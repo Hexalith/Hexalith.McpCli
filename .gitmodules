@@ -1,0 +1,21 @@
+[submodule "references/Hexalith.AI.Tools"]
+	path = references/Hexalith.AI.Tools
+	url = https://github.com/Hexalith/Hexalith.AI.Tools.git
+[submodule "references/Hexalith.Commons"]
+	path = references/Hexalith.Commons
+	url = https://github.com/Hexalith/Hexalith.Commons.git
+[submodule "references/Hexalith.PolymorphicSerializations"]
+	path = references/Hexalith.PolymorphicSerializations
+	url = https://github.com/Hexalith/Hexalith.PolymorphicSerializations.git
+[submodule "references/Hexalith.Conversations"]
+	path = references/Hexalith.Conversations
+	url = https://github.com/Hexalith/Hexalith.Conversations.git
+[submodule "references/Hexalith.EventStore"]
+	path = references/Hexalith.EventStore
+	url = https://github.com/Hexalith/Hexalith.EventStore.git
+[submodule "references/Hexalith.Memories"]
+	path = references/Hexalith.Memories
+	url = https://github.com/Hexalith/Hexalith.Memories.git
+[submodule "references/Hexalith.Tenants"]
+	path = references/Hexalith.Tenants
+	url = https://github.com/Hexalith/Hexalith.Tenants.git
