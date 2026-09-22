@@ -104,6 +104,6 @@ One generic MCP server and one thin CLI, both driven by a catalog of commands an
 - Flat layout like the sibling modules: `src/Hexalith.McpCli.*` and `tests/Hexalith.McpCli.*.Tests`, not the nested `src/libraries/...` layout the shared instructions describe.
 - In the MCP server, stdout is the JSON-RPC channel: log to stderr only, never `Console.WriteLine`.
 - The catalog distinguishes commands from queries so a read-only mode is one filter.
-- Message ID and idempotency key are generated per call; correlation ID is optional pass-through.
+- Message ID is generated per call; an idempotency key is optional and caller-supplied only; correlation ID is optional pass-through.
 
 <!-- /bmad:context -->

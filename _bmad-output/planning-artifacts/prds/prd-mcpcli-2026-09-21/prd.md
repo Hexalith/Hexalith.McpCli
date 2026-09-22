@@ -10,7 +10,7 @@ updated: 2026-09-22
 
 ## 0. Document purpose
 
-This PRD is for the Hexalith maintainers and for the workflows that follow it: architecture, epics and stories, and the migration plan for the legacy per-module MCP servers. It builds on the product brief at `_bmad-output/planning-artifacts/briefs/brief-mcpcli-2026-09-21/` and does not restate its research. Rejected alternatives, transport mechanics, and comparables live in `addendum.md` next to this file; its §E argument table and §G result documents are normative, and FR-9, FR-11, and FR-12 are specified against them. Guardrails live in §4, attribute and marker members in §5.1, and behavior in the owning FR; the Glossary and §4 summarize and point to those owners. Unconfirmed inferences carry an inline `[ASSUMPTION]` tag and are indexed in §11.
+This PRD is for the Hexalith maintainers and for the workflows that follow it: architecture, epics and stories, and the migration plan for the legacy per-module MCP servers. It builds on the product brief at `_bmad-output/planning-artifacts/briefs/brief-mcpcli-2026-09-21/` and does not restate its research. Rejected alternatives, transport mechanics, and comparables are in the adjacent `addendum.md`. Addendum §E, which defines arguments, and §G, which defines results, are normative for FR-9, FR-11, and FR-12. Section 4 owns the guardrails, §5.1 owns attribute and marker members, and each FR owns its behavior. The Glossary and §4 summarize those requirements and link to their owners. Unconfirmed inferences carry an inline `[ASSUMPTION]` tag and are indexed in §11.
 
 ## 1. Vision
 
@@ -26,7 +26,7 @@ There is no triggering incident; the bet is that the Agents, ChatBot, and Conver
 
 Two consequences follow now. Identity forwarding becomes essential, which is why the HTTP transport is the next release rather than a distant one. And a Command without a description is a Command an agent cannot use, so the Decoration Attribute stops being decoration and becomes part of what it means for a Hexalith Operation to exist: every Module that ships after 2026-09-21 ships agent-ready, or is not finished (FR-22).
 
-**Status (2026-09-22).** v1 is blocked on upstream decoration of Tenants and Parties; dates are open (OQ-8) and there is no scope fallback (§8). The HTTP transport is the only committed next release and is load-bearing for per-user identity (§8.2). The migration plan is a v1 deliverable (FR-21). Folders is the largest prerequisite; it gates SM-1, not v1. The architecture spine needs the amendments listed in §10.1 before the executor epic.
+**Status (2026-09-22).** v1 is blocked on upstream decoration of Tenants and Parties; dates are open (OQ-8) and there is no scope fallback (§8). The HTTP transport is the only committed next release and is load-bearing for per-user identity (§8.2). The migration plan is a v1 deliverable (FR-21). Projects and Folders follow v1 and both gate SM-1. The prior architecture amendments are verified; the remaining consistency amendments and their owning implementation gates are listed in §10.1.
 
 ## 2. Target user
 
@@ -39,11 +39,11 @@ Two consequences follow now. Identity forwarding becomes essential, which is why
 
 ### 2.2 Non-users and the admin-plane boundary (v1)
 
-Non-users: EventStore infrastructure administrators (streams, subscriptions, and clusters stay with `Hexalith.EventStore.Admin.Cli` and `.Admin.Mcp`), end users of Hexalith web applications, and anyone who needs per-user identity across a shared hosted server (the HTTP release, §8.2). Business administration modeled as Commands and Queries is in scope even when it needs a platform-administrator token, as every Tenants Operation does (FR-3): the boundary is the Gateway, not the token.
+Non-users: EventStore infrastructure administrators (streams, subscriptions, and clusters stay with `Hexalith.EventStore.Admin.Cli` and `.Admin.Mcp`), end users of Hexalith web applications, and anyone who needs per-user identity across a shared hosted server (the HTTP release, §8.2). Business administration modeled as Commands and Queries remains in scope even when it requires a platform-administrator token; every Tenants Operation does (FR-3). The Gateway, not the token, defines the boundary.
 
 ### 2.3 Key user journeys
 
-- **UJ-1. Nadia wires her agent to a test EventStore and runs a two-module task.** Nadia, a Hexalith developer, installs the tool, creates a Profile with the Gateway URL, a token, and the default Tenant `acme`, and adds the stdio server to Claude Code. She asks the agent to check who belongs to `acme` and then create a party for the newest member. The agent walks the discovery sequence (`list_modules`, `list_operations`, `describe_operation`), then calls `run_query` on `tenants.get-tenant-users` (whose description says the Envelope Tenant is fixed to `system`, so the agent passes none) and `send_command` on `parties.create-party` under `acme`. Both results carry identifiers she can trace: the Command result carries its message identifier and idempotency key. **Edge case:** the second call times out before any result document arrives; because the agent supplied its own idempotency key on the first attempt, it retries with the same key. `[ASSUMPTION: the Gateway deduplicates on the idempotency key and the result says whether it did; OQ-9 asks the EventStore owner.]`
+- **UJ-1. Nadia wires her agent to a test EventStore and runs a two-module task.** Nadia, a Hexalith developer, installs the tool, creates a Profile with the Gateway URL, a token, and the default Tenant `acme`, and adds the stdio server to Claude Code. She asks the agent to check who belongs to `acme` and then create a party for the newest member. The agent follows the discovery sequence: `list_modules`, `list_operations`, then `describe_operation`. It calls `run_query` on `tenants.get-tenant-users`; the description identifies `system` as the fixed Envelope Tenant, so the agent supplies no Tenant. It then calls `send_command` on `parties.create-party` under `acme`. Both results carry identifiers she can trace, including the Command's canonical message identifier. **Edge case:** the second call times out before any result document arrives; the tool does not retry and the agent reports an unknown outcome so Nadia can inspect business state or use EventStore operator tooling. A caller may deliberately reuse a caller-supplied idempotency key only when the target deployment has confirmed a trusted adapter for that Command; v1 makes no generic safe-retry promise.
 - **UJ-2. An agent session explores a Module it has never seen.** The Conversations Module's agent is asked about tenant membership. It follows the same discovery sequence for `tenants`, sees each Operation with its kind and description, picks `tenants.get-tenant-users`, reads its Schema and example, and calls `run_query`. The result comes back paged with a cursor. Nobody wrote a tenants-specific prompt or tool. **Edge case:** the session runs in Read-only Mode; `send_command` is absent from its tool list, so it reports that it can look but not act.
 - **UJ-3. Marc adds a Module and it appears everywhere.** Marc maintains Projects. Once `Hexalith.Projects.Contracts` satisfies the dependency allowlist (§4), he adds the Decoration Package, decorates each Command and Query with a description, example, and Routing Values, marks the assembly as a Module, and publishes the package. This repository bumps the package reference and rebuilds. Every agent and every script now sees `projects.*` Operations with no change here. **Edge case:** one record lacks a description; the Catalog excludes it and reports it on stderr at startup, so the gap is visible, not silent.
 
@@ -65,7 +65,7 @@ Downstream readers and workflows use these terms exactly. Terms owned by a requi
 - **Module marker** — the assembly attribute declaring a Module; members in §5.1.
 - **Decoration Package** — the dependency-free NuGet package `Hexalith.McpCli.Abstractions`, built here, holding the Decoration Attributes, the identifier attribute, the Module marker, and the bundled analyzer (FR-1).
 - **Identifier** — a Payload property marked with the identifier attribute or named by `aggregateIdProperty` (FR-7). Never inferred from a name suffix. Typed and validated by its Module's Identifier Kind.
-- **Identifier Kind** — `Ulid` or `String`, declared once per Module on the Module marker (FR-3). Governs the Schema and validation of every Identifier in that Module (FR-7, FR-15). Envelope identifiers the tool generates or the caller supplies (message identifier, idempotency key, correlation identifier) are always ULIDs regardless of that kind.
+- **Identifier Kind** — `Ulid` or `String`, declared once per Module on the Module marker (FR-3). Governs the Schema and validation of every Identifier in that Module (FR-7, FR-15). The message identifier the tool generates and any caller-supplied idempotency key or correlation identifier are always ULIDs regardless of that kind.
 
 **Catalog and Heads**
 
@@ -96,12 +96,12 @@ Downstream readers and workflows use these terms exactly. Terms owned by a requi
 
 Each rule below is authoritative; FRs reference them rather than restate them.
 
-- **Dependency allowlist.** The tool package references exactly: the EventStore client package; `*.Contracts` packages of the Modules being exposed; and the transitive closure of `Hexalith.EventStore.Contracts` at the pinned version, today `Hexalith.Commons.UniqueIds` and `ByteAether.Ulid`. A Contracts Library is referenced only when its own transitive closure stays inside that allowlist and adds no framework reference beyond `Microsoft.NETCore.App`; a CI test over the restored dependency graph enforces it (FR-20). Adding a package to the allowlist is a PRD change. The tool package never references an aggregate, projection, handler, client, or server project of any Module. Test projects may add the EventStore testing and Aspire composition packages the architecture names, plus one synthetic sample Contracts Library (the sample Module) never referenced by the tool package.
-- **Zero module-specific code.** No type, branch, or configuration in this repository names a Module.
+- **Dependency allowlist.** The tool package references its Decoration Package and exactly these external Hexalith and domain dependencies: the EventStore client package, the exposed Modules' `*.Contracts` packages, and the transitive closure of `Hexalith.EventStore.Contracts` at the pinned version. That closure currently includes `Hexalith.Commons.UniqueIds` and `ByteAether.Ulid`. An exposed Contracts Library may reference the dependency-free Decoration Package. All other transitive dependencies must remain within the external allowlist and add no framework reference beyond `Microsoft.NETCore.App`. A CI test over the restored dependency graph enforces the rule (FR-20). Adding another external package is a PRD change. The tool package never references an aggregate, projection, handler, client, or server project of any Module. Test projects may add the EventStore testing and Aspire composition packages the architecture names, plus one synthetic sample Contracts Library (the sample Module) never referenced by the tool package.
+- **Zero module-specific code.** No application source type, branch, hand-authored scan list, or runtime configuration in this repository names a Module. Pinned Contracts `PackageReference` entries and scan metadata generated from the restored dependency graph are permitted because they are the declarative enrollment mechanism (FR-5, FR-20).
 - **Tenant.** Envelope-only, resolved by the executor (FR-16); never read from the Payload; a per-call MCP argument is honored only under the FR-16 gate.
-- **Identity in v1.** The stdio server acts as whoever owns the configured token; the audit trail says "the tool", not the human. The Actor an Operation records is an operator setting (Profile, flag, environment), never chosen by the agent per call, and the extension keys a call may carry are limited to an operator allowlist (FR-16, FR-18). Accepted for dev and test use, and the reason the HTTP transport is the next release.
+- **Identity in v1.** The stdio server acts as whoever owns the configured token; the audit trail says "the tool", not the human. The Actor an Operation records is an operator setting (Profile, flag, environment), never chosen by the agent per call, and the extension keys a call may carry are limited to an operator allowlist (FR-16, FR-18). This limitation is accepted for development and test use, and it is why HTTP transport is the next release.
 - **Identifiers.** Envelope identifiers, generated or caller-supplied, are ULIDs validated with `Ulid.TryParse`, never `Guid.TryParse` (FR-16). Payload Identifiers and the aggregate identifier are typed by explicit marking and validated by the Module's Identifier Kind, never guessed from a name (FR-3, FR-7, FR-15). The Tenant is a non-empty string and is never ULID-validated. Every Envelope field is pre-validated against the Gateway's published patterns before submission (FR-15).
-- **Idempotency.** One generated message identifier per call; one idempotency key per call, caller-supplied or generated and returned in the result; the tool never retries (FR-16, FR-17).
+- **Idempotency.** One generated message identifier per call. An idempotency key is optional and caller-supplied only: the tool never invents one, never retries, and never claims generic deduplication because Gateway support depends on a trusted adapter registered for that Command type. When supplied, the key is passed through and echoed in the result (FR-16, FR-17).
 - **Read-only.** Enforced in the executor, never by hints alone (FR-19).
 - **Cost.** No hosted infrastructure in v1.
 
@@ -137,7 +137,7 @@ Each feature opens with a description and the journeys it realizes, then its FRs
 | `projectionType` | query | no `IQueryContract` | Projection the Query reads |
 | `projectionActorType` | query | optional; only when the Module serves the projection through a named actor | Projection actor type for the Envelope; the interface does not carry it |
 | `tenantProperty` | both | record declares a tenant member | Payload property the executor fills from the Envelope Tenant; never the aggregate identifier source |
-| `correlationProperty` | both | record declares one | Payload property filled from the Envelope correlation identifier |
+| `correlationProperty` | command | record declares one | Payload property filled from the resolved command correlation identifier |
 | `idempotencyKeyProperty` | command | record declares one | Payload property filled from the Envelope idempotency key |
 | `actorProperty` | command | record declares an actor or principal member | Payload property filled from the resolved Actor (FR-16) |
 
@@ -183,11 +183,12 @@ A Module author can mark a Contracts Library assembly with the Module marker (me
 
 #### FR-4: Describe properties
 
-Every property carrying `System.ComponentModel.Description` gets a `description` in the Schema, and `describe --lint` on the CLI reports the property-level gaps of one Operation.
+Every property carrying `System.ComponentModel.Description` gets a `description` in the Schema, and `describe --lint` on the CLI reports the description and property gaps of one Operation.
 
 **Consequences (testable):**
-- `describe --lint` lists undescribed properties; unmarked identifier-like properties (FR-7); and Payload paging members named `PageSize`, `Offset`, or `Cursor` (paging travels only as `run_query` arguments, FR-16). It exits 1 if any exist.
-- These property-level findings are lint-only: they never appear as Catalog diagnostics (FR-6).
+- `describe --lint` reports a hollow Operation description that equals its humanized type name. It recursively reports undescribed properties, unmarked identifier-like properties (FR-7), and Payload paging members named `PageSize`, `Offset`, or `Cursor`. Paging travels only through `run_query` arguments (FR-16). The command exits 1 if any finding exists.
+- Every `describe_operation` and `describe` result includes `lintFindings`; each finding has `code`, `severity`, and `message`. A property-level finding also has `property`, an RFC 6901 JSON Pointer using Module-serialized property names; the operation-level `hollow_description` finding omits it. An Operation with no findings returns an empty array. The `--lint` flag changes only the CLI exit-code behavior (FR-14), not the result shape.
+- These findings are lint-only: they never appear as Catalog diagnostics (FR-6).
 
 ### 5.2 Catalog
 
@@ -225,6 +226,7 @@ Every decorated type or Module the Catalog cannot expose as declared is reported
 
 - Scan order is deterministic: assemblies in the generated list order (sorted by assembly name), types within an assembly by ordinal full type name; the first declaration of a duplicate Module Name or Operation Name survives.
 - An empty Catalog fails only the verbs that need it (the discovery verbs, `send`, `query`, and `mcp`) with exit 2 and `code: catalog_empty`; `config` and `--version` never build the Catalog and always run (FR-14).
+- The `mcp` verb validates settings, builds the Catalog, and applies `--strict` before opening the JSON-RPC channel. Any pre-initialize failure writes one structured error to stderr, writes nothing to stdout, and exits 2. After initialization, failures travel only as JSON-RPC/MCP errors (FR-10, FR-14).
 
 #### FR-7: Derive a JSON Schema per Operation
 
@@ -234,7 +236,7 @@ The Catalog derives from the Operation type a Schema that includes every settabl
 - Required, nullable, enum, nested type, and collection members map to the corresponding JSON Schema constructs; `additionalProperties` is `false`. Get-only members with neither a setter nor a constructor parameter (such as `ICommandContract.AggregateId`) are not Schema properties; the executor reads them through the accessor (FR-16).
 - An Identifier is a property marked with the identifier attribute or named by `aggregateIdProperty`; it is typed `string`, with the ULID pattern when the Module's Identifier Kind is `Ulid`, and never with `format: uuid`. A property whose CLR type is `ByteAether.Ulid.Ulid`, recognized by full name so the Decoration Package needs no reference to it, gets the pattern regardless of the kind.
 - An Identifier's CLR type must serialize as a JSON string; a value-object identifier serializes as its own declared converter or the marker's `serializerOptionsProvider` dictates, and the tool adds no converter. An Identifier that does not serialize as a string excludes the Operation with an `invalid_identifier_type` diagnostic (FR-6).
-- An unmarked property whose name ends in `Id` is a plain string in the Schema and a `describe --lint` warning (FR-4); the name suffix never types a property.
+- An unmarked property whose name ends in `Id` retains the ordinary Schema derived from its declared type and serializer contract and produces a `describe --lint` warning (FR-4); the name suffix never types or rewrites a property. A string Schema therefore appears only when the declared serialization is already a JSON string.
 - Properties named by `tenantProperty`, `correlationProperty`, `idempotencyKeyProperty`, or `actorProperty` are marked `readOnly`, removed from `required`, and filled by the executor (FR-16); a caller may omit them.
 
 #### FR-8: Name Operations canonically
@@ -255,7 +257,8 @@ An agent can call the five Generic Tools and no others; their arguments are the 
 
 **Consequences (testable):**
 - `tools/list` returns exactly five tools, or four without `send_command` in Read-only Mode.
-- `list_modules` returns each Module Name with its description and Operation count; `list_operations` takes a Module Name and an optional kind and returns Operation Name, kind, description; `describe_operation` returns description, kind, Schema, example, the Envelope arguments the caller may supply (whether `aggregateId` is required, the Module's fixed tenant if any), and `submittable`, with a reason when it is false.
+- `list_modules` returns each Module Name with its description and Operation count; `list_operations` takes a Module Name and an optional kind and returns Operation Name, kind, description; `describe_operation` returns description, kind, Schema, example when declared, the Envelope arguments the caller may supply (whether `aggregateId` or `idempotencyKey` is required, the Module's fixed tenant if any), `lintFindings`, and head-level `submittable`, with a reason when it is false.
+- `submittable` reports surface availability from Read-only Mode and resolved Gateway URL only. It is `false` with `reason: read_only` for a Command in Read-only Mode; otherwise it is `false` with `reason: configuration_invalid` when the session has no resolved Gateway URL; otherwise it is `true`. Tenant, actor, Payload, and per-call Envelope requirements are evaluated only on execution and do not change this discovery value. An offline discovery fixture covers both read and write Operations.
 - Each tool description has three labeled parts: `Purpose`, `Use when`, and `Next`.
 - The three discovery tools and `run_query` carry `readOnlyHint: true`; `send_command` carries `readOnlyHint: false` and `idempotentHint: false`.
 
@@ -266,18 +269,20 @@ An agent can call the five Generic Tools and no others; their arguments are the 
 The MCP Server runs as a local process over stdio; stdout carries JSON-RPC only and all logging goes to stderr.
 
 **Consequences (testable):**
-- A test that drives the server with the ModelContextProtocol client SDK over stdio completes initialize, `tools/list`, and one call of each tool without a parse error; Claude Code, Claude Desktop, and VS Code are a release-checklist item.
+- A test that drives the server with the ModelContextProtocol client SDK over stdio completes initialization, `tools/list`, and one call to each tool without a parse error. The release checklist separately covers Claude Code, Claude Desktop, and VS Code.
 - The server starts from a Profile or environment variables with no interactive prompt.
+- Settings and Catalog validation complete before server initialization. Tests for malformed settings, an empty Catalog, and `mcp --strict` diagnostics each assert one structured stderr error, exit 2, and zero stdout bytes; after initialization, tests assert failures use JSON-RPC/MCP errors only.
 
 #### FR-11: Return structured results and errors
 
-Every tool returns structured content with a declared output schema; failures return a structured error, never a stack trace. Both Heads serialize the same result and error record types (addendum §G).
+Every tool returns structured content with a declared output schema; failures return a structured error, never a stack trace. Both Heads serialize the same result and error record types. Addendum §G is the exhaustive contract for their field names, nesting, required and optional members, and omission rules; declared schemas and architecture records must conform to it.
 
 **Consequences (testable):**
 - Validation failure: `code: validation_failed`, the Operation Name, and one entry per violation with JSON path and message; a Payload that is not JSON is one violation.
-- Gateway failure: `code: gateway_error` with status, reason code, detail, retryable flag, retry-after, client action, and correlation identifier, mapped from the client's exception.
+- Gateway-client failure: return `code: gateway_error` with the exception status and the mapped detail defined in addendum §G. Include the reason code, retryable flag, client action, retry-after value, and correlation identifier only when the client exception provides them. This includes HTTP-success responses represented by `EventStoreGatewayException` because they are malformed or fail semantic validation; their `2xx` status is preserved.
 - Unknown Operation Name: `code: unknown_operation` and up to three nearest Operation Names by case-insensitive edit distance.
 - Any other exception: `code: internal_error` with a message, never a stack trace.
+- Snapshot tests assert each addendum §G result and error schema, including types, constraints, enums, required members, and optional-member omission, and run the same fixtures through both Heads.
 
 ### 5.4 CLI
 
@@ -288,18 +293,18 @@ Every tool returns structured content with a declared output schema; failures re
 A shell user can run `modules`, `operations <module> [--kind]`, `describe <operation> [--lint]`, `send <operation>`, `query <operation>`, `mcp`, and `config`.
 
 **Consequences (testable):**
-- Every argument in the addendum §E table exists in both Heads under the spelling given there.
+- Each Head implements every argument assigned to it in the addendum §E table, under the spelling given there.
 - `send` and `query` accept the Payload as `--payload <json>`, `--payload @file`, or stdin.
 - `mcp` starts the MCP Server over stdio; `mcp --transport http` exits 2 with `code: unsupported_transport` and a message naming the release in which it arrives, before building the Catalog.
 - `--format table` renders `modules`, `operations`, and `config`; on `describe`, `send`, and `query` the output is JSON with one stderr note, and the exit code is unaffected.
 
 #### FR-13: Resolve global options in one order
 
-Every verb accepts `--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output <file>`, `--read-only`, and `--strict`. `--profile` resolves first (flag, environment variable, then the active Profile); every other option then resolves in the order flag, environment variable, selected Profile, default, using the sources addendum §E lists for it. These are session settings; the CLI has no per-call tenant. Only the MCP tools carry a per-call `tenant` argument, governed by FR-16.
+Every verb accepts `--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output <file>`, `--read-only`, and `--strict`. Resolve `--profile` first, in this order: flag, environment variable, then active Profile. Resolve every other option in this order: flag, environment variable, selected Profile, then default. Use only the sources listed for that option in addendum §E. These are session settings; the CLI has no per-call tenant. Only the MCP tools carry a per-call `tenant` argument, governed by FR-16.
 
 **Consequences (testable):**
 - The order is testable per option with a fixture that sets every source.
-- Defaults differ from the admin CLI: `json` is the default format, and the URL has no default, so a missing URL is `configuration_invalid`, exit 2, rather than a silent fallback to the admin API. `[ASSUMPTION: a tool whose primary reader is an agent defaults to JSON.]`
+- Defaults differ from the admin CLI: `json` is the default format, and the URL has no default. `modules`, `operations`, `describe`, `config`, `--version`, and MCP discovery work without one; `send`, `query`, and the corresponding MCP execution calls return `configuration_invalid` when execution has no resolved URL, rather than silently falling back to the admin API. `[ASSUMPTION: a tool whose primary reader is an agent defaults to JSON.]`
 - Environment variable names are in addendum §E; they use the `EVENTSTORE_` prefix without `ADMIN`. `[ASSUMPTION: this tool is not the admin plane, so it must not read the admin CLI's variables.]`
 - Boolean options (`--read-only`, `--strict`, `--allow-tenant-override`) accept `true`, `false`, `1`, and `0` from the environment; anything else is `configuration_invalid`, exit 2.
 
@@ -313,7 +318,7 @@ Every CLI invocation ends with one of three exit codes, and the code depends onl
 |---|---|---|
 | 0 | Result document produced | result |
 | 1 | Result document produced by `describe --lint` and at least one lint finding listed (FR-4) | result |
-| 2 | No result document: validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11) |
+| 2 | No result document: validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11); any pre-initialize `mcp` failure writes it to stderr and leaves stdout empty |
 
 - Catalog diagnostics go to stderr and never move an invocation between rows; only `--strict` turns them into row 2 (FR-6).
 
@@ -332,10 +337,11 @@ The executor validates every Payload against the Schema and refuses to submit an
 
 #### FR-16: Fill the Envelope
 
-The executor generates a message identifier per call, uses the caller's idempotency key or generates one, resolves the Tenant, the Actor, and the aggregate identifier, and for Commands passes a caller-supplied correlation identifier and allowed extensions through.
+The executor generates a message identifier per call, passes through a caller-supplied idempotency key without inventing one, resolves the Tenant, the Actor, and the aggregate identifier, and for Commands passes a caller-supplied correlation identifier and allowed extensions through. When the caller omits the optional command correlation identifier, the resolved correlation identifier is the generated message identifier; the executor never generates a second identifier for correlation.
 
 **Consequences (testable):**
-- Generated message identifiers and idempotency keys are ULIDs and differ between calls; a caller-supplied idempotency key or correlation identifier that is not a ULID is a validation failure.
+- Generated message identifiers are ULIDs and differ between calls; a caller-supplied idempotency key or correlation identifier that is not a ULID is a validation failure. The same resolved command correlation identifier (`callerCorrelationId ?? generatedMessageId`) is sent in `SubmitCommandRequest`, written to any declared `correlationProperty`, and expected from the successful Gateway result.
+- Command fixtures cover supplied and omitted correlation identifiers and overwrite any caller Payload value under `correlationProperty` with the resolved value before rebuilt-Payload validation.
 - The Tenant resolves in this order, and a Command or Query with no Tenant from any source is `validation_failed`:
   1. The Module's `fixedTenant`, when declared. The session Tenant is ignored for that Operation; a differing per-call value is `validation_failed` at `/tenant`.
   2. The per-call MCP argument, honored only when no session Tenant resolves from the FR-13 chain or when `allowTenantOverride` is set for the session; otherwise a differing per-call value is `validation_failed`.
@@ -345,7 +351,7 @@ The executor generates a message identifier per call, uses the caller's idempote
   2. The value of an accessor compiled once at startup, which reads `aggregateIdProperty` when set and otherwise the `ICommandContract` getter. A Command with no accessor source is excluded from the Catalog (FR-2).
   3. The Query's `aggregateId` constant.
 - Actor: an Operation naming an `actorProperty` requires a resolved Actor (flag, environment, Profile; next release the forwarded user header) and is `validation_failed` without one. `[ASSUMPTION: in v1 the operator states the actor principal in the Profile; the tool never decodes the token.]`
-- A Payload value under `tenantProperty` or `actorProperty` that differs from the resolved value is `validation_failed`; otherwise the properties named by `tenantProperty`, `correlationProperty`, `idempotencyKeyProperty`, and `actorProperty` are overwritten from the Envelope before submission.
+- A Payload value under `tenantProperty` or `actorProperty` that differs from the resolved value produces `validation_failed`. Otherwise, the executor overwrites the properties named by `tenantProperty`, `correlationProperty`, and `actorProperty` with their Envelope values before submission. When the caller supplies an idempotency key, the executor overwrites `idempotencyKeyProperty` with that key. If an Operation has a non-nullable `idempotencyKeyProperty`, discovery reports `idempotencyKeyRequired: true`, and omitting the key produces `validation_failed` at `/idempotencyKey`.
 - Extensions travel only on Commands and only with keys in the Profile's `allowedExtensions` list, default empty (FR-18). Queries carry neither a correlation identifier nor extensions in v1, because the pinned client's query request has no such members (§8.2).
 - Paging travels only as `run_query` arguments mapped to the Gateway's paging options; a Payload member named like one is sent as ordinary Payload, neither stripped nor mapped (FR-4).
 - The Envelope carries the Routing Values, never the Operation Name.
@@ -355,8 +361,8 @@ The executor generates a message identifier per call, uses the caller's idempote
 The executor submits through the `Hexalith.EventStore.Client` gateway client, returns the Gateway's result as JSON, and never retries.
 
 **Consequences (testable):**
-- Command results include the message identifier and idempotency key used, plus the Gateway's correlation identifier; they state whether the Gateway reported a duplicate, once OQ-9 confirms the response carries it.
-- Query results include the document and, when paging applies, page size, offset, next cursor, total count, and has-more; no correlation identifier in v1 (§8.2). A Query-side `gateway_error` carries the correlation identifier only when the client's exception exposes one.
+- Command results include the Gateway's canonical message identifier and correlation identifier. They echo `idempotencyKey` only when the caller supplied it and do not include or infer a `duplicate` field; the Gateway response does not distinguish replay from pending admission generically.
+- Query results include the document. When paging metadata applies, they include page size and each available offset, next cursor, total count, and has-more value. Omit absent metadata; do not supply defaults. Query results have no correlation identifier in v1 (§8.2). A Query-side `gateway_error` includes one only when the client exception provides it.
 - The only outbound HTTP is through the gateway client; a test asserts no other `HttpClient` registration.
 
 #### FR-19: Refuse writes in Read-only Mode
@@ -394,13 +400,15 @@ The v1 tool references by pinned package only the Contracts Libraries that satis
 - Package references only; CI builds contain no project reference to any Module, and the allowlist test rejects any referenced Contracts Library whose closure breaks the rule.
 - A referenced Module whose assembly carries the marker but exposes no Operation appears in `list_modules` with zero Operations and an `empty_module` warning; an unmarked assembly is invisible (FR-3, FR-6).
 - `Hexalith.Projects.Contracts` fails the allowlist today (it carries web framework and UI packages); slimming it is a Projects Gateway-ready prerequisite (§8.1).
+- Parties coverage passes only when the maintainer-approved, versioned FR-21 inventory matches the built Catalog. Each included canonical Operation Name must appear exactly once in `list_operations parties`. A build-time Catalog-descriptor or reflection test must separately match each Operation to its decorated contract type. Each excluded legacy operation must have an approved exclusion row with a rationale.
 
 #### FR-21: Define parity and produce the migration plan
 
 A Legacy Server is deleted when its Module is Gateway-ready for every agent-facing Operation, meaning every tool or resource whose effect is a Command or Query through the Gateway; the migration plan is a v1 deliverable owned by the McpCli maintainers.
 
 **Consequences (testable):**
-- The plan lists, per Legacy Server and per Frozen CLI, a full inventory of its operations, the decorated type covering each, and the operations dropped (stream and file resources, and the search, filter, order-by, and freshness variants deferred by FR-9).
+- The plan is the durable, versioned inventory for each Legacy Server and Frozen CLI. Every row names the legacy operation, records `include` or `exclude`, gives the rationale, and names the decorated contract type when included; the owning Module maintainer's approval reference is recorded beside the inventory version. Dropped operations include stream and file resources and the search, filter, order-by, and freshness variants deferred by FR-9.
+- A coverage check compares every included row's canonical Operation Name with the corresponding `list_operations` result, separately verifies its decorated contract type against the internal Catalog descriptor or generated assembly manifest, and verifies that every excluded legacy operation has an approved exclusion row. A missing, extra, mismatched, or unapproved row fails the Module's Gateway-ready gate; the inventory never becomes runtime configuration or adds CLR type names to the public result.
 - Task and actor context that Projects and ChatBot carry today travels as ordinary Payload properties, through `actorProperty`, or in allowed Envelope extensions, never in module-specific code here.
 - FrontComposer's host and the Projects plug-in are deleted together; Memories, which fronts per-user JWT identity today, is deleted only after the HTTP release.
 
@@ -408,11 +416,11 @@ A Legacy Server is deleted when its Module is Gateway-ready for every agent-faci
 
 The Hexalith agent instructions (`hexalith-llm-instructions.md` in Hexalith.AI.Tools) state that from 2026-09-21 no new per-module MCP server or per-module agent CLI is created, that a Module's agent surface is its decorated Contracts Library, and that the Frozen CLIs are limited to bug fixes and listed in the migration plan.
 
-**Consequence (testable):** the story closes when the pull request adding the rule is opened upstream and linked from this repository's `AGENTS.md`; its merge is tracked by the migration plan, not by this story.
+**Consequence (testable):** the story closes only when the rule is merged into the authoritative Hexalith.AI.Tools instructions and this repository's `AGENTS.md` points to the merged baseline. Opening a pull request is progress evidence, not completion.
 
 ## 6. Cross-cutting non-functional requirements
 
-- **NFR-1 Startup.** The Catalog for the v1 Modules plus the sample Module builds in under 500 ms on `ubuntu-latest`, the CI runner the architecture names, so the stdio server is ready before a client's first request times out. `[ASSUMPTION: threshold from typical MCP client initialize timeouts; tune after the first measurement.]`
+- **NFR-1 Startup.** The Catalog for the v1 Modules plus the one declared synthetic sample Module builds in under 500 ms on `ubuntu-latest`, the CI runner the architecture names, so the stdio server is ready before a client's first request times out. The other Identifier Kind is covered through isolated test construction and does not add a second Module to the production-like Catalog or benchmark. `[ASSUMPTION: threshold from typical MCP client initialize timeouts; tune after the first measurement.]`
 - **NFR-2 Tool budget.** The five Generic Tool names, descriptions, and input schemas together stay under 8,000 characters, so the server fits a client's tool budget alongside other servers; a snapshot test measures that figure and, separately, the output schemas. `[ASSUMPTION: roughly 2,000 tokens; characters are tokenizer-independent.]`
 - **NFR-3 Determinism.** See FR-5.
 - **NFR-4 Channel discipline.** See FR-10; logs use source-generated `LoggerMessage` methods.
@@ -451,6 +459,7 @@ v1 is done when the tool is released and Tenants and Parties are covered end to 
 5. Publish the Contracts Library as a NuGet package and bump its version.
 6. Have descriptions reviewed against NFR-8, with the review recorded in the Module's pull request.
 7. Keep Operation Name, domain, and Wire Type stable, because renaming any of them silently breaks agents.
+8. For a Module replacing a Legacy Server or Frozen CLI, version and approve its FR-21 operation inventory and pass the inventory-to-Catalog coverage check.
 
 Work is tracked in each Module's own repository.
 
@@ -462,14 +471,14 @@ Dates are open (OQ-8); the release is blocked until both v1 rows are met, and th
 |---|---|---|---|---|
 | Tenants | Tenants maintainer | open | v1 | prerequisite, blocks v1 |
 | Parties | Parties maintainer | open | v1 | prerequisite, blocks v1 |
-| Projects | Projects maintainer | open | after v1 | follow-on |
+| Projects | Projects maintainer | open | after v1 | follow-on, gates SM-1 |
 | Folders | Folders maintainer | open | after v1 | follow-on, gates SM-1 |
 
 #### Module-specific prerequisites
 
 - **Tenants.** `fixedTenant = "system"`, `identifierKind = String`; descriptions and examples; `aggregateIdProperty` on per-tenant Queries and an `aggregateId` constant on list Queries (`list-tenants`, `get-user-tenants`), value chosen by the maintainer within the Gateway pattern; drop the `Cursor` and `PageSize` Payload members or accept the lint warning (FR-4); do not decorate the global-administrator Commands in v1.
-- **Parties.** `identifierKind = String`. Query types do not exist; create one per read the Legacy Server exposes, served by the Parties projection actor (`projectionActorType`) with the `parties` list constant it already uses. On Commands, either keep attribute routing with today's values (`domain = "party"`, `wireTypeConvention = FullTypeName`, `aggregateIdProperty = PartyId`) or migrate to `ICommandContract` with kebab-case Wire Types, a breaking wire change; the maintainer chooses (OQ-5). Publish the agent-facing subset; the erasure and key-rotation Commands are probably not in it.
-- **Projects.** Slim `Hexalith.Projects.Contracts` until it satisfies the allowlist (§4, FR-20); then add Query types for the Legacy Server's 11 resources and attribute routing with `actorProperty = ActorPrincipalId`. Detail in addendum §H.
+- **Parties.** Set `identifierKind = String`. Parties has no Query types, so create one for each included read in the FR-21 inventory. Serve each Query through the Parties projection actor (`projectionActorType`) and use its existing `parties` list constant. For Commands, either retain the current attribute routing (`domain = "party"`, `wireTypeConvention = FullTypeName`, and `aggregateIdProperty = PartyId`) or migrate to `ICommandContract` with kebab-case Wire Types. The latter is a breaking wire change; the maintainer decides in OQ-5. Before decoration, the Parties maintainer approves the versioned migration-plan inventory or links an equivalent table from the decoration pull request. Expose every decorated Operation. Record each exclusion, including erasure or key rotation, as an approved row with a rationale. FR-20 compares the inventory with `list_operations parties`; the inventory never becomes module-specific runtime configuration.
+- **Projects.** Slim `Hexalith.Projects.Contracts` until it satisfies the allowlist (§4, FR-20); then add Query types for the Legacy Server's 11 resources and attribute routing with `actorProperty = ActorPrincipalId`. Detail in addendum §H. It does not gate v1, but it gates SM-1.
 - **Folders.** Publish decorated Command and Query types for the agent-facing subset of today's 49 REST tools, handled by a Folders domain service; acceptance is `list_operations folders` showing the agreed subset, each accepted by the Gateway. Owner: the Folders maintainer. Detail in addendum §H. The largest prerequisite: it does not gate v1 (FR-20), but it gates SM-1.
 
 ### 8.2 Out of scope for MVP
@@ -491,10 +500,10 @@ Dates are open (OQ-8); the release is blocked until both v1 rows are met, and th
 Checked three months after v1 ships.
 
 **Primary**
-- **SM-1 Zero module-specific code.** Tenants, Parties, and every Module that became Gateway-ready since are exposed with no module-specific code here, and one further Module was added by a package reference and a rebuild. Validates FR-5, FR-20.
+- **SM-1 Zero module-specific code.** Tenants, Parties, Projects, and Folders are exposed with no module-specific code here; Projects and Folders were each added by a package reference and a rebuild after becoming Gateway-ready. Validates FR-5, FR-20.
 - **SM-2 Cross-module task.** An agent completes a task spanning two Modules using only the Generic Tools, with no per-module prompt or tool. Validates FR-9, FR-15 to FR-17.
 - **SM-3 First deletion.** At least one Legacy Server deleted. Validates FR-21.
-- **SM-4 Heads agree.** A test runs both Heads against one EventStore with identical inputs for every Operation and gets identical Catalog data, identical error documents, and identical results once volatile Command result fields (message identifier, idempotency key, correlation identifier) are masked. Validates FR-5, FR-11, FR-12.
+- **SM-4 Heads agree.** A test runs both Heads against one EventStore with identical inputs for every Operation and gets identical Catalog data, identical error documents, and identical results once generated message and correlation identifiers are masked. Caller-supplied `idempotencyKey` must be equal and present in both results when supplied and omitted by both when absent. Validates FR-5, FR-11, FR-12.
 
 **Secondary**
 - **SM-5 Description quality.** Every description passes a reviewer who has never seen the code, recorded in the Module's pull request per the §8.1 checklist. Validates FR-1, NFR-8.
@@ -507,13 +516,20 @@ Checked three months after v1 ships.
 - **SM-C3 No dependency creep.** Coverage gained by referencing a Module's server or client project, or by widening the §4 allowlist without a PRD change, is a failure. Counterbalances SM-1.
 - **SM-C4 No hollow descriptions.** A description equal to the humanized type name counts against SM-5.
 
-## 10. Open questions
+## 10. Handoff and open questions
 
 Numbering is stable so downstream references stay valid.
 
 ### 10.1 Handoff to architecture
 
-This revision (2026-09-22) changes rules the architecture spine at `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md` encodes; the spine must be updated before the executor epic: AD-15 (allowlist wording), AD-9 (per-call tenant gate, `actorProperty`, no Query correlation or extensions), AD-19 (`aggregateId` constant, no empty identifier), AD-7 (`actorProperty` as an envelope-filled property), AD-11 (profile store and new Profile fields).
+The earlier AD-7/9/11/15/19 handoff is complete and recorded in `verify-update-2026-09-22.md`. The architecture spine at `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md` must reconcile this validation-driven amendment at the owning implementation gates; unaffected catalog preparation may continue:
+
+- Before the fixture story: keep one declared synthetic Module and construct the other Identifier Kind in isolation.
+- Before the dependency-closure test or Module pins: AD-15 distinguishes the Decoration Package from the external dependency allowlist.
+- Before Schema and Catalog implementation: AD-6/7 preserve Module serializer casing, and AD-8 preserves an unmarked `*Id` property's serializer-derived Schema with lint only.
+- Before settings resolution: AD-13 requires a URL only when execution reaches the Gateway.
+- Before executor implementation: AD-9 and the identifier-generation convention use caller-supplied idempotency keys only, expose no generic retry or duplicate promise, resolve omitted command correlation to the generated message identifier, and preserve the actual status on every `EventStoreGatewayException`, including malformed-success `2xx` responses.
+- Before either Head or its output schemas: AD-5/12 conform to the exhaustive addendum §G records, including lint findings and member types and constraints; the channel convention applies the pre-initialize MCP stderr/empty-stdout rule to every startup failure.
 
 ### 10.2 Open
 
@@ -521,7 +537,6 @@ This revision (2026-09-22) changes rules the architecture spine at `_bmad-output
 5. **Parties routing choice.** Attribute routing with today's full-type-name Wire Types, or migration to `ICommandContract`. Owner: Parties maintainer. Revisit before Parties decoration starts.
 6. **Deletion order.** Owner: product owner. Revisit when the migration plan (FR-21) is drafted.
 8. **Upstream decoration dates.** Target Contracts versions and dates for the §8.1 schedule. Owner: product owner with the Tenants and Parties maintainers. Revisit before the Decoration Package is published.
-9. **Gateway deduplication.** Whether the Gateway deduplicates a resubmitted idempotency key and reports it in the command response, so UJ-1's retry and the FR-17 result can state it. Owner: EventStore owner. Revisit before FR-17 is implemented.
 
 ### 10.3 Resolved
 
@@ -529,6 +544,7 @@ This revision (2026-09-22) changes rules the architecture spine at `_bmad-output
 3. **Aggregate-less Queries.** Resolved from source (2026-09-22): the Gateway's query validator rejects an empty aggregate identifier, and sibling clients send a per-Query constant (Parties `parties`); hence the `aggregateId` attribute member (§5.1, FR-16) and the §8.1 query spike.
 4. **Analyzer feasibility.** Resolved by the architecture spine (2026-09-22): the analyzer is a separate project packed into the Decoration Package, so a Module author needs one reference; it is a separable story and the package may ship before it (FR-1).
 7. **Package identifiers and CLI command name.** Resolved by the architecture spine (2026-09-22): command `hexalith`; packages `Hexalith.McpCli` (tool) and `Hexalith.McpCli.Abstractions` (Decoration Package), one shared version (§7).
+9. **Gateway deduplication.** Resolved from the pinned EventStore source (2026-09-22): logical retry safety is conditional on a trusted adapter registered per Command type, and `SubmitCommandResponse` has no replay/duplicate classification. v1 therefore passes through only caller-supplied keys, never retries, and exposes no generic safe-retry or `duplicate` promise (UJ-1, FR-16, FR-17).
 
 ## 11. Assumptions index
 
@@ -536,7 +552,6 @@ Each inline `[ASSUMPTION]` tag carries its own rationale; this table is the conf
 
 | Location | Assumption | Who confirms |
 |---|---|---|
-| UJ-1 | The Gateway deduplicates on the idempotency key and reports it | EventStore owner (OQ-9) |
 | FR-13 | JSON is the right default format for an agent-first tool | Product owner |
 | FR-13 | The tool must not read the admin CLI's environment variables | Product owner |
 | FR-16 | In v1 the operator states the Actor in the Profile; the tool never decodes the token | Product owner, architecture |

@@ -7,16 +7,17 @@ updated: 2026-09-22
 
 # PRD Addendum: Hexalith.McpCli
 
-Normative: §E argument table and §G result documents (PRD FR-9, FR-11, and
-FR-12 are specified against them). Context for architecture, solution design, and
-implementation: §A–D, §F, §H.
+Sections E and G are normative; PRD FR-9, FR-11, and FR-12 depend on them.
+Sections A–D, F, and H provide context for architecture, solution design, and
+implementation.
 
 ## A. Rejected alternatives and options considered
 
-Full options matrix (D1–D6, pros and cons): the brief addendum at
+For the full D1–D6 options matrix, including pros and cons, see the brief
+addendum at
 `_bmad-output/planning-artifacts/briefs/brief-mcpcli-2026-09-21/addendum.md`,
-sections "Options considered" and "Decisions (2026-09-21)". Rejected, and
-why:
+sections "Options considered" and "Decisions (2026-09-21)". The following
+alternatives were rejected:
 
 - **D1 discovery** — attribute-only and marker-interface-only were both
   rejected in favor of the hybrid: attribute-only duplicates routing data that
@@ -30,13 +31,13 @@ why:
   filter" is parked (PRD §8.2).
 - **D4 transport** — any authentication server rejected. Hosted HTTP is the
   next release, not v1, because the hard part is operations, not code.
-- **D5 CLI depth** — generated per-operation subcommands parked: option
-  typing for nested payloads gets fiddly.
-- **D6 legacy servers** — coexist-indefinitely rejected (keeps the
-  inconsistency forever); strangler rejected by the product owner because it
-  means an unbounded transition with two ways of doing things (an explicit
-  override of the facilitator's recommendation). Replace is the end
-  state; see §D for the replacement inventory.
+- **D5 CLI depth** — generated per-Operation subcommands were deferred
+  because typing options for nested Payloads becomes complex.
+- **D6 legacy servers** — indefinite coexistence was rejected because it
+  would preserve the inconsistency. The product owner rejected the strangler
+  approach because it would create an unbounded transition with two ways of
+  doing things, explicitly overriding the facilitator's recommendation.
+  Replacement is the end state; see §D for the inventory.
 - **Profile store (2026-09-22)** — sharing `~/.eventstore/profiles.json` with
   the admin CLI rejected after validation: one profile name cannot target both
   the admin API and the Gateway, `csv` is unsupported here, and the admin CLI's
@@ -51,14 +52,15 @@ why:
 
 **Envelope and Gateway rules**
 
-- The Envelope records that the executor fills: `SubmitCommandRequest(MessageId,
+- The executor fills two Envelope records: `SubmitCommandRequest(MessageId,
   Tenant, Domain, AggregateId, CommandType, JsonElement Payload,
   CorrelationId?, Extensions?, IdempotencyKey?)` and
   `SubmitQueryRequest(Tenant, Domain, AggregateId, QueryType,
-  ProjectionType?, Payload?, EntityId?, ProjectionActorType?)` plus its Paging, Search, Filters, OrderBy, and Freshness members (source:
-  `extract-references.md` §B, which also lists `QueryEnvelope`,
+  ProjectionType?, Payload?, EntityId?, ProjectionActorType?)`.
+  `SubmitQueryRequest` also includes Paging, Search, Filters, OrderBy, and
+  Freshness members. See `extract-references.md` §B, which also lists `QueryEnvelope`,
   `QueryPagingOptions`, `QueryPagingMetadata`, and the
-  `EventStoreGatewayException` members that PRD FR-11 maps to).
+  `EventStoreGatewayException` members that PRD FR-11 maps.
 - `SubmitQueryRequest` has no correlation identifier or extensions member and
   its validator rejects additional properties, which is why PRD FR-16 sends
   neither on Queries.
@@ -77,11 +79,10 @@ why:
 - Transport switch is `hexalith mcp --transport stdio|http`; v1 ships stdio
   only. HTTP reuses the Parties `McpContextForwardingHandler` pattern
   (bearer token, `X-Tenant-Id`, `X-User-Id`).
-- Stdio host pattern to copy from `Hexalith.EventStore.Admin.Mcp`: the
-  logging setup (all providers to stderr). Tool registration is not copied:
-  the Generic Tools are built at runtime with `McpServerTool.Create` and a
-  custom list-tools handler (spine AD-12), never static
-  `[McpServerToolType]` classes.
+- Copy the logging setup from `Hexalith.EventStore.Admin.Mcp`; it sends all
+  providers to stderr. Do not copy its tool registration. Build the Generic
+  Tools at runtime with `McpServerTool.Create` and a custom list-tools handler
+  (spine AD-12), never static `[McpServerToolType]` classes.
 - Exit codes 0/1/2 copied from `Hexalith.EventStore.Admin.Cli`, with the
   meaning of exit 1 narrowed to `describe --lint` (PRD FR-14).
 - MCP C# SDK notes relevant to FR-9 and FR-19: the SDK has no first-class
@@ -117,10 +118,11 @@ why:
   host inside Hexalith itself (runtime `McpCommandDescriptor` records,
   hosting the Projects plug-in): a comparable for the catalog idea. Its
   deletion status is in §D.
-- CLI + MCP sharing one catalog: Azure `azmcp` (`--learn` progressive
-  discovery, namespace and read-only filters, JSON stdout / logs stderr);
-  Scaleway `scw mcp server serve` (stdio or streamable HTTP, filters by
-  namespace, resource, verb, read-only).
+- Comparable tools that share one Catalog between CLI and MCP surfaces include
+  Azure `azmcp` (`--learn` progressive discovery, namespace and read-only
+  filters, JSON on stdout, and logs on stderr) and Scaleway
+  `scw mcp server serve` (stdio or streamable HTTP, with filters by namespace,
+  resource, verb, and read-only status).
 - Landscape research for this PRD (`research-landscape.md` in this folder):
   - Catalog-driven MCP servers converge on four to six meta tools named
     list / describe / invoke.
@@ -159,22 +161,25 @@ Survey facts that shaped the PRD (full detail in `extract-references.md`):
   "Gateway-ready" prerequisite in PRD §4 and §8.1.
 - `Hexalith.Folders.Contracts` holds read models and OpenAPI YAML only, no
   command or query records.
-- Tenants is the only module implementing `ICommandContract` /
-  `IQueryContract`; wire `CommandType` differs per module (kebab-case, full
-  type name, `nameof`). Hence canonical `module.kebab-case` Operation Names
-  mapped to per-module wire values.
+- Tenants is the only Module implementing `ICommandContract` or
+  `IQueryContract`; wire `CommandType` differs per Module (kebab-case, full
+  type name, `nameof`). This variation is why canonical `module.kebab-case`
+  Operation Names map to Module-specific wire values.
 - Tenants runs every Command and Query under the Envelope tenant `system`
   (`TenantIdentity.ForTenant` puts the managed tenant in the aggregate
   identifier) and no longer has a projection actor; reads go through the
   read-model store by handler routing. Hence `fixedTenant` on the marker and
   `projectionActorType` being optional.
-- None of the four v1 Contracts libraries carries a `[Description]`
-  attribute.
+- At the 2026-09-21 survey, none of the four candidate Contracts libraries
+  carried a `[Description]` attribute. The accepted v1 scope later narrowed to
+  Tenants and Parties; Projects and Folders follow after v1 (PRD FR-20).
 
 ## E. Generic Tool and CLI argument table
 
-Both Heads implement every row with the spelling shown. Positional CLI
-arguments are shown in angle brackets.
+### Call arguments
+
+Each Head implements every argument assigned to it in its column, with the
+spelling shown. Positional CLI arguments are shown in angle brackets.
 
 | Argument | MCP tools | CLI | Notes |
 |---|---|---|---|
@@ -184,22 +189,24 @@ arguments are shown in angle brackets.
 | payload | `send_command`, `run_query` | `--payload <json>` / `@file` / stdin | validated against the Schema |
 | tenant | `send_command`, `run_query` (optional) | none per call; `--tenant` is a session setting (global) | the only per-call identity value, MCP only; honored per PRD FR-16 (fixed tenant, then operator gate) |
 | aggregateId | `send_command`, `run_query` (optional) | `--aggregate-id` | explicit value wins over the constant; disagreement with the accessor value is a validation failure; required when a Query has no property and no constant |
-| correlationId | `send_command` (optional) | `--correlation-id` | ULID, pass-through; Commands only (§B) |
-| idempotencyKey | `send_command` (optional) | `--idempotency-key` | ULID; generated when absent; returned in the result |
+| correlationId | `send_command` (optional) | `--correlation-id` | caller-supplied ULID is passed through; when omitted, the generated message identifier is used as command correlation; no second identifier is generated (§B) |
+| idempotencyKey | `send_command` (optional) | `--idempotency-key` | caller-supplied ULID; never generated; passed through and echoed when present; retry safety requires a trusted Gateway adapter for the Command type |
 | entityId | `run_query` (optional) | `--entity-id` | Gateway `EntityId` |
 | pageSize, offset, cursor | `run_query` (optional) | `--page-size`, `--offset`, `--cursor` | Gateway paging; the only paging channel (PRD FR-16) |
 | extensions | `send_command` (optional) | `--extension key=value` (repeatable) | Gateway `Extensions` map; keys must be in the Profile's `allowedExtensions`; Commands only (§B) |
-| lint | none | `describe --lint` | lists undescribed properties, unmarked identifier-like properties, and Payload paging members; exit 1 if any |
+| lint | none | `describe --lint` | `lintFindings` is always present in the describe result; this flag makes findings produce exit 1 |
 
-Session settings. `--profile` resolves first (flag, `EVENTSTORE_PROFILE`, then
-the file's `activeProfile`); every other setting resolves from the flag, then the environment variable,
-then the selected Profile, then the default, skipping any source the table
-marks none. Only the MCP `tenant` argument is a per-call source, gated by
-PRD FR-16.
+### Session settings and profiles
+
+For session settings, `--profile` resolves first: flag, `EVENTSTORE_PROFILE`,
+then the file's `activeProfile`. Every other setting resolves in this order:
+flag, environment variable, selected Profile, then default. Skip sources that
+the table marks as `none`. Only the MCP `tenant` argument is a per-call source,
+gated by PRD FR-16.
 
 | Setting | Flag | Environment variable | Profile field | Default |
 |---|---|---|---|---|
-| url | `--url` | `EVENTSTORE_URL` | `url` | none (missing is `configuration_invalid`) |
+| url | `--url` | `EVENTSTORE_URL` | `url` | none; required only when an execution call reaches the Gateway |
 | token | `--token` | `EVENTSTORE_TOKEN` | `token` | none |
 | tenant | `--tenant` | `EVENTSTORE_TENANT` | `tenant` | none |
 | actor | `--actor` | `EVENTSTORE_ACTOR` | `actor` | none |
@@ -257,10 +264,47 @@ list).
 
 ## G. Result and error documents
 
-Both Heads serialize the same record types with the tool's canonical
-serializer options; the MCP Server declares each record type as the output schema of the tool
-that returns it (PRD FR-11). One example per document; optional members are omitted when
-absent.
+### Success documents
+
+Both Heads serialize the same record types by using the tool's canonical
+serializer options. The MCP Server declares each record type as the output
+schema for the tool that returns it (PRD FR-11). This section is exhaustive:
+fields listed as required are always
+present, arrays use `[]` when empty, and optional members are omitted rather than serialized as
+`null`. Outer result fields use the canonical camel-case spelling below. Embedded `schema` and
+`example` documents preserve the Module's serializer contract, including property casing.
+
+| Document | Required members | Optional members |
+|---|---|---|
+| `list_modules` | `modules`; each item has `name`, `description`, `operationCount` | none |
+| `list_operations` | `module`, `operations`; each item has `name`, `kind`, `description` | none |
+| `describe_operation` | `name`, `kind`, `description`, `schema`, `envelope`, `lintFindings`, `submittable`; `envelope` has `aggregateIdRequired`, `idempotencyKeyRequired`, `arguments`; each lint finding has `code`, `severity`, `message` | `example`, `envelope.fixedTenant`, lint finding `property` (required for property-level findings), `reason` (required when `submittable` is `false`) |
+| `send_command` | `operation`, `messageId`, `correlationId`, `tenant`, `aggregateId`, `status` | `idempotencyKey` (echoed only when caller-supplied), `result` (present only when the Gateway returns a result payload) |
+| `run_query` | `operation`, `tenant`, `document` | `paging`; when present it requires `pageSize` and may independently include `offset`, `nextCursor`, `totalCount`, `hasMore` |
+
+Public member types and constraints:
+
+| Member | JSON contract |
+|---|---|
+| Module `name` / `module` | non-empty string equal to the canonical Module Name |
+| `operation` / Operation `name` | non-empty string in the FR-8 canonical form |
+| `description`, `message`, `detail` | non-empty string |
+| `operationCount`, `paging.offset`, `paging.totalCount` | integer greater than or equal to zero |
+| `paging.pageSize` | integer greater than zero |
+| `kind` | string enum: `read`, `write` |
+| `schema` | JSON object produced by FR-7 |
+| `example` | JSON object that validates against `schema` |
+| `envelope` | JSON object; `fixedTenant` is a Gateway-valid Tenant string; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable `idempotencyKeyProperty`; `arguments` is a duplicate-free array of applicable §E argument-name strings |
+| `lintFindings` | array of objects defined below; empty when no finding exists |
+| `submittable` | boolean describing head-level surface availability from Read-only Mode and resolved Gateway URL only; Tenant, actor, Payload, and per-call Envelope requirements are evaluated on execution; `reason` is `read_only` or `configuration_invalid` when false |
+| `messageId`, `correlationId`, `idempotencyKey` | ULID string; `messageId` is the Gateway's canonical execution identifier |
+| `tenant` | non-empty string satisfying the FR-15 Gateway Tenant pattern |
+| `aggregateId` | non-empty string satisfying the FR-15 Gateway aggregate-identifier pattern and the Module's Identifier Kind |
+| `status` | string constant `accepted`, representing the successful Gateway `202 Accepted` response; later values require a public-contract change |
+| `result` | any JSON value returned as `SubmitCommandResponse.ResultPayload`; omitted when the Gateway returns no payload |
+| `document` | any JSON value returned as `EventStoreQueryResult.Payload` |
+| `paging.nextCursor` | non-empty string when present |
+| `paging.hasMore` | boolean |
 
 `list_modules`:
 
@@ -280,21 +324,34 @@ absent.
 {
   "name": "tenants.get-tenant-users", "kind": "read",
   "description": "Lists the users of one tenant.",
-  "schema": { "type": "object", "additionalProperties": false, "properties": { "tenantId": { "type": "string", "description": "…" } }, "required": ["tenantId"] },
-  "example": { "tenantId": "acme" },
-  "envelope": { "fixedTenant": "system", "aggregateIdRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"] },
+  "schema": { "type": "object", "additionalProperties": false, "properties": { "TenantId": { "type": "string", "description": "…" } }, "required": ["TenantId"] },
+  "example": { "TenantId": "acme" },
+  "envelope": { "fixedTenant": "system", "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"] },
+  "lintFindings": [],
   "submittable": true
 }
 ```
 
 `arguments` lists the Envelope arguments the caller may supply; `tenant` is
-omitted when the Module declares a `fixedTenant`.
+omitted when the Module declares a `fixedTenant`. Lint finding `code` is one of
+`missing_property_description`, `unmarked_identifier_like_property`,
+`payload_paging_member`, or `hollow_description`; `severity` is the string
+constant `warning`. For the first three codes, `property` is an RFC 6901 JSON
+Pointer to the recursively inspected property, using Module-serialized casing.
+The operation-level `hollow_description` finding omits `property`.
 
-`send_command` (`duplicate` is present once OQ-9 confirms the Gateway reports it):
+`send_command` (example with a caller-supplied idempotency key):
 
 ```json
-{ "operation": "parties.create-party", "messageId": "01J9…", "idempotencyKey": "01J9…", "correlationId": "01J9…", "tenant": "acme", "aggregateId": "01J9…", "status": "accepted", "duplicate": false, "result": { } }
+{ "operation": "parties.create-party", "messageId": "01J9…", "idempotencyKey": "01J9…", "correlationId": "01J9…", "tenant": "acme", "aggregateId": "party-42", "status": "accepted", "result": { } }
 ```
+
+The tool does not infer replay when the returned `messageId` differs from the
+identifier generated for the attempt. The Gateway uses the canonical execution
+identifier for both replay and pending admission, but its response provides no
+generic replay classification.
+Callers must not retry an unknown command outcome unless the target deployment has
+confirmed a trusted idempotency adapter for that Command type.
 
 `run_query`:
 
@@ -302,19 +359,52 @@ omitted when the Module declares a `fixedTenant`.
 { "operation": "tenants.list-tenants", "tenant": "system", "document": [ ], "paging": { "pageSize": 50, "offset": 0, "nextCursor": "…", "totalCount": 120, "hasMore": true } }
 ```
 
-Error documents (the CLI writes one to stdout with exit 2; the MCP Server
-returns it as `structuredContent.error` with `isError: true`).
+### Error documents
+
+The CLI writes an error document to stdout with exit 2; the MCP Server
+returns it as `structuredContent.error` with `isError: true`. For any `mcp`
+failure before JSON-RPC initialization, the CLI instead writes the structured
+error to stderr and leaves stdout empty. After initialization, failures travel
+only as JSON-RPC/MCP errors.
+
+| Error code | Required members under `error` | Optional members under `error` |
+|---|---|---|
+| `validation_failed` | `code`, `operation`, `violations`; each violation has `path`, `message` | none |
+| `gateway_error` | `code`, `status`, `detail` | `reason`, `retryable`, `clientAction`, `retryAfter`, `correlationId` |
+| `unknown_operation` | `code`, `operation`, `suggestions` | none |
+| `read_only`, `catalog_empty`, `catalog_invalid`, `unsupported_transport`, `configuration_invalid`, `internal_error` | `code`, `message` | none |
+
+Error member types and constraints:
+
+- `error` is an object; `code` is exactly the row's string discriminator.
+- `operation` follows the Operation Name contract above. `suggestions` is an array
+  of at most three canonical Operation Name strings.
+- `violations` is a non-empty array; each `path` is an RFC 6901 JSON Pointer and
+  each `message` is a non-empty string.
+- Gateway `status` is the integer `EventStoreGatewayException.StatusCode`
+  copied without reclassification. It may therefore be `2xx` when the pinned
+  client reports an HTTP-success response that is malformed or fails semantic
+  validation. `detail` is the first non-empty value of
+  `EventStoreGatewayException.Detail` and `.Title`, so it is always present.
+  `reason` is the first non-empty value of `.ReasonCode`,
+  `.Code`, and `.Reason`; it is omitted when all are absent. `clientAction` is
+  a non-empty forward-compatible Gateway string when supplied; `retryable` is
+  boolean when supplied; `retryAfter` is the non-empty Gateway header or
+  extension string; and `correlationId` is a ULID string. No optional value is
+  synthesized. Fixtures cover complete Gateway Problem Details, malformed
+  `202` command and `200` query responses, a semantic query failure, and a
+  locally created client exception with optional metadata absent.
 
 `validation_failed`:
 
 ```json
-{ "error": { "code": "validation_failed", "operation": "parties.create-party", "violations": [ { "path": "/partyId", "message": "must match the ULID pattern" } ] } }
+{ "error": { "code": "validation_failed", "operation": "parties.create-party", "violations": [ { "path": "/PartyId", "message": "must match the aggregate identifier pattern" } ] } }
 ```
 
 `gateway_error`:
 
 ```json
-{ "error": { "code": "gateway_error", "status": 409, "reason": "conflict", "detail": "…", "retryable": false, "retryAfter": null, "clientAction": "inspect", "correlationId": "01J9…" } }
+{ "error": { "code": "gateway_error", "status": 409, "reason": "conflict", "detail": "…", "retryable": false, "clientAction": "inspect", "correlationId": "01J9…" } }
 ```
 
 `unknown_operation`:
@@ -323,9 +413,15 @@ returns it as `structuredContent.error` with `isError: true`).
 { "error": { "code": "unknown_operation", "operation": "parties.crate-party", "suggestions": ["parties.create-party"] } }
 ```
 
-Other codes with only `code` and `message`: `read_only`, `catalog_empty`,
-`catalog_invalid`, `unsupported_transport`, `configuration_invalid`,
-`internal_error`.
+### Offline discovery
+
+Catalog-only discovery does not require a resolved Gateway URL. A missing URL
+produces `configuration_invalid` for execution calls only: `send`, `query`,
+`send_command`, and `run_query`. It does not prevent `modules`, `operations`, `describe`, `config`,
+`--version`, MCP startup, or MCP discovery calls. In such a session,
+`describe_operation` returns `submittable: false, reason: configuration_invalid`
+unless a write Operation is already blocked by Read-only Mode, which takes
+precedence as `reason: read_only`.
 
 ## H. Module prerequisite detail
 
@@ -333,22 +429,22 @@ Expanded from PRD §8.1 for the Module maintainers.
 
 - **Projects.** **Today:** `Hexalith.Projects.Contracts` carries ASP.NET
   Core, Fluxor, FluentUI, and FrontComposer.Shell, so it fails the PRD §4
-  allowlist and the tool cannot reference it (FR-20). **Becomes:** a slimmed
-  Contracts Library; Query types for the 11 resources the Legacy Server
-  exposes; attribute routing (`wireType` from the instance `CommandType` property,
-  `aggregateIdProperty = ProjectId`); `tenantProperty`,
-  `correlationProperty`, `idempotencyKeyProperty`, and
-  `actorProperty = ActorPrincipalId` naming the existing members, so records
-  are unchanged; a decision on whether the server-side tenant guard in the
-  Projects command submitter moves into the aggregate, since direct Gateway
+-  allowlist and the tool cannot reference it (FR-20). **Becomes:** Slim the
+  Contracts Library. Add Query types for the 11 resources the Legacy Server
+  exposes. Configure attribute routing with `wireType` from the instance
+  `CommandType` property and `aggregateIdProperty = ProjectId`. Name the
+  existing members through `tenantProperty`, `correlationProperty`,
+  `idempotencyKeyProperty`, and `actorProperty = ActorPrincipalId`, so the
+  records remain unchanged. Decide whether the server-side tenant guard in the
+  Projects command submitter moves into the aggregate because direct Gateway
   submission bypasses it. **Owner:** the Projects maintainer. **Acceptance:**
   `list_operations projects` shows the agreed subset and each Operation is
   accepted by the Gateway.
 - **Folders.** **Today:** `Hexalith.Folders.Contracts` holds read models and
   OpenAPI only, and the Legacy Server exposes 49 tools over REST with
-  dry-run, redaction, and freshness semantics. **Becomes:** decorated Command
-  and Query types for the agent-facing subset, handled by a Folders domain
-  service; dry-run, redaction, and freshness either move into handlers or are
-  dropped and listed in the migration plan. **Owner:** the Folders
+  dry-run, redaction, and freshness semantics. **Becomes:** Add decorated
+  Command and Query types for the agent-facing subset, handled by a Folders
+  domain service. Move dry-run, redaction, and freshness into handlers or drop
+  them and list them in the migration plan. **Owner:** the Folders
   maintainer. **Acceptance:** `list_operations folders` shows the agreed
   subset and each Operation is accepted by the Gateway.

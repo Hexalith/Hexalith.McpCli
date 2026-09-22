@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PRD Validation: Hexalith.McpCli</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+
+    --grade-exc: #16a34a;
+    --grade-good: #65a30d;
+    --grade-fair: #d97706;
+    --grade-poor: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .grade {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .grade-excellent { background: var(--grade-exc); }
+  .grade-good { background: var(--grade-good); }
+  .grade-fair { background: var(--grade-fair); }
+  .grade-poor { background: var(--grade-poor); }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body><div class="container">
+<header class="report-header"><div class="title"><h1>Hexalith.McpCli — Validation Report</h1><div class="subtitle">_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md</div></div><div class="grade grade-fair">Fair</div></header>
+<div class="synthesis"><p>The PRD is a usable basis for architecture and story preparation: its catalog thesis, two-head execution boundary, security decisions, and release prerequisites are explicit and mostly testable. Remaining weaknesses are bounded contract ambiguities, especially identifier schema typing, settings applicability, and the Parties command subset; these need clarification in their owning stories, but do not justify restarting discovery or blocking all work. No critical or high finding is established by this rubric review; the explicitly timed upstream decisions remain gates for their named phases.</p><p>The consistency review changes the consolidated grade to Fair (3 high, 6 medium, 1 low; 10 distinct findings). The current PRD and architecture disagree on the required Decoration Package dependency, public result records, and Tenants Payload casing. Reconcile those contracts before implementing the affected dependency checks, serialization, and heads; generic catalog and other independent preparation can continue. No critical finding was established. The SM-1/Folders issue appears in both reviews and is counted once, at medium severity.</p></div>
+<div class="dimension-summary"><div class="dim-card"><div class="dim-name">Decision-readiness</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+<div class="dim-card"><div class="dim-name">Substance over theater</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+<div class="dim-card"><div class="dim-name">Strategic coherence</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+<div class="dim-card"><div class="dim-name">Done-ness clarity</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+<div class="dim-card"><div class="dim-name">Scope honesty</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+<div class="dim-card"><div class="dim-name">Downstream usability</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+<div class="dim-card"><div class="dim-name">Shape fit</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div></div>
+<section class="dimension"><details><summary><h2>Decision-readiness</h2><span class="verdict-pill verdict-adequate">adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>Sections 1, 4, and 8 state consequential choices directly: a single generic surface, no hosted infrastructure in v1, token-owner identity for dev/test, and no release-scope fallback if Tenants or Parties slips. Addendum §A records what was sacrificed by rejecting permanent coexistence, shared profile storage, and unconditional per-call tenant precedence.</p>
+<p>The five open questions in §10.2 have owner roles and revisit conditions. OQ-1 belongs to HTTP; OQ-5 to Parties decoration; OQ-8 to publication scheduling; OQ-9 to FR-17. Their presence in a final PRD does not imply all catalog or fixture work is blocked. The current architecture consistency reviewer should determine which §10.1 handoff items still remain; the PRD's historical handoff sentence is not proof they remain unimplemented.</p></div></div><div class="findings-list"></div></details></section>
+<section class="dimension"><details><summary><h2>Substance over theater</h2><span class="verdict-pill verdict-strong">strong</span></summary><div class="dim-body"><div class="dim-judgment"><p>The vision describes an actual platform constraint: six legacy packages encode incompatible operation surfaces while module contracts lack runtime descriptions. The proposed catalog, decoration, routing fallback, and migration plan each address that problem. User roles drive concrete decisions: module authors get one decoration dependency, agents get discovery tools, and shell users share the executor.</p>
+<p>NFRs predominantly have product-specific consequences: 500 ms catalog startup, 8,000 characters for tool definitions, clean stdio, three-platform support, and reviewable descriptions. The numerical assumptions are disclosed. There is no need to invent market positioning, additional personas, or enterprise SLA sections for this internal tool.</p></div></div><div class="findings-list"></div></details></section>
+<section class="dimension"><details><summary><h2>Strategic coherence</h2><span class="verdict-pill verdict-adequate">adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>The central bet—one contract declaration should expose a capability to both agents and scripts—connects §1 to FR-1–FR-20 and to SM-1, SM-2, SM-4, and SM-7. Counter-metrics explicitly prevent apparent progress through new typed tools, dependency creep, or hollow descriptions. Replacement is a longer-term objective; FR-21 makes the migration plan a v1 deliverable and §8.2 correctly places deletions later.</p><p>The Folders/SM-1 finding is consolidated with <a href="#C4">C4</a> below, at medium severity.</p></div></div><div class="findings-list"></div></details></section>
+<section class="dimension"><details><summary><h2>Done-ness clarity</h2><span class="verdict-pill verdict-adequate">adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>All 22 FRs carry observable consequences, and the strongest ones name refusal behavior, error codes, precedence, or test boundaries rather than adjectives. The startup diagnostic table, executor-enforced read-only guarantee, explicit aggregate handling, and source-precedence fixtures are particularly useful for story acceptance. A few literal statements still allow incompatible implementations.</p>
+<p>The shared-head result comparison in FR-20/SM-4 needs equivalent initial state for stateful commands, but “one EventStore” does not forbid restoring fixtures between executions. That is a test-design obligation, not a separate PRD blocker. Likewise, OQ-9 explicitly gates deduplication claims before FR-17 implementation; no unsupported retry guarantee should be inferred now.</p></div></div><div class="findings-list"><article class="finding" id="R1"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">R1: The unmarked identifier rule contradicts schema derivation</h3><span class="finding-location">(FR-7, <code>prd.md:231–237</code>)</span></header><div class="finding-note">FR-7 first derives schema from the operation type, then says an unmarked property ending in <code>Id</code> “is a plain string in the Schema,” immediately followed by “the name suffix never types a property.” For an otherwise ordinary numeric or object-valued <code>ExternalId</code>, those instructions cannot both hold: forcing a string types by suffix; preserving the CLR representation violates the plain-string sentence. The explicitly recognized ULID type also needs its existing exception preserved.</div><div class="finding-fix"><strong>Fix:</strong> Say an unmarked property retains its normal serializer-derived schema and only receives a lint finding; use “plain string” solely for a property whose declared serialization is already a string. Reconcile the same wording in architecture AD-8 when updating the requirement.</div></article>
+<article class="finding" id="R2"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">R2: Missing-URL validation has no verb applicability rule</h3><span class="finding-location">(FR-6 <code>prd.md:227</code>; FR-13 <code>prd.md:298–302</code>; addendum §E settings table)</span></header><div class="finding-note">FR-6 says <code>config</code> and <code>--version</code> “always run,” while FR-13 applies settings resolution to every verb and says a missing URL is <code>configuration_invalid</code>. Neither scopes URL validation to verbs that submit work or explains whether offline discovery and bootstrap configuration require connection settings. Accepting a global option is not itself the problem; the unconditional missing-value rule is. A conforming implementation could reject the first profile-management command before an operator has configured a URL.</div><div class="finding-fix"><strong>Fix:</strong> State which verbs require a resolved URL, exempt bootstrap/config/version as intended, and decide whether catalog-only discovery works offline. This is an applicability clarification, not evidence that an implementation currently fails.</div></article></div></details></section>
+<section class="dimension"><details><summary><h2>Scope honesty</h2><span class="verdict-pill verdict-adequate">adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>Sections 8.2–8.3 clearly exclude the admin plane, identity-server work, executor retries, typed tools, and direct module API execution. HTTP is explicitly the only committed next release. The dependency allowlist and zero-module-specific-code requirement make the scope boundary inspectable. There are nine substantive inline assumptions with matching index entries, and five unresolved OQs; several are low-risk defaults while the dependency-sensitive ones have phase gates. Their count alone is not a reason to withhold architecture work.</p></div></div><div class="findings-list"><article class="finding" id="R3"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">R3: The v1 Parties command subset remains a tentative scope statement</h3><span class="finding-location">(§8.1, <code>prd.md:471</code>; FR-20)</span></header><div class="finding-note">The requirement says “Publish the agent-facing subset; the erasure and key-rotation Commands are probably not in it.” FR-20 then accepts every operation that happens to be decorated, which cannot establish whether the intended command coverage or exclusions were delivered. OQ-5 assigns the wire-routing decision, but does not explicitly assign this inclusion/exclusion decision or its acceptance inventory.</div><div class="finding-fix"><strong>Fix:</strong> Record an owner-approved included/excluded command inventory before Parties decoration, or add a bounded open item with that owner and revisit condition. Keep it upstream; no module-specific runtime configuration is needed here. This is a gate for defining Parties coverage, not a blocker to building the generic catalog.</div></article></div></details></section>
+<section class="dimension"><details><summary><h2>Downstream usability</h2><span class="verdict-pill verdict-adequate">adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>The glossary and feature/FR index make extraction straightforward. Stable identifiers are preserved despite FR-18/FR-19 placement. §0 explicitly promotes addendum §E and §G to normative status, which prevents readers from treating the argument and result contracts as optional explanatory examples. The remaining gap is that not all promised machine-consumable outcomes have a defined representation.</p></div></div><div class="findings-list"><article class="finding" id="R4"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">R4: The normative result documents omit the lint outcome</h3><span class="finding-location">(FR-4; FR-12; FR-14 <code>prd.md:315</code>; addendum §E lint row and §G <code>addendum.md:258–328</code>)</span></header><div class="finding-note"><code>describe --lint</code> must list three classes of findings and return a result document with exit 1 when any exist. §G specifies the shared <code>describe_operation</code> document but supplies no lint field/document or location for those findings. Two CLI implementations could both “list” them while emitting incompatible JSON or mixing non-JSON text into the JSON-default surface.</div><div class="finding-fix"><strong>Fix:</strong> Define the lint result's location and minimum fields in §G, including the empty result case and whether its findings supplement the ordinary describe document. Leave presentation details to the CLI story.</div></article></div></details></section>
+<section class="dimension"><details><summary><h2>Shape fit</h2><span class="verdict-pill verdict-strong">strong</span></summary><div class="dim-body"><div class="dim-judgment"><p>A capability specification is appropriate for this internal platform tool. Three compact journeys illustrate cross-module execution, discovery, and module onboarding without overwhelming the functional contract. The PRD's length is high, but its recent decision log explicitly accepts keeping testable consequences in the main document; this review does not relitigate that choice. Mechanism detail and deferred-module depth are largely kept in the addendum, and a separate architecture spine exists for implementation decisions.</p></div></div><div class="findings-list"></div></details></section>
+<section class="reviewer-section"><details><summary><h2>Decision and architecture consistency</h2><span class="reviewer-source">review-consistency.md</span></summary><div class="dim-body"><div class="dim-judgment"><p>The amended PRD preserves the main accepted product direction and resolves the former tenant, actor, profile-store, and aggregate-less-query conflicts. It is not yet consistent enough to use with the current architecture spine as a single implementation contract: the dependency allowlist still rejects a dependency required by decoration itself, and the normative result examples disagree with the architecture's records and Payload serialization. These are current cross-document conflicts, not requests to design intentionally deferred features. Findings: 0 critical, 3 high, 2 medium, 1 low.</p></div></div><div class="findings-list"><article class="finding" id="C1"><header><span class="badge badge-sev-high">high</span><h3 class="finding-title">C1: The allowlist rejects the Decoration Package every exposed Contracts Library must acquire</h3><span class="finding-location">(§4 Dependency allowlist; §8.1 Gateway-ready checklist item 1; architecture AD-2 and AD-15)</span></header><div class="finding-note">The PRD says a Contracts Library's &quot;own transitive closure stays inside that allowlist&quot;, whose exhaustive entries are the EventStore client, exposed <code>*.Contracts</code>, and the EventStore.Contracts closure. The same PRD requires every Module to &quot;Reference the Decoration Package&quot;, named <code>Hexalith.McpCli.Abstractions</code> in §3 and §7. That package is neither a Module Contracts package nor part of the pinned EventStore.Contracts closure. AD-2 explicitly draws <code>Contracts --&gt; Abs</code>, but AD-15 repeats an &quot;exactly&quot; allowlist without Abstractions. Thus a previously allowed Tenants/Parties package becomes disallowed as soon as it satisfies the first decoration prerequisite. Independently, PRD §4's unqualified &quot;tool package references exactly&quot; excludes the non-Hexalith runtime packages the spine explicitly allows; the intended domain-dependency boundary needs explicit scope.</div><div class="finding-fix"><strong>Fix:</strong> Enumerate this repository's Decoration Package as an allowed Contracts dependency, distinguish the domain/Hexalith boundary from the tool's own implementation and pinned third-party dependencies, and align AD-15 and the eventual closure test with that exact policy.</div></article>
+<article class="finding" id="C2"><header><span class="badge badge-sev-high">high</span><h3 class="finding-title">C2: The architecture's document records cannot emit the normative public results</h3><span class="finding-location">(§0; FR-9, FR-11, FR-12; addendum §G; architecture AD-5 and AD-12)</span></header><div class="finding-note">The PRD makes §G &quot;normative&quot; and requires both Heads to serialize &quot;the same result and error record types&quot;. Its command document has <code>operation</code>, <code>tenant</code>, <code>aggregateId</code>, <code>status</code>, and <code>result</code>; AD-5 instead specifies <code>CommandResult(MessageId, IdempotencyKey, CorrelationId, ResultPayload?)</code>, omitting four of those fields and naming the result <code>ResultPayload</code>. The query example requires <code>operation</code> and <code>tenant</code>, whereas AD-5 has only <code>QueryResult(Document?, Paging?)</code>. §G's gateway error puts <code>status</code>, <code>reason</code>, <code>detail</code>, <code>retryable</code>, <code>retryAfter</code>, <code>clientAction</code>, and <code>correlationId</code> directly under <code>error</code>; AD-5 groups gateway information under <code>OperationError(..., Gateway?)</code>. AD-12 returns Core records directly and derives output schemas from them, so these differences become public schema differences, not private implementation choices. Both Heads agreeing with each other would not prove conformity to §G.</div><div class="finding-fix"><strong>Fix:</strong> Reconcile AD-5 with the normative §G field names and nesting, explicitly identify required and optional members, and bind the head/schema contract checks to those documents. Keep the unresolved duplicate flag conditional on OQ-9.</div></article>
+<article class="finding" id="C3"><header><span class="badge badge-sev-high">high</span><h3 class="finding-title">C3: The normative Tenants example uses Payload casing rejected by the selected serialization policy</h3><span class="finding-location">(addendum §G <code>describe_operation</code>; FR-7 and FR-15; architecture AD-6 and AD-7)</span></header><div class="finding-note">The example declares a Schema property and required member <code>tenantId</code>, then gives <code>&quot;example&quot;: { &quot;tenantId&quot;: &quot;acme&quot; }</code>. AD-6 deliberately sets Payload <code>PropertyNamingPolicy = null</code> to preserve &quot;CLR property names verbatim&quot;, with <code>UnmappedMemberHandling = Disallow</code>; AD-7 derives the Schema with those Module Payload options. The current primary source, <code>references/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/Queries/GetTenantUsersQuery.cs:12</code>, declares <code>public string TenantId { get; init; }</code> and has no <code>JsonPropertyName</code> override. Under the accepted architecture its Payload Schema therefore uses <code>TenantId</code>, and the normative lower-case example fails the Schema. Camel-casing the outer result document does not change the keys inside an embedded Schema or Payload.</div><div class="finding-fix"><strong>Fix:</strong> Correct the normative example to the contract's actual Payload property spelling and state that outer result casing and Payload casing are distinct. Alternatively, document an explicit upstream contract naming amendment before relying on the lower-case example; do not silently change the Gateway-facing serializer.</div></article>
+<article class="finding" id="C4"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">C4: SM-1 no longer requires the prerequisite that the PRD repeatedly says gates it</h3><span class="finding-location">(§1 Status; §8.1 Upstream decoration schedule and Folders prerequisite; §9 SM-1; PRD <code>.memlog.md</code>)</span></header><div class="finding-note">The status and Folders row both say Folders &quot;gates SM-1&quot;. The current metric instead requires Tenants, Parties, &quot;every Module that became Gateway-ready since&quot;, and &quot;one further Module&quot;. It can pass with Projects alone while Folders remains unready. The decision log records the earlier deliberate release/metric split: &quot;Projects and Folders follow as they become Gateway-ready; SM-1 checked at three months for all four.&quot; A later entry says the metric was &quot;made observable&quot; without recording that relaxation. The v1 cut to two Modules was accepted and is not a finding; the surviving Folders gate and the metric's pass condition disagree.</div><div class="finding-fix"><strong>Fix:</strong> Choose and record the actual three-month acceptance rule: explicitly retain Projects and Folders in SM-1, or remove the Folders-gates-SM-1 claims and log the relaxed post-release target. Keep v1's two-Module release gate unchanged.</div></article>
+<article class="finding" id="C5"><header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">C5: The sample test plan violates the accepted one-Module fixture boundary</h3><span class="finding-location">(§4 Dependency allowlist; §6 NFR-1; architecture AD-15, Consistency Conventions/Tests, and Structural Seed)</span></header><div class="finding-note">The PRD permits &quot;one synthetic sample Contracts Library (the sample Module)&quot; and measures startup for the v1 Modules &quot;plus the sample Module&quot;; the latest decision log explicitly says &quot;Sample Module count is one.&quot; AD-15 likewise calls Sample.Contracts &quot;the only synthetic Module&quot;, but the architecture's Tests convention says that same assembly &quot;declares two Modules, sample-ulid ... and sample-opaque&quot;, and its Structural Seed repeats &quot;two synthetic Modules&quot;. This changes both the agreed fixture scope and the benchmark population. It also needs reconciliation with FR-3's assembly-level Module identity before implementers can construct the fixture.</div><div class="finding-fix"><strong>Fix:</strong> Keep one declared synthetic Module in the production-like fixture and cover the other Identifier Kind through isolated test construction, or explicitly amend the fixture allowance and assembly arrangement. Update the benchmark definition to match the chosen fixture.</div></article>
+<article class="finding" id="C6"><header><span class="badge badge-sev-low">low</span><h3 class="finding-title">C6: The handoff status still lists amendments that are already present</h3><span class="finding-location">(§1 Status; §10.1 Handoff to architecture)</span></header><div class="finding-note">The PRD says the spine &quot;must be updated before the executor epic&quot; for AD-7, AD-9, AD-11, AD-15, and AD-19. The current spine already includes Actor among envelope-filled properties (AD-7), the fixed-tenant and operator gate with Command-only extensions (AD-9), the exclusive mcpcli.json store and new settings (AD-11/AD-14), the expanded EventStore.Contracts closure (AD-15), and the Query constant plus nonempty aggregate rule (AD-19). This historical handoff is not evidence that the prior criticals remain open. Residual differences are identified above.</div><div class="finding-fix"><strong>Fix:</strong> Mark the listed amendment handoff completed, link its verification, and replace its pending work with any remaining concrete reconciliation items.</div></article></div></details></section>
+<div class="mechanical"><h3>Mechanical notes</h3><ul><li>The 22 FR definitions are unique; FR-18 and FR-19 are deliberately ordered by feature and explicitly explained. UJ-1–UJ-3, NFR-1–NFR-8, SM-1–SM-7, and SM-C1–SM-C4 are present. Stable OQ numbering is split between open and resolved sections intentionally.</li>
+<li>All nine substantive inline assumption tags round-trip to §11. Literal mentions of the tag in explanatory text are not additional assumptions.</li>
+<li>UJ-2 has an agent session rather than a named human protagonist. That is suitable for this tool's actual consumer role; adding a fictional name solely for the rubric would not improve the document.</li>
+<li>Addendum §D line 171 still says “four v1 Contracts libraries”; the amended PRD has two v1 modules. Update that inherited survey wording or date it explicitly.</li>
+<li>Addendum §G's Parties ULID error example is misleading now that Parties declares <code>String</code>; use a synthetic ULID-module example or a String-kind gateway-pattern violation.</li>
+<li>Addendum §G says absent optional fields are omitted, but the gateway-error example uses <code>retryAfter: null</code>. Clarify the canonical omitted/null convention when formalizing record schemas.</li>
+<li>Mechanical checks: 22 unique FR definitions; no undefined FR references or broken explicit Markdown file links in the PRD/addendum.</li>
+<li>Scope: current PRD, addendum, decisions, original brief, architecture spine, and cited local Contracts source. No implementation tests or live Gateway verification were performed.</li>
+<li>The earlier Poor report predates the amendments. Historical reports were preserved; this report covers the current documents.</li></ul></div>
+<footer class="report-footer"><div class="meta"><span>Rubric: .agents/skills/bmad-prd/assets/prd-validation-checklist.md</span><span>Generated: 2026-09-22T10:50:12Z</span><span>Report: _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/validation-2026-09-22-0901/validation-report.md</span></div></footer>
+</div></body></html>
+
