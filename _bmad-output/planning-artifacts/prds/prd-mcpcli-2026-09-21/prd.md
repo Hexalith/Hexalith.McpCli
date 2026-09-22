@@ -26,7 +26,7 @@ There is no triggering incident; the bet is that the Agents, ChatBot, and Conver
 
 Two consequences follow now. Identity forwarding becomes essential, which is why the HTTP transport is the next release rather than a distant one. And a Command without a description is a Command an agent cannot use, so the Decoration Attribute stops being decoration and becomes part of what it means for a Hexalith Operation to exist: every Module that ships after 2026-09-21 ships agent-ready, or is not finished (FR-22).
 
-**Status (2026-09-22).** v1 is blocked on upstream decoration of Tenants and Parties; dates are open (OQ-8) and there is no scope fallback (§8). The HTTP transport is the only committed next release and is load-bearing for per-user identity (§8.2). The migration plan is a v1 deliverable (FR-21). Projects and Folders follow v1 and both gate SM-1. The prior architecture amendments are verified; the remaining consistency amendments and their owning implementation gates are listed in §10.1.
+**Status (2026-09-22).** v1 is blocked on upstream decoration of Tenants and Parties; dates are open (OQ-8) and there is no scope fallback (§8). The HTTP transport is the only committed next release and is load-bearing for per-user identity (§8.2). The migration plan is a v1 deliverable (FR-21). Projects and Folders follow v1 and both gate SM-1. Architecture and public-contract handoffs are listed in §10.1.
 
 ## 2. Target user
 
@@ -96,7 +96,7 @@ Downstream readers and workflows use these terms exactly. Terms owned by a requi
 
 Each rule below is authoritative; FRs reference them rather than restate them.
 
-- **Dependency allowlist.** The tool package references its Decoration Package and exactly these external Hexalith and domain dependencies: the EventStore client package, the exposed Modules' `*.Contracts` packages, and the transitive closure of `Hexalith.EventStore.Contracts` at the pinned version. That closure currently includes `Hexalith.Commons.UniqueIds` and `ByteAether.Ulid`. An exposed Contracts Library may reference the dependency-free Decoration Package. All other transitive dependencies must remain within the external allowlist and add no framework reference beyond `Microsoft.NETCore.App`. A CI test over the restored dependency graph enforces the rule (FR-20). Adding another external package is a PRD change. The tool package never references an aggregate, projection, handler, client, or server project of any Module. Test projects may add the EventStore testing and Aspire composition packages the architecture names, plus one synthetic sample Contracts Library (the sample Module) never referenced by the tool package.
+- **Dependency allowlist.** Direct production package references are limited to the first-party Decoration Package, `Hexalith.EventStore.Client`, the exposed Modules' `*.Contracts` packages, and the named pinned Stack packages. The allowed transitive baseline is the exact locked closure of the pinned EventStore client, `Hexalith.EventStore.Contracts`, and Stack packages; it includes the client's Dapr and Microsoft dependencies and the Contracts closure's `Hexalith.Commons.UniqueIds` and `ByteAether.Ulid`. An exposed Contracts Library may add its own identity and reference the dependency-free Decoration Package, but may add no other package identity outside that baseline. A CI test over restored assets enforces the direct references, approved baseline identities and versions, Module Contracts closure, no additional Module or Hexalith package, and no framework reference beyond `Microsoft.NETCore.App` (FR-20). Adding an external package outside this policy is a PRD change. The tool package never references an aggregate, projection, handler, client, or server project of any Module. Test projects may add the EventStore testing and Aspire composition packages the architecture names, plus one synthetic sample Contracts Library (the sample Module) never referenced by the tool package.
 - **Zero module-specific code.** No application source type, branch, hand-authored scan list, or runtime configuration in this repository names a Module. Pinned Contracts `PackageReference` entries and scan metadata generated from the restored dependency graph are permitted because they are the declarative enrollment mechanism (FR-5, FR-20).
 - **Tenant.** Envelope-only, resolved by the executor (FR-16); never read from the Payload; a per-call MCP argument is honored only under the FR-16 gate.
 - **Identity in v1.** The stdio server acts as whoever owns the configured token; the audit trail says "the tool", not the human. The Actor an Operation records is an operator setting (Profile, flag, environment), never chosen by the agent per call, and the extension keys a call may carry are limited to an operator allowlist (FR-16, FR-18). This limitation is accepted for development and test use, and it is why HTTP transport is the next release.
@@ -257,7 +257,7 @@ An agent can call the five Generic Tools and no others; their arguments are the 
 
 **Consequences (testable):**
 - `tools/list` returns exactly five tools, or four without `send_command` in Read-only Mode.
-- `list_modules` returns each Module Name with its description and Operation count; `list_operations` takes a Module Name and an optional kind and returns Operation Name, kind, description; `describe_operation` returns description, kind, Schema, example when declared, the Envelope arguments the caller may supply (whether `aggregateId` or `idempotencyKey` is required, the Module's fixed tenant if any), `lintFindings`, and head-level `submittable`, with a reason when it is false.
+- `list_modules` returns each Module Name with its description and Operation count; `list_operations` takes a Module Name and an optional kind and returns Operation Name, kind, description, or `unknown_module` when a non-empty requested Module Name is absent; `describe_operation` returns description, kind, Schema, example when declared, the Envelope arguments the caller may supply (whether `aggregateId` or `idempotencyKey` is required, the Module's fixed tenant if any), `lintFindings`, and head-level `submittable`, with a reason when it is false.
 - `submittable` reports surface availability from Read-only Mode and resolved Gateway URL only. It is `false` with `reason: read_only` for a Command in Read-only Mode; otherwise it is `false` with `reason: configuration_invalid` when the session has no resolved Gateway URL; otherwise it is `true`. Tenant, actor, Payload, and per-call Envelope requirements are evaluated only on execution and do not change this discovery value. An offline discovery fixture covers both read and write Operations.
 - Each tool description has three labeled parts: `Purpose`, `Use when`, and `Next`.
 - The three discovery tools and `run_query` carry `readOnlyHint: true`; `send_command` carries `readOnlyHint: false` and `idempotentHint: false`.
@@ -281,6 +281,7 @@ Every tool returns structured content with a declared output schema; failures re
 - Validation failure: `code: validation_failed`, the Operation Name, and one entry per violation with JSON path and message; a Payload that is not JSON is one violation.
 - Gateway-client failure: return `code: gateway_error` with the exception status and the mapped detail defined in addendum §G. Include the reason code, retryable flag, client action, retry-after value, and correlation identifier only when the client exception provides them. This includes HTTP-success responses represented by `EventStoreGatewayException` because they are malformed or fail semantic validation; their `2xx` status is preserved.
 - Unknown Operation Name: `code: unknown_operation` and up to three nearest Operation Names by case-insensitive edit distance.
+- Unknown non-empty Module Name in `list_operations`: `code: unknown_module`, the requested Module Name, and up to three nearest declared Module Names by case-insensitive edit distance (addendum §G). Missing or empty `module` fails Head input binding before Catalog dispatch: MCP returns a JSON-RPC invalid-parameters error; CLI exits 2 with the §G `invalid_arguments` document.
 - Any other exception: `code: internal_error` with a message, never a stack trace.
 - Snapshot tests assert each addendum §G result and error schema, including types, constraints, enums, required members, and optional-member omission, and run the same fixtures through both Heads.
 
@@ -318,7 +319,7 @@ Every CLI invocation ends with one of three exit codes, and the code depends onl
 |---|---|---|
 | 0 | Result document produced | result |
 | 1 | Result document produced by `describe --lint` and at least one lint finding listed (FR-4) | result |
-| 2 | No result document: validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11); any pre-initialize `mcp` failure writes it to stderr and leaves stdout empty |
+| 2 | No result document: invalid arguments, validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11); any pre-initialize `mcp` failure writes it to stderr and leaves stdout empty |
 
 - Catalog diagnostics go to stderr and never move an invocation between rows; only `--strict` turns them into row 2 (FR-6).
 
@@ -394,12 +395,13 @@ A shell user can select a Profile by name; a Profile holds `url`, `token`, `form
 
 #### FR-20: Cover the v1 Modules
 
-The v1 tool references by pinned package only the Contracts Libraries that satisfy the dependency allowlist (§4), today Tenants and Parties, and exposes every decorated Operation in them. v1 is done when the tool is released and Tenants and Parties are covered end to end: for every Operation in `list_operations`, both Heads submit it against a running EventStore in the test harness, the Gateway accepts it, and the two result documents are equal (NFR-7, SM-4). Projects and Folders are added when they satisfy the allowlist and are Gateway-ready.
+The v1 tool references by pinned package only the Contracts Libraries that satisfy the dependency allowlist (§4), today Tenants and Parties, and exposes every decorated Operation in them. V1 is done when the tool is released and Tenants and Parties are covered end to end. Each Operation in `list_operations` has one versioned, maintainer-approved conformance vector in its owning Module repository. Both Heads execute every vector against the same reset loopback Gateway script and produce equal canonical documents and captured Gateway requests after masking only generated message and correlation identifiers (SM-4); each request also matches the vector's expected inputs. Separately, a blocking Aspire test executes each vector once against a running EventStore and asserts Gateway acceptance or a returned Query document plus the vector's semantic checks (NFR-7). A live Command is not submitted twice merely to compare documents. Projects and Folders are added when they satisfy the allowlist and are Gateway-ready.
 
 **Consequences (testable):**
 - Package references only; CI builds contain no project reference to any Module, and the allowlist test rejects any referenced Contracts Library whose closure breaks the rule.
 - A referenced Module whose assembly carries the marker but exposes no Operation appears in `list_modules` with zero Operations and an `empty_module` warning; an unmarked assembly is invisible (FR-3, FR-6).
 - `Hexalith.Projects.Contracts` fails the allowlist today (it carries web framework and UI packages); slimming it is a Projects Gateway-ready prerequisite (§8.1).
+- A generic runner rejects a missing, duplicate, or stale vector for any listed Operation. Vectors supply valid Payload and Envelope values, prerequisite Operation calls, and semantic assertions; this repository contains no Module-specific setup code.
 - Parties coverage passes only when the maintainer-approved, versioned FR-21 inventory matches the built Catalog. Each included canonical Operation Name must appear exactly once in `list_operations parties`. A build-time Catalog-descriptor or reflection test must separately match each Operation to its decorated contract type. Each excluded legacy operation must have an approved exclusion row with a rationale.
 
 #### FR-21: Define parity and produce the migration plan
@@ -408,7 +410,7 @@ A Legacy Server is deleted when its Module is Gateway-ready for every agent-faci
 
 **Consequences (testable):**
 - The plan is the durable, versioned inventory for each Legacy Server and Frozen CLI. Every row names the legacy operation, records `include` or `exclude`, gives the rationale, and names the decorated contract type when included; the owning Module maintainer's approval reference is recorded beside the inventory version. Dropped operations include stream and file resources and the search, filter, order-by, and freshness variants deferred by FR-9.
-- A coverage check compares every included row's canonical Operation Name with the corresponding `list_operations` result, separately verifies its decorated contract type against the internal Catalog descriptor or generated assembly manifest, and verifies that every excluded legacy operation has an approved exclusion row. A missing, extra, mismatched, or unapproved row fails the Module's Gateway-ready gate; the inventory never becomes runtime configuration or adds CLR type names to the public result.
+- A coverage check compares every included row's canonical Operation Name with the corresponding `list_operations` result, separately verifies its decorated contract type against the internal `OperationDescriptor.ContractType`, and verifies that every excluded legacy operation has an approved exclusion row. A missing, extra, mismatched, or unapproved row fails the Module's Gateway-ready gate; the inventory never becomes runtime configuration or adds CLR type names to the public result.
 - Task and actor context that Projects and ChatBot carry today travels as ordinary Payload properties, through `actorProperty`, or in allowed Envelope extensions, never in module-specific code here.
 - FrontComposer's host and the Projects plug-in are deleted together; Memories, which fronts per-user JWT identity today, is deleted only after the HTTP release.
 
@@ -426,7 +428,7 @@ The Hexalith agent instructions (`hexalith-llm-instructions.md` in Hexalith.AI.T
 - **NFR-4 Channel discipline.** See FR-10; logs use source-generated `LoggerMessage` methods.
 - **NFR-5 Secrets.** See FR-18.
 - **NFR-6 Portability.** A .NET 10 global tool for Linux, Windows, and macOS with no native dependencies. The EventStore client package carries the Dapr SDK; its size is accepted unless the EventStore owner publishes a gateway-only client package.
-- **NFR-7 Testability.** The executor is testable with a substituted Gateway client; integration tests run against an EventStore started by the Aspire harness the architecture defines (spine AD-16) and assert accepted Commands and returned Query documents, not only status codes.
+- **NFR-7 Testability.** The executor is testable with a substituted Gateway client. Out-of-process parity tests drive both Heads through a reset loopback Gateway, while a blocking Aspire test runs each approved Module vector once against EventStore and asserts accepted Commands or returned Query documents plus semantic effects, not only status codes (spine AD-16).
 - **NFR-8 Description quality.** Every exposed description is understandable by someone who has never seen the code, verified by review of the Catalog dump (SM-5); a lint rejects a description equal to the humanized type name (SM-C4).
 
 ## 7. Public surface and versioning
@@ -460,6 +462,7 @@ v1 is done when the tool is released and Tenants and Parties are covered end to 
 6. Have descriptions reviewed against NFR-8, with the review recorded in the Module's pull request.
 7. Keep Operation Name, domain, and Wire Type stable, because renaming any of them silently breaks agents.
 8. For a Module replacing a Legacy Server or Frozen CLI, version and approve its FR-21 operation inventory and pass the inventory-to-Catalog coverage check.
+9. Version and approve one conformance vector for every exposed Operation; pass the generic vector-to-Catalog and live semantic gates (FR-20).
 
 Work is tracked in each Module's own repository.
 
@@ -503,7 +506,7 @@ Checked three months after v1 ships.
 - **SM-1 Zero module-specific code.** Tenants, Parties, Projects, and Folders are exposed with no module-specific code here; Projects and Folders were each added by a package reference and a rebuild after becoming Gateway-ready. Validates FR-5, FR-20.
 - **SM-2 Cross-module task.** An agent completes a task spanning two Modules using only the Generic Tools, with no per-module prompt or tool. Validates FR-9, FR-15 to FR-17.
 - **SM-3 First deletion.** At least one Legacy Server deleted. Validates FR-21.
-- **SM-4 Heads agree.** A test runs both Heads against one EventStore with identical inputs for every Operation and gets identical Catalog data, identical error documents, and identical results once generated message and correlation identifiers are masked. Caller-supplied `idempotencyKey` must be equal and present in both results when supplied and omitted by both when absent. Validates FR-5, FR-11, FR-12.
+- **SM-4 Heads agree.** For every Operation, tests run both out-of-process Heads with identical inputs against one reset loopback Gateway response script and obtain identical Catalog data, error documents, canonical result documents, and captured Gateway requests after masking only generated message and correlation identifiers. Captured method, path, routing, Envelope, Payload, and paging match each other and the vector's expected inputs. Caller-supplied `idempotencyKey` is equal and present in both results when supplied and omitted by both when absent. The separate FR-20 live lane executes every approved vector once against EventStore and checks its semantic outcome. Validates FR-5, FR-11, FR-12, FR-20.
 
 **Secondary**
 - **SM-5 Description quality.** Every description passes a reviewer who has never seen the code, recorded in the Module's pull request per the §8.1 checklist. Validates FR-1, NFR-8.
@@ -522,7 +525,7 @@ Numbering is stable so downstream references stay valid.
 
 ### 10.1 Handoff to architecture
 
-The earlier AD-7/9/11/15/19 handoff is complete and recorded in `verify-update-2026-09-22.md`. The architecture spine at `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md` must reconcile this validation-driven amendment at the owning implementation gates; unaffected catalog preparation may continue:
+The earlier AD-7/9/11/15/19 handoff is complete and recorded in `verify-update-2026-09-22.md`. The architecture spine at `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md` binds these decisions at their implementation gates:
 
 - Before the fixture story: keep one declared synthetic Module and construct the other Identifier Kind in isolation.
 - Before the dependency-closure test or Module pins: AD-15 distinguishes the Decoration Package from the external dependency allowlist.
@@ -530,6 +533,8 @@ The earlier AD-7/9/11/15/19 handoff is complete and recorded in `verify-update-2
 - Before settings resolution: AD-13 requires a URL only when execution reaches the Gateway.
 - Before executor implementation: AD-9 and the identifier-generation convention use caller-supplied idempotency keys only, expose no generic retry or duplicate promise, resolve omitted command correlation to the generated message identifier, and preserve the actual status on every `EventStoreGatewayException`, including malformed-success `2xx` responses.
 - Before either Head or its output schemas: AD-5/12 conform to the exhaustive addendum §G records, including lint findings and member types and constraints; the channel convention applies the pre-initialize MCP stderr/empty-stdout rule to every startup failure.
+- Before Catalog public-contract implementation: AD-3/5 return `unknown_module` for a non-empty `list_operations` lookup miss, using the exhaustive addendum §G variant.
+- Before the v1 release gate: AD-16 runs every approved Module vector through both Heads against reset loopback Gateway scripts for parity and once against live EventStore for semantics; AD-21 separately verifies the approved Legacy Server and Frozen CLI inventory against the Catalog. The Parties Aspire composition helper and a source-build path for the blocking CI tier are upstream prerequisites.
 
 ### 10.2 Open
 

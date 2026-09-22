@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hexalith.McpCli architecture validation — 2026-09-22</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #edf3f8;
+      --muted: #aebdca;
+      --panel: #111c27;
+      --panel-2: #172635;
+      --line: #34485a;
+      --critical: #ff756f;
+      --high: #ffb454;
+      --medium: #f0da78;
+      --low: #8cccf0;
+      --good: #7ed6a8;
+      --accent: #77bdfb;
+      --bg: #081018;
+      --shadow: 0 18px 54px rgba(0, 0, 0, .24);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(119, 189, 251, .12), transparent 32rem),
+        radial-gradient(circle at 92% 8%, rgba(255, 117, 111, .09), transparent 30rem),
+        var(--bg);
+      color: var(--ink);
+      font: 16px/1.62 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: #a9d6ff; text-underline-offset: .18em; }
+    a:hover { color: #fff; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+    code {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: .35rem;
+      padding: .08rem .3rem;
+      color: #f4f8fb;
+      overflow-wrap: anywhere;
+    }
+    .skip-link { position: absolute; left: -9999px; top: 1rem; z-index: 20; background: #fff; color: #000; padding: .7rem 1rem; }
+    .skip-link:focus { left: 1rem; }
+    .verdict-strip {
+      margin: 0;
+      padding: .85rem max(1.2rem, calc((100vw - 1180px) / 2));
+      background: #381617;
+      border-bottom: 1px solid #88383a;
+      color: #fff4f2;
+      font-weight: 750;
+      letter-spacing: .01em;
+    }
+    .shell { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; }
+    header { padding: 4.5rem 0 2.3rem; }
+    .eyebrow { margin: 0 0 .55rem; color: var(--critical); font-weight: 800; text-transform: uppercase; letter-spacing: .16em; font-size: .78rem; }
+    h1 { margin: 0; max-width: 900px; font-size: clamp(2.3rem, 7vw, 5.3rem); line-height: .98; letter-spacing: -.055em; }
+    .dek { max-width: 820px; margin: 1.35rem 0 0; color: var(--muted); font-size: 1.14rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.5rem; }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: .32rem .7rem; color: var(--muted); background: rgba(255,255,255,.025); font-size: .88rem; }
+    .grid { display: grid; gap: 1rem; }
+    .severity-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 1.2rem 0 2rem; }
+    .stat { background: linear-gradient(145deg, var(--panel-2), var(--panel)); border: 1px solid var(--line); border-top: 4px solid var(--tone); border-radius: 1rem; padding: 1.1rem 1.15rem; box-shadow: var(--shadow); }
+    .stat .number { font-size: 2.45rem; line-height: 1; font-weight: 850; letter-spacing: -.05em; }
+    .stat .label { color: var(--muted); margin-top: .4rem; }
+    .critical { --tone: var(--critical); }
+    .high { --tone: var(--high); }
+    .medium { --tone: var(--medium); }
+    .low { --tone: var(--low); }
+    nav.toc, .decision, .coverage, .finding, details.tail {
+      background: rgba(17, 28, 39, .9);
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
+    }
+    nav.toc { padding: 1.2rem 1.4rem; margin-bottom: 2rem; }
+    nav.toc h2 { margin-top: 0; }
+    nav.toc ol { columns: 2; column-gap: 2.5rem; margin-bottom: 0; }
+    nav.toc li { break-inside: avoid; margin: .2rem 0; }
+    main { padding-bottom: 5rem; }
+    section { scroll-margin-top: 1rem; margin-top: 3.4rem; }
+    h2 { margin: 0 0 1rem; font-size: clamp(1.55rem, 3vw, 2.25rem); letter-spacing: -.025em; }
+    h3 { font-size: 1.25rem; line-height: 1.25; margin: 0; }
+    .section-lead { color: var(--muted); max-width: 860px; }
+    .decision { padding: 1.35rem 1.5rem; border-left: 5px solid var(--critical); }
+    .decision strong { color: #fff; }
+    .coverage { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: .8rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: #fff; background: rgba(255,255,255,.045); font-size: .88rem; letter-spacing: .03em; }
+    tr:last-child td { border-bottom: 0; }
+    .finding { overflow: hidden; margin: 1rem 0; border-left: 5px solid var(--tone); }
+    .finding-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.15rem 1.25rem .85rem; background: rgba(255,255,255,.025); border-bottom: 1px solid var(--line); }
+    .badge { display: inline-block; flex: 0 0 auto; color: #081018; background: var(--tone); font-weight: 850; text-transform: uppercase; letter-spacing: .08em; font-size: .71rem; padding: .3rem .55rem; border-radius: 999px; }
+    .finding-body { padding: .2rem 1.25rem 1.05rem; }
+    dl { margin: 0; }
+    dt { margin-top: .9rem; color: var(--muted); font-size: .76rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    dd { margin: .18rem 0 0; }
+    .disposition { border-left: 3px solid var(--accent); padding-left: .75rem; }
+    details.tail { margin: 1rem 0; overflow: hidden; }
+    summary { cursor: pointer; list-style-position: inside; padding: 1rem 1.2rem; background: rgba(255,255,255,.03); font-weight: 800; }
+    details[open] summary { border-bottom: 1px solid var(--line); }
+    .tail-body { padding: .15rem 1.2rem 1.1rem; }
+    .tail-body p { margin: .75rem 0; }
+    .tail-meta { color: var(--muted); font-size: .9rem; }
+    .source-list { margin: .5rem 0 0; }
+    .source-list li { margin: .35rem 0; }
+    .note { color: var(--muted); }
+    .exit { border-top: 1px solid var(--line); padding-top: 1.25rem; }
+    footer { border-top: 1px solid var(--line); color: var(--muted); padding: 1.4rem 0 3rem; }
+    @media (max-width: 760px) {
+      .severity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      nav.toc ol { columns: 1; }
+      .finding-head { display: block; }
+      .badge { margin-top: .65rem; }
+      th, td { padding: .65rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      :root { color-scheme: light; --ink: #13202b; --muted: #405363; --panel: #fff; --panel-2: #fff; --line: #bcc8d1; --bg: #fff; }
+      body { background: #fff; }
+      .verdict-strip { color: #351010; background: #fce5e4; }
+      .finding, .stat, nav.toc, .decision, .coverage, details.tail { box-shadow: none; break-inside: avoid; }
+      details.tail > * { display: block; }
+      a { color: #174f7c; }
+      code { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to report</a>
+  <p class="verdict-strip">Gate verdict: FAIL — the architecture spine is not safe for implementation or release planning until its Critical and High findings are resolved and the gate is rerun.</p>
+
+  <div class="shell">
+    <header>
+      <p class="eyebrow">Standalone Validate · 2026-09-22</p>
+      <h1>Architecture validation</h1>
+      <p class="dek">A consolidated, traceable review of the Hexalith.McpCli architecture spine. The mechanics pass; the contract and integration seams do not.</p>
+      <div class="meta" aria-label="Report metadata">
+        <span class="pill">Target: <a href="ARCHITECTURE-SPINE.md">ARCHITECTURE-SPINE.md</a>, lines 1–333</span>
+        <span class="pill">23 raw findings</span>
+        <span class="pill">20 consolidated findings</span>
+        <span class="pill">Spine unchanged</span>
+      </div>
+    </header>
+
+    <div class="grid severity-grid" aria-label="Consolidated severity counts">
+      <div class="stat critical"><div class="number">4</div><div class="label">Critical</div></div>
+      <div class="stat high"><div class="number">7</div><div class="label">High</div></div>
+      <div class="stat medium"><div class="number">8</div><div class="label">Medium</div></div>
+      <div class="stat low"><div class="number">1</div><div class="label">Low</div></div>
+    </div>
+
+    <nav class="toc" aria-labelledby="toc-heading">
+      <h2 id="toc-heading">Contents</h2>
+      <ol>
+        <li><a href="#decision">Executive decision</a></li>
+        <li><a href="#coverage">Coverage and counts</a></li>
+        <li><a href="#critical">Critical findings</a></li>
+        <li><a href="#high">High findings</a></li>
+        <li><a href="#tail">Medium and Low tail</a></li>
+        <li><a href="#exit">Gate exit criteria</a></li>
+      </ol>
+    </nav>
+
+    <main id="main">
+      <section id="decision" aria-labelledby="decision-heading">
+        <h2 id="decision-heading">Executive decision</h2>
+        <div class="decision">
+          <p>The spine is mechanically clean and strong on its central hexagonal boundary, catalog ownership, executor sequencing, dependency closure, packaging direction, and v1 runtime envelope. It still conflicts with the binding PRD on idempotency and public documents, specifies two unimplementable integration-test guarantees, relies on a nonexistent composition package, and leaves several head/executor/release seams open to divergent implementations.</p>
+          <p><strong>Implementation:</strong> hold story breakdown and implementation that depends on this spine. Resolve all four Critical and seven High findings first; incorporate the Medium/Low changes and decisions in the same update, or explicitly defer only where a finding permits it with an owner, operating constraint, and revisit gate. Then rerun the complete gate.</p>
+          <p><strong>Release:</strong> do not approve a v1 release plan from the current spine. Its harness and release transaction do not yet prove that the promised artifacts and cross-head behavior can be produced.</p>
+          <p><strong>Mutation statement:</strong> this validation did not change <code>ARCHITECTURE-SPINE.md</code>, <code>.memlog.md</code>, the PRD, its addendum, or any source review.</p>
+        </div>
+      </section>
+
+      <section id="coverage" aria-labelledby="coverage-heading">
+        <h2 id="coverage-heading">Coverage and counts</h2>
+        <div class="coverage" tabindex="0" aria-label="Review coverage table">
+          <table>
+            <thead><tr><th scope="col">Gate component</th><th scope="col">Result</th><th scope="col">Coverage</th></tr></thead>
+            <tbody>
+              <tr><td>Deterministic lint</td><td><strong>Pass</strong></td><td><code>ok=true</code>, 0 findings; placeholders, duplicate AD IDs, missing Binds/Prevents/Rule, and unpinned Stack versions checked.</td></tr>
+              <tr><td><a href="reviews/review-validation-20260922-rubric.md">Good-spine rubric review</a></td><td><strong>Fail</strong></td><td>Divergence points, enforceability, Deferred safety, source coverage, brownfield fit, named technology, and owned dimensions.</td></tr>
+              <tr><td><a href="reviews/review-validation-20260922-tech-reality.md">Technology/reality review</a></td><td><strong>Needs update</strong></td><td>Current package versions, official MCP/.NET APIs, EventStore source behavior, packaging, and unlanded prerequisites.</td></tr>
+              <tr><td><a href="reviews/review-validation-20260922-adversarial.md">Adversarial seam review</a></td><td><strong>Fail</strong></td><td>Counterexamples in which independently built units obey the ADs yet remain incompatible.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">No parent spine is declared. The final PRD and normative addendum are binding; brownfield evidence includes repository guidance, central package pins, and current EventStore, Tenants, and Parties checkouts.</p>
+        <div class="coverage" tabindex="0" aria-label="Raw and consolidated finding counts">
+          <table>
+            <thead><tr><th scope="col">Severity</th><th scope="col">Raw</th><th scope="col">Consolidated</th></tr></thead>
+            <tbody>
+              <tr><td>Critical</td><td>4</td><td>4</td></tr>
+              <tr><td>High</td><td>8</td><td>7</td></tr>
+              <tr><td>Medium</td><td>9</td><td>8</td></tr>
+              <tr><td>Low</td><td>2</td><td>1</td></tr>
+              <tr><td><strong>Total</strong></td><td><strong>23</strong></td><td><strong>20</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">Every source ID is retained. The merged groups are <code>RV-RUB-004</code> + <code>ADV-004</code>, <code>RV-RUB-005</code> + <code>ADV-005</code>, and <code>RV-RUB-011</code> + <code>TR-004</code>; each consolidated finding uses the highest contributing severity.</p>
+      </section>
+
+      <section id="critical" aria-labelledby="critical-heading">
+        <h2 id="critical-heading">Critical findings</h2>
+
+        <article class="finding critical" id="val-001">
+          <div class="finding-head"><h3>VAL-001 · The spine generates an idempotency key that the final PRD forbids</h3><span class="badge">Critical</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>RV-RUB-001</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:83,107,189</code> makes the key unconditional and generated. The binding contract makes it optional and caller-supplied only at <code>../../prds/prd-mcpcli-2026-09-21/prd.md:103-105,338-354,523-532</code> and <code>../../prds/prd-mcpcli-2026-09-21/addendum.md:192-196,277-283</code>.</dd>
+            <dt>Why it matters</dt><dd>Executor stories can implement incompatible retry and payload-fill semantics, and a generated key weakens the no-generic-safe-retry guardrail.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Generate only <code>MessageId</code>; use it as omitted correlation ID; keep <code>IdempotencyKey</code> absent unless supplied, including Payload overwrite and result serialization.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding critical" id="val-002">
+          <div class="finding-head"><h3>VAL-002 · AD-5 does not bind the exhaustive public document and error contract</h3><span class="badge">Critical</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>RV-RUB-002</code></dd>
+            <dt>Exact evidence</dt><dd>The shorthand records/codes at <code>ARCHITECTURE-SPINE.md:79-83,107,183-185</code> diverge from <code>../../prds/prd-mcpcli-2026-09-21/addendum.md:277-307,335-341,362-396</code> and <code>../../prds/prd-mcpcli-2026-09-21/prd.md:206-229,254-285,382-390</code>: extra public diagnostics; missing lint/envelope, command, and query fields; nullable required document; incomplete error/status rules; wrong lint codes; and unsupported <code>unsupported_format</code>.</dd>
+            <dt>Why it matters</dt><dd>Core records, MCP schemas, CLI rendering, and fixtures can all comply with AD-5 while disagreeing and failing FR-11.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Bind typed records exactly to addendum §G, including members, constraints, omission rules, exhaustive errors, and public codes; keep diagnostics off <code>list_modules</code>.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding critical" id="val-003">
+          <div class="finding-head"><h3>VAL-003 · Raw live cross-head equality is impossible for Commands</h3><span class="badge">Critical</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>ADV-001</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:83</code> requires <code>JsonElement.DeepEquals</code>; <code>:107,189</code> generates volatile identifiers per call; <code>:145-149</code> drives CLI and MCP as separate calls against one live topology and requires equality for every Operation.</dd>
+            <dt>Why it matters</dt><dd>Two compliant Command calls use different IDs and may mutate twice, fail on changed state, or alter later Query results. Calling once no longer tests both heads.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Discuss.</strong> Choose a deterministic fake/capture-replay parity lane plus once-only live semantic tests, or precisely define normalization and independent fixtures. Do not retain raw equality over two live executions.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding critical" id="val-004">
+          <div class="finding-head"><h3>VAL-004 · The generic harness has no compliant source of accepted production inputs</h3><span class="badge">Critical</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>ADV-002</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:67-71,79-83</code> permits but does not require examples; <code>:139-149</code> bans Module implementation dependencies/module-specific <code>src/</code> code yet requires accepted Commands and returned Queries for every Tenants and Parties Operation.</dd>
+            <dt>Why it matters</dt><dd>Schema-shaped placeholders cannot satisfy arbitrary domain preconditions, while hard-coded setup breaks the generic boundary. The stated gate cannot be guaranteed.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Discuss.</strong> Require versioned, Module-owned conformance vectors at an explicitly allowed boundary, or narrow AD-16 if examples remain optional.</dd>
+          </dl></div>
+        </article>
+      </section>
+
+      <section id="high" aria-labelledby="high-heading">
+        <h2 id="high-heading">High findings</h2>
+
+        <article class="finding high" id="val-005">
+          <div class="finding-head"><h3>VAL-005 · AD-16 depends on a nonexistent Hexalith.Parties.Aspire</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>RV-RUB-003</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:139-149,212</code> requires/pins it. It is absent from <code>references/Hexalith.Builds/Props/Directory.Packages.props:80-88,97</code>, <code>references/Hexalith.Parties/tools/release-packages.json:1-40</code>, and <code>references/Hexalith.Parties/Hexalith.Parties.slnx:23-36</code>. The current AppHost composes the domain project at <code>references/Hexalith.Parties/src/Hexalith.Parties.AppHost/Hexalith.Parties.AppHost.csproj:14-19</code> and <code>Program.cs:90-103</code>. Commitments: <code>../../prds/prd-mcpcli-2026-09-21/prd.md:395-403,423-430</code>.</dd>
+            <dt>Why it matters</dt><dd>The v1 harness cannot restore/compose both required Modules as written; FR-20/NFR-7 cannot close.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Discuss.</strong> Make a published helper an owned prerequisite or bind another test-only composition path that preserves the boundary; remove the fictitious pin.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-006">
+          <div class="finding-head"><h3>VAL-006 · Offline discovery and execution availability use incompatible Gateway-URL state</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>RV-RUB-004</code>, <code>ADV-004</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:67-71</code> derives submittability only from Read-only Mode; <code>:109-113,127-131,257-262</code> consumes URL and classifies absence without a discovery boundary. Offline behavior and precedence are fixed at <code>../../prds/prd-mcpcli-2026-09-21/addendum.md:207-219,416-424</code> and <code>../../prds/prd-mcpcli-2026-09-21/prd.md:254-261,301-309,523-532</code>.</dd>
+            <dt>Why it matters</dt><dd>One head can advertise available execution while another refuses startup or the executor later fails.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Add one Core-owned immutable execution-availability value shared by describe and executor preflight; missing URL must not block host construction or catalog-only behavior.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-007">
+          <div class="finding-head"><h3>VAL-007 · MCP tool registration conflicts with the live SDK list/dispatch model</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>TR-001</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:121-125</code> constructs tools and a custom list handler without compatible dispatch ownership. SDK 2.2.0 appends registered tools and dispatches from the collection: <a href="https://github.com/modelcontextprotocol/csharp-sdk/blob/v2.2.0/src/ModelContextProtocol.Core/Server/McpServerImpl.cs#L1464-L1527">ConfigureTools</a>, <a href="https://github.com/modelcontextprotocol/csharp-sdk/blob/v2.2.0/src/ModelContextProtocol.Core/Server/McpServerOptions.cs#L145-L156">ToolCollection</a>, <a href="https://github.com/modelcontextprotocol/csharp-sdk/blob/v2.2.0/src/ModelContextProtocol/McpServerBuilderExtensions.cs#L600-L630">WithListToolsHandler</a>.</dd>
+            <dt>Why it matters</dt><dd>Registration plus custom listing duplicates tools and leaks <code>send_command</code> in Read-only Mode; no registration removes automatic dispatch.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Discuss.</strong> Bind one filtered collection with built-in dispatch, or custom list and call handlers over the same map; test uniqueness, order, and Read-only omission.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-008">
+          <div class="finding-head"><h3>VAL-008 · AD-9 models only one Gateway extension-validation layer</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>TR-002</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:103-107</code> binds structural limits from <code>references/Hexalith.EventStore/src/Hexalith.EventStore/Validation/SubmitCommandRequestValidator.cs:17-20,81-91</code>. The controller invokes another layer at <code>.../Controllers/CommandsController.cs:90-110</code>, with 32-entry/4,096-byte defaults at <code>.../Configuration/ExtensionMetadataOptions.cs:7-28</code> and grammar/injection checks at <code>.../Validation/ExtensionMetadataSanitizer.cs:28-100,117-135</code>.</dd>
+            <dt>Why it matters</dt><dd>Core can accept inputs predictably rejected by the default gateway, contradicting complete pre-validation; configured gateways may diverge further.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Discuss.</strong> Choose a fixed stricter public contract, operator-matched settings, or normal gateway-error treatment; if zero predictable calls is required, bind the default intersection and drift policy.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-009">
+          <div class="finding-head"><h3>VAL-009 · The MCP output schema is not an exclusive success/error union</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>ADV-003</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:79-83</code> requires error-only failure objects, while <code>:121-125</code> declares one closed object with success properties plus optional <code>error</code>.</dd>
+            <dt>Why it matters</dt><dd>Required success fields reject failures; optional fields admit empty/mixed objects. Schema and adapter stories cannot converge.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Use <code>oneOf</code> two closed branches: exact success or required <code>{ error: OperationError }</code>, generated with structured content from one Core contract.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-010">
+          <div class="finding-head"><h3>VAL-010 · The synthetic fixture violates cardinality and lacks multi-Module ownership</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>RV-RUB-005</code>, <code>ADV-005</code></dd>
+            <dt>Exact evidence</dt><dd>The assembly marker/catalog at <code>ARCHITECTURE-SPINE.md:67-71,179-180</code> conflicts with one assembly declaring two Modules at <code>:193,238</code>; AD-15 calls it the only synthetic Module at <code>:143</code>. The final handoff requires one Module and isolated construction of the other Identifier Kind: <code>../../prds/prd-mcpcli-2026-09-21/prd.md:423-424,523-529</code>.</dd>
+            <dt>Why it matters</dt><dd>No marker-to-type mapping exists, so builders may reject, duplicate, or namespace-partition Operations differently; the benchmark population is also wrong.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Keep one Module in <code>Sample.Contracts</code> and test the other kind through isolated construction; otherwise add an explicit Operation discriminator and collision rules.</dd>
+          </dl></div>
+        </article>
+
+        <article class="finding high" id="val-011">
+          <div class="finding-head"><h3>VAL-011 · The release rule can pass build without producing releasable packages</h3><span class="badge">High</span></div>
+          <div class="finding-body"><dl>
+            <dt>Source-review IDs</dt><dd><code>ADV-006</code></dd>
+            <dt>Exact evidence</dt><dd><code>ARCHITECTURE-SPINE.md:151-155</code> names build, manifest, and push but not pack/validation/install; <code>:214-223</code> contains no release script seed; <code>:257-261</code> still promises pack/push.</dd>
+            <dt>Why it matters</dt><dd>Default <code>GeneratePackageOnBuild=false</code> lets the named build pass without a <code>.nupkg</code>; only some plausible release implementations create verified artifacts.</dd>
+            <dt>Recommended disposition</dt><dd class="disposition"><strong>Autofix.</strong> Bind pack/script, exactly two IDs at one version, consumer/NuGet validation, publication preflight, push, and isolated local-source tool-install smoke tests.</dd>
+          </dl></div>
+        </article>
+      </section>
+
+      <section id="tail" aria-labelledby="tail-heading">
+        <h2 id="tail-heading">Medium and Low tail</h2>
+        <p class="section-lead">Compact presentation; complete traceability, evidence, impact, and disposition are retained. Expand each finding.</p>
+
+        <details class="tail" id="val-012"><summary>VAL-012 · Medium · Pre-initialize MCP failures lack a protocol-safe contract</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>RV-RUB-006</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:121-125,187</code> omits the lifecycle required at <code>../../prds/prd-mcpcli-2026-09-21/prd.md:267-285</code> and <code>../../prds/prd-mcpcli-2026-09-21/addendum.md:362-368</code>.</p>
+          <p><strong>Why it matters:</strong> startup stories can diverge or corrupt stdout JSON-RPC.</p>
+          <p><strong>Autofix:</strong> bind pre-initialize validation to one structured stderr error, zero stdout, exit 2; post-initialize failures use MCP only. Test malformed settings, empty catalog, and strict diagnostics.</p>
+        </div></details>
+
+        <details class="tail" id="val-013"><summary>VAL-013 · Medium · AD-1 wrongly assigns adapter behavior to Core</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>RV-RUB-007</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:41-45</code> assigns all FR-13–FR-19 behavior to Core, contradicting adapter allocations at <code>:121-137,186,190</code>.</p>
+          <p><strong>Why it matters:</strong> builders must violate AD-1 or duplicate/drag protocol concerns into Core.</p>
+          <p><strong>Autofix:</strong> limit Core to shared resolved settings, catalog, validation, execution, and result/error records; reserve transport, advertisement, exit codes, rendering, and carriage for adapters.</p>
+        </div></details>
+
+        <details class="tail" id="val-014"><summary>VAL-014 · Medium · Deferred config parity permits the public CLI to drift</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>RV-RUB-008</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:133-137,315</code> freezes verbs but defers flags/semantics; source surfaces are <code>../../prds/prd-mcpcli-2026-09-21/prd.md:382-390</code>, <code>../../prds/prd-mcpcli-2026-09-21/addendum.md:199-246</code>, and <code>AGENTS.md:90-95</code>.</p>
+          <p><strong>Why it matters:</strong> config stories can disagree on arguments, overwrite behavior, masking, and errors.</p>
+          <p><strong>Autofix:</strong> freeze a pinned Admin CLI revision or enumerate flags/mutation/error semantics; defer presentation-local details only.</p>
+        </div></details>
+
+        <details class="tail" id="val-015"><summary>VAL-015 · Medium · The dependency allowlist omits the product's Decoration Package</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>RV-RUB-009</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:47-64,139-143</code> requires Contracts to reference Abstractions yet omits it from the “exact” Hexalith allowlist; source distinction: <code>../../prds/prd-mcpcli-2026-09-21/prd.md:95-104,523-529</code>.</p>
+          <p><strong>Why it matters:</strong> a literal test rejects Abstractions; a loose exemption admits unrelated dependencies.</p>
+          <p><strong>Autofix:</strong> declare Abstractions separately as a first-party allowed artifact, then enforce the external allowlist independently.</p>
+        </div></details>
+
+        <details class="tail" id="val-016"><summary>VAL-016 · Medium · Aspire CI checkout/build ownership is open too late</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>RV-RUB-010</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:145-149,257-261</code> requires root-submodule checkout/build, while <code>:317-320</code> defers workflow inputs; repository bounds: <code>AGENTS.md:47-61</code>.</p>
+          <p><strong>Why it matters:</strong> workflow, AppHost, and test stories can assume different sources/build owners or use forbidden recursive updates.</p>
+          <p><strong>Discuss:</strong> bind exact inputs, root-submodule contract, and absent-source failure, or identify an owned upstream prerequisite and revisit gate.</p>
+        </div></details>
+
+        <details class="tail" id="val-017"><summary>VAL-017 · Medium · EventStore does not establish the claimed PascalCase baseline</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>TR-003</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:85-89</code> attributes strict PascalCase to EventStore. Readers use web defaults at <code>references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Serialization/EventStorePayloadSerialization.cs:5-17,30-43</code>; generated REST writers use them at <code>references/Hexalith.EventStore/src/Hexalith.EventStore.RestApi.Generators/RestApiControllerEmitter.cs:236,266-272</code>; other writers differ.</p>
+          <p><strong>Why it matters:</strong> a stricter McpCli contract is presented as external necessity, hiding its compatibility cost.</p>
+          <p><strong>Discuss:</strong> retain it as an explicit, tested McpCli wire decision, or align with readers/Module provider behavior.</p>
+        </div></details>
+
+        <details class="tail" id="val-018"><summary>VAL-018 · Medium · The Dapr Aspire version is not the exact catalog pin</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Sources:</strong> <code>RV-RUB-011</code>, <code>TR-004</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:196-212</code> says <code>13.5.1-beta</code>; exact pin <code>13.5.1-beta.757</code> is at <code>references/Hexalith.Builds/Props/Directory.Packages.props:151</code> and <a href="https://www.nuget.org/packages/CommunityToolkit.Aspire.Hosting.Dapr/13.5.1-beta.757">NuGet</a>.</p>
+          <p><strong>Why it matters:</strong> the claimed exact pin is a different identifier and not published as written.</p>
+          <p><strong>Autofix:</strong> use <code>13.5.1-beta.757</code>, or state transitive version ownership by <code>Hexalith.EventStore.Aspire</code>.</p>
+        </div></details>
+
+        <details class="tail" id="val-019"><summary>VAL-019 · Medium · Profile mutations can lose updates or expose tokens transiently</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>ADV-007</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:115-119,133-137,192</code> defines the only secret-bearing mutable store and final modes, but no atomic mutation, lock, restrictive creation mode, target rule, or recovery contract.</p>
+          <p><strong>Why it matters:</strong> concurrent updates can be lost, write-then-chmod can expose tokens, and interruptions can corrupt the store.</p>
+          <p><strong>Autofix:</strong> one transactional API; cross-process serialization; restrictive same-directory temp creation, flush and atomic replace; reject symlink/non-regular targets; define recovery and tests.</p>
+        </div></details>
+
+        <details class="tail" id="val-020"><summary>VAL-020 · Low · The pinned ULID package has no two-argument TryParse convenience overload</summary><div class="tail-body">
+          <p class="tail-meta"><strong>Source:</strong> <code>TR-005</code></p>
+          <p><strong>Evidence:</strong> <code>ARCHITECTURE-SPINE.md:97-101,189</code> says <code>Ulid.TryParse</code>; ByteAether.Ulid 1.4.1 documents the provider-bearing overload in its <a href="https://github.com/ByteAether/Ulid#parsing">official repository</a> and <a href="https://www.nuget.org/packages/ByteAether.Ulid/1.4.1">NuGet</a>.</p>
+          <p><strong>Why it matters:</strong> common two-argument notation fails with <code>CS1501</code>.</p>
+          <p><strong>Autofix:</strong> spell <code>Ulid.TryParse(value, provider: null, out _)</code>, or use <code>Ulid.IsValid(value)</code> for validation-only sites.</p>
+        </div></details>
+      </section>
+
+      <section id="exit" class="exit" aria-labelledby="exit-heading">
+        <h2 id="exit-heading">Gate exit criteria</h2>
+        <ol>
+          <li>Conform to caller-supplied-only idempotency and the exhaustive addendum §G document contract.</li>
+          <li>Replace impossible live equality and generic-input requirements with implementable, owned test contracts.</li>
+          <li>Resolve Parties composition, offline availability, MCP registration/schema, Gateway extension, fixture, and release-transaction seams.</li>
+          <li>Incorporate or explicitly and safely defer every Medium/Low item.</li>
+          <li>Pass deterministic lint plus the rubric, technology/reality, and adversarial reviews again.</li>
+        </ol>
+        <p><strong>Until then: FAIL / update required.</strong> The reviewed spine remains unchanged.</p>
+      </section>
+    </main>
+
+    <footer>
+      Standalone architecture Validate report · Generated from three independent reviews and a passing deterministic lint result · No reviewed artifact was modified.
+    </footer>
+  </div>
+</body>
+</html>

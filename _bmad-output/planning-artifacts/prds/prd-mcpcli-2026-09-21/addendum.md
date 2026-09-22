@@ -81,8 +81,10 @@ alternatives were rejected:
   (bearer token, `X-Tenant-Id`, `X-User-Id`).
 - Copy the logging setup from `Hexalith.EventStore.Admin.Mcp`; it sends all
   providers to stderr. Do not copy its tool registration. Build the Generic
-  Tools at runtime with `McpServerTool.Create` and a custom list-tools handler
-  (spine AD-12), never static `[McpServerToolType]` classes.
+  Tools at runtime with `McpServerTool.Create`; after settings resolution,
+  register one Read-only-filtered `ToolCollection` and use the pinned SDK's
+  built-in list and call dispatch (spine AD-12). Never use static
+  `[McpServerToolType]` classes or a second list-tools handler.
 - Exit codes 0/1/2 copied from `Hexalith.EventStore.Admin.Cli`, with the
   meaning of exit 1 narrowed to `describe --lint` (PRD FR-14).
 - MCP C# SDK notes relevant to FR-9 and FR-19: the SDK has no first-class
@@ -196,6 +198,12 @@ spelling shown. Positional CLI arguments are shown in angle brackets.
 | extensions | `send_command` (optional) | `--extension key=value` (repeatable) | Gateway `Extensions` map; keys must be in the Profile's `allowedExtensions`; Commands only (§B) |
 | lint | none | `describe --lint` | `lintFindings` is always present in the describe result; this flag makes findings produce exit 1 |
 
+The `module` argument is required and non-empty in both Heads. An absent or
+empty argument fails input binding before Catalog dispatch: the MCP SDK returns
+a JSON-RPC invalid-parameters error before tool invocation, while the CLI
+returns the §G `invalid_arguments` document at exit 2 with `argument: module`.
+`unknown_module` applies to a non-empty name that is absent from the Catalog.
+
 ### Session settings and profiles
 
 For session settings, `--profile` resolves first: flag, `EVENTSTORE_PROFILE`,
@@ -286,7 +294,7 @@ Public member types and constraints:
 
 | Member | JSON contract |
 |---|---|
-| Module `name` / `module` | non-empty string equal to the canonical Module Name |
+| Success Module `name` / `module` | non-empty string equal to a declared canonical Module Name; the `unknown_module` error's `module` member follows the error rule below |
 | `operation` / Operation `name` | non-empty string in the FR-8 canonical form |
 | `description`, `message`, `detail` | non-empty string |
 | `operationCount`, `paging.offset`, `paging.totalCount` | integer greater than or equal to zero |
@@ -372,13 +380,23 @@ only as JSON-RPC/MCP errors.
 | `validation_failed` | `code`, `operation`, `violations`; each violation has `path`, `message` | none |
 | `gateway_error` | `code`, `status`, `detail` | `reason`, `retryable`, `clientAction`, `retryAfter`, `correlationId` |
 | `unknown_operation` | `code`, `operation`, `suggestions` | none |
+| `unknown_module` | `code`, `module`, `suggestions` | none |
+| `invalid_arguments` | `code`, `argument`, `message` | none |
 | `read_only`, `catalog_empty`, `catalog_invalid`, `unsupported_transport`, `configuration_invalid`, `internal_error` | `code`, `message` | none |
 
 Error member types and constraints:
 
 - `error` is an object; `code` is exactly the row's string discriminator.
-- `operation` follows the Operation Name contract above. `suggestions` is an array
-  of at most three canonical Operation Name strings.
+- `operation` follows the Operation Name contract above. For
+  `unknown_operation`, `suggestions` is an array of at most three canonical
+  Operation Name strings. For `unknown_module`, `module` is the exact non-empty
+  requested Module Name and `suggestions` is an array of at most three declared
+  canonical Module Name strings. Both suggestion lists are ordered by
+  case-insensitive edit distance, with ordinal name order breaking ties.
+- `invalid_arguments` is emitted by CLI Head input binding before a Core call;
+  `argument` is the non-empty canonical §E argument name and `message` explains
+  the missing or invalid value. MCP input-schema binding failures use JSON-RPC
+  invalid parameters before tool invocation, outside these tool documents.
 - `violations` is a non-empty array; each `path` is an RFC 6901 JSON Pointer and
   each `message` is a non-empty string.
 - Gateway `status` is the integer `EventStoreGatewayException.StatusCode`
@@ -411,6 +429,18 @@ Error member types and constraints:
 
 ```json
 { "error": { "code": "unknown_operation", "operation": "parties.crate-party", "suggestions": ["parties.create-party"] } }
+```
+
+`unknown_module`:
+
+```json
+{ "error": { "code": "unknown_module", "module": "partes", "suggestions": ["parties"] } }
+```
+
+CLI input binding (`invalid_arguments`):
+
+```json
+{ "error": { "code": "invalid_arguments", "argument": "module", "message": "module is required and must be non-empty" } }
 ```
 
 ### Offline discovery
