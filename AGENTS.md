@@ -79,10 +79,10 @@ One generic MCP server and one thin CLI, both driven by a catalog of commands an
 
 ## Policy
 
-- Only two kinds of Hexalith dependency: the EventStore client package and the `*.Contracts` libraries being exposed. Never reference another module's aggregate, projection, handler, client, or server project.
+- Dependency allowlist: the EventStore client package, the `*.Contracts` libraries being exposed, and the transitive closure of `Hexalith.EventStore.Contracts` at the pinned version. Never reference another module's aggregate, projection, handler, client, or server project.
 - Zero module-specific code in this repo; adding a module is a package reference and a rebuild.
-- Tenant comes from the envelope (profile, flag, or forwarded header), never from the payload.
-- Identifiers are ULIDs; validate with `Ulid.TryParse`, never `Guid.TryParse`.
+- Tenant comes from the envelope (a Module's fixed tenant, the profile, a flag, or a forwarded header; a per-call MCP argument only under the operator gate), never from the payload.
+- Envelope identifiers (message, idempotency key, correlation) are ULIDs; validate with `Ulid.TryParse`, never `Guid.TryParse`. Payload identifiers follow the Module's declared Identifier Kind (`Ulid` or `String`), never a name suffix.
 - Out of version one, refuse if proposed: plugin loading of Contracts assemblies, typed one-tool-per-operation exposure, generated per-operation CLI subcommands, any OAuth or identity server, event stream reading, MCP resources or prompts.
 - `references/` holds read-only submodules of sibling repos; change them upstream, never here.
 - `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` must stay byte-identical; edit `AGENTS.md`, copy it to the other two, and run `scripts/check-agent-instructions-sync.sh`.
@@ -90,7 +90,7 @@ One generic MCP server and one thin CLI, both driven by a catalog of commands an
 ## Where things are
 
 - EventStore gateway client and envelopes: `references/Hexalith.EventStore/src/Hexalith.EventStore.Client/` and `references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Commands/` plus `Queries/`.
-- CLI shape to copy (profiles in `~/.eventstore/profiles.json`, global `--url/--token/--format/--output/--profile`, exit codes 0/1/2): `references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/`.
+- CLI shape to copy (profile file shape and `config` verbs, global `--url/--token/--format/--output/--profile`, exit codes 0/1/2): `references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/`. This tool keeps its own `~/.eventstore/mcpcli.json`; it never reads the admin CLI's `profiles.json`.
 - Stdio MCP host pattern: `references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Mcp/Program.cs`.
 - Header-forwarding handler for the HTTP transport (next release): `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/McpContextForwardingHandler.cs`.
 

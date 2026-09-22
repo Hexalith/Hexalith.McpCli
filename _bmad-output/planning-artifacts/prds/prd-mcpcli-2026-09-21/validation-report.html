@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<!--
+  PRD Validation Report — skeleton template.
+
+  This file is a starter the synthesis pass fills in directly. There is no
+  substitution engine. The LLM:
+    1. Reads {doc_workspace}/review-rubric.md and every review-{slug}.md from
+       additional reviewers.
+    2. Copies this skeleton.
+    3. Replaces the placeholder content (everything between TEMPLATE markers)
+       with the consolidated review, preserving the structure and CSS.
+    4. Writes the result to {doc_workspace}/validation-report.html.
+    5. Writes a markdown twin to {doc_workspace}/validation-report.md.
+
+  Visual rules the LLM must preserve:
+    - The container width, the color tokens, the typography.
+    - One dimension = one collapsible <section class="dimension">.
+    - Verdict pill uses the verdict-* class matching its judgment.
+    - Severity badge uses the sev-* class matching its level.
+    - Each extra reviewer (adversarial, etc.) gets its own collapsible section
+      below the rubric dimensions.
+    - The footer always shows the artifact paths and timestamp.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PRD Validation: Hexalith.McpCli PRD</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+
+    --grade-exc: #16a34a;
+    --grade-good: #65a30d;
+    --grade-fair: #d97706;
+    --grade-poor: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .grade {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .grade-excellent { background: var(--grade-exc); }
+  .grade-good { background: var(--grade-good); }
+  .grade-fair { background: var(--grade-fair); }
+  .grade-poor { background: var(--grade-poor); }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="report-header">
+      <div class="title">
+        <h1>Hexalith.McpCli PRD — Validation Report</h1>
+        <div class="subtitle">_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md (+ addendum.md)</div>
+      </div>
+      <div class="grade grade-poor">Poor</div>
+    </header>
+
+    <div class="synthesis">
+      <p>The amended PRD is a sound spine: the thesis (CQRS uniformity through one Gateway makes one generic agent surface possible, and the Decoration Attribute turns that into a platform policy) still drives every feature, the four contradictions the 2026-09-21 review found are gone, and nearly every FR carries a consequence a story can test. What is at risk is one open question the PRD treats as safely deferred but is not: the Gateway's query validator rejects an empty <code>AggregateId</code>, so FR-16's interim rule for list-style Queries fails against the referenced code on the first Tenants query story; and one brownfield claim (<code>projectionActorType</code> for Tenants) is stale.</p>
+      <p>The adversarial and spine-alignment reviewers materially shift the picture, and their critical findings were spot-checked against the source under <code>references/</code>. Three brownfield facts contradict the PRD as written: Tenants runs every Command and Query under the fixed Envelope tenant <code>system</code>, so the one-default-tenant-per-Profile model and FR-13's "tenant-less global-administrator Queries" claim are wrong for the flagship Module; <code>Hexalith.EventStore.Contracts</code> package-references <code>Hexalith.Commons.UniqueIds</code>, so the §4 closure rule and its CI test reject both v1 Contracts Libraries on day one; and <code>SubmitQueryRequest</code> carries neither a correlation identifier nor extensions, so FR-16 and addendum §E promise a <code>run_query</code> pass-through the pinned client cannot make. A fourth critical is a design gap: the LLM-controlled per-call <code>tenant</code> argument, identity-bearing Payload properties such as Projects' <code>ActorPrincipalId</code>, and unrestricted <code>extensions</code> are three caller-controlled identity paths the §4 tenant guardrail does not cover. The grade is Poor because of these blockers, not because of the document's craft; the PRD is usable now for the Decoration Package, Catalog, MCP head, CLI head, and Profile epics, and becomes usable for the executor and coverage epics once the four criticals and the OQ-3 decision land.</p>
+    </div>
+
+    <div class="dimension-summary">
+      <div class="dim-card"><div class="dim-name">Decision-readiness</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Substance over theater</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Strategic coherence</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Done-ness clarity</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">Scope honesty</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Downstream usability</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Shape fit</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+    </div>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Decision-readiness</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>Decisions are stated as decisions with what was given up: §5.7 "replacement over a strangler pattern to remove the inconsistency for good, accepting cross-repository coordination"; §4 "Identity in v1" says the audit trail "says 'the tool', not the human" and names that as the reason the HTTP transport is next; §8 makes the v1 gate explicit rather than letting Folders sit on the critical path. The four remaining Open Questions are genuinely open, each with an owner and a revisit point, and the three resolved ones say where they were resolved and keep their numbers. The one place a decision is shown as open after it was made elsewhere is Tenants paging.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Tenants paging decision is still shown as open although spine AD-20 decided it</h3><span class="finding-location">§8.1 Tenants; FR-7; FR-17; addendum §E</span></header>
+            <div class="finding-note">§8.1 says "decide whether the <code>Cursor</code> and <code>PageSize</code> Payload members give way to Envelope paging", but AD-20 ("Paging is Envelope-only") already decided and the amendment pass did not carry it in. FR-7 puts <code>Cursor</code> and <code>PageSize</code> in the Schema while addendum §E offers <code>pageSize</code>/<code>cursor</code> as tool arguments, so an agent sees two paging channels. The adversarial and spine reviewers raise the same point.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Record AD-20 in FR-16 or FR-17 (paging travels only as <code>run_query</code> arguments; Payload paging members are ordinary Payload or lint-flagged); extend the FR-4 lint list; turn the §8.1 bullet into a prerequisite.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Substance over theater</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>No furniture. §2.1 uses jobs-to-be-done, not personas; the named protagonists each carry an edge case that lands on an FR. The Vision is this product's and no other's: "a Command without a description is a Command an agent cannot use". NFRs carry bounds (500 ms, 8,000 characters, byte-identical output), and the addendum keeps mechanism, comparables, and the argument table out of the requirements. The one substance issue is length.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Overlength persists; §0's "stated once" promise is not quite met</h3><span class="finding-location">whole document (6,284 words vs 2,500–4,000 target)</span></header>
+            <div class="finding-note">The dependency rule still appears in §4, FR-5 c1, FR-20 c1, §8.3, SM-1, and SM-C3; the five tool names in §3, FR-9, §7, and §8.1; §5.1's attribute table plus FR-2 plus FR-16 c2 describe the routing precedence three times in different words, which is where the next amendment will miss one.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Keep §5.1 as the only description of attribute members; reduce FR-2 and FR-16 c2 to a precedence sentence and pointer; drop the §8.3 dependency bullet. Target a 600–900 word cut without cutting testable consequences.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Strategic coherence</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>The thesis is stated in §1 and everything hangs off it: uniformity → one generic surface → decoration as policy (FR-22) → no new per-module server (SM-C1). Feature order in §8.1 is dependency order. SM-1 and SM-2 are the thesis in test form; SM-7 now measures the audience the §1 bet is about. Counter-metrics point at the temptations this product faces. No findings.</p>
+        </div></div>
+        <div class="findings-list"></div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details open>
+        <summary><h2>Done-ness clarity</h2><span class="verdict-pill verdict-adequate">adequate</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>Most FRs give an engineer a done condition: FR-5 byte-identical output; FR-10 an SDK-driven stdio round trip; FR-14's exit-code table; FR-15 "the substituted Gateway client records zero calls"; FR-16 ULID checks and the accessor rule. The Identifier Kind, accessor, and readOnly-property rules from the amendment close the gaps that mattered most. What remains is one stated fallback that fails against the referenced Gateway (raised to critical in synthesis because the adversarial and spine reviewers both rated it a v1 blocker), and one interplay between lint findings and exit codes that will surprise scripts.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">Aggregate-less Queries cannot reach the Gateway as specified; OQ-3 is a v1 blocker, not a deferral</h3><span class="finding-location">FR-16 c2 [ASSUMPTION]; §10 OQ-3; §5.1 aggregateIdProperty; §8.1 Tenants</span></header>
+            <div class="finding-note"><code>SubmitQueryRequestValidator.cs</code> requires a non-empty <code>AggregateId</code>, so the fallback "sends an empty aggregate identifier pending OQ-3" is a guaranteed 400 for <code>tenants.list-tenants</code>, <code>tenants.get-user-tenants</code>, and every Parties list read. No Tenants code constructs a <code>SubmitQueryRequest</code>, so "Tenants covered end to end" rests on a read path nothing exercises. Sibling clients send a per-operation constant (Parties <code>"parties"</code>, Rest <code>RestQueryBindingSource.Constant</code>) and the Decoration Attribute has no member for one. Rated high by the rubric, critical by both other reviewers.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Close OQ-3 from source now. Add a Query-only <code>aggregateId</code> constant member to §5.1 and FR-2 (mutually exclusive with <code>aggregateIdProperty</code>); make the FR-16 rule "explicit argument, else accessor value, else the attribute constant; a Query resolving to nothing is <code>validation_failed</code>, never empty". Add a spike before the Executor epic: <code>tenants.list-tenants</code> returns a page through <code>IEventStoreGatewayClient.SubmitQueryAsync</code> from a throwaway harness.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">Undescribed properties make every discovery verb exit 1 until Modules are fully described; lint categories are placed inconsistently</h3><span class="finding-location">FR-4; FR-6; FR-7 c4; FR-14 row 1; UJ-3</span></header>
+            <div class="finding-note">Zero <code>[Description]</code> attributes exist in the Tenants or Parties Contracts today, so <code>hexalith modules</code> exits 1 on every run under <code>set -e</code> until the last property is described, and with <code>--strict</code> the <code>send</code> and <code>query</code> verbs refuse to start. Meanwhile FR-7 c4 makes the unmarked-<code>Id</code> case lint-only. Rated medium by the rubric, high by the adversarial reviewer.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Property-level findings are lint-only, surfaced by <code>describe --lint</code>; Catalog diagnostics are stderr-only unless <code>--strict</code> (then exit 2 before any result). Say so in FR-6 and FR-14.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">A Query with no Tenant has no stated outcome</h3><span class="finding-location">FR-13 c4</span></header>
+            <div class="finding-note">"A Command with no Tenant from any source is a validation failure." <code>SubmitQueryRequest.Tenant</code> is required too, but the PRD never states what happens to a decorated Query with no Tenant.</div>
+            <div class="finding-fix"><strong>Fix:</strong> "A Command or Query with no Tenant from any source is a validation failure."</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Duplicate Module Name: startup error in FR-3, excluded type in FR-6; which assembly survives is unstated</h3><span class="finding-location">FR-3 c2; FR-6 error categories</span></header>
+            <div class="finding-note">A duplicate Module Name is an assembly-level conflict, but FR-6's error categories are defined as "type excluded". All three reviewers flag it.</div>
+            <div class="finding-fix"><strong>Fix:</strong> One clause in FR-6: the second assembly in manifest order is excluded with <code>duplicate_module_name</code>; the diagnostic names both.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Scope honesty</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>§8.3 Non-Goals does real work ("Not a second executor: the tool never calls a Module's REST or Dapr API" is what keeps four Legacy Servers alive until their Modules are Gateway-ready). §8.2 lists deferrals with timing and addendum §F says which client members each deferral maps to. Folders is kept in the v1 Module list but explicitly does not gate v1. Open-items density is right for Internal stakes: 10 inline assumptions, 2 PM notes, 4 open OQs. No further findings.</p>
+        </div></div>
+        <div class="findings-list"></div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Downstream usability</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>The Glossary is used with discipline and the amendment added the terms it introduced. FR-1..22, NFR-1..8, SM-1..7, SM-C1..4, UJ-1..3 are contiguous and unique; every cross-reference inside <code>prd.md</code> resolves. Each §5 cluster reads alone, and the addendum §E argument table is the single source for both Heads. The only usability blemish is in the addendum.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Addendum cross-references point at PRD sections that no longer exist</h3><span class="finding-location">addendum §D "§4.8 and §9.1"; §F "§9.2", "§6"</span></header>
+            <div class="finding-note">The PRD's constraints are §4, MVP scope is §8 with §8.1/§8.2/§8.3; §6 is now NFRs. An extractor following these lands on the wrong section.</div>
+            <div class="finding-fix"><strong>Fix:</strong> §D → "PRD §4 and §8.1"; §F command status → "(PRD §8.2)"; §F retries → "(PRD §4 Idempotency)".</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>Shape fit</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>Internal developer product with one operator role, chain-top, brownfield: capability-spec shape with three light journeys, cross-cutting NFRs, a public-surface section, and named per-Module prerequisites is the right shape. Brownfield references checked by the rubric walker were accurate (contract interfaces, submission records, admin CLI profile shape, Tenants routing, Projects closure failure, Parties command count, Folders and Memories server facts) with one exception below.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">Tenants no longer has a projection actor; <code>projectionActorType</code> "required for Tenants" is stale in three places</h3><span class="finding-location">§5.1 table row projectionActorType; FR-2 c1; §8.1 Tenants prerequisite</span></header>
+            <div class="finding-note"><code>TenantQueryHandlerBase.cs</code> describes the "retired <code>TenantsProjectionActor</code>" and says reads go through <code>IReadModelStore</code> via handler routing; the string <code>ProjectionActorType</code> appears nowhere in Tenants. FR-2 c1 sets a false test. Rated medium by the rubric, high by the spine reviewer.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Confirm with the Tenants owner, then make the member "optional; only for a Module whose projection is served by a named actor" and rewrite FR-2 c1 and the Tenants prerequisite.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details open>
+        <summary><h2>Adversarial review</h2><span class="reviewer-source">review-adversarial-general.md</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>The PRD is well-structured and most of its mechanism is decided, but it is built on a tenancy model that the flagship v1 module does not follow, a dependency rule that excludes the two modules it names, and a read path that no existing code exercises. On security, the PRD lets an agent set the envelope tenant per call, pass arbitrary extensions, and write identity-bearing payload properties, which together are an impersonation path the guardrails do not cover. Six months out, the most likely failure is a tool that can write but not read, holds a platform-administrator token on a developer laptop, and exposes a Catalog whose upstream decoration work nobody scheduled. Ship only after the critical findings are resolved; the high findings should be decided before stories are cut. Counts: 4 critical, 11 high, 12 medium, 6 low. The four criticals were spot-checked against source by the validating session and hold.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-1. Tenants runs under the fixed Envelope tenant <code>system</code>; the PRD's tenant model cannot drive it</h3><span class="finding-location">§3 Tenant; §4 Tenant; FR-3 c3; FR-13 c4; FR-18; UJ-1; UJ-2</span></header>
+            <div class="finding-note"><code>TenantIdentity.ForTenant(managedTenantId)</code> yields Envelope tenant <code>system</code> with the managed tenant as aggregate id; <code>TenantsSystemTenantValidator</code> and <code>GetGlobalAdministratorsQueryHandler</code> reject anything else. FR-13's "tenant-less" claim is false, FR-3's rationale conflates Envelope tenant with Identifier Kind, UJ-1 and UJ-2 cannot share one Profile default tenant, and nothing in <code>describe_operation</code> tells the agent to pass <code>tenant: "system"</code>. A token with the <code>system</code> claim is a platform-administrator token on a laptop.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a Module marker member <code>fixedTenant</code> (or an Operation member <code>tenant</code>) surfaced by <code>describe_operation</code> as the Envelope default and used by the executor when no per-call tenant is given; a differing per-call tenant is <code>validation_failed</code>. Rewrite FR-3 c3 with a real non-ULID aggregate id; fix FR-13 c4 and both journeys.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-2. The closure rule as written excludes Tenants and Parties themselves</h3><span class="finding-location">§4 Dependency policy; FR-20; §8.1 Projects; addendum §B; spine AD-15</span></header>
+            <div class="finding-note"><code>Hexalith.EventStore.Contracts.csproj</code> package-references <code>Hexalith.Commons.UniqueIds</code>, which references <code>ByteAether.Ulid</code>. "No other Hexalith package" therefore fails for every Contracts Library, the CI test blocks the first v1 pin, and the first story will loosen the rule ad hoc, which is how <code>Hexalith.Projects.Contracts</code> grew Fluxor and FluentUI. <code>Hexalith.Parties.Contracts</code> already ships service interfaces; "Contracts" is a package name, not a purity guarantee. The spine reviewer rates the same finding high.</div>
+            <div class="finding-fix"><strong>Fix:</strong> State the rule once in §4 as an allowlist: <code>*.Contracts</code> packages, <code>Hexalith.EventStore.Contracts</code> and its own transitive closure at the pinned version, no framework reference beyond <code>Microsoft.NETCore.App</code>; additions are a PRD change. Point §3 and FR-20 at §4; align AD-15.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-3. Identity can be set by the caller three ways; the tenant guardrail covers none of them</h3><span class="finding-location">§4 Tenant; FR-9 argument table (tenant, extensions); FR-16; FR-21 c2; §8.1 Projects</span></header>
+            <div class="finding-note">(1) The per-call <code>tenant</code> argument is chosen by the LLM; a token with several tenant claims lets the agent hop tenants per call with no operator consent, a fourth tenant source the repository policy does not list. (2) Projects' <code>IProjectCommand.ActorPrincipalId</code> is an ordinary Schema property, so <code>send_command</code> lets the agent name any principal as the actor and the audit trail records it. (3) <code>--extension key=value</code> passes through with no allowlist against a Gateway whose <code>ITrustedCommandExtensionPolicy</code> stores unclaimed keys as trusted.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Honor per-call <code>tenant</code> only when the Profile has no default or the operator sets <code>--allow-tenant-override</code>, else <code>validation_failed</code>. Add an <code>actorProperty</code> attribute member the executor fills from session identity and marks <code>readOnly</code>. Add a per-Profile extension-key allowlist, default empty.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-4. <code>run_query</code> has no proven path for either v1 module, and the PRD's fallback is rejected by the Gateway</h3><span class="finding-location">FR-16 assumption; OQ-3; §5.1 projectionActorType; §8.1 Tenants and Parties; FR-20</span></header>
+            <div class="finding-note">Same root as the Done-ness critical above, plus: Tenants query handlers are reached today through REST routes, and Parties, the only Module that reaches the Gateway at all, has no Query types. "Tenants and Parties covered end to end" rests on a read path that nothing exercises.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Promote OQ-3 to a v1 blocker with a named owner and a spike deliverable; add a <code>fixedAggregateId</code> attribute member for list-style Queries; replace the empty-identifier assumption with <code>validation_failed</code>.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-1. Sharing <code>~/.eventstore/profiles.json</code> with the admin CLI makes one profile name unusable by both tools</h3><span class="finding-location">FR-18; §5.6; addendum §B and §E</span></header>
+            <div class="finding-note">Admin <code>url</code> and token target the admin API, not the Gateway; <code>csv</code> format is unsupported here.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Make <code>~/.eventstore/mcpcli.json</code> the sole store, or keep <code>profiles.json</code> read-only for the active profile name only. State what happens with an unknown <code>format</code>.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-3. The Schema is derived with the tool's serializer options, but Parties and Tenants ship their own converters</h3><span class="finding-location">FR-5 c3; FR-7; FR-16 accessor; FR-1 c3</span></header>
+            <div class="finding-note">A Schema and an example validated under the tool's options may not match what the Module's own <code>JsonSerializerOptions</code> would produce.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Require attribute-complete decorated types in the Gateway-ready checklist and add a Catalog diagnostic when a property's converter comes from options; or add a marker member naming a static options provider.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-4. Nothing stops <code>tenantProperty</code> from naming the aggregate identifier, and on Tenants that is the natural mistake</h3><span class="finding-location">§5.1 tenantProperty; FR-16 c3</span></header>
+            <div class="finding-note">Tenants' <code>TenantId</code> is an aggregate id, not a tenant; marking it <code>tenantProperty</code> would overwrite the aggregate id with the Envelope tenant <code>system</code>.</div>
+            <div class="finding-fix"><strong>Fix:</strong> FR-6 error category for <code>tenantProperty</code> naming the aggregate identifier source; note the Tenants case in §5.1.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-5. SM-4 cannot pass as written, and several acceptance statements are unobservable</h3><span class="finding-location">SM-4; FR-9 c4; FR-11 c3; NFR-1; NFR-8; SM-5; SM-6</span></header>
+            <div class="finding-note">"Identical results for every Operation" fails on any Command result that carries a fresh message identifier; "three labeled parts", "up to three nearest", "the CI runner class", and "understandable by someone who has never seen the code" have no observable test.</div>
+            <div class="finding-fix"><strong>Fix:</strong> SM-4 compares Catalog data and error documents for identical inputs with volatile fields masked; name the FR-9 labels, the FR-11 distance metric, and the NFR-1 runner.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-6. The result document shapes are not specified anywhere, yet both Heads must agree on them</h3><span class="finding-location">FR-11; FR-17; FR-9 c2; SM-4</span></header>
+            <div class="finding-note">Addendum §E covers inputs only.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add addendum §G with one JSON example per tool result and per error document; both Heads serialize the same record types.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-7. <code>--format table</code> is required for every verb but undefined for nested JSON documents</h3><span class="finding-location">FR-13; FR-12; addendum §E</span></header>
+            <div class="finding-fix"><strong>Fix:</strong> <code>table</code> applies to <code>modules</code>, <code>operations</code>, <code>config</code>; on <code>describe</code>, <code>send</code>, <code>query</code> it falls back to <code>json</code> with a stderr note or is rejected with exit 2. Pick one.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-8. FR-20 and FR-3 disagree on what a referenced-but-undecorated Module looks like</h3><span class="finding-location">FR-3 c1; FR-20 c2; FR-6</span></header>
+            <div class="finding-note">FR-3: "an undecorated assembly contributes nothing and produces no diagnostic". FR-20: "appears in <code>list_modules</code> with zero Operations and a startup diagnostic". The spine reviewer adds that FR-6's category list omits the <code>no_operations</code> diagnostic FR-20 relies on.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Two states: unmarked assembly (invisible, no diagnostic) and marked assembly with zero exposed Operations (listed, warning <code>empty_module</code>). Amend FR-6 and FR-20.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-9. The build-time assembly list generator has no rule for which package references are Contracts Libraries</h3><span class="finding-location">FR-5; addendum §B</span></header>
+            <div class="finding-fix"><strong>Fix:</strong> <code>HexalithContracts="true"</code> metadata on the <code>PackageReference</code> item, read by an MSBuild target; a test that the list equals the flagged set.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-10. Upstream decoration work has no owner, date, or gate, and it is on the v1 critical path</h3><span class="finding-location">§8.1 checklist; Tenants and Parties prerequisites; §7; SM-1; SM-3</span></header>
+            <div class="finding-note">"Work is tracked in each Module's own repository"; Parties needs Query types created from scratch; nothing says who, when, or what happens if they slip.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Per-Module table with owner, target version, and earliest pinnable tool release; a §8 fallback if Parties Queries are not published by a date.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-11. The <code>Ulid</code> CLR-type rule and the Decoration Package's zero-dependency rule conflict</h3><span class="finding-location">FR-7 c2; FR-1 c4; §3 Decoration Package</span></header>
+            <div class="finding-fix"><strong>Fix:</strong> Name the recognized type by full name (<code>ByteAether.Ulid.Ulid</code>); reword FR-1 so the analyzer's dependencies are private assets.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">M-7 (raised). The Tenants Module is the admin plane the PRD says it excludes</h3><span class="finding-location">§2.2 Non-Users; §8.3 Non-Goals; FR-20</span></header>
+            <div class="finding-note">Every Tenants operation requires the <code>system</code> tenant claim, a platform-administrator token. Rated medium by the reviewer; raised in synthesis because it follows directly from C-1.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Narrow the decorated Tenants subset (and pick a different second v1 Module), or amend §2.2 to say the exclusion covers EventStore infrastructure only and accept the admin-CLI overlap.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Eleven further medium and six low findings</h3><span class="finding-location">review-adversarial-general.md M-1..M-12, L-1..L-6</span></header>
+            <div class="finding-note">Parties Wire Types as 24 hand-typed strings with no drift test (M-2); <code>EVENTSTORE_READ_ONLY</code> boolean parsing rejects <code>1</code>/<code>0</code> (M-3); untestable hand-crafted <code>send_command</code> refusal (M-4); NFR-2 budget vs output schemas (M-5); CLAUDE.md "Identifiers are ULIDs" stale (M-6); UJ-1 asserts unverified Gateway deduplication (M-8); §E resolution order omits <code>--profile</code> (M-9); no Gateway pre-validation (M-10); FR-22 closes on an upstream merge (M-11); §8.2 pre-commits to typed tools (M-12); Legacy Server counts, HTTP transport error code, versioning of Module-driven breaks, Dapr SDK size, Wire Type glossary example, addendum §C duplicate (L-1..L-6). Full text in the file; the markdown twin lists each with its fix.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details open>
+        <summary><h2>Spine alignment review</h2><span class="reviewer-source">review-spine-alignment.md</span></summary>
+        <div class="dim-body"><div class="dim-judgment">
+          <p>The amendment pass landed every bullet of the spine's "PRD Amendments" section, the FR ids are stable, the §11 assumption index matches the body, and every hunk in the 2026-09-22 diff is traceable to the amendments list or the spine's conventions table. The PRD is usable for epics for the Decoration Package, Catalog, MCP head, CLI head, and profiles. It is not yet usable for the executor and coverage epics, because four brownfield claims inherited from the spine are contradicted by EventStore, Tenants, and Parties source. Of the remaining open questions, only OQ-3 blocks architecture and epics, and it is answerable from source now. 32 claims checked: 27 accurate, 5 inaccurate. Counts: 1 critical, 3 high, 8 medium, 7 low.</p>
+        </div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-1. Aggregate-less Queries cannot reach the Gateway as specified; blocks the Tenants half of the v1 gate</h3><span class="finding-location">FR-16 assumption; §10 OQ-3; §5.1; §8.1 Tenants; spine AD-19</span></header>
+            <div class="finding-note">Merged with the Done-ness critical above. Spine AD-19's <code>string.Empty</code> assumption is falsified by <code>SubmitQueryRequestValidator.cs:37-39</code>; sibling clients send a per-operation constant.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a Query-only <code>aggregateId</code> constant member; FR-16 resolves explicit argument, accessor, constant, else <code>validation_failed</code>; ask the spine owner to replace AD-19.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-2. <code>run_query</code> cannot pass a correlation identifier or extensions through the pinned client and Gateway</h3><span class="finding-location">FR-16 sentence 1; FR-17; addendum §E rows correlationId and extensions; spine AD-9</span></header>
+            <div class="finding-note"><code>SubmitQueryRequest</code> has no such members; the validator rejects <code>AdditionalProperties</code> (lines 142-145); query correlation comes from an <code>X-Correlation-ID</code> header the client never sets.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Make <code>correlationId</code> and <code>extensions</code> <code>send_command</code>-only rows in §E; FR-16 says a Query gets the Gateway's correlation identifier in its result; move query correlation and extensions to §8.2.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-1 and H-3. Closure rule rejects both v1 modules; Tenants projection actor is retired</h3><span class="finding-location">§4; FR-20; §5.1 projectionActorType; FR-2 c1; §8.1 Tenants</span></header>
+            <div class="finding-note">Both merged with the findings above (adversarial C-2 and the Shape fit finding).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Unlanded spine decisions and stale v1 assumptions</h3><span class="finding-location">FR-7 vs AD-7; FR-4/FR-17 vs AD-20; FR-3 c3; §8.1 Tenants; addendum preamble; UJ-1; NFR-1; FR-20; FR-6</span></header>
+            <div class="finding-note">M-1: FR-7 "every declared property" contradicts AD-7's removal of computed get-only members. M-2: AD-20 Envelope-only paging and its lint did not land. M-3: both v1 Modules are <code>String</code>-kind and Parties is never told. M-4: §8.1 Tenants still requires <code>aggregateIdProperty</code> after FR-2 made it optional. M-5: addendum §E is normative for FR-9 and FR-12 but the addendum disclaims requirement status. M-6: UJ-1 and NFR-1 still assume Projects in v1. M-7: FR-20 "covered end to end" has no observable definition. M-8: FR-6 misses <code>no_operations</code>.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Each has a one-line fix in the markdown twin and the reviewer file; the get-only-member rule and the end-to-end definition are the two to land first.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Seven low findings</h3><span class="finding-location">NFR-7; addendum §B, §C; FR-3/FR-6; §3 Routing Values; FR-6/FR-12; FR-11</span></header>
+            <div class="finding-note">NFR-7's assumption is resolved by AD-16 but still tagged; addendum §B points at static tool classes the spine forbids; §C is duplicated; duplicate Module Name rule split; Glossary "Routing Values" omits the constant source; FR-6 lists <code>mcp</code> among Catalog-needing verbs while the spine exempts <code>mcp --transport http</code>; FR-11 lacks the nearest-name metric.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <div class="mechanical">
+      <h3>Mechanical notes</h3>
+      <ul>
+        <li>Word counts: <code>prd.md</code> 6,284 (previous 6,037; target 2,500–4,000); <code>addendum.md</code> 1,521.</li>
+        <li><code>[ASSUMPTION]</code> tags: 10 inline, §11 roundtrip clean both ways; FR-13 c4 and SM-6 carry bare tags with no rationale; NFR-7's tag is already resolved by the spine.</li>
+        <li><code>[NOTE FOR PM]</code>: 2 (§8.1 Folders, §8.2 HTTP transport).</li>
+        <li>Open Questions: 7 numbered, 4 open (OQ-1, OQ-3, OQ-5, OQ-6), 3 resolved with source and date. Only OQ-3 blocks architecture and epics.</li>
+        <li>IDs: FR-1..22, NFR-1..8, SM-1..7, SM-C1..4, UJ-1..3 contiguous; FR-19 precedes FR-18 by design. Every in-PRD cross-reference resolves.</li>
+        <li>Dangling cross-references: four in <code>addendum.md</code> into stale PRD section numbers (§4.8, §9.1, §9.2, §6).</li>
+        <li>Addendum §C duplicated block; Legacy Server count (six vs four plus host) reconciles only if the Projects plug-in counts as a server.</li>
+        <li>FR-22's rule is not yet in <code>hexalith-llm-instructions.md</code>; expected, since FR-22 adds it.</li>
+        <li>Brownfield claims: spine reviewer checked 32, 27 accurate, 5 inaccurate (table in <code>review-spine-alignment.md</code>). The validating session independently confirmed the Contracts package reference, the Tenants <code>system</code> tenant, the per-call <code>tenant</code> argument, and the absence of any <code>SubmitQueryRequest</code> in Tenants.</li>
+        <li>Prior review (2026-09-21): 4 of 5 high findings resolved; overlength persists at medium; the Query aggregate-id item became this run's critical.</li>
+      </ul>
+    </div>
+
+    <footer class="report-footer">
+      <div class="meta">
+        <span>Rubric: .claude/skills/bmad-prd/assets/prd-validation-checklist.md</span>
+        <span>Generated: 2026-09-22T09:10:24+02:00</span>
+        <span>Reviewers: review-rubric.md · review-adversarial-general.md · review-spine-alignment.md</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
