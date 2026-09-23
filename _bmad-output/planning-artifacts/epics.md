@@ -21,6 +21,7 @@ approvedStories:
   - "1.5"
   - "1.6"
   - "1.7"
+  - "1.8"
   - "2.1"
   - "2.2"
   - "2.3"
@@ -87,7 +88,7 @@ FR8: Give each Operation a stable `<module>.<kebab-case-operation>` name derived
 
 FR9: Expose exactly five generic MCP tools (`list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query`), or four in Read-only Mode, with the addendum §E arguments and §G results, descriptive tool text and annotations, Module and kind filtering, operation Schema and Envelope discovery, and correct `submittable` state.
 
-FR10: Run the MCP Server over stdio with JSON-RPC alone on stdout, logging on stderr, no interactive startup, SDK-driven initialization/list/call behavior, and structured stderr-only failure before initialization versus MCP errors afterward.
+FR10: Run the MCP Server over stdio with JSON-RPC alone on stdout, logging on stderr, no interactive startup, SDK-driven legacy initialization or 2026-07-28 discovery and list/call behavior, and structured stderr-only failure before request serving versus MCP errors afterward.
 
 FR11: Return the exact addendum §G structured success and error documents from both Heads, including output schemas, validation violations, Gateway status and supplied metadata, unknown Operation or Module suggestions, and no stack traces; preserve required fields and omit absent optional fields.
 
@@ -95,7 +96,7 @@ FR12: Offer CLI verbs `modules`, `operations`, `describe`, `send`, `query`, `mcp
 
 FR13: Resolve Profile selection from flag, environment, then active Profile, and each session setting from flag, environment, selected Profile, then default using only documented sources; use JSON as the default format, no default Gateway URL, and validate boolean environment values while allowing offline discovery.
 
-FR14: Use CLI exit 0 for a result, exit 1 only for a `describe --lint` result with findings, and exit 2 for a structured failure with no result; diagnostics affect the code only under `--strict`, and pre-initialize MCP failures keep stdout empty.
+FR14: Use CLI exit 0 for a result, exit 1 only for a `describe --lint` result with findings, and exit 2 for a structured failure with no result; diagnostics affect the code only under `--strict`, and MCP failures before request serving keep stdout empty.
 
 FR15: Validate every Payload against its Operation Schema and every resolved Envelope value against Gateway rules before submission, return all violations with JSON Pointers, validate aggregate identifiers by Module Identifier Kind, and make no Gateway call on invalid input.
 
@@ -137,14 +138,14 @@ NFR8: Ensure each exposed description is understandable without source-code cont
 - Keep the hexagonal dependency direction: Abstractions has zero package references; Core has no MCP, System.CommandLine, or ASP.NET dependency; MCP and CLI are adapters; only the tool executable references Module Contracts packages; one composition root and one immutable Catalog serve both Heads (AD1–AD3, AD11).
 - Generate `ModuleAssemblyManifest.g.cs` after `ResolveReferences` from flagged `HexalithContracts="true"` package references, match by `NuGetPackageId`, require exactly one Contracts assembly per flag, sort assembly names ordinally, and test manifest-to-reference equivalence, including marked-empty and unmarked assemblies (AD4).
 - Define Core argument, result, and error records to match addendum §E/§G exactly, with one canonical result serializer; test all public document variants, optional-member omission, input surface mapping, and cross-head document equality (AD5).
-- Use one cached, read-only Payload options instance per Module, preserving its converter order while fixing canonical non-converter settings; derive Schema through `JsonSchemaExporter` and validate with `JsonSchema.Net` `OutputFormat.List` (AD6–AD7).
+- Use one cached, read-only Payload options instance per Module, preserving its converter order while fixing canonical non-converter settings including a tool-owned `DefaultJsonTypeInfoResolver` before `MakeReadOnly()`; derive Schema through `JsonSchemaExporter`, force a non-null Command object root without changing nested nullability, and validate with `JsonSchema.Net` `OutputFormat.List` (AD6–AD7).
 - Compile aggregate identifier accessors once at Catalog build, including a JSON property read and `ICommandContract` getter path; preserve explicit argument precedence and Query constants while rejecting Command declarations with no source (AD19).
 - Validate Command extensions against the operator allowlist and pinned Gateway sanitizer grammar, with at most 32 entries, key length 100, value length 1,000, and combined UTF-8 size 4,096 bytes; validate query paging `pageSize` 1..200, nonnegative `offset`, cursor length at most 4,096, and cursor/offset exclusivity before Gateway submission (AD9, AD20).
 - Register the gateway client once through `AddMcpCliCore`; attach the static bearer handler only in the tool host, keep credentials out of Core, and retain the handler seam for the subsequent HTTP release (AD10–AD11).
-- Build MCP tools dynamically with the pinned SDK's `McpServerTool.Create`, one filtered fixed-order `ToolCollection`, closed success/error output-schema branches, and built-in dispatch; test schema conformance and annotation behavior under both required MCP protocol revisions (AD12).
+- Build MCP tools dynamically with the pinned SDK's `McpServerTool.Create`, one Read-only-filtered `ToolCollection`, an SDK list filter that orders the assembled response, closed success/error output-schema branches, and built-in call dispatch; test schema conformance and annotation behavior under both required MCP protocol revisions (AD12).
 - Make Profile mutations atomic and cross-process safe: lock, reload, validate, write and flush a restrictive same-directory temporary file, then replace; reject symlinks and malformed targets; enforce Unix permissions and Windows ACLs before token bytes are written (AD14).
 - Enforce the exact production dependency allowlist and locked transitive closure from restored assets, including framework references; allow only named test-only EventStore/Aspire packages and the synthetic Contracts fixture outside production (AD15).
-- Build generic versioned conformance-vector and migration-inventory gates without Module-specific runtime branches; compare captured Gateway requests as well as documents under loopback, and assert live semantic effects without submitting a Command twice merely for parity (AD16, AD21).
+- Approve the McpCli-owned versioned vector contract and shared validator before upstream vector authoring; build generic conformance-vector and migration-inventory gates without Module-specific runtime branches; compare captured Gateway requests as well as documents under loopback, and assert live semantic effects without submitting a Command twice merely for parity (AD16, AD21).
 - Compose the live AppHost with EventStore and Tenants through published Aspire helpers and Parties once a server-code-free `Hexalith.Parties.Aspire` package exists; require an upstream bounded source-build path in Hexalith.Builds or helper-managed build before claiming the blocking Aspire CI gate (AD16, open questions).
 - Coordinate upstream `JsonSchema.Net 9.4.0` and `HexalithMcpCliVersion` catalog additions, first decorated Tenants and Parties Contracts releases, exact version pins, and Parties Aspire helper publication; these are explicit release dependencies, not substitutes for local implementation (AD15–AD17, open questions).
 - Package and publish the dependency-free Decoration Package first through an Abstractions-only bootstrap gate; after upstream decorations, use one version for Abstractions and tool packages, validate exact staged IDs and versions, install the staged tool for smoke checks, and publish only from a green source SHA (AD17–AD18).
@@ -176,7 +177,7 @@ FR16: Epic 2 — Resolve Tenant, Actor, aggregate identity, identifiers, extensi
 FR17: Epic 2 — Submit once through the EventStore gateway client and map its result.
 FR18: Epic 2 — Manage separate, secret-safe Profiles.
 FR19: Epic 2 — Refuse writes inside the executor and CLI; Epic 3 omits the MCP write tool.
-FR20: Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness.
+FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness.
 FR21: Epic 4 — Produce approved migration inventories and enforce inventory-to-Catalog parity.
 FR22: Epic 4 — Merge the authoritative no-new-server and frozen-CLI rule.
 
@@ -186,9 +187,9 @@ FR22: Epic 4 — Merge the authoritative no-new-server and frozen-CLI rule.
 
 A Module author can ship a decorated Contracts Library and verify that its Commands and Queries enter a deterministic Catalog with accurate routing, Schemas, descriptions, and diagnostics. The structural seed and synthetic Contracts fixture are built here so the capability can be checked before upstream Module releases exist.
 
-**FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6, FR7, FR8.
+**FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6, FR7, FR8; the FR20 vector-authoring prerequisite.
 
-**Implementation notes:** Build the dependency-free Abstractions package and optional bundled analyzer, generated assembly manifest, one immutable Core Catalog, Module-aware serialization, Schema derivation, and author-facing Catalog and lint checks. Keep this epic usable with the synthetic Module alone. The Package can be published before the v1 tool.
+**Implementation notes:** Build the dependency-free Abstractions package and optional bundled analyzer, generated assembly manifest, one immutable Core Catalog, Module-aware serialization, Schema derivation, and author-facing Catalog and lint checks. Story 1.8 supplies the shared vector contract and validator before upstream Module vector authoring. Keep this epic usable with the synthetic Module alone. The Package can be published before the v1 tool.
 
 ### Epic 2: Operators Can Configure and Run Operations from the Terminal
 
@@ -204,7 +205,7 @@ An MCP-capable agent can discover and execute every available Operation through 
 
 **FRs covered:** FR9, FR10. This epic also completes the MCP-facing acceptance of FR11, FR12, and FR19.
 
-**Implementation notes:** Adapt the existing Catalog and executor through one fixed-order, Read-only-filtered `ToolCollection`; use SDK list/call dispatch, advertised output schemas, clean JSON-RPC channels, and pre-initialize error behavior. No Module-specific tool code is added.
+**Implementation notes:** Adapt the existing Catalog and executor through one Read-only-filtered `ToolCollection`; use the SDK's post-handler list filter for fixed order and built-in call dispatch, advertised output schemas, clean JSON-RPC channels, and pre-request-serving error behavior. No Module-specific tool code is added.
 
 ### Epic 4: Maintainers Can Verify and Release v1 Coverage
 
@@ -383,6 +384,16 @@ So that I can fix gaps before agents rely on them.
 **Then** it reports `invalid_routing_value`, `ambiguous_aggregate_id`, or `tenant_is_aggregate_id` as appropriate,
 **And** the invalid Operation is excluded before execution.
 
+**Given** a property-reference attribute using a top-level CLR property with `[JsonPropertyName]`,
+**When** the Catalog builds,
+**Then** it caches one effective serialized name and escaped pointer shared by Schema, envelope filling, ownership checks, and the aggregate accessor,
+**And** an unknown, ignored, ambiguous, or converter-opaque member excludes the Operation with `invalid_property_reference`.
+
+**Given** two envelope roles or an envelope role and `aggregateIdProperty` resolving to one serialized member,
+**When** the Catalog checks ownership after serialization mapping,
+**Then** it excludes the Operation with `conflicting_property_roles`, retaining `tenant_is_aggregate_id` for that specific collision,
+**And** fixtures cover tenant/actor aliasing, correlation/aggregate aliasing, and renamed serialized members.
+
 **Given** duplicate Module or Operation Names,
 **When** assemblies and types are scanned in ordinal order,
 **Then** the first declaration survives and each later duplicate is excluded with its specific diagnostic,
@@ -457,6 +468,38 @@ So that I can fix the declaration before the Catalog excludes it at startup.
 **When** the Decoration Package is packed and inspected,
 **Then** Abstractions has no consumer-visible package dependencies, while the analyzer's Roslyn dependencies remain private,
 **And** the analyzer project follows the architecture's `netstandard2.0` and Roslyn component settings.
+
+### Story 1.8: Define and Validate the Conformance Vector Contract
+
+As a Module author,
+I want an approved vector format and a shared validator before I author conformance evidence,
+So that my Contracts release can supply compatible inputs and semantic expectations for the generic test runners.
+
+**Requirements:** FR20, NFR7; architecture AD-16
+
+**Dependencies:** Story 1.1's structural seed and synthetic Contracts fixture. This story completes without the executor, either Head, decorated Tenants or Parties releases, or the live AppHost. Stories 4.8–4.10 consume its approved artifact before upstream vector authoring; Story 4.11 consumes it for parity execution.
+
+**Acceptance Criteria:**
+
+**Given** upstream Tenants and Parties vector authoring has not begun,
+**When** McpCli maintainers approve the companion vector contract and shared validator,
+**Then** a versioned, closed schema fixes canonical Operation Names, owning Contracts package ID and exact version, generic prerequisite calls, Payload and Envelope inputs, expected Gateway requests, scripted responses, semantic assertion vocabulary, and supported format versions,
+**And** the contract and validator are test artifacts outside production source, with no Module-specific branches or additional production dependency.
+
+**Given** valid Command and Query vectors for the existing synthetic Contracts fixture and its locally packed immutable release artifact,
+**When** the shared validator runs without a Gateway connection,
+**Then** it accepts compatible vectors and verifies their owning package ID and exact version against that artifact,
+**And** fixtures with unsupported format versions, unknown fields, invalid contract-defined inputs or assertions, or a mismatched package ID/version fail with actionable locations and reasons.
+
+**Given** the approved schema, validator, and synthetic examples,
+**When** a Module maintainer follows the versioned authoring instructions,
+**Then** they can run the same validator against their vectors and owning immutable Contracts release artifact before approving those vectors,
+**And** the handoff records the approved contract version, validator invocation, and compatibility policy; real Module vector authoring is not required to complete this story.
+
+**Given** the validator's reusable entry point and synthetic package identity/version fixtures,
+**When** local tests supply the expected package identity/version as a runner would,
+**Then** matching vectors pass and stale vectors fail through the same validation rules used for author approval,
+**And** the handoff assigns restored production-package rechecks and parity execution to Story 4.11 and live semantic execution to Story 4.13; neither runner is a completion gate for Story 1.8.
 
 ## Epic 2: Operators Can Configure and Run Operations from the Terminal
 
@@ -702,6 +745,11 @@ So that I can perform a business action and inspect its accepted result.
 **Then** the shared executor validates the Payload and sends exactly one `SubmitCommandRequest` through `IEventStoreGatewayClient`,
 **And** the request uses Catalog routing values rather than the public Operation Name.
 
+**Given** a write Operation named through `run_query` or `hexalith query`, or a read Operation named through `send_command` or `hexalith send`,
+**When** the shared executor resolves the descriptor in either writable or Read-only Mode,
+**Then** it returns `validation_failed` at `/operation` before availability or Payload checks,
+**And** a direct Core call has the same result with zero Gateway calls.
+
 **Given** a Command call with no correlation identifier,
 **When** the executor builds its Envelope,
 **Then** it generates one ULID message identifier and uses that same value as the resolved correlation identifier,
@@ -745,7 +793,27 @@ So that an agent cannot silently impersonate an Actor or change the Tenant.
 **Given** a Command declaring `correlationProperty` or `idempotencyKeyProperty`,
 **When** the executor builds the Envelope,
 **Then** it overwrites the correlation Payload field with the resolved command correlation identifier and fills the idempotency field only when the caller supplied a key,
-**And** a non-nullable idempotency field without a supplied key returns `validation_failed` at `/idempotencyKey`.
+**And** a non-nullable or serializer-required idempotency field without a supplied key returns `validation_failed` at `/idempotencyKey`, including a required nullable member; without a key, a non-null raw field also fails and a raw null is removed before submission.
+
+**Given** raw null or incorrectly typed idempotency fields and invalid raw correlation values,
+**When** the caller supplies a valid Envelope key and correlation resolves,
+**Then** pre-fill validation checks a copy without mapped envelope-owned members while retaining all ordinary/unknown-member constraints,
+**And** the raw values are overwritten before complete-Payload validation, with no premature schema rejection.
+
+**Given** no caller key and a declared idempotency member,
+**When** raw ownership checks run,
+**Then** a non-null raw value fails at `/idempotencyKey`, a raw null is removed, and an omitted required key fails at `/idempotencyKey` before materialization,
+**And** raw null, non-string, or conflicting Tenant/Actor values fail at their mapped property pointers before overwrite with zero Gateway calls.
+
+**Given** a contract whose required tenant, actor, or correlation member is envelope-filled and whose `ICommandContract.AggregateId` getter is computed,
+**When** the caller omits those allowed Payload members,
+**Then** the executor fills them and validates the rebuilt Payload before deserializing the contract for the getter,
+**And** a conflicting supplied Tenant or Actor is still `validation_failed` with zero Gateway calls.
+
+**Given** a Command Payload of JSON null or another non-object root,
+**When** Core validates it against the advertised Schema,
+**Then** it returns `validation_failed` at `/` before accessor use or Gateway submission,
+**And** a nested null permitted by the contract Schema remains valid.
 
 **Given** Command extensions and the Profile's allowed extension keys,
 **When** the executor validates them,
@@ -860,7 +928,7 @@ So that scripts can distinguish results, lint findings, and failures.
 **Given** `hexalith mcp --transport http`,
 **When** the verb parses the transport before Catalog construction,
 **Then** it exits 2 with `unsupported_transport` and a message naming the next release,
-**And** because JSON-RPC has not initialized, the structured error goes to stderr with zero stdout bytes.
+**And** because the server has not started serving MCP requests, the structured error goes to stderr with zero stdout bytes.
 
 ## Epic 3: Agents Can Use One Generic MCP Server
 
@@ -879,11 +947,11 @@ So that I can understand available Modules and Operations without a tool per Ope
 **Given** a normal session,
 **When** the MCP SDK lists tools,
 **Then** it advertises exactly `list_modules`, `list_operations`, `describe_operation`, `send_command`, and `run_query` in fixed order,
-**And** each tool is created with `McpServerTool.Create`, dispatched through the pinned SDK's built-in list/call path, and described with labeled `Purpose`, `Use when`, and `Next` parts.
+**And** each tool is created with `McpServerTool.Create`, listed through a pinned SDK post-handler ordering filter, dispatched through its built-in call path, and described with labeled `Purpose`, `Use when`, and `Next` parts.
 
 **Given** a Read-only session,
 **When** the server registers its one filtered `ToolCollection`,
-**Then** `send_command` is absent and the other four tools remain in the same order,
+**Then** `send_command` is absent and the other four tools remain in the same order in fresh `tools/list` protocol sessions,
 **And** direct write execution is still refused by the shared executor.
 
 **Given** the tool definitions,
@@ -916,8 +984,18 @@ So that an MCP client can connect reliably and parse every response.
 **Then** the existing tool Host resolves settings once, builds the Catalog, and starts the pinned SDK's stdio transport,
 **And** no interactive prompt or second settings resolver appears.
 
+**Given** valid inherited `format: table` settings or explicit `--format json`,
+**When** `mcp --transport stdio` starts under the adopted AD-13 policy,
+**Then** it serves JSON-RPC normally with no formatting note,
+**And** inherited format settings do not alter the protocol stream.
+
+**Given** explicit `--format table` or any `--output` on `mcp --transport stdio`,
+**When** the composition root checks the parsed flags,
+**Then** it emits one stderr `invalid_arguments` document naming `format` or `output` (format first if both), exits 2 with zero stdout, and opens no output path,
+**And** neither Catalog construction nor transport startup has begun; malformed inherited settings still fail normal validation.
+
 **Given** a valid Catalog and no Gateway URL,
-**When** an SDK client initializes, lists tools, and calls a discovery tool,
+**When** an SDK client establishes a session through the version-appropriate flow, lists tools, and calls a discovery tool,
 **Then** the exchange completes over JSON-RPC without a parse error,
 **And** offline discovery remains available.
 
@@ -927,11 +1005,11 @@ So that an MCP client can connect reliably and parse every response.
 **And** no `Console.WriteLine` call writes from the MCP server.
 
 **Given** malformed settings, an empty Catalog, or a `--strict` Catalog diagnostic,
-**When** startup fails before JSON-RPC initialization,
+**When** startup fails before the server starts serving MCP requests,
 **Then** the process writes exactly one structured error to stderr and zero bytes to stdout, then exits 2,
-**And** no partially initialized MCP session is advertised.
+**And** no partial MCP session is advertised.
 
-**Given** an initialized MCP session,
+**Given** an MCP session serving requests,
 **When** a tool call fails,
 **Then** the failure travels through MCP/JSON-RPC only,
 **And** the server does not write a second structured error document to stderr.
@@ -967,7 +1045,7 @@ So that I can reason about results and failures without a separate MCP dialect.
 **And** both branches conform under a pre-2026-07-28 MCP protocol version and the 2026-07-28 revision, with output-schema size measured separately from the input-tool budget.
 
 **Given** an SDK stdio client and a substituted Gateway client,
-**When** it initializes, lists tools, and calls each available tool once,
+**When** it establishes a session through the version-appropriate flow, lists tools, and calls each available tool once,
 **Then** every call completes without a JSON-RPC parse error,
 **And** execution without a resolved URL returns `configuration_invalid` while discovery remains usable.
 
@@ -1193,6 +1271,8 @@ So that the generic tool can expose tenant operations without Tenants-specific c
 
 **Requirements:** FR3, FR20, NFR8
 
+**Vector prerequisite:** Complete Story 1.8 and use its approved contract and shared validator before authoring Tenants vectors.
+
 **Acceptance Criteria:**
 
 **Given** the published Decoration Package,
@@ -1203,7 +1283,17 @@ So that the generic tool can expose tenant operations without Tenants-specific c
 **Given** per-tenant and list-style Tenants Queries,
 **When** they are decorated,
 **Then** per-tenant reads declare an aggregate identifier property and list reads declare a Gateway-valid aggregate identifier constant,
-**And** Payload `Cursor` or `PageSize` members are removed or their lint findings are explicitly accepted.
+**And** exposed paged handlers consume `QueryEnvelope.Paging`; retained legacy Payload paging members cannot govern generic requests even when their lint findings are accepted.
+
+**Given** audit entries that differ in time and category,
+**When** a live conformance scenario sends non-default `From`, `To`, and `Category` using the contract's effective serialized names,
+**Then** the upstream handler returns the expected filtered records,
+**And** successful status alone cannot pass the audit-filter readiness gate.
+
+**Given** sufficient records for multiple pages,
+**When** a live scenario requests a non-default page size and then the returned continuation cursor through Envelope paging,
+**Then** the actual page sizes and contents match the vector's expectations,
+**And** Gateway-ready acceptance remains blocked until both handler migrations and these semantic vectors pass against the decorated Contracts release and matching live handler source.
 
 **Given** Tenants' global-administrator Commands,
 **When** v1 scope is checked,
@@ -1218,7 +1308,7 @@ So that the generic tool can expose tenant operations without Tenants-specific c
 **Given** each exposed Tenants Operation,
 **When** its owning-repository conformance vector is reviewed,
 **Then** the vector has valid Payload, Envelope, prerequisites, and semantic assertions with maintainer approval,
-**And** no Operation lacks a versioned vector.
+**And** no Operation lacks a versioned vector validated against the McpCli-owned contract approved before upstream authoring.
 
 **Given** the generated Tenants Catalog dump,
 **When** someone unfamiliar with its source reviews descriptions,
@@ -1232,6 +1322,8 @@ I want the approved write operations decorated in Contracts,
 So that the generic Catalog can expose them with correct Gateway routing.
 
 **Requirements:** FR20, FR21, NFR8
+
+**Vector prerequisite:** Complete Story 1.8 and use its approved contract and shared validator before authoring Parties Command vectors.
 
 **Acceptance Criteria:**
 
@@ -1253,7 +1345,7 @@ So that the generic Catalog can expose them with correct Gateway routing.
 **Given** each included Parties Command,
 **When** its versioned conformance vector is reviewed,
 **Then** it contains valid Payload and Envelope inputs, prerequisite calls, and semantic success assertions with maintainer approval,
-**And** the command set can be inspected by `CatalogBuilder` without Parties-specific runtime code.
+**And** it passes the same McpCli-owned vector validator as Tenants before approval, while the command set can be inspected by `CatalogBuilder` without Parties-specific runtime code.
 
 ### Story 4.10: Add Parties Queries and Pin Complete Coverage
 
@@ -1262,6 +1354,8 @@ I want each approved read represented by a decorated Query in a published Contra
 So that v1 can expose the full approved Parties surface through the Gateway.
 
 **Requirements:** FR20, FR21, NFR8
+
+**Vector prerequisite:** Complete Story 1.8 and use its approved contract and shared validator before authoring Parties Query vectors.
 
 **Acceptance Criteria:**
 
@@ -1273,7 +1367,7 @@ So that v1 can expose the full approved Parties surface through the Gateway.
 **Given** each new Parties Query,
 **When** its versioned conformance vector is reviewed,
 **Then** it supplies valid Payload and Envelope values, generic prerequisites, and semantic Query assertions with maintainer approval,
-**And** the Query is accepted by the Gateway without a Parties-specific McpCli path.
+**And** it passes the same McpCli-owned vector validator as Tenants before approval, while the Query is accepted by the Gateway without a Parties-specific McpCli path.
 
 **Given** the complete decorated Parties Contracts release,
 **When** its exact version is flagged in the tool project,
@@ -1298,11 +1392,13 @@ So that the CLI and MCP server cannot ship different behavior for the same call.
 
 **Requirements:** FR11, FR20, NFR1, NFR3, NFR7
 
+**Dependencies:** Story 1.8's approved vector contract and validator, both implemented Heads, and the decorated Contracts releases and approved vectors from Stories 4.8–4.10.
+
 **Acceptance Criteria:**
 
 **Given** the built production Catalog and approved Module-owned conformance vectors,
 **When** the generic runner starts,
-**Then** it rejects missing, duplicate, or stale vectors for any listed Operation,
+**Then** it reuses Story 1.8's contract and shared validator, rechecks each vector's Contracts package ID and exact version against the flagged restored package, and rejects missing, duplicate, stale, or incompatible vectors for any listed Operation,
 **And** it contains no Module-specific setup branch or production test hook.
 
 **Given** a vector's valid inputs and reset scripted loopback Gateway responses,
@@ -1416,9 +1512,9 @@ So that new Modules use decorated Contracts instead of creating another server o
 **And** it does not treat those CLIs as a template for new Modules.
 
 **Given** a proposed instruction change,
-**When** completion is assessed,
+**When** completion and paired v1 release readiness are assessed,
 **Then** the authoritative upstream rule has been merged, not merely proposed in a pull request,
-**And** this repository's synchronized agent entry points still direct assistants to the merged baseline.
+**And** evidence records the merge, the root-declared baseline reference containing it, byte-identical local `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`, and a successful `scripts/check-agent-instructions-sync.sh`; an open pull request cannot unblock paired publication, while the Abstractions-only bootstrap is exempt.
 
 ### Story 4.16: Stage and Validate the Paired Packages
 
@@ -1430,7 +1526,7 @@ So that publication can use exactly the tool and Decoration Package that passed 
 
 **Acceptance Criteria:**
 
-**Given** a green `main` source SHA and completed dependency, inventory, loopback, live semantic, and instruction gates,
+**Given** a green `main` source SHA and completed dependency, inventory, loopback, live semantic, and instruction gates, including recorded FR-22 merge/baseline/synchronization evidence,
 **When** the paired release workflow runs,
 **Then** semantic-release selects one version and packs exactly `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli` from `tools/release-packages.json` into a clean staging directory,
 **And** the staged packages have the exact IDs and shared version before any publication.

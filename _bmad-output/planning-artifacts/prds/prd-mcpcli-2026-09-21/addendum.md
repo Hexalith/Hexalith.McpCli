@@ -2,7 +2,7 @@
 title: "PRD Addendum: Hexalith.McpCli"
 status: final
 created: 2026-09-21
-updated: 2026-09-22
+updated: 2026-09-23
 ---
 
 # PRD Addendum: Hexalith.McpCli
@@ -83,7 +83,9 @@ alternatives were rejected:
   providers to stderr. Do not copy its tool registration. Build the Generic
   Tools at runtime with `McpServerTool.Create`; after settings resolution,
   register one Read-only-filtered `ToolCollection` and use the pinned SDK's
-  built-in list and call dispatch (spine AD-12). Never use static
+  built-in list and call dispatch. An SDK `ListToolsFilters` filter orders the
+  assembled list by the fixed permitted-name sequence (spine AD-12); collection
+  insertion order is not a discovery guarantee. Never use static
   `[McpServerToolType]` classes or a second list-tools handler.
 - Exit codes 0/1/2 copied from `Hexalith.EventStore.Admin.Cli`, with the
   meaning of exit 1 narrowed to `describe --lint` (PRD FR-14).
@@ -204,6 +206,12 @@ a JSON-RPC invalid-parameters error before tool invocation, while the CLI
 returns the §G `invalid_arguments` document at exit 2 with `argument: module`.
 `unknown_module` applies to a non-empty name that is absent from the Catalog.
 
+After Core resolves an Operation Name, `send_command`/`send` requires kind
+`write` and `run_query`/`query` requires kind `read`. A mismatch returns
+`validation_failed` with one violation at `/operation` before Read-only or
+missing-URL availability checks and before Payload parsing, regardless of the
+session. A matching write Operation in Read-only Mode still returns `read_only`.
+
 ### Session settings and profiles
 
 For session settings, `--profile` resolves first: flag, `EVENTSTORE_PROFILE`,
@@ -225,6 +233,14 @@ gated by PRD FR-16.
 | read-only | `--read-only` | `EVENTSTORE_READ_ONLY` | none | `false` |
 | strict | `--strict` | `EVENTSTORE_STRICT` | none | `false` |
 | profile | `--profile` | `EVENTSTORE_PROFILE` | `activeProfile` | none |
+
+For `mcp --transport stdio`, valid inherited
+`format` is ignored for protocol output; explicit `--format json` is accepted.
+Explicit `--format table` and any `--output` fail before Catalog or transport
+startup with one §G `invalid_arguments` object on stderr (`argument: format` or
+`output`, format first if both), zero stdout bytes, exit 2, and no output file
+opened. Malformed inherited settings still fail ordinary validation. These
+options never reformat or redirect the protocol stream.
 
 Boolean environment variables accept `true`, `false`, `1`, `0`.
 
@@ -281,6 +297,12 @@ fields listed as required are always
 present, arrays use `[]` when empty, and optional members are omitted rather than serialized as
 `null`. Outer result fields use the canonical camel-case spelling below. Embedded `schema` and
 `example` documents preserve the Module's serializer contract, including property casing.
+Decoration property-reference strings use exact top-level CLR names; the Catalog
+resolves `[JsonPropertyName]` and caches serialized names and escaped pointers for
+Schema, envelope ownership, and aggregate access (PRD §5.1). Pre-fill validation
+removes only mapped envelope-owned members from a copy, retains the raw values
+for ownership checks, and validates the complete rebuilt Payload after filling
+(PRD FR-16).
 
 | Document | Required members | Optional members |
 |---|---|---|
@@ -302,7 +324,7 @@ Public member types and constraints:
 | `kind` | string enum: `read`, `write` |
 | `schema` | JSON object produced by FR-7 |
 | `example` | JSON object that validates against `schema` |
-| `envelope` | JSON object; `fixedTenant` is a Gateway-valid Tenant string; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable `idempotencyKeyProperty`; `arguments` is a duplicate-free array of applicable §E argument-name strings |
+| `envelope` | JSON object; `fixedTenant` is a Gateway-valid Tenant string; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
 | `lintFindings` | array of objects defined below; empty when no finding exists |
 | `submittable` | boolean describing head-level surface availability from Read-only Mode and resolved Gateway URL only; Tenant, actor, Payload, and per-call Envelope requirements are evaluated on execution; `reason` is `read_only` or `configuration_invalid` when false |
 | `messageId`, `correlationId`, `idempotencyKey` | ULID string; `messageId` is the Gateway's canonical execution identifier |
@@ -371,9 +393,10 @@ confirmed a trusted idempotency adapter for that Command type.
 
 The CLI writes an error document to stdout with exit 2; the MCP Server
 returns it as `structuredContent.error` with `isError: true`. For any `mcp`
-failure before JSON-RPC initialization, the CLI instead writes the structured
-error to stderr and leaves stdout empty. After initialization, failures travel
-only as JSON-RPC/MCP errors.
+failure before the server starts serving MCP requests, the CLI instead writes
+the structured error to stderr and leaves stdout empty. Once requests can be
+served, failures travel only as JSON-RPC/MCP errors under both supported
+protocol revisions.
 
 | Error code | Required members under `error` | Optional members under `error` |
 |---|---|---|
@@ -399,6 +422,8 @@ Error member types and constraints:
   invalid parameters before tool invocation, outside these tool documents.
 - `violations` is a non-empty array; each `path` is an RFC 6901 JSON Pointer and
   each `message` is a non-empty string.
+- A call-kind mismatch uses `validation_failed` at `/operation`; a JSON null
+  or non-object Command Payload uses `validation_failed` at `/`.
 - Gateway `status` is the integer `EventStoreGatewayException.StatusCode`
   copied without reclassification. It may therefore be `2xx` when the pinned
   client reports an HTTP-success response that is malformed or fails semantic

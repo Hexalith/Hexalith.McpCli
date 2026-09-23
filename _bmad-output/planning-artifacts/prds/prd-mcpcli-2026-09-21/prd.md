@@ -2,7 +2,7 @@
 title: Hexalith.McpCli PRD
 status: final
 created: 2026-09-21
-updated: 2026-09-22
+updated: 2026-09-23
 ---
 
 # PRD: Hexalith.McpCli
@@ -141,6 +141,8 @@ Each feature opens with a description and the journeys it realizes, then its FRs
 | `idempotencyKeyProperty` | command | record declares one | Payload property filled from the Envelope idempotency key |
 | `actorProperty` | command | record declares an actor or principal member | Payload property filled from the resolved Actor (FR-16) |
 
+Property-reference members (`aggregateIdProperty`, `tenantProperty`, `correlationProperty`, `idempotencyKeyProperty`, `actorProperty`) name exact, case-sensitive top-level CLR properties, not serialized JSON names or paths. The Catalog resolves each once through effective Module serializer metadata, including `[JsonPropertyName]`, to one included, deserializable serialized member and escaped JSON Pointer. Schema generation, filling, ownership checks, and accessors use that same mapping. Missing, ignored, ambiguous, or converter-opaque targets exclude the Operation with `invalid_property_reference`. Multiple envelope roles, or an envelope role and `aggregateIdProperty`, cannot own the same serialized member; exclude with `conflicting_property_roles`, except the tenant/aggregate collision retains `tenant_is_aggregate_id`.
+
 **Module marker members**
 
 | Member | Required | Meaning |
@@ -150,7 +152,7 @@ Each feature opens with a description and the journeys it realizes, then its FRs
 | `identifierKind` | always | `Ulid` or `String` (FR-3) |
 | `fixedTenant` | optional | Envelope Tenant every Operation of the Module runs under (Tenants: `system`); surfaced by `describe_operation`, applied by FR-16 |
 | `wireTypeConvention` | optional, default `Explicit` | How the Catalog derives a Wire Type when the attribute gives none: `Explicit` (none derived), `FullTypeName` (the CLR full type name, namespace included, not assembly-qualified), or `KebabCase` (the FR-8 name part) |
-| `serializerOptionsProvider` | optional | Static member of a type in the Contracts Library returning the `JsonSerializerOptions` the Module's converters need; for that Module's Payload types its converters take precedence over the tool's canonical options in Schema derivation and Payload handling (FR-7); the Envelope is always serialized with the tool's options |
+| `serializerOptionsProvider` | optional | Static member of a type in the Contracts Library returning the `JsonSerializerOptions` the Module's converters need; for that Module's Payload types its converters take precedence over the tool's canonical options in Schema derivation and Payload handling (FR-7), while the tool fixes the metadata resolver and other non-converter settings; the Envelope is always serialized with the tool's options |
 
 #### FR-1: Mark a type as a Command or a Query
 
@@ -218,6 +220,8 @@ Every decorated type or Module the Catalog cannot expose as declared is reported
 | `invalid_example` | error, type excluded | Example does not validate against the Schema (FR-1) |
 | `invalid_identifier_type` | error, type excluded | An Identifier that does not serialize as a JSON string (FR-7) |
 | `tenant_is_aggregate_id` | error, type excluded | `tenantProperty` names the aggregate identifier source. On Tenants, `TenantId` is the aggregate identifier, not the tenant |
+| `invalid_property_reference` | error, type excluded | A property-reference member cannot resolve to one included, deserializable serialized property under Module options |
+| `conflicting_property_roles` | error, type excluded | Two envelope roles, or an envelope role and the aggregate property source, own one serialized member; the tenant/aggregate case uses `tenant_is_aggregate_id` |
 | `ambiguous_aggregate_id` | error, type excluded | Both `aggregateId` and `aggregateIdProperty` set |
 | `duplicate_module` | error, later assembly excluded | Two assemblies declare one Module Name |
 | `conflicting_value` | warning, kept | Attribute value differs from the interface value (FR-2) |
@@ -226,7 +230,7 @@ Every decorated type or Module the Catalog cannot expose as declared is reported
 
 - Scan order is deterministic: assemblies in the generated list order (sorted by assembly name), types within an assembly by ordinal full type name; the first declaration of a duplicate Module Name or Operation Name survives.
 - An empty Catalog fails only the verbs that need it (the discovery verbs, `send`, `query`, and `mcp`) with exit 2 and `code: catalog_empty`; `config` and `--version` never build the Catalog and always run (FR-14).
-- The `mcp` verb validates settings, builds the Catalog, and applies `--strict` before opening the JSON-RPC channel. Any pre-initialize failure writes one structured error to stderr, writes nothing to stdout, and exits 2. After initialization, failures travel only as JSON-RPC/MCP errors (FR-10, FR-14).
+- The `mcp` verb validates settings, builds the Catalog, and applies `--strict` before opening the JSON-RPC channel. Any failure before the server starts serving MCP requests writes one structured error to stderr, writes nothing to stdout, and exits 2. Once requests can be served, failures travel only as JSON-RPC/MCP errors (FR-10, FR-14).
 
 #### FR-7: Derive a JSON Schema per Operation
 
@@ -237,7 +241,8 @@ The Catalog derives from the Operation type a Schema that includes every settabl
 - An Identifier is a property marked with the identifier attribute or named by `aggregateIdProperty`; it is typed `string`, with the ULID pattern when the Module's Identifier Kind is `Ulid`, and never with `format: uuid`. A property whose CLR type is `ByteAether.Ulid.Ulid`, recognized by full name so the Decoration Package needs no reference to it, gets the pattern regardless of the kind.
 - An Identifier's CLR type must serialize as a JSON string; a value-object identifier serializes as its own declared converter or the marker's `serializerOptionsProvider` dictates, and the tool adds no converter. An Identifier that does not serialize as a string excludes the Operation with an `invalid_identifier_type` diagnostic (FR-6).
 - An unmarked property whose name ends in `Id` retains the ordinary Schema derived from its declared type and serializer contract and produces a `describe --lint` warning (FR-4); the name suffix never types or rewrites a property. A string Schema therefore appears only when the declared serialization is already a JSON string.
-- Properties named by `tenantProperty`, `correlationProperty`, `idempotencyKeyProperty`, or `actorProperty` are marked `readOnly`, removed from `required`, and filled by the executor (FR-16); a caller may omit them.
+- Serialized members resolved from `tenantProperty`, `correlationProperty`, `idempotencyKeyProperty`, or `actorProperty` are marked `readOnly`, removed from `required`, and filled by the executor (FR-16); a caller may omit them. Pre-fill validation checks a copy with only those mapped members removed; ownership checks retain the raw values. The complete rebuilt Payload is then checked against the unmodified Schema, including those members' types and patterns. `readOnly` alone does not suppress validation.
+- A Command Payload Schema has a non-null object root, including when the .NET exporter initially emits an object-or-null root. Nested nullable members retain their declared nullability. A Query root follows its declared contract Schema and the Gateway's optional Query Payload rule.
 
 #### FR-8: Name Operations canonically
 
@@ -256,7 +261,7 @@ Each Operation's name part is the type name in kebab-case with a trailing `Comma
 An agent can call the five Generic Tools and no others; their arguments are the addendum §E table and their results the addendum §G documents, which both Heads implement.
 
 **Consequences (testable):**
-- `tools/list` returns exactly five tools, or four without `send_command` in Read-only Mode.
+- `tools/list` returns `list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query` in that order, or the same sequence without `send_command` in Read-only Mode. The order is verified through the protocol in fresh processes.
 - `list_modules` returns each Module Name with its description and Operation count; `list_operations` takes a Module Name and an optional kind and returns Operation Name, kind, description, or `unknown_module` when a non-empty requested Module Name is absent; `describe_operation` returns description, kind, Schema, example when declared, the Envelope arguments the caller may supply (whether `aggregateId` or `idempotencyKey` is required, the Module's fixed tenant if any), `lintFindings`, and head-level `submittable`, with a reason when it is false.
 - `submittable` reports surface availability from Read-only Mode and resolved Gateway URL only. It is `false` with `reason: read_only` for a Command in Read-only Mode; otherwise it is `false` with `reason: configuration_invalid` when the session has no resolved Gateway URL; otherwise it is `true`. Tenant, actor, Payload, and per-call Envelope requirements are evaluated only on execution and do not change this discovery value. An offline discovery fixture covers both read and write Operations.
 - Each tool description has three labeled parts: `Purpose`, `Use when`, and `Next`.
@@ -269,9 +274,9 @@ An agent can call the five Generic Tools and no others; their arguments are the 
 The MCP Server runs as a local process over stdio; stdout carries JSON-RPC only and all logging goes to stderr.
 
 **Consequences (testable):**
-- A test that drives the server with the ModelContextProtocol client SDK over stdio completes initialization, `tools/list`, and one call to each tool without a parse error. The release checklist separately covers Claude Code, Claude Desktop, and VS Code.
+- A test that drives the server with the ModelContextProtocol client SDK over stdio establishes a session through the version-appropriate legacy `initialize` or 2026-07-28 discovery path, then completes `tools/list` and one call to each tool without a parse error. The release checklist separately covers Claude Code, Claude Desktop, and VS Code.
 - The server starts from a Profile or environment variables with no interactive prompt.
-- Settings and Catalog validation complete before server initialization. Tests for malformed settings, an empty Catalog, and `mcp --strict` diagnostics each assert one structured stderr error, exit 2, and zero stdout bytes; after initialization, tests assert failures use JSON-RPC/MCP errors only.
+- Settings and Catalog validation complete before the server serves MCP requests. Tests for malformed settings, an empty Catalog, and `mcp --strict` diagnostics each assert one structured stderr error, exit 2, and zero stdout bytes; once requests can be served, tests assert failures use JSON-RPC/MCP errors only under both protocol revisions.
 
 #### FR-11: Return structured results and errors
 
@@ -301,7 +306,7 @@ A shell user can run `modules`, `operations <module> [--kind]`, `describe <opera
 
 #### FR-13: Resolve global options in one order
 
-Every verb accepts `--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output <file>`, `--read-only`, and `--strict`. Resolve `--profile` first, in this order: flag, environment variable, then active Profile. Resolve every other option in this order: flag, environment variable, selected Profile, then default. Use only the sources listed for that option in addendum §E. These are session settings; the CLI has no per-call tenant. Only the MCP tools carry a per-call `tenant` argument, governed by FR-16.
+Every verb accepts `--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output <file>`, `--read-only`, and `--strict`. Resolve `--profile` first, in this order: flag, environment variable, then active Profile. Resolve every other option in this order: flag, environment variable, selected Profile, then default. Use only the sources listed for that option in addendum §E. For `mcp --transport stdio`, the adopted AD-13 policy ignores valid inherited format settings, accepts explicit `--format json`, and rejects explicit `--format table` or any `--output` before Catalog/transport startup with one stderr `invalid_arguments` document (`argument: format` or `output`, format first if both), zero stdout bytes, exit 2, and no output file opened. Malformed inherited settings still fail validation. These are session settings; the CLI has no per-call tenant. Only the MCP tools carry a per-call `tenant` argument, governed by FR-16.
 
 **Consequences (testable):**
 - The order is testable per option with a fixture that sets every source.
@@ -319,7 +324,7 @@ Every CLI invocation ends with one of three exit codes, and the code depends onl
 |---|---|---|
 | 0 | Result document produced | result |
 | 1 | Result document produced by `describe --lint` and at least one lint finding listed (FR-4) | result |
-| 2 | No result document: invalid arguments, validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11); any pre-initialize `mcp` failure writes it to stderr and leaves stdout empty |
+| 2 | No result document: invalid arguments, validation failure, Gateway rejection, read-only refusal, unsupported transport, unsupported format, invalid configuration, empty Catalog, `--strict` diagnostic | structured error (FR-11); any `mcp` failure before request serving writes it to stderr and leaves stdout empty |
 
 - Catalog diagnostics go to stderr and never move an invocation between rows; only `--strict` turns them into row 2 (FR-6).
 
@@ -333,6 +338,8 @@ The executor validates every Payload against the Schema and refuses to submit an
 
 **Consequences (testable):**
 - An invalid Payload never reaches the Gateway; the substituted Gateway client records zero calls.
+- The Core executor accepts a Command call only for a write Operation and a Query call only for a read Operation. After Operation lookup and before availability or Payload checks, a mismatch is `validation_failed` at `/operation` in every session, with zero Gateway calls. A matching write call in Read-only Mode retains the `read_only` response before a missing-URL error.
+- A JSON null or non-object Command Payload is `validation_failed` at `/` before contract accessor use or Gateway submission; nullable nested properties remain valid when their Schema permits them.
 - The explicit aggregate identifier argument and the resolved aggregate identifier are checked by the Module's Identifier Kind: `Ulid.TryParse` for `Ulid`, non-empty for `String` (FR-3).
 - Per call, the Tenant matches the Gateway's lowercase alphanumeric-and-hyphen pattern of at most 64 characters; the aggregate and entity identifiers match its alphanumeric, dot, hyphen, and underscore pattern of at most 256 characters with no colon; extension keys are in the Profile's allowlist (FR-16). Each failure is a `validation_failed` entry at `/tenant`, `/aggregateId`, `/entityId`, or `/extensions/<key>`. Routing Values are checked against the same patterns once, at Catalog build (FR-6).
 
@@ -352,7 +359,8 @@ The executor generates a message identifier per call, passes through a caller-su
   2. The value of an accessor compiled once at startup, which reads `aggregateIdProperty` when set and otherwise the `ICommandContract` getter. A Command with no accessor source is excluded from the Catalog (FR-2).
   3. The Query's `aggregateId` constant.
 - Actor: an Operation naming an `actorProperty` requires a resolved Actor (flag, environment, Profile; next release the forwarded user header) and is `validation_failed` without one. `[ASSUMPTION: in v1 the operator states the actor principal in the Profile; the tool never decodes the token.]`
-- A Payload value under `tenantProperty` or `actorProperty` that differs from the resolved value produces `validation_failed`. Otherwise, the executor overwrites the properties named by `tenantProperty`, `correlationProperty`, and `actorProperty` with their Envelope values before submission. When the caller supplies an idempotency key, the executor overwrites `idempotencyKeyProperty` with that key. If an Operation has a non-nullable `idempotencyKeyProperty`, discovery reports `idempotencyKeyRequired: true`, and omitting the key produces `validation_failed` at `/idempotencyKey`.
+- A present raw value under `tenantProperty` or `actorProperty` must be a JSON string ordinally equal to the resolved value; null, non-string, or differing values produce `validation_failed` at the mapped member pointer. Otherwise, the executor overwrites the properties named by `tenantProperty`, `correlationProperty`, and `actorProperty` with their Envelope values before submission. When the caller supplies an idempotency key, the executor overwrites `idempotencyKeyProperty` with that key. Without a per-call key, a non-null raw value there is `validation_failed` at `/idempotencyKey`; a raw null is removed before final validation and submission. If an Operation has a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under the Module's Payload options), discovery reports `idempotencyKeyRequired: true`, and omitting the key produces `validation_failed` at `/idempotencyKey` before contract materialization.
+- The executor preserves the raw Payload for ownership checks and schema-validates a copy with only the mapped envelope-owned members removed, without constructing the contract. Ordinary members, unknown names, and root constraints remain checked. It resolves envelope values, checks raw Tenant/Actor disagreements and Payload-only idempotency keys, fills the owned members, then validates the complete rebuilt Payload against the unmodified Schema. Raw correlation values and, when a caller supplies a key, raw idempotency values may have any JSON shape because they are overwritten; their old type/pattern constraints must not preempt the ownership rules. It reads an `ICommandContract.AggregateId` getter only from that complete, validated Payload. Omitted envelope-owned members that the Schema permits cannot fail required-member deserialization before filling; conflicting supplied Tenant or Actor values still fail before overwrite.
 - Extensions travel only on Commands and only with keys in the Profile's `allowedExtensions` list, default empty (FR-18). Queries carry neither a correlation identifier nor extensions in v1, because the pinned client's query request has no such members (§8.2).
 - Paging travels only as `run_query` arguments mapped to the Gateway's paging options; a Payload member named like one is sent as ordinary Payload, neither stripped nor mapped (FR-4).
 - The Envelope carries the Routing Values, never the Operation Name.
@@ -402,6 +410,8 @@ The v1 tool references by pinned package only the Contracts Libraries that satis
 - A referenced Module whose assembly carries the marker but exposes no Operation appears in `list_modules` with zero Operations and an `empty_module` warning; an unmarked assembly is invisible (FR-3, FR-6).
 - `Hexalith.Projects.Contracts` fails the allowlist today (it carries web framework and UI packages); slimming it is a Projects Gateway-ready prerequisite (§8.1).
 - A generic runner rejects a missing, duplicate, or stale vector for any listed Operation. Vectors supply valid Payload and Envelope values, prerequisite Operation calls, and semantic assertions; this repository contains no Module-specific setup code.
+- McpCli maintainers approve one versioned, closed vector contract and shared compatibility validator before Tenants or Parties author vectors. That companion test artifact fixes generic prerequisites, inputs, scripted Gateway responses, assertion vocabulary, and supported format versions. Each vector names its owning Contracts package ID and exact version. The shared validator compares these with the owning immutable Contracts release artifact before Module maintainer approval; the runner compares them with the flagged restored production package before loopback or live execution, rejecting vectors for another package version even when the Operation Name matches.
+- Tenants coverage requires upstream audit handlers to honor the effective serialized `From`, `To`, and `Category` members and exposed paged handlers to consume `QueryEnvelope.Paging`. Live vectors use discriminating data to assert non-default filtered results and actual page contents for a non-default page size and a subsequent cursor. Retained legacy Payload paging members cannot govern generic envelope requests. Passing status codes or paging metadata alone cannot satisfy this gate.
 - Parties coverage passes only when the maintainer-approved, versioned FR-21 inventory matches the built Catalog. Each included canonical Operation Name must appear exactly once in `list_operations parties`. A build-time Catalog-descriptor or reflection test must separately match each Operation to its decorated contract type. Each excluded legacy operation must have an approved exclusion row with a rationale.
 
 #### FR-21: Define parity and produce the migration plan
@@ -418,7 +428,7 @@ A Legacy Server is deleted when its Module is Gateway-ready for every agent-faci
 
 The Hexalith agent instructions (`hexalith-llm-instructions.md` in Hexalith.AI.Tools) state that from 2026-09-21 no new per-module MCP server or per-module agent CLI is created, that a Module's agent surface is its decorated Contracts Library, and that the Frozen CLIs are limited to bug fixes and listed in the migration plan.
 
-**Consequence (testable):** the story closes only when the rule is merged into the authoritative Hexalith.AI.Tools instructions and this repository's `AGENTS.md` points to the merged baseline. Opening a pull request is progress evidence, not completion.
+**Consequence (testable):** the story closes only when the rule is merged into the authoritative Hexalith.AI.Tools instructions and this repository's `AGENTS.md` points to the merged baseline. Opening a pull request is progress evidence, not completion. Paired v1 publication is blocked until release evidence records the authoritative merge, a root-declared baseline reference containing it, byte-identical `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`, and a passing `scripts/check-agent-instructions-sync.sh`. This gate exempts the one-time Abstractions-only bootstrap.
 
 ## 6. Cross-cutting non-functional requirements
 
@@ -479,7 +489,7 @@ Dates are open (OQ-8); the release is blocked until both v1 rows are met, and th
 
 #### Module-specific prerequisites
 
-- **Tenants.** `fixedTenant = "system"`, `identifierKind = String`; descriptions and examples; `aggregateIdProperty` on per-tenant Queries and an `aggregateId` constant on list Queries (`list-tenants`, `get-user-tenants`), value chosen by the maintainer within the Gateway pattern; drop the `Cursor` and `PageSize` Payload members or accept the lint warning (FR-4); do not decorate the global-administrator Commands in v1.
+- **Tenants.** `fixedTenant = "system"`, `identifierKind = String`; descriptions and examples; `aggregateIdProperty` on per-tenant Queries and an `aggregateId` constant on list Queries (`list-tenants`, `get-user-tenants`), value chosen by the maintainer within the Gateway pattern; migrate exposed paged handlers to `QueryEnvelope.Paging` and align audit filters with the declared serialized `From`, `To`, and `Category` fields before Gateway-ready acceptance; prove filtering and non-default paging/continuation through AD-16 live vectors; drop legacy `Cursor` and `PageSize` Payload members or retain them with lint warnings only for other clients, never as the source of generic paging; do not decorate the global-administrator Commands in v1.
 - **Parties.** Set `identifierKind = String`. Parties has no Query types, so create one for each included read in the FR-21 inventory. Serve each Query through the Parties projection actor (`projectionActorType`) and use its existing `parties` list constant. For Commands, either retain the current attribute routing (`domain = "party"`, `wireTypeConvention = FullTypeName`, and `aggregateIdProperty = PartyId`) or migrate to `ICommandContract` with kebab-case Wire Types. The latter is a breaking wire change; the maintainer decides in OQ-5. Before decoration, the Parties maintainer approves the versioned migration-plan inventory or links an equivalent table from the decoration pull request. Expose every decorated Operation. Record each exclusion, including erasure or key rotation, as an approved row with a rationale. FR-20 compares the inventory with `list_operations parties`; the inventory never becomes module-specific runtime configuration.
 - **Projects.** Slim `Hexalith.Projects.Contracts` until it satisfies the allowlist (§4, FR-20); then add Query types for the Legacy Server's 11 resources and attribute routing with `actorProperty = ActorPrincipalId`. Detail in addendum §H. It does not gate v1, but it gates SM-1.
 - **Folders.** Publish decorated Command and Query types for the agent-facing subset of today's 49 REST tools, handled by a Folders domain service; acceptance is `list_operations folders` showing the agreed subset, each accepted by the Gateway. Owner: the Folders maintainer. Detail in addendum §H. The largest prerequisite: it does not gate v1 (FR-20), but it gates SM-1.
@@ -532,7 +542,7 @@ The earlier AD-7/9/11/15/19 handoff is complete and recorded in `verify-update-2
 - Before Schema and Catalog implementation: AD-6/7 preserve Module serializer casing, and AD-8 preserves an unmarked `*Id` property's serializer-derived Schema with lint only.
 - Before settings resolution: AD-13 requires a URL only when execution reaches the Gateway.
 - Before executor implementation: AD-9 and the identifier-generation convention use caller-supplied idempotency keys only, expose no generic retry or duplicate promise, resolve omitted command correlation to the generated message identifier, and preserve the actual status on every `EventStoreGatewayException`, including malformed-success `2xx` responses.
-- Before either Head or its output schemas: AD-5/12 conform to the exhaustive addendum §G records, including lint findings and member types and constraints; the channel convention applies the pre-initialize MCP stderr/empty-stdout rule to every startup failure.
+- Before either Head or its output schemas: AD-5/12 conform to the exhaustive addendum §G records, including lint findings and member types and constraints; the channel convention applies the pre-request-serving MCP stderr/empty-stdout rule to every startup failure.
 - Before Catalog public-contract implementation: AD-3/5 return `unknown_module` for a non-empty `list_operations` lookup miss, using the exhaustive addendum §G variant.
 - Before the v1 release gate: AD-16 runs every approved Module vector through both Heads against reset loopback Gateway scripts for parity and once against live EventStore for semantics; AD-21 separately verifies the approved Legacy Server and Frozen CLI inventory against the Catalog. The Parties Aspire composition helper and a source-build path for the blocking CI tier are upstream prerequisites.
 
