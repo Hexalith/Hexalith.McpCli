@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Bootstrap Abstractions or publish the later paired tool release
+        required: true
+        type: choice
+        options: [bootstrap, paired]
+
+concurrency:
+  group: release-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify-source:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Require current main with successful exact-source CI and commitlint
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
+          DISPATCH_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test "$DISPATCH_REF" = refs/heads/main
+          test "$DISPATCH_SHA" = "$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          for workflow in ci.yml commitlint.yml; do
+            runs="$(gh api --method GET "repos/${REPOSITORY}/actions/workflows/${workflow}/runs" \
+              -f branch=main -f event=push -f head_sha="$DISPATCH_SHA" -f status=success)"
+            if ! jq -e --arg sha "$DISPATCH_SHA" \
+              '[.workflow_runs[] | select(.head_sha == $sha and .head_branch == "main" and .event == "push" and .status == "completed" and .conclusion == "success")] | length > 0' \
+              <<< "$runs" >/dev/null; then
+              echo "No successful ${workflow} push run exists for ${DISPATCH_SHA}." >&2
+              exit 1
+            fi
+          done
+
+  publish:
+    needs: verify-source
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          submodules: false
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Set up Node
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+      - name: Install pinned release tooling
+        run: npm ci
+      - name: Recheck current main after production approval
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          live_main_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          if [ "$DISPATCH_SHA" != "$live_main_sha" ]; then
+            echo "Main moved while release approval was pending." >&2
+            exit 1
+          fi
+      - name: Derive one version and publish the selected phase
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+        run: npx --no-install semantic-release

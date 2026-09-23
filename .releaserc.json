@@ -1,0 +1,25 @@
+{
+  "branches": ["main"],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/exec",
+      {
+        "verifyReleaseCmd": "bash scripts/release-preflight.sh ${nextRelease.version}",
+        "prepareCmd": "bash scripts/release-prepare.sh ${nextRelease.version}",
+        "publishCmd": "bash scripts/release-publish.sh ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": ["nupkgs/*.nupkg"],
+        "labels": [],
+        "successCommentCondition": false,
+        "releasedLabels": false
+      }
+    ]
+  ]
+}

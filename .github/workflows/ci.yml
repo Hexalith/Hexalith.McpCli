@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main
+    with:
+      solution: Hexalith.McpCli.slnx
+      test-platform: microsoft-testing-platform
+      unit-test-projects: |
+        tests/Hexalith.McpCli.Abstractions.Tests
+      # Add the blocking Aspire tier after the harness and upstream source-build seam exist.
+
+  bootstrap-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Pack and validate the bootstrap package
+        run: |
+          dotnet restore src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj
+          dotnet pack src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj --configuration Release --no-restore -p:Version=1.0.0 --output nupkgs
+          python3 scripts/validate-release-packages.py nupkgs 1.0.0 bootstrap
+      - name: Restore and build a Contracts consumer from the staged package
+        run: |
+          consumer_dir="$RUNNER_TEMP/mcpcli-bootstrap-consumer"
+          mkdir -p "$consumer_dir"
+          cp global.json "$consumer_dir/global.json"
+          cat > "$consumer_dir/Consumer.csproj" <<'EOF'
+          <Project Sdk="Microsoft.NET.Sdk">
+            <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>
+            <ItemGroup><PackageReference Include="Hexalith.McpCli.Abstractions" Version="1.0.0" /></ItemGroup>
+          </Project>
+          EOF
+          cat > "$consumer_dir/Contracts.cs" <<'EOF'
+          using Hexalith.McpCli.Abstractions;
+          [assembly: HexalithModule("sample", "Consumer sample", IdentifierKind.Ulid)]
+          [HexalithCommand("Create a sample item.", Domain = "sample", WireType = "create-item", AggregateIdProperty = nameof(Id))]
+          public sealed record CreateItemCommand([property: HexalithIdentifier] string Id);
+          [HexalithQuery("Read a sample item.", Domain = "sample", WireType = "get-item", AggregateIdProperty = nameof(Id), ProjectionType = "items")]
+          public sealed record GetItemQuery([property: HexalithIdentifier] string Id);
+          EOF
+          dotnet restore "$consumer_dir/Consumer.csproj" --source "$PWD/nupkgs"
+          dotnet build "$consumer_dir/Consumer.csproj" --configuration Release --no-restore

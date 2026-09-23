@@ -1,0 +1,12 @@
+{
+  "packages": [
+    {
+      "id": "Hexalith.McpCli.Abstractions",
+      "project": "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj"
+    },
+    {
+      "id": "Hexalith.McpCli",
+      "project": "src/Hexalith.McpCli/Hexalith.McpCli.csproj"
+    }
+  ]
+}
