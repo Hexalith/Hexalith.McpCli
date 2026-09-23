@@ -1,0 +1,87 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 09-23-2026 07:41
+last_updated: 09-23-2026 07:41
+project: mcpcli
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-declare-a-module-and-its-operations: backlog
+  1-2-enroll-a-contracts-package-by-reference: backlog
+  1-3-derive-the-operation-s-json-schema: backlog
+  1-4-discover-valid-operations-in-one-catalog: backlog
+  1-5-diagnose-catalog-declarations: backlog
+  1-6-inspect-description-quality: backlog
+  1-7-warn-on-missing-operation-descriptions-at-build-time: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-inspect-effective-session-settings: backlog
+  2-2-add-and-select-a-private-profile: backlog
+  2-3-update-and-remove-profiles-safely: backlog
+  2-4-browse-the-catalog-from-the-cli: backlog
+  2-5-run-a-valid-query-through-the-gateway: backlog
+  2-6-validate-and-page-query-calls: backlog
+  2-7-submit-a-command-once: backlog
+  2-8-protect-command-identity-and-extensions: backlog
+  2-9-explain-execution-failures-with-stable-documents: backlog
+  2-10-refuse-writes-in-read-only-mode: backlog
+  2-11-keep-cli-output-and-exit-codes-predictable: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-discover-operations-through-a-fixed-mcp-surface: backlog
+  3-2-run-the-mcp-server-over-clean-stdio: backlog
+  3-3-execute-calls-with-structured-mcp-results: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-approve-the-parties-migration-inventory: backlog
+  4-2-approve-the-folders-migration-inventory: backlog
+  4-3-approve-projects-and-frontcomposer-migration-inventories: backlog
+  4-4-approve-chatbot-and-memories-migration-inventories: backlog
+  4-5-gate-module-coverage-against-the-approved-inventory: backlog
+  4-6-publish-the-bootstrap-decoration-package: backlog
+  4-7-enforce-the-production-dependency-boundary: backlog
+  4-8-make-tenants-gateway-ready-for-v1: backlog
+  4-9-declare-parties-commands-for-the-gateway: backlog
+  4-10-add-parties-queries-and-pin-complete-coverage: backlog
+  4-11-prove-both-heads-agree-against-a-loopback-gateway: backlog
+  4-12-compose-the-v1-live-test-topology: backlog
+  4-13-test-every-vector-against-live-gateway-semantics: backlog
+  4-14-make-the-live-semantic-lane-blocking-in-ci: backlog
+  4-15-publish-the-no-new-server-rule: backlog
+  4-16-stage-and-validate-the-paired-packages: backlog
+  4-17-verify-the-operator-setup-experience: backlog
+  4-18-publish-the-validated-package-pair: backlog
+  epic-4-retrospective: optional
