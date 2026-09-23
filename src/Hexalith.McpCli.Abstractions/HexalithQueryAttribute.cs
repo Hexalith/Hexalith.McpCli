@@ -13,7 +13,7 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     /// <summary>Gets or sets a validating JSON payload example.</summary>
     public string? Example { get; set; }
 
-    /// <summary>Gets or sets the operation name part, overriding the derived name.</summary>
+    /// <summary>Gets or sets the ASCII lowercase kebab-case operation name part, overriding the name derived from the type name.</summary>
     public string? Name { get; set; }
 
     /// <summary>Gets or sets the gateway domain when no contract interface supplies it.</summary>
@@ -25,7 +25,7 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     /// <summary>Gets or sets the exact CLR property containing the aggregate identifier.</summary>
     public string? AggregateIdProperty { get; set; }
 
-    /// <summary>Gets or sets a constant aggregate identifier for a list query.</summary>
+    /// <summary>Gets or sets a constant aggregate identifier for a list query; mutually exclusive with <see cref="AggregateIdProperty"/>.</summary>
     public string? AggregateId { get; set; }
 
     /// <summary>Gets or sets the gateway projection type when no contract interface supplies it.</summary>

@@ -60,6 +60,47 @@ context:
 - Given the synthetic sample, when its declarations are inspected or tested, then it has exactly one `Ulid` Module, both Command routing forms, a converter-backed identifier, and a Query, with no production project depending on it.
 - Given the seeded delivery files, when inspected, then CI calls Builds `domain-ci.yml`, release permits an Abstractions-only bootstrap and defines the later paired path, and commitlint and semantic-release use the pinned single-version policy.
 
+### Review Findings
+
+Code review of 2026-09-23 (`b410fcd..0a7079c`, excluding `package-lock.json`; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; none failed).
+
+All 8 patches applied and reverified on 2026-09-23: Release solution build with zero warnings, 20 tests passed with zero skipped, `release-prepare.sh` bootstrap run with package validation, preflight rejects `paired` and invalid versions, `actionlint`, `bash -n`, and `git diff --check`. Note: recovery runs the scripts at the tag, so only tags cut after this change get the idempotent `--skip-duplicate` push.
+
+- [x] [Review][Patch] A failed NuGet push leaves an orphan release tag; add a `workflow_dispatch` recovery workflow (adapted from Tenants `recover-partial-release.yml`) that republishes an existing `v<version>` tag with `--skip-duplicate` and creates any missing GitHub release (decision resolved 2026-09-23: option 1) [scripts/release-publish.sh:9]
+- [x] [Review][Patch] CI bootstrap job bypasses the release scripts that production runs; run `release-prepare.sh` and assert that preflight rejects `paired` [.github/workflows/ci.yml:38]
+- [x] [Review][Patch] No test pins single-suffix stripping (`SaveQueryCommand` → `save-query`, `FindCommandQuery` → `find-command`) [tests/Hexalith.McpCli.Abstractions.Tests/KebabCaseTests.cs:19]
+- [x] [Review][Patch] `actions/setup-node@v7.0.0` is pinned by tag in the publish job that holds `contents: write` and `NUGET_API_KEY`; pin it to `820762786026740c76f36085b0efc47a31fe5020`, as in Builds `domain-release.yml` [.github/workflows/release.yml:69]
+- [x] [Review][Patch] Test packages and `IsTestProject` are conditioned on one exact project name, so later `*.Tests` projects get no framework [tests/Directory.Build.props:6]
+- [x] [Review][Patch] Sample fixture tests live in `KebabCaseTests`; move them to `SampleContractsTests.cs` [tests/Hexalith.McpCli.Abstractions.Tests/KebabCaseTests.cs:54]
+- [x] [Review][Patch] XML docs omit PRD constraints: `AggregateId` cannot be combined with `AggregateIdProperty`, and the `Name` override is ASCII lowercase kebab-case [src/Hexalith.McpCli.Abstractions/HexalithQueryAttribute.cs:29]
+- [x] [Review][Patch] Release gates fail without printing a reason (the `test` ref/SHA checks and the version regex) [.github/workflows/release.yml:35]
+- [x] [Review][Defer] `KebabCase` uses `ThrowIfNullOrWhiteSpace` and range slicing, so it cannot be linked into the `netstandard2.0` analyzer that the architecture says shares it [src/Hexalith.McpCli.Abstractions/KebabCase.cs:17] — deferred: the Story 1.7 analyzer must choose linked source or multi-targeting and add a `netstandard2.0` compile check
+- [x] [Review][Defer] Preflight will still accept `bootstrap` after paired releases exist, which would split the shared version line [scripts/release-preflight.sh:9] — deferred: unreachable while `paired` fails closed; the paired-release story must reject bootstrap once `Hexalith.McpCli` is published
+- [x] [Review][Defer] The architecture's Code style row requires a StyleCop header, but no new file has one and neither does sibling Tenants [src/Hexalith.McpCli.Abstractions/HexalithModuleAttribute.cs:1] — deferred: the fix is either amending the architecture spine or adopting headers repo-wide; that is a planning decision
+- [x] [Review][Defer] No rule or diagnostic rejects a non-canonical `Name` override or module name, for example `a.b`, which breaks the `<module>.<operation>` split [src/Hexalith.McpCli.Abstractions/HexalithModuleAttribute.cs:10] — deferred: planning gap for the Catalog diagnostics stories (1.4/1.5); nothing consumes names yet
+- [x] [Review][Defer] No diagnostic category covers a type that carries both `[HexalithCommand]` and `[HexalithQuery]` [src/Hexalith.McpCli.Abstractions/HexalithCommandAttribute.cs:7] — deferred: planning gap for Stories 1.4/1.5; the read-only filter depends on an unambiguous kind
+
+**Rejected**
+
+- `false` — IPv6AddressQuery → `i-pv6-address`: this is what the architecture's specified split rule produces.
+- `false` — throw on empty Command description in the attribute constructor: PRD FR-1 assigns this to the analyzer and a startup diagnostic, and throwing would break reflection during Catalog build.
+- `false` — throw on empty Query description: same refutation as the Command description.
+- `false` — out-of-range `IdentifierKind`/`WireTypeConvention` casts: nothing consumes them yet, and Catalog validation owns declaration errors.
+- `false` — both `AggregateId` and `AggregateIdProperty` set: the Catalog's `ambiguous_aggregate_id` category owns this.
+- `low` — `default(SampleItemId)` makes `AggregateId` null: test fixture only, never constructed that way, and the fix adds a guard.
+- `false` — converter accepts non-ULID strings: identifier-kind validation belongs to Schema and PayloadValidator (FR-7/FR-15), not to the Module converter.
+- `low` — missing Builds submodule skips imports silently: restore still fails with NU1010 naming the packages, the import copies the sibling pattern, and the fix adds a guard target.
+- `false` — shared workflows referenced `@main`: identical to sibling Tenants `ci.yml`/`commitlint.yml`.
+- `low` — no test forbids production references to Sample.Contracts: true today, and enforcing it needs new architecture-test infrastructure.
+- `low` — no tests for `AttributeUsage` flags or the `Explicit` default: static metadata that is unlikely to regress in everyday work.
+- `low` — spec `status: done` vs sprint `review`: the fix would edit the spec under review; "12 passed" and "18 tests" are labelled sequential runs.
+- `low` — validator skips packed README/XML and there is no SourceLink/`ContinuousIntegrationBuild`: publishing works, and the fix adds configuration.
+- `false` — README describes a product that does not exist yet: it describes the repository's product, and the provider contract is documented on `SerializerOptionsProvider`.
+- `low` — no coverage collection: with `run-coverage-gate` defaulting to false, no `--coverage` argument is passed, so nothing breaks; adopting a gate is a separate policy choice.
+- `false` — workflows are not "thin": the frozen task scopes "thin" to the CI/commitlint calls, and the bootstrap-consumer job came from the earlier review (BH-04/VG-01).
+- `false` — paired path is only a stub: the spec explicitly defers paired gates, and preflight fails closed.
+- `low` — tracking status mismatch (Acceptance Auditor): the fix would edit the spec under review.
+
 ## Implementation Notes
 
 - Added `.editorconfig` and `.gitattributes` so C# remains CRLF in the workspace while Git stores normalized text and `git diff --check` passes.

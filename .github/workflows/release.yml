@@ -32,8 +32,15 @@ jobs:
           DISPATCH_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          test "$DISPATCH_REF" = refs/heads/main
-          test "$DISPATCH_SHA" = "$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          if [ "$DISPATCH_REF" != refs/heads/main ]; then
+            echo "Release must be dispatched from refs/heads/main, not ${DISPATCH_REF}." >&2
+            exit 1
+          fi
+          live_main_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          if [ "$DISPATCH_SHA" != "$live_main_sha" ]; then
+            echo "Dispatch SHA ${DISPATCH_SHA} is not the current main SHA ${live_main_sha}." >&2
+            exit 1
+          fi
           for workflow in ci.yml commitlint.yml; do
             runs="$(gh api --method GET "repos/${REPOSITORY}/actions/workflows/${workflow}/runs" \
               -f branch=main -f event=push -f head_sha="$DISPATCH_SHA" -f status=success)"
@@ -66,7 +73,7 @@ jobs:
         with:
           global-json-file: global.json
       - name: Set up Node
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
       - name: Install pinned release tooling

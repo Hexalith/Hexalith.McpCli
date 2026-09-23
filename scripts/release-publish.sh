@@ -7,8 +7,8 @@ staging_directory="nupkgs"
 
 python3 scripts/validate-release-packages.py "$staging_directory" "$release_version" "$release_phase"
 dotnet nuget push "$staging_directory/Hexalith.McpCli.Abstractions.$release_version.nupkg" \
-  --source https://api.nuget.org/v3/index.json --api-key "${NUGET_API_KEY:?NuGet publication key is required}"
+  --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key "${NUGET_API_KEY:?NuGet publication key is required}"
 if [ "$release_phase" = paired ]; then
   dotnet nuget push "$staging_directory/Hexalith.McpCli.$release_version.nupkg" \
-    --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY"
+    --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key "$NUGET_API_KEY"
 fi

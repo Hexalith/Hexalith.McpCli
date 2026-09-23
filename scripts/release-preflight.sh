@@ -14,7 +14,10 @@ case "$release_phase" in
   *) echo "Unknown release phase: $release_phase" >&2; exit 1 ;;
 esac
 
-[[ "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
+if [[ ! "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+  echo "Invalid release version: $release_version" >&2
+  exit 1
+fi
 
 python3 - "$release_version" <<'PY'
 import json

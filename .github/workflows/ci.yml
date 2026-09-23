@@ -35,11 +35,22 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
-      - name: Pack and validate the bootstrap package
+      - name: Check release preflight rejections before any network call
+        env:
+          NUGET_API_KEY: unused-by-rejected-preflight
         run: |
-          dotnet restore src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj
-          dotnet pack src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj --configuration Release --no-restore -p:Version=1.0.0 --output nupkgs
-          python3 scripts/validate-release-packages.py nupkgs 1.0.0 bootstrap
+          if MCPCLI_RELEASE_PHASE=paired bash scripts/release-preflight.sh 1.0.0; then
+            echo "release-preflight.sh accepted the deferred paired phase." >&2
+            exit 1
+          fi
+          if MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-preflight.sh 1.0; then
+            echo "release-preflight.sh accepted an invalid version." >&2
+            exit 1
+          fi
+      - name: Prepare and validate the bootstrap package with the release script
+        env:
+          MCPCLI_RELEASE_PHASE: bootstrap
+        run: bash scripts/release-prepare.sh 1.0.0
       - name: Restore and build a Contracts consumer from the staged package
         run: |
           consumer_dir="$RUNNER_TEMP/mcpcli-bootstrap-consumer"

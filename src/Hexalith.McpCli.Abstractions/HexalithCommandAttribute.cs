@@ -13,7 +13,7 @@ public sealed class HexalithCommandAttribute(string description) : Attribute
     /// <summary>Gets or sets a validating JSON payload example.</summary>
     public string? Example { get; set; }
 
-    /// <summary>Gets or sets the operation name part, overriding the derived name.</summary>
+    /// <summary>Gets or sets the ASCII lowercase kebab-case operation name part, overriding the name derived from the type name.</summary>
     public string? Name { get; set; }
 
     /// <summary>Gets or sets the gateway domain when no contract interface supplies it.</summary>

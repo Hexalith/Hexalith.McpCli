@@ -1,0 +1,95 @@
+name: Recover Partial Release
+
+# semantic-release pushes v<version> before publishCmd runs. When the NuGet push or the GitHub
+# release fails after that point, a rerun of release.yml finds no releasable commit. This workflow
+# rebuilds the existing tag with the release scripts, pushes idempotently, and completes the
+# GitHub release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing partially published version, for example 1.0.0
+        required: true
+        type: string
+      phase:
+        description: Release phase that produced the tag
+        required: true
+        type: choice
+        options: [bootstrap, paired]
+
+concurrency:
+  group: release-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          submodules: false
+          persist-credentials: false
+      - name: Require an existing release tag on main
+        shell: bash
+        env:
+          RECOVERY_VERSION: ${{ inputs.version }}
+          RECOVERY_PHASE: ${{ inputs.phase }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$RECOVERY_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid release version: $RECOVERY_VERSION" >&2
+            exit 1
+          fi
+          if [ "$RECOVERY_PHASE" = paired ]; then
+            echo "Paired release is deferred until the tool, FR-22, and live gates are implemented." >&2
+            exit 1
+          fi
+          if ! git rev-parse -q --verify "refs/tags/v${RECOVERY_VERSION}" >/dev/null; then
+            echo "Tag v${RECOVERY_VERSION} does not exist; run release.yml instead." >&2
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "v${RECOVERY_VERSION}" origin/main; then
+            echo "Tag v${RECOVERY_VERSION} is not on main." >&2
+            exit 1
+          fi
+          git checkout --detach "v${RECOVERY_VERSION}"
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Rebuild the tagged packages with the release script
+        env:
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+          RECOVERY_VERSION: ${{ inputs.version }}
+        run: bash scripts/release-prepare.sh "$RECOVERY_VERSION"
+      - name: Push missing packages
+        env:
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          RECOVERY_VERSION: ${{ inputs.version }}
+        run: bash scripts/release-publish.sh "$RECOVERY_VERSION"
+      - name: Complete the GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RECOVERY_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          tag="v${RECOVERY_VERSION}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" nupkgs/*.nupkg --clobber
+          else
+            gh release create "$tag" nupkgs/*.nupkg --verify-tag --title "$tag" --generate-notes
+          fi
