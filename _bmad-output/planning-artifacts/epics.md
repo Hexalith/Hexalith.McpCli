@@ -233,6 +233,16 @@ So that I can declare agent-facing Commands and Queries without adding a per-Mod
 **Then** the .NET 10 solution builds the flat `Hexalith.McpCli.Abstractions` and synthetic `Sample.Contracts` projects using the pinned SDK, central package management, and warnings as errors,
 **And** no legacy `.sln` file or nested source layout is introduced.
 
+**Given** the architecture's structural seed,
+**When** Story 1.1 creates the repository scaffold,
+**Then** it includes `Directory.Build.props` with the three-path import of `references/Hexalith.Builds/Props/Directory.Packages.props`, root `Directory.Packages.props`, `global.json` copied from Hexalith.Builds, and `tests/Directory.Build.props`,
+**And** it includes `package.json`, `commitlint.config.mjs`, `.releaserc.json`, `tools/release-packages.json`, and thin `.github/workflows/ci.yml`, `release.yml`, and `commitlint.yml` files, ready for their later story gates.
+
+**Given** the seeded delivery files,
+**When** their configuration is inspected,
+**Then** `ci.yml` calls the Hexalith.Builds reusable `domain-ci.yml`, `release.yml` supports the Abstractions-only bootstrap before the paired release, and `tools/release-packages.json` names exactly `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli` for that paired release,
+**And** package and commitlint configuration uses the repository's pinned Conventional Commits tooling and `.releaserc.json` defines the architecture's single semantic-release version path.
+
 **Given** a Contracts project that references `Hexalith.McpCli.Abstractions`,
 **When** I mark its assembly with `[HexalithModule]`, mark a class or record with `[HexalithCommand]` or `[HexalithQuery]`, and mark an identifier property with `[HexalithIdentifier]`,
 **Then** the declarations compile with the PRD §5.1 marker and operation members, including required description and Identifier Kind,
@@ -602,10 +612,15 @@ So that I can read business data with the same routing the agent will use.
 
 **Acceptance Criteria:**
 
-**Given** the pinned EventStore client and a throwaway Gateway harness,
-**When** the `tenants.list-tenants` Query spike submits a valid list Query,
-**Then** the Gateway returns a page using its declared aggregate identifier constant,
-**And** the spike records the routing value before the shared Query executor is implemented.
+**Given** the pinned EventStore client and a throwaway Gateway harness before Story 4.12 creates this repository's test AppHost,
+**When** the `tenants.list-tenants` Query spike runs against EventStore Gateway and Tenants started locally through the existing EventStore AppHost and root-declared checkouts,
+**Then** the harness calls the pinned client directly and receives a page without depending on a decorated Tenants Contracts release or the Story 4.12 topology,
+**And** the spike records the local startup path, Gateway endpoint, required test identity, request routing, and response evidence without storing credentials.
+
+**Given** the existing Tenants list Query route uses `index` as its aggregate identifier,
+**When** the spike selects the candidate `aggregateId` constant before Story 4.8,
+**Then** it verifies `index` against the pinned Gateway identifier pattern and the live `tenants.list-tenants` response, recording the source and result,
+**And** Story 4.8's Tenants maintainer confirms or corrects that candidate when declaring the final list-Query constant in the owning Contracts package.
 
 **Given** a valid Query, Payload, Gateway URL, and resolved Tenant,
 **When** I run `hexalith query <operation>` with `--payload <json>`, `--payload @file`, or stdin,
@@ -873,7 +888,7 @@ So that I can understand available Modules and Operations without a tool per Ope
 
 **Given** the tool definitions,
 **When** their annotations and input schemas are inspected,
-**Then** discovery tools and `run_query` have `readOnlyHint: true`, while `send_command` has `readOnlyHint: false` and `idempotentHint: false`,
+**Then** discovery tools and `run_query` have `readOnlyHint: true`, while `send_command` has `readOnlyHint: false`, `idempotentHint: false`, and `destructiveHint: true`,
 **And** the five names, descriptions, and input schemas together contain fewer than 8,000 characters.
 
 **Given** a Catalog, with or without a Gateway URL,

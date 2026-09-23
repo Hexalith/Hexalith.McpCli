@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 09-23-2026 07:41
+last_updated: 09-23-2026 07:55
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -86,10 +86,10 @@ development_status:
   4-18-publish-the-validated-package-pair: backlog
   epic-4-retrospective: optional
 
-# Readiness-gate concerns (09-23-2026), accepted to proceed; resolve in the named story.
+# Readiness action items (09-23-2026); criteria are assigned, implementation remains open.
 action_items:
   - epic: 1
-    action: "Story 1.1 owns the rest of the architecture structural seed (Directory.Build.props, Directory.Packages.props, global.json, package.json + commitlint.config.mjs, .releaserc.json, tools/release-packages.json, thin ci.yml/release.yml/commitlint.yml); no story currently lists them, yet 4.6 assumes a release workflow and 4.14 assumes ci.yml"
+    action: "Implement the structural seed in Story 1.1 (Directory.Build.props, Directory.Packages.props, global.json, package.json + commitlint.config.mjs, .releaserc.json, tools/release-packages.json, thin ci.yml/release.yml/commitlint.yml) so Stories 4.6 and 4.14 can use the release and CI workflows"
     owner: "McpCli maintainer"
     status: open
   - epic: 1
@@ -97,7 +97,7 @@ action_items:
     owner: "Hexalith.Builds owner"
     status: open
   - epic: 2
-    action: "Before Story 2.5, record the spike's Gateway environment (EventStore + Tenants running locally; the Aspire AppHost only arrives in 4.12) and the candidate list-tenants aggregateId constant, which the Tenants maintainer fixes in 4.8"
+    action: "In Story 2.5, run and record the query spike against locally started EventStore Gateway and Tenants, test the candidate list-tenants aggregateId constant, and hand the result to the Tenants maintainer for the final decision in 4.8"
     owner: "McpCli maintainer + Tenants maintainer"
     status: open
   - epic: 4
@@ -109,6 +109,6 @@ action_items:
     owner: "Product owner"
     status: open
   - epic: 3
-    action: "Story 3.1 omits AD-12's destructiveHint=true on send_command; the architecture's lint convention also allows hollow_description on properties, while addendum §G (normative) makes it operation-level only. Follow AD-12 for annotations and §G for lint."
+    action: "In Story 3.1, implement AD-12's destructiveHint=true on send_command; follow normative addendum §G for operation-level hollow_description lint."
     owner: "McpCli maintainer"
     status: open
