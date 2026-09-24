@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Security;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Hexalith.McpCli.Sample.Contracts;
 using Shouldly;
@@ -27,10 +28,10 @@ public sealed class ManifestBuildTests
             string feed = Path.Combine(root, "feed");
             CreatePackage(feed, "Hexalith.McpCli.Sample.Contracts", (SampleAssembly, "lib/net10.0/Hexalith.McpCli.Sample.Contracts.dll"));
             CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
-            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/Manifest.Unmarked.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/manifest.AUnmarked.Contracts.dll"));
             string project = WriteProject(root,
-                ("Manifest.MarkedEmpty.Contracts", true),
                 ("Manifest.Unmarked.Contracts", true),
+                ("Manifest.MarkedEmpty.Contracts", true),
                 ("Hexalith.McpCli.Sample.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -44,18 +45,27 @@ public sealed class ManifestBuildTests
             {
                 ("Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
                 ("Manifest.MarkedEmpty.Contracts", "Manifest.MarkedEmpty.Contracts"),
-                ("Manifest.Unmarked.Contracts", "Manifest.Unmarked.Contracts"),
+                ("Manifest.Unmarked.Contracts", "manifest.AUnmarked.Contracts"),
             });
 
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
             File.ReadAllBytes(manifest).ShouldBe(first);
             RunDotnet(root, true, "clean", project, "--configuration", "Release");
             File.Exists(manifest).ShouldBeFalse();
+            RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release", "-p:DesignTimeBuild=true");
+            File.Exists(manifest).ShouldBeTrue();
+            string compileItems = RunDotnet(root, true, "msbuild", project, "-getItem:Compile", "-p:Configuration=Release", "-p:DesignTimeBuild=true");
+            using (JsonDocument document = JsonDocument.Parse(compileItems))
+            {
+                document.RootElement.GetProperty("Items").GetProperty("Compile").EnumerateArray()
+                    .Any(item => string.Equals(item.GetProperty("FullPath").GetString(), manifest, StringComparison.OrdinalIgnoreCase))
+                    .ShouldBeTrue();
+            }
 
             // Changing only the direct flag must remove the unmarked package's entry.
             WriteProject(root,
-                ("Manifest.MarkedEmpty.Contracts", true),
                 ("Manifest.Unmarked.Contracts", false),
+                ("Manifest.MarkedEmpty.Contracts", true),
                 ("Hexalith.McpCli.Sample.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -64,6 +74,13 @@ public sealed class ManifestBuildTests
                 ("Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
                 ("Manifest.MarkedEmpty.Contracts", "Manifest.MarkedEmpty.Contracts"),
             });
+            byte[] withUnflaggedReference = File.ReadAllBytes(manifest);
+            RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
+            File.ReadAllBytes(manifest).ShouldBe(withUnflaggedReference);
+            string missingFlag = RunDotnet(root, false, "build", project, "--no-restore", "--configuration", "Release", "-p:RequireContractsFlag=true");
+            missingFlag.ShouldContain("Manifest.Unmarked.Contracts");
+            missingFlag.ShouldContain("must declare HexalithContracts");
+            File.Exists(manifest).ShouldBeFalse();
         }
         finally
         {
@@ -80,7 +97,7 @@ public sealed class ManifestBuildTests
         {
             string feed = Path.Combine(root, "feed");
             CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
-            CreatePackage(feed, "Manifest.Zero.Contracts", (UnmarkedAssembly, "tools/Manifest.Unmarked.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Zero.Contracts", (UnmarkedAssembly, "lib/net10.0/Unrelated.dll"));
             string project = WriteProject(root, ("Manifest.MarkedEmpty.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -140,7 +157,7 @@ public sealed class ManifestBuildTests
             RunDotnet(root, true, "restore", project, "--source", feed);
             string output = RunDotnet(root, false, "build", project, "--no-restore", "--configuration", "Release");
             output.ShouldContain("Manifest.Renamed.Contracts");
-            output.ShouldContain("assembly identity 'Manifest.Unmarked.Contracts'");
+            output.ShouldContain("assembly identity 'manifest.AUnmarked.Contracts'");
             File.Exists(ManifestPath(root)).ShouldBeFalse();
         }
         finally
@@ -149,21 +166,21 @@ public sealed class ManifestBuildTests
         }
     }
 
-    /// <summary>Checks the shipping project imports and compiles its generated manifest.</summary>
+    /// <summary>Matches a differently cased direct package reference to its resolved package identity.</summary>
     [Fact]
-    public void ShippingProjectImportGeneratesFlaggedEntry()
+    public void PackageIdMatchingUsesResolvedIdentity()
     {
         string root = CreateFixtureRoot();
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/Manifest.Unmarked.Contracts.dll"));
-            string project = WriteShippingProject(root);
+            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/manifest.AUnmarked.Contracts.dll"));
+            string project = WriteProject(root, ("manifest.unmarked.contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
-            ReadEntries(ManifestPath(Path.GetDirectoryName(project)!)).ShouldBe(new[]
+            ReadEntries(ManifestPath(root)).ShouldBe(new[]
             {
-                ("Manifest.Unmarked.Contracts", "Manifest.Unmarked.Contracts"),
+                ("Manifest.Unmarked.Contracts", "manifest.AUnmarked.Contracts"),
             });
         }
         finally
@@ -172,10 +189,24 @@ public sealed class ManifestBuildTests
         }
     }
 
+    /// <summary>Checks the real shipping project requires explicit Contracts enrollment.</summary>
+    [Fact]
+    public void ShippingProjectRequiresContractsFlag()
+    {
+        string repositoryRoot = FindRepositoryRoot();
+        string project = Path.Combine(repositoryRoot, "src", "Hexalith.McpCli", "Hexalith.McpCli.csproj");
+        RunDotnet(repositoryRoot, true, "msbuild", project, "-getProperty:RequireContractsFlag").Trim().ShouldBe("true");
+    }
+
     private static string CreateFixtureRoot()
     {
         string path = Path.Combine(Path.GetTempPath(), "mcpcli-manifest-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(path);
+        string repositoryRoot = FindRepositoryRoot();
+        File.Copy(Path.Combine(repositoryRoot, "global.json"), Path.Combine(path, "global.json"));
+        File.WriteAllText(Path.Combine(path, "Directory.Build.props"), "<Project><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup></Project>");
+        File.WriteAllText(Path.Combine(path, "Directory.Build.targets"), "<Project />");
+        File.WriteAllText(Path.Combine(path, "Directory.Packages.props"), "<Project><PropertyGroup><ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup><ItemGroup><PackageVersion Include=\"Hexalith.McpCli.Sample.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.MarkedEmpty.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Unmarked.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Zero.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Ambiguous.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Renamed.Contracts\" Version=\"1.0.0\" /></ItemGroup></Project>");
         return path;
     }
 
@@ -202,7 +233,7 @@ public sealed class ManifestBuildTests
         project.Append("<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup>");
         foreach ((string id, bool flagged) in packages)
         {
-            project.Append("<PackageReference Include=\"").Append(id).Append("\" Version=\"1.0.0\" HexalithContracts=\"").Append(flagged ? "true" : "false").Append("\" />");
+            project.Append("<PackageReference Include=\"").Append(id).Append("\" HexalithContracts=\"").Append(flagged ? "true" : "false").Append("\" />");
         }
 
         project.Append("</ItemGroup><Import Project=\"").Append(SecurityElement.Escape(targets)).Append("\" /></Project>");
@@ -210,23 +241,6 @@ public sealed class ManifestBuildTests
         File.WriteAllText(path, project.ToString());
         File.WriteAllText(Path.Combine(root, "Program.cs"), "using Hexalith.McpCli.Hosting;\ninternal static class Program { private static void Main() { System.Console.WriteLine(ModuleAssemblyManifest.Entries.Length); } }\n");
         return path;
-    }
-
-    private static string WriteShippingProject(string root)
-    {
-        string source = Path.Combine(FindRepositoryRoot(), "src", "Hexalith.McpCli");
-        string destination = Path.Combine(root, "src", "Hexalith.McpCli");
-        Directory.CreateDirectory(Path.Combine(destination, "Build"));
-        File.Copy(Path.Combine(source, "Program.cs"), Path.Combine(destination, "Program.cs"));
-        File.Copy(Path.Combine(source, "Build", "ModuleAssemblyManifest.targets"), Path.Combine(destination, "Build", "ModuleAssemblyManifest.targets"));
-        File.WriteAllText(Path.Combine(root, "Directory.Build.props"), "<Project><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup></Project>");
-        File.WriteAllText(Path.Combine(destination, "ManifestProbe.cs"), "namespace Hexalith.McpCli.Hosting; internal static class ManifestProbe { internal static int Count => ModuleAssemblyManifest.Entries.Length; }");
-
-        string original = File.ReadAllText(Path.Combine(source, "Hexalith.McpCli.csproj"));
-        original.ShouldContain("<Import Project=\"Build/ModuleAssemblyManifest.targets\" />");
-        string project = Path.Combine(destination, "Hexalith.McpCli.csproj");
-        File.WriteAllText(project, original.Replace("</Project>", "  <ItemGroup><PackageReference Include=\"Manifest.Unmarked.Contracts\" Version=\"1.0.0\" HexalithContracts=\"true\" /></ItemGroup>\n</Project>", StringComparison.Ordinal));
-        return project;
     }
 
     private static string FindTargetsPath()

@@ -4,6 +4,7 @@
       <Packages ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
       <References ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
       <OutputPath ParameterType="System.String" Required="true" />
+      <RequireContractsFlag ParameterType="System.Boolean" />
     </ParameterGroup>
     <Task>
       <Using Namespace="System" />
@@ -14,6 +15,16 @@
       <Code Type="Fragment" Language="cs"><![CDATA[
         var matches = new System.Collections.Generic.List<(string PackageId, string AssemblyName)>();
         var failed = false;
+        if (RequireContractsFlag)
+        {
+            foreach (var package in Packages.Where(p => p.ItemSpec.EndsWith(".Contracts", StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(p.GetMetadata("HexalithContracts"), "true", StringComparison.OrdinalIgnoreCase)))
+            {
+                Log.LogError($"Contracts package '{package.ItemSpec}' must declare HexalithContracts=\"true\" to enroll in the assembly manifest.");
+                failed = true;
+            }
+        }
+
         foreach (var package in Packages.Where(p => string.Equals(p.GetMetadata("HexalithContracts"), "true", StringComparison.OrdinalIgnoreCase)))
         {
             var packageId = package.ItemSpec;
@@ -37,7 +48,7 @@
                 continue;
             }
 
-            matches.Add((packageId, assemblyName));
+            matches.Add((assets[0].GetMetadata("NuGetPackageId"), assemblyName));
         }
 
         if (failed)
@@ -70,10 +81,13 @@
     </Task>
   </UsingTask>
 
-  <Target Name="GenerateModuleAssemblyManifest" AfterTargets="ResolveReferences" BeforeTargets="CoreCompile" Condition="'$(DesignTimeBuild)' != 'true'">
-    <GenerateModuleAssemblyManifest Packages="@(PackageReference)" References="@(ReferenceCopyLocalPaths)" OutputPath="$(IntermediateOutputPath)ModuleAssemblyManifest.g.cs" />
+  <ItemGroup>
+    <Compile Include="$(IntermediateOutputPath)ModuleAssemblyManifest.g.cs" />
+  </ItemGroup>
+
+  <Target Name="GenerateModuleAssemblyManifest" AfterTargets="ResolveReferences" BeforeTargets="CoreCompile">
+    <GenerateModuleAssemblyManifest Packages="@(PackageReference)" References="@(ReferenceCopyLocalPaths)" OutputPath="$(IntermediateOutputPath)ModuleAssemblyManifest.g.cs" RequireContractsFlag="$(RequireContractsFlag)" />
     <ItemGroup>
-      <Compile Include="$(IntermediateOutputPath)ModuleAssemblyManifest.g.cs" />
       <FileWrites Include="$(IntermediateOutputPath)ModuleAssemblyManifest.g.cs" />
     </ItemGroup>
   </Target>

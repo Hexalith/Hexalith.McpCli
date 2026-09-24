@@ -7,5 +7,7 @@
     <Project Path="tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
     <Project Path="tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj" />
     <Project Path="tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj" />
+    <Project Path="tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
+    <Project Path="tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
   </Folder>
 </Solution>

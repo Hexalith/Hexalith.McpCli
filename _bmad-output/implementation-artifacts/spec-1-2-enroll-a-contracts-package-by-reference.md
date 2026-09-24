@@ -2,7 +2,7 @@
 title: 'Enroll a Contracts Package by Reference'
 type: 'feature'
 created: '2026-09-23'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '01bd25ded2e1e7bb34aab75a9cfed6f58ee2bb25'
@@ -61,16 +61,16 @@ context:
 
 Code review 2026-09-24 (diff `01bd25d..45bd4b6`; layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor).
 
-- [ ] [Review][Patch] Replace the copied shipping-project test with proof from the real build (decision resolved 2026-09-24: option 4). Make the scaffold `Program.cs` read `ModuleAssemblyManifest.Entries`, so that removing the import breaks the real solution build; delete `ShippingProjectImportGeneratesFlaggedEntry` and `WriteShippingProject`; and give the fixture root a `Directory.Packages.props` with central package management, so fixture references are versionless like the real tool project. Combine this with the fixture-isolation patch below [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:215]
-- [ ] [Review][Patch] Design-time builds skip the generated manifest's `Compile` item, so IDE builds will report `ModuleAssemblyManifest` as undefined once the composition root uses it [src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets:73]
-- [ ] [Review][Patch] AC-2's repeated-build byte-stability check never runs with an unflagged reference present (the byte comparison happens only in the all-flagged phase) [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:56]
-- [ ] [Review][Patch] Fixture builds are not isolated from the ambient SDK and MSBuild configuration: there is no `global.json`, so the newest installed SDK builds them instead of the pinned 10.0.401, and `Directory.*` files in parent folders would be inherited [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:175]
-- [ ] [Review][Patch] The sort test cannot tell ordinal order from case-insensitive or culture-aware order, and the matrix's "reverse name order" pair (MarkedEmpty then Unmarked) is already in order [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:31]
-- [ ] [Review][Patch] The `*.Contracts.dll` filename filter is untested: the zero-match package puts its DLL under `tools/`, so removing the filter leaves every test green [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:83]
-- [ ] [Review][Patch] Case-insensitive package-ID matching is untested: every reference uses the packed ID's exact casing [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:205]
-- [ ] [Review][Patch] The manifest records `PackageReference.ItemSpec` casing rather than the resolved `NuGetPackageId`; `Include="pkg.a"` was confirmed to emit `("pkg.a", …)` [src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets:19]
-- [ ] [Review][Patch] The fixture Contracts projects are missing from the solution, unlike `Sample.Contracts`, so solution-wide format and the IDE skip them [Hexalith.McpCli.slnx:9]
-- [ ] [Review][Patch] The tool project has no note on the enrollment shape, and a reference that omits `HexalithContracts="true"` is silently left out [src/Hexalith.McpCli/Hexalith.McpCli.csproj:9]
+- [x] [Review][Patch] Replace the copied shipping-project test with proof from the real build (decision resolved 2026-09-24: option 4). Make the scaffold `Program.cs` read `ModuleAssemblyManifest.Entries`, so that removing the import breaks the real solution build; delete `ShippingProjectImportGeneratesFlaggedEntry` and `WriteShippingProject`; and give the fixture root a `Directory.Packages.props` with central package management, so fixture references are versionless like the real tool project. Combine this with the fixture-isolation patch below [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:215]
+- [x] [Review][Patch] Design-time builds skip the generated manifest's `Compile` item, so IDE builds will report `ModuleAssemblyManifest` as undefined once the composition root uses it [src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets:73]
+- [x] [Review][Patch] AC-2's repeated-build byte-stability check never runs with an unflagged reference present (the byte comparison happens only in the all-flagged phase) [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:56]
+- [x] [Review][Patch] Fixture builds are not isolated from the ambient SDK and MSBuild configuration: there is no `global.json`, so the newest installed SDK builds them instead of the pinned 10.0.401, and `Directory.*` files in parent folders would be inherited [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:175]
+- [x] [Review][Patch] The sort test cannot tell ordinal order from case-insensitive or culture-aware order, and the matrix's "reverse name order" pair (MarkedEmpty then Unmarked) is already in order [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:31]
+- [x] [Review][Patch] The `*.Contracts.dll` filename filter is untested: the zero-match package puts its DLL under `tools/`, so removing the filter leaves every test green [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:83]
+- [x] [Review][Patch] Case-insensitive package-ID matching is untested: every reference uses the packed ID's exact casing [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:205]
+- [x] [Review][Patch] The manifest records `PackageReference.ItemSpec` casing rather than the resolved `NuGetPackageId`; `Include="pkg.a"` was confirmed to emit `("pkg.a", …)` [src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets:19]
+- [x] [Review][Patch] The fixture Contracts projects are missing from the solution, unlike `Sample.Contracts`, so solution-wide format and the IDE skip them [Hexalith.McpCli.slnx:9]
+- [x] [Review][Patch] The tool project has no note on the enrollment shape, and a reference that omits `HexalithContracts="true"` is silently left out [src/Hexalith.McpCli/Hexalith.McpCli.csproj:9]
 
 **Rejected**
 
@@ -93,6 +93,7 @@ Code review 2026-09-24 (diff `01bd25d..45bd4b6`; layers: blind-hunter, edge-case
 - The build target matches flagged direct package IDs to copy-local Contracts DLLs, records package/assembly pairs in an ordinal manifest, and deletes stale output on a mismatch. Generated C# uses CRLF and is registered in MSBuild `FileWrites` for clean.
 - Isolated package tests cover the decorated sample, marked-empty and unmarked assemblies, an unflagged package, zero and multiple matches, repeat builds, line endings, and clean behavior. Verification on 2026-09-24: solution restore and Release build succeeded with zero warnings; manifest tests passed 3/3; existing Abstractions tests passed 20/20; `git diff --cached --check` passed before the final spec update.
 - Review fixes added the manifest test project to CI, isolated fixture package caches, validated DLL assembly identity, exercised the shipping project import and stale-output cleanup, and bounded concurrent subprocess output reads. Final local verification: solution restore and Release build succeeded with zero warnings; manifest tests passed 5/5; `actionlint .github/workflows/ci.yml` passed. The earlier 20/20 Abstractions result still applies; its source and tests did not change.
+- Review loop fixes on 2026-09-24 made the real scaffold compile against the generated manifest, exposed generated source to design-time builds, required explicit flags for shipping Contracts references, preserved resolved package ID casing, and added fixture coverage for ordering, unflagged repeatability, DLL filtering, and case-insensitive package IDs. The fixture writes local SDK and MSBuild configuration with central package versions. The final review added assertions for design-time `Compile` membership and the shipping project's flag setting. Solution restore and Release build passed with zero warnings; manifest tests passed 6/6; Abstractions tests passed 20/20; `dotnet format Hexalith.McpCli.slnx --verify-no-changes --no-restore` passed.
 
 ## Spec Change Log
 
@@ -112,6 +113,16 @@ Code review 2026-09-24 (diff `01bd25d..45bd4b6`; layers: blind-hunter, edge-case
 | EC-04: global NuGet cache persists fixtures | medium — the test deletes its temporary root but NuGet writes fixed fixture IDs to the global cache; same root cause as BH-02. | patch |
 | VG-01: manifest tests absent from CI | medium — the normal CI lane lists only Abstractions tests; manifest regression is not exercised. | patch |
 | VG-02: shipping project import untested | medium — the checked fixture directly imports the target and the shipping project's unused generated type does not prove its import. | patch |
+| BH2-01: invalid flag on a differently named package | low — a non-boolean marker on a package whose ID does not end in `.Contracts` is ignored, but ordinary unflagged packages must be excluded and the previous review explicitly rejected adding value validation. The additional guard would add a branch for an unlikely authoring error. | reject |
+| BH2-02: unreadable Contracts DLL leaves stale output | low — `AssemblyName.GetAssemblyName` can throw before the failure cleanup, but the build fails and managed Contracts packages normally contain readable assemblies. Catching this adds a failure branch for an unlikely corrupt package. | reject |
+| BH2-03: concurrent writes to generated source | low — `File.WriteAllText` can expose a partial file to another independent build using the same `obj` directory. The generated file is small, and an atomic replacement adds cross-process file handling for an unlikely collision. | reject |
+| BH2-04: mutable manifest array | false — the generated array is internal and the current consumer only reads it; no current caller mutates an entry, so the claimed changed result does not occur. | reject |
+| BH2-05: design-time `Compile` membership untested | medium — the test checks only file existence after a design-time build, so excluding the generated file from `Compile` would pass while the IDE lacks the referenced type. | patch |
+| BH2-06: shipping flag property untested | medium — the fixture passes `RequireContractsFlag=true` on its command line, so removal of the shipping project's property would leave tests green. | patch |
+| BH2-07: no `dotnet pack` fixture | low — tests package compiled fixture DLLs into real NuGet archives and exercise restore/build, but cannot detect a future fixture project's pack-layout change. The fixture projects are test inputs, and invoking pack adds process complexity for an unlikely regression. | reject |
+| EC2-01: unreadable Contracts DLL leaves stale output | low — the call to `AssemblyName.GetAssemblyName` precedes cleanup and can throw, but the build fails for corrupt managed package content. The previous review also rejected this unlikely failure path. | reject |
+| VG2-01: design-time `Compile` membership untested | medium — verified gap: the test asserts generated file existence but never queries design-time `Compile` items, allowing the IDE regression to escape CI. | patch |
+| VG2-02: shipping flag property untested | medium — verified gap: the fixture overrides the property, while the shipping solution has no Contracts reference to exercise its own property. | patch |
 
 ## Design Notes
 

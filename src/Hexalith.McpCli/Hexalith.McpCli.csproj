@@ -5,6 +5,10 @@
     <IsPublishable>false</IsPublishable>
     <PublishTrimmed>false</PublishTrimmed>
     <PublishAot>false</PublishAot>
+    <RequireContractsFlag>true</RequireContractsFlag>
   </PropertyGroup>
+  <!-- Enroll each production *.Contracts package with a direct, versionless
+       PackageReference marked HexalithContracts="true". This project's build
+       rejects unmarked *.Contracts references. -->
   <Import Project="Build/ModuleAssemblyManifest.targets" />
 </Project>
