@@ -21,6 +21,7 @@ jobs:
       test-platform: microsoft-testing-platform
       unit-test-projects: |
         tests/Hexalith.McpCli.Abstractions.Tests
+        tests/Hexalith.McpCli.Manifest.Tests
       # Add the blocking Aspire tier after the harness and upstream source-build seam exist.
 
   bootstrap-package:
