@@ -130,6 +130,44 @@ Code review of `12c73c5..abc331a` (2026-09-25, round 4). Layers: Blind Hunter, E
 - `low` — `[HexalithIdentifier]` on a string enum throws: enum identifiers are an unlikely contract shape; the fix adds a branch.
 - `false` — Query root admits `null`: the spec normalizes only a Command root.
 
+Code review of `12c73c5..365867c` (2026-09-25, round 5). Layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; claims verified with a scratch probe referencing Core. The Acceptance Auditor ran Core tests 54/54.
+
+- [ ] [Review][Patch] Test gap: no test validates a non-object Query payload. `SchemaTests.cs:547` passes `default(JsonElement)` with `isCommand: false`, so the `Undefined` guard returns first. If `isCommand &&` is dropped from the guard, every scalar Query payload is rejected as "A Command payload must be a JSON object." and no test fails. The probe shows a `typeof(string)` Query schema accepts `"abc"` and rejects `1`; assert both, the `1` case at `/`. [src/Hexalith.McpCli.Core/Schema/PayloadValidator.cs:50]
+- [ ] [Review][Patch] Test gap: no test checks that `Derive` rejects options that are not read-only. Every `Derive` call passes cached, already read-only options. Deleting the `IsReadOnly` guard would let a schema be built from non-Module options (default resolver, unmapped members allowed), and no test would fail. The probe confirms `new JsonSerializerOptions()` currently throws `ArgumentException`; assert it. [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:35]
+- [ ] [Review][Patch] Test gap: no test checks that Module options still append the canonical `JsonStringEnumConverter` after provider converters. `ProviderIsReadOnceAndOnlyConvertersAreCopied` asserts only `Converters[0..2]`, and `CanonicalEnumConverterRejectsIntegerInput` uses the provider-less `McpCliJson.Payload`. Assert that the Module options' last converter is `JsonStringEnumConverter` and that the converter count is provider converters plus one. [src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs:78]
+
+**Rejected (round 5):**
+
+- carried: Validator fails open when no node carries `Errors` (BH, EC, AA). Already deferred in `deferred-work.md`.
+- carried: A duplicate property name hides the Schema's other violations (AA). Rejected as R3-BH-03.
+- carried: Declared `Example` values are never validated (AA). Rejected in round 4; this belongs to Catalog construction (story 1.4).
+- carried: `JsonSchema.Net` is missing from the CLAUDE.md allowlist (AA). Already deferred.
+- reject: Implementation Notes cite superseded Builds commit `3716c34` (AA). The fix edits this spec.
+- `false`: Missing-member errors point at the parent object (AA). This matches AD-7's `InstanceLocation` rule; the reviewer marked it informational.
+- `low`: The resolver modifier also drops get-only members when Module options serialize (AA). AD-7 names the transform as the mechanism, but the executor rebuilds Payloads as JSON, never from a CLR instance. STJ also ignores a getter-only member on read. No harm was shown, and the fix would rework the approach.
+- `false`: JsonSchema.Net 9.4 only annotates `format` (EC). The probe rejects `{"Id":"abc","At":"nope"}` at `/Id` (`uuid`) and `/At` (`date-time`).
+- carried: A property named `""` shares the root pointer `/` (EC). Rejected as R3-EC-08.
+- carried: Dictionary keys that are not strings are unconstrained (EC). Rejected as R3-EC-07.
+- carried: A declared `Guid`/`DateTime` identifier under Ulid kind can never be satisfied (EC). Rejected as R3-BH-02.
+- carried: An undefined `PropertyRole` value is accepted (EC). Rejected as R3-EC-04.
+- carried: A role member declared with C# `required` fails deserialization once it is stripped from `required` (EC). Rejected `false` in round 4 because the executor fills envelope values first.
+- carried: The probe's catch list omits other converter exceptions (EC). Rejected in earlier rounds.
+- carried: `ForModule` caches a faulted `Lazy` and ignores a mismatched declaration (EC). Rejected as EC-05 and R3-EC-10.
+- carried: A provider getter that throws surfaces `TargetInvocationException` (EC). Rejected `low` in round 1.
+- carried: A recursive `$ref: "#"` payload reuses the modified root (EC). Rejected as R3-BH-05.
+- `low`: An identifier attribute declared on an interface property is not recognized (EC). `Attribute.IsDefined` follows class inheritance, and .NET does not inherit attributes from interfaces. No Contract uses this pattern, and supporting it adds an interface walk.
+- `low`: The invalid-provider test leaves a faulted CoreLib cache entry, and the static `ReadCount` depends on check order (EC, BH). No other test passes CoreLib. A reordering would make the test fail, not pass wrongly.
+- `low`: Each `DerivedSchema` registers in `SchemaRegistry.Global` under a random URI (BH). The probe confirms `registered=True`, but the Catalog calls `Derive` once per Operation, so growth is bounded. Random GUID URIs never collide.
+- `low`: Payload options do not set `AllowDuplicateProperties = false` (BH). No Core path deserializes a Payload without first running the validator's duplicate rejection, and the spec's canonical option list does not include it.
+- `low`: Null omission drops a `required T?` member set to null, so re-serialization fails deserialization (BH). The probe confirms `{"Title":"t"}` then "missing required properties". AD-7/AD-9 rebuild Payloads as JSON and never serialize a contract instance, and the only `required T?` members in sibling Contracts (Memories `V1` snapshots) are not Operation Payloads. Null omission is also a spec-mandated canonical setting.
+- `low`: RFC 6901 escaping exists twice (BH). The two copies are identical and correct, and they only drift if one is edited; merging them adds a shared helper.
+- `false`: A `public const UlidPattern` goes stale in consuming assemblies (BH). Every consumer ships in this repo's single tool package and is rebuilt together (AD-17).
+- `false`: Mixed `&&`/`||` without parentheses (BH). The reviewer confirms the conditions are correct under C# precedence, and the Release build has zero warnings.
+- `low`: Rejection messages omit the containing type and path (BH). Diagnostic wording belongs to story 1.5 (already recorded for free-form members), and there is no consumer yet.
+- `low`: Tests match substrings of serialized JSON (BH). Each cited assertion was checked. No sibling member name collides, and `ToJsonString` does not escape `tenant/~`, so none can pass wrongly today.
+- `low`: Flat test project and one large `SchemaTests` class (BH). This matches the repo's flat convention, and test names identify the component.
+- `low`: `EvaluationOptions` is allocated on every validation (BH). The cost is negligible, and sharing a mutable options object adds a hazard.
+
 ## Implementation Notes
 
 - Added Core serialization, effective property bindings, schema export, and one stored JsonSchema.Net validator. Opaque identifier converters are probed through Module options; output that varies by value cannot be proven exhaustively from a finite probe and remains subject to Payload validation.
