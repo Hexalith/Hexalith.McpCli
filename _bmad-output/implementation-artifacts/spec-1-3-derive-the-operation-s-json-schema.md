@@ -2,7 +2,7 @@
 title: 'Derive the Operation’s JSON Schema'
 type: 'feature'
 created: '2026-09-25'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '12c73c562949d7c848cf85479c63135fcaac6d19'
@@ -56,6 +56,42 @@ context:
 - Given Module options and a decorated Payload, when Core derives its Schema, then it reflects the effective JSON contract, descriptions, declared roles, and identifier kind.
 - Given valid and invalid examples or Payloads, when Core validates them, then the same stored Schema accepts or lists every violation location.
 - Given the updated Builds revision, when the shipping solution restores and builds, then it consumes the central `JsonSchema.Net` pin and all existing tests pass.
+
+### Review Findings
+
+Code review of `12c73c5..da3536a` (2026-09-25). Layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; claims verified with a scratch probe against Core.
+
+- [ ] [Review][Patch] Envelope-role property types are never checked — resolved decision: `Tenant` and `Actor` must be `string`; `Correlation` and `IdempotencyKey` may be `string` or `Ulid` (nullable allowed); reject any other type as an invalid binding [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:116]
+- [ ] [Review][Patch] Envelope-role `required` stripping also hits nested collection/dictionary item objects — gate on the root (`context.Path` empty) instead of `PropertyInfo is null`; probe: `{"Tenant":"t","Lines":[{}]}` validates while deserialization throws for the item's missing required `Tenant` [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:227]
+- [ ] [Review][Patch] `Ulid` and converter-backed element types in collections/dictionaries are unconstrained — probe: `List<Ulid>` exports `{"type":"array"}` with no `items` and `{"Ids":[1,{},"x"]}` validates; apply the ULID string schema to `Ulid` elements and reject other opaque elements like direct members [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:167]
+- [ ] [Review][Patch] Nullable converter-backed declared identifier throws — `options.Converters.Any(c => c.CanConvert(propertyType))` uses `Nullable<T>`; probe: `[HexalithIdentifier] Sid? Id` with a provider `JsonConverter<Sid>` throws "does not serialize as a JSON string" [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:250]
+- [ ] [Review][Patch] Duplicate JSON property names validate the first value while the deserializer keeps the last — probe: `{"N":1,"N":"bad"}` is schema-valid; parse with `AllowDuplicateProperties = false` [src/Hexalith.McpCli.Core/Schema/PayloadValidator.cs:137]
+- [ ] [Review][Patch] Inherited `[HexalithIdentifier]` on an overriding property is ignored — `PropertyInfo.IsDefined(..., true)` ignores inheritance; probe: overridden `Key` exports plain `string`; use `Attribute.IsDefined` [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:161]
+- [ ] [Review][Patch] Test gap: non-object Command root rejection is untested — deleting the `Kind` check turns `typeof(string)` into an open `type: object` schema with no failing test [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:46]
+- [ ] [Review][Patch] Test gap: only the wrong-assembly provider failure is tested — missing `Options`, wrong type, and null-returning providers are uncovered; dropping `?? throw` would silently lose provider converters [src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs:56]
+- [ ] [Review][Patch] Test gap: nullable declared identifier `["string","null"]` type and `{"Id":null}` acceptance are untested [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:203]
+- [ ] [Review][Patch] Test gap: `[Description]` on identifier properties is never asserted (e.g. `RenameItemCommand.ItemId`) [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:188]
+- [x] [Review][Defer] CLAUDE.md dependency allowlist omits `JsonSchema.Net` [src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj:9] — deferred: fix edits the shared agent-context files; the spec and architecture spine already approve the pin.
+- [x] [Review][Defer] Validator is fail-open if evaluation is invalid but no node carries `Errors` [src/Hexalith.McpCli.Core/Schema/PayloadValidator.cs:171] — deferred: unverified (would be high); settle by confirming JsonSchema.Net 9.4 `List` output always attaches an error to a failing evaluation, or add a fallback `/` violation.
+
+**Rejected:**
+
+- `false` — Builds pointer `3716c34` is unfetchable: HEAD `4dc1319` already moves the gitlink to published `90670b7`, which contains the pin (`40fb0bb`).
+- `false` — Non-nullable reference members export as nullable: probe shows `string Name` exports `{"type":"string"}` and rejects `null`.
+- `false` — Payload may carry envelope values despite `readOnly`: the Envelope row and Design Notes prescribe optional `readOnly` that does not suppress validation; enforcement belongs to the executor.
+- `false` — `ForModule` ignores a mismatched declaration after caching: supported Catalog construction reads the unique assembly marker (EC-05).
+- `false` — String-kind opaque identifiers are unconstrained: String kind admits any string by definition; the probe limit is recorded in Implementation Notes.
+- `low` — `isCommand` passed to both `Derive` and `Validate`: a mismatch needs a future caller bug and the fix adds public surface.
+- `low` — Root violation pointer `/` instead of RFC 6901 `""`: the spec mandates `/`; changing it edits the spec.
+- `low` — Faulted `Lazy` caches provider failures; `TargetInvocationException` escapes: provider failures are deterministic declaration errors.
+- `low` — Mixed exception types for invalid declarations: no Catalog consumer exists yet to break.
+- `low` — Spec bookkeeping (status, stale 12/12 count, absolute paths): the fix edits the spec; status is reset by this review.
+- `low` — No positive Query-root nullability test: minor coverage nicety.
+- `low` — `UlidPattern` rejects Crockford aliases `I/L/O` that `Ulid.TryParse` accepts: only non-canonical input is affected.
+- `low` — Probe catch list omits `OverflowException` and similar: unlikely converter behavior on the fixed samples.
+- `low` — Integer ranges unconstrained (`3000000000` for `int` validates): exporter limitation; per-type bounds add branches, and the gateway rejects.
+- `low` — Abstract non-polymorphic member accepted: that contract cannot be deserialized regardless.
+- `low` — `[JsonInclude]` `Ulid` field exports `{}`: contracts use properties and `[HexalithIdentifier]` targets properties only.
 
 ## Implementation Notes
 
