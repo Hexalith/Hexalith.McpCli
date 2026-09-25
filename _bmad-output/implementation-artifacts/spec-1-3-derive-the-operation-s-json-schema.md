@@ -93,6 +93,43 @@ Code review of `12c73c5..da3536a` (2026-09-25). Layers: Blind Hunter, Edge Case 
 - `low` — Abstract non-polymorphic member accepted: that contract cannot be deserialized regardless.
 - `low` — `[JsonInclude]` `Ulid` field exports `{}`: contracts use properties and `[HexalithIdentifier]` targets properties only.
 
+Code review of `12c73c5..abc331a` (2026-09-25, round 4). Layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; claims verified with a scratch probe referencing Core and the Sample Contracts.
+
+- [x] [Review][Patch] Populate-handled get-only members are dropped — the resolver modifier removes any getter-only member without a constructor parameter, including `[JsonObjectCreationHandling(Populate)]` collections (property- or type-level) that STJ fills in place; probe: `List<string> Tags { get; } = []` with Populate exports `{"type":"object","additionalProperties":false}` and `{"Tags":["a"]}` fails Module deserialization with "could not be mapped" while default options deserialize it. Keep members whose effective creation handling is `Populate`. [src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs:109]
+- [x] [Review][Patch] Test gap: non-nullable declared identifier's `type` and `null` rejection are unasserted — replacing the nullability computation with `true` fails no test while `{"ItemId":null,"Title":"x"}` becomes valid for `RenameItemCommand`; assert `type == "string"` and a violation at `/ItemId`. [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:231]
+- [x] [Review][Patch] Test gap: a mapped `AggregateId` staying writable and required is unasserted — replacing both `Role != PropertyRole.AggregateId` filters with `true` fails no test while `ItemId` becomes `readOnly` and optional; assert no `readOnly` and `required` still contains the source. [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:245]
+- [x] [Review][Patch] Test gap: a built-in STJ property-level converter staying non-opaque is unasserted — flipping the assembly comparison fails no test while `[JsonConverter(typeof(JsonStringEnumConverter<StatusValue>))]` members start throwing; add a fixture that derives with `"enum":["Pending","Complete"]`. [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:282]
+- [x] [Review][Patch] Test gap: the `JsonConverterFactory` branch of the identifier probe is untested — probe shows a factory-backed `[HexalithIdentifier]` currently derives the ULID string schema, but every fixture converter is a plain `JsonConverter<T>`; add a factory-backed identifier fixture. [src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:381]
+
+**Rejected (round 4):**
+
+- resolved decision (option 1) — Free-form members (`object`, `JsonElement`, `JsonNode`, and collections of them) are rejected as opaque: the rule is kept, so every Payload must be closable and a free-form member is an invalid declaration that story 1.5 diagnoses; no v1 or sibling Module Command/Query declares one (verified across `references/*/src/*.Contracts`).
+- carried — Validator fail-open when no node carries `Errors`: already deferred in `deferred-work.md`.
+- `low` — Declared attribute `Example`s never validated; Sample `CreateItemCommand`/`GetItemQuery` never derived: probe derives all three Sample operations; reading `Example` belongs to Catalog construction (1.4).
+- reject — Implementation Notes cite superseded Builds commit `3716c34`: the fix edits this spec.
+- reject — Range includes unrelated `pushall` and submodule bumps: informational; the `pushall` defects are already deferred.
+- `low` — `TimeOnly` accepts any string after the `format` removal: schema looser than the deserializer and the gateway rejects, same class as the rejected integer ranges.
+- `low` — String `Correlation`/`IdempotencyKey` roles lack a ULID pattern: `readOnly` envelope members the executor fills; the earlier decision allows `string`.
+- `low` — Type-level `[Description]` ignored: the spec sources descriptions from properties; nested description lint is story 1.6.
+- `false` — Data-annotation constraints/defaults missing: they are not part of the STJ contract the spec asks the Schema to reflect.
+- `low` — No `$schema` keyword: JsonSchema.Net 9.4 and MCP both default to 2020-12.
+- `low` — Empty `required: []` left after stripping: probe confirms it; valid 2020-12, validator unaffected.
+- `low` — `PayloadViolation` lacks keyword/schema location: the spec requires JSON Pointer locations; error documents belong to story 2.9.
+- carried — Public API exceptions undocumented: same class as the rejected mixed exception types.
+- `false` — Provider-less Modules do not reuse `McpCliJson.Payload`: the spec requires one cached instance per Module, which `ForModule` provides.
+- `low` — `CollectDuplicates` unbounded recursion and double walk: depth is bounded by the parsed document's `MaxDepth`; the second walk is negligible.
+- `low` — `DerivedSchema.Node` deep-copies per read: no consumer exists yet.
+- carried — `ForModule` faulted `Lazy` and declaration mismatch after caching (VG other, EC): rejected in earlier rounds (EC-05, R3-EC-10).
+- `false` — `DateTime`/`DateTimeOffset` `date-time` rejects offset-less values: probe shows `"2024-01-01T10:00:00Z"` satisfies both; a stricter-but-satisfiable schema is accepted (R3-BH-08).
+- carried — Integral ranges and `1.0` for `int` unconstrained: rejected in earlier rounds.
+- `low` — Dictionary non-string keys unconstrained: same class as the rejected R3-EC-07.
+- `false` — Role-bound `required`/constructor members stripped from `required` fail deserialization: the executor injects envelope values before submission; the Schema describes caller input.
+- carried — Payload-supplied envelope values pass `readOnly`: rejected by Design Notes.
+- carried — Probe catch list omits other converter exceptions: rejected in earlier rounds.
+- carried — Strict String-kind converter rejects every probe sample: rejected as R3-EC-05.
+- `low` — `[HexalithIdentifier]` on a string enum throws: enum identifiers are an unlikely contract shape; the fix adds a branch.
+- `false` — Query root admits `null`: the spec normalizes only a Command root.
+
 ## Implementation Notes
 
 - Added Core serialization, effective property bindings, schema export, and one stored JsonSchema.Net validator. Opaque identifier converters are probed through Module options; output that varies by value cannot be proven exhaustively from a finite probe and remains subject to Payload validation.
@@ -101,6 +138,7 @@ Code review of `12c73c5..da3536a` (2026-09-25). Layers: Blind Hunter, Edge Case 
 - Validated the exact Builds commit message `build(deps): pin JsonSchema.Net for MCP schema validation` with `node_modules/.bin/commitlint --edit <exact-candidate-file>` using `@commitlint/cli@21.2.2`; exit 0.
 - Review patches registered Core tests in CI, rejected unsupported opaque, extension-data, and polymorphic schemas explicitly, tightened role and identifier validation, and added regression cases. Final local verification: Release solution build with zero warnings; Core 21/21, Abstractions 20/20, Manifest 6/6; `actionlint .github/workflows/ci.yml` and both repositories' whitespace checks passed.
 - Second review patches (10/10): envelope roles now type-checked (`Tenant`/`Actor` `string`; `Correlation`/`IdempotencyKey` `string` or `Ulid`, nullable allowed); envelope `required` stripping and `readOnly`/aggregate marking gated to root properties; opaque collection/dictionary elements get the ULID string schema when `Ulid`/`Ulid?` and are otherwise rejected; nullable converter-backed identifiers probe the underlying type; `[HexalithIdentifier]` read with `Attribute.IsDefined` so overrides inherit it; string payloads parse with `AllowDuplicateProperties = false` and the `JsonElement` overload walks for duplicates, both reporting `/` with the duplicate's pointer in the message. Added regression tests for each plus the non-object Command root, all three invalid provider shapes (emitted into fresh dynamic assemblies to bypass the per-assembly cache), nullable identifiers, and identifier descriptions. The new behavioral tests fail on the pre-patch Core (14 failures) and pass after it. Verification: Release solution build with zero warnings; Core 45/45, Abstractions 20/20, Manifest 6/6; `git diff --check` clean including new files.
+- Round 4 review patches (5/5): the canonical resolver keeps getter-only members whose effective creation handling is `Populate` (property or type level); added regression assertions for non-nullable declared identifiers (`type` `"string"`, `null` reported at the member), a mapped `AggregateId` staying writable and required, a System.Text.Json property-level converter staying non-opaque, and a factory-backed declared identifier. Each new assertion fails when its guarded behavior is mutated. Resolved decision: free-form members stay rejected (follow-up for story 1.5 in `deferred-work.md`). Verification: Release solution build with zero warnings; Core 54/54, Abstractions 20/20, Manifest 6/6; `git diff --check` clean including new files.
 
 ## Spec Change Log
 

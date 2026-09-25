@@ -80,6 +80,8 @@ public sealed class SchemaTests
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(IdentifierCommand.ItemKey) });
         JsonObject properties = (JsonObject)derived.Node["properties"]!;
         (properties["ItemKey"]!["pattern"] is not null).ShouldBe(expectPattern);
+        properties["ItemKey"]!["type"]!.GetValue<string>().ShouldBe("string");
+        PayloadValidator.Validate(derived, "{\"ItemKey\":null}", true).Violations.Select(violation => violation.Path).ShouldContain("/ItemKey");
         properties["Tracking"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
         properties["ExternalId"]!["type"]!.ToJsonString().ShouldContain("integer");
         properties["ExternalId"]!["pattern"].ShouldBeNull();
@@ -167,6 +169,8 @@ public sealed class SchemaTests
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(AggregateOnlyCommand.Source) });
         JsonObject properties = (JsonObject)schema.Node["properties"]!;
         (properties["Source"]!["pattern"] is not null).ShouldBe(expectPattern);
+        properties["Source"]!["readOnly"].ShouldBeNull();
+        schema.Node["required"]!.AsArray().Select(name => name!.GetValue<string>()).ShouldContain("Source");
         properties["OtherId"]!["type"]!.ToJsonString().ShouldContain("integer");
         Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(AggregateOnlyCommand), TestOptions(), kind, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(AggregateOnlyCommand.OtherId) }));
@@ -372,6 +376,41 @@ public sealed class SchemaTests
             .Message.ShouldContain("Opaque serialized member");
     }
 
+    /// <summary>Keeps a System.Text.Json property-level converter's exported shape instead of treating it as opaque.</summary>
+    [Fact]
+    public void BuiltInPropertyConverterIsNotOpaque()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(BuiltInConverterCommand), McpCliJson.Payload, IdentifierKind.String, true);
+        schema.Node["properties"]!["Mode"]!["enum"]!.ToJsonString().ShouldBe("[\"Pending\",\"Complete\"]");
+        PayloadValidator.Validate(schema, "{\"Mode\":\"Complete\"}", true).IsValid.ShouldBeTrue();
+    }
+
+    /// <summary>Probes a declared identifier whose property-level converter is a factory.</summary>
+    [Fact]
+    public void FactoryConverterIdentifierIsProbed()
+    {
+        McpCliJson.Payload.GetTypeInfo(typeof(FactoryIdentifierCommand)).Properties.Single().CustomConverter
+            .ShouldBeOfType<FactoryIdentifierConverterFactory>();
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(FactoryIdentifierCommand), McpCliJson.Payload, IdentifierKind.Ulid, true);
+        JsonNode id = schema.Node["properties"]!["Id"]!;
+        id["type"]!.GetValue<string>().ShouldBe("string");
+        id["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        PayloadValidator.Validate(schema, "{\"Id\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true).IsValid.ShouldBeTrue();
+    }
+
+    /// <summary>Keeps getter-only members that deserialization populates in place at property or type level.</summary>
+    [Fact]
+    public void PopulatedGetterOnlyMembersRemainInput()
+    {
+        DerivedSchema property = SchemaDeriver.Derive(typeof(PopulatedCollectionCommand), McpCliJson.Payload, IdentifierKind.String, true);
+        property.Node["properties"]!["Tags"]!["type"]!.ToJsonString().ShouldContain("array");
+        PayloadValidator.Validate(property, "{\"Tags\":[\"a\"]}", true).IsValid.ShouldBeTrue();
+        JsonSerializer.Deserialize<PopulatedCollectionCommand>("{\"Tags\":[\"a\"]}", McpCliJson.Payload)!.Tags.ShouldBe(["a"]);
+        DerivedSchema type = SchemaDeriver.Derive(typeof(PopulatedTypeCommand), McpCliJson.Payload, IdentifierKind.String, true);
+        PayloadValidator.Validate(type, "{\"Lines\":[\"b\"]}", true).IsValid.ShouldBeTrue();
+        JsonSerializer.Deserialize<PopulatedTypeCommand>("{\"Lines\":[\"b\"]}", McpCliJson.Payload)!.Lines.ShouldBe(["b"]);
+    }
+
     /// <summary>Accepts offset-free time-of-day values that TimeOnly deserialization reads.</summary>
     [Fact]
     public void TimeOnlyAcceptsTimeWithoutOffset()
@@ -488,6 +527,9 @@ public sealed class SchemaTests
                 typeof(RenameItemCommand).Assembly.GetCustomAttributes(typeof(HexalithModuleAttribute), false).Cast<HexalithModuleAttribute>().Single()),
             IdentifierKind.Ulid, true);
         schema.Node["properties"]!["ItemId"]!["description"]!.GetValue<string>().ShouldBe("The ULID of the item to rename.");
+        schema.Node["properties"]!["ItemId"]!["type"]!.GetValue<string>().ShouldBe("string");
+        PayloadValidator.Validate(schema, "{\"ItemId\":null,\"Title\":\"x\"}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/ItemId");
         string good = "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"New\"}";
         PayloadValidator.Validate(schema, good, true).IsValid.ShouldBeTrue();
         string bad = "{\"ItemId\":\"bad\",\"Title\":4,\"Extra\":1}";

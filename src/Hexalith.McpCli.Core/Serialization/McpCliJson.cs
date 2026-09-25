@@ -106,7 +106,10 @@ public static class McpCliJson
             for (int index = typeInfo.Properties.Count - 1; index >= 0; index--)
             {
                 JsonPropertyInfo property = typeInfo.Properties[index];
-                if (property.Get is not null && property.Set is null && property.AssociatedParameter is null && !property.IsExtensionData)
+
+                // A getter-only member is still input when deserialization populates it in place.
+                bool populated = (property.ObjectCreationHandling ?? typeInfo.PreferredPropertyObjectCreationHandling) == JsonObjectCreationHandling.Populate;
+                if (property.Get is not null && property.Set is null && property.AssociatedParameter is null && !property.IsExtensionData && !populated)
                 {
                     typeInfo.Properties.RemoveAt(index);
                 }
