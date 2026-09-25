@@ -87,6 +87,27 @@ Code review 2026-09-24 (diff `01bd25d..45bd4b6`; layers: blind-hunter, edge-case
 - low — An unflagged reference with no attribute is untested: missing metadata compares as `""` ≠ `"true"`, which is trivially correct.
 - rejected (spec edit) — The spec status `done` versus sprint status `review`, `review_loop_iteration`, and the `last_updated` format: the fix edits the spec under review, and this workflow updates the sprint status.
 
+Code review 2026-09-24, round 3 (diff `01bd25d..dccd5dd`; layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor).
+
+- [x] [Review][Patch] The `RequireContractsFlag` branch has only one test input: a `*.Contracts` package with an explicit `HexalithContracts="false"`. Two regressions would pass unnoticed. First, rejecting every unflagged reference would break the build as soon as `Hexalith.EventStore.Client` is added. Second, rejecting only an explicit `"false"` would bring back silent non-enrollment when the attribute is left out. Fix: let `WriteProject` omit the attribute; with the flag on, require a successful build for an unflagged package whose ID does not end in `.Contracts`, and a failed build for a `*.Contracts` reference with no attribute [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:80]
+- [x] [Review][Patch] The sort assertion cannot tell sorting by assembly name from sorting by package ID: in every fixture both orders agree, so changing the comparer to `x.PackageId` leaves the tests green. Give one flagged package an ID that sorts to the opposite end from its assembly name [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:44]
+- [x] [Review][Patch] The fixture root writes `global.json` and `Directory.*` files but no `NuGet.config`. On a developer machine whose user-level config enables `packageSourceMapping`, `restore --source feed` fails with NU1100. Fix: write a `NuGet.config` that clears `packageSources`, `packageSourceMapping`, and `fallbackPackageFolders` [tests/Hexalith.McpCli.Manifest.Tests/ManifestBuildTests.cs:201]
+
+**Rejected (round 3)**
+
+- false — An unflagged direct `*.Contracts` reference (such as `Hexalith.EventStore.Contracts`) cannot be opted out, and this deviates from the matrix's "unflagged absent" row (blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor): AD-15 limits direct production references to Abstractions, the EventStore client, flagged `*.Contracts` packages, and Stack packages. EventStore Contracts is transitive-only and is pinned through `CentralPackageTransitivePinningEnabled`, so the loud failure enforces the architecture. The fixture's matrix behavior is unchanged because the flag defaults to off.
+- false — `ProjectReference` enrollment is unsupported and silently ignored (blind-hunter, edge-case-hunter): AD-4 defines enrollment by `PackageReference` and AD-15 forbids project references to Modules. The source-build seam concerns server source for the test AppHost, not the tool.
+- false — An unflagged package with a non-`.Contracts` ID that ships a `*.Contracts.dll` is left out silently (edge-case-hunter): none of the unflagged direct roots AD-15 admits ships its own `*.Contracts.dll`, and EventStore Contracts is a separate package.
+- false — The `ShippingProjectRequiresContractsFlag` test writes a `packages/` folder into the checkout (blind-hunter): `msbuild -getProperty` does not restore, so nothing is written.
+- false — Child build nodes hold the redirected pipes, so `GetResult` blocks with no limit (edge-case-hunter): this repeats a finding already rejected in round 1. The suite completes locally and in CI.
+- false / maybe-false — The design-time test is tautological and does not run IDE design-time targets (blind-hunter): the evaluation-time `-getItem:Compile` check is the intended regression guard for the static `Compile` item from the round-1 patch. Whether `CompileDesignTime` generates the file on a fresh clone cannot be checked with the Linux SDK; if it does not, the only effect is IDE errors until the first build.
+- maybe-false — Inherited `MSBuild*` or `DOTNET_*` environment variables override the fixture's `global.json` (blind-hunter, part of the fixture-isolation finding): the fixture pins the same SDK the tests run on, and no mismatch has been observed; at worst the effect would be low.
+- low — The build errors have no diagnostic codes (blind-hunter): cosmetic, and the messages already name the package and the count.
+- low — The ambiguous-match error does not list the matched file paths (blind-hunter): the spec requires the package and the count, which the message already gives, and ambiguous packages are rare.
+- low — Build servers left running can lock the temporary root on Windows (blind-hunter): CI runs on Linux; this repeats a rejection from round 1.
+- low — The subprocess-heavy tests run in the unit lane (blind-hunter): they finish in bounded time, and a separate lane adds CI complexity.
+- rejected (spec edit) — The Verification section omits `dotnet format`, `actionlint`, and the Abstractions run (blind-hunter); also the status mismatch between the commit message, the spec, and sprint status (edge-case-hunter): the fix edits the spec, and this workflow updates the status.
+
 ## Implementation Notes
 
 - Added a non-packable, non-publishable executable scaffold. The production project has no Contracts package reference until decorated production packages are available.

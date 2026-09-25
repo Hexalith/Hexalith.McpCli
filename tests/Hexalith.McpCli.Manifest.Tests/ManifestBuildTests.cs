@@ -26,13 +26,14 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Hexalith.McpCli.Sample.Contracts", (SampleAssembly, "lib/net10.0/Hexalith.McpCli.Sample.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Sample.Contracts", (SampleAssembly, "lib/net10.0/Hexalith.McpCli.Sample.Contracts.dll"));
             CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
             CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/manifest.AUnmarked.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Other", (UnmarkedAssembly, "lib/net10.0/Manifest.Other.dll"));
             string project = WriteProject(root,
                 ("Manifest.Unmarked.Contracts", true),
                 ("Manifest.MarkedEmpty.Contracts", true),
-                ("Hexalith.McpCli.Sample.Contracts", true));
+                ("Manifest.Sample.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
 
@@ -41,9 +42,11 @@ public sealed class ManifestBuildTests
             string generated = Encoding.UTF8.GetString(first);
             generated.ShouldContain("\r\n");
             generated.Replace("\r\n", string.Empty, StringComparison.Ordinal).ShouldNotContain("\n");
+
+            // Entries sort by assembly name; package-ID order would put Manifest.Sample.Contracts second.
             ReadEntries(manifest).ShouldBe(new[]
             {
-                ("Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
+                ("Manifest.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
                 ("Manifest.MarkedEmpty.Contracts", "Manifest.MarkedEmpty.Contracts"),
                 ("Manifest.Unmarked.Contracts", "manifest.AUnmarked.Contracts"),
             });
@@ -66,12 +69,12 @@ public sealed class ManifestBuildTests
             WriteProject(root,
                 ("Manifest.Unmarked.Contracts", false),
                 ("Manifest.MarkedEmpty.Contracts", true),
-                ("Hexalith.McpCli.Sample.Contracts", true));
+                ("Manifest.Sample.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
             ReadEntries(manifest).ShouldBe(new[]
             {
-                ("Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
+                ("Manifest.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
                 ("Manifest.MarkedEmpty.Contracts", "Manifest.MarkedEmpty.Contracts"),
             });
             byte[] withUnflaggedReference = File.ReadAllBytes(manifest);
@@ -80,6 +83,28 @@ public sealed class ManifestBuildTests
             string missingFlag = RunDotnet(root, false, "build", project, "--no-restore", "--configuration", "Release", "-p:RequireContractsFlag=true");
             missingFlag.ShouldContain("Manifest.Unmarked.Contracts");
             missingFlag.ShouldContain("must declare HexalithContracts");
+            File.Exists(manifest).ShouldBeFalse();
+
+            // The flag requirement covers only direct *.Contracts references, including one without the attribute.
+            WriteProject(root,
+                ("Manifest.Other", null),
+                ("Manifest.MarkedEmpty.Contracts", true),
+                ("Manifest.Sample.Contracts", true));
+            RunDotnet(root, true, "restore", project, "--source", feed);
+            RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release", "-p:RequireContractsFlag=true");
+            ReadEntries(manifest).ShouldBe(new[]
+            {
+                ("Manifest.Sample.Contracts", "Hexalith.McpCli.Sample.Contracts"),
+                ("Manifest.MarkedEmpty.Contracts", "Manifest.MarkedEmpty.Contracts"),
+            });
+            WriteProject(root,
+                ("Manifest.Unmarked.Contracts", null),
+                ("Manifest.MarkedEmpty.Contracts", true),
+                ("Manifest.Sample.Contracts", true));
+            RunDotnet(root, true, "restore", project, "--source", feed);
+            string omittedFlag = RunDotnet(root, false, "build", project, "--no-restore", "--configuration", "Release", "-p:RequireContractsFlag=true");
+            omittedFlag.ShouldContain("Manifest.Unmarked.Contracts");
+            omittedFlag.ShouldContain("must declare HexalithContracts");
             File.Exists(manifest).ShouldBeFalse();
         }
         finally
@@ -206,7 +231,8 @@ public sealed class ManifestBuildTests
         File.Copy(Path.Combine(repositoryRoot, "global.json"), Path.Combine(path, "global.json"));
         File.WriteAllText(Path.Combine(path, "Directory.Build.props"), "<Project><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup></Project>");
         File.WriteAllText(Path.Combine(path, "Directory.Build.targets"), "<Project />");
-        File.WriteAllText(Path.Combine(path, "Directory.Packages.props"), "<Project><PropertyGroup><ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup><ItemGroup><PackageVersion Include=\"Hexalith.McpCli.Sample.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.MarkedEmpty.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Unmarked.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Zero.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Ambiguous.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Renamed.Contracts\" Version=\"1.0.0\" /></ItemGroup></Project>");
+        File.WriteAllText(Path.Combine(path, "nuget.config"), "<configuration><packageSources><clear /></packageSources><packageSourceMapping><clear /></packageSourceMapping><fallbackPackageFolders><clear /></fallbackPackageFolders></configuration>");
+        File.WriteAllText(Path.Combine(path, "Directory.Packages.props"), "<Project><PropertyGroup><ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup><ItemGroup><PackageVersion Include=\"Manifest.Sample.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Other\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.MarkedEmpty.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Unmarked.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Zero.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Ambiguous.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Renamed.Contracts\" Version=\"1.0.0\" /></ItemGroup></Project>");
         return path;
     }
 
@@ -226,14 +252,20 @@ public sealed class ManifestBuildTests
         }
     }
 
-    private static string WriteProject(string root, params (string PackageId, bool Flagged)[] packages)
+    private static string WriteProject(string root, params (string PackageId, bool? Flagged)[] packages)
     {
         string targets = FindTargetsPath();
         StringBuilder project = new();
         project.Append("<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup>");
-        foreach ((string id, bool flagged) in packages)
+        foreach ((string id, bool? flagged) in packages)
         {
-            project.Append("<PackageReference Include=\"").Append(id).Append("\" HexalithContracts=\"").Append(flagged ? "true" : "false").Append("\" />");
+            project.Append("<PackageReference Include=\"").Append(id).Append('"');
+            if (flagged is bool value)
+            {
+                project.Append(" HexalithContracts=\"").Append(value ? "true" : "false").Append('"');
+            }
+
+            project.Append(" />");
         }
 
         project.Append("</ItemGroup><Import Project=\"").Append(SecurityElement.Escape(targets)).Append("\" /></Project>");
