@@ -106,7 +106,7 @@ public static class McpCliJson
             for (int index = typeInfo.Properties.Count - 1; index >= 0; index--)
             {
                 JsonPropertyInfo property = typeInfo.Properties[index];
-                if (property.Get is not null && property.Set is null && property.AssociatedParameter is null)
+                if (property.Get is not null && property.Set is null && property.AssociatedParameter is null && !property.IsExtensionData)
                 {
                     typeInfo.Properties.RemoveAt(index);
                 }

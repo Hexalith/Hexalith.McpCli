@@ -1,10 +1,10 @@
 using System.Text.Json;
-using Shouldly;
 using System.Text.Json.Nodes;
 using Hexalith.McpCli.Abstractions;
 using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Sample.Contracts;
+using Shouldly;
 
 namespace Hexalith.McpCli.Core.Tests;
 
@@ -196,15 +196,233 @@ public sealed class SchemaTests
         schema.Bindings.ShouldBeEmpty();
     }
 
-    /// <summary>Rejects unsupported converter-backed fields even when an envelope role names them.</summary>
+    /// <summary>Rejects unsupported converter-backed fields, and rejects an envelope role that names one as an invalid binding.</summary>
     [Fact]
     public void OrdinaryOpaqueMemberIsRejected()
     {
         Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("Opaque serialized member");
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true,
+        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(OrdinaryOpaqueCommand.Value) }))
+            .Message.ShouldContain("cannot bind member");
+    }
+
+    /// <summary>Accepts only string tenant and actor roles, and string or ULID correlation and idempotency roles.</summary>
+    /// <param name="role">The envelope role.</param>
+    /// <param name="member">The CLR member the role names.</param>
+    /// <param name="valid">Whether the binding is valid.</param>
+    [Theory]
+    [InlineData(PropertyRole.Tenant, nameof(EnvelopeTypedCommand.Title), true)]
+    [InlineData(PropertyRole.Tenant, nameof(EnvelopeTypedCommand.Count), false)]
+    [InlineData(PropertyRole.Tenant, nameof(EnvelopeTypedCommand.Key), false)]
+    [InlineData(PropertyRole.Actor, nameof(EnvelopeTypedCommand.Title), true)]
+    [InlineData(PropertyRole.Actor, nameof(EnvelopeTypedCommand.Key), false)]
+    [InlineData(PropertyRole.Actor, nameof(EnvelopeTypedCommand.OptionalKey), false)]
+    [InlineData(PropertyRole.Correlation, nameof(EnvelopeTypedCommand.Title), true)]
+    [InlineData(PropertyRole.Correlation, nameof(EnvelopeTypedCommand.Key), true)]
+    [InlineData(PropertyRole.Correlation, nameof(EnvelopeTypedCommand.OptionalKey), true)]
+    [InlineData(PropertyRole.Correlation, nameof(EnvelopeTypedCommand.Count), false)]
+    [InlineData(PropertyRole.IdempotencyKey, nameof(EnvelopeTypedCommand.Key), true)]
+    [InlineData(PropertyRole.IdempotencyKey, nameof(EnvelopeTypedCommand.OptionalKey), true)]
+    [InlineData(PropertyRole.IdempotencyKey, nameof(EnvelopeTypedCommand.Count), false)]
+    public void EnvelopeRolePropertyTypesAreChecked(PropertyRole role, string member, bool valid)
+    {
+        var roles = new Dictionary<PropertyRole, string?> { [role] = member };
+        if (!valid)
+        {
+            Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(EnvelopeTypedCommand), TestOptions(), IdentifierKind.String, true, roles))
+                .Message.ShouldContain("cannot bind member");
+            return;
+        }
+
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(EnvelopeTypedCommand), TestOptions(), IdentifierKind.String, true, roles);
+        schema.Node["properties"]![member]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
+        schema.Node["required"]!.ToJsonString().ShouldNotContain(member);
+    }
+
+    /// <summary>Strips envelope requirements and read-only marks only at the payload root.</summary>
+    [Fact]
+    public void EnvelopeRoleStrippingStaysAtRoot()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(NestedEnvelopeCommand), TestOptions(), IdentifierKind.String, true,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(NestedEnvelopeCommand.Tenant) });
+        JsonNode node = schema.Node;
+        node["required"]!.ToJsonString().ShouldNotContain("Tenant");
+        node["properties"]!["Tenant"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
+        JsonNode line = node["properties"]!["Lines"]!["items"]!;
+        line["required"]!.ToJsonString().ShouldContain("Tenant");
+        line["properties"]!["Tenant"]!["readOnly"].ShouldBeNull();
+        PayloadValidator.Validate(schema, "{\"Tenant\":\"t\",\"Lines\":[{}]}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/Lines/0");
+        PayloadValidator.Validate(schema, "{\"ByKey\":{\"a\":{}}}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/ByKey/a");
+        PayloadValidator.Validate(schema, "{\"Lines\":[{\"Tenant\":\"x\"}]}", true).IsValid.ShouldBeTrue();
+    }
+
+    /// <summary>Applies the ULID string schema to CLR ULID elements of collections and dictionaries.</summary>
+    [Fact]
+    public void UlidElementsAreConstrained()
+    {
+        JsonSerializerOptions options = TestOptions();
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(UlidCollectionCommand), options, IdentifierKind.String, true);
+        JsonNode properties = schema.Node["properties"]!;
+        properties["Ids"]!["items"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        properties["ByName"]!["additionalProperties"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        properties["Optional"]!["items"]!["type"]!.ToJsonString().ShouldContain("null");
+        string[] paths = PayloadValidator.Validate(schema, "{\"Ids\":[1,{},\"x\"],\"ByName\":{\"a\":2}}", true)
+            .Violations.Select(violation => violation.Path).ToArray();
+        foreach (string path in new[] { "/Ids/0", "/Ids/1", "/Ids/2", "/ByName/a" })
+        {
+            paths.ShouldContain(path);
+        }
+        const string good = "{\"Ids\":[\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"],\"ByName\":{\"a\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"},\"Optional\":[null,\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"]}";
+        PayloadValidator.Validate(schema, good, true).IsValid.ShouldBeTrue();
+        JsonSerializer.Deserialize<UlidCollectionCommand>(good, options)!.Ids.Count.ShouldBe(1);
+    }
+
+    /// <summary>Rejects converter-backed collection and dictionary elements whose schema is unknown.</summary>
+    [Fact]
+    public void OpaqueElementsAreRejected()
+    {
+        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OpaqueCollectionCommand), TestOptions(), IdentifierKind.String, true))
+            .Message.ShouldContain("Opaque element");
+        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OpaqueDictionaryCommand), TestOptions(), IdentifierKind.String, true))
+            .Message.ShouldContain("Opaque element");
+    }
+
+    /// <summary>Allows null for optional declared identifiers, including converter-backed ones.</summary>
+    /// <param name="kind">The Module identifier kind.</param>
+    /// <param name="expectPattern">Whether the declared identifiers carry the ULID pattern.</param>
+    [Theory]
+    [InlineData(IdentifierKind.Ulid, true)]
+    [InlineData(IdentifierKind.String, false)]
+    public void NullableDeclaredIdentifiersAcceptNull(IdentifierKind kind, bool expectPattern)
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(NullableIdentifierCommand), TestOptions(), kind, true);
+        JsonNode properties = schema.Node["properties"]!;
+        foreach (string name in new[] { "Id", "Sid" })
+        {
+            properties[name]!["type"]!.ToJsonString().ShouldBe("[\"string\",\"null\"]");
+            (properties[name]!["pattern"] is not null).ShouldBe(expectPattern);
+        }
+
+        properties["Id"]!["description"]!.GetValue<string>().ShouldBe("The optional identifier.");
+        PayloadValidator.Validate(schema, "{\"Id\":null,\"Sid\":null}", true).IsValid.ShouldBeTrue();
+        PayloadValidator.Validate(schema, "{\"Id\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Sid\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true).IsValid.ShouldBeTrue();
+        PayloadValidator.Validate(schema, "{\"Id\":1}", true).Violations.Select(violation => violation.Path).ShouldContain("/Id");
+    }
+
+    /// <summary>Honors an identifier declaration inherited by an overriding property.</summary>
+    [Fact]
+    public void InheritedIdentifierDeclarationApplies()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(OverridingIdentifierCommand), TestOptions(), IdentifierKind.Ulid, true);
+        schema.Node["properties"]!["Key"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+    }
+
+    /// <summary>Rejects a Command whose payload type does not serialize as a JSON object.</summary>
+    [Fact]
+    public void NonObjectCommandRootIsRejected()
+    {
+        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, true))
+            .Message.ShouldContain("object serialization contract");
+        SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, false).Node["type"]!.ToJsonString().ShouldContain("string");
+    }
+
+    /// <summary>Rejects duplicate member names that the deserializer would silently resolve to the last value.</summary>
+    [Fact]
+    public void DuplicatePropertyNamesAreRejected()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(AggregateOnlyCommand), TestOptions(), IdentifierKind.String, true);
+        const string duplicate = "{\"Source\":\"a\",\"OtherId\":1,\"OtherId\":\"bad\"}";
+        PayloadValidator.Validate(schema, duplicate, true).Violations.Single().Path.ShouldBe("/");
+        PayloadValidationResult parsed = PayloadValidator.Validate(schema, JsonDocument.Parse(duplicate).RootElement, true);
+        parsed.Violations.Single().Path.ShouldBe("/");
+        parsed.Violations.Single().Message.ShouldContain("/OtherId");
+        DerivedSchema mixed = SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true);
+        const string nested = "{\"Name\":\"x\",\"Nested\":{\"Count\":1,\"Count\":2},\"Items\":[],\"Required\":\"r\",\"tenant/~\":\"t\"}";
+        PayloadValidator.Validate(mixed, JsonDocument.Parse(nested).RootElement, true)
+            .Violations.Single().Message.ShouldContain("/Nested/Count");
+        const string inArray = "{\"Name\":\"x\",\"Nested\":{\"Count\":1},\"Items\":[{\"Count\":1,\"Count\":2}],\"Required\":\"r\",\"tenant/~\":\"t\"}";
+        PayloadViolation arrayDuplicate = PayloadValidator.Validate(mixed, JsonDocument.Parse(inArray).RootElement, true).Violations.Single();
+        arrayDuplicate.Path.ShouldBe("/");
+        arrayDuplicate.Message.ShouldContain("/Items/0/Count");
+    }
+
+    /// <summary>Reports invalid UTF-16 text such as a lone surrogate at the root instead of throwing.</summary>
+    [Fact]
+    public void LoneSurrogateIsReportedAtRoot()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(AggregateOnlyCommand), TestOptions(), IdentifierKind.String, true);
+        PayloadValidator.Validate(schema, "{\"Source\":\"\uD800\"}", true).Violations.Single().Path.ShouldBe("/");
+    }
+
+    /// <summary>Treats a property-level converter on a nullable value type as opaque rather than as the underlying object shape.</summary>
+    [Fact]
+    public void NullablePropertyLevelConverterIsOpaque()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(PropertyConverterNullableIdentifierCommand), McpCliJson.Payload, IdentifierKind.Ulid, true);
+        JsonNode id = schema.Node["properties"]!["Id"]!;
+        id["type"]!.ToJsonString().ShouldBe("[\"string\",\"null\"]");
+        id["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        id["properties"].ShouldBeNull();
+        PayloadValidator.Validate(schema, "{\"Id\":null}", true).IsValid.ShouldBeTrue();
+        PayloadValidator.Validate(schema, "{\"Id\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true).IsValid.ShouldBeTrue();
+        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(PropertyConverterNullableCommand), McpCliJson.Payload, IdentifierKind.String, true))
             .Message.ShouldContain("Opaque serialized member");
+    }
+
+    /// <summary>Accepts offset-free time-of-day values that TimeOnly deserialization reads.</summary>
+    [Fact]
+    public void TimeOnlyAcceptsTimeWithoutOffset()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(TimeOnlyCommand), McpCliJson.Payload, IdentifierKind.String, true);
+        schema.Node["properties"]!["At"]!["format"].ShouldBeNull();
+        schema.Node["properties"]!["Maybe"]!["format"].ShouldBeNull();
+        const string payload = "{\"At\":\"14:30:00\",\"Maybe\":\"14:30:00\"}";
+        PayloadValidator.Validate(schema, payload, true).IsValid.ShouldBeTrue();
+        JsonSerializer.Deserialize<TimeOnlyCommand>(payload, McpCliJson.Payload)!.At.ShouldBe(new TimeOnly(14, 30));
+    }
+
+    /// <summary>Reads a description declared on a positional record parameter.</summary>
+    [Fact]
+    public void PositionalParameterDescriptionIsUsed()
+    {
+        SchemaDeriver.Derive(typeof(PositionalDescriptionCommand), McpCliJson.Payload, IdentifierKind.String, true)
+            .Node["properties"]!["Title"]!["description"]!.GetValue<string>().ShouldBe("The positional title.");
+    }
+
+    /// <summary>Permits a non-object Query root when every declared role name is absent.</summary>
+    [Fact]
+    public void AbsentRolesDoNotRequireObjectQueryRoot()
+    {
+        SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, false,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = null }).Bindings.ShouldBeEmpty();
+    }
+
+    /// <summary>Keeps a get-only extension-data member visible so it is rejected rather than silently dropped.</summary>
+    [Fact]
+    public void GetOnlyExtensionDataIsRejected()
+    {
+        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(GetOnlyExtensionDataCommand), McpCliJson.Payload, IdentifierKind.String, true))
+            .Message.ShouldContain("extension data");
+    }
+
+    /// <summary>Rejects provider types without a readable static JsonSerializerOptions Options value.</summary>
+    /// <param name="optionsType">The emitted Options property type, or null to omit it.</param>
+    /// <param name="expected">The expected message fragment.</param>
+    [Theory]
+    [InlineData(null, "must expose public static JsonSerializerOptions Options")]
+    [InlineData(typeof(string), "must expose public static JsonSerializerOptions Options")]
+    [InlineData(typeof(JsonSerializerOptions), "returned null")]
+    public void InvalidProviderShapesCannotYieldOptions(Type? optionsType, string expected)
+    {
+        Type provider = DynamicProviderFactory.Emit(optionsType);
+        Should.Throw<ArgumentException>(() => McpCliJson.ForModule(provider.Assembly,
+            new HexalithModuleAttribute("invalid", "Invalid provider.", IdentifierKind.String)
+            {
+                SerializerOptionsProvider = provider,
+            })).Message.ShouldContain(expected);
     }
 
     /// <summary>Rejects an unconstrained schema for a converter-backed Query root.</summary>
@@ -269,6 +487,7 @@ public sealed class SchemaTests
             McpCliJson.ForModule(typeof(RenameItemCommand).Assembly,
                 typeof(RenameItemCommand).Assembly.GetCustomAttributes(typeof(HexalithModuleAttribute), false).Cast<HexalithModuleAttribute>().Single()),
             IdentifierKind.Ulid, true);
+        schema.Node["properties"]!["ItemId"]!["description"]!.GetValue<string>().ShouldBe("The ULID of the item to rename.");
         string good = "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"New\"}";
         PayloadValidator.Validate(schema, good, true).IsValid.ShouldBeTrue();
         string bad = "{\"ItemId\":\"bad\",\"Title\":4,\"Extra\":1}";
@@ -278,6 +497,7 @@ public sealed class SchemaTests
         example.Violations.Select(violation => violation.Path).ShouldBe(payload.Violations.Select(violation => violation.Path));
         example.Violations.Select(violation => violation.Path).ShouldContain("/ItemId");
         example.Violations.Select(violation => violation.Path).ShouldContain("/Title");
+        example.Violations.Select(violation => violation.Path).ShouldContain("/Extra");
         PayloadValidator.Validate(schema, "{", true).Violations.Single().Path.ShouldBe("/");
         PayloadValidator.Validate(schema, "null", true).Violations.Single().Path.ShouldBe("/");
         PayloadValidator.Validate(schema, "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true)

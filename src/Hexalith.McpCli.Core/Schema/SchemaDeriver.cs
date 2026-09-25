@@ -72,7 +72,7 @@ public static class SchemaDeriver
         IReadOnlyDictionary<PropertyRole, string?>? roleNames)
     {
         var bindings = new Dictionary<PropertyRole, PropertyBinding>();
-        if (roleNames is null)
+        if (roleNames is null || roleNames.Values.All(name => name is null))
         {
             return bindings;
         }
@@ -121,6 +121,11 @@ public static class SchemaDeriver
                 throw new ArgumentException($"Property role {role} must name a deserializable payload property: {clrName}.", nameof(roleNames));
             }
 
+            if (!IsSupportedRoleType(role, metadata.PropertyType))
+            {
+                throw new ArgumentException($"Property role {role} cannot bind member {clrName} of type {metadata.PropertyType}.", nameof(roleNames));
+            }
+
             if (bindings.Values.Any(existing => string.Equals(existing.SerializedName, metadata.Name, StringComparison.Ordinal)))
             {
                 throw new ArgumentException($"Two property roles cannot own the same serialized member: {metadata.Name}.", nameof(roleNames));
@@ -136,6 +141,14 @@ public static class SchemaDeriver
 
         return bindings;
     }
+
+    private static bool IsSupportedRoleType(PropertyRole role, Type propertyType) => role switch
+    {
+        PropertyRole.Tenant or PropertyRole.Actor => propertyType == typeof(string),
+        PropertyRole.Correlation or PropertyRole.IdempotencyKey => propertyType == typeof(string)
+            || (Nullable.GetUnderlyingType(propertyType) ?? propertyType) == typeof(Ulid),
+        _ => true,
+    };
 
     private static JsonNode Transform(
         JsonSchemaExporterContext context,
@@ -157,16 +170,19 @@ public static class SchemaDeriver
 
         JsonPropertyInfo? metadata = context.PropertyInfo;
         PropertyInfo? clrProperty = metadata?.AttributeProvider as PropertyInfo;
+        bool rootProperty = IsRootProperty(context);
         bool declaredIdentifier = clrProperty is not null
-            && (clrProperty.IsDefined(typeof(HexalithIdentifierAttribute), true)
-                || bindings.TryGetValue(PropertyRole.AggregateId, out PropertyBinding? aggregate)
+            && (Attribute.IsDefined(clrProperty, typeof(HexalithIdentifierAttribute), true)
+                || rootProperty
+                    && bindings.TryGetValue(PropertyRole.AggregateId, out PropertyBinding? aggregate)
                     && ReferenceEquals(aggregate.Metadata, metadata));
         bool clrUlid = metadata is not null
             && (Nullable.GetUnderlyingType(metadata.PropertyType) == typeof(Ulid)
                 || metadata.PropertyType == typeof(Ulid));
         bool opaqueConverter = schema is JsonValue boolean
             && boolean.TryGetValue<bool>(out bool unconstrained)
-            && unconstrained;
+            && unconstrained
+            || HasExternalPropertyConverter(clrProperty);
         if (opaqueConverter && metadata is null)
         {
             throw new NotSupportedException($"Opaque payload root {context.TypeInfo.Type} cannot be represented by a closed schema.");
@@ -177,15 +193,27 @@ public static class SchemaDeriver
             throw new NotSupportedException($"Opaque serialized member {metadata.Name} cannot be represented by a closed schema.");
         }
 
+        if (schema is JsonObject container)
+        {
+            ConstrainOpaqueElements(context.TypeInfo, container);
+            if ((Nullable.GetUnderlyingType(context.TypeInfo.Type) ?? context.TypeInfo.Type) == typeof(TimeOnly))
+            {
+                // The exporter's "time" format requires an offset that TimeOnly deserialization rejects.
+                container.Remove("format");
+            }
+        }
+
         if (schema is not JsonObject && !(opaqueConverter && (declaredIdentifier || clrUlid)))
         {
             return schema;
         }
 
-        JsonObject node = schema as JsonObject ?? new JsonObject();
+        JsonObject node = opaqueConverter ? new JsonObject() : (JsonObject)schema;
         if (clrProperty is not null)
         {
-            string? description = clrProperty.GetCustomAttribute<DescriptionAttribute>()?.Description;
+            string? description = clrProperty.GetCustomAttribute<DescriptionAttribute>()?.Description
+                ?? metadata!.AssociatedParameter?.AttributeProvider?.GetCustomAttributes(typeof(DescriptionAttribute), true)
+                    .OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
             if (description is not null)
             {
                 node["description"] = description;
@@ -214,7 +242,7 @@ public static class SchemaDeriver
                 }
             }
 
-            if (bindings.Values.Any(binding => binding.Role != PropertyRole.AggregateId
+            if (rootProperty && bindings.Values.Any(binding => binding.Role != PropertyRole.AggregateId
                 && ReferenceEquals(binding.Metadata, metadata)))
             {
                 node["readOnly"] = true;
@@ -224,7 +252,7 @@ public static class SchemaDeriver
         if (ContainsType(node, "object") && context.TypeInfo.Kind == JsonTypeInfoKind.Object)
         {
             node["additionalProperties"] = false;
-            if (context.PropertyInfo is null && node["required"] is JsonArray required)
+            if (context.Path.IsEmpty && node["required"] is JsonArray required)
             {
                 foreach (PropertyBinding binding in bindings.Values.Where(binding => binding.Role != PropertyRole.AggregateId))
                 {
@@ -242,12 +270,59 @@ public static class SchemaDeriver
         return node;
     }
 
+    private static bool HasExternalPropertyConverter(PropertyInfo? clrProperty)
+    {
+        // A property-level converter is opaque even when STJ wraps it for Nullable<T> and exports the underlying shape.
+        if (clrProperty is null
+            || Attribute.GetCustomAttribute(clrProperty, typeof(JsonConverterAttribute), true) is not JsonConverterAttribute attribute)
+        {
+            return false;
+        }
+
+        return (attribute.ConverterType ?? attribute.GetType()).Assembly != typeof(JsonSerializer).Assembly;
+    }
+
+    private static bool IsRootProperty(JsonSchemaExporterContext context)
+        => context.PropertyInfo is not null
+            && context.Path.Length == 2
+            && string.Equals(context.Path[0], "properties", StringComparison.Ordinal);
+
+    private static void ConstrainOpaqueElements(JsonTypeInfo typeInfo, JsonObject node)
+    {
+        string? elementKeyword = typeInfo.Kind switch
+        {
+            JsonTypeInfoKind.Enumerable => "items",
+            JsonTypeInfoKind.Dictionary => "additionalProperties",
+            _ => null,
+        };
+
+        // The exporter omits the element keyword only when the element schema is unconstrained (true).
+        if (elementKeyword is null || typeInfo.ElementType is null || node.ContainsKey(elementKeyword))
+        {
+            return;
+        }
+
+        Type elementType = typeInfo.ElementType;
+        if ((Nullable.GetUnderlyingType(elementType) ?? elementType) != typeof(Ulid))
+        {
+            throw new NotSupportedException($"Opaque element type {elementType} of {typeInfo.Type} cannot be represented by a closed schema.");
+        }
+
+        node[elementKeyword] = new JsonObject
+        {
+            ["type"] = Nullable.GetUnderlyingType(elementType) is null ? JsonValue.Create("string") : new JsonArray("string", "null"),
+            ["pattern"] = UlidPattern,
+            ["minLength"] = 26,
+            ["maxLength"] = 26,
+        };
+    }
+
     private static bool OpaqueIdentifierWritesString(JsonPropertyInfo metadata, JsonSerializerOptions options, IdentifierKind identifierKind)
     {
         Type propertyType = metadata.PropertyType;
         Type effectiveType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
         bool hasConverter = metadata.CustomConverter is not null
-            || options.Converters.Any(converter => converter.CanConvert(propertyType))
+            || options.Converters.Any(converter => converter.CanConvert(propertyType) || converter.CanConvert(effectiveType))
             || effectiveType.IsDefined(typeof(JsonConverterAttribute), true);
         if (!hasConverter && effectiveType != typeof(Ulid))
         {
@@ -278,8 +353,11 @@ public static class SchemaDeriver
         {
             if (metadata.CustomConverter is JsonConverter customConverter)
             {
+                Type probeType = customConverter.CanConvert(metadata.PropertyType)
+                    ? metadata.PropertyType
+                    : Nullable.GetUnderlyingType(metadata.PropertyType) ?? metadata.PropertyType;
                 MethodInfo method = typeof(SchemaDeriver).GetMethod(nameof(ProbeCustomConverter), BindingFlags.NonPublic | BindingFlags.Static)!
-                    .MakeGenericMethod(metadata.PropertyType);
+                    .MakeGenericMethod(probeType);
                 return (bool?)method.Invoke(null, [customConverter, options, sample]);
             }
 
