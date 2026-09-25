@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Canonical serialization, schemas, and validation for Hexalith MCP operations.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />
+    <PackageReference Include="ByteAether.Ulid" />
+    <PackageReference Include="JsonSchema.Net" />
+  </ItemGroup>
+</Project>

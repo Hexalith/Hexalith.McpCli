@@ -1,11 +1,13 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />
+    <Project Path="src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj" />
     <Project Path="src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
     <Project Path="tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj" />
+    <Project Path="tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj" />
     <Project Path="tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj" />
     <Project Path="tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
     <Project Path="tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
