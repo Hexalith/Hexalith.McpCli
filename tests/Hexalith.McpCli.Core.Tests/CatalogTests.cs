@@ -439,7 +439,7 @@ public sealed class CatalogTests
 
         catalog.Diagnostics.ShouldNotBeEmpty();
         modules.ShouldNotContain("\"diagnostics\"", Case.Insensitive);
-        modules.ShouldNotContain("\"severity\"", Case.Insensitive);
+        modules.ShouldContain("\"lintFindings\"", Case.Insensitive);
         foreach (CatalogDiagnostic diagnostic in catalog.Diagnostics)
         {
             modules.ShouldNotContain(diagnostic.Category);

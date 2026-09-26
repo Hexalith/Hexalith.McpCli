@@ -10,7 +10,7 @@ public sealed class OperationDescriptor
 {
     internal OperationDescriptor(string name, OperationKind kind, string description, string? example, DerivedSchema schema,
         OperationRouting routing, Func<JsonElement, string?>? aggregateIdAccessor, string? aggregateIdConstant,
-        bool aggregateIdRequired, bool idempotencyKeyRequired, Type contractType)
+        bool aggregateIdRequired, bool idempotencyKeyRequired, Type contractType, IReadOnlyList<LintFinding> lintFindings)
     {
         Name = name;
         Kind = kind;
@@ -27,6 +27,7 @@ public sealed class OperationDescriptor
             .Where(binding => binding.Role != PropertyRole.AggregateId)
             .Select(binding => binding.SerializedName).OrderBy(name => name, StringComparer.Ordinal).ToArray());
         ContractType = contractType;
+        LintFindings = Array.AsReadOnly(lintFindings.ToArray());
     }
 
     /// <summary>Gets the canonical module-qualified operation name.</summary>
@@ -47,6 +48,9 @@ public sealed class OperationDescriptor
 
     /// <summary>Gets a defensive copy of the schema document for result serialization.</summary>
     public JsonNode SchemaDocument => Schema.Node;
+
+    /// <summary>Gets stable description-quality warnings for the operation.</summary>
+    public IReadOnlyList<LintFinding> LintFindings { get; }
 
     /// <summary>Gets the resolved gateway routing fields.</summary>
     public OperationRouting Routing { get; }

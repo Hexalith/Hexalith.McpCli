@@ -270,6 +270,12 @@ public static class SchemaDeriver
         }
 
         JsonObject node = opaqueConverter ? new JsonObject() : (JsonObject)schema;
+        if (metadata?.AttributeProvider is FieldInfo field
+            && field.GetCustomAttribute<DescriptionAttribute>()?.Description is { } fieldDescription)
+        {
+            node["description"] = fieldDescription;
+        }
+
         if (clrProperty is not null)
         {
             string? description = clrProperty.GetCustomAttribute<DescriptionAttribute>()?.Description
