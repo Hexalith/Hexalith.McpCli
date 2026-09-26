@@ -24,11 +24,12 @@ public sealed class DescriptionLintTests
             ("missing_property_description", "/properties/Entries/items/properties/Count"),
             ("missing_property_description", "/properties/EntriesByKey/additionalProperties/properties/Quantity"),
             ("unmarked_identifier_like_property", "/properties/ExternalId"),
-            ("unmarked_identifier_like_property", "/properties/Nested/properties/ExternalId"),
-            ("missing_property_description", "/properties/Nested/properties/Label"),
-            ("missing_property_description", "/properties/Nested/properties/PageSize"),
-            ("payload_paging_member", "/properties/Nested/properties/PageSize"),
+            ("missing_property_description", "/properties/Maybe/properties/Count"),
+            ("unmarked_identifier_like_property", "/properties/Maybe/properties/ExternalId"),
+            ("unmarked_identifier_like_property", "/properties/Nested/properties/external~1~0id"),
             ("missing_property_description", "/properties/Nested/properties/nested~1~0"),
+            ("missing_property_description", "/properties/Nested/properties/page~1~0size"),
+            ("payload_paging_member", "/properties/Nested/properties/page~1~0size"),
             ("payload_paging_member", "/properties/Cursor"),
             ("payload_paging_member", "/properties/Offset"),
             ("payload_paging_member", "/properties/PageSize"),
@@ -44,8 +45,12 @@ public sealed class DescriptionLintTests
             Resolve(schema, finding.Property!).ShouldNotBeNull();
         }
 
-        operation.LintFindings.Single(finding => finding.Code == "unmarked_identifier_like_property"
-            && finding.Property == "/properties/Nested/properties/ExternalId").Message.ShouldContain("Use a property marked with HexalithIdentifier");
+        LintFinding renamedIdentifier = operation.LintFindings.Single(finding => finding.Code == "unmarked_identifier_like_property"
+            && finding.Property == "/properties/Nested/properties/external~1~0id");
+        renamedIdentifier.Message.ShouldContain("Member ExternalId");
+        renamedIdentifier.Message.ShouldContain("Use a property marked with HexalithIdentifier");
+        operation.LintFindings.Single(finding => finding.Code == "payload_paging_member"
+            && finding.Property == "/properties/Nested/properties/page~1~0size").Message.ShouldContain("paging member PageSize");
         operation.LintFindings.Where(finding => finding.Code == "missing_property_description")
             .ShouldAllBe(finding => !finding.Message.Contains("supply", StringComparison.OrdinalIgnoreCase));
         schema["properties"]!["Tenant"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
@@ -58,10 +63,27 @@ public sealed class DescriptionLintTests
         schema["properties"]!["ItemId"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
         schema["properties"]!["Entries"]!["items"]!["properties"]!["MarkedId"]!["pattern"]!.GetValue<string>()
             .ShouldBe(SchemaDeriver.UlidPattern);
+        schema["properties"]!["Entries"]!["items"]!["properties"]!["Count"]!["description"]!.GetValue<string>()
+            .ShouldBe("   ");
         schema["properties"]!["Nested"]!["properties"]!["nested/~"].ShouldNotBeNull();
-        schema["properties"]!["Nested"]!["properties"]!["ExternalId"]!["description"]!.GetValue<string>()
+        schema["properties"]!["Nested"]!["properties"]!["Label"]!["description"]!.GetValue<string>()
+            .ShouldBe("The label supplied for the nested item.");
+        schema["properties"]!["Nested"]!["properties"]!["external/~id"]!["description"]!.GetValue<string>()
             .ShouldBe("The external identifier of the nested item.");
         schema["properties"]!["lowerCamel"].ShouldNotBeNull();
+    }
+
+    /// <summary>Envelope-bound identifiers are not identifier hints, and command paging names are ordinary payload members.</summary>
+    [Fact]
+    public void CommandHollowDescriptionDoesNotWarnOnPagingOrEnvelopeIdentifier()
+    {
+        OperationDescriptor command = BuildLintCatalog().Modules.Single().Operations.Single(item => item.ContractType == typeof(Lint.MoveItemCommand));
+
+        command.Kind.ShouldBe(OperationKind.Command);
+        command.LintFindings.Select(finding => finding.Code).ShouldBe(["hollow_description"]);
+        command.LintFindings.Single().Property.ShouldBeNull();
+        command.Schema.Node["properties"]!["TenantId"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
+        command.Schema.Node["properties"]!["TenantId"]!["pattern"].ShouldBeNull();
     }
 
     /// <summary>Operation-level findings omit the property member while property findings include it.</summary>
@@ -104,7 +126,7 @@ public sealed class DescriptionLintTests
         strict.Catalog.ShouldBeSameAs(normal.Catalog);
         strict.ErrorCode.ShouldBeNull();
         normal.Catalog.Diagnostics.ShouldBeEmpty();
-        normal.Catalog.Modules.Single().Operations.Count.ShouldBe(2);
+        normal.Catalog.Modules.Single().Operations.Count.ShouldBe(3);
         normal.Catalog.Modules.Single().Operations.ShouldAllBe(operation => operation.LintFindings.Count > 0);
         logger.Entries.ShouldBeEmpty();
     }

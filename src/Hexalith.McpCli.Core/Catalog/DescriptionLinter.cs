@@ -60,7 +60,7 @@ public static partial class DescriptionLinter
             return;
         }
 
-        JsonTypeInfo typeInfo = options.GetTypeInfo(type);
+        JsonTypeInfo typeInfo = options.GetTypeInfo(Nullable.GetUnderlyingType(type) ?? type);
         if (typeInfo.Kind == JsonTypeInfoKind.Enumerable && typeInfo.ElementType is { } elementType)
         {
             InspectNode(elementType, schemaNode["items"], pointer + "/items", kind, options, bindings, findings);
@@ -101,20 +101,19 @@ public static partial class DescriptionLinter
                 if (member.Name.EndsWith("Id", StringComparison.Ordinal)
                     && !(member is PropertyInfo property && Attribute.IsDefined(property, typeof(HexalithIdentifierAttribute), true))
                     && !(pointer.Length == 0
-                        && bindings.TryGetValue(PropertyRole.AggregateId, out PropertyBinding? aggregate)
-                        && ReferenceEquals(aggregate.Metadata, metadata)))
+                        && bindings.Values.Any(binding => ReferenceEquals(binding.Metadata, metadata))))
                 {
                     string advice = member is FieldInfo
                         ? "Use a property marked with HexalithIdentifier when this is an identifier, or rename the field."
                         : "Mark it with HexalithIdentifier when it is an identifier, or rename the property.";
                     findings.Add(new LintFinding("unmarked_identifier_like_property", "warning",
-                        $"Member {metadata.Name} looks like an identifier. {advice}", propertyPointer));
+                        $"Member {member.Name} looks like an identifier. {advice}", propertyPointer));
                 }
 
                 if (kind == OperationKind.Query && member.Name is "PageSize" or "Offset" or "Cursor")
                 {
                     findings.Add(new LintFinding("payload_paging_member", "warning",
-                        $"Move paging member {metadata.Name} to the query envelope argument.", propertyPointer));
+                        $"Move paging member {member.Name} to the query envelope argument.", propertyPointer));
                 }
             }
 

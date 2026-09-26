@@ -33,6 +33,10 @@ public sealed record InspectItemQuery(
     [Description("The keyed input entries.")]
     public Dictionary<string, DictionaryValue> EntriesByKey { get; init; } = [];
 
+    /// <summary>Gets an optional nested value-type input.</summary>
+    [Description("The optional nested item.")]
+    public NullableItem? Maybe { get; init; }
+
     /// <summary>Gets the tenant filled from the envelope.</summary>
     public string? Tenant { get; init; }
 

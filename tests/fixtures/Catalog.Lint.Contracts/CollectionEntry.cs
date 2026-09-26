@@ -7,6 +7,6 @@ namespace Catalog.Lint.Contracts;
 /// <param name="Count">An undescribed element count.</param>
 /// <param name="MarkedId">A marked identifier-like member.</param>
 public sealed record CollectionEntry(
-    int Count,
+    [property: Description("   ")] int Count,
     [property: HexalithIdentifier]
     [property: Description("The marked entry identifier.")] string MarkedId);
