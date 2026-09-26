@@ -34,17 +34,17 @@ public static class CatalogBuilder
                 continue;
             }
 
-            if (!IsCanonicalPart(marker.Name) || string.IsNullOrWhiteSpace(marker.Description)
-                || marker.IdentifierKind is not (IdentifierKind.Ulid or IdentifierKind.String)
-                || marker.WireTypeConvention is not (WireTypeConvention.Explicit or WireTypeConvention.FullTypeName or WireTypeConvention.KebabCase))
+            string? markerProblem = DescribeMarkerProblem(marker);
+            if (markerProblem is not null)
             {
-                diagnostics.Add(Diagnostic(assemblyName, "invalid_module_declaration", "The module marker has invalid values."));
+                diagnostics.Add(Diagnostic(assemblyName, "invalid_module_declaration", markerProblem));
                 continue;
             }
 
             if (marker.FixedTenant is not null && !RoutingResolver.IsTenantDomain(marker.FixedTenant))
             {
-                diagnostics.Add(Diagnostic(assemblyName, "invalid_routing_value", "The module fixed tenant is invalid."));
+                diagnostics.Add(Diagnostic(assemblyName, "invalid_routing_value",
+                    $"Module FixedTenant '{marker.FixedTenant}' must be 1 to 64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit."));
                 continue;
             }
 
@@ -53,10 +53,9 @@ public static class CatalogBuilder
             {
                 options = McpCliJson.ForModule(assembly, marker);
             }
-            catch (Exception exception) when (IsDeclarationFailure(exception))
+            catch (ContractDeclarationException exception)
             {
-                diagnostics.Add(Diagnostic(assemblyName, "invalid_serializer_options_provider",
-                    "The module serializer options provider could not be used."));
+                diagnostics.Add(Diagnostic(assemblyName, exception.Category, exception.Message));
                 continue;
             }
 
@@ -65,10 +64,11 @@ public static class CatalogBuilder
             {
                 types = assembly.GetTypes();
             }
-            catch (ReflectionTypeLoadException)
+            catch (ReflectionTypeLoadException exception)
             {
+                string cause = exception.LoaderExceptions.FirstOrDefault(item => item is not null)?.Message ?? exception.Message;
                 diagnostics.Add(Diagnostic(assemblyName, "invalid_module_declaration",
-                    "The Contracts assembly's types could not be loaded."));
+                    $"The types of Contracts assembly {assemblyName} could not be loaded: {cause}"));
                 continue;
             }
 
@@ -93,36 +93,45 @@ public static class CatalogBuilder
                 if (command is not null && query is not null)
                 {
                     diagnostics.Add(Diagnostic(type.FullName, "conflicting_operation_kinds",
-                        "A contract cannot be both a command and a query."));
+                        $"Type {type.Name} carries both HexalithCommand and HexalithQuery; keep exactly one."));
                     continue;
                 }
 
                 if (!type.IsClass || type.IsAbstract || type.ContainsGenericParameters)
                 {
+                    string shape = !type.IsClass ? "is not a class" : type.IsAbstract ? "is abstract" : "is an open generic type";
                     diagnostics.Add(Diagnostic(type.FullName, "invalid_operation_declaration",
-                        "An operation must be a concrete, closed class."));
+                        $"Operation type {type.Name} {shape}; an operation must be a concrete, closed class."));
                     continue;
                 }
 
-                OperationDescriptor? operation = BuildOperation(marker, options, type, command, query, diagnostics);
-                if (operation is not null)
+                (OperationDescriptor Operation, IReadOnlyList<CatalogDiagnostic> Warnings) result;
+                try
                 {
-                    if (seenOperations.Add(operation.Name))
-                    {
-                        operations.Add(operation);
-                    }
-                    else
-                    {
-                        diagnostics.Add(Diagnostic(type.FullName, "duplicate_operation_name",
-                            $"Operation name {operation.Name} is already declared."));
-                    }
+                    result = BuildOperation(marker, options, type, command, query);
+                }
+                catch (ContractDeclarationException exception)
+                {
+                    diagnostics.Add(Diagnostic(type.FullName, exception.Category, exception.Message));
+                    continue;
+                }
+
+                if (seenOperations.Add(result.Operation.Name))
+                {
+                    operations.Add(result.Operation);
+                    diagnostics.AddRange(result.Warnings);
+                }
+                else
+                {
+                    diagnostics.Add(Diagnostic(type.FullName, "duplicate_operation_name",
+                        $"Operation name {result.Operation.Name} is already declared by an earlier type."));
                 }
             }
 
             OperationDescriptor[] valid = operations.OrderBy(item => item.Name, StringComparer.Ordinal).ToArray();
             if (valid.Length == 0)
             {
-                diagnostics.Add(Diagnostic(assemblyName, "empty_module", "The module has no valid operations.", "warning"));
+                diagnostics.Add(Diagnostic(assemblyName, "empty_module", $"Module {marker.Name} exposes no valid operations.", "warning"));
             }
 
             modules.Add(new ModuleDescriptor(marker.Name, marker.Description, marker.IdentifierKind, marker.FixedTenant,
@@ -136,130 +145,119 @@ public static class CatalogBuilder
                 .ThenBy(item => item.Message, StringComparer.Ordinal).ToArray());
     }
 
-    private static OperationDescriptor? BuildOperation(HexalithModuleAttribute module, JsonSerializerOptions options,
-        Type type, HexalithCommandAttribute? command, HexalithQueryAttribute? query, List<CatalogDiagnostic> diagnostics)
+    private static (OperationDescriptor Operation, IReadOnlyList<CatalogDiagnostic> Warnings) BuildOperation(
+        HexalithModuleAttribute module, JsonSerializerOptions options, Type type, HexalithCommandAttribute? command,
+        HexalithQueryAttribute? query)
     {
         OperationKind kind = command is null ? OperationKind.Query : OperationKind.Command;
+        string attribute = command is null ? "HexalithQuery" : "HexalithCommand";
         string? explicitName = command?.Name ?? query?.Name;
+        string derivedNameFailure = $"Operation type name {type.Name} does not yield a lowercase ASCII kebab-case name; set {attribute}.Name.";
         string part;
-        try
+        if (explicitName is not null)
         {
-            part = explicitName ?? KebabCase.FromTypeName(type.Name);
+            part = explicitName;
         }
-        catch (ArgumentException)
+        else
         {
-            diagnostics.Add(Diagnostic(type.FullName, "invalid_operation_name",
-                "The operation type name cannot be made canonical."));
-            return null;
+            try
+            {
+                part = KebabCase.FromTypeName(type.Name);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new ContractDeclarationException("invalid_operation_name", derivedNameFailure, exception);
+            }
         }
 
         if (!IsCanonicalPart(part))
         {
-            diagnostics.Add(Diagnostic(type.FullName, "invalid_operation_name",
-                "The operation name must be lowercase ASCII kebab-case."));
-            return null;
+            throw new ContractDeclarationException("invalid_operation_name", explicitName is null
+                ? derivedNameFailure
+                : $"{attribute}.Name '{explicitName}' must be lowercase ASCII kebab-case.");
         }
 
         if (string.IsNullOrWhiteSpace(command?.Description ?? query?.Description))
         {
-            diagnostics.Add(Diagnostic(type.FullName, "missing_description", "An operation description is required."));
-            return null;
+            throw new ContractDeclarationException("missing_description", $"{attribute}.Description is empty or whitespace.");
         }
 
         string? aggregateProperty = command?.AggregateIdProperty ?? query?.AggregateIdProperty;
         string? aggregateConstant = query?.AggregateId;
-        if (aggregateProperty is not null && string.Equals(aggregateProperty,
-            command?.TenantProperty ?? query?.TenantProperty, StringComparison.Ordinal))
-        {
-            diagnostics.Add(Diagnostic(type.FullName, "tenant_is_aggregate_id",
-                "Tenant and aggregate identifier roles cannot share a payload member."));
-            return null;
-        }
         if (query is not null && aggregateProperty is not null && aggregateConstant is not null)
         {
-            diagnostics.Add(Diagnostic(type.FullName, "ambiguous_aggregate_id",
-                "A query cannot declare both an aggregate property and a constant."));
-            return null;
+            throw new ContractDeclarationException("ambiguous_aggregate_id",
+                $"HexalithQuery sets both AggregateIdProperty '{aggregateProperty}' and AggregateId '{aggregateConstant}'; keep one.");
         }
 
         if (aggregateConstant is not null && !RoutingResolver.IsAggregateId(aggregateConstant))
         {
-            diagnostics.Add(Diagnostic(type.FullName, "invalid_routing_value",
-                "The query aggregate identifier constant is invalid."));
-            return null;
+            throw new ContractDeclarationException("invalid_routing_value",
+                $"HexalithQuery.AggregateId '{aggregateConstant}' must be 1 to 256 ASCII letters, digits, '.', '_', or '-', starting and ending with a letter or digit.");
         }
 
-        try
+        RoutingResolution routing = RoutingResolver.Resolve(type, kind, module, part, command, query);
+        var roleNames = new Dictionary<PropertyRole, string?>
         {
-            OperationRouting routing = RoutingResolver.Resolve(type, kind, module, part, command, query);
-            var roleNames = new Dictionary<PropertyRole, string?>
-            {
-                [PropertyRole.AggregateId] = aggregateProperty,
-                [PropertyRole.Tenant] = command?.TenantProperty ?? query?.TenantProperty,
-                [PropertyRole.Correlation] = command?.CorrelationProperty,
-                [PropertyRole.IdempotencyKey] = command?.IdempotencyKeyProperty,
-                [PropertyRole.Actor] = command?.ActorProperty,
-            };
-            DerivedSchema schema = SchemaDeriver.Derive(type, options, module.IdentifierKind, kind == OperationKind.Command, roleNames);
-            Func<JsonElement, string?>? accessor = AggregateIdAccessors.Create(type, options, schema.Bindings, kind);
-            if (kind == OperationKind.Command && accessor is null)
-            {
-                diagnostics.Add(Diagnostic(type.FullName, "missing_routing_values",
-                    "A command requires an aggregate identifier source."));
-                return null;
-            }
-
-            string? example = command?.Example ?? query?.Example;
-            if (example is not null && !PayloadValidator.Validate(schema, example, kind == OperationKind.Command).IsValid)
-            {
-                diagnostics.Add(Diagnostic(type.FullName, "invalid_example",
-                    "The declared example does not validate against the payload schema."));
-                return null;
-            }
-
-            bool idempotencyRequired = schema.Bindings.TryGetValue(PropertyRole.IdempotencyKey, out PropertyBinding? binding)
-                && (binding.Metadata.IsRequired || !binding.Metadata.IsSetNullable);
-            return new OperationDescriptor(module.Name + "." + part, kind, command?.Description ?? query!.Description,
-                example, schema, routing, accessor, aggregateConstant, kind == OperationKind.Query && accessor is null && aggregateConstant is null,
-                idempotencyRequired, type);
-        }
-        catch (Exception exception) when (IsDeclarationFailure(exception))
+            [PropertyRole.AggregateId] = aggregateProperty,
+            [PropertyRole.Tenant] = command?.TenantProperty ?? query?.TenantProperty,
+            [PropertyRole.Correlation] = command?.CorrelationProperty,
+            [PropertyRole.IdempotencyKey] = command?.IdempotencyKeyProperty,
+            [PropertyRole.Actor] = command?.ActorProperty,
+        };
+        DerivedSchema schema = SchemaDeriver.Derive(type, options, module.IdentifierKind, kind == OperationKind.Command, roleNames);
+        Func<JsonElement, string?>? accessor = AggregateIdAccessors.Create(type, options, schema.Bindings, kind);
+        if (kind == OperationKind.Command && accessor is null)
         {
-            string code = Classify(exception);
-            diagnostics.Add(Diagnostic(type.FullName, code, "The operation declaration could not be resolved."));
-            return null;
+            throw new ContractDeclarationException("missing_routing_values",
+                "The command has no aggregate identifier source; set HexalithCommand.AggregateIdProperty or implement ICommandContract.AggregateId.");
         }
+
+        string? example = command?.Example ?? query?.Example;
+        if (example is not null)
+        {
+            PayloadValidationResult validation = PayloadValidator.Validate(schema, example, kind == OperationKind.Command);
+            if (!validation.IsValid)
+            {
+                // Report the most specific location, so the message names the failing member rather than only the root.
+                PayloadViolation first = validation.Violations
+                    .OrderByDescending(violation => violation.Path == "/" ? 0 : violation.Path.Count(character => character == '/'))
+                    .ThenBy(violation => violation.Path, StringComparer.Ordinal)
+                    .ThenBy(violation => violation.Message, StringComparer.Ordinal)
+                    .First();
+                throw new ContractDeclarationException("invalid_example",
+                    $"{attribute}.Example violates the payload schema at {first.Path}: {first.Message}");
+            }
+        }
+
+        bool idempotencyRequired = schema.Bindings.TryGetValue(PropertyRole.IdempotencyKey, out PropertyBinding? binding)
+            && (binding.Metadata.IsRequired || !binding.Metadata.IsSetNullable);
+        var operation = new OperationDescriptor(module.Name + "." + part, kind, command?.Description ?? query!.Description,
+            example, schema, routing.Routing, accessor, aggregateConstant,
+            kind == OperationKind.Query && accessor is null && aggregateConstant is null, idempotencyRequired, type);
+        return (operation, routing.Warnings);
     }
 
-    private static string Classify(Exception exception)
+    private static string? DescribeMarkerProblem(HexalithModuleAttribute marker)
     {
-        if (exception is ArgumentException argument && argument.Message.StartsWith("missing_routing_values", StringComparison.Ordinal))
+        if (!IsCanonicalPart(marker.Name))
         {
-            return "missing_routing_values";
+            return $"HexalithModule Name '{marker.Name}' must be lowercase ASCII kebab-case.";
         }
 
-        if (exception is ArgumentException routing && routing.Message.StartsWith("invalid_routing_value", StringComparison.Ordinal))
+        if (string.IsNullOrWhiteSpace(marker.Description))
         {
-            return "invalid_routing_value";
+            return "HexalithModule Description is empty or whitespace.";
         }
 
-        if (exception.Message.Contains("Two property roles", StringComparison.Ordinal))
+        if (marker.IdentifierKind is not (IdentifierKind.Ulid or IdentifierKind.String))
         {
-            return "conflicting_property_roles";
+            return $"HexalithModule IdentifierKind '{marker.IdentifierKind}' is not Ulid or String.";
         }
 
-        if (exception.Message.Contains("Property role", StringComparison.Ordinal)
-            || exception.Message.Contains("property roles", StringComparison.Ordinal))
-        {
-            return "invalid_property_reference";
-        }
-
-        if (exception.Message.Contains("Declared identifier", StringComparison.Ordinal))
-        {
-            return "invalid_identifier_type";
-        }
-
-        return "invalid_schema";
+        return marker.WireTypeConvention is not (WireTypeConvention.Explicit or WireTypeConvention.FullTypeName or WireTypeConvention.KebabCase)
+            ? $"HexalithModule WireTypeConvention '{marker.WireTypeConvention}' is not Explicit, FullTypeName, or KebabCase."
+            : null;
     }
 
     private static CatalogDiagnostic Diagnostic(string? typeName, string category, string message, string severity = "error")
@@ -271,7 +269,4 @@ public static class CatalogBuilder
         && !value.Contains("--", StringComparison.Ordinal)
         && value.All(character => character is >= 'a' and <= 'z' or >= '0' and <= '9' or '-');
 
-    private static bool IsDeclarationFailure(Exception exception)
-        => exception is ArgumentException or InvalidOperationException or NotSupportedException or JsonException
-            or TargetInvocationException or TypeInitializationException or TypeLoadException;
 }

@@ -37,12 +37,53 @@ public sealed class CatalogTests
         unmarkedOnly.Diagnostics.ShouldBeEmpty();
     }
 
-    /// <summary>The canonical sample and the valid routing variants build without diagnostics.</summary>
+    /// <summary>The canonical sample builds without diagnostics; the routing variants keep every Operation with only routing warnings.</summary>
     [Fact]
     public void ValidFixturesBuildWithoutDiagnostics()
     {
         CatalogBuilder.Build([typeof(CreateItemCommand).Assembly]).Diagnostics.ShouldBeEmpty();
-        CatalogBuilder.Build([typeof(Routing.Module).Assembly]).Diagnostics.ShouldBeEmpty();
+        CatalogSnapshot routing = CatalogBuilder.Build([typeof(Routing.Module).Assembly]);
+        routing.Diagnostics.Select(diagnostic => (diagnostic.TypeName, diagnostic.Category, diagnostic.Severity)).ShouldBe(
+        [
+            (typeof(Routing.CompetingRouteCommand).FullName!, "conflicting_value", "warning"),
+            (typeof(Routing.CompetingRouteCommand).FullName!, "conflicting_value", "warning"),
+            (typeof(Routing.InterfaceItemQuery).FullName!, "conflicting_value", "warning"),
+            (typeof(Routing.InterfaceItemQuery).FullName!, "conflicting_value", "warning"),
+            (typeof(Routing.InterfaceItemQuery).FullName!, "conflicting_value", "warning"),
+            (typeof(Routing.RedundantConventionQuery).FullName!, "redundant_value", "warning"),
+            (typeof(Routing.RedundantInterfaceCommand).FullName!, "redundant_value", "warning"),
+        ]);
+        routing.Modules.Single().Operations.Count.ShouldBe(10);
+    }
+
+    /// <summary>Each routing field reports its own warning, and the interface value wins a conflict.</summary>
+    [Fact]
+    public void RoutingWarningsNameTheFieldAndKeepTheOperation()
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Routing.Module).Assembly]);
+        string[] Messages(Type type) => catalog.Diagnostics.Where(diagnostic => diagnostic.TypeName == type.FullName)
+            .Select(diagnostic => diagnostic.Message).ToArray();
+
+        Messages(typeof(Routing.RedundantInterfaceCommand)).ShouldBe(
+            ["Attribute Domain 'routing' equals the ICommandContract value and is redundant."]);
+        Messages(typeof(Routing.RedundantConventionQuery)).ShouldBe(
+            ["Attribute WireType 'redundant-convention' equals the KebabCase convention value and is redundant."]);
+        Messages(typeof(Routing.CompetingRouteCommand)).ShouldBe(
+        [
+            "Attribute Domain 'attribute-domain' differs from the ICommandContract value 'routing'; the interface value is used.",
+            "Attribute WireType 'attribute-wire' differs from the ICommandContract value 'interface-wire'; the interface value is used.",
+        ]);
+        Messages(typeof(Routing.InterfaceItemQuery)).Length.ShouldBe(3);
+        Messages(typeof(Routing.InterfaceItemQuery)).ShouldAllBe(message => message.Contains("differs from the IQueryContract value"));
+
+        ModuleDescriptor module = catalog.Modules.Single();
+        Find(module, "routing-fixture.redundant-interface").Routing.Domain.ShouldBe("routing");
+        Find(module, "routing-fixture.redundant-interface").Routing.WireType.ShouldBe("redundant-interface-wire");
+        Find(module, "routing-fixture.redundant-convention").Routing.WireType.ShouldBe("redundant-convention");
+        Find(module, "routing-fixture.competing-route").Routing.Domain.ShouldBe("routing");
+
+        // An attribute overriding a differing convention value is silent.
+        catalog.Diagnostics.ShouldNotContain(diagnostic => diagnostic.TypeName == typeof(Routing.ListItemsQuery).FullName);
     }
 
     /// <summary>A marked assembly with no decorated operations remains discoverable.</summary>
@@ -174,37 +215,99 @@ public sealed class CatalogTests
         operation.AggregateIdAccessor!(payload.RootElement).ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
     }
 
-    /// <summary>Each invalid declaration is excluded with its own diagnostic category.</summary>
+    /// <summary>Each invalid declaration is excluded with its own category and a message naming what failed.</summary>
     /// <param name="contractType">The invalid contract type.</param>
     /// <param name="category">The expected diagnostic category.</param>
+    /// <param name="detail">A fragment naming the failing member or value.</param>
     [Theory]
-    [InlineData(typeof(Invalid.AbstractOperationQuery), "invalid_operation_declaration")]
-    [InlineData(typeof(Invalid.BadNameQuery), "invalid_operation_name")]
-    [InlineData(typeof(Invalid.ColonWireQuery), "invalid_routing_value")]
-    [InlineData(typeof(Invalid.ConflictingEnvelopeCommand), "conflicting_property_roles")]
-    [InlineData(typeof(Invalid.ConflictingRoleCommand), "tenant_is_aggregate_id")]
-    [InlineData(typeof(Invalid.DoublyDecoratedOperation), "conflicting_operation_kinds")]
-    [InlineData(typeof(Invalid.DualAggregateQuery), "ambiguous_aggregate_id")]
-    [InlineData(typeof(Invalid.DuplicateSecondQuery), "duplicate_operation_name")]
-    [InlineData(typeof(Invalid.ExtensionDataCommand), "invalid_schema")]
-    [InlineData(typeof(Invalid.GenericOperationQuery<>), "invalid_operation_declaration")]
-    [InlineData(typeof(Invalid.InvalidConstantQuery), "invalid_routing_value")]
-    [InlineData(typeof(Invalid.InvalidExampleQuery), "invalid_example")]
-    [InlineData(typeof(Invalid.InvalidIdentifierCommand), "invalid_identifier_type")]
-    [InlineData(typeof(Invalid.InvalidProjectionQuery), "invalid_routing_value")]
-    [InlineData(typeof(Invalid.InvalidRoleCommand), "invalid_property_reference")]
-    [InlineData(typeof(Invalid.InvalidRoutingQuery), "invalid_routing_value")]
-    [InlineData(typeof(Invalid.MissingDescriptionQuery), "missing_description")]
-    [InlineData(typeof(Invalid.MissingProjectionQuery), "missing_routing_values")]
-    [InlineData(typeof(Invalid.NoAggregateCommand), "missing_routing_values")]
-    [InlineData(typeof(Invalid.WhitespaceProjectionActorQuery), "invalid_routing_value")]
-    public void InvalidOperationIsExcludedWithItsCategory(Type contractType, string category)
+    [InlineData(typeof(Invalid.AbstractOperationQuery), "invalid_operation_declaration", "AbstractOperationQuery is abstract")]
+    [InlineData(typeof(Invalid.ActorTenantCommand), "conflicting_property_roles", "Tenant and Actor both own serialized member Operator")]
+    [InlineData(typeof(Invalid.BadNameQuery), "invalid_operation_name", "HexalithQuery.Name 'Bad_Name'")]
+    [InlineData(typeof(Invalid.CollidingNameCommand), "invalid_schema", "has an invalid serialization contract")]
+    [InlineData(typeof(Invalid.ColonWireQuery), "invalid_routing_value", "WireType 'items:colon' contains ':'")]
+    [InlineData(typeof(Invalid.ConflictingEnvelopeCommand), "conflicting_property_roles",
+        "Correlation and IdempotencyKey both own serialized member EnvelopeValue")]
+    [InlineData(typeof(Invalid.ConflictingRoleCommand), "tenant_is_aggregate_id", "serialized member ItemId")]
+    [InlineData(typeof(Invalid.CorrelationAggregateCommand), "conflicting_property_roles",
+        "AggregateId and Correlation both own serialized member ItemId")]
+    [InlineData(typeof(Invalid.DoublyDecoratedOperation), "conflicting_operation_kinds", "both HexalithCommand and HexalithQuery")]
+    [InlineData(typeof(Invalid.DualAggregateQuery), "ambiguous_aggregate_id", "AggregateIdProperty 'ItemId' and AggregateId 'invalid-list'")]
+    [InlineData(typeof(Invalid.DuplicateSecondQuery), "duplicate_operation_name", "invalid-fixture.duplicate")]
+    [InlineData(typeof(Invalid.ExtensionDataCommand), "invalid_schema", "extension data member Extras")]
+    [InlineData(typeof(Invalid.FreeFormElementCommand), "invalid_schema", "Free-form member Value")]
+    [InlineData(typeof(Invalid.FreeFormNodeCommand), "invalid_schema", "Free-form member Value")]
+    [InlineData(typeof(Invalid.FreeFormObjectCommand), "invalid_schema", "Free-form member Value")]
+    [InlineData(typeof(Invalid.GenericOperationQuery<>), "invalid_operation_declaration", "is an open generic type")]
+    [InlineData(typeof(Invalid.HiddenRoleCommand), "invalid_property_reference", "names Tenant, which matches 2 CLR properties")]
+    [InlineData(typeof(Invalid.IgnoredRoleCommand), "invalid_property_reference", "names Tenant, which is ignored")]
+    [InlineData(typeof(Invalid.InvalidConstantQuery), "invalid_routing_value", "AggregateId 'bad id'")]
+    [InlineData(typeof(Invalid.InvalidExampleQuery), "invalid_example", "Example violates the payload schema at /ItemId")]
+    [InlineData(typeof(Invalid.InvalidIdentifierCommand), "invalid_identifier_type", "Declared identifier ItemId")]
+    [InlineData(typeof(Invalid.InvalidProjectionQuery), "invalid_routing_value", "ProjectionType 'Invalid Items'")]
+    [InlineData(typeof(Invalid.InvalidRoleCommand), "invalid_property_reference", "names Missing, which is not a public instance property")]
+    [InlineData(typeof(Invalid.InvalidRoutingQuery), "invalid_routing_value", "Domain 'Bad Domain'")]
+    [InlineData(typeof(Invalid.JsonArrayMemberCommand), "invalid_schema", "Free-form member Value")]
+    [InlineData(typeof(Invalid.JsonObjectMemberCommand), "invalid_schema", "Free-form member Value")]
+    [InlineData(typeof(Invalid.MissingDescriptionQuery), "missing_description", "HexalithQuery.Description")]
+    [InlineData(typeof(Invalid.MissingProjectionQuery), "missing_routing_values", "supplies ProjectionType")]
+    [InlineData(typeof(Invalid.NoAggregateCommand), "missing_routing_values", "AggregateIdProperty")]
+    [InlineData(typeof(Invalid.ObjectListCommand), "invalid_schema", "Free-form element type System.Object of member Value")]
+    [InlineData(typeof(Invalid.OpaqueRoleCommand), "invalid_property_reference", "names Tenant, whose custom JsonConverter")]
+    [InlineData(typeof(Invalid.RenamedTenantAggregateCommand), "tenant_is_aggregate_id", "serialized member tenant-key")]
+    [InlineData(typeof(Invalid.ThrowingInterfaceCommand), "invalid_routing_value", "Domain is unavailable.")]
+    [InlineData(typeof(Invalid.Underscore_NameQuery), "invalid_operation_name", "Underscore_NameQuery does not yield")]
+    [InlineData(typeof(Invalid.WhitespaceProjectionActorQuery), "invalid_routing_value", "ProjectionActorType '   '")]
+    public void InvalidOperationIsExcludedWithItsCategory(Type contractType, string category, string detail)
     {
         CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
         catalog.Modules.Single().Operations.ShouldNotContain(operation => operation.ContractType == contractType);
-        catalog.Diagnostics.Where(diagnostic => diagnostic.TypeName == contractType.FullName)
-            .Select(diagnostic => (diagnostic.Category, diagnostic.Severity))
-            .ShouldBe([(category, "error")]);
+        CatalogDiagnostic diagnostic = catalog.Diagnostics.Where(item => item.TypeName == contractType.FullName).ShouldHaveSingleItem();
+        (diagnostic.Category, diagnostic.Severity).ShouldBe((category, "error"));
+        diagnostic.Message.ShouldContain(detail);
+    }
+
+    /// <summary>A free-form member is reported with that wording.</summary>
+    [Fact]
+    public void FreeFormMembersAreNamedAsSuch()
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
+        foreach (Type type in new[] { typeof(Invalid.FreeFormObjectCommand), typeof(Invalid.FreeFormElementCommand), typeof(Invalid.FreeFormNodeCommand) })
+        {
+            catalog.Diagnostics.Single(diagnostic => diagnostic.TypeName == type.FullName).Message
+                .ShouldContain("free-form member", Case.Insensitive);
+        }
+    }
+
+    /// <summary>Every emitted category belongs to the amended spine taxonomy, with its declared severity.</summary>
+    [Fact]
+    public void EveryDiagnosticBelongsToTheTaxonomy()
+    {
+        string[] errors =
+        [
+            "missing_description", "missing_routing_values", "invalid_routing_value", "invalid_serializer_options_provider",
+            "duplicate_operation_name", "invalid_example", "invalid_identifier_type", "tenant_is_aggregate_id",
+            "invalid_property_reference", "conflicting_property_roles", "ambiguous_aggregate_id", "duplicate_module",
+            "invalid_module_declaration", "conflicting_operation_kinds", "invalid_operation_declaration", "invalid_operation_name",
+            "invalid_schema",
+        ];
+        string[] warnings = ["conflicting_value", "redundant_value", "empty_module"];
+
+        CatalogSnapshot catalog = CatalogBuilder.Build(FullFixtureSet());
+
+        catalog.Diagnostics.ShouldNotBeEmpty();
+        foreach (CatalogDiagnostic diagnostic in catalog.Diagnostics)
+        {
+            (diagnostic.Severity == "error" ? errors : warnings).ShouldContain(diagnostic.Category, diagnostic.ToString());
+            diagnostic.Message.ShouldNotBeNullOrWhiteSpace();
+        }
+    }
+
+    /// <summary>A non-coded exception raised during operation resolution propagates instead of becoming an exclusion.</summary>
+    [Fact]
+    public void NonCodedFailurePropagates()
+    {
+        var assembly = new FaultingContractsAssembly();
+        Should.Throw<ArgumentException>(() => CatalogBuilder.Build([assembly])).Message.ShouldContain(FaultingConverterAttribute.FaultMessage);
     }
 
     /// <summary>Invalid declarations do not hide the valid first duplicate or add unexplained diagnostics.</summary>
@@ -214,7 +317,20 @@ public sealed class CatalogTests
         CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
         catalog.Modules.Single().Operations.Select(operation => operation.ContractType)
             .ShouldBe([typeof(Invalid.DuplicateFirstQuery)]);
-        catalog.Diagnostics.Count.ShouldBe(20);
+        catalog.Diagnostics.Count.ShouldBe(35);
+    }
+
+    /// <summary>A Contracts assembly whose types cannot be loaded is excluded with the loader's cause.</summary>
+    [Fact]
+    public void UnloadableTypesExcludeTheModuleWithTheLoaderCause()
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build([new UnloadableContractsAssembly()]);
+
+        catalog.Modules.ShouldBeEmpty();
+        CatalogDiagnostic diagnostic = catalog.Diagnostics.ShouldHaveSingleItem();
+        (diagnostic.TypeName, diagnostic.Category, diagnostic.Severity)
+            .ShouldBe(("Unloadable.Contracts", "invalid_module_declaration", "error"));
+        diagnostic.Message.ShouldContain(UnloadableContractsAssembly.LoaderMessage);
     }
 
     /// <summary>An invalid module marker excludes the whole module with a diagnostic.</summary>
@@ -224,15 +340,16 @@ public sealed class CatalogTests
     /// <param name="convention">The raw wire type convention.</param>
     /// <param name="fixedTenant">The fixed tenant, if any.</param>
     /// <param name="category">The expected diagnostic category.</param>
+    /// <param name="detail">A fragment naming the failing member or value.</param>
     [Theory]
-    [InlineData("Bad_Name", "Invalid name.", 0, 2, null, "invalid_module_declaration")]
-    [InlineData("-leading", "Invalid name.", 0, 2, null, "invalid_module_declaration")]
-    [InlineData("blank-description", "   ", 0, 2, null, "invalid_module_declaration")]
-    [InlineData("bad-kind", "Unknown identifier kind.", 99, 2, null, "invalid_module_declaration")]
-    [InlineData("bad-convention", "Unknown convention.", 0, 99, null, "invalid_module_declaration")]
-    [InlineData("bad-tenant", "Invalid fixed tenant.", 0, 2, "Bad Tenant", "invalid_routing_value")]
+    [InlineData("Bad_Name", "Invalid name.", 0, 2, null, "invalid_module_declaration", "Name 'Bad_Name'")]
+    [InlineData("-leading", "Invalid name.", 0, 2, null, "invalid_module_declaration", "Name '-leading'")]
+    [InlineData("blank-description", "   ", 0, 2, null, "invalid_module_declaration", "Description")]
+    [InlineData("bad-kind", "Unknown identifier kind.", 99, 2, null, "invalid_module_declaration", "IdentifierKind '99'")]
+    [InlineData("bad-convention", "Unknown convention.", 0, 99, null, "invalid_module_declaration", "WireTypeConvention '99'")]
+    [InlineData("bad-tenant", "Invalid fixed tenant.", 0, 2, "Bad Tenant", "invalid_routing_value", "FixedTenant 'Bad Tenant'")]
     public void InvalidModuleMarkerExcludesTheModule(string name, string description, int identifierKind, int convention,
-        string? fixedTenant, string category)
+        string? fixedTenant, string category, string detail)
     {
         const string assemblyName = "InvalidMarker.Contracts";
         AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
@@ -250,6 +367,7 @@ public sealed class CatalogTests
         catalog.Modules.ShouldBeEmpty();
         catalog.Diagnostics.Select(diagnostic => (diagnostic.TypeName, diagnostic.Category, diagnostic.Severity))
             .ShouldBe([(assemblyName, category, "error")]);
+        catalog.Diagnostics.Single().Message.ShouldContain(detail);
     }
 
     /// <summary>The first declaration in sorted assembly order survives a duplicate module name.</summary>
@@ -295,16 +413,51 @@ public sealed class CatalogTests
             .ShouldBe(JsonSerializer.Serialize(forward, McpCliJson.Result));
     }
 
-    /// <summary>Result serialization is byte-identical across repeated and reordered manifests.</summary>
+    /// <summary>Survivors, diagnostics, and result bytes are identical across repeated and reordered manifests.</summary>
     [Fact]
     public void CanonicalSerializationIsIndependentOfAssemblyInputOrder()
     {
-        Assembly[] assemblies = [typeof(CreateItemCommand).Assembly, typeof(global::Catalog.String.Contracts.LookupQuery).Assembly,
-            typeof(Routing.Module).Assembly, typeof(Invalid.Module).Assembly, typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly];
-        string first = JsonSerializer.Serialize(CatalogBuilder.Build(assemblies), McpCliJson.Result);
-        string second = JsonSerializer.Serialize(CatalogBuilder.Build(assemblies.Reverse().ToArray()), McpCliJson.Result);
-        second.ShouldBe(first);
+        Assembly[] assemblies = FullFixtureSet();
+        CatalogSnapshot forward = CatalogBuilder.Build(assemblies);
+        CatalogSnapshot reversed = CatalogBuilder.Build(assemblies.Reverse().ToArray());
+        CatalogSnapshot repeated = CatalogBuilder.Build(assemblies);
+
+        reversed.Modules.SelectMany(module => module.Operations).Select(operation => operation.ContractType)
+            .ShouldBe(forward.Modules.SelectMany(module => module.Operations).Select(operation => operation.ContractType));
+        reversed.Diagnostics.ShouldBe(forward.Diagnostics);
+        repeated.Diagnostics.ShouldBe(forward.Diagnostics);
+        JsonSerializer.SerializeToUtf8Bytes(reversed, McpCliJson.Result)
+            .ShouldBe(JsonSerializer.SerializeToUtf8Bytes(forward, McpCliJson.Result));
     }
+
+    /// <summary>Diagnostics stay in the snapshot's diagnostic list and never leak into serialized Modules.</summary>
+    [Fact]
+    public void SerializedModulesCarryNoDiagnosticText()
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build(FullFixtureSet());
+        string modules = JsonSerializer.Serialize(catalog.Modules, McpCliJson.Result);
+
+        catalog.Diagnostics.ShouldNotBeEmpty();
+        modules.ShouldNotContain("\"diagnostics\"", Case.Insensitive);
+        modules.ShouldNotContain("\"severity\"", Case.Insensitive);
+        foreach (CatalogDiagnostic diagnostic in catalog.Diagnostics)
+        {
+            modules.ShouldNotContain(diagnostic.Category);
+            modules.ShouldNotContain(diagnostic.Message);
+        }
+    }
+
+    private static Assembly[] FullFixtureSet() =>
+    [
+        typeof(CreateItemCommand).Assembly,
+        typeof(global::Catalog.String.Contracts.LookupQuery).Assembly,
+        typeof(global::Catalog.Explicit.Contracts.ValidQuery).Assembly,
+        typeof(global::Catalog.InvalidProvider.Contracts.Module).Assembly,
+        typeof(Routing.Module).Assembly,
+        typeof(Invalid.Module).Assembly,
+        typeof(Manifest.MarkedEmpty.Contracts.Module).Assembly,
+        typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly,
+    ];
 
     private static ModuleDescriptor Sample() => CatalogBuilder.Build([typeof(CreateItemCommand).Assembly]).Modules.Single();
 

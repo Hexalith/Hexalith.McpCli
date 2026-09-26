@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using ByteAether.Ulid;
 using Hexalith.McpCli.Abstractions;
+using Hexalith.McpCli.Core.Catalog;
 
 namespace Hexalith.McpCli.Core.Schema;
 
@@ -23,6 +24,7 @@ public static class SchemaDeriver
     /// <param name="isCommand">Whether to enforce a non-null object root.</param>
     /// <param name="roleNames">Declared roles mapped to exact top-level CLR property names.</param>
     /// <returns>The schema and its effective property bindings.</returns>
+    /// <exception cref="ContractDeclarationException">The payload contract or a property role cannot be exposed as declared.</exception>
     public static DerivedSchema Derive(
         Type payloadType,
         JsonSerializerOptions options,
@@ -42,22 +44,43 @@ public static class SchemaDeriver
             throw new ArgumentOutOfRangeException(nameof(identifierKind), identifierKind, "The Module identifier kind is unknown.");
         }
 
-        JsonTypeInfo typeInfo = options.GetTypeInfo(payloadType);
+        JsonTypeInfo typeInfo;
+        try
+        {
+            typeInfo = options.GetTypeInfo(payloadType);
+        }
+        catch (Exception exception) when (exception is InvalidOperationException or NotSupportedException)
+        {
+            throw InvalidContract(payloadType, exception);
+        }
+
         if (isCommand && typeInfo.Kind != JsonTypeInfoKind.Object)
         {
-            throw new ArgumentException("A Command payload must have an object serialization contract.", nameof(payloadType));
+            throw new ContractDeclarationException("invalid_schema",
+                $"Command payload type {payloadType} must have an object serialization contract, not {typeInfo.Kind}.");
         }
+
         IReadOnlyDictionary<PropertyRole, PropertyBinding> bindings = ResolveBindings(payloadType, typeInfo, roleNames);
         var exporterOptions = new JsonSchemaExporterOptions
         {
             TransformSchemaNode = (context, schema) => Transform(context, schema, options, identifierKind, bindings),
         };
-        JsonNode schemaNode = JsonSchemaExporter.GetJsonSchemaAsNode(options, payloadType, exporterOptions);
+        JsonNode schemaNode;
+        try
+        {
+            schemaNode = JsonSchemaExporter.GetJsonSchemaAsNode(options, payloadType, exporterOptions);
+        }
+        catch (Exception exception) when (exception is InvalidOperationException or NotSupportedException)
+        {
+            throw InvalidContract(payloadType, exception);
+        }
+
         if (isCommand)
         {
             if (schemaNode is not JsonObject root)
             {
-                throw new ArgumentException("A Command payload must serialize as a JSON object.", nameof(payloadType));
+                throw new ContractDeclarationException("invalid_schema",
+                    $"Command payload type {payloadType} must serialize as a JSON object, not as {schemaNode.ToJsonString()}.");
             }
 
             root["type"] = "object";
@@ -79,7 +102,7 @@ public static class SchemaDeriver
 
         if (typeInfo.Kind != JsonTypeInfoKind.Object)
         {
-            throw new ArgumentException("An operation with property roles must have an object serialization contract.", nameof(payloadType));
+            throw InvalidReference($"Payload type {payloadType} declares property roles but has a {typeInfo.Kind} serialization contract, not an object.");
         }
 
         foreach ((PropertyRole role, string? clrName) in roleNames)
@@ -91,15 +114,21 @@ public static class SchemaDeriver
 
             if (string.IsNullOrWhiteSpace(clrName))
             {
-                throw new ArgumentException($"Property role {role} has an empty CLR property name.", nameof(roleNames));
+                throw InvalidReference($"Property role {role} names a blank CLR property '{clrName}'.");
             }
 
             PropertyInfo[] clrMatches = payloadType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(property => string.Equals(property.Name, clrName, StringComparison.Ordinal))
                 .ToArray();
-            if (clrMatches.Length != 1)
+            if (clrMatches.Length == 0)
             {
-                throw new ArgumentException($"Property role {role} must name one exact top-level CLR property: {clrName}.", nameof(roleNames));
+                throw InvalidReference($"Property role {role} names {clrName}, which is not a public instance property of {payloadType}.");
+            }
+
+            if (clrMatches.Length > 1)
+            {
+                throw InvalidReference($"Property role {role} names {clrName}, which matches {clrMatches.Length} CLR properties "
+                    + $"of {payloadType} because one hides another.");
             }
 
             PropertyInfo clrProperty = clrMatches[0];
@@ -110,25 +139,44 @@ public static class SchemaDeriver
                 .ToArray();
             if (metadataMatches.Length != 1)
             {
-                throw new ArgumentException($"Property role {role} names an ignored or ambiguous serialized property: {clrName}.", nameof(roleNames));
+                throw InvalidReference(metadataMatches.Length == 0
+                    ? $"Property role {role} names {clrName}, which is not a serialized input member under the Module payload options."
+                    : $"Property role {role} names {clrName}, which maps to {metadataMatches.Length} serialized members.");
             }
 
             JsonPropertyInfo metadata = metadataMatches[0];
+            if (metadata.Get is null && metadata.Set is null && metadata.AssociatedParameter is null)
+            {
+                throw InvalidReference($"Property role {role} names {clrName}, which is ignored and never serialized under the Module payload options.");
+            }
+
+            // Ownership is resolved on the serialized member, after [JsonPropertyName] and naming policy mapping.
+            PropertyBinding? owner = bindings.Values.FirstOrDefault(existing
+                => string.Equals(existing.SerializedName, metadata.Name, StringComparison.Ordinal));
+            if (owner is not null)
+            {
+                throw (owner.Role, role) is (PropertyRole.Tenant, PropertyRole.AggregateId) or (PropertyRole.AggregateId, PropertyRole.Tenant)
+                    ? new ContractDeclarationException("tenant_is_aggregate_id",
+                        $"Tenant and AggregateId roles both own serialized member {metadata.Name} (CLR property {clrName}).")
+                    : new ContractDeclarationException("conflicting_property_roles",
+                        $"Property roles {owner.Role} and {role} both own serialized member {metadata.Name} (CLR property {clrName}).");
+            }
+
             if ((role == PropertyRole.AggregateId && metadata.Get is null)
                 || (metadata.Set is null && metadata.AssociatedParameter is null)
                 || metadata.IsExtensionData)
             {
-                throw new ArgumentException($"Property role {role} must name a deserializable payload property: {clrName}.", nameof(roleNames));
+                throw InvalidReference($"Property role {role} must name a deserializable payload property: {clrName}.");
             }
 
             if (!IsSupportedRoleType(role, metadata.PropertyType))
             {
-                throw new ArgumentException($"Property role {role} cannot bind member {clrName} of type {metadata.PropertyType}.", nameof(roleNames));
+                throw InvalidReference($"Property role {role} cannot bind member {clrName} of type {metadata.PropertyType}.");
             }
 
-            if (bindings.Values.Any(existing => string.Equals(existing.SerializedName, metadata.Name, StringComparison.Ordinal)))
+            if (role != PropertyRole.AggregateId && HasExternalPropertyConverter(clrProperty))
             {
-                throw new ArgumentException($"Two property roles cannot own the same serialized member: {metadata.Name}.", nameof(roleNames));
+                throw InvalidReference($"Property role {role} names {clrName}, whose custom JsonConverter makes the serialized member converter-opaque.");
             }
 
             bindings.Add(role, new PropertyBinding(
@@ -160,15 +208,26 @@ public static class SchemaDeriver
         if (context.TypeInfo.Kind == JsonTypeInfoKind.Object
             && context.TypeInfo.Properties.Any(property => property.IsExtensionData))
         {
-            throw new NotSupportedException($"JSON extension data is unsupported in payload type {context.TypeInfo.Type}.");
+            string member = context.TypeInfo.Properties.First(property => property.IsExtensionData).Name;
+            throw new ContractDeclarationException("invalid_schema",
+                $"JSON extension data member {member} of payload type {context.TypeInfo.Type} cannot be represented by a closed schema.");
         }
 
         if (context.TypeInfo.PolymorphismOptions is not null)
         {
-            throw new NotSupportedException($"Polymorphic payload type {context.TypeInfo.Type} cannot be represented by a closed schema.");
+            throw new ContractDeclarationException("invalid_schema",
+                $"Polymorphic payload type {context.TypeInfo.Type} at {Location(context)} cannot be represented by a closed schema.");
         }
 
         JsonPropertyInfo? metadata = context.PropertyInfo;
+        Type nodeType = Nullable.GetUnderlyingType(context.TypeInfo.Type) ?? context.TypeInfo.Type;
+        if (IsFreeForm(nodeType))
+        {
+            throw new ContractDeclarationException("invalid_schema", metadata is not null
+                ? $"Free-form member {metadata.Name} of type {nodeType} cannot be represented by a closed schema."
+                : $"Free-form value of type {nodeType} at {Location(context)} cannot be represented by a closed schema.");
+        }
+
         PropertyInfo? clrProperty = metadata?.AttributeProvider as PropertyInfo;
         bool rootProperty = IsRootProperty(context);
         bool declaredIdentifier = clrProperty is not null
@@ -185,17 +244,19 @@ public static class SchemaDeriver
             || HasExternalPropertyConverter(clrProperty);
         if (opaqueConverter && metadata is null)
         {
-            throw new NotSupportedException($"Opaque payload root {context.TypeInfo.Type} cannot be represented by a closed schema.");
+            throw new ContractDeclarationException("invalid_schema",
+                $"Opaque payload root {context.TypeInfo.Type} at {Location(context)} cannot be represented by a closed schema.");
         }
 
         if (opaqueConverter && metadata is not null && !(declaredIdentifier || clrUlid))
         {
-            throw new NotSupportedException($"Opaque serialized member {metadata.Name} cannot be represented by a closed schema.");
+            throw new ContractDeclarationException("invalid_schema",
+                $"Opaque serialized member {metadata.Name} of type {metadata.PropertyType} has a custom converter and cannot be represented by a closed schema.");
         }
 
         if (schema is JsonObject container)
         {
-            ConstrainOpaqueElements(context.TypeInfo, container);
+            ConstrainOpaqueElements(context.TypeInfo, container, metadata?.Name ?? Location(context));
             if ((Nullable.GetUnderlyingType(context.TypeInfo.Type) ?? context.TypeInfo.Type) == typeof(TimeOnly))
             {
                 // The exporter's "time" format requires an offset that TimeOnly deserialization rejects.
@@ -225,7 +286,8 @@ public static class SchemaDeriver
                     ? !OpaqueIdentifierWritesString(metadata!, options, identifierKind)
                     : !SerializesAsString(node))
                 {
-                    throw new ArgumentException($"Declared identifier {clrProperty.Name} does not serialize as a JSON string.");
+                    throw new ContractDeclarationException("invalid_identifier_type",
+                        $"Declared identifier {metadata!.Name} of type {metadata.PropertyType} does not serialize as a JSON string.");
                 }
 
                 bool nullable = metadata!.IsGetNullable || AllowsNull(node);
@@ -287,7 +349,7 @@ public static class SchemaDeriver
             && context.Path.Length == 2
             && string.Equals(context.Path[0], "properties", StringComparison.Ordinal);
 
-    private static void ConstrainOpaqueElements(JsonTypeInfo typeInfo, JsonObject node)
+    private static void ConstrainOpaqueElements(JsonTypeInfo typeInfo, JsonObject node, string location)
     {
         string? elementKeyword = typeInfo.Kind switch
         {
@@ -303,9 +365,17 @@ public static class SchemaDeriver
         }
 
         Type elementType = typeInfo.ElementType;
-        if ((Nullable.GetUnderlyingType(elementType) ?? elementType) != typeof(Ulid))
+        Type effectiveElement = Nullable.GetUnderlyingType(elementType) ?? elementType;
+        if (IsFreeForm(effectiveElement))
         {
-            throw new NotSupportedException($"Opaque element type {elementType} of {typeInfo.Type} cannot be represented by a closed schema.");
+            throw new ContractDeclarationException("invalid_schema",
+                $"Free-form element type {elementType} of member {location} cannot be represented by a closed schema.");
+        }
+
+        if (effectiveElement != typeof(Ulid))
+        {
+            throw new ContractDeclarationException("invalid_schema",
+                $"Opaque element type {elementType} of member {location} ({typeInfo.Type}) cannot be represented by a closed schema.");
         }
 
         node[elementKeyword] = new JsonObject
@@ -436,6 +506,19 @@ public static class SchemaDeriver
                 && itemValue.TryGetValue<string>(out string? itemName)
                 && string.Equals(itemName, type, StringComparison.Ordinal));
     }
+
+    private static bool IsFreeForm(Type type) => type == typeof(object)
+        || type == typeof(JsonElement)
+        || type == typeof(JsonDocument)
+        || typeof(JsonNode).IsAssignableFrom(type);
+
+    private static string Location(JsonSchemaExporterContext context)
+        => context.Path.IsEmpty ? "#" : "#/" + string.Join('/', context.Path.ToArray());
+
+    private static ContractDeclarationException InvalidReference(string message) => new("invalid_property_reference", message);
+
+    private static ContractDeclarationException InvalidContract(Type payloadType, Exception exception)
+        => new("invalid_schema", $"Payload type {payloadType} has an invalid serialization contract: {exception.Message}", exception);
 
     private static string Escape(string segment) => segment.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
 }

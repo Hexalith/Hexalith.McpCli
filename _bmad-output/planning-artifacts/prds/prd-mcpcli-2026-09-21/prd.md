@@ -215,15 +215,20 @@ Every decorated type or Module the Catalog cannot expose as declared is reported
 |---|---|---|
 | `missing_description` | error, type excluded | Empty or whitespace description (FR-1) |
 | `missing_routing_values` | error, type excluded | A Routing Value with no interface, attribute, or convention source (FR-2) |
-| `invalid_routing_value` | error, type excluded | A domain, Wire Type, projection type, or `aggregateId` constant outside the Gateway patterns (FR-15) |
+| `invalid_routing_value` | error, type excluded | A domain, Wire Type, projection type, projection actor type, Module `FixedTenant`, or `aggregateId` constant outside the Gateway patterns, or a contract interface routing member that throws (FR-15) |
 | `duplicate_operation_name` | error, later type excluded | Two types resolve to one Operation Name (FR-8) |
 | `invalid_example` | error, type excluded | Example does not validate against the Schema (FR-1) |
 | `invalid_identifier_type` | error, type excluded | An Identifier that does not serialize as a JSON string (FR-7) |
 | `tenant_is_aggregate_id` | error, type excluded | `tenantProperty` names the aggregate identifier source. On Tenants, `TenantId` is the aggregate identifier, not the tenant |
-| `invalid_property_reference` | error, type excluded | A property-reference member cannot resolve to one included, deserializable serialized property under Module options |
+| `invalid_property_reference` | error, type excluded | A property-reference member cannot resolve to one included, deserializable serialized property under Module options, or is converter-opaque or of an unsupported type for its role |
 | `conflicting_property_roles` | error, type excluded | Two envelope roles, or an envelope role and the aggregate property source, own one serialized member; the tenant/aggregate case uses `tenant_is_aggregate_id` |
 | `ambiguous_aggregate_id` | error, type excluded | Both `aggregateId` and `aggregateIdProperty` set |
 | `duplicate_module` | error, later assembly excluded | Two assemblies declare one Module Name |
+| `invalid_module_declaration` | error, assembly excluded | The Module marker's name, description, Identifier Kind, or wire type convention is invalid, or the Contracts assembly's types cannot be loaded (FR-3) |
+| `conflicting_operation_kinds` | error, type excluded | One type carries both the Command and the Query decoration (FR-1) |
+| `invalid_operation_declaration` | error, type excluded | A decorated type is abstract, open generic, or not a class (FR-1) |
+| `invalid_operation_name` | error, type excluded | An explicit or type-derived Operation Name part is not lowercase ASCII kebab-case (FR-8) |
+| `invalid_schema` | error, type excluded | The payload uses extension data, polymorphism, a free-form (`object`, `JsonElement`, `JsonDocument`, `JsonNode`) or converter-opaque member, a Command payload that is not a JSON object, or has a System.Text.Json contract error (FR-7) |
 | `conflicting_value` | warning, kept | Attribute value differs from the interface value (FR-2) |
 | `redundant_value` | warning, kept | Attribute value equals the interface or convention value (FR-2) |
 | `empty_module` | warning, kept | A marked assembly exposes zero Operations (FR-20) |

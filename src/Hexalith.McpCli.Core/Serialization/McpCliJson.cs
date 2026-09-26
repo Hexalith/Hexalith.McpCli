@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Hexalith.McpCli.Abstractions;
+using Hexalith.McpCli.Core.Catalog;
 
 namespace Hexalith.McpCli.Core.Serialization;
 
@@ -22,6 +23,7 @@ public static class McpCliJson
     /// <param name="contractsAssembly">The marked Contracts assembly.</param>
     /// <param name="module">The Module declaration from that assembly.</param>
     /// <returns>Read-only canonical payload options.</returns>
+    /// <exception cref="ContractDeclarationException">The declared serializer options provider cannot be used.</exception>
     public static JsonSerializerOptions ForModule(Assembly contractsAssembly, HexalithModuleAttribute module)
     {
         ArgumentNullException.ThrowIfNull(contractsAssembly);
@@ -43,18 +45,36 @@ public static class McpCliJson
 
         if (provider.Assembly != assembly)
         {
-            throw new ArgumentException("The serializer options provider must be in the Contracts assembly.", nameof(module));
+            throw ProviderFailure($"SerializerOptionsProvider {provider.FullName} must be declared in the Contracts assembly "
+                + $"{assembly.GetName().Name}, not in {provider.Assembly.GetName().Name}.");
         }
 
         PropertyInfo? property = provider.GetProperty("Options", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
         if (property is null || property.PropertyType != typeof(JsonSerializerOptions) || property.GetMethod is null || property.GetIndexParameters().Length != 0)
         {
-            throw new ArgumentException("The serializer options provider must expose public static JsonSerializerOptions Options { get; }.", nameof(module));
+            throw ProviderFailure($"SerializerOptionsProvider {provider.FullName} must expose public static JsonSerializerOptions Options {{ get; }}.");
         }
 
-        return (JsonSerializerOptions?)property.GetValue(null)
-            ?? throw new ArgumentException("The serializer options provider returned null.", nameof(module));
+        object? value;
+        try
+        {
+            value = property.GetValue(null);
+        }
+        catch (TargetInvocationException exception)
+        {
+            // A failing static constructor arrives as TargetInvocationException wrapping TypeInitializationException.
+            Exception cause = exception.InnerException is TypeInitializationException { InnerException: { } initializer }
+                ? initializer
+                : exception.InnerException ?? exception;
+            throw ProviderFailure($"SerializerOptionsProvider {provider.FullName}.Options threw {cause.GetType().Name}: {cause.Message}", cause);
+        }
+
+        return (JsonSerializerOptions?)value
+            ?? throw ProviderFailure($"SerializerOptionsProvider {provider.FullName}.Options returned null.");
     }
+
+    private static ContractDeclarationException ProviderFailure(string message, Exception? cause = null)
+        => new("invalid_serializer_options_provider", message, cause);
 
     private static JsonSerializerOptions CreatePayload(JsonSerializerOptions? provider)
     {

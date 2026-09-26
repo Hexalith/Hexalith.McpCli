@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Hexalith.McpCli.Abstractions;
+using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Sample.Contracts;
@@ -85,7 +86,8 @@ public sealed class SchemaTests
         properties["Tracking"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
         properties["ExternalId"]!["type"]!.ToJsonString().ShouldContain("integer");
         properties["ExternalId"]!["pattern"].ShouldBeNull();
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(InvalidIdentifierCommand), TestOptions(), kind, true));
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(InvalidIdentifierCommand), TestOptions(), kind, true))
+            .Category.ShouldBe("invalid_identifier_type");
     }
 
     /// <summary>Rejects opaque converters that emit numbers for declared identifiers.</summary>
@@ -96,10 +98,10 @@ public sealed class SchemaTests
     {
         JsonSerializerOptions options = TestOptions();
         JsonSerializer.Serialize(new NumericIdentifier(1), options).ShouldBe("1");
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(ConvertedNumericIdentifierCommand), options, kind, true));
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(ConvertedNumericIdentifierCommand), options, kind, true));
         options.GetTypeInfo(typeof(PropertyConvertedNumericIdentifierCommand)).Properties.Single().CustomConverter.ShouldNotBeNull();
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(PropertyConvertedNumericIdentifierCommand), options, kind, true));
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(ConvertedNumericAggregateCommand), options, kind, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(PropertyConvertedNumericIdentifierCommand), options, kind, true));
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(ConvertedNumericAggregateCommand), options, kind, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(ConvertedNumericAggregateCommand.Source) }));
     }
 
@@ -147,16 +149,16 @@ public sealed class SchemaTests
         }
         derived.Node["required"]!.ToJsonString().ShouldNotContain("tenant/~");
         PayloadValidator.Validate(derived, "{\"Name\":\"x\",\"Nested\":{\"Count\":1},\"Items\":[],\"Required\":\"r\",\"tenant/~\":4}", true).Violations.Select(violation => violation.Path).ShouldContain("/tenant~1~0");
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
-            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(MixedCommand.Derived) }));
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(MixedCommand.Derived) })).Category.ShouldBe("invalid_property_reference");
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = "tenant/~" }));
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?>
             {
                 [PropertyRole.Tenant] = nameof(MixedCommand.Tenant),
                 [PropertyRole.AggregateId] = nameof(MixedCommand.Tenant),
-            }));
+            })).Category.ShouldBe("tenant_is_aggregate_id");
     }
 
     /// <summary>Tests aggregate mapping independent of attributes and rejects numeric sources.</summary>
@@ -172,7 +174,7 @@ public sealed class SchemaTests
         properties["Source"]!["readOnly"].ShouldBeNull();
         schema.Node["required"]!.AsArray().Select(name => name!.GetValue<string>()).ShouldContain("Source");
         properties["OtherId"]!["type"]!.ToJsonString().ShouldContain("integer");
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(AggregateOnlyCommand), TestOptions(), kind, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(AggregateOnlyCommand), TestOptions(), kind, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(AggregateOnlyCommand.OtherId) }));
     }
 
@@ -185,7 +187,7 @@ public sealed class SchemaTests
         schema.Bindings[PropertyRole.Tenant].Pointer.ShouldBe("/tenant~1~0");
         schema.Node["properties"]!["tenant/~"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
         schema.Node["properties"]!["tenant/~"]!["description"]!.GetValue<string>().ShouldBe("The tenant supplied by the envelope.");
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(SetterOnlyEnvelopeCommand), TestOptions(), IdentifierKind.String, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(SetterOnlyEnvelopeCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.AggregateId] = nameof(SetterOnlyEnvelopeCommand.Tenant) }));
     }
 
@@ -193,7 +195,7 @@ public sealed class SchemaTests
     [Fact]
     public void BlankRoleNameIsInvalid()
     {
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = "  " }));
         DerivedSchema schema = SchemaDeriver.Derive(typeof(MixedCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = null });
@@ -204,11 +206,15 @@ public sealed class SchemaTests
     [Fact]
     public void OrdinaryOpaqueMemberIsRejected()
     {
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true))
-            .Message.ShouldContain("Opaque serialized member");
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true,
+        ContractDeclarationException opaque = Should.Throw<ContractDeclarationException>(
+            () => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true));
+        opaque.Category.ShouldBe("invalid_schema");
+        opaque.Message.ShouldContain("Opaque serialized member Value");
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true,
             new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(OrdinaryOpaqueCommand.Value) }))
-            .Message.ShouldContain("cannot bind member");
+            .ShouldSatisfyAllConditions(
+                exception => exception.Category.ShouldBe("invalid_property_reference"),
+                exception => exception.Message.ShouldContain("cannot bind member"));
     }
 
     /// <summary>Accepts only string tenant and actor roles, and string or ULID correlation and idempotency roles.</summary>
@@ -234,7 +240,7 @@ public sealed class SchemaTests
         var roles = new Dictionary<PropertyRole, string?> { [role] = member };
         if (!valid)
         {
-            Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(EnvelopeTypedCommand), TestOptions(), IdentifierKind.String, true, roles))
+            Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(EnvelopeTypedCommand), TestOptions(), IdentifierKind.String, true, roles))
                 .Message.ShouldContain("cannot bind member");
             return;
         }
@@ -288,9 +294,9 @@ public sealed class SchemaTests
     [Fact]
     public void OpaqueElementsAreRejected()
     {
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OpaqueCollectionCommand), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(OpaqueCollectionCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("Opaque element");
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OpaqueDictionaryCommand), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(OpaqueDictionaryCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("Opaque element");
     }
 
@@ -328,7 +334,7 @@ public sealed class SchemaTests
     [Fact]
     public void NonObjectCommandRootIsRejected()
     {
-        Should.Throw<ArgumentException>(() => SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("object serialization contract");
         SchemaDeriver.Derive(typeof(string), TestOptions(), IdentifierKind.String, false).Node["type"]!.ToJsonString().ShouldContain("string");
     }
@@ -372,7 +378,7 @@ public sealed class SchemaTests
         id["properties"].ShouldBeNull();
         PayloadValidator.Validate(schema, "{\"Id\":null}", true).IsValid.ShouldBeTrue();
         PayloadValidator.Validate(schema, "{\"Id\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true).IsValid.ShouldBeTrue();
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(PropertyConverterNullableCommand), McpCliJson.Payload, IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(PropertyConverterNullableCommand), McpCliJson.Payload, IdentifierKind.String, true))
             .Message.ShouldContain("Opaque serialized member");
     }
 
@@ -443,7 +449,7 @@ public sealed class SchemaTests
     [Fact]
     public void GetOnlyExtensionDataIsRejected()
     {
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(GetOnlyExtensionDataCommand), McpCliJson.Payload, IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(GetOnlyExtensionDataCommand), McpCliJson.Payload, IdentifierKind.String, true))
             .Message.ShouldContain("extension data");
     }
 
@@ -457,11 +463,43 @@ public sealed class SchemaTests
     public void InvalidProviderShapesCannotYieldOptions(Type? optionsType, string expected)
     {
         Type provider = DynamicProviderFactory.Emit(optionsType);
-        Should.Throw<ArgumentException>(() => McpCliJson.ForModule(provider.Assembly,
+        ContractDeclarationException exception = Should.Throw<ContractDeclarationException>(() => McpCliJson.ForModule(provider.Assembly,
             new HexalithModuleAttribute("invalid", "Invalid provider.", IdentifierKind.String)
             {
                 SerializerOptionsProvider = provider,
-            })).Message.ShouldContain(expected);
+            }));
+        exception.Category.ShouldBe("invalid_serializer_options_provider");
+        exception.Message.ShouldContain(expected);
+    }
+
+    /// <summary>A provider whose Options getter throws becomes a coded provider failure that keeps the cause.</summary>
+    [Fact]
+    public void ThrowingProviderGetterIsACodedProviderFailure()
+    {
+        Type provider = DynamicProviderFactory.EmitThrowing();
+        ContractDeclarationException exception = Should.Throw<ContractDeclarationException>(() => McpCliJson.ForModule(provider.Assembly,
+            new HexalithModuleAttribute("throwing", "Throwing provider.", IdentifierKind.String)
+            {
+                SerializerOptionsProvider = provider,
+            }));
+        exception.Category.ShouldBe("invalid_serializer_options_provider");
+        exception.Message.ShouldContain("Provider.Options threw InvalidOperationException");
+        exception.InnerException.ShouldBeOfType<InvalidOperationException>();
+    }
+
+    /// <summary>A provider whose static constructor throws reports the initializer's own cause, not the type-initialization wrapper.</summary>
+    [Fact]
+    public void ThrowingProviderInitializerReportsTheRealCause()
+    {
+        Type provider = DynamicProviderFactory.EmitThrowingInitializer();
+        ContractDeclarationException exception = Should.Throw<ContractDeclarationException>(() => McpCliJson.ForModule(provider.Assembly,
+            new HexalithModuleAttribute("initializer", "Throwing initializer provider.", IdentifierKind.String)
+            {
+                SerializerOptionsProvider = provider,
+            }));
+        exception.Category.ShouldBe("invalid_serializer_options_provider");
+        exception.Message.ShouldContain("threw InvalidOperationException: Initializer failure.");
+        exception.InnerException.ShouldBeOfType<InvalidOperationException>();
     }
 
     /// <summary>Rejects an unconstrained schema for a converter-backed Query root.</summary>
@@ -469,7 +507,7 @@ public sealed class SchemaTests
     public void OpaqueQueryRootIsRejected()
     {
         JsonSerializer.Serialize(new OpaqueQueryPayload("value"), TestOptions()).ShouldBe("\"value\"");
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(OpaqueQueryPayload), TestOptions(), IdentifierKind.String, false))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(OpaqueQueryPayload), TestOptions(), IdentifierKind.String, false))
             .Message.ShouldContain("Opaque payload root");
     }
 
@@ -477,9 +515,9 @@ public sealed class SchemaTests
     [Fact]
     public void ExtensionDataIsRejectedAtEveryDepth()
     {
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(ExtensionDataCommand), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(ExtensionDataCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("extension data");
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(ExtensionContainerCommand), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(ExtensionContainerCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("extension data");
     }
 
@@ -487,9 +525,9 @@ public sealed class SchemaTests
     [Fact]
     public void PolymorphismIsRejectedAtEveryDepth()
     {
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(PolymorphicBase), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(PolymorphicBase), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("Polymorphic");
-        Should.Throw<NotSupportedException>(() => SchemaDeriver.Derive(typeof(PolymorphicContainerCommand), TestOptions(), IdentifierKind.String, true))
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(PolymorphicContainerCommand), TestOptions(), IdentifierKind.String, true))
             .Message.ShouldContain("Polymorphic");
     }
 
@@ -507,7 +545,7 @@ public sealed class SchemaTests
     [Fact]
     public void InvalidProviderCannotYieldOptionsAndSchemaSnapshotStaysConsistent()
     {
-        Should.Throw<ArgumentException>(() => McpCliJson.ForModule(typeof(string).Assembly,
+        Should.Throw<ContractDeclarationException>(() => McpCliJson.ForModule(typeof(string).Assembly,
             new HexalithModuleAttribute("invalid", "Invalid provider.", IdentifierKind.String)
             {
                 SerializerOptionsProvider = typeof(FixtureSerializerOptions),
