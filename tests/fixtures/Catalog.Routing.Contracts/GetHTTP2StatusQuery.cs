@@ -1,7 +1,7 @@
 using Hexalith.McpCli.Abstractions;
 
-namespace Hexalith.McpCli.Sample.Contracts;
+namespace Catalog.Routing.Contracts;
 
 /// <summary>Exercises acronym and digit naming and explicit aggregate input.</summary>
-[HexalithQuery("Read HTTP2 status.", Domain = "sample", ProjectionType = "sample-items")]
+[HexalithQuery("Read HTTP2 status.", Domain = "routing", ProjectionType = "routing-items")]
 public sealed record GetHTTP2StatusQuery;

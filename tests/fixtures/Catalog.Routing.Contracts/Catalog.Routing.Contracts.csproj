@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../../src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />
+    <PackageReference Include="Hexalith.EventStore.Contracts" />
+  </ItemGroup>
+</Project>

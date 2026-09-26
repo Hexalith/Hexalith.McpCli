@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Hexalith.EventStore.Contracts.Commands;
 using Hexalith.McpCli.Abstractions;
 
-namespace Hexalith.McpCli.Sample.Contracts;
+namespace Catalog.Routing.Contracts;
 
 /// <summary>Exercises command interface routing precedence over conflicting attributes.</summary>
 /// <param name="ItemId">The aggregate identifier.</param>
@@ -13,7 +13,7 @@ public sealed record CompetingRouteCommand(string ItemId) : ICommandContract
     public static string CommandType => "interface-wire";
 
     /// <summary>Gets the interface domain.</summary>
-    public static string Domain => "sample";
+    public static string Domain => "routing";
 
     /// <summary>Gets the computed aggregate identifier.</summary>
     [JsonIgnore]

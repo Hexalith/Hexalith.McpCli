@@ -14,5 +14,7 @@
     <Project Path="tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj" />
     <Project Path="tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj" />
     <Project Path="tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj" />
+    <Project Path="tests/fixtures/Catalog.Routing.Contracts/Catalog.Routing.Contracts.csproj" />
+    <Project Path="tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj" />
   </Folder>
 </Solution>

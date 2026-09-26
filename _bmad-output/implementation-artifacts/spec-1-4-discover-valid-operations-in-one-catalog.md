@@ -57,6 +57,66 @@ context: []
 - Given an exposed Operation, when a consumer inspects its descriptor, then its route, aggregate source, Schema, Payload options, envelope bindings, and Contract type are already resolved without reflection by the consumer.
 - Given the same assemblies in different input orders, when a Catalog is built and serialized with `McpCliJson.Result`, then the bytes are equal.
 
+### Review Findings
+
+Code review of 2026-09-26: `27b998a..fb6a64a`, full mode, with the Blind Hunter, Edge Case Hunter, Verification Gap and Acceptance Auditor layers.
+
+- [x] [Review][Patch] Sample.Contracts now carries invalid and extra declarations (decision: move them to an isolated `tests/fixtures/Catalog.Invalid.Contracts` assembly) — The architecture spine's Tests convention says `Sample.Contracts` declares exactly one Module with one `ICommandContract` command, one attribute-routed command, one converter-backed identifier, and one query. The diff adds about 20 types to it, a dozen of them deliberately invalid. As a result, every `CatalogBuilder.Build([Sample])` returns error diagnostics. Story 1.5's `--strict` (`catalog_invalid`) path and the planned Verify snapshot of the Catalog dump will inherit that noise. This spec's Code Map allowed extending the fixtures, so the spine and the spec disagree. The options are to move the invalid and extra fixtures into isolated `tests/fixtures/Catalog.*.Contracts` assemblies, or to keep them and amend the spine.
+- [x] [Review][Patch] Public type `Catalog` shares its name with the namespace `Hexalith.McpCli.Core.Catalog` (decision: rename the class to `CatalogSnapshot`) — Code inside `Hexalith.McpCli.Core.*`, such as the future executor and `Core.Tests`, resolves `Catalog` to the namespace (CS0118). It needs an alias, as `CatalogTests` already does with `using CatalogSnapshot = …Catalog.Catalog;`. The options are to rename the type (for example `CatalogSnapshot`), rename the namespace, or keep it.
+- [x] [Review][Patch] Routing wire-value validation diverges from the Gateway validators [src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:65]
+  - `IsWireValue` bans `:` in every wire type. The pinned `SubmitCommandRequestValidator` allows colons in `CommandType`; only `QueryType`, `ProjectionType` and `ProjectionActorType` ban them. A valid command wire type such as `orders:create` is therefore excluded.
+  - `IsWireValue` also rejects control characters, which the Gateway accepts.
+  - It omits the Gateway's `javascript\s*:` and `<\s*script` injection terms.
+  - Fix: mirror AD-9 exactly. Apply the colon rule per field and use the Gateway's `(?i)(javascript\s*:|on\w+\s*=|<\s*script)` pattern.
+- [x] [Review][Patch] Invalid-operation test asserts categories globally, not per type [tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs:158]
+  - `codes.ShouldContain(...)` passes as long as any fixture emits the category.
+  - `InvalidRoutingQuery` (a bad domain) is never named, so removing the `IsTenantDomain(domain)` check still passes. `DualAggregateQuery`, `ConflictingEnvelopeCommand` and `ConflictingRoleCommand` are never tied to their categories either.
+  - No fixture covers an invalid `ProjectionType`.
+  - Fix: assert exclusion and a `(TypeName, Category)` diagnostic for each invalid fixture.
+- [x] [Review][Patch] Invalid Query aggregate-ID constant has no fixture [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:185] — Removing the `IsAggregateId` constant check passes every test.
+- [x] [Review][Patch] Module-marker validation is untested [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:37] — No test covers a non-canonical name, a blank description, an out-of-range enum, or an invalid `FixedTenant`. Deleting either check passes every test. Use the existing dynamic-assembly helper.
+- [x] [Review][Patch] `AggregateIdRequired` is never asserted false for a property-sourced Query [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:223] — Dropping `accessor is null &&` from the expression passes every test. Assert that `sample.get-item` is false.
+- [x] [Review][Patch] `IdempotencyKeyRequired` is only asserted true [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:220] — No nullable-idempotency fixture exists, and no operation without an idempotency binding is asserted false. Replacing the expression with `ContainsKey` passes every test.
+- [x] [Review][Patch] The "Invalid Schema" matrix cell is untested [tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs:158] — No fixture produces `invalid_schema` (extension data, a polymorphic type, or an opaque member), although Task 3 requires every matrix row.
+- [x] [Review][Patch] `missing_description` and `invalid_operation_declaration` branches are untested [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:100] — Blank descriptions and abstract, open-generic or struct decorated types have no fixture.
+- [x] [Review][Defer] Diagnostic categories come from matching exception message text [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:234] — deferred: Story 1.5 owns the taxonomy.
+  - `Classify` substring-matches `SchemaDeriver` messages, so `RoutingResolver.Invoke`'s "Contract interface routing could not be read." lands in `invalid_schema`.
+  - `IsDeclarationFailure` catches broad BCL exceptions, which can turn internal McpCli bugs into quiet operation exclusions.
+  - `invalid_module_declaration`, `conflicting_operation_kinds`, `invalid_operation_declaration`, `invalid_operation_name` and `invalid_schema` are outside the spine taxonomy.
+  - Story 1.5 should replace this with a coded declaration-failure exception.
+- [x] [Review][Defer] Diagnostic messages drop the failure detail [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:229] — deferred: Story 1.5 requires an "actionable message". Generic texts such as "The operation declaration could not be resolved." discard `exception.Message`, so the author cannot tell which member or value failed.
+- [x] [Review][Defer] Routing source is discarded, so `redundant_value` and `conflicting_value` cannot be emitted [src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:21] — deferred: this is a Story 1.5 AC. `Resolve` overwrites attribute values with interface values without recording which source won. `CompetingRouteCommand` and `InterfaceItemQuery` conflict silently.
+
+**Patch resolution (2026-09-26):**
+- `Sample.Contracts` is back to the spine's canonical shape and builds with no diagnostics.
+- The valid routing, aggregate-source and envelope variants moved to `tests/fixtures/Catalog.Routing.Contracts`. That assembly adds a colon command wire type and an optional idempotency key.
+- The invalid declarations, together with the surviving first duplicate, moved to `tests/fixtures/Catalog.Invalid.Contracts`. It adds these fixtures: invalid constant, invalid projection type, colon query wire type, blank description, abstract, open generic, and extension-data (`invalid_schema`).
+- Moved fixtures use string `[HexalithIdentifier]` members, because a Module's serializer provider must live in its own assembly.
+- `Catalog` is renamed `CatalogSnapshot`.
+- `RoutingResolver.IsWireValue` mirrors the Gateway validators: colons are allowed only in command wire types, it uses the Gateway's source-generated injection pattern, and it no longer rejects control characters.
+- `CatalogTests` asserts one `(TypeName, Category, Severity)` per invalid type, the invalid module markers, and the `false` cases of `AggregateIdRequired` and `IdempotencyKeyRequired`.
+- Verification:
+  - `dotnet build Hexalith.McpCli.slnx --configuration Release` gives 0 warnings and 0 errors.
+  - Tests pass: Core 92/92, Abstractions 20/20, Manifest 6/6.
+  - Reintroducing each regression (command colon ban, domain check, `accessor is null`, idempotency nullability) fails at least one test.
+
+**Rejected:**
+- `false` — `CatalogDiagnostic` is loosely modeled: its shape is exactly the spine's `CatalogDiagnostic(TypeName, Category, Severity, Message)`.
+- `low` — Non-public decorated types are exposed: decoration is the explicit opt-in, and a visibility guard adds a branch for an unlikely authoring case.
+- `false` — The interface aggregate accessor is not compiled once, can throw, and its result is unvalidated: AD-19 prescribes deserializing the finally validated payload before the getter runs, and AD-8/AD-19 make the executor validate the accessor value and reject empty identifiers.
+- `false` — A nullable Command aggregate property yields a null accessor value: AD-19 makes a missing non-empty value `validation_failed` in the executor.
+- `false` — `AggregateIdProperty` silently overrides the `ICommandContract` getter: AD-19 prescribes the property first.
+- `low` — The same-identity assembly tie-break is arbitrary: the earlier triage made it input-order independent, and the generated manifest loads by unique name.
+- `false` — The name validators are duplicated and `IsCanonicalPart` is uncapped: no consumer imposes a length limit on canonical names, and no divergence harm was named.
+- `false` — The tenant/aggregate pre-check duplicates `SchemaDeriver`: the spine requires retaining `tenant_is_aggregate_id` for that collision.
+- `low` — Unloadable attribute or member metadata aborts `Build`: the earlier triage already rejected this; manifest assemblies ship with their dependencies, and guards add branches.
+- `low` — A Command attribute on an `IQueryContract` type ignores interface routing: this is a rare authoring error, and a guard adds a branch.
+- `false` — KebabCase wire type follows the explicit name override: `WireTypeConvention.KebabCase` is documented as "the operation's kebab-case name part".
+- `false` — `OperationDescriptor` lacks Payload options: AD-3 places `ModulePayloadOptions` on `ModuleDescriptor`, and the descriptor field list matches.
+- `false` — An empty interface static blocks the attribute fallback: the spine's "Routing per field" says the interface value wins when it defines the field.
+- `low` — `IsWireValue` regex has no timeout and is not source-generated: its input is bounded to 256 characters by the preceding length check.
+- `low` — The null-entry and `ReflectionTypeLoadException` paths are untested: both are trivial guards, and the second is hard to fixture.
+
 ## Implementation Notes
 
 - Added the immutable Catalog and descriptors in Core, reusing cached Module options, Schema derivation, role bindings, and the Payload validator. Routing reads interface static members before attributes and convention; aggregate sources use one prepared property or interface accessor.

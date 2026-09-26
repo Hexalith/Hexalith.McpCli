@@ -7,7 +7,7 @@ using Hexalith.McpCli.Abstractions;
 namespace Hexalith.McpCli.Core.Catalog;
 
 /// <summary>Resolves contract interface and declaration routing at catalog construction.</summary>
-internal static class RoutingResolver
+internal static partial class RoutingResolver
 {
     internal static OperationRouting Resolve(Type type, OperationKind kind, HexalithModuleAttribute module,
         string namePart, HexalithCommandAttribute? command, HexalithQueryAttribute? query)
@@ -42,9 +42,9 @@ internal static class RoutingResolver
             throw new ArgumentException("missing_routing_values");
         }
 
-        if (!IsTenantDomain(domain) || !IsWireValue(wireType)
+        if (!IsTenantDomain(domain) || !IsWireValue(wireType, allowColon: kind == OperationKind.Command)
             || (kind == OperationKind.Query && projectionType is not null && !IsTenantDomain(projectionType))
-            || (query?.ProjectionActorType is not null && !IsWireValue(query.ProjectionActorType, 64)))
+            || (query?.ProjectionActorType is not null && !IsWireValue(query.ProjectionActorType, allowColon: false, 64)))
         {
             throw new ArgumentException("invalid_routing_value");
         }
@@ -62,11 +62,15 @@ internal static class RoutingResolver
         && IsAsciiLetterOrDigit(value[^1])
         && value.All(character => IsAsciiLetterOrDigit(character) || character is '.' or '_' or '-');
 
-    private static bool IsWireValue(string? value, int maxLength = 256) => !string.IsNullOrWhiteSpace(value)
+    // Mirrors the pinned Gateway validators: only Query-side wire values reserve ':' as the actor ID separator.
+    private static bool IsWireValue(string? value, bool allowColon, int maxLength = 256) => !string.IsNullOrWhiteSpace(value)
         && value.Length <= maxLength
-        && !value.Contains(':')
-        && value.All(character => !char.IsControl(character) && character is not ('<' or '>' or '&' or '\'' or '"'))
-        && !Regex.IsMatch(value, @"on\w+\s*=", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        && (allowColon || !value.Contains(':'))
+        && value.IndexOfAny(['<', '>', '&', '\'', '"']) < 0
+        && !InjectionPattern().IsMatch(value);
+
+    [GeneratedRegex(@"(?i)(javascript\s*:|on\w+\s*=|<\s*script)")]
+    private static partial Regex InjectionPattern();
 
     private static bool IsAsciiLowerOrDigit(char value) => value is >= 'a' and <= 'z' or >= '0' and <= '9';
 

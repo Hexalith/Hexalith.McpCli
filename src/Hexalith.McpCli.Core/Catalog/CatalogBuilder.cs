@@ -12,7 +12,7 @@ public static class CatalogBuilder
     /// <summary>Discovers marked modules and valid decorated operations.</summary>
     /// <param name="assemblies">The assembly manifest; no other assemblies are scanned.</param>
     /// <returns>An immutable catalog and its declaration diagnostics.</returns>
-    public static Catalog Build(IReadOnlyList<Assembly> assemblies)
+    public static CatalogSnapshot Build(IReadOnlyList<Assembly> assemblies)
     {
         ArgumentNullException.ThrowIfNull(assemblies);
         if (assemblies.Any(assembly => assembly is null))
@@ -129,7 +129,7 @@ public static class CatalogBuilder
                 marker.WireTypeConvention, options, valid));
         }
 
-        return new Catalog(modules.OrderBy(item => item.Name, StringComparer.Ordinal).ToArray(),
+        return new CatalogSnapshot(modules.OrderBy(item => item.Name, StringComparer.Ordinal).ToArray(),
             diagnostics.OrderBy(item => item.TypeName, StringComparer.Ordinal)
                 .ThenBy(item => item.Category, StringComparer.Ordinal)
                 .ThenBy(item => item.Severity, StringComparer.Ordinal)

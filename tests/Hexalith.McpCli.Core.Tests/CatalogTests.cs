@@ -7,7 +7,8 @@ using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Sample.Contracts;
 using Shouldly;
-using CatalogSnapshot = Hexalith.McpCli.Core.Catalog.Catalog;
+using Invalid = global::Catalog.Invalid.Contracts;
+using Routing = global::Catalog.Routing.Contracts;
 
 namespace Hexalith.McpCli.Core.Tests;
 
@@ -30,11 +31,18 @@ public sealed class CatalogTests
             && diagnostic.TypeName == "Catalog.InvalidProvider.Contracts" && diagnostic.Severity == "error");
         catalog.Diagnostics.ShouldNotContain(diagnostic => diagnostic.TypeName == typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly.GetName().Name);
         catalog.Modules.Single(module => module.Name == "sample").Operations.Select(operation => operation.Name)
-            .ShouldBe(catalog.Modules.Single(module => module.Name == "sample").Operations.Select(operation => operation.Name)
-                .OrderBy(name => name, StringComparer.Ordinal));
+            .ShouldBe(["sample.create-item", "sample.get-item", "sample.rename-item"]);
         CatalogSnapshot unmarkedOnly = CatalogBuilder.Build([typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly]);
         unmarkedOnly.Modules.ShouldBeEmpty();
         unmarkedOnly.Diagnostics.ShouldBeEmpty();
+    }
+
+    /// <summary>The canonical sample and the valid routing variants build without diagnostics.</summary>
+    [Fact]
+    public void ValidFixturesBuildWithoutDiagnostics()
+    {
+        CatalogBuilder.Build([typeof(CreateItemCommand).Assembly]).Diagnostics.ShouldBeEmpty();
+        CatalogBuilder.Build([typeof(Routing.Module).Assembly]).Diagnostics.ShouldBeEmpty();
     }
 
     /// <summary>A marked assembly with no decorated operations remains discoverable.</summary>
@@ -52,8 +60,8 @@ public sealed class CatalogTests
     [Fact]
     public void RoutingAndAggregateSourcesAreResolvedAtBuild()
     {
-        ModuleDescriptor module = Sample();
-        OperationDescriptor command = Find(module, "sample.create-item");
+        ModuleDescriptor sample = Sample();
+        OperationDescriptor command = Find(sample, "sample.create-item");
         command.Routing.Domain.ShouldBe("sample");
         command.Routing.WireType.ShouldBe("create-item");
         command.AggregateIdAccessor.ShouldNotBeNull();
@@ -62,11 +70,7 @@ public sealed class CatalogTests
             command.AggregateIdAccessor(payload.RootElement).ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
         }
 
-        OperationDescriptor competing = Find(module, "sample.competing-route");
-        competing.Routing.Domain.ShouldBe("sample");
-        competing.Routing.WireType.ShouldBe("interface-wire");
-
-        OperationDescriptor attributeCommand = Find(module, "sample.rename-item");
+        OperationDescriptor attributeCommand = Find(sample, "sample.rename-item");
         attributeCommand.Routing.WireType.ShouldBe("rename-item-wire");
         attributeCommand.Routing.Domain.ShouldBe("sample");
         using (JsonDocument payload = JsonDocument.Parse("{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"new\"}"))
@@ -74,19 +78,29 @@ public sealed class CatalogTests
             attributeCommand.AggregateIdAccessor!(payload.RootElement).ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
         }
 
-        OperationDescriptor interfaceQuery = Find(module, "sample.interface-item");
-        interfaceQuery.Routing.Domain.ShouldBe("sample");
+        OperationDescriptor propertyQuery = Find(sample, "sample.get-item");
+        propertyQuery.Routing.ProjectionType.ShouldBe("sample-items");
+        propertyQuery.Routing.WireType.ShouldBe("get-item");
+        propertyQuery.AggregateIdAccessor.ShouldNotBeNull();
+        propertyQuery.AggregateIdRequired.ShouldBeFalse();
+
+        ModuleDescriptor routing = RoutingModule();
+        OperationDescriptor competing = Find(routing, "routing-fixture.competing-route");
+        competing.Routing.Domain.ShouldBe("routing");
+        competing.Routing.WireType.ShouldBe("interface-wire");
+        Find(routing, "routing-fixture.colon-wire").Routing.WireType.ShouldBe("items:colon");
+
+        OperationDescriptor interfaceQuery = Find(routing, "routing-fixture.interface-item");
+        interfaceQuery.Routing.Domain.ShouldBe("routing");
         interfaceQuery.Routing.WireType.ShouldBe("interface-item-wire");
-        interfaceQuery.Routing.ProjectionType.ShouldBe("sample-items");
-        interfaceQuery.Routing.ProjectionActorType.ShouldBe("SampleProjectionActor");
-        Find(module, "sample.get-item").Routing.ProjectionType.ShouldBe("sample-items");
-        Find(module, "sample.get-item").Routing.WireType.ShouldBe("get-item");
-        OperationDescriptor constant = Find(module, "sample.items-list");
+        interfaceQuery.Routing.ProjectionType.ShouldBe("routing-items");
+        interfaceQuery.Routing.ProjectionActorType.ShouldBe("RoutingProjectionActor");
+        OperationDescriptor constant = Find(routing, "routing-fixture.items-list");
         constant.Routing.WireType.ShouldBe("list-items-wire");
-        constant.AggregateIdConstant.ShouldBe("sample-list");
+        constant.AggregateIdConstant.ShouldBe("routing-list");
         constant.AggregateIdAccessor.ShouldBeNull();
         constant.AggregateIdRequired.ShouldBeFalse();
-        OperationDescriptor sourceFree = Find(module, "sample.get-http2-status");
+        OperationDescriptor sourceFree = Find(routing, "routing-fixture.get-http2-status");
         sourceFree.AggregateIdRequired.ShouldBeTrue();
         sourceFree.AggregateIdAccessor.ShouldBeNull();
     }
@@ -100,8 +114,11 @@ public sealed class CatalogTests
         module.FixedTenant.ShouldBe("sample-tenant");
         module.WireTypeConvention.ShouldBe(WireTypeConvention.KebabCase);
         module.ModulePayloadOptions.IsReadOnly.ShouldBeTrue();
-        OperationDescriptor operation = Find(module, "sample.envelope-item");
-        operation.ContractType.ShouldBe(typeof(EnvelopeItemCommand));
+        Find(module, "sample.create-item").IdempotencyKeyRequired.ShouldBeFalse();
+
+        ModuleDescriptor routing = RoutingModule();
+        OperationDescriptor operation = Find(routing, "routing-fixture.envelope-item");
+        operation.ContractType.ShouldBe(typeof(Routing.EnvelopeItemCommand));
         operation.Schema.Node["properties"].ShouldNotBeNull();
         operation.PropertyBindings[PropertyRole.Tenant].SerializedName.ShouldBe("tenant/~");
         operation.PropertyBindings[PropertyRole.Tenant].Pointer.ShouldBe("/tenant~1~0");
@@ -112,6 +129,10 @@ public sealed class CatalogTests
         PayloadValidator.Validate(operation.Schema, operation.Example!, true).IsValid.ShouldBeTrue();
         using JsonDocument payload = JsonDocument.Parse("{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}");
         operation.AggregateIdAccessor!(payload.RootElement).ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
+
+        OperationDescriptor optional = Find(routing, "routing-fixture.nullable-idempotency");
+        optional.PropertyBindings.ShouldContainKey(PropertyRole.IdempotencyKey);
+        optional.IdempotencyKeyRequired.ShouldBeFalse();
     }
 
     /// <summary>String identifiers and fixed tenant resolve in an isolated marked assembly.</summary>
@@ -146,49 +167,89 @@ public sealed class CatalogTests
     [Fact]
     public void AggregateAccessorReadsMappedSerializedName()
     {
-        OperationDescriptor operation = Find(Sample(), "sample.renamed-aggregate");
+        OperationDescriptor operation = Find(RoutingModule(), "routing-fixture.renamed-aggregate");
         operation.PropertyBindings[PropertyRole.AggregateId].SerializedName.ShouldBe("aggregate/~id");
         operation.PropertyBindings[PropertyRole.AggregateId].Pointer.ShouldBe("/aggregate~1~0id");
         using JsonDocument payload = JsonDocument.Parse("{\"aggregate/~id\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}");
         operation.AggregateIdAccessor!(payload.RootElement).ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
     }
 
-    /// <summary>Invalid declarations are isolated, with data retained for the later diagnostic policy.</summary>
+    /// <summary>Each invalid declaration is excluded with its own diagnostic category.</summary>
+    /// <param name="contractType">The invalid contract type.</param>
+    /// <param name="category">The expected diagnostic category.</param>
+    [Theory]
+    [InlineData(typeof(Invalid.AbstractOperationQuery), "invalid_operation_declaration")]
+    [InlineData(typeof(Invalid.BadNameQuery), "invalid_operation_name")]
+    [InlineData(typeof(Invalid.ColonWireQuery), "invalid_routing_value")]
+    [InlineData(typeof(Invalid.ConflictingEnvelopeCommand), "conflicting_property_roles")]
+    [InlineData(typeof(Invalid.ConflictingRoleCommand), "tenant_is_aggregate_id")]
+    [InlineData(typeof(Invalid.DoublyDecoratedOperation), "conflicting_operation_kinds")]
+    [InlineData(typeof(Invalid.DualAggregateQuery), "ambiguous_aggregate_id")]
+    [InlineData(typeof(Invalid.DuplicateSecondQuery), "duplicate_operation_name")]
+    [InlineData(typeof(Invalid.ExtensionDataCommand), "invalid_schema")]
+    [InlineData(typeof(Invalid.GenericOperationQuery<>), "invalid_operation_declaration")]
+    [InlineData(typeof(Invalid.InvalidConstantQuery), "invalid_routing_value")]
+    [InlineData(typeof(Invalid.InvalidExampleQuery), "invalid_example")]
+    [InlineData(typeof(Invalid.InvalidIdentifierCommand), "invalid_identifier_type")]
+    [InlineData(typeof(Invalid.InvalidProjectionQuery), "invalid_routing_value")]
+    [InlineData(typeof(Invalid.InvalidRoleCommand), "invalid_property_reference")]
+    [InlineData(typeof(Invalid.InvalidRoutingQuery), "invalid_routing_value")]
+    [InlineData(typeof(Invalid.MissingDescriptionQuery), "missing_description")]
+    [InlineData(typeof(Invalid.MissingProjectionQuery), "missing_routing_values")]
+    [InlineData(typeof(Invalid.NoAggregateCommand), "missing_routing_values")]
+    [InlineData(typeof(Invalid.WhitespaceProjectionActorQuery), "invalid_routing_value")]
+    public void InvalidOperationIsExcludedWithItsCategory(Type contractType, string category)
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
+        catalog.Modules.Single().Operations.ShouldNotContain(operation => operation.ContractType == contractType);
+        catalog.Diagnostics.Where(diagnostic => diagnostic.TypeName == contractType.FullName)
+            .Select(diagnostic => (diagnostic.Category, diagnostic.Severity))
+            .ShouldBe([(category, "error")]);
+    }
+
+    /// <summary>Invalid declarations do not hide the valid first duplicate or add unexplained diagnostics.</summary>
     [Fact]
     public void InvalidOperationsAreExcludedWithoutHidingValidOnes()
     {
-        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(CreateItemCommand).Assembly]);
-        ModuleDescriptor module = catalog.Modules.Single();
-        module.Operations.ShouldContain(operation => operation.Name == "sample.create-item");
-        module.Operations.ShouldNotContain(operation => operation.Name == "sample.no-aggregate");
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(BadNameQuery));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(DoublyDecoratedOperation));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(InvalidExampleQuery));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(InvalidIdentifierCommand));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(InvalidRoleCommand));
-        OperationDescriptor duplicate = Find(module, "sample.duplicate");
-        duplicate.ContractType.ShouldBe(typeof(DuplicateFirstQuery));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(DuplicateSecondQuery));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(MissingProjectionQuery));
-        module.Operations.ShouldNotContain(operation => operation.ContractType == typeof(WhitespaceProjectionActorQuery));
-        string[] codes = catalog.Diagnostics.Select(diagnostic => diagnostic.Category).ToArray();
-        codes.ShouldContain("missing_routing_values");
-        codes.ShouldContain("ambiguous_aggregate_id");
-        codes.ShouldContain("invalid_property_reference");
-        codes.ShouldContain("invalid_identifier_type");
-        codes.ShouldContain("conflicting_property_roles");
-        codes.ShouldContain("tenant_is_aggregate_id");
-        codes.ShouldContain("invalid_example");
-        codes.ShouldContain("invalid_routing_value");
-        codes.ShouldContain("invalid_operation_name");
-        codes.ShouldContain("conflicting_operation_kinds");
-        catalog.Diagnostics.Count(diagnostic => diagnostic.Category == "duplicate_operation_name").ShouldBe(1);
-        catalog.Diagnostics.ShouldContain(diagnostic => diagnostic.Category == "duplicate_operation_name"
-            && diagnostic.TypeName == typeof(DuplicateSecondQuery).FullName && diagnostic.Severity == "error");
-        catalog.Diagnostics.ShouldContain(diagnostic => diagnostic.Category == "missing_routing_values"
-            && diagnostic.TypeName == typeof(MissingProjectionQuery).FullName);
-        catalog.Diagnostics.ShouldContain(diagnostic => diagnostic.Category == "invalid_routing_value"
-            && diagnostic.TypeName == typeof(WhitespaceProjectionActorQuery).FullName);
+        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
+        catalog.Modules.Single().Operations.Select(operation => operation.ContractType)
+            .ShouldBe([typeof(Invalid.DuplicateFirstQuery)]);
+        catalog.Diagnostics.Count.ShouldBe(20);
+    }
+
+    /// <summary>An invalid module marker excludes the whole module with a diagnostic.</summary>
+    /// <param name="name">The module name.</param>
+    /// <param name="description">The module description.</param>
+    /// <param name="identifierKind">The raw identifier kind.</param>
+    /// <param name="convention">The raw wire type convention.</param>
+    /// <param name="fixedTenant">The fixed tenant, if any.</param>
+    /// <param name="category">The expected diagnostic category.</param>
+    [Theory]
+    [InlineData("Bad_Name", "Invalid name.", 0, 2, null, "invalid_module_declaration")]
+    [InlineData("-leading", "Invalid name.", 0, 2, null, "invalid_module_declaration")]
+    [InlineData("blank-description", "   ", 0, 2, null, "invalid_module_declaration")]
+    [InlineData("bad-kind", "Unknown identifier kind.", 99, 2, null, "invalid_module_declaration")]
+    [InlineData("bad-convention", "Unknown convention.", 0, 99, null, "invalid_module_declaration")]
+    [InlineData("bad-tenant", "Invalid fixed tenant.", 0, 2, "Bad Tenant", "invalid_routing_value")]
+    public void InvalidModuleMarkerExcludesTheModule(string name, string description, int identifierKind, int convention,
+        string? fixedTenant, string category)
+    {
+        const string assemblyName = "InvalidMarker.Contracts";
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+        ConstructorInfo constructor = typeof(HexalithModuleAttribute).GetConstructor(
+            [typeof(string), typeof(string), typeof(IdentifierKind)])!;
+        assembly.SetCustomAttribute(new CustomAttributeBuilder(constructor, [name, description, (IdentifierKind)identifierKind],
+            [
+                typeof(HexalithModuleAttribute).GetProperty(nameof(HexalithModuleAttribute.WireTypeConvention))!,
+                typeof(HexalithModuleAttribute).GetProperty(nameof(HexalithModuleAttribute.FixedTenant))!,
+            ],
+            [(WireTypeConvention)convention, fixedTenant]));
+
+        CatalogSnapshot catalog = CatalogBuilder.Build([assembly]);
+
+        catalog.Modules.ShouldBeEmpty();
+        catalog.Diagnostics.Select(diagnostic => (diagnostic.TypeName, diagnostic.Category, diagnostic.Severity))
+            .ShouldBe([(assemblyName, category, "error")]);
     }
 
     /// <summary>The first declaration in sorted assembly order survives a duplicate module name.</summary>
@@ -239,13 +300,15 @@ public sealed class CatalogTests
     public void CanonicalSerializationIsIndependentOfAssemblyInputOrder()
     {
         Assembly[] assemblies = [typeof(CreateItemCommand).Assembly, typeof(global::Catalog.String.Contracts.LookupQuery).Assembly,
-            typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly];
+            typeof(Routing.Module).Assembly, typeof(Invalid.Module).Assembly, typeof(Manifest.Unmarked.Contracts.Placeholder).Assembly];
         string first = JsonSerializer.Serialize(CatalogBuilder.Build(assemblies), McpCliJson.Result);
         string second = JsonSerializer.Serialize(CatalogBuilder.Build(assemblies.Reverse().ToArray()), McpCliJson.Result);
         second.ShouldBe(first);
     }
 
     private static ModuleDescriptor Sample() => CatalogBuilder.Build([typeof(CreateItemCommand).Assembly]).Modules.Single();
+
+    private static ModuleDescriptor RoutingModule() => CatalogBuilder.Build([typeof(Routing.Module).Assembly]).Modules.Single();
 
     private static OperationDescriptor Find(ModuleDescriptor module, string name)
         => module.Operations.Single(operation => operation.Name == name);
