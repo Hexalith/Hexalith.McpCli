@@ -41,7 +41,7 @@ development_status:
   1-3-derive-the-operation-s-json-schema: done
   1-4-discover-valid-operations-in-one-catalog: done
   1-5-diagnose-catalog-declarations: done
-  1-6-inspect-description-quality: review
+  1-6-inspect-description-quality: done
   1-7-warn-on-missing-operation-descriptions-at-build-time: backlog
   1-8-define-and-validate-the-conformance-vector-contract: backlog
   epic-1-retrospective: optional

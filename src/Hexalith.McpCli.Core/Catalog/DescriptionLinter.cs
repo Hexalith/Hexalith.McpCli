@@ -2,14 +2,14 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization.Metadata;
-using System.Text.RegularExpressions;
+using Hexalith.EventStore.Contracts.Commands;
 using Hexalith.McpCli.Abstractions;
 using Hexalith.McpCli.Core.Schema;
 
 namespace Hexalith.McpCli.Core.Catalog;
 
 /// <summary>Inspects the effective input schema for missing or misleading descriptions.</summary>
-public static partial class DescriptionLinter
+public static class DescriptionLinter
 {
     /// <summary>Returns stable, immutable findings for a valid operation.</summary>
     /// <param name="contractType">The decorated payload type.</param>
@@ -31,7 +31,7 @@ public static partial class DescriptionLinter
         ArgumentNullException.ThrowIfNull(schema);
 
         var findings = new List<LintFinding>();
-        if (string.Equals(description.Trim(), HumanizeOperationName(contractType.Name), StringComparison.OrdinalIgnoreCase))
+        if (IsHollow(description, contractType.Name))
         {
             findings.Add(new LintFinding("hollow_description", "warning",
                 $"Operation description only repeats the name of {contractType.Name}; explain what it does."));
@@ -86,22 +86,28 @@ public static partial class DescriptionLinter
             }
 
             string propertyPointer = pointer + "/properties/" + Escape(metadata.Name);
+            MemberInfo? member = metadata.AttributeProvider as MemberInfo;
             if (propertyNode is not JsonObject propertySchema
                 || propertySchema["description"] is not JsonValue descriptionNode
                 || !descriptionNode.TryGetValue<string>(out string? propertyDescription)
                 || string.IsNullOrWhiteSpace(propertyDescription))
             {
                 findings.Add(new LintFinding("missing_property_description", "warning",
-                    $"Describe payload member {metadata.Name} so callers understand its meaning.", propertyPointer));
+                    $"Describe payload member {member?.Name ?? metadata.Name} so callers understand its meaning.", propertyPointer));
             }
 
-            MemberInfo? member = metadata.AttributeProvider as MemberInfo;
             if (member is PropertyInfo or FieldInfo)
             {
+                // A root member bound to an envelope role, or the ICommandContract.AggregateId source, is not an unmarked identifier.
+                bool declaredRoot = pointer.Length == 0
+                    && (bindings.Values.Any(binding => ReferenceEquals(binding.Metadata, metadata))
+                        || kind == OperationKind.Command
+                            && !bindings.ContainsKey(PropertyRole.AggregateId)
+                            && member.Name == nameof(ICommandContract.AggregateId)
+                            && typeof(ICommandContract).IsAssignableFrom(type));
                 if (member.Name.EndsWith("Id", StringComparison.Ordinal)
                     && !(member is PropertyInfo property && Attribute.IsDefined(property, typeof(HexalithIdentifierAttribute), true))
-                    && !(pointer.Length == 0
-                        && bindings.Values.Any(binding => ReferenceEquals(binding.Metadata, metadata))))
+                    && !declaredRoot)
                 {
                     string advice = member is FieldInfo
                         ? "Use a property marked with HexalithIdentifier when this is an identifier, or rename the field."
@@ -121,15 +127,17 @@ public static partial class DescriptionLinter
         }
     }
 
-    private static string HumanizeOperationName(string name)
+    // Letters and digits only, so spacing, punctuation, casing, and kebab-case variants of the name all count as hollow.
+    private static bool IsHollow(string description, string name)
     {
         string stem = name.EndsWith("Command", StringComparison.Ordinal) ? name[..^"Command".Length]
             : name.EndsWith("Query", StringComparison.Ordinal) ? name[..^"Query".Length] : name;
-        return PascalBoundary().Replace(stem, " ");
+        string text = LettersAndDigits(description);
+        return string.Equals(text, LettersAndDigits(stem), StringComparison.OrdinalIgnoreCase)
+            || string.Equals(text, LettersAndDigits(name), StringComparison.OrdinalIgnoreCase);
     }
 
-    private static string Escape(string token) => token.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
+    private static string LettersAndDigits(string value) => string.Concat(value.Where(char.IsLetterOrDigit));
 
-    [GeneratedRegex("(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", RegexOptions.CultureInvariant)]
-    private static partial Regex PascalBoundary();
+    private static string Escape(string token) => token.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
 }

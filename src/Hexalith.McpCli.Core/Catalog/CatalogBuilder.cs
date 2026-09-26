@@ -232,9 +232,9 @@ public static class CatalogBuilder
 
         bool idempotencyRequired = schema.Bindings.TryGetValue(PropertyRole.IdempotencyKey, out PropertyBinding? binding)
             && (binding.Metadata.IsRequired || !binding.Metadata.IsSetNullable);
-        IReadOnlyList<LintFinding> lintFindings = DescriptionLinter.Inspect(
-            type, command?.Description ?? query!.Description, kind, options, schema);
-        var operation = new OperationDescriptor(module.Name + "." + part, kind, command?.Description ?? query!.Description,
+        string description = command?.Description ?? query!.Description;
+        IReadOnlyList<LintFinding> lintFindings = DescriptionLinter.Inspect(type, description, kind, options, schema);
+        var operation = new OperationDescriptor(module.Name + "." + part, kind, description,
             example, schema, routing.Routing, accessor, aggregateConstant,
             kind == OperationKind.Query && accessor is null && aggregateConstant is null, idempotencyRequired, type, lintFindings);
         return (operation, routing.Warnings);

@@ -51,6 +51,8 @@ public sealed class DescriptionLintTests
         renamedIdentifier.Message.ShouldContain("Use a property marked with HexalithIdentifier");
         operation.LintFindings.Single(finding => finding.Code == "payload_paging_member"
             && finding.Property == "/properties/Nested/properties/page~1~0size").Message.ShouldContain("paging member PageSize");
+        operation.LintFindings.Single(finding => finding.Code == "missing_property_description"
+            && finding.Property == "/properties/Nested/properties/nested~1~0").Message.ShouldContain("payload member Escaped");
         operation.LintFindings.Where(finding => finding.Code == "missing_property_description")
             .ShouldAllBe(finding => !finding.Message.Contains("supply", StringComparison.OrdinalIgnoreCase));
         schema["properties"]!["Tenant"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
@@ -84,6 +86,20 @@ public sealed class DescriptionLintTests
         command.LintFindings.Single().Property.ShouldBeNull();
         command.Schema.Node["properties"]!["TenantId"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
         command.Schema.Node["properties"]!["TenantId"]!["pattern"].ShouldBeNull();
+    }
+
+    /// <summary>An ICommandContract aggregate source counts as marked, and a kebab-case restatement of the name is hollow.</summary>
+    [Fact]
+    public void ContractAggregateSourceIsMarkedAndKebabNameIsHollow()
+    {
+        OperationDescriptor command = BuildLintCatalog().Modules.Single().Operations
+            .Single(item => item.ContractType == typeof(Lint.ContractSourceCommand));
+
+        command.Kind.ShouldBe(OperationKind.Command);
+        command.PropertyBindings.ShouldBeEmpty();
+        command.Schema.Node["properties"]!["AggregateId"].ShouldNotBeNull();
+        command.LintFindings.Select(finding => finding.Code).ShouldBe(["hollow_description"]);
+        command.LintFindings.Single().Property.ShouldBeNull();
     }
 
     /// <summary>Operation-level findings omit the property member while property findings include it.</summary>
@@ -126,7 +142,7 @@ public sealed class DescriptionLintTests
         strict.Catalog.ShouldBeSameAs(normal.Catalog);
         strict.ErrorCode.ShouldBeNull();
         normal.Catalog.Diagnostics.ShouldBeEmpty();
-        normal.Catalog.Modules.Single().Operations.Count.ShouldBe(3);
+        normal.Catalog.Modules.Single().Operations.Count.ShouldBe(4);
         normal.Catalog.Modules.Single().Operations.ShouldAllBe(operation => operation.LintFindings.Count > 0);
         logger.Entries.ShouldBeEmpty();
     }

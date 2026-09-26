@@ -79,6 +79,26 @@ context: []
 - rejected — `SchemaDeriver` field-description change undocumented in the spec: the fix is a spec edit; behavior is asserted by the lint test's nested `ExternalId` description check.
 - low/maybe-false — `$ref` and punctuation verdicts rest on uncommitted probes: no demonstrated false finding; the fix would add speculative fixtures.
 
+### Review Findings — 2026-09-27 re-review
+
+- [x] [Review][Decision] Lint messages name members inconsistently — resolved: every message names the CLR member (`member?.Name ?? metadata.Name`); the pointer carries the serialized name, and "No CLR-name leakage" applies to pointers.
+- [x] [Review][Decision] Hollow description only matches the exact humanized stem — resolved: compare letters and digits only, case-insensitively, against the type name with and without its `Command`/`Query` suffix; this is a superset of the humanized-name rule.
+- [x] [Review][Patch] A serialized `ICommandContract.AggregateId` member is flagged as an unmarked identifier — the canonical `record CreateCounter(string AggregateId) : ICommandContract` without `AggregateIdProperty` gets `unmarked_identifier_like_property` on `/properties/AggregateId`, although `CatalogBuilder` accepts it as the declared aggregate-ID source and the spec says such a source counts as marked; exempt the root `AggregateId` member of a Command implementing `ICommandContract` when no `AggregateId` binding exists, and add a fixture [src/Hexalith.McpCli.Core/Catalog/DescriptionLinter.cs:103]
+- [x] [Review][Patch] Name the CLR member in `missing_property_description`, falling back to the serialized name [src/Hexalith.McpCli.Core/Catalog/DescriptionLinter.cs:95]
+- [x] [Review][Patch] Replace `HumanizeOperationName`/`PascalBoundary` with an alphanumeric, case-insensitive comparison against the type name with and without suffix; add a fixture described with the raw or kebab type name (supersedes the acronym/digit test gap, whose regex is removed) [src/Hexalith.McpCli.Core/Catalog/DescriptionLinter.cs:34]
+- [x] [Review][Patch] Operation description expression evaluated twice — `command?.Description ?? query!.Description` feeds the linter and the descriptor separately; hoist one local so the linted text and the exposed text cannot diverge [src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:236]
+
+**Rejected (2026-09-27):**
+- false — envelope-role exemption widens the frozen aggregate-only rule: warning a `TenantId` would advise adding a ULID pattern to the Tenant; the spec does not require warnings on envelope-bound members, and the change would be a spec edit.
+- rejected — `SchemaDeriver` field-description change untracked in the spec (Acceptance Auditor and Blind Hunter): the fix is a spec edit; the schema description is asserted in `DescriptionLintTests` (`external/~id` description).
+- false — removed `"severity"` guard in `CatalogTests`: each diagnostic's `Category` and `Message` are still asserted absent; lint findings legitimately carry `severity`.
+- low — root-level `~`/`/` escaping untested: the same `Escape` call builds every pointer segment regardless of depth; no divergent path.
+- false — messages not actionable: each message names the member and the required action; the spec asks only for a nonempty actionable message, and PRD FR-4 applies paging recursively.
+- false — `ID`/`Ids` suffixes missed: FR-7 defines the hint for a property name ending in `Id`.
+- rejected — spec bookkeeping (`review_loop_iteration`, 126 vs 127, status): fixes are spec edits; sprint status is synced by this review.
+- low — finding codes as literals without constants: no present consumer diverges; constants would add public surface ahead of `describe --lint` and conformance vectors.
+- false — `OperationDescriptor` double copy and missing null check: the internal constructor's only caller passes a non-null read-only array; no reachable fault.
+
 ## Implementation Notes
 
 - Added immutable lint findings to each valid Operation descriptor. The linter walks effective serialized members and the exported Schema together, then sorts findings by pointer and code.
@@ -88,8 +108,11 @@ context: []
 - Commit message `feat: inspect description quality` passed the pinned `@commitlint/cli` 21.2.2 via `npx --no -- commitlint --edit /tmp/mcpcli-story16-commit-message.txt` (exit 0).
 - Resumed review fixes cover nullable struct properties, all root envelope-bound identifier roles, and Command-specific paging and hollow descriptions. Release solution build passed with zero warnings/errors; Core tests passed 127/127 with zero skipped.
 - Final review patched warning wording and added constructor-parameter and whitespace-only description coverage; no findings were deferred. The Release build and Core tests still passed (127/127), with zero warnings and errors.
+- 2026-09-27 re-review patches: exempted the `ICommandContract.AggregateId` root source, named CLR members in every message, replaced the humanize regex with a letters-and-digits hollow comparison, and hoisted the operation description. Release build passed with zero warnings/errors; Core tests passed 132/132 with zero skipped; removing the new exemption fails `ContractAggregateSourceIsMarkedAndKebabNameIsHollow`.
 
 ## Spec Change Log
+
+- 2026-09-27 re-review: "No CLR-name leakage" governs finding pointers, which always use serialized names; every lint message names the CLR member (serialized name when none exists) so the author can find it. `hollow_description` compares letters and digits only against the type name with and without suffix, a superset of the humanized-name rule.
 
 ## Review Triage Log
 
@@ -120,7 +143,7 @@ context: []
 
 ## Design Notes
 
-Use pointers into the exported Schema: `/properties/<name>` for a root member, `/properties/<outer>/properties/<inner>` for nested objects, and `/properties/<collection>/items/properties/<inner>` through an array. This gives collection members a concrete RFC 6901 target without inventing a payload array index. A humanized type name removes only the trailing `Command` or `Query`, separates its Pascal-case words, and compares with the trimmed description without case sensitivity.
+Use pointers into the exported Schema: `/properties/<name>` for a root member, `/properties/<outer>/properties/<inner>` for nested objects, and `/properties/<collection>/items/properties/<inner>` through an array. This gives collection members a concrete RFC 6901 target without inventing a payload array index. A hollow description, reduced to its letters and digits, equals the type name with or without its trailing `Command` or `Query` suffix, compared without case sensitivity; this covers the humanized name and its spaced, punctuated, and kebab-case variants.
 The PRD and addendum define `hollow_description` only for the Operation; the architecture table's property-name wording does not add a fifth lint shape.
 
 ## Verification
