@@ -11,6 +11,7 @@ namespace Hexalith.McpCli.Sample.Contracts;
 [HexalithCommand(
     "Rename a synthetic item in the sample module.",
     Domain = "sample",
+    WireType = "rename-item-wire",
     AggregateIdProperty = nameof(ItemId))]
 public sealed record RenameItemCommand(
     [property: HexalithIdentifier]

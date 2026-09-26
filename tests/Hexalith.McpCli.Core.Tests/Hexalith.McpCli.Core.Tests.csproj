@@ -2,5 +2,10 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj" />
     <ProjectReference Include="../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
+    <ProjectReference Include="../fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj" />
+    <ProjectReference Include="../fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj" />
+    <ProjectReference Include="../fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj" />
+    <ProjectReference Include="../fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
+    <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
   </ItemGroup>
 </Project>

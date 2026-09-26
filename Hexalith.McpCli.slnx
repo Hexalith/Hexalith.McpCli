@@ -11,5 +11,8 @@
     <Project Path="tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj" />
     <Project Path="tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
     <Project Path="tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
+    <Project Path="tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj" />
+    <Project Path="tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj" />
+    <Project Path="tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj" />
   </Folder>
 </Solution>
