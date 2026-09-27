@@ -275,7 +275,7 @@ class VectorContractTests(unittest.TestCase):
     def test_wrong_kind_inputs_at_every_call_position(self) -> None:
         cases = (
             (self.command, {"entityId": "entity", "pageSize": 1, "offset": 0, "cursor": "next"}),
-            (self.query, {"correlationId": "0" * 26, "idempotencyKey": "0" * 26, "extensions": {}}),
+            (self.query, {"correlationId": "0" * 26, "idempotencyKey": "0" * 26, "extensions": {"custom": "value"}}),
         )
         for template, fields in cases:
             for position in POSITIONS:
@@ -284,6 +284,17 @@ class VectorContractTests(unittest.TestCase):
                         document, step, pointer = self._step_at(template, position)
                         step["envelope"][field] = value
                         self._assert_rejected(document, f"{pointer}/envelope/{field}")
+
+    def test_supplied_extensions_cannot_be_empty_at_every_call_position(self) -> None:
+        # The CLI sends no extension flags for an empty map while MCP forwards {}; omission is the only portable form.
+        for position in POSITIONS:
+            for expected in (None, {}):
+                with self.subTest(position=position, expected=expected):
+                    document, step, pointer = self._step_at(self.command, position)
+                    step["envelope"]["extensions"] = {}
+                    if expected is not None:
+                        step["expectedGateway"]["body"]["extensions"] = expected
+                    self._assert_rejected(document, f"{pointer}/envelope/extensions: {{}} should be non-empty")
 
     def test_supplied_extensions_must_match_expected_request_at_every_call_position(self) -> None:
         for position in POSITIONS:
@@ -334,6 +345,16 @@ class VectorContractTests(unittest.TestCase):
                         document, step, pointer = self._step_at(template, position)
                         step["expectedGateway"]["body"][field] = value
                         self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_unsent_known_request_fields_at_every_call_position(self) -> None:
+        fields = {"search": "text", "filters": [], "orderBy": [], "freshness": {}}
+        for template in (self.command, self.query):
+            for position in POSITIONS:
+                for field, value in fields.items():
+                    with self.subTest(kind=template["kind"], position=position, field=field):
+                        document, step, pointer = self._step_at(template, position)
+                        step["expectedGateway"]["body"][field] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}: Core never sends")
 
     def test_expected_paging_matches_integer_types_at_every_call_position(self) -> None:
         for position in POSITIONS:
@@ -436,10 +457,17 @@ class VectorContractTests(unittest.TestCase):
 
     def test_unreadable_or_invalid_artifact_is_reported_without_loading_assemblies(self) -> None:
         self.artifact.write_bytes(b"not a zip")
-        self._assert_rejected(self.command, "cannot read NuGet release artifact")
+        self._assert_rejected(self.command, f"{self.artifact}:/: cannot read NuGet release artifact")
         with zipfile.ZipFile(self.artifact, "w") as archive:
             archive.writestr("nested/sample.nuspec", "<package/>")
-        self._assert_rejected(self.command, "expected exactly one root .nuspec")
+        self._assert_rejected(self.command, f"{self.artifact}:/: expected exactly one root .nuspec")
+        for nuspec, reason in (("<package/>", ".nuspec /metadata is missing"),
+                               ("<package><metadata><id>Sample</id></metadata></package>",
+                                ".nuspec /metadata/id and /metadata/version are required")):
+            with self.subTest(reason=reason):
+                with zipfile.ZipFile(self.artifact, "w") as archive:
+                    archive.writestr("sample.nuspec", nuspec)
+                self._assert_rejected(self.command, f"{self.artifact}:/metadata: {reason}")
 
     def test_cli_accepts_all_three_samples(self) -> None:
         result = self._cli([HERE / "sample-command.json", HERE / "sample-query.json", HERE / "sample-rename.json"])

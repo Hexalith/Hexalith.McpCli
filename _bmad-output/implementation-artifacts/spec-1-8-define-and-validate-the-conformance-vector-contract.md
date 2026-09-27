@@ -89,6 +89,30 @@ Second code review, 2026-09-27, `9b3b099..1bf6906` (excluding committed `story-1
 - Commit 9951257 is not a Conventional Commit — low; already pushed, and rewriting history is out of scope.
 - Spec `status: done` vs sprint `review` — the fix is editing status; reconciled when this review closes.
 
+Third code review, 2026-09-27, `9b3b099..9eb723f` (excluding `_bmad-output/` and submodule pointers), four layers: blind, edge-case, verification-gap, acceptance. 24 raw findings triaged into 3 patch entries (4 findings), 2 defer entries (5 findings, both already in `deferred-work.md`) and 13 rejected entries (15 findings).
+
+- [x] [Review][Patch] Expected Gateway request body is still open: any field Core never emits validates [tools/conformance-vectors/v1/validate.py:113] — Decision 2026-09-27: the README makes `expectedGateway.body` Module-owned open JSON, so the allow-list below was not applied; instead both kinds now reject the known `SubmitQueryRequest` fields McpCli never sends (`search`, `filters`, `orderBy`, `freshness`), with every-position tests. Original finding: `OperationExecutor` builds `SubmitCommandRequest` from exactly `messageId, tenant, domain, aggregateId, commandType, payload, correlationId, extensions, idempotencyKey` and `SubmitQueryRequest` from exactly `tenant, domain, aggregateId, queryType, projectionType, payload, entityId, projectionActorType, paging`; it never sets `search`, `filters`, `orderBy`, `freshness` or extension data. Reproduced: adding `search`, `filters`, or an invented `bogus` field to `invocation.expectedGateway.body` in each of the three samples returns no findings. The hand-listed `wrong_kind_fields` deny-list keeps missing fields (the prior review already had to add the projection fields). Replace it with a per-kind allow-list of emitted request fields ("Close contract-owned objects"; the Payload inside stays open), and extend the every-position tests. (blind+acceptance)
+- [x] [Review][Patch] Empty envelope `extensions: {}` forces an expectation the two Heads cannot both meet [tools/conformance-vectors/v1/schema.json:44] — The new equality rule requires `body.extensions == {}`. `run_loopback._call_args` gives MCP `{}` (→ `SubmitCommandRequest.Extensions = {}`) but the CLI no `--extension` flags (`CliRunner` maps an empty set to `null`, so the body omits `extensions`). An approved vector with empty extensions cannot pass cross-head parity. Add `"minProperties": 1` to envelope `extensions` with a regression test; an empty extension set is expressed by omission. (acceptance)
+- [x] [Review][Patch] Artifact-level rejections carry no location segment [tools/conformance-vectors/v1/validate.py:76] — `package_identity` emits `{artifact}: …` for unreadable ZIPs, wrong nuspec count, missing metadata and missing id/version, while every other finding uses `source:/pointer: reason` (the Always constraint). Emit `{artifact}:/: …` for archive-level failures and `{artifact}:/metadata…: …` for metadata failures, and assert the prefix in the existing invalid-artifact test. (acceptance)
+- [x] [Review][Defer] Padded or ungrammatical routing values (`tenant: " t "`, `domain: " sample "`, `aggregateId: "a b"`) pass the nonblank check [tools/conformance-vectors/v1/validate.py:127] — deferred, pre-existing: covered by the existing "unconditional Gateway identifier syntax and length restrictions" entry in `deferred-work.md`; not duplicated. (blind+acceptance+edge)
+- [x] [Review][Defer] Cursor length counts code points, Core counts UTF-16 units [tools/conformance-vectors/v1/schema.json:43] — deferred, pre-existing: existing cursor-unit entry in `deferred-work.md`; not duplicated. (edge)
+
+**Rejected (third review)**
+
+- Nested duplicate key reported at `/` (blind, edge) — low; rejected by both prior reviews for the same reason.
+- Unsupported `formatVersion` yields several findings, one mislabelled (blind) — low; every case is still rejected with located findings, and deduplicating needs type-aware branching.
+- SHA-512 snippet exists in the runner, the script and the README; the script's printed hash is untested (blind, verification) — low; the runner recomputes the hash from the artifact, so enforcement does not depend on the printed value. A shared helper adds new CLI surface. The prior review rejected the same gap.
+- No approval-record template or location (blind) — rejected by the prior review; README lists the required fields (AC3).
+- CLI exit-2 paths untested (blind) — rejected by the prior review; argparse default behavior.
+- Missing `jsonschema` exits 1 like a rejected vector (blind) — low, pre-existing import guard; the message names the install command.
+- Sample gate packs before running unit tests (blind) — low; only affects how fast a failure is reported.
+- Loopback job re-runs unit tests and duplicates setup (blind) — rejected by the prior review; separate jobs are what the spec requires.
+- Exact version comparison may clash with NuGet's lowercased paths in Story 4.11 (blind) — maybe-false, would be low; the runner reads versions from `.deps.json` library keys, not restore paths, and 4.11 is not built yet.
+- `package.id` lacks a 100-character limit (blind) — false; an overlong ID can never equal a real artifact's ID, so the package identity check already rejects it.
+- Recursion near the interpreter limit could diverge between callers (edge) — low; both paths return a located rejection, not a crash, and Payload depth compatibility is already deferred.
+- Version pattern rejects SemVer build metadata (`1.2.3+abc`) (edge) — low, pre-existing pattern; build metadata on package versions is uncommon, and supporting it needs a comparison policy against `.deps.json` keys.
+- README implies the validator enforces the artifact hash (acceptance) — false; the README assigns the restored-package match to the Story 4.11 runner, which already performs it.
+
 ## Implementation Notes
 
 - Hardened the existing v1 schema and shared validator; all three sample vectors remain unchanged. CLI package expectations now also reject an explicitly empty expected package ID.
@@ -156,6 +180,8 @@ All three independent layers completed. The edge-case layer returned no findings
 - Verification logs: `/tmp/mcpcli-story-1-8-verification.MgS5yY/final-tests.log`, `final-debug.log`, `final-release.log`, `final-shell.log`, `final-diff.log`, and `approval-example.log`.
 
 - Follow-up commit candidate passed pinned `@commitlint/cli` 21.2.2: `npx --no -- commitlint --edit /tmp/mcpcli-story-1-8-commit-vrf575yn.txt --verbose` — exit 0, zero problems and warnings. Exact message and validation output are preserved in `/tmp/mcpcli-story-1-8-commit-vrf575yn.txt` and `/tmp/mcpcli-story-1-8-commit-vrf575yn.validation.log`.
+
+- Third review patches (2026-09-27): `python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'` — 49 tests pass. `run-sample-validation.sh` (Debug) and `run-sample-validation.sh Release` both exit 0 and validate all three unchanged samples. Each of the three new rules was reverted on its own, and its new tests then failed (6, 4 and 24 failures). `git diff --check` is clean.
 
 ### Prior commit validation
 

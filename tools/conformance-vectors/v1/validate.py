@@ -21,6 +21,8 @@ except ImportError as exc:
 
 SCHEMA_PATH = Path(__file__).with_name("schema.json")
 SUPPORTED_FORMAT_VERSIONS = (1,)
+# Known SubmitQueryRequest fields that McpCli never sets for either operation kind.
+UNSENT_REQUEST_FIELDS = ("search", "filters", "orderBy", "freshness")
 # CLI integer arguments require integer JSON tokens, not integral floats or booleans.
 VectorValidator = validators.extend(
     Draft202012Validator,
@@ -73,16 +75,16 @@ def package_identity(artifact: Path) -> tuple[str, str]:
         with zipfile.ZipFile(artifact) as archive:
             nuspecs = [name for name in archive.namelist() if name.endswith(".nuspec") and "/" not in name]
             if len(nuspecs) != 1:
-                raise VectorError(f"{artifact}: expected exactly one root .nuspec, found {len(nuspecs)}")
+                raise VectorError(f"{artifact}:/: expected exactly one root .nuspec, found {len(nuspecs)}")
             root = ElementTree.fromstring(archive.read(nuspecs[0]))
     except (OSError, zipfile.BadZipFile, ElementTree.ParseError) as exc:
-        raise VectorError(f"{artifact}: cannot read NuGet release artifact: {exc}") from exc
+        raise VectorError(f"{artifact}:/: cannot read NuGet release artifact: {exc}") from exc
     metadata = next((node for node in root if node.tag.rsplit("}", 1)[-1] == "metadata"), None)
     if metadata is None:
-        raise VectorError(f"{artifact}: .nuspec /metadata is missing")
+        raise VectorError(f"{artifact}:/metadata: .nuspec /metadata is missing")
     fields = {node.tag.rsplit("}", 1)[-1]: (node.text or "").strip() for node in metadata}
     if not fields.get("id") or not fields.get("version"):
-        raise VectorError(f"{artifact}: .nuspec /metadata/id and /metadata/version are required")
+        raise VectorError(f"{artifact}:/metadata: .nuspec /metadata/id and /metadata/version are required")
     return fields["id"], fields["version"]
 
 
@@ -121,6 +123,9 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
     for field in wrong_kind_fields:
         if field in body:
             findings.append(f"{pointer}/expectedGateway/body/{field}: request field is invalid for a {kind}")
+    for field in UNSENT_REQUEST_FIELDS:
+        if field in body:
+            findings.append(f"{pointer}/expectedGateway/body/{field}: Core never sends this request field")
     if body.get("tenant") != envelope["tenant"]:
         findings.append(f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
     for field in ("domain", "aggregateId", "commandType" if kind == "command" else "queryType"):
