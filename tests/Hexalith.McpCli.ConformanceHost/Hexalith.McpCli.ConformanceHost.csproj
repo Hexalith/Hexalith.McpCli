@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <RequireContractsFlag>true</RequireContractsFlag>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
+    <PackageReference Include="Hexalith.McpCli.Sample.Contracts" HexalithContracts="true" />
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+  <Import Project="../../src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets" />
+</Project>

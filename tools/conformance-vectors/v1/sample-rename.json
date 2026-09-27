@@ -1,0 +1,38 @@
+{
+  "formatVersion": 1,
+  "package": { "id": "Hexalith.McpCli.Sample.Contracts", "version": "1.0.0" },
+  "operation": "sample.rename-item",
+  "kind": "command",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "sample.rename-item",
+    "kind": "command",
+    "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "Title": "Renamed item" },
+    "envelope": { "tenant": "sample-tenant" },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "correlationId": "<generated>",
+        "tenant": "sample-tenant",
+        "domain": "sample",
+        "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "commandType": "rename-item-wire",
+        "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "Title": "Renamed item" }
+      },
+      "maskGenerated": ["/messageId", "/correlationId"]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": { "resultPayload": { "renamed": true } },
+      "echoRequestFields": ["correlationId", "messageId"]
+    },
+    "assertions": [
+      { "path": "/status", "operator": "equals", "value": "accepted" },
+      { "path": "/result/renamed", "operator": "equals", "value": true },
+      { "path": "/idempotencyKey", "operator": "exists", "value": false }
+    ]
+  },
+  "postconditions": []
+}

@@ -1,0 +1,6 @@
+<Project>
+  <Import Project="../../Directory.Packages.props" />
+  <ItemGroup>
+    <PackageVersion Include="Hexalith.McpCli.Sample.Contracts" Version="1.0.0" />
+  </ItemGroup>
+</Project>

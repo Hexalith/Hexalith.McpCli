@@ -1,0 +1,39 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.McpCli.Sample.Contracts",
+    "version": "1.0.0"
+  },
+  "operation": "sample.get-item",
+  "kind": "query",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "sample.get-item",
+    "kind": "query",
+    "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" },
+    "envelope": { "tenant": "sample-tenant", "pageSize": 25 },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "sample-tenant",
+        "domain": "sample",
+        "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "queryType": "get-item",
+        "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" },
+        "paging": { "pageSize": 25 }
+      },
+      "maskGenerated": []
+    },
+    "scriptedResponse": {
+      "statusCode": 200,
+      "body": { "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK", "success": true, "payload": { "title": "Conformance item" } },
+      "echoRequestFields": []
+    },
+    "assertions": [
+      { "path": "/document/title", "operator": "equals", "value": "Conformance item" },
+      { "path": "/tenant", "operator": "equals", "value": "sample-tenant" }
+    ]
+  },
+  "postconditions": []
+}

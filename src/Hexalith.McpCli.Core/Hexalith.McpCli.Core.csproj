@@ -9,6 +9,7 @@
     <PackageReference Include="Hexalith.EventStore.Client" />
     <PackageReference Include="Hexalith.EventStore.Contracts" />
     <PackageReference Include="JsonSchema.Net" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 </Project>

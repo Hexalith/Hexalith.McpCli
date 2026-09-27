@@ -36,21 +36,21 @@ context:
 
 ## Code Map
 
-- `src/Hexalith.McpCli/Program.cs` — executable is currently a stub; CLI and MCP execution stories remain backlog.
+- `src/Hexalith.McpCli/Program.cs`, `src/Hexalith.McpCli/Cli/`, and `src/Hexalith.McpCli.Mcp/` — generic CLI and stdio MCP heads now call the shared catalog and gateway executor.
 - `src/Hexalith.McpCli/Hexalith.McpCli.csproj` and `Build/ModuleAssemblyManifest.targets` — flagged production package enrollment and generated assembly list.
 - `src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs`, `Catalog/AggregateIdAccessors.cs`, and `Schema/SchemaDeriver.cs` — current declaration, aggregate ID, and envelope property constraints.
 - `../works/src/Hexalith.Works.Contracts/` — 15 value-object-ID commands, no query DTOs or annotations; gateway handles two queries.
 - `../timesheets/src/Hexalith.Timesheets.Contracts/` and `../timesheets/src/Hexalith.Timesheets.Server/` — 28 commands and 8 queries, but no registered EventStore aggregate/query handlers.
 - `../agents/src/Hexalith.Agents.Contracts/` — envelope-only aggregate IDs and some deferred query DTOs; interaction writes require trusted orchestration.
 - `../conversations/src/Hexalith.Conversations.Contracts/` and `../conversations/src/Hexalith.Conversations/` — public command DTOs differ from aggregate wrapper commands; only two gateway query adapters exist.
-- `../projects/src/Hexalith.Projects.Contracts/` and `../projects/src/Hexalith.Projects.Server/` — Contracts pull UI/framework dependencies and differ from strict gateway wire payloads.
+- `../projects/src/Hexalith.Projects.Contracts/` and `../projects/src/Hexalith.Projects.Server/` — Contracts pull UI/framework dependencies and differ from strict gateway wire payloads. The legacy Projects plug-in and CLI surface is mapped in `projects-migration-inventory-draft.md`.
 - `../folders/src/Hexalith.Folders.Contracts/` and `../folders/src/Hexalith.Folders.Server/` — current Contracts package has no command or query DTOs; server has gateway commands alongside REST-only behavior. Epic 4 Story 4.2 requires a maintainer-approved inventory of 49 legacy MCP tools and the CLI.
 - `references/Hexalith.Builds/Props/Directory.Packages.props` — shared version catalog, currently missing three requested Contracts versions and McpCli Abstractions.
 
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `src/Hexalith.McpCli/` and `src/Hexalith.McpCli.Core/` — complete the generic CLI, MCP, settings, and gateway executor stories before claiming user-facing module coverage.
+- [x] `src/Hexalith.McpCli/` and `src/Hexalith.McpCli.Core/` — complete the generic CLI, MCP, settings, and gateway executor stories before claiming user-facing module coverage.
 - [ ] `../works/src/Hexalith.Works.Contracts/` and McpCli Core — support envelope-owned value-object IDs, add two gateway query descriptors, declare only callable operations, and remove disallowed Contracts dependencies.
 - [ ] `../timesheets/src/Hexalith.Timesheets.Server/` and Contracts — implement and verify gateway handlers, then declare only callable operations.
 - [ ] `../agents/src/Hexalith.Agents.Contracts/` and runtime — supply safe aggregate ID sources, retain trusted interaction orchestration, and declare only live handlers.
@@ -68,13 +68,22 @@ context:
 
 ## Implementation Notes
 
+- 2026-09-27: The shared catalog, gateway executor, CLI, and stdio MCP head now build without Module-specific production references. Discovery correctly returns `catalog_empty` until decorated Contracts packages are enrolled.
+- 2026-09-27: Added `tools/dependency-policy.json` and a manifest test that compares the tool's restored packages with an exact pinned baseline, rejects unapproved direct roots and cross-Module transitives, and checks Module package framework references. This gate runs in the existing Manifest test project. The bootstrap `Hexalith.McpCli.Abstractions` 1.0.0 package packs and passes local release validation; it has not been published.
+- 2026-09-27: Captured the Folders legacy surface in `folders-migration-inventory-draft.md`: all 49 MCP tools, two read-only resources, and 42 Frozen CLI leaf verbs (mapped to 42 tools), with command wire candidates and explicit pending inclusion decisions. This is a review draft, not the maintainer-approved AD-21 inventory.
+- 2026-09-27: Captured the Projects legacy surface in `projects-migration-inventory-draft.md`: 11 MCP resources, five maintenance tools, and 18 Frozen CLI spellings, including aliases and REST-only behaviors. This is likewise a review draft awaiting the Projects maintainer's include/exclude decisions.
+- 2026-09-27: Added CLI/MCP protocol test projects and the Python conformance-vector contract tests to CI; documented the gateway boundary and current `catalog_empty` state in the README. The vector contract is test-only and does not enroll a Module.
+- 2026-09-27: Added the test-only out-of-process loopback runner and made it a blocking CI step. It packs one flagged sample Contracts package, verifies the restored artifact hash, and checks three sample Operations across CLI and MCP discovery, Gateway requests, result documents, malformed payloads, and Gateway errors. This establishes the generic AD-16 loopback mechanism; no requested Module has a matching approved vector or live semantic run yet.
+- 2026-09-27: Prepared a framework-dependent `hexalith` .NET tool package and staged package validator. An isolated local tool install passed version and config smoke checks. The paired release validator correctly rejects its current empty production Contracts manifest, and the paired publication preflight remains closed.
+- Release order remains binding: publish the decoration package first, migrate and verify each owning Module's gateway contracts and handler routes, release the decorated Contracts packages, then pin and enroll them in McpCli. At the inspected sibling revisions, no Module meets every gate. Projects and Conversations add package identities outside AD-15; Folders has no command/query DTOs and its 49-operation REST/MCP inventory needs an approved gateway migration; Timesheets lacks registered EventStore aggregate/query handlers; Works uses value-object identifiers and a disallowed serialization dependency; Agents has envelope-only command IDs and guarded interaction writes. Do not turn on an incomplete Module merely to make discovery list it.
+
 ## Spec Change Log
 
 ## Review Triage Log
 
 ## Design Notes
 
-No existing module release is ready for direct enrollment. NuGet currently has no `Hexalith.McpCli.Abstractions`, Works.Contracts, or Timesheets.Contracts package. Agents, Conversations, Projects, and Folders have 1.0.0 packages without McpCli declarations. Folders.Contracts 1.0.0 is dependency-free but contains no command or query types. The current McpCli executable returns an unimplemented error, so enrollment alone cannot satisfy the user-facing goal.
+No Module package is enrolled in this source tree. The inspected sibling Contracts source lacks the declarations, dependency closure, or live Gateway behavior needed for direct enrollment. The `Hexalith.McpCli.Abstractions` bootstrap package was packed locally but not published by this change. The generic McpCli executable now runs, but enrollment alone cannot satisfy the user-facing goal until the owning Module gateway paths and conformance gates pass.
 
 ## Verification
 

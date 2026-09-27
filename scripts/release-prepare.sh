@@ -17,3 +17,21 @@ if [ "$release_phase" = paired ]; then
 fi
 
 python3 scripts/validate-release-packages.py "$staging_directory" "$release_version" "$release_phase"
+
+if [ "$release_phase" = paired ]; then
+  smoke_directory="$(mktemp -d)"
+  trap 'rm -rf "$smoke_directory"' EXIT
+  cat > "$smoke_directory/NuGet.Config" <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<configuration><packageSources><clear/><add key="staged" value="$(pwd)/$staging_directory" /></packageSources></configuration>
+EOF
+  dotnet tool install Hexalith.McpCli --tool-path "$smoke_directory/bin" \
+    --version "$release_version" --configfile "$smoke_directory/NuGet.Config" --no-cache
+  version_output="$("$smoke_directory/bin/hexalith" --version)"
+  if [[ "$version_output" != "$release_version" && "$version_output" != "$release_version"+* ]]; then
+    echo "Staged hexalith reported version $version_output, expected $release_version." >&2
+    exit 1
+  fi
+  "$smoke_directory/bin/hexalith" config current > /dev/null
+  "$smoke_directory/bin/hexalith" modules > /dev/null
+fi

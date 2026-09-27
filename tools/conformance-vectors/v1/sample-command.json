@@ -1,0 +1,79 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.McpCli.Sample.Contracts",
+    "version": "1.0.0"
+  },
+  "operation": "sample.create-item",
+  "kind": "command",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "sample.create-item",
+    "kind": "command",
+    "payload": {
+      "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "Title": "Conformance item"
+    },
+    "envelope": {
+      "tenant": "sample-tenant",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "sample-tenant",
+        "domain": "sample",
+        "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "commandType": "create-item",
+        "payload": {
+          "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+          "Title": "Conformance item"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+        "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"
+      },
+      "maskGenerated": ["/messageId"]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": { "resultPayload": { "accepted": true } },
+      "echoRequestFields": ["correlationId", "messageId"]
+    },
+    "assertions": [
+      { "path": "/status", "operator": "equals", "value": "accepted" },
+      { "path": "/idempotencyKey", "operator": "equals", "value": "01J9MZHXT3RKM0VWXRXGSJDATM" },
+      { "path": "/result/accepted", "operator": "equals", "value": true }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "sample.get-item",
+      "kind": "query",
+      "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" },
+      "envelope": { "tenant": "sample-tenant" },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "sample-tenant",
+          "domain": "sample",
+          "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+          "queryType": "get-item",
+          "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": { "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK", "success": true, "payload": { "title": "Conformance item" } },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        { "path": "/document/title", "operator": "equals", "value": "Conformance item" }
+      ]
+    }
+  ]
+}
