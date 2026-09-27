@@ -63,10 +63,7 @@ context: []
 
 Code review of 93fc112..9590d29 (2026-09-27).
 
-- [ ] [Review][Decision] Packed analyzer requires Roslyn 5.9 and breaks consumers on SDKs older than 10.0.4xx — `Hexalith.McpCli.Analyzers.csproj` takes the central `Microsoft.CodeAnalysis.CSharp` 5.9.0 pin, so the DLL references compiler 5.9.0.0 and `System.Collections.Immutable` 10.0.0.0. Two reviewers reproduced a staged-package consumer on SDK 10.0.302 (Roslyn 5.6) and got `CS9057 ... references version '5.9.0.0' of the compiler, which is newer than the currently running version '5.6.0.0'`. The analyzer does not load, so there is no MCPCLI001. With `TreatWarningsAsErrors=true` the consumer build fails. The CI consumer copies this repo's `global.json` (10.0.401), so it cannot detect this. Hexalith.Builds sets `CentralPackageVersionOverrideEnabled=false`, so `VersionOverride` is not available. Today every sibling module is on 10.0.4xx; external consumers and older Visual Studio hosts are not.
-- [ ] [Review][Patch] Diagnostic message argument is never asserted [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:491]
-- [ ] [Review][Patch] Test matrix omits the explicit `Attribute` suffix spelling (Always constraint) and a null description [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:484]
-- [ ] [Review][Patch] A same-FQN or ambiguous attribute type silently disables the rule for the whole compilation; the counterfeit test pairs no genuine violation [src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs:380]
+Pass-1 open items (Roslyn 5.9 pin, message argument, suffix/null coverage, same-FQN lookup) were re-verified in pass 2 and are tracked there.
 
 **Rejected**
 
@@ -78,6 +75,28 @@ Code review of 93fc112..9590d29 (2026-09-27).
 - low — No `helpLinkUri` or README entry for MCPCLI001: the message names the type and states the fix.
 - low — Deferred-work entries for concurrent CLI, settings, and executor work are attributed to this spec: bookkeeping only, no code impact.
 - reject — Spec `status: done` differs from sprint `review`: the fix would edit the spec under review, and this review step resets both statuses.
+
+Code review pass 2 of 93fc112..9590d29 (2026-09-27): Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor.
+
+- [ ] [Review][Decision] Packed analyzer requires Roslyn 5.9 and fails to load on SDKs older than 10.0.4xx — `Hexalith.McpCli.Analyzers.csproj` inherits the central `Microsoft.CodeAnalysis.CSharp` 5.9.0 pin (`references/Hexalith.Builds/Props/Directory.Packages.props:215`). A consumer on SDK 10.0.302 (Roslyn 5.6, installed locally) gets CS9057, no MCPCLI001, and a failed build under warnings-as-errors. The CI consumer copies `global.json` 10.0.401, so it cannot catch this. `CentralPackageVersionOverrideEnabled=false` rules out `VersionOverride`. All four layers raised it.
+- [ ] [Review][Patch] Diagnostic message argument is never asserted; replacing `type.Name` with `string.Empty` leaves all 12 tests green [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:30]
+- [ ] [Review][Patch] Null description warns today but no test pins it; a `Value is string s` refactor would silently drop it while the runtime still excludes null [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:19]
+- [ ] [Review][Patch] Test matrix omits the explicit `Attribute` suffix spelling, a constant equal to `""`, and an unrelated `HexalithQueryAttribute` look-alike (Always constraint and I/O matrix) [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:19]
+- [ ] [Review][Patch] Attribute lookup via `GetTypeByMetadataName` returns null for an ambiguous FQN and disables the rule for the compilation; use `GetTypesByMetadataName` filtered to the `Hexalith.McpCli.Abstractions` assembly (reachable only with `extern alias`, direct one-line fix) [src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs:35]
+
+**Rejected (pass 2)**
+
+- false — Counterfeit test pairs no genuine violation: when a same-FQN type exists in source or a second reference, a genuine `[HexalithQuery]` binds to the counterfeit (CS0436) or fails as ambiguous (CS0433), so a pairing is only expressible with `extern alias`; the lookup fix above covers that case.
+- false — Message names only the short type name and not the attribute: every diagnostic carries a file and line location at the type declaration, which identifies the type.
+- false — CI consumer never checks which type warned: unit tests pin the diagnostic location on the type name; the CI probe exists to prove package auto-loading.
+- false — Module descriptions are not checked at build time: the spec Intent and Always constraint scope this story to `[HexalithCommand]` and `[HexalithQuery]`.
+- low — Linked `KebabCase` is unused, duplicates a public type, and its netstandard shim is untested: the link is a spec Always constraint, and no fixture uses `KebabCase`, so CS0433 does not occur.
+- low — Analyzer DLL packed from a hard-coded `bin/$(Configuration)/netstandard2.0` path: no artifacts output or custom `OutputPath` is configured; same verdict as pass 1.
+- low — Exact `1 Warning(s)` CI check is brittle against unrelated warnings: intended strictness, same verdict as pass 1.
+- low — Test compilations reference every trusted platform assembly: slower but correct, and no fixture references a duplicated type.
+- low — No README entry or `helpLinkUri` for MCPCLI001: the message names the type and states the fix; same verdict as pass 1.
+- low — Nothing moves MCPCLI001 to `AnalyzerReleases.Shipped.md` at release: no build break results; a release-process chore.
+- low — Named-argument and nested-type cases are untested: `description:` still populates `ConstructorArguments`, and nested types are ordinary `NamedType` symbols.
 
 ## Implementation Notes
 

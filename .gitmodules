@@ -46,3 +46,6 @@
 [submodule "references/Hexalith.Timesheets"]
 	path = references/Hexalith.Timesheets
 	url = https://github.com/Hexalith/Hexalith.Timesheets.git
+[submodule "references/Hexalith.Platform"]
+	path = references/Hexalith.Platform
+	url = https://github.com/Hexalith/Hexalith.Platform.git
