@@ -2,7 +2,7 @@
 title: 'Define and Validate the Conformance Vector Contract'
 type: 'feature'
 created: '2026-09-27'
-status: 'in-review'
+status: 'done'
 baseline_commit: '9b3b099bf117eac880b9b6e12422990a168519eb'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -66,17 +66,39 @@ All tooling paths below are under `tools/conformance-vectors/v1/` unless qualifi
 
 - Hardened the existing v1 schema and shared validator; all three sample vectors remain unchanged. CLI package expectations now also reject an explicitly empty expected package ID.
 - Added a sample-only pack/validate gate with temporary build outputs and Debug/Release selection; CI runs it independently from the existing loopback job.
-- Verification: all 41 Python tests passed, including the unchanged runner unit tests. Debug and Release sample gates both passed and accepted all three vectors against their packed artifact. Shell syntax, invalid configuration exit 2, temporary cleanup, CI job separation, and diff whitespace checks passed.
+- Initial verification: all 41 Python tests passed, including the unchanged runner unit tests. Debug and Release sample gates both passed and accepted all three vectors against their packed artifact. Shell syntax, invalid configuration exit 2, temporary cleanup, CI job separation, and diff whitespace checks passed.
 - Matrix audit: sample approval is covered by the packed gates and CLI success test; compatibility by artifact/runner ID and exact-version tests; syntax by closed-object, name, ULID, whitespace and nonfinite tests; script consistency by wrong-kind, extensions and echo tests; assertions by operator/pointer/value tests. The full verbose run executed every covering test successfully.
 - Production code, upstream repositories, and parity/live implementations are unchanged. Full parity/live execution remains assigned to Stories 4.11/4.13.
+- Resumed review fixed parser-limit diagnostics and added raw malformed-JSON, deep-nesting, and integer-limit regression coverage through both entry points. All 42 tests and both sample gates pass after the patch. Eight pre-existing compatibility defects are recorded in `deferred-work.md`; two low-impact diagnostic refinements were rejected. All fourteen reviewer findings have individual triage rows below.
 
 ## Spec Change Log
 
 ## Review Triage Log
 
+Review resumed on 2026-09-27 from the recorded baseline, using all three workflow review layers. Each finding was classified before grouping. Baseline comparisons used `9b3b099bf117eac880b9b6e12422990a168519eb` in an isolated temporary directory; no existing implementation or submodule revisions were reverted.
+
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| Blind 1: parser-limit exceptions escape | medium | patch | Reproduced an uncaught `ValueError` for 4,301 digits and `RecursionError` for deep JSON. The newly added finite-number traversal also fails on a valid sample with 993 nested arrays that the baseline accepts; catch these failures at the existing load boundary and cover CLI/API behavior. |
+| Blind 2: nested duplicate location is root | low | reject | Reproduced the root pointer; the baseline already omitted the containing-object path. Source and duplicate key remain available, and preserving nested object pairs would add parser complexity for an uncommon diagnostic refinement. |
+| Blind 3: offset exceeds Int32 | medium | defer | Both baseline and reviewed validators accept 2147483648; the unchanged `RunQueryArguments.Offset` is `int?`. Record the pre-existing validator/runtime range mismatch for downstream compatibility work. |
+| Blind 4: integral floating-point paging | medium | defer | Both versions accept `pageSize: 1.0`; unchanged `run_loopback._call_args` renders it as `--page-size 1.0`. Record the pre-existing runner representation mismatch. |
+| Blind 5: boolean paging expectation equals integer input | medium | defer | Both versions accept expected `true` for supplied page size 1 because the unchanged comparison uses Python equality. Record the pre-existing request-consistency defect. |
+| Blind 6: cursor length measurement | medium | defer | Both versions accept 3,000 supplementary Unicode characters; Core checks UTF-16 `string.Length` against 4096. The schema's code-point maximum predates this change. |
+| Blind 7: fixed extension restrictions absent | medium | defer | Both versions accept 33 matching extensions; the unchanged runtime validator rejects more than 32 and enforces key/content/length/byte limits. The new supplied-extension equality check does not introduce this gap. |
+| Blind 8: invented optional request fields | medium | defer | Baseline and reviewed versions both accept expected extensions without supplied extensions and expected paging without paging inputs. Record the existing absence-consistency gap. |
+| Blind 9: wrong-kind expected request fields | medium | defer | Both versions accept a query expectation containing `idempotencyKey`, which the query request construction never emits. The open request-body schema and missing field-kind check predate this work. |
+| Blind 10: invalid entity routing | medium | defer | Both versions accept entity ID `/`; `RoutingResolver.IsAggregateId` and the executor reject it. Record the pre-existing fixed-routing compatibility gap, independently of Module identifier kinds. |
+| Edge 1: parser/traversal limits escape | medium | patch (grouped with Blind 1) | The same executable parser-limit and new finite-traversal reproductions confirm this claim. One exception-boundary correction covers both findings. |
+| Edge 2: nested duplicate location is root | low | reject | The same nested duplicate reproduction confirms the diagnostic limitation; source and offending key remain available. Additional object-pair traversal is disproportionate to this uncommon refinement. |
+| Edge 3: boolean paging expectation equals integer input | medium | defer (grouped with Blind 5) | Both baseline and reviewed implementations accept the supplied page size 1 / expected `true` reproduction. One deferred entry records the shared Python-equality defect. |
+| Verification 1: malformed JSON diagnostic coverage missing | medium | patch | The reviewer removed `JSONDecodeError` handling in isolation and all original 41 tests still passed. Add raw truncated/trailing-comma JSON plus parser-limit cases, checking source/root/reason, identical CLI stderr, exit 1, and no traceback. |
+
 ## Verification
 
-- `python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'` — all offline validator and existing runner unit tests pass.
-- `bash tools/conformance-vectors/v1/run-sample-validation.sh` — packed sample accepted independently.
-- Run the same script with its documented Release selection to verify the CI path.
-- Inspect CI job separation and repository diff for absence of production or upstream changes.
+- `python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'` — exit 0, all 42 offline validator and existing runner unit tests pass.
+- `bash tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0, Debug sample packed, all 42 tests pass, all three vectors accepted against the artifact and expected package identity.
+- `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` — exit 0, Release sample packed, all 42 tests pass, all three vectors accepted against the artifact and expected package identity.
+- `bash -n tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0; invalid configuration and extra-argument invocations return exit 2. Both gates clean their own temporary directories.
+- `git diff --check` — exit 0. CI keeps contract and loopback jobs independent. This resumed run modifies only validator/test and tracking files; the already-committed Tenants pointer change in the full baseline diff is unrelated and preserved.
+- Commit message `fix: complete conformance vector contract validation` passed the repository's pinned `@commitlint/cli` 21.2.2: `npx --no -- commitlint --edit /tmp/mcpcli-story-1-8-commit-zpz223mf.txt --verbose` returned exit 0, zero problems and zero warnings. Full validation evidence is preserved at `/tmp/mcpcli-story-1-8-commit-zpz223mf.validation.log`.

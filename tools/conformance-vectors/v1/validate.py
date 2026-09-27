@@ -58,7 +58,7 @@ def _load_json(path: Path) -> Any:
         return document
     except VectorError as exc:
         raise VectorError(f"{path}:{exc}") from exc
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:
         raise VectorError(f"{path}:/: {exc}") from exc
 
 

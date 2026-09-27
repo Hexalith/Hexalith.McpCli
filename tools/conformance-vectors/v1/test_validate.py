@@ -369,6 +369,30 @@ class VectorContractTests(unittest.TestCase):
         self.assertIn("Validated 3 vector(s)", result.stdout)
         self.assertEqual("", result.stderr)
 
+    def test_json_syntax_and_parser_limits_return_identical_cli_and_api_findings(self) -> None:
+        cases = [
+            ('{"formatVersion":', "line 1 column"),
+            ('[1,]', "line 1 column"),
+            ('[' * (sys.getrecursionlimit() + 100) + '0' + ']' * (sys.getrecursionlimit() + 100),
+             "maximum recursion depth exceeded"),
+        ]
+        digit_limit = getattr(sys, "get_int_max_str_digits", lambda: 0)()
+        if digit_limit:
+            cases.append(('{"number":' + '9' * (digit_limit + 1) + '}', "integer string conversion"))
+        source = self.directory / "malformed.json"
+        for raw, reason in cases:
+            with self.subTest(reason=reason):
+                source.write_text(raw, encoding="utf-8")
+                findings = validate_vectors([source], self.artifact, PACKAGE)
+                self.assertEqual(1, len(findings), findings)
+                self.assertTrue(findings[0].startswith(f"{source}:/:"), findings)
+                self.assertIn(reason, findings[0])
+                result = self._cli([source])
+                self.assertEqual(1, result.returncode, result.stderr)
+                self.assertEqual("", result.stdout)
+                self.assertEqual(findings, result.stderr.splitlines())
+                self.assertNotIn("Traceback", result.stderr)
+
     def test_cli_and_reusable_entry_point_return_identical_located_rejections(self) -> None:
         cases = []
         malformed = copy.deepcopy(self.command)
