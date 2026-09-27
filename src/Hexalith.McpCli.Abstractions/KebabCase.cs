@@ -14,7 +14,19 @@ public static class KebabCase
     /// <returns>The kebab-case name.</returns>
     public static string Convert(string name)
     {
+#if NETSTANDARD2_0
+        if (name is null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("The value cannot be an empty string or composed entirely of whitespace.", nameof(name));
+        }
+#else
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
+#endif
 
         var result = new StringBuilder(name.Length + 4);
         for (int index = 0; index < name.Length; index++)
@@ -51,11 +63,23 @@ public static class KebabCase
     /// <returns>The canonical operation name part.</returns>
     public static string FromTypeName(string typeName)
     {
+#if NETSTANDARD2_0
+        if (typeName is null)
+        {
+            throw new ArgumentNullException(nameof(typeName));
+        }
+
+        if (string.IsNullOrWhiteSpace(typeName))
+        {
+            throw new ArgumentException("The value cannot be an empty string or composed entirely of whitespace.", nameof(typeName));
+        }
+#else
         ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
+#endif
         string name = typeName.EndsWith("Command", StringComparison.Ordinal)
-            ? typeName[..^"Command".Length]
+            ? typeName.Substring(0, typeName.Length - "Command".Length)
             : typeName.EndsWith("Query", StringComparison.Ordinal)
-                ? typeName[..^"Query".Length]
+                ? typeName.Substring(0, typeName.Length - "Query".Length)
                 : typeName;
         if (name.Length == 0)
         {

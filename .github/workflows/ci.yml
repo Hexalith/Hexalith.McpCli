@@ -21,6 +21,7 @@ jobs:
       test-platform: microsoft-testing-platform
       unit-test-projects: |
         tests/Hexalith.McpCli.Abstractions.Tests
+        tests/Hexalith.McpCli.Analyzers.Tests
         tests/Hexalith.McpCli.Core.Tests
         tests/Hexalith.McpCli.Manifest.Tests
       # Add the blocking Aspire tier after the harness and upstream source-build seam exist.
@@ -55,6 +56,7 @@ jobs:
         run: bash scripts/release-prepare.sh 1.0.0
       - name: Restore and build a Contracts consumer from the staged package
         run: |
+          set -euo pipefail
           consumer_dir="$RUNNER_TEMP/mcpcli-bootstrap-consumer"
           mkdir -p "$consumer_dir"
           cp global.json "$consumer_dir/global.json"
@@ -71,6 +73,11 @@ jobs:
           public sealed record CreateItemCommand([property: HexalithIdentifier] string Id);
           [HexalithQuery("Read a sample item.", Domain = "sample", WireType = "get-item", AggregateIdProperty = nameof(Id), ProjectionType = "items")]
           public sealed record GetItemQuery([property: HexalithIdentifier] string Id);
+          [HexalithQuery(" ")]
+          public sealed record MissingDescriptionQuery;
           EOF
+          export NUGET_PACKAGES="$consumer_dir/packages"
           dotnet restore "$consumer_dir/Consumer.csproj" --source "$PWD/nupkgs"
-          dotnet build "$consumer_dir/Consumer.csproj" --configuration Release --no-restore
+          dotnet build "$consumer_dir/Consumer.csproj" --configuration Release --no-restore 2>&1 | tee "$consumer_dir/build.log"
+          grep -q 'warning MCPCLI001:' "$consumer_dir/build.log"
+          grep -Eq '^[[:space:]]*1 Warning\(s\)$' "$consumer_dir/build.log"

@@ -35,6 +35,10 @@ def main() -> int:
                 "lib/net10.0/Hexalith.McpCli.Abstractions.dll" not in archive.namelist()
             ):
                 raise ValueError("Abstractions package is missing its net10.0 compile DLL")
+            if package_id.endswith(".Abstractions") and (
+                "analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll" not in archive.namelist()
+            ):
+                raise ValueError("Abstractions package is missing its C# analyzer DLL")
             nuspec_names = [name for name in archive.namelist() if name.endswith(".nuspec")]
             if len(nuspec_names) != 1:
                 raise ValueError(f"{path} must contain one nuspec")

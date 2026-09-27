@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj" />
+    <ProjectReference Include="../../src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

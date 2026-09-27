@@ -6,5 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <ProjectReference Include="../Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <None Include="../Hexalith.McpCli.Analyzers/bin/$(Configuration)/netstandard2.0/Hexalith.McpCli.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" Visible="false" />
   </ItemGroup>
 </Project>
