@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 import zipfile
@@ -34,16 +35,31 @@ def _no_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     value: dict[str, Any] = {}
     for key, item in pairs:
         if key in value:
-            raise VectorError(f"duplicate JSON field {key!r}")
+            raise VectorError(f"/: duplicate JSON field {key!r}")
         value[key] = item
     return value
 
 
+def _check_finite_json(value: Any, parts: tuple[str | int, ...] = ()) -> None:
+    if isinstance(value, float) and not math.isfinite(value):
+        raise VectorError(f"{_pointer(parts)}: nonfinite JSON number {value!r} is not supported")
+    if isinstance(value, dict):
+        for key, item in value.items():
+            _check_finite_json(item, (*parts, key))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            _check_finite_json(item, (*parts, index))
+
+
 def _load_json(path: Path) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_no_duplicate_keys)
-    except (OSError, UnicodeError, json.JSONDecodeError, VectorError) as exc:
-        raise VectorError(f"{path}: {exc}") from exc
+        document = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_no_duplicate_keys)
+        _check_finite_json(document)
+        return document
+    except VectorError as exc:
+        raise VectorError(f"{path}:{exc}") from exc
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise VectorError(f"{path}:/: {exc}") from exc
 
 
 def package_identity(artifact: Path) -> tuple[str, str]:
@@ -98,11 +114,11 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
     if body.get("tenant") != envelope["tenant"]:
         findings.append(f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
     for field in ("domain", "aggregateId", "commandType" if kind == "command" else "queryType"):
-        if not isinstance(body.get(field), str) or not body[field]:
-            findings.append(f"{pointer}/expectedGateway/body/{field}: required nonempty Gateway routing value")
+        if not isinstance(body.get(field), str) or not body[field].strip():
+            findings.append(f"{pointer}/expectedGateway/body/{field}: required nonblank Gateway routing value")
     if not isinstance(body.get("payload"), dict):
         findings.append(f"{pointer}/expectedGateway/body/payload: expected submitted Payload object is required")
-    for field in ("aggregateId", "entityId", "idempotencyKey"):
+    for field in ("aggregateId", "entityId", "idempotencyKey", "extensions"):
         if field in envelope and body.get(field) != envelope[field]:
             findings.append(f"{pointer}/expectedGateway/body/{field}: must equal supplied envelope value")
     masks = gateway["maskGenerated"]
@@ -123,6 +139,8 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         findings.append(f"{pointer}/expectedGateway/body/idempotencyKey: absent caller key must remain absent")
     if kind == "command" and "correlationId" not in step["scriptedResponse"]["echoRequestFields"]:
         findings.append(f"{pointer}/scriptedResponse/echoRequestFields: command response must echo request correlationId")
+    if kind == "query" and step["scriptedResponse"]["echoRequestFields"]:
+        findings.append(f"{pointer}/scriptedResponse/echoRequestFields: query request has no identifiers to echo")
     if kind == "query" and any(field in envelope for field in ("pageSize", "offset", "cursor")):
         paging = {field: envelope[field] for field in ("pageSize", "offset", "cursor") if field in envelope}
         if body.get("paging") != paging:
@@ -207,7 +225,7 @@ def main(argv: list[str] | None = None) -> int:
         if not isinstance(operations, list) or not all(isinstance(item, str) for item in operations):
             print(f"{args.operations_file}:/: expected an array of canonical operation names", file=sys.stderr)
             return 1
-    expected = (args.expected_package_id, args.expected_package_version) if args.expected_package_id else None
+    expected = (args.expected_package_id, args.expected_package_version) if args.expected_package_id is not None else None
     findings = validate_vectors(args.vectors, args.artifact, expected, operations)
     if findings:
         print("\n".join(findings), file=sys.stderr)

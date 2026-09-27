@@ -40,11 +40,29 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
-      - name: Validate the shared vector contract
+      - name: Pack and validate the shared vector contract without a Head or Gateway
+        run: |
+          python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
+          source "$RUNNER_TEMP/mcpcli-vector-venv/bin/activate"
+          python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt
+          bash tools/conformance-vectors/v1/run-sample-validation.sh Release
+
+  conformance-vector-loopback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Install vector runner test tooling
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
           "$RUNNER_TEMP/mcpcli-vector-venv/bin/python" -m pip install -r tools/conformance-vectors/v1/requirements.txt
-          "$RUNNER_TEMP/mcpcli-vector-venv/bin/python" -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
       - name: Run packaged Contracts through CLI and MCP against reset Gateway replay
         run: |
           source "$RUNNER_TEMP/mcpcli-vector-venv/bin/activate"

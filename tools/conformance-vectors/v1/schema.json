@@ -20,30 +20,31 @@
       "additionalProperties": false,
       "required": ["id", "version"],
       "properties": {
-        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$" },
-        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[0-9A-Za-z.-]+)?$" }
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*(?![\\s\\S])" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[0-9A-Za-z.-]+)?(?![\\s\\S])" }
       }
     },
-    "operation": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$" },
+    "operation": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])" },
     "kind": { "enum": ["command", "query"] },
+    "nonblank": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "envelope": {
       "type": "object",
       "additionalProperties": false,
       "required": ["tenant"],
       "properties": {
-        "tenant": { "type": "string", "minLength": 1 },
-        "actor": { "type": "string", "minLength": 1 },
-        "aggregateId": { "type": "string", "minLength": 1 },
-        "entityId": { "type": "string", "minLength": 1 },
+        "tenant": { "$ref": "#/$defs/nonblank" },
+        "actor": { "$ref": "#/$defs/nonblank" },
+        "aggregateId": { "$ref": "#/$defs/nonblank" },
+        "entityId": { "$ref": "#/$defs/nonblank" },
         "correlationId": { "$ref": "#/$defs/ulid" },
         "idempotencyKey": { "$ref": "#/$defs/ulid" },
         "pageSize": { "type": "integer", "minimum": 1, "maximum": 200 },
         "offset": { "type": "integer", "minimum": 0 },
-        "cursor": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "cursor": { "$ref": "#/$defs/nonblank", "maxLength": 4096 },
         "extensions": { "type": "object", "additionalProperties": { "type": "string" } }
       }
     },
-    "ulid": { "type": "string", "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$" },
+    "ulid": { "type": "string", "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}(?![\\s\\S])" },
     "gateway": {
       "type": "object",
       "additionalProperties": false,
@@ -78,7 +79,7 @@
       "additionalProperties": false,
       "required": ["path", "operator"],
       "properties": {
-        "path": { "type": "string", "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$" },
+        "path": { "type": "string", "pattern": "^(?:/(?:[^~/]|~0|~1)*)*(?![\\s\\S])" },
         "operator": { "enum": ["equals", "exists", "arrayLength", "contains"] },
         "value": {}
       },
