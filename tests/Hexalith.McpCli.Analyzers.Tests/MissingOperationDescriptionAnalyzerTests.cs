@@ -22,9 +22,15 @@ public sealed class MissingOperationDescriptionAnalyzerTests
     [InlineData("[HexalithQuery(\"  \")] public record MissingQuery;")]
     [InlineData("[HexalithCommand(Text.Blank)] public record MissingCommand;")]
     [InlineData("[HexalithQuery(Text.Blank)] public class MissingQuery { }")]
+    [InlineData("[HexalithCommand(Text.Empty)] public class MissingCommand { }")]
+    [InlineData("[HexalithQuery(Text.Empty)] public record MissingQuery;")]
+    [InlineData("[HexalithCommandAttribute(\"\")] public class MissingCommand { }")]
+    [InlineData("[HexalithQueryAttribute(\"\")] public record MissingQuery;")]
+    [InlineData("[HexalithCommand(null)] public class MissingCommand { }")]
+    [InlineData("[HexalithQuery(null)] public record MissingQuery;")]
     public async Task BlankDescriptionsWarnAtTypeName(string declaration)
     {
-        string source = "using Hexalith.McpCli.Abstractions; internal static class Text { internal const string Blank = \"   \"; } " + declaration;
+        string source = "using Hexalith.McpCli.Abstractions; internal static class Text { internal const string Blank = \"   \"; internal const string Empty = \"\"; } " + declaration;
         ImmutableArray<Diagnostic> diagnostics = await AnalyzeAsync(source);
 
         Diagnostic diagnostic = diagnostics.ShouldHaveSingleItem();
@@ -32,6 +38,7 @@ public sealed class MissingOperationDescriptionAnalyzerTests
         diagnostic.Severity.ShouldBe(DiagnosticSeverity.Warning);
         string typeName = declaration.Contains("MissingCommand", StringComparison.Ordinal) ? "MissingCommand" : "MissingQuery";
         diagnostic.Location.SourceSpan.Start.ShouldBe(source.LastIndexOf(typeName, StringComparison.Ordinal));
+        diagnostic.GetMessage().ShouldBe($"Operation '{typeName}' needs a nonblank description");
     }
 
     /// <summary>Accepts nonblank descriptions, including compile-time constants.</summary>
@@ -58,7 +65,10 @@ public sealed class MissingOperationDescriptionAnalyzerTests
             namespace Other;
             [AttributeUsage(AttributeTargets.Class)]
             public sealed class HexalithCommandAttribute(string description) : Attribute { }
+            [AttributeUsage(AttributeTargets.Class)]
+            public sealed class HexalithQueryAttribute(string description) : Attribute { }
             [HexalithCommand("")] public sealed class UnrelatedCommand { }
+            [HexalithQueryAttribute("")] public sealed record UnrelatedQuery;
             public sealed record PlainQuery;
             """;
 
@@ -114,6 +124,31 @@ public sealed class MissingOperationDescriptionAnalyzerTests
         (await AnalyzeAsync(source)).ShouldBeEmpty();
     }
 
+    /// <summary>Finds the real attribute when a same-named source attribute is also present.</summary>
+    [Fact]
+    public async Task SameMetadataNameStillWarnsForGenuineAttribute()
+    {
+        const string source = """
+            extern alias genuine;
+            namespace Hexalith.McpCli.Abstractions
+            {
+                [System.AttributeUsage(System.AttributeTargets.Class)]
+                public sealed class HexalithQueryAttribute(string description) : System.Attribute { }
+            }
+            namespace Contracts
+            {
+                [genuine::Hexalith.McpCli.Abstractions.HexalithQuery("")]
+                public sealed record GenuineQuery;
+                [Hexalith.McpCli.Abstractions.HexalithQuery("")]
+                public sealed record CounterfeitQuery;
+            }
+            """;
+
+        Diagnostic diagnostic = (await AnalyzeAsync(source, aliasAbstractions: true)).ShouldHaveSingleItem();
+        diagnostic.Location.SourceSpan.Start.ShouldBe(source.IndexOf("GenuineQuery", StringComparison.Ordinal));
+        diagnostic.GetMessage().ShouldBe("Operation 'GenuineQuery' needs a nonblank description");
+    }
+
     /// <summary>Warns on decorated types in generated Contracts source.</summary>
     [Fact]
     public async Task GeneratedContractsSourceWarns()
@@ -129,14 +164,22 @@ public sealed class MissingOperationDescriptionAnalyzerTests
         diagnostic.Location.SourceSpan.Start.ShouldBe(source.IndexOf("GeneratedQuery", StringComparison.Ordinal));
     }
 
-    private static async Task<ImmutableArray<Diagnostic>> AnalyzeAsync(string source, string path = "Contracts.cs")
+    private static async Task<ImmutableArray<Diagnostic>> AnalyzeAsync(
+        string source,
+        string path = "Contracts.cs",
+        bool aliasAbstractions = false)
     {
         var tree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(LanguageVersion.CSharp14), path);
         string? trustedAssemblies = AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES") as string;
         trustedAssemblies.ShouldNotBeNull();
         IEnumerable<MetadataReference> references = trustedAssemblies.Split(Path.PathSeparator)
             .Select(path => MetadataReference.CreateFromFile(path));
-        references = references.Append(MetadataReference.CreateFromFile(typeof(HexalithCommandAttribute).Assembly.Location));
+        MetadataReferenceProperties abstractionsProperties = aliasAbstractions
+            ? new MetadataReferenceProperties(aliases: ImmutableArray.Create("genuine"))
+            : MetadataReferenceProperties.Assembly;
+        references = references.Append(MetadataReference.CreateFromFile(
+            typeof(HexalithCommandAttribute).Assembly.Location,
+            abstractionsProperties));
         CSharpCompilation compilation = CSharpCompilation.Create(
             "AnalyzerFixture",
             [tree],

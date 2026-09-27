@@ -32,19 +32,12 @@ public sealed class MissingOperationDescriptionAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.RegisterCompilationStartAction(startContext =>
         {
-            INamedTypeSymbol? commandAttribute = startContext.Compilation.GetTypeByMetadataName(
-                "Hexalith.McpCli.Abstractions.HexalithCommandAttribute");
-            INamedTypeSymbol? queryAttribute = startContext.Compilation.GetTypeByMetadataName(
-                "Hexalith.McpCli.Abstractions.HexalithQueryAttribute");
-            if (commandAttribute?.ContainingAssembly.Identity.Name != "Hexalith.McpCli.Abstractions")
-            {
-                commandAttribute = null;
-            }
-
-            if (queryAttribute?.ContainingAssembly.Identity.Name != "Hexalith.McpCli.Abstractions")
-            {
-                queryAttribute = null;
-            }
+            INamedTypeSymbol? commandAttribute = startContext.Compilation.GetTypesByMetadataName(
+                "Hexalith.McpCli.Abstractions.HexalithCommandAttribute")
+                .FirstOrDefault(symbol => symbol.ContainingAssembly.Identity.Name == "Hexalith.McpCli.Abstractions");
+            INamedTypeSymbol? queryAttribute = startContext.Compilation.GetTypesByMetadataName(
+                "Hexalith.McpCli.Abstractions.HexalithQueryAttribute")
+                .FirstOrDefault(symbol => symbol.ContainingAssembly.Identity.Name == "Hexalith.McpCli.Abstractions");
 
             if (commandAttribute is null && queryAttribute is null)
             {

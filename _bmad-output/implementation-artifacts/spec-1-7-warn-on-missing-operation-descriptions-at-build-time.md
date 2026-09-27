@@ -78,11 +78,12 @@ Pass-1 open items (Roslyn 5.9 pin, message argument, suffix/null coverage, same-
 
 Code review pass 2 of 93fc112..9590d29 (2026-09-27): Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor.
 
-- [ ] [Review][Decision] Packed analyzer requires Roslyn 5.9 and fails to load on SDKs older than 10.0.4xx — `Hexalith.McpCli.Analyzers.csproj` inherits the central `Microsoft.CodeAnalysis.CSharp` 5.9.0 pin (`references/Hexalith.Builds/Props/Directory.Packages.props:215`). A consumer on SDK 10.0.302 (Roslyn 5.6, installed locally) gets CS9057, no MCPCLI001, and a failed build under warnings-as-errors. The CI consumer copies `global.json` 10.0.401, so it cannot catch this. `CentralPackageVersionOverrideEnabled=false` rules out `VersionOverride`. All four layers raised it.
-- [ ] [Review][Patch] Diagnostic message argument is never asserted; replacing `type.Name` with `string.Empty` leaves all 12 tests green [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:30]
-- [ ] [Review][Patch] Null description warns today but no test pins it; a `Value is string s` refactor would silently drop it while the runtime still excludes null [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:19]
-- [ ] [Review][Patch] Test matrix omits the explicit `Attribute` suffix spelling, a constant equal to `""`, and an unrelated `HexalithQueryAttribute` look-alike (Always constraint and I/O matrix) [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:19]
-- [ ] [Review][Patch] Attribute lookup via `GetTypeByMetadataName` returns null for an ambiguous FQN and disables the rule for the compilation; use `GetTypesByMetadataName` filtered to the `Hexalith.McpCli.Abstractions` assembly (reachable only with `extern alias`, direct one-line fix) [src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs:35]
+- [x] [Review][Decision] Packed analyzer requires Roslyn 5.9 and fails to load on SDKs older than 10.0.4xx — resolved 2026-09-27: require .NET SDK 10.0.4xx or later and move every Hexalith repository's SDK and the Hexalith.Builds Roslyn pin together. All `references/` submodules, including the newly added Hexalith.Platform, now pin 10.0.401. Rejected alternatives: pinning the analyzer to Roslyn 5.0 through a nested `Directory.Packages.props` (prototype loaded on SDK 10.0.302), and deferral.
+- [x] [Review][Patch] Document the .NET SDK 10.0.4xx minimum and MCPCLI001 in the packed README so consumers can diagnose CS9057 [README.md:36]
+- [x] [Review][Patch] Diagnostic message argument is asserted in every blank-description case and in the same-FQN case [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:39]
+- [x] [Review][Patch] Null descriptions are covered for commands and queries [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:32]
+- [x] [Review][Patch] Explicit `Attribute` suffix, empty constant, and unrelated query look-alike are covered [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:28]
+- [x] [Review][Patch] Attribute lookup uses `GetTypesByMetadataName`, filters by the Abstractions assembly, and has a same-FQN test with `extern alias` [src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs:35]
 
 **Rejected (pass 2)**
 
@@ -98,6 +99,32 @@ Code review pass 2 of 93fc112..9590d29 (2026-09-27): Blind Hunter, Edge Case Hun
 - low — Nothing moves MCPCLI001 to `AnalyzerReleases.Shipped.md` at release: no build break results; a release-process chore.
 - low — Named-argument and nested-type cases are untested: `description:` still populates `ConstructorArguments`, and nested types are ordinary `NamedType` symbols.
 
+Code review pass 3 of 93fc112..working tree, scoped to story files (2026-09-27): Blind Hunter, Edge Case Hunter, Verification Gap (no gaps), Acceptance Auditor (no AC violations). Analyzer tests 19/19 in Release. Clean review — no decision, patch, or defer items.
+
+**Rejected (pass 3)**
+
+- low — Blind: in-repo Contracts projects never run MCPCLI001: their `ProjectReference` to Abstractions omits the packed analyzer by design; attaching it under inherited `TreatWarningsAsErrors` would fail the intentionally invalid fixtures (spec Never), and the CI package consumer covers auto-loading. Same verdict as passes 1–2.
+- low — Blind: CI `1 Warning(s)` grep depends on console-logger text: `tee` disables the terminal logger and the runner locale is fixed; intended strictness, same verdict as passes 1–2.
+- low — Blind: linked `KebabCase` is unused and its netstandard guard is untested and duplicated: the link is a spec Always constraint; the guard mirrors `ThrowIfNullOrWhiteSpace` exactly. Same verdict as passes 1–2.
+- false — Blind: message `type.Name` is ambiguous across namespaces, nested, or generic types: every diagnostic carries a source location at the type identifier. Same verdict as pass 2.
+- false — Blind: TPA reference set breaks alias isolation: TPA does include an unaliased `Hexalith.McpCli.Abstractions.dll`, but the source counterfeit wins by CS0436 and `GetTypesByMetadataName` still returns both symbols, so the same-FQN test exercises the lookup fix (the pre-fix `GetTypeByMetadataName` returned the source type and would fail it); no fixture uses `KebabCase`.
+- low — Blind: early-return, single-attribute, nested/generic, `<auto-generated>` header, and `.editorconfig` suppression paths are untested: each is a trivial branch or Roslyn platform behavior (`ConfigureGeneratedCodeAnalysis` covers all generated forms).
+- low — Blind: README omits `TreatWarningsAsErrors` impact and suppression syntax, and no `helpLinkUri`: the message names the type and the fix; standard .NET suppression applies. Same verdict as passes 1–2.
+- low — Blind: analyzer DLL packed from a hard-coded `bin/$(Configuration)/netstandard2.0` path: no `UseArtifactsOutput`, `OutputPath`, or `BaseOutputPath` is configured, `release-prepare.sh` builds then packs `--no-build`, and the validator fails on a missing DLL. Same verdict as passes 1–2.
+- low — Blind: package validation checks only presence of the analyzer DLL, not absence of Roslyn DLLs or a `lib/` copy: only one explicit `None` item packs to `analyzers/dotnet/cs`, and `ReferenceOutputAssembly="false"` keeps the analyzer out of `lib/`; the guard would add checks for a state not demonstrated.
+- low — Edge: in-repo Contracts never run MCPCLI001: same as the Blind finding above.
+- low — Edge: hard-coded analyzer pack path: same as the Blind finding above.
+- false — Edge: public linked `KebabCase` causes CS0433 in the test project: the Analyzers test project references both assemblies but never names `KebabCase`, and its Release build is clean.
+- false — Edge: blank description dropped when no type location falls inside the decorated declaration span: a type's identifier location always lies inside each of its declaration spans, and a null declaration falls back to the first location.
+- false — Edge: two referenced assemblies named `Hexalith.McpCli.Abstractions` leave the second copy unchecked: a non-strong-named duplicate simple name is CS1704, so the compilation cannot reach the analyzer with two copies.
+- low — Edge: exact `1 Warning(s)` CI check fails on unrelated warnings: intended strictness, same as the Blind finding above.
+- false — Edge: alias test binds the global alias too: same refutation as the Blind TPA finding above.
+- reject — Auditor: auto-loading requires .NET SDK 10.0.4xx: resolved as a pass-2 decision and documented in the README.
+- low — Auditor: genuine attribute recognized by assembly simple name only: no spec requirement for identity pinning; a spoofed Abstractions assembly is not a realistic consumer state.
+- reject — Auditor: null descriptions warn though the matrix names only empty and whitespace: a superset matching runtime exclusion; the fix would edit the frozen spec.
+- low — Auditor: hard-coded analyzer pack path: same as the Blind finding above.
+- false — Auditor: packaged-consumer probe missing from `release-prepare.sh`: `release.yml` requires a green `ci.yml` run on the exact SHA. Same verdict as pass 1.
+
 ## Implementation Notes
 
 - Added `MCPCLI001` for blank Command and Query descriptions. It matches attribute symbols from the Abstractions assembly, reports at the decorated type, and leaves runtime Catalog exclusion unchanged.
@@ -105,6 +132,7 @@ Code review pass 2 of 93fc112..9590d29 (2026-09-27): Blind Hunter, Edge Case Hun
 - Verification: Release solution build (zero warnings/errors); analyzer tests 11/11; Abstractions tests 20/20; Core tests 158/158. The package contains `analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll`; an isolated fresh-cache consumer with only the Abstractions reference produced one `MCPCLI001` warning at its decorated type.
 - A first consumer probe reused an older local NuGet cache entry for package version `1.0.0` and showed zero warnings. Repeating with an isolated package cache loaded the newly packed DLL and passed.
 - Review patches enabled diagnostics for generated Contracts source, added a generated-source test, enrolled the analyzer suite in CI, required the analyzer asset in release package validation, and asserted one warning from CI's staged-package consumer. Final Release build had zero warnings/errors; analyzer tests passed 12/12, Abstractions tests 20/20, and the fresh staged-package consumer emitted one `MCPCLI001` warning.
+- The final review patches document `MCPCLI001` and the SDK minimum in the packed README, resolve ambiguous same-name attribute symbols, and assert the message and remaining description cases. Analyzer tests passed 19/19, Abstractions tests 20/20, Core tests 173/173, and the Release solution build had zero warnings/errors. A fresh one-package consumer emitted one `MCPCLI001` warning; package inspection confirmed the analyzer asset and zero consumer dependencies. The final review found no analyzer-specific defect and deferred eight findings in concurrent CLI, settings, executor, MCP, and conformance work.
 
 ## Spec Change Log
 
@@ -131,6 +159,29 @@ Code review pass 2 of 93fc112..9590d29 (2026-09-27): Blind Hunter, Edge Case Hun
 | Edge: package-consumer coverage claim relies on direct analyzer tests | medium: direct `WithAnalyzers` tests cannot prove NuGet auto-loading; the isolated consumer ran locally, but release verification does not yet run it. | patch |
 | Verification: CI omits analyzer tests | medium: `.github/workflows/ci.yml` lists existing unit projects but not the new analyzer test project. | patch |
 | Verification: release package gate misses analyzer consumption | medium: `validate-release-packages.py` checks the runtime DLL and dependencies, while its staged Contracts consumer has only valid descriptions. Dropping the analyzer asset would pass the gate. | patch |
+| Blind 3: bare boolean switches are ignored | high: carried — `ExplicitFlag` still requires a token; the earlier triage recorded this CLI defect. | defer |
+| Blind 3: blank operation becomes internal error | medium: carried — `CatalogService.Describe` still receives blank input from the executor. | defer |
+| Blind 3: cancellation becomes internal error | medium: carried — the executor still catches cancellation as `Exception`. | defer |
+| Blind 3: malformed response identifiers | medium: carried — the executor still copies Gateway response IDs without ULID validation. | defer |
+| Blind 3: returned correlation differs from request | false: the PRD defines the Gateway response as the canonical result and makes no equality promise; an idempotency replay can return the earlier command's correlation. | reject |
+| Blind 3: malformed response paging | medium: carried — the executor still copies paging without validating its values. | defer |
+| Blind 3: blank cursor and offset | medium: `ValidateQueryArguments` accepts a whitespace cursor and bypasses its offset conflict; concurrent executor work, unrelated to description analysis. | defer |
+| Blind 3: extension allowlist count | medium: carried — profile validation still applies a per-command 32-entry limit to the whole allowlist. | defer |
+| Blind 3: short token masking | medium: `MaskToken` reveals every character of a token of four or fewer characters in config output; concurrent profile work. | defer |
+| Blind 3: vector request subset comparison | medium: `_expect_fields` traverses expected keys only, so an unexpected Gateway envelope field passes; concurrent conformance work. | defer |
+| Blind 3: vector public result shape | medium: CLI/MCP equality and vector-specific assertions do not guarantee all required public result fields; concurrent conformance work. | defer |
+| Blind 3: HTTP transport release message | low: `RunMcpAsync` returns the correct code but its text omits the PRD's next-release wording; concurrent CLI work. | defer |
+| Verification 3: bearer header has no gateway request test | medium: verified — command parity uses a null token and never asserts `Authorization`; concurrent hosting and CLI work. | defer |
+| Verification 3: paging cursor has no public output test | medium: verified — parity uses a response without paging and the Core test checks only the in-memory result; concurrent query work. | defer |
+| Verification 3: MCP kind filter lacks handler test | medium: verified — Core filtering is tested, while MCP parity calls `list_operations` without `kind`; concurrent MCP work. | defer |
+| Verification 3: bare boolean switches are ignored | high: carried — the earlier triage recorded this same `ExplicitFlag` defect and the code still requires a value token. | defer |
+| Edge 3: bare boolean switches are ignored | high: carried — the earlier triage recorded this same `ExplicitFlag` defect. | defer |
+| Edge 3: extension allowlist count | medium: carried — `SettingsResolver` still validates the whole allowlist as one command. | defer |
+| Edge 3: blank operation becomes internal error | medium: carried — executor lookup still sends blank input to `Describe`. | defer |
+| Edge 3: cancellation becomes internal error | medium: carried — the executor's blanket catch is unchanged. | defer |
+| Edge 3: explicit aggregate ID overrides query constant | high: carried — caller ID still takes precedence over the declared constant. | defer |
+| Edge 3: malformed response identifiers | medium: carried — the executor still copies response IDs without ULID validation. | defer |
+| Edge 3: malformed response paging | medium: carried — the executor still copies paging without validating it. | defer |
 
 ## Design Notes
 
