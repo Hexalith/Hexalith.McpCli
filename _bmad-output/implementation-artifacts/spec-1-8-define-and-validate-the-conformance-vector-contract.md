@@ -2,7 +2,7 @@
 title: 'Define and Validate the Conformance Vector Contract'
 type: 'feature'
 created: '2026-09-27'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '9b3b099bf117eac880b9b6e12422990a168519eb'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -61,6 +61,33 @@ All tooling paths below are under `tools/conformance-vectors/v1/` unless qualifi
 - Given the existing sample Contracts project, when the standalone offline gate packs and validates its vectors, then all examples pass without building either Head or connecting to a Gateway.
 - Given malformed or incompatible vectors, when authors or runners use the shared validator, then both receive actionable rejections under the same rules.
 - Given the author instructions, when a maintainer prepares approval evidence, then they can identify the version, immutable artifact, validation command/result, and downstream responsibilities without parity or live tests.
+
+### Review Findings
+
+Second code review, 2026-09-27, `9b3b099..1bf6906` (excluding committed `story-1-8-review/` scaffolding and this spec), four layers.
+
+- [ ] [Review][Patch] Pull the cheap deferred validator gaps into 1.8 (decision 2026-09-27: fix now) [tools/conformance-vectors/v1/validate.py:117] — The matrix row "Reject contradictory expectations" and the Problem ("accepts malformed vectors") are still partly open via deferrals: expected extensions/paging with none supplied; Query `expectedGateway.body.idempotencyKey`; `pageSize: true` equal to `1`; `offset` above Int32. New this pass: whole-number floats are accepted in every integer field, not only `pageSize` — reproduced `formatVersion: 1.0` and `statusCode: 202.0` → no findings. Most are one-line schema/`_check_step` changes, e.g. a strict `integer` type checker plus `"maximum": 2147483647`.
+- [ ] [Review][Patch] Approval evidence hash (SHA-256) differs from the runner's restored-package check (NuGet `sha512-` base64) [tools/conformance-vectors/v1/run-sample-validation.sh:29]
+- [ ] [Review][Patch] `sha256sum` missing on macOS turns a passed validation into exit 127 [tools/conformance-vectors/v1/run-sample-validation.sh:29]
+- [ ] [Review][Patch] README says `schema.json` and `validate.py` define the same rules; cross-field rules live only in `validate.py` [tools/conformance-vectors/v1/README.md:3]
+- [ ] [Review][Patch] Duplicate-key test does not assert the `source:/:` location prefix or CLI/API parity [tools/conformance-vectors/v1/test_validate.py:118]
+- [ ] [Review][Patch] `run-sample-validation.sh` committed as 100644 while sibling `run-sample-loopback.sh` is 100755 [tools/conformance-vectors/v1/run-sample-validation.sh]
+- [ ] [Review][Patch] Explicit empty configuration argument silently runs Debug instead of exiting 2 [tools/conformance-vectors/v1/run-sample-validation.sh:4]
+- [ ] [Review][Patch] Previous review scaffolding (~1,800 lines of reviewer prompts with stale diff copies) was committed in 9951257 [_bmad-output/implementation-artifacts/story-1-8-review/]
+
+**Rejected**
+
+- Nested duplicate key reported at `/` (raised by all four layers) — low; same call as the first review: uncommon, and the source and key are still reported; path-aware parsing adds complexity.
+- Nonfinite check stops file processing on first hit — low; consistent with other load-time failures (syntax, duplicate keys).
+- No approval-record template — the README lists the required fields, which satisfies AC3; a template is new scope.
+- README does not explain NuGet version normalization — false; a mismatch fails loudly with a located finding naming both versions.
+- CLI exit-2 paths untested — low; argparse default behavior, verified manually per Verification.
+- `jsonschema` not checked before packing — low; fails loudly with an import error.
+- Minimum Python version unpinned — false; the int-digit test guards with `getattr`, and CI images ship 3.12+.
+- CI jobs duplicate setup and unit tests — low; separate jobs are what the spec requires.
+- `references/Hexalith.Tenants` pointer bump — low; already on `origin/main` in 9951257, unused by this repo's build.
+- Commit 9951257 is not a Conventional Commit — low; already pushed, and rewriting history is out of scope.
+- Spec `status: done` vs sprint `review` — the fix is editing status; reconciled when this review closes.
 
 ## Implementation Notes
 
