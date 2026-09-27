@@ -1,6 +1,6 @@
 # Conformance vector contract v1
 
-This directory is the McpCli-owned, test-only contract for Module conformance vectors. Only `formatVersion: 1` is supported. `schema.json` and `validate.py` define the same approval rules for authors and runners; production code never loads these files. An incompatible format needs a new versioned directory and an explicit validator update. Tightening validation of malformed v1 inputs does not introduce a new format.
+This directory is the McpCli-owned, test-only contract for Module conformance vectors. Only `formatVersion: 1` is supported. `schema.json` defines structural rules; `validate.py` applies them with strict integer typing and adds cross-field consistency and artifact identity checks. Authors and runners must use this shared validator for the complete approval rules; schema validation alone is insufficient. Production code never loads these files. An incompatible format needs a new versioned directory and an explicit validator update. Tightening validation of malformed v1 inputs does not introduce a new format.
 
 Each vector names one canonical decorated Operation and its owning Contracts **package ID and exact version**. Package IDs compare case-insensitively; versions compare exactly, without case folding or version normalization. A vector approved for one version is stale when its package version changes, even if its Operation Name is reused. The owning Module repository stores and approves its real vectors. The three `sample-*.json` vectors cover the local synthetic Contracts fixture; they do not enroll a production Module.
 
@@ -10,7 +10,9 @@ Create a vector using `schema.json` and the synthetic examples. `prerequisites` 
 
 The root, package, call, Envelope, Gateway expectation, scripted response, and assertion objects reject unknown fields. `payload`, `expectedGateway.body`, and `scriptedResponse.body` remain Module-owned JSON data, as do assertion values. Arbitrary fields and nested JSON are allowed there; duplicate JSON keys and nonfinite numbers (`NaN`, `Infinity`, or numeric overflow) are rejected. Required routing strings and supplied tenant, actor, aggregate ID, entity ID, and cursor strings cannot be blank. Caller-supplied correlation and idempotency identifiers use the v1 ULID pattern. Envelope identifiers are independent of the Module's payload Identifier Kind.
 
-`expectedGateway.body` lists fields that the runner must compare against the captured request, including routing, Envelope, submitted Payload, and paging. It is a required-field projection; the runner separately compares complete captured requests from both Heads. The submitted Payload can differ from the input Payload where Core fills or removes envelope-owned properties. Supplied extensions must match the expected request's extensions. Command-only inputs and Query-only inputs cannot be mixed; a Query cannot combine cursor and offset.
+Contract integer fields (`formatVersion`, `pageSize`, `offset`, `statusCode`, and `arrayLength` values) require integer JSON tokens: `1.0`, `1e0`, and booleans are invalid even when Python would compare them equal to integers. Query offsets range from 0 through 2147483647. Module-owned JSON numbers retain their normal finite numeric representation.
+
+`expectedGateway.body` lists fields that the runner must compare against the captured request, including routing, Envelope, submitted Payload, and paging. It is a required-field projection; the runner separately compares complete captured requests from both Heads. The submitted Payload can differ from the input Payload where Core fills or removes envelope-owned properties. Supplied extensions and paging must match the expected request exactly, including paging value types; when those inputs are absent, their request fields must be absent too. Command-only and Query-only inputs and known request fields cannot be mixed; a Query cannot combine cursor and offset.
 
 `maskGenerated` may name only a generated Command `/messageId` or `/correlationId`, with `<generated>` at that location in the expected body. Caller-supplied identifiers, especially an idempotency key, remain exact. `echoRequestFields` tells the loopback script to copy selected request identifiers into its response: a Command response must echo correlation ID and may echo message ID. A Query has no request identifiers to mask or echo; its response may still contain a scripted correlation ID supplied by the Module.
 
@@ -28,7 +30,7 @@ bash tools/conformance-vectors/v1/run-sample-validation.sh
 bash tools/conformance-vectors/v1/run-sample-validation.sh Release
 ```
 
-The script packs only the sample Contracts project and builds its dependencies, runs the offline validator and existing runner unit tests, then validates all three examples against the packed `Hexalith.McpCli.Sample.Contracts` version `1.0.0` artifact and expected identity. It prints the result and artifact SHA-256, exits 0 on success, and cleans only its own temporary artifact/build directory. It builds neither Head and needs no Gateway or AppHost. Packing may restore build dependencies from NuGet; “offline” means validation and unit tests need no network service or running application.
+The script packs only the sample Contracts project and builds its dependencies, runs the offline validator and existing runner unit tests, then validates all three examples against the packed `Hexalith.McpCli.Sample.Contracts` version `1.0.0` artifact and expected identity. It prints the result and artifact SHA-512 as `sha512-` plus base64, matching the runner's NuGet restored-package hash format. It uses Python's standard library for hashing on Linux and macOS, exits 0 on success, and cleans only its own temporary artifact/build directory. It builds neither Head and needs no Gateway or AppHost. Packing may restore build dependencies from NuGet; “offline” means validation and unit tests need no network service or running application.
 
 For the focused Python checks alone:
 
@@ -46,12 +48,21 @@ python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
      --artifact /path/to/Owner.Contracts.1.2.3.nupkg \
      --expected-package-id Owner.Contracts \
      --expected-package-version 1.2.3 \
-     /path/to/module/vectors/*.json
-   sha256sum /path/to/Owner.Contracts.1.2.3.nupkg
+     /path/to/module/vectors/*.json &&
+   python3 - /path/to/Owner.Contracts.1.2.3.nupkg <<'PY'
+   import base64
+   import hashlib
+   import sys
+   from pathlib import Path
+
+   artifact = Path(sys.argv[1])
+   digest = base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode("ascii")
+   print(f"sha512-{digest}  {artifact}")
+   PY
    ```
 
 3. Resolve every finding and rerun until exit 0. Invalid or incompatible vectors exit 1, with source, location, and reason diagnostics. CLI usage errors exit 2. Package identity comes from the artifact's root `.nuspec`, never a project file.
-4. Record maintainer approval with `formatVersion: 1`, the vector repository revision, validator revision, owning package ID and exact version, immutable artifact location and SHA-256, exact validation command, successful output/exit code, and approving maintainer. Keep the artifact available for downstream checks; the temporary sample artifact is illustrative evidence only.
+4. Record maintainer approval with `formatVersion: 1`, the vector repository revision, validator revision, owning package ID and exact version, immutable artifact location and NuGet-compatible `sha512-` base64 hash, exact validation command, successful output/exit code, and approving maintainer. Keep the artifact available for downstream checks; the temporary sample artifact is illustrative evidence only.
 
 Approval establishes format, script consistency, and artifact identity compatibility. It does not establish that an Operation exists in the owning Catalog, that its kind or Payload matches the decorated Contracts schema, or that a handler produces the scripted semantic result. Those checks belong to the downstream gates below.
 

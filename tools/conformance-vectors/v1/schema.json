@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["formatVersion", "package", "operation", "kind", "prerequisites", "invocation", "postconditions"],
   "properties": {
-    "formatVersion": { "const": 1 },
+    "formatVersion": { "type": "integer", "const": 1 },
     "package": { "$ref": "#/$defs/package" },
     "operation": { "$ref": "#/$defs/operation" },
     "kind": { "$ref": "#/$defs/kind" },
@@ -39,7 +39,7 @@
         "correlationId": { "$ref": "#/$defs/ulid" },
         "idempotencyKey": { "$ref": "#/$defs/ulid" },
         "pageSize": { "type": "integer", "minimum": 1, "maximum": 200 },
-        "offset": { "type": "integer", "minimum": 0 },
+        "offset": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
         "cursor": { "$ref": "#/$defs/nonblank", "maxLength": 4096 },
         "extensions": { "type": "object", "additionalProperties": { "type": "string" } }
       }

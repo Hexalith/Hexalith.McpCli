@@ -93,12 +93,15 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance offset validation lacks the runtime Int32 maximum.
   evidence: Medium; both baseline 9b3b099bf117eac880b9b6e12422990a168519eb and the reviewed schema accept offset 2147483648, while RunQueryArguments.Offset is int?. Align this existing range gap before downstream runner compatibility acceptance.
+  status: resolved in Story 1.8 (2026-09-27); the schema enforces 2147483647, with boundary and every-call-position regression coverage.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Integral floating-point paging accepted by JSON Schema is rendered as an invalid CLI integer.
   evidence: Medium; both validator versions accept pageSize 1.0; run_loopback.py _call_args uses str(value), yielding --page-size 1.0. Story 4.11 should normalize accepted integral numeric values or settle an explicit representation rule.
+  status: resolved in Story 1.8 (2026-09-27); all contract integer fields require integer JSON tokens through the shared validator's strict type checker.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance paging comparisons equate booleans with integers.
   evidence: Medium; both validator versions accept expectedGateway.body.paging.pageSize true for envelope.pageSize 1 because validate.py _check_step uses Python dictionary equality. Distinguish JSON boolean and number types before downstream request-consistency acceptance.
+  status: resolved in Story 1.8 (2026-09-27); expected paging must match supplied keys, types, and values at every call position.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance cursor limits count Unicode code points while Core counts UTF-16 units.
   evidence: Medium; both validator versions accept 3000 emoji, while OperationExecutor.ValidateQueryArguments rejects their 6000 UTF-16 units. Align the pre-existing schema/runtime limit before downstream compatibility acceptance.
@@ -108,9 +111,23 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Expected Gateway fields can contradict absent optional envelope inputs.
   evidence: Medium; both validator versions accept invented expected extensions with no supplied extensions and expected paging with no supplied paging. Core maps these fields directly from the missing inputs; extend the existing presence-only consistency checks before downstream acceptance.
+  status: resolved in Story 1.8 (2026-09-27); absent extensions and paging must remain absent in request expectations, including empty and null expectations.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance expected requests can contain known fields belonging to the other operation kind.
   evidence: Medium; both validator versions accept idempotencyKey in a query expectedGateway.body although query request construction has no such field. Preserve open Module data while checking incompatible known request fields before downstream compatibility acceptance.
+  status: resolved in Story 1.8 (2026-09-27); known Command-only and Query-only request fields are rejected on the opposite kind while arbitrary Module data remains open.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance routing inputs omit unconditional Gateway identifier syntax and length restrictions.
   evidence: Medium; both validator versions accept entityId / in the envelope and expected request, while RoutingResolver.IsAggregateId rejects it. Apply common routing constraints independently of Module payload identifier kinds before downstream compatibility acceptance.
+
+## Deferred from: Story 1.8 follow-up review (2026-09-27)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
+  summary: Conformance envelope ULIDs require uppercase while the pinned runtime parser also accepts lowercase.
+  evidence: Medium; both baseline 9b3b099bf117eac880b9b6e12422990a168519eb and current schema reject 01j9mzhxt3rkm0vwxrxgsjdatk; the review's ByteAether.Ulid 1.4.1 probe accepts it. Resolve the existing v1 representation rule during downstream compatibility work.
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
+  summary: Python parsing can silently underflow Module-owned numeric tokens before conformance execution.
+  evidence: Medium; baseline and current validator accept raw 1e-400 as 0.0. The unchanged runner also uses json.loads and json.dumps, losing the original value; settle supported numeric representation or precision preservation in runner work.
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
+  summary: Offline vector validation accepts Payload nesting deeper than the execution parser supports.
+  evidence: Medium; baseline and current validator accept 65 nested arrays, while OperationExecutor uses JsonDocument.Parse with the default depth limit. The review reproduced the runtime rejection; add Payload depth compatibility to Story 4.11 acceptance.

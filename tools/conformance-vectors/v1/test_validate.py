@@ -113,9 +113,17 @@ class VectorContractTests(unittest.TestCase):
 
     def test_duplicate_json_fields_are_rejected(self) -> None:
         source = self.directory / "duplicate.json"
-        source.write_text('{"formatVersion":1,"formatVersion":1}', encoding="utf-8")
-        findings = validate_vectors([source], self.artifact)
-        self.assertTrue(any("duplicate JSON field 'formatVersion'" in finding for finding in findings), findings)
+        for raw, field in (('{"formatVersion":1,"formatVersion":1}', "formatVersion"),
+                           ('{"invocation":{"payload":{"name":1,"name":2}}}', "name")):
+            with self.subTest(field=field):
+                source.write_text(raw, encoding="utf-8")
+                findings = validate_vectors([source], self.artifact, PACKAGE)
+                self.assertEqual([f"{source}:/: duplicate JSON field {field!r}"], findings)
+                result = self._cli([source])
+                self.assertEqual(1, result.returncode, result.stderr)
+                self.assertEqual("", result.stdout)
+                self.assertEqual(findings, result.stderr.splitlines())
+                self.assertNotIn("Traceback", result.stderr)
 
     def test_contract_owned_objects_are_closed_at_every_call_position(self) -> None:
         for field in (None, "package"):
@@ -202,19 +210,38 @@ class VectorContractTests(unittest.TestCase):
                 document["invocation"]["envelope"][field] = value
                 document["invocation"]["expectedGateway"]["body"][field] = value
             self.assertEqual([], self._validate(document))
-        for paging in ({"pageSize": 1, "offset": 0}, {"pageSize": 200, "cursor": "x" * 4096}):
+        for paging in ({"pageSize": 1, "offset": 0}, {"offset": 2147483647},
+                       {"pageSize": 200, "cursor": "x" * 4096}):
             document = copy.deepcopy(self.query)
+            document["invocation"]["envelope"].pop("pageSize", None)
             document["invocation"]["envelope"].update(paging)
             document["invocation"]["expectedGateway"]["body"]["paging"] = paging
             self.assertEqual([], self._validate(document))
 
     def test_paging_outside_bounds_is_rejected(self) -> None:
-        for field, values in (("pageSize", (0, 201, True)), ("offset", (-1, True)), ("cursor", ("x" * 4097,))):
-            for value in values:
-                with self.subTest(field=field, value=value):
-                    document = copy.deepcopy(self.query)
-                    document["invocation"]["envelope"][field] = value
-                    self._assert_rejected(document, f"/invocation/envelope/{field}")
+        for position in POSITIONS:
+            for field, values in (("pageSize", (0, 201, True)), ("offset", (-1, True, 2147483648)),
+                                  ("cursor", ("x" * 4097,))):
+                for value in values:
+                    with self.subTest(position=position, field=field, value=value):
+                        document, step, pointer = self._step_at(self.query, position)
+                        step["envelope"][field] = value
+                        self._assert_rejected(document, f"{pointer}/envelope/{field}")
+
+    def test_contract_integer_fields_reject_floats_and_booleans_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for area, field, integer in (("envelope", "pageSize", 1), ("envelope", "offset", 0),
+                                         ("scriptedResponse", "statusCode", 202)):
+                for value in (float(integer), bool(integer)):
+                    with self.subTest(position=position, field=field, value=value):
+                        document, step, pointer = self._step_at(self.query, position)
+                        step[area][field] = value
+                        self._assert_rejected(document, f"{pointer}/{area}/{field}")
+            for value in (0.0, 1.0, True, False):
+                with self.subTest(position=position, value=value):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["assertions"] = [{"path": "", "operator": "arrayLength", "value": value}]
+                    self._assert_rejected(document, f"{pointer}/assertions/0/value")
 
     def test_nonfinite_json_is_rejected_with_escaped_locations_in_all_data_areas(self) -> None:
         for position in POSITIONS:
@@ -238,7 +265,7 @@ class VectorContractTests(unittest.TestCase):
     def test_module_owned_json_remains_open_and_preserves_finite_values(self) -> None:
         document = copy.deepcopy(self.command)
         step = document["invocation"]
-        data = {"unfamiliar": [None, True, False, -1, 1.25, 1e300, "NaN", {"~name/": ""}]}
+        data = {"unfamiliar": [None, True, False, -1, 1.0, 1.25, 1e300, "NaN", {"~name/": ""}]}
         step["payload"]["custom"] = data
         step["expectedGateway"]["body"]["custom"] = data
         step["scriptedResponse"]["body"]["custom"] = data
@@ -270,6 +297,57 @@ class VectorContractTests(unittest.TestCase):
                         self.assertEqual([], self._validate(document))
                     else:
                         self._assert_rejected(document, f"{pointer}/expectedGateway/body/extensions")
+
+    def test_absent_optional_inputs_cannot_have_expected_request_values(self) -> None:
+        for template, field, values in ((self.command, "extensions", (None, {}, {"custom": "value"})),
+                                        (self.query, "paging", (None, {}, {"pageSize": 1})),
+                                        (self.query, "entityId", (None, "", "entity"))):
+            for position in POSITIONS:
+                for value in values:
+                    with self.subTest(position=position, field=field, value=value):
+                        document, step, pointer = self._step_at(template, position)
+                        for optional in ("extensions", "entityId", "pageSize", "offset", "cursor"):
+                            step["envelope"].pop(optional, None)
+                        step["expectedGateway"]["body"][field] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_supplied_entity_id_is_valid_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for value in ("entity", "0" * 26):
+                with self.subTest(position=position, value=value):
+                    document, step, _ = self._step_at(self.query, position)
+                    step["envelope"]["entityId"] = value
+                    step["expectedGateway"]["body"]["entityId"] = value
+                    self.assertEqual([], self._validate(document))
+
+    def test_wrong_kind_expected_request_fields_at_every_call_position(self) -> None:
+        cases = (
+            (self.command, {"queryType": "get-item", "projectionType": "items", "projectionActorType": "item-actor",
+                            "entityId": "entity", "paging": {"pageSize": 1}}),
+            (self.query, {"commandType": "create-item", "messageId": "0" * 26,
+                          "correlationId": "0" * 26, "idempotencyKey": "0" * 26, "extensions": {}}),
+        )
+        for template, fields in cases:
+            for position in POSITIONS:
+                for field, value in fields.items():
+                    with self.subTest(kind=template["kind"], position=position, field=field):
+                        document, step, pointer = self._step_at(template, position)
+                        step["expectedGateway"]["body"][field] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_expected_paging_matches_integer_types_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for field, integer in (("pageSize", 1), ("offset", 0), ("offset", 1)):
+                for expected in (None, {}, {field: bool(integer)}, {field: float(integer)}, {field: integer}):
+                    with self.subTest(position=position, field=field, expected=expected):
+                        document, step, pointer = self._step_at(self.query, position)
+                        step["envelope"].pop("pageSize", None)
+                        step["envelope"][field] = integer
+                        step["expectedGateway"]["body"]["paging"] = expected
+                        if isinstance(expected, dict) and type(expected.get(field)) is int:
+                            self.assertEqual([], self._validate(document))
+                        else:
+                            self._assert_rejected(document, f"{pointer}/expectedGateway/body/paging")
 
     def test_query_response_cannot_echo_request_identifiers_at_every_call_position(self) -> None:
         for position in POSITIONS:
@@ -348,7 +426,7 @@ class VectorContractTests(unittest.TestCase):
             self._assert_rejected(document, "/invocation: operation and kind must match")
 
     def test_unsupported_format_values_and_missing_version_are_rejected(self) -> None:
-        for version in (0, -1, 2, "1", True, None):
+        for version in (0, -1, 2, "1", 1.0, True, None):
             with self.subTest(version=version):
                 document = copy.deepcopy(self.command)
                 document["formatVersion"] = version
@@ -395,6 +473,14 @@ class VectorContractTests(unittest.TestCase):
 
     def test_cli_and_reusable_entry_point_return_identical_located_rejections(self) -> None:
         cases = []
+        for version in (1.0, True):
+            malformed = copy.deepcopy(self.command)
+            malformed["formatVersion"] = version
+            cases.append((malformed, PACKAGE))
+        malformed = copy.deepcopy(self.query)
+        malformed["invocation"]["envelope"]["pageSize"] = 1
+        malformed["invocation"]["expectedGateway"]["body"]["paging"]["pageSize"] = True
+        cases.append((malformed, PACKAGE))
         malformed = copy.deepcopy(self.command)
         malformed["postconditions"][0]["scriptedResponse"]["echoRequestFields"] = ["messageId"]
         cases.append((malformed, PACKAGE))

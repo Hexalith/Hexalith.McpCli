@@ -2,7 +2,7 @@
 title: 'Define and Validate the Conformance Vector Contract'
 type: 'feature'
 created: '2026-09-27'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '9b3b099bf117eac880b9b6e12422990a168519eb'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -66,14 +66,14 @@ All tooling paths below are under `tools/conformance-vectors/v1/` unless qualifi
 
 Second code review, 2026-09-27, `9b3b099..1bf6906` (excluding committed `story-1-8-review/` scaffolding and this spec), four layers.
 
-- [ ] [Review][Patch] Pull the cheap deferred validator gaps into 1.8 (decision 2026-09-27: fix now) [tools/conformance-vectors/v1/validate.py:117] — The matrix row "Reject contradictory expectations" and the Problem ("accepts malformed vectors") are still partly open via deferrals: expected extensions/paging with none supplied; Query `expectedGateway.body.idempotencyKey`; `pageSize: true` equal to `1`; `offset` above Int32. New this pass: whole-number floats are accepted in every integer field, not only `pageSize` — reproduced `formatVersion: 1.0` and `statusCode: 202.0` → no findings. Most are one-line schema/`_check_step` changes, e.g. a strict `integer` type checker plus `"maximum": 2147483647`.
-- [ ] [Review][Patch] Approval evidence hash (SHA-256) differs from the runner's restored-package check (NuGet `sha512-` base64) [tools/conformance-vectors/v1/run-sample-validation.sh:29]
-- [ ] [Review][Patch] `sha256sum` missing on macOS turns a passed validation into exit 127 [tools/conformance-vectors/v1/run-sample-validation.sh:29]
-- [ ] [Review][Patch] README says `schema.json` and `validate.py` define the same rules; cross-field rules live only in `validate.py` [tools/conformance-vectors/v1/README.md:3]
-- [ ] [Review][Patch] Duplicate-key test does not assert the `source:/:` location prefix or CLI/API parity [tools/conformance-vectors/v1/test_validate.py:118]
-- [ ] [Review][Patch] `run-sample-validation.sh` committed as 100644 while sibling `run-sample-loopback.sh` is 100755 [tools/conformance-vectors/v1/run-sample-validation.sh]
-- [ ] [Review][Patch] Explicit empty configuration argument silently runs Debug instead of exiting 2 [tools/conformance-vectors/v1/run-sample-validation.sh:4]
-- [ ] [Review][Patch] Previous review scaffolding (~1,800 lines of reviewer prompts with stale diff copies) was committed in 9951257 [_bmad-output/implementation-artifacts/story-1-8-review/]
+- [x] [Review][Patch] Pull the cheap deferred validator gaps into 1.8 (decision 2026-09-27: fix now) [tools/conformance-vectors/v1/validate.py:117] — The matrix row "Reject contradictory expectations" and the Problem ("accepts malformed vectors") are still partly open via deferrals: expected extensions/paging with none supplied; Query `expectedGateway.body.idempotencyKey`; `pageSize: true` equal to `1`; `offset` above Int32. New this pass: whole-number floats are accepted in every integer field, not only `pageSize` — reproduced `formatVersion: 1.0` and `statusCode: 202.0` → no findings. Most are one-line schema/`_check_step` changes, e.g. a strict `integer` type checker plus `"maximum": 2147483647`.
+- [x] [Review][Patch] Approval evidence hash (SHA-256) differs from the runner's restored-package check (NuGet `sha512-` base64) [tools/conformance-vectors/v1/run-sample-validation.sh:29]
+- [x] [Review][Patch] `sha256sum` missing on macOS turns a passed validation into exit 127 [tools/conformance-vectors/v1/run-sample-validation.sh:29]
+- [x] [Review][Patch] README says `schema.json` and `validate.py` define the same rules; cross-field rules live only in `validate.py` [tools/conformance-vectors/v1/README.md:3]
+- [x] [Review][Patch] Duplicate-key test does not assert the `source:/:` location prefix or CLI/API parity [tools/conformance-vectors/v1/test_validate.py:118]
+- [x] [Review][Patch] `run-sample-validation.sh` committed as 100644 while sibling `run-sample-loopback.sh` is 100755 [tools/conformance-vectors/v1/run-sample-validation.sh]
+- [x] [Review][Patch] Explicit empty configuration argument silently runs Debug instead of exiting 2 [tools/conformance-vectors/v1/run-sample-validation.sh:4]
+- [x] [Review][Patch] Previous review scaffolding (~1,800 lines of reviewer prompts with stale diff copies) was committed in 9951257 [_bmad-output/implementation-artifacts/story-1-8-review/]
 
 **Rejected**
 
@@ -98,6 +98,11 @@ Second code review, 2026-09-27, `9b3b099..1bf6906` (excluding committed `story-1
 - Production code, upstream repositories, and parity/live implementations are unchanged. Full parity/live execution remains assigned to Stories 4.11/4.13.
 - Resumed review fixed parser-limit diagnostics and added raw malformed-JSON, deep-nesting, and integer-limit regression coverage through both entry points. All 42 tests and both sample gates pass after the patch. Eight pre-existing compatibility defects are recorded in `deferred-work.md`; two low-impact diagnostic refinements were rejected. All fourteen reviewer findings have individual triage rows below.
 
+- Review follow-up completed all eight open patch items: strict integer tokens and Int32 offsets; exact paging types and absent optional-request consistency; wrong-kind request fields; portable NuGet-compatible SHA-512 evidence; executable script and empty-argument rejection; accurate validator documentation; duplicate-key CLI/API regression checks; removal of the three stale review scaffolding files. Five deferred issues are now resolved; the existing cursor-unit, extension-restriction, and routing-syntax entries remain for downstream compatibility work.
+- Current verification: all 46 offline tests and both Debug/Release packed sample gates pass. Every matrix row has executed coverage; all three samples remain unchanged. Independent OpenSSL checks match the Python hash output, script argument errors exit 2, and both gate runs cleaned their temporary directories.
+
+- Final review patches add query projection fields to Command rejection, forbid invented Query entity IDs, and make README hashing conditional on validation success. Final verification passes all 47 tests and both packed sample gates. Three review layers completed; all patch findings are closed and remaining pre-existing compatibility issues are deferred. The spec is done and sprint tracking moves to review as required by bmad-build.
+
 ## Spec Change Log
 
 ## Review Triage Log
@@ -121,11 +126,37 @@ Review resumed on 2026-09-27 from the recorded baseline, using all three workflo
 | Edge 3: boolean paging expectation equals integer input | medium | defer (grouped with Blind 5) | Both baseline and reviewed implementations accept the supplied page size 1 / expected `true` reproduction. One deferred entry records the shared Python-equality defect. |
 | Verification 1: malformed JSON diagnostic coverage missing | medium | patch | The reviewer removed `JSONDecodeError` handling in isolation and all original 41 tests still passed. Add raw truncated/trailing-comma JSON plus parser-limit cases, checking source/root/reason, identical CLI stderr, exit 1, and no traceback. |
 
+
+### Follow-up review triage (2026-09-27)
+
+All three independent layers completed. The edge-case layer returned no findings; the blind layer returned ten and the verification layer one. Each finding is classified separately below before grouping. Baseline probes used `9b3b099bf117eac880b9b6e12422990a168519eb` in temporary files.
+
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| Follow-up Blind 1: missing query projection request fields | medium | patch | Both versions accept Command expectations containing `projectionType` or `projectionActorType`, which `SubmitCommandRequest` cannot emit. This exposes an omission in the newly added known wrong-kind check; complete its tuple and existing every-position tests. |
+| Follow-up Blind 2: invented query entity ID | medium | patch | Both versions accept an expected `entityId` with no envelope input; `OperationExecutor` passes `run.EntityId` directly. Complete the new absent-input consistency checks with this proven optional field and regression cases. |
+| Follow-up Blind 3: unknown nuspec XML encoding | low | reject | Both versions raise `LookupError` for a fabricated root nuspec declaring `unrecognized-codec`. This pre-existing malformed-artifact case is uncommon for immutable NuGet releases and would add an exception guard; it does not block this patch. |
+| Follow-up Blind 4: approval example masks validator failure | medium | patch | The new README block runs hashing after validation unconditionally; a shell without `set -e` returns the successful hash command's status after rejection. Chain the commands with `&&` and verify both outcomes. |
+| Follow-up Blind 5: cursor UTF-16 limit | medium | defer (carried) | Carried: same claim and unchanged code as prior Blind 6. Keep the existing downstream entry; do not duplicate it. |
+| Follow-up Blind 6: fixed extension restrictions | medium | defer (carried) | Carried: same claim and unchanged code as prior Blind 7. Keep the existing downstream entry; do not duplicate it. |
+| Follow-up Blind 7: routing grammar | medium | defer (carried) | Carried: same claim and unchanged code as prior Blind 10. Keep the existing downstream entry; do not duplicate it. |
+| Follow-up Blind 8: lowercase ULID compatibility | medium | defer | Both baseline and current patterns require uppercase. The review's pinned ByteAether.Ulid probe accepts lowercase. Preserve the existing v1 pattern in this patch; record the pre-existing parser/contract difference for downstream compatibility. |
+| Follow-up Blind 9: numeric underflow | medium | defer | Both versions accept raw `1e-400` after Python JSON parsing produces `0.0`; the unchanged runner parses and serializes again. This is pre-existing numeric representation behavior; runner representation changes are excluded by the frozen intent. |
+| Follow-up Blind 10: Payload depth compatibility | medium | defer | Both versions accept 65 nested arrays; Core uses `JsonDocument.Parse` with default depth and the review reproduced rejection. Runtime Payload compatibility belongs to downstream Story 4.11. |
+| Follow-up Verification 1: no automated sample hash assertion | low | reject | The emitted hash is illustrative sample evidence and was independently compared with OpenSSL during this run. No incorrect output was found. Adding a shell execution harness solely for this low-impact output exceeds a direct correction; retain the manual evidence. |
+
 ## Verification
 
-- `python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'` — exit 0, all 42 offline validator and existing runner unit tests pass.
-- `bash tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0, Debug sample packed, all 42 tests pass, all three vectors accepted against the artifact and expected package identity.
-- `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` — exit 0, Release sample packed, all 42 tests pass, all three vectors accepted against the artifact and expected package identity.
-- `bash -n tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0; invalid configuration and extra-argument invocations return exit 2. Both gates clean their own temporary directories.
-- `git diff --check` — exit 0. CI keeps contract and loopback jobs independent. This resumed run modifies only validator/test and tracking files; the already-committed Tenants pointer change in the full baseline diff is unrelated and preserved.
+- `python3 -m unittest discover -v -s tools/conformance-vectors/v1 -p 'test_*.py'` — exit 0; all 47 tests pass, including every matrix row, CLI/API parity and all call positions. No skips.
+- `bash tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0; Debug pack succeeds, all 47 tests pass, all three unchanged vectors validate, and NuGet-compatible `sha512-` evidence is printed.
+- `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` — exit 0; Release pack succeeds with the same checks. Both runs build only Sample.Contracts, Abstractions and Analyzers and clean their temporary directories.
+- `bash -n tools/conformance-vectors/v1/run-sample-validation.sh` — exit 0. Empty, invalid and extra configuration arguments return exit 2; executable file mode is set. Python hash snippets match an independent OpenSSL SHA-512 calculation.
+- The rendered README approval example returns exit 0 and a hash for valid vectors, or exit 1 with no hash for invalid vectors.
+- `git diff --check` — exit 0. The existing CI contract and loopback jobs remain independent. Production code, dependencies, sample vectors, runner implementations, submodule pointers and the frozen spec block are unchanged by this follow-up.
+- Verification logs: `/tmp/mcpcli-story-1-8-verification.MgS5yY/final-tests.log`, `final-debug.log`, `final-release.log`, `final-shell.log`, `final-diff.log`, and `approval-example.log`.
+
+- Follow-up commit candidate passed pinned `@commitlint/cli` 21.2.2: `npx --no -- commitlint --edit /tmp/mcpcli-story-1-8-commit-vrf575yn.txt --verbose` — exit 0, zero problems and warnings. Exact message and validation output are preserved in `/tmp/mcpcli-story-1-8-commit-vrf575yn.txt` and `/tmp/mcpcli-story-1-8-commit-vrf575yn.validation.log`.
+
+### Prior commit validation
+
 - Commit message `fix: complete conformance vector contract validation` passed the repository's pinned `@commitlint/cli` 21.2.2: `npx --no -- commitlint --edit /tmp/mcpcli-story-1-8-commit-zpz223mf.txt --verbose` returned exit 0, zero problems and zero warnings. Full validation evidence is preserved at `/tmp/mcpcli-story-1-8-commit-zpz223mf.validation.log`.

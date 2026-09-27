@@ -14,13 +14,18 @@ from typing import Any
 from xml.etree import ElementTree
 
 try:
-    from jsonschema import Draft202012Validator
+    from jsonschema import Draft202012Validator, validators
 except ImportError as exc:
     raise SystemExit("Install test tooling with: python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt") from exc
 
 
 SCHEMA_PATH = Path(__file__).with_name("schema.json")
 SUPPORTED_FORMAT_VERSIONS = (1,)
+# CLI integer arguments require integer JSON tokens, not integral floats or booleans.
+VectorValidator = validators.extend(
+    Draft202012Validator,
+    type_checker=Draft202012Validator.TYPE_CHECKER.redefine("integer", lambda checker, value: type(value) is int),
+)
 
 
 class VectorError(ValueError):
@@ -105,12 +110,17 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         for field in ("entityId", "pageSize", "offset", "cursor"):
             if field in envelope:
                 findings.append(f"{pointer}/envelope/{field}: query-only input is invalid for a command")
+        wrong_kind_fields = ("queryType", "projectionType", "projectionActorType", "entityId", "paging")
     else:
         for field in ("correlationId", "idempotencyKey", "extensions"):
             if field in envelope:
                 findings.append(f"{pointer}/envelope/{field}: command-only input is invalid for a query")
         if "cursor" in envelope and "offset" in envelope:
             findings.append(f"{pointer}/envelope/cursor: cursor cannot be combined with offset")
+        wrong_kind_fields = ("commandType", "messageId", "correlationId", "idempotencyKey", "extensions")
+    for field in wrong_kind_fields:
+        if field in body:
+            findings.append(f"{pointer}/expectedGateway/body/{field}: request field is invalid for a {kind}")
     if body.get("tenant") != envelope["tenant"]:
         findings.append(f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
     for field in ("domain", "aggregateId", "commandType" if kind == "command" else "queryType"):
@@ -137,13 +147,22 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         findings.append(f"{pointer}/expectedGateway/body/correlationId: caller-supplied identifier must match exactly")
     if kind == "command" and "idempotencyKey" not in envelope and "idempotencyKey" in body:
         findings.append(f"{pointer}/expectedGateway/body/idempotencyKey: absent caller key must remain absent")
+    if kind == "command" and "extensions" not in envelope and "extensions" in body:
+        findings.append(f"{pointer}/expectedGateway/body/extensions: absent envelope extensions must remain absent")
     if kind == "command" and "correlationId" not in step["scriptedResponse"]["echoRequestFields"]:
         findings.append(f"{pointer}/scriptedResponse/echoRequestFields: command response must echo request correlationId")
     if kind == "query" and step["scriptedResponse"]["echoRequestFields"]:
         findings.append(f"{pointer}/scriptedResponse/echoRequestFields: query request has no identifiers to echo")
-    if kind == "query" and any(field in envelope for field in ("pageSize", "offset", "cursor")):
+    if kind == "query":
+        if "entityId" not in envelope and "entityId" in body:
+            findings.append(f"{pointer}/expectedGateway/body/entityId: absent envelope entityId must remain absent")
         paging = {field: envelope[field] for field in ("pageSize", "offset", "cursor") if field in envelope}
-        if body.get("paging") != paging:
+        expected_paging = body.get("paging")
+        if not paging and "paging" in body:
+            findings.append(f"{pointer}/expectedGateway/body/paging: absent envelope paging must remain absent")
+        elif paging and (not isinstance(expected_paging, dict) or expected_paging.keys() != paging.keys()
+                         or any(type(expected_paging[field]) is not type(value) or expected_paging[field] != value
+                                for field, value in paging.items())):
             findings.append(f"{pointer}/expectedGateway/body/paging: must equal supplied envelope paging")
 
 
@@ -165,7 +184,7 @@ def validate_vectors(
             findings.append(f"{artifact}:/metadata: artifact {artifact_id}@{artifact_version} does not match restored package {expected_id}@{expected_version}")
     schema = _load_json(SCHEMA_PATH)
     Draft202012Validator.check_schema(schema)
-    validator = Draft202012Validator(schema)
+    validator = VectorValidator(schema)
     seen: dict[str, Path] = {}
     for source in paths:
         try:

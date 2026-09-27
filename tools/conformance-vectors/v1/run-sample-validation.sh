@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-configuration="${1:-Debug}"
+configuration="${1-Debug}"
 if (( $# > 1 )) || [[ "$configuration" != Debug && "$configuration" != Release ]]; then
     echo "Usage: bash tools/conformance-vectors/v1/run-sample-validation.sh [Debug|Release]" >&2
     exit 2
@@ -26,4 +26,13 @@ python3 tools/conformance-vectors/v1/validate.py \
     tools/conformance-vectors/v1/sample-command.json \
     tools/conformance-vectors/v1/sample-query.json \
     tools/conformance-vectors/v1/sample-rename.json
-sha256sum "$artifact"
+python3 - "$artifact" <<'PY'
+import base64
+import hashlib
+import sys
+from pathlib import Path
+
+artifact = Path(sys.argv[1])
+digest = base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode("ascii")
+print(f"sha512-{digest}  {artifact}")
+PY
