@@ -59,6 +59,26 @@ context: []
 - Given that package, when its contents and nuspec are inspected, then it contains the analyzer DLL at `analyzers/dotnet/cs` and has no consumer-visible package dependencies.
 - Given the existing invalid Contracts fixture, when the solution builds, then runtime Catalog tests can still exercise its startup exclusion.
 
+### Review Findings
+
+Code review of 93fc112..9590d29 (2026-09-27).
+
+- [ ] [Review][Decision] Packed analyzer requires Roslyn 5.9 and breaks consumers on SDKs older than 10.0.4xx — `Hexalith.McpCli.Analyzers.csproj` takes the central `Microsoft.CodeAnalysis.CSharp` 5.9.0 pin, so the DLL references compiler 5.9.0.0 and `System.Collections.Immutable` 10.0.0.0. Two reviewers reproduced a staged-package consumer on SDK 10.0.302 (Roslyn 5.6) and got `CS9057 ... references version '5.9.0.0' of the compiler, which is newer than the currently running version '5.6.0.0'`. The analyzer does not load, so there is no MCPCLI001. With `TreatWarningsAsErrors=true` the consumer build fails. The CI consumer copies this repo's `global.json` (10.0.401), so it cannot detect this. Hexalith.Builds sets `CentralPackageVersionOverrideEnabled=false`, so `VersionOverride` is not available. Today every sibling module is on 10.0.4xx; external consumers and older Visual Studio hosts are not.
+- [ ] [Review][Patch] Diagnostic message argument is never asserted [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:491]
+- [ ] [Review][Patch] Test matrix omits the explicit `Attribute` suffix spelling (Always constraint) and a null description [tests/Hexalith.McpCli.Analyzers.Tests/MissingOperationDescriptionAnalyzerTests.cs:484]
+- [ ] [Review][Patch] A same-FQN or ambiguous attribute type silently disables the rule for the whole compilation; the counterfeit test pairs no genuine violation [src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs:380]
+
+**Rejected**
+
+- low — Analyzer DLL packed from hard-coded `bin/$(Configuration)/netstandard2.0`: `release-prepare.sh` builds the solution in Release, then packs `--no-build` from the same tree, and no artifacts output or custom `OutputPath` is configured. The fix adds an MSBuild target for a layout nobody uses.
+- low — Linked `KebabCase` is unused and duplicates a public type: the link is required by the spec's Always constraint, and CS0433 appears only if `Analyzers.Tests` uses `KebabCase`, which it does not.
+- false — Release scripts lack the packaged-consumer probe: `release.yml` `verify-source` requires a successful `ci.yml` push run on the exact SHA, and that run includes the bootstrap-package consumer probe.
+- false — CI warning assertion is brittle: the output is piped through `tee`, so the terminal logger is automatically off. A local run matched both greps, and the exactly-one-warning check is intended strictness.
+- low — The repo's own Contracts projects never run MCPCLI001: the spec scopes the warning to package consumers and the Code Map says to avoid attaching the analyzer to every project reference.
+- low — No `helpLinkUri` or README entry for MCPCLI001: the message names the type and states the fix.
+- low — Deferred-work entries for concurrent CLI, settings, and executor work are attributed to this spec: bookkeeping only, no code impact.
+- reject — Spec `status: done` differs from sprint `review`: the fix would edit the spec under review, and this review step resets both statuses.
+
 ## Implementation Notes
 
 - Added `MCPCLI001` for blank Command and Query descriptions. It matches attribute symbols from the Abstractions assembly, reports at the decorated type, and leaves runtime Catalog exclusion unchanged.
