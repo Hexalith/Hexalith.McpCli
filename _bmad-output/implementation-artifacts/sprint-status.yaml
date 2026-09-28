@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 09-27-2026
+last_updated: 09-27-2026 22:54
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -44,7 +44,7 @@ development_status:
   1-6-inspect-description-quality: done
   1-7-warn-on-missing-operation-descriptions-at-build-time: done
   1-8-define-and-validate-the-conformance-vector-contract: done
-  epic-1-retrospective: optional
+  epic-1-retrospective: done
 
   epic-2: backlog
   2-1-inspect-effective-session-settings: backlog
@@ -134,3 +134,40 @@ action_items:
       follow normative addendum §G for operation-level hollow_description lint."
     owner: "McpCli maintainer"
     status: open
+  - id: "epic-1-retro-item-1-query-payload-vectors"
+    epic: 1
+    action: "Support Catalog-valid Query payload roots including null in v1 vectors
+      and add validator and loopback regression cases."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
+  - id: "epic-1-retro-item-2-gateway-request-expectations"
+    epic: 1
+    action: "Require complete valid Gateway request expectations including Query projectionType;
+      reject unknown request fields and invalid tenant syntax across every vector
+      step."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
+  - id: "epic-1-retro-item-3-typed-json-parity"
+    epic: 1
+    action: "Use type-preserving JSON comparison in loopback assertions and CLI/MCP
+      parity, with boolean versus number negative coverage."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
+  - id: "epic-1-retro-item-4-dependency-guidance"
+    epic: 1
+    action: "Reconcile managed project dependency guidance with the accepted JsonSchema.Net
+      pin and executable dependency policy while keeping shared agent entry points
+      synchronized."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
+  - id: "epic-1-retro-item-5-string-identifier-contract"
+    epic: 1
+    action: "Decide whether marked non-routing String identifiers may be empty and
+      reconcile the public enum documentation, story decision, and schema if needed."
+    owner: "Product/architecture owner"
+    status: open
+    ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
