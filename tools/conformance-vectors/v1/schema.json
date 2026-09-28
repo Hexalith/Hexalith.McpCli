@@ -27,12 +27,33 @@
     "operation": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])" },
     "kind": { "enum": ["command", "query"] },
     "nonblank": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "tenant": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$(?![\\s\\S])"
+    },
+    "extensions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string" }
+    },
+    "paging": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "pageSize": { "type": "integer", "minimum": 1, "maximum": 200 },
+        "offset": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "cursor": { "$ref": "#/$defs/nonblank", "maxLength": 4096 }
+      }
+    },
     "envelope": {
       "type": "object",
       "additionalProperties": false,
       "required": ["tenant"],
       "properties": {
-        "tenant": { "$ref": "#/$defs/nonblank" },
+        "tenant": { "$ref": "#/$defs/tenant" },
         "actor": { "$ref": "#/$defs/nonblank" },
         "aggregateId": { "$ref": "#/$defs/nonblank" },
         "entityId": { "$ref": "#/$defs/nonblank" },
@@ -41,7 +62,7 @@
         "pageSize": { "type": "integer", "minimum": 1, "maximum": 200 },
         "offset": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
         "cursor": { "$ref": "#/$defs/nonblank", "maxLength": 4096 },
-        "extensions": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string" } }
+        "extensions": { "$ref": "#/$defs/extensions" }
       }
     },
     "ulid": { "type": "string", "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}(?![\\s\\S])" },
@@ -58,6 +79,43 @@
           "uniqueItems": true,
           "items": { "enum": ["/messageId", "/correlationId"] }
         }
+      }
+    },
+    "commandGatewayBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messageId", "tenant", "domain", "aggregateId", "commandType", "payload", "correlationId"],
+      "properties": {
+        "messageId": { "const": "<generated>" },
+        "tenant": { "$ref": "#/$defs/tenant" },
+        "domain": { "$ref": "#/$defs/tenant" },
+        "aggregateId": { "$ref": "#/$defs/nonblank" },
+        "commandType": { "$ref": "#/$defs/nonblank" },
+        "payload": { "type": "object" },
+        "correlationId": {
+          "anyOf": [
+            { "$ref": "#/$defs/ulid" },
+            { "const": "<generated>" }
+          ]
+        },
+        "extensions": { "$ref": "#/$defs/extensions" },
+        "idempotencyKey": { "$ref": "#/$defs/ulid" }
+      }
+    },
+    "queryGatewayBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tenant", "domain", "aggregateId", "queryType", "projectionType"],
+      "properties": {
+        "tenant": { "$ref": "#/$defs/tenant" },
+        "domain": { "$ref": "#/$defs/tenant" },
+        "aggregateId": { "$ref": "#/$defs/nonblank" },
+        "queryType": { "$ref": "#/$defs/nonblank" },
+        "projectionType": { "$ref": "#/$defs/tenant" },
+        "payload": {},
+        "entityId": { "$ref": "#/$defs/nonblank" },
+        "projectionActorType": { "$ref": "#/$defs/nonblank", "maxLength": 64 },
+        "paging": { "$ref": "#/$defs/paging" }
       }
     },
     "response": {
@@ -96,12 +154,32 @@
       "properties": {
         "operation": { "$ref": "#/$defs/operation" },
         "kind": { "$ref": "#/$defs/kind" },
-        "payload": { "type": "object" },
+        "payload": {},
         "envelope": { "$ref": "#/$defs/envelope" },
         "expectedGateway": { "$ref": "#/$defs/gateway" },
         "scriptedResponse": { "$ref": "#/$defs/response" },
         "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "command" } } },
+          "then": {
+            "properties": {
+              "payload": { "type": "object" },
+              "expectedGateway": {
+                "properties": { "body": { "$ref": "#/$defs/commandGatewayBody" } }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "expectedGateway": {
+                "properties": { "body": { "$ref": "#/$defs/queryGatewayBody" } }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

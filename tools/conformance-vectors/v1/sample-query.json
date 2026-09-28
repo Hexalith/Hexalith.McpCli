@@ -10,8 +10,12 @@
   "invocation": {
     "operation": "sample.get-item",
     "kind": "query",
-    "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" },
-    "envelope": { "tenant": "sample-tenant", "pageSize": 25 },
+    "payload": null,
+    "envelope": {
+      "tenant": "sample-tenant",
+      "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "pageSize": 25
+    },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/queries",
@@ -20,7 +24,7 @@
         "domain": "sample",
         "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
         "queryType": "get-item",
-        "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" },
+        "projectionType": "sample-items",
         "paging": { "pageSize": 25 }
       },
       "maskGenerated": []

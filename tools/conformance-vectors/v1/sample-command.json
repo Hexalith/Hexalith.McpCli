@@ -62,6 +62,7 @@
           "domain": "sample",
           "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
           "queryType": "get-item",
+          "projectionType": "sample-items",
           "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV" }
         },
         "maskGenerated": []

@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from run_loopback import _assert_result, _expect_fields, _mask, _mask_result, _verify_artifact_in_host
+from run_loopback import _assert_result, _expect_fields, _json_equal, _mask, _mask_result, _verify_artifact_in_host
 from validate import VectorError
 
 
@@ -43,11 +43,28 @@ class LoopbackRulesTests(unittest.TestCase):
         self.assertEqual(result["idempotencyKey"], _mask_result(result, self.command, "result")["idempotencyKey"])
 
     def test_expected_gateway_payload_and_paging_are_exact(self) -> None:
-        _expect_fields({"body": {"payload": {"id": "A"}, "tenant": "t", "unused": None}},
+        _expect_fields({"body": {"payload": {"id": "A"}, "tenant": "t"}},
                        {"body": {"payload": {"id": "A"}, "tenant": "t"}}, "request")
+        with self.assertRaisesRegex(VectorError, "/unused"):
+            _expect_fields({"body": {"payload": {"id": "A"}, "tenant": "t", "unused": None}},
+                           {"body": {"payload": {"id": "A"}, "tenant": "t"}}, "request")
         with self.assertRaisesRegex(VectorError, "/payload"):
             _expect_fields({"body": {"payload": {"id": "A", "unexpected": True}}},
                            {"body": {"payload": {"id": "A"}}}, "request")
+
+    def test_json_equality_preserves_types_recursively_but_unifies_number_encodings(self) -> None:
+        self.assertTrue(_json_equal({"items": [1, 2.0, {"value": 3}]},
+                                    {"items": [1.0, 2, {"value": 3.0}]}))
+        self.assertFalse(_json_equal({"items": [True]}, {"items": [1]}))
+        self.assertFalse(_json_equal({"value": False}, {"value": 0.0}))
+        self.assertFalse(_json_equal([1], {"0": 1}))
+
+    def test_gateway_expectations_use_recursive_json_equality(self) -> None:
+        _expect_fields({"body": {"payload": {"items": [1, 2.0]}}},
+                       {"body": {"payload": {"items": [1.0, 2]}}}, "request")
+        with self.assertRaisesRegex(VectorError, "/payload/items/0"):
+            _expect_fields({"body": {"payload": {"items": [True]}}},
+                           {"body": {"payload": {"items": [1]}}}, "request")
 
     def test_semantic_assertion_vocabulary(self) -> None:
         result = {"document": {"items": [{"id": "A"}, {"id": "B"}], "title": "Hello world"}}
@@ -60,6 +77,22 @@ class LoopbackRulesTests(unittest.TestCase):
             _assert_result(result, assertion, "result")
         with self.assertRaisesRegex(VectorError, "assertion equals"):
             _assert_result(result, {"path": "/document/title", "operator": "equals", "value": "Wrong"}, "result")
+
+    def test_equals_and_contains_assertions_use_recursive_json_equality(self) -> None:
+        result = {"document": {"value": {"items": [1.0]}, "items": [{"count": 1.0}]}}
+        _assert_result(result, {"path": "/document/value", "operator": "equals",
+                                "value": {"items": [1]}}, "result")
+        _assert_result(result, {"path": "/document/items", "operator": "contains",
+                                "value": {"count": 1}}, "result")
+        _assert_result(result, {"path": "/document/value", "operator": "contains",
+                                "value": {"items": [1]}}, "result")
+        for path, operator, value in (
+            ("/document/value", "equals", {"items": [True]}),
+            ("/document/items", "contains", {"count": True}),
+            ("/document/value", "contains", {"items": [True]}),
+        ):
+            with self.subTest(operator=operator, value=value), self.assertRaises(VectorError):
+                _assert_result(result, {"path": path, "operator": operator, "value": value}, "result")
 
     def test_host_restored_artifact_hash_must_match(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

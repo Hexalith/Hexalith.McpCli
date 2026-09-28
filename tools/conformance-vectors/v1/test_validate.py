@@ -89,6 +89,37 @@ class VectorContractTests(unittest.TestCase):
         self.command["invocation"]["expectedGateway"]["body"]["payload"]["Tenant"] = "sample-tenant"
         self.assertEqual([], self._validate(self.command))
 
+    def test_query_accepts_every_finite_json_root_at_every_call_position(self) -> None:
+        values = ({"field": [1, True, None]}, [1, "two", False], "value", 0, 1.5, True, False, None)
+        for position in POSITIONS:
+            for value in values:
+                with self.subTest(position=position, value=value):
+                    document, step, _ = self._step_at(self.query, position)
+                    step["payload"] = copy.deepcopy(value)
+                    if value is None:
+                        step["expectedGateway"]["body"].pop("payload", None)
+                    else:
+                        step["expectedGateway"]["body"]["payload"] = copy.deepcopy(value)
+                    self.assertEqual([], self._validate(document))
+
+    def test_command_rejects_non_object_json_roots_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for value in ([1], "value", 0, 1.5, True, False, None):
+                with self.subTest(position=position, value=value):
+                    document, step, pointer = self._step_at(self.command, position)
+                    step["payload"] = value
+                    self._assert_rejected(document, f"{pointer}/payload")
+
+    def test_query_payload_wire_presence_matches_nullness_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            document, step, pointer = self._step_at(self.query, position)
+            step["expectedGateway"]["body"]["payload"] = None
+            self._assert_rejected(document, f"{pointer}/expectedGateway/body/payload: JSON null Query payload must be omitted")
+            document, step, pointer = self._step_at(self.query, position)
+            step["payload"] = []
+            step["expectedGateway"]["body"].pop("payload", None)
+            self._assert_rejected(document, f"{pointer}/expectedGateway/body/payload: non-null Query payload must be emitted")
+
     def test_caller_correlation_id_cannot_be_masked(self) -> None:
         self.command["invocation"]["expectedGateway"]["maskGenerated"].append("/correlationId")
         self._assert_rejected(self.command, "caller-supplied correlationId cannot be masked")
@@ -191,7 +222,71 @@ class VectorContractTests(unittest.TestCase):
                         with self.subTest(kind=template["kind"], position=position, field=field, value=value):
                             document, step, pointer = self._step_at(template, position)
                             step["expectedGateway"]["body"][field] = value
-                            self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}: required nonblank")
+                            self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_gateway_request_bodies_require_every_emitted_field_at_every_call_position(self) -> None:
+        required = (
+            (self.command, ("messageId", "tenant", "domain", "aggregateId", "commandType", "payload", "correlationId")),
+            (self.query, ("tenant", "domain", "aggregateId", "queryType", "projectionType")),
+        )
+        for template, fields in required:
+            for position in POSITIONS:
+                for field in fields:
+                    with self.subTest(kind=template["kind"], position=position, field=field):
+                        document, step, pointer = self._step_at(template, position)
+                        del step["expectedGateway"]["body"][field]
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_gateway_request_bodies_reject_unknown_and_mistyped_fields_at_every_call_position(self) -> None:
+        mistyped = (
+            (self.command, (("messageId", True), ("tenant", 1), ("payload", []), ("correlationId", False))),
+            (self.query, (("tenant", 1), ("projectionType", True), ("paging", []))),
+        )
+        for template, cases in mistyped:
+            for position in POSITIONS:
+                document, step, pointer = self._step_at(template, position)
+                step["expectedGateway"]["body"]["bogus"] = "impossible"
+                self._assert_rejected(document, f"{pointer}/expectedGateway/body/bogus")
+                for field, value in cases:
+                    with self.subTest(kind=template["kind"], position=position, field=field):
+                        document, step, pointer = self._step_at(template, position)
+                        step["expectedGateway"]["body"][field] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_query_projection_type_uses_runtime_slug_grammar_at_every_call_position(self) -> None:
+        invalid = (None, False, 42, "", "Sample-items", "-sample", "sample-", "a" * 65)
+        for position in POSITIONS:
+            for value in invalid:
+                with self.subTest(position=position, value=value):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["expectedGateway"]["body"]["projectionType"] = value
+                    self._assert_rejected(document, f"{pointer}/expectedGateway/body/projectionType")
+
+    def test_tenant_runtime_slug_grammar_and_agreement_apply_at_every_call_position(self) -> None:
+        invalid = ("", "UPPER", "-leading", "trailing-", "contains space", "a" * 65)
+        for template in (self.command, self.query):
+            for position in POSITIONS:
+                for area in ("envelope", "expectedGateway"):
+                    for value in invalid:
+                        with self.subTest(kind=template["kind"], position=position, area=area, value=value):
+                            document, step, pointer = self._step_at(template, position)
+                            if area == "envelope":
+                                step["envelope"]["tenant"] = value
+                                location = f"{pointer}/envelope/tenant"
+                            else:
+                                step["expectedGateway"]["body"]["tenant"] = value
+                                location = f"{pointer}/expectedGateway/body/tenant"
+                            self._assert_rejected(document, location)
+                document, step, pointer = self._step_at(template, position)
+                step["expectedGateway"]["body"]["tenant"] = "other-tenant"
+                self._assert_rejected(document, f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
+        for value in ("a", "a-b1", "a" + "-" * 62 + "z"):
+            for template in (self.command, self.query):
+                with self.subTest(kind=template["kind"], value=value):
+                    document = copy.deepcopy(template)
+                    document["invocation"]["envelope"]["tenant"] = value
+                    document["invocation"]["expectedGateway"]["body"]["tenant"] = value
+                    self.assertEqual([], self._validate(document))
 
     def test_ulids_reject_invalid_alphabet_overflow_and_trailing_newlines(self) -> None:
         for position in POSITIONS:
@@ -267,7 +362,7 @@ class VectorContractTests(unittest.TestCase):
         step = document["invocation"]
         data = {"unfamiliar": [None, True, False, -1, 1.0, 1.25, 1e300, "NaN", {"~name/": ""}]}
         step["payload"]["custom"] = data
-        step["expectedGateway"]["body"]["custom"] = data
+        step["expectedGateway"]["body"]["payload"]["custom"] = data
         step["scriptedResponse"]["body"]["custom"] = data
         step["assertions"].append({"path": "", "operator": "equals", "value": data})
         self.assertEqual([], self._validate(document))
@@ -354,7 +449,7 @@ class VectorContractTests(unittest.TestCase):
                     with self.subTest(kind=template["kind"], position=position, field=field):
                         document, step, pointer = self._step_at(template, position)
                         step["expectedGateway"]["body"][field] = value
-                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}: Core never sends")
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
 
     def test_expected_paging_matches_integer_types_at_every_call_position(self) -> None:
         for position in POSITIONS:

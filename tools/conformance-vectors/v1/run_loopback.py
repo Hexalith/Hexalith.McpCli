@@ -34,6 +34,20 @@ def _canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
+def _json_equal(actual: Any, expected: Any) -> bool:
+    if type(actual) in (int, float) and type(expected) in (int, float):
+        return actual == expected
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(actual, dict):
+        return actual.keys() == expected.keys() and all(
+            _json_equal(actual[key], expected[key]) for key in actual)
+    if isinstance(actual, list):
+        return len(actual) == len(expected) and all(
+            _json_equal(actual_item, expected_item) for actual_item, expected_item in zip(actual, expected))
+    return actual == expected
+
+
 def _pointer(document: Any, path: str) -> tuple[bool, Any]:
     if path == "":
         return True, document
@@ -58,14 +72,14 @@ def _assert_result(result: Any, assertion: dict[str, Any], location: str) -> Non
     elif not present:
         passed = False
     elif operator == "equals":
-        passed = actual == expected
+        passed = _json_equal(actual, expected)
     elif operator == "arrayLength":
         passed = isinstance(actual, list) and len(actual) == expected
     else:
-        passed = (isinstance(actual, list) and expected in actual
+        passed = (isinstance(actual, list) and any(_json_equal(item, expected) for item in actual)
                   or isinstance(actual, str) and isinstance(expected, str) and expected in actual
                   or isinstance(actual, dict) and isinstance(expected, dict)
-                  and all(actual.get(key, object()) == value for key, value in expected.items()))
+                  and all(key in actual and _json_equal(actual[key], value) for key, value in expected.items()))
     if not passed:
         _fail(f"{location}: assertion {operator} at {assertion['path'] or '/'} expected {expected!r}; got {actual!r}; result {_canonical(result)}")
 
@@ -94,16 +108,23 @@ def _mask_result(document: dict[str, Any], step: dict[str, Any], location: str) 
 
 
 def _expect_fields(actual: Any, expected: Any, location: str) -> None:
+    if _json_equal(actual, expected):
+        return
     if isinstance(expected, dict) and isinstance(actual, dict):
+        for key in sorted(actual.keys() - expected.keys()):
+            _fail(f"{location}/{key}: unexpected Gateway field")
         for key, value in expected.items():
             if key not in actual:
                 _fail(f"{location}/{key}: expected Gateway field is missing")
-            if key in ("payload", "paging"):
-                if actual[key] != value:
-                    _fail(f"{location}/{key}: expected {_canonical(value)}, got {_canonical(actual[key])}")
-            else:
+            if not _json_equal(actual[key], value):
                 _expect_fields(actual[key], value, f"{location}/{key}")
-    elif actual != expected:
+    elif isinstance(expected, list) and isinstance(actual, list):
+        if len(actual) != len(expected):
+            _fail(f"{location}: expected {_canonical(expected)}, got {_canonical(actual)}")
+        for index, (actual_item, expected_item) in enumerate(zip(actual, expected)):
+            if not _json_equal(actual_item, expected_item):
+                _expect_fields(actual_item, expected_item, f"{location}/{index}")
+    else:
         _fail(f"{location}: expected {_canonical(expected)}, got {_canonical(actual)}")
 
 
@@ -226,7 +247,7 @@ class HeadProcess:
             if not isinstance(structured, dict):
                 _fail(f"MCP {tool}: missing structuredContent: {reply!r}")
             content = result.get("content", [])
-            if len(content) != 1 or json.loads(content[0]["text"]) != structured:
+            if len(content) != 1 or not _json_equal(json.loads(content[0]["text"]), structured):
                 _fail(f"MCP {tool}: text and structuredContent differ")
             return bool(result.get("isError", False)), structured
         except (KeyError, ValueError, OSError) as exc:
@@ -267,7 +288,7 @@ class _JsonRpcClient:
         deadline = time.monotonic() + self.timeout
         while True:
             reply = self._read(deadline)
-            if reply.get("id") != request_id:
+            if not _json_equal(reply.get("id"), request_id):
                 continue
             if "error" in reply:
                 _fail(f"JSON-RPC {method}: {reply['error']!r}")
@@ -367,14 +388,14 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
         head = HeadProcess(host, home, timeout)
         exit_code, modules = head.cli(["modules"])
         mcp_error, mcp_modules = head.mcp("list_modules", {})
-        if exit_code != 0 or mcp_error or modules != mcp_modules:
+        if exit_code != 0 or mcp_error or not _json_equal(modules, mcp_modules):
             _fail("list_modules CLI/MCP discovery differs")
         catalog: dict[str, str] = {}
         for module in modules["modules"]:
             name = module["name"]
             exit_code, listed = head.cli(["operations", name])
             mcp_error, mcp_listed = head.mcp("list_operations", {"module": name})
-            if exit_code != 0 or mcp_error or listed != mcp_listed:
+            if exit_code != 0 or mcp_error or not _json_equal(listed, mcp_listed):
                 _fail(f"list_operations {name} CLI/MCP discovery differs")
             for operation in listed["operations"]:
                 catalog[operation["name"]] = operation["kind"]
@@ -392,7 +413,7 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
                 _fail(f"{source}:/kind: differs from owning flagged package kind {owned[operation]}")
             exit_code, described = head.cli(["describe", operation])
             mcp_error, mcp_described = head.mcp("describe_operation", {"operation": operation})
-            if exit_code != 0 or mcp_error or described != mcp_described:
+            if exit_code != 0 or mcp_error or not _json_equal(described, mcp_described):
                 _fail(f"{source}: describe_operation CLI/MCP discovery differs")
             steps = vector["prerequisites"] + [vector["invocation"]] + vector["postconditions"]
             observations: dict[str, tuple[list[dict[str, Any]], list[dict[str, Any]]]] = {}
@@ -411,7 +432,7 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
             for index, step in enumerate(steps):
                 cli_doc = _mask_result(cli_docs[index], step, f"{source}:CLI/steps/{index}")
                 mcp_doc = _mask_result(mcp_docs[index], step, f"{source}:MCP/steps/{index}")
-                if cli_doc != mcp_doc:
+                if not _json_equal(cli_doc, mcp_doc):
                     _fail(f"{source}:/steps/{index}: canonical CLI/MCP documents differ: {_canonical(cli_doc)} != {_canonical(mcp_doc)}")
                 expected = step["expectedGateway"]
                 requests = []
@@ -423,7 +444,7 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
                     if "idempotencyKey" not in step["envelope"] and "idempotencyKey" in request["body"]:
                         _fail(f"{source}:{label}/steps/{index}: unsupplied idempotency key appeared")
                     requests.append(request)
-                if requests[0] != requests[1]:
+                if not _json_equal(requests[0], requests[1]):
                     _fail(f"{source}:/steps/{index}: captured Gateway requests differ: {_canonical(requests[0])} != {_canonical(requests[1])}")
             # Malformed Payload is a generic validation error and must never reach the Gateway.
             invalid = copy.deepcopy(vector["invocation"])
@@ -434,7 +455,8 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
                 mcp_error, mcp_document = head.mcp(tool, mcp_args, gateway.url,
                                                     envelope["tenant"], envelope.get("actor"))
                 gateway.assert_consumed(f"{source}:malformed-Payload")
-            if cli_exit != 2 or not mcp_error or cli_error != mcp_document or cli_error.get("error", {}).get("code") != "validation_failed":
+            if cli_exit != 2 or not mcp_error or not _json_equal(cli_error, mcp_document) \
+                    or cli_error.get("error", {}).get("code") != "validation_failed":
                 _fail(f"{source}: malformed-Payload CLI/MCP error parity failed: {cli_error!r}, {mcp_document!r}")
             # Exercise the Gateway error mapping with a separate reset script for each Head.
             failure = copy.deepcopy(vector["invocation"])
@@ -451,7 +473,8 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
                     failed[label] = (document, gateway.captured[0])
             cli_error_document, cli_error_request = failed["CLI"]
             mcp_error_document, mcp_error_request = failed["MCP"]
-            if cli_error_document != mcp_error_document or cli_error_document.get("error", {}).get("code") != "gateway_error" \
+            if not _json_equal(cli_error_document, mcp_error_document) \
+                    or cli_error_document.get("error", {}).get("code") != "gateway_error" \
                     or cli_error_document["error"].get("status") != 503:
                 _fail(f"{source}: Gateway error documents differ or lost status: {cli_error_document!r}, {mcp_error_document!r}")
             expected = failure["expectedGateway"]
@@ -462,7 +485,7 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
                 _expect_fields(normalized, {"method": expected["method"], "path": expected["path"],
                                             "body": expected["body"]}, f"{source}:{label}/gateway-error")
                 normalized_error_requests.append(normalized)
-            if normalized_error_requests[0] != normalized_error_requests[1]:
+            if not _json_equal(normalized_error_requests[0], normalized_error_requests[1]):
                 _fail(f"{source}: Gateway error requests differ between Heads")
             print(f"PASS {operation}: discovery, {len(steps)} reset Gateway step(s), documents, requests, validation/Gateway error parity")
 

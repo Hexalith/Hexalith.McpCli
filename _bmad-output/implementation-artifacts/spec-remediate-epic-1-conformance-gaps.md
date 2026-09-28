@@ -2,9 +2,10 @@
 title: 'Remediate Epic 1 conformance-vector blockers'
 type: 'bugfix'
 created: '2026-09-28'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
+baseline_commit: 'f9a51f42bfd50948adb94f243ad03136a6840d0b'
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md'
 ---
@@ -46,10 +47,10 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `schema.json`, `validate.py` -- encode kind-specific payloads, exact request bodies, tenant syntax, Query projection, and null omission.
-- [ ] `sample-*.json`, `README.md` -- align approved examples and guidance.
-- [ ] `run_loopback.py` -- use recursive JSON equality for assertions, containment, expectations, documents, errors, and requests.
-- [ ] `test_validate.py`, `test_loopback.py` -- cover every call position and comparison layer.
+- [x] `schema.json`, `validate.py` -- encode kind-specific payloads, exact request bodies, tenant syntax, Query projection, and null omission.
+- [x] `sample-*.json`, `README.md` -- align approved examples and guidance.
+- [x] `run_loopback.py` -- use recursive JSON equality for assertions, containment, expectations, documents, errors, and requests.
+- [x] `test_validate.py`, `test_loopback.py` -- cover every call position and comparison layer.
 
 **Acceptance Criteria:**
 - Given any finite Query JSON value, when authored in v1, then it is representable while non-object Command roots fail.

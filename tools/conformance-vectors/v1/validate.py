@@ -21,8 +21,6 @@ except ImportError as exc:
 
 SCHEMA_PATH = Path(__file__).with_name("schema.json")
 SUPPORTED_FORMAT_VERSIONS = (1,)
-# Known SubmitQueryRequest fields that McpCli never sets for either operation kind.
-UNSENT_REQUEST_FIELDS = ("search", "filters", "orderBy", "freshness")
 # CLI integer arguments require integer JSON tokens, not integral floats or booleans.
 VectorValidator = validators.extend(
     Draft202012Validator,
@@ -96,6 +94,10 @@ def _schema_errors(document: Any, source: Path, validator: Draft202012Validator)
             match = re.search(r"\('([^']+)' was unexpected\)", error.message)
             if match:
                 path.append(match.group(1))
+        elif error.validator == "required":
+            match = re.search(r"'([^']+)' is a required property", error.message)
+            if match:
+                path.append(match.group(1))
         findings.append(f"{source}:{_pointer(path)}: {error.message}")
     return findings
 
@@ -123,16 +125,19 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
     for field in wrong_kind_fields:
         if field in body:
             findings.append(f"{pointer}/expectedGateway/body/{field}: request field is invalid for a {kind}")
-    for field in UNSENT_REQUEST_FIELDS:
-        if field in body:
-            findings.append(f"{pointer}/expectedGateway/body/{field}: Core never sends this request field")
     if body.get("tenant") != envelope["tenant"]:
         findings.append(f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
-    for field in ("domain", "aggregateId", "commandType" if kind == "command" else "queryType"):
+    routing_fields = ("domain", "aggregateId", "commandType") if kind == "command" else (
+        "domain", "aggregateId", "queryType", "projectionType")
+    for field in routing_fields:
         if not isinstance(body.get(field), str) or not body[field].strip():
             findings.append(f"{pointer}/expectedGateway/body/{field}: required nonblank Gateway routing value")
-    if not isinstance(body.get("payload"), dict):
+    if kind == "command" and not isinstance(body.get("payload"), dict):
         findings.append(f"{pointer}/expectedGateway/body/payload: expected submitted Payload object is required")
+    elif kind == "query" and step["payload"] is None and "payload" in body:
+        findings.append(f"{pointer}/expectedGateway/body/payload: JSON null Query payload must be omitted")
+    elif kind == "query" and step["payload"] is not None and "payload" not in body:
+        findings.append(f"{pointer}/expectedGateway/body/payload: non-null Query payload must be emitted")
     for field in ("aggregateId", "entityId", "idempotencyKey", "extensions"):
         if field in envelope and body.get(field) != envelope[field]:
             findings.append(f"{pointer}/expectedGateway/body/{field}: must equal supplied envelope value")
