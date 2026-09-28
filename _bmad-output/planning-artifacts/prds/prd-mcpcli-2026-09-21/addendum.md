@@ -147,13 +147,18 @@ alternatives were rejected:
   (standalone), `Hexalith.FrontComposer.Mcp` (descriptor-driven host), and
   `Hexalith.Projects.Mcp` (the plug-in it hosts). The host and the plug-in
   are deleted together (FR-21).
-- **Not targets:** `Hexalith.EventStore.Admin.Mcp` and `.Admin.Cli`, the
-  admin-plane tools.
+- **Successor migration targets:** `Hexalith.EventStore.Admin.Mcp` and
+  `.Admin.Cli` are obsolete proprietary surfaces. Their infrastructure
+  operations need an approved generic administration contract, transport,
+  authorization, and destructive-action design before retirement. They are
+  outside the first gateway-only McpCli increment, not permanent exclusions.
 - **Parity bar:** `ChatBotMcpToolCatalog.cs` (read/write kind, correlation,
   task and tenant arguments).
-- **Frozen CLIs** (PRD FR-22, deletion candidates on the FR-21 parity bar):
-  Folders, Projects, ChatBot, FrontComposer, Memories, with divergent global
-  options (`--base-address`, `--correlation-id`) and exit-code enums.
+- **Frozen CLIs** (PRD FR-22, retirement candidates on the FR-21 parity bar):
+  Folders, Projects, ChatBot, FrontComposer, Memories, and, in the successor
+  administration inventory, EventStore Admin. Their global options
+  (`--base-address`, `--correlation-id`) and exit-code enums need explicit
+  replacement or approved withdrawal dispositions.
 
 Survey facts that shaped the PRD (full detail in `extract-references.md`):
 

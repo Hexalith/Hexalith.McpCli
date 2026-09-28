@@ -30,6 +30,8 @@ companions: []
 
 **Hexagonal.** One core that knows Contracts types, the Catalog, validation, the Envelope, and the gateway port. Two adapters (the MCP Server head and the CLI head) that translate their protocol into the core's call model and back, and nothing else. The gateway client, the settings sources, and id generation are ports.
 
+**Approved ecosystem direction (2026-09-27).** This gateway-only design is the first increment of the sole target Hexalith-owned MCP/CLI implementation. Proprietary module MCP servers, plug-ins, and CLIs, including EventStore Admin, are obsolete migration sources. Do not add a module-specific implementation to either head. Before retiring a legacy surface that exposes infrastructure administration, MCP resources, migration diagnostics, or REST/Dapr-only behavior, approve a generic catalog/transport extension with contract versioning, actor and surface authorization, audit, and conformance evidence. The current first-increment gateway and dependency rules remain binding until that decision is made; an unsupported capability is not represented as migrated.
+
 | Hexagon layer | Project | Namespace root |
 | --- | --- | --- |
 | Contract the Modules see | `Hexalith.McpCli.Abstractions` (the Decoration Package) | `Hexalith.McpCli.Abstractions` |

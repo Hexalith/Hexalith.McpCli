@@ -14,9 +14,9 @@ This PRD is for the Hexalith maintainers and for the workflows that follow it: a
 
 ## 1. Vision
 
-Hexalith.McpCli replaces the six Legacy Server packages with one generic MCP Server and one thin CLI, both driven by a single Catalog. A Module declares each Operation once, in its Contracts Library, with a Decoration Attribute that carries what the agent needs and the contract cannot express: a description a stranger can understand, an example, and routing fallbacks. The Catalog discovers those declarations at startup and describes them to the agent; the shared executor validates each Payload, fills the Envelope, and submits through the Gateway. The repository contains zero module-specific code; adding a Module is a package reference and a rebuild.
+Hexalith.McpCli is the target Hexalith-owned MCP and CLI surface, replacing proprietary MCP servers and CLIs in domain and technical modules. The first increment replaces the six inventoried Legacy Servers with one generic MCP Server and one thin CLI, both driven by a single Catalog. A Module declares each gateway-ready Operation once, in its Contracts Library, with a Decoration Attribute that carries what the agent needs and the contract cannot express: a description a stranger can understand, an example, and routing fallbacks. The Catalog discovers those declarations at startup and describes them to the agent; the shared executor validates each Payload, fills the Envelope, and submits through the Gateway. The repository contains zero module-specific code; adding a gateway-ready Module is a package reference and a rebuild. Non-domain administration and resource-like capabilities need a subsequent generic contract and transport decision before their legacy surfaces can retire.
 
-The goal is that a human can do any operation in Hexalith through an LLM agent, and that an agent is a peer of the Hexalith user interface rather than a second-class client bolted onto each Module. Hexalith is a CQRS platform in which every business action is a Command and every read is a Query, and the target state is that all of them travel through one EventStore Gateway. Today that uniformity is hidden:
+The goal is that a human or agent can do every **agent-eligible** Hexalith operation through one shared machine surface; UI-only and human-confirmation operations remain on confidential interactive UI under Platform AD-14. Hexalith is a CQRS platform in which business actions are Commands and reads are Queries, and the gateway-ready target state carries them through the EventStore Gateway. Infrastructure administration and resource-like capabilities require a separately approved generic McpCli extension. Today that uniformity is hidden:
 
 - each Legacy Server has its own transport, tool naming, description mechanism, and authentication story;
 - only one of them reaches the Gateway;
@@ -39,7 +39,7 @@ Two consequences follow now. Identity forwarding becomes essential, which is why
 
 ### 2.2 Non-users and the admin-plane boundary (v1)
 
-Non-users: EventStore infrastructure administrators (streams, subscriptions, and clusters stay with `Hexalith.EventStore.Admin.Cli` and `.Admin.Mcp`), end users of Hexalith web applications, and anyone who needs per-user identity across a shared hosted server (the HTTP release, §8.2). Business administration modeled as Commands and Queries remains in scope even when it requires a platform-administrator token; every Tenants Operation does (FR-3). The Gateway, not the token, defines the boundary.
+The first increment does not serve EventStore infrastructure administrators or anyone who needs per-user identity across a shared hosted server (the HTTP release, §8.2). `Hexalith.EventStore.Admin.Cli` and `.Admin.Mcp` are obsolete migration sources, not permanent exclusions: their stream, subscription, and cluster operations require a separately approved generic administration contract and security design before cutover. Business administration modeled as Commands and Queries remains in the first increment even when it requires a platform-administrator token; every Tenants Operation does (FR-3). End users of Hexalith web applications continue to use the web UI. The Gateway defines the first increment's execution boundary; extending that boundary is an architecture decision.
 
 ### 2.3 Key user journeys
 
@@ -88,8 +88,8 @@ Downstream readers and workflows use these terms exactly. Terms owned by a requi
 
 **Migration**
 
-- **Legacy Server** — one of the six per-module MCP packages this product replaces, listed in addendum §D: the standalone servers of Parties, Folders, ChatBot, and Memories; the FrontComposer descriptor-driven host; and the Projects plug-in it hosts (FR-21).
-- **Frozen CLI** — one of the five existing per-module agent CLIs (Folders, Projects, ChatBot, FrontComposer, and Memories), frozen to bug fixes by FR-22 and inventoried by FR-21.
+- **Legacy Server** — a proprietary Hexalith MCP server or plug-in being replaced by McpCli. The first six are listed in addendum §D; EventStore Admin MCP also enters the later administration migration inventory (FR-21).
+- **Frozen CLI** — an existing proprietary Hexalith module CLI being replaced by McpCli. The first five (Folders, Projects, ChatBot, FrontComposer, and Memories) are frozen to bug fixes by FR-22; EventStore Admin CLI also enters the later administration migration inventory (FR-21).
 - **Gateway-ready** — the state of a Module whose agent-facing Operations exist as decorated Command and Query types in a published Contracts Library and are accepted by the Gateway (checklist in §8.1).
 
 ## 4. Constraints and guardrails
@@ -421,17 +421,17 @@ The v1 tool references by pinned package only the Contracts Libraries that satis
 
 #### FR-21: Define parity and produce the migration plan
 
-A Legacy Server is deleted when its Module is Gateway-ready for every agent-facing Operation, meaning every tool or resource whose effect is a Command or Query through the Gateway; the migration plan is a v1 deliverable owned by the McpCli maintainers.
+A Legacy Server or Frozen CLI is retired only when each supported operation has an owner-approved McpCli replacement or explicit product withdrawal, with authorization and behavior proven on the selected environment. Gateway-ready Command and Query operations use decorated Contracts; administrative, resource-like, and other non-gateway operations require a separate generic catalog and transport decision before their old surfaces retire. The first versioned migration inventory is a v1 deliverable owned by the McpCli maintainers; ecosystem retirement continues in a successor epic.
 
 **Consequences (testable):**
-- The plan is the durable, versioned inventory for each Legacy Server and Frozen CLI. Every row names the legacy operation, records `include` or `exclude`, gives the rationale, and names the decorated contract type when included; the owning Module maintainer's approval reference is recorded beside the inventory version. Dropped operations include stream and file resources and the search, filter, order-by, and freshness variants deferred by FR-9.
+- The plan is the durable, versioned inventory for every proprietary Hexalith module MCP server, MCP plug-in, and CLI, including EventStore Admin. Every row names the legacy operation, records `replace`, `withdraw`, or `defer`, gives the rationale, security class, replacement contract or unresolved gap, and owning maintainer's approval reference. First-increment Gateway-ready rows also name the decorated contract type and retain the existing `include`/`exclude` coverage field: `include` requires `replace`, while `exclude` requires an approved `withdraw` or `defer` disposition and cannot silently mean deletion. Stream and file resources and the search, filter, order-by, and freshness variants deferred by FR-9 remain tracked gaps rather than silently disappearing.
 - A coverage check compares every included row's canonical Operation Name with the corresponding `list_operations` result, separately verifies its decorated contract type against the internal `OperationDescriptor.ContractType`, and verifies that every excluded legacy operation has an approved exclusion row. A missing, extra, mismatched, or unapproved row fails the Module's Gateway-ready gate; the inventory never becomes runtime configuration or adds CLR type names to the public result.
 - Task and actor context that Projects and ChatBot carry today travels as ordinary Payload properties, through `actorProperty`, or in allowed Envelope extensions, never in module-specific code here.
 - FrontComposer's host and the Projects plug-in are deleted together; Memories, which fronts per-user JWT identity today, is deleted only after the HTTP release.
 
 #### FR-22: Publish the no-new-server rule
 
-The Hexalith agent instructions (`hexalith-llm-instructions.md` in Hexalith.AI.Tools) state that from 2026-09-21 no new per-module MCP server or per-module agent CLI is created, that a Module's agent surface is its decorated Contracts Library, and that the Frozen CLIs are limited to bug fixes and listed in the migration plan.
+The Hexalith agent instructions (`hexalith-llm-instructions.md` in Hexalith.AI.Tools) state that no new proprietary per-module MCP server, plug-in, or CLI is created; Hexalith.McpCli owns new Hexalith MCP/CLI presentation. Existing proprietary module MCP/CLI implementations are migration compatibility, limited to fixes needed for safety and continuity and listed in the migration plan. Gateway-ready agent Operations are declared in decorated Contracts; a generic extension decision is required for other capability classes.
 
 **Consequence (testable):** the story closes only when the rule is merged into the authoritative Hexalith.AI.Tools instructions and this repository's `AGENTS.md` points to the merged baseline. Opening a pull request is progress evidence, not completion. Paired v1 publication is blocked until release evidence records the authoritative merge, a root-declared baseline reference containing it, byte-identical `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`, and a passing `scripts/check-agent-instructions-sync.sh`. This gate exempts the one-time Abstractions-only bootstrap.
 
@@ -502,14 +502,14 @@ Dates are open (OQ-8); the release is blocked until both v1 rows are met, and th
 ### 8.2 Out of scope for MVP
 
 - HTTP transport with bearer, Tenant, and user header forwarding: the only committed next release, after an authentication design pass (OQ-1). Load-bearing for per-user identity.
-- Legacy Server and Frozen CLI deletions: after v1, per Module, per FR-21.
+- Legacy Server and Frozen CLI deletions: after the first increment, per Module, per FR-21 and the approved successor migration epic.
 - Query correlation identifier and extensions: the pinned client's query request cannot carry them (FR-16); revisit when the client does.
 - Search, filter, order-by, freshness, and entity-scoped Query arguments beyond `entityId`, and command status lookup through the Gateway's status call: deferred; meanwhile the message identifier is returned for tracing.
 - Parked, not scheduled: typed tools behind a module filter (SM-C2 forbids chasing them in v1), generated per-Operation subcommands, shell completion, plug-in loading of Contracts Libraries, event stream reading, MCP resources and prompts, executor retries.
 
 ### 8.3 Non-goals (explicit)
 
-- Not the EventStore admin plane (`Hexalith.EventStore.Admin.Cli`, `.Admin.Mcp`); §2.2 draws the line.
+- EventStore infrastructure administration is outside the first increment, but its Admin CLI/MCP are in the mandatory successor migration scope; §2.2 defines the cutover prerequisite.
 - Not an identity provider: no OAuth or identity server in v1 or the next release; parked, not rejected forever.
 - Not a second executor: the tool never calls a Module's REST or Dapr API. Modules that expose Operations only that way are not covered until Gateway-ready.
 

@@ -110,9 +110,9 @@ FR19: In Read-only Mode, omit `send_command` from MCP tool registration, make CL
 
 FR20: Ship v1 only when decorated Tenants and Parties Contracts packages satisfy the dependency allowlist and every exposed Operation has one approved Module-owned conformance vector; compare both Heads against reset loopback Gateway scripts, execute every vector once in a blocking live Aspire lane, and enforce Parties inventory-to-Catalog coverage before release.
 
-FR21: Produce versioned, maintainer-approved include/exclude inventories for every Legacy Server and Frozen CLI, with rationale and decorated type for included rows; a generic coverage gate checks exact canonical Operation and CLR type matches plus approved exclusions, and deletion waits for Module Gateway readiness, with FrontComposer and Projects removed together and Memories after HTTP identity support.
+FR21: Produce versioned, maintainer-approved replacement, withdrawal, or deferral inventories for every proprietary Hexalith MCP server, plug-in, and CLI, including EventStore Admin. First-increment Gateway-ready rows name decorated types and pass generic Catalog coverage; non-gateway and administrative rows require an approved generic contract and transport decision. Retirement waits for owner-approved behavior, authorization, and release evidence, with FrontComposer and Projects coordinated and Memories after per-user identity support.
 
-FR22: Publish the no-new-per-module-server-or-agent-CLI rule in the authoritative Hexalith.AI.Tools instructions, make decorated Contracts the Module agent surface, freeze existing per-module CLIs to bug fixes, and close the work only after the rule is merged and this repository points to that baseline.
+FR22: Publish the no-new-proprietary-per-module-MCP-or-CLI rule in the authoritative Hexalith.AI.Tools instructions, make Hexalith.McpCli the Hexalith-owned machine surface, freeze existing module MCP/CLI implementations to safety and continuity fixes, and close the work only after the rule is merged and this repository points to that baseline.
 
 ### NonFunctional Requirements
 
@@ -178,8 +178,8 @@ FR17: Epic 2 — Submit once through the EventStore gateway client and map its r
 FR18: Epic 2 — Manage separate, secret-safe Profiles.
 FR19: Epic 2 — Refuse writes inside the executor and CLI; Epic 3 omits the MCP write tool.
 FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness.
-FR21: Epic 4 — Produce approved migration inventories and enforce inventory-to-Catalog parity.
-FR22: Epic 4 — Merge the authoritative no-new-server and frozen-CLI rule.
+FR21: Epic 4 — Produce approved first-increment migration inventories and enforce inventory-to-Catalog parity; Epic 5 — cover administration and non-gateway gaps, then retire obsolete surfaces.
+FR22: Epic 4 — Merge the authoritative no-new-proprietary-MCP/CLI rule; Epic 5 — verify adoption across module plans and release packaging.
 
 ## Epic List
 
@@ -209,11 +209,17 @@ An MCP-capable agent can discover and execute every available Operation through 
 
 ### Epic 4: Maintainers Can Verify and Release v1 Coverage
 
-Maintainers can demonstrate that approved Tenants and Parties Operations work through both Heads, have the required migration inventory and conformance evidence, and release the generic tool with an authoritative rule against new per-Module agent servers and CLIs.
+Maintainers can demonstrate that approved Tenants and Parties Operations work through both Heads, have the required first-increment migration inventory and conformance evidence, and release the generic tool with an authoritative rule against new proprietary per-Module MCP servers, plug-ins, and CLIs. Ecosystem retirement is Epic 5 and is not claimed by this initial release.
 
 **FRs covered:** FR20, FR21, FR22.
 
-**Implementation notes:** Enforce the dependency closure; run generic loopback parity and once-per-vector live semantic gates; version and approve Legacy Server/Frozen CLI inventories; complete upstream Contracts, Aspire helper, Builds, and Hexalith.AI.Tools prerequisites; then validate and publish the two packages at one version. Projects, Folders, and legacy deletions follow their PRD gates after v1.
+**Implementation notes:** Enforce the dependency closure; run generic loopback parity and once-per-vector live semantic gates; version and approve first-increment Legacy Server/Frozen CLI inventories with replacement, withdrawal, or deferral dispositions; complete upstream Contracts, Aspire helper, Builds, and Hexalith.AI.Tools prerequisites; then validate and publish the two packages at one version. Projects, Folders, administration, resource-like features, and legacy retirements follow Epic 5 and their owner gates after v1.
+
+### Epic 5: Migrate and Retire Proprietary Hexalith MCP and CLI Surfaces
+
+Module owners and McpCli maintainers can replace each proprietary Hexalith MCP server, plug-in, and CLI with approved McpCli behavior or an explicit product withdrawal, prove authorization and parity, and remove obsolete packages and Platform routes. The first-increment gateway-only design remains binding until a separately approved generic extension covers administration, resources, diagnostics, and other non-gateway behavior.
+
+**FRs covered:** FR21, FR22. **Entry:** the Epic 4 initial release and owner-approved operation inventories. **Exit:** no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation; all old operations have approved dispositions and every retired surface has verified replacement or withdrawal evidence.
 
 ## Epic 1: Module Authors Can Publish Discoverable Operations
 
@@ -1051,7 +1057,9 @@ So that I can reason about results and failures without a separate MCP dialect.
 
 ## Epic 4: Maintainers Can Verify and Release v1 Coverage
 
-Maintainers can demonstrate that approved Tenants and Parties Operations work through both Heads, have the required migration inventory and conformance evidence, and release the generic tool with an authoritative rule against new per-Module agent servers and CLIs.
+Maintainers can demonstrate that approved Tenants and Parties Operations work through both Heads, have the required first-increment migration inventory and conformance evidence, and release the generic tool with an authoritative rule against new proprietary per-Module MCP servers, plug-ins, and CLIs. Epic 5 owns ecosystem retirement.
+
+For Stories 4.1–4.5, each inventory row has the ecosystem disposition `replace`, `withdraw`, or `defer`. The existing first-increment coverage field remains `include` or `exclude`: `include` requires a gateway-ready `replace` row, and `exclude` requires an approved `withdraw` or `defer` row. Exclusion from v1 never means automatic retirement.
 
 ### Story 4.1: Approve the Parties Migration Inventory
 
@@ -1065,7 +1073,7 @@ So that v1 coverage can be checked against an explicit replacement scope.
 
 **Given** the current `Hexalith.Parties.Mcp` surface,
 **When** its tools and resources are inventoried,
-**Then** every legacy operation has a versioned row outside `src/` marked `include` or `exclude`,
+**Then** every legacy operation has a versioned row outside `src/` marked `replace`, `withdraw`, or `defer`,
 **And** each row records its rationale and the Parties maintainer's approval reference.
 
 **Given** an included Parties write or read,
@@ -1095,7 +1103,7 @@ So that its large REST surface has an agreed migration scope.
 
 **Given** the Folders Legacy Server's 49 tools and the Folders Frozen CLI,
 **When** their agent-facing operations are inventoried,
-**Then** every operation has a versioned include or exclude row with rationale and Folders maintainer approval,
+**Then** every operation has a versioned replace, withdraw, or defer row with rationale and Folders maintainer approval,
 **And** included rows name a canonical Operation and intended decorated Command or Query type.
 
 **Given** an operation with dry-run, redaction, freshness, or another REST-only behavior,
@@ -1125,7 +1133,7 @@ So that their shared deletion gate is based on agreed Operation coverage.
 
 **Given** `Hexalith.FrontComposer.Mcp`, its Projects plug-in, and their Frozen CLIs,
 **When** the surfaces are inventoried,
-**Then** each legacy operation has a versioned include or exclude row with rationale, intended canonical Operation and decorated type when included, and the owning maintainer's approval reference,
+**Then** each legacy operation has a versioned replace, withdraw, or defer row with rationale, intended canonical Operation and decorated type when gateway-ready, and the owning maintainer's approval reference,
 **And** the inventories distinguish host behavior from Projects business Operations.
 
 **Given** the Projects server's resource reads, including its 11 known resources,
@@ -1155,7 +1163,7 @@ So that their later replacement preserves the behavior and identity guarantees u
 
 **Given** the ChatBot and Memories Legacy Servers and Frozen CLIs,
 **When** their operations are inventoried,
-**Then** every agent-facing operation has a versioned include or exclude row with rationale, intended canonical Operation and decorated type when included, and maintainer approval,
+**Then** every agent-facing operation has a versioned replace, withdraw, or defer row with rationale, intended canonical Operation and decorated type when gateway-ready, and maintainer approval,
 **And** the rows remain outside runtime source and configuration.
 
 **Given** ChatBot task, actor, Tenant, or correlation context,
@@ -1503,12 +1511,12 @@ So that new Modules use decorated Contracts instead of creating another server o
 
 **Given** the Hexalith.AI.Tools instruction baseline,
 **When** the rule is updated in its owning repository,
-**Then** it states that from 2026-09-21 no new per-Module MCP server or per-Module agent CLI is created,
-**And** a Module's agent-facing surface is its decorated Contracts Library.
+**Then** it states that no new proprietary per-Module MCP server, plug-in, or CLI is created,
+**And** `Hexalith.McpCli` is the Hexalith-owned CLI/MCP surface, with decorated Contracts for gateway-ready Operations and a separately approved generic decision for other capability classes.
 
 **Given** the existing Frozen CLIs,
 **When** the rule is reviewed,
-**Then** it limits them to bug fixes and points to the versioned migration plan listing them,
+**Then** it limits existing proprietary MCP/CLI implementations to safety and continuity fixes and points to the versioned migration plan listing them,
 **And** it does not treat those CLIs as a template for new Modules.
 
 **Given** a proposed instruction change,
@@ -1580,3 +1588,79 @@ So that operators can install the exact pair proven by CI and smoke checks.
 **When** the release publishes to nuget.org,
 **Then** it pushes only the validated Abstractions and tool packages and records their resulting versions,
 **And** the packages share the version selected by semantic-release.
+
+## Epic 5: Migrate and Retire Proprietary Hexalith MCP and CLI Surfaces
+
+The owning modules publish approved McpCli replacements or withdrawals for every proprietary MCP/CLI operation. McpCli remains generic, and the legacy surface is retired only after the selected-environment authorization, parity, and release gates pass.
+
+### Story 5.1: Inventory EventStore Admin and Technical-Tool Operations
+
+As a McpCli migration owner, I want a versioned operation inventory for EventStore Admin and technical-module tools so that no infrastructure or migration capability disappears during cutover.
+
+**Requirements:** FR21. **Dependencies:** Epic 4 inventory format and EventStore/FrontComposer owner review.
+
+**Acceptance Criteria:**
+
+- Every `Hexalith.EventStore.Admin.Cli` and `.Admin.Mcp` operation, FrontComposer `inspect`/`migrate` command, MCP resource, skill resource, and lifecycle call has an owner-approved `replace`, `withdraw`, or `defer` row with security class, current transport, expected behavior, and replacement gap.
+- Destructive and confirmation-required operations are called out separately; an inventory row alone cannot authorize them through McpCli.
+- The inventory also identifies remaining proprietary CLI/MCP packages in other technical or domain modules and records their owning maintainer.
+
+### Story 5.2: Decide Generic Non-Gateway Capability Contracts
+
+As a solution architect, I want an approved McpCli catalog and transport extension for capability classes outside v1 gateway Commands and Queries so that administration, resources, and diagnostics can migrate without module-specific branches.
+
+**Requirements:** FR21, FR22. **Dependencies:** Story 5.1 and module inventory gap rows.
+
+**Acceptance Criteria:**
+
+- The architecture decision defines versioned declaration, discovery, execution, errors, authorization class, audit, and conformance for infrastructure administration, resource-like reads, and operator diagnostics; it names which operations become EventStore Gateway contracts and which need another authenticated generic transport.
+- The decision preserves Platform AD-14's denial of UI-only and human-confirmation operations through the public McpCli client and defines treatment of destructive administrative operations.
+- The extension keeps one shared CLI/MCP core and no module-specific runtime branch. Until approved, the v1 dependency and gateway rules remain binding and no unsupported capability is marked migrated.
+
+### Story 5.3: Enroll Replacement Contracts and Profiles
+
+As a module maintainer, I want approved operations enrolled in McpCli with selected-environment contracts and credentials so that legacy transport behavior can move to the shared heads.
+
+**Requirements:** FR20, FR21. **Dependencies:** Story 5.2 for non-gateway rows; owning module Contracts and EventStore readiness.
+
+**Acceptance Criteria:**
+
+- Each `replace` row names an immutable contract version, operation identity, eligibility, destination, and conformance vector; Gateway-ready rows appear in `list_operations` and match their decorated type exactly.
+- REST/Dapr-only behavior, freshness, redaction, task context, actor attribution, paging, token-budget, and idempotency semantics are preserved or explicitly approved as changed by the owning product owner.
+- Profiles and credentials bind to one environment; cross-environment and actor-spoof attempts fail closed.
+
+### Story 5.4: Prove Shared-Head Parity and Safety
+
+As a release owner, I want positive and negative evidence for each migrated operation so that retirement does not break supported access or weaken security.
+
+**Requirements:** FR21. **Dependencies:** Story 5.3.
+
+**Acceptance Criteria:**
+
+- The shared CLI and MCP heads pass the owner-approved operation vectors against the selected environment, including equivalent authorized outcomes, stable machine documents and exit/error semantics, audit attribution, tenant isolation, and denial of disabled, mismatched, UI-only, confirmation-required, and unauthorized operations.
+- Capability classes without an approved equivalent remain marked `defer`; no parity claim is made from operation-name matching alone.
+- Each module owner signs the result and records the exact McpCli candidate, Contracts versions, gateway/catalog digest, environment, and test evidence.
+
+### Story 5.5: Retire Legacy Packages and Platform Routes
+
+As a platform maintainer, I want obsolete module MCP servers, plug-ins, and CLIs removed after proven replacement or approved withdrawal so that only McpCli remains the supported proprietary CLI/MCP path.
+
+**Requirements:** FR21, FR22. **Dependencies:** Story 5.4 and owner-approved withdrawal rows.
+
+**Acceptance Criteria:**
+
+- Publication, deployment, package manifests, startup, samples, and operator setup no longer advertise or route the retired packages. FrontComposer MCP host and Projects plug-in retire together; Memories waits for per-user identity support; EventStore Admin waits for its approved administration contract and destructive-operation safety evidence.
+- A module with a deferred operation keeps the needed old compatibility binary clearly labeled and versioned, with a removal gate; it is not counted as retired.
+- CI rejects new proprietary per-module MCP/CLI projects or release entries unless an explicit migration exception names its owner and expiry.
+
+### Story 5.6: Reconcile Product and UX Claims
+
+As a product owner, I want PRDs, architecture, UX, and operator guidance to describe the actual shared surface so that users and release gates do not assume unavailable module-specific adapters.
+
+**Requirements:** FR21, FR22. **Dependencies:** Stories 5.1–5.5 evidence.
+
+**Acceptance Criteria:**
+
+- Every active Hexalith PRD and architecture topic about proprietary MCP/CLI names `Hexalith.McpCli` as the target; historical component names are explicitly labeled migration sources.
+- Module MVP gates and machine-facing UX flows name available operations, output/error behavior, setup through the `hexalith` tool and stdio server, and safe refusal or UI handoff for restricted actions.
+- Release notes distinguish the initial McpCli gateway-only increment from completed module retirements and list remaining compatibility binaries without claiming ecosystem migration is finished.
