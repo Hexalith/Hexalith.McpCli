@@ -56,6 +56,20 @@ def _check_finite_json(value: Any, parts: tuple[str | int, ...] = ()) -> None:
             _check_finite_json(item, (*parts, index))
 
 
+def _json_equal(actual: Any, expected: Any) -> bool:
+    if type(actual) in (int, float) and type(expected) in (int, float):
+        return actual == expected
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(actual, dict):
+        return actual.keys() == expected.keys() and all(
+            _json_equal(actual[key], expected[key]) for key in actual)
+    if isinstance(actual, list):
+        return len(actual) == len(expected) and all(
+            _json_equal(actual_item, expected_item) for actual_item, expected_item in zip(actual, expected))
+    return actual == expected
+
+
 def _load_json(path: Path) -> Any:
     try:
         document = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_no_duplicate_keys)
@@ -90,11 +104,18 @@ def _schema_errors(document: Any, source: Path, validator: Draft202012Validator)
     findings: list[str] = []
     for error in sorted(validator.iter_errors(document), key=lambda item: (list(map(str, item.absolute_path)), item.message)):
         path = list(error.absolute_path)
-        if error.validator == "additionalProperties":
-            match = re.search(r"\('([^']+)' was unexpected\)", error.message)
-            if match:
-                path.append(match.group(1))
-        elif error.validator == "required":
+        if error.validator == "additionalProperties" and isinstance(error.instance, dict):
+            properties = error.schema.get("properties", {})
+            patterns = error.schema.get("patternProperties", {})
+            unexpected = sorted(
+                key for key in error.instance
+                if key not in properties and not any(re.search(pattern, key) for pattern in patterns))
+            if unexpected:
+                findings.extend(
+                    f"{source}:{_pointer([*path, key])}: additional property {key!r} is not allowed"
+                    for key in unexpected)
+                continue
+        if error.validator == "required":
             match = re.search(r"'([^']+)' is a required property", error.message)
             if match:
                 path.append(match.group(1))
@@ -138,6 +159,9 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         findings.append(f"{pointer}/expectedGateway/body/payload: JSON null Query payload must be omitted")
     elif kind == "query" and step["payload"] is not None and "payload" not in body:
         findings.append(f"{pointer}/expectedGateway/body/payload: non-null Query payload must be emitted")
+    elif kind == "query" and step["payload"] is not None and not isinstance(step["payload"], dict) \
+            and not _json_equal(body["payload"], step["payload"]):
+        findings.append(f"{pointer}/expectedGateway/body/payload: non-object Query payload must equal the input Payload")
     for field in ("aggregateId", "entityId", "idempotencyKey", "extensions"):
         if field in envelope and body.get(field) != envelope[field]:
             findings.append(f"{pointer}/expectedGateway/body/{field}: must equal supplied envelope value")

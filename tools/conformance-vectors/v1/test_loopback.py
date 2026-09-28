@@ -9,7 +9,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from run_loopback import _assert_result, _expect_fields, _json_equal, _mask, _mask_result, _verify_artifact_in_host
+from run_loopback import (
+    _assert_discovery_parity,
+    _assert_document_parity,
+    _assert_error_parity,
+    _assert_request_parity,
+    _assert_result,
+    _expect_fields,
+    _json_equal,
+    _mask,
+    _mask_result,
+    _verify_artifact_in_host,
+)
 from validate import VectorError
 
 
@@ -65,6 +76,33 @@ class LoopbackRulesTests(unittest.TestCase):
         with self.assertRaisesRegex(VectorError, "/payload/items/0"):
             _expect_fields({"body": {"payload": {"items": [True]}}},
                            {"body": {"payload": {"items": [1]}}}, "request")
+
+    def test_gateway_mismatch_locations_escape_json_pointer_tokens(self) -> None:
+        with self.assertRaises(VectorError) as caught:
+            _expect_fields({"body": {"odd~/field": True}}, {"body": {"odd~/field": 1}}, "request")
+        self.assertIn("request/body/odd~0~1field:", str(caught.exception))
+        with self.assertRaises(VectorError) as caught:
+            _expect_fields({"body": {"unexpected~/field": True}}, {"body": {}}, "request")
+        self.assertIn("request/body/unexpected~0~1field:", str(caught.exception))
+
+    def test_all_cross_head_parity_layers_use_json_semantics(self) -> None:
+        layers = (
+            ("discovery", lambda actual, expected: _assert_discovery_parity(
+                0, False, actual, expected, "discovery")),
+            ("document", lambda actual, expected: _assert_document_parity(
+                actual, expected, "document")),
+            ("error", lambda actual, expected: _assert_error_parity(
+                actual, expected, "error")),
+            ("captured-request", lambda actual, expected: _assert_request_parity(
+                actual, expected, "request")),
+        )
+        numerically_equal = ({"nested": [1, {"value": 2.0}]}, {"nested": [1.0, {"value": 2}]})
+        type_mismatch = ({"nested": [{"value": True}]}, {"nested": [{"value": 1}]})
+        for layer, compare in layers:
+            with self.subTest(layer=layer, case="numbers"):
+                compare(*numerically_equal)
+            with self.subTest(layer=layer, case="boolean-number"), self.assertRaises(VectorError):
+                compare(*type_mismatch)
 
     def test_semantic_assertion_vocabulary(self) -> None:
         result = {"document": {"items": [{"id": "A"}, {"id": "B"}], "title": "Hello world"}}

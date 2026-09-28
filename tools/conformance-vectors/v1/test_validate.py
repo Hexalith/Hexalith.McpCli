@@ -120,6 +120,33 @@ class VectorContractTests(unittest.TestCase):
             step["expectedGateway"]["body"].pop("payload", None)
             self._assert_rejected(document, f"{pointer}/expectedGateway/body/payload: non-null Query payload must be emitted")
 
+    def test_non_object_query_payload_must_match_wire_payload_at_every_call_position(self) -> None:
+        mismatches = (
+            ([{"value": True}], [{"value": 1}]),
+            ([1, {"nested": [False]}], [1.0, {"nested": [0]}]),
+            ("input", "different"),
+            (1, None),
+            (True, 1),
+        )
+        for position in POSITIONS:
+            for payload, expected in mismatches:
+                with self.subTest(position=position, payload=payload, expected=expected):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["payload"] = payload
+                    step["expectedGateway"]["body"]["payload"] = expected
+                    self._assert_rejected(
+                        document,
+                        f"{pointer}/expectedGateway/body/payload: non-object Query payload must equal the input Payload")
+
+    def test_non_object_query_payload_treats_integer_and_float_encodings_as_numbers(self) -> None:
+        for position in POSITIONS:
+            for payload, expected in ((1, 1.0), (1.0, 1), ([1, {"nested": [2.0]}], [1.0, {"nested": [2]}])):
+                with self.subTest(position=position, payload=payload, expected=expected):
+                    document, step, _ = self._step_at(self.query, position)
+                    step["payload"] = payload
+                    step["expectedGateway"]["body"]["payload"] = expected
+                    self.assertEqual([], self._validate(document))
+
     def test_caller_correlation_id_cannot_be_masked(self) -> None:
         self.command["invocation"]["expectedGateway"]["maskGenerated"].append("/correlationId")
         self._assert_rejected(self.command, "caller-supplied correlationId cannot be masked")
@@ -173,6 +200,16 @@ class VectorContractTests(unittest.TestCase):
                     target["unknown"] = True
                     suffix = "" if field is None else "/" + field + ("/0" if field == "assertions" else "")
                     self._assert_rejected(document, f"{pointer}{suffix}/unknown")
+
+    def test_multiple_unknown_gateway_fields_are_each_reported_at_escaped_locations(self) -> None:
+        document = copy.deepcopy(self.command)
+        body = document["invocation"]["expectedGateway"]["body"]
+        body["odd~/field"] = True
+        body["second/field~"] = False
+        findings = self._validate(document)
+        self.assertTrue(any("/invocation/expectedGateway/body/odd~0~1field:" in item for item in findings), findings)
+        self.assertTrue(any("/invocation/expectedGateway/body/second~1field~0:" in item for item in findings), findings)
+        self.assertEqual(2, sum("additional property" in item for item in findings), findings)
 
     def test_operation_names_reject_malformed_parts_at_every_call_position(self) -> None:
         for name in ("sample", "sample.get.item", "Sample.get-item", "sample.get_item",
@@ -261,6 +298,75 @@ class VectorContractTests(unittest.TestCase):
                     document, step, pointer = self._step_at(self.query, position)
                     step["expectedGateway"]["body"]["projectionType"] = value
                     self._assert_rejected(document, f"{pointer}/expectedGateway/body/projectionType")
+
+    def test_gateway_domains_use_runtime_slug_grammar_at_every_call_position(self) -> None:
+        invalid = ("", "UPPER", "-leading", "trailing-", "under_score", "contains space", "a" * 65)
+        valid = ("a", "two--hyphens", "a" + "-" * 62 + "z")
+        for template in (self.command, self.query):
+            for position in POSITIONS:
+                for value in invalid:
+                    with self.subTest(kind=template["kind"], position=position, value=value):
+                        document, step, pointer = self._step_at(template, position)
+                        step["expectedGateway"]["body"]["domain"] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/domain")
+                for value in valid:
+                    with self.subTest(kind=template["kind"], position=position, value=value):
+                        document, step, _ = self._step_at(template, position)
+                        step["expectedGateway"]["body"]["domain"] = value
+                        self.assertEqual([], self._validate(document))
+
+    def test_gateway_identifiers_use_runtime_grammar_at_every_call_position(self) -> None:
+        invalid = ("", "-leading", "trailing-", ".leading", "trailing_", "contains/slash", "contains space", "a" * 257)
+        valid = ("a", "A.b_c-9", "A" + "." * 254 + "9")
+        for template in (self.command, self.query):
+            for position in POSITIONS:
+                for value in invalid:
+                    with self.subTest(kind=template["kind"], position=position, field="aggregateId", value=value):
+                        document, step, pointer = self._step_at(template, position)
+                        step["envelope"]["aggregateId"] = value
+                        step["expectedGateway"]["body"]["aggregateId"] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/aggregateId")
+                for value in valid:
+                    with self.subTest(kind=template["kind"], position=position, field="aggregateId", value=value):
+                        document, step, _ = self._step_at(template, position)
+                        step["envelope"]["aggregateId"] = value
+                        step["expectedGateway"]["body"]["aggregateId"] = value
+                        self.assertEqual([], self._validate(document))
+        for position in POSITIONS:
+            for value in invalid:
+                with self.subTest(position=position, field="entityId", value=value):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["envelope"]["entityId"] = value
+                    step["expectedGateway"]["body"]["entityId"] = value
+                    self._assert_rejected(document, f"{pointer}/expectedGateway/body/entityId")
+            for value in valid:
+                with self.subTest(position=position, field="entityId", value=value):
+                    document, step, _ = self._step_at(self.query, position)
+                    step["envelope"]["entityId"] = value
+                    step["expectedGateway"]["body"]["entityId"] = value
+                    self.assertEqual([], self._validate(document))
+
+    def test_gateway_wire_types_use_kind_specific_runtime_grammar_at_every_call_position(self) -> None:
+        common_invalid = ("", " \t", "bad<type", "bad>type", "bad&type", "bad'type", 'bad"type',
+                          "prefix-JavaScript :suffix", "prefix-onload =suffix", "a" * 257)
+        cases = (
+            (self.command, "commandType", common_invalid, ("a", "command:type", "a" * 256)),
+            (self.query, "queryType", (*common_invalid, "query:type"), ("a", "query-type", "a" * 256)),
+            (self.query, "projectionActorType", (*common_invalid, "actor:type", "a" * 65),
+             ("a", "projection-actor", "a" * 64)),
+        )
+        for template, field, invalid, valid in cases:
+            for position in POSITIONS:
+                for value in invalid:
+                    with self.subTest(kind=template["kind"], position=position, field=field, value=value):
+                        document, step, pointer = self._step_at(template, position)
+                        step["expectedGateway"]["body"][field] = value
+                        self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+                for value in valid:
+                    with self.subTest(kind=template["kind"], position=position, field=field, value=value):
+                        document, step, _ = self._step_at(template, position)
+                        step["expectedGateway"]["body"][field] = value
+                        self.assertEqual([], self._validate(document))
 
     def test_tenant_runtime_slug_grammar_and_agreement_apply_at_every_call_position(self) -> None:
         invalid = ("", "UPPER", "-leading", "trailing-", "contains space", "a" * 65)

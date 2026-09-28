@@ -2,7 +2,7 @@
 title: 'Remediate Epic 1 conformance-vector blockers'
 type: 'bugfix'
 created: '2026-09-28'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'f9a51f42bfd50948adb94f243ad03136a6840d0b'
@@ -63,6 +63,31 @@ context:
 ## Spec Change Log
 
 ## Review Triage Log
+
+- BH-01 — `medium` / `patch` — A direct validator probe accepted Query input `[]` with expected wire `payload: null`; Core forwards the non-object root unchanged, so the approved request is impossible.
+- BH-02 — `maybe-false` / `defer` — Python rounds some large decimal/exponent tokens before comparison, but the approved intent does not define arbitrary-precision Number semantics; an explicit numeric-precision decision is needed to determine the required behavior.
+- BH-03 — `medium` / `patch` — Validator probes accepted `aggregateId` and `entityId` shapes that `OperationExecutor` rejects through `RoutingResolver.IsAggregateId`.
+- BH-04 — `medium` / `patch` — A validator probe accepted Query `queryType: bad:value`; `RoutingResolver.IsWireValue` rejects Query colons, overlength values, markup, quotes, and injection patterns.
+- BH-05 — `medium` / `patch` — A validator probe accepted Query `projectionActorType: <script>` although `RoutingResolver.IsWireValue(..., 64)` rejects that value.
+- BH-06 — `medium` / `defer` — A validator probe accepted an extension key `../bad` that `ExtensionValidator` rejects, but the extension schema behavior predates this story and was only moved into a shared definition here.
+- BH-07 — `false` / `reject` — Although Python's raw parser accepts duplicate keys and named non-finite values, the loopback response source is the already validated vector and the .NET heads serialize through `System.Text.Json`; no reachable invalid-output path was demonstrated at the cited sites.
+- BH-08 — `medium` / `patch` — Focused tests exercise the comparator, expectations, and assertions but do not drive the `run()` parity call sites, so the checked “every comparison layer” task lacks regression evidence.
+- BH-09 — `medium` / `defer` — AD-21 still defines only `include`/`exclude` inventory semantics while the newer migration plan introduces ecosystem dispositions; commit inspection shows this came from the concurrent planning-history advance, not this story.
+- BH-10 — `low` / `defer` — The PRD vision can be read as claiming all six legacy servers are replaced in the first increment while retirement is deferred; this wording came from the concurrent planning-history advance.
+- BH-11 — `medium` / `defer` — Story 4.5 does not test the newly declared consistency between `include`/`exclude` coverage and `replace`/`withdraw`/`defer` disposition; this is pre-existing planning work outside this story.
+- BH-12 — `medium` / `defer` — Epic 5's temporary migration-exception language conflicts with the authoritative unconditional no-new-proprietary-surface rule and needs planning-owner reconciliation.
+- BH-13 — `medium` / `defer` — The PRD calls the all-surface inventory a v1 deliverable while Epic 5 schedules EventStore Admin inventory after the initial release; the planning boundary needs one authoritative answer.
+- BH-14 — `low` / `defer` — SM-C1 still names only server or CLI creation and omits plug-ins and the broadened proprietary-surface scope.
+- VG-01 — `medium` / `patch` — Pre-verified gap: no runner-level regression makes CLI and MCP result documents differ by nested boolean versus number, so reverting that call site to Python equality would leave current focused tests green.
+- VG-02 — `low` / `patch` — Pre-verified gap: malformed and boundary-valid Gateway `domain` slugs are not covered for both kinds at all call positions, even though the new schema uses the runtime grammar.
+- VG-03 — `low` / `patch` — Pre-verified gap: Query `projectionActorType` has no positive or negative tests at each call position, so its current type/length constraints can regress unnoticed.
+- VG-O1 — `medium` / `patch` — A direct probe confirmed that non-object, non-null Query input `1` may be paired with expected wire payload `2`; Core preserves such roots unchanged.
+- VG-O2 — `medium` / `patch` — A direct probe confirmed that colon, markup, and injection-invalid projection actor values pass offline validation while runtime routing rejects them.
+- EC-01 — `low` / `patch` — With two unknown Gateway fields, `_schema_errors` reports only the containing body because its message parser recognizes only the single-property form; the individual offending locations are lost.
+- EC-02 — `low` / `patch` — `_expect_fields` appends object keys without RFC 6901 escaping; a demonstrated `a/b` mismatch reports a different pointer path.
+- EC-03 — `maybe-false` / `defer` — This repeats BH-02's verified rounding behavior; arbitrary-precision preservation remains unspecified and needs the same explicit decision.
+- EC-04 — `medium` / `patch` — Direct probes confirmed the closed request-body schema still accepts impossible aggregate, wire-type, and projection-actor values despite `OperationExecutor` and `RoutingResolver` being named as authorities to mirror.
+- EC-05 — `medium` / `patch` — This independently confirms BH-08/VG-01: discovery, document, error, and captured-request parity sites lack focused boolean-versus-number regression coverage.
 
 ## Verification
 

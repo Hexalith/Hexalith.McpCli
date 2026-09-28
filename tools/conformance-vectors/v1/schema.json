@@ -33,6 +33,34 @@
       "maxLength": 64,
       "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$(?![\\s\\S])"
     },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9._-]{0,254}[A-Za-z0-9])?$(?![\\s\\S])"
+    },
+    "commandWireType": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "\\S",
+      "allOf": [
+        { "not": { "pattern": "[<>&'\\\"]" } },
+        { "not": { "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]\\s*:" } },
+        { "not": { "pattern": "[oO][nN]\\w+\\s*=" } }
+      ]
+    },
+    "queryWireType": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "\\S",
+      "allOf": [
+        { "not": { "pattern": "[<>&'\\\":]" } },
+        { "not": { "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]\\s*:" } },
+        { "not": { "pattern": "[oO][nN]\\w+\\s*=" } }
+      ]
+    },
     "extensions": {
       "type": "object",
       "minProperties": 1,
@@ -55,8 +83,8 @@
       "properties": {
         "tenant": { "$ref": "#/$defs/tenant" },
         "actor": { "$ref": "#/$defs/nonblank" },
-        "aggregateId": { "$ref": "#/$defs/nonblank" },
-        "entityId": { "$ref": "#/$defs/nonblank" },
+        "aggregateId": { "$ref": "#/$defs/aggregateId" },
+        "entityId": { "$ref": "#/$defs/aggregateId" },
         "correlationId": { "$ref": "#/$defs/ulid" },
         "idempotencyKey": { "$ref": "#/$defs/ulid" },
         "pageSize": { "type": "integer", "minimum": 1, "maximum": 200 },
@@ -89,8 +117,8 @@
         "messageId": { "const": "<generated>" },
         "tenant": { "$ref": "#/$defs/tenant" },
         "domain": { "$ref": "#/$defs/tenant" },
-        "aggregateId": { "$ref": "#/$defs/nonblank" },
-        "commandType": { "$ref": "#/$defs/nonblank" },
+        "aggregateId": { "$ref": "#/$defs/aggregateId" },
+        "commandType": { "$ref": "#/$defs/commandWireType" },
         "payload": { "type": "object" },
         "correlationId": {
           "anyOf": [
@@ -109,12 +137,12 @@
       "properties": {
         "tenant": { "$ref": "#/$defs/tenant" },
         "domain": { "$ref": "#/$defs/tenant" },
-        "aggregateId": { "$ref": "#/$defs/nonblank" },
-        "queryType": { "$ref": "#/$defs/nonblank" },
+        "aggregateId": { "$ref": "#/$defs/aggregateId" },
+        "queryType": { "$ref": "#/$defs/queryWireType" },
         "projectionType": { "$ref": "#/$defs/tenant" },
         "payload": {},
-        "entityId": { "$ref": "#/$defs/nonblank" },
-        "projectionActorType": { "$ref": "#/$defs/nonblank", "maxLength": 64 },
+        "entityId": { "$ref": "#/$defs/aggregateId" },
+        "projectionActorType": { "$ref": "#/$defs/queryWireType", "maxLength": 64 },
         "paging": { "$ref": "#/$defs/paging" }
       }
     },
