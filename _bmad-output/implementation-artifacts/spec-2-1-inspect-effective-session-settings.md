@@ -2,7 +2,7 @@
 title: 'Inspect Effective Session Settings'
 type: 'feature'
 created: '2026-09-28'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'e599f5c3faa41dbf90bd9219a4a1de47c40f2fd3'
@@ -60,6 +60,39 @@ context:
 - Given any implemented CLI verb, when settings resolution succeeds and the verb runs, then exactly one Host owns one `ResolvedSettings` singleton and Core/head behavior uses that instance rather than rereading environment or profile state.
 - Given `config current` with any valid combination of flags, environment, selected profile, and defaults, when its JSON or table result is emitted, then all effective settings and their sources are represented and no raw token is observable.
 - Given malformed configuration from a known source, when resolution fails, then the CLI emits only the canonical `configuration_invalid` document naming that source and exits 2.
+
+### Review Findings
+
+Code review 2026-09-28 (range `e599f5c..d19eb40`, layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor).
+
+- [ ] [Review][Patch] Production environment reader is never exercised: every CLI test injects `readEnvironment`, parity tests set no `EVENTSTORE_*`, loopback strips them; defaulting the reader to `_ => null` stays green. Add an out-of-process `config current` test with temp `HOME` plus `EVENTSTORE_TENANT`/`EVENTSTORE_READ_ONLY` asserting values and sources (medium, verification-gap) [src/Hexalith.McpCli/Hosting/SettingsBootstrap.cs:23]
+- [ ] [Review][Patch] `mcp` verb configuration-error path is untested: no test drives `HostFactory.Create` failure under `mcp`; routing it to stdout or returning 0 stays green. Add an `mcp` case with `EVENTSTORE_URL=not-a-url` and a failing `runMcp` stub asserting exit 2, empty stdout, stderr `configuration_invalid` naming the source (medium, verification-gap) [src/Hexalith.McpCli/Cli/CliRunner.cs:411]
+- [ ] [Review][Patch] Allowlist-key validation is unpinned at both layers: `ProfileStore.Read` rejects first, so the resolver's source-specific branch is unreachable in production and both raw-file tests assert only `ShouldContain("profile")`, which the generic catch prefix satisfies; no test submits an invalid-grammar key via `Add`/`Set`. Pin `store.Set("dev", "allowedExtensions", "../unsafe")` throwing without mutation, and drive the resolver seam (`Func<ProfileSnapshot>`) asserting the exact message (medium, verification-gap+blind-hunter+acceptance-auditor) [tests/Hexalith.McpCli.Core.Tests/SettingsAndRegistrationTests.cs:239]
+- [ ] [Review][Patch] Blank token and tenant rejection is untested: only actor is covered; dropping `ValidateText(token)` or `ValidateText(tenant)` stays green. Add `EVENTSTORE_TOKEN " "` and `EVENTSTORE_TENANT " "` rows (medium, verification-gap) [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:319]
+- [ ] [Review][Patch] Profile-file failures are reported under the ambiguous prefix "Invalid mcpcli profile or environment setting:"; split the catch so environment `FormatException` keeps its variable-named message and store failures say they come from the mcpcli profile file (low, acceptance-auditor) [src/Hexalith.McpCli.Core/Settings/SettingsResolver.cs:112]
+- [ ] [Review][Patch] `config current --format table` is never asserted although AC2 covers table output; add a table case checking every field, the `sources` entry, and the masked token (low, acceptance-auditor) [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:285]
+- [ ] [Review][Patch] A flag-selected missing profile is untested; only the environment-selected case exists. Add `--profile missing` asserting exit 2 and `flag` in the message (low, acceptance-auditor) [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:346]
+- [ ] [Review][Patch] `McpReadOnlyOmitsSendCommandAsync` has no positive control: an empty tool collection also passes. Also assert the query tool is advertised (low, blind-hunter) [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:483]
+- [ ] [Review][Patch] `VersionUsesEarlyOfflineEntryPointAsync` does not poison settings, so it cannot prove `--version` skips resolution; set `EVENTSTORE_READ_ONLY=yes` and `EVENTSTORE_URL=not-a-url` in `startInfo.Environment` (low, blind-hunter) [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:506]
+- [x] [Review][Defer] `config profile add/remove/use/set` run through `RunAsync` settings resolution, so a missing `EVENTSTORE_PROFILE` or corrupt profile file blocks the verbs that would repair it [src/Hexalith.McpCli/Cli/CliRunner.cs:302] — deferred: pre-existing, belongs to Stories 2.2/2.3 profile management
+- [x] [Review][Defer] `--output` path is not validated before execution, so a `send` can reach the Gateway and then fail writing the result [src/Hexalith.McpCli/Cli/CliOutput.cs:25] — deferred: pre-existing, belongs to Story 2.11 output routing
+- [x] [Review][Defer] Cancellation during `host.RunAsync` startup is caught by the generic handler and reported as `internal_error` exit 2 [src/Hexalith.McpCli/Cli/CliRunner.cs:462] — deferred: pre-existing, MCP stdio lifecycle (Epic 3)
+- [x] [Review][Defer] `Host.CreateApplicationBuilder()` loads content-root `appsettings*.json` and all environment variables (including `EVENTSTORE_ADMIN_*`) into unused `IConfiguration` [src/Hexalith.McpCli/Hosting/HostFactory.cs:39] — deferred: pre-existing; consider `Host.CreateEmptyApplicationBuilder` in a hosting hardening change
+
+**Rejected:**
+- Mask oracle/containment (`abcd***` → `abcd****`, `abcd*` → `abcd***`): low; requires tokens ending in asterisks, output never literally equals the raw token, and any fix adds branches.
+- Prefix shown for 5–8 character tokens: spec-mandated threshold (">4 visible prefix"); fix would edit the spec.
+- Environment booleans case-sensitive while flags are not: exact `true/false/1/0` is spec-mandated for environment values.
+- MCP host built before format/output checks and `EVENTSTORE_FORMAT=table` unchecked: false; the host is disposed unstarted with no Catalog built, and the explicit-format check is unchanged pre-existing behavior.
+- `HostFactory.Create` out-parameter contract: false; no caller diverges, no named harm.
+- Hand-written `ToString` omits `AllowedExtensions`/`Sources`: false; diagnostic-only, token redaction is the only requirement.
+- Test mutates `Environment.CurrentDirectory` under parallel runs: false; the CLI test assembly sets `ParallelMode.None`.
+- Dead `ThenBy`, redundant temp-directory creation: false; no bad outcome.
+- Unbounded stored allowlist: false; Design Notes allow exceeding 32, and the 1 MiB file cap bounds it.
+- Admin isolation test does not use real `~/.eventstore/profiles.json`: false; `src/` has no reference to `profiles.json` or `EVENTSTORE_ADMIN_*`.
+- `null` fields in `config current`: spec requires every setting in the flat current document.
+- No CLI-level singleton identity test: false; `HostFactory` passes the same instance to `AddMcpCliCore` and `AddMcpCliMcpServer`, and Core asserts identity.
+- Empty `EVENTSTORE_*` treated as set: false; pre-existing, fails loudly with the source named, consistent with the blank-text rule.
 
 ## Implementation Notes
 

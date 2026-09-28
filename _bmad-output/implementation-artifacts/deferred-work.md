@@ -144,3 +144,10 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Migration planning artifacts disagree on inventory dispositions, v1 scope, retirement claims, and the no-new-proprietary-surface rule.
   evidence: Medium; the concurrent planning-history advance left AD-21 and Story 4.5 on include/exclude-only semantics, conflicts over EventStore Admin timing and temporary exceptions, and stale PRD wording and metrics. Reconcile the architecture, PRD, epics, and authoritative agent baseline together.
+
+## Deferred from: code review of spec-2-1-inspect-effective-session-settings.md (2026-09-28)
+
+- `config profile add/remove/use/set` run through `CliRunner.RunAsync` settings resolution, so a missing `EVENTSTORE_PROFILE` or a corrupt `mcpcli.json` blocks the very verbs that would repair it. Pre-existing; address with Stories 2.2/2.3.
+- `--output` is not validated before execution; `send` can reach the Gateway and then fail writing the result file (`CliOutput.WriteAsync`). Pre-existing; address with Story 2.11.
+- Cancellation while `host.RunAsync` is starting in `RunMcpHostAsync` falls into the generic catch and reports `internal_error` exit 2 instead of a clean exit. Pre-existing; MCP stdio lifecycle (Epic 3).
+- `HostFactory.CreateHost` uses `Host.CreateApplicationBuilder()`, which loads content-root `appsettings*.json` and every environment variable (including `EVENTSTORE_ADMIN_*`) into an unused `IConfiguration`. Pre-existing; consider `Host.CreateEmptyApplicationBuilder`.
