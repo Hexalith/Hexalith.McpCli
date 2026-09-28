@@ -62,6 +62,6 @@ internal static class CliOutput
 
         JsonElement json = JsonSerializer.SerializeToElement(document, McpCliJson.Result);
         return "FIELD\tVALUE" + Environment.NewLine + string.Join(Environment.NewLine,
-            json.EnumerateObject().Select(property => property.Name + "\t" + property.Value.GetRawText()));
+            json.EnumerateObject().Select(property => property.Name + "\t" + JsonSerializer.Serialize(property.Value)));
     }
 }

@@ -252,12 +252,53 @@ public sealed class SettingsAndRegistrationTests
             resolution.Settings.ShouldBeNull();
             OperationError error = resolution.Error.ShouldNotBeNull();
             error.Code.ShouldBe("configuration_invalid");
-            error.Message.ShouldNotBeNull().ShouldContain("profile");
+            error.Message.ShouldNotBeNull().ShouldStartWith("Invalid mcpcli profile file:");
         }
         finally
         {
             Directory.Delete(Path.GetDirectoryName(path)!, recursive: true);
         }
+    }
+
+    /// <summary>Profile mutation rejects an invalid allowlist key without changing the stored profile.</summary>
+    [Fact]
+    public void SetRejectsInvalidAllowlistKeyWithoutMutation()
+    {
+        string path = TemporaryPath();
+        try
+        {
+            var store = new ProfileStore(path);
+            store.Add("dev", new ConnectionProfile(AllowedExtensions: ["safe-key"]));
+
+            Should.Throw<InvalidDataException>(() => store.Set("dev", "allowedExtensions", "../unsafe"));
+
+            ConnectionProfile profile = store.Read().Profiles["dev"];
+            profile.AllowedExtensions.ShouldBe(["safe-key"]);
+        }
+        finally
+        {
+            Directory.Delete(Path.GetDirectoryName(path)!, recursive: true);
+        }
+    }
+
+    /// <summary>Resolver validation identifies the profile source even when the store seam supplies invalid data.</summary>
+    [Fact]
+    public void ResolverRejectsInvalidAllowlistKeyWithExactSourceMessage()
+    {
+        var profiles = new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal)
+        {
+            ["dev"] = new(AllowedExtensions: ["../unsafe"]),
+        };
+        var resolver = new SettingsResolver(
+            () => new ProfileSnapshot(1, "dev", profiles),
+            new Dictionary<string, string?>());
+
+        SettingsResolution resolution = resolver.Resolve(new SettingsInput());
+
+        resolution.Settings.ShouldBeNull();
+        OperationError error = resolution.Error.ShouldNotBeNull();
+        error.Code.ShouldBe("configuration_invalid");
+        error.Message.ShouldBe("The selected profile contains an invalid allowed extension key from profile.");
     }
 
     /// <summary>Resolution performs exactly one profile read.</summary>

@@ -191,14 +191,29 @@ public sealed partial class ProfileStore
         }
 
         string masked = prefix + "***";
-        return string.Equals(masked, token, StringComparison.Ordinal) ? prefix + "****" : masked;
+        return masked.Contains(token, StringComparison.Ordinal) ? FullMask(token) : masked;
     }
 
     private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
         => new ProfileFileTransaction(_path).Apply(Read, update, JsonOptions);
 
     private static string FullMask(string token)
-        => string.Equals(token, "***", StringComparison.Ordinal) ? "****" : "***";
+    {
+        if (token.Length > 3)
+        {
+            return "***";
+        }
+
+        foreach (char candidate in "*#~!")
+        {
+            if (token.IndexOf(candidate) < 0)
+            {
+                return new string(candidate, 3);
+            }
+        }
+
+        return "***";
+    }
 
     private static bool ParseBoolean(string value)
         => value switch

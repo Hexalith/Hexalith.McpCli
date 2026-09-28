@@ -406,14 +406,6 @@ internal sealed class CliRunner
         try
         {
             SettingsInput input = _globals.Read(parsed);
-            IHost? created = HostFactory.Create(input, _profileStore, out OperationError? error,
-                mcp: true, _manifest, _readEnvironment);
-            using IHost? host = created;
-            if (error is not null)
-            {
-                return await WriteMcpErrorAsync(error, cancellationToken).ConfigureAwait(false);
-            }
-
             if (input.Format is not null && input.Format != "json")
             {
                 return await WriteMcpErrorAsync(Invalid("format", "MCP stdio accepts only explicit json format."),
@@ -424,6 +416,14 @@ internal sealed class CliRunner
             {
                 return await WriteMcpErrorAsync(Invalid("output", "MCP stdio cannot write protocol output to a file."),
                     cancellationToken).ConfigureAwait(false);
+            }
+
+            IHost? created = HostFactory.Create(input, _profileStore, out OperationError? error,
+                mcp: true, _manifest, _readEnvironment);
+            using IHost? host = created;
+            if (error is not null)
+            {
+                return await WriteMcpErrorAsync(error, cancellationToken).ConfigureAwait(false);
             }
 
             IHost invocationHost = host ?? throw new InvalidOperationException("Settings resolution produced no host or error.");

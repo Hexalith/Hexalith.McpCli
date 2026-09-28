@@ -9,17 +9,22 @@ public sealed class ProfileStoreTests
     /// <summary>Token masking uses safe Unicode text-element prefixes and never returns the complete token.</summary>
     [Theory]
     [InlineData("abcd", "***")]
-    [InlineData("***", "****")]
-    [InlineData("abcd***", "abcd****")]
+    [InlineData("***", "###")]
+    [InlineData("****", "***")]
+    [InlineData("abcd*", "***")]
+    [InlineData("abcd***", "***")]
     [InlineData("\u001babcdef", "***")]
+    [InlineData("\u2028abcdef", "***")]
+    [InlineData("\u2029abcdef", "***")]
     [InlineData("\u202eabcdef", "***")]
+    [InlineData("😀😁😂🤣", "***")]
     [InlineData("😀a\u0301bcdef", "😀a\u0301bc***")]
     public void MasksTokenSafely(string token, string expected)
     {
         string masked = ProfileStore.MaskToken(token).ShouldNotBeNull();
 
         masked.ShouldBe(expected);
-        masked.ShouldNotBe(token);
+        masked.ShouldNotContain(token);
     }
 
     /// <summary>All profile commands round-trip without exposing the admin CLI file.</summary>

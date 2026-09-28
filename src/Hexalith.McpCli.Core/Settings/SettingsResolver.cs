@@ -35,9 +35,19 @@ public sealed class SettingsResolver
     public SettingsResolution Resolve(SettingsInput input)
     {
         ArgumentNullException.ThrowIfNull(input);
+        ProfileSnapshot snapshot;
         try
         {
-            ProfileSnapshot snapshot = _readProfile();
+            snapshot = _readProfile();
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException
+            or System.Text.Json.JsonException or FormatException)
+        {
+            return Failure("Invalid mcpcli profile file: " + exception.Message);
+        }
+
+        try
+        {
             var sources = new Dictionary<string, string>(StringComparer.Ordinal);
             string? profileName = Select(input.Profile, "EVENTSTORE_PROFILE", null, null, "profile", sources);
             ConnectionProfile? profile = null;
@@ -109,10 +119,9 @@ public sealed class SettingsResolver
                 strict ?? false, profileName, new ReadOnlyDictionary<string, string>(sources));
             return new SettingsResolution(settings, null);
         }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException
-            or System.Text.Json.JsonException or FormatException)
+        catch (FormatException exception)
         {
-            return Failure("Invalid mcpcli profile or environment setting: " + exception.Message);
+            return Failure(exception.Message);
         }
     }
 

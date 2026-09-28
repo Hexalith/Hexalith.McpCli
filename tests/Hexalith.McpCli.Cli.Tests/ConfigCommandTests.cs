@@ -7,6 +7,7 @@ using Hexalith.McpCli.Sample.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using ModelContextProtocol.Client;
 using ModelContextProtocol.Server;
 using Shouldly;
 
@@ -156,6 +157,54 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>The executable uses the production environment reader when resolving current settings.</summary>
+    [Fact]
+    public async Task CurrentExecutableReadsProcessEnvironmentAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+            };
+            foreach (string name in startInfo.Environment.Keys
+                .Where(name => name.StartsWith("EVENTSTORE_", StringComparison.Ordinal)).ToArray())
+            {
+                startInfo.Environment.Remove(name);
+            }
+
+            startInfo.Environment["HOME"] = directory;
+            startInfo.Environment["USERPROFILE"] = directory;
+            startInfo.Environment["EVENTSTORE_TENANT"] = "process-tenant";
+            startInfo.Environment["EVENTSTORE_READ_ONLY"] = "true";
+            startInfo.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
+            startInfo.ArgumentList.Add("config");
+            startInfo.ArgumentList.Add("current");
+
+            using Process process = Process.Start(startInfo).ShouldNotBeNull();
+            Task<string> output = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
+            Task<string> error = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+            await process.WaitForExitAsync(TestContext.Current.CancellationToken);
+
+            process.ExitCode.ShouldBe(0);
+            (await error).ShouldBeEmpty();
+            JsonElement current = JsonDocument.Parse(await output).RootElement;
+            current.GetProperty("tenant").GetString().ShouldBe("process-tenant");
+            current.GetProperty("readOnly").GetBoolean().ShouldBeTrue();
+            JsonElement sources = current.GetProperty("sources");
+            sources.GetProperty("tenant").GetString().ShouldBe("EVENTSTORE_TENANT");
+            sources.GetProperty("readOnly").GetString().ShouldBe("EVENTSTORE_READ_ONLY");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Bare boolean flags are explicit true values and the current document is complete.</summary>
     [Fact]
     public async Task CurrentBindsBareFlagsAndEmitsAllValuesAndSourcesAsync()
@@ -280,6 +329,66 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Table output includes every resolved field, all sources, and only the masked token.</summary>
+    [Fact]
+    public async Task CurrentTableIncludesEveryValueAndSourceWithoutRawTokenAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string token = "secret-value";
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(
+                "https://gateway.example/", token, "json", "acme", "operator", true, ["trace-id"]));
+            store.Use("dev");
+            var environment = new Dictionary<string, string?>
+            {
+                ["EVENTSTORE_READ_ONLY"] = "true",
+                ["EVENTSTORE_STRICT"] = "true",
+            };
+
+            (int exit, string output, string error) = await InvokeAsync(store, environment, null,
+                "config", "current", "--format", "table");
+
+            exit.ShouldBe(0);
+            error.ShouldBeEmpty();
+            output.ShouldContain("secr***");
+            output.ShouldNotContain(token);
+            string[] rows = output.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            rows[0].ShouldBe("FIELD\tVALUE");
+            rows.Length.ShouldBe(13);
+            rows.Skip(1).ShouldAllBe(row => row.Count(character => character == '\t') == 1);
+            rows.Skip(1).Select(row => row[..row.IndexOf('\t')]).ShouldBe([
+                "profile", "url", "token", "tenant", "actor", "allowTenantOverride", "allowedExtensions",
+                "format", "output", "readOnly", "strict", "sources",
+            ]);
+            rows.ShouldContain("profile\t\"dev\"");
+            rows.ShouldContain("url\t\"https://gateway.example/\"");
+            rows.ShouldContain("token\t\"secr***\"");
+            rows.ShouldContain("tenant\t\"acme\"");
+            rows.ShouldContain("actor\t\"operator\"");
+            rows.ShouldContain("allowTenantOverride\ttrue");
+            rows.ShouldContain("allowedExtensions\t[\"trace-id\"]");
+            rows.ShouldContain("format\t\"table\"");
+            rows.ShouldContain("output\tnull");
+            rows.ShouldContain("readOnly\ttrue");
+            rows.ShouldContain("strict\ttrue");
+            string sourceRow = rows.Single(row => row.StartsWith("sources\t", StringComparison.Ordinal));
+            JsonElement sources = JsonDocument.Parse(sourceRow["sources\t".Length..]).RootElement;
+            sources.EnumerateObject().Select(property => property.Name).ShouldBe([
+                "profile", "url", "token", "tenant", "actor", "format", "allowTenantOverride", "readOnly",
+                "strict", "output", "allowedExtensions",
+            ], ignoreOrder: true);
+            sources.GetProperty("profile").GetString().ShouldBe("activeProfile");
+            sources.GetProperty("format").GetString().ShouldBe("flag");
+            sources.GetProperty("output").GetString().ShouldBe("default");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Whitespace-only output is rejected before any file can be created.</summary>
     [Fact]
     public async Task CurrentRejectsWhitespaceOutputWithoutWritingAsync()
@@ -314,6 +423,8 @@ public sealed class ConfigCommandTests
     [Theory]
     [InlineData("EVENTSTORE_URL", "not-a-url")]
     [InlineData("EVENTSTORE_FORMAT", "yaml")]
+    [InlineData("EVENTSTORE_TOKEN", " ")]
+    [InlineData("EVENTSTORE_TENANT", " ")]
     [InlineData("EVENTSTORE_ACTOR", " ")]
     [InlineData("EVENTSTORE_READ_ONLY", "yes")]
     public async Task CurrentNamesInvalidEnvironmentSourceAsync(string name, string value)
@@ -369,6 +480,32 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>A missing flag-selected profile returns the canonical flag-source error.</summary>
+    [Fact]
+    public async Task CurrentNamesMissingFlagProfileSourceAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "current", "--profile", "missing");
+
+            exit.ShouldBe(2);
+            error.ShouldBeEmpty();
+            JsonElement document = JsonDocument.Parse(output).RootElement;
+            document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
+            JsonElement configurationError = document.GetProperty("error");
+            configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
+            configurationError.GetProperty("message").GetString().ShouldNotBeNull().ShouldContain("flag");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>An invalid stored allowlist returns the canonical profile-source error.</summary>
     [Fact]
     public async Task CurrentNamesInvalidProfileAllowlistSourceAsync()
@@ -389,7 +526,8 @@ public sealed class ConfigCommandTests
             document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
             JsonElement configurationError = document.GetProperty("error");
             configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
-            configurationError.GetProperty("message").GetString().ShouldNotBeNull().ShouldContain("profile");
+            configurationError.GetProperty("message").GetString().ShouldNotBeNull()
+                .ShouldStartWith("Invalid mcpcli profile file:");
         }
         finally
         {
@@ -481,6 +619,7 @@ public sealed class ConfigCommandTests
                 McpServerPrimitiveCollection<McpServerTool> tools = host.Services
                     .GetRequiredService<IOptions<McpServerOptions>>().Value.ToolCollection.ShouldNotBeNull();
                 tools.Select(tool => tool.ProtocolTool.Name).ShouldNotContain("send_command");
+                tools.Select(tool => tool.ProtocolTool.Name).ShouldContain("run_query");
                 return Task.FromResult(0);
             }
 
@@ -501,6 +640,119 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>MCP configuration failures emit only a canonical stderr document and never start the host.</summary>
+    [Fact]
+    public async Task McpNamesInvalidEnvironmentSourceOnStandardErrorAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var environment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = "not-a-url" };
+            int hostRuns = 0;
+            Task<int> FailIfRunAsync(IHost _, CancellationToken __)
+            {
+                hostRuns++;
+                return Task.FromException<int>(new InvalidOperationException("MCP must not start."));
+            }
+
+            (int exit, string output, string error) = await InvokeAsync(
+                store, environment, () => [typeof(CreateItemCommand).Assembly], FailIfRunAsync, "mcp");
+
+            exit.ShouldBe(2);
+            output.ShouldBeEmpty();
+            hostRuns.ShouldBe(0);
+            JsonElement document = JsonDocument.Parse(error).RootElement;
+            document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
+            JsonElement configurationError = document.GetProperty("error");
+            configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
+            configurationError.GetProperty("message").GetString().ShouldNotBeNull()
+                .ShouldContain("EVENTSTORE_URL");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Explicit MCP format and output errors are deterministic before settings resolution.</summary>
+    [Fact]
+    public async Task McpValidatesExplicitOptionsBeforeSettingsResolutionAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var invalidEnvironment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = "not-a-url" };
+
+            (int formatExit, string formatOutput, string formatError) = await InvokeAsync(
+                store, invalidEnvironment, null, "mcp", "--format", "table", "--output", " ");
+            formatExit.ShouldBe(2);
+            formatOutput.ShouldBeEmpty();
+            JsonElement formatDocument = JsonDocument.Parse(formatError).RootElement.GetProperty("error");
+            formatDocument.GetProperty("code").GetString().ShouldBe("invalid_arguments");
+            formatDocument.GetProperty("argument").GetString().ShouldBe("format");
+            formatDocument.GetProperty("message").GetString().ShouldNotBeNull().ShouldNotContain("EVENTSTORE_URL");
+
+            (int outputExit, string output, string outputError) = await InvokeAsync(
+                store, invalidEnvironment, null, "mcp", "--output", " ");
+            outputExit.ShouldBe(2);
+            output.ShouldBeEmpty();
+            JsonElement outputDocument = JsonDocument.Parse(outputError).RootElement.GetProperty("error");
+            outputDocument.GetProperty("code").GetString().ShouldBe("invalid_arguments");
+            outputDocument.GetProperty("argument").GetString().ShouldBe("output");
+            outputDocument.GetProperty("message").GetString().ShouldNotBeNull().ShouldNotContain("EVENTSTORE_URL");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>The executable MCP path initializes, lists tools, and shuts down over stdio.</summary>
+    [Fact]
+    public async Task McpExecutableInitializesAndListsToolsOverStdioAsync()
+    {
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        string directory = TemporaryDirectory();
+        try
+        {
+            Dictionary<string, string?> environment = StdioClientTransportOptions.GetDefaultEnvironmentVariables();
+            environment["HOME"] = directory;
+            environment["USERPROFILE"] = directory;
+            string? dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
+            if (dotnetRoot is not null)
+            {
+                environment["DOTNET_ROOT"] = dotnetRoot;
+            }
+
+            var transport = new StdioClientTransport(new StdioClientTransportOptions
+            {
+                Command = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
+                Arguments = [ConformanceHostPath(), "mcp"],
+                Name = "mcpcli-production-stdio",
+                WorkingDirectory = directory,
+                InheritEnvironmentVariables = false,
+                EnvironmentVariables = environment,
+                ShutdownTimeout = TimeSpan.FromSeconds(5),
+            });
+            await using McpClient client = await McpClient.CreateAsync(
+                transport,
+                new McpClientOptions { ProtocolVersion = "2025-06-18" },
+                cancellationToken: timeout.Token);
+
+            IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
+
+            tools.Select(tool => tool.Name).ShouldBe([
+                "list_modules", "list_operations", "describe_operation", "send_command", "run_query",
+            ]);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>The executable version path succeeds before settings, host, or Catalog construction.</summary>
     [Fact]
     public async Task VersionUsesEarlyOfflineEntryPointAsync()
@@ -514,6 +766,8 @@ public sealed class ConfigCommandTests
         };
         startInfo.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
         startInfo.ArgumentList.Add("--version");
+        startInfo.Environment["EVENTSTORE_READ_ONLY"] = "yes";
+        startInfo.Environment["EVENTSTORE_URL"] = "not-a-url";
 
         using Process process = Process.Start(startInfo).ShouldNotBeNull();
         Task<string> output = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
@@ -583,6 +837,14 @@ public sealed class ConfigCommandTests
         IReadOnlyDictionary<string, string?> environment,
         Func<IReadOnlyList<Assembly>>? manifest,
         params string[] args)
+        => await InvokeAsync(store, environment, manifest, null, args);
+
+    private static async Task<(int Exit, string Output, string Error)> InvokeAsync(
+        ProfileStore store,
+        IReadOnlyDictionary<string, string?> environment,
+        Func<IReadOnlyList<Assembly>>? manifest,
+        Func<IHost, CancellationToken, Task<int>>? runMcp,
+        params string[] args)
     {
         TextWriter originalOut = Console.Out;
         TextWriter originalError = Console.Error;
@@ -593,7 +855,7 @@ public sealed class ConfigCommandTests
             Console.SetOut(output);
             Console.SetError(error);
             int exit = await new CliRunner(store, manifest,
-                name => environment.TryGetValue(name, out string? value) ? value : null)
+                name => environment.TryGetValue(name, out string? value) ? value : null, runMcp)
                 .CreateRoot().Parse(args).InvokeAsync();
             return (exit, output.ToString(), error.ToString());
         }
@@ -609,6 +871,20 @@ public sealed class ConfigCommandTests
         string path = Path.Combine(Path.GetTempPath(), "mcpcli-cli-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(path);
         return path;
+    }
+
+    private static string ConformanceHostPath()
+    {
+        DirectoryInfo? root = new(AppContext.BaseDirectory);
+        while (root is not null && !File.Exists(Path.Combine(root.FullName, "Hexalith.McpCli.slnx")))
+        {
+            root = root.Parent;
+        }
+
+        root.ShouldNotBeNull();
+        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent.ShouldNotBeNull().Name;
+        return Path.Combine(root.FullName, "tests", "Hexalith.McpCli.ConformanceHost", "bin", configuration,
+            "net10.0", "Hexalith.McpCli.ConformanceHost.dll");
     }
 
     private static void AssertCurrent(string json, string profile, string tenant, string source)

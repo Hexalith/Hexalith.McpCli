@@ -151,3 +151,15 @@
 - `--output` is not validated before execution; `send` can reach the Gateway and then fail writing the result file (`CliOutput.WriteAsync`). Pre-existing; address with Story 2.11.
 - Cancellation while `host.RunAsync` is starting in `RunMcpHostAsync` falls into the generic catch and reports `internal_error` exit 2 instead of a clean exit. Pre-existing; MCP stdio lifecycle (Epic 3).
 - `HostFactory.CreateHost` uses `Host.CreateApplicationBuilder()`, which loads content-root `appsettings*.json` and every environment variable (including `EVENTSTORE_ADMIN_*`) into an unused `IConfiguration`. Pre-existing; consider `Host.CreateEmptyApplicationBuilder`.
+
+- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Offline CLI actions can still depend on unrelated application configuration loaded by the default Host builder.
+  evidence: This is real but predates Story 2.1; the baseline `HostFactory` already used `Host.CreateApplicationBuilder`, so hosting-configuration isolation belongs in a separate hardening change.
+
+- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: A nonblank output path can fail only after a Gateway action has completed.
+  evidence: This is real but predates Story 2.1; output-file preflight and retained-handle semantics belong to Story 2.11 output routing, and the frozen Story 2.1 intent excludes execution behavior changes.
+
+- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Cancellation during MCP host startup is mapped through the generic startup-error path.
+  evidence: This is real but predates Story 2.1; the baseline `host.RunAsync` path had the same behavior, and clean stdio lifecycle cancellation belongs to Epic 3.

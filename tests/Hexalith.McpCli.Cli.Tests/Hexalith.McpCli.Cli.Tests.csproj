@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="../../src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
+    <ProjectReference Include="../Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj" ReferenceOutputAssembly="false" />
     <ProjectReference Include="../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
   </ItemGroup>
 </Project>
