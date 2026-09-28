@@ -15,4 +15,11 @@ public sealed record ConnectionProfile(
     string? Tenant = null,
     string? Actor = null,
     bool? AllowTenantOverride = null,
-    IReadOnlyList<string>? AllowedExtensions = null);
+    IReadOnlyList<string>? AllowedExtensions = null)
+{
+    /// <summary>Formats the profile without exposing the bearer token.</summary>
+    /// <returns>A redacted diagnostic representation.</returns>
+    public override string ToString()
+        => $"{nameof(ConnectionProfile)} {{ Url = {Url}, Token = {ProfileStore.MaskToken(Token)}, Format = {Format}, "
+            + $"Tenant = {Tenant}, Actor = {Actor}, AllowTenantOverride = {AllowTenantOverride} }}";
+}

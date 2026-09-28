@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Hexalith.McpCli.Core.Settings;
 
 /// <summary>The immutable settings used by Core and both heads for one process.</summary>
@@ -15,7 +17,7 @@ namespace Hexalith.McpCli.Core.Settings;
 /// <param name="Sources">The source of every resolved setting.</param>
 public sealed record ResolvedSettings(
     Uri? Url,
-    string? Token,
+    [property: JsonIgnore] string? Token,
     string? Tenant,
     string? Actor,
     bool AllowTenantOverride,
@@ -25,4 +27,12 @@ public sealed record ResolvedSettings(
     bool ReadOnly,
     bool Strict,
     string? Profile,
-    IReadOnlyDictionary<string, string> Sources);
+    IReadOnlyDictionary<string, string> Sources)
+{
+    /// <summary>Formats the settings without exposing the bearer token.</summary>
+    /// <returns>A redacted diagnostic representation.</returns>
+    public override string ToString()
+        => $"{nameof(ResolvedSettings)} {{ Url = {Url}, Token = {ProfileStore.MaskToken(Token)}, "
+            + $"Tenant = {Tenant}, Actor = {Actor}, AllowTenantOverride = {AllowTenantOverride}, "
+            + $"Format = {Format}, Output = {Output}, ReadOnly = {ReadOnly}, Strict = {Strict}, Profile = {Profile} }}";
+}

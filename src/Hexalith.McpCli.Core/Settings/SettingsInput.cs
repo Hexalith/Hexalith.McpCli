@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Hexalith.McpCli.Core.Settings;
 
 /// <summary>Explicit global CLI options before precedence resolution.</summary>
@@ -13,7 +15,7 @@ namespace Hexalith.McpCli.Core.Settings;
 /// <param name="Strict">The explicit strict Catalog flag.</param>
 public sealed record SettingsInput(
     string? Url = null,
-    string? Token = null,
+    [property: JsonIgnore] string? Token = null,
     string? Tenant = null,
     string? Actor = null,
     bool? AllowTenantOverride = null,
@@ -21,4 +23,12 @@ public sealed record SettingsInput(
     string? Format = null,
     string? Output = null,
     bool? ReadOnly = null,
-    bool? Strict = null);
+    bool? Strict = null)
+{
+    /// <summary>Formats explicit settings without exposing the bearer token.</summary>
+    /// <returns>A redacted diagnostic representation.</returns>
+    public override string ToString()
+        => $"{nameof(SettingsInput)} {{ Url = {Url}, Token = {ProfileStore.MaskToken(Token)}, Tenant = {Tenant}, "
+            + $"Actor = {Actor}, AllowTenantOverride = {AllowTenantOverride}, Profile = {Profile}, Format = {Format}, "
+            + $"Output = {Output}, ReadOnly = {ReadOnly}, Strict = {Strict} }}";
+}

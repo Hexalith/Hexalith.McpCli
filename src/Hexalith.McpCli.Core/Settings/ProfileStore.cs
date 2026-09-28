@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -168,10 +170,35 @@ public sealed partial class ProfileStore
 
     /// <summary>Masks a token for a display document.</summary>
     public static string? MaskToken(string? token)
-        => token is null ? null : token[..Math.Min(4, token.Length)] + "***";
+    {
+        if (token is null)
+        {
+            return null;
+        }
+
+        int[] textElements = StringInfo.ParseCombiningCharacters(token);
+        if (textElements.Length <= 4)
+        {
+            return FullMask(token);
+        }
+
+        string prefix = token[..textElements[4]];
+        if (prefix.EnumerateRunes().Any(rune => Rune.GetUnicodeCategory(rune) is
+            UnicodeCategory.Control or UnicodeCategory.Format or
+            UnicodeCategory.LineSeparator or UnicodeCategory.ParagraphSeparator))
+        {
+            return FullMask(token);
+        }
+
+        string masked = prefix + "***";
+        return string.Equals(masked, token, StringComparison.Ordinal) ? prefix + "****" : masked;
+    }
 
     private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
         => new ProfileFileTransaction(_path).Apply(Read, update, JsonOptions);
+
+    private static string FullMask(string token)
+        => string.Equals(token, "***", StringComparison.Ordinal) ? "****" : "***";
 
     private static bool ParseBoolean(string value)
         => value switch
@@ -220,7 +247,7 @@ public sealed partial class ProfileStore
             }
         }
 
-        if (ExtensionValidator.Validate(allowed.ToDictionary(key => key, _ => string.Empty, StringComparer.Ordinal), allowed).Count > 0)
+        if (allowed.Any(key => !ExtensionValidator.IsValidKey(key)))
         {
             throw new InvalidDataException("A profile has invalid allowed extension keys.");
         }

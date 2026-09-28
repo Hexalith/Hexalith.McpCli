@@ -49,5 +49,5 @@ internal sealed class GlobalOptionsBinding
         => parsed.GetResult(option)?.Tokens.Count > 0 ? parsed.GetValue(option) : null;
 
     private static bool? ExplicitFlag(ParseResult parsed, Option<bool> option)
-        => parsed.GetResult(option)?.Tokens.Count > 0 ? parsed.GetValue(option) : null;
+        => parsed.GetResult(option) is { Implicit: false } ? parsed.GetValue(option) : null;
 }

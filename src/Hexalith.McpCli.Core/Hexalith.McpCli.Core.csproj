@@ -4,6 +4,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Hexalith.McpCli.Core.Tests" />
     <ProjectReference Include="../Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />
     <PackageReference Include="ByteAether.Ulid" />
     <PackageReference Include="Hexalith.EventStore.Client" />

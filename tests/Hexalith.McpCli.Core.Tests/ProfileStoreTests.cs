@@ -6,6 +6,22 @@ namespace Hexalith.McpCli.Core.Tests;
 /// <summary>Checks profile transactions, validation, and private storage.</summary>
 public sealed class ProfileStoreTests
 {
+    /// <summary>Token masking uses safe Unicode text-element prefixes and never returns the complete token.</summary>
+    [Theory]
+    [InlineData("abcd", "***")]
+    [InlineData("***", "****")]
+    [InlineData("abcd***", "abcd****")]
+    [InlineData("\u001babcdef", "***")]
+    [InlineData("\u202eabcdef", "***")]
+    [InlineData("😀a\u0301bcdef", "😀a\u0301bc***")]
+    public void MasksTokenSafely(string token, string expected)
+    {
+        string masked = ProfileStore.MaskToken(token).ShouldNotBeNull();
+
+        masked.ShouldBe(expected);
+        masked.ShouldNotBe(token);
+    }
+
     /// <summary>All profile commands round-trip without exposing the admin CLI file.</summary>
     [Fact]
     public void MutationsRoundTripAndKeepPrivatePermissions()

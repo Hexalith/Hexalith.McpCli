@@ -18,11 +18,46 @@ internal sealed class CliRunner
     private readonly GlobalOptionsBinding _globals = new();
     private readonly ProfileStore _profileStore;
     private readonly Func<IReadOnlyList<Assembly>>? _manifest;
+    private readonly Func<string, string?>? _readEnvironment;
+    private readonly Func<IHost, CancellationToken, Task<int>>? _runMcp;
 
-    internal CliRunner(ProfileStore? profileStore = null, Func<IReadOnlyList<Assembly>>? manifest = null)
+    /// <summary>Initializes a CLI runner with optional profile and manifest seams.</summary>
+    /// <param name="profileStore">The private mcpcli profile store.</param>
+    /// <param name="manifest">The lazy Contracts assembly manifest.</param>
+    internal CliRunner(
+        ProfileStore? profileStore = null,
+        Func<IReadOnlyList<Assembly>>? manifest = null)
+        : this(profileStore, manifest, null, null)
+    {
+    }
+
+    /// <summary>Initializes a CLI runner with injectable profiles, manifests, and environment values.</summary>
+    /// <param name="profileStore">The private mcpcli profile store.</param>
+    /// <param name="manifest">The lazy Contracts assembly manifest.</param>
+    /// <param name="readEnvironment">The environment reader.</param>
+    internal CliRunner(
+        ProfileStore? profileStore,
+        Func<IReadOnlyList<Assembly>>? manifest,
+        Func<string, string?>? readEnvironment)
+        : this(profileStore, manifest, readEnvironment, null)
+    {
+    }
+
+    /// <summary>Initializes a CLI runner with injectable profiles, manifests, environment values, and MCP execution.</summary>
+    /// <param name="profileStore">The private mcpcli profile store.</param>
+    /// <param name="manifest">The lazy Contracts assembly manifest.</param>
+    /// <param name="readEnvironment">The environment reader.</param>
+    /// <param name="runMcp">The MCP host runner, or the production host runner by default.</param>
+    internal CliRunner(
+        ProfileStore? profileStore,
+        Func<IReadOnlyList<Assembly>>? manifest,
+        Func<string, string?>? readEnvironment,
+        Func<IHost, CancellationToken, Task<int>>? runMcp)
     {
         _profileStore = profileStore ?? new ProfileStore();
         _manifest = manifest;
+        _readEnvironment = readEnvironment;
+        _runMcp = runMcp;
     }
 
     internal RootCommand CreateRoot()
@@ -216,8 +251,12 @@ internal sealed class CliRunner
                     settings.Tenant,
                     settings.Actor,
                     settings.AllowTenantOverride,
-                    settings.AllowedExtensions,
+                    allowedExtensions = settings.AllowedExtensions
+                        .OrderBy(extension => extension, StringComparer.OrdinalIgnoreCase)
+                        .ThenBy(extension => extension, StringComparer.Ordinal)
+                        .ToArray(),
                     settings.Format,
+                    settings.Output,
                     settings.ReadOnly,
                     settings.Strict,
                     settings.Sources,
@@ -367,10 +406,12 @@ internal sealed class CliRunner
         try
         {
             SettingsInput input = _globals.Read(parsed);
-            SettingsResolution resolved = Resolve(input);
-            if (resolved.Error is not null)
+            IHost? created = HostFactory.Create(input, _profileStore, out OperationError? error,
+                mcp: true, _manifest, _readEnvironment);
+            using IHost? host = created;
+            if (error is not null)
             {
-                return await WriteMcpErrorAsync(resolved.Error, cancellationToken).ConfigureAwait(false);
+                return await WriteMcpErrorAsync(error, cancellationToken).ConfigureAwait(false);
             }
 
             if (input.Format is not null && input.Format != "json")
@@ -385,17 +426,18 @@ internal sealed class CliRunner
                     cancellationToken).ConfigureAwait(false);
             }
 
-            ResolvedSettings settings = resolved.Settings!;
-            using IHost host = HostFactory.Create(settings, mcp: true, _manifest);
-            CatalogAccess catalog = host.Services.GetRequiredService<CatalogProvider>().Get(settings.Strict);
+            IHost invocationHost = host ?? throw new InvalidOperationException("Settings resolution produced no host or error.");
+            ResolvedSettings settings = invocationHost.Services.GetRequiredService<ResolvedSettings>();
+            CatalogAccess catalog = invocationHost.Services.GetRequiredService<CatalogProvider>().Get(settings.Strict);
             if (catalog.Catalog is null)
             {
                 return await WriteMcpErrorAsync(new OperationError(catalog.ErrorCode ?? "internal_error",
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
             }
 
-            await host.RunAsync(cancellationToken).ConfigureAwait(false);
-            return 0;
+            return _runMcp is null
+                ? await RunMcpHostAsync(invocationHost, cancellationToken).ConfigureAwait(false)
+                : await _runMcp(invocationHost, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException)
         {
@@ -416,20 +458,27 @@ internal sealed class CliRunner
         return 2;
     }
 
+    private static async Task<int> RunMcpHostAsync(IHost host, CancellationToken cancellationToken)
+    {
+        await host.RunAsync(cancellationToken).ConfigureAwait(false);
+        return 0;
+    }
+
     private async Task<int> RunAsync(ParseResult parsed,
         Func<IServiceProvider, ResolvedSettings, CancellationToken, Task<int>> action,
         CancellationToken cancellationToken)
     {
         try
         {
-            SettingsResolution resolved = Resolve(_globals.Read(parsed));
-            if (resolved.Error is not null)
+            IHost? created = HostFactory.Create(_globals.Read(parsed), _profileStore, out OperationError? error,
+                manifest: _manifest, readEnvironment: _readEnvironment);
+            if (error is not null)
             {
-                return await CliOutput.WriteErrorAsync(resolved.Error, cancellationToken).ConfigureAwait(false);
+                return await CliOutput.WriteErrorAsync(error, cancellationToken).ConfigureAwait(false);
             }
 
-            ResolvedSettings settings = resolved.Settings!;
-            using IHost host = HostFactory.Create(settings, manifest: _manifest);
+            using IHost host = created ?? throw new InvalidOperationException("Settings resolution produced no host or error.");
+            ResolvedSettings settings = host.Services.GetRequiredService<ResolvedSettings>();
             return await action(host.Services, settings, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException)
@@ -442,21 +491,6 @@ internal sealed class CliRunner
             return await CliOutput.WriteErrorAsync(new OperationError("internal_error", Message: "The CLI action failed."),
                 cancellationToken).ConfigureAwait(false);
         }
-    }
-
-    private SettingsResolution Resolve(SettingsInput input)
-    {
-        var environment = new Dictionary<string, string?>(StringComparer.Ordinal);
-        foreach (string name in new[]
-        {
-            "EVENTSTORE_PROFILE", "EVENTSTORE_URL", "EVENTSTORE_TOKEN", "EVENTSTORE_TENANT", "EVENTSTORE_ACTOR",
-            "EVENTSTORE_ALLOW_TENANT_OVERRIDE", "EVENTSTORE_FORMAT", "EVENTSTORE_READ_ONLY", "EVENTSTORE_STRICT",
-        })
-        {
-            environment[name] = Environment.GetEnvironmentVariable(name);
-        }
-
-        return new SettingsResolver(_profileStore, environment).Resolve(input);
     }
 
     private static async Task<string?> ReadPayloadAsync(string? input, CancellationToken cancellationToken)

@@ -5,8 +5,30 @@ using Hexalith.McpCli.Core.Execution;
 namespace Hexalith.McpCli.Core.Settings;
 
 /// <summary>Resolves one settings snapshot from explicit options, environment, and one profile read.</summary>
-public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<string, string?> environment)
+public sealed class SettingsResolver
 {
+    private readonly IReadOnlyDictionary<string, string?> _environment;
+    private readonly Func<ProfileSnapshot> _readProfile;
+
+    /// <summary>Initializes a resolver for one profile store and captured environment.</summary>
+    /// <param name="store">The private mcpcli profile store.</param>
+    /// <param name="environment">The captured supported environment values.</param>
+    public SettingsResolver(ProfileStore store, IReadOnlyDictionary<string, string?> environment)
+        : this((store ?? throw new ArgumentNullException(nameof(store))).Read, environment)
+    {
+    }
+
+    /// <summary>Initializes a testable resolver from a single snapshot reader.</summary>
+    /// <param name="readProfile">The function that reads one profile snapshot.</param>
+    /// <param name="environment">The captured supported environment values.</param>
+    internal SettingsResolver(Func<ProfileSnapshot> readProfile, IReadOnlyDictionary<string, string?> environment)
+    {
+        ArgumentNullException.ThrowIfNull(readProfile);
+        ArgumentNullException.ThrowIfNull(environment);
+        _readProfile = readProfile;
+        _environment = environment;
+    }
+
     /// <summary>Resolves settings without requiring a gateway URL for discovery.</summary>
     /// <param name="input">Explicit global options.</param>
     /// <returns>The immutable settings or a source-specific configuration error.</returns>
@@ -15,7 +37,7 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
         ArgumentNullException.ThrowIfNull(input);
         try
         {
-            ProfileSnapshot snapshot = store.Read();
+            ProfileSnapshot snapshot = _readProfile();
             var sources = new Dictionary<string, string>(StringComparer.Ordinal);
             string? profileName = Select(input.Profile, "EVENTSTORE_PROFILE", null, null, "profile", sources);
             ConnectionProfile? profile = null;
@@ -27,7 +49,7 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
 
             if (profileName is not null && !snapshot.Profiles.TryGetValue(profileName, out profile))
             {
-                return Failure("The selected mcpcli profile does not exist.");
+                return Failure($"The selected profile from {sources["profile"]} does not exist.");
             }
 
             string? urlText = Select(input.Url, "EVENTSTORE_URL", profile?.Url, null, "url", sources);
@@ -48,11 +70,12 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
                 return Failure($"Invalid format from {sources["format"]}; expected json or table.");
             }
 
-            if (token is not null && string.IsNullOrWhiteSpace(token)
-                || tenant is not null && string.IsNullOrWhiteSpace(tenant)
-                || actor is not null && string.IsNullOrWhiteSpace(actor))
+            SettingsResolution? textFailure = ValidateText(token, "token", sources)
+                ?? ValidateText(tenant, "tenant", sources)
+                ?? ValidateText(actor, "actor", sources);
+            if (textFailure is not null)
             {
-                return Failure("A configured token, tenant, or actor is blank.");
+                return textFailure;
             }
 
             bool? allowOverride = SelectBoolean(input.AllowTenantOverride, "EVENTSTORE_ALLOW_TENANT_OVERRIDE",
@@ -61,6 +84,10 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
             bool? strict = SelectBoolean(input.Strict, "EVENTSTORE_STRICT", null, "strict", sources);
             string? output = input.Output;
             sources["output"] = output is null ? "default" : "flag";
+            if (output is not null && string.IsNullOrWhiteSpace(output))
+            {
+                return Failure($"Invalid output from {sources["output"]}; the value cannot be blank.");
+            }
 
             var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (string extension in profile?.AllowedExtensions ?? [])
@@ -71,12 +98,12 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
                 }
             }
 
-            if (ExtensionValidator.Validate(allowed.ToDictionary(key => key, _ => string.Empty, StringComparer.Ordinal), allowed).Count > 0)
+            if (allowed.Any(extension => !ExtensionValidator.IsValidKey(extension)))
             {
-                return Failure("The selected profile contains an invalid allowed extension key.");
+                return Failure("The selected profile contains an invalid allowed extension key from profile.");
             }
 
-            sources["allowedExtensions"] = profile is null ? "default" : "profile";
+            sources["allowedExtensions"] = profile?.AllowedExtensions is null ? "default" : "profile";
             var settings = new ResolvedSettings(url, token, tenant, actor, allowOverride ?? false,
                 allowed.ToFrozenSet(StringComparer.OrdinalIgnoreCase), format, output, readOnly ?? false,
                 strict ?? false, profileName, new ReadOnlyDictionary<string, string>(sources));
@@ -98,7 +125,7 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
             return flag;
         }
 
-        if (environment.TryGetValue(environmentName, out string? value) && value is not null)
+        if (_environment.TryGetValue(environmentName, out string? value) && value is not null)
         {
             sources[field] = environmentName;
             return value;
@@ -117,22 +144,15 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
             return flag;
         }
 
-        if (environment.TryGetValue(environmentName, out string? raw) && raw is not null)
+        if (_environment.TryGetValue(environmentName, out string? raw) && raw is not null)
         {
             sources[field] = environmentName;
-            bool parsed;
-            if (raw == "1")
+            bool parsed = raw switch
             {
-                parsed = true;
-            }
-            else if (raw == "0")
-            {
-                parsed = false;
-            }
-            else if (!bool.TryParse(raw, out parsed))
-            {
-                throw new FormatException($"{environmentName} must be true, false, 1, or 0.");
-            }
+                "true" or "1" => true,
+                "false" or "0" => false,
+                _ => throw new FormatException($"{environmentName} must be true, false, 1, or 0."),
+            };
 
             return parsed;
         }
@@ -140,6 +160,14 @@ public sealed class SettingsResolver(ProfileStore store, IReadOnlyDictionary<str
         sources[field] = profile is null ? "default" : "profile";
         return profile;
     }
+
+    private static SettingsResolution? ValidateText(
+        string? value,
+        string field,
+        IReadOnlyDictionary<string, string> sources)
+        => value is not null && string.IsNullOrWhiteSpace(value)
+            ? Failure($"Invalid {field} from {sources[field]}; the value cannot be blank.")
+            : null;
 
     private static SettingsResolution Failure(string message)
         => new(null, new OperationError("configuration_invalid", Message: message));

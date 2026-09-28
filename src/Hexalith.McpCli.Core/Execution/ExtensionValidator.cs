@@ -31,7 +31,7 @@ internal static partial class ExtensionValidator
                 violations.Add(new PayloadViolation(pointer, "The extension key is not allowlisted."));
             }
 
-            if (key.Length is < 1 or > 100 || !KeyPattern().IsMatch(key) || HasInjection(key))
+            if (!IsValidKey(key))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension key is invalid."));
             }
@@ -52,6 +52,12 @@ internal static partial class ExtensionValidator
 
         return violations;
     }
+
+    /// <summary>Checks the grammar and sanitizer rules shared by stored allowlists and submitted extensions.</summary>
+    /// <param name="key">The extension key to validate.</param>
+    /// <returns><see langword="true" /> when the key is safe and well-formed; otherwise, <see langword="false" />.</returns>
+    internal static bool IsValidKey(string key)
+        => key.Length is >= 1 and <= 100 && KeyPattern().IsMatch(key) && !HasInjection(key);
 
     private static bool HasForbiddenControl(string value)
         => value.Any(character => character is < (char)0x20 and not '\t' and not '\n' and not '\r');
