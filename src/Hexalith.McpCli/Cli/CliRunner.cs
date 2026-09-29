@@ -305,24 +305,15 @@ internal sealed class CliRunner
         Argument<string?> addName = new("name") { Arity = ArgumentArity.ZeroOrOne };
         Command add = new("add", "Add or replace a connection profile");
         add.Arguments.Add(addName);
-        add.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
+        add.SetAction((parsed, token) =>
         {
-            string? name = parsed.GetValue(addName);
-            SettingsInput input = _globals.Read(parsed);
-            if (name is null)
-            {
-                return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
-            }
-
-            if (input.Url is null)
-            {
-                return CliOutput.WriteErrorAsync(Invalid("url", "--url is required for profile add"), cancellationToken);
-            }
-
-            // Only supplied fields are stored; the store rejects a supplied-but-invalid name as configuration_invalid.
-            ProfileSnapshot snapshot = _profileStore.Add(name, new ConnectionProfile(input.Url, input.Token, input.Format));
-            return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
-        }, token));
+            // Operator settings are edited only through config set; an explicit flag here is refused, never dropped.
+            OperationError? operatorFlag = RejectOperatorFlags(_globals.Read(parsed));
+            return operatorFlag is not null
+                ? CliOutput.WriteErrorAsync(operatorFlag, token)
+                : RunManagementAsync(parsed,
+                    (_, settings, cancellationToken) => AddProfileAsync(parsed, addName, settings, cancellationToken), token);
+        });
 
         Argument<string?> removeName = new("name") { Arity = ArgumentArity.ZeroOrOne };
         Command remove = new("remove", "Remove a connection profile");
@@ -330,7 +321,7 @@ internal sealed class CliRunner
         remove.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? name = parsed.GetValue(removeName);
-            if (string.IsNullOrWhiteSpace(name))
+            if (name is null)
             {
                 return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
             }
@@ -344,6 +335,36 @@ internal sealed class CliRunner
         profile.Subcommands.Add(remove);
         return profile;
     }
+
+    private Task<int> AddProfileAsync(ParseResult parsed, Argument<string?> addName, ResolvedSettings settings,
+        CancellationToken cancellationToken)
+    {
+        string? name = parsed.GetValue(addName);
+        SettingsInput input = _globals.Read(parsed);
+        if (name is null)
+        {
+            return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
+        }
+
+        if (input.Url is null)
+        {
+            return CliOutput.WriteErrorAsync(Invalid("url", "--url is required for profile add"), cancellationToken);
+        }
+
+        // Add replaces the whole record with only the supplied connection fields; the store rejects a
+        // supplied-but-invalid name or value as configuration_invalid.
+        ProfileSnapshot snapshot = _profileStore.Add(name, new ConnectionProfile(input.Url, input.Token, input.Format));
+        return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
+    }
+
+    private static OperationError? RejectOperatorFlags(SettingsInput input)
+        => input.Tenant is not null ? OperatorFlag("tenant", "--tenant")
+            : input.Actor is not null ? OperatorFlag("actor", "--actor")
+            : input.AllowTenantOverride is not null ? OperatorFlag("allowTenantOverride", "--allow-tenant-override")
+            : null;
+
+    private static OperationError OperatorFlag(string field, string flag)
+        => Invalid(field, $"{flag} is not stored by profile add; use 'config set <profile> {field} <value>' after adding the profile");
 
     private Command CreateConfigUse()
     {
@@ -381,11 +402,12 @@ internal sealed class CliRunner
             string? selected = parsed.GetValue(name);
             string? key = parsed.GetValue(field);
             string? content = parsed.GetValue(value);
-            if (string.IsNullOrWhiteSpace(selected) || string.IsNullOrWhiteSpace(key) || content is null)
+            if (selected is null || key is null || content is null)
             {
                 return CliOutput.WriteErrorAsync(Invalid("set", "profile, field, and value are required"), cancellationToken);
             }
 
+            // Supplied names, fields, and values are validated by the store and fail as configuration_invalid.
             _profileStore.Set(selected, key, content);
             return CliOutput.WriteAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tabular: true);
         }, token));

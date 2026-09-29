@@ -170,7 +170,21 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-add-and-select-a-private-profile.md`
   summary: Blank or empty names for `config profile remove` and `config set` fail as `invalid_arguments`, while `add` and `use` report them as `configuration_invalid`.
   evidence: `CliRunner` `remove`/`set` still guard with `string.IsNullOrWhiteSpace`, whereas Story 2.2 routes a supplied invalid `add` name to `ProfileStore.ValidateName`; Story 2.2's frozen intent excluded `set`/`remove` semantic changes, so align them in Story 2.3.
+  status: resolved in Story 2.3 (2026-09-29); `remove` and `set` report `invalid_arguments` only for absent arguments and send every supplied value to `ProfileStore` validation (`configuration_invalid`).
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-add-and-select-a-private-profile.md`
   summary: `config profile add` silently ignores `--tenant`, `--actor`, and `--allow-tenant-override` instead of storing or rejecting them.
   evidence: Pre-existing: `add` builds `ConnectionProfile(input.Url, input.Token, input.Format)` per AD-14, so global operator flags succeed without effect; decide in Story 2.3 whether to store them or reject them as `invalid_arguments`.
+  status: resolved in Story 2.3 (2026-09-29); an explicit `--tenant`, `--actor`, or `--allow-tenant-override` on `add` fails as `invalid_arguments` naming the first offending flag, points to `config set`, and writes nothing.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: No CI job runs the Windows-only profile ACL tests, so AD-14's Windows ACL guarantees have code coverage but no executed evidence.
+  evidence: `.github/workflows/ci.yml` runs only on `ubuntu-latest`; Story 2.3 writes Windows ACL tests that skip off Windows. Adding a `windows-latest` test job is shared CI infrastructure outside a profile story, and no planned story owns it yet; it needs an owner before v1 release so the Story 2.3 Linux/Windows ACL criterion has executed evidence.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: System.CommandLine parse errors on config verbs print help to stdout, echo the unmatched token on stderr, and exit 1 instead of a single error document with exit 2.
+  evidence: Reproduced on the Release build: `config set dev tenant a b` prints the `set` help on stdout and `Unrecognized command or argument 'b'.` on stderr with exit 1. Pre-existing default ParseErrorAction; it breaks the epic's "stdout holds only the result document, exit 2 when no result" rule and can echo a mistyped positional secret. Owned by Story 2.11 (predictable output and exit codes).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Pre-existing process-level CLI tests redirect HOME/USERPROFILE, which Windows ignores, so running them on Windows mutates the developer's real `~/.eventstore/mcpcli.json`.
+  evidence: `Environment.GetFolderPath(SpecialFolder.UserProfile)` uses the known-folder API on Windows, not USERPROFILE; `ExecutableStoresAtPrefixedTokenVerbatimAsync` (ConfigCommandTests) adds a `dev` profile to the real store there. Story 2.3's new process tests skip on Windows; the pre-existing one predates this story.
