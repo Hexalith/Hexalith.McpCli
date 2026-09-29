@@ -1089,6 +1089,8 @@ public sealed class ConfigCommandTests
                 ["config", "use", "bad name"],
                 ["config", "set", "dev", "colour", "red", "--token", SuppliedToken],
                 ["config", "set", "dev", "Tenant", "acme"],
+                ["config", "set", "dev", "format", "json"],
+                ["config", "set", "dev", "token", SuppliedToken],
                 ["config", "set", "dev", "allowTenantOverride", "yes"],
                 ["config", "set", "dev", "tenant", " "],
                 ["config", "set", "dev", "tenant", ""],
@@ -1348,14 +1350,16 @@ public sealed class ConfigCommandTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             store.Add("dev", new ConnectionProfile("https://gateway.example/", StoredToken));
 
-            (int listExit, string listOutput, _) = await InvokeAsync(store,
+            (int listExit, string listOutput, string listError) = await InvokeAsync(store,
                 "config", "set", "dev", "allowedExtensions", "task-id,trace-id");
             listExit.ShouldBe(0, listOutput);
+            listError.ShouldBeEmpty();
             store.Read().Profiles["dev"].AllowedExtensions.ShouldBe(["task-id", "trace-id"]);
 
-            (int emptyExit, string emptyOutput, _) = await InvokeAsync(store,
+            (int emptyExit, string emptyOutput, string emptyError) = await InvokeAsync(store,
                 "config", "set", "dev", "allowedExtensions", string.Empty);
             emptyExit.ShouldBe(0, emptyOutput);
+            emptyError.ShouldBeEmpty();
             using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
             JsonElement extensions = written.RootElement.GetProperty("profiles").GetProperty("dev").GetProperty("allowedExtensions");
             extensions.ValueKind.ShouldBe(JsonValueKind.Array);
@@ -1383,6 +1387,7 @@ public sealed class ConfigCommandTests
 
             (int devExit, string devOutput, string devError) = await InvokeAsync(store, "config", "profile", "remove", "dev");
             devExit.ShouldBe(0, devOutput);
+            devError.ShouldBeEmpty();
             AssertNoSecret(devOutput, devError, StoredToken);
             JsonElement removedDev = JsonDocument.Parse(devOutput).RootElement;
             removedDev.GetProperty("name").GetString().ShouldBe("dev");
@@ -1393,15 +1398,18 @@ public sealed class ConfigCommandTests
                 written.RootElement.TryGetProperty("activeProfile", out _).ShouldBeFalse();
             }
 
-            (int useExit, _, _) = await InvokeAsync(store, "config", "use", "test");
+            (int useExit, _, string useError) = await InvokeAsync(store, "config", "use", "test");
             useExit.ShouldBe(0);
-            (int prodExit, string prodOutput, _) = await InvokeAsync(store, "config", "profile", "remove", "prod");
+            useError.ShouldBeEmpty();
+            (int prodExit, string prodOutput, string prodError) = await InvokeAsync(store, "config", "profile", "remove", "prod");
             prodExit.ShouldBe(0, prodOutput);
+            prodError.ShouldBeEmpty();
             JsonDocument.Parse(prodOutput).RootElement.GetProperty("activeProfile").GetString().ShouldBe("test");
             store.Read().ActiveProfile.ShouldBe("test");
 
-            (int testExit, string testOutput, _) = await InvokeAsync(store, "config", "profile", "remove", "test");
+            (int testExit, string testOutput, string testError) = await InvokeAsync(store, "config", "profile", "remove", "test");
             testExit.ShouldBe(0, testOutput);
+            testError.ShouldBeEmpty();
             JsonDocument.Parse(testOutput).RootElement.GetProperty("activeProfile").ValueKind.ShouldBe(JsonValueKind.Null);
             store.Read().Profiles.ShouldBeEmpty();
             store.Read().ActiveProfile.ShouldBeNull();
@@ -1430,6 +1438,7 @@ public sealed class ConfigCommandTests
                 "config", "profile", "add", "dev", "--url", "https://u2.example/");
 
             exit.ShouldBe(0, output);
+            error.ShouldBeEmpty();
             AssertNoSecret(output, error, StoredToken, "test-secret-value");
             JsonDocument.Parse(output).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
             ProfileSnapshot snapshot = store.Read();
@@ -1460,6 +1469,7 @@ public sealed class ConfigCommandTests
                 (["--allow-tenant-override", "--actor", "x", "--tenant", "acme"], "tenant"),
                 (["--allow-tenant-override", "--actor", "x"], "actor"),
                 (["--tenant", " "], "tenant"),
+                (["--tenant", ""], "tenant"),
             ];
             var data = new TheoryData<string[], string, bool>();
             foreach ((string[] flags, string argument) in inputs)
@@ -1629,7 +1639,7 @@ public sealed class ConfigCommandTests
                 (int exit, string output, string error) = await RunExecutableAsync(directory, adminEnvironment, verb);
                 exit.ShouldBe(0, string.Join(' ', verb) + ": " + output + error);
                 error.ShouldBeEmpty();
-                AssertNoSecret(output, error, SuppliedToken, adminSecret);
+                AssertNoSecret(output, error, SuppliedToken, adminSecret, ProfileStore.MaskToken(adminSecret)!);
             }
 
             Directory.Exists(adminPath).ShouldBeTrue();

@@ -334,6 +334,7 @@ public sealed class ProfileStoreTests
     [InlineData("dev", "Tenant", "acme")]
     [InlineData("dev", "url", "https://other.example/")]
     [InlineData("dev", "token", "other-token")]
+    [InlineData("dev", "format", "json")]
     [InlineData("dev", "", "x")]
     [InlineData("dev", " ", "x")]
     [InlineData("dev", "allowTenantOverride", "yes")]

@@ -177,23 +177,19 @@
   evidence: Pre-existing: `add` builds `ConnectionProfile(input.Url, input.Token, input.Format)` per AD-14, so global operator flags succeed without effect; decide in Story 2.3 whether to store them or reject them as `invalid_arguments`.
   status: resolved in Story 2.3 (2026-09-29); an explicit `--tenant`, `--actor`, or `--allow-tenant-override` on `add` fails as `invalid_arguments` naming the first offending flag, points to `config set`, and writes nothing.
 
+## Deferred from: implementation of spec-2-3-update-and-remove-profiles-safely.md (2026-09-29)
+
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: No run has executed Story 2.3's Windows evidence. The Core ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`) skip off Windows, and the CLI process tests `ConcurrentSetProcessesPreserveBothValuesAsync` and `VerbsNeverOpenAdminProfilesAsync` skip on Windows, so AD-14's Windows ACL, cross-process locking and admin-isolation guarantees have no executed Windows evidence.
   evidence: `.github/workflows/ci.yml` runs only on `ubuntu-latest`; on Linux the Core tests show 2 skipped (the ACL tests), confirmed by the second-pass verification-gap review. A `windows-latest` job alone is not enough: the process tests redirect HOME/USERPROFILE, which `Environment.GetFolderPath(SpecialFolder.UserProfile)` ignores on Windows (known-folder API), so the CLI also needs a home override that Windows honors before those tests can run there. The pre-existing read-only `CurrentExecutableReadsProcessEnvironmentAsync` likewise reads the developer's real `~/.eventstore/mcpcli.json` on Windows (the mutating `ExecutableStoresAtPrefixedTokenVerbatimAsync` case is the entry below). Adding the Windows job and the home override is shared CI and hosting infrastructure outside a profile story, and no planned story owns it yet; it needs an owner before v1 release so the Story 2.3 Linux/Windows ACL criterion has executed evidence. This entry also traces the second-pass review's "no run has executed the Windows ACL tests" deferral.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: System.CommandLine parse errors on config verbs print help to stdout, echo the unmatched token on stderr, and exit 1 instead of a single error document with exit 2.
-  evidence: Reproduced on the Release build: `config set dev tenant a b` prints the `set` help on stdout and `Unrecognized command or argument 'b'.` on stderr with exit 1. Pre-existing default ParseErrorAction; it breaks the epic's "stdout holds only the result document, exit 2 when no result" rule and can echo a mistyped positional secret. Owned by Story 2.11 (predictable output and exit codes).
+  evidence: Reproduced on the Release build: `config set dev tenant a b` prints the `set` help on stdout and `Unrecognized command or argument 'b'.` on stderr with exit 1. Pre-existing default ParseErrorAction; it breaks the epic's "stdout holds only the result document, exit 2 when no result" rule and can echo a mistyped positional secret. The same parse failure also bypasses the `config profile add` operator-flag refusal, so these cases never report `invalid_arguments` with exit 2: `add dev --url U --tenant` (no value; help on stdout, exit 1; second-pass acceptance audit), `add dev --url U --allow-tenant-override yes` (`Unrecognized command or argument 'yes'.`, help on stdout, exit 1) and `add dev --url U --tenant=` (`Required argument missing`, exit 1), the last two reproduced on the Release build in the fifth-pass review. Owned by Story 2.11 (predictable output and exit codes); include every case above in that story's tests.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Pre-existing process-level CLI tests redirect HOME/USERPROFILE, which Windows ignores, so running them on Windows mutates the developer's real `~/.eventstore/mcpcli.json`.
   evidence: `Environment.GetFolderPath(SpecialFolder.UserProfile)` uses the known-folder API on Windows, not USERPROFILE; `ExecutableStoresAtPrefixedTokenVerbatimAsync` (ConfigCommandTests) adds a `dev` profile to the real store there. Story 2.3's new process tests skip on Windows; the pre-existing one predates this story.
-
-## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md (2026-09-29)
-
-- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
-  summary: A parse error in `config profile add` bypasses the operator-flag refusal. With `add dev --url U --tenant` (no value), System.CommandLine fails on the missing option value, prints help on stdout and exits 1. It never reports `invalid_arguments` with exit 2.
-  evidence: Reproduced by the second-pass acceptance audit. The cause is the same default ParseErrorAction as the Story 2.11 entry above, so fix it there and include this case in that story's tests.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, third pass (2026-09-29)
 
@@ -205,4 +201,10 @@
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Profile-management success documents serialize `"activeProfile": null`, although addendum §G and the Epic 2 output rule require absent optional members to be omitted.
-  evidence: `McpCliJson.Result` has no `WhenWritingNull`. Story 2.2's matrix specifies `use --clear → null`, and its tests (ConfigCommandTests l.1015 and l.1036) and Story 2.3's remove tests (l.1389 and l.1405) assert `JsonValueKind.Null`. The planning artifacts need to agree on null or omission before any code changes; Story 2.11 (predictable output) is the natural owner.
+  evidence: `McpCliJson.Result` has no `WhenWritingNull`. Story 2.2's matrix specifies `use --clear → null`, and its tests (ConfigCommandTests l.1015 and l.1036) and Story 2.3's remove tests (l.1394 and l.1413) assert `JsonValueKind.Null`. The planning artifacts need to agree on null or omission before any code changes; Story 2.11 (predictable output) is the natural owner.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, sixth pass (2026-09-29)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: `config profile add`, `config set`, and `config profile remove` with an unwritable `--output` path report `configuration_invalid` (exit 2) even though `mcpcli.json` was already changed.
+  evidence: `CliRunner` commits through `ProfileStore` before `CliOutput.WriteAsync` writes the success document to `settings.Output`; a missing output directory raises `DirectoryNotFoundException`, which `RunManagementAsync` maps to `configuration_invalid`. Pre-existing at baseline `6fe785e`; a retried `remove` then fails as "does not exist". Found in the sixth-pass review of Story 2.3; Story 2.11 (predictable output and exit codes) is the natural owner.
