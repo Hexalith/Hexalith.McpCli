@@ -200,3 +200,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: A stored `tenant` or `actor` cannot be cleared. `config set dev tenant ""` fails validation, and the only way back is `config profile add`, which replaces the whole record and drops the token, format and allowed extensions.
   evidence: `ProfileStore.Set` assigns the value as given, and `ValidateProfile` rejects a blank tenant or actor. Story 2.3's frozen Never forbids a field-unset verb, and the new `add` operator-flag error sends users to `config set`. By design for v1, but no story owns the clearing path yet.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, fifth pass (2026-09-29)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Profile-management success documents serialize `"activeProfile": null`, although addendum §G and the Epic 2 output rule require absent optional members to be omitted.
+  evidence: `McpCliJson.Result` has no `WhenWritingNull`. Story 2.2's matrix specifies `use --clear → null`, and its tests (ConfigCommandTests l.1015 and l.1036) and Story 2.3's remove tests (l.1389 and l.1405) assert `JsonValueKind.Null`. The planning artifacts need to agree on null or omission before any code changes; Story 2.11 (predictable output) is the natural owner.

@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -103,6 +103,27 @@ Third-pass code review (2026-09-29) of `6fe785e..6f1950a` (`references/`, this s
 - `low`: An invalid `EVENTSTORE_ALLOW_TENANT_OVERRIDE` (for example `yes`) fails `add` even though `add` ignores that setting. This is pre-existing and shared by every management verb through `ResolvePresentation`, and the epic requires environment booleans to be validated.
 - `low`: If `Task.Delay` is cancelled inside the concurrency test's `using` block, the children are orphaned, and `RunExecutableAsync` never kills a hung child. The second pass rejected the same point: it needs cancellation plumbing and a process-tree kill.
 - `low`: Commit `0668bf6` says it pins Windows ACLs, but those tests have never run. Fixing that means rewriting history, and the ledger already records the gap.
+
+Fifth-pass code review (2026-09-29) of `6fe785e..88eb3ac` (`references/`, this spec, and `sprint-status.yaml` excluded), run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor. The verification-gap layer found no gaps. Every edge-case-hunter finding repeats an earlier Rejected row (created lock file on failure, the 2 s startup window, the child process never killed, the `File.Exists`-guarded admin read, fixed flag precedence).
+
+- [ ] [Review][Patch] The three Story 2.3 ledger entries added at implementation time (Windows evidence, parse errors owned by Story 2.11, pre-existing process tests on Windows) sit under the `## Deferred from: code review of spec-2-1-inspect-effective-session-settings.md (2026-09-28)` heading. Anyone reading by heading attributes them to Story 2.1. Fix: give them a Story 2.3 heading. [_bmad-output/implementation-artifacts/deferred-work.md:180]
+- [ ] [Review][Patch] The parse errors on `add` are split across two ledger entries, and two reproduced cases are missing from both. The `add dev --url U --tenant` (no value) entry is a separate open item under its own heading, even though it names the Story 2.11 entry as its cause. This is the duplicate pattern the third pass fixed for the Windows entries. Two more cases were reproduced on the Release build and appear in neither entry: `add … --allow-tenant-override yes` (`Unrecognized command or argument 'yes'`, help on stdout, exit 1) and `add … --tenant=` (`Required argument missing`, exit 1). Fix: add all three cases to the Story 2.11 entry and delete the separate entry. [_bmad-output/implementation-artifacts/deferred-work.md:192]
+- [ ] [Review][Patch] No test covers refusing the stored `format` field in `set`. Both layers test `url` and `token`, but not `format`, even though `format` is stored and is not one of the four fields `set` may change. The CLI theory also never passes a secret as a positional `set` value. Fix: add a `("dev", "format", "json")` row to the Core theory, and `set dev format json` plus `set dev token <SuppliedToken>` rows to `InvalidManagementInputs`. [tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs:336]
+- [ ] [Review][Patch] The admin-isolation test can't detect an admin-token fallback on `config current`. That verb prints `MaskToken(token)`, so `admin-secret-value` would appear as `admi***`, and `AssertNoSecret` only searches for the full value. Fix: also assert that the output does not contain `ProfileStore.MaskToken(adminSecret)`. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1632]
+- [ ] [Review][Patch] The operator-flag rows pin `--tenant " "` but not `--tenant ""`. `ExplicitValue` treats an empty token as supplied, and the Release build returns `invalid_arguments` with argument `tenant`, but no test covers it. Fix: add an `(["--tenant", ""], "tenant")` row. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1462]
+- [ ] [Review][Patch] The new CLI success tests check stderr inconsistently. `SetStoresAllowedExtensionsListAsync` discards it, and `RemoveClearsOnlyItsOwnSelectionAsync` and `AddReplacesTheWholeRecordAsync` only run `AssertNoSecret` on it, so stray stderr output from those verbs would go unnoticed. Fix: assert `error.ShouldBeEmpty()` there, as the sibling success tests do. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1343]
+- [x] [Review][Defer] Success documents serialize `"activeProfile": null`, but addendum §G and the epic's output rule require absent optional members to be omitted. The new remove tests at l.1389 and l.1405 pin the null, as the Story 2.2 tests at l.1015 and l.1036 already do. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1389] — deferred: pre-existing Story 2.2 output shape (its matrix says `use --clear → null`); resolving the conflict between the planning artifacts is outside Story 2.3.
+
+**Rejected (fifth pass)**
+
+- `false`: `EVENTSTORE_ADMIN_PROFILE` in the hostile environment is not a variable the admin CLI reads. That is true, but an extra hostile variable does no harm; the three variables the admin CLI does read are all set.
+- `low`: The set-only-one-field fixtures leave out `format`, `allowTenantOverride` and `allowedExtensions`. `Set` builds the update with `existing with { … }`, so the other fields are kept by construction, and the fixture matches the frozen matrix row. Seeding extensions would also mean replacing record equality, because the list compares by reference.
+- `low`: A failed `set` or `remove` leaves a pre-existing 0644 target unchanged, because `RestrictFile` runs only after `update` succeeds. This is pre-existing transaction behaviour, the permissive file was not created by the tool, and fixing it means changing the transaction.
+- `low`: The concurrency assertion message blames the lock when a child exits early for an unrelated reason. This only affects diagnostics, and showing the child's result needs a new branch.
+- `low`: No test covers `--format table` output for `set`, `remove` and `add`. The tabular output is unchanged by this story, and covering it needs new tests.
+- `low`: The Interrupted row is not tested through the parser (acceptance-auditor). This repeats the second-pass rejection: the fix would edit the spec.
+- carried: The Windows ACL criterion has never been executed (acceptance-auditor). It is already tracked by the Windows ledger entry.
+- carried: Edge-case-hunter's eight findings (the lock file created on failure, twice; the 2 s startup window, twice; the child process never killed; the `File.Exists` admin read; fixed flag precedence, twice) repeat the second-, third- and fourth-pass Rejected rows.
 
 ## Verification
 
