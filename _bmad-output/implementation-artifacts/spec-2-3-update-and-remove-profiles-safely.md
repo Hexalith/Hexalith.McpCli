@@ -84,6 +84,26 @@ Second-pass code review (2026-09-29) of `6fe785e..0668bf6`, run as four layers: 
 - `low`: A missing `set` argument is reported as `set`, and the new rows pin that. The message is pre-existing, the case is rare, and naming the actual missing positional adds branches.
 - Rejected because the fix would edit the spec: the Interrupted row is not tested through the CLI, although the task says every row is. The Implementation Notes already acknowledge this.
 
+Third-pass code review (2026-09-29) of `6fe785e..6f1950a` (`references/`, this spec, and `sprint-status.yaml` excluded), run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor. The verification-gap layer found no gaps. The two open second-pass `[Review][Patch]` items above were confirmed again, still unfixed, by acceptance-auditor, blind-hunter and edge-case-hunter; they stay open and are not duplicated here.
+
+- [ ] [Review][Patch] The two ledger entries for the Windows ACL tests describe one item. The entry at l.199 says it "is the same item as the Windows CI entry above", yet it is a separate open entry with its own `source_spec`, so a ledger sweep counts two items and could resolve one while leaving the other. Fix: fold its traceability note into the l.181 entry (while applying the second-pass ledger patch) and delete it. [_bmad-output/implementation-artifacts/deferred-work.md:199]
+- [ ] [Review][Patch] `SetChangesOnlyTheNamedField` pins the property order of the written `dev` record (`["url","token","tenant","actor"]`). The criterion is which fields are present, so reordering `ConnectionProfile` members would fail the test with no behaviour change. Fix: `ShouldBe([...], ignoreOrder: true)`, as the `Profiles.Keys` checks already do. [tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs:294]
+- [x] [Review][Defer] A stored `tenant` or `actor` cannot be cleared: `set dev tenant ""` fails validation, and the only path back is `config profile add`, which replaces the whole record and drops the token, format and allowed extensions. The new `add` error hint points users to `config set` as the only editing path. [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:152] — deferred: by design for v1 (frozen Never: no field-unset verb); no owner recorded yet.
+
+**Rejected (third pass)**
+
+- `false`: A secret typed as a positional `set` value (`set dev token X`) could be echoed. `ProfileStore.Set` rejects the field before any read, with a constant message that holds neither the field value nor the stored token. `InvalidSetFailsWithoutChangingBytes` needs no value-absence assertion for the same reason.
+- `false`: `add` silently drops `--read-only`, `--strict` and `--profile`. Decision (1) says "Other global options are unaffected."
+- `false`: The admin-isolation environment is vacuous because `EVENTSTORE_ADMIN_*` are not in `SettingsBootstrap.EnvironmentNames`. That is the point of the test: a new read of those names would get `not-a-url` or `yaml` and fail, or leak `admin-secret-value`.
+- `low`: The admin-isolation test would not catch an `EVENTSTORE_ADMIN_TOKEN` fallback stored by the token-less second `add`. `add` takes its token only from parsed flags, so such a regression is hypothetical.
+- `low`: The concurrency test never checks that stderr is empty. Exit 0 and the secret checks already cover the contract. The blocked-children assertion is the open second-pass patch.
+- `low`: A failed `set` or `remove` on a clean machine leaves `.eventstore/` and the lock file, and the ledger does not record it. The second pass already rejected this: it is pre-existing and the transaction is unchanged.
+- `low`: The Story 2.11 criteria do not name "no unmatched token echoed on stderr" or `add --tenant` with no value. Its "missing required CLI argument … exit 2, no partial result" criterion covers the contract, and both ledger entries carry the cases to 2.11's tests.
+- `low`: The probe converter rebuilds the store's serializer options instead of reusing them. The settings are identical today, and reusing them would expose `ProfileStore.JsonOptions`, which is new internal surface on a class this story leaves unchanged.
+- `low`: An invalid `EVENTSTORE_ALLOW_TENANT_OVERRIDE` (for example `yes`) fails `add` even though `add` ignores that setting. This is pre-existing and shared by every management verb through `ResolvePresentation`, and the epic requires environment booleans to be validated.
+- `low`: If `Task.Delay` is cancelled inside the concurrency test's `using` block, the children are orphaned, and `RunExecutableAsync` never kills a hung child. The second pass rejected the same point: it needs cancellation plumbing and a process-tree kill.
+- `low`: Commit `0668bf6` says it pins Windows ACLs, but those tests have never run. Fixing that means rewriting history, and the ledger already records the gap.
+
 ## Verification
 
 **Commands:**

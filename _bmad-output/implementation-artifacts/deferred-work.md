@@ -198,3 +198,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: No run has executed the Windows ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`).
   evidence: Confirmed by the second-pass verification-gap review: Core tests show 240 total and 2 skipped on Linux. This is the same item as the Windows CI entry above; it is recorded here only so this review can be traced.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, third pass (2026-09-29)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: A stored `tenant` or `actor` cannot be cleared. `config set dev tenant ""` fails validation, and the only way back is `config profile add`, which replaces the whole record and drops the token, format and allowed extensions.
+  evidence: `ProfileStore.Set` assigns the value as given, and `ValidateProfile` rejects a blank tenant or actor. Story 2.3's frozen Never forbids a field-unset verb, and the new `add` operator-flag error sends users to `config set`. By design for v1, but no story owns the clearing path yet.
