@@ -188,3 +188,13 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Pre-existing process-level CLI tests redirect HOME/USERPROFILE, which Windows ignores, so running them on Windows mutates the developer's real `~/.eventstore/mcpcli.json`.
   evidence: `Environment.GetFolderPath(SpecialFolder.UserProfile)` uses the known-folder API on Windows, not USERPROFILE; `ExecutableStoresAtPrefixedTokenVerbatimAsync` (ConfigCommandTests) adds a `dev` profile to the real store there. Story 2.3's new process tests skip on Windows; the pre-existing one predates this story.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md (2026-09-29)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: A parse error in `config profile add` bypasses the operator-flag refusal. With `add dev --url U --tenant` (no value), System.CommandLine fails on the missing option value, prints help on stdout and exits 1. It never reports `invalid_arguments` with exit 2.
+  evidence: Reproduced by the second-pass acceptance audit. The cause is the same default ParseErrorAction as the Story 2.11 entry above, so fix it there and include this case in that story's tests.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: No run has executed the Windows ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`).
+  evidence: Confirmed by the second-pass verification-gap review: Core tests show 240 total and 2 skipped on Linux. This is the same item as the Windows CI entry above; it is recorded here only so this review can be traced.

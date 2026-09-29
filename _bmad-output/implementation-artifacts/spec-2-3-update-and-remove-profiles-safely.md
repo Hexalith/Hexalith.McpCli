@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -59,6 +59,30 @@ context:
 **Acceptance Criteria:**
 - Given any failed `set`, `remove`, or `add`, when it exits, then stdout holds only the error document and no raw token appears on either stream.
 - Given the full Release test run on Linux, when it completes, then only the Windows-ACL tests are skipped.
+
+### Review Findings
+
+Second-pass code review (2026-09-29) of `6fe785e..0668bf6`, run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor.
+
+- [ ] [Review][Patch] The concurrency test never shows that either child blocked on the held lock. A `set` that skipped the lock would still pass if both children finished inside the 2 s window. Fix: assert that both child tasks are still incomplete just before the lock is released. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1564]
+- [ ] [Review][Patch] The Windows ledger entries understate the gap. `ConcurrentSetProcessesPreserveBothValuesAsync` and `VerbsNeverOpenAdminProfilesAsync` also skip on Windows, so a `windows-latest` job alone would still not exercise them; it also needs a home override that Windows honors. The pre-existing read-only `CurrentExecutableReadsProcessEnvironmentAsync` also reads the developer's real profile on Windows, and the entry does not name it. [_bmad-output/implementation-artifacts/deferred-work.md:181]
+- [x] [Review][Defer] No run has executed the Windows ACL tests: the CI runs only on `ubuntu-latest` and both tests skip there. [tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs:928] — deferred: already tracked by this story's Windows CI entry in `deferred-work.md`; needs shared CI infrastructure.
+- [x] [Review][Defer] System.CommandLine parse errors break AC 1: help goes to stdout, the unmatched token is echoed on stderr, and the exit code is 1. This also covers `config profile add dev --url U --tenant` with no value, which never reaches `RejectOperatorFlags`. [src/Hexalith.McpCli/Cli/CliRunner.cs:310] — deferred: pre-existing default ParseErrorAction, owned by Story 2.11; the `add --tenant` (no value) case is added to that entry.
+
+**Rejected**
+
+- `false`: Operator flags are named by fixed priority, not command-line order. Decision (1) itself says "names the first offending flag in that order".
+- `false`: A supplied secret could leak through a `set` failure. Every `ProfileStore` failure message is a constant string, and the CLI rows that pass `--token SuppliedToken` assert the token is absent from both streams.
+- `false`: `add` replaces a profile silently, with no `replaced` flag. The frozen Boundaries define `add` as a whole-record replace, and adding the flag would mean new output surface.
+- `false`: The probe converter's serializer options have drifted from the store's. The settings that affect writing (Web defaults plus `WhenWritingNull`) are identical; the two that differ only apply when reading.
+- `low`: The admin-isolation test can't catch a read guarded by `File.Exists`, and it runs only `config` verbs. No `src` reference to `profiles.json` or `EVENTSTORE_ADMIN_*` exists, and closing the gap needs a new platform-specific test variant.
+- `low`: The operator-flag check runs before the missing-name and missing-URL checks. This is a rare input, and moving the check behind settings resolution changes how `--tenant " "` is reported.
+- `low`: `set`, `remove` and `use` still ignore explicit operator flags. This is pre-existing, and Decision (1) limits the refusal to `add`; the fix would add branches to every verb.
+- `low`: A failed `set` or `remove` on a clean machine creates `~/.eventstore/` and `mcpcli.json.lock`. This is pre-existing: `Apply` creates both before `update` throws, the target bytes are unchanged, and the input is rare. The fix would change the transaction, which requires a failing test first.
+- `low`: `RunExecutableAsync` has no timeout and never kills the child process. Lock acquisition gives up after 10 s, and adding cancellation and a process-tree kill is more than a direct correction.
+- `low`: `config profile add --help` lists the recursive operator flags, and the error text uses a `<profile>` placeholder. The name can still be null when the error is built, and hiding recursive options per subcommand is not a direct fix.
+- `low`: A missing `set` argument is reported as `set`, and the new rows pin that. The message is pre-existing, the case is rare, and naming the actual missing positional adds branches.
+- Rejected because the fix would edit the spec: the Interrupted row is not tested through the CLI, although the task says every row is. The Implementation Notes already acknowledge this.
 
 ## Verification
 
