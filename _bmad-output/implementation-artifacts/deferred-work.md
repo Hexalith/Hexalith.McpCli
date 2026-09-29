@@ -1,9 +1,5 @@
 # Deferred Work
 
-- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
-  summary: Profile-management verbs can read or mutate a second profile snapshot after invocation settings were resolved.
-  evidence: This predates Story 2.1: `config profile list|add|remove`, `config use`, and `config set` operate on `ProfileStore` inside the action after `RunAsync` resolved format/output from an earlier snapshot, so a concurrent writer can make the displayed or mutated state inconsistent with those invocation settings; profile-management transaction and snapshot semantics belong to Stories 2.2 and 2.3.
-
 ## Deferred from: code review of spec-1-1-declare-a-module-and-its-operations.md (2026-09-23)
 
 - **The `KebabCase` helper cannot be shared with the `netstandard2.0` analyzer.** `src/Hexalith.McpCli.Abstractions/KebabCase.cs:17` uses `ArgumentException.ThrowIfNullOrWhiteSpace` and range slicing (`[..^n]`). The architecture requires one helper shared by the Catalog and the analyzer. The analyzer is `netstandard2.0`, and the Abstractions package is `net10.0` only. Story 1.7 must choose between linked source and multi-targeting, and add a `netstandard2.0` compile check so the naming rule cannot fork.
@@ -147,19 +143,26 @@
 
 ## Deferred from: code review of spec-2-1-inspect-effective-session-settings.md (2026-09-28)
 
-- `config profile add/remove/use/set` run through `CliRunner.RunAsync` settings resolution, so a missing `EVENTSTORE_PROFILE` or a corrupt `mcpcli.json` blocks the very verbs that would repair it. Pre-existing; address with Stories 2.2/2.3.
-- `--output` is not validated before execution; `send` can reach the Gateway and then fail writing the result file (`CliOutput.WriteAsync`). Pre-existing; address with Story 2.11.
-- Cancellation while `host.RunAsync` is starting in `RunMcpHostAsync` falls into the generic catch and reports `internal_error` exit 2 instead of a clean exit. Pre-existing; MCP stdio lifecycle (Epic 3).
-- `HostFactory.CreateHost` uses `Host.CreateApplicationBuilder()`, which loads content-root `appsettings*.json` and every environment variable (including `EVENTSTORE_ADMIN_*`) into an unused `IConfiguration`. Pre-existing; consider `Host.CreateEmptyApplicationBuilder`.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Profile-management verbs can read or mutate a second profile snapshot after invocation settings were resolved.
+  evidence: This predates Story 2.1: `config profile list|add|remove`, `config use`, and `config set` operate on `ProfileStore` inside the action after `RunAsync` resolved format/output from an earlier snapshot, so a concurrent writer can make the displayed or mutated state inconsistent with those invocation settings; profile-management transaction and snapshot semantics belong to Stories 2.2 and 2.3.
 
-- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
-  summary: Offline CLI actions can still depend on unrelated application configuration loaded by the default Host builder.
-  evidence: This is real but predates Story 2.1; the baseline `HostFactory` already used `Host.CreateApplicationBuilder`, so hosting-configuration isolation belongs in a separate hardening change.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Profile-management verbs cannot repair the configuration that blocks them.
+  evidence: Pre-existing: `config profile add/remove/use/set` run through `CliRunner.RunAsync` settings resolution, so a missing `EVENTSTORE_PROFILE` or a corrupt `mcpcli.json` blocks the very verbs that would repair it; address with Stories 2.2/2.3.
 
-- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: A nonblank output path can fail only after a Gateway action has completed.
-  evidence: This is real but predates Story 2.1; output-file preflight and retained-handle semantics belong to Story 2.11 output routing, and the frozen Story 2.1 intent excludes execution behavior changes.
+  evidence: Pre-existing: `--output` is not validated before execution, so `send` can reach the Gateway and then fail writing the result file in `CliOutput.WriteAsync`; output-file preflight and retained-handle semantics belong to Story 2.11 output routing, and the frozen Story 2.1 intent excludes execution behavior changes.
 
-- source_spec: `/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Cancellation during MCP host startup is mapped through the generic startup-error path.
-  evidence: This is real but predates Story 2.1; the baseline `host.RunAsync` path had the same behavior, and clean stdio lifecycle cancellation belongs to Epic 3.
+  evidence: Pre-existing: cancellation while `host.RunAsync` is starting in `RunMcpHostAsync` falls into the generic catch and reports `internal_error` exit 2 instead of a clean exit; clean stdio lifecycle cancellation belongs to Epic 3.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Offline CLI actions can still depend on unrelated application configuration loaded by the default Host builder.
+  evidence: Pre-existing: `HostFactory.CreateHost` uses `Host.CreateApplicationBuilder()`, which loads content-root `appsettings*.json` and every environment variable (including `EVENTSTORE_ADMIN_*`) into an unused `IConfiguration`; consider `Host.CreateEmptyApplicationBuilder` in a separate hosting hardening change.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
+  summary: Verb-action I/O failures are reported as configuration errors with raw exception text.
+  evidence: Pre-existing: `CliRunner.RunAsync`'s outer catch maps any `IOException`/`UnauthorizedAccessException`/`InvalidDataException` thrown by a verb action (for example an output-file write) to `configuration_invalid` with the raw exception message, which can include absolute home paths; the baseline catch wrapped the action too. Address with Story 2.9 stable failure documents.

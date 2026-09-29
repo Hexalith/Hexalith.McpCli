@@ -94,6 +94,30 @@ Code review 2026-09-28 (range `e599f5c..d19eb40`, layers: blind-hunter, edge-cas
 - No CLI-level singleton identity test: false; `HostFactory` passes the same instance to `AddMcpCliCore` and `AddMcpCliMcpServer`, and Core asserts identity.
 - Empty `EVENTSTORE_*` treated as set: false; pre-existing, fails loudly with the source named, consistent with the blank-text rule.
 
+Code review 2026-09-28, round 3 (range `e599f5c..955a317`, `references/` gitlinks excluded; layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor).
+
+- [x] [Review][Patch] Remove ConformanceHost from the solution and the CLI test project references, and delete `McpExecutableInitializesAndListsToolsOverStdioAsync` plus `ConformanceHostPath()`: the host needs `Hexalith.McpCli.Sample.Contracts` 1.0.0, which only the loopback script packs, so a clean `dotnet restore Hexalith.McpCli.slnx` fails (NU1101) and local runs rely on a stale cached copy. The `conformance-vector-loopback` job already drives `mcp --transport stdio` through the production `RunMcpHostAsync` via the same host. Decision 2026-09-29: option 1 chosen over a repo `nuget.config` pre-restore feed (needs an upstream `domain-ci.yml` hook, breaks fresh clones, and keeps a stale same-version cache) (high, acceptance-auditor+verification-gap) [Hexalith.McpCli.slnx:13]
+- [x] [Review][Patch] The missing-profile error names the source but not the profile, so an operator whose `EVENTSTORE_PROFILE` or `activeProfile` points to a missing entry cannot tell which name failed; include the selected name in the message (low, blind-hunter) [src/Hexalith.McpCli.Core/Settings/SettingsResolver.cs:62]
+- [x] [Review][Patch] `deferred-work.md` Story 2.1 entries are duplicated and malformed: host configuration isolation, output preflight, and MCP startup cancellation each appear twice (as bullets and as `source_spec` entries); three entries use the absolute machine path `/home/administrator/...`; the snapshot-race entry sits above the first section heading. Deduplicate, use repo-relative paths, and move the entry under the Story 2.1 heading (low, blind-hunter) [_bmad-output/implementation-artifacts/deferred-work.md:3]
+- [x] [Review][Defer] `RunAsync`'s outer catch maps any `IOException`/`UnauthorizedAccessException`/`InvalidDataException` thrown by a verb action (for example an output-file write) to `configuration_invalid` with the raw exception message, which can include absolute home paths [src/Hexalith.McpCli/Cli/CliRunner.cs:522] — deferred: pre-existing (the baseline catch wrapped the action too); belongs to Story 2.9 stable failure documents
+
+**Rejected (round 3):**
+- Dangling `activeProfile` blocks a flag- or environment-selected profile: low; pre-existing strict file validation, `remove` clears `activeProfile` so only hand edits create it, and the failure is loud and names the profile file.
+- `FullMask` returns `###`/`~~~`/`!!!` for 3-character-or-shorter tokens containing `*`: low; such tokens are not realistic credentials, and a constant mask reintroduces the containment collision fixed in round 2.
+- Long tokens with unsafe prefix characters collapse to `***`: fix would either expose control characters or edit the frozen spec.
+- No `--token` flag secrecy test: false; `config current` masks `settings.Token` independent of its source through the one directly tested masker.
+- No CLI test for mask-like collision tokens: false; the CLI emits `ProfileStore.MaskToken` output, whose collision cases are pinned in `ProfileStoreTests`.
+- Table output escapes non-ASCII after switching to `JsonSerializer.Serialize(JsonElement)`: false; `SerializeToElement` already applied the same default encoder, so `GetRawText()` was identically escaped and matches JSON output.
+- The stdio test does not launch the real `Hexalith.McpCli` executable: false; the real executable has no Contracts and returns `catalog_empty`, the host invokes the production two-argument constructor so `RunMcpHostAsync` runs, and `Program.cs` passes `mcp` straight to `CliRunner`.
+- ConformanceHost binds `CliRunner`'s constructor by reflection without a guard: false; pre-existing host code that fails loudly in the loopback CI job.
+- `ConformanceHostPath()` hard-codes `bin/<config>/net10.0`: low; the repo uses the default output layout and the fix needs MSBuild plumbing (moot under decision option 1).
+- Out-of-process tests are not hermetic on Windows because `GetFolderPath(UserProfile)` ignores `HOME`/`USERPROFILE`: low; asserted values come from environment sources that outrank any profile, CI is Linux, and the fix needs a new profile-path seam.
+- Spawned processes have no timeout or kill: low; offline short-lived commands, guard for an undemonstrated hang.
+- Resolver allowlist-key branch is unreachable in production: low; both call sites use the same `ExtensionValidator.IsValidKey` predicate so they cannot diverge, and round 2 requested the seam coverage.
+- `[JsonIgnore]` on `Token` silently drops it on a round-trip: false; intentional, and no consumer serializes these records.
+- Token masking lives on `ProfileStore`: false; no named harm.
+- Spec `status: done` versus sprint `review`, and merged triage-log rounds: fix edits the spec under review; status is synchronized by this workflow.
+
 ## Implementation Notes
 
 - Added a hosting-layer settings bootstrap so environment/profile resolution occurs once before Host construction and CLI actions consume the registered singleton.

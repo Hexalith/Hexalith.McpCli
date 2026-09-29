@@ -7,7 +7,6 @@ using Hexalith.McpCli.Sample.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ModelContextProtocol.Client;
 using ModelContextProtocol.Server;
 using Shouldly;
 
@@ -471,8 +470,8 @@ public sealed class ConfigCommandTests
             document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
             JsonElement configurationError = document.GetProperty("error");
             configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
-            configurationError.GetProperty("message").GetString().ShouldNotBeNull()
-                .ShouldContain("EVENTSTORE_PROFILE");
+            configurationError.GetProperty("message").GetString()
+                .ShouldBe("The selected profile 'missing' from EVENTSTORE_PROFILE does not exist.");
         }
         finally
         {
@@ -498,7 +497,8 @@ public sealed class ConfigCommandTests
             document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
             JsonElement configurationError = document.GetProperty("error");
             configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
-            configurationError.GetProperty("message").GetString().ShouldNotBeNull().ShouldContain("flag");
+            configurationError.GetProperty("message").GetString()
+                .ShouldBe("The selected profile 'missing' from flag does not exist.");
         }
         finally
         {
@@ -709,50 +709,6 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>The executable MCP path initializes, lists tools, and shuts down over stdio.</summary>
-    [Fact]
-    public async Task McpExecutableInitializesAndListsToolsOverStdioAsync()
-    {
-        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-        string directory = TemporaryDirectory();
-        try
-        {
-            Dictionary<string, string?> environment = StdioClientTransportOptions.GetDefaultEnvironmentVariables();
-            environment["HOME"] = directory;
-            environment["USERPROFILE"] = directory;
-            string? dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
-            if (dotnetRoot is not null)
-            {
-                environment["DOTNET_ROOT"] = dotnetRoot;
-            }
-
-            var transport = new StdioClientTransport(new StdioClientTransportOptions
-            {
-                Command = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
-                Arguments = [ConformanceHostPath(), "mcp"],
-                Name = "mcpcli-production-stdio",
-                WorkingDirectory = directory,
-                InheritEnvironmentVariables = false,
-                EnvironmentVariables = environment,
-                ShutdownTimeout = TimeSpan.FromSeconds(5),
-            });
-            await using McpClient client = await McpClient.CreateAsync(
-                transport,
-                new McpClientOptions { ProtocolVersion = "2025-06-18" },
-                cancellationToken: timeout.Token);
-
-            IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
-
-            tools.Select(tool => tool.Name).ShouldBe([
-                "list_modules", "list_operations", "describe_operation", "send_command", "run_query",
-            ]);
-        }
-        finally
-        {
-            Directory.Delete(directory, recursive: true);
-        }
-    }
-
     /// <summary>The executable version path succeeds before settings, host, or Catalog construction.</summary>
     [Fact]
     public async Task VersionUsesEarlyOfflineEntryPointAsync()
@@ -871,20 +827,6 @@ public sealed class ConfigCommandTests
         string path = Path.Combine(Path.GetTempPath(), "mcpcli-cli-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(path);
         return path;
-    }
-
-    private static string ConformanceHostPath()
-    {
-        DirectoryInfo? root = new(AppContext.BaseDirectory);
-        while (root is not null && !File.Exists(Path.Combine(root.FullName, "Hexalith.McpCli.slnx")))
-        {
-            root = root.Parent;
-        }
-
-        root.ShouldNotBeNull();
-        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent.ShouldNotBeNull().Name;
-        return Path.Combine(root.FullName, "tests", "Hexalith.McpCli.ConformanceHost", "bin", configuration,
-            "net10.0", "Hexalith.McpCli.ConformanceHost.dll");
     }
 
     private static void AssertCurrent(string json, string profile, string tenant, string source)

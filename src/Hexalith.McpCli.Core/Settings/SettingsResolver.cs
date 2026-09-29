@@ -59,7 +59,7 @@ public sealed class SettingsResolver
 
             if (profileName is not null && !snapshot.Profiles.TryGetValue(profileName, out profile))
             {
-                return Failure($"The selected profile from {sources["profile"]} does not exist.");
+                return Failure($"The selected profile '{profileName}' from {sources["profile"]} does not exist.");
             }
 
             string? urlText = Select(input.Url, "EVENTSTORE_URL", profile?.Url, null, "url", sources);
