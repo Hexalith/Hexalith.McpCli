@@ -208,6 +208,54 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>The executable never expands an <c>@</c>-prefixed token as a response file or echoes it.</summary>
+    [Fact]
+    public async Task ExecutableStoresAtPrefixedTokenVerbatimAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string token = "@s3cretTokValue";
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+            };
+            foreach (string name in startInfo.Environment.Keys
+                .Where(name => name.StartsWith("EVENTSTORE_", StringComparison.Ordinal)).ToArray())
+            {
+                startInfo.Environment.Remove(name);
+            }
+
+            startInfo.Environment["HOME"] = directory;
+            startInfo.Environment["USERPROFILE"] = directory;
+            startInfo.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
+            foreach (string argument in new[]
+                { "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", token })
+            {
+                startInfo.ArgumentList.Add(argument);
+            }
+
+            using Process process = Process.Start(startInfo).ShouldNotBeNull();
+            Task<string> output = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
+            Task<string> error = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+            await process.WaitForExitAsync(TestContext.Current.CancellationToken);
+
+            string standardOutput = await output;
+            string standardError = await error;
+            process.ExitCode.ShouldBe(0, standardOutput + standardError);
+            AssertNoSecret(standardOutput, standardError, token, token[1..], "Response file");
+            new ProfileStore(Path.Combine(directory, ".eventstore", "mcpcli.json")).Read()
+                .Profiles["dev"].Token.ShouldBe(token);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Bare boolean flags are explicit true values and the current document is complete.</summary>
     [Fact]
     public async Task CurrentBindsBareFlagsAndEmitsAllValuesAndSourcesAsync()
@@ -632,7 +680,7 @@ public sealed class ConfigCommandTests
                 () => [typeof(CreateItemCommand).Assembly],
                 _ => null,
                 InspectMcpAsync)
-                .CreateRoot().Parse(["mcp", "--read-only"])
+                .Parse(["mcp", "--read-only"])
                 .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
 
             exit.ShouldBe(0);
@@ -848,6 +896,28 @@ public sealed class ConfigCommandTests
             snapshot.Profiles["implicit"].Format.ShouldBeNull();
             snapshot.Profiles["implicit"].Token.ShouldBeNull();
             snapshot.Profiles["explicit"].Format.ShouldBe("table");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Adding the profile that a missing environment selection names creates it.</summary>
+    [Fact]
+    public async Task AddCreatesMissingSelectedProfileAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, _) = await InvokeAsync(store,
+                new Dictionary<string, string?> { ["EVENTSTORE_PROFILE"] = "staging" }, null,
+                "config", "profile", "add", "staging", "--url", "https://staging.example/");
+
+            exit.ShouldBe(0, output);
+            store.Read().Profiles["staging"].Url.ShouldBe("https://staging.example/");
         }
         finally
         {

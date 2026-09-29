@@ -107,7 +107,7 @@ public sealed class CliMcpCommandParityTests
             try
             {
                 Console.SetOut(output);
-                int exit = await new CliRunner(store, manifest).CreateRoot().Parse(cliArgs)
+                int exit = await new CliRunner(store, manifest).Parse(cliArgs)
                     .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
                 exit.ShouldBe(0);
             }

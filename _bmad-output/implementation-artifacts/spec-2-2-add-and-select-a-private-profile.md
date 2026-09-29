@@ -61,6 +61,30 @@ context:
 - Given any profile-management verb, when it runs, then it never fails because of the selected profile, and it reads or mutates the store exactly once.
 - Given any profile command output, error, or log, when a token exists anywhere in the flags or the file, then only its masked form is observable.
 
+### Review Findings
+
+Code review of story 2.2 (2026-09-29), diff `d2501c8..feeed9d`.
+
+- [x] [Review][Patch] The shipped entry point's non-expanding parse is not pinned at process level [src/Hexalith.McpCli/Program.cs:21] — reverting `Program.cs` to `CreateRoot().Parse(args)` brings back the reproduced `--token @secret` echo ("Response file not found …", exit 1) and re-tokenizes `--payload @file` contents, and every test stays green: `AtPrefixedTokenIsNeverExpandedOrEchoedAsync` calls `CliRunner.Parse` directly, and the two executable tests never pass an `@` argument. Add a process-level test next to `CurrentExecutableReadsProcessEnvironmentAsync` (`tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:165`) that runs `config profile add dev --url https://gateway.example/ --token @s3cretTokValue` with `HOME`/`USERPROFILE` redirected. It must assert exit 0, no token or "Response file" text on either stream, and a stored token equal to `@s3cretTokValue`. (verification-gap + blind-hunter, medium)
+- [x] [Review][Patch] Test harnesses and the conformance host bypass `CliRunner.Parse`, so they parse with response-file expansion still on [tests/Hexalith.McpCli.ConformanceHost/Program.cs:38] — `CliMcpCommandParityTests.cs:110`, `CliMcpQueryParityTests.cs:91`, `CliMcpDiscoveryParityTests.cs:85` and `ConfigCommandTests.cs:635` call `CreateRoot().Parse(...)`, and the conformance host reflects on `CreateRoot`. Any `@` argument there, such as a future `--payload @file` vector, behaves differently from the shipped binary. Route every caller through `Parse`; the conformance host should reflect on `Parse` instead. (blind-hunter + edge-case-hunter + verification-gap, low)
+- [x] [Review][Patch] The "Add under missing selection" matrix row is not pinned literally [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:863] — the matrix selects `EVENTSTORE_PROFILE=staging` and then runs `add staging`, so the verb creates the very profile that is selected. `ManagementVerbsIgnoreMissingSelectionAsync` selects `ghost` instead. Add the literal case (`EVENTSTORE_PROFILE=staging`, `add staging --url U` → exit 0, profile present). (acceptance-auditor + blind-hunter, low)
+
+**Rejected:**
+- false — Written shape breaks older readers or legacy files: `ActiveProfile` is nullable and missing members deserialize to null; a `"activeProfile": null` file still reads.
+- false — A dangling `activeProfile` in the file blocks `use --clear`: that file can only come from a hand edit, and the frozen rules forbid overwriting a malformed target.
+- false — `config current` routing to presentation mode is unguarded: `CurrentNamesMissingEnvironmentProfileSourceAsync` and `CurrentNamesMissingFlagProfileSourceAsync` pin its missing-profile failure.
+- false — `set` could succeed without writing: `ProfileCommandsRoundTripWithoutExposingTokenAsync` reads `tenant: acme` back through `config current` after `set`.
+- low — Disabling response-file expansion changes execution and MCP parsing, against the frozen "Never": it is recorded in Implementation Notes, it is the fix for a reproduced token leak, and it also makes documented `--payload @file` read the file instead of tokenizing it; the only fix edits the spec.
+- low — Blank names fail as `configuration_invalid` for `add`/`use` but `invalid_arguments` for `set`/`remove`: already in `deferred-work.md` for Story 2.3.
+- low — The "exactly once" criterion has no counting test: `ProfileStore` is sealed and has no seam; presentation mode uses a fixed empty snapshot and `list` reads once in its action. Adding a seam is more than a direct correction.
+- low — A version-2 file with new fields reports "malformed" instead of "unsupported version": both are `configuration_invalid`, exit 2, and bytes unchanged; only the message differs.
+- low — A mistyped option such as `--tokn s3cret` gets its value echoed by System.CommandLine's "Unrecognized command or argument": reproduced, but pre-existing, the value is not a recognised token, and redacting parser errors adds a new error path.
+- low — README does not say `@` response files are unsupported: no documented workflow relied on them.
+- low — `--profile "bad name"` is silently ignored by management verbs: Design Notes deliberately ignore selection there.
+- low — Hostile-target and invalid-input theories leave out `set` and `remove`: both use the same `Mutate` → `Read` path that the covered verbs exercise, and their semantics are unchanged.
+- low — No test sets `EVENTSTORE_ADMIN_*`: `SettingsBootstrap.EnvironmentNames` is a fixed allowlist without those names.
+- low — Spec `status: done` versus sprint `review`: workflow bookkeeping that this review's status sync resolves.
+
 ## Design Notes
 
 Presentation-only mode: management verbs render with format flag → `EVENTSTORE_FORMAT` → `json`, and `--output` from its flag. The active profile's `format` no longer styles `list`/`use`/`add` output. This removes the second-snapshot race and the self-blocking selection, and environment values are still validated. A missing `name` stays `invalid_arguments`, because an absent argument is a usage error rather than a bad configuration value.

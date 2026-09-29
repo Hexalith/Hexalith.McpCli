@@ -82,7 +82,7 @@ public sealed class CliMcpDiscoveryParityTests
         try
         {
             Console.SetOut(output);
-            int exit = await new CliRunner(store, manifest).CreateRoot()
+            int exit = await new CliRunner(store, manifest)
                 .Parse([.. cliArgs, "--url", "https://gateway.example/", "--tenant", "sample-tenant"]).InvokeAsync();
             exit.ShouldBe(expectedError ? 2 : 0);
         }

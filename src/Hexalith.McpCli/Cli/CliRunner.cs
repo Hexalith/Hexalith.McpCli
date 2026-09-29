@@ -66,7 +66,7 @@ internal sealed class CliRunner
     internal ParseResult Parse(IReadOnlyList<string> args)
         => CreateRoot().Parse(args, new ParserConfiguration { ResponseFileTokenReplacer = null });
 
-    internal RootCommand CreateRoot()
+    private RootCommand CreateRoot()
     {
         RootCommand root = new("Hexalith MCP and CLI gateway tool");
         _globals.AddTo(root);

@@ -35,8 +35,9 @@ internal static class Program
             .ToArray();
         string? profilePath = Environment.GetEnvironmentVariable("MCPCLI_CONFORMANCE_PROFILE_PATH");
         object runner = constructor.Invoke([new ProfileStore(profilePath), manifest]);
-        MethodInfo createRoot = runnerType.GetMethod("CreateRoot", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        var root = (RootCommand)createRoot.Invoke(runner, null)!;
-        return await root.Parse(args).InvokeAsync().ConfigureAwait(false);
+        MethodInfo parse = runnerType.GetMethod("Parse", BindingFlags.Instance | BindingFlags.NonPublic,
+            binder: null, [typeof(IReadOnlyList<string>)], modifiers: null)!;
+        var parsed = (ParseResult)parse.Invoke(runner, [args])!;
+        return await parsed.InvokeAsync().ConfigureAwait(false);
     }
 }
