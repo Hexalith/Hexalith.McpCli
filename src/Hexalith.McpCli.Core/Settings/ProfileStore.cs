@@ -14,6 +14,7 @@ public sealed partial class ProfileStore
     {
         PropertyNameCaseInsensitive = false,
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
     private readonly string _path;
@@ -50,9 +51,7 @@ public sealed partial class ProfileStore
         }
 
         string json = File.ReadAllText(_path);
-        using JsonDocument parsed = JsonDocument.Parse(json, new JsonDocumentOptions { AllowDuplicateProperties = false });
-
-        ProfileSnapshot snapshot = JsonSerializer.Deserialize<ProfileSnapshot>(json, JsonOptions)
+        ProfileSnapshot snapshot = Parse(json)
             ?? throw new InvalidDataException("The mcpcli profile document is empty.");
         if (snapshot.Version != 1 || snapshot.Profiles is null)
         {
@@ -196,6 +195,20 @@ public sealed partial class ProfileStore
 
     private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
         => new ProfileFileTransaction(_path).Apply(Read, update, JsonOptions);
+
+    private static ProfileSnapshot? Parse(string json)
+    {
+        try
+        {
+            using JsonDocument parsed = JsonDocument.Parse(json, new JsonDocumentOptions { AllowDuplicateProperties = false });
+            return JsonSerializer.Deserialize<ProfileSnapshot>(json, JsonOptions);
+        }
+        catch (JsonException)
+        {
+            // The parser message can quote document content, so only a fixed message is surfaced.
+            throw new InvalidDataException("The mcpcli profile document is malformed or has unknown or duplicate fields.");
+        }
+    }
 
     private static string FullMask(string token)
     {

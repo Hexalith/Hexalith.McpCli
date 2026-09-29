@@ -15,6 +15,10 @@ namespace Hexalith.McpCli.Cli.Tests;
 /// <summary>Checks the CLI's profile verbs through the actual command parser.</summary>
 public sealed class ConfigCommandTests
 {
+    private const string SuppliedToken = "supplied-secret-value";
+
+    private const string StoredToken = "stored-secret-value";
+
     /// <summary>A profile can be added, selected, edited, listed, and removed without printing its secret.</summary>
     [Fact]
     public async Task ProfileCommandsRoundTripWithoutExposingTokenAsync()
@@ -785,6 +789,448 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>The first add creates a private version-1 file with only the supplied fields and leaves the admin file alone.</summary>
+    [Fact]
+    public async Task FirstAddStoresOnlySuppliedFieldsAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string token = "first-secret-value";
+            string adminPath = Path.Combine(directory, "profiles.json");
+            File.WriteAllText(adminPath, "{\"activeProfile\":\"dev\",\"profiles\":{}}");
+            byte[] adminBytes = File.ReadAllBytes(adminPath);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", token);
+
+            exit.ShouldBe(0);
+            AssertNoSecret(output, error, token);
+            JsonDocument.Parse(output).RootElement.GetProperty("name").GetString().ShouldBe("dev");
+            using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
+            written.RootElement.GetProperty("version").GetInt32().ShouldBe(1);
+            written.RootElement.TryGetProperty("activeProfile", out _).ShouldBeFalse();
+            JsonElement profile = written.RootElement.GetProperty("profiles").GetProperty("dev");
+            profile.EnumerateObject().Select(property => property.Name).ShouldBe(["url", "token"]);
+            profile.GetProperty("url").GetString().ShouldBe("https://gateway.example/");
+            profile.GetProperty("token").GetString().ShouldBe(token);
+            File.ReadAllBytes(adminPath).ShouldBe(adminBytes);
+            if (!OperatingSystem.IsWindows())
+            {
+                File.GetUnixFileMode(store.ProfilePath).ShouldBe(UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>An explicit format is stored, while the presentation format never leaks from the environment.</summary>
+    [Fact]
+    public async Task AddStoresOnlyExplicitFormatAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var environment = new Dictionary<string, string?> { ["EVENTSTORE_FORMAT"] = "table" };
+
+            (int implicitExit, _, _) = await InvokeAsync(store, environment, null,
+                "config", "profile", "add", "implicit", "--url", "https://gateway.example/");
+            (int explicitExit, _, _) = await InvokeAsync(store,
+                "config", "profile", "add", "explicit", "--url", "https://gateway.example/", "--format", "table");
+
+            implicitExit.ShouldBe(0);
+            explicitExit.ShouldBe(0);
+            ProfileSnapshot snapshot = store.Read();
+            snapshot.Profiles["implicit"].Format.ShouldBeNull();
+            snapshot.Profiles["implicit"].Token.ShouldBeNull();
+            snapshot.Profiles["explicit"].Format.ShouldBe("table");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A selected profile that never exists blocks none of the management verbs.</summary>
+    /// <param name="useEnvironment">Whether the missing profile is selected by environment rather than flag.</param>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task ManagementVerbsIgnoreMissingSelectionAsync(bool useEnvironment)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            Dictionary<string, string?> environment = useEnvironment
+                ? new() { ["EVENTSTORE_PROFILE"] = "ghost" }
+                : [];
+            string[] selection = useEnvironment ? [] : ["--profile", "ghost"];
+            string[][] verbs =
+            [
+                ["config", "profile", "add", "staging", "--url", "https://staging.example/"],
+                ["config", "profile", "list"],
+                ["config", "use", "staging"],
+                ["config", "set", "staging", "tenant", "acme"],
+                ["config", "use", "--clear"],
+                ["config", "profile", "remove", "staging"],
+            ];
+
+            foreach (string[] verb in verbs)
+            {
+                (int exit, string output, _) = await InvokeAsync(store, environment, null, [.. verb, .. selection]);
+                exit.ShouldBe(0, string.Join(' ', verb) + ": " + output);
+            }
+
+            ProfileSnapshot snapshot = store.Read();
+            snapshot.Profiles.ContainsKey("staging").ShouldBeFalse();
+            snapshot.Profiles.ContainsKey("ghost").ShouldBeFalse();
+            snapshot.ActiveProfile.ShouldBeNull();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A token beginning with <c>@</c> is never expanded as a response file or echoed on either channel.</summary>
+    [Fact]
+    public async Task AtPrefixedTokenIsNeverExpandedOrEchoedAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string token = "@s3cretTokValue";
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", token);
+
+            exit.ShouldBe(0, output + error);
+            AssertNoSecret(output, error, token, token[1..]);
+            store.Read().Profiles["dev"].Token.ShouldBe(token);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>List is sorted and masked; use selects and clears the active profile.</summary>
+    [Fact]
+    public async Task ListUseAndClearMaskEveryTokenAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string devToken = "dev-secret-value";
+            const string prodToken = "prod-secret-value";
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (int prodExit, string prodOutput, string prodError) = await InvokeAsync(store,
+                "config", "profile", "add", "prod", "--url", "https://prod.example/", "--token", prodToken);
+            (int devExit, string devOutput, string devError) = await InvokeAsync(store,
+                "config", "profile", "add", "dev", "--url", "https://dev.example/", "--token", devToken);
+            prodExit.ShouldBe(0);
+            devExit.ShouldBe(0);
+            AssertNoSecret(prodOutput + devOutput, prodError + devError, devToken, prodToken);
+
+            (int listExit, string listing, string listError) = await InvokeAsync(store, "config", "profile", "list");
+            listExit.ShouldBe(0);
+            AssertNoSecret(listing, listError, devToken, prodToken);
+            JsonElement document = JsonDocument.Parse(listing).RootElement;
+            document.GetProperty("activeProfile").ValueKind.ShouldBe(JsonValueKind.Null);
+            JsonElement[] profiles = [.. document.GetProperty("profiles").EnumerateArray()];
+            profiles.Select(profile => profile.GetProperty("name").GetString()).ShouldBe(["dev", "prod"]);
+            profiles[0].GetProperty("token").GetString().ShouldBe(ProfileStore.MaskToken(devToken));
+            profiles[1].GetProperty("token").GetString().ShouldBe(ProfileStore.MaskToken(prodToken));
+
+            (int useExit, string selected, string useError) = await InvokeAsync(store, "config", "use", "dev");
+            useExit.ShouldBe(0);
+            AssertNoSecret(selected, useError, devToken, prodToken);
+            JsonDocument.Parse(selected).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
+            store.Read().ActiveProfile.ShouldBe("dev");
+
+            (int tableExit, string table, string tableError) = await InvokeAsync(store,
+                "config", "profile", "list", "--format", "table");
+            tableExit.ShouldBe(0);
+            AssertNoSecret(table, tableError, devToken, prodToken);
+            table.ShouldStartWith("FIELD\tVALUE");
+
+            (int clearExit, string cleared, string clearError) = await InvokeAsync(store, "config", "use", "--clear");
+            clearExit.ShouldBe(0);
+            AssertNoSecret(cleared, clearError, devToken, prodToken);
+            JsonDocument.Parse(cleared).RootElement.GetProperty("activeProfile").ValueKind.ShouldBe(JsonValueKind.Null);
+            store.Read().ActiveProfile.ShouldBeNull();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Management output uses the flag, environment, or JSON default, never the active profile's format.</summary>
+    [Fact]
+    public async Task ManagementOutputIgnoresActiveProfileFormatAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", Format: "table"));
+            store.Use("dev");
+
+            (int listExit, string listing, _) = await InvokeAsync(store, "config", "profile", "list");
+            (int useExit, string selected, _) = await InvokeAsync(store, "config", "use", "dev");
+            (int environmentExit, string environmentListing, _) = await InvokeAsync(store,
+                new Dictionary<string, string?> { ["EVENTSTORE_FORMAT"] = "table" }, null, "config", "profile", "list");
+
+            listExit.ShouldBe(0);
+            useExit.ShouldBe(0);
+            environmentExit.ShouldBe(0);
+            JsonDocument.Parse(listing).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
+            JsonDocument.Parse(selected).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
+            environmentListing.ShouldStartWith("FIELD\tVALUE");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Gets invalid profile-management inputs that must fail as configuration errors.</summary>
+    public static TheoryData<string[], bool> InvalidManagementInputs
+    {
+        get
+        {
+            string[][] inputs =
+            [
+                ["config", "profile", "add", "bad name", "--url", "https://gateway.example/", "--token", SuppliedToken],
+                ["config", "profile", "add", "", "--url", "https://gateway.example/", "--token", SuppliedToken],
+                ["config", "profile", "add", new string('a', 65), "--url", "https://gateway.example/", "--token", SuppliedToken],
+                ["config", "profile", "add", "dev", "--url", "ftp://x", "--token", SuppliedToken],
+                ["config", "profile", "add", "dev", "--url", "not-a-url", "--token", SuppliedToken],
+                ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--format", "xml", "--token", SuppliedToken],
+                ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", " "],
+                ["config", "use", "missing", "--token", SuppliedToken],
+                ["config", "use", "bad name"],
+            ];
+            var data = new TheoryData<string[], bool>();
+            foreach (string[] input in inputs)
+            {
+                data.Add(input, true);
+                data.Add(input, false);
+            }
+
+            return data;
+        }
+    }
+
+    /// <summary>Invalid names, URLs, formats, tokens, and use targets fail as configuration errors without a write.</summary>
+    /// <param name="args">The command-line arguments.</param>
+    /// <param name="existing">Whether a profile file exists before the command.</param>
+    [Theory]
+    [MemberData(nameof(InvalidManagementInputs))]
+    public async Task InvalidManagementInputFailsWithoutMutationAsync(string[] args, bool existing)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            byte[]? previous = null;
+            if (existing)
+            {
+                store.Add("dev", new ConnectionProfile("https://gateway.example/", StoredToken));
+                previous = File.ReadAllBytes(store.ProfilePath);
+            }
+
+            (int exit, string output, string error) = await InvokeAsync(store, args);
+
+            exit.ShouldBe(2);
+            AssertError(output, "configuration_invalid");
+            AssertNoSecret(output, error, SuppliedToken, StoredToken);
+            if (previous is null)
+            {
+                File.Exists(store.ProfilePath).ShouldBeFalse();
+            }
+            else
+            {
+                File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Absent required arguments remain usage errors and never touch the store.</summary>
+    /// <param name="args">The command-line arguments.</param>
+    /// <param name="argument">The reported argument name.</param>
+    [Theory]
+    [InlineData(new[] { "config", "profile", "add", "--url", "https://gateway.example/" }, "name")]
+    [InlineData(new[] { "config", "profile", "add", "dev" }, "url")]
+    [InlineData(new[] { "config", "use" }, "name")]
+    public async Task MissingRequiredArgumentIsInvalidArgumentsAsync(string[] args, string argument)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, _) = await InvokeAsync(store, args);
+
+            exit.ShouldBe(2);
+            AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe(argument);
+            File.Exists(store.ProfilePath).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Gets hostile target states crossed with the profile-management verbs they must block.</summary>
+    public static TheoryData<string, string[]> HostileTargets
+    {
+        get
+        {
+            string[][] mutations =
+            [
+                ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", SuppliedToken],
+                ["config", "use", "dev"],
+                ["config", "use", "--clear"],
+            ];
+            string[] list = ["config", "profile", "list"];
+            var data = new TheoryData<string, string[]>();
+            foreach (string kind in new[] { "symlink-target", "malformed", "version-2", "unknown-field", "duplicate-key" })
+            {
+                foreach (string[] mutation in mutations)
+                {
+                    data.Add(kind, mutation);
+                }
+
+                data.Add(kind, list);
+            }
+
+            foreach (string[] mutation in mutations)
+            {
+                data.Add("symlink-lock", mutation);
+            }
+
+            return data;
+        }
+    }
+
+    /// <summary>Symlinked, malformed, unsupported, and unknown-field targets fail without following links or rewriting.</summary>
+    /// <param name="kind">The hostile target kind.</param>
+    /// <param name="args">The command-line arguments.</param>
+    [Theory]
+    [MemberData(nameof(HostileTargets))]
+    public async Task HostileTargetFailsWithoutMutationAsync(string kind, string[] args)
+    {
+        Assert.SkipWhen(OperatingSystem.IsWindows() && kind.StartsWith("symlink", StringComparison.Ordinal),
+            "Symbolic-link targets are exercised only on Unix-like systems.");
+
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            string external = Path.Combine(directory, "external.json");
+            string stored = "{\"version\":1,\"activeProfile\":\"dev\",\"profiles\":{\"dev\":{\"token\":\"" + StoredToken + "\"}}}";
+            string content = kind switch
+            {
+                "malformed" => "{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"" + StoredToken + "\"",
+                "version-2" => stored.Replace("\"version\":1", "\"version\":2", StringComparison.Ordinal),
+                "unknown-field" => stored.Replace("\"token\"", "\"colour\":\"red\",\"token\"", StringComparison.Ordinal),
+                "duplicate-key" => stored.Replace("\"profiles\"", "\"version\":1,\"profiles\"", StringComparison.Ordinal),
+                _ => stored,
+            };
+            string linkPath = kind == "symlink-lock" ? store.ProfilePath + ".lock" : store.ProfilePath;
+            if (kind.StartsWith("symlink", StringComparison.Ordinal))
+            {
+                File.WriteAllText(external, content);
+                File.CreateSymbolicLink(linkPath, external);
+            }
+            else
+            {
+                File.WriteAllText(store.ProfilePath, content);
+            }
+
+            byte[] previous = File.ReadAllBytes(kind.StartsWith("symlink", StringComparison.Ordinal) ? external : store.ProfilePath);
+
+            (int exit, string output, string error) = await InvokeAsync(store, args);
+
+            exit.ShouldBe(2);
+            AssertError(output, "configuration_invalid");
+            AssertNoSecret(output, error, SuppliedToken, StoredToken);
+            if (kind.StartsWith("symlink", StringComparison.Ordinal))
+            {
+                File.ReadAllBytes(external).ShouldBe(previous);
+                new FileInfo(linkPath).LinkTarget.ShouldBe(external);
+                if (kind == "symlink-lock")
+                {
+                    File.Exists(store.ProfilePath).ShouldBeFalse();
+                }
+            }
+            else
+            {
+                File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A stale temporary file from an interrupted write is ignored.</summary>
+    [Fact]
+    public async Task AddIgnoresStaleTemporaryFileAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            string stale = store.ProfilePath + ".tmp-0123456789abcdef";
+            File.WriteAllText(stale, "{broken");
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "profile", "add", "test", "--url", "https://test.example/", "--token", SuppliedToken);
+
+            exit.ShouldBe(0);
+            AssertNoSecret(output, error, SuppliedToken);
+            store.Read().Profiles.Keys.ShouldBe(["dev", "test"], ignoreOrder: true);
+            File.ReadAllText(stale).ShouldBe("{broken");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static JsonElement AssertError(string output, string code)
+    {
+        JsonElement document = JsonDocument.Parse(output).RootElement;
+        document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
+        JsonElement error = document.GetProperty("error");
+        error.GetProperty("code").GetString().ShouldBe(code);
+        return error;
+    }
+
+    private static void AssertNoSecret(string output, string error, params string[] tokens)
+    {
+        foreach (string token in tokens)
+        {
+            output.ShouldNotContain(token);
+            error.ShouldNotContain(token);
+        }
+    }
+
     private static Task<(int Exit, string Output, string Error)> InvokeAsync(ProfileStore store, params string[] args)
         => InvokeAsync(store, new Dictionary<string, string?>(), null, args);
 
@@ -812,7 +1258,7 @@ public sealed class ConfigCommandTests
             Console.SetError(error);
             int exit = await new CliRunner(store, manifest,
                 name => environment.TryGetValue(name, out string? value) ? value : null, runMcp)
-                .CreateRoot().Parse(args).InvokeAsync();
+                .Parse(args).InvokeAsync();
             return (exit, output.ToString(), error.ToString());
         }
         finally

@@ -60,6 +60,12 @@ internal sealed class CliRunner
         _runMcp = runMcp;
     }
 
+    /// <summary>Parses arguments with response-file expansion disabled so <c>@</c> values reach their options verbatim.</summary>
+    /// <param name="args">The command-line arguments.</param>
+    /// <returns>The parse result ready for invocation.</returns>
+    internal ParseResult Parse(IReadOnlyList<string> args)
+        => CreateRoot().Parse(args, new ParserConfiguration { ResponseFileTokenReplacer = null });
+
     internal RootCommand CreateRoot()
     {
         RootCommand root = new("Hexalith MCP and CLI gateway tool");
@@ -274,7 +280,7 @@ internal sealed class CliRunner
     {
         Command profile = new("profile", "Manage named connection profiles");
         Command list = new("list", "List profile names and masked credentials");
-        list.SetAction((parsed, token) => RunAsync(parsed, (_, settings, cancellationToken) =>
+        list.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             ProfileSnapshot snapshot = _profileStore.Read();
             object document = new
@@ -299,11 +305,11 @@ internal sealed class CliRunner
         Argument<string?> addName = new("name") { Arity = ArgumentArity.ZeroOrOne };
         Command add = new("add", "Add or replace a connection profile");
         add.Arguments.Add(addName);
-        add.SetAction((parsed, token) => RunAsync(parsed, (_, settings, cancellationToken) =>
+        add.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? name = parsed.GetValue(addName);
             SettingsInput input = _globals.Read(parsed);
-            if (string.IsNullOrWhiteSpace(name))
+            if (name is null)
             {
                 return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
             }
@@ -313,15 +319,15 @@ internal sealed class CliRunner
                 return CliOutput.WriteErrorAsync(Invalid("url", "--url is required for profile add"), cancellationToken);
             }
 
-            ProfileSnapshot snapshot = _profileStore.Add(name,
-                new ConnectionProfile(input.Url, input.Token, input.Format ?? "json"));
+            // Only supplied fields are stored; the store rejects a supplied-but-invalid name as configuration_invalid.
+            ProfileSnapshot snapshot = _profileStore.Add(name, new ConnectionProfile(input.Url, input.Token, input.Format));
             return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
         }, token));
 
         Argument<string?> removeName = new("name") { Arity = ArgumentArity.ZeroOrOne };
         Command remove = new("remove", "Remove a connection profile");
         remove.Arguments.Add(removeName);
-        remove.SetAction((parsed, token) => RunAsync(parsed, (_, settings, cancellationToken) =>
+        remove.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? name = parsed.GetValue(removeName);
             if (string.IsNullOrWhiteSpace(name))
@@ -346,7 +352,7 @@ internal sealed class CliRunner
         Command use = new("use", "Select or clear the active profile");
         use.Arguments.Add(name);
         use.Options.Add(clear);
-        use.SetAction((parsed, token) => RunAsync(parsed, (_, settings, cancellationToken) =>
+        use.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? selected = parsed.GetValue(name);
             bool shouldClear = parsed.GetValue(clear);
@@ -370,7 +376,7 @@ internal sealed class CliRunner
         set.Arguments.Add(name);
         set.Arguments.Add(field);
         set.Arguments.Add(value);
-        set.SetAction((parsed, token) => RunAsync(parsed, (_, settings, cancellationToken) =>
+        set.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? selected = parsed.GetValue(name);
             string? key = parsed.GetValue(field);
@@ -464,14 +470,25 @@ internal sealed class CliRunner
         return 0;
     }
 
+    private Task<int> RunAsync(ParseResult parsed,
+        Func<IServiceProvider, ResolvedSettings, CancellationToken, Task<int>> action,
+        CancellationToken cancellationToken)
+        => RunAsync(parsed, action, presentationOnly: false, cancellationToken);
+
+    private Task<int> RunManagementAsync(ParseResult parsed,
+        Func<IServiceProvider, ResolvedSettings, CancellationToken, Task<int>> action,
+        CancellationToken cancellationToken)
+        => RunAsync(parsed, action, presentationOnly: true, cancellationToken);
+
     private async Task<int> RunAsync(ParseResult parsed,
         Func<IServiceProvider, ResolvedSettings, CancellationToken, Task<int>> action,
+        bool presentationOnly,
         CancellationToken cancellationToken)
     {
         try
         {
             IHost? created = HostFactory.Create(_globals.Read(parsed), _profileStore, out OperationError? error,
-                manifest: _manifest, readEnvironment: _readEnvironment);
+                manifest: _manifest, readEnvironment: _readEnvironment, presentationOnly: presentationOnly);
             if (error is not null)
             {
                 return await CliOutput.WriteErrorAsync(error, cancellationToken).ConfigureAwait(false);

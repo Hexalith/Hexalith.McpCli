@@ -26,6 +26,29 @@ internal sealed class SettingsBootstrap(ProfileStore profileStore, Func<string, 
     /// <param name="input">The explicit command-line settings.</param>
     /// <returns>The resolved settings or their canonical configuration error.</returns>
     internal SettingsResolution Resolve(SettingsInput input)
+        => new SettingsResolver(profileStore, CaptureEnvironment()).Resolve(input);
+
+    /// <summary>
+    /// Resolves presentation settings for profile-management verbs without selecting a profile or reading the store.
+    /// </summary>
+    /// <remarks>
+    /// The <c>--profile</c> flag and <c>EVENTSTORE_PROFILE</c> are ignored so a missing selection cannot block the verb
+    /// that repairs it; every other flag and environment value is still validated against an empty snapshot.
+    /// </remarks>
+    /// <param name="input">The explicit command-line settings.</param>
+    /// <returns>The resolved settings or their canonical configuration error.</returns>
+    internal SettingsResolution ResolvePresentation(SettingsInput input)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+        Dictionary<string, string?> environment = CaptureEnvironment();
+        _ = environment.Remove("EVENTSTORE_PROFILE");
+        return new SettingsResolver(EmptySnapshot, environment).Resolve(input with { Profile = null });
+    }
+
+    private static ProfileSnapshot EmptySnapshot()
+        => new(1, null, new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal));
+
+    private Dictionary<string, string?> CaptureEnvironment()
     {
         var environment = new Dictionary<string, string?>(StringComparer.Ordinal);
         foreach (string name in EnvironmentNames)
@@ -33,6 +56,6 @@ internal sealed class SettingsBootstrap(ProfileStore profileStore, Func<string, 
             environment[name] = _readEnvironment(name);
         }
 
-        return new SettingsResolver(profileStore, environment).Resolve(input);
+        return environment;
     }
 }

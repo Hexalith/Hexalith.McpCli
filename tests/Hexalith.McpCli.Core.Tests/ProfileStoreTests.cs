@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Hexalith.McpCli.Core.Settings;
 using Shouldly;
 
@@ -193,6 +194,75 @@ public sealed class ProfileStoreTests
         finally
         {
             Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>Malformed, unknown-field, duplicate-key, and unsupported-version targets fail without being overwritten.</summary>
+    /// <param name="content">The hostile target document.</param>
+    [Theory]
+    [InlineData("{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-secret\"")]
+    [InlineData("{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-secret\",\"colour\":\"red\"}}}")]
+    [InlineData("{\"version\":1,\"profiles\":{},\"extra\":true}")]
+    [InlineData("{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-secret\"},\"dev\":{}}}")]
+    [InlineData("{\"version\":2,\"profiles\":{\"dev\":{\"token\":\"hostile-secret\"}}}")]
+    public void HostileTargetsFailWithoutMutation(string content)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            Directory.CreateDirectory(directory);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            File.WriteAllText(store.ProfilePath, content);
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+
+            InvalidDataException read = Should.Throw<InvalidDataException>(() => store.Read());
+            InvalidDataException add = Should.Throw<InvalidDataException>(
+                () => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")));
+            InvalidDataException use = Should.Throw<InvalidDataException>(() => store.Use("dev"));
+            InvalidDataException clear = Should.Throw<InvalidDataException>(() => store.Use(null));
+
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+            foreach (InvalidDataException exception in new[] { read, add, use, clear })
+            {
+                exception.Message.ShouldNotContain("hostile-secret");
+                exception.Message.ShouldNotContain("new-secret");
+                exception.InnerException.ShouldBeNull();
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>The written document stores only supplied fields and never writes explicit nulls.</summary>
+    [Fact]
+    public void WritesOnlySuppliedFields()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", "secret-token"));
+
+            using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
+            JsonElement root = written.RootElement;
+            root.EnumerateObject().Select(property => property.Name).ShouldBe(["version", "profiles"]);
+            root.GetProperty("version").GetInt32().ShouldBe(1);
+            JsonElement profile = root.GetProperty("profiles").GetProperty("dev");
+            profile.EnumerateObject().Select(property => property.Name).ShouldBe(["url", "token"]);
+            profile.GetProperty("url").GetString().ShouldBe("https://gateway.example/");
+
+            store.Use("dev");
+            store.Use(null);
+            using JsonDocument cleared = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
+            cleared.RootElement.TryGetProperty("activeProfile", out _).ShouldBeFalse();
+            store.Read().ActiveProfile.ShouldBeNull();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
         }
     }
 

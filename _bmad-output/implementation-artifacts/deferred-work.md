@@ -166,3 +166,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Verb-action I/O failures are reported as configuration errors with raw exception text.
   evidence: Pre-existing: `CliRunner.RunAsync`'s outer catch maps any `IOException`/`UnauthorizedAccessException`/`InvalidDataException` thrown by a verb action (for example an output-file write) to `configuration_invalid` with the raw exception message, which can include absolute home paths; the baseline catch wrapped the action too. Address with Story 2.9 stable failure documents.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-add-and-select-a-private-profile.md`
+  summary: Blank or empty names for `config profile remove` and `config set` fail as `invalid_arguments`, while `add` and `use` report them as `configuration_invalid`.
+  evidence: `CliRunner` `remove`/`set` still guard with `string.IsNullOrWhiteSpace`, whereas Story 2.2 routes a supplied invalid `add` name to `ProfileStore.ValidateName`; Story 2.2's frozen intent excluded `set`/`remove` semantic changes, so align them in Story 2.3.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-add-and-select-a-private-profile.md`
+  summary: `config profile add` silently ignores `--tenant`, `--actor`, and `--allow-tenant-override` instead of storing or rejecting them.
+  evidence: Pre-existing: `add` builds `ConnectionProfile(input.Url, input.Token, input.Format)` per AD-14, so global operator flags succeed without effect; decide in Story 2.3 whether to store them or reject them as `invalid_arguments`.

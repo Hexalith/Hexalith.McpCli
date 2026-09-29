@@ -60,6 +60,6 @@ hexalith query your-module.your-query --payload @query.json --page-size 25
 hexalith mcp --transport stdio
 ```
 
-`--url`, `--token`, `--tenant`, `--actor`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and rejects CLI writes. The local profile file is `~/.eventstore/mcpcli.json`; token values are masked in `config` output.
+`--url`, `--token`, `--tenant`, `--actor`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and rejects CLI writes. The local profile file is `~/.eventstore/mcpcli.json`; token values are masked in `config` output. `config profile`, `config use`, and `config set` ignore `--profile` and `EVENTSTORE_PROFILE` and render their output using `--format`, then `EVENTSTORE_FORMAT`, then `json`, never the active profile's format.
 
 The stdio MCP server exposes up to five generic tools: `list_modules`, `list_operations`, `describe_operation`, `send_command`, and `run_query`. Its protocol output uses stdout and diagnostics use stderr. The HTTP MCP transport is reserved for a later release.

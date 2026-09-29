@@ -19,6 +19,9 @@ internal static class HostFactory
     /// <param name="mcp">Whether to register the MCP stdio server.</param>
     /// <param name="manifest">The lazy Contracts assembly manifest.</param>
     /// <param name="readEnvironment">The environment reader, or the process environment by default.</param>
+    /// <param name="presentationOnly">
+    /// Whether to resolve only presentation settings, ignoring profile selection and never reading the profile store.
+    /// </param>
     /// <returns>The invocation host, or <see langword="null" /> when settings resolution fails.</returns>
     internal static IHost? Create(
         SettingsInput input,
@@ -26,9 +29,11 @@ internal static class HostFactory
         out OperationError? error,
         bool mcp = false,
         Func<IReadOnlyList<Assembly>>? manifest = null,
-        Func<string, string?>? readEnvironment = null)
+        Func<string, string?>? readEnvironment = null,
+        bool presentationOnly = false)
     {
-        SettingsResolution resolved = new SettingsBootstrap(profileStore, readEnvironment).Resolve(input);
+        var bootstrap = new SettingsBootstrap(profileStore, readEnvironment);
+        SettingsResolution resolved = presentationOnly ? bootstrap.ResolvePresentation(input) : bootstrap.Resolve(input);
         error = resolved.Error;
         return resolved.Settings is null ? null : CreateHost(resolved.Settings, mcp, manifest);
     }
