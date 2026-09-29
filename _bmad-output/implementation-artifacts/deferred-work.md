@@ -178,8 +178,8 @@
   status: resolved in Story 2.3 (2026-09-29); an explicit `--tenant`, `--actor`, or `--allow-tenant-override` on `add` fails as `invalid_arguments` naming the first offending flag, points to `config set`, and writes nothing.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
-  summary: No CI job runs the Windows-only profile ACL tests, so AD-14's Windows ACL guarantees have code coverage but no executed evidence.
-  evidence: `.github/workflows/ci.yml` runs only on `ubuntu-latest`; Story 2.3 writes Windows ACL tests that skip off Windows. Adding a `windows-latest` test job is shared CI infrastructure outside a profile story, and no planned story owns it yet; it needs an owner before v1 release so the Story 2.3 Linux/Windows ACL criterion has executed evidence.
+  summary: No run has executed Story 2.3's Windows evidence. The Core ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`) skip off Windows, and the CLI process tests `ConcurrentSetProcessesPreserveBothValuesAsync` and `VerbsNeverOpenAdminProfilesAsync` skip on Windows, so AD-14's Windows ACL, cross-process locking and admin-isolation guarantees have no executed Windows evidence.
+  evidence: `.github/workflows/ci.yml` runs only on `ubuntu-latest`; on Linux the Core tests show 2 skipped (the ACL tests), confirmed by the second-pass verification-gap review. A `windows-latest` job alone is not enough: the process tests redirect HOME/USERPROFILE, which `Environment.GetFolderPath(SpecialFolder.UserProfile)` ignores on Windows (known-folder API), so the CLI also needs a home override that Windows honors before those tests can run there. The pre-existing read-only `CurrentExecutableReadsProcessEnvironmentAsync` likewise reads the developer's real `~/.eventstore/mcpcli.json` on Windows (the mutating `ExecutableStoresAtPrefixedTokenVerbatimAsync` case is the entry below). Adding the Windows job and the home override is shared CI and hosting infrastructure outside a profile story, and no planned story owns it yet; it needs an owner before v1 release so the Story 2.3 Linux/Windows ACL criterion has executed evidence. This entry also traces the second-pass review's "no run has executed the Windows ACL tests" deferral.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: System.CommandLine parse errors on config verbs print help to stdout, echo the unmatched token on stderr, and exit 1 instead of a single error document with exit 2.
@@ -194,10 +194,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: A parse error in `config profile add` bypasses the operator-flag refusal. With `add dev --url U --tenant` (no value), System.CommandLine fails on the missing option value, prints help on stdout and exits 1. It never reports `invalid_arguments` with exit 2.
   evidence: Reproduced by the second-pass acceptance audit. The cause is the same default ParseErrorAction as the Story 2.11 entry above, so fix it there and include this case in that story's tests.
-
-- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
-  summary: No run has executed the Windows ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`).
-  evidence: Confirmed by the second-pass verification-gap review: Core tests show 240 total and 2 skipped on Linux. This is the same item as the Windows CI entry above; it is recorded here only so this review can be traced.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, third pass (2026-09-29)
 

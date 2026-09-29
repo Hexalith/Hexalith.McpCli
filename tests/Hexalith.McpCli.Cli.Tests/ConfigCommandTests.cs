@@ -1099,6 +1099,7 @@ public sealed class ConfigCommandTests
                 ["config", "set", "", "tenant", "x"],
                 ["config", "set", " ", "tenant", "x"],
                 ["config", "set", "dev", "", "x"],
+                ["config", "set", "dev", " ", "x"],
                 ["config", "profile", "remove", "missing", "--token", SuppliedToken],
                 ["config", "profile", "remove", ""],
                 ["config", "profile", "remove", " "],
@@ -1566,6 +1567,10 @@ public sealed class ConfigCommandTests
                 tenant = RunExecutableAsync(directory, "config", "set", "dev", "tenant", "a");
                 actor = RunExecutableAsync(directory, "config", "set", "dev", "actor", "b");
                 await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+
+                // A set that skipped the lock would already have finished; both must still be waiting on it.
+                tenant.IsCompleted.ShouldBeFalse("`set dev tenant a` finished while the transaction lock was held.");
+                actor.IsCompleted.ShouldBeFalse("`set dev actor b` finished while the transaction lock was held.");
             }
 
             (int Exit, string Output, string Error)[] results = await Task.WhenAll(tenant, actor);

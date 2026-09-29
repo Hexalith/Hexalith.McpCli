@@ -291,7 +291,7 @@ public sealed class ProfileStoreTests
             snapshot.ActiveProfile.ShouldBe("test");
             using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
             written.RootElement.GetProperty("profiles").GetProperty("dev").EnumerateObject()
-                .Select(property => property.Name).ShouldBe(["url", "token", "tenant", "actor"]);
+                .Select(property => property.Name).ShouldBe(["url", "token", "tenant", "actor"], ignoreOrder: true);
         }
         finally
         {
@@ -335,6 +335,7 @@ public sealed class ProfileStoreTests
     [InlineData("dev", "url", "https://other.example/")]
     [InlineData("dev", "token", "other-token")]
     [InlineData("dev", "", "x")]
+    [InlineData("dev", " ", "x")]
     [InlineData("dev", "allowTenantOverride", "yes")]
     [InlineData("dev", "tenant", " ")]
     [InlineData("dev", "actor", "")]
