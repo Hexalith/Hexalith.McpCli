@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -143,6 +143,26 @@ Seventh-pass code review (2026-09-29) of `6fe785e..c05e097` (`references/` and t
 - `low`: New equality failures print identical-looking profiles because `AllowedExtensions` is compared by reference (blind-hunter). This affects only diagnostic quality. The compared fixtures carry no extensions, and the fifth pass rejected replacing record equality.
 - carried: Invalid environment operator values fail `add` (third-pass Rejected). The refusal hint leads to a whole-record replace and prints a `<profile>` placeholder (second-pass Rejected, third-pass Defer). No ACL rights or inheritance check (triage-log row). Operator-flag precedence over name and URL is untested (triage-log row, twice).
 - carried: Edge-case-hunter's other seven findings repeat earlier Rejected rows: `set`/`remove`/`use` ignore operator flags; orphaned children, twice; the lock file created on an `existing=false` failure; the `File.Exists` admin read; fixed flag priority (`false`); and the 2 s startup window.
+
+Ninth-pass code review (2026-09-30) of `6fe785e..032e79a` (`references/` and `_bmad-output/` excluded), run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor. The verification-gap layer found no gaps. Acceptance-auditor found every criterion, Decision and matrix row met, and reran the Release build (0 warnings, 0 errors) and solution tests (444 total, 0 failed, 2 skipped: the Windows ACL tests).
+
+- [ ] [Review][Patch] The `add` refusal hint prints as `'config set <profile> tenant <value>'`. `McpCliJson.Result` uses the default HTML-safe encoder, so the quotes and angle brackets in the new message come out as JSON escapes, and that is what a user sees on the terminal. The test decodes the string before checking, so it can't catch this. Fix: remove the quotes and angle brackets from the message (for example, `after adding the profile, run config set PROFILE tenant VALUE`) and assert the raw stdout has no `\u00` escapes. [src/Hexalith.McpCli/Cli/CliRunner.cs:367]
+- [ ] [Review][Patch] The README never says that `config profile add` on an existing name replaces the whole profile. The token, tenant, actor, `allowTenantOverride` and `allowedExtensions` are all dropped, and the new sentence even tells users to run `add` first and then `config set`. Only `--help` ("Add or replace") hints at it. Fix: one sentence saying that `add` on an existing name replaces the whole record, and naming the four fields `config set` can change. [README.md:63]
+- [x] [Review][Defer] Profile names and allowed-extension keys accept a trailing newline. In .NET, `$` also matches before a final `\n`, so `add $'dev\n'` stores a separate `"dev\n"` profile and `set dev allowedExtensions $'task-id\n'` stores `"task-id\n"`. [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:298] — deferred: pre-existing (Story 2.2 name rule and the shared execution `ExtensionValidator.KeyPattern` at `ExtensionValidator.cs:68`). This story's Never forbids changing execution.
+- [x] [Review][Defer] `config set` stores a tenant or actor that execution later rejects. `set dev tenant ACME` or `tenant 'acme corp'` exits 0, but every later `send`/`query` fails with "The tenant does not match the Gateway tenant pattern". [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:263] — deferred: pre-existing (Story 2.2 `ValidateProfile` checks only for blank values). Validating in the store would also need a decision on the flag and environment paths.
+
+**Rejected (ninth pass)**
+
+- `false`: The spec says `done` while `sprint-status.yaml` says `review` (acceptance-auditor). This is workflow bookkeeping, and the closing step of this review sets both.
+- `false`: The `existing=false` rows for `set dev <bad value>` fail on the missing profile and never exercise value validation (edge-case-hunter). Every input also runs with `existing=true`, where `dev` exists, and the Core `InvalidSetFailsWithoutChangingBytes` theory covers the same values.
+- `low`: A written profile file larger than the 1 MiB read cap blocks every later verb (edge-case-hunter). This is pre-existing and unlikely to be met: Linux caps a single argument at 128 KiB, so reaching the cap takes many huge values. The fix adds a size guard to the transaction.
+- `low`: `TemporaryFileIsPrivateBeforeTokenBytesAreWritten` can't detect losing `UnixCreateMode`, because `CreatePrivateFile` chmods the file to 0600 before serialization (blind-hunter). The directory is already 0700 when the file is created, so no other non-root user can open it during the window. Observing the mode at creation needs a new transaction seam.
+- `low`: `MutationRestrictsPermissivePreexistingModes` can't detect dropping the pre-write `RestrictFile(path)`, because a 0600 temporary file replaces the target (edge-case-hunter). The pre-write window only exposes bytes that were already 0644 before the command. The fix needs a new mid-transaction probe test.
+- `low`: On Windows, `RestrictFile` runs after `File.Replace` has already committed, so an ACL failure there would report an error for a saved change (blind-hunter). This is pre-existing, Windows-only and rarely met, since it needs an ACL write on a file the user just wrote to fail. The fix changes the transaction.
+- `low`: The operator-flag theory never puts a flag before the verb or uses the `--tenant=acme` syntax (blind-hunter). Both forms are refused today (reproduced). Option position and attached values are System.CommandLine semantics shared by every recursive global option, and pinning them needs a new test shape.
+- `low`: `config set` success output doesn't echo the stored value (blind-hunter). That would add output surface, and `config profile list` already shows the value.
+- Rejected because the fix would edit the spec: there is no non-destructive way to rotate a URL, token or format (blind-hunter). The frozen Boundaries limit `set` to four fields and make `add` a whole-record replace. This is related to the third-pass clearing deferral.
+- carried: `--output` fails after the commit (sixth-pass Defer). `add` silently erases operator fields (second-pass Rejected, `false`). Orphaned children and no child timeout (earlier Rejected rows). The `File.Exists`-guarded admin read (earlier Rejected rows). The lock file and directory are created on failure (earlier Rejected rows). The 2 s startup window (fourth-pass Rejected). All from edge-case-hunter.
 
 ## Verification
 
