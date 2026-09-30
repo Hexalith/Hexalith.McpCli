@@ -1547,7 +1547,8 @@ So that publication can use exactly the tool and Decoration Package that passed 
 **Given** Linux, Windows, and macOS installation checks,
 **When** the staged .NET 10 tool is installed,
 **Then** it runs without native dependencies or hosted v1 infrastructure,
-**And** stdout and stderr retain their CLI and MCP channel contracts while Catalog discovery JSON stays byte-identical for the same build across operating systems.
+**And** stdout and stderr retain their CLI and MCP channel contracts while Catalog discovery JSON stays byte-identical for the same build across operating systems,
+**And** the Windows check also runs the Core and CLI test suites with a home override that Windows honors, so Story 2.3's Windows-only ACL tests and its Windows-skipped process tests execute there.
 
 ### Story 4.17: Verify the Operator Setup Experience
 

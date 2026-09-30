@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -124,6 +124,25 @@ Fifth-pass code review (2026-09-29) of `6fe785e..88eb3ac` (`references/`, this s
 - `low`: The Interrupted row is not tested through the parser (acceptance-auditor). This repeats the second-pass rejection: the fix would edit the spec.
 - carried: The Windows ACL criterion has never been executed (acceptance-auditor). It is already tracked by the Windows ledger entry.
 - carried: Edge-case-hunter's eight findings (the lock file created on failure, twice; the 2 s startup window, twice; the child process never killed; the `File.Exists` admin read; fixed flag precedence, twice) repeat the second-, third- and fourth-pass Rejected rows.
+
+Seventh-pass code review (2026-09-29) of `6fe785e..c05e097` (`references/` and this spec excluded), run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor. Acceptance-auditor found every criterion, Decision and matrix row met, and reran the Release build and solution tests (444 total, 0 failed, 2 skipped: the Windows ACL tests). Verification-gap's only gap is the already-tracked Windows evidence.
+
+- [x] [Review][Decision] The Windows-evidence ledger entry has no `gate:` — The entry says the work "needs an owner before v1 release", but nothing stops the release stories from running before it lands. Verification-gap confirms that no CI job runs `WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`, `ConcurrentSetProcessesPreserveBothValuesAsync` or `VerbsNeverOpenAdminProfilesAsync` on Windows (`domain-ci.yml` is `ubuntu-latest` only). A regression that dropped `SetAccessRuleProtection` in `RestrictFile` would ship undetected. Options: add `gate: 4-18-publish-the-validated-package-pair` to the entry, or keep it an ungated open item. Resolved (option C): Story 4.16 owns it. Its Windows installation check in `epics.md` now also runs the Core and CLI test suites with a Windows-honored home override, and the ledger entry names 4.16 as the owner. No `gate:` was added: tested on a scratch copy, `bmad-loop validate` ignores `gate:` in this ledger's legacy entries, and a canonical `DW-` gate would fail every preflight while 4-16 sits in the backlog.
+- [ ] [Review][Patch] The concurrency test's success loop never asserts empty stderr, although commit `c05e097` says it pins "empty stderr on profile success paths". Fix: add `error.ShouldBeEmpty()` after `exit.ShouldBe(0, …)`, as `VerbsNeverOpenAdminProfilesAsync` does. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1590]
+- [ ] [Review][Patch] `README.md` still lists `--tenant` and `--actor` as plain global options and never says that `config profile add` refuses them. `--allow-tenant-override` is missing from the global-options list (pre-existing). Fix: add the flag to the list, and one sentence saying `add` refuses an explicit `--tenant`, `--actor` or `--allow-tenant-override` and points to `config set`. [README.md:63]
+
+**Rejected (seventh pass)**
+
+- `false`: The two Story 2.2 ledger entries use `status: resolved in Story 2.3 …` instead of `status: done <date>` (blind-hunter). This ledger uses the legacy flat `- source_spec:` blocks, and the Story 1.8 entries use the same `resolved in` wording. `bmad-loop sweep --migrate` normalizes legacy entries.
+- `false`: The spec says `done` while `sprint-status.yaml` says `review` (acceptance-auditor, blind-hunter). The closing step of this review sets both to the same status.
+- `false`: No `set "bad name" tenant x` row (acceptance-auditor). `ValidateName` is shared and is pinned through the `remove`, `add` and `use` rows. If `Set` stopped calling it, a bad name would still fail as "does not exist" → `configuration_invalid` with the bytes unchanged, so the row would not discriminate.
+- `false`: mcpcli chmods the shared `~/.eventstore` directory to 0700 (blind-hunter). AD-14 requires protecting the directory, this is Story 2.2 behaviour, and the owning user keeps full access for the admin CLI.
+- `low`: A lock held for more than 10 s surfaces as `configuration_invalid` with the raw OS message (blind-hunter). This is pre-existing and already covered by the Story 2.1 ledger entry for verb I/O failures reported as configuration errors with raw text (Story 2.9).
+- `low`: `DOTNET_SYSTEM_IO_DISABLEFILELOCKING` or an NFS home disables the flock (blind-hunter). This is a runtime-wide opt-out that nobody meets in everyday use, and detecting it would add code.
+- `low`: A killed process leaves a `mcpcli.json.tmp-*` file that holds the token (blind-hunter). This is pre-existing transaction behaviour. The file is 0600 inside a 0700 directory, and a cleanup step would change the transaction without a failing test, which the frozen Never forbids.
+- `low`: New equality failures print identical-looking profiles because `AllowedExtensions` is compared by reference (blind-hunter). This affects only diagnostic quality. The compared fixtures carry no extensions, and the fifth pass rejected replacing record equality.
+- carried: Invalid environment operator values fail `add` (third-pass Rejected). The refusal hint leads to a whole-record replace and prints a `<profile>` placeholder (second-pass Rejected, third-pass Defer). No ACL rights or inheritance check (triage-log row). Operator-flag precedence over name and URL is untested (triage-log row, twice).
+- carried: Edge-case-hunter's other seven findings repeat earlier Rejected rows: `set`/`remove`/`use` ignore operator flags; orphaned children, twice; the lock file created on an `existing=false` failure; the `File.Exists` admin read; fixed flag priority (`false`); and the 2 s startup window.
 
 ## Verification
 
