@@ -1527,7 +1527,7 @@ public sealed class ConfigCommandTests
             string message = failure.GetProperty("message").GetString().ShouldNotBeNull();
             string flag = argument == "allowTenantOverride" ? "--allow-tenant-override" : "--" + argument;
             message.ShouldContain(flag);
-            message.ShouldContain("does not accept");
+            message.ShouldStartWith("config profile add does not accept ");
             message.ShouldContain("wrote nothing");
             message.ShouldContain("config set");
             if (previous is null)
@@ -1545,16 +1545,19 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>Add ignores operator settings from the environment; only explicit flags are refused.</summary>
+    /// <summary>Add stores only explicit connection fields and ignores operator settings from the environment.</summary>
     [Fact]
     public async Task AddIgnoresEnvironmentOperatorSettingsAsync()
     {
         string directory = TemporaryDirectory();
         try
         {
+            const string environmentToken = "environment-secret-value";
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             var environment = new Dictionary<string, string?>
             {
+                ["EVENTSTORE_URL"] = "https://environment.example/",
+                ["EVENTSTORE_TOKEN"] = environmentToken,
                 ["EVENTSTORE_TENANT"] = "environment-tenant",
                 ["EVENTSTORE_ACTOR"] = "environment-actor",
                 ["EVENTSTORE_ALLOW_TENANT_OVERRIDE"] = "true",
@@ -1565,11 +1568,47 @@ public sealed class ConfigCommandTests
 
             exit.ShouldBe(0, output);
             error.ShouldBeEmpty();
+            AssertNoSecret(output, error, environmentToken);
             JsonDocument.Parse(output).RootElement.TryGetProperty("error", out _).ShouldBeFalse();
             ConnectionProfile profile = store.Read().Profiles["dev"];
+            profile.Url.ShouldBe("https://gateway.example/");
+            profile.Token.ShouldBeNull();
             profile.Tenant.ShouldBeNull();
             profile.Actor.ShouldBeNull();
             profile.AllowTenantOverride.ShouldBeNull();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Add accepts the other global options and writes its result to the requested output file.</summary>
+    [Fact]
+    public async Task AddAcceptsOtherGlobalOptionsAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            string resultPath = Path.Combine(directory, "result.json");
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "profile", "add", "dev", "--url", "https://gateway.example/",
+                "--read-only", "--strict", "--output", resultPath);
+
+            exit.ShouldBe(0, output);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+            store.Read().Profiles["dev"].ShouldBe(new ConnectionProfile("https://gateway.example/"));
+            using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
+            written.RootElement.GetProperty("profiles").GetProperty("dev").EnumerateObject()
+                .Select(property => property.Name).ShouldBe(["url"]);
+            using JsonDocument result = JsonDocument.Parse(File.ReadAllText(resultPath));
+            result.RootElement.EnumerateObject().Select(property => property.Name)
+                .ShouldBe(["name", "activeProfile"], ignoreOrder: true);
+            result.RootElement.GetProperty("name").GetString().ShouldBe("dev");
+            result.RootElement.GetProperty("activeProfile").ValueKind.ShouldBe(JsonValueKind.Null);
         }
         finally
         {

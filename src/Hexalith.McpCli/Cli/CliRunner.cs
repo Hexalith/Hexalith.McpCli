@@ -303,7 +303,7 @@ internal sealed class CliRunner
         }, token));
 
         Argument<string?> addName = new("name") { Arity = ArgumentArity.ZeroOrOne };
-        Command add = new("add", "Add or replace a connection profile");
+        Command add = new("add", "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set");
         add.Arguments.Add(addName);
         add.SetAction((parsed, token) =>
         {
@@ -364,7 +364,7 @@ internal sealed class CliRunner
             : null;
 
     private static OperationError OperatorFlag(string field, string flag)
-        => Invalid(field, $"profile add does not accept {flag} and wrote nothing; rerun it without {flag}, then run config set PROFILE {field} VALUE");
+        => Invalid(field, $"config profile add does not accept {flag} and wrote nothing; rerun it without {flag}, then run config set PROFILE {field} VALUE");
 
     private Command CreateConfigUse()
     {
