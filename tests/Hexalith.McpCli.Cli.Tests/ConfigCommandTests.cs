@@ -1588,6 +1588,7 @@ public sealed class ConfigCommandTests
             foreach ((int exit, string output, string error) in results)
             {
                 exit.ShouldBe(0, output + error);
+                error.ShouldBeEmpty();
                 AssertNoSecret(output, error, StoredToken);
             }
 
