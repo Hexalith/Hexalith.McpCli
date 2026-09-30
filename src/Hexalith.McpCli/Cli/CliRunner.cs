@@ -364,7 +364,7 @@ internal sealed class CliRunner
             : null;
 
     private static OperationError OperatorFlag(string field, string flag)
-        => Invalid(field, $"{flag} is not stored by profile add; after adding the profile, run config set PROFILE {field} VALUE");
+        => Invalid(field, $"profile add does not accept {flag} and wrote nothing; rerun it without {flag}, then run config set PROFILE {field} VALUE");
 
     private Command CreateConfigUse()
     {

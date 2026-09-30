@@ -343,6 +343,7 @@ public sealed class ProfileStoreTests
     [InlineData("dev", "allowedExtensions", "a,A")]
     [InlineData("dev", "allowedExtensions", "a,")]
     [InlineData("dev", "allowedExtensions", "a, b")]
+    [InlineData("dev", "allowedExtensions", "a ,b")]
     [InlineData("dev", "allowedExtensions", " a")]
     [InlineData("dev", "allowedExtensions", "../unsafe")]
     [InlineData("missing", "tenant", "x")]

@@ -1094,9 +1094,12 @@ public sealed class ConfigCommandTests
                 ["config", "set", "dev", "allowTenantOverride", "yes"],
                 ["config", "set", "dev", "tenant", " "],
                 ["config", "set", "dev", "tenant", ""],
+                ["config", "set", "dev", "actor", ""],
+                ["config", "set", "dev", "actor", " "],
                 ["config", "set", "dev", "allowedExtensions", "a,A"],
                 ["config", "set", "dev", "allowedExtensions", "a,"],
                 ["config", "set", "dev", "allowedExtensions", "a, b"],
+                ["config", "set", "dev", "allowedExtensions", "a ,b"],
                 ["config", "set", "missing", "tenant", "x", "--token", SuppliedToken],
                 ["config", "set", "", "tenant", "x"],
                 ["config", "set", " ", "tenant", "x"],
@@ -1180,6 +1183,7 @@ public sealed class ConfigCommandTests
             error.ShouldBeEmpty();
             AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe(argument);
             File.Exists(store.ProfilePath).ShouldBeFalse();
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
         }
         finally
         {
@@ -1354,12 +1358,20 @@ public sealed class ConfigCommandTests
                 "config", "set", "dev", "allowedExtensions", "task-id,trace-id");
             listExit.ShouldBe(0, listOutput);
             listError.ShouldBeEmpty();
+            AssertNoSecret(listOutput, listError, StoredToken);
+            JsonElement listDocument = JsonDocument.Parse(listOutput).RootElement;
+            listDocument.GetProperty("profile").GetString().ShouldBe("dev");
+            listDocument.GetProperty("field").GetString().ShouldBe("allowedExtensions");
             store.Read().Profiles["dev"].AllowedExtensions.ShouldBe(["task-id", "trace-id"]);
 
             (int emptyExit, string emptyOutput, string emptyError) = await InvokeAsync(store,
                 "config", "set", "dev", "allowedExtensions", string.Empty);
             emptyExit.ShouldBe(0, emptyOutput);
             emptyError.ShouldBeEmpty();
+            AssertNoSecret(emptyOutput, emptyError, StoredToken);
+            JsonElement emptyDocument = JsonDocument.Parse(emptyOutput).RootElement;
+            emptyDocument.GetProperty("profile").GetString().ShouldBe("dev");
+            emptyDocument.GetProperty("field").GetString().ShouldBe("allowedExtensions");
             using JsonDocument written = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
             JsonElement extensions = written.RootElement.GetProperty("profiles").GetProperty("dev").GetProperty("allowedExtensions");
             extensions.ValueKind.ShouldBe(JsonValueKind.Array);
@@ -1464,6 +1476,8 @@ public sealed class ConfigCommandTests
             [
                 (["--tenant", "acme"], "tenant"),
                 (["--actor", "x"], "actor"),
+                (["--actor", ""], "actor"),
+                (["--actor", " "], "actor"),
                 (["--allow-tenant-override"], "allowTenantOverride"),
                 (["--allow-tenant-override", "false"], "allowTenantOverride"),
                 (["--allow-tenant-override", "--actor", "x", "--tenant", "acme"], "tenant"),
@@ -1510,7 +1524,12 @@ public sealed class ConfigCommandTests
             output.ShouldNotContain("\\u00");
             JsonElement failure = AssertError(output, "invalid_arguments");
             failure.GetProperty("argument").GetString().ShouldBe(argument);
-            failure.GetProperty("message").GetString().ShouldNotBeNull().ShouldContain("config set");
+            string message = failure.GetProperty("message").GetString().ShouldNotBeNull();
+            string flag = argument == "allowTenantOverride" ? "--allow-tenant-override" : "--" + argument;
+            message.ShouldContain(flag);
+            message.ShouldContain("does not accept");
+            message.ShouldContain("wrote nothing");
+            message.ShouldContain("config set");
             if (previous is null)
             {
                 Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
@@ -1632,6 +1651,7 @@ public sealed class ConfigCommandTests
                 ["config", "set", "dev", "allowedExtensions", "task-id"],
                 ["config", "current"],
                 ["config", "use", "--clear"],
+                ["config", "current"],
                 ["config", "profile", "add", "dev", "--url", "https://u2.example/"],
                 ["config", "profile", "remove", "dev"],
             ];
