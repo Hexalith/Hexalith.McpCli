@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -224,6 +224,32 @@ Post-commit code review (2026-09-30) of `6fe785e..d97e505` (`references/` gitlin
 - Rejected because the fix would edit the spec: the Interrupted row is tested only in Core (acceptance-auditor).
 - carried: Parse errors break criterion 1 (Story 2.11 Defer). The Windows ACL and process tests have never run (Story 4.16 Defer). `activeProfile: null` (fifth-pass Defer; the new l.1611 pin is folded into the ledger patch above). All from acceptance-auditor.
 - carried: Edge-case-hunter's nine other findings repeat earlier rows. Several operator flags need one rerun each (thirteenth-pass `low`). `set`, `use` and `remove` ignore operator flags (second-pass `low`). The `existing=false` rows miss the lock file (fourth-pass). A failing `IsCompleted` assertion orphans the children (fourth-pass). The 2 s startup window, twice (fourth-pass). No child timeout or kill (earlier rows). `MutationRestrictsPermissivePreexistingModes` can't see the pre-replace `RestrictFile` (ninth-pass). Fixed flag precedence (`false`: Decision (1) says "in that order").
+
+Current-HEAD code review (2026-09-30, 15:53 UTC) of `6fe785e..fa54f6a`, using the story and Epic 2 context. The diff covers seven files (992 additions, 24 deletions): source, tests, README, deferred-work and epics. Unrelated submodule pointers and review tracking are excluded. All four independent layers completed; verification-gap found no gaps. No new production regression was confirmed. There are zero new decision or patch findings, three carried deferrals, and eleven rejected reviewer findings. Earlier unchecked action items above remain open.
+
+- [x] [Review][Defer] Parser failures still violate AC1's error-document, token-secrecy and exit-code contract. [src/Hexalith.McpCli/Cli/CliRunner.cs:310] — medium; deferred: the pre-existing parser action bypasses the command action, prints help on stdout, can echo an unmatched token on stderr, and exits 1. Acceptance-auditor reproduced both an extra positional token on `set` and `add --tenant` without a value. Retains the existing Story 2.11 ledger entry; no duplicate action item.
+- [x] [Review][Defer] The added tests retain `activeProfile: null` despite Epic 2's absent-optional-member rule. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1406] — medium; deferred: `RemoveClearsOnlyItsOwnSelectionAsync` and `AddAcceptsOtherGlobalOptionsAsync` pin the existing Story 2.2 shape. Acceptance-auditor confirmed the output. Retains the existing fifth-pass ledger entry and its planning-conflict disposition.
+- [x] [Review][Defer] A trailing-newline allowed-extension key still passes validation and changes the profile. [src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:68] — low; deferred: the unchanged `$` regex anchor accepts a final newline, and acceptance-auditor reproduced `task-id\n` being stored with exit 0. Retains the existing ninth-pass ledger entry; the shared execution validator is outside this story's change scope.
+
+**Current validation blocker (existing action item)**
+
+The Release solution build passed with zero warnings and errors. All six test projects ran individually: Core 243 (241 passed, two Windows ACL skips), CLI 160 passed, Abstractions 20 passed, Analyzers 19 passed, MCP 6 passed, Manifest 8 (seven passed, one failed). Total: 456, 453 passed, one failed, two skipped. `dotnet test tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj --configuration Release --no-build` exited 2: `ProductionContractsStayWithinPinnedDependencyClosure` rejects EventStore Client and Contracts 3.110.0 because `tools/dependency-policy.json` still pins 3.109.0. This reconfirms the existing post-commit dependency-policy action item, rather than a new defect in this scoped diff. The chosen policy update has not been applied; AC2 remains unmet and the story stays `in-progress`.
+
+The parent also verified that `add` with an environment URL but no explicit `--url` returns `invalid_arguments` (argument `url`), exit 2, empty stderr and no profile file. This behavior is correct; the earlier unchecked regression-test action item remains open.
+
+**Rejected (current-HEAD review)**
+
+- blind-hunter / low: a successful mutation can exceed the 1 MiB read cap. Independently reproduced with a 1,048,570-byte valid file: `set` writes 1,048,586 bytes and subsequent `list`/`remove` fail. This is the already-rejected ninth-pass edge case, unlikely in everyday CLI use; a fix adds a transaction size guard outside the changed production path.
+- blind-hunter / low: cancellation can leave a child process alive. `RunExecutableAsync` disposes the process handle without killing it, but the case requires interrupted test execution and the fix needs process-tree termination and drain handling. Retains the earlier rejection.
+- blind-hunter / low: the two-second concurrency window cannot prove that both children reached the lock. An incomplete task can still be starting; fixing that rare false-positive path requires a child-start or lock-attempt handshake. Retains the earlier rejection and existing negative-control evidence.
+- blind-hunter / low: an admin read guarded by `File.Exists` would evade the directory fixture. The fixture has that limitation, but current production has no admin-profile read and a new malformed-file variant adds coverage for a hypothetical regression. Retains the earlier rejection.
+- blind-hunter / low: ACL assertions do not check every `FileSystemRights` bit. The helper checks protection, allowed identities and inheritance, while the unchanged implementation grants FullControl. Extra effective-rights assertions address a hypothetical Windows regression; Windows execution remains explicitly deferred.
+- blind-hunter / low: Windows tests do not seed permissive existing ACLs. The Unix counterpart does, but adding a Windows ACL-seeding fixture is more than a direct correction and would not run on the current Ubuntu CI. Retains the earlier rejection.
+- blind-hunter / low: field-preservation fixtures leave format, tenant-override and extensions unset. This limits those fixtures, but the unchanged setter preserves fields with record `with` expressions; adding complete fixtures and collection-aware assertions expands the test matrix. Retains the fifth-pass rejection.
+- blind-hunter / low: successful `true`, `false` and `0` setter variants lack dedicated parser cases. The shared setter's explicit switch already handles these values and the existing round-trip covers `1`; additional transition tests do not expose a current production failure. Retains the earlier rejection.
+- blind-hunter / low: hostile-file cases are not repeated for `set` and `remove`. Both use the same unchanged, tested locked transaction and validating read as `add`/`use`; the null-guard change does not bypass it. Extending the entire matrix adds tests without an observed new failure.
+- edge-case-hunter / low: cancellation can orphan a child during cleanup. Verified separately at the cited `WaitForExitAsync`; same rare cancelled-test outcome and process-lifecycle complexity as the blind-hunter finding above.
+- edge-case-hunter / low: slow-starting lock-free children can pass the concurrency claim. Verified separately: `IsCompleted` observes task completion, not lock acquisition. A startup handshake adds instrumentation for the already-rejected slow-start boundary.
 
 ## Verification
 

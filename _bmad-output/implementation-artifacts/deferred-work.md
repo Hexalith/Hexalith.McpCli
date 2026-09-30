@@ -234,3 +234,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: The README documents no error codes, so a script that branches on `error.code` has no documented contract.
   evidence: `README.md` never mentions `invalid_arguments`, `configuration_invalid`, or the exit codes of any verb. Story 2.3 made a missing positional argument `invalid_arguments` and a supplied but invalid name, field or value `configuration_invalid`, both exit 2; these rules appear only in the spec and tests. Pre-existing: no verb's error codes were documented at baseline `6fe785e`. Story 2.11 owns the exit-code and addendum §G error-document contract. This entry is related to the eleventh-pass documentation entry above.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md (2026-09-30, HEAD fa54f6a)
+
+These are reconfirmations of the existing entries above, with their existing ownership and disposition; they add no separate work items.
+
+- **Parser error documents and token secrecy:** acceptance-auditor reproduced an extra positional token on `config set` being echoed on stderr, help on stdout and exit 1, plus `add --tenant` without a value taking the same parser path. Retains the implementation-time Story 2.11 entry.
+- **Absent active-profile output:** acceptance-auditor confirmed `activeProfile: null`; `RemoveClearsOnlyItsOwnSelectionAsync` and `AddAcceptsOtherGlobalOptionsAsync` assert that shape. Retains the fifth-pass planning-conflict entry and the existing action item to update its test references.
+- **Trailing-newline extension keys:** acceptance-auditor confirmed `config set dev allowedExtensions "task-id\n"` exits 0 and persists the invalid key. Retains the ninth-pass shared-validator entry; no new dependency or execution change is authorized by this review.
