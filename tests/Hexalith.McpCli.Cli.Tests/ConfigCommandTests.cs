@@ -1564,6 +1564,15 @@ public sealed class ConfigCommandTests
             };
 
             (int exit, string output, string error) = await InvokeAsync(store, environment, null,
+                "config", "profile", "add", "dev");
+
+            exit.ShouldBe(2);
+            error.ShouldBeEmpty();
+            AssertNoSecret(output, error, environmentToken);
+            AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe("url");
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
+
+            (exit, output, error) = await InvokeAsync(store, environment, null,
                 "config", "profile", "add", "dev", "--url", "https://gateway.example/");
 
             exit.ShouldBe(0, output);
