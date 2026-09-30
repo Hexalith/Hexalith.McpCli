@@ -1507,6 +1507,7 @@ public sealed class ConfigCommandTests
             exit.ShouldBe(2);
             error.ShouldBeEmpty();
             AssertNoSecret(output, error, SuppliedToken, StoredToken);
+            output.ShouldNotContain("\\u00");
             JsonElement failure = AssertError(output, "invalid_arguments");
             failure.GetProperty("argument").GetString().ShouldBe(argument);
             failure.GetProperty("message").GetString().ShouldNotBeNull().ShouldContain("config set");
