@@ -2,7 +2,7 @@
 title: 'Update and Remove Profiles Safely'
 type: 'feature'
 created: '2026-09-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '6fe785e063c1d4e76d001c1ec825b41e42b589d7'
@@ -270,6 +270,30 @@ Final-HEAD code review (2026-10-01) of `6fe785e..2769f9e` (`references/`, `tools
 - Rejected because the fix would edit the spec: the Always rule ("a key that is … invalid … fails") conflicts with the Never rule on execution for trailing-newline keys (acceptance-auditor). The underlying defect is the ninth-pass deferral.
 - carried: Parser errors break AC 1, including malformed operator-flag forms on `add` (Story 2.11 Defer). `activeProfile: null` (fifth-pass Defer). A mutation commits before an `--output` failure (sixth-pass Defer). The Windows checks have never run (Story 4.16 Defer). The Interrupted row is Core-only (earlier spec-edit rejections). The admin-isolation test covers only `config` verbs and misses `File.Exists`-guarded reads (earlier `low` rows). All from acceptance-auditor.
 - carried: Edge-case-hunter's seven findings repeat earlier rows: `set`, `use` and `remove` ignore operator flags (second-pass `low`); a failed `set` on a clean home creates the directory and lock (fourth-pass); no child timeout or kill (earlier rows); a failing `IsCompleted` assertion orphans the children (fourth-pass); a failed write leaves a permissive target untested (fifth- and ninth-pass); the 2 s startup window (fourth-pass); fixed flag precedence (`false`: Decision (1) says "in that order").
+
+Closing code review (2026-10-01) of `6fe785e..d05af56` (`references/` gitlinks and this spec excluded; 10 files, 1,051 additions, 47 deletions), run as four layers: blind-hunter, edge-case-hunter, verification-gap and acceptance-auditor. The verification-gap layer found no gaps. Acceptance-auditor found every Decision, Always/Never rule and matrix row met. It reran the Release build (0 warnings, 0 errors) and the solution tests (457 total, 0 failed, 2 skipped: the Windows ACL tests), and validated the four post-baseline commit messages with commitlint. Of the 31 findings, 7 form 3 patches, 4 repeat existing ledger deferrals (no new ledger entries), and 20 are rejected.
+
+- [ ] [Review][Patch] `AddHelpLimitsStoredFlagsAndPointsOperatorFieldsToSetAsync` fails when the test assembly runs in a terminal narrower than the help text. System.CommandLine wraps help at the console width when stdout is not redirected, so the 104-character description breaks after "set". Reproduced: the direct Release assembly run with `-method '*AddHelpLimits*'` fails inside an 80-column `script` terminal and passes when redirected. The repository's fallback validation ladder runs that assembly directly. Fix: collapse whitespace in `output` before `ShouldContain` (blind-hunter + edge-case-hunter). [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1562]
+- [ ] [Review][Patch] Commit `d05af56` rewrote `epic-2-context.md` without recording it, and the new text drops constraints that later Epic 2 specs load through `context:`. Dropped: (1) FR14's "MCP failures before request serving keep stdout empty"; only the `--transport http` case remains (`epics.md:99`). (2) "Atomically replace the target"; it now just "replaces the target". (3) The list of files to protect before token bytes are written: directory, profile, lock and temporary (`epics.md:146`, Story 2.3 criteria). (4) The earlier-flagged no-accessor clause: Commands without an accessor source are not executable Catalog entries, and Queries without one need an explicit argument. Fix: put these four clauses back into the matching bullets of the regenerated context (acceptance-auditor + blind-hunter). [_bmad-output/implementation-artifacts/epic-2-context.md:25]
+- [ ] [Review][Patch] `AddRejectsOperatorFlagsWithoutWritingAsync` never checks the field name in the refusal hint. The field token is the only part of the hint the user acts on, and `set` fields are case-sensitive (`allowTenantOverride`, not `allow-tenant-override`), yet a hint naming the wrong field would pass every row. Fix: add `message.ShouldContain($"config set PROFILE {argument} VALUE");` (blind-hunter). [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1532]
+
+**Rejected (closing review)**
+
+- `false`: The epic context's name rule `^[a-zA-Z0-9_-]{1,64}$` contradicts the trailing-newline fix (blind-hunter). It copies the planning grammar exactly (`epics.md:569`). The `\z` remediation concerns .NET's `$` semantics and is the ninth-pass deferral.
+- `false`: Five ledger entries name Story 2.11 as owner without matching criteria, so they will be lost (blind-hunter). The entries say "natural" or "suggested" owner, and the sweep triages open ledger entries directly, whatever a story's criteria say.
+- `false`: The HTML-escape ledger fix would send unescaped `<`, `>`, `&` to MCP clients (blind-hunter). The entry already notes that the encoder is shared with MCP output, and parsed string values are identical under either encoder. No code in this diff changes output.
+- `false`: New ledger entries cite line numbers that will go stale (blind-hunter). Every cited line is accurate today, and each sits next to a symbol name or a code quote.
+- `false`: The Story 4.16 criterion cannot tell executed tests from skipped ones (blind-hunter). The criterion requires the tests to "execute", which a skip does not satisfy (tenth-pass row).
+- `false`: The ledger's "first offending flag" wording conflicts with argv order (edge-case-hunter). Decision (1) fixes the order: "in that order".
+- `false`: The spec frontmatter says `done` while the sprint file says `review` (acceptance-auditor). Workflow bookkeeping, synced when this review closes.
+- `false`: `tools/dependency-policy.json` breaks "Never change dependencies" (acceptance-auditor). It is the user-approved option (a), committed separately as `06514df`.
+- `low`: After a fixed `$`-to-`\z` change, a stored `"dev\n"` profile would block every verb, and the ledger has no migration note (blind-hunter). This needs a newline deliberately typed into a name, and migration belongs to whoever implements that deferral.
+- `low`: `set` returns `{profile, field}`, while `add` and `remove` return `{name, activeProfile}`, and new tests pin both (blind-hunter). The shapes predate the baseline, and unifying them is a contract change for Story 2.11, not a direct correction.
+- `low`: Allowed-extension errors do not name the bad key (blind-hunter). These are pre-existing constant `ProfileStore` messages, and naming the key would interpolate input into messages that are deliberately fixed.
+- Rejected because the fix would edit the spec: `add --tenant` gives `invalid_arguments` while `set dev url X` gives `configuration_invalid` (blind-hunter). Decision (1) and the Always rule mandate both codes.
+- Rejected because the fix would edit the spec: the Interrupted matrix row is tested only in Core (acceptance-auditor), as in earlier passes.
+- carried: Already deferred to Story 2.11 or 4.16, with no new ledger entries: parser errors break AC 1 (acceptance-auditor); the Windows ACL and process checks never ran (acceptance-auditor); the `activeProfile: null` pins (acceptance-auditor); the cross-verb error-code rules are recorded only in the spec and tests (blind-hunter, covered by the thirteenth-pass README error-code entry).
+- carried: Edge-case-hunter's other findings repeat earlier `low` rejections: a failed `set` or `remove` on a clean home creates `~/.eventstore/` and the lock (twice); a mutation can exceed the 1 MiB read cap; a failed assertion or cancellation orphans the child processes; the 2 s startup window; the admin-isolation test runs only `config` verbs (also acceptance-auditor).
 
 ## Verification
 
