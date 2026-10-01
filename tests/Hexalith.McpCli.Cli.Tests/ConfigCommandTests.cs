@@ -1529,7 +1529,7 @@ public sealed class ConfigCommandTests
             message.ShouldContain(flag);
             message.ShouldStartWith("config profile add does not accept ");
             message.ShouldContain("wrote nothing");
-            message.ShouldContain("config set");
+            message.ShouldContain($"config set PROFILE {argument} VALUE", Case.Sensitive);
             if (previous is null)
             {
                 Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
@@ -1559,7 +1559,8 @@ public sealed class ConfigCommandTests
 
             exit.ShouldBe(0, output + error);
             error.ShouldBeEmpty();
-            output.ShouldContain(
+            string normalizedOutput = string.Join(' ', output.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+            normalizedOutput.ShouldContain(
                 "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set");
         }
         finally
