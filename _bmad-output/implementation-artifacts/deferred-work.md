@@ -240,3 +240,37 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: A token can be stored in a profile only by passing it as `--token` on the command line, so the secret ends up in shell history and, while the process runs, in `/proc/<pid>/cmdline`.
   evidence: `config profile add` builds the record from parsed flags only (`new ConnectionProfile(input.Url, input.Token, input.Format)`, `src/Hexalith.McpCli/Cli/CliRunner.cs:356`). It ignores `EVENTSTORE_TOKEN` (pinned by `AddIgnoresEnvironmentOperatorSettingsAsync`), response files are disabled (`CliRunner.cs:67`), and `@`-prefixed values are stored verbatim, so there is no stdin, file or prompt source. The README says `add` stores `--token` and "never environment values", but does not mention the argv exposure or that the token is kept as plaintext in `mcpcli.json`, protected only by mode 0600 or the ACL. Pre-existing: this is the Story 2.2 / AD-14 `add` input rule at baseline `6fe785e`. A secret-safe input such as `--token -` or a prompt adds public surface and needs an owning settings story. Found by the final-HEAD blind-hunter review of Story 2.3; no owning story yet.
+
+## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md (2026-10-01, 6fe785e..7e3226b)
+
+Reconfirmations only. Each item is already an open ledger entry above. Do not count these as additional open items.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Profile names and allowed-extension keys ending in a newline pass validation.
+  evidence: Reconfirmed 2026-10-01. `"dev\n"` and `"task-id\n"` match `ProfileNamePattern` and `KeyPattern` because `$` matches before a final newline. Already tracked by the ninth-pass entry above.
+  status: reconfirmed; not a second open item
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: README and config help still omit set-value rules and error codes.
+  evidence: Reconfirmed 2026-10-01 at `README.md:65` and `CliRunner` set arguments. Already tracked by the eleventh-pass and thirteenth-pass documentation entries above.
+  status: reconfirmed; not a second open item
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Parser failures of set, remove, and add do not emit one error document.
+  evidence: Reconfirmed 2026-10-01. `CliRunner` does not replace the default parse-error action. Already tracked by the Story 2.11 parse-error entry above.
+  status: reconfirmed; not a second open item
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: A missing `--output` directory is reported as failure after the profile commit.
+  evidence: Reconfirmed 2026-10-01. `add`, `set`, and `remove` call `ProfileStore` before `CliOutput.WriteAsync`. Already tracked by the sixth-pass entry above.
+  status: reconfirmed; not a second open item
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Windows ACL tests and the two process tests still have no executed Windows evidence.
+  evidence: Reconfirmed 2026-10-01. Both ACL tests skip off Windows, and `ConcurrentSetProcessesPreserveBothValuesAsync` and `VerbsNeverOpenAdminProfilesAsync` skip on Windows. Already tracked by the Story 4.16 Windows entry above.
+  status: reconfirmed; not a second open item
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+  summary: Profile-management success documents serialize `"activeProfile": null`.
+  evidence: Reconfirmed 2026-10-01. `RemoveClearsOnlyItsOwnSelectionAsync` and `AddAcceptsOtherGlobalOptionsAsync` still assert `JsonValueKind.Null`. Already tracked by the fifth-pass entry above.
+  status: reconfirmed; not a second open item
