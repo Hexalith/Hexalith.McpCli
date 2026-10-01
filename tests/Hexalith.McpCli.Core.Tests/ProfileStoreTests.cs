@@ -587,7 +587,7 @@ public sealed class ProfileStoreTests
         }
     }
 
-    /// <summary>The temporary file carries a protected owner-only ACL before profile bytes are serialized into it.</summary>
+    /// <summary>The temporary file carries protected ACLs for only the current user and LocalSystem before profile bytes are serialized into it.</summary>
     [Fact]
     [SupportedOSPlatform("windows")]
     public void WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten()
@@ -599,8 +599,14 @@ public sealed class ProfileStoreTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             store.Add("dev", new ConnectionProfile("https://gateway.example/", "secret-token"));
             var observed = new List<FileSecurity>();
-            JsonSerializerOptions options = ConnectionProfileProbeConverter.Options(
-                _ => observed.Add(new FileInfo(TemporaryFiles(store).Single()).GetAccessControl()));
+            JsonSerializerOptions options = ConnectionProfileProbeConverter.Options(_ =>
+            {
+                // ReadPermissions requests ACL metadata only; it does not conflict with the writer's FileShare.None.
+                using FileStream permissions = new FileInfo(TemporaryFiles(store).Single()).Create(
+                    FileMode.Open, FileSystemRights.ReadPermissions, FileShare.ReadWrite,
+                    bufferSize: 1, options: FileOptions.None, fileSecurity: null);
+                observed.Add(permissions.GetAccessControl());
+            });
 
             new ProfileFileTransaction(store.ProfilePath).Apply(store.Read, snapshot => snapshot, options);
 
@@ -630,6 +636,7 @@ public sealed class ProfileStoreTests
         foreach (FileSystemAccessRule rule in rules)
         {
             rule.AccessControlType.ShouldBe(AccessControlType.Allow);
+            rule.FileSystemRights.ShouldBe(FileSystemRights.FullControl);
             rule.IsInherited.ShouldBeFalse();
         }
 
