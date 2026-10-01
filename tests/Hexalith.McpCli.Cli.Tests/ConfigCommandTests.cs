@@ -1545,6 +1545,29 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Add help states that only connection flags are stored and that operator fields belong to config set.</summary>
+    [Fact]
+    public async Task AddHelpLimitsStoredFlagsAndPointsOperatorFieldsToSetAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+
+            (int exit, string output, string error) = await InvokeAsync(
+                store, "config", "profile", "add", "--help");
+
+            exit.ShouldBe(0, output + error);
+            error.ShouldBeEmpty();
+            output.ShouldContain(
+                "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Add stores only explicit connection fields and ignores operator settings from the environment.</summary>
     [Fact]
     public async Task AddIgnoresEnvironmentOperatorSettingsAsync()
