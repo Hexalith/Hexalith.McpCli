@@ -885,13 +885,17 @@ public sealed class ConfigCommandTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             var environment = new Dictionary<string, string?> { ["EVENTSTORE_FORMAT"] = "table" };
 
-            (int implicitExit, _, _) = await InvokeAsync(store, environment, null,
+            (int implicitExit, string implicitOutput, string implicitError) = await InvokeAsync(store, environment, null,
                 "config", "profile", "add", "implicit", "--url", "https://gateway.example/");
-            (int explicitExit, _, _) = await InvokeAsync(store,
+            (int explicitExit, string explicitOutput, string explicitError) = await InvokeAsync(store,
                 "config", "profile", "add", "explicit", "--url", "https://gateway.example/", "--format", "table");
 
             implicitExit.ShouldBe(0);
             explicitExit.ShouldBe(0);
+            implicitError.ShouldBeEmpty();
+            explicitError.ShouldBeEmpty();
+            implicitOutput.ShouldBe(TableOutput("name\t\"implicit\"", "activeProfile\tnull"));
+            explicitOutput.ShouldBe(TableOutput("name\t\"explicit\"", "activeProfile\tnull"));
             ProfileSnapshot snapshot = store.Read();
             snapshot.Profiles["implicit"].Format.ShouldBeNull();
             snapshot.Profiles["implicit"].Token.ShouldBeNull();
@@ -1064,6 +1068,42 @@ public sealed class ConfigCommandTests
             JsonDocument.Parse(listing).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
             JsonDocument.Parse(selected).RootElement.GetProperty("activeProfile").GetString().ShouldBe("dev");
             environmentListing.ShouldStartWith("FIELD\tVALUE");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Every profile-management verb renders its result as FIELD/VALUE rows without a format note.</summary>
+    [Fact]
+    public async Task ManagementVerbsRenderFieldValueTablesAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string token = "secret-value";
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (string[] Args, string Expected)[] steps =
+            [
+                (["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", token],
+                    TableOutput("name\t\"dev\"", "activeProfile\tnull")),
+                (["config", "use", "dev"], TableOutput("activeProfile\t\"dev\"")),
+                (["config", "set", "dev", "tenant", "acme"], TableOutput("profile\t\"dev\"", "field\t\"tenant\"")),
+                (["config", "profile", "list"], TableOutput("activeProfile\t\"dev\"",
+                    "profiles\t[{\"name\":\"dev\",\"url\":\"https://gateway.example/\",\"token\":\"secr***\",\"format\":\"table\","
+                    + "\"tenant\":\"acme\",\"actor\":null,\"allowTenantOverride\":null,\"allowedExtensions\":[]}]")),
+                (["config", "use", "--clear"], TableOutput("activeProfile\tnull")),
+                (["config", "profile", "remove", "dev"], TableOutput("name\t\"dev\"", "activeProfile\tnull")),
+            ];
+
+            foreach ((string[] args, string expected) in steps)
+            {
+                (int exit, string output, string error) = await InvokeAsync(store, [.. args, "--format", "table"]);
+                exit.ShouldBe(0, string.Join(' ', args));
+                error.ShouldBeEmpty(string.Join(' ', args));
+                output.ShouldBe(expected, string.Join(' ', args));
+            }
         }
         finally
         {
@@ -1844,6 +1884,9 @@ public sealed class ConfigCommandTests
         await process.WaitForExitAsync(TestContext.Current.CancellationToken);
         return (process.ExitCode, await output, await error);
     }
+
+    private static string TableOutput(params string[] rows)
+        => string.Join(Environment.NewLine, ["FIELD\tVALUE", .. rows, string.Empty]);
 
     private static string TemporaryDirectory()
     {

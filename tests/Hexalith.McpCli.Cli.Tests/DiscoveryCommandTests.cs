@@ -82,15 +82,13 @@ public sealed class DiscoveryCommandTests
             ["operations", "sample", .. flags]);
         listExit.ShouldBe(0);
         listError.ShouldBeEmpty();
-        JsonElement list = Parse(listing);
-        AssertMembers(list, "module", "operations");
-        list.GetProperty("module").GetString().ShouldBe("sample");
-        list.GetProperty("operations").EnumerateArray().Select(item => item.GetProperty("name").GetString())
-            .ShouldBe(["sample.create-item", "sample.get-item", "sample.rename-item"]);
-        foreach (JsonElement item in list.GetProperty("operations").EnumerateArray())
-        {
-            AssertMembers(item, "name", "kind", "description");
-        }
+        AssertJson(listing, """
+            {"module":"sample","operations":[
+                {"name":"sample.create-item","kind":"write","description":"Create a synthetic item in the sample module."},
+                {"name":"sample.get-item","kind":"read","description":"Read one synthetic item from the sample projection."},
+                {"name":"sample.rename-item","kind":"write","description":"Rename a synthetic item in the sample module."}
+            ]}
+            """);
 
         (int writesExit, string writes, string writesError) = await InvokeAsync(SampleManifest,
             ["operations", "sample", "--kind", "write", .. flags]);
@@ -255,7 +253,7 @@ public sealed class DiscoveryCommandTests
         Assembly[] manifest = [typeof(Routing.Module).Assembly];
         (int exit, string output, string error) = await InvokeAsync(manifest, "describe", "routing-fixture.envelope-item");
         exit.ShouldBe(0);
-        error.ShouldContain("warning");
+        error.ShouldContain("Catalog warning ");
         JsonElement description = Parse(output);
         AssertMembers(description, "name", "kind", "description", "schema", "example", "envelope", "lintFindings", "submittable", "reason");
         description.GetProperty("name").GetString().ShouldBe("routing-fixture.envelope-item");
@@ -268,6 +266,20 @@ public sealed class DiscoveryCommandTests
             """);
         description.GetProperty("submittable").GetBoolean().ShouldBeFalse();
         description.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+        AssertJson(description.GetProperty("lintFindings").GetRawText(), """
+            [
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member Actor so callers understand its meaning.","property":"/properties/Actor"},
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member Correlation so callers understand its meaning.","property":"/properties/Correlation"},
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member Idempotency so callers understand its meaning.","property":"/properties/Idempotency"},
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member ItemId so callers understand its meaning.","property":"/properties/ItemId"},
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member Tenant so callers understand its meaning.","property":"/properties/tenant~1~0"}
+            ]
+            """);
         AssertJson(description.GetProperty("schema").GetRawText(), """
             {"type":"object","properties":{
                 "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26},
@@ -280,16 +292,31 @@ public sealed class DiscoveryCommandTests
 
         (int queryExit, string queryOutput, _) = await InvokeAsync(manifest, "describe", "routing-fixture.get-http2-status");
         queryExit.ShouldBe(0);
-        JsonElement query = Parse(queryOutput);
-        AssertMembers(query, "name", "kind", "description", "schema", "envelope", "lintFindings", "submittable", "reason");
-        AssertJson(query.GetProperty("envelope").GetRawText(), """
-            {"aggregateIdRequired":true,"idempotencyKeyRequired":false,
-             "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]}
+        AssertJson(queryOutput, """
+            {"name":"routing-fixture.get-http2-status","kind":"read","description":"Read HTTP2 status.",
+             "schema":{"type":["object","null"],"additionalProperties":false},
+             "envelope":{"aggregateIdRequired":true,"idempotencyKeyRequired":false,
+                "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
+             "lintFindings":[],"submittable":false,"reason":"configuration_invalid"}
             """);
 
         (int optionalExit, string optionalOutput, _) = await InvokeAsync(manifest, "describe", "routing-fixture.nullable-idempotency");
         optionalExit.ShouldBe(0);
-        Parse(optionalOutput).GetProperty("envelope").GetProperty("idempotencyKeyRequired").GetBoolean().ShouldBeFalse();
+        AssertJson(optionalOutput, """
+            {"name":"routing-fixture.nullable-idempotency","kind":"write","description":"Command with an optional idempotency key.",
+             "schema":{"type":"object","properties":{
+                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26},
+                "Idempotency":{"type":["string","null"],"default":null,"readOnly":true}
+             },"required":["ItemId"],"additionalProperties":false},
+             "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
+                "arguments":["tenant","aggregateId","correlationId","idempotencyKey","extensions"]},
+             "lintFindings":[
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member Idempotency so callers understand its meaning.","property":"/properties/Idempotency"},
+                {"code":"missing_property_description","severity":"warning",
+                 "message":"Describe payload member ItemId so callers understand its meaning.","property":"/properties/ItemId"}
+             ],"submittable":false,"reason":"configuration_invalid"}
+            """);
     }
 
     /// <summary>Lint is always present, never invalidates strict catalogs, and affects exit only when requested.</summary>
@@ -433,16 +460,19 @@ public sealed class DiscoveryCommandTests
             (int exit, string output, string error) = await InvokeAsync(manifest,
                 [.. verb, .. strict ? new[] { "--strict" } : []]);
             exit.ShouldBe(strict ? 2 : 0);
-            error.ShouldContain(warning ? "warning" : "error");
+            error.ShouldContain(warning ? "Catalog warning " : "Catalog error ");
+            error.ShouldNotContain(warning ? "Catalog error " : "Catalog warning ");
             error.ShouldContain(warning ? "CompetingRouteCommand" : "MissingWireQuery");
-            JsonElement document = Parse(output);
             if (strict)
             {
-                AssertMembers(document, "error");
-                JsonElement details = document.GetProperty("error");
-                AssertMembers(details, "code", "message");
-                details.GetProperty("code").GetString().ShouldBe("catalog_invalid");
-                details.GetProperty("message").GetString().ShouldStartWith("Strict mode rejects the Catalog because it has ");
+                AssertJson(output, JsonSerializer.Serialize(new
+                {
+                    error = new
+                    {
+                        code = "catalog_invalid",
+                        message = $"Strict mode rejects the Catalog because it has {(warning ? 7 : 1)} diagnostic(s).",
+                    },
+                }));
             }
             else
             {
@@ -480,26 +510,23 @@ public sealed class DiscoveryCommandTests
         }
     }
 
-    /// <summary>Configured URL discovery makes zero HTTP requests to a bounded local listener.</summary>
+    /// <summary>Configured URL discovery opens zero connections to a bounded local listener.</summary>
     [Fact]
     public async Task ConfiguredUrlDiscoveryDoesNotContactGatewayAsync()
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
-        int requests = 0;
-        async Task CountRequestsAsync()
+        int connections = 0;
+        async Task CountConnectionsAsync()
         {
             try
             {
                 while (!timeout.IsCancellationRequested)
                 {
+                    // Count the connection itself, so contact that never sends a request line is still caught.
                     using TcpClient client = await listener.AcceptTcpClientAsync(timeout.Token);
-                    using var reader = new StreamReader(client.GetStream());
-                    if (await reader.ReadLineAsync(timeout.Token) is not null)
-                    {
-                        Interlocked.Increment(ref requests);
-                    }
+                    Interlocked.Increment(ref connections);
 
                     // Close the connection so an accidental call fails promptly instead of hanging the test.
                 }
@@ -509,7 +536,7 @@ public sealed class DiscoveryCommandTests
             }
         }
 
-        Task accepting = CountRequestsAsync();
+        Task accepting = CountConnectionsAsync();
         try
         {
             string url = $"http://127.0.0.1:{((IPEndPoint)listener.LocalEndpoint).Port}/";
@@ -543,7 +570,7 @@ public sealed class DiscoveryCommandTests
             }
         }
 
-        Volatile.Read(ref requests).ShouldBe(0);
+        Volatile.Read(ref connections).ShouldBe(0);
     }
 
     private static string ExpectedRetainedDocument(bool warning, string verb)
@@ -620,8 +647,8 @@ public sealed class DiscoveryCommandTests
     {
         error.ShouldContain("CompetingRouteCommand");
         error.ShouldContain("MissingWireQuery");
-        error.ShouldContain("warning");
-        error.ShouldContain("error");
+        error.ShouldContain("Catalog warning ");
+        error.ShouldContain("Catalog error ");
     }
 
     private static void AssertMembers(JsonElement json, params string[] names)
