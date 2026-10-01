@@ -255,3 +255,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-5-run-a-valid-query-through-the-gateway.md`
   summary: The AGENTS.md/CLAUDE.md policy line allows a per-call MCP tenant "only under the operator gate", which is stricter than the approved tenant rule.
   evidence: `AGENTS.md:84` (byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`). epics.md (Story 2.5 tenant AC), epic-2-context.md, the Story 2.5 frozen spec and `OperationExecutor.ResolveTenant` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:291`) all honor a per-call tenant when no session tenant exists *or* override is enabled. `QueryExecutionTests` pins the no-session case. An agent that follows the policy line could "fix" the executor against the architecture. Pre-existing wording. Fix: edit `AGENTS.md`, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-6-validate-and-page-query-calls.md`
+  summary: General CLI numeric binding failures still exit 1 with plain usage rather than the canonical error document and exit 2; reconcile in Story 2.11.
+  evidence: `dotnet src/Hexalith.McpCli/bin/Debug/net10.0/Hexalith.McpCli.dll query string-fixture.list-items --payload '{}' --offset 2147483648` exited 1; stdout contained usage and stderr reported that the value could not be parsed as Nullable<Int32>. Existing `CreateQuery` integer bindings and README validation-exit wording predate Story 2.6; no executor call occurred.
