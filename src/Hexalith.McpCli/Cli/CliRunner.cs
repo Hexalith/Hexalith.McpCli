@@ -87,7 +87,7 @@ internal sealed class CliRunner
             (services, settings, token) =>
             {
                 CatalogLookupResult<ModulesDocument> result = services.GetRequiredService<ICatalog>().ListModules();
-                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tabular: true);
+                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tOPERATIONS\tDESCRIPTION");
             }, cancellationToken));
         return command;
     }
@@ -115,7 +115,7 @@ internal sealed class CliRunner
                 }
 
                 CatalogLookupResult<OperationsDocument> result = services.GetRequiredService<ICatalog>().ListOperations(name, filter);
-                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tabular: true);
+                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tKIND\tDESCRIPTION");
             }, cancellationToken));
         return command;
     }
@@ -267,7 +267,7 @@ internal sealed class CliRunner
                     settings.Strict,
                     settings.Sources,
                 };
-                return CliOutput.WriteAsync(document, null, settings, token, tabular: true);
+                return CliOutput.WriteAsync(document, null, settings, token, tableHeader: "FIELD\tVALUE");
             }, cancellationToken));
         config.Subcommands.Add(current);
         config.Subcommands.Add(CreateConfigProfile());
@@ -299,7 +299,7 @@ internal sealed class CliRunner
                         allowedExtensions = entry.Value.AllowedExtensions ?? [],
                     }).ToArray(),
             };
-            return CliOutput.WriteAsync(document, null, settings, cancellationToken, tabular: true);
+            return CliOutput.WriteAsync(document, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
         Argument<string?> addName = new("name") { Arity = ArgumentArity.ZeroOrOne };
@@ -327,7 +327,7 @@ internal sealed class CliRunner
             }
 
             ProfileSnapshot snapshot = _profileStore.Remove(name);
-            return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
+            return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
         profile.Subcommands.Add(list);
@@ -354,7 +354,7 @@ internal sealed class CliRunner
         // Add replaces the whole record with only the supplied connection fields; the store rejects a
         // supplied-but-invalid name or value as configuration_invalid.
         ProfileSnapshot snapshot = _profileStore.Add(name, new ConnectionProfile(input.Url, input.Token, input.Format));
-        return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
+        return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
     }
 
     private static OperationError? RejectOperatorFlags(SettingsInput input)
@@ -383,7 +383,7 @@ internal sealed class CliRunner
             }
 
             ProfileSnapshot snapshot = _profileStore.Use(shouldClear ? null : selected);
-            return CliOutput.WriteAsync(new { activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tabular: true);
+            return CliOutput.WriteAsync(new { activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
         return use;
     }
@@ -409,7 +409,7 @@ internal sealed class CliRunner
 
             // Supplied names, fields, and values are validated by the store and fail as configuration_invalid.
             _profileStore.Set(selected, key, content);
-            return CliOutput.WriteAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tabular: true);
+            return CliOutput.WriteAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
         return set;
     }

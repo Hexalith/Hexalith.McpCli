@@ -9,17 +9,26 @@ namespace Hexalith.McpCli.Cli;
 /// <summary>Writes one public Core document to the CLI output channel.</summary>
 internal static class CliOutput
 {
+    /// <summary>Writes a result or error using the requested format and destination.</summary>
+    /// <param name="document">The successful result document.</param>
+    /// <param name="error">The failure document, when no result is available.</param>
+    /// <param name="settings">The resolved presentation settings.</param>
+    /// <param name="cancellationToken">Cancels file output.</param>
+    /// <param name="tableHeader">The verb's tab-separated column names, or null for JSON-only results.</param>
+    /// <returns>Zero for a result or two for an error.</returns>
     internal static async Task<int> WriteAsync(object? document, OperationError? error,
-        ResolvedSettings settings, CancellationToken cancellationToken, bool tabular = false)
+        ResolvedSettings settings, CancellationToken cancellationToken, string? tableHeader = null)
     {
-        if (error is null && settings.Format == "table" && !tabular)
+        if (error is null && settings.Format == "table" && tableHeader is null)
         {
             await Console.Error.WriteLineAsync("This result is emitted as JSON; no table view is defined.").ConfigureAwait(false);
         }
 
         string output = error is not null
             ? JsonSerializer.Serialize(new { error }, McpCliJson.Result)
-            : settings.Format == "table" && tabular ? FormatTable(document!) : JsonSerializer.Serialize(document, McpCliJson.Result);
+            : settings.Format == "table" && tableHeader is not null
+                ? FormatTable(document!, tableHeader)
+                : JsonSerializer.Serialize(document, McpCliJson.Result);
         if (error is null && settings.Output is not null)
         {
             await File.WriteAllTextAsync(settings.Output, output + Environment.NewLine, cancellationToken).ConfigureAwait(false);
@@ -44,24 +53,24 @@ internal static class CliOutput
         return 2;
     }
 
-    private static string FormatTable(object document)
+    private static string FormatTable(object document, string header)
     {
         if (document is ModulesDocument modules)
         {
-            return "NAME\tOPERATIONS\tDESCRIPTION" + Environment.NewLine
+            return header + Environment.NewLine
                 + string.Join(Environment.NewLine, modules.Modules.Select(module
                     => $"{module.Name}\t{module.OperationCount}\t{module.Description}"));
         }
 
         if (document is OperationsDocument operations)
         {
-            return "NAME\tKIND\tDESCRIPTION" + Environment.NewLine
+            return header + Environment.NewLine
                 + string.Join(Environment.NewLine, operations.Operations.Select(operation
                     => $"{operation.Name}\t{operation.Kind}\t{operation.Description}"));
         }
 
         JsonElement json = JsonSerializer.SerializeToElement(document, McpCliJson.Result);
-        return "FIELD\tVALUE" + Environment.NewLine + string.Join(Environment.NewLine,
+        return header + Environment.NewLine + string.Join(Environment.NewLine,
             json.EnumerateObject().Select(property => property.Name + "\t" + JsonSerializer.Serialize(property.Value)));
     }
 }
