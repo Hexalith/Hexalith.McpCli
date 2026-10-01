@@ -23,7 +23,14 @@ The spike directly references the pinned Client package; it has no McpCli or Ten
 git -C references/Hexalith.EventStore show 27279fe6431925a6ea046c3f89af61487185c7de:src/Hexalith.EventStore/Validation/SubmitQueryRequestValidator.cs
 ```
 
-That source limits `AggregateId` to 256 characters and uses `^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$`. `index` satisfies both checks. The [pinned validator source](https://github.com/Hexalith/Hexalith.EventStore/blob/27279fe6431925a6ea046c3f89af61487185c7de/src/Hexalith.EventStore/Validation/SubmitQueryRequestValidator.cs) supports only syntactic validity; maintainer confirmation and a live response are still required.
+That source limits `AggregateId` to 256 characters and uses `^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$`. `index` satisfies both checks. The [pinned validator source](https://github.com/Hexalith/Hexalith.EventStore/blob/27279fe6431925a6ea046c3f89af61487185c7de/src/Hexalith.EventStore/Validation/SubmitQueryRequestValidator.cs) supports only syntactic validity; the [authorized live run](#authorized-live-run) supplies the live acceptance evidence, and maintainer confirmation remains for Story 4.8.
+
+The cited sources are unchanged at the runtime revisions. Each of these comparisons printed no differences (code review, 2026-10-01):
+
+```sh
+git -C /home/administrator/projects/hexalith/tenants diff --stat 3ce15d103227fb7767820fc89c51b75b86401ff3 78e09184247c38641242c676eed40502a477eb7e -- src/Hexalith.Tenants.Contracts/Queries/ListTenantsQuery.cs src/Hexalith.Tenants.Contracts/Queries/PaginatedResult.cs
+git -C references/Hexalith.EventStore diff --stat 27279fe6431925a6ea046c3f89af61487185c7de 19dc1f82122564453163ac010dc7e5ae81db7ed3 -- src/Hexalith.EventStore/Validation/SubmitQueryRequestValidator.cs
+```
 
 ## Request and identity
 
@@ -174,7 +181,7 @@ try
     if (result.Payload is not { ValueKind: JsonValueKind.Object } page
         || !page.TryGetProperty("items", out JsonElement items) || items.ValueKind != JsonValueKind.Array)
     {
-        Console.WriteLine(JsonSerializer.Serialize(new { blocker = "response_was_not_a_page" }, json));
+        Console.WriteLine(JsonSerializer.Serialize(new { blocker = "response_was_not_a_page", stage }, json));
         return 2;
     }
 
@@ -306,7 +313,8 @@ print("Spike exit:", spike.returncode)
 if spike.stdout.strip():
     evidence = json.loads(spike.stdout)
     print(json.dumps(evidence))
-    Path("/tmp/mcpcli-story-25-spike/live-result.json").write_text(json.dumps(evidence, indent=2) + "\n")
+    if spike.returncode == 0:
+        Path("/tmp/mcpcli-story-25-spike/live-result.json").write_text(json.dumps(evidence, indent=2) + "\n")
 if spike.returncode and not spike.stdout.strip():
     print("No sanitized response; inspect the failure without logging credentials.")
 raise SystemExit(spike.returncode)
@@ -343,6 +351,78 @@ Authentication, token parsing, and Gateway submission now share one protected sc
 Executed only synthetic loopback failure probes after this correction; the live query above was not repeated:
 
 ```sh
+cat > /tmp/mcpcli-story-25-spike/failure-probes.py <<'PY'
+import contextlib
+import http.server
+import json
+from pathlib import Path
+import socket
+import subprocess
+import threading
+import time
+
+assembly = '/tmp/mcpcli-story-25-spike/bin/Debug/net10.0/Spike.dll'
+sentinels = ['synthetic-username-sentinel', 'synthetic-password-sentinel']
+results = []
+
+def probe(name, stdin, expected):
+    run = subprocess.run(['dotnet', assembly], input=stdin, text=True, capture_output=True, timeout=36)
+    assert run.returncode == 2, (name, run.returncode)
+    assert run.stderr == '', (name, 'unexpected stderr')
+    assert all(value not in run.stdout + run.stderr for value in sentinels), (name, 'credential leak')
+    result = json.loads(run.stdout)
+    assert result['blocker'] == expected, (name, result)
+    results.append({'probe': name, 'exit': run.returncode, 'result': result, 'stderrEmpty': True, 'credentialFree': True})
+
+def input_for(endpoint):
+    return json.dumps({'gatewayUrl': 'http://127.0.0.1:1/', 'tokenEndpoint': endpoint,
+        'adminUsername': sentinels[0], 'adminPassword': sentinels[1]})
+
+@contextlib.contextmanager
+def identity_server(body, status=200, delay=0):
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_POST(self):
+            self.rfile.read(int(self.headers.get('Content-Length', '0')))
+            time.sleep(delay)
+            try:
+                self.send_response(status)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+        def log_message(self, *args):
+            pass
+    server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield 'http://127.0.0.1:' + str(server.server_port) + '/token'
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join()
+
+probe('malformed-input', '{', 'input_malformed_json')
+probe('missing-input-properties', '{}', 'input_invalid')
+with socket.socket() as reservation:
+    reservation.bind(('127.0.0.1', 0))
+    closed_port = reservation.getsockname()[1]
+probe('refused-authentication-connection', input_for('http://127.0.0.1:' + str(closed_port) + '/token'), 'authentication_transport_failure')
+with identity_server(b'{}', status=401) as endpoint:
+    probe('authentication-http-failure', input_for(endpoint), 'administrator_token_request_failed')
+with identity_server(b'{') as endpoint:
+    probe('malformed-authentication-json', input_for(endpoint), 'authentication_malformed_json')
+for name, body in [('absent', b'{}'), ('null', b'{"access_token":null}'), ('numeric', b'{"access_token":7}'),
+                   ('blank', b'{"access_token":" "}'), ('array-root', b'[]')]:
+    with identity_server(body) as endpoint:
+        probe('missing-token-' + name, input_for(endpoint), 'authentication_missing_token')
+with identity_server(b'{}', delay=35) as endpoint:
+    probe('authentication-timeout', input_for(endpoint), 'authentication_timeout')
+Path('/tmp/mcpcli-story-25-spike/failure-probes.json').write_text(json.dumps(results, indent=2) + '\n')
+print(json.dumps({'passed': len(results), 'failed': 0, 'results': '/tmp/mcpcli-story-25-spike/failure-probes.json'}))
+PY
 dotnet build /tmp/mcpcli-story-25-spike/Spike.csproj --configuration Debug --no-restore -m:1
 python3 /tmp/mcpcli-story-25-spike/failure-probes.py
 dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll -class '*QueryCommandTests'
@@ -350,4 +430,4 @@ dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tes
 
 The harness build succeeded with 0 warnings/errors. All 11 probes passed: malformed input, missing input properties, refused authentication connection, HTTP 401, malformed authentication JSON, five missing/invalid token representations, and authentication timeout. Every probe exited 2 with a single valid JSON blocker, empty stderr, and no synthetic credential sentinels in output. Sanitized results are saved at `/tmp/mcpcli-story-25-spike/failure-probes.json`.
 
-The corrected focused CLI class passed **19/19**, with 0 failures/skips; output is saved at `/tmp/mcpcli-story-25-spike/query-command-tests.log`. It now includes a profile-only tenant invocation and verifies the exact synthetic Bearer header on every request. Listener setup and task failures cannot skip directory cleanup, and task draining preserves an existing test failure. Broad-suite counts above are from the earlier verification; no broad suites were rerun for these review fixes. `git diff --check` passed.
+The corrected focused CLI class passed **19/19**, with 0 failures/skips; output is saved at `/tmp/mcpcli-story-25-spike/query-command-tests.log`. It now includes a profile-only tenant invocation and verifies the exact synthetic Bearer header on every request. Listener setup and task failures cannot skip directory cleanup, and task draining preserves an existing test failure. `git diff --check` passed.

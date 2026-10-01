@@ -39,7 +39,7 @@ public sealed class QueryCommandTests
     [InlineData("stdin", "explicit", true, true)]
     [InlineData("inline", "accessor", false, false)]
     public async Task PayloadSourcesUseOneDescriptorRoutedPostAsync(
-        string source, string aggregateSource, bool nullPayload, bool overrideTenant)
+        string source, string aggregateSource, bool nullPayload, bool tenantFlag)
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(15));
@@ -89,7 +89,7 @@ public sealed class QueryCommandTests
             using var output = new StringWriter();
             using var error = new StringWriter();
             string payload = aggregateSource == "accessor" ? $$"""{"ItemId":"{{ItemId}}"}""" : "{}";
-            using var input = new StringReader(payload);
+            using var input = new StringReader(source == "stdin" ? payload : "stdin must not be read");
             bool testFailed = false;
             try
             {
@@ -116,7 +116,7 @@ public sealed class QueryCommandTests
                 store.Use("query-profile");
                 Func<IReadOnlyList<Assembly>> manifest = () => [typeof(Routing.Module).Assembly, typeof(StringContracts.Module).Assembly];
                 List<string> arguments = ["query", operation, "--payload", payloadArgument];
-                if (overrideTenant)
+                if (tenantFlag)
                 {
                     arguments.AddRange(["--tenant", "session-tenant"]);
                 }
@@ -131,13 +131,13 @@ public sealed class QueryCommandTests
                 int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
                     .InvokeAsync(cancellationToken: timeout.Token);
 
-                exit.ShouldBe(0, error.ToString());
+                exit.ShouldBe(0, output.ToString() + error.ToString());
                 calls.ShouldBe(1);
                 method.ShouldBe("POST");
                 path.ShouldBe("/api/v1/queries");
                 authorization.ShouldBe("Bearer " + ProfileToken);
                 string tenant = aggregateSource == "constant" ? "fixed-tenant"
-                    : overrideTenant ? "session-tenant" : "profile-tenant";
+                    : tenantFlag ? "session-tenant" : "profile-tenant";
                 string expectedRequest = aggregateSource switch
                 {
                     "constant" => """
