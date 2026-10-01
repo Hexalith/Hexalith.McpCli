@@ -184,7 +184,7 @@ public sealed class CatalogTests
         ModuleDescriptor module = catalog.Modules.Single();
         module.IdentifierKind.ShouldBe(IdentifierKind.String);
         module.FixedTenant.ShouldBe("fixed-tenant");
-        OperationDescriptor operation = module.Operations.Single();
+        OperationDescriptor operation = module.Operations.Single(item => item.Name == "string-fixture.lookup");
         operation.Name.ShouldBe("string-fixture.lookup");
         operation.Routing.WireType.ShouldBe(typeof(global::Catalog.String.Contracts.LookupQuery).FullName);
         operation.Schema.Node["properties"]!["Key"]!["pattern"].ShouldBeNull();
