@@ -346,6 +346,7 @@ public sealed class ProfileStoreTests
     [InlineData("dev", "allowedExtensions", "a ,b")]
     [InlineData("dev", "allowedExtensions", " a")]
     [InlineData("dev", "allowedExtensions", "../unsafe")]
+    [InlineData("dev", "allowedExtensions", "javascript:x")]
     [InlineData("missing", "tenant", "x")]
     [InlineData("", "tenant", "x")]
     [InlineData(" ", "tenant", "x")]
@@ -499,6 +500,10 @@ public sealed class ProfileStoreTests
             File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
             TemporaryFiles(store).ShouldBeEmpty();
             store.Read().Profiles.Keys.ShouldBe(["dev"]);
+
+            // The failed write released the lock and temporary stream, so the next mutation commits.
+            store.Set("dev", "tenant", "acme");
+            store.Read().Profiles["dev"].Tenant.ShouldBe("acme");
         }
         finally
         {
