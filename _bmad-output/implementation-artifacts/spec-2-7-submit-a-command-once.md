@@ -62,6 +62,36 @@ context:
 - Given omitted or supplied caller identifiers, when a Command succeeds, then message/correlation/idempotency fields follow the matrix and the returned correlation matches the submitted value.
 - Given a timeout or unknown outcome, when the Gateway call fails, then there is no retry and the error does not state that another submission is safe.
 
+### Review Findings
+
+Code review 2026-10-02 of `dbc10bb..954a426` (excluding `_bmad-output/`); layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap confirmed both new Core tests fail if the correlation fix is reverted.
+
+- [x] [Review][Patch] README does not say which `gateway_error` reasons are uncertain outcomes — medium (blind-hunter). A transport `HttpRequestException`, including a connection reset after the body was sent, becomes 503 `gateway-unreachable` with detail "The EventStore gateway could not be reached." That reads as not delivered, so a script may resubmit. Name `gateway-timeout` and `gateway-unreachable` as possibly delivered, whatever the detail text says. [README.md:65]
+- [x] [Review][Patch] README wording suggests an invalid caller ID silently falls back — low (blind-hunter). "Uses it as correlation unless `--correlation-id` supplies a ULID" and "`--idempotency-key` accepts a caller ULID" do not say that a non-ULID value fails with `validation_failed` at `/correlationId` or `/idempotencyKey` (`OperationExecutor.cs:148-156`). [README.md:65]
+- [x] [Review][Patch] README omits `send` exit codes and the `--aggregate-id` agreement rule — low (blind-hunter). The query paragraphs state exit 0 or 2 and the aggregate rule; the command paragraph does neither, though the executor applies the same accessor-agreement check to commands (`OperationExecutor.cs:201-205`). [README.md:65]
+- [x] [Review][Patch] Timeout test asserts the root name of an anonymous object it built itself — low (blind-hunter). `new { error = outcome.Error }` always serializes with the single root `error`, so the assertion cannot fail. The test's other checks are real: no retry, no added `retryable`/`clientAction`, and no "safe" text. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:441]
+- [x] [Review][Patch] `CallerIdentifiersArePreservedAsync` uses `ItemId` as the Gateway's differing correlation — low (blind-hunter). It reads as a typo; a maintainer "correcting" it to `CorrelationId` would remove this test's proof that the Gateway value is ignored. Use a named Gateway-correlation constant and assert the result differs from it. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:104]
+- [x] [Review][Defer] An uncertain command failure carries no identifier to trace it — medium (verification-gap+blind-hunter) [src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:34] — deferred: pre-existing executor behavior; the transport failure document drops the generated message and correlation IDs, and the Gateway status endpoint is keyed by message ID. Resolved by user decision 2026-10-02: add a new ledger entry naming Story 2.9 as owner, so the error format is designed once, including the idempotency case (`deferred-work.md:276`).
+- [x] [Review][Defer] Empty or whitespace Gateway `messageId` reaches the accepted document [src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:223] — deferred: pre-existing; already tracked (`deferred-work.md:274`, also `:52`); no new ledger entry.
+- [x] [Review][Defer] Caller cancellation after the POST is reported as `internal_error`, not an unknown outcome [src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:38] — deferred: pre-existing; already tracked (`deferred-work.md:49`); no new ledger entry.
+
+**Rejected**
+
+- false — Gateway `retryable` passthrough contradicts the README caution (verification-gap+blind-hunter): the Gateway sets `retryable: true` only on idempotency-admission paths under a caller key (`SubmitCommandHandler.cs:112,162,218,243`). There its dedup makes the hint authoritative, and the epic requires passing optional metadata through when supplied.
+- false — CLI loopback echoes the submitted correlation, so a revert passes (blind-hunter+edge-case-hunter): both new Core tests fail on a revert, and `CliRunner.CreateSend` writes the Core `CommandResult` without remapping.
+- false — Gateway correlation silently dropped (blind-hunter+edge-case-hunter+acceptance-auditor): the pinned Gateway returns `request.CorrelationId` on every accept and replay path (`SubmitCommandHandler.cs:131,189,657` → `CommandsController.cs:163`), and the spec's Always list mandates the resolved correlation.
+- false — Tests cannot tell Catalog routing from the Operation Name (acceptance-auditor): CI's `conformance-vector-loopback` job sends `sample.rename-item` through both heads and asserts `commandType: rename-item-wire` (`tools/conformance-vectors/v1/sample-rename.json:21`).
+- false — Attribute-accessor aggregate mismatch untested (acceptance-auditor): attribute accessor extraction is pinned at `CatalogTests.cs:119`, and the executor's mismatch check is accessor-agnostic (`OperationExecutor.cs:201-205`).
+- false — Wrong-kind refusal tested only in read-only mode (acceptance-auditor): the kind gate (`OperationExecutor.cs:66-71`) has no mode dependency and runs before availability; the read-only tests prove the stronger ordering.
+- false — The 250 ms drain guards a case that cannot happen (blind-hunter): it catches a duplicate POST from the CLI head, which is AC1's "exactly one request"; a 202 retry is not the only source.
+- low — Correlation and idempotency flags toggle together in the CLI theory (blind-hunter+edge-case-hunter): the spec matrix rows (none, both distinct) are covered, and a key-only cross-copy bug is unlikely; it would need new theory parameters.
+- low — A duplicate arriving more than 250 ms after the 202 escapes the count (edge-case-hunter): no retry policy re-sends a success, and restructuring the listener is more than a direct fix.
+- low — CLI test duplicates `QueryCliHarness`, and field-by-field asserts miss stray members (blind-hunter): the CLI passes null extensions when none are given (`CliRunner.cs:192`), and generalizing the query-path harness (`QueryCliHarness.cs:106`) is a refactor.
+- low — README omits the extension allowlist and the required-key rule for `send` (blind-hunter): Story 2.8 owns identity and extension policy, which this spec's Never list keeps out.
+- low — README does not call the returned `messageId` the status-tracking key (blind-hunter): the README already states its provenance; status guidance depends on the Decision above.
+- low — The `"/"` prefix matches any path for the `[]` payload row (edge-case-hunter): the row still proves zero Gateway calls; the matrix fixes no root path, and exact matching would need a per-row branch.
+- low — Free-port probe race (edge-case-hunter): an existing fixture pattern, already rejected as Edge 3 in the implementation review.
+
 ## Implementation Notes
 
 - The executor returns the resolved correlation ID submitted to the Gateway even when a Gateway response contains a different correlation ID. The Gateway message ID still takes precedence when present.

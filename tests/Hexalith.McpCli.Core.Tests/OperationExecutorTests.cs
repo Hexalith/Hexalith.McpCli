@@ -98,10 +98,11 @@ public sealed class OperationExecutorTests
     {
         const string idempotencyKey = "01J9MZHXT3RKM0VWXRXGSJDATM";
         const string returnedMessageId = "01J9MZHXT3RKM0VWXRXGSJDATN";
+        const string gatewayCorrelationId = "01J9MZHXT3RKM0VWXRXGSJDATP";
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
         SubmitCommandRequest? captured = null;
         gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(new SubmitCommandResponse(ItemId, MessageId: returnedMessageId)));
+            .Returns(Task.FromResult(new SubmitCommandResponse(gatewayCorrelationId, MessageId: returnedMessageId)));
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
 
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
@@ -118,6 +119,7 @@ public sealed class OperationExecutorTests
         CommandResult result = outcome.Document.ShouldBeOfType<CommandResult>();
         result.MessageId.ShouldBe(returnedMessageId);
         result.CorrelationId.ShouldBe(CorrelationId);
+        result.CorrelationId.ShouldNotBe(gatewayCorrelationId);
         result.IdempotencyKey.ShouldBe(idempotencyKey);
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
@@ -438,7 +440,6 @@ public sealed class OperationExecutorTests
         outcome.Error.Reason.ShouldBe("gateway-timeout");
         outcome.Error.Detail.ShouldBe("The EventStore gateway did not respond before the request timed out.");
         using JsonDocument json = JsonDocument.Parse(JsonSerializer.Serialize(new { error = outcome.Error }, McpCliJson.Result));
-        json.RootElement.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
         JsonElement error = json.RootElement.GetProperty("error");
         error.GetProperty("code").GetString().ShouldBe("gateway_error");
         error.GetProperty("status").GetInt32().ShouldBe(503);
