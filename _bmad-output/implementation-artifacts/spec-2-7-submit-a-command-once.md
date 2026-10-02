@@ -2,7 +2,8 @@
 title: 'Submit a Command Once'
 type: 'feature'
 created: '2026-10-02'
-status: 'ready-for-dev'
+status: 'done'
+baseline_commit: 'dbc10bb99715584848deb7d1a9aa58fcfc9994c4'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -50,10 +51,10 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs` — pin both mismatch directions, distinct generated IDs, distinct caller ULIDs, optional result omission, accessor disagreement, and timeout/no-retry behavior.
-- [ ] `tests/Hexalith.McpCli.Cli.Tests/CliMcpCommandParityTests.cs` — cover inline, file, and stdin sends; assert one routed POST and the complete accepted document, including omission rules.
-- [ ] `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs` — correct any behavior the acceptance tests prove wrong without adding retries or changing Query semantics.
-- [ ] `README.md` — document the accepted Command result identifiers, optional fields, and uncertain Gateway outcomes.
+- [x] `tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs` — pin both mismatch directions, distinct generated IDs, distinct caller ULIDs, optional result omission, accessor disagreement, and timeout/no-retry behavior.
+- [x] `tests/Hexalith.McpCli.Cli.Tests/CliMcpCommandParityTests.cs` — cover inline, file, and stdin sends; assert one routed POST and the complete accepted document, including omission rules.
+- [x] `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs` — correct any behavior the acceptance tests prove wrong without adding retries or changing Query semantics.
+- [x] `README.md` — document the accepted Command result identifiers, optional fields, and uncertain Gateway outcomes.
 
 **Acceptance Criteria:**
 - Given a valid decorated Command and any supported CLI payload source, when `hexalith send` runs, then Core makes exactly one request using Catalog routing values and CLI output is the shared canonical success document.
@@ -63,14 +64,33 @@ context:
 
 ## Implementation Notes
 
+- The executor returns the resolved correlation ID submitted to the Gateway even when a Gateway response contains a different correlation ID. The Gateway message ID still takes precedence when present.
+- The Command result documentation now describes the message ID fallback and submitted correlation ID.
+- Review tightened the timeout test to match the Gateway client's translated 503 error, made the CLI listener observe additional requests, and covered optional fields independently.
+
 ## Spec Change Log
 
 ## Review Triage Log
 
+- **Blind 1 — medium, patch:** The new timeout test throws a raw `TimeoutException`, while `EventStoreGatewayClient.SendTranslatingAsync` wraps HTTP timeout as a 503 `EventStoreGatewayException`. The test therefore misses the actual Gateway timeout error mapping; use the translated exception and assert its stable fields.
+- **Blind 2 — medium, patch:** The new CLI listener accepts only one request, so a second queued POST can escape its `calls == 1` assertion. Observe the listener for a bounded interval after the first response.
+- **Blind 3 — low, patch:** `CallerIdentifiersArePreservedAsync` proves the generated message ID parses but does not prove it differs from the two caller IDs. Add direct inequality assertions.
+- **Blind 4 — low, patch:** The new CLI test combines idempotency and result payload in one Boolean, leaving their independent omission unverified. Exercise all four combinations.
+- **Blind 5 — false, reject:** A missing Gateway `messageId` is covered by `GeneratedIdentifiersAreDistinctAndOptionalFieldsAreOmittedAsync`; `CliRunner.CreateSend` serializes that same `CommandResult` without remapping it. The loopback fixture's always-present ID does not create a different fallback path.
+- **Blind 6 — low, reject:** The CLI fixture covers success only, but `CliRunner.CreateSend` passes the Core `OperationOutcome` directly to the common `CliOutput.WriteAsync` path. Core failure and timeout tests cover single submission and stable errors; another HTTP fixture would add test machinery without exposing a distinct command path.
+- **Blind 7 — false, reject:** Sprint status temporarily remains `in-progress` during review; workflow step 05 explicitly syncs it to `review` before presentation.
+- **Edge 1 — medium, patch:** The second queued POST is invisible to the single-accept listener, the same root cause as Blind 2. Add bounded observation.
+- **Edge 2 — medium, defer:** `SubmitCommandResponse.MessageId` can be empty or whitespace and the existing `response.MessageId ?? messageId` expression would return it, leaving an unusable tracking ID. This expression predates Story 2.7; handling malformed Gateway IDs needs its own response-policy decision.
+- **Edge 3 — low, reject:** The free-port probe creates a narrow bind race, but the same loopback fixture pattern already exists in these tests. A retry loop adds complexity for an unlikely local test collision.
+
 ## Verification
 
 **Commands:**
-- `dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --configuration Debug --no-restore -m:1` — expected: zero warnings and errors.
-- `dotnet build tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj --configuration Debug --no-restore -m:1` — expected: zero warnings and errors.
-- Run the focused Core and CLI acceptance classes, then each test project individually — expected: zero failures; report existing platform-only skips separately.
-- `git diff --check` — expected: clean.
+- `dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings and errors.
+- `dotnet build tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings and errors.
+- `dotnet tests/Hexalith.McpCli.Core.Tests/bin/Debug/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.OperationExecutorTests` — 29 passed.
+- `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll -class Hexalith.McpCli.Cli.Tests.CliMcpCommandParityTests` — 14 passed.
+- `dotnet tests/Hexalith.McpCli.Core.Tests/bin/Debug/net10.0/Hexalith.McpCli.Core.Tests.dll` — 421 passed, 2 Windows-only skips.
+- `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll` — 338 passed.
+- `git diff --check` — clean.
+- `npx --no -- commitlint --edit /tmp/mcpcli-story-2-7-commit-YpXiGCXq.txt` — passed for `fix(command): preserve correlation when submitting a command once`.

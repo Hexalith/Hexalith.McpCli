@@ -5,8 +5,8 @@ namespace Hexalith.McpCli.Core.Execution;
 
 /// <summary>The public result of an accepted command.</summary>
 /// <param name="Operation">The canonical operation name.</param>
-/// <param name="MessageId">The gateway's canonical message identifier.</param>
-/// <param name="CorrelationId">The gateway correlation identifier.</param>
+/// <param name="MessageId">The gateway message identifier when returned, otherwise the submitted identifier.</param>
+/// <param name="CorrelationId">The correlation identifier submitted to the gateway.</param>
 /// <param name="Tenant">The resolved tenant.</param>
 /// <param name="AggregateId">The resolved aggregate identifier.</param>
 /// <param name="Status">The accepted status.</param>

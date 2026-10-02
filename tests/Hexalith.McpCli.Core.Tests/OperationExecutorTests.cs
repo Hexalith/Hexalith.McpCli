@@ -1,4 +1,5 @@
 using System.Text.Json;
+using ByteAether.Ulid;
 using Hexalith.EventStore.Client.Gateway;
 using Hexalith.EventStore.Contracts.Commands;
 using Hexalith.EventStore.Contracts.Queries;
@@ -51,6 +52,73 @@ public sealed class OperationExecutorTests
         result.Result.ShouldNotBeNull();
         JsonElement json = JsonSerializer.SerializeToElement(result, McpCliJson.Result);
         json.TryGetProperty("idempotencyKey", out _).ShouldBeFalse();
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Each accepted call gets a fresh message ID and reuses it as correlation without inventing a key.</summary>
+    [Fact]
+    public async Task GeneratedIdentifiersAreDistinctAndOptionalFieldsAreOmittedAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        var captured = new List<SubmitCommandRequest>();
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(captured.Add), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var call = new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""");
+
+        CommandResult first = (await executor.ExecuteAsync(call, Context(), TestContext.Current.CancellationToken))
+            .Document.ShouldBeOfType<CommandResult>();
+        CommandResult second = (await executor.ExecuteAsync(call, Context(), TestContext.Current.CancellationToken))
+            .Document.ShouldBeOfType<CommandResult>();
+
+        captured.Count.ShouldBe(2);
+        captured[0].MessageId.ShouldNotBe(captured[1].MessageId);
+        foreach ((SubmitCommandRequest request, CommandResult result) in captured.Zip([first, second]))
+        {
+            Ulid.TryParse(request.MessageId, provider: null, out _).ShouldBeTrue();
+            request.CorrelationId.ShouldBe(request.MessageId);
+            request.IdempotencyKey.ShouldBeNull();
+            result.MessageId.ShouldBe(request.MessageId);
+            result.CorrelationId.ShouldBe(request.CorrelationId);
+            result.Tenant.ShouldBe("sample-tenant");
+            result.AggregateId.ShouldBe(ItemId);
+            result.Status.ShouldBe("accepted");
+            using JsonDocument json = JsonDocument.Parse(JsonSerializer.Serialize(result, McpCliJson.Result));
+            json.RootElement.TryGetProperty("idempotencyKey", out _).ShouldBeFalse();
+            json.RootElement.TryGetProperty("result", out _).ShouldBeFalse();
+            json.RootElement.TryGetProperty("duplicate", out _).ShouldBeFalse();
+        }
+
+        await gateway.Received(2).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Distinct caller IDs reach the gateway unchanged and the result uses the submitted correlation.</summary>
+    [Fact]
+    public async Task CallerIdentifiersArePreservedAsync()
+    {
+        const string idempotencyKey = "01J9MZHXT3RKM0VWXRXGSJDATM";
+        const string returnedMessageId = "01J9MZHXT3RKM0VWXRXGSJDATN";
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(ItemId, MessageId: returnedMessageId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            CorrelationId: CorrelationId, IdempotencyKey: idempotencyKey), Context(), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull();
+        captured.CorrelationId.ShouldBe(CorrelationId);
+        captured.IdempotencyKey.ShouldBe(idempotencyKey);
+        Ulid.TryParse(captured.MessageId, provider: null, out _).ShouldBeTrue();
+        captured.MessageId.ShouldNotBe(CorrelationId);
+        captured.MessageId.ShouldNotBe(idempotencyKey);
+        CommandResult result = outcome.Document.ShouldBeOfType<CommandResult>();
+        result.MessageId.ShouldBe(returnedMessageId);
+        result.CorrelationId.ShouldBe(CorrelationId);
+        result.IdempotencyKey.ShouldBe(idempotencyKey);
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -111,12 +179,30 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitQueryAsync(Arg.Any<SubmitQueryRequest>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>A read passed to send fails at the operation before availability or payload validation.</summary>
+    [Fact]
+    public async Task SendRejectsQueryBeforeAvailabilityAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(GetItemQuery), readOnly: true, hasGatewayUrl: false);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(
+            new SendCommandArguments("sample.get-item", "invalid-json"), Context(), TestContext.Current.CancellationToken);
+
+        outcome.Document.ShouldBeNull();
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe("/operation");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>Malformed JSON and unknown members fail before command submission.</summary>
     [Theory]
     [InlineData("{", "/")]
     [InlineData("{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"x\",\"Unexpected\":1}", "/")]
     [InlineData("{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAW\",\"Title\":\"x\"}", "/")]
     [InlineData("null", "/")]
+    [InlineData("[]", "/")]
+    [InlineData("{\"ItemId\":\"bad\",\"Title\":\"Hello\"}", "/ItemId")]
     public async Task InvalidPayloadFailsBeforeGatewayAsync(string payload, string expectedPathPrefix)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
@@ -327,6 +413,39 @@ public sealed class OperationExecutorTests
         outcome.Error.ShouldNotBeNull().Code.ShouldBe("gateway_error");
         outcome.Error.Status.ShouldBe(409);
         outcome.Error.Reason.ShouldBe("conflict");
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A timed-out submission has one call and only a stable failure document.</summary>
+    [Fact]
+    public async Task GatewayTimeoutDoesNotRetryOrClaimSafeResubmissionAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+            .Returns<Task<SubmitCommandResponse>>(_ => throw new EventStoreGatewayException(
+                503, "EventStore gateway unavailable",
+                detail: "The EventStore gateway did not respond before the request timed out.",
+                reason: "gateway-timeout", innerException: new TaskCanceledException()));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(
+            new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}"""),
+            Context(), TestContext.Current.CancellationToken);
+
+        outcome.Document.ShouldBeNull();
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("gateway_error");
+        outcome.Error.Status.ShouldBe(503);
+        outcome.Error.Reason.ShouldBe("gateway-timeout");
+        outcome.Error.Detail.ShouldBe("The EventStore gateway did not respond before the request timed out.");
+        using JsonDocument json = JsonDocument.Parse(JsonSerializer.Serialize(new { error = outcome.Error }, McpCliJson.Result));
+        json.RootElement.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
+        JsonElement error = json.RootElement.GetProperty("error");
+        error.GetProperty("code").GetString().ShouldBe("gateway_error");
+        error.GetProperty("status").GetInt32().ShouldBe(503);
+        error.GetProperty("reason").GetString().ShouldBe("gateway-timeout");
+        error.TryGetProperty("retryable", out _).ShouldBeFalse();
+        error.TryGetProperty("clientAction", out _).ShouldBeFalse();
+        error.GetRawText().ShouldNotContain("safe", Case.Insensitive);
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 

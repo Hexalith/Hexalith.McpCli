@@ -221,7 +221,7 @@ public sealed class OperationExecutor(
                 send.Extensions is null ? null : new Dictionary<string, string>(send.Extensions, StringComparer.Ordinal), idempotencyKey);
             SubmitCommandResponse response = await gateway.SubmitCommandAsync(request, cancellationToken).ConfigureAwait(false);
             return new OperationOutcome(new CommandResult(operation.Name, response.MessageId ?? messageId!,
-                response.CorrelationId, tenant!, aggregateId!, "accepted", idempotencyKey, response.ResultPayload), null);
+                correlationId!, tenant!, aggregateId!, "accepted", idempotencyKey, response.ResultPayload), null);
         }
 
         var run = (RunQueryArguments)call;

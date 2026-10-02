@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using ByteAether.Ulid;
 using Hexalith.McpCli.Cli;
 using Hexalith.McpCli.Core;
 using Hexalith.McpCli.Core.Settings;
@@ -170,4 +171,215 @@ public sealed class CliMcpCommandParityTests
             }
         }
     }
+
+    /// <summary>Every CLI payload source sends one catalog-routed command and returns the canonical accepted document.</summary>
+    [Theory]
+    [InlineData("inline", false, false)]
+    [InlineData("inline", false, true)]
+    [InlineData("inline", true, false)]
+    [InlineData("inline", true, true)]
+    [InlineData("file", false, false)]
+    [InlineData("file", false, true)]
+    [InlineData("file", true, false)]
+    [InlineData("file", true, true)]
+    [InlineData("stdin", false, false)]
+    [InlineData("stdin", false, true)]
+    [InlineData("stdin", true, false)]
+    [InlineData("stdin", true, true)]
+    public async Task PayloadSourcesSubmitOnceAndReturnCanonicalResultAsync(
+        string source, bool withIdempotencyKey, bool withResult)
+    {
+        const string returnedMessageId = "01J9MZHXT3RKM0VWXRXGSJDATN";
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(15));
+        string directory = Path.Combine(Path.GetTempPath(), "mcpcli-send-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            using var portProbe = new TcpListener(IPAddress.Loopback, 0);
+            portProbe.Start();
+            int port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
+            portProbe.Stop();
+            string url = $"http://127.0.0.1:{port}/";
+            using var gateway = new HttpListener();
+            gateway.Prefixes.Add(url);
+            gateway.Start();
+            int calls = 0;
+            string? method = null;
+            string? path = null;
+            JsonNode? captured = null;
+            Task response = Task.Run(async () =>
+            {
+                HttpListenerContext context = await gateway.GetContextAsync().WaitAsync(timeout.Token);
+                Interlocked.Increment(ref calls);
+                method = context.Request.HttpMethod;
+                path = context.Request.Url!.AbsolutePath;
+                using var reader = new StreamReader(context.Request.InputStream);
+                captured = JsonNode.Parse(await reader.ReadToEndAsync(timeout.Token));
+                var document = new JsonObject
+                {
+                    ["correlationId"] = captured!["correlationId"]!.GetValue<string>(),
+                    ["messageId"] = returnedMessageId,
+                };
+                if (withResult)
+                {
+                    document["resultPayload"] = new JsonObject { ["accepted"] = true };
+                }
+
+                byte[] bytes = Encoding.UTF8.GetBytes(document.ToJsonString());
+                context.Response.StatusCode = 202;
+                context.Response.ContentType = "application/json";
+                context.Response.ContentLength64 = bytes.Length;
+                await context.Response.OutputStream.WriteAsync(bytes, timeout.Token);
+                context.Response.Close();
+
+                // Keep accepting briefly so a queued retry cannot escape the one-call assertion.
+                Task deadline = Task.Delay(TimeSpan.FromMilliseconds(250), timeout.Token);
+                while (!deadline.IsCompleted)
+                {
+                    Task<HttpListenerContext> pending = gateway.GetContextAsync();
+                    Task completed = await Task.WhenAny(pending, deadline);
+                    if (completed == deadline && !pending.IsCompletedSuccessfully)
+                    {
+                        gateway.Stop();
+                        try
+                        {
+                            await pending;
+                        }
+                        catch (Exception exception) when (exception is HttpListenerException or ObjectDisposedException)
+                        {
+                        }
+
+                        break;
+                    }
+
+                    HttpListenerContext extra = await pending;
+                    Interlocked.Increment(ref calls);
+                    extra.Response.StatusCode = 202;
+                    extra.Response.Close();
+                }
+
+                timeout.Token.ThrowIfCancellationRequested();
+            }, timeout.Token);
+
+            TextReader originalIn = Console.In;
+            TextWriter originalOut = Console.Out;
+            TextWriter originalError = Console.Error;
+            using var output = new StringWriter();
+            using var error = new StringWriter();
+            string payload = $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""";
+            using var input = new StringReader(source == "stdin" ? payload : "stdin must not be read");
+            bool testFailed = false;
+            try
+            {
+                string argument = payload;
+                if (source == "file")
+                {
+                    string file = Path.Combine(directory, "command.json");
+                    await File.WriteAllTextAsync(file, payload, timeout.Token);
+                    argument = "@" + file;
+                }
+                else if (source == "stdin")
+                {
+                    argument = "-";
+                }
+
+                List<string> arguments = ["send", "sample.create-item", "--payload", argument, "--url", url];
+                if (withIdempotencyKey)
+                {
+                    arguments.AddRange(["--correlation-id", CorrelationId, "--idempotency-key", IdempotencyKey]);
+                }
+
+                var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+                Func<IReadOnlyList<System.Reflection.Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+                Console.SetIn(input);
+                Console.SetOut(output);
+                Console.SetError(error);
+                int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
+                    .InvokeAsync(cancellationToken: timeout.Token);
+
+                exit.ShouldBe(0, output.ToString() + error.ToString());
+                await response.WaitAsync(timeout.Token);
+                calls.ShouldBe(1);
+                method.ShouldBe("POST");
+                path.ShouldBe("/api/v1/commands");
+                captured.ShouldNotBeNull();
+                captured["domain"]!.GetValue<string>().ShouldBe("sample");
+                captured["commandType"]!.GetValue<string>().ShouldBe("create-item");
+                captured["tenant"]!.GetValue<string>().ShouldBe("sample-tenant");
+                captured["aggregateId"]!.GetValue<string>().ShouldBe(ItemId);
+                captured["payload"]!["ItemId"]!.GetValue<string>().ShouldBe(ItemId);
+                captured["payload"]!["Title"]!.GetValue<string>().ShouldBe("Hello");
+                string submittedMessageId = captured["messageId"]!.GetValue<string>();
+                Ulid.TryParse(submittedMessageId, provider: null, out _).ShouldBeTrue();
+                string submittedCorrelationId = withIdempotencyKey ? CorrelationId : submittedMessageId;
+                captured["correlationId"]!.GetValue<string>().ShouldBe(submittedCorrelationId);
+                if (withIdempotencyKey)
+                {
+                    captured["idempotencyKey"]!.GetValue<string>().ShouldBe(IdempotencyKey);
+                }
+                else
+                {
+                    captured.AsObject().ContainsKey("idempotencyKey").ShouldBeFalse();
+                }
+
+                using JsonDocument result = JsonDocument.Parse(output.ToString());
+                JsonElement root = result.RootElement;
+                root.GetProperty("operation").GetString().ShouldBe("sample.create-item");
+                root.GetProperty("messageId").GetString().ShouldBe(returnedMessageId);
+                root.GetProperty("correlationId").GetString().ShouldBe(submittedCorrelationId);
+                root.GetProperty("tenant").GetString().ShouldBe("sample-tenant");
+                root.GetProperty("aggregateId").GetString().ShouldBe(ItemId);
+                root.GetProperty("status").GetString().ShouldBe("accepted");
+                root.TryGetProperty("duplicate", out _).ShouldBeFalse();
+                root.EnumerateObject().Count().ShouldBe(6 + (withIdempotencyKey ? 1 : 0) + (withResult ? 1 : 0));
+                if (withIdempotencyKey)
+                {
+                    root.GetProperty("idempotencyKey").GetString().ShouldBe(IdempotencyKey);
+                }
+                else
+                {
+                    root.TryGetProperty("idempotencyKey", out _).ShouldBeFalse();
+                }
+
+                if (withResult)
+                {
+                    root.GetProperty("result").GetProperty("accepted").GetBoolean().ShouldBeTrue();
+                }
+                else
+                {
+                    root.TryGetProperty("result", out _).ShouldBeFalse();
+                }
+            }
+            catch
+            {
+                testFailed = true;
+                throw;
+            }
+            finally
+            {
+                Console.SetIn(originalIn);
+                Console.SetOut(originalOut);
+                Console.SetError(originalError);
+                timeout.Cancel();
+                gateway.Stop();
+                try
+                {
+                    await response;
+                }
+                catch (Exception exception) when (exception is OperationCanceledException or HttpListenerException or ObjectDisposedException)
+                {
+                }
+                catch when (testFailed)
+                {
+                    // Preserve the original assertion failure.
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
 }
