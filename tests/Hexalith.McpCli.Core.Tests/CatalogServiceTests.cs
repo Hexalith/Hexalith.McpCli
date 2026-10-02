@@ -86,6 +86,20 @@ public sealed class CatalogServiceTests
         read.Envelope.Arguments.ShouldNotContain("idempotencyKey");
     }
 
+    /// <summary>A nullable mapped key remains required when serializer metadata requires it.</summary>
+    [Fact]
+    public void RequiredNullableIdempotencyAppearsInDiscovery()
+    {
+        var provider = new CatalogProvider(() => [typeof(global::Catalog.Routing.Contracts.Module).Assembly],
+            new RecordingLogger<CatalogProvider>());
+        ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, true), strict: false);
+
+        OperationDescriptionDocument description = catalog.Describe("routing-fixture.required-nullable-idempotency")
+            .Document.ShouldNotBeNull();
+        description.Envelope.IdempotencyKeyRequired.ShouldBeTrue();
+        description.Schema["properties"]!["Idempotency"]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
+    }
+
     /// <summary>Optional fields are absent, and payload schema casing stays unchanged.</summary>
     [Fact]
     public void DescriptionSerializationPreservesContractShape()

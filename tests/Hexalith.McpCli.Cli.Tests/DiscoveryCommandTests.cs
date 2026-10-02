@@ -118,7 +118,7 @@ public sealed class DiscoveryCommandTests
                 {"name":"explicit-fixture","description":"Explicit wire type fixture.","operationCount":1},
                 {"name":"lint-fixture","description":"Description quality fixtures.","operationCount":4},
                 {"name":"marked-empty","description":"Module with no operations.","operationCount":0},
-                {"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":10},
+                {"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":12},
                 {"name":"sample","description":"Synthetic operations for testing module declarations.","operationCount":3}
             ]}
             """;
@@ -138,10 +138,11 @@ public sealed class DiscoveryCommandTests
             list.GetProperty("module").GetString().ShouldBe("routing-fixture");
             list.GetProperty("operations").EnumerateArray().Select(item => item.GetProperty("name").GetString()).ShouldBe(
             [
-                "routing-fixture.colon-wire", "routing-fixture.competing-route", "routing-fixture.envelope-item",
+                "routing-fixture.colon-wire", "routing-fixture.competing-route", "routing-fixture.computed-envelope", "routing-fixture.envelope-item",
                 "routing-fixture.get-http2-status", "routing-fixture.interface-item", "routing-fixture.items-list",
                 "routing-fixture.nullable-idempotency", "routing-fixture.redundant-convention",
                 "routing-fixture.redundant-interface", "routing-fixture.renamed-aggregate",
+                "routing-fixture.required-nullable-idempotency",
             ]);
             foreach (JsonElement item in list.GetProperty("operations").EnumerateArray())
             {
@@ -282,7 +283,7 @@ public sealed class DiscoveryCommandTests
             """);
         AssertJson(description.GetProperty("schema").GetRawText(), """
             {"type":"object","properties":{
-                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26},
+                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Z]{25}$","minLength":26,"maxLength":26},
                 "tenant/~":{"type":"string","readOnly":true},
                 "Correlation":{"type":"string","readOnly":true},
                 "Idempotency":{"type":"string","readOnly":true},
@@ -305,7 +306,7 @@ public sealed class DiscoveryCommandTests
         AssertJson(optionalOutput, """
             {"name":"routing-fixture.nullable-idempotency","kind":"write","description":"Command with an optional idempotency key.",
              "schema":{"type":"object","properties":{
-                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26},
+                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Z]{25}$","minLength":26,"maxLength":26},
                 "Idempotency":{"type":["string","null"],"default":null,"readOnly":true}
              },"required":["ItemId"],"additionalProperties":false},
              "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
@@ -577,7 +578,7 @@ public sealed class DiscoveryCommandTests
         => (warning, verb) switch
         {
             (true, "modules") => """
-                {"modules":[{"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":10}]}
+                {"modules":[{"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":12}]}
                 """,
             (false, "modules") => """
                 {"modules":[{"name":"explicit-fixture","description":"Explicit wire type fixture.","operationCount":1}]}
@@ -586,6 +587,7 @@ public sealed class DiscoveryCommandTests
                 {"module":"routing-fixture","operations":[
                     {"name":"routing-fixture.colon-wire","kind":"write","description":"Command with a colon in its wire type."},
                     {"name":"routing-fixture.competing-route","kind":"write","description":"Command with competing route values."},
+                    {"name":"routing-fixture.computed-envelope","kind":"write","description":"Command with a computed aggregate identifier and envelope members."},
                     {"name":"routing-fixture.envelope-item","kind":"write","description":"Change an item using mapped envelope values."},
                     {"name":"routing-fixture.get-http2-status","kind":"read","description":"Read HTTP2 status."},
                     {"name":"routing-fixture.interface-item","kind":"read","description":"Read an item through the query interface."},
@@ -593,7 +595,8 @@ public sealed class DiscoveryCommandTests
                     {"name":"routing-fixture.nullable-idempotency","kind":"write","description":"Command with an optional idempotency key."},
                     {"name":"routing-fixture.redundant-convention","kind":"read","description":"Query whose attribute repeats its convention wire type."},
                     {"name":"routing-fixture.redundant-interface","kind":"write","description":"Command whose attribute repeats its interface domain."},
-                    {"name":"routing-fixture.renamed-aggregate","kind":"write","description":"Read a renamed aggregate property."}
+                    {"name":"routing-fixture.renamed-aggregate","kind":"write","description":"Read a renamed aggregate property."},
+                    {"name":"routing-fixture.required-nullable-idempotency","kind":"write","description":"Command with a required nullable idempotency member."}
                 ]}
                 """,
             (false, "operations") => """
@@ -622,12 +625,12 @@ public sealed class DiscoveryCommandTests
     {
         string schema = write ? """
             {"type":"object","properties":{
-                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26,"description":"The ULID of the new item."},
+                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Z]{25}$","minLength":26,"maxLength":26,"description":"The ULID of the new item."},
                 "Title":{"type":"string","description":"The title shown for the item."}
             },"required":["ItemId","Title"],"additionalProperties":false}
             """ : """
             {"type":["object","null"],"properties":{
-                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$","minLength":26,"maxLength":26,"description":"The ULID of the item to read."}
+                "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Z]{25}$","minLength":26,"maxLength":26,"description":"The ULID of the item to read."}
             },"required":["ItemId"],"additionalProperties":false}
             """;
         string arguments = write ? """["aggregateId","correlationId","idempotencyKey","extensions"]"""

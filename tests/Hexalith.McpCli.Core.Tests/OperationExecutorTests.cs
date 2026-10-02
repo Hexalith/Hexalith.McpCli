@@ -378,6 +378,361 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>Approved keys are matched without case sensitivity and reach the gateway unchanged.</summary>
+    [Fact]
+    public async Task MixedCaseApprovedExtensionReachesGatewayOnceAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var extensions = new Dictionary<string, string> { ["Task-ID"] = "safe" };
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id" });
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
+            context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull().Extensions!["Task-ID"].ShouldBe("safe");
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Gateway request validation forbids dangerous characters even in approved extension values.</summary>
+    [Theory]
+    [InlineData("<")]
+    [InlineData(">")]
+    [InlineData("&")]
+    [InlineData("'")]
+    [InlineData("\"")]
+    [InlineData("\u0001")]
+    [InlineData("javascript:alert(1)")]
+    public async Task DangerousExtensionValuesMakeZeroCallsAsync(string value)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id" });
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: new Dictionary<string, string> { ["task-id"] = value }), context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Malformed keys retain RFC 6901 escaped member pointers.</summary>
+    [Fact]
+    public async Task UnsafeExtensionKeyUsesEscapedPointerAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task/~" });
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: new Dictionary<string, string> { ["task/~"] = "safe" }), context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task~1~0");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A final newline cannot satisfy the Gateway extension-key grammar.</summary>
+    [Fact]
+    public async Task ExtensionKeyWithFinalNewlineMakesZeroCallsAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        const string key = "task-id\n";
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { key });
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: new Dictionary<string, string> { [key] = "safe" }), context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Gateway's case-insensitive extension dictionary cannot silently overwrite a caller value.</summary>
+    [Fact]
+    public async Task CaseInsensitiveDuplicateExtensionsMakeZeroCallsAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id" });
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: new Dictionary<string, string> { ["Task-ID"] = "first", ["task-id"] = "second" }),
+            context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>The Gateway reserves this key regardless of caller casing or allowlist contents.</summary>
+    [Theory]
+    [InlineData("actor:globalAdmin")]
+    [InlineData("AcToR:gLoBaLaDmIn")]
+    public async Task ReservedExtensionMakesZeroCallsAsync(string key)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { key });
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: new Dictionary<string, string> { [key] = "true" }), context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>The pinned sanitizer's entry, member, and UTF-8 size boundaries are enforced locally.</summary>
+    [Theory]
+    [InlineData("count", false)]
+    [InlineData("count", true)]
+    [InlineData("key", false)]
+    [InlineData("key", true)]
+    [InlineData("value", false)]
+    [InlineData("value", true)]
+    [InlineData("bytes", false)]
+    [InlineData("bytes", true)]
+    public async Task ExtensionBoundariesMakeExpectedGatewayCallsAsync(string boundary, bool overLimit)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        Dictionary<string, string> extensions = boundary switch
+        {
+            "count" => Enumerable.Range(0, overLimit ? 33 : 32).ToDictionary(index => "k" + index, _ => ""),
+            "key" => new() { [new string('k', overLimit ? 101 : 100)] = "" },
+            "value" => new() { ["k"] = new string('a', overLimit ? 1001 : 1000) },
+            _ => new()
+            {
+                ["a"] = new string('é', 500),
+                ["b"] = new string('é', 500),
+                ["c"] = new string('é', 500),
+                ["d"] = new string('é', 500),
+                ["e"] = new string('x', overLimit ? 92 : 91),
+            },
+        };
+        var context = new EnvelopeContext(null, null, false, extensions.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase));
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
+            context, TestContext.Current.CancellationToken);
+
+        if (overLimit)
+        {
+            outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path.StartsWith("/extensions", StringComparison.Ordinal));
+            await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+        }
+        else
+        {
+            outcome.Error.ShouldBeNull();
+            IDictionary<string, string> submitted = captured.ShouldNotBeNull().Extensions.ShouldNotBeNull();
+            submitted.Count.ShouldBe(extensions.Count);
+            foreach ((string key, string value) in extensions)
+            {
+                submitted.TryGetValue(key, out string? actual).ShouldBeTrue();
+                actual.ShouldBe(value);
+            }
+
+            await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+        }
+    }
+
+    /// <summary>A mutable caller dictionary is enumerated once, then its validated snapshot is submitted.</summary>
+    [Fact]
+    public async Task MutableExtensionsCannotChangeAfterValidationAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var extensions = new ChangingExtensions();
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id" });
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
+            context, TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        extensions.EnumerationCount.ShouldBe(1);
+        captured.ShouldNotBeNull().Extensions.ShouldNotBeNull()["task-id"].ShouldBe("safe");
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A supplied key replaces raw mapped data, and the computed accessor sees the rebuilt envelope.</summary>
+    [Theory]
+    [InlineData(false, false, false)]
+    [InlineData(true, true, true)]
+    public async Task ComputedAccessorSeesTrustedEnvelopeAndNestedNullAsync(
+        bool includeRawIdentity, bool rawNull, bool nullDetails)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        const string key = "01J9MZHXT3RKM0VWXRXGSJDATM";
+
+        var payload = new Dictionary<string, object?>
+        {
+            ["ItemId"] = ItemId,
+            ["Correlation"] = rawNull ? null : new { invalid = true },
+            ["Idempotency"] = rawNull ? null : 42,
+            ["Details"] = nullDetails ? null : new { Note = (string?)null },
+        };
+        if (includeRawIdentity)
+        {
+            payload["Tenant"] = "acme";
+            payload["Actor"] = "operator-1";
+        }
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "routing-fixture.computed-envelope", JsonSerializer.Serialize(payload),
+            IdempotencyKey: key),
+            new EnvelopeContext("acme", "operator-1", false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull();
+        captured.AggregateId.ShouldBe(ItemId);
+        captured.Payload.GetProperty("Tenant").GetString().ShouldBe("acme");
+        captured.Payload.GetProperty("Actor").GetString().ShouldBe("operator-1");
+        captured.Payload.GetProperty("Correlation").GetString().ShouldBe(captured.MessageId);
+        captured.Payload.GetProperty("Idempotency").GetString().ShouldBe(key);
+        if (nullDetails)
+        {
+            captured.Payload.GetProperty("Details").ValueKind.ShouldBe(JsonValueKind.Null);
+        }
+        else
+        {
+            captured.Payload.GetProperty("Details").GetProperty("Note").ValueKind.ShouldBe(JsonValueKind.Null);
+        }
+        captured.IdempotencyKey.ShouldBe(key);
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Present tenant and actor members must be strings exactly matching trusted values.</summary>
+    [Theory]
+    [InlineData("Tenant", "null", "/Tenant")]
+    [InlineData("Tenant", "42", "/Tenant")]
+    [InlineData("Tenant", "\"ACME\"", "/Tenant")]
+    [InlineData("Actor", "null", "/Actor")]
+    [InlineData("Actor", "false", "/Actor")]
+    [InlineData("Actor", "\"Operator-1\"", "/Actor")]
+    public async Task RawIdentityConflictMakesZeroCallsAsync(string member, string rawValue, string path)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        string payload = $$"""{"ItemId":"{{ItemId}}","{{member}}":{{rawValue}}}""";
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments("routing-fixture.computed-envelope", payload),
+            new EnvelopeContext("acme", "operator-1", false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe(path);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A payload actor cannot supply the missing trusted session actor.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task MissingTrustedActorMakesZeroCallsAsync(bool rawActor)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        string payload = rawActor
+            ? $$"""{"ItemId":"{{ItemId}}","Actor":"caller"}"""
+            : $$"""{"ItemId":"{{ItemId}}"}""";
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments("routing-fixture.computed-envelope", payload),
+            new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe("/actor");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Optional raw null is removed when the caller omits a key.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task OptionalIdempotencyIsAbsentWithoutCallerKeyAsync(bool rawNull)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        string payload = rawNull
+            ? $$"""{"ItemId":"{{ItemId}}","Idempotency":null}"""
+            : $$"""{"ItemId":"{{ItemId}}"}""";
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments("routing-fixture.nullable-idempotency", payload),
+            new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull().IdempotencyKey.ShouldBeNull();
+        captured.Payload.TryGetProperty("Idempotency", out _).ShouldBeFalse();
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A required nullable member still needs a caller key even if raw JSON contains null.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task RequiredNullableIdempotencyNeedsCallerKeyAsync(bool rawNull)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        string payload = rawNull
+            ? $$"""{"ItemId":"{{ItemId}}","Idempotency":null}"""
+            : $$"""{"ItemId":"{{ItemId}}"}""";
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "routing-fixture.required-nullable-idempotency", payload),
+            new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe("/idempotencyKey");
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>The supplied key satisfies a serializer-required nullable member.</summary>
+    [Fact]
+    public async Task SuppliedKeyFillsRequiredNullableMemberAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "routing-fixture.required-nullable-idempotency", $$"""{"ItemId":"{{ItemId}}","Idempotency":"bad"}""",
+            IdempotencyKey: CorrelationId),
+            new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull().Payload.GetProperty("Idempotency").GetString().ShouldBe(CorrelationId);
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>Lowercase aggregate ULIDs fail at the proper source before submission.</summary>
+    [Theory]
+    [InlineData("routing-fixture.computed-envelope", "/aggregateId")]
+    [InlineData("routing-fixture.nullable-idempotency", "/ItemId")]
+    public async Task LowercaseAggregateUlidMakesZeroCallsAsync(string operation, string path)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(operation,
+            $$"""{"ItemId":"{{ItemId.ToLowerInvariant()}}"}"""),
+            new EnvelopeContext("acme", "operator-1", false, new HashSet<string>()), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == path);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>A string-kind module accepts its declared string identifier and preserves a JSON-null query result.</summary>
     [Fact]
     public async Task StringIdentifierQueryReturnsRequiredNullDocumentAsync()

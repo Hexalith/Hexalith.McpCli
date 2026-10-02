@@ -117,6 +117,23 @@ public sealed class SchemaTests
             .Violations.Select(violation => violation.Path).ShouldContain("/ItemKey");
     }
 
+    /// <summary>Advertised ULID schemas accept only canonical uppercase text for marked and typed identifiers.</summary>
+    [Fact]
+    public void UlidSchemaRejectsLowercaseMarkedAndTypedValues()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(IdentifierCommand), TestOptions(), IdentifierKind.Ulid, true);
+        JsonNode properties = schema.Node["properties"]!;
+        properties["ItemKey"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        properties["Tracking"]!["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+        SchemaDeriver.UlidPattern.ShouldBe("^[0-7][0-9A-HJKMNP-TV-Z]{25}$");
+        PayloadValidator.Validate(schema, "{\"ItemKey\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Tracking\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true)
+            .IsValid.ShouldBeTrue();
+        PayloadValidator.Validate(schema, "{\"ItemKey\":\"01arz3ndektsv4rrffq69g5fav\"}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/ItemKey");
+        PayloadValidator.Validate(schema, "{\"Tracking\":\"01arz3ndektsv4rrffq69g5fav\"}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/Tracking");
+    }
+
     /// <summary>Rejects unknown Module identifier kinds before exporting a schema.</summary>
     [Fact]
     public void UnknownIdentifierKindIsRejected()
@@ -288,6 +305,13 @@ public sealed class SchemaTests
         const string good = "{\"Ids\":[\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"],\"ByName\":{\"a\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"},\"Optional\":[null,\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"]}";
         PayloadValidator.Validate(schema, good, true).IsValid.ShouldBeTrue();
         JsonSerializer.Deserialize<UlidCollectionCommand>(good, options)!.Ids.Count.ShouldBe(1);
+        const string lowercase = "01arz3ndektsv4rrffq69g5fav";
+        PayloadValidator.Validate(schema, "{\"Ids\":[\"" + lowercase + "\"]}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/Ids/0");
+        PayloadValidator.Validate(schema, "{\"ByName\":{\"a\":\"" + lowercase + "\"}}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/ByName/a");
+        PayloadValidator.Validate(schema, "{\"Optional\":[\"" + lowercase + "\"]}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/Optional/0");
     }
 
     /// <summary>Rejects converter-backed collection and dictionary elements whose schema is unknown.</summary>

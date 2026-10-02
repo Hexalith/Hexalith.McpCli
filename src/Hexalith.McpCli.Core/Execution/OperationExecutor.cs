@@ -141,6 +141,7 @@ public sealed class OperationExecutor(
         string? messageId = null;
         string? correlationId = null;
         string? idempotencyKey = null;
+        Dictionary<string, string>? extensions = null;
         if (call is SendCommandArguments command)
         {
             messageId = Ulid.New().ToString();
@@ -163,13 +164,13 @@ public sealed class OperationExecutor(
 
             if (operation.PropertyBindings.TryGetValue(PropertyRole.IdempotencyKey, out PropertyBinding? keyBinding)
                 && RawHasNonNull(raw, keyBinding)
-                && (idempotencyKey is null || !RawMatches(raw, keyBinding, idempotencyKey)))
+                && idempotencyKey is null)
             {
-                return Fail(call, idempotencyKey is null ? "/idempotencyKey" : keyBinding.Pointer,
-                    "The payload idempotency key must match the caller-supplied key.");
+                return Fail(call, "/idempotencyKey", "A payload idempotency key requires a caller-supplied key.");
             }
 
-            IReadOnlyList<PayloadViolation> extensionViolations = ExtensionValidator.Validate(command.Extensions, context.AllowedExtensions);
+            extensions = command.Extensions is null ? null : new Dictionary<string, string>(command.Extensions, StringComparer.Ordinal);
+            IReadOnlyList<PayloadViolation> extensionViolations = ExtensionValidator.Validate(extensions, context.AllowedExtensions);
             if (extensionViolations.Count > 0)
             {
                 return Fail(call, extensionViolations);
@@ -208,17 +209,17 @@ public sealed class OperationExecutor(
 
         string? aggregateId = call.AggregateId ?? accessorId ?? operation.AggregateIdConstant;
         if (string.IsNullOrWhiteSpace(aggregateId)
-            || module.IdentifierKind == IdentifierKind.Ulid && !IsUlid(aggregateId)
+            || module.IdentifierKind == IdentifierKind.Ulid && !IsCanonicalUlid(aggregateId)
             || !RoutingResolver.IsAggregateId(aggregateId))
         {
             return Fail(call, "/aggregateId", "The aggregate identifier does not match the module and Gateway rules.");
         }
 
-        if (call is SendCommandArguments send)
+        if (call is SendCommandArguments)
         {
             var request = new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,
                 operation.Routing.WireType, rebuilt, correlationId,
-                send.Extensions is null ? null : new Dictionary<string, string>(send.Extensions, StringComparer.Ordinal), idempotencyKey);
+                extensions, idempotencyKey);
             SubmitCommandResponse response = await gateway.SubmitCommandAsync(request, cancellationToken).ConfigureAwait(false);
             return new OperationOutcome(new CommandResult(operation.Name, response.MessageId ?? messageId!,
                 correlationId!, tenant!, aggregateId!, "accepted", idempotencyKey, response.ResultPayload), null);
@@ -323,6 +324,10 @@ public sealed class OperationExecutor(
     }
 
     private static bool IsUlid(string? value) => value is not null && Ulid.TryParse(value, provider: null, out _);
+
+    private static bool IsCanonicalUlid(string value)
+        => Ulid.TryParse(value, provider: null, out Ulid parsed)
+            && string.Equals(value, parsed.ToString(), StringComparison.Ordinal);
 
     private static OperationOutcome Fail(OperationCall call, string path, string message)
         => Fail(call, [new PayloadViolation(path, message)]);

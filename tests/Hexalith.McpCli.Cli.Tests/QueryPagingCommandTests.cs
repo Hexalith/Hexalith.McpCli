@@ -53,7 +53,7 @@ public sealed class QueryPagingCommandTests
     {
         string tenant = new('a', tenantLength);
         string entity = entityLength == 1 ? "A" : "A._-" + new string('z', entityLength - 5) + "9";
-        string aggregate = ItemId.ToLowerInvariant();
+        string aggregate = ItemId;
         await using var harness = new QueryCliHarness();
         (int exit, string output, string error) = await harness.InvokeAsync(
             ["query", "routing-fixture.get-http2-status", "--payload", "{}", "--tenant", tenant,
@@ -65,6 +65,23 @@ public sealed class QueryPagingCommandTests
              "queryType":"get-http2-status","projectionType":"routing-items","payload":{},"entityId":"{{entity}}"}
             """);
         AssertJson(output, $$$"""{"operation":"routing-fixture.get-http2-status","tenant":"{{{tenant}}}","document":{"items":[]}}""");
+    }
+
+    /// <summary>The CLI rejects lowercase aggregate ULIDs before the loopback Gateway receives a request.</summary>
+    [Fact]
+    public async Task LowercaseAggregateUlidIsRejectedBeforeGatewayAsync()
+    {
+        await using var harness = new QueryCliHarness();
+        (int exit, string output, _) = await harness.InvokeAsync(
+            ["query", "routing-fixture.get-http2-status", "--payload", "{}", "--tenant", "acme",
+                "--aggregate-id", ItemId.ToLowerInvariant()]);
+
+        exit.ShouldBe(2);
+        using JsonDocument document = JsonDocument.Parse(output);
+        JsonElement error = document.RootElement.GetProperty("error");
+        error.GetProperty("code").GetString().ShouldBe("validation_failed");
+        error.GetProperty("violations").EnumerateArray().ShouldContain(violation => violation.GetProperty("path").GetString() == "/aggregateId");
+        harness.Calls.ShouldBe(0);
     }
 
     /// <summary>Tenant digit endpoints and internal hyphens survive CLI binding and Gateway submission.</summary>

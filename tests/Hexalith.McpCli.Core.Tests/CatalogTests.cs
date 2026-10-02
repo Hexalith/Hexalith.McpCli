@@ -53,7 +53,7 @@ public sealed class CatalogTests
             (typeof(Routing.RedundantConventionQuery).FullName!, "redundant_value", "warning"),
             (typeof(Routing.RedundantInterfaceCommand).FullName!, "redundant_value", "warning"),
         ]);
-        routing.Modules.Single().Operations.Count.ShouldBe(10);
+        routing.Modules.Single().Operations.Count.ShouldBe(12);
     }
 
     /// <summary>Each routing field reports its own warning, and the interface value wins a conflict.</summary>

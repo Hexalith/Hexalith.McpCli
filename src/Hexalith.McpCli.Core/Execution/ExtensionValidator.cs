@@ -23,20 +23,31 @@ internal static partial class ExtensionValidator
         }
 
         int totalSize = 0;
+        var seenKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach ((string key, string value) in extensions.OrderBy(item => item.Key, StringComparer.Ordinal))
         {
             string pointer = "/extensions/" + key.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
+            if (!seenKeys.Add(key))
+            {
+                violations.Add(new PayloadViolation(pointer, "Extension keys must be unique regardless of case."));
+            }
+
             if (!allowedExtensions.Any(allowed => string.Equals(allowed, key, StringComparison.OrdinalIgnoreCase)))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension key is not allowlisted."));
             }
 
-            if (!IsValidKey(key))
+            if (string.Equals(key, "actor:globalAdmin", StringComparison.OrdinalIgnoreCase))
+            {
+                violations.Add(new PayloadViolation(pointer, "The extension key is reserved."));
+            }
+            else if (!IsValidKey(key))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension key is invalid."));
             }
 
-            if (value is null || value.Length > 1_000 || HasForbiddenControl(value) || HasInjection(value))
+            if (value is null || value.Length > 1_000 || HasForbiddenControl(value)
+                || HasDangerousCharacters(value) || HasInjection(value))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension value is invalid."));
                 continue;
@@ -57,15 +68,19 @@ internal static partial class ExtensionValidator
     /// <param name="key">The extension key to validate.</param>
     /// <returns><see langword="true" /> when the key is safe and well-formed; otherwise, <see langword="false" />.</returns>
     internal static bool IsValidKey(string key)
-        => key.Length is >= 1 and <= 100 && KeyPattern().IsMatch(key) && !HasInjection(key);
+        => key.Length is >= 1 and <= 100 && KeyPattern().IsMatch(key) && !HasInjection(key)
+            && !string.Equals(key, "actor:globalAdmin", StringComparison.OrdinalIgnoreCase);
 
     private static bool HasForbiddenControl(string value)
         => value.Any(character => character is < (char)0x20 and not '\t' and not '\n' and not '\r');
 
+    private static bool HasDangerousCharacters(string value)
+        => value.AsSpan().IndexOfAny(['<', '>', '&', '\'', '"']) >= 0;
+
     private static bool HasInjection(string value)
         => XssPattern().IsMatch(value) || SqlPattern().IsMatch(value) || LdapPattern().IsMatch(value) || PathPattern().IsMatch(value);
 
-    [GeneratedRegex(@"^[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?(?::[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?)*$")]
+    [GeneratedRegex(@"^[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?(?::[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?)*\z")]
     private static partial Regex KeyPattern();
 
     [GeneratedRegex(@"(?i)(<\s*script|javascript\s*:|on\w+\s*=|<\s*iframe|<\s*object|<\s*embed)")]

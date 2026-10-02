@@ -14,8 +14,8 @@ namespace Hexalith.McpCli.Core.Schema;
 /// <summary>Exports an operation payload contract and resolves declared property roles.</summary>
 public static class SchemaDeriver
 {
-    /// <summary>The JSON Schema pattern for a 26-character ULID string.</summary>
-    public const string UlidPattern = "^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$";
+    /// <summary>The JSON Schema pattern for a canonical uppercase 26-character ULID string.</summary>
+    public const string UlidPattern = "^[0-7][0-9A-HJKMNP-TV-Z]{25}$";
 
     /// <summary>Derives one reusable schema from canonical module payload options.</summary>
     /// <param name="payloadType">The decorated payload type.</param>

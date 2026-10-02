@@ -90,6 +90,7 @@ public sealed class QueryValidationTests
     [InlineData("ItemId", " ", "/ItemId")]
     [InlineData("ItemId", "550e8400-e29b-41d4-a716-446655440000", "/ItemId")]
     [InlineData("MarkedId", "not-a-ulid", "/Entries/0/MarkedId")]
+    [InlineData("MarkedId", "01arz3ndektsv4rrffq69g5fav", "/Entries/0/MarkedId")]
     public async Task InvalidPayloadIdentifiersMakeZeroCallsAsync(string member, string value, string path)
     {
         JsonNode payload = JsonNode.Parse(InspectPayload)!;
@@ -184,6 +185,7 @@ public sealed class QueryValidationTests
     [InlineData(" ")]
     [InlineData("not-a-ulid")]
     [InlineData("550e8400-e29b-41d4-a716-446655440000")]
+    [InlineData("01arz3ndektsv4rrffq69g5fav")]
     public async Task InvalidUlidAggregateArgumentsUseEnvelopePathAsync(string value)
     {
         IEventStoreGatewayClient gateway = Gateway();
@@ -193,7 +195,7 @@ public sealed class QueryValidationTests
         AssertRefusal(outcome, gateway, "/aggregateId");
     }
 
-    /// <summary>Minimum and maximum lengths, valid punctuation, and ULID casing are preserved.</summary>
+    /// <summary>Minimum and maximum lengths, valid punctuation, and canonical ULIDs are preserved.</summary>
     [Theory]
     [InlineData(1, 1, false)]
     [InlineData(64, 256, false)]
@@ -202,7 +204,7 @@ public sealed class QueryValidationTests
     {
         string tenant = new('a', tenantLength);
         string entity = new('A', entityLength);
-        string aggregate = ulid ? ItemId.ToLowerInvariant() : entityLength == 1 ? "A" : "A._-" + new string('z', entityLength - 5) + "9";
+        string aggregate = ulid ? ItemId : entityLength == 1 ? "A" : "A._-" + new string('z', entityLength - 5) + "9";
         string operation = ulid ? "routing-fixture.get-http2-status" : "string-fixture.list-items";
         IEventStoreGatewayClient gateway = Gateway();
         OperationOutcome outcome = await Executor(gateway).ExecuteAsync(

@@ -347,6 +347,8 @@ public sealed class ProfileStoreTests
     [InlineData("dev", "allowedExtensions", " a")]
     [InlineData("dev", "allowedExtensions", "../unsafe")]
     [InlineData("dev", "allowedExtensions", "javascript:x")]
+    [InlineData("dev", "allowedExtensions", "task-id\n")]
+    [InlineData("dev", "allowedExtensions", "AcToR:gLoBaLaDmIn")]
     [InlineData("missing", "tenant", "x")]
     [InlineData("", "tenant", "x")]
     [InlineData(" ", "tenant", "x")]
