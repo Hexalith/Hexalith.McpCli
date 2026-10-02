@@ -52,7 +52,7 @@ public sealed class QueryPagingCommandTests
     public async Task EntityAndTenantBoundaryValuesArePreservedAsync(int tenantLength, int entityLength)
     {
         string tenant = new('a', tenantLength);
-        string entity = entityLength == 1 ? "A" : "A._-" + new string('z', 251) + "9";
+        string entity = entityLength == 1 ? "A" : "A._-" + new string('z', entityLength - 5) + "9";
         string aggregate = ItemId.ToLowerInvariant();
         await using var harness = new QueryCliHarness();
         (int exit, string output, string error) = await harness.InvokeAsync(
@@ -91,7 +91,7 @@ public sealed class QueryPagingCommandTests
     [InlineData(256)]
     public async Task StringAggregateBoundaryValuesArePreservedAsync(int length)
     {
-        string aggregate = length == 1 ? "A" : "A._-" + new string('z', 251) + "9";
+        string aggregate = length == 1 ? "A" : "A._-" + new string('z', length - 5) + "9";
         await using var harness = new QueryCliHarness();
         (int exit, string output, string error) = await harness.InvokeAsync(
             ["query", "string-fixture.list-items", "--payload", "{}", "--aggregate-id", aggregate]);

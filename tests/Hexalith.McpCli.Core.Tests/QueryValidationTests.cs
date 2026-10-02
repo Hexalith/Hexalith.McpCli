@@ -141,6 +141,25 @@ public sealed class QueryValidationTests
         outcome.Error!.Violations!.ShouldHaveSingleItem();
     }
 
+    /// <summary>Supplies the invalid session tenant values as untrusted per-call tenants, with and without override.</summary>
+    public static IEnumerable<object?[]> InvalidPerCallTenants() => InvalidEnvelopeIdentifiers()
+        .Where(row => string.Equals(row[0] as string, "tenant", StringComparison.Ordinal))
+        .SelectMany(row => new[] { new object?[] { row[1], false }, new object?[] { row[1], true } });
+
+    /// <summary>A per-call tenant used without a session tenant or through override must satisfy the Gateway grammar.</summary>
+    [Theory]
+    [MemberData(nameof(InvalidPerCallTenants))]
+    public async Task InvalidPerCallTenantsMakeZeroCallsAsync(string value, bool overrideSession)
+    {
+        IEventStoreGatewayClient gateway = Gateway();
+        EnvelopeContext context = overrideSession ? new("session-tenant", null, true, new HashSet<string>()) : Context(null);
+        OperationOutcome outcome = await Executor(gateway).ExecuteAsync(
+            new RunQueryArguments("routing-fixture.get-http2-status", "{}", Tenant: value, AggregateId: ItemId), context,
+            TestContext.Current.CancellationToken);
+        AssertRefusal(outcome, gateway, "/tenant");
+        outcome.Error!.Violations!.ShouldHaveSingleItem();
+    }
+
     /// <summary>Supplies the invalid String aggregate values already covered at the envelope boundary.</summary>
     public static IEnumerable<object?[]> InvalidStringAccessorIdentifiers() => InvalidEnvelopeIdentifiers()
         .Where(row => string.Equals(row[0] as string, "aggregateId", StringComparison.Ordinal))
@@ -183,7 +202,7 @@ public sealed class QueryValidationTests
     {
         string tenant = new('a', tenantLength);
         string entity = new('A', entityLength);
-        string aggregate = ulid ? ItemId.ToLowerInvariant() : entityLength == 1 ? "A" : "A._-" + new string('z', 251) + "9";
+        string aggregate = ulid ? ItemId.ToLowerInvariant() : entityLength == 1 ? "A" : "A._-" + new string('z', entityLength - 5) + "9";
         string operation = ulid ? "routing-fixture.get-http2-status" : "string-fixture.list-items";
         IEventStoreGatewayClient gateway = Gateway();
         OperationOutcome outcome = await Executor(gateway).ExecuteAsync(
