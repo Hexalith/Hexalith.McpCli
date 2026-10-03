@@ -4,7 +4,7 @@ namespace Hexalith.McpCli.Core.Execution;
 /// <param name="Operation">The canonical write operation.</param>
 /// <param name="Payload">The raw JSON command payload.</param>
 /// <param name="Tenant">The optional MCP per-call tenant.</param>
-/// <param name="AggregateId">The optional explicit aggregate identifier; a canonical uppercase ULID in ULID-kind modules.</param>
+/// <param name="AggregateId">The optional aggregate identifier, which must equal the payload aggregate identifier; a canonical uppercase ULID in ULID-kind modules.</param>
 /// <param name="CorrelationId">The optional caller-supplied canonical uppercase ULID correlation identifier.</param>
 /// <param name="IdempotencyKey">The optional caller-supplied canonical uppercase ULID idempotency key.</param>
 /// <param name="Extensions">Optional allowlisted extension metadata.</param>

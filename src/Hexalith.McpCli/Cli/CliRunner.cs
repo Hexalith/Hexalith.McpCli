@@ -148,7 +148,7 @@ internal sealed class CliRunner
     {
         Argument<string?> operation = new("operation") { Description = "Canonical write operation", Arity = ArgumentArity.ZeroOrOne };
         Option<string?> payload = new("--payload") { Description = "JSON, @file, or - for stdin" };
-        Option<string?> aggregateId = new("--aggregate-id") { Description = "Explicit aggregate identifier; canonical uppercase ULID in ULID-kind modules" };
+        Option<string?> aggregateId = new("--aggregate-id") { Description = "Must equal the payload aggregate identifier; canonical uppercase ULID in ULID-kind modules" };
         Option<string?> correlationId = new("--correlation-id") { Description = "Caller-supplied canonical uppercase ULID correlation identifier" };
         Option<string?> idempotencyKey = new("--idempotency-key") { Description = "Caller-supplied canonical uppercase ULID idempotency key" };
         Option<string[]> extensions = new("--extension") { Description = "Allowlisted key=value; repeatable" };

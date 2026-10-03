@@ -324,7 +324,11 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             CorrelationId: correlationId, IdempotencyKey: idempotencyKey), Context(), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe(path);
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe(path);
+        outcome.Error.Violations!.Single().Message.ShouldBe(correlationId is not null
+            ? "The correlation identifier must be a canonical uppercase ULID."
+            : "The idempotency key must be a canonical uppercase ULID.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -388,7 +392,9 @@ public sealed class OperationExecutorTests
             "routing-fixture.nullable-idempotency", $$"""{"ItemId":"{{ItemId}}","Idempotency":"{{CorrelationId}}"}"""),
             new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe("/idempotencyKey");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe("/idempotencyKey");
+        outcome.Error.Violations!.Single().Message.ShouldBe("A payload idempotency key requires a caller-supplied key.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -436,13 +442,18 @@ public sealed class OperationExecutorTests
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
-    /// <summary>Gateway request validation forbids dangerous characters even in approved extension values.</summary>
+    /// <summary>Approved values still reject embedded dangerous characters, forbidden controls, and injection patterns.</summary>
     [Theory]
     [InlineData("<")]
     [InlineData(">")]
     [InlineData("&")]
     [InlineData("'")]
     [InlineData("\"")]
+    [InlineData("a<b")]
+    [InlineData("a>b")]
+    [InlineData("R&D")]
+    [InlineData("O'Brien")]
+    [InlineData("a\"b")]
     [InlineData("\u0001")]
     [InlineData("javascript:alert(1)")]
     public async Task DangerousExtensionValuesMakeZeroCallsAsync(string value)
@@ -677,7 +688,8 @@ public sealed class OperationExecutorTests
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments("routing-fixture.computed-envelope", payload),
             new EnvelopeContext("acme", "operator-1", false, new HashSet<string>()), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe(path);
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe(path);
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -696,7 +708,8 @@ public sealed class OperationExecutorTests
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments("routing-fixture.computed-envelope", payload),
             new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe("/actor");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe("/actor");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -740,7 +753,9 @@ public sealed class OperationExecutorTests
             "routing-fixture.required-nullable-idempotency", payload),
             new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe("/idempotencyKey");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe("/idempotencyKey");
+        outcome.Error.Violations!.Single().Message.ShouldBe("This operation requires a caller-supplied idempotency key.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -776,7 +791,8 @@ public sealed class OperationExecutorTests
             $$"""{"ItemId":"{{ItemId.ToLowerInvariant()}}"}"""),
             new EnvelopeContext("acme", "operator-1", false, new HashSet<string>()), TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == path);
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == path);
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
