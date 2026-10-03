@@ -147,14 +147,14 @@ public sealed class OperationExecutor(
             messageId = Ulid.New().ToString();
             correlationId = command.CorrelationId ?? messageId;
             idempotencyKey = command.IdempotencyKey;
-            if (!IsUlid(correlationId))
+            if (!IsCanonicalUlid(correlationId))
             {
-                return Fail(call, "/correlationId", "The correlation identifier must be a ULID.");
+                return Fail(call, "/correlationId", "The correlation identifier must be a canonical uppercase ULID.");
             }
 
-            if (idempotencyKey is not null && !IsUlid(idempotencyKey))
+            if (idempotencyKey is not null && !IsCanonicalUlid(idempotencyKey))
             {
-                return Fail(call, "/idempotencyKey", "The idempotency key must be a ULID.");
+                return Fail(call, "/idempotencyKey", "The idempotency key must be a canonical uppercase ULID.");
             }
 
             if (operation.IdempotencyKeyRequired && idempotencyKey is null)
@@ -322,8 +322,6 @@ public sealed class OperationExecutor(
         using JsonDocument document = JsonDocument.Parse(node?.ToJsonString() ?? "null");
         return document.RootElement.Clone();
     }
-
-    private static bool IsUlid(string? value) => value is not null && Ulid.TryParse(value, provider: null, out _);
 
     private static bool IsCanonicalUlid(string value)
         => Ulid.TryParse(value, provider: null, out Ulid parsed)

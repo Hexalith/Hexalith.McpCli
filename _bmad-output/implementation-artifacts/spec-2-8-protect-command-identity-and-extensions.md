@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -20,7 +20,7 @@ context:
 
 ## Boundaries & Constraints
 
-**Always:** Resolve Tenant from fixed Module, permitted per-call value, or session; Actor only from session. Present mapped Tenant/Actor members must be JSON strings ordinally equal to resolved values; otherwise fail at escaped member pointers. Fill omitted/matching members. Generate one message ULID, reuse it for omitted correlation, and overwrite raw correlation. A supplied ULID idempotency key overwrites any raw mapped value; without a key, reject non-null raw values at `/idempotencyKey`, remove raw null, and require the key for non-nullable or serializer-required members, including required nullable. Validate a copy without mapped envelope fields, then rebuilt Payload, before computed `ICommandContract.AggregateId` access. Commands require object roots; allowed nested nulls survive. Reject lowercase ULID aggregates and marked identifiers per the user decision; correlation and idempotency use `Ulid.TryParse`. Allow only Profile-approved extension keys case-insensitively, within pinned Gateway sanitizer and request-validator grammar, injection, count, length, and UTF-8 limits. Refusals make zero Gateway calls; successes make one.
+**Always:** Resolve Tenant from fixed Module, permitted per-call value, or session; Actor only from session. Present mapped Tenant/Actor members must be JSON strings ordinally equal to resolved values; otherwise fail at escaped member pointers. Fill omitted/matching members. Generate one message ULID, reuse it for omitted correlation, and overwrite raw correlation. A supplied ULID idempotency key overwrites any raw mapped value; without a key, reject non-null raw values at `/idempotencyKey`, remove raw null, and require the key for non-nullable or serializer-required members, including required nullable. Validate a copy without mapped envelope fields, then rebuilt Payload, before computed `ICommandContract.AggregateId` access. Commands require object roots; allowed nested nulls survive. Reject lowercase ULID aggregates, marked identifiers, and caller correlation and idempotency keys per the user decisions; accepted values pass unchanged. Allow only Profile-approved extension keys case-insensitively, within pinned Gateway sanitizer and request-validator grammar, injection, count, length, and UTF-8 limits. Refusals make zero Gateway calls; successes make one.
 
 **Never:** Read Tenant or Actor from Payload as an authority; generate an idempotency key; apply envelope identity or extension fields to Queries; add module-specific code or dependencies; edit `references/`.
 
@@ -62,6 +62,32 @@ context:
 - Given allowed extensions, when a Command supplies them, then only Gateway-compatible keys and values reach one request.
 - Given a noncanonical ULID aggregate or marked identifier, when either head calls Core, then validation fails before submission.
 
+### Review Findings
+
+Code review 2026-10-03 of `1554a84..a343378`; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap traced every behavioral change to a test that fails on its smallest regression.
+
+- [x] [Review][Patch] Lowercase caller correlation or idempotency ULIDs pass the envelope check, then fail at a payload pointer the caller never wrote — medium (blind-hunter+edge-case-hunter+verification-gap+acceptance-auditor). `SchemaDeriver.IsSupportedRoleType` lets Correlation and IdempotencyKey bind to CLR `Ulid`/`Ulid?` members (`SchemaDeriver.cs:196-197`). Those members now get the uppercase-only `UlidPattern` (`SchemaDeriver.cs:18`, `:301-304`). The executor still accepts lowercase envelope values through `Ulid.TryParse` (`OperationExecutor.cs:150`, `:155`), and `Fill` writes them unchanged (`:192-193`). Final validation (`:197`) then rejects them at `/Correlation` or `/Idempotency`, not at `/correlationId` or `/idempotencyKey`. Before this change the same value succeeded, and it still succeeds for `string` members. Three layers reproduced this against the built Core assembly; no test or fixture declares a `Ulid`-typed role member. Same root cause: the Gateway treats the idempotency key as an opaque ordinal string (`SubmitCommandRequestValidator.cs:93-97`), so `01arz…` and `01ARZ…` are different deduplication keys and a retry that changes the casing can submit twice (pre-existing since Story 2.7). Options: (1) canonicalize accepted envelope ULIDs with `parsed.ToString()` before filling, submitting and echoing; (2) reject noncanonical envelope ULIDs at `/correlationId` and `/idempotencyKey`, which renegotiates the frozen "`Ulid.TryParse`" wording; (3) canonicalize only the text filled into `Ulid`-typed role members; (4) defer. Resolved by user decision 2026-10-03: option 2. Canonicalizing would contradict Story 2.7's "accept caller values unchanged" rule, and rejection matches the Story 2.6 aggregate decision. The executor now checks both envelope values with `IsCanonicalUlid` at `/correlationId` and `/idempotencyKey`; `IsUlid` was removed; README and the frozen Always clause updated. [src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:150]
+- [ ] [Review][Patch] README understates where uppercase ULID text is required — low (acceptance-auditor+blind-hunter). "ULID aggregate identifiers and marked payload identifiers must use canonical uppercase text" can be read as covering marked identifiers in String-kind modules, which stay nonempty strings. It also omits that every CLR `Ulid`-typed payload member requires uppercase in every module, including nested collection and dictionary elements (`SchemaDeriver.cs:301`, `SchemaTests` `/Ids/0`, `/ByName/a`, `/Optional/0`). Envelope correlation and idempotency casing is now stated at `README.md:67`. [README.md:73]
+- [ ] [Review][Patch] README does not say a payload correlation member is replaced — low (blind-hunter). The story documents raw Tenant, Actor and idempotency handling, but not that a mapped correlation member is always overwritten by `--correlation-id` or the generated message ID (`OperationExecutor.cs:148`, `:192`), while a raw idempotency value is refused in the same situation. Add one sentence to the identity-ownership text. [README.md:67]
+- [ ] [Review][Patch] The reserved key literal appears twice, and the test cannot tell which check fired — low (blind-hunter). `"actor:globalAdmin"` is written at `ExtensionValidator.cs:40` and `:72`. `ReservedExtensionMakesZeroCallsAsync` asserts only the pointer, so deleting the "reserved" branch silently turns the message into "The extension key is invalid." Use one constant and assert the reserved message. [src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:40; tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:484]
+- [ ] [Review][Patch] The lowercase-ULID ledger entry this story resolves is not marked resolved — low (blind-hunter). The ledger records resolutions with a `status: resolved in Story …` line (`deferred-work.md:96`), but the Story 2.6 entry Story 2.8 owns has none, so a later ledger sweep would treat it as open. [_bmad-output/implementation-artifacts/deferred-work.md:267]
+
+**Rejected**
+
+- false — The extension snapshot copy can throw on a duplicate or null key (edge-case-hunter): both heads bind real `Dictionary` instances that cannot hold either, and the same copy already existed at submission before this change. Only a deliberately broken custom `IReadOnlyDictionary` reaches it, and it then fails loudly as `internal_error`.
+- false — A lowercase-ULID contract `Example` now fails catalog build (edge-case-hunter): such an example violates the advertised Schema and would fail at call time, so `invalid_example` is the intended consequence. No enrolled or referenced Contracts package has one.
+- false — Overwriting a supplied key over a valid raw ULID is unpinned (blind-hunter): the old code refused any non-matching raw key, so `SuppliedKeyFillsRequiredNullableMemberAsync` (malformed `"bad"`) fails on a revert. The coupled computed-accessor rows name no missed defect.
+- false — Spec `done` versus sprint `review` (blind-hunter): the sprint entry moves only when this review closes, the same path Story 2.7 took (`954a426`).
+- false — An oversized extension map produces an unbounded error document (blind-hunter): at most three violations per entry the caller sent, so the error grows linearly with the caller's own input.
+- false — The README presents configurable Gateway limits as fixed (blind-hunter): it states the CLI's local limits, which epic-2-context.md fixes. They are the strictest combination of the pinned sanitizer defaults and the request validator, and a stricter Gateway reports its own `gateway_error`.
+- false — Verification skipped the other test projects and the Release solution build (blind-hunter): no Abstractions, Analyzers, Manifest or ConformanceHost source uses the ULID pattern or the routing fixture, and no repository file outside the new negative tests contains lowercase ULID text.
+- low — Existing profile files holding `actor:globalAdmin` or a newline-terminated key become unreadable (edge-case-hunter+acceptance-auditor+blind-hunter): there is no release (no tags; nothing ships before Epic 4), so only local development files could hold one, and read-time tolerance adds new branches.
+- low — A lowercase ULID query constant passes catalog validation but fails every call (edge-case-hunter+blind-hunter): no module declares one, `--aggregate-id` overrides it, and the fix needs a shared canonical helper plus a new catalog check.
+- low — An allowlisted `traceparent` or `tracestate` is replaced by the Gateway (edge-case-hunter): an operator must allowlist the key, the overwrite is the Gateway's own trace propagation (`SubmitCommandExtensions.cs:32-39`), and a reserved list is a new guard.
+- low — AC3's "either head" is tested only through CLI `query` (acceptance-auditor+blind-hunter): the MCP head passes the aggregate argument to the same Core executor; an MCP protocol fixture adds machinery without a distinct branch, as triage item Blind 7 already concluded.
+- Rejected because the fix would edit the spec (acceptance-auditor): AC2's "only Gateway-compatible keys" overstates local enforcement for colon keys, which require a Gateway-side trusted-extension policy. The frozen Always clause asks only for the sanitizer and validator rules, and the README documents the policy requirement.
+- Rejected because the fix would edit the spec (blind-hunter): the Code Map lists planned files that were not touched and omits fixture and test files that were.
+
 ## Implementation Notes
 
 - The executor retains its prefill and final-schema pipeline. A supplied key now overwrites raw mapped idempotency data; absent-key non-null data still fails before submission.
@@ -71,6 +97,8 @@ context:
 - Review fixes reject newline-terminated, case-colliding, and reserved extension keys. The executor validates and submits one extension snapshot; docs explain Profile setup and Gateway policy for namespaced keys. Accepted-limit and nested-ULID tests now check the submitted data and rejection paths.
 
 ## Spec Change Log
+
+- 2026-10-03: The user renegotiated the frozen envelope ULID rule during code review. Caller correlation and idempotency keys must now be canonical uppercase ULIDs, like aggregate and marked identifiers, instead of any text `Ulid.TryParse` accepts. Accepted values still pass unchanged, so Story 2.7's rule holds. The Always clause now reflects the decision.
 
 ## Review Triage Log
 

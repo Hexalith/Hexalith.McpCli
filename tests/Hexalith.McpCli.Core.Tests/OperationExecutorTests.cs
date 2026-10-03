@@ -297,10 +297,12 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
-    /// <summary>Caller-supplied envelope identifiers must be ULIDs and are never silently regenerated.</summary>
+    /// <summary>Caller-supplied envelope identifiers must be canonical ULIDs and are never silently regenerated.</summary>
     [Theory]
     [InlineData("bad", null, "/correlationId")]
     [InlineData(null, "bad", "/idempotencyKey")]
+    [InlineData("01arz3ndektsv4rrffq69g5fav", null, "/correlationId")]
+    [InlineData(null, "01arz3ndektsv4rrffq69g5fav", "/idempotencyKey")]
     public async Task InvalidEnvelopeUlidFailsBeforeGatewayAsync(string? correlationId, string? idempotencyKey, string path)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
