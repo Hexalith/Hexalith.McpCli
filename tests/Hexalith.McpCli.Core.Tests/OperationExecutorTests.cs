@@ -303,6 +303,18 @@ public sealed class OperationExecutorTests
     [InlineData(null, "bad", "/idempotencyKey")]
     [InlineData("01arz3ndektsv4rrffq69g5fav", null, "/correlationId")]
     [InlineData(null, "01arz3ndektsv4rrffq69g5fav", "/idempotencyKey")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FaV", null, "/correlationId")]
+    [InlineData(null, "01ARZ3NDEKTSV4RRFFQ69G5FaV", "/idempotencyKey")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAO", null, "/correlationId")]
+    [InlineData(null, "01ARZ3NDEKTSV4RRFFQ69G5FAO", "/idempotencyKey")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAI", null, "/correlationId")]
+    [InlineData(null, "01ARZ3NDEKTSV4RRFFQ69G5FAI", "/idempotencyKey")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAL", null, "/correlationId")]
+    [InlineData(null, "01ARZ3NDEKTSV4RRFFQ69G5FAL", "/idempotencyKey")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAU", null, "/correlationId")]
+    [InlineData(null, "01ARZ3NDEKTSV4RRFFQ69G5FAU", "/idempotencyKey")]
+    [InlineData("81ARZ3NDEKTSV4RRFFQ69G5FAV", null, "/correlationId")]
+    [InlineData(null, "81ARZ3NDEKTSV4RRFFQ69G5FAV", "/idempotencyKey")]
     public async Task InvalidEnvelopeUlidFailsBeforeGatewayAsync(string? correlationId, string? idempotencyKey, string path)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
@@ -389,8 +401,8 @@ public sealed class OperationExecutorTests
         gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
-        var extensions = new Dictionary<string, string> { ["Task-ID"] = "safe" };
-        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id" });
+        var extensions = new Dictionary<string, string> { ["Task-ID"] = "safe", ["Trace:Task-ID"] = "namespaced" };
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id", "trace:task-id" });
 
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
@@ -398,6 +410,7 @@ public sealed class OperationExecutorTests
 
         outcome.Error.ShouldBeNull();
         captured.ShouldNotBeNull().Extensions!["Task-ID"].ShouldBe("safe");
+        captured.Extensions!["Trace:Task-ID"].ShouldBe("namespaced");
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -525,7 +538,8 @@ public sealed class OperationExecutorTests
 
         if (overLimit)
         {
-            outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path.StartsWith("/extensions", StringComparison.Ordinal));
+            string expectedPath = boundary is "count" or "bytes" ? "/extensions" : "/extensions/" + extensions.Keys.Single();
+            outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe(expectedPath);
             await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
         }
         else

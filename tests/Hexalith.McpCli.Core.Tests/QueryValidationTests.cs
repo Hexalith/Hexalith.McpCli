@@ -186,6 +186,12 @@ public sealed class QueryValidationTests
     [InlineData("not-a-ulid")]
     [InlineData("550e8400-e29b-41d4-a716-446655440000")]
     [InlineData("01arz3ndektsv4rrffq69g5fav")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FaV")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAO")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAI")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAL")]
+    [InlineData("01ARZ3NDEKTSV4RRFFQ69G5FAU")]
+    [InlineData("81ARZ3NDEKTSV4RRFFQ69G5FAV")]
     public async Task InvalidUlidAggregateArgumentsUseEnvelopePathAsync(string value)
     {
         IEventStoreGatewayClient gateway = Gateway();

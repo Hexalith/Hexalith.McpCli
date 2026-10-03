@@ -267,7 +267,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-6-validate-and-page-query-calls.md`
   summary: Lowercase ULID text reaches the Gateway unchanged and addresses a different aggregate than its canonical uppercase form. Story 2.8 owns the fix; intended rule (user decision, 2026-10-02): reject non-canonical (lowercase) ULID text for aggregate arguments and marked identifiers.
   evidence: `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`) and `Ulid.TryParse` in `OperationExecutor.IsUlid` accept lowercase Crockford text, and the executor forwards it as given. EventStore's `AggregateIdentity` lowercases tenant and domain but keeps `AggregateId` case-sensitive (`ActorId` is `{tenant}:{domain}:{aggregateId}`), so a lowercase query reads an empty or missing projection and a lowercase command would start a split stream. Story 2.6 tests pin the current pass-through and must flip with the fix: the ULID row of `QueryValidationTests.ValidIdentifierBoundariesArePreservedAsync` and `QueryPagingCommandTests.EntityAndTenantBoundaryValuesArePreservedAsync`. Deferred because Story 2.8 owns identifier validation, nothing ships before Epic 4, and Story 2.6 stays test-only; the change renegotiates the frozen `Ulid.TryParse` rule.
-  status: resolved in Story 2.8 (2026-10-03); Core rejects non-canonical aggregate and marked ULID text before Gateway submission, and the prior lowercase pass-through tests now assert rejection.
+  status: resolved in Story 2.8 (2026-10-03); Core rejects non-canonical aggregate and marked ULID text, caller correlation IDs, and idempotency keys before Gateway submission. `ValidIdentifierBoundariesArePreservedAsync` and `EntityAndTenantBoundaryValuesArePreservedAsync` now use canonical uppercase IDs and still assert pass-through. Rejection is covered by `InvalidUlidAggregateArgumentsUseEnvelopePathAsync`, `LowercaseAggregateUlidIsRejectedBeforeGatewayAsync`, `LowercaseAggregateUlidMakesZeroCallsAsync`, and `InvalidEnvelopeUlidFailsBeforeGatewayAsync`.
 
 ## Deferred from: code review of spec-2-7-submit-a-command-once.md (2026-10-02)
 
@@ -281,5 +281,20 @@
 ## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
-  summary: Bound extension validation work immediately when a submitted map exceeds the 32-entry limit.
-  evidence: `ExtensionValidator.Validate` adds a count violation but still sorts and visits every entry, taking O(n log n) work and building more violations for a request already known to be invalid. This behavior predates Story 2.8; a later cleanup can return after the count failure while preserving the refusal.
+  summary: Extension validation still sorts and visits every entry after a submitted map exceeds the 32-entry limit.
+  evidence: `ExtensionValidator.Validate` (`src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:22`) adds a count violation but still sorts and visits every entry at `:29`, taking O(n log n) work and building more violations for a request already known to be invalid. This behavior predates Story 2.8; a later cleanup can return after the count failure while preserving the refusal.
+
+## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03, third pass)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
+  summary: Planning documents still state that identifiers are accepted when `Ulid.TryParse` succeeds, but Story 2.8 renegotiated the rule (Spec Change Log 2026-10-03). Core now also requires canonical uppercase text for ULID aggregates, marked identifiers, CLR `Ulid` members, and caller correlation and idempotency keys.
+  evidence: `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:103` and `:348`, `_bmad-output/planning-artifacts/epics.md:711`, and `_bmad-output/implementation-artifacts/epic-2-context.md` ("Caller correlation and idempotency keys must be ULIDs"; "`Ulid.TryParse` or nonempty string") disagree with `OperationExecutor.IsCanonicalUlid` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:326`) and `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`). Deferred because the fix edits other planning specs. Reconcile them through a correct-course note or by regenerating the epic context before Story 2.9 builds on them.
+
+## Deferred from: final build review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
+
+- source_spec: `spec-2-8-protect-command-identity-and-extensions.md`
+  summary: The pre-existing SQL extension sanitizer pattern lacks an independent negative execution test.
+  evidence: `src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:91` rejects `UNION SELECT` through `SqlPattern`, but the negative values in `tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425` exercise other checks; deleting the unchanged SQL pattern would evade those examples. Add an allowlisted value without dangerous characters and assert its member pointer and zero Gateway calls.
+- source_spec: `spec-2-8-protect-command-identity-and-extensions.md`
+  summary: The pre-existing LDAP extension sanitizer pattern lacks an independent negative execution test.
+  evidence: `src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:94` rejects `)(` through `LdapPattern`, but the negative values in `tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425` exercise other checks; deleting the unchanged LDAP pattern would evade those examples. Add an allowlisted value without dangerous characters and assert its member pointer and zero Gateway calls.
