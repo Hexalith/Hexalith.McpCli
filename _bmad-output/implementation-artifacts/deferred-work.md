@@ -298,3 +298,12 @@
 - source_spec: `spec-2-8-protect-command-identity-and-extensions.md`
   summary: The pre-existing LDAP extension sanitizer pattern lacks an independent negative execution test.
   evidence: `src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:94` rejects `)(` through `LdapPattern`, but the negative values in `tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425` exercise other checks; deleting the unchanged LDAP pattern would evade those examples. Add an allowlisted value without dangerous characters and assert its member pointer and zero Gateway calls.
+
+## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03, post-completion pass)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
+  summary: A ULID-kind query whose declared aggregate constant is not canonical ULID text is advertised as callable without `--aggregate-id`, but every call fails.
+  evidence: `CatalogBuilder` checks a query's `AggregateId` constant only with `RoutingResolver.IsAggregateId` (`src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:193`), never against the module's Identifier Kind. `tests/fixtures/Catalog.Routing.Contracts/ListItemsQuery.cs:7` declares `AggregateId = "routing-list"` in the ULID-kind routing fixture, and `tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs:143` pins `AggregateIdRequired` false, yet `OperationExecutor` rejects that constant at `/aggregateId` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:210-215`), and the caller cannot pass it explicitly either. This behavior predates Story 2.8, which also makes lowercase ULID constants fail. Decide whether Identifier Kind governs query constants (exempt them, or refuse them at catalog build) before Epic 4 declares module queries.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
+  summary: Profile names accept a trailing newline.
+  evidence: `ProfileNamePattern` (`src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:298`) ends with `$`, which .NET matches before a final `\n`, so `dev\n` passes `config profile add` and profile load (`:63`, `:241`). Story 2.8 fixed the same anchor in `ExtensionValidator.KeyPattern`. This predates Story 2.8 (Story 2.2); the fix is the absolute `\z` anchor plus a rejection row.
