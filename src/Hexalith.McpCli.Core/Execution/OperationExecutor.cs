@@ -170,6 +170,11 @@ public sealed class OperationExecutor(
             }
 
             extensions = command.Extensions is null ? null : new Dictionary<string, string>(command.Extensions, StringComparer.Ordinal);
+            if (extensions is { Count: 0 })
+            {
+                extensions = null;
+            }
+
             IReadOnlyList<PayloadViolation> extensionViolations = ExtensionValidator.Validate(extensions, context.AllowedExtensions);
             if (extensionViolations.Count > 0)
             {

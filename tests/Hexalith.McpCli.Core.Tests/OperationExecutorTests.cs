@@ -205,7 +205,7 @@ public sealed class OperationExecutorTests
     [InlineData("null", "/")]
     [InlineData("[]", "/")]
     [InlineData("{\"ItemId\":\"bad\",\"Title\":\"Hello\"}", "/ItemId")]
-    public async Task InvalidPayloadFailsBeforeGatewayAsync(string payload, string expectedPathPrefix)
+    public async Task InvalidPayloadFailsBeforeGatewayAsync(string payload, string expectedPath)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
@@ -214,7 +214,7 @@ public sealed class OperationExecutorTests
             Context(), TestContext.Current.CancellationToken);
 
         outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
-        outcome.Error.Violations.ShouldNotBeNull().ShouldContain(item => item.Path.StartsWith(expectedPathPrefix, StringComparison.Ordinal));
+        outcome.Error.Violations.ShouldNotBeNull().ShouldContain(item => item.Path == expectedPath);
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -392,6 +392,28 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>Absent and empty extensions are omitted from the Gateway request.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task AbsentAndEmptyExtensionsAreOmittedAsync(bool supplyEmptyExtensions)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitCommandRequest? captured = null;
+        gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            Extensions: supplyEmptyExtensions ? new Dictionary<string, string>() : null),
+            Context(), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldBeNull();
+        captured.ShouldNotBeNull().Extensions.ShouldBeNull();
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>Approved keys are matched without case sensitivity and reach the gateway unchanged.</summary>
     [Fact]
     public async Task MixedCaseApprovedExtensionReachesGatewayOnceAsync()
@@ -432,7 +454,8 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { ["task-id"] = value }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -447,11 +470,12 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { ["task/~"] = "safe" }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task~1~0");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/task~1~0");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
-    /// <summary>A final newline cannot satisfy the Gateway extension-key grammar.</summary>
+    /// <summary>The local extension-key grammar rejects a final newline that the pinned Gateway permits.</summary>
     [Fact]
     public async Task ExtensionKeyWithFinalNewlineMakesZeroCallsAsync()
     {
@@ -463,7 +487,8 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { [key] = "safe" }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key);
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key);
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -479,7 +504,8 @@ public sealed class OperationExecutorTests
             Extensions: new Dictionary<string, string> { ["Task-ID"] = "first", ["task-id"] = "second" }),
             context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -496,11 +522,12 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { [key] = "true" }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key && violation.Message == "The extension key is reserved.");
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key && violation.Message == "The extension key is reserved.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
-    /// <summary>The pinned sanitizer's entry, member, and UTF-8 size boundaries are enforced locally.</summary>
+    /// <summary>The pinned sanitizer's entry, UTF-16 member, and UTF-8 size boundaries are enforced locally.</summary>
     [Theory]
     [InlineData("count", false)]
     [InlineData("count", true)]
@@ -508,6 +535,8 @@ public sealed class OperationExecutorTests
     [InlineData("key", true)]
     [InlineData("value", false)]
     [InlineData("value", true)]
+    [InlineData("emoji", false)]
+    [InlineData("emoji", true)]
     [InlineData("bytes", false)]
     [InlineData("bytes", true)]
     public async Task ExtensionBoundariesMakeExpectedGatewayCallsAsync(string boundary, bool overLimit)
@@ -522,6 +551,7 @@ public sealed class OperationExecutorTests
             "count" => Enumerable.Range(0, overLimit ? 33 : 32).ToDictionary(index => "k" + index, _ => ""),
             "key" => new() { [new string('k', overLimit ? 101 : 100)] = "" },
             "value" => new() { ["k"] = new string('a', overLimit ? 1001 : 1000) },
+            "emoji" => new() { ["k"] = string.Concat(Enumerable.Repeat("\U0001F600", overLimit ? 501 : 500)) },
             _ => new()
             {
                 ["a"] = new string('é', 500),
@@ -539,7 +569,8 @@ public sealed class OperationExecutorTests
         if (overLimit)
         {
             string expectedPath = boundary is "count" or "bytes" ? "/extensions" : "/extensions/" + extensions.Keys.Single();
-            outcome.Error.ShouldNotBeNull().Violations!.Single().Path.ShouldBe(expectedPath);
+            outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+            outcome.Error.Violations!.Single().Path.ShouldBe(expectedPath);
             await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
         }
         else
