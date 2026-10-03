@@ -7,6 +7,8 @@ namespace Hexalith.McpCli.Core.Execution;
 /// <summary>Applies the gateway's default extension limits before submission.</summary>
 internal static partial class ExtensionValidator
 {
+    private const string ReservedActorAdminKey = "actor:globalAdmin";
+
     internal static IReadOnlyList<PayloadViolation> Validate(
         IReadOnlyDictionary<string, string>? extensions,
         IReadOnlySet<string> allowedExtensions)
@@ -37,7 +39,7 @@ internal static partial class ExtensionValidator
                 violations.Add(new PayloadViolation(pointer, "The extension key is not allowlisted."));
             }
 
-            if (string.Equals(key, "actor:globalAdmin", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(key, ReservedActorAdminKey, StringComparison.OrdinalIgnoreCase))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension key is reserved."));
             }
@@ -69,7 +71,7 @@ internal static partial class ExtensionValidator
     /// <returns><see langword="true" /> when the key is safe and well-formed; otherwise, <see langword="false" />.</returns>
     internal static bool IsValidKey(string key)
         => key.Length is >= 1 and <= 100 && KeyPattern().IsMatch(key) && !HasInjection(key)
-            && !string.Equals(key, "actor:globalAdmin", StringComparison.OrdinalIgnoreCase);
+            && !string.Equals(key, ReservedActorAdminKey, StringComparison.OrdinalIgnoreCase);
 
     private static bool HasForbiddenControl(string value)
         => value.Any(character => character is < (char)0x20 and not '\t' and not '\n' and not '\r');

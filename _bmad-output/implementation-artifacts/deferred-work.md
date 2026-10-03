@@ -267,6 +267,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-6-validate-and-page-query-calls.md`
   summary: Lowercase ULID text reaches the Gateway unchanged and addresses a different aggregate than its canonical uppercase form. Story 2.8 owns the fix; intended rule (user decision, 2026-10-02): reject non-canonical (lowercase) ULID text for aggregate arguments and marked identifiers.
   evidence: `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`) and `Ulid.TryParse` in `OperationExecutor.IsUlid` accept lowercase Crockford text, and the executor forwards it as given. EventStore's `AggregateIdentity` lowercases tenant and domain but keeps `AggregateId` case-sensitive (`ActorId` is `{tenant}:{domain}:{aggregateId}`), so a lowercase query reads an empty or missing projection and a lowercase command would start a split stream. Story 2.6 tests pin the current pass-through and must flip with the fix: the ULID row of `QueryValidationTests.ValidIdentifierBoundariesArePreservedAsync` and `QueryPagingCommandTests.EntityAndTenantBoundaryValuesArePreservedAsync`. Deferred because Story 2.8 owns identifier validation, nothing ships before Epic 4, and Story 2.6 stays test-only; the change renegotiates the frozen `Ulid.TryParse` rule.
+  status: resolved in Story 2.8 (2026-10-03); Core rejects non-canonical aggregate and marked ULID text before Gateway submission, and the prior lowercase pass-through tests now assert rejection.
 
 ## Deferred from: code review of spec-2-7-submit-a-command-once.md (2026-10-02)
 
@@ -276,3 +277,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-7-submit-a-command-once.md`
   summary: An uncertain command failure (Gateway timeout or unreachable) returns no identifier the caller can use to check the outcome. Story 2.9 owns the fix, so the failure document format is designed once, including the idempotency case.
   evidence: `EventStoreGatewayClient.CreateTransportException` sets no correlation, `OperationError.FromGateway` copies only `exception.CorrelationId` (`src/Hexalith.McpCli.Core/Execution/OperationError.cs:52`), and the executor's catch (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:34`) drops the message and correlation IDs it generated at `:146-147`. The Gateway status endpoint is keyed by message ID (`CommandStatusController.cs:58`), and callers never supply one, so after the README's "may have reached the Gateway" warning nothing can be polled, even with `--correlation-id`. Constraints for Story 2.9: its AC currently allows a correlation identifier only when the client exception supplies one, and under a caller idempotency key the Gateway tracks status by its own execution message ID (`CommandsController.cs:158`), which can differ from the submitted one.
+
+## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
+  summary: Bound extension validation work immediately when a submitted map exceeds the 32-entry limit.
+  evidence: `ExtensionValidator.Validate` adds a count violation but still sorts and visits every entry, taking O(n log n) work and building more violations for a request already known to be invalid. This behavior predates Story 2.8; a later cleanup can return after the count failure while preserving the refusal.

@@ -483,7 +483,7 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { [key] = "true" }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key);
+        outcome.Error.ShouldNotBeNull().Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key && violation.Message == "The extension key is reserved.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
