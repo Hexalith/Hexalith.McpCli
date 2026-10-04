@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -235,7 +235,7 @@ Code review 2026-10-04 (post-closure pass) of the full range `1554a84..9c2bf2a`,
 
 Code review 2026-10-04 (boundary-closure pass) of the full range `1554a84..638a3a9`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap found no gaps. The Acceptance Auditor found no AC or frozen-clause violation, reran the Core executor, query-validation, schema, and profile classes (333 total, two Windows-only ACL skips, zero failures), and restated five carried items. Edge Case Hunter raised only carried items. `638a3a9` changed one test and ledger anchors. Items the earlier passes already settled are carried, not reopened.
 
-- [ ] [Review][Patch] README never says that extensions need a Profile allowlist, which is empty by default — low (blind-hunter). `SettingsResolver` builds the allowlist only from the selected Profile (`SettingsResolver.cs:103`); no flag or `EVENTSTORE_*` variable sets it, and the default is empty (`epic-2-context.md`: "empty extension allowlist"). A session configured only by flags or environment, including the README's `hexalith mcp --transport stdio` example, therefore refuses every key with "The extension key is not allowlisted." (`ExtensionValidator.cs:39`). The new paragraph shows how to set the list but never says that unlisted keys are refused or that only a Profile supplies the list. Add one sentence. [README.md:77]
+- [x] [Review][Patch] README never says that extensions need a Profile allowlist, which is empty by default — low (blind-hunter). `SettingsResolver` builds the allowlist only from the selected Profile (`SettingsResolver.cs:103`); no flag or `EVENTSTORE_*` variable sets it, and the default is empty (`epic-2-context.md`: "empty extension allowlist"). A session configured only by flags or environment, including the README's `hexalith mcp --transport stdio` example, therefore refuses every key with "The extension key is not allowlisted." (`ExtensionValidator.cs:39`). The new paragraph shows how to set the list but never says that unlisted keys are refused or that only a Profile supplies the list. Add one sentence. [README.md:77]
 - [x] [Review][Defer] Conformance vectors cannot express a successful extension call — medium (blind-hunter). The vector schema accepts `envelope.extensions` (`tools/conformance-vectors/v1/schema.json:64`), and the runner forwards them to both heads (`run_loopback.py:345-347`). But it points each head at an empty profile path (`run_loopback.py:222`), never writes an allowlist, and the schema has no allowlist input, while the allowlist comes only from a Profile (`SettingsResolver.cs:103`). Every vector that supplies extensions is refused by both heads with `validation_failed` at `/extensions/<key>`, although `tools/conformance-vectors/v1/README.md:15` says supplied extensions must match the expected request exactly. No sample vector uses extensions. [tools/conformance-vectors/v1/run_loopback.py:222] — deferred: pre-existing; the runner and schema predate baseline `1554a84`, allowlist enforcement predates this story, and the fix adds a new vector input. Recorded in `deferred-work.md` for the conformance tooling before Epic 4 modules write extension vectors.
 
 **Rejected (boundary-closure pass)**
@@ -378,6 +378,20 @@ Post-closure boundary build review 2026-10-04: Blind Hunter, Edge Case Hunter, a
 - Boundary Build Blind 9 — low, carried defer: the XSS event-handler alternative lacks independent negative coverage (`ExtensionValidator.cs:92`). Same issue as Final-HEAD Resumption Blind 9; retain the existing sanitizer-coverage entry.
 - Boundary Build Blind 10 — low, carried defer: profile names still accept a final newline (`ProfileStore.cs:298`). Same pre-existing issue deferred by the post-completion code review and retained in the narrowed Story 2.3 ledger entry; no duplicate deferral is added.
 
+Profile-allowlist build review 2026-10-04: Blind Hunter, Edge Case Hunter, and Verification Gap reviewed the full baseline diff from `1554a84d792a0178a342d62367259999fd45e0b9` through the working tree rooted at `f1e2f4e90735cc643f3ca721a4850eb6706ecd82`. All three layers completed. Verification Gap found no gaps. Each finding retains its existing decision below; no new patches or deferrals were required.
+
+- Allowlist Build Blind 1 — medium, carried defer: conformance vectors cannot express a successful extension call because the loopback runner supplies no Profile allowlist (`run_loopback.py:222`, `SettingsResolver.cs:103`). Same boundary-closure finding, already recorded in the ledger for conformance tooling before Epic 4 extension vectors.
+- Allowlist Build Blind 2 — low, carried defer: discovery omits Identifier Kind (`ModuleSummary.cs:7`, `OperationEnvelopeDocument.cs:10`). Same Boundary Build Blind 2 and existing public-discovery ledger entry.
+- Allowlist Build Blind 3 — medium, carried defer: ULID-kind query constants can pass catalog validation and fail execution (`CatalogBuilder.cs:193`, `OperationExecutor.cs:216-220`). Same Boundary Build Blind 1; retain the Identifier Kind decision and canonical explicit-aggregate workaround.
+- Allowlist Build Blind 4 — low, carried defer: planning and agent guidance retain parse-only ULID acceptance. Same Boundary Build Blind 3; reconciliation before Story 2.9 and synchronized agent-entry updates remain tracked.
+- Allowlist Build Blind 5 — low, carried defer: extension maps still sort and scan after count refusal (`ExtensionValidator.cs:22-29`). Same Boundary Build Blind 6; retain the bounded-processing ledger entry.
+- Allowlist Build Blind 6 — low, carried defer: independent SQL `UNION SELECT` and trailing-comment tests remain absent (`ExtensionValidator.cs:95`). Same Boundary Build Blind 7; retain the existing sanitizer-coverage entry.
+- Allowlist Build Blind 7 — low, carried defer: independent LDAP `)(` and `|(` tests remain absent (`ExtensionValidator.cs:98`). Same Boundary Build Blind 8; retain the existing sanitizer-coverage entry.
+- Allowlist Build Blind 8 — low, carried defer: independent XSS event-handler assignment coverage remains absent (`ExtensionValidator.cs:92`). Same Boundary Build Blind 9; retain the existing sanitizer-coverage entry.
+- Allowlist Build Blind 9 — low, carried defer: validation precedence differs from AD-9 (`OperationExecutor.cs:150-202`). Same Boundary Build Blind 4; retain the existing ordering decision and ledger entry.
+- Allowlist Build Blind 10 — low, carried defer: entity and paging query options lack help descriptions (`CliRunner.cs:205-208`). Same Boundary Build Blind 5; retain the existing help-text ledger entry.
+- Allowlist Build Edge 1 — low, carried rejection (spec edit): AC2's Gateway-compatible claim overstates local handling of allowlisted colon keys (`ExtensionValidator.cs:37-48`), which still need one Gateway trusted-extension policy. Same first-pass rejected AC2 finding: the frozen Always clause requires sanitizer/request-validator enforcement, and README states the additional Gateway policy. Its correction edits this build's spec, so the recorded rejection stands.
+
 ## Verification
 
 **Commands:**
@@ -498,3 +512,19 @@ Current verification artifacts: `/tmp/mcpcli-story-2-8-actor-boundary-kv_1la_7/`
 - `git diff --check`, changed C# CRLF preservation, refreshed ledger test anchors, and frozen-intent comparison — passed.
 
 Completion commit validation: `npx --no -- commitlint --edit /tmp/mcpcli-story-2-8-build-t211ixaj/completion-message.txt --verbose` passed (exit 0) with zero problems/warnings for exact full message `test(command): close identity and extension boundary review`. Successful evidence is `/tmp/mcpcli-story-2-8-build-t211ixaj/completion-message.commitlint.log`.
+
+
+Profile-allowlist completion 2026-10-04: the final open Patch finding is closed. README states that only the selected Profile supplies the extension allowlist, the default list is empty, and unlisted keys are refused. No runtime code changed. All three review layers completed; ten Blind Hunter findings and one Edge Case Hunter claim retain their individually recorded prior decisions, and Verification Gap found no gaps. No new work was deferred. Frozen intent and original baseline are preserved. The spec is done and sprint Story 2.8 is ready for review.
+
+Current verification artifacts: `/tmp/mcpcli-story-2-8-profile-allowlist-qUQWmuof/` contains Core build/test logs, full xUnit XML, exact commands, and source-backed documentation checks. `/tmp/mcpcli-story-2-8-allowlist-4lod78cl/` contains the full baseline diff, CLI/MCP build/test logs and XML reports, exact commands, and the independent acceptance-matrix audit.
+
+- `dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings/errors.
+- `dotnet tests/Hexalith.McpCli.Core.Tests/bin/Debug/net10.0/Hexalith.McpCli.Core.Tests.dll -result-xml /tmp/mcpcli-story-2-8-profile-allowlist-qUQWmuof/core-tests.xml` — 507 total, 505 passed, two Windows-only ACL skips, zero failures/errors/not run.
+- `dotnet build tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings/errors.
+- `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll -result-xml /tmp/mcpcli-story-2-8-allowlist-4lod78cl/cli-tests.xml` — 339 passed, zero failures/errors/skips/not run.
+- `dotnet build tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings/errors.
+- `dotnet tests/Hexalith.McpCli.Mcp.Tests/bin/Debug/net10.0/Hexalith.McpCli.Mcp.Tests.dll -result-xml /tmp/mcpcli-story-2-8-allowlist-4lod78cl/mcp-tests.xml` — six passed, zero failures/errors/skips/not run.
+- The independent full-XML audit found executed passing coverage for Owned identity (11 cases), No key (six), Payload shape (eight), Identifiers (34), and Extensions (38). No matrix coverage was skipped. Existing passing tests also pin the empty default and selected-Profile allowlist source.
+- `git diff --check`, source-backed documentation checks, frozen-intent comparison, and original-baseline preservation — passed.
+
+Completion commit validation: `npx --no -- commitlint --edit /tmp/mcpcli-story-2-8-allowlist-4lod78cl/completion-message.txt --verbose` passed (exit 0), using repository-pinned `@commitlint/cli` 21.2.2 for exact full message `docs(command): clarify profile extension allowlist`. Output: `found 0 problems, 0 warnings`. Successful evidence: `/tmp/mcpcli-story-2-8-allowlist-4lod78cl/completion-message.commitlint.log`.
