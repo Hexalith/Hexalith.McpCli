@@ -39,7 +39,7 @@ internal static partial class ExtensionValidator
                 violations.Add(new PayloadViolation(pointer, "The extension key is not allowlisted."));
             }
 
-            if (string.Equals(key, ReservedActorAdminKey, StringComparison.OrdinalIgnoreCase))
+            if (IsReservedKey(key))
             {
                 violations.Add(new PayloadViolation(pointer, "The extension key is reserved."));
             }
@@ -71,7 +71,11 @@ internal static partial class ExtensionValidator
     /// <returns><see langword="true" /> when the key is safe and well-formed; otherwise, <see langword="false" />.</returns>
     internal static bool IsValidKey(string key)
         => key.Length is >= 1 and <= 100 && KeyPattern().IsMatch(key) && !HasInjection(key)
-            && !string.Equals(key, ReservedActorAdminKey, StringComparison.OrdinalIgnoreCase);
+            && !IsReservedKey(key);
+
+    private static bool IsReservedKey(string key)
+        => string.Equals(key, ReservedActorAdminKey, StringComparison.OrdinalIgnoreCase)
+            || key.StartsWith("identity:", StringComparison.OrdinalIgnoreCase);
 
     private static bool HasForbiddenControl(string value)
         => value.Any(character => character is < (char)0x20 and not '\t' and not '\n' and not '\r');

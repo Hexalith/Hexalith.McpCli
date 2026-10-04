@@ -429,8 +429,14 @@ public sealed class OperationExecutorTests
         gateway.SubmitCommandAsync(Arg.Do<SubmitCommandRequest>(request => captured = request), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId)));
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
-        var extensions = new Dictionary<string, string> { ["Task-ID"] = "safe", ["Trace:Task-ID"] = "namespaced" };
-        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id", "trace:task-id" });
+        var extensions = new Dictionary<string, string>
+        {
+            ["Task-ID"] = "safe",
+            ["Trace:Task-ID"] = "namespaced",
+            ["Identity"] = "ordinary",
+            ["Trace:Identity:Task-ID"] = "nested",
+        };
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id", "trace:task-id", "identity", "trace:identity:task-id" });
 
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
@@ -439,6 +445,8 @@ public sealed class OperationExecutorTests
         outcome.Error.ShouldBeNull();
         captured.ShouldNotBeNull().Extensions!["Task-ID"].ShouldBe("safe");
         captured.Extensions!["Trace:Task-ID"].ShouldBe("namespaced");
+        captured.Extensions!["Identity"].ShouldBe("ordinary");
+        captured.Extensions!["Trace:Identity:Task-ID"].ShouldBe("nested");
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -520,11 +528,19 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
-    /// <summary>The Gateway reserves this key regardless of caller casing or allowlist contents.</summary>
+    /// <summary>The Gateway's reserved key and namespace fail regardless of caller casing or allowlist contents.</summary>
+    /// <param name="key">The reserved extension key.</param>
+    /// <param name="path">The expected escaped JSON Pointer.</param>
     [Theory]
-    [InlineData("actor:globalAdmin")]
-    [InlineData("AcToR:gLoBaLaDmIn")]
-    public async Task ReservedExtensionMakesZeroCallsAsync(string key)
+    [InlineData("actor:globalAdmin", "/extensions/actor:globalAdmin")]
+    [InlineData("AcToR:gLoBaLaDmIn", "/extensions/AcToR:gLoBaLaDmIn")]
+    [InlineData("identity:x", "/extensions/identity:x")]
+    [InlineData("IDENTITY:X", "/extensions/IDENTITY:X")]
+    [InlineData("IdEnTiTy:proof", "/extensions/IdEnTiTy:proof")]
+    [InlineData("identity:proof:nested", "/extensions/identity:proof:nested")]
+    [InlineData("identity:", "/extensions/identity:")]
+    [InlineData("identity:task/~", "/extensions/identity:task~1~0")]
+    public async Task ReservedExtensionMakesZeroCallsAsync(string key, string path)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
@@ -534,7 +550,7 @@ public sealed class OperationExecutorTests
             Extensions: new Dictionary<string, string> { [key] = "true" }), context, TestContext.Current.CancellationToken);
 
         outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
-        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/" + key && violation.Message == "The extension key is reserved.");
+        outcome.Error.Violations!.ShouldContain(violation => violation.Path == path && violation.Message == "The extension key is reserved.");
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
