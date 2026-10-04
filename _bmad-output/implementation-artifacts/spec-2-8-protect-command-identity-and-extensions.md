@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -232,6 +232,26 @@ Code review 2026-10-04 (post-closure pass) of the full range `1554a84..9c2bf2a`,
 - false — The ledger splits this story's deferrals across six headings and three similar entries (blind-hunter): each heading records provenance, which the follow-up and final-HEAD patches required, and the SQL, LDAP, and XSS entries track distinct alternatives with distinct evidence.
 - low — A profile file holding a reserved or newline-terminated allowlist key becomes unreadable (edge-case-hunter): carried rejection from every earlier pass. Nothing has shipped.
 - false — A custom dictionary with duplicate or null keys becomes `internal_error` (edge-case-hunter): carried rejection. Neither head binds such a dictionary.
+
+Code review 2026-10-04 (boundary-closure pass) of the full range `1554a84..638a3a9`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap found no gaps. The Acceptance Auditor found no AC or frozen-clause violation, reran the Core executor, query-validation, schema, and profile classes (333 total, two Windows-only ACL skips, zero failures), and restated five carried items. Edge Case Hunter raised only carried items. `638a3a9` changed one test and ledger anchors. Items the earlier passes already settled are carried, not reopened.
+
+- [ ] [Review][Patch] README never says that extensions need a Profile allowlist, which is empty by default — low (blind-hunter). `SettingsResolver` builds the allowlist only from the selected Profile (`SettingsResolver.cs:103`); no flag or `EVENTSTORE_*` variable sets it, and the default is empty (`epic-2-context.md`: "empty extension allowlist"). A session configured only by flags or environment, including the README's `hexalith mcp --transport stdio` example, therefore refuses every key with "The extension key is not allowlisted." (`ExtensionValidator.cs:39`). The new paragraph shows how to set the list but never says that unlisted keys are refused or that only a Profile supplies the list. Add one sentence. [README.md:77]
+- [x] [Review][Defer] Conformance vectors cannot express a successful extension call — medium (blind-hunter). The vector schema accepts `envelope.extensions` (`tools/conformance-vectors/v1/schema.json:64`), and the runner forwards them to both heads (`run_loopback.py:345-347`). But it points each head at an empty profile path (`run_loopback.py:222`), never writes an allowlist, and the schema has no allowlist input, while the allowlist comes only from a Profile (`SettingsResolver.cs:103`). Every vector that supplies extensions is refused by both heads with `validation_failed` at `/extensions/<key>`, although `tools/conformance-vectors/v1/README.md:15` says supplied extensions must match the expected request exactly. No sample vector uses extensions. [tools/conformance-vectors/v1/run_loopback.py:222] — deferred: pre-existing; the runner and schema predate baseline `1554a84`, allowlist enforcement predates this story, and the fix adds a new vector input. Recorded in `deferred-work.md` for the conformance tooling before Epic 4 modules write extension vectors.
+
+**Rejected (boundary-closure pass)**
+
+- low — MCP callers cannot discover the session allowlist, and the refusal does not name allowed keys (blind-hunter): allowlist enforcement predates this story; exposing the list adds public discovery surface, as in the carried MCP-description rejections, and the operator who sets the allowlist also configures the agent.
+- false — `--extension` help and the `SendCommandArguments.Extensions` docs were not updated (blind-hunter): both remain accurate ("Allowlisted key=value; repeatable"). The three identifier options had no description and their accepted text changed; nothing the extension descriptions state became wrong, and `README.md:77-79` holds the rules.
+- low — All-zero and maximum canonical ULIDs have no positive rows (blind-hunter): carried Final Blind 3 rejection.
+- false — The two canonical-ULID definitions (`SchemaDeriver.UlidPattern` and `IsCanonicalUlid`) can drift silently (blind-hunter): success tests pass the uppercase `CorrelationId` constant and generated message IDs through `IsCanonicalUlid`, and the schema tests pin `UlidPattern` against the same uppercase text and lowercase rejection, so a pattern change or a ByteAether formatting change fails the suite. A shared helper for query constants belongs to the deferred query-constant decision.
+- false — README does not warn that lowercase-ID aggregates become unreachable (blind-hunter): no McpCli build has shipped (no tags), ULID generators emit canonical text, and `README.md:73` states the canonical rule. The only such streams are development split streams, which the 2026-10-02 user decision set out to stop creating.
+- low — `ExtensionBoundariesMakeExpectedGatewayCallsAsync`'s default arm would absorb a misspelled boundary name (blind-hunter): every current row names a real boundary; the harm needs a future typo, and a throwing default adds a branch to test code.
+- false — `OperationExecutorTests.cs` is long and repeats its arrange and assert steps (blind-hunter): no defect is named, and the new tests follow the file's existing per-test style.
+- false — The CLI lowercase-aggregate refusal sits in `QueryPagingCommandTests` (blind-hunter): it sits beside `EntityAndTenantBoundaryValuesArePreservedAsync`, the row it flipped from lowercase pass-through; its placement causes no wrong result.
+- false — No test makes `ComputedEnvelopeCommand.AggregateId` throw, and a throwing getter becomes `internal_error` (blind-hunter): the throw exists so that `ComputedAccessorSeesTrustedEnvelopeAndNestedNullAsync` fails if the accessor ever runs before `Fill`, which pins the ordering. Mapping an unexpected module exception to `internal_error` is the epic rule ("Any other exception is `internal_error`"), and Story 2.9 owns failure explanations.
+- low — A profile file holding a reserved or newline-terminated allowlist key becomes unreadable, and `config set` cannot repair it (edge-case-hunter): carried rejection from every earlier pass. Nothing has shipped.
+- low — An allowlisted `traceparent` or `tracestate` is overwritten by the Gateway after acceptance (edge-case-hunter): carried first-pass rejection.
+- low — `send --aggregate-id` chooses the aggregate when a nullable payload aggregate member is absent (edge-case-hunter): carried review-status rejection.
 
 ## Implementation Notes
 
