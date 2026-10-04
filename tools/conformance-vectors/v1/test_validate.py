@@ -487,7 +487,7 @@ class VectorContractTests(unittest.TestCase):
                         self._assert_rejected(document, f"{pointer}/envelope/{field}")
 
     def test_supplied_extensions_cannot_be_empty_at_every_call_position(self) -> None:
-        # The CLI sends no extension flags for an empty map while MCP forwards {}; omission is the only portable form.
+        # Core omits empty extension maps for both heads; omission is the single canonical vector form.
         for position in POSITIONS:
             for expected in (None, {}):
                 with self.subTest(position=position, expected=expected):
