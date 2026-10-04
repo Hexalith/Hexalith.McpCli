@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -159,6 +159,27 @@ Code review 2026-10-03 (follow-up pass) of the full range `1554a84..4e84186`, ex
 - false — Changing the `public const UlidPattern` leaves stale values in compiled consumers (blind-hunter): nothing has been published (no tags), and every consumer builds from this repository's source. The const-versus-readonly choice predates this story.
 - low — An extension value with a lone UTF-16 surrogate is accepted and sent as U+FFFD (blind-hunter): the MCP head cannot deserialize one, and Linux CLI arguments are decoded from UTF-8 before Core, so only a crafted Windows command line reaches it. The fix adds a new guard.
 - low — A case-collision refusal names only one key of the pair (blind-hunter): it needs two case-variant keys in one call of at most 32 entries, the message states the rule, and naming both keys adds first-seen tracking.
+
+Code review 2026-10-04 (review-status pass) of the full range `1554a84..15340be`, including this spec, `sprint-status.yaml`, and the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap found no gaps. Items the earlier passes already settled are carried, not reopened.
+
+- [ ] [Review][Patch] The moved EventStore pin reserves every `identity:` extension key, but Core accepts them — medium (acceptance-auditor+blind-hunter+edge-case-hunter). Commit `e14d32d` moved `references/Hexalith.EventStore` from `2c58ffd` to `b51978d`, whose `CommandsController.Submit` (`CommandsController.cs:77-80`) returns 400 "Gateway identity evidence is reserved." for any key starting with `identity:`, ignoring case; the Gateway injects its own admission proof under that namespace. `ExtensionValidator` reserves only `actor:globalAdmin`, so `config set PROFILE allowedExtensions identity:x` is stored, and `send --extension identity:x=v` passes Core and makes one Gateway call that ends as `gateway_error`. That breaks "Refusals make zero Gateway calls" and AC2's "only Gateway-compatible keys". Mirror the `actor:globalAdmin` precedent: refuse the prefix case-insensitively in `Validate` (escaped key pointer, "The extension key is reserved.") and `IsValidKey`; add `ProfileStoreTests` and executor rows plus one README sentence (`README.md:77`). [src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:42]
+- [ ] [Review][Patch] The Story 2.7 ledger anchor `CommandsController.cs:158` went stale when this story moved the EventStore pin — low (blind-hunter). This diff refreshed the entry's executor anchors but left the Gateway anchor; at the new pin `string statusKey = result.MessageId ?? command.MessageId;` is at `:193`. Story 2.9 is next to follow it. `CommandStatusController.cs:58` and the sanitizer and validator anchors are unchanged between pins. [_bmad-output/implementation-artifacts/deferred-work.md:279]
+- [x] [Review][Defer] Agent entry points still prescribe a parse-only `Ulid.TryParse` check — low (blind-hunter). `AGENTS.md:85`, `CLAUDE.md:85`, and `.github/copilot-instructions.md:85` say "validate with `Ulid.TryParse`", while Core now also requires canonical uppercase text. [AGENTS.md:85] — deferred: the fix edits agent-context files; already tracked (`deferred-work.md:287-291`); no new ledger entry.
+
+**Rejected (review-status pass)**
+
+- false — The nine `references/` gitlink moves violate "Never edit `references/`" (acceptance-auditor+blind-hunter+edge-case-hunter): they moved in the user-authored commit `e14d32d` under an explicit `fix(references)` header, which changes which upstream commit is checked out, not a file under `references/`. The Implementation Notes sentence "No … `references/` file changed" is now stale, but its fix edits this spec. The move's consequences are the two patches above.
+- reject (spec edit) — Implementation Notes still say aggregate ULIDs use a check separate from envelope parsing (blind-hunter+edge-case-hunter): both paths call `IsCanonicalUlid`, but the fix edits this spec; carried from Final Blind 7.
+- reject (spec edit) — Verification evidence is cited only under `/tmp` (blind-hunter): the fix changes this spec's evidence recording, and every lane reproduces from the commands listed in Verification.
+- reject (spec edit) — This spec repeats carried items across passes and has double blank lines (blind-hunter): the fix edits this spec.
+- low — Extension refusals use one generic message per key and per value (blind-hunter): the message design predates this story, which only added a rule under it; per-rule messages add branches, and Story 2.9 owns failure explanations.
+- false — Uppercase-only now constrains every CLR `Ulid` property beyond the recorded decision (blind-hunter): the scope is deliberate and documented at `README.md:73` ("in any module", including nested collection and dictionary elements), added by an earlier pass of this story.
+- low — `Dictionary<Ulid, T>` keys get no `propertyNames` pattern (blind-hunter+edge-case-hunter): no contract in `src/`, `tests/`, or `references/` declares a `Ulid`-keyed dictionary, dictionary keys do not address streams, and the fix adds a new Schema branch.
+- low — An omitted nullable aggregate member lets `send --aggregate-id` choose the aggregate, contrary to the new help "Must equal the payload aggregate identifier" (edge-case-hunter): real, because `IsSupportedRoleType` accepts any type for the aggregate role and the accessor returns null for an absent member (`AggregateIdAccessors.cs:16-18`), so `OperationExecutor.cs:215` uses the explicit value. No fixture or enrolled module declares a nullable aggregate member, the precedence matches `epic-2-context.md` ("explicit argument, compiled accessor"), and a refusal adds a new guard.
+- false — `query --aggregate-id` help omits how the option resolves (blind-hunter): on `query` the explicit value does select or override the aggregate, so "Explicit aggregate identifier" is accurate, unlike the old `send` wording; `README.md:69` states the agreement rule.
+- false — Null extension values have no test (blind-hunter): the `value is null` guard predates this story and refuses at the escaped key pointer, and the new snapshot copy preserves null values; no wrong behavior was shown.
+- low — The allowlist check scans linearly (blind-hunter): at most 32 keys against a short allowlist, and requiring a comparer changes the `EnvelopeContext` contract for no measurable gain.
+- false — README lists sanitizer patterns that cannot fire on their own (blind-hunter): every listed pattern is refused, so the README is accurate; overlap with the dangerous-character rule does not mislead.
 
 ## Implementation Notes
 
