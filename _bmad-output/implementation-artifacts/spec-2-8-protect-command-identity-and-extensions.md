@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -210,7 +210,7 @@ Code review 2026-10-04 (final-HEAD pass) of the full range `1554a84..c8da2b7`, e
 
 Code review 2026-10-04 (post-closure pass) of the full range `1554a84..9c2bf2a`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). The Acceptance Auditor found no AC or frozen-clause violation, and Edge Case Hunter raised only carried items. `9c2bf2a` changed only README, ledger, and conformance-vector text; every ledger anchor it refreshed resolves at HEAD. Items the earlier passes already settled are carried, not reopened.
 
-- [ ] [Review][Patch] No test accepts a non-reserved `actor:` key, so a prefix-style reservation regression would pass — low (verification-gap). `IsReservedKey` pairs an exact match on `actor:globalAdmin` with a prefix match on `identity:` (`ExtensionValidator.cs:76-78`). Only rejection rows use an `actor:` key (`OperationExecutorTests.cs:535-536`, `ProfileStoreTests.cs:351`); the accept-side test covers only the `identity:` boundary (`Identity`, `Trace:Identity:Task-ID`). If both rules became one `StartsWith` list, `actor:globalAdmin` and its mixed-case row would still be refused, the approved-extension test would still pass, and every allowlisted `actor:*` key would be refused locally with zero Gateway calls, in both heads and in Profile allowlists. Add `["actor:operator"] = "ordinary"` with `actor:operator` in the allowlist to `MixedCaseApprovedExtensionReachesGatewayOnceAsync` and assert it arrives unchanged. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425]
+- [x] [Review][Patch] No test accepts a non-reserved `actor:` key, so a prefix-style reservation regression would pass — low (verification-gap). `IsReservedKey` pairs an exact match on `actor:globalAdmin` with a prefix match on `identity:` (`ExtensionValidator.cs:76-78`). Only rejection rows use an `actor:` key (`OperationExecutorTests.cs:535-536`, `ProfileStoreTests.cs:351`); the accept-side test covers only the `identity:` boundary (`Identity`, `Trace:Identity:Task-ID`). If both rules became one `StartsWith` list, `actor:globalAdmin` and its mixed-case row would still be refused, the approved-extension test would still pass, and every allowlisted `actor:*` key would be refused locally with zero Gateway calls, in both heads and in Profile allowlists. Add `["actor:operator"] = "ordinary"` with `actor:operator` in the allowlist to `MixedCaseApprovedExtensionReachesGatewayOnceAsync` and assert it arrives unchanged. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425]
 - [x] [Review][Defer] Reachable SQL, LDAP, and XSS sanitizer alternatives still lack independent negative tests, including the README's `session_id=abc` example — low (blind-hunter). [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:467] — deferred: pre-existing sanitizer patterns; already tracked (`deferred-work.md:295-303`); no new ledger entry.
 
 **Rejected (post-closure pass)**
@@ -345,6 +345,19 @@ Final-HEAD resumption build review 2026-10-04: Blind Hunter, Edge Case Hunter, a
 - Final-HEAD Resumption Blind 9 — low, carried defer: the XSS event-handler alternative, including documented ordinary assignment strings, lacks independent negative coverage (`README.md:79`, `ExtensionValidator.cs:92`). Same unchanged alternative as Follow-up Build Blind 9 and Review-status Build Blind 9; retain the existing coverage entry.
 - Final-HEAD Resumption Blind 10 — low, carried defer: planning, architecture, and agent entry points still prescribe parse-only ULID acceptance (`OperationExecutor.cs:331`). Same stale-guidance issue as Follow-up Build Blind 3 and Review-status Build Blind 10; reconciliation before Story 2.9 and synchronized agent-entry updates remain tracked.
 
+Post-closure boundary build review 2026-10-04: Blind Hunter, Edge Case Hunter, and Verification Gap reviewed the implementation diff from `1554a84d792a0178a342d62367259999fd45e0b9` through the working tree rooted at `ff7137ff4bdded6b05b303710eb9ca8a9e086aba`. The full baseline artifact includes this claims document; the reviewer artifact excludes it and supplies it separately only to Edge Case Hunter. Edge Case Hunter returned no findings; Verification Gap found no gaps. Every Blind Hunter finding retains its recorded decision, with no new patches or deferrals.
+
+- Boundary Build Blind 1 — medium, carried defer: query aggregate constants pass catalog Gateway-syntax validation and can fail canonical aggregate execution (`CatalogBuilder.cs:193`, `OperationExecutor.cs:216-220`). Same issue as Final-HEAD Resumption Blind 1; retain the Identifier Kind decision and canonical explicit-aggregate workaround.
+- Boundary Build Blind 2 — low, carried defer: module and envelope discovery omit Identifier Kind (`ModuleSummary.cs:7`, `OperationEnvelopeDocument.cs:10`). Same issue as Final-HEAD Resumption Blind 2; retain the existing public-discovery entry.
+- Boundary Build Blind 3 — low, carried defer: agent guidance, AD-8, and epic context retain parse-only ULID wording. Same issue as Final-HEAD Resumption Blind 10; reconciliation before Story 2.9 and synchronized agent-entry updates remain tracked.
+- Boundary Build Blind 4 — low, carried defer: AD-9 orders extension checks after rebuilding while Core checks them earlier (`OperationExecutor.cs:178`). Same issue as the follow-up code-review ordering deferral; keep its existing ledger entry and unchanged validation order.
+- Boundary Build Blind 5 — low, carried defer: query entity and paging options lack help descriptions (`CliRunner.cs:205-208`). Same issue as the follow-up code-review help deferral; keep its existing ledger entry.
+- Boundary Build Blind 6 — low, carried defer: excessive extension maps still sort and scan after count refusal (`ExtensionValidator.cs:22-29`). Same issue as Final-HEAD Resumption Blind 6; retain the existing bounded-processing entry.
+- Boundary Build Blind 7 — low, carried defer: independent SQL `UNION SELECT` and trailing-comment tests remain absent (`ExtensionValidator.cs:95`). Same issue as Final-HEAD Resumption Blind 7; retain the existing sanitizer-coverage entry.
+- Boundary Build Blind 8 — low, carried defer: independent LDAP `)(` and `|(` tests remain absent (`ExtensionValidator.cs:98`). Same issue as Final-HEAD Resumption Blind 8; retain the existing sanitizer-coverage entry.
+- Boundary Build Blind 9 — low, carried defer: the XSS event-handler alternative lacks independent negative coverage (`ExtensionValidator.cs:92`). Same issue as Final-HEAD Resumption Blind 9; retain the existing sanitizer-coverage entry.
+- Boundary Build Blind 10 — low, carried defer: profile names still accept a final newline (`ProfileStore.cs:298`). Same pre-existing issue deferred by the post-completion code review and retained in the narrowed Story 2.3 ledger entry; no duplicate deferral is added.
+
 ## Verification
 
 **Commands:**
@@ -451,3 +464,17 @@ The orchestrator read the full baseline diff, including the user-authored gitlin
 Final-HEAD resumption completion 2026-10-04: all four Patch tasks are closed, every acceptance-matrix row has independently verified passing coverage, and all three review layers completed. Ten Blind Hunter findings retain their individually recorded prior decisions; Edge Case Hunter found no issues and Verification Gap found no gaps. No new work was deferred. The spec is done and sprint Story 2.8 is ready for review.
 
 Completion commit validation: `npx --no -- commitlint --edit /tmp/mcpcli-story-2-8-orchestrator-ty9zhuen/completion-message.txt --verbose` passed (exit 0) using the repository-pinned `@commitlint/cli` 21.2.2 for the exact full message `fix(command): close identity and extension review findings`. Output: `found 0 problems, 0 warnings`. Successful evidence: `/tmp/mcpcli-story-2-8-orchestrator-ty9zhuen/completion-message.commitlint.log`.
+
+
+Post-closure boundary completion 2026-10-04: the last open Patch task is closed. `MixedCaseApprovedExtensionReachesGatewayOnceAsync` now supplies and allowlists `actor:operator`, asserts that its value reaches the Gateway unchanged, and retains the exactly-one-call assertion. This pins the exact `actor:globalAdmin` reservation separately from the `identity:` prefix reservation. Deferred-ledger test anchors were refreshed for the two inserted test lines. No runtime code changed; frozen intent and original baseline are preserved. All three review layers completed without new patches or new deferrals. The spec is done and sprint Story 2.8 is ready for review.
+
+Current verification artifacts: `/tmp/mcpcli-story-2-8-actor-boundary-kv_1la_7/` contains exact commands, build/test logs, and xUnit XML; `/tmp/mcpcli-story-2-8-build-t211ixaj/` contains the full baseline diff, reviewer diff, and independent matrix audit.
+
+- `dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --configuration Debug --no-restore -m:1` — passed, zero warnings/errors.
+- `dotnet tests/Hexalith.McpCli.Core.Tests/bin/Debug/net10.0/Hexalith.McpCli.Core.Tests.dll -method Hexalith.McpCli.Core.Tests.OperationExecutorTests.MixedCaseApprovedExtensionReachesGatewayOnceAsync -result-xml /tmp/mcpcli-story-2-8-actor-boundary-kv_1la_7/core-focused-tests.xml` — one passed, zero failures/errors/skips/not run.
+- `dotnet tests/Hexalith.McpCli.Core.Tests/bin/Debug/net10.0/Hexalith.McpCli.Core.Tests.dll -result-xml /tmp/mcpcli-story-2-8-actor-boundary-kv_1la_7/core-tests.xml` — 507 total, 505 passed, two Windows-only ACL skips, zero failures/errors/not run.
+- The orchestrator independently audited the full Core XML: Owned identity 11 passing cases, No key six, Payload shape eight, Identifiers 34, Extensions 37. Every required matrix method ran and passed; no matrix coverage was skipped.
+
+- `git diff --check`, changed C# CRLF preservation, refreshed ledger test anchors, and frozen-intent comparison — passed.
+
+Completion commit validation: `npx --no -- commitlint --edit /tmp/mcpcli-story-2-8-build-t211ixaj/completion-message.txt --verbose` passed (exit 0) with zero problems/warnings for exact full message `test(command): close identity and extension boundary review`. Successful evidence is `/tmp/mcpcli-story-2-8-build-t211ixaj/completion-message.commitlint.log`.

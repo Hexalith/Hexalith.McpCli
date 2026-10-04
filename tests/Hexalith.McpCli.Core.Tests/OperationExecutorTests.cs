@@ -435,8 +435,9 @@ public sealed class OperationExecutorTests
             ["Trace:Task-ID"] = "namespaced",
             ["Identity"] = "ordinary",
             ["Trace:Identity:Task-ID"] = "nested",
+            ["actor:operator"] = "ordinary",
         };
-        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id", "trace:task-id", "identity", "trace:identity:task-id" });
+        var context = new EnvelopeContext(null, null, false, new HashSet<string> { "task-id", "trace:task-id", "identity", "trace:identity:task-id", "actor:operator" });
 
         OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
@@ -447,6 +448,7 @@ public sealed class OperationExecutorTests
         captured.Extensions!["Trace:Task-ID"].ShouldBe("namespaced");
         captured.Extensions!["Identity"].ShouldBe("ordinary");
         captured.Extensions!["Trace:Identity:Task-ID"].ShouldBe("nested");
+        captured.Extensions!["actor:operator"].ShouldBe("ordinary");
         await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
