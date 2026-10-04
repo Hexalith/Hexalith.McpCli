@@ -253,6 +253,31 @@ Code review 2026-10-04 (boundary-closure pass) of the full range `1554a84..638a3
 - low — An allowlisted `traceparent` or `tracestate` is overwritten by the Gateway after acceptance (edge-case-hunter): carried first-pass rejection.
 - low — `send --aggregate-id` chooses the aggregate when a nullable payload aggregate member is absent (edge-case-hunter): carried review-status rejection.
 
+Code review 2026-10-04 (allowlist-closure pass) of the full range `1554a84..39f5dda`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap found no gaps. The Acceptance Auditor found no AC or frozen-clause violation and reran the Core executor, query-validation, schema, profile, and catalog-service classes (339 total, two Windows-only ACL skips, zero failures). `39f5dda` changed one README sentence and ledger text. No new patch or decision survived triage. Items the earlier passes already settled are carried, not reopened.
+
+- [x] [Review][Defer] Reachable SQL, LDAP, and XSS sanitizer alternatives still lack independent negative tests, although README `:79` documents each rule — low (blind-hunter). [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:469] — deferred: pre-existing sanitizer patterns; already tracked (`deferred-work.md:295-303`); no new ledger entry.
+
+**Rejected (allowlist-closure pass)**
+
+- false — The `"Unexpected":1` row in `InvalidPayloadFailsBeforeGatewayAsync` expects only `/`, so a lost member pointer would pass (blind-hunter): commands and queries share `PayloadValidator`, whose `isCommand` flag gates only the root kind (`PayloadValidator.cs:50-53`), and the executor forwards prefill violations unchanged (`OperationExecutor.cs:106-109`). `QueryValidationTests.InvalidSchemaMembersMakeZeroCallsAsync` pins the exact path set `/` and `/Unexpected` through `QueryTestHarness.AssertRefusal`, so dropping the member pointer fails the suite.
+- false — The schema ULID pattern has no alias, overflow, or mixed-case rows, so a looser pattern would pass (blind-hunter): `SchemaTests.cs:128` pins the literal `^[0-7][0-9A-HJKMNP-TV-Z]{25}$`, so widening the class to `[0-9A-Z]` or the lead to `[0-9]` fails the suite, and the pinned pattern excludes I, L, O, U and leading 8–Z.
+- low — The CLI `config set` invalid-input theory has no newline, reserved, or `identity:` allowlist rows (blind-hunter): carried Blind 6/7 and final-HEAD decision. The CLI passes the text to `ProfileStore`, whose shared `IsValidKey` rows are pinned at `ProfileStoreTests.cs:350-355`, and the existing `a,A` and `a,` CLI rows pin the head's error mapping. The Story 2.3 ledger entry claims only the key fix and cites the tests that pin it.
+- low — The Profile allowlist error names neither the refused key nor the reason (blind-hunter): carried post-closure rejection. Nothing has shipped.
+- low — MCP `send_command` and `run_query` parameters have no descriptions (blind-hunter): carried third-pass rejection.
+- low — CLI `--extension` parsing is untested, and README omits that values may contain `=` and that exact and case-only duplicates get different codes (blind-hunter): carried post-completion and third-pass rejections. The parser is unchanged since `de67938`, and `--extension k=a=b` submits `a=b` as written.
+- false — README lists sanitizer patterns that cannot fire alone (blind-hunter): carried review-status rejection.
+- false — README repeats the payload tenant rule and words the idempotency requirement redundantly (blind-hunter): carried post-closure README-readability rejection.
+- false — Nine `references/` gitlink moves ride in the story, and the build still resolves EventStore 3.110.0 packages (blind-hunter): carried user-authored and post-closure rejections.
+- false — Two canonical-ULID definitions plus the conformance runner's copy can drift (blind-hunter): carried boundary-closure rejection. `run_loopback.py:26` is unchanged by this diff, matches `UlidPattern` exactly, and checks only generated identifiers.
+- false — The `SendCommandArguments.Extensions` doc was not updated (blind-hunter): carried boundary-closure rejection; it remains accurate.
+- low — Executor-only fixtures in the shared routing module forced discovery golden-list edits (blind-hunter): carried post-closure rejection.
+- low — A profile file holding a reserved or newline-terminated allowlist key becomes unreadable, and `config set` cannot repair it (edge-case-hunter): carried rejection from every earlier pass. Nothing has shipped.
+- low — An allowlisted `traceparent` or `tracestate` is overwritten by the Gateway (edge-case-hunter): carried first-pass rejection.
+- low — `Dictionary<Ulid, T>` keys get no `propertyNames` pattern (edge-case-hunter): carried review-status rejection.
+- false — A custom dictionary with duplicate or null keys becomes `internal_error` (edge-case-hunter): carried rejection. Neither head binds such a dictionary.
+- false — README's "Both heads use the same validation" is contradicted by CLI binding errors and MCP duplicate-key collapse (edge-case-hunter): carried third-pass and post-completion rejections. Every rule the README lists runs in Core for both heads; CLI `key=value` parse failures are binding errors, not extension validation.
+- low — An allowlisted `domain-service-version` with a value other than `v<digits>` passes Core and Gateway admission, then fails during server processing (acceptance-auditor): real at the pinned server (`DaprDomainServiceInvoker.cs:31`, `:308-320`), but an operator must allowlist the key, the frozen Always clause pins only the sanitizer and request-validator rules, and mirroring per-key server semantics adds a new guard, as in the carried `traceparent` rejection.
+
 ## Implementation Notes
 
 - The executor retains its prefill and final-schema pipeline. A supplied key now overwrites raw mapped idempotency data; absent-key non-null data still fails before submission.
