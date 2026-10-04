@@ -117,7 +117,9 @@ public sealed class OperationExecutor(
 
         if (!RoutingResolver.IsTenantDomain(tenant))
         {
-            return Fail(call, "/tenant", "The tenant does not match the Gateway tenant pattern.");
+            return Fail(call, "/tenant", tenant is null
+                ? "A tenant is required for this operation."
+                : "The tenant does not match the Gateway tenant pattern.");
         }
 
         string? actor = context.Actor;
@@ -217,7 +219,10 @@ public sealed class OperationExecutor(
             || module.IdentifierKind == IdentifierKind.Ulid && !IsCanonicalUlid(aggregateId)
             || !RoutingResolver.IsAggregateId(aggregateId))
         {
-            return Fail(call, "/aggregateId", "The aggregate identifier does not match the module and Gateway rules.");
+            string path = call.AggregateId is null && accessorId is not null
+                && operation.PropertyBindings.TryGetValue(PropertyRole.AggregateId, out PropertyBinding? binding)
+                    ? binding.Pointer : "/aggregateId";
+            return Fail(call, path, "The aggregate identifier does not match the module and Gateway rules.");
         }
 
         if (call is SendCommandArguments)
@@ -309,9 +314,14 @@ public sealed class OperationExecutor(
             return new PayloadViolation("/offset", "Offset cannot be negative.");
         }
 
-        if (query.Cursor is { Length: > 4096 } || !string.IsNullOrWhiteSpace(query.Cursor) && query.Offset is not null)
+        if (query.Cursor is { Length: > 4096 })
         {
-            return new PayloadViolation("/cursor", "Cursor must be at most 4096 characters and cannot be combined with offset.");
+            return new PayloadViolation("/cursor", "Cursor must be at most 4096 characters.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(query.Cursor) && query.Offset is not null)
+        {
+            return new PayloadViolation("/cursor", "Cursor cannot be combined with offset.");
         }
 
         if (query.EntityId is not null && !RoutingResolver.IsAggregateId(query.EntityId))

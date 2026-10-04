@@ -166,7 +166,7 @@ public sealed class QueryValidationTests
         .Where(row => string.Equals(row[0] as string, "aggregateId", StringComparison.Ordinal))
         .Select(row => new object?[] { row[1] });
 
-    /// <summary>Invalid String identifiers extracted from a payload accessor fail Gateway syntax at the envelope path.</summary>
+    /// <summary>Invalid String identifiers extracted from a payload accessor use its mapped payload path.</summary>
     [Theory]
     [MemberData(nameof(InvalidStringAccessorIdentifiers))]
     public async Task InvalidStringPayloadAccessorMakesZeroCallsAsync(string value)
@@ -175,7 +175,7 @@ public sealed class QueryValidationTests
         OperationOutcome outcome = await Executor(gateway).ExecuteAsync(
             new RunQueryArguments("string-fixture.lookup", JsonSerializer.Serialize(new { Key = value })), Context(),
             TestContext.Current.CancellationToken);
-        AssertRefusal(outcome, gateway, "/aggregateId");
+        AssertRefusal(outcome, gateway, "/Key");
         outcome.Error!.Violations!.ShouldHaveSingleItem();
     }
 

@@ -185,7 +185,7 @@ public sealed class CatalogTests
         module.IdentifierKind.ShouldBe(IdentifierKind.String);
         module.FixedTenant.ShouldBe("fixed-tenant");
         module.Operations.Select(item => item.Name).ShouldBe(
-            ["string-fixture.list-items", "string-fixture.lookup"], ignoreOrder: true);
+            ["string-fixture.escaped-key", "string-fixture.list-items", "string-fixture.lookup"], ignoreOrder: true);
         OperationDescriptor operation = module.Operations.Single(item => item.Name == "string-fixture.lookup");
         operation.Name.ShouldBe("string-fixture.lookup");
         operation.Routing.WireType.ShouldBe(typeof(global::Catalog.String.Contracts.LookupQuery).FullName);

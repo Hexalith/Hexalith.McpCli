@@ -431,6 +431,7 @@ internal sealed class CliRunner
                 Message: "Only stdio transport is available."), cancellationToken).ConfigureAwait(false);
         }
 
+        bool hostStarted = false;
         try
         {
             SettingsInput input = _globals.Read(parsed);
@@ -463,11 +464,17 @@ internal sealed class CliRunner
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
             }
 
+            hostStarted = true;
             return _runMcp is null
                 ? await RunMcpHostAsync(invocationHost, cancellationToken).ConfigureAwait(false)
                 : await _runMcp(invocationHost, cancellationToken).ConfigureAwait(false);
         }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException)
+        catch (Exception exception) when (!hostStarted && exception is IOException or UnauthorizedAccessException)
+        {
+            return await WriteMcpErrorAsync(new OperationError("configuration_invalid", Message: "Unable to read the mcpcli profile file."),
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidDataException exception) when (!hostStarted)
         {
             return await WriteMcpErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
                 cancellationToken).ConfigureAwait(false);
@@ -507,6 +514,7 @@ internal sealed class CliRunner
         bool presentationOnly,
         CancellationToken cancellationToken)
     {
+        bool actionStarted = false;
         try
         {
             IHost? created = HostFactory.Create(_globals.Read(parsed), _profileStore, out OperationError? error,
@@ -518,9 +526,20 @@ internal sealed class CliRunner
 
             using IHost host = created ?? throw new InvalidOperationException("Settings resolution produced no host or error.");
             ResolvedSettings settings = host.Services.GetRequiredService<ResolvedSettings>();
+            actionStarted = true;
             return await action(host.Services, settings, cancellationToken).ConfigureAwait(false);
         }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException)
+        catch (Exception exception) when (!actionStarted && exception is IOException or UnauthorizedAccessException)
+        {
+            return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: "Unable to read the mcpcli profile file."),
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidDataException exception) when (!actionStarted)
+        {
+            return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidDataException exception) when (presentationOnly)
         {
             return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
                 cancellationToken).ConfigureAwait(false);

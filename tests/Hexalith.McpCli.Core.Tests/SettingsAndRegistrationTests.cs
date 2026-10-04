@@ -301,6 +301,24 @@ public sealed class SettingsAndRegistrationTests
         error.Message.ShouldBe("The selected profile contains an invalid allowed extension key from profile.");
     }
 
+    /// <summary>Profile read I/O omits exception paths while expected profile validation stays specific.</summary>
+    [Fact]
+    public void ProfileReadIoHidesPaths()
+    {
+        var resolver = new SettingsResolver(
+            () => throw new IOException("secret-token /private/profile.json"), new Dictionary<string, string?>());
+
+        OperationError error = resolver.Resolve(new SettingsInput()).Error.ShouldNotBeNull();
+
+        error.Code.ShouldBe("configuration_invalid");
+        error.Message.ShouldBe("Unable to read the mcpcli profile file.");
+        var invalid = new SettingsResolver(
+            () => throw new InvalidDataException("The mcpcli profile document has an unsupported version."),
+            new Dictionary<string, string?>());
+        invalid.Resolve(new SettingsInput()).Error.ShouldNotBeNull().Message
+            .ShouldBe("Invalid mcpcli profile file: The mcpcli profile document has an unsupported version.");
+    }
+
     /// <summary>Resolution performs exactly one profile read.</summary>
     [Fact]
     public void ReadsProfileSnapshotOnce()

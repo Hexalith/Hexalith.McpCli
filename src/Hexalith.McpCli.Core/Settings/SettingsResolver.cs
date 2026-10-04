@@ -40,7 +40,11 @@ public sealed class SettingsResolver
         {
             snapshot = _readProfile();
         }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            return Failure("Unable to read the mcpcli profile file.");
+        }
+        catch (Exception exception) when (exception is InvalidDataException
             or System.Text.Json.JsonException or FormatException)
         {
             return Failure("Invalid mcpcli profile file: " + exception.Message);

@@ -727,6 +727,41 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>An I/O failure after MCP host startup is a safe internal error on stderr.</summary>
+    [Fact]
+    public async Task McpHostIoFailureIsInternalErrorOnStandardErrorAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            int hostRuns = 0;
+            Task<int> FailDuringHostRunAsync(IHost _, CancellationToken __)
+            {
+                hostRuns++;
+                return Task.FromException<int>(new IOException("token-secret /private/mcp-host.log"));
+            }
+
+            (int exit, string output, string error) = await InvokeAsync(
+                store, new Dictionary<string, string?>(), () => [typeof(CreateItemCommand).Assembly],
+                FailDuringHostRunAsync, "mcp");
+
+            exit.ShouldBe(2);
+            output.ShouldBeEmpty();
+            hostRuns.ShouldBe(1);
+            using JsonDocument document = JsonDocument.Parse(error);
+            JsonElement actual = document.RootElement.GetProperty("error");
+            actual.GetProperty("code").GetString().ShouldBe("internal_error");
+            actual.GetProperty("message").GetString().ShouldBe("MCP startup failed.");
+            error.ShouldNotContain("token-secret");
+            error.ShouldNotContain("/private/mcp-host.log");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Explicit MCP format and output errors are deterministic before settings resolution.</summary>
     [Fact]
     public async Task McpValidatesExplicitOptionsBeforeSettingsResolutionAsync()

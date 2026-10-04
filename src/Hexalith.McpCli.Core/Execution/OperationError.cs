@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using ByteAether.Ulid;
 using Hexalith.EventStore.Client.Gateway;
 using Hexalith.McpCli.Core.Schema;
 
@@ -49,8 +50,11 @@ public sealed record OperationError(
             Retryable: exception.Retryable,
             ClientAction: FirstNonEmpty(exception.ClientAction),
             RetryAfter: FirstNonEmpty(exception.RetryAfter),
-            CorrelationId: FirstNonEmpty(exception.CorrelationId));
+            CorrelationId: ValidCorrelationId(exception.CorrelationId));
     }
+
+    private static string? ValidCorrelationId(string? value)
+        => value is not null && Ulid.TryParse(value, provider: null, out _) ? value : null;
 
     private static string? FirstNonEmpty(params string?[] values)
         => values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));

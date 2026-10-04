@@ -103,7 +103,7 @@ public sealed class QueryValidationCommandTests
             "/entityId" => "Entity identifier does not match the Gateway pattern.",
             "/pageSize" => "Page size must be between 1 and 200.",
             "/offset" => "Offset cannot be negative.",
-            _ => "Cursor must be at most 4096 characters and cannot be combined with offset.",
+            _ => "Cursor must be at most 4096 characters.",
         };
         AssertJson(output, JsonSerializer.Serialize(new
         {
@@ -122,7 +122,7 @@ public sealed class QueryValidationCommandTests
         AssertValidation(exit, output, error, "string-fixture.list-items", "/cursor");
         AssertJson(output, """
             {"error":{"code":"validation_failed","operation":"string-fixture.list-items",
-            "violations":[{"path":"/cursor","message":"Cursor must be at most 4096 characters and cannot be combined with offset."}]}}
+            "violations":[{"path":"/cursor","message":"Cursor cannot be combined with offset."}]}}
             """);
         harness.Calls.ShouldBe(0);
     }
@@ -137,7 +137,7 @@ public sealed class QueryValidationCommandTests
         AssertValidation(exit, output, error, "routing-fixture.get-http2-status", "/tenant");
         AssertJson(output, """
             {"error":{"code":"validation_failed","operation":"routing-fixture.get-http2-status",
-            "violations":[{"path":"/tenant","message":"The tenant does not match the Gateway tenant pattern."}]}}
+            "violations":[{"path":"/tenant","message":"A tenant is required for this operation."}]}}
             """);
         harness.Calls.ShouldBe(0);
     }
