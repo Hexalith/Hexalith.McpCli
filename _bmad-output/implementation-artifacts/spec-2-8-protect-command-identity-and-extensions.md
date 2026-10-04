@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -207,6 +207,31 @@ Code review 2026-10-04 (final-HEAD pass) of the full range `1554a84..c8da2b7`, e
 - false — The XSS sanitizer entry sits under the final-build-review heading (acceptance-auditor): the post-completion patch asked to extend those final-build sanitizer entries, so the XSS sibling belongs with them.
 - low — `Dictionary<Ulid, T>` keys get no `propertyNames` pattern (edge-case-hunter): carried review-status rejection.
 - low — `send --aggregate-id` chooses the aggregate when a nullable payload aggregate is absent (edge-case-hunter): carried review-status rejection.
+
+Code review 2026-10-04 (post-closure pass) of the full range `1554a84..9c2bf2a`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). The Acceptance Auditor found no AC or frozen-clause violation, and Edge Case Hunter raised only carried items. `9c2bf2a` changed only README, ledger, and conformance-vector text; every ledger anchor it refreshed resolves at HEAD. Items the earlier passes already settled are carried, not reopened.
+
+- [ ] [Review][Patch] No test accepts a non-reserved `actor:` key, so a prefix-style reservation regression would pass — low (verification-gap). `IsReservedKey` pairs an exact match on `actor:globalAdmin` with a prefix match on `identity:` (`ExtensionValidator.cs:76-78`). Only rejection rows use an `actor:` key (`OperationExecutorTests.cs:535-536`, `ProfileStoreTests.cs:351`); the accept-side test covers only the `identity:` boundary (`Identity`, `Trace:Identity:Task-ID`). If both rules became one `StartsWith` list, `actor:globalAdmin` and its mixed-case row would still be refused, the approved-extension test would still pass, and every allowlisted `actor:*` key would be refused locally with zero Gateway calls, in both heads and in Profile allowlists. Add `["actor:operator"] = "ordinary"` with `actor:operator` in the allowlist to `MixedCaseApprovedExtensionReachesGatewayOnceAsync` and assert it arrives unchanged. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:425]
+- [x] [Review][Defer] Reachable SQL, LDAP, and XSS sanitizer alternatives still lack independent negative tests, including the README's `session_id=abc` example — low (blind-hunter). [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:467] — deferred: pre-existing sanitizer patterns; already tracked (`deferred-work.md:295-303`); no new ledger entry.
+
+**Rejected (post-closure pass)**
+
+- low — The local extension rules copy an unreleased Gateway commit, not the 3.110.0 client package the build uses (blind-hunter): carried final-HEAD rejection. README never calls the rules "pinned", the server rules ship with the Gateway rather than the client package, and against an older Gateway the local `identity:` refusal is only stricter.
+- false — Nine unrelated `references/` gitlink moves ride in the feature diff (blind-hunter): carried user-authored rejection; no commit after `d80e32b` moves a gitlink, and the `Hexalith.Builds` move leaves `Props/Directory.Packages.props` unchanged.
+- low — `ChangingExtensions` varies only enumeration, so an indexer or `Keys` re-read goes unnoticed (blind-hunter): carried third-pass rejection.
+- false — No fixture declares a CLR `Ulid` correlation or idempotency member (blind-hunter): carried Blind resumption 6 rejection. `IsCanonicalUlid` refuses noncanonical envelope text at the envelope pointers before `Fill`, and canonical text satisfies the uppercase pattern, so no divergent outcome exists.
+- low — No test sends a lowercase explicit aggregate argument on a command, and the new tests use `ShouldContain` (blind-hunter): carried third-pass and final-HEAD rejections. `OperationExecutor.cs:215-217` resolves `call.AggregateId ?? accessorId ?? constant` and checks it once for both operation kinds, so the query-argument rows exercise the same line; `ShouldContain` hides no product defect.
+- low — MCP `send_command` and `run_query` parameters omit the canonical-ULID rule (blind-hunter): carried third-pass rejection.
+- false — `ExtensionValidator` docs are stale and `IsReservedKey` runs twice (blind-hunter): carried third-pass rejection; the explicit branch gives the distinct "reserved" message, and `IsValidKey`'s clause serves `ProfileStore` and `SettingsResolver`.
+- low — A reserved key in a Profile allowlist gets a generic error that names neither key nor reason (blind-hunter): carried rejection from every earlier pass; nothing has shipped.
+- low — "A payload idempotency key requires a caller-supplied key." omits the removal remedy and the payload member (blind-hunter): the message is accurate, `/idempotencyKey` is the pointer the frozen Always clause names, and Story 2.9 owns failure explanations (carried review-status rationale).
+- reject (spec edit) — A supplied key silently discards a conflicting payload idempotency value (blind-hunter): carried final-HEAD rejection; the frozen Always clause requires the overwrite.
+- false — Generated message IDs are only checked with `Ulid.TryParse`, and the canonical check runs on the generated correlation (blind-hunter): `Ulid.New().ToString()` (`OperationExecutor.cs:147`) passes through the `:150` check in every success test without `--correlation-id`, so a noncanonical generator would fail those tests, and canonical generator output can never trigger the refusal.
+- false — `SuppliedKeyFillsRequiredNullableMemberAsync` does not assert the request-level key (blind-hunter): `OperationExecutorTests.cs:115` and `:687` pin the submitted `IdempotencyKey`, and this story did not change that path; reusing `CorrelationId` as the key is the carried third-pass rejection.
+- low — Executor-only fixtures in the shared routing module forced discovery golden-list edits (blind-hunter): updating golden lists is the expected cost of a new fixture, and a separate fixture module adds machinery with no runtime effect.
+- false — README readability (blind-hunter): the cited line 21 is 39 characters; the long send paragraph (`README.md:67`) carries rules earlier passes asked for; "including when a required member is nullable" is the third-pass clarification of "serializer-required"; the repeated tenant rule and the unreachable sanitizer patterns are carried false rejections; capitalized "Profile" is the spec's domain term and causes no misreading.
+- false — The ledger splits this story's deferrals across six headings and three similar entries (blind-hunter): each heading records provenance, which the follow-up and final-HEAD patches required, and the SQL, LDAP, and XSS entries track distinct alternatives with distinct evidence.
+- low — A profile file holding a reserved or newline-terminated allowlist key becomes unreadable (edge-case-hunter): carried rejection from every earlier pass. Nothing has shipped.
+- false — A custom dictionary with duplicate or null keys becomes `internal_error` (edge-case-hunter): carried rejection. Neither head binds such a dictionary.
 
 ## Implementation Notes
 
