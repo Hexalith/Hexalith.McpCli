@@ -2,7 +2,7 @@
 title: 'Protect Command Identity and Extensions'
 type: 'feature'
 created: '2026-10-02'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '1554a84d792a0178a342d62367259999fd45e0b9'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -180,6 +180,33 @@ Code review 2026-10-04 (review-status pass) of the full range `1554a84..15340be`
 - false — Null extension values have no test (blind-hunter): the `value is null` guard predates this story and refuses at the escaped key pointer, and the new snapshot copy preserves null values; no wrong behavior was shown.
 - low — The allowlist check scans linearly (blind-hunter): at most 32 keys against a short allowlist, and requiring a comparer changes the `EnvelopeContext` contract for no measurable gain.
 - false — README lists sanitizer patterns that cannot fire on their own (blind-hunter): every listed pattern is refused, so the README is accurate; overlap with the dangerous-character rule does not mislead.
+
+Code review 2026-10-04 (final-HEAD pass) of the full range `1554a84..c8da2b7`, excluding this spec and `sprint-status.yaml`, including the nine `references/` gitlink moves; layers: Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor (none failed). Verification Gap found no gaps and reran the Core suite (505 passed, two Windows-only ACL skips). The Acceptance Auditor found no AC or frozen-clause violation. The EventStore pin move in `d80e32b` (`b51978d`→`5e32d07`) changes only command-status records; the sanitizer, the request validator, and `CommandsController.cs:77-80` are unchanged. Items the earlier passes already settled are carried, not reopened.
+
+- [ ] [Review][Patch] Ledger anchors into `ExtensionValidator.cs`, `OperationExecutorTests.cs`, and `OperationExecutor.cs` went stale when this story inserted lines — low (blind-hunter+acceptance-auditor+verification-gap+edge-case-hunter). `c8da2b7` added `IsReservedKey` (four lines) and two `Identity` entries to `MixedCaseApprovedExtensionReachesGatewayOnceAsync` (eight lines). The ledger now cites blank lines for `KeyPattern`, `XssPattern`, `SqlPattern`, and `LdapPattern` (`ExtensionValidator.cs:85`, `:88`, `:91`, `:94`; now `:89`, `:92`, `:95`, `:98`) and a line inside `UnsafeExtensionKeyUsesEscapedPointerAsync` for `ExtensionKeyWithFinalNewlineMakesZeroCallsAsync` (`OperationExecutorTests.cs:491`; now `:499`). The three sanitizer entries cite `OperationExecutorTests.cs:459`, the `DangerousExtensionValuesMakeZeroCallsAsync` method line at `15340be`, now a data row (method at `:467`). The Story 2.5 tenant entry cites `OperationExecutor.cs:291` for the per-call tenant return, exact at baseline `1554a84` and now `:297`. [_bmad-output/implementation-artifacts/deferred-work.md:216]
+- [ ] [Review][Patch] The count-limit deferral sits under a code-review heading that never raised it — low (acceptance-auditor). The entry came from build-review "Blind resumption 3" (Review Triage Log), but `## Deferred from: code review of spec-2-8-… (2026-10-03)` labels it, and that code review recorded no defers. Give it a build-review resumption heading, as the follow-up pass did for the Identifier Kind entry. [_bmad-output/implementation-artifacts/deferred-work.md:281]
+- [ ] [Review][Patch] Conformance-vector docs justify the empty-extensions ban with stale head behavior — low (verification-gap). `tools/conformance-vectors/v1/README.md:15` and the `test_validate.py:490` comment say "MCP forwards `{}`", but Core now turns an empty map into `null` before submission (`OperationExecutor.cs:172-176`, `AbsentAndEmptyExtensionsAreOmittedAsync`), so neither head sends extensions. Keep the ban, since omission stays the single canonical form, and correct the reason. [tools/conformance-vectors/v1/README.md:15]
+- [ ] [Review][Patch] README qualifies only the `identity:` reservation as case-insensitive and applying to Profile allowlists — low (blind-hunter). `README.md:77` says "The reserved `actor:globalAdmin` key is rejected." and then "Every key beginning with `identity:` is also reserved and rejected regardless of case, both in Profile allowlists and command calls." `IsReservedKey` applies the same case-insensitive rule to both in `Validate` and `IsValidKey` (`ExtensionValidator.cs:42`, `:74-78`), and `ProfileStoreTests.cs:351` pins `AcToR:gLoBaLaDmIn`. State both reservations in one sentence. [README.md:77]
+- [x] [Review][Defer] Agent entry points still prescribe a parse-only `Ulid.TryParse` check — low (blind-hunter). `AGENTS.md:85`, `CLAUDE.md:85`, and `.github/copilot-instructions.md:85` say "validate with `Ulid.TryParse`". [AGENTS.md:85] — deferred: the fix edits agent-context files; already tracked (`deferred-work.md:289-291`); no new ledger entry.
+- [x] [Review][Defer] Reachable SQL, LDAP, and XSS sanitizer alternatives still lack independent negative tests, including the README's `session_id=abc` example — low (blind-hunter). [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:467] — deferred: pre-existing sanitizer patterns; already tracked (`deferred-work.md:295-303`); no new ledger entry.
+
+**Rejected (final-HEAD pass)**
+
+- low — A profile file holding a reserved or newline-terminated allowlist key becomes unreadable, `config set` cannot repair it, and the error names neither profile nor key (blind-hunter): carried rejection from every earlier pass. Nothing has shipped.
+- false — CLI exact duplicates and case-only duplicates get different error codes, and MCP keeps the last exact-duplicate key (blind-hunter): carried rejections from the third and post-completion passes.
+- low — No CLI or MCP head-level test passes extensions or a reserved allowlist key (blind-hunter): carried Blind 6/7 decision; both heads feed the tested Core executor, and `ProfileStore` and `SettingsResolver` share `IsValidKey`.
+- low — AC3's "either head" lacks MCP and CLI `send` lowercase-ULID tests (blind-hunter): carried rejection; the heads add no identifier checks of their own.
+- low — MCP `send_command` and `run_query` parameters omit the canonical-ULID rule (blind-hunter): carried third-pass rejection.
+- false — `ComputedAccessorSeesTrustedEnvelopeAndNestedNullAsync` runs only two of eight flag combinations, and the fixture getter ignores `Idempotency` (blind-hunter): carried rejection; the test asserts the filled `Idempotency`, and `Fill` writes every mapped member in one step before the accessor.
+- low — Submodule bumps ride in this story, and nothing records which Gateway release reserves `identity:` (blind-hunter): the gitlink moves are the carried user-authored rejection, and the build uses only the `Hexalith.Builds` package props, which the bump leaves unchanged. Against an older Gateway the local `identity:` refusal is only stricter, and tracking Gateway releases adds new machinery.
+- false — Changing the `public const UlidPattern` leaves stale values in compiled consumers (blind-hunter): carried follow-up-pass rejection; nothing is published.
+- false — README lists sanitizer checks that cannot fire alone (blind-hunter): carried review-status rejection.
+- false — README omits that the Gateway silently drops `actor:globalAdmin` (blind-hunter): README describes local refusal, which happens before any Gateway call, so the Gateway's handling never applies.
+- reject (spec edit) — A supplied key silently discards a different payload idempotency value (blind-hunter): the frozen Always clause says "A supplied ULID idempotency key overwrites any raw mapped value"; changing it edits this spec.
+- false — No positive test sends tab, LF, or CR in an extension value (blind-hunter): carried Blind resumption 10 rejection.
+- false — The XSS sanitizer entry sits under the final-build-review heading (acceptance-auditor): the post-completion patch asked to extend those final-build sanitizer entries, so the XSS sibling belongs with them.
+- low — `Dictionary<Ulid, T>` keys get no `propertyNames` pattern (edge-case-hunter): carried review-status rejection.
+- low — `send --aggregate-id` chooses the aggregate when a nullable payload aggregate is absent (edge-case-hunter): carried review-status rejection.
 
 ## Implementation Notes
 
