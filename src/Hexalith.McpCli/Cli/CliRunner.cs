@@ -169,6 +169,15 @@ internal sealed class CliRunner
                         .ConfigureAwait(false);
                 }
 
+                if (settings.ReadOnly)
+                {
+                    // Core owns lookup, kind, and availability ordering; no payload input is needed for refusal.
+                    OperationOutcome refusal = await services.GetRequiredService<IOperationExecutor>()
+                        .ExecuteAsync(new SendCommandArguments(name, string.Empty),
+                            services.GetRequiredService<EnvelopeContext>(), token).ConfigureAwait(false);
+                    return await CliOutput.WriteAsync(refusal.Document, refusal.Error, settings, token).ConfigureAwait(false);
+                }
+
                 (string? content, bool fileReadFailed) = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
                 if (fileReadFailed)
                 {

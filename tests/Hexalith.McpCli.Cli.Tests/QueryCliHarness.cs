@@ -31,7 +31,7 @@ internal sealed class QueryCliHarness : IAsyncDisposable
     private readonly Task _responses;
 
     /// <summary>Starts a bounded loopback Gateway returning an object or null document and optional paging metadata.</summary>
-    internal QueryCliHarness(string? paging = null, bool nullDocument = false)
+    internal QueryCliHarness(string? paging = null, bool nullDocument = false, bool commandResponse = false)
     {
         _timeout.CancelAfter(TimeSpan.FromSeconds(15));
         try
@@ -48,7 +48,11 @@ internal sealed class QueryCliHarness : IAsyncDisposable
             string document = nullDocument ? "null" : "{\"items\":[]}";
             byte[] response = Encoding.UTF8.GetBytes(
                 $$$"""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{{{document}}},"success":true{{{metadata}}}}""");
-            _responses = RespondAsync(response);
+            if (commandResponse)
+            {
+                response = Encoding.UTF8.GetBytes("""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","messageId":"01J9MZHXT3RKM0VWXRXGSJDATK"}""");
+            }
+            _responses = RespondAsync(response, commandResponse ? 202 : 200);
         }
         catch
         {
@@ -70,7 +74,8 @@ internal sealed class QueryCliHarness : IAsyncDisposable
     internal int Calls => _requests.Count;
 
     /// <summary>Invokes the real CLI parser and restores all streams even on failure.</summary>
-    internal async Task<(int Exit, string Output, string Error)> InvokeAsync(string[] arguments, bool withUrl = true)
+    internal async Task<(int Exit, string Output, string Error)> InvokeAsync(
+        string[] arguments, bool withUrl = true, string? readOnlyEnvironment = null, TextReader? standardInput = null)
     {
         TextReader originalIn = Console.In;
         TextWriter originalOut = Console.Out;
@@ -80,13 +85,13 @@ internal sealed class QueryCliHarness : IAsyncDisposable
         using var error = new StringWriter();
         try
         {
-            Console.SetIn(input);
+            Console.SetIn(standardInput ?? input);
             Console.SetOut(output);
             Console.SetError(error);
             var store = new ProfileStore(Path.Combine(_directory, "mcpcli.json"));
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(Lint.Module).Assembly, typeof(Routing.Module).Assembly, typeof(StringContracts.Module).Assembly];
             string[] invocation = withUrl ? [.. arguments, "--url", Url] : arguments;
-            int exit = await new CliRunner(store, manifest, _ => null).Parse(invocation)
+            int exit = await new CliRunner(store, manifest, key => key == "EVENTSTORE_READ_ONLY" ? readOnlyEnvironment : null).Parse(invocation)
                 .InvokeAsync(cancellationToken: _timeout.Token);
             return (exit, output.ToString(), error.ToString());
         }
@@ -150,7 +155,7 @@ internal sealed class QueryCliHarness : IAsyncDisposable
         }
     }
 
-    private async Task RespondAsync(byte[] response)
+    private async Task RespondAsync(byte[] response, int statusCode)
     {
         while (!_timeout.IsCancellationRequested)
         {
@@ -159,6 +164,7 @@ internal sealed class QueryCliHarness : IAsyncDisposable
             string body = await reader.ReadToEndAsync(_timeout.Token);
             using JsonDocument request = JsonDocument.Parse(body);
             _requests.Enqueue((context.Request.HttpMethod, context.Request.Url!.AbsolutePath, request.RootElement.Clone()));
+            context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
             context.Response.ContentLength64 = response.Length;
             await context.Response.OutputStream.WriteAsync(response, _timeout.Token);

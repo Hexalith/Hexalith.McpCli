@@ -151,19 +151,53 @@ public sealed class OperationExecutorTests
         outcome.Document.ShouldBeOfType<CommandResult>().IdempotencyKey.ShouldBe(CorrelationId);
     }
 
-    /// <summary>Read-only mode is enforced before URL availability or gateway access.</summary>
-    [Fact]
-    public async Task ReadOnlyCommandFailsBeforeGatewayAsync()
+    /// <summary>Read-only mode wins over payload parsing, validation, and URL availability for direct callers.</summary>
+    [Theory]
+    [InlineData(false, "{")]
+    [InlineData(true, "{")]
+    [InlineData(false, "")]
+    [InlineData(true, "")]
+    [InlineData(false, "null")]
+    [InlineData(true, "null")]
+    [InlineData(false, "{}")]
+    [InlineData(true, "{}")]
+    [InlineData(false, "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"Hello\"}")]
+    [InlineData(true, "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"Hello\"}")]
+    public async Task ReadOnlyCommandFailsBeforeGatewayAsync(bool hasGatewayUrl, string payload)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
-        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), readOnly: true, hasGatewayUrl: false);
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), readOnly: true, hasGatewayUrl: hasGatewayUrl);
 
         OperationOutcome outcome = await executor.ExecuteAsync(
-            new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}"""),
+            new SendCommandArguments("sample.create-item", payload),
             Context(), TestContext.Current.CancellationToken);
 
+        outcome.Document.ShouldBeNull();
+        outcome.Error.ShouldNotBeNull().ShouldBe(new OperationError("read_only",
+            Message: "Command submission is disabled in read-only mode."));
+        gateway.ReceivedCalls().ShouldBeEmpty();
+    }
+
+    /// <summary>Read-only refusal precedes command identity and extension validation for direct callers.</summary>
+    [Theory]
+    [InlineData("correlation")]
+    [InlineData("idempotency")]
+    [InlineData("extensions")]
+    public async Task ReadOnlyCommandFailsBeforeEnvelopeValidationAsync(string invalidField)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), readOnly: true, hasGatewayUrl: true);
+        var call = new SendCommandArguments("sample.create-item",
+            $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            CorrelationId: invalidField == "correlation" ? "invalid" : null,
+            IdempotencyKey: invalidField == "idempotency" ? "invalid" : null,
+            Extensions: invalidField == "extensions" ? new Dictionary<string, string> { ["unapproved"] = "value" } : null);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(call, Context(), TestContext.Current.CancellationToken);
+
+        outcome.Document.ShouldBeNull();
         outcome.Error.ShouldNotBeNull().Code.ShouldBe("read_only");
-        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+        gateway.ReceivedCalls().ShouldBeEmpty();
     }
 
     /// <summary>Kind mismatch wins over the read-only and missing-URL gates.</summary>
