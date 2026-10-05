@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -118,6 +118,30 @@ Independent Blind Hunter reviewed the current worktree changes; the configured o
 
 - **Low, patched:** README's new lookup/kind precedence wording could be read as applying to `query` in read-only mode. `CliRunner.CreateQuery` still acquires its payload before Core lookup. Scoped both precedence statements explicitly to `send`; queries retain their normal input path.
 - **Low, patched:** "Whenever the read-only setting is resolved" did not tell users which commands validate the environment value. `SettingsBootstrap.ResolvePresentation` calls the complete `SettingsResolver` even for profile-management verbs, while help/version and `CliRunner.RunMcpAsync` transport/output-option rejection can finish before settings resolution. Named discovery, execution, `config` (including profile management), and MCP stdio startup, plus these early exits, in README.
+
+### Final Cumulative Review Findings
+
+Code review 2026-10-05 of `3260812..8dd69d6`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps and reran `ReadOnlyCommandTests` (32 passed), the Core read-only cases, and the Manifest suite (8 passed).
+
+- [ ] [Review][Patch] README's ordinary-`send` precedence sentence uses internal terms ("CLI payload acquisition", "extension binding", "Core lookup") that appear nowhere else in README; state it as which errors users see first [README.md:67]
+- [ ] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation omits command-line parse failures and the `config profile add` operator-flag refusal, which returns `invalid_arguments` before settings resolution (`CliRunner.cs:331-335`) [README.md:69]
+
+Rejected:
+
+- Fix edits this spec — Spec `status: 'done'` disagrees with sprint `review` (Acceptance Auditor): the spec was marked done in `8dd69d6` before this review finished; this review's completion sets both to the same status.
+- Fix edits this spec — Same status mismatch (Blind Hunter).
+- Fix edits this spec — The dependency-policy bump contradicts the "no dependency change" note: it is the approved cumulative Decision (option 1), landed separately in `4d39200`.
+- `false` — Stdin comment wrong for the omitted payload: the comment is conditional and detects a regression that falls back to stdin for an omitted payload. Third identical verdict.
+- `false` — README does not name the errors that precede `read_only`: "After settings resolution and catalog access succeed" covers `configuration_invalid`, `catalog_empty`, and `catalog_invalid`; README:44 documents the current `catalog_empty` state, and an empty operation name names no declared write.
+- `false` — Empty `EVENTSTORE_READ_ONLY=` is undocumented: `SelectBoolean` throws for `""` (`SettingsResolver.cs:160-168`), so "any other value" is accurate. On Windows, an empty assignment unsets the variable at the shell level, which gives the documented default. The resolver is unchanged by this story.
+- `false` — Flag `true` over environment `false` is untested: `SelectBoolean` returns any non-null flag before reading the environment (`SettingsResolver.cs:154-158`), and the explicit-false tests exercise that same branch.
+- `false` — Lookup/kind precedence is tested only with stdin: the read-only branch reads no payload or extension option (`CliRunner.cs:172-179`), so the input form cannot change the result; the 24-row refusal matrix catches any reorder.
+- `false` — Identifier options are untested in read-only CLI: the branch builds `SendCommandArguments(name, string.Empty)` without them. Core rows pin correlation and idempotency, and aggregate validation follows payload parsing, which the `{` and `""` rows show comes after refusal.
+- `false` — Duplicated ULID literal and hand-written matrix in `ReadOnlyCommandFailsBeforeGatewayAsync`: refusal precedes parsing, so payload values are irrelevant and no divergence can weaken the test.
+- `false` — Nothing durable stops dependency drift: CI runs the Manifest suite (`.github/workflows/ci.yml:26`), so a drifting `references/` bump fails the blocking gate.
+- `false` — Ledger entry contradicts itself: `evidence` records the first run's observation, while `status` names the fresh-restore 3.113.0 source and the resolution. The cumulative Decision already settled this.
+- `low` — Harness ignores `paging`/`nullDocument` with `commandResponse`: no caller combines them; a guard adds complexity for an unreachable case. Third identical verdict.
+- `low` — Explicit-false send asserts only the request count: `CliMcpCommandParityTests` covers command routing and the envelope; asserting them here needs a new harness parameter. Third identical verdict.
 
 ## Verification Blocker
 
