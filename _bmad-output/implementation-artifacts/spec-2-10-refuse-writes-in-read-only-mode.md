@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -48,7 +48,19 @@ context: []
 - Resumed from clean `main` at `e159f82b7528797fc245045625ff387d65294ba9` on 2026-10-05. Addressed the two outstanding cumulative-review patches in README: ordinary `send` precedence now names the errors users see first, and environment validation documents command-line parse failures and the three rejected `config profile add` operator flags as early exits. Checked both statements against `CliRunner`, `SettingsBootstrap`, and `SettingsResolver`; no execution behavior or dependencies changed.
 - Closing validation: the focused CLI read-only class passed 32/32. All six individual Debug test-project builds succeeded with zero warnings/errors; complete suites passed CLI 424, Core 557 with two existing Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skipped, zero failures/errors). Commands, results, and log paths are recorded in `/tmp/mcpcli-2-10-close-validation.json`; suite XML is `/tmp/mcpcli-2-10-close-<Suite>.xml`, and the focused XML is `/tmp/mcpcli-2-10-close-ReadOnlyCommandTests.xml`. CLI build and focused-run output are preserved in this session. The pinned commitlint 21.2.2 command `npx --no -- commitlint --edit /tmp/mcpcli-2-10-close-commit-message.txt --verbose` exited 0 with zero problems/warnings; the exact full message is preserved in that file and successful validation output in this session.
 
+- Resumed from clean `main` at `0937e0b6fdd429764f7d5a555a932481a833979b` on 2026-10-05. Completed the two post-closing review patches: README now states the flag's optional, case-insensitive `true`/`false` values separately from the environment's exact values, and places both read-only paragraphs after the Commands and Queries guidance. The original baseline and frozen intent remain intact.
+
+- Documentation resumption validation: all six individual Debug test-project builds succeeded with zero warnings/errors using `dotnet build tests/Hexalith.McpCli.<Suite>.Tests/Hexalith.McpCli.<Suite>.Tests.csproj --configuration Debug --no-restore --verbosity quiet`. Direct runs with `dotnet tests/Hexalith.McpCli.<Suite>.Tests/bin/Debug/net10.0/Hexalith.McpCli.<Suite>.Tests.dll -result-xml <evidence-directory>/<Suite>.xml` passed Core 557 (two existing Windows-only skips), CLI 424, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8: 1,034 passed, two skipped, zero failures/errors. The focused CLI read-only class passed 32/32. Exact commands, build/test logs, suite XML, and results are preserved in `/tmp/mcpcli-2-10-docs-fj8vjhrg/validation.json` and that directory. Seven process-level `config current --read-only` checks verified no value, `true`, `True`, `FALSE`, and `false`, plus numeric `1` and `0` rejection with parser exit 1; `flag-values.json` records each command and result. The pinned commitlint 21.2.2 command `npx --no -- commitlint --edit /tmp/mcpcli-2-10-docs-fj8vjhrg/commit-message.txt --verbose` exited 0 with zero problems/warnings; `commit-message.txt` and `commitlint.log` preserve the exact candidate and validation evidence. Whitespace, original baseline, and frozen-intent checks passed.
+
 ## Review Triage Log
+
+### Documentation Resumption Review Triage
+
+Independent Blind Hunter reviewed the current worktree (5.312 kB; finding floor `min(floor(sqrt(5.312) + 1), 10) = 3`). All three findings were checked; no new work was deferred.
+
+- **Low, patched:** The adjacent environment values made numeric flag failures easy to miss. Process-level checks confirmed `--read-only 1` and `--read-only 0` fail parsing with exit 1; README now states both explicitly.
+- **Low, patched:** The moved refusal paragraph mentioned extension validation before its later explanation. README now introduces the exact `--extension key=value` syntax at that first prose reference.
+- **False, rejected:** This resumption lacked validation evidence. Review read the interim implementation note while verification was still running; finalization now records all current build/test commands and results, the seven parser checks, and pinned commitlint evidence in Implementation Notes above.
 
 ### Closing Review Triage
 
@@ -160,8 +172,8 @@ Rejected:
 
 Code review 2026-10-05 of `3260812..6d7eab8`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found no acceptance-criteria violations and reran `ReadOnlyCommandTests` (32 passed).
 
-- [ ] [Review][Patch] README documents the accepted `EVENTSTORE_READ_ONLY` values but not the flag's, which differ. `--read-only 1` and `--read-only 0` fail to parse (exit 1, "Unrecognized command or argument"), while `--read-only True` is accepted, as verified against the built CLI. State that the flag takes no value, `true`, or `false` (case-insensitive) [README.md:69]
-- [ ] [Review][Patch] The read-only paragraphs precede the `send` and `query` paragraphs they depend on: they reference `--aggregate-id`, `--correlation-id`, `--idempotency-key`, extensions, and `invalid_arguments` before those are introduced. Move both paragraphs after the Queries paragraph [README.md:67]
+- [x] [Review][Patch] README documents the accepted `EVENTSTORE_READ_ONLY` values but not the flag's, which differ. `--read-only 1` and `--read-only 0` fail to parse (exit 1, "Unrecognized command or argument"), while `--read-only True` is accepted, as verified against the built CLI. State that the flag takes no value, `true`, or `false` (case-insensitive) [README.md:69]
+- [x] [Review][Patch] The read-only paragraphs precede the `send` and `query` paragraphs they depend on: they reference `--aggregate-id`, `--correlation-id`, `--idempotency-key`, extensions, and `invalid_arguments` before those are introduced. Move both paragraphs after the Queries paragraph [README.md:67]
 - [x] [Review][Defer] `--read-only` help text says only "Disable command submission" and does not mention `EVENTSTORE_READ_ONLY` or the explicit `false` override [src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:18] — deferred: pre-existing since `de67938` (Story 2.1); no global option's help names its environment variable, so this is a CLI-wide help convention
 
 Rejected:
