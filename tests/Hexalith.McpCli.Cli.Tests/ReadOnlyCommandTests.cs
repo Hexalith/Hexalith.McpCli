@@ -87,6 +87,7 @@ public sealed class ReadOnlyCommandTests
         {
             error.GetProperty("violations")[0].GetProperty("path").GetString().ShouldBe("/operation");
         }
+
         harness.Calls.ShouldBe(0);
     }
 
@@ -142,6 +143,7 @@ public sealed class ReadOnlyCommandTests
                 document.RootElement.TryGetProperty("reason", out _).ShouldBeFalse();
             }
         }
+
         harness.Calls.ShouldBe(0);
     }
 

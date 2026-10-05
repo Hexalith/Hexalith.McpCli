@@ -55,6 +55,7 @@ internal sealed class QueryCliHarness : IAsyncDisposable
             {
                 response = Encoding.UTF8.GetBytes("""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","messageId":"01J9MZHXT3RKM0VWXRXGSJDATK"}""");
             }
+
             _responses = RespondAsync(response, commandResponse ? 202 : 200);
         }
         catch

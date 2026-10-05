@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -39,6 +39,11 @@ context: []
 - Stale MCP/Abstractions restore assets initially selected EventStore 3.112.0 while rebuilt shared assemblies required 3.113.0. `dotnet restore Hexalith.McpCli.slnx --verbosity quiet` exited 0 using the existing central pins; rebuilding and rerunning those suites resolved their assembly-load failures. No tracked dependency, policy, build configuration, or submodule change was made.
 - The required all-tests gate still prevents completion because the exact dependency-policy test fails on EventStore 3.113.0 versus policy 3.110.0. Keep the spec `in-review` and sprint story `review`; the existing deferred-work entry owns dependency reconciliation.
 - Resumption commit-message validation: the pinned commitlint 21.2.2 command `npx --no -- commitlint --edit /tmp/mcpcli-2-10-resume-commit-message.txt --verbose` exited 0 with zero problems. The exact message and successful output are preserved in that file and `/tmp/mcpcli-2-10-resume-commitlint.log`.
+
+- Resumed from clean `main` at `8953c8bf4e9abcbb5896d87102c2d4f178d11a8a` on 2026-10-05. Completed the remaining cumulative-review patches: README now distinguishes read-only precedence from ordinary CLI input binding and includes identifier validation; invalid environment values are documented as failing whenever the setting is resolved. Added the three missing blank lines in the CLI acceptance tests and loopback harness, preserving CRLF. The dependency-policy blocker is already resolved by `4d39200b45858c621cf40ff7bd8ec1491ba19803` in this repository history; the full Manifest suite passed in this resumption.
+
+- Final validation on 2026-10-05: all six individual test-project Debug builds (`dotnet build tests/Hexalith.McpCli.<Suite>.Tests/Hexalith.McpCli.<Suite>.Tests.csproj --configuration Debug --no-restore --verbosity quiet`) succeeded with zero warnings/errors. The focused CLI read-only class passed 32/32. Complete suites passed CLI 424, Core 557 with two existing Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8: 1,034 passed, two skipped, zero failures/errors. Each suite was run directly with `dotnet tests/Hexalith.McpCli.<Suite>.Tests/bin/Debug/net10.0/Hexalith.McpCli.<Suite>.Tests.dll -result-xml /tmp/mcpcli-2-10-final-<Suite>.xml`; XML and test logs for every suite, five subsequent build logs, and `/tmp/mcpcli-2-10-final-validation.json` preserve the results. The CLI build's successful output is in this session. No remaining acceptance blocker or dependency change.
+- Exact commit-message validation with the pinned `@commitlint/cli@21.2.2`: `npx --no -- commitlint --edit /tmp/mcpcli-2-10-final-commit-message.txt --verbose` exited 0 with zero problems/warnings. The full candidate and successful output are preserved in that file and `/tmp/mcpcli-2-10-final-commitlint.log`. Whitespace and changed C# CRLF checks passed.
 
 ## Review Triage Log
 
@@ -86,11 +91,11 @@ Independent Blind Hunter reviewed the three changed files during this workflow r
 Code review 2026-10-05 of `3260812..2978717`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps and reran the focused class (32 passed).
 
 - [x] [Review][Decision] Dependency-policy blocker has no owner, so the story has no path to `done` — Resolved (option 1): `4d39200` aligns both pins to 3.113.0 in a separate `build(deps)` commit; the full Manifest suite passes 8/8. The only open blocker is the pre-existing Manifest failure (EventStore Client/Contracts restore 3.113.0 against policy 3.110.0). The ledger entry names no owner, and every later story inherits the failing gate. Choose: align `tools/dependency-policy.json` to 3.113.0 in a separate `build(deps)` commit (precedent `06514df`), or close 2.10 with a documented exception and give the reconciliation an owner in `sprint-status.yaml` `action_items`.
-- [ ] [Review][Patch] README understates read-only refusal precedence: lookup and kind errors win over missing-payload and extension errors only in read-only mode, and identifier options also go unvalidated [README.md:67]
-- [ ] [Review][Patch] README "During read-only settings resolution" is ambiguous; state that the value fails whenever the read-only setting is resolved [README.md:69]
+- [x] [Review][Patch] README understates read-only refusal precedence: lookup and kind errors win over missing-payload and extension errors only in read-only mode, and identifier options also go unvalidated [README.md:67]
+- [x] [Review][Patch] README "During read-only settings resolution" is ambiguous; state that the value fails whenever the read-only setting is resolved [README.md:69]
 - [x] [Review][Patch] Ledger evidence reports a stale 3.112.0 restore and omits the drift source, the Builds `HexalithEventStoreVersion` default of 3.113.0 [_bmad-output/implementation-artifacts/deferred-work.md:357] — superseded by the decision: the entry now carries `status: resolved by 4d39200` naming the 3.113.0 source
 - [x] [Review][Patch] Story 2.10 ledger entry sits under the Story 2.9 pass-2 heading; give it its own `implementation of` heading [_bmad-output/implementation-artifacts/deferred-work.md:353]
-- [ ] [Review][Patch] Statements directly follow closing braces, unlike the touched files' convention [tests/Hexalith.McpCli.Cli.Tests/QueryCliHarness.cs:58; ReadOnlyCommandTests.cs:90, :145]
+- [x] [Review][Patch] Statements directly follow closing braces, unlike the touched files' convention [tests/Hexalith.McpCli.Cli.Tests/QueryCliHarness.cs:58; ReadOnlyCommandTests.cs:90, :145]
 
 Rejected:
 
@@ -106,6 +111,13 @@ Rejected:
 - `false` — `QueryCliHarness` name and single-variable environment hook: no current caller is misled or blocked; the rename and dictionary hook serve only hypothetical tests.
 - `low` — Canned 202 response reuses one ULID for `messageId` and `correlationId`: Core executor tests and `CliMcpCommandParityTests` cover the field mapping, which this story does not change.
 - `false` — `ExplicitFalseOverridesEnvironmentAsync` is redundant: it covers the override reaching payload validation with zero requests, a failure path the successful send does not exercise.
+
+### Final Resumption Review Triage
+
+Independent Blind Hunter reviewed the current worktree changes; the configured oneshot workflow has no other review layers. Finding floor: `min(floor(sqrt(3.681) + 1), 10) = 2`. Both findings were checked against the implementation and patched; nothing was deferred.
+
+- **Low, patched:** README's new lookup/kind precedence wording could be read as applying to `query` in read-only mode. `CliRunner.CreateQuery` still acquires its payload before Core lookup. Scoped both precedence statements explicitly to `send`; queries retain their normal input path.
+- **Low, patched:** "Whenever the read-only setting is resolved" did not tell users which commands validate the environment value. `SettingsBootstrap.ResolvePresentation` calls the complete `SettingsResolver` even for profile-management verbs, while help/version and `CliRunner.RunMcpAsync` transport/output-option rejection can finish before settings resolution. Named discovery, execution, `config` (including profile management), and MCP stdio startup, plus these early exits, in README.
 
 ## Verification Blocker
 
