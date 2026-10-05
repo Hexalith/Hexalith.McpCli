@@ -166,7 +166,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Verb-action I/O failures are reported as configuration errors with raw exception text.
   evidence: Pre-existing: `CliRunner.RunAsync`'s outer catch maps any `IOException`/`UnauthorizedAccessException`/`InvalidDataException` thrown by a verb action (for example an output-file write) to `configuration_invalid` with the raw exception message, which can include absolute home paths; the baseline catch wrapped the action too. Address with Story 2.9 stable failure documents.
-  status: resolved in Story 2.9 (2026-10-04); setup and action catches are separate, action I/O returns a fixed `internal_error`, and `ExecutionFailureCommandTests` covers missing `@file`, profile action I/O, and failed result writes without leaking paths.
+  status: resolved in Story 2.9 (2026-10-05); host setup failures and action I/O return a fixed `internal_error`, only profile validation raised inside a `config` action stays `configuration_invalid`, and a missing or unreadable `@file` is `invalid_arguments`. `ExecutionFailureCommandTests` and `ConfigCommandTests.MalformedApplicationConfigurationUsesSafeInternalErrorAsync` cover payload files, profile action I/O, failed result writes, and malformed host configuration without leaking paths.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-add-and-select-a-private-profile.md`
   summary: Blank or empty names for `config profile remove` and `config set` fail as `invalid_arguments`, while `add` and `use` report them as `configuration_invalid`.
@@ -343,3 +343,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Writing CLI output to a FIFO with no reader can block before cancellation takes effect.
   evidence: `CliOutput.WriteResultFileAsync` opens an existing FIFO synchronously before checking `CanSeek`; the baseline `File.WriteAllTextAsync` likewise opened the FIFO before a reader arrived. A nonblocking FIFO open and error policy are needed to bound this pre-existing behavior.
+
+## Deferred from: code review of spec-2-9-explain-execution-failures-with-stable-documents.md (2026-10-05, pass 2)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
+  summary: Windows `--output NUL` or `CON` may fail, or may create a literal file, instead of writing to the device.
+  evidence: Unverified; would be medium if confirmed. `CliOutput.IsSpecialDevicePath` (`src/Hexalith.McpCli/Cli/CliOutput.cs:161`) is always false on Windows. `ResolveFinalSymlink` combines a relative device name with the working directory without calling `Path.GetFullPath`, so the result goes through `File.Exists` and the staged `File.Move`. The baseline `File.WriteAllTextAsync("NUL")` opened `\\.\NUL`. Settle it by running `hexalith config current --output NUL` on Windows 10 and Windows 11 and checking the exit code and whether a file named `NUL` is created; if it reproduces, detect reserved device names or character-device handles on Windows and write to them directly.

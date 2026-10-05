@@ -481,7 +481,7 @@ internal sealed class CliRunner
         }
         catch (Exception)
         {
-            return await WriteMcpErrorAsync(new OperationError("internal_error", Message: "MCP startup failed."),
+            return await WriteMcpErrorAsync(new OperationError("internal_error", Message: "MCP server failed."),
                 cancellationToken).ConfigureAwait(false);
         }
     }
@@ -514,6 +514,8 @@ internal sealed class CliRunner
         bool presentationOnly,
         CancellationToken cancellationToken)
     {
+        // Host configuration errors can name files; only profile validation inside the action is echoed.
+        bool actionStarted = false;
         try
         {
             IHost? created = HostFactory.Create(_globals.Read(parsed), _profileStore, out OperationError? error,
@@ -525,9 +527,10 @@ internal sealed class CliRunner
 
             using IHost host = created ?? throw new InvalidOperationException("Settings resolution produced no host or error.");
             ResolvedSettings settings = host.Services.GetRequiredService<ResolvedSettings>();
+            actionStarted = true;
             return await action(host.Services, settings, cancellationToken).ConfigureAwait(false);
         }
-        catch (InvalidDataException exception) when (presentationOnly)
+        catch (InvalidDataException exception) when (presentationOnly && actionStarted)
         {
             return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
                 cancellationToken).ConfigureAwait(false);

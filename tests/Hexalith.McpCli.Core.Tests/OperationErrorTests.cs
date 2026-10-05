@@ -54,6 +54,7 @@ public sealed class OperationErrorTests
     [InlineData("01J9MZHXT3RKM0VWXRXGSJDAT~")]
     [InlineData("01J9MZHXT3RKM0VWXRXGSJDATU")]
     [InlineData("81J9MZHXT3RKM0VWXRXGSJDATK")]
+    [InlineData("OIJ9MZHXT3RKM0VWXRXGSJDATK")]
     public void OmitsNonCanonicalGatewayCorrelationId(string supplied)
     {
         var exception = new EventStoreGatewayException(409, "Conflict", correlationId: supplied);

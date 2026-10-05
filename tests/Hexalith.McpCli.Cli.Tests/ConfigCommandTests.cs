@@ -752,7 +752,7 @@ public sealed class ConfigCommandTests
             using JsonDocument document = JsonDocument.Parse(error);
             JsonElement actual = document.RootElement.GetProperty("error");
             actual.GetProperty("code").GetString().ShouldBe("internal_error");
-            actual.GetProperty("message").GetString().ShouldBe("MCP startup failed.");
+            actual.GetProperty("message").GetString().ShouldBe("MCP server failed.");
             error.ShouldNotContain("token-secret");
             error.ShouldNotContain("/private/mcp-host.log");
         }
@@ -766,7 +766,10 @@ public sealed class ConfigCommandTests
     [Theory]
     [InlineData("modules")]
     [InlineData("mcp")]
-    public async Task MalformedApplicationConfigurationUsesSafeInternalErrorAsync(string verb)
+    [InlineData("config profile list")]
+    [InlineData("config use dev")]
+    [InlineData("config set dev tenant t")]
+    public async Task MalformedApplicationConfigurationUsesSafeInternalErrorAsync(string command)
     {
         string directory = TemporaryDirectory();
         string originalDirectory = Directory.GetCurrentDirectory();
@@ -776,14 +779,14 @@ public sealed class ConfigCommandTests
                 TestContext.Current.CancellationToken);
             Directory.SetCurrentDirectory(directory);
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            (int exit, string output, string error) = await InvokeAsync(store, verb);
+            (int exit, string output, string error) = await InvokeAsync(store, command.Split(' '));
 
             exit.ShouldBe(2);
-            if (verb == "mcp")
+            if (command == "mcp")
             {
                 output.ShouldBeEmpty();
                 error.ShouldContain("\"internal_error\"");
-                error.ShouldContain("MCP startup failed.");
+                error.ShouldContain("MCP server failed.");
                 error.ShouldNotContain(directory);
             }
             else
@@ -817,7 +820,7 @@ public sealed class ConfigCommandTests
             exit.ShouldBe(2);
             output.ShouldBeEmpty();
             error.ShouldContain("\"internal_error\"");
-            error.ShouldContain("MCP startup failed.");
+            error.ShouldContain("MCP server failed.");
             error.ShouldNotContain("secret");
             error.ShouldNotContain("/private/");
         }

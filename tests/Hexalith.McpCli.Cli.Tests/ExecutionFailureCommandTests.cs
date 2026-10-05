@@ -65,7 +65,7 @@ public sealed class ExecutionFailureCommandTests
         calls.ShouldBe(1);
     }
 
-    /// <summary>A missing @file is an action failure with a safe message, stdout error, and unchanged result file.</summary>
+    /// <summary>A missing, empty, or unreadable @file is an invalid argument with a safe message and unchanged result file.</summary>
     [Fact]
     public async Task MissingPayloadFileHidesPathAndKeepsResultAsync()
     {
@@ -86,6 +86,14 @@ public sealed class ExecutionFailureCommandTests
                 TestContext.Current.CancellationToken);
             emptyExit.ShouldBe(2, emptyOutput);
             AssertJson(emptyOutput, """{"error":{"code":"invalid_arguments","message":"Unable to read the payload file.","argument":"payload"}}""");
+            string unreadable = Directory.CreateDirectory(Path.Combine(directory, "secret-payload-directory")).FullName;
+            (int unreadableExit, string unreadableOutput, string unreadableStderr) = await InvokeCliAsync(
+                ["query", "string-fixture.list-items", "--payload", "@" + unreadable, "--output", result], directory,
+                TestContext.Current.CancellationToken);
+            unreadableExit.ShouldBe(2, unreadableOutput);
+            AssertJson(unreadableOutput, """{"error":{"code":"invalid_arguments","message":"Unable to read the payload file.","argument":"payload"}}""");
+            unreadableOutput.ShouldNotContain(unreadable);
+            unreadableStderr.ShouldNotContain(unreadable);
             (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("old result");
         }
         finally
@@ -780,6 +788,51 @@ public sealed class ExecutionFailureCommandTests
         int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings("/dev/null"),
             TestContext.Current.CancellationToken);
         exit.ShouldBe(0);
+    }
+
+    /// <summary>A proc fd naming a character device, as /dev/stdout does under a null redirect, is written directly.</summary>
+    [Fact]
+    public async Task ProcFdDeviceResultTargetWritesDirectlyAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This filesystem behavior requires Linux.");
+            return;
+        }
+
+        using FileStream device = new("/dev/null", FileMode.Open, FileAccess.Write);
+        string path = "/proc/self/fd/" + device.SafeFileHandle.DangerousGetHandle().ToInt64();
+
+        int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path),
+            TestContext.Current.CancellationToken);
+        exit.ShouldBe(0);
+    }
+
+    /// <summary>A regular tmpfs file under /dev/shm is truncated like any other existing result.</summary>
+    [Fact]
+    public async Task ExistingDevShmResultIsTruncatedAsync()
+    {
+        if (!OperatingSystem.IsLinux() || !Directory.Exists("/dev/shm"))
+        {
+            Assert.Skip("This filesystem behavior requires Linux /dev/shm.");
+            return;
+        }
+
+        string path = Path.Combine("/dev/shm", "mcpcli-result-" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            await File.WriteAllTextAsync(path, new string('x', 4096), TestContext.Current.CancellationToken);
+
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path),
+                TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(0);
+            AssertJson(await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken), """{"updated":true}""");
+        }
+        finally
+        {
+            File.Delete(path);
+        }
     }
 
     /// <summary>ACL setup errors other than unsupported-filesystem errors fail the test.</summary>

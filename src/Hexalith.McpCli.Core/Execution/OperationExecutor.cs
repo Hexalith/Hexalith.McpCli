@@ -338,7 +338,7 @@ public sealed class OperationExecutor(
         return document.RootElement.Clone();
     }
 
-    private static bool IsCanonicalUlid(string value)
+    internal static bool IsCanonicalUlid(string value)
         => Ulid.TryParse(value, provider: null, out Ulid parsed)
             && string.Equals(value, parsed.ToString(), StringComparison.Ordinal);
 

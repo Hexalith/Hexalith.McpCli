@@ -214,10 +214,11 @@ internal static class CliOutput
             }
 
             // Proc fd links may name a pipe, socket, or unlinked file. Keep the fd path so
-            // the open handle remains the destination even when its old name is gone.
+            // the open handle remains the destination even when its old name is gone. A
+            // device such as /dev/null keeps its own path so it is written directly.
             if (remaining.Count == 0 && IsProcFdPath(candidate))
             {
-                return candidate;
+                return Path.IsPathRooted(target) && IsSpecialDevicePath(target) ? target : candidate;
             }
 
             bool directoryRequired = Path.EndsInDirectorySeparator(target);
