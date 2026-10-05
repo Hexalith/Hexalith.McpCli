@@ -350,6 +350,9 @@
   summary: Windows `--output NUL` or `CON` may fail, or may create a literal file, instead of writing to the device.
   evidence: Unverified; would be medium if confirmed. `CliOutput.IsSpecialDevicePath` (`src/Hexalith.McpCli/Cli/CliOutput.cs:161`) is always false on Windows. `ResolveFinalSymlink` combines a relative device name with the working directory without calling `Path.GetFullPath`, so the result goes through `File.Exists` and the staged `File.Move`. The baseline `File.WriteAllTextAsync("NUL")` opened `\\.\NUL`. Settle it by running `hexalith config current --output NUL` on Windows 10 and Windows 11 and checking the exit code and whether a file named `NUL` is created; if it reproduces, detect reserved device names or character-device handles on Windows and write to them directly.
 
+## Deferred from: implementation of spec-2-10-refuse-writes-in-read-only-mode.md (2026-10-05)
+
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
   summary: Reconcile the pre-existing EventStore package versions with the exact dependency policy so the Manifest acceptance gate passes.
   evidence: Story 2.10 full Manifest run exited 1 in ProductionContractsStayWithinPinnedDependencyClosure: Client and Contracts restore as 3.112.0 while tools/dependency-policy.json pins 3.110.0; current Builds declares 3.113.0. These inputs are unchanged by story 2.10. Seven other Manifest tests and all five other test suites pass. Exact command and logs are recorded in the story spec; dependency changes are outside this story.
+  status: resolved by `4d39200` (2026-10-05); a fresh restore selects 3.113.0 from the Builds `HexalithEventStoreVersion` default, the policy now pins that exact version, and the full Manifest suite passes 8/8. When bumping `references/`, run the Manifest suite and align the policy in the same commit.
