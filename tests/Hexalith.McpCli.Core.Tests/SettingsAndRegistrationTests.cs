@@ -312,6 +312,12 @@ public sealed class SettingsAndRegistrationTests
 
         error.Code.ShouldBe("configuration_invalid");
         error.Message.ShouldBe("Unable to read the mcpcli profile file.");
+        var denied = new SettingsResolver(
+            () => throw new UnauthorizedAccessException("secret-token /private/profile.json"),
+            new Dictionary<string, string?>());
+        OperationError deniedError = denied.Resolve(new SettingsInput()).Error.ShouldNotBeNull();
+        deniedError.Code.ShouldBe("configuration_invalid");
+        deniedError.Message.ShouldBe("Unable to read the mcpcli profile file.");
         var invalid = new SettingsResolver(
             () => throw new InvalidDataException("The mcpcli profile document has an unsupported version."),
             new Dictionary<string, string?>());

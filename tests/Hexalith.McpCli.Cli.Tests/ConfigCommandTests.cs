@@ -762,6 +762,71 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Host configuration errors never echo the configuration file path in either head.</summary>
+    [Theory]
+    [InlineData("modules")]
+    [InlineData("mcp")]
+    public async Task MalformedApplicationConfigurationUsesSafeInternalErrorAsync(string verb)
+    {
+        string directory = TemporaryDirectory();
+        string originalDirectory = Directory.GetCurrentDirectory();
+        try
+        {
+            await File.WriteAllTextAsync(Path.Combine(directory, "appsettings.json"), "{",
+                TestContext.Current.CancellationToken);
+            Directory.SetCurrentDirectory(directory);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (int exit, string output, string error) = await InvokeAsync(store, verb);
+
+            exit.ShouldBe(2);
+            if (verb == "mcp")
+            {
+                output.ShouldBeEmpty();
+                error.ShouldContain("\"internal_error\"");
+                error.ShouldContain("MCP startup failed.");
+                error.ShouldNotContain(directory);
+            }
+            else
+            {
+                error.ShouldBeEmpty();
+                output.ShouldContain("\"internal_error\"");
+                output.ShouldContain("The CLI action failed.");
+                output.ShouldNotContain(directory);
+            }
+        }
+        finally
+        {
+            Directory.SetCurrentDirectory(originalDirectory);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A missing Contracts assembly is a generic MCP setup failure.</summary>
+    [Fact]
+    public async Task MissingMcpContractsAssemblyUsesSafeInternalErrorAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            Func<IReadOnlyList<Assembly>> missing = () => throw new FileNotFoundException(
+                "secret token in missing Contracts path", "/private/secret-contracts.dll");
+            (int exit, string output, string error) = await InvokeAsync(
+                store, new Dictionary<string, string?>(), missing, "mcp");
+
+            exit.ShouldBe(2);
+            output.ShouldBeEmpty();
+            error.ShouldContain("\"internal_error\"");
+            error.ShouldContain("MCP startup failed.");
+            error.ShouldNotContain("secret");
+            error.ShouldNotContain("/private/");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Explicit MCP format and output errors are deterministic before settings resolution.</summary>
     [Fact]
     public async Task McpValidatesExplicitOptionsBeforeSettingsResolutionAsync()

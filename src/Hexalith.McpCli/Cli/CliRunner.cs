@@ -169,7 +169,13 @@ internal sealed class CliRunner
                         .ConfigureAwait(false);
                 }
 
-                string? content = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
+                (string? content, bool fileReadFailed) = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
+                if (fileReadFailed)
+                {
+                    return await CliOutput.WriteErrorAsync(Invalid("payload", "Unable to read the payload file."), token)
+                        .ConfigureAwait(false);
+                }
+
                 if (content is null)
                 {
                     return await CliOutput.WriteErrorAsync(Invalid("payload", "payload JSON, @file, or stdin is required"), token)
@@ -224,7 +230,13 @@ internal sealed class CliRunner
                         .ConfigureAwait(false);
                 }
 
-                string? content = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
+                (string? content, bool fileReadFailed) = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
+                if (fileReadFailed)
+                {
+                    return await CliOutput.WriteErrorAsync(Invalid("payload", "Unable to read the payload file."), token)
+                        .ConfigureAwait(false);
+                }
+
                 if (content is null)
                 {
                     return await CliOutput.WriteErrorAsync(Invalid("payload", "payload JSON, @file, or stdin is required"), token)
@@ -431,7 +443,6 @@ internal sealed class CliRunner
                 Message: "Only stdio transport is available."), cancellationToken).ConfigureAwait(false);
         }
 
-        bool hostStarted = false;
         try
         {
             SettingsInput input = _globals.Read(parsed);
@@ -464,20 +475,9 @@ internal sealed class CliRunner
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
             }
 
-            hostStarted = true;
             return _runMcp is null
                 ? await RunMcpHostAsync(invocationHost, cancellationToken).ConfigureAwait(false)
                 : await _runMcp(invocationHost, cancellationToken).ConfigureAwait(false);
-        }
-        catch (Exception exception) when (!hostStarted && exception is IOException or UnauthorizedAccessException)
-        {
-            return await WriteMcpErrorAsync(new OperationError("configuration_invalid", Message: "Unable to read the mcpcli profile file."),
-                cancellationToken).ConfigureAwait(false);
-        }
-        catch (InvalidDataException exception) when (!hostStarted)
-        {
-            return await WriteMcpErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
-                cancellationToken).ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -514,7 +514,6 @@ internal sealed class CliRunner
         bool presentationOnly,
         CancellationToken cancellationToken)
     {
-        bool actionStarted = false;
         try
         {
             IHost? created = HostFactory.Create(_globals.Read(parsed), _profileStore, out OperationError? error,
@@ -526,18 +525,7 @@ internal sealed class CliRunner
 
             using IHost host = created ?? throw new InvalidOperationException("Settings resolution produced no host or error.");
             ResolvedSettings settings = host.Services.GetRequiredService<ResolvedSettings>();
-            actionStarted = true;
             return await action(host.Services, settings, cancellationToken).ConfigureAwait(false);
-        }
-        catch (Exception exception) when (!actionStarted && exception is IOException or UnauthorizedAccessException)
-        {
-            return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: "Unable to read the mcpcli profile file."),
-                cancellationToken).ConfigureAwait(false);
-        }
-        catch (InvalidDataException exception) when (!actionStarted)
-        {
-            return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
-                cancellationToken).ConfigureAwait(false);
         }
         catch (InvalidDataException exception) when (presentationOnly)
         {
@@ -551,19 +539,31 @@ internal sealed class CliRunner
         }
     }
 
-    private static async Task<string?> ReadPayloadAsync(string? input, CancellationToken cancellationToken)
+    private static async Task<(string? Content, bool FileReadFailed)> ReadPayloadAsync(string? input, CancellationToken cancellationToken)
     {
         if (input is null)
         {
-            return null;
+            return (null, false);
         }
 
         if (input == "-")
         {
-            return await Console.In.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+            return (await Console.In.ReadToEndAsync(cancellationToken).ConfigureAwait(false), false);
         }
 
-        return input.StartsWith('@') ? await File.ReadAllTextAsync(input[1..], cancellationToken).ConfigureAwait(false) : input;
+        if (!input.StartsWith('@'))
+        {
+            return (input, false);
+        }
+
+        try
+        {
+            return (await File.ReadAllTextAsync(input[1..], cancellationToken).ConfigureAwait(false), false);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        {
+            return (null, true);
+        }
     }
 
     private static OperationError Invalid(string argument, string message)

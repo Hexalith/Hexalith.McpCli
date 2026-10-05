@@ -50,10 +50,10 @@
   evidence: `OperationExecutor.ExecuteAsync` catches `OperationCanceledException` in its blanket catch; this belongs to concurrent executor work.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway response identifiers can enter a successful command result.
-  evidence: `OperationExecutor` copies response IDs without the ULID validation required by PRD addendum §G; this belongs to concurrent executor work.
+  evidence: `OperationExecutor` copies response IDs without the ULID validation required by PRD addendum §G. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway paging metadata can enter a successful query result.
-  evidence: `OperationExecutor` copies paging values without checking a nonempty cursor or numeric constraints; this belongs to concurrent executor work.
+  evidence: `OperationExecutor` copies paging values without checking a nonempty cursor or numeric constraints. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Concurrent CLI and settings paths lack focused behavior tests.
   evidence: No current test covers settings precedence, bare boolean switches, boolean environment values, or the format behavior described in PRD FR-12.
@@ -207,8 +207,8 @@
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, sixth pass (2026-09-29)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
-  summary: `config profile add`, `config set`, and `config profile remove` with an unwritable `--output` path report `configuration_invalid` (exit 2) even though `mcpcli.json` was already changed.
-  evidence: `CliRunner` commits through `ProfileStore` before `CliOutput.WriteAsync` writes the success document to `settings.Output`; a missing output directory raises `DirectoryNotFoundException`, which `RunManagementAsync` maps to `configuration_invalid`. Pre-existing at baseline `6fe785e`; a retried `remove` then fails as "does not exist". Found in the sixth-pass review of Story 2.3; Story 2.11 (predictable output and exit codes) is the natural owner.
+  summary: `config profile add`, `config set`, and `config profile remove` with an unwritable `--output` path report `internal_error` (exit 2) even though `mcpcli.json` was already changed.
+  evidence: `CliRunner` commits through `ProfileStore` before `CliOutput.WriteAsync` writes the success document to `settings.Output`; a missing output directory raises `DirectoryNotFoundException`, which `RunManagementAsync` now maps to `internal_error`; the profile change still precedes the failed output. Pre-existing at baseline `6fe785e`; a retried `remove` then fails as "does not exist". Found in the sixth-pass review of Story 2.3; Story 2.11 (predictable output and exit codes) is the natural owner.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, ninth pass (2026-09-30)
 
@@ -278,8 +278,8 @@
   summary: Decide how to handle a successful Gateway response with an empty or whitespace command message ID.
   evidence: `SubmitCommandResponse.MessageId` is nullable and the EventStore client validates only `CorrelationId` in a successful response. The pre-existing `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:229` expression uses `response.MessageId ?? messageId`, so an empty or whitespace value reaches the accepted document and cannot be used to track the command. Decide whether to fall back to the submitted ID or reject the malformed response before changing the mapping.
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-7-submit-a-command-once.md`
-  summary: An uncertain command failure (Gateway timeout or unreachable) returns no identifier the caller can use to check the outcome. Story 2.9 owns the fix, so the failure document format is designed once, including the idempotency case.
-  evidence: `EventStoreGatewayClient.CreateTransportException` sets no correlation, `OperationError.FromGateway` copies only `exception.CorrelationId` (`src/Hexalith.McpCli.Core/Execution/OperationError.cs:52`), and the executor's catch (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:34`) drops the message and correlation IDs it generated at `:147-148`. The Gateway status endpoint is keyed by message ID (`CommandStatusController.cs:58`), and callers never supply one, so after the README's "may have reached the Gateway" warning nothing can be polled, even with `--correlation-id`. Constraints for Story 2.9: its AC currently allows a correlation identifier only when the client exception supplies one, and under a caller idempotency key the Gateway tracks status by its own execution message ID (`CommandsController.cs:193`), which can differ from the submitted one.
+  summary: An uncertain command failure (Gateway timeout or unreachable) returns no identifier the caller can use to check the outcome.
+  evidence: `EventStoreGatewayClient.CreateTransportException` sets no correlation, `OperationError.FromGateway` copies only `exception.CorrelationId` (`src/Hexalith.McpCli.Core/Execution/OperationError.cs:52`), and the executor's catch (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:34`) drops the message and correlation IDs it generated at `:147-148`. The Gateway status endpoint is keyed by message ID (`CommandStatusController.cs:58`), and callers never supply one, so after the README's "may have reached the Gateway" warning nothing can be polled, even with `--correlation-id`. Story 2.9 froze the decision to add no generated tracking fields to errors and documents the retry warning in README; this remains deferred. Under a caller idempotency key the Gateway tracks status by its own execution message ID (`CommandsController.cs:193`), which can differ from the submitted one.
 
 ## Deferred from: build review resumption of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 
@@ -332,6 +332,14 @@
   summary: Conformance vectors cannot express a successful command call with extensions, because the loopback runner never supplies an extension allowlist.
   evidence: `tools/conformance-vectors/v1/schema.json:64` accepts `envelope.extensions`, and `tools/conformance-vectors/v1/run_loopback.py:345-347` forwards them to both heads. But `run_loopback.py:222` points each head at an empty `MCPCLI_CONFORMANCE_PROFILE_PATH` profile and never writes one, the vector schema has no allowlist input, and the allowlist comes only from the selected Profile (`src/Hexalith.McpCli.Core/Settings/SettingsResolver.cs:103`). Every vector that supplies extensions is therefore refused by both heads with `validation_failed` at `/extensions/<key>` ("The extension key is not allowlisted.", `src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:39`), although `tools/conformance-vectors/v1/README.md:15` says supplied extensions must match the expected request exactly. No sample vector uses extensions. Pre-existing: the runner and schema predate baseline `1554a84`, and allowlist enforcement predates Story 2.8. Add an allowlist input that the runner writes into the temporary Profile, plus a sample vector that sends a mixed-case approved key through both heads, before Epic 4 modules write extension vectors.
 
+## Deferred from: review of spec-2-9-explain-execution-failures-with-stable-documents.md (2026-10-05)
+
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
-  summary: Validate successful Gateway command identifiers and query paging metadata before emitting §G result documents.
-  evidence: Review loop 3 found that `OperationExecutor` can echo a malformed returned `messageId` or invalid `PageSize`, `Offset`, `TotalCount`, or `NextCursor`; the Story 2.9 frozen decision defers successful-response hardening beyond malformed and semantically failed client responses.
+  summary: MCP protocol coverage does not exercise a Gateway failure, including a 2xx client exception status.
+  evidence: `McpProtocolTests` covers unknown operation errors but no Gateway rejection; review loop 1 deferred this pre-existing protocol test gap to MCP execution work.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
+  summary: Unknown CLI verbs use parser help and exit 1 instead of a stable error document.
+  evidence: System.CommandLine rejects unknown verbs before a verb action; review loop 1 deferred this pre-existing parser behavior to Story 2.11.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
+  summary: Writing CLI output to a FIFO with no reader can block before cancellation takes effect.
+  evidence: `CliOutput.WriteResultFileAsync` opens an existing FIFO synchronously before checking `CanSeek`; the baseline `File.WriteAllTextAsync` likewise opened the FIFO before a reader arrived. A nonblocking FIFO open and error policy are needed to bound this pre-existing behavior.

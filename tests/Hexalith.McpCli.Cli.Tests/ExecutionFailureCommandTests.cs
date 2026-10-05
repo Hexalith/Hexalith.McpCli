@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -74,12 +75,68 @@ public sealed class ExecutionFailureCommandTests
             string result = Path.Combine(directory, "result.json");
             await File.WriteAllTextAsync(result, "old result", TestContext.Current.CancellationToken);
             string missing = Path.Combine(directory, "secret-token-file.json");
-            (int exit, string output, _) = await InvokeCliAsync(
-                ["query", "string-fixture.list-items", "--payload", "@" + missing, "--output", result], directory);
+            (int exit, string output, string stderr) = await InvokeCliAsync(
+                ["query", "string-fixture.list-items", "--payload", "@" + missing, "--output", result], directory, TestContext.Current.CancellationToken);
+            exit.ShouldBe(2, output);
+            AssertJson(output, """{"error":{"code":"invalid_arguments","message":"Unable to read the payload file.","argument":"payload"}}""");
+            output.ShouldNotContain(missing);
+            stderr.ShouldNotContain(missing);
+            (int emptyExit, string emptyOutput, _) = await InvokeCliAsync(
+                ["query", "string-fixture.list-items", "--payload", "@", "--output", result], directory,
+                TestContext.Current.CancellationToken);
+            emptyExit.ShouldBe(2, emptyOutput);
+            AssertJson(emptyOutput, """{"error":{"code":"invalid_arguments","message":"Unable to read the payload file.","argument":"payload"}}""");
+            (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("old result");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A missing command payload file is an invalid argument and leaves the requested result untouched.</summary>
+    [Fact]
+    public async Task MissingCommandPayloadFileLeavesResultUnchangedAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            string result = Path.Combine(directory, "result.json");
+            string missing = Path.Combine(directory, "secret-command-payload.json");
+            await File.WriteAllTextAsync(result, "old result", TestContext.Current.CancellationToken);
+
+            (int exit, string output, string stderr) = await InvokeCliAsync(
+                ["send", "sample.create-item", "--payload", "@" + missing, "--output", result,
+                    "--url", "http://127.0.0.1:1/"], directory, TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(2, output);
+            AssertJson(output, """{"error":{"code":"invalid_arguments","message":"Unable to read the payload file.","argument":"payload"}}""");
+            output.ShouldNotContain(missing);
+            stderr.ShouldNotContain(missing);
+            (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("old result");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>An accepted command can fail while writing output; it must not be submitted again.</summary>
+    [Fact]
+    public async Task AcceptedCommandOutputFailureReportsErrorAfterOneRequestAsync()
+    {
+        string directory = NewDirectory();
+        string outputDirectory = Path.Combine(directory, "result-directory");
+        Directory.CreateDirectory(outputDirectory);
+        try
+        {
+            (int exit, string output, int calls) = await InvokeGatewayAsync(
+                true, 202, "", outputDirectory, acceptedCommand: true);
+
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
-            output.ShouldNotContain(missing);
-            (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("old result");
+            calls.ShouldBe(1);
+            Directory.Exists(outputDirectory).ShouldBeTrue();
         }
         finally
         {
@@ -98,7 +155,7 @@ public sealed class ExecutionFailureCommandTests
             await File.WriteAllTextAsync(result, "old result", TestContext.Current.CancellationToken);
             (int exit, string output, _) = await InvokeCliAsync(
                 ["query", "string-fixture.list-items", "--payload", "{", "--format", "table", "--output", result,
-                    "--url", "http://127.0.0.1:1/"], directory);
+                    "--url", "http://127.0.0.1:1/"], directory, TestContext.Current.CancellationToken);
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"validation_failed","operation":"string-fixture.list-items","violations":[{"path":"/","message":"The payload must be valid JSON without duplicate properties."}]}}""");
             (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("old result");
@@ -118,10 +175,11 @@ public sealed class ExecutionFailureCommandTests
         Directory.CreateDirectory(targetDirectory);
         try
         {
-            (int exit, string output, _) = await InvokeCliAsync(
-                ["modules", "--format", "table", "--output", targetDirectory], directory);
+            (int exit, string output, string stderr) = await InvokeCliAsync(
+                ["modules", "--format", "table", "--output", targetDirectory], directory, TestContext.Current.CancellationToken);
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
+            stderr.ShouldNotContain(targetDirectory);
             Directory.Exists(targetDirectory).ShouldBeTrue();
             Directory.GetFiles(directory, ".mcpcli-*").ShouldBeEmpty();
         }
@@ -137,6 +195,7 @@ public sealed class ExecutionFailureCommandTests
     {
         if (OperatingSystem.IsWindows())
         {
+            Assert.Skip("This filesystem behavior requires Unix.");
             return;
         }
 
@@ -146,10 +205,11 @@ public sealed class ExecutionFailureCommandTests
         {
             await File.WriteAllTextAsync(profile, "secret-token-path", TestContext.Current.CancellationToken);
             File.SetUnixFileMode(profile, UnixFileMode.None);
-            (int exit, string output, _) = await InvokeCliAsync(["config", "profile", "list"], directory);
+            (int exit, string output, string stderr) = await InvokeCliAsync(["config", "profile", "list"], directory, TestContext.Current.CancellationToken);
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
             output.ShouldNotContain(profile);
+            stderr.ShouldNotContain(profile);
         }
         finally
         {
@@ -220,11 +280,11 @@ public sealed class ExecutionFailureCommandTests
         string link = Path.Combine(directory, "result.json");
         try
         {
-            await File.WriteAllTextAsync(target, "old result", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(target, new string('x', 4096), TestContext.Current.CancellationToken);
             if (!OperatingSystem.IsWindows())
             {
                 File.SetUnixFileMode(target, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-                File.CreateSymbolicLink(link, target);
+                File.CreateSymbolicLink(link, "target.json");
             }
             else
             {
@@ -235,7 +295,11 @@ public sealed class ExecutionFailureCommandTests
             UnixFileMode? beforeMode = OperatingSystem.IsWindows() ? null : File.GetUnixFileMode(target);
             byte[] before = await File.ReadAllBytesAsync(target, TestContext.Current.CancellationToken);
             string[] tempBefore = Directory.GetFiles(Path.GetTempPath(), ".mcpcli-*");
-            Func<CancellationToken, Task> fault = _ => throw new IOException("secret after truncation");
+            Func<FileStream, CancellationToken, Task> fault = async (stream, token) =>
+            {
+                await stream.WriteAsync(new byte[8192], token);
+                throw new IOException("secret after partial write");
+            };
 
             await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { updated = true }, null,
                 Settings(link), TestContext.Current.CancellationToken, afterDestinationTruncated: fault));
@@ -269,11 +333,11 @@ public sealed class ExecutionFailureCommandTests
         string link = Path.Combine(directory, "result.json");
         try
         {
-            await File.WriteAllTextAsync(target, "old result", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(target, new string('x', 4096), TestContext.Current.CancellationToken);
             if (!OperatingSystem.IsWindows())
             {
                 File.SetUnixFileMode(target, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-                File.CreateSymbolicLink(link, target);
+                File.CreateSymbolicLink(link, "target.json");
             }
             else
             {
@@ -308,6 +372,7 @@ public sealed class ExecutionFailureCommandTests
     {
         if (OperatingSystem.IsWindows())
         {
+            Assert.Skip("This filesystem behavior requires Unix.");
             return;
         }
 
@@ -316,7 +381,7 @@ public sealed class ExecutionFailureCommandTests
         string link = Path.Combine(directory, "result.json");
         try
         {
-            File.CreateSymbolicLink(link, target);
+            File.CreateSymbolicLink(link, "new-target.json");
             File.Exists(target).ShouldBeFalse();
 
             int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(link), TestContext.Current.CancellationToken);
@@ -325,6 +390,266 @@ public sealed class ExecutionFailureCommandTests
             AssertJson(await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken), """{"updated":true}""");
             File.ResolveLinkTarget(link, returnFinalTarget: false).ShouldNotBeNull().FullName.ShouldBe(target);
             File.GetUnixFileMode(target).ShouldBe(UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Relative links resolve from physical parent directories before the destination is selected.</summary>
+    [Fact]
+    public async Task NestedRelativeLinksUpdatePhysicalTargetAsync()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("This filesystem behavior requires Unix.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        try
+        {
+            string a = Path.Combine(directory, "a");
+            string x = Path.Combine(directory, "x");
+            string y = Path.Combine(x, "y");
+            Directory.CreateDirectory(a);
+            Directory.CreateDirectory(y);
+            string correct = Path.Combine(x, "t.json");
+            string wrong = Path.Combine(a, "t.json");
+            await File.WriteAllTextAsync(correct, "old target", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(wrong, "unrelated", TestContext.Current.CancellationToken);
+            Directory.CreateSymbolicLink(Path.Combine(a, "linkdir"), "../x/y");
+            File.CreateSymbolicLink(Path.Combine(y, "result.json"), "../t.json");
+
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null,
+                Settings(Path.Combine(a, "linkdir", "result.json")), TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(0);
+            AssertJson(await File.ReadAllTextAsync(correct, TestContext.Current.CancellationToken), """{"updated":true}""");
+            (await File.ReadAllTextAsync(wrong, TestContext.Current.CancellationToken)).ShouldBe("unrelated");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A parent traversal after a directory link follows the physical link target.</summary>
+    [Fact]
+    public async Task ParentTraversalAfterDirectoryLinkUpdatesPhysicalTargetAsync()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("This filesystem behavior requires Unix.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        try
+        {
+            string a = Path.Combine(directory, "a");
+            string x = Path.Combine(directory, "x");
+            Directory.CreateDirectory(a);
+            Directory.CreateDirectory(Path.Combine(x, "y"));
+            string correct = Path.Combine(x, "result.json");
+            string wrong = Path.Combine(a, "result.json");
+            await File.WriteAllTextAsync(correct, "old target", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(wrong, "unrelated", TestContext.Current.CancellationToken);
+            Directory.CreateSymbolicLink(Path.Combine(a, "linkdir"), "../x/y");
+
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null,
+                Settings(Path.Combine(a, "linkdir", "..", "result.json")), TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(0);
+            AssertJson(await File.ReadAllTextAsync(correct, TestContext.Current.CancellationToken), """{"updated":true}""");
+            (await File.ReadAllTextAsync(wrong, TestContext.Current.CancellationToken)).ShouldBe("unrelated");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A file or absent parent cannot be bypassed with a subsequent parent traversal.</summary>
+    [Theory]
+    [InlineData("file")]
+    [InlineData("missing")]
+    public async Task ParentTraversalCannotBypassInvalidIntermediateAsync(string intermediate)
+    {
+        string directory = NewDirectory();
+        string result = Path.Combine(directory, "result.json");
+        try
+        {
+            await File.WriteAllTextAsync(result, "unrelated", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(Path.Combine(directory, "file"), "plain file", TestContext.Current.CancellationToken);
+            await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { updated = true }, null,
+                Settings(Path.Combine(directory, intermediate, "..", "result.json")),
+                TestContext.Current.CancellationToken));
+            (await File.ReadAllTextAsync(result, TestContext.Current.CancellationToken)).ShouldBe("unrelated");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Restrictive umask cannot make staged or backup files unreadable during rollback.</summary>
+    [Fact]
+    public async Task RestrictiveUmaskPreservesNewAndExistingOutputAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This filesystem behavior requires Linux.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        string existing = Path.Combine(directory, "existing.json");
+        string created = Path.Combine(directory, "created.json");
+        try
+        {
+            await File.WriteAllTextAsync(existing, "old result", TestContext.Current.CancellationToken);
+            uint previous = Umask(0x1FF);
+            try
+            {
+                (await CliOutput.WriteAsync(new { updated = true }, null, Settings(created),
+                    TestContext.Current.CancellationToken)).ShouldBe(0);
+                File.GetUnixFileMode(created).ShouldBe(UnixFileMode.UserRead | UnixFileMode.UserWrite);
+                AssertJson(await File.ReadAllTextAsync(created, TestContext.Current.CancellationToken), """{"updated":true}""");
+
+                Func<FileStream, CancellationToken, Task> fault = (_, _) => throw new IOException("injected write failure");
+                await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { updated = true }, null,
+                    Settings(existing), TestContext.Current.CancellationToken, afterDestinationTruncated: fault));
+                (await File.ReadAllTextAsync(existing, TestContext.Current.CancellationToken)).ShouldBe("old result");
+            }
+            finally
+            {
+                _ = Umask(previous);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>An unlinked regular file remains writable through its proc fd without a ghost pathname.</summary>
+    [Fact]
+    public async Task UnlinkedProcFdRegularFileUpdatesOpenHandleAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This filesystem behavior requires Linux.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        string original = Path.Combine(directory, "result.json");
+        try
+        {
+            await File.WriteAllTextAsync(original, "old result", TestContext.Current.CancellationToken);
+            await using FileStream handle = new(original, FileMode.Open, FileAccess.ReadWrite,
+                FileShare.ReadWrite | FileShare.Delete, bufferSize: 0, useAsync: true);
+            string fdPath = "/proc/self/fd/" + handle.SafeFileHandle.DangerousGetHandle().ToInt64();
+            File.Delete(original);
+            string ghost = original + " (deleted)";
+            File.Exists(ghost).ShouldBeFalse();
+
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(fdPath),
+                TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(0);
+            handle.Position = 0;
+            using var reader = new StreamReader(handle, leaveOpen: true);
+            AssertJson(await reader.ReadToEndAsync(TestContext.Current.CancellationToken), """{"updated":true}""");
+            File.Exists(original).ShouldBeFalse();
+            File.Exists(ghost).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A literal pipe-shaped symlink target is an ordinary filename.</summary>
+    [Fact]
+    public async Task LiteralPipeNamedSymlinkTargetIsCreatedAsync()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("This filename and symbolic link require Unix.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        string target = Path.Combine(directory, "pipe:[123]");
+        string link = Path.Combine(directory, "result.json");
+        try
+        {
+            File.CreateSymbolicLink(link, "pipe:[123]");
+            (await CliOutput.WriteAsync(new { updated = true }, null, Settings(link),
+                TestContext.Current.CancellationToken)).ShouldBe(0);
+            AssertJson(await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken), """{"updated":true}""");
+            File.ResolveLinkTarget(link, returnFinalTarget: false).ShouldNotBeNull().FullName.ShouldBe(target);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A symlink target with a trailing slash cannot be treated as a regular result file.</summary>
+    [Fact]
+    public async Task TrailingSlashSymlinkTargetCannotOverwriteFileAsync()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("This symbolic link behavior requires Unix.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        string target = Path.Combine(directory, "target.json");
+        string link = Path.Combine(directory, "result.json");
+        try
+        {
+            await File.WriteAllTextAsync(target, "old result", TestContext.Current.CancellationToken);
+            File.CreateSymbolicLink(link, "target.json/");
+            await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { updated = true }, null,
+                Settings(link), TestContext.Current.CancellationToken));
+            (await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken)).ShouldBe("old result");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A symlink chain within the Linux limit remains a usable output path.</summary>
+    [Fact]
+    public async Task ThirtyThreeLinkOutputChainWorksAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This symbolic link limit requires Linux.");
+            return;
+        }
+
+        string directory = NewDirectory();
+        string target = Path.Combine(directory, "target.json");
+        try
+        {
+            await File.WriteAllTextAsync(target, "old result", TestContext.Current.CancellationToken);
+            for (int index = 32; index >= 0; index--)
+            {
+                File.CreateSymbolicLink(Path.Combine(directory, "link-" + index),
+                    index == 32 ? "target.json" : "link-" + (index + 1));
+            }
+
+            (await CliOutput.WriteAsync(new { updated = true }, null, Settings(Path.Combine(directory, "link-0")),
+                TestContext.Current.CancellationToken)).ShouldBe(0);
+            AssertJson(await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken), """{"updated":true}""");
         }
         finally
         {
@@ -363,7 +688,7 @@ public sealed class ExecutionFailureCommandTests
         string path = Path.Combine(directory, "result.json");
         try
         {
-            await File.WriteAllTextAsync(path, "old result", TestContext.Current.CancellationToken);
+            await File.WriteAllTextAsync(path, new string('x', 4096), TestContext.Current.CancellationToken);
             using (FileStream reader = new(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path), TestContext.Current.CancellationToken);
@@ -378,23 +703,34 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
-    /// <summary>A FIFO is refused before backup and cannot hold the result writer open.</summary>
+    /// <summary>A FIFO receives the result directly without staging or backup.</summary>
     [Fact]
-    public async Task NonSeekableResultTargetIsRefusedAsync()
+    public async Task NonSeekableResultTargetWritesDirectlyAsync()
     {
         if (!OperatingSystem.IsLinux())
         {
+            Assert.Skip("This filesystem behavior requires Linux.");
             return;
         }
 
         string directory = NewDirectory();
         string path = Path.Combine(directory, "result.fifo");
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(3));
         try
         {
             Mkfifo(path, 0x180).ShouldBe(0);
-            await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { updated = true }, null,
-                Settings(path), TestContext.Current.CancellationToken).WaitAsync(TimeSpan.FromSeconds(3),
-                    TestContext.Current.CancellationToken));
+            Task<string> reader = Task.Run(async () =>
+            {
+                await using FileStream stream = new(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite,
+                    bufferSize: 0, useAsync: true);
+                using var textReader = new StreamReader(stream);
+                return await textReader.ReadToEndAsync(timeout.Token);
+            }, timeout.Token);
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path), timeout.Token)
+                .WaitAsync(timeout.Token);
+            exit.ShouldBe(0);
+            AssertJson(await reader.WaitAsync(timeout.Token), """{"updated":true}""");
             File.GetUnixFileMode(path).ShouldBe(UnixFileMode.UserRead | UnixFileMode.UserWrite);
         }
         finally
@@ -403,12 +739,56 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
+    /// <summary>A proc fd pipe receives the result directly without resolving its pseudo target as a file path.</summary>
+    [Fact]
+    public async Task ProcFdPipeReceivesResultDirectlyAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This filesystem behavior requires Linux.");
+            return;
+        }
+
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(3));
+        using var pipe = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.None);
+        string path = "/proc/self/fd/" + pipe.GetClientHandleAsString();
+        Task<string> reader = Task.Run(async () =>
+        {
+            using var textReader = new StreamReader(pipe);
+            return await textReader.ReadToEndAsync(timeout.Token);
+        }, timeout.Token);
+
+        int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path), timeout.Token)
+            .WaitAsync(timeout.Token);
+        pipe.DisposeLocalCopyOfClientHandle();
+
+        exit.ShouldBe(0);
+        AssertJson(await reader.WaitAsync(timeout.Token), """{"updated":true}""");
+    }
+
+    /// <summary>A character device accepts direct output without a seek or truncate operation.</summary>
+    [Fact]
+    public async Task DeviceResultTargetWritesDirectlyAsync()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Skip("This filesystem behavior requires Linux.");
+            return;
+        }
+
+        int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings("/dev/null"),
+            TestContext.Current.CancellationToken);
+        exit.ShouldBe(0);
+    }
+
     /// <summary>ACL setup errors other than unsupported-filesystem errors fail the test.</summary>
     [Fact]
     public void UnexpectedAclSetupErrorIsNotIgnored()
     {
         if (!OperatingSystem.IsLinux())
         {
+            Assert.Skip("This filesystem behavior requires Linux.");
             return;
         }
 
@@ -422,6 +802,7 @@ public sealed class ExecutionFailureCommandTests
     {
         if (OperatingSystem.IsWindows())
         {
+            Assert.Skip("This filesystem behavior requires Unix.");
             return;
         }
         string directory = NewDirectory();
@@ -447,6 +828,7 @@ public sealed class ExecutionFailureCommandTests
     {
         if (OperatingSystem.IsWindows())
         {
+            Assert.Skip("This filesystem behavior requires Unix.");
             return;
         }
 
@@ -456,9 +838,10 @@ public sealed class ExecutionFailureCommandTests
         {
             await File.WriteAllTextAsync(path, "old result", TestContext.Current.CancellationToken);
             File.SetUnixFileMode(path, UnixFileMode.UserRead);
-            (int exit, string output, _) = await InvokeCliAsync(["modules", "--output", path], directory);
+            (int exit, string output, string stderr) = await InvokeCliAsync(["modules", "--output", path], directory, TestContext.Current.CancellationToken);
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
+            stderr.ShouldNotContain(path);
             File.GetUnixFileMode(path).ShouldBe(UnixFileMode.UserRead);
             (await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken)).ShouldBe("old result");
         }
@@ -475,6 +858,7 @@ public sealed class ExecutionFailureCommandTests
     {
         if (OperatingSystem.IsWindows())
         {
+            Assert.Skip("This filesystem behavior requires Unix.");
             return;
         }
         string directory = NewDirectory();
@@ -494,7 +878,8 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
-    private static async Task<(int Exit, string Output, int Calls)> InvokeGatewayAsync(bool command, int status, string body)
+    private static async Task<(int Exit, string Output, int Calls)> InvokeGatewayAsync(bool command, int status, string body,
+        string? outputPath = null, bool acceptedCommand = false)
     {
         string directory = NewDirectory();
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
@@ -510,27 +895,53 @@ public sealed class ExecutionFailureCommandTests
         int calls = 0;
         Task response = Task.Run(async () =>
         {
-            HttpListenerContext context = await gateway.GetContextAsync().WaitAsync(timeout.Token);
-            Interlocked.Increment(ref calls);
-            context.Request.HttpMethod.ShouldBe("POST");
-            context.Request.Url!.AbsolutePath.ShouldBe(command ? "/api/v1/commands" : "/api/v1/queries");
-            using var reader = new StreamReader(context.Request.InputStream);
-            _ = await reader.ReadToEndAsync(timeout.Token);
-            context.Response.StatusCode = status;
-            context.Response.StatusDescription = status == 409 ? "Conflict" : status == 202 ? "Accepted" : "OK";
-            context.Response.ContentType = "application/problem+json";
-            byte[] bytes = Encoding.UTF8.GetBytes(body);
-            context.Response.ContentLength64 = bytes.Length;
-            await context.Response.OutputStream.WriteAsync(bytes, timeout.Token);
-            context.Response.Close();
+            try
+            {
+                while (!timeout.IsCancellationRequested)
+                {
+                    HttpListenerContext context = await gateway.GetContextAsync().WaitAsync(timeout.Token);
+                    Interlocked.Increment(ref calls);
+                    context.Request.HttpMethod.ShouldBe("POST");
+                    context.Request.Url!.AbsolutePath.ShouldBe(command ? "/api/v1/commands" : "/api/v1/queries");
+                    using var reader = new StreamReader(context.Request.InputStream);
+                    string requestBody = await reader.ReadToEndAsync(timeout.Token);
+                    string responseBody = body;
+                    if (acceptedCommand)
+                    {
+                        using JsonDocument request = JsonDocument.Parse(requestBody);
+                        responseBody = JsonSerializer.Serialize(new
+                        {
+                            correlationId = request.RootElement.GetProperty("correlationId").GetString(),
+                            messageId = request.RootElement.GetProperty("messageId").GetString(),
+                        });
+                    }
+
+                    context.Response.StatusCode = status;
+                    context.Response.StatusDescription = status == 409 ? "Conflict" : status == 202 ? "Accepted" : "OK";
+                    context.Response.ContentType = acceptedCommand ? "application/json" : "application/problem+json";
+                    byte[] bytes = Encoding.UTF8.GetBytes(responseBody);
+                    context.Response.ContentLength64 = bytes.Length;
+                    await context.Response.OutputStream.WriteAsync(bytes, timeout.Token);
+                    context.Response.Close();
+                }
+            }
+            catch (OperationCanceledException) when (timeout.IsCancellationRequested)
+            {
+            }
         }, timeout.Token);
         try
         {
             string[] invocation = command
                 ? ["send", "sample.create-item", "--payload", $"{{\"ItemId\":\"{Id}\",\"Title\":\"Hello\"}}", "--url", url]
                 : ["query", "string-fixture.list-items", "--payload", "{}", "--url", url];
-            (int exit, string output, _) = await InvokeCliAsync(invocation, directory);
-            await response.WaitAsync(timeout.Token);
+            if (outputPath is not null)
+            {
+                invocation = [.. invocation, "--output", outputPath];
+            }
+
+            (int exit, string output, _) = await InvokeCliAsync(invocation, directory, timeout.Token);
+            await timeout.CancelAsync();
+            await response.WaitAsync(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken);
             return (exit, output, calls);
         }
         finally
@@ -541,7 +952,8 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
-    private static async Task<(int Exit, string Output, string Error)> InvokeCliAsync(string[] arguments, string directory)
+    private static async Task<(int Exit, string Output, string Error)> InvokeCliAsync(string[] arguments, string directory,
+        CancellationToken cancellationToken)
     {
         TextWriter originalOut = Console.Out;
         TextWriter originalError = Console.Error;
@@ -555,7 +967,7 @@ public sealed class ExecutionFailureCommandTests
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(SampleContracts.CreateItemCommand).Assembly,
                 typeof(StringContracts.Module).Assembly];
             int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
-                .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
+                .InvokeAsync(cancellationToken: cancellationToken);
             return (exit, output.ToString(), error.ToString());
         }
         finally
@@ -609,7 +1021,7 @@ public sealed class ExecutionFailureCommandTests
     private static byte[]? ReadAcl(string path)
     {
         byte[] acl = new byte[256];
-        long length = GetXattr(path, "system.posix_acl_access", acl, (nuint)acl.Length);
+        nint length = GetXattr(path, "system.posix_acl_access", acl, (nuint)acl.Length);
         return length > 0 ? acl[..(int)length] : null;
     }
 
@@ -617,7 +1029,10 @@ public sealed class ExecutionFailureCommandTests
     private static extern int SetXattr(string path, string name, byte[] value, nuint size, int flags);
 
     [DllImport("libc", EntryPoint = "getxattr", SetLastError = true)]
-    private static extern long GetXattr(string path, string name, byte[] value, nuint size);
+    private static extern nint GetXattr(string path, string name, byte[] value, nuint size);
+
+    [DllImport("libc", EntryPoint = "umask")]
+    private static extern uint Umask(uint mask);
 
     [DllImport("libc", EntryPoint = "mkfifo", SetLastError = true)]
     private static extern int Mkfifo(string path, uint mode);

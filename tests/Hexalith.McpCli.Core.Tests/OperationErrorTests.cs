@@ -47,16 +47,20 @@ public sealed class OperationErrorTests
         json.TryGetProperty("correlationId", out _).ShouldBeFalse();
     }
 
-    /// <summary>A supplied lowercase ULID is valid Gateway metadata and retains its original text.</summary>
-    [Fact]
-    public void RetainsValidLowercaseGatewayCorrelationId()
+    /// <summary>Only canonical uppercase Gateway correlation IDs enter the public error.</summary>
+    [Theory]
+    [InlineData("01j9mzhxt3rkm0vwxrxgsjdatk")]
+    [InlineData("                          ")]
+    [InlineData("01J9MZHXT3RKM0VWXRXGSJDAT~")]
+    [InlineData("01J9MZHXT3RKM0VWXRXGSJDATU")]
+    [InlineData("81J9MZHXT3RKM0VWXRXGSJDATK")]
+    public void OmitsNonCanonicalGatewayCorrelationId(string supplied)
     {
-        const string supplied = "01j9mzhxt3rkm0vwxrxgsjdatk";
         var exception = new EventStoreGatewayException(409, "Conflict", correlationId: supplied);
 
         JsonElement json = JsonSerializer.SerializeToElement(OperationError.FromGateway(exception), McpCliJson.Result);
 
-        json.GetProperty("correlationId").GetString().ShouldBe(supplied);
+        json.TryGetProperty("correlationId", out _).ShouldBeFalse();
     }
 
     /// <summary>Blank fields use the specified precedence and invalid correlation text is omitted.</summary>

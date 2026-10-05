@@ -20,7 +20,7 @@ internal static class CliOutput
     /// <returns>Zero for a result or two for an error.</returns>
     internal static async Task<int> WriteAsync(object? document, OperationError? error,
         ResolvedSettings settings, CancellationToken cancellationToken, string? tableHeader = null,
-        Func<CancellationToken, Task>? afterDestinationTruncated = null)
+        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated = null)
     {
         if (error is null && settings.Format == "table" && tableHeader is null)
         {
@@ -58,10 +58,22 @@ internal static class CliOutput
     }
 
     private static async Task WriteResultFileAsync(string path, string output, CancellationToken cancellationToken,
-        Func<CancellationToken, Task>? afterDestinationTruncated)
+        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated)
     {
         path = ResolveFinalSymlink(path);
         bool existing = File.Exists(path);
+        if (existing)
+        {
+            await using FileStream target = new(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite,
+                bufferSize: 0, useAsync: true);
+            if (!target.CanSeek || IsSpecialDevicePath(path))
+            {
+                await target.WriteAsync(Encoding.UTF8.GetBytes(output), cancellationToken).ConfigureAwait(false);
+                await target.FlushAsync(cancellationToken).ConfigureAwait(false);
+                return;
+            }
+        }
+
         string stagingDirectory = existing ? Path.GetTempPath() : Path.GetDirectoryName(Path.GetFullPath(path))!;
         string stagedPath = Path.Combine(stagingDirectory, ".mcpcli-result-" + Guid.NewGuid().ToString("N"));
         string? backupPath = null;
@@ -98,7 +110,7 @@ internal static class CliOutput
 
             backupPath = Path.Combine(Path.GetTempPath(), ".mcpcli-backup-" + Guid.NewGuid().ToString("N"));
             await using FileStream destination = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read,
-                bufferSize: 4096, useAsync: true);
+                bufferSize: 0, useAsync: true);
             if (!destination.CanSeek)
             {
                 throw new IOException("The existing result target is not seekable.");
@@ -116,7 +128,7 @@ internal static class CliOutput
                 destination.SetLength(0);
                 if (afterDestinationTruncated is not null)
                 {
-                    await afterDestinationTruncated(cancellationToken).ConfigureAwait(false);
+                    await afterDestinationTruncated(destination, cancellationToken).ConfigureAwait(false);
                 }
 
                 await using FileStream stage = new(stagedPath, FileMode.Open, FileAccess.Read, FileShare.Read,
@@ -146,23 +158,106 @@ internal static class CliOutput
         }
     }
 
+    private static bool IsSpecialDevicePath(string path)
+        => !OperatingSystem.IsWindows() && path.StartsWith("/dev/", StringComparison.Ordinal)
+            && !path.StartsWith("/dev/shm/", StringComparison.Ordinal);
+
     private static string ResolveFinalSymlink(string path)
     {
-        string resolved = Path.GetFullPath(path);
-        for (int depth = 0; depth < 32; depth++)
+        if (Path.EndsInDirectorySeparator(path))
         {
-            string? target = new FileInfo(resolved).LinkTarget;
-            if (target is null)
-            {
-                return resolved;
-            }
-
-            resolved = Path.GetFullPath(Path.IsPathRooted(target)
-                ? target : Path.Combine(Path.GetDirectoryName(resolved)!, target));
+            throw new IOException("A result file path cannot end in a directory separator.");
         }
 
-        throw new IOException("The result path has too many symbolic links.");
+        // Resolve one component at a time: lexical normalization of ".." before following a
+        // directory link can select a different file than the operating system would open.
+        string absolute = Path.IsPathRooted(path) ? path : Path.Combine(Directory.GetCurrentDirectory(), path);
+        string root = Path.GetPathRoot(absolute)!;
+        string current = root;
+        var remaining = new LinkedList<string>(SplitComponents(absolute[root.Length..]));
+        int linkCount = 0;
+        while (remaining.First is not null)
+        {
+            string part = remaining.First.Value;
+            remaining.RemoveFirst();
+            if (part is "." or "..")
+            {
+                if (!Directory.Exists(current))
+                {
+                    throw new IOException("A result path parent is not a directory.");
+                }
+
+                if (part == "..")
+                {
+                    current = Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(current)) ?? root;
+                }
+
+                continue;
+            }
+
+            string candidate = Path.Combine(current, part);
+            string? target = new FileInfo(candidate).LinkTarget;
+            if (target is null)
+            {
+                if (remaining.Count != 0 && !Directory.Exists(candidate))
+                {
+                    throw new IOException("A result path parent is not a directory.");
+                }
+
+                current = candidate;
+                continue;
+            }
+
+            if (++linkCount > 40)
+            {
+                throw new IOException("The result path has too many symbolic links.");
+            }
+
+            // Proc fd links may name a pipe, socket, or unlinked file. Keep the fd path so
+            // the open handle remains the destination even when its old name is gone.
+            if (remaining.Count == 0 && IsProcFdPath(candidate))
+            {
+                return candidate;
+            }
+
+            bool directoryRequired = Path.EndsInDirectorySeparator(target);
+            if (Path.IsPathRooted(target))
+            {
+                current = Path.GetPathRoot(target)!;
+                target = target[current.Length..];
+            }
+
+            string[] targetParts = SplitComponents(target);
+            if (directoryRequired)
+            {
+                remaining.AddFirst(".");
+            }
+
+            for (int index = targetParts.Length - 1; index >= 0; index--)
+            {
+                remaining.AddFirst(targetParts[index]);
+            }
+        }
+
+        return current;
     }
+
+    private static bool IsProcFdPath(string path)
+    {
+        if (!OperatingSystem.IsLinux() || !int.TryParse(Path.GetFileName(path), out _))
+        {
+            return false;
+        }
+
+        string? fdDirectory = Path.GetDirectoryName(path);
+        string? processDirectory = fdDirectory is null ? null : Path.GetDirectoryName(fdDirectory);
+        return Path.GetFileName(fdDirectory) == "fd" && processDirectory is not null
+            && Path.GetDirectoryName(processDirectory) == "/proc"
+            && int.TryParse(Path.GetFileName(processDirectory), out _);
+    }
+
+    private static string[] SplitComponents(string path)
+        => path.Split([Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries);
 
     private static FileStream CreatePrivateTemporaryFile(string path)
     {
@@ -178,7 +273,23 @@ internal static class CliOutput
             options.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
         }
 
-        return new FileStream(path, options);
+        FileStream stream = new(path, options);
+        try
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                // UnixCreateMode is still masked by the process umask.
+                File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
+
+            return stream;
+        }
+        catch
+        {
+            stream.Dispose();
+            TryDelete(path);
+            throw;
+        }
     }
 
     private static void TryDelete(string path)

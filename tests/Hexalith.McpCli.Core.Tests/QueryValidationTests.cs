@@ -179,6 +179,18 @@ public sealed class QueryValidationTests
         outcome.Error!.Violations!.ShouldHaveSingleItem();
     }
 
+    /// <summary>An invalid explicit String identifier uses the envelope path even when an accessor exists.</summary>
+    [Fact]
+    public async Task InvalidExplicitStringIdentifierUsesEnvelopePathAsync()
+    {
+        IEventStoreGatewayClient gateway = Gateway();
+        OperationOutcome outcome = await Executor(gateway).ExecuteAsync(
+            new RunQueryArguments("string-fixture.lookup", "{\"Key\":\"bad/id\"}", AggregateId: "bad/id"), Context(),
+            TestContext.Current.CancellationToken);
+        AssertRefusal(outcome, gateway, "/aggregateId");
+        outcome.Error!.Violations!.ShouldHaveSingleItem();
+    }
+
     /// <summary>Explicit identifiers on an accessor-free ULID query reach the envelope validation stage.</summary>
     [Theory]
     [InlineData("")]

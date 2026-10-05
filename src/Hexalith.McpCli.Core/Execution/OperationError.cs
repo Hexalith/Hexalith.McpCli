@@ -54,7 +54,8 @@ public sealed record OperationError(
     }
 
     private static string? ValidCorrelationId(string? value)
-        => value is not null && Ulid.TryParse(value, provider: null, out _) ? value : null;
+        => value is not null && Ulid.TryParse(value, provider: null, out Ulid parsed)
+            && string.Equals(value, parsed.ToString(), StringComparison.Ordinal) ? value : null;
 
     private static string? FirstNonEmpty(params string?[] values)
         => values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
