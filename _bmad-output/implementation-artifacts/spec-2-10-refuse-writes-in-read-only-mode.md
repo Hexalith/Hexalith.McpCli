@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -155,6 +155,26 @@ Rejected:
 - `false` — Ledger entry contradicts itself: `evidence` records the first run's observation, while `status` names the fresh-restore 3.113.0 source and the resolution. The cumulative Decision already settled this.
 - `low` — Harness ignores `paging`/`nullDocument` with `commandResponse`: no caller combines them; a guard adds complexity for an unreachable case. Third identical verdict.
 - `low` — Explicit-false send asserts only the request count: `CliMcpCommandParityTests` covers command routing and the envelope; asserting them here needs a new harness parameter. Third identical verdict.
+
+### Post-Closing Cumulative Review Findings
+
+Code review 2026-10-05 of `3260812..6d7eab8`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found no acceptance-criteria violations and reran `ReadOnlyCommandTests` (32 passed).
+
+- [ ] [Review][Patch] README documents the accepted `EVENTSTORE_READ_ONLY` values but not the flag's, which differ. `--read-only 1` and `--read-only 0` fail to parse (exit 1, "Unrecognized command or argument"), while `--read-only True` is accepted, as verified against the built CLI. State that the flag takes no value, `true`, or `false` (case-insensitive) [README.md:69]
+- [ ] [Review][Patch] The read-only paragraphs precede the `send` and `query` paragraphs they depend on: they reference `--aggregate-id`, `--correlation-id`, `--idempotency-key`, extensions, and `invalid_arguments` before those are introduced. Move both paragraphs after the Queries paragraph [README.md:67]
+- [x] [Review][Defer] `--read-only` help text says only "Disable command submission" and does not mention `EVENTSTORE_READ_ONLY` or the explicit `false` override [src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:18] — deferred: pre-existing since `de67938` (Story 2.1); no global option's help names its environment variable, so this is a CLI-wide help convention
+
+Rejected:
+
+- `false` — No README read-only example: README:67 gives both activation forms (`--read-only`, `EVENTSTORE_READ_ONLY=true`), README:65 states the MCP tool-list effect, and scripts match the documented `read_only` code with exit 2.
+- `false` — "even without a Gateway URL" attaches to the wrong clause: it qualifies "returns `read_only`", which is the guarantee that `read_only` beats the missing-URL error.
+- `false` — `refusal` is misnamed because the branch can return lookup, kind, or catalog errors: every one of those outcomes refuses the send. Availability and `settings.ReadOnly` come from one settings snapshot, so this branch can never submit.
+- `false` — No Core test runs a successful read-only query: `QueryRemainsAvailableAsync` drives the real `OperationExecutor` with `ReadOnly` true for both activation sources, and the MCP server uses the same executor, so an executor regression fails that test.
+- `false` — Dependency-drift rule is buried in a resolved ledger entry: CI runs the Manifest suite (`.github/workflows/ci.yml:26`), which checks restored assets whatever the version source (submodule, MSBuild override, checkout layout). Fourth identical verdict.
+- `false` — `--output`/`--format table` add no read-only evidence and leak temp files: the spec's verification requires unchanged output files, and `finally` deletes the temp file.
+- `false` — Environment discovery test is weaker than the flag test: listing reads only the resolved `ReadOnly` boolean, never its source. The `describe` assertions prove environment activation, and `DiscoveryCommandTests` proves the exact unfiltered listing for `ReadOnly` true.
+- `low` — Harness ignores `paging`/`nullDocument` with `commandResponse`: no caller combines them; a guard adds complexity for an unreachable case. Fourth identical verdict.
+- `low` — Command-mode harness answers any path and the explicit-false send does not check the route: the harness exposes no request list, so checking needs new harness surface. `CliMcpCommandParityTests` covers command routing. Fourth identical verdict.
 
 ## Verification Blocker
 

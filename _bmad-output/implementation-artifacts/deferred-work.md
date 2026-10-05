@@ -356,3 +356,9 @@
   summary: Reconcile the pre-existing EventStore package versions with the exact dependency policy so the Manifest acceptance gate passes.
   evidence: Story 2.10 full Manifest run exited 1 in ProductionContractsStayWithinPinnedDependencyClosure: Client and Contracts restore as 3.112.0 while tools/dependency-policy.json pins 3.110.0; current Builds declares 3.113.0. These inputs are unchanged by story 2.10. Seven other Manifest tests and all five other test suites pass. Exact command and logs are recorded in the story spec; dependency changes are outside this story.
   status: resolved by `4d39200` (2026-10-05); a fresh restore selects 3.113.0 from the Builds `HexalithEventStoreVersion` default, the policy now pins that exact version, and the full Manifest suite passes 8/8. When bumping `references/`, run the Manifest suite and align the policy in the same commit.
+
+## Deferred from: code review of spec-2-10-refuse-writes-in-read-only-mode.md (2026-10-05)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
+  summary: Global option help does not name environment variables or explicit boolean values; `--read-only` says only "Disable command submission".
+  evidence: Pre-existing since `de67938` (Story 2.1). `src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:10-19` descriptions omit every `EVENTSTORE_*` variable, so `--help` does not reveal `EVENTSTORE_READ_ONLY` or that `--read-only false` overrides it. This is a CLI-wide help convention; settle it once for all global options rather than for `--read-only` alone.
