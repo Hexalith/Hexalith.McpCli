@@ -13,7 +13,7 @@ using StringContracts = global::Catalog.String.Contracts;
 
 namespace Hexalith.McpCli.Cli.Tests;
 
-/// <summary>Captures real CLI query requests with bounded loopback service and restored console streams.</summary>
+/// <summary>Captures real CLI query or command requests with bounded loopback service and restored console streams.</summary>
 internal sealed class QueryCliHarness : IAsyncDisposable
 {
     /// <summary>The valid aggregate ULID shared by synthetic CLI cases.</summary>
@@ -30,7 +30,10 @@ internal sealed class QueryCliHarness : IAsyncDisposable
     private readonly ConcurrentQueue<(string Method, string Path, JsonElement Document)> _requests = new();
     private readonly Task _responses;
 
-    /// <summary>Starts a bounded loopback Gateway returning an object or null document and optional paging metadata.</summary>
+    /// <summary>Starts a bounded loopback Gateway returning a query document with optional paging or a command acceptance.</summary>
+    /// <param name="paging">Optional response paging metadata for queries.</param>
+    /// <param name="nullDocument">Whether the query response document is null.</param>
+    /// <param name="commandResponse">Whether to return a command acceptance with HTTP 202 instead of a query response with HTTP 200.</param>
     internal QueryCliHarness(string? paging = null, bool nullDocument = false, bool commandResponse = false)
     {
         _timeout.CancelAfter(TimeSpan.FromSeconds(15));

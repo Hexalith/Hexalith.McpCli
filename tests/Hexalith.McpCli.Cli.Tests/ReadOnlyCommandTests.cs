@@ -8,18 +8,21 @@ namespace Hexalith.McpCli.Cli.Tests;
 public sealed class ReadOnlyCommandTests
 {
     /// <summary>Combines both activation sources, URL states, and command input forms.</summary>
-    public static IEnumerable<object[]> RefusedInputs()
+    public static TheoryData<bool, bool, string> RefusedInputs()
     {
+        var data = new TheoryData<bool, bool, string>();
         foreach (bool environment in new[] { false, true })
         {
             foreach (bool withUrl in new[] { false, true })
             {
                 foreach (string input in new[] { "absent", "invalid", "valid", "file", "stdin", "extension" })
                 {
-                    yield return [environment, withUrl, input];
+                    data.Add(environment, withUrl, input);
                 }
             }
         }
+
+        return data;
     }
 
     /// <summary>Refusal precedes input acquisition and leaves the Gateway and existing result file untouched.</summary>
