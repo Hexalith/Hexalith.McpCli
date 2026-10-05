@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -45,7 +45,20 @@ context: []
 - Final validation on 2026-10-05: all six individual test-project Debug builds (`dotnet build tests/Hexalith.McpCli.<Suite>.Tests/Hexalith.McpCli.<Suite>.Tests.csproj --configuration Debug --no-restore --verbosity quiet`) succeeded with zero warnings/errors. The focused CLI read-only class passed 32/32. Complete suites passed CLI 424, Core 557 with two existing Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8: 1,034 passed, two skipped, zero failures/errors. Each suite was run directly with `dotnet tests/Hexalith.McpCli.<Suite>.Tests/bin/Debug/net10.0/Hexalith.McpCli.<Suite>.Tests.dll -result-xml /tmp/mcpcli-2-10-final-<Suite>.xml`; XML and test logs for every suite, five subsequent build logs, and `/tmp/mcpcli-2-10-final-validation.json` preserve the results. The CLI build's successful output is in this session. No remaining acceptance blocker or dependency change.
 - Exact commit-message validation with the pinned `@commitlint/cli@21.2.2`: `npx --no -- commitlint --edit /tmp/mcpcli-2-10-final-commit-message.txt --verbose` exited 0 with zero problems/warnings. The full candidate and successful output are preserved in that file and `/tmp/mcpcli-2-10-final-commitlint.log`. Whitespace and changed C# CRLF checks passed.
 
+- Resumed from clean `main` at `e159f82b7528797fc245045625ff387d65294ba9` on 2026-10-05. Addressed the two outstanding cumulative-review patches in README: ordinary `send` precedence now names the errors users see first, and environment validation documents command-line parse failures and the three rejected `config profile add` operator flags as early exits. Checked both statements against `CliRunner`, `SettingsBootstrap`, and `SettingsResolver`; no execution behavior or dependencies changed.
+- Closing validation: the focused CLI read-only class passed 32/32. All six individual Debug test-project builds succeeded with zero warnings/errors; complete suites passed CLI 424, Core 557 with two existing Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skipped, zero failures/errors). Commands, results, and log paths are recorded in `/tmp/mcpcli-2-10-close-validation.json`; suite XML is `/tmp/mcpcli-2-10-close-<Suite>.xml`, and the focused XML is `/tmp/mcpcli-2-10-close-ReadOnlyCommandTests.xml`. CLI build and focused-run output are preserved in this session. The pinned commitlint 21.2.2 command `npx --no -- commitlint --edit /tmp/mcpcli-2-10-close-commit-message.txt --verbose` exited 0 with zero problems/warnings; the exact full message is preserved in that file and successful validation output in this session.
+
 ## Review Triage Log
+
+### Closing Review Triage
+
+Independent Blind Hunter reviewed this resumption's changed files (4.223 kB, finding floor `min(floor(sqrt(4.223) + 1), 10) = 3`). All three findings were verified against the implementation and patched; nothing was deferred.
+
+- **Low, patched:** "Malformed extension entries" overstated which errors precede lookup. `CliRunner.CreateSend` checks only a nonempty key before `=` and exact duplicate keys; Core checks key grammar, case-insensitive duplicates, and the allowlist later. README now names the early checks precisely.
+- **Low, patched:** The early-exit wording omitted failures earlier in settings resolution. `SettingsResolver.Resolve` validates profile selection, URL, format, text settings, and the tenant-override boolean before the read-only boolean. README now states that earlier configuration errors can take precedence, with URL and profile examples.
+- **Low, patched:** The precedence explanation omitted stable error codes. Confirmed the CLI's early input checks return `invalid_arguments`, catalog lookup returns `unknown_operation`, and sending a read returns `validation_failed`; README now names all three.
+
+Build workflow complete: spec status is `done`; sprint status advances to `review` as required by the oneshot workflow, pending the separate sprint review gate.
 
 - **Low, rejected:** The missing-file case cannot detect a hypothetical read whose exception is discarded before refusal. The actual branch returns before `ReadPayloadAsync`; moving it below existing acquisition fails the absent/file/stdin cases. Detecting an otherwise invisible discarded read needs a new I/O seam or platform-specific blocking-file fixture, disproportionate to this speculative regression. The disposed-reader case directly detects stdin acquisition.
 - **Low, patched:** The explicit-false case stopped at malformed JSON. Added a valid command and Command 202 loopback response, asserting accepted result and exactly one Gateway request.
@@ -123,8 +136,8 @@ Independent Blind Hunter reviewed the current worktree changes; the configured o
 
 Code review 2026-10-05 of `3260812..8dd69d6`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps and reran `ReadOnlyCommandTests` (32 passed), the Core read-only cases, and the Manifest suite (8 passed).
 
-- [ ] [Review][Patch] README's ordinary-`send` precedence sentence uses internal terms ("CLI payload acquisition", "extension binding", "Core lookup") that appear nowhere else in README; state it as which errors users see first [README.md:67]
-- [ ] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation omits command-line parse failures and the `config profile add` operator-flag refusal, which returns `invalid_arguments` before settings resolution (`CliRunner.cs:331-335`) [README.md:69]
+- [x] [Review][Patch] README's ordinary-`send` precedence sentence uses internal terms ("CLI payload acquisition", "extension binding", "Core lookup") that appear nowhere else in README; state it as which errors users see first [README.md:67]
+- [x] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation omits command-line parse failures and the `config profile add` operator-flag refusal, which returns `invalid_arguments` before settings resolution (`CliRunner.cs:331-335`) [README.md:69]
 
 Rejected:
 
