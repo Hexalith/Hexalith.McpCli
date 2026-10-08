@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -58,7 +58,20 @@ context: []
 
 - Review verification: six process-level probes against the current Debug CLI are recorded in `/tmp/mcpcli-2-10-oct08-_4sgoz1_/flag-values.json`. With an invalid `EVENTSTORE_READ_ONLY` value, `operations --read-only 0` and `describe --read-only 1` passed parsing and settings resolution before returning `catalog_empty` (exit 2; no production Contracts are enrolled); the numeric token binds the missing name and the bare flag overrides the environment. `operations example --read-only 0` and `config current --read-only 0` failed parsing (exit 1). `config current --read-only` reported `readOnly: true`; explicit `false` reported `readOnly: false`. README now gives the positional-token example without promising a parser exit code. The optional ConformanceHost build command `dotnet build tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj --configuration Debug --no-restore --verbosity quiet` was blocked by `NETSDK1064` (Dapr.Common 1.18.10 missing from that host's stale restore location); the probes instead used the already validated production CLI directly, so no remaining validation blocker or package change was introduced.
 
+- Resumed from clean `main` at `d2a607d50afb7a86e5c16095df34724c9c8242e8` on 2026-10-08. Completed the three Post-Sync Cumulative Review patches: README distinguishes missing payloads from unreadable payload files and explains `config current` read-only state/source inspection; direct-executor envelope refusal now asserts the complete stable `OperationError` record. Preserved the original baseline, frozen intent, and C# CRLF endings. Validation evidence for this resumption is collected in `/tmp/mcpcli-2-10-post-sync-iznn0fbz`.
+
+- Post-Sync resumption validation: `dotnet restore Hexalith.McpCli.slnx --verbosity quiet` succeeded using the existing central package pins. All six individual Debug test-project builds passed with zero warnings/errors; direct assembly runs passed Core 557 (two existing Windows-only skips), CLI 424, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skipped, zero failures/errors). Focused direct assembly runs passed the 13 Core refusal cases and all 32 CLI read-only cases. Exact commands, exit codes, logs, and XML are preserved in `/tmp/mcpcli-2-10-post-sync-iznn0fbz/validation.json` and its directory; `summary.json` records the complete-suite counts. Pinned commitlint 21.2.2 validation with `npx --no -- commitlint --edit /tmp/mcpcli-2-10-post-sync-iznn0fbz/commit-message.txt --verbose` exited 0 with zero problems/warnings; the exact candidate and successful output are preserved in `commit-message.txt` and `commitlint.log`. The independent review adds explicit JSON format to the configuration-inspection example; no execution behavior or dependency changes were needed. Build status is `done`; sprint status is `review` according to the oneshot workflow.
+
 ## Review Triage Log
+
+### Post-Sync Resumption Review Triage
+
+Independent Blind Hunter reviewed the current worktree (5.388 kB; finding floor `min(floor(sqrt(5.388) + 1), 10) = 3`). All three findings were checked against their callers and existing tests; nothing was deferred.
+
+- **Low, patched:** The configuration-inspection example inherited the selected output format, which could be table. `ConfigCommandTests` verifies both table rendering and source reporting; the example now requests `--format json` so `sources.readOnly` appears as the documented JSON path. It also says to retain the same read-only flag and environment because flags apply to each invocation.
+- **Low, rejected:** The envelope-refusal theory lacks an explicit aggregate mismatch row. This is an existing optional coverage expansion: `OperationExecutor` checks availability before payload parsing, while aggregate selection/mismatch validation follows deserialization and envelope filling; the ten existing payload refusal rows already pin this ordering. The changed assertion strengthens the complete error contract for the three existing envelope cases. Adding another scenario and discriminator branch would cover a speculative reorder rather than a defect introduced here.
+- **False, rejected:** An unsupported `invalidField` can produce valid arguments, but all three theory rows are fixed in this file and exactly match the three branch values (`correlation`, `idempotency`, `extensions`). No external input or current caller supplies another value; a throwing guard would protect an unreachable case rather than fix a vacuous current test.
+
 
 ### October 8 Resumption Review Triage
 
@@ -223,9 +236,9 @@ Rejected:
 
 Code review 2026-10-08 of `3260812..d2fc528`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed). `8247a2d` moves `references/Hexalith.Builds` to `fef0318`, which changes nothing under `Props/` from `58d9b54` and keeps `HexalithEventStoreVersion` at 3.117.1, so the policy pin from `c6cd224` still holds.
 
-- [ ] [Review][Patch] README says ordinary `send` returns `invalid_arguments` for "missing or unreadable payloads", but only omitted payloads and `@file` read failures do. `ReadPayloadAsync` catches file I/O exceptions only (`CliRunner.cs:571-578`); a stdin read that throws reaches `RunAsync`'s catch-all and returns `internal_error`. Say "missing payloads or unreadable payload files" (Acceptance Auditor + Verification Gap) [README.md:71]
-- [ ] [Review][Patch] README never says how to confirm the mode is active. `config current` reports `readOnly` and its origin in `sources.readOnly` (`flag`, `EVENTSTORE_READ_ONLY`, or `default`), as `ConfigCommandTests` asserts; add one sentence to the read-only paragraph (Blind Hunter) [README.md:73]
-- [ ] [Review][Patch] `ReadOnlyCommandFailsBeforeEnvelopeValidationAsync` asserts only `Code`, while its sibling pins the full `OperationError("read_only", Message: ...)` record; an envelope-specific refusal that gained violations, `operation`, or a different message would still pass. Use the same full-record assertion (Blind Hunter) [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:199]
+- [x] [Review][Patch] README says ordinary `send` returns `invalid_arguments` for "missing or unreadable payloads", but only omitted payloads and `@file` read failures do. `ReadPayloadAsync` catches file I/O exceptions only (`CliRunner.cs:571-578`); a stdin read that throws reaches `RunAsync`'s catch-all and returns `internal_error`. Say "missing payloads or unreadable payload files" (Acceptance Auditor + Verification Gap) [README.md:71]
+- [x] [Review][Patch] README never says how to confirm the mode is active. `config current` reports `readOnly` and its origin in `sources.readOnly` (`flag`, `EVENTSTORE_READ_ONLY`, or `default`), as `ConfigCommandTests` asserts; add one sentence to the read-only paragraph (Blind Hunter) [README.md:73]
+- [x] [Review][Patch] `ReadOnlyCommandFailsBeforeEnvelopeValidationAsync` asserts only `Code`, while its sibling pins the full `OperationError("read_only", Message: ...)` record; an envelope-specific refusal that gained violations, `operation`, or a different message would still pass. Use the same full-record assertion (Blind Hunter) [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:199]
 
 Rejected:
 

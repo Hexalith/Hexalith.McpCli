@@ -196,7 +196,8 @@ public sealed class OperationExecutorTests
         OperationOutcome outcome = await executor.ExecuteAsync(call, Context(), TestContext.Current.CancellationToken);
 
         outcome.Document.ShouldBeNull();
-        outcome.Error.ShouldNotBeNull().Code.ShouldBe("read_only");
+        outcome.Error.ShouldNotBeNull().ShouldBe(new OperationError("read_only",
+            Message: "Command submission is disabled in read-only mode."));
         gateway.ReceivedCalls().ShouldBeEmpty();
     }
 
