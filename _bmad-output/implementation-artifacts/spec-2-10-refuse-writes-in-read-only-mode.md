@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -253,6 +253,26 @@ Rejected:
 - `low` — The help-text deferral has no owner and no links to the two other help-gap entries (Blind Hunter): those entries (`deferred-work.md:225`, `:325`) also have no owner, and grouping related ledger entries is the sweep's job. Assigning an owner is a planning decision, not a review correction.
 - `low` — `references/Hexalith.EventStore` sits at `v3.117.1-8-g07d1e23`, past the pinned package (Blind Hunter): the drift touches only Client `Aggregates`/`Events`/`Streams` and Contracts `Security`/`Streams`. `Gateway`, `Commands`, and `Queries`, which this repository reads, are identical to the tag. Re-pinning a reference is a dependency change outside this story.
 - `low` — Conventional Commit types `fix(references)`, `fix(dependencies)`, and `fix(status)` add patch-level release-note noise (Blind Hunter): each `fix(status)` commit does set `in-progress`, so its message is accurate, and the types pass commitlint. Correcting them means rewriting published `main` history.
+
+### Post-Fix Cumulative Review Findings
+
+Code review 2026-10-08 of `3260812..1b1012d`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
+
+- [ ] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation says "MCP transport or output-option errors", but `CliRunner.RunMcpAsync` rejects `--transport`, any explicit non-`json` `--format`, and `--output` before settings resolution (`CliRunner.cs:449-468`). "Output-option" reads as `--output` alone; name all three options (Acceptance Auditor) [README.md:73]
+- [ ] [Review][Patch] `SendPreservesLookupAndKindErrorsAsync` and `EnvironmentPreservesDiscoveryAsync` discard stderr, while their siblings call `AssertDiagnostics(error)`. An unexpected log line or diagnostic on the read-only lookup path or in environment-activated discovery would go unnoticed. Assert diagnostics for every invocation (Blind Hunter) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:74, :118]
+
+Rejected:
+
+- `false` — README does not say read-only is not a security boundary (Blind Hunter): README:71 states that an explicit `--read-only false` overrides the environment setting, so no reader can take the variable for a lock. The story frames the mode as preventing accidental business-state changes (`epics.md:878`), not as access control.
+- `false` — README does not scope read-only, and `config` verbs and `--output` still write local files (Blind Hunter): README:65 and :71 scope the mode to CLI `send` and MCP command registration, as FR19 does. `config` verbs change only the local profile file, never business state, and each later invocation applies its own flag or environment.
+- `false` — No test calls `send_command` on a read-only MCP server (Blind Hunter): `McpCliMcpServiceCollectionExtensions.cs:35` never registers the tool in read-only mode, so no call can reach the executor or the Gateway. The PRD validation split this into "the MCP head does not register `send_command`" and "the executor called directly returns `read_only`" (`validation-report.md:126`), and Story 3.1 (backlog) owns the read-only tool surface. This story changes no MCP code.
+- `low` — Ordinary `send` `invalid_arguments` precedence appears only in the read-only paragraph (Blind Hunter): the omitted-payload error explains itself, README:93 lists `invalid_arguments`, and an earlier review patch deliberately placed the contrast here. Moving it into the Commands section is a README restructure.
+- `false` — `ExplicitFalseOverridesEnvironmentAsync` cannot prove JSON parsing ran, because a `/tenant` or `/actor` violation also yields `validation_failed` (Blind Hunter): the test proves the override. If the override failed, availability would return `read_only` before any validation (`OperationExecutor.cs:78-83`). `ExplicitFalseAllowsCommandSubmissionAsync` proves a full submission.
+- `false` — The unknown-operation row does not pin `suggestions` (Blind Hunter, the second half of the stderr finding): the executor delegates unknown names to the shared `CatalogService.Describe` (`OperationExecutor.cs:59-62`), whose suggestions `DiscoveryCommandTests` pins (`:223-224`). The read-only branch cannot change them.
+- `low` — Refusing before reading stdin can send SIGPIPE to a large piped payload's producer (Blind Hunter): this is the frozen Approach's required order, and README:71 already says refusal happens before reading stdin. The pipeline still reports exit 2, and draining stdin would add a branch that contradicts the intent.
+- `low` — The explicit-false send asserts only output fields and one request, not route or envelope (Edge Case Hunter): `CliMcpCommandParityTests` covers command routing and the envelope. Checking them here needs new harness surface. Fifth identical verdict.
+- `low` — `QueryCliHarness` ignores `paging`/`nullDocument` with `commandResponse` (Edge Case Hunter): no caller combines them, and a guard adds complexity for an unreachable case. Seventh identical verdict.
+- `false` — `AssertRequest` hard-codes `/api/v1/queries` (Edge Case Hunter): no command test calls it, and calling it on a command request fails loudly on the path, so no test can pass wrongly.
 
 ## Verification Blocker
 
