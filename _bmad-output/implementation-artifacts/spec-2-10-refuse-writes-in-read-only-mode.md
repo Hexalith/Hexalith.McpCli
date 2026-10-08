@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -218,6 +218,28 @@ Rejected:
 - `false` — README does not say read-only cannot live in a profile (Blind Hunter): README names exactly two activation sources, and `config set` accepts only `tenant`, `actor`, `allowTenantOverride` and `allowedExtensions` (`CliRunner.cs:417`), so an attempt to store it fails loudly instead of misleading.
 - `low` — `switch (source)` and `invalidField` have no throwing default (Blind Hunter): every row's spelling matches, the data sit in the same file or attribute right beside the test, and the guard adds code that only protects against a future typo.
 - `false` — `InvokeAsync` lacks `<param>` docs (Blind Hunter): the harness's methods carry summaries only, and the pre-existing `withUrl` had none. Only the constructor gained `<param>` tags, by an earlier review patch. The build is warning-free, and the parameter names describe themselves.
+
+### Post-Sync Cumulative Review Findings
+
+Code review 2026-10-08 of `3260812..d2fc528`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed). `8247a2d` moves `references/Hexalith.Builds` to `fef0318`, which changes nothing under `Props/` from `58d9b54` and keeps `HexalithEventStoreVersion` at 3.117.1, so the policy pin from `c6cd224` still holds.
+
+- [ ] [Review][Patch] README says ordinary `send` returns `invalid_arguments` for "missing or unreadable payloads", but only omitted payloads and `@file` read failures do. `ReadPayloadAsync` catches file I/O exceptions only (`CliRunner.cs:571-578`); a stdin read that throws reaches `RunAsync`'s catch-all and returns `internal_error`. Say "missing payloads or unreadable payload files" (Acceptance Auditor + Verification Gap) [README.md:71]
+- [ ] [Review][Patch] README never says how to confirm the mode is active. `config current` reports `readOnly` and its origin in `sources.readOnly` (`flag`, `EVENTSTORE_READ_ONLY`, or `default`), as `ConfigCommandTests` asserts; add one sentence to the read-only paragraph (Blind Hunter) [README.md:73]
+- [ ] [Review][Patch] `ReadOnlyCommandFailsBeforeEnvelopeValidationAsync` asserts only `Code`, while its sibling pins the full `OperationError("read_only", Message: ...)` record; an envelope-specific refusal that gained violations, `operation`, or a different message would still pass. Use the same full-record assertion (Blind Hunter) [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:199]
+
+Rejected:
+
+- Fix edits this spec — The eight `references/` pointer moves (`342e072`, `8247a2d`) are not all recorded in this spec or the ledger (Acceptance Auditor; Blind Hunter's "no stated purpose"). They are owner commits outside the story; only the Builds move affects the build, and it changes no package version.
+- `false` — Stdin comment wrong for the omitted payload (Verification Gap): the comment is conditional and detects a regression that falls back to stdin for an omitted payload. Fourth identical verdict.
+- `low` — `QueryCliHarness` ignores `paging`/`nullDocument` with `commandResponse` (Edge Case Hunter): no caller combines them, and a guard adds complexity for an unreachable case. Sixth identical verdict.
+- `false` — Ledger rule "align the policy in the same commit" contradicts the separate `build(deps)` commit (Blind Hunter): the separate commit remediated a bump that had already landed; the rule prevents recurrence. `8247a2d` changed no package version, so it had nothing to align. Moving the rule into `AGENTS.md` was rejected four times: CI's blocking Manifest suite enforces it.
+- `low` — Boolean flag and environment rules are documented for read-only only, though `--strict` and `--allow-tenant-override` share them (Blind Hunter): pre-existing Story 2.1/2.2 documentation gap, partly tracked (`deferred-work.md:225`); `--strict 0` is unlikely in everyday use, and restating all three settings is a README restructure. "An earlier configuration error, such as…" is explicitly non-exhaustive, so the invalid `EVENTSTORE_ALLOW_TENANT_OVERRIDE` case is covered.
+- `low` — Flag accepts case-insensitive `true`/`false` while `EVENTSTORE_READ_ONLY` accepts exactly `true`/`false`/`1`/`0`, so PowerShell `$true` (`True`) fails every verb (Blind Hunter): this is the Story 2.1 contract (`SettingsResolver.cs:151-174`, unchanged by this story), and it fails loudly with `EVENTSTORE_READ_ONLY must be true, false, 1, or 0.` Aligning them changes a pinned contract or needs a custom parser.
+- `false` — README turns incidental ordering into contract that Story 2.11 will make stale (Blind Hunter): the frozen Approach requires documenting gate precedence, and an earlier review patch added the ordinary-`send` ordering. The sentences promise order, not parser exit codes; Story 2.11's parse-error fix (`deferred-work.md:188`) still fails before settings resolution.
+- `false` — README read-only guidance omits MCP (Blind Hunter): README:65 states the tool-list effect, README:103 says "up to five" tools and that diagnostics use stderr, and README:73 names MCP stdio startup's `configuration_invalid`. MCP host configuration belongs to Epic 3 (Story 3.2).
+- `low` — The help-text deferral has no owner and no links to the two other help-gap entries (Blind Hunter): those entries (`deferred-work.md:225`, `:325`) also have no owner, and grouping related ledger entries is the sweep's job. Assigning an owner is a planning decision, not a review correction.
+- `low` — `references/Hexalith.EventStore` sits at `v3.117.1-8-g07d1e23`, past the pinned package (Blind Hunter): the drift touches only Client `Aggregates`/`Events`/`Streams` and Contracts `Security`/`Streams`. `Gateway`, `Commands`, and `Queries`, which this repository reads, are identical to the tag. Re-pinning a reference is a dependency change outside this story.
+- `low` — Conventional Commit types `fix(references)`, `fix(dependencies)`, and `fix(status)` add patch-level release-note noise (Blind Hunter): each `fix(status)` commit does set `in-progress`, so its message is accurate, and the types pass commitlint. Correcting them means rewriting published `main` history.
 
 ## Verification Blocker
 
