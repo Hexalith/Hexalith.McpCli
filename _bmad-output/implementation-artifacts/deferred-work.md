@@ -355,7 +355,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
   summary: Reconcile the pre-existing EventStore package versions with the exact dependency policy so the Manifest acceptance gate passes.
   evidence: Story 2.10 full Manifest run exited 1 in ProductionContractsStayWithinPinnedDependencyClosure: Client and Contracts restore as 3.112.0 while tools/dependency-policy.json pins 3.110.0; current Builds declares 3.113.0. These inputs are unchanged by story 2.10. Seven other Manifest tests and all five other test suites pass. Exact command and logs are recorded in the story spec; dependency changes are outside this story.
-  status: resolved by `4d39200` (2026-10-05); a fresh restore selects 3.113.0 from the Builds `HexalithEventStoreVersion` default, the policy now pins that exact version, and the full Manifest suite passes 8/8. When bumping `references/`, run the Manifest suite and align the policy in the same commit.
+  status: resolved by `4d39200` (2026-10-05) for 3.113.0, then by `c6cd224` (2026-10-08) for 3.117.1. The `342e072` Builds bump moved the `HexalithEventStoreVersion` default to 3.117.1 and failed CI run 37814775292. After a fresh restore, the policy pins that exact version and the full Manifest suite passes 8/8. When bumping `references/`, run the Manifest suite and align the policy in the same commit.
 
 ## Deferred from: code review of spec-2-10-refuse-writes-in-read-only-mode.md (2026-10-05)
 
