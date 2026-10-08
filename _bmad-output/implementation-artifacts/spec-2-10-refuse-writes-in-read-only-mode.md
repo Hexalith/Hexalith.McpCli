@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -62,7 +62,19 @@ context: []
 
 - Post-Sync resumption validation: `dotnet restore Hexalith.McpCli.slnx --verbosity quiet` succeeded using the existing central package pins. All six individual Debug test-project builds passed with zero warnings/errors; direct assembly runs passed Core 557 (two existing Windows-only skips), CLI 424, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skipped, zero failures/errors). Focused direct assembly runs passed the 13 Core refusal cases and all 32 CLI read-only cases. Exact commands, exit codes, logs, and XML are preserved in `/tmp/mcpcli-2-10-post-sync-iznn0fbz/validation.json` and its directory; `summary.json` records the complete-suite counts. Pinned commitlint 21.2.2 validation with `npx --no -- commitlint --edit /tmp/mcpcli-2-10-post-sync-iznn0fbz/commit-message.txt --verbose` exited 0 with zero problems/warnings; the exact candidate and successful output are preserved in `commit-message.txt` and `commitlint.log`. The independent review adds explicit JSON format to the configuration-inspection example; no execution behavior or dependency changes were needed. Build status is `done`; sprint status is `review` according to the oneshot workflow.
 
+- Resumed on 2026-10-09 from clean `main` at `dbfbc23f91e3b545cde68ea083294ba59ada2701`. Closed the two outstanding Post-Fix review patches: README now names MCP `--transport`, `--format`, and `--output` as early validation exits; the read-only CLI acceptance tests assert stderr for lookup, discovery, description, and explicit-false override calls. No production behavior or dependencies changed.
+- Current verification: `dotnet build tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj --configuration Debug --no-restore --verbosity quiet` passed with zero warnings/errors; the focused `ReadOnlyCommandTests` passed 32/32. After the first test edit, all six direct Debug suites passed: CLI 424, Core 557 with two Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skips). After review extended stderr assertions to the explicit-false cases, the CLI test project rebuilt cleanly and the focused 32/32 cases passed again. `git diff --check` passed; changed C# lines retain CRLF.
+- The exact commit message is preserved in `/tmp/mcpcli-2-10-oct09-commit-message.txt`; pinned `npx --no -- commitlint --edit /tmp/mcpcli-2-10-oct09-commit-message.txt --verbose` exited 0 with zero problems and warnings.
+
 ## Review Triage Log
+
+### October 9 Resumption Review Triage
+
+Independent Blind Hunter reviewed 2.625 kB of changed content; finding floor `min(floor(sqrt(2.625) + 1), 10) = 2`. All three findings were checked; nothing was deferred.
+
+- **Low, rejected:** The README's MCP early-exit statement lacks dedicated invalid-`EVENTSTORE_READ_ONLY` test rows. `CliRunner.RunMcpAsync` returns for unsupported `--transport`, non-JSON explicit `--format`, and any `--output` before `HostFactory.Create` resolves settings; the existing tests cover those option errors, and `ConfigCommandTests` covers invalid read-only environment values. Dedicated cross-product rows would mirror this unchanged control flow.
+- **Low, rejected:** Lookup and kind precedence are tested with flag activation only. Both activation sources reach the same `ResolvedSettings.ReadOnly` branch; `SendRefusesBeforeReadingInputAsync` proves environment activation reaches that branch, while the lookup/kind theory pins its ordering. Extra environment rows would repeat unchanged behavior.
+- **Low, patched:** The two explicit-false override tests did not inspect stderr. Both now call `AssertDiagnostics`, matching the other invocations in this acceptance class; the focused class passes 32/32.
 
 ### Post-Sync Resumption Review Triage
 
@@ -258,8 +270,8 @@ Rejected:
 
 Code review 2026-10-08 of `3260812..1b1012d`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
 
-- [ ] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation says "MCP transport or output-option errors", but `CliRunner.RunMcpAsync` rejects `--transport`, any explicit non-`json` `--format`, and `--output` before settings resolution (`CliRunner.cs:449-468`). "Output-option" reads as `--output` alone; name all three options (Acceptance Auditor) [README.md:73]
-- [ ] [Review][Patch] `SendPreservesLookupAndKindErrorsAsync` and `EnvironmentPreservesDiscoveryAsync` discard stderr, while their siblings call `AssertDiagnostics(error)`. An unexpected log line or diagnostic on the read-only lookup path or in environment-activated discovery would go unnoticed. Assert diagnostics for every invocation (Blind Hunter) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:74, :118]
+- [x] [Review][Patch] README's list of exits that precede `EVENTSTORE_READ_ONLY` validation now names MCP `--transport`, `--format`, and `--output` errors (`CliRunner.cs:449-468`) [README.md:73]
+- [x] [Review][Patch] `SendPreservesLookupAndKindErrorsAsync` and `EnvironmentPreservesDiscoveryAsync` now assert stderr diagnostics for all invocations [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:74, :118]
 
 Rejected:
 

@@ -76,7 +76,7 @@ public sealed class ReadOnlyCommandTests
         await using var harness = new QueryCliHarness();
         using var input = new StringReader("");
         input.Dispose();
-        (int exit, string output, _) = await harness.InvokeAsync(
+        (int exit, string output, string errorText) = await harness.InvokeAsync(
             ["send", operation, "--read-only", "--payload", "-"], withUrl: false, standardInput: input);
         exit.ShouldBe(2);
         using JsonDocument result = JsonDocument.Parse(output);
@@ -88,6 +88,7 @@ public sealed class ReadOnlyCommandTests
             error.GetProperty("violations")[0].GetProperty("path").GetString().ShouldBe("/operation");
         }
 
+        AssertDiagnostics(errorText);
         harness.Calls.ShouldBe(0);
     }
 
@@ -118,7 +119,7 @@ public sealed class ReadOnlyCommandTests
     public async Task EnvironmentPreservesDiscoveryAsync(bool withUrl)
     {
         await using var harness = new QueryCliHarness();
-        (int exit, string output, _) = await harness.InvokeAsync(
+        (int exit, string output, string errorText) = await harness.InvokeAsync(
             ["operations", "routing-fixture"], withUrl, "true");
         exit.ShouldBe(0);
         using JsonDocument list = JsonDocument.Parse(output);
@@ -129,8 +130,9 @@ public sealed class ReadOnlyCommandTests
         foreach (bool write in new[] { false, true })
         {
             string operation = write ? "routing-fixture.computed-envelope" : "string-fixture.list-items";
-            (int describeExit, string description, _) = await harness.InvokeAsync(["describe", operation], withUrl, "true");
+            (int describeExit, string description, string describeError) = await harness.InvokeAsync(["describe", operation], withUrl, "true");
             describeExit.ShouldBe(0);
+            AssertDiagnostics(describeError);
             using JsonDocument document = JsonDocument.Parse(description);
             document.RootElement.GetProperty("kind").GetString().ShouldBe(write ? "write" : "read");
             document.RootElement.GetProperty("submittable").GetBoolean().ShouldBe(!write && withUrl);
@@ -144,6 +146,7 @@ public sealed class ReadOnlyCommandTests
             }
         }
 
+        AssertDiagnostics(errorText);
         harness.Calls.ShouldBe(0);
     }
 
@@ -162,6 +165,7 @@ public sealed class ReadOnlyCommandTests
         document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");
         document.RootElement.GetProperty("aggregateId").GetString().ShouldBe(ItemId);
         document.RootElement.GetProperty("tenant").GetString().ShouldBe("acme");
+        AssertDiagnostics(error);
         harness.Calls.ShouldBe(1);
     }
 
@@ -170,12 +174,13 @@ public sealed class ReadOnlyCommandTests
     public async Task ExplicitFalseOverridesEnvironmentAsync()
     {
         await using var harness = new QueryCliHarness();
-        (int exit, string output, _) = await harness.InvokeAsync(
+        (int exit, string output, string error) = await harness.InvokeAsync(
             ["send", "routing-fixture.computed-envelope", "--read-only", "false", "--payload", "{"],
             readOnlyEnvironment: "true");
         exit.ShouldBe(2);
         using JsonDocument document = JsonDocument.Parse(output);
         document.RootElement.GetProperty("error").GetProperty("code").GetString().ShouldBe("validation_failed");
+        AssertDiagnostics(error);
         harness.Calls.ShouldBe(0);
     }
 }
