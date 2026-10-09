@@ -67,6 +67,38 @@ public sealed class ReadOnlyCommandTests
         }
     }
 
+    /// <summary>A missing or blank operation fails input binding before read-only catalog dispatch.</summary>
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData(" \t", false)]
+    [InlineData(null, true)]
+    [InlineData("", true)]
+    [InlineData(" \t", true)]
+    public async Task SendRequiresOperationBeforeReadOnlyDispatchAsync(string? operation, bool environment)
+    {
+        await using var harness = new QueryCliHarness();
+        List<string> arguments = ["send", "--payload", "-"];
+        if (operation is not null)
+        {
+            arguments.Insert(1, operation);
+        }
+
+        if (!environment)
+        {
+            arguments.Add("--read-only");
+        }
+
+        using var input = new StringReader("must not be read");
+        input.Dispose();
+        (int exit, string output, string error) = await harness.InvokeAsync(
+            [.. arguments], readOnlyEnvironment: environment ? "true" : null, standardInput: input);
+        exit.ShouldBe(2, output + error);
+        AssertJson(output, """{"error":{"code":"invalid_arguments","message":"operation is required and must be non-empty","argument":"operation"}}""");
+        error.ShouldBeEmpty();
+        harness.Calls.ShouldBe(0);
+    }
+
     /// <summary>The shared executor still owns lookup and kind failures before read-only refusal.</summary>
     [Theory]
     [InlineData("unknown.operation", "unknown_operation")]

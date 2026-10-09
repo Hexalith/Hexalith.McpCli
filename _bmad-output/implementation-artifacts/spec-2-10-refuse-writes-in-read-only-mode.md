@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -69,7 +69,20 @@ context: []
 - Resumed from clean `main` at `4694cc783920f87b25054c4d3a97a3419299801b` on 2026-10-09. Removed the inaccurate Story 2.1 attribution from the deferred help-text entry and this spec; Git confirms `de67938e424e0d2ee4b649a3fb0ea58b778d3129` precedes the Story 2.1 baseline `e599f5c3faa41dbf90bd9219a4a1de47c40f2fd3`. Added captured output and diagnostics to the six remaining CLI exit-code assertions so failures identify the gate that fired. The CLI Debug test project builds with zero warnings/errors; the focused read-only class passes 32/32 and the complete CLI suite passes 424/424. The final full-suite command `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll > /tmp/mcpcli-2-10-oct09-final-cli-tests.log 2>&1` exited 0, and that log records 424 passed with zero failures/errors. `git diff --check` passes and the changed C# file retains CRLF endings.
 - The exact commit message `test(cli): preserve diagnostics in read-only assertions` is preserved in `/tmp/mcpcli-2-10-final-commit-message.txt`; pinned `npx --no -- commitlint --edit /tmp/mcpcli-2-10-final-commit-message.txt --verbose` exited 0 with zero problems and warnings, recorded in `/tmp/mcpcli-2-10-final-commitlint.log`.
 
+- Resumed from clean `main` at `26eae63c68dc274f68b5b9073b1c063612f29219` on 2026-10-09. Added six CLI acceptance rows for omitted, empty, and whitespace-only `send` operations under both flag and environment read-only activation. They assert the exact `invalid_arguments` operation document, exit 2, no stderr catalog diagnostics, no stdin read, and zero Gateway requests. README now names both malformed extension forms checked before ordinary `send` lookup. No production code or dependencies changed. The CLI Debug test project built with zero warnings/errors; the focused read-only class passed 38/38 and the complete CLI suite passed 430/430. Reproducible commands: `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll -class Hexalith.McpCli.Cli.Tests.ReadOnlyCommandTests > /tmp/mcpcli-2-10-operation-precedence-focused.log 2>&1` and `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll > /tmp/mcpcli-2-10-operation-precedence-cli.log 2>&1`; both exited 0 and their logs record 38/38 and 430/430 respectively.
+
+- Final whitespace check passed, and the changed C# test file retains CRLF endings. The exact commit message `test(cli): pin read-only send operation validation` is preserved in `/tmp/mcpcli-2-10-operation-precedence-commit-message.txt`; pinned `npx --no -- commitlint --edit /tmp/mcpcli-2-10-operation-precedence-commit-message.txt --verbose` exited 0 with zero problems and warnings, recorded in `/tmp/mcpcli-2-10-operation-precedence-commitlint.log`.
+
 ## Review Triage Log
+
+### October 9 Operation Precedence Review
+
+Blind Hunter reviewed 5,889 changed-content bytes (5.889 kB; finding floor `min(floor(sqrt(5.889) + 1), 10) = 3`). All four findings were checked against the CLI path; nothing was deferred.
+
+- **Low, patched:** README omitted the missing or blank operation case. The CLI returns `invalid_arguments` for `operation` before catalog lookup; the new acceptance cases cover flag and environment activation, and README now names this order.
+- **Low, rejected:** All six new cases use a Gateway URL. The name guard in `CliRunner.CreateSend` runs after settings resolution and before catalog access, independently of URL availability; existing read-only refusal cases cover both URL states. Another offline row would repeat this unchanged branch.
+- **Low, rejected:** The README extension forms lack dedicated ordinary-send tests. `CliRunner.CreateSend` checks `separator < 1` and exact duplicate keys before dispatch, and this resumption changes only the description of those unchanged checks. Cross-product tests would mirror the branch rather than verify a new behavior.
+- **Low, patched:** The first validation note lacked reproducible commands and saved output. The Implementation Notes now include exact focused and complete CLI commands, exit results, and both `/tmp/mcpcli-2-10-operation-precedence-*.log` paths.
 
 ### October 9 Final Review Triage
 
@@ -318,8 +331,8 @@ Rejected:
 
 Code review 2026-10-09 of `3260812..7777525`, scoped to `README.md`, `src` and `tests` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
 
-- [ ] [Review][Patch] No test pins that read-only `send` with an omitted or blank operation returns `invalid_arguments` at `operation` before catalog access; hoisting the read-only branch above the blank-name check would pass a blank name to `CatalogService.Describe`, whose `ThrowIfNullOrWhiteSpace` becomes `internal_error`, and every `send` test would stay green (Verification Gap) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:71; src/Hexalith.McpCli/Cli/CliRunner.cs:166]
-- [ ] [Review][Patch] "extensions without a nonempty `key=` prefix" is hard to parse; name the two rejected forms the CLI checks (`separator < 1`): an `--extension` value with no `=`, or an empty key before it (Blind Hunter) [README.md:71]
+- [x] [Review][Patch] No test pins that read-only `send` with an omitted or blank operation returns `invalid_arguments` at `operation` before catalog access; hoisting the read-only branch above the blank-name check would pass a blank name to `CatalogService.Describe`, whose `ThrowIfNullOrWhiteSpace` becomes `internal_error`, and every `send` test would stay green (Verification Gap) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:71; src/Hexalith.McpCli/Cli/CliRunner.cs:166]
+- [x] [Review][Patch] "extensions without a nonempty `key=` prefix" is hard to parse; name the two rejected forms the CLI checks (`separator < 1`): an `--extension` value with no `=`, or an empty key before it (Blind Hunter) [README.md:71]
 
 Rejected:
 
