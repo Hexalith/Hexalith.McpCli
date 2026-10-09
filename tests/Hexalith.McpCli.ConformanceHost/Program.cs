@@ -35,9 +35,8 @@ internal static class Program
             .ToArray();
         string? profilePath = Environment.GetEnvironmentVariable("MCPCLI_CONFORMANCE_PROFILE_PATH");
         object runner = constructor.Invoke([new ProfileStore(profilePath), manifest]);
-        MethodInfo parse = runnerType.GetMethod("Parse", BindingFlags.Instance | BindingFlags.NonPublic,
-            binder: null, [typeof(IReadOnlyList<string>)], modifiers: null)!;
-        var parsed = (ParseResult)parse.Invoke(runner, [args])!;
-        return await parsed.InvokeAsync().ConfigureAwait(false);
+        MethodInfo invoke = runnerType.GetMethod("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic,
+            binder: null, [typeof(IReadOnlyList<string>), typeof(CancellationToken)], modifiers: null)!;
+        return await ((Task<int>)invoke.Invoke(runner, [args, CancellationToken.None])!).ConfigureAwait(false);
     }
 }

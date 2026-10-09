@@ -30,16 +30,41 @@ internal static class OutputFileType
         }
 
         byte[] native = new byte[256];
-        if (Stat(path, native) != 0)
+        int offset;
+        int result;
+        if (OperatingSystem.IsLinux())
+        {
+            // statx has a fixed layout across Linux architectures and is exported by glibc 2.28+.
+            result = Statx(-100, path, 0, 1, native);
+            offset = 28;
+        }
+        else if (OperatingSystem.IsMacOS() && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        {
+            result = MacStatInode64(path, native);
+            offset = 4;
+        }
+        else if (OperatingSystem.IsMacOS() && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+        {
+            result = Stat(path, native);
+            offset = 4;
+        }
+        else if (OperatingSystem.IsFreeBSD() && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        {
+            result = Stat(path, native);
+            offset = 24;
+        }
+        else
+        {
+            throw new PlatformNotSupportedException("Result target inspection is unavailable on this ABI.");
+        }
+
+        if (result != 0)
         {
             int error = Marshal.GetLastPInvokeError();
             return error is 2 or 20 ? OutputTargetKind.Missing
                 : throw new IOException("The result target cannot be inspected.");
         }
 
-        int offset = OperatingSystem.IsMacOS() ? 4
-            : OperatingSystem.IsFreeBSD() ? 24
-            : RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? 16 : 24;
         int kind = BitConverter.ToUInt16(native, offset) & 0xF000;
         return kind switch
         {
@@ -61,6 +86,12 @@ internal static class OutputFileType
             throw new UnauthorizedAccessException("The result target is not accessible for writing.");
         }
     }
+
+    [DllImport("libc", EntryPoint = "statx", SetLastError = true, CharSet = CharSet.Ansi)]
+    private static extern int Statx(int directory, string path, int flags, int mask, [Out] byte[] buffer);
+
+    [DllImport("libc", EntryPoint = "stat$INODE64", SetLastError = true, CharSet = CharSet.Ansi)]
+    private static extern int MacStatInode64(string path, [Out] byte[] buffer);
 
     [DllImport("libc", EntryPoint = "stat", SetLastError = true, CharSet = CharSet.Ansi)]
     private static extern int Stat(string path, [Out] byte[] buffer);

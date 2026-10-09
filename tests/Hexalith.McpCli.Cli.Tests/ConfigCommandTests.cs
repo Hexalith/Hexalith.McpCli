@@ -1937,7 +1937,7 @@ public sealed class ConfigCommandTests
             Console.SetError(error);
             int exit = await new CliRunner(store, manifest,
                 name => environment.TryGetValue(name, out string? value) ? value : null, runMcp)
-                .Parse(args).InvokeAsync();
+                .InvokeAsync(args);
             return (exit, output.ToString(), error.ToString());
         }
         finally

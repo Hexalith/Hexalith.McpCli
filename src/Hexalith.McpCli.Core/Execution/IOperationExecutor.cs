@@ -9,5 +9,5 @@ public interface IOperationExecutor
     /// <param name="cancellationToken">The request cancellation token.</param>
     /// <param name="beforeSubmit">Optional check immediately before the gateway request.</param>
     Task<OperationOutcome> ExecuteAsync(OperationCall call, EnvelopeContext context, CancellationToken cancellationToken = default,
-        Func<CancellationToken, Task>? beforeSubmit = null);
+        Func<CancellationToken, Task<OperationError?>>? beforeSubmit = null);
 }

@@ -88,9 +88,9 @@ public sealed class CliMcpQueryParityTests
             try
             {
                 Console.SetOut(output);
-                int exit = await new CliRunner(store, manifest).Parse(
-                    ["query", "sample.get-item", "--payload", payload, "--page-size", "25", "--url", url])
-                    .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
+                int exit = await new CliRunner(store, manifest).InvokeAsync(
+                    ["query", "sample.get-item", "--payload", payload, "--page-size", "25", "--url", url],
+                    TestContext.Current.CancellationToken);
                 exit.ShouldBe(0);
             }
             finally

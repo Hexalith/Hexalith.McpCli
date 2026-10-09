@@ -10,7 +10,10 @@ namespace Hexalith.McpCli.Cli;
 /// <summary>Writes one public Core document to the CLI output channel.</summary>
 internal static class CliOutput
 {
-    /// <summary>Checks predictable result-path failures before an action can have side effects.</summary>
+    /// <summary>The safe public message for a failed result-path preflight.</summary>
+    internal const string PreflightFailureMessage = "The result destination cannot be written; no request was sent.";
+
+    /// <summary>Checks predictable destination failures before an action can have side effects.</summary>
     internal static void Preflight(string? output)
     {
         if (output is null)
@@ -18,6 +21,18 @@ internal static class CliOutput
             return;
         }
 
+        try
+        {
+            PreflightCore(output);
+        }
+        catch (Exception exception)
+        {
+            throw new OutputPreflightException(PreflightFailureMessage, exception);
+        }
+    }
+
+    private static void PreflightCore(string output)
+    {
         string path = ResolveFinalSymlink(output);
         OutputTargetKind kind = OutputFileType.Inspect(path);
         if (kind == OutputTargetKind.Missing)

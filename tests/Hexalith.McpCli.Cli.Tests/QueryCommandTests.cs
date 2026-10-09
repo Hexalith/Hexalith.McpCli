@@ -128,8 +128,7 @@ public sealed class QueryCommandTests
                 Console.SetIn(input);
                 Console.SetOut(output);
                 Console.SetError(error);
-                int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
-                    .InvokeAsync(cancellationToken: timeout.Token);
+                int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(arguments, timeout.Token);
 
                 exit.ShouldBe(0, output.ToString() + error.ToString());
                 calls.ShouldBe(1);

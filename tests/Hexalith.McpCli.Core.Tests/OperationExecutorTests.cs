@@ -28,7 +28,7 @@ public sealed class OperationExecutorTests
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
         IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
         int checks = 0;
-        Func<CancellationToken, Task> preflight = _ =>
+        Func<CancellationToken, Task<OperationError?>> preflight = _ =>
         {
             checks++;
             throw new IOException("The output destination is unavailable.");
@@ -38,6 +38,13 @@ public sealed class OperationExecutorTests
             new SendCommandArguments("sample.create-item", "not json"), Context(),
             TestContext.Current.CancellationToken, preflight);
         invalid.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        checks.ShouldBe(0);
+
+        OperationOutcome envelopeInvalid = await executor.ExecuteAsync(
+            new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+                CorrelationId: "not-a-ulid"), Context(),
+            TestContext.Current.CancellationToken, preflight);
+        envelopeInvalid.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
         checks.ShouldBe(0);
 
         OperationOutcome valid = await executor.ExecuteAsync(

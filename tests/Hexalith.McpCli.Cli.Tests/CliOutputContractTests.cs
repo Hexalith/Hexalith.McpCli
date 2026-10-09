@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.Versioning;
@@ -37,9 +38,16 @@ public sealed class CliOutputContractTests
                 (["config", "set", "dev", "tenant", "value", "extra"], "arguments"),
                 (["--help=secret"], "arguments"),
                 (["/?=secret"], "arguments"),
+                (["/h=secret"], "arguments"),
                 (["--version=secret"], "arguments"),
-                (["modules", "--strict=secret", "--help"], "strict"),
+                (["modules", "--strict=secret", "--help"], "arguments"),
                 (["modules", "--read-only=secret"], "readOnly"),
+                (["modules", "--strict=true", "--read-only=bad"], "readOnly"),
+                (["modules", "--read-only", "maybe"], "readOnly"),
+                (["modules", "--token", "/?=secret"], "arguments"),
+                (["operations", "sample", "--kind", "-?=secret"], "arguments"),
+                (["query", "--page-size:abc"], "pageSize"),
+                (["modules", "--strict:secret"], "strict"),
                 (["--version", "--bogus-secret"], "arguments"),
             ];
             foreach ((string[] arguments, string expectedArgument) in cases)
@@ -64,6 +72,27 @@ public sealed class CliOutputContractTests
         }
     }
 
+    /// <summary>Colon-attached option values accepted by the parser remain valid.</summary>
+    [Fact]
+    public async Task ColonAttachedOptionsRemainValidAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (int exit, string output, string error) = await InvokeAsync(store,
+                ["--tenant:foo", "config", "current", "--read-only:true"]);
+            exit.ShouldBe(0, output + error);
+            using JsonDocument document = JsonDocument.Parse(output);
+            document.RootElement.GetProperty("tenant").GetString().ShouldBe("foo");
+            document.RootElement.GetProperty("readOnly").GetBoolean().ShouldBeTrue();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Bare help stays successful while supplied invalid operands and settings do not bypass validation.</summary>
     [Fact]
     public async Task HelpAliasesValidateSuppliedInputAsync()
@@ -75,7 +104,7 @@ public sealed class CliOutputContractTests
             foreach (string[] arguments in new[]
                 {
                     new[] { "--help" }, new[] { "config", "--help" }, new[] { "config", "profile", "add", "-h" },
-                    new[] { "operations", "-?" }, new[] { "operations", "/?" },
+                    new[] { "operations", "-?" }, new[] { "operations", "/?" }, new[] { "operations", "/h" },
                 })
             {
                 (int exit, string output, string error) = await InvokeAsync(store, arguments);
@@ -93,8 +122,12 @@ public sealed class CliOutputContractTests
                 (["operations", "sample", "--kind", "bad", "/?"], "invalid_arguments"),
                 (["config", "set", "dev", "tenant", "--help"], "invalid_arguments"),
                 (["config", "use", "--clear=false", "--help"], "invalid_arguments"),
-                (["modules", "--url", "ftp://bad.example/", "--help"], "configuration_invalid"),
-                (["modules", "--format", "xml", "--help"], "configuration_invalid"),
+                (["modules", "--url", "ftp://bad.example/", "--help"], "invalid_arguments"),
+                (["modules", "--format", "xml", "--help"], "invalid_arguments"),
+                (["config", "profile", "remove", "missing", "--help"], "invalid_arguments"),
+                (["config", "use", "missing", "-h"], "invalid_arguments"),
+                (["config", "set", "dev", "badfield", "x", "--help"], "invalid_arguments"),
+                (["config", "profile", "add", "dev", "--help"], "invalid_arguments"),
             ];
             foreach ((string[] arguments, string code) in invalid)
             {
@@ -109,21 +142,32 @@ public sealed class CliOutputContractTests
                 ["mcp", "--transport", "http", "--help"]);
             httpExit.ShouldBe(2);
             httpOut.ShouldBeEmpty();
-            AssertError(httpError, "unsupported_transport").GetProperty("message").GetString()!.ShouldContain("next release");
+            AssertError(httpError, "invalid_arguments");
+
+            (int slashHttpExit, string slashHttpOut, string slashHttpError) = await InvokeAsync(store,
+                ["mcp", "--transport", "http", "/h"]);
+            slashHttpExit.ShouldBe(2);
+            slashHttpOut.ShouldBeEmpty();
+            AssertError(slashHttpError, "invalid_arguments");
 
             (int mcpSettingsExit, string mcpSettingsOut, string mcpSettingsError) = await InvokeAsync(store,
                 ["mcp", "--url", "ftp://bad.example/", "--help"]);
             mcpSettingsExit.ShouldBe(2);
             mcpSettingsOut.ShouldBeEmpty();
-            AssertError(mcpSettingsError, "configuration_invalid");
+            AssertError(mcpSettingsError, "invalid_arguments");
+
+            (int mcpFormatExit, string mcpFormatOut, string mcpFormatError) = await InvokeAsync(store,
+                ["mcp", "--format", "table", "--help"]);
+            mcpFormatExit.ShouldBe(2);
+            mcpFormatOut.ShouldBeEmpty();
+            AssertError(mcpFormatError, "invalid_arguments");
 
             store.Add("dev", new ConnectionProfile("https://gateway.example/"));
-            byte[] before = File.ReadAllBytes(store.ProfilePath);
             (int literalExit, string literalOutput, string literalError) = await InvokeAsync(store,
-                ["config", "set", "dev", "actor", "--help", "--", "--help"]);
+                ["config", "set", "dev", "actor", "--", "--help"]);
             literalExit.ShouldBe(0, literalOutput + literalError);
-            literalOutput.ShouldContain("Usage:");
-            File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
+            literalOutput.ShouldNotContain("Usage:");
+            store.Read().Profiles["dev"].Actor.ShouldBe("--help");
         }
         finally
         {
@@ -236,13 +280,15 @@ public sealed class CliOutputContractTests
             {
                 (int exit, string output, _) = await InvokeAsync(store, [.. arguments, "--output", bad]);
                 exit.ShouldBe(2, string.Join(' ', arguments) + output);
-                AssertError(output, "internal_error");
+                AssertError(output, "internal_error").GetProperty("message").GetString().ShouldBe(
+                    "The result destination cannot be written; no request was sent.");
                 File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
             }
 
             foreach (string[] arguments in new[]
                 {
                     new[] { "config", "profile", "remove", "missing" },
+                    new[] { "config", "use", "missing" },
                     new[] { "config", "profile", "add", "bad name", "--url", "https://gateway.example/" },
                     new[] { "config", "set", "dev", "allowTenantOverride", "bad" },
                     new[] { "config", "set", "dev", "allowedExtensions", "bad key" },
@@ -252,6 +298,19 @@ public sealed class CliOutputContractTests
                 exit.ShouldBe(2);
                 AssertError(output, "configuration_invalid");
                 File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
+            }
+
+            File.WriteAllText(store.ProfilePath, "{");
+            foreach (string[] arguments in new[]
+                {
+                    new[] { "config", "profile", "add", "new", "--url", "https://gateway.example/" },
+                    new[] { "config", "use", "--clear" },
+                })
+            {
+                (int exit, string output, _) = await InvokeAsync(store, [.. arguments, "--output", bad]);
+                exit.ShouldBe(2);
+                AssertError(output, "configuration_invalid");
+                File.ReadAllText(store.ProfilePath).ShouldBe("{");
             }
         }
         finally
@@ -288,6 +347,50 @@ public sealed class CliOutputContractTests
                 new FileInfo(link).LinkTarget.ShouldBe(target);
                 using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
                 document.RootElement.GetProperty("profiles").GetArrayLength().ShouldBe(0);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Successful profile writes leave no preflight probes in either staging location.</summary>
+    [Fact]
+    public async Task MutationPreflightRemovesProbeFilesAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            string[] beforeTemp = Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*");
+            string created = Path.Combine(directory, "new-result.json");
+            (int newExit, string newOutput, _) = await InvokeAsync(store,
+                ["config", "set", "dev", "actor", "first", "--output", created]);
+            newExit.ShouldBe(0, newOutput);
+            newOutput.ShouldBeEmpty();
+            File.Exists(created).ShouldBeTrue();
+            Directory.GetFiles(directory, ".mcpcli-probe-*").ShouldBeEmpty();
+            Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
+
+            (int existingExit, string existingOutput, _) = await InvokeAsync(store,
+                ["config", "set", "dev", "actor", "second", "--output", created]);
+            existingExit.ShouldBe(0, existingOutput);
+            existingOutput.ShouldBeEmpty();
+            Directory.GetFiles(directory, ".mcpcli-probe-*").ShouldBeEmpty();
+            Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
+
+            if (!OperatingSystem.IsWindows())
+            {
+                string link = Path.Combine(directory, "result-link");
+                File.CreateSymbolicLink(link, created);
+                (int linkExit, string linkOutput, _) = await InvokeAsync(store,
+                    ["config", "set", "dev", "actor", "third", "--output", link]);
+                linkExit.ShouldBe(0, linkOutput);
+                linkOutput.ShouldBeEmpty();
+                new FileInfo(link).LinkTarget.ShouldBe(created);
+                Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
             }
         }
         finally
@@ -408,8 +511,10 @@ public sealed class CliOutputContractTests
             }
 
             using Process process = Process.Start(start).ShouldNotBeNull();
-            string output = await process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-            string error = await process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+            Task<string> stdout = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
+            Task<string> stderr = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+            string output = await stdout;
+            string error = await stderr;
             await process.WaitForExitAsync(TestContext.Current.CancellationToken);
             process.ExitCode.ShouldBe(2, output + error);
             AssertError(output, "internal_error");
@@ -435,10 +540,15 @@ public sealed class CliOutputContractTests
             ResolvedSettings settings = new SettingsResolver(store, new Dictionary<string, string?>())
                 .Resolve(new SettingsInput(Format: "table")).Settings.ShouldNotBeNull();
             Console.SetOut(output);
-            await CliOutput.WriteAsync(new ModulesDocument([new ModuleSummary("sample", "tab\tand\nline", 1)]),
+            await CliOutput.WriteAsync(new ModulesDocument([]), null, settings,
+                TestContext.Current.CancellationToken, "NAME\tOPERATIONS\tDESCRIPTION");
+            output.ToString().ShouldBe("NAME\tOPERATIONS\tDESCRIPTION" + Environment.NewLine);
+
+            output.GetStringBuilder().Clear();
+            await CliOutput.WriteAsync(new ModulesDocument([new ModuleSummary("sample", "tab\tand\nline\r\\path", 1)]),
                 null, settings, TestContext.Current.CancellationToken, "NAME\tOPERATIONS\tDESCRIPTION");
             output.ToString().ShouldBe("NAME\tOPERATIONS\tDESCRIPTION" + Environment.NewLine
-                + "sample\t1\ttab\\tand\\nline" + Environment.NewLine);
+                + "sample\t1\ttab\\tand\\nline\\r\\\\path" + Environment.NewLine);
 
             output.GetStringBuilder().Clear();
             await CliOutput.WriteAsync(new OperationsDocument("sample", []), null, settings,
@@ -447,10 +557,10 @@ public sealed class CliOutputContractTests
 
             output.GetStringBuilder().Clear();
             await CliOutput.WriteAsync(new OperationsDocument("sample",
-                [new OperationSummary("sample.operation", "read", "tab\tand\nline")]), null, settings,
+                [new OperationSummary("sample.operation", "read", "tab\tand\nline\r\\path")]), null, settings,
                 TestContext.Current.CancellationToken, "NAME\tKIND\tDESCRIPTION");
             output.ToString().ShouldBe("NAME\tKIND\tDESCRIPTION" + Environment.NewLine
-                + "sample.operation\tread\ttab\\tand\\nline" + Environment.NewLine);
+                + "sample.operation\tread\ttab\\tand\\nline\\r\\\\path" + Environment.NewLine);
 
             output.GetStringBuilder().Clear();
             await CliOutput.WriteAsync(new { value = "a\\b" }, null, settings,
@@ -471,12 +581,12 @@ public sealed class CliOutputContractTests
     {
         Assert.SkipWhen(OperatingSystem.IsWindows(), "Unix file-type fixtures are required.");
         string directory = NewDirectory();
+        string socketPath = Path.Combine("/tmp", "mc-" + Guid.NewGuid().ToString("N")[..8]);
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             string link = Path.Combine(directory, "unusable-link");
             File.CreateSymbolicLink(link, Path.Combine(directory, "missing-parent", "result.json"));
-            string socketPath = Path.Combine(directory, "occupied-socket");
             using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
             socket.Bind(new UnixDomainSocketEndPoint(socketPath));
 
@@ -495,6 +605,63 @@ public sealed class CliOutputContractTests
         finally
         {
             Directory.Delete(directory, recursive: true);
+            if (File.Exists(socketPath))
+            {
+                File.Delete(socketPath);
+            }
+        }
+    }
+
+    /// <summary>CLI file output accepts a character device and a live anonymous pipe.</summary>
+    [Fact]
+    public async Task CliAcceptsDeviceAndProcFdPipeAsync()
+    {
+        Assert.SkipWhen(!OperatingSystem.IsLinux(), "The device and proc-fd fixtures require Linux.");
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (int deviceExit, string deviceOutput, string deviceError) = await InvokeAsync(store,
+                ["config", "current", "--output", "/dev/null"]);
+            deviceExit.ShouldBe(0, deviceOutput + deviceError);
+            deviceOutput.ShouldBeEmpty();
+
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            (int mutationExit, string mutationOutput, string mutationError) = await InvokeAsync(store,
+                ["config", "set", "dev", "actor", "device", "--output", "/dev/null"]);
+            mutationExit.ShouldBe(0, mutationOutput + mutationError);
+            mutationOutput.ShouldBeEmpty();
+            store.Read().Profiles["dev"].Actor.ShouldBe("device");
+
+            for (int index = 0; index < 2; index++)
+            {
+                using var server = new AnonymousPipeServerStream(PipeDirection.Out, HandleInheritability.None);
+                using var client = new AnonymousPipeClientStream(PipeDirection.In, server.ClientSafePipeHandle);
+                string path = "/proc/self/fd/" + server.SafePipeHandle.DangerousGetHandle().ToInt64();
+                string[] arguments = index == 0
+                    ? ["config", "current", "--output", path]
+                    : ["config", "set", "dev", "actor", "pipe", "--output", path];
+                (int pipeExit, string pipeOutput, string pipeError) = await InvokeAsync(store, arguments);
+                pipeExit.ShouldBe(0, pipeOutput + pipeError);
+                pipeOutput.ShouldBeEmpty();
+                server.Dispose();
+                using var reader = new StreamReader(client);
+                using JsonDocument result = JsonDocument.Parse(
+                    await reader.ReadToEndAsync(TestContext.Current.CancellationToken));
+                if (index == 0)
+                {
+                    result.RootElement.GetProperty("format").GetString().ShouldBe("json");
+                }
+                else
+                {
+                    result.RootElement.GetProperty("field").GetString().ShouldBe("actor");
+                    store.Read().Profiles["dev"].Actor.ShouldBe("pipe");
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
         }
     }
 
@@ -507,6 +674,8 @@ public sealed class CliOutputContractTests
             Assert.Skip("The FIFO fixture uses the Linux mkfifo utility.");
             return;
         }
+        Assert.SkipWhen(Environment.IsPrivilegedProcess,
+            "Root can bypass the owner-denied FIFO fixture and block opening it without a reader.");
         string directory = NewDirectory();
         try
         {
@@ -548,6 +717,8 @@ public sealed class CliOutputContractTests
             return;
         }
 
+        Assert.SkipWhen(Environment.IsPrivilegedProcess,
+            "Root can create the staging probe in a read-only parent.");
         string directory = NewDirectory();
         string parent = Path.Combine(directory, "no-write-parent");
         Directory.CreateDirectory(parent);
@@ -677,8 +848,10 @@ public sealed class CliOutputContractTests
         start.ArgumentList.Add("--version");
         start.ArgumentList.Add("--bogus-secret");
         using Process process = Process.Start(start).ShouldNotBeNull();
-        string output = await process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-        string error = await process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+        Task<string> stdout = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
+        Task<string> stderr = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+        string output = await stdout;
+        string error = await stderr;
         await process.WaitForExitAsync(TestContext.Current.CancellationToken);
         process.ExitCode.ShouldBe(2, output + error);
         error.ShouldBeEmpty();

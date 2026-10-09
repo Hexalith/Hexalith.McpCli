@@ -689,7 +689,7 @@ public sealed class DiscoveryCommandTests
             Console.SetError(error);
             Console.SetIn(input);
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            int exit = await new CliRunner(store, manifest, _ => null).Parse(args).InvokeAsync(cancellationToken: timeout.Token);
+            int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(args, timeout.Token);
             return (exit, output.ToString(), error.ToString());
         }
         finally

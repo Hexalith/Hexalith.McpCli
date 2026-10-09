@@ -24,7 +24,7 @@ public sealed class OperationExecutor(
         OperationCall call,
         EnvelopeContext context,
         CancellationToken cancellationToken = default,
-        Func<CancellationToken, Task>? beforeSubmit = null)
+        Func<CancellationToken, Task<OperationError?>>? beforeSubmit = null)
     {
         ArgumentNullException.ThrowIfNull(call);
         ArgumentNullException.ThrowIfNull(context);
@@ -46,7 +46,7 @@ public sealed class OperationExecutor(
         OperationCall call,
         EnvelopeContext context,
         CancellationToken cancellationToken,
-        Func<CancellationToken, Task>? beforeSubmit)
+        Func<CancellationToken, Task<OperationError?>>? beforeSubmit)
     {
         CatalogAccess access = provider.Get(strict);
         if (access.Catalog is null)
@@ -231,7 +231,11 @@ public sealed class OperationExecutor(
         {
             if (beforeSubmit is not null)
             {
-                await beforeSubmit(cancellationToken).ConfigureAwait(false);
+                OperationError? preflightError = await beforeSubmit(cancellationToken).ConfigureAwait(false);
+                if (preflightError is not null)
+                {
+                    return new OperationOutcome(null, preflightError);
+                }
             }
 
             var request = new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,
@@ -245,7 +249,11 @@ public sealed class OperationExecutor(
         var run = (RunQueryArguments)call;
         if (beforeSubmit is not null)
         {
-            await beforeSubmit(cancellationToken).ConfigureAwait(false);
+            OperationError? preflightError = await beforeSubmit(cancellationToken).ConfigureAwait(false);
+            if (preflightError is not null)
+            {
+                return new OperationOutcome(null, preflightError);
+            }
         }
 
         var queryRequest = new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,

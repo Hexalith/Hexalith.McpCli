@@ -108,8 +108,7 @@ public sealed class CliMcpCommandParityTests
             try
             {
                 Console.SetOut(output);
-                int exit = await new CliRunner(store, manifest).Parse(cliArgs)
-                    .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
+                int exit = await new CliRunner(store, manifest).InvokeAsync(cliArgs, TestContext.Current.CancellationToken);
                 exit.ShouldBe(0);
             }
             finally
@@ -295,8 +294,7 @@ public sealed class CliMcpCommandParityTests
                 Console.SetIn(input);
                 Console.SetOut(output);
                 Console.SetError(error);
-                int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
-                    .InvokeAsync(cancellationToken: timeout.Token);
+                int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(arguments, timeout.Token);
 
                 exit.ShouldBe(0, output.ToString() + error.ToString());
                 await response.WaitAsync(timeout.Token);

@@ -401,6 +401,15 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
     _verify_artifact_in_host(host, artifact, package)
     with tempfile.TemporaryDirectory(prefix="mcpcli-conformance-home-") as home:
         head = HeadProcess(host, home, timeout)
+        malformed = subprocess.run(head._base() + ["modules", "--bogus-secret"],
+                                   capture_output=True, text=True, timeout=timeout, env=head.env, check=False)
+        try:
+            malformed_document = json.loads(malformed.stdout)
+        except json.JSONDecodeError as exc:
+            _fail(f"test host malformed-command stdout is not JSON: {exc}")
+        if malformed.returncode != 2 or malformed.stderr or malformed_document.get("error", {}).get("code") != "invalid_arguments":
+            _fail(f"test host bypasses checked CLI parsing: exit {malformed.returncode}, "
+                  f"stdout {malformed.stdout!r}, stderr {malformed.stderr!r}")
         exit_code, modules = head.cli(["modules"])
         mcp_error, mcp_modules = head.mcp("list_modules", {})
         _assert_discovery_parity(exit_code, mcp_error, modules, mcp_modules, "list_modules")

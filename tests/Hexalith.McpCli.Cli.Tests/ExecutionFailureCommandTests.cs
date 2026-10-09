@@ -142,7 +142,7 @@ public sealed class ExecutionFailureCommandTests
                 true, 202, "", outputDirectory, acceptedCommand: true);
 
             exit.ShouldBe(2, output);
-            AssertJson(output, """{"error":{"code":"internal_error","message":"Operation execution failed."}}""");
+            AssertJson(output, """{"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}""");
             calls.ShouldBe(0);
             Directory.Exists(outputDirectory).ShouldBeTrue();
         }
@@ -150,6 +150,18 @@ public sealed class ExecutionFailureCommandTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    /// <summary>A device write can fail after one accepted command, without suggesting a retry.</summary>
+    [Fact]
+    public async Task AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync()
+    {
+        Assert.SkipWhen(!OperatingSystem.IsLinux(), "The full-device fixture requires Linux.");
+        (int exit, string output, int calls) = await InvokeGatewayAsync(
+            true, 202, "", "/dev/full", acceptedCommand: true);
+        exit.ShouldBe(2, output);
+        AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
+        calls.ShouldBe(1);
     }
 
     /// <summary>A successful command writes its canonical result to an existing file after one submission.</summary>
