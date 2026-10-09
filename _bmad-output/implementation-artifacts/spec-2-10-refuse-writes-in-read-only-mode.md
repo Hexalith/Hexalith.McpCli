@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -285,6 +285,26 @@ Rejected:
 - `low` — The explicit-false send asserts only output fields and one request, not route or envelope (Edge Case Hunter): `CliMcpCommandParityTests` covers command routing and the envelope. Checking them here needs new harness surface. Fifth identical verdict.
 - `low` — `QueryCliHarness` ignores `paging`/`nullDocument` with `commandResponse` (Edge Case Hunter): no caller combines them, and a guard adds complexity for an unreachable case. Seventh identical verdict.
 - `false` — `AssertRequest` hard-codes `/api/v1/queries` (Edge Case Hunter): no command test calls it, and calling it on a command request fails loudly on the path, so no test can pass wrongly.
+
+### Post-Diagnostics Cumulative Review Findings
+
+Code review 2026-10-09 of `3260812..ecf8952`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
+
+- [ ] [Review][Patch] Ledger evidence labels `de67938` as Story 2.1, but that commit precedes Story 2.1's `baseline_commit` `e599f5c`; drop "(Story 2.1)" (Blind Hunter) [_bmad-output/implementation-artifacts/deferred-work.md:364]
+- [ ] [Review][Patch] Six exit-code assertions omit the `output + error` message used at :162, so a failing row reports only the exit value, not the error document naming the gate that fired (Blind Hunter) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:58, :81, :106, :124, :134, :180]
+
+Rejected:
+
+- `false` — Read-only and ordinary `send` return different codes for the same bad input, and Story 2.11 has no ledger entry (Blind Hunter): the frozen Approach requires lookup and kind checks before the read-only gate, and the gate before input acquisition. README:71 documents both orders, the exit code is 2 either way, and Story 2.11's criteria (`epics.md:904`) fix output channels and exit codes, not cross-mode error codes. The Cumulative review settled the addendum §G question.
+- `false` — README omits `--read-only=0` (Blind Hunter): README:73 says the flag does not accept `1` or `0` and to use `true` or `false`, whichever syntax is used; `operations --read-only 0` is an example.
+- `low` — A read-only MCP server drops `send_command` without a stderr diagnostic (Blind Hunter): pre-existing, since this story changes no MCP code. Story 3.1 (backlog) owns the read-only tool surface and Story 3.2 owns startup logging; a startup line adds a branch for an uncommon inherited-environment case, and `config current` already reports the source.
+- `low` — No test places `--read-only` before the verb (Blind Hunter): all ten global options share `Recursive = true` (`GlobalOptionsBinding.cs:10-19`), and no CLI test places any of them before the verb. The placement works today; the gap is CLI-wide and pre-existing, and the fix is a new test rather than a correction.
+- `low` — `QueryCliHarness` ignores `paging`/`nullDocument` with `commandResponse` (Edge Case Hunter): no caller combines them, and a guard adds complexity for an unreachable case. Eighth identical verdict.
+- `low` — `AssertRequest` hard-codes the query route, and the explicit-false send checks only the call count (Edge Case Hunter): `CliMcpCommandParityTests` covers command routing and the envelope; checking them here needs new harness surface. Sixth identical verdict.
+- `false` — Cumulative `git diff --check` flags `tools/dependency-policy.json:27-28` (Acceptance Auditor): all 74 lines were CRLF at `3260812`, the changed lines keep those endings, and `.gitattributes` sets CRLF only for `*.cs`. There is no trailing whitespace.
+- `false` — AC1 is proven only through the harness, because the shipped CLI returns `catalog_empty` (Acceptance Auditor): no production Contracts are enrolled yet (README:44), and README:71 qualifies refusal with "after settings resolution and catalog access succeed".
+- `false` — The range includes the dependency-policy and `references/` moves (Acceptance Auditor): the policy bumps are the approved Decisions landed as separate `build(deps)` commits `4d39200` and `c6cd224`, and the pointer moves are owner commits `342e072` and `8247a2d`.
+- Fix edits this spec — Spec `status: done` versus sprint `review` (Acceptance Auditor): this review's completion sets both.
 
 ## Verification Blocker
 
