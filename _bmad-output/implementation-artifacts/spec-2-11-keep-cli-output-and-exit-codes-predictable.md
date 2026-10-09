@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'in-review'
+status: 'in-progress'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -191,6 +191,54 @@ context:
 | R6-E2 wrong Boolean argument name | medium | Reproduced `modules --strict=true --read-only=bad` returning `argument: strict` even though the invalid value belongs to `readOnly`; `ParseFailure` takes the first recognized attached Boolean token. Direct parser patch after loopback. |
 | R6-E3 staging permission probe | maybe-false | Same create-without-delete-or-rename Windows ACL claim as R6-B9; no permission fixture demonstrates the later failure. Potential unverified medium issue; defer only after loopback. |
 | R6-V1 conformance host bypasses checked parser | medium | Preverified: `ConformanceHost/Program.cs` reflects `Parse` and calls raw `ParseResult.InvokeAsync`, while production calls `CliRunner.InvokeAsync`; malformed conformance invocations can have a different exit/channel contract. Direct adapter patch and malformed-command assertion after loopback. |
+
+### Review Findings
+
+Code review 2026-10-09 of `52cf2aa..fbc7684`, excluding `references/` gitlinks and `_bmad-output/` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Runtime claims were reproduced against Debug builds of HEAD and of baseline `52cf2aa`. This pass reviews the same implementation commit (`1d8ce67`) as loop 6, so the R6 items it re-found are marked "carried".
+
+- [ ] [Review][Patch] Help combined with supplied arguments relies on a hand-written copy of each verb's validation, which drifts from the real checks. Decision 2026-10-09: allow help only when bare (the command path plus help aliases before `--`); any other token mixed with help returns safe `invalid_arguments`, exit 2, on the ordinary channel (stderr for `mcp`). Remove `ValidateHelp`, update the Code Map, Task 1 and Design Notes help wording, and record it in the Spec Change Log. This resolves the carried R6-B2–B5/R6-E1 items, the `send`/`query` payload `null == 0` guard, and the `mcp` and `profile add` precedence drift. [src/Hexalith.McpCli/Cli/CliRunner.cs:234]
+- [ ] [Review][Patch] A predictable `--output` failure caught by preflight looks the same as a failure that may follow submission. Decision 2026-10-09: keep code `internal_error` but give preflight failures one dedicated, stable message, "The result destination cannot be written; no request was sent.", with no new members, for every verb that preflights. Let the Core `beforeSubmit` seam return that error instead of throwing into the executor's catch-all, and document the message in the README. [src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:232]
+- [ ] [Review][Patch] Raw libc `stat` P/Invoke breaks every `--output` on glibc < 2.33 and misreads `st_mode` on several supported ABIs, with no fallback. `stat` is exported only as `stat@@GLIBC_2.33` (checked with `nm -D`), so RHEL 8, Ubuntu 20.04 and Debian 11 throw `EntryPointNotFoundException`; `Preflight` runs `Inspect` for every target, so every `--output` returns `internal_error`. The offsets are wrong for macOS x64 (legacy `stat` symbol, `st_mode` at 8), linux-arm32 (16), riscv64 and loongarch64 (16), and big-endian 4-byte `mode_t`. Use Linux `statx` (fixed layout on every architecture, glibc ≥ 2.28), select `stat$INODE64` on macOS x64, and fail with an explicit error, never a misread, on any unverified ABI. [src/Hexalith.McpCli/Cli/OutputFileType.cs:40]
+- [ ] [Review][Patch] `/h`, System.CommandLine 2.0.12's fifth help alias, bypasses all help validation and attached-value checks. `mcp --transport http /h`, `operations "" /h`, `modules --url ftp://bad.example/ /h` and `/h=secret` exit 0 with usage on stdout. Take help aliases from the root `HelpOption` so the scanner and the help detector cannot drift from the parser. [src/Hexalith.McpCli/Cli/CliRunner.cs:98]
+- [ ] [Review][Patch] The option scanner rejects the parser's valid `--option:value` form, a regression from baseline. `--tenant:foo config current` and `config current --read-only:true` exit 0 at `52cf2aa` but now return `invalid_arguments` "unknown or malformed option". `--page-size:abc` and `--strict:secret` also lose their argument names. Split on the first `=` or `:` in `FindInvalidOption`, the `--transport` value check, the attached help/version check and the `ParseFailure` fallback. [src/Hexalith.McpCli/Cli/CliRunner.cs:181]
+- [ ] [Review][Patch] Carried R6-B1, still open: a malformed help alias in an option-value position is skipped as that option's value. `modules --token /?=secret` and `operations sample --kind -?=secret` exit 0 with help. Check help/version aliases, bare or with an attached value, before consuming the next token as a value. [src/Hexalith.McpCli/Cli/CliRunner.cs:203]
+- [ ] [Review][Patch] Carried R6-B6/R6-E2, still open: the malformed-Boolean argument name comes from the first attached Boolean token, whatever its value. `modules --strict=true --read-only=bad` reports `strict`, and `modules --read-only maybe` reports `arguments`. Pick the flag whose value fails Boolean parsing (attached or separated), and stop scanning at `--`. [src/Hexalith.McpCli/Cli/CliRunner.cs:219]
+- [ ] [Review][Patch] Carried R6-V1, plus six more harnesses: callers still bypass the checked entry point through `CliRunner.Parse(...).InvokeAsync()`:
+  - `tests/Hexalith.McpCli.ConformanceHost/Program.cs:38-41`
+  - `DiscoveryCommandTests.cs:692`, which also carries the lint/strict/diagnostic coverage
+  - `ConfigCommandTests.cs:683`
+  - `ConfigCommandTests.cs:1940`
+  - `QueryCommandTests.cs:131`
+  - `CliMcpDiscoveryParityTests.cs:86`
+  - `CliMcpQueryParityTests.cs:91`
+  - `CliMcpCommandParityTests.cs:111`
+
+  These test or vector-check a parser path production no longer uses. Switch each to `CliRunner.InvokeAsync`. [tests/Hexalith.McpCli.ConformanceHost/Program.cs:38]
+- [ ] [Review][Patch] No CLI-level test remains for an accepted `send` whose `--output` write fails at runtime. `AcceptedCommandOutputFailureReportsErrorAfterOneRequestAsync` became a preflight test, but the README still documents exit 2 with no resubmission. Add a Linux `/dev/full` case through `InvokeGatewayAsync` that asserts exit 2, `internal_error` "The CLI action failed." and exactly one Gateway request. [tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs:134]
+- [ ] [Review][Patch] Two permission fixtures assume a non-root user. Under root, `faccessat(AT_EACCESS)` allows the `0002` FIFO, so the profile is added and the reader-less FIFO open hangs the test. Root can also create the probe in the `r-x` parent, so the new-file case exits 0. Skip both when `Environment.IsPrivilegedProcess`. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:503]
+- [ ] [Review][Patch] Preflight acceptance of character devices and proc-fd pipes has no CLI test; the existing device and pipe tests call `CliOutput.WriteAsync` directly and skip `Preflight`. Add Linux `config current --output /dev/null` and an anonymous-pipe `/proc/self/fd/N` case through `CliRunner.InvokeAsync`, each asserting exit 0 and empty stdout. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:470]
+- [ ] [Review][Patch] Error precedence over bad output is untested for `config use missing` and for a malformed profile file during `profile add` / `use --clear`. Removing `ValidateUse` or `ValidateAdd`'s `Read()` would change `configuration_invalid` to `internal_error` without failing a test. Add these to the precedence loop. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:213]
+- [ ] [Review][Patch] The help path's profile, `profile add` and `mcp` format/output rejections have no tests. `config profile remove missing --help`, `config use missing -h`, `config set dev badfield x --help`, `config profile add dev --help` and `mcp --format table --help` are each unpinned. Under the bare-help decision, assert `invalid_arguments`, exit 2, no usage and the right channel. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:69]
+- [ ] [Review][Patch] The executor's pre-submit hook is only tested against invalid JSON and a valid call. Add a valid-JSON call that fails a later envelope check (an invalid correlation ULID or a mismatched aggregate identifier) with a throwing hook, and assert `validation_failed` and zero hook calls. [tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs:26]
+- [ ] [Review][Patch] Preflight runs on side-effect-free verbs. `modules`, `operations`, `describe`, `config current` and `config profile list` preflight although there is no Gateway call or profile mutation to protect, and the writer already leaves the target intact on failure. Each run creates and deletes a probe file in the destination or temp directory, and any `Inspect` portability failure also breaks discovery output. Remove those five calls. [src/Hexalith.McpCli/Cli/CliRunner.cs:394]
+- [ ] [Review][Patch] Probe cleanup is never asserted after a successful write. Removing `TryDelete` would leave `.mcpcli-probe-*` files without failing a test. After the existing-file and new-file success cases, assert that no probe remains in the target directory or in `Path.GetTempPath()`. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:265]
+- [ ] [Review][Patch] Table escaping of `\r` and backslash is untested; only tab and newline are covered. Add both to the module and operation row cases. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:427]
+- [ ] [Review][Patch] The README says "Failure output, including parse failures, is one JSON object on stdout", but `mcp` parse and transport failures (for example `mcp --transport -x`) go to stderr with empty stdout. State that `mcp` failures before request serving, including parse failures, use stderr. [README.md:93]
+- [ ] [Review][Patch] The Unix socket fixture path is longer than macOS's 104-byte `sun_path` limit: `$TMPDIR/mcpcli-output-contract-<32 hex>/occupied-socket` makes the bind throw before any assertion. Bind under a short directory. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:479]
+- [ ] [Review][Patch] The child-process tests read stdout to the end before stderr, which can deadlock if the child fills the stderr pipe. Read both streams concurrently in the staging and current-executable tests. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:411]
+- [x] [Review][Defer] CI never runs the new macOS, arm64 or arm32 native file-type branches [.github/workflows/ci.yml:18] — deferred: the shared `domain-ci.yml` runs only on `ubuntu-latest` x64, and its platform matrix lives in Hexalith.Builds. The Windows part is already tracked (`deferred-work.md:184`, Story 4.16), so no new entry was added for it; the macOS/arm part got a new ledger entry.
+
+Rejected:
+
+- `low` `--extension` argument naming differs (`extension` from the parser, `extensions` from the duplicate-key check). The fix adds a special-case branch, and scripts rarely key on this distinction.
+- `low` A probe file can stay behind if deletion fails or the process dies between create and delete. The window is negligible, and the Windows create-without-delete ACL variant is already the deferred R6-B9.
+- `low` Vertical tab, form feed, U+0085/U+2028/U+2029 and terminal escapes are not escaped in table cells. This was already rejected as R2-E5, R3-E2, R4-B10 and R4-E6.
+- `low` The five Boolean flag names are hard-coded in both the scanner and `ParseFailure`. This matters only when a new `Option<bool>` is added, and the fix is a refactor.
+- `false` Duplicated write-error ternaries, `CommandDepth` versus `CommandPath`, and the `ValidateUse` branches. No caller or rule was named that would diverge.
+- `low` `IOperationExecutor.ExecuteAsync` takes `beforeSubmit` after the `CancellationToken`. The spec allows changing the interface for this hook, and there are no external implementers before v1.
+- `low` (unverified) A Windows `\\.\pipe\` output might be opened by preflight and use up a single-instance pipe. It would need a Windows run against a single-instance pipe server, and it is an exotic target even if true.
+- `low` `--output` under `~/.eventstore/` on a fresh home now fails preflight, where baseline let the mutation create the directory. Confirmed, but rare, and the fix needs a special case.
+- `low` The table-escaping test is in `CliOutputContractTests` rather than `DiscoveryCommandTests` and builds its documents by hand. It still covers the same `FormatTable` path that the verbs call.
 
 ## Design Notes
 

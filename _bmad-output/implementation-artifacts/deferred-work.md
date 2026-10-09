@@ -362,3 +362,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
   summary: Global option help does not name environment variables or explicit boolean values; `--read-only` says only "Disable command submission".
   evidence: Pre-existing since `de67938`. `src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:10-19` descriptions omit every `EVENTSTORE_*` variable, so `--help` does not reveal `EVENTSTORE_READ_ONLY` or that `--read-only false` overrides it. This is a CLI-wide help convention; settle it once for all global options rather than for `--read-only` alone.
+
+## Deferred from: code review of spec-2-11-keep-cli-output-and-exit-codes-predictable.md (2026-10-09)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+  summary: CI never executes the CLI's native output file-type inspection on macOS, linux-arm64, or linux-arm32.
+  evidence: `src/Hexalith.McpCli/Cli/OutputFileType.cs` selects a `stat` symbol and `st_mode` offset per platform and architecture, but `.github/workflows/ci.yml` delegates to `Hexalith.Builds/.github/workflows/domain-ci.yml@main`, which runs only on `ubuntu-latest` x64; the conformance jobs are also `ubuntu-latest`. A wrong symbol or offset on those platforms would classify every existing `--output` target as unsupported while CI stays green. The Windows branch is already tracked at the Story 2.3 Windows-evidence entry (Story 4.16 owns the Windows test run); this entry covers only the macOS and ARM legs, which belong in the shared Builds workflow matrix or Story 4.16's macOS installation check.
