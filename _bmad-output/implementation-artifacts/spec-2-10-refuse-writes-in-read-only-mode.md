@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -313,6 +313,29 @@ Rejected:
 - `false` — AC1 is proven only through the harness, because the shipped CLI returns `catalog_empty` (Acceptance Auditor): no production Contracts are enrolled yet (README:44), and README:71 qualifies refusal with "after settings resolution and catalog access succeed".
 - `false` — The range includes the dependency-policy and `references/` moves (Acceptance Auditor): the policy bumps are the approved Decisions landed as separate `build(deps)` commits `4d39200` and `c6cd224`, and the pointer moves are owner commits `342e072` and `8247a2d`.
 - Fix edits this spec — Spec `status: done` versus sprint `review` (Acceptance Auditor): this review's completion sets both.
+
+### Post-Assertion Cumulative Review Findings
+
+Code review 2026-10-09 of `3260812..7777525`, scoped to `README.md`, `src` and `tests` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
+
+- [ ] [Review][Patch] No test pins that read-only `send` with an omitted or blank operation returns `invalid_arguments` at `operation` before catalog access; hoisting the read-only branch above the blank-name check would pass a blank name to `CatalogService.Describe`, whose `ThrowIfNullOrWhiteSpace` becomes `internal_error`, and every `send` test would stay green (Verification Gap) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:71; src/Hexalith.McpCli/Cli/CliRunner.cs:166]
+- [ ] [Review][Patch] "extensions without a nonempty `key=` prefix" is hard to parse; name the two rejected forms the CLI checks (`separator < 1`): an `--extension` value with no `=`, or an empty key before it (Blind Hunter) [README.md:71]
+
+Rejected:
+
+- `low` — `harness.Calls.ShouldBe(0)` cannot fail in no-URL rows (Blind Hunter): true, since no URL source exists there, but the with-URL rows of the same theories carry the zero-request proof; dropping the check only in no-URL rows adds a branch for a redundant but harmless assertion.
+- `false` — `AssertDiagnostics` accepting 0 or 4 HTTP lines cannot back the zero-request and one-write claims (Blind Hunter): those claims rest on the loopback capture `harness.Calls` (0 with a URL; 1 for the explicit-false send), not on stderr.
+- `false` — Hard-coded fixture warning counts make 32 more cases brittle (Blind Hunter): the counts live once in the pre-existing helper (`QueryCliHarness.cs:131-136`) shared by four classes, so a fixture change needs one edit whatever the caller count.
+- `low` — `bool environment` means flag versus environment (Blind Hunter): the `RefusedInputs` summary names both activation sources; an enum or string adds machinery for test-local readability.
+- `false` — README precedence omits the missing-operation gate and misplaces catalog access (Blind Hunter): README:71 conditions `read_only` on "a `send` naming a declared write" after catalog access, which is accurate; it claims nothing about a missing operation, whose `invalid_arguments` error names `operation`.
+- `low` — The read-only paragraph is dense and holds the ordinary-`send` sentence (Blind Hunter): it matches the README's paragraph style (e.g. README:75), and an earlier review patch deliberately placed the contrast here. Second identical verdict.
+- `false` — "Enable a read-only session with `--read-only`" overstates the flag's scope (Blind Hunter): README uses "session" for one invocation's resolved settings ("The global CLI `--tenant` sets the session tenant", README:75), as Story 2.1's effective session settings do.
+- `false` — `ReadOnlyCommandFailsBeforeGatewayAsync` no longer matches what it tests (Blind Hunter): it still asserts refusal with no gateway interaction (`ReceivedCalls().ShouldBeEmpty()`), and each failing row reports its `hasGatewayUrl` and payload values.
+- `low` — `QueryCliHarness` ignores `paging`/`nullDocument` with `commandResponse` (Edge Case Hunter): no caller combines them, and a guard adds complexity for an unreachable case. Ninth identical verdict.
+- `low` — The explicit-false send does not inspect the posted command's route or envelope (Edge Case Hunter): `CliMcpCommandParityTests` covers command routing and the envelope; checking them here needs new harness surface. Seventh identical verdict.
+- `low` — Direct-executor envelope theory lacks `AggregateId` and `Tenant` rows (Edge Case Hunter): moving those later checks above availability is unlikely; the correlation, idempotency, extension and ten payload rows already pin the order. Second identical verdict.
+- `low` — The CLI refusal matrix lacks invalid `--aggregate-id`, `--correlation-id` and `--idempotency-key` inputs (Edge Case Hunter): the read-only branch builds `SendCommandArguments(name, string.Empty)` and never reads those options (`CliRunner.cs:172-179`), and Core pins correlation and idempotency ordering; a new matrix case guards only a hypothetical CLI-level validator.
+- `false` — Lookup and kind precedence are tested only with `--payload -` (Edge Case Hunter): the read-only branch reads no payload or extension option, so the input form cannot change the result, and the 24-row refusal matrix fails on any reorder. Second identical verdict.
 
 ## Verification Blocker
 
