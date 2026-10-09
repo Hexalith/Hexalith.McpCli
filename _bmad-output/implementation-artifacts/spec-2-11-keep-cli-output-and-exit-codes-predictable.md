@@ -2,10 +2,10 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'in-progress'
+status: 'in-review'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
-review_loop_iteration: 5
+review_loop_iteration: 6
 context:
   - '_bmad-output/implementation-artifacts/epic-2-context.md'
 ---
@@ -175,6 +175,22 @@ context:
 | R5-V1 existing file/link success test | medium | Preverified gap: CLI success tests write new files; direct writer tests bypass new preflight for existing files and links. Add command-level success cases after loopback. |
 | R5-V2 add/remove error precedence test | medium | Preverified gap: invalid add/remove operands are tested only with usable output, and bad output only with valid operands. Add crossed cases after loopback. |
 | R5-V3 invalid URL plus help | medium | Same reproduced defect as R5-B5; bad_spec. |
+| R6-B1 malformed help alias as option value | medium | Reproduced `modules --token /?=secret` and `operations sample --kind -?=secret` exiting 0 with help: the option scanner skips the following token before checking whether it is a malformed help alias. Direct parser patch after loopback. |
+| R6-B2 missing payload file plus help | medium | Reproduced `send sample.create-item --payload @/path/does/not/exist --help` exiting 0, while the supplied file fails without help. `ValidateHelp` checks only payload presence and bypasses payload loading; bad_spec under the supplied-operand validation rule. |
+| R6-B3 malformed extension plus help | medium | Reproduced `send sample.create-item --payload '{}' --extension invalid --help` exiting 0, while ordinary execution rejects the supplied extension. Core extension validation is absent from the help path; bad_spec, grouped with R6-B2. |
+| R6-B4 invalid payload and paging plus help | medium | Reproduced malformed JSON and `query ... --page-size 0 --help` exiting 0; Core payload and paging validators run only during execution. Bad_spec, grouped with R6-B2. |
+| R6-B5 unknown catalog name plus help | medium | Reproduced `operations missing --help` exiting 0 although ordinary discovery returns a no-result catalog error; help validation checks name presence but skips Catalog lookup. Bad_spec, grouped with R6-B2. |
+| R6-B6 separated malformed Boolean argument | medium | Reproduced `modules --read-only maybe` returning safe `invalid_arguments` with `argument: arguments`; the parser supplies no OptionResult and the fallback recognizes only `--flag=value`. Direct parser patch after loopback. |
+| R6-B7 profile path as output | medium | Carried B1/R5-B9: a config result can overwrite its own profile file. Pre-existing writer behavior; retain the prior defer route and do not append it again. |
+| R6-B8 proc pseudo-file output | medium | Carried R3-B6/R5-B8: `/proc/self/comm` is accepted as a pseudo-regular target but does not retain the JSON result. Pre-existing writer behavior; retain the prior defer route and do not append it again. |
+| R6-B9 staging create/delete rights | maybe-false | `ProbeStagingDirectory` creates a file and `TryDelete` suppresses deletion errors, but a Windows create-allowed/delete-or-rename-denied ACL fixture was not run; that fixture must show whether a later `File.Move` fails after an action. Potential unverified medium issue; defer only after loopback. |
+| R6-B10 named POSIX ACL grant test | low | No CLI test grants a named ACL to a nonowner and asserts a successful result, so that uncommon permission path has regression risk. Establishing a second identity and ACL fixture adds substantial test setup; reject the low-impact test-only finding. |
+| R6-B11 Windows staging ACL test | maybe-false | No Windows fixture exercises create permission without delete or rename permission; the ACL fixture described for R6-B9 would settle whether the claimed post-action failure is reachable. Potential unverified medium issue; grouped with R6-B9 after loopback. |
+| R6-B12 strict diagnostics/lint coverage | false | `DiscoveryCommandTests.DiagnosticsAffectOnlyStrictAccessAsync` and `LintFlagChangesOnlyExitAndTableFallbackKeepsJsonAsync` already exercise CLI strict diagnostics and describe lint; coverage is not confined to `CliOutputContractTests`. |
+| R6-E1 supplied send/query values plus help | medium | Same reproduced payload, paging, and catalog-bypass outcomes as R6-B2/R6-B4/R6-B5; `ValidateHelp` does not execute the Core validation path. Bad_spec. |
+| R6-E2 wrong Boolean argument name | medium | Reproduced `modules --strict=true --read-only=bad` returning `argument: strict` even though the invalid value belongs to `readOnly`; `ParseFailure` takes the first recognized attached Boolean token. Direct parser patch after loopback. |
+| R6-E3 staging permission probe | maybe-false | Same create-without-delete-or-rename Windows ACL claim as R6-B9; no permission fixture demonstrates the later failure. Potential unverified medium issue; defer only after loopback. |
+| R6-V1 conformance host bypasses checked parser | medium | Preverified: `ConformanceHost/Program.cs` reflects `Parse` and calls raw `ParseResult.InvokeAsync`, while production calls `CliRunner.InvokeAsync`; malformed conformance invocations can have a different exit/channel contract. Direct adapter patch and malformed-command assertion after loopback. |
 
 ## Design Notes
 
