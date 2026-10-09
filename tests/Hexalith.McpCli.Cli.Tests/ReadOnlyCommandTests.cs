@@ -55,7 +55,7 @@ public sealed class ReadOnlyCommandTests
             input.Dispose();
             (int exit, string output, string error) = await harness.InvokeAsync(
                 [.. args], withUrl, environment ? "true" : null, input);
-            exit.ShouldBe(2);
+            exit.ShouldBe(2, output + error);
             AssertJson(output, """{"error":{"code":"read_only","message":"Command submission is disabled in read-only mode."}}""");
             AssertDiagnostics(error);
             harness.Calls.ShouldBe(0);
@@ -78,7 +78,7 @@ public sealed class ReadOnlyCommandTests
         input.Dispose();
         (int exit, string output, string errorText) = await harness.InvokeAsync(
             ["send", operation, "--read-only", "--payload", "-"], withUrl: false, standardInput: input);
-        exit.ShouldBe(2);
+        exit.ShouldBe(2, output + errorText);
         using JsonDocument result = JsonDocument.Parse(output);
         JsonElement error = result.RootElement.GetProperty("error");
         error.GetProperty("code").GetString().ShouldBe(code);
@@ -103,7 +103,7 @@ public sealed class ReadOnlyCommandTests
         (int exit, string output, string error) = await harness.InvokeAsync(
             ["query", "string-fixture.list-items", "--payload", "{}", .. flags],
             readOnlyEnvironment: environment ? "true" : null);
-        exit.ShouldBe(0);
+        exit.ShouldBe(0, output + error);
         AssertJson(output, """{"operation":"string-fixture.list-items","tenant":"fixed-tenant","document":{"items":[]}}""");
         AssertDiagnostics(error);
         harness.AssertRequest("""
@@ -121,7 +121,7 @@ public sealed class ReadOnlyCommandTests
         await using var harness = new QueryCliHarness();
         (int exit, string output, string errorText) = await harness.InvokeAsync(
             ["operations", "routing-fixture"], withUrl, "true");
-        exit.ShouldBe(0);
+        exit.ShouldBe(0, output + errorText);
         using JsonDocument list = JsonDocument.Parse(output);
         list.RootElement.GetProperty("operations").EnumerateArray().ShouldContain(operation =>
             operation.GetProperty("name").GetString() == "routing-fixture.computed-envelope"
@@ -131,7 +131,7 @@ public sealed class ReadOnlyCommandTests
         {
             string operation = write ? "routing-fixture.computed-envelope" : "string-fixture.list-items";
             (int describeExit, string description, string describeError) = await harness.InvokeAsync(["describe", operation], withUrl, "true");
-            describeExit.ShouldBe(0);
+            describeExit.ShouldBe(0, description + describeError);
             AssertDiagnostics(describeError);
             using JsonDocument document = JsonDocument.Parse(description);
             document.RootElement.GetProperty("kind").GetString().ShouldBe(write ? "write" : "read");
@@ -177,7 +177,7 @@ public sealed class ReadOnlyCommandTests
         (int exit, string output, string error) = await harness.InvokeAsync(
             ["send", "routing-fixture.computed-envelope", "--read-only", "false", "--payload", "{"],
             readOnlyEnvironment: "true");
-        exit.ShouldBe(2);
+        exit.ShouldBe(2, output + error);
         using JsonDocument document = JsonDocument.Parse(output);
         document.RootElement.GetProperty("error").GetProperty("code").GetString().ShouldBe("validation_failed");
         AssertDiagnostics(error);

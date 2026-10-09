@@ -361,4 +361,4 @@
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
   summary: Global option help does not name environment variables or explicit boolean values; `--read-only` says only "Disable command submission".
-  evidence: Pre-existing since `de67938` (Story 2.1). `src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:10-19` descriptions omit every `EVENTSTORE_*` variable, so `--help` does not reveal `EVENTSTORE_READ_ONLY` or that `--read-only false` overrides it. This is a CLI-wide help convention; settle it once for all global options rather than for `--read-only` alone.
+  evidence: Pre-existing since `de67938`. `src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:10-19` descriptions omit every `EVENTSTORE_*` variable, so `--help` does not reveal `EVENTSTORE_READ_ONLY` or that `--read-only false` overrides it. This is a CLI-wide help convention; settle it once for all global options rather than for `--read-only` alone.

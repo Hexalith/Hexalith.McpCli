@@ -2,7 +2,7 @@
 title: 'Refuse Writes in Read-only Mode'
 type: 'feature'
 created: '2026-10-05'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '3260812a565d5a6d915e3343ebe2941df549ee13'
 route: 'oneshot'
 review_loop_iteration: 1
@@ -66,7 +66,15 @@ context: []
 - Current verification: `dotnet build tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj --configuration Debug --no-restore --verbosity quiet` passed with zero warnings/errors; the focused `ReadOnlyCommandTests` passed 32/32. After the first test edit, all six direct Debug suites passed: CLI 424, Core 557 with two Windows-only skips, MCP 6, Abstractions 20, Analyzers 19, and Manifest 8 (1,034 passed, two skips). After review extended stderr assertions to the explicit-false cases, the CLI test project rebuilt cleanly and the focused 32/32 cases passed again. `git diff --check` passed; changed C# lines retain CRLF.
 - The exact commit message is preserved in `/tmp/mcpcli-2-10-oct09-commit-message.txt`; pinned `npx --no -- commitlint --edit /tmp/mcpcli-2-10-oct09-commit-message.txt --verbose` exited 0 with zero problems and warnings.
 
+- Resumed from clean `main` at `4694cc783920f87b25054c4d3a97a3419299801b` on 2026-10-09. Removed the inaccurate Story 2.1 attribution from the deferred help-text entry and this spec; Git confirms `de67938e424e0d2ee4b649a3fb0ea58b778d3129` precedes the Story 2.1 baseline `e599f5c3faa41dbf90bd9219a4a1de47c40f2fd3`. Added captured output and diagnostics to the six remaining CLI exit-code assertions so failures identify the gate that fired. The CLI Debug test project builds with zero warnings/errors; the focused read-only class passes 32/32 and the complete CLI suite passes 424/424. The final full-suite command `dotnet tests/Hexalith.McpCli.Cli.Tests/bin/Debug/net10.0/Hexalith.McpCli.Cli.Tests.dll > /tmp/mcpcli-2-10-oct09-final-cli-tests.log 2>&1` exited 0, and that log records 424 passed with zero failures/errors. `git diff --check` passes and the changed C# file retains CRLF endings.
+- The exact commit message `test(cli): preserve diagnostics in read-only assertions` is preserved in `/tmp/mcpcli-2-10-final-commit-message.txt`; pinned `npx --no -- commitlint --edit /tmp/mcpcli-2-10-final-commit-message.txt --verbose` exited 0 with zero problems and warnings, recorded in `/tmp/mcpcli-2-10-final-commitlint.log`.
+
 ## Review Triage Log
+
+### October 9 Final Review Triage
+
+- **Low, patched:** The earlier spec triage still called `de67938` Story 2.1 although Git places it before the story baseline. Removed the attribution from the spec, matching the ledger correction.
+- **Low, patched:** The latest 424/424 CLI result lacked a saved output location. Reran the exact full-suite command with output captured in `/tmp/mcpcli-2-10-oct09-final-cli-tests.log`; it exited 0 and reports 424 passed.
 
 ### October 9 Resumption Review Triage
 
@@ -213,7 +221,7 @@ Code review 2026-10-05 of `3260812..6d7eab8`, excluding this spec (Blind Hunter,
 
 - [x] [Review][Patch] README documents the accepted `EVENTSTORE_READ_ONLY` values but not the flag's, which differ. `--read-only 1` and `--read-only 0` fail to parse (exit 1, "Unrecognized command or argument"), while `--read-only True` is accepted, as verified against the built CLI. State that the flag takes no value, `true`, or `false` (case-insensitive) [README.md:69]
 - [x] [Review][Patch] The read-only paragraphs precede the `send` and `query` paragraphs they depend on: they reference `--aggregate-id`, `--correlation-id`, `--idempotency-key`, extensions, and `invalid_arguments` before those are introduced. Move both paragraphs after the Queries paragraph [README.md:67]
-- [x] [Review][Defer] `--read-only` help text says only "Disable command submission" and does not mention `EVENTSTORE_READ_ONLY` or the explicit `false` override [src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:18] — deferred: pre-existing since `de67938` (Story 2.1); no global option's help names its environment variable, so this is a CLI-wide help convention
+- [x] [Review][Defer] `--read-only` help text says only "Disable command submission" and does not mention `EVENTSTORE_READ_ONLY` or the explicit `false` override [src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:18] — deferred: pre-existing since `de67938`; no global option's help names its environment variable, so this is a CLI-wide help convention
 
 Rejected:
 
@@ -290,8 +298,8 @@ Rejected:
 
 Code review 2026-10-09 of `3260812..ecf8952`, excluding this spec (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). Verification Gap found no gaps. Acceptance Auditor found all four acceptance criteria satisfied and reran `ReadOnlyCommandTests` (32 passed) and the Core read-only cases (14 passed).
 
-- [ ] [Review][Patch] Ledger evidence labels `de67938` as Story 2.1, but that commit precedes Story 2.1's `baseline_commit` `e599f5c`; drop "(Story 2.1)" (Blind Hunter) [_bmad-output/implementation-artifacts/deferred-work.md:364]
-- [ ] [Review][Patch] Six exit-code assertions omit the `output + error` message used at :162, so a failing row reports only the exit value, not the error document naming the gate that fired (Blind Hunter) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:58, :81, :106, :124, :134, :180]
+- [x] [Review][Patch] Ledger evidence labels `de67938` as Story 2.1, but that commit precedes Story 2.1's `baseline_commit` `e599f5c`; drop "(Story 2.1)" (Blind Hunter) [_bmad-output/implementation-artifacts/deferred-work.md:364]
+- [x] [Review][Patch] Six exit-code assertions omit the `output + error` message used at :162, so a failing row reports only the exit value, not the error document naming the gate that fired (Blind Hunter) [tests/Hexalith.McpCli.Cli.Tests/ReadOnlyCommandTests.cs:58, :81, :106, :124, :134, :180]
 
 Rejected:
 
