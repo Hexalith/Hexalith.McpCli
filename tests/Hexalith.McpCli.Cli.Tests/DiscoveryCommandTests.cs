@@ -433,7 +433,7 @@ public sealed class DiscoveryCommandTests
             "operations", "marked-empty", "--format", "table");
         emptyExit.ShouldBe(0);
         emptyError.ShouldContain("empty_module");
-        empty.ShouldBe("NAME\tKIND\tDESCRIPTION" + Environment.NewLine + Environment.NewLine);
+        empty.ShouldBe("NAME\tKIND\tDESCRIPTION" + Environment.NewLine);
 
         (int unknownExit, string unknown, string unknownError) = await InvokeAsync(SampleManifest,
             "operations", "Missing", "--format", "table");

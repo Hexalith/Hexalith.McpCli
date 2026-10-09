@@ -10,6 +10,69 @@ namespace Hexalith.McpCli.Cli;
 /// <summary>Writes one public Core document to the CLI output channel.</summary>
 internal static class CliOutput
 {
+    /// <summary>Checks predictable result-path failures before an action can have side effects.</summary>
+    internal static void Preflight(string? output)
+    {
+        if (output is null)
+        {
+            return;
+        }
+
+        string path = ResolveFinalSymlink(output);
+        OutputTargetKind kind = OutputFileType.Inspect(path);
+        if (kind == OutputTargetKind.Missing)
+        {
+            ProbeStagingDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
+            return;
+        }
+
+        if (kind == OutputTargetKind.Unsupported)
+        {
+            throw new IOException("The result target is not a supported file type.");
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            OutputFileType.RequireAccess(path, kind == OutputTargetKind.Regular);
+        }
+
+        if (kind is OutputTargetKind.Pipe or OutputTargetKind.Device)
+        {
+            return;
+        }
+
+        if (OperatingSystem.IsWindows() && (File.GetAttributes(path) & FileAttributes.ReadOnly) != 0)
+        {
+            throw new UnauthorizedAccessException("The existing result file is read-only.");
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            UnixFileMode mode = File.GetUnixFileMode(path);
+            if ((mode & (UnixFileMode.UserRead | UnixFileMode.GroupRead | UnixFileMode.OtherRead)) == 0
+                || (mode & (UnixFileMode.UserWrite | UnixFileMode.GroupWrite | UnixFileMode.OtherWrite)) == 0)
+            {
+                throw new UnauthorizedAccessException("The existing result file cannot be safely updated.");
+            }
+        }
+
+        using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+        {
+        }
+
+        ProbeStagingDirectory(Path.GetTempPath());
+    }
+
+    private static void ProbeStagingDirectory(string directory)
+    {
+        string path = Path.Combine(directory, ".mcpcli-probe-" + Guid.NewGuid().ToString("N"));
+        using (CreatePrivateTemporaryFile(path))
+        {
+        }
+
+        TryDelete(path);
+    }
+
     /// <summary>Writes a result or error using the requested format and destination.</summary>
     /// <param name="document">The successful result document.</param>
     /// <param name="error">The failure document, when no result is available.</param>
@@ -311,20 +374,27 @@ internal static class CliOutput
     {
         if (document is ModulesDocument modules)
         {
-            return header + Environment.NewLine
-                + string.Join(Environment.NewLine, modules.Modules.Select(module
-                    => $"{module.Name}\t{module.OperationCount}\t{module.Description}"));
+            string[] rows = modules.Modules.Select(module
+                => $"{TableCell(module.Name)}\t{module.OperationCount}\t{TableCell(module.Description)}").ToArray();
+            return rows.Length == 0 ? header : header + Environment.NewLine + string.Join(Environment.NewLine, rows);
         }
 
         if (document is OperationsDocument operations)
         {
-            return header + Environment.NewLine
-                + string.Join(Environment.NewLine, operations.Operations.Select(operation
-                    => $"{operation.Name}\t{operation.Kind}\t{operation.Description}"));
+            string[] rows = operations.Operations.Select(operation
+                => $"{TableCell(operation.Name)}\t{TableCell(operation.Kind)}\t{TableCell(operation.Description)}").ToArray();
+            return rows.Length == 0 ? header : header + Environment.NewLine + string.Join(Environment.NewLine, rows);
         }
 
         JsonElement json = JsonSerializer.SerializeToElement(document, McpCliJson.Result);
-        return header + Environment.NewLine + string.Join(Environment.NewLine,
-            json.EnumerateObject().Select(property => property.Name + "\t" + JsonSerializer.Serialize(property.Value)));
+        string[] fields = json.EnumerateObject().Select(property
+            => TableCell(property.Name) + "\t" + JsonSerializer.Serialize(property.Value)).ToArray();
+        return fields.Length == 0 ? header : header + Environment.NewLine + string.Join(Environment.NewLine, fields);
     }
+
+    private static string TableCell(string value)
+        => value.Replace("\\", "\\\\", StringComparison.Ordinal)
+            .Replace("\t", "\\t", StringComparison.Ordinal)
+            .Replace("\r", "\\r", StringComparison.Ordinal)
+            .Replace("\n", "\\n", StringComparison.Ordinal);
 }

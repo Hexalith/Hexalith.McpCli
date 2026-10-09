@@ -66,6 +66,308 @@ internal sealed class CliRunner
     internal ParseResult Parse(IReadOnlyList<string> args)
         => CreateRoot().Parse(args, new ParserConfiguration { ResponseFileTokenReplacer = null });
 
+    /// <summary>Invokes one checked parse, including failures suppressed by help or version.</summary>
+    internal async Task<int> InvokeAsync(IReadOnlyList<string> args, CancellationToken cancellationToken = default)
+    {
+        ParseResult parsed = Parse(args);
+        string? invalidToken = FindInvalidOption(args, parsed);
+        if (invalidToken is not null)
+        {
+            OperationError failure = Invalid("arguments", "The command contains an unknown or malformed option.");
+            return parsed.CommandResult.Command.Name == "mcp"
+                ? await WriteMcpErrorAsync(failure, cancellationToken).ConfigureAwait(false)
+                : await CliOutput.WriteErrorAsync(failure, cancellationToken).ConfigureAwait(false);
+        }
+
+        bool afterSeparator = false;
+        var withoutHelp = new List<string>();
+        bool hasHelp = false;
+        bool hasVersion = false;
+        foreach (string argument in args)
+        {
+            if (argument == "--")
+            {
+                afterSeparator = true;
+            }
+
+            if (!afterSeparator && argument == "--version")
+            {
+                hasVersion = true;
+            }
+
+            if (!afterSeparator && argument is "--help" or "-h" or "-?" or "/?")
+            {
+                hasHelp = true;
+                continue;
+            }
+
+            withoutHelp.Add(argument);
+        }
+
+        if (hasVersion && (args.Count != 1 || parsed.Errors.Count > 0))
+        {
+            OperationError failure = Invalid("arguments", "Version must be requested alone.");
+            return parsed.CommandResult.Command.Name == "mcp"
+                ? await WriteMcpErrorAsync(failure, cancellationToken).ConfigureAwait(false)
+                : await CliOutput.WriteErrorAsync(failure, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (hasHelp && withoutHelp.Count > CommandDepth(parsed.CommandResult.Command))
+        {
+            ParseResult checkedHelp = Parse(withoutHelp);
+            if (checkedHelp.Errors.Count > 0)
+            {
+                OperationError failure = ParseFailure(checkedHelp, withoutHelp);
+                return parsed.CommandResult.Command.Name == "mcp"
+                    ? await WriteMcpErrorAsync(failure, cancellationToken).ConfigureAwait(false)
+                    : await CliOutput.WriteErrorAsync(failure, cancellationToken).ConfigureAwait(false);
+            }
+
+            OperationError? helpError = ValidateHelp(checkedHelp);
+            if (helpError is not null)
+            {
+                return parsed.CommandResult.Command.Name == "mcp"
+                    ? await WriteMcpErrorAsync(helpError, cancellationToken).ConfigureAwait(false)
+                    : await CliOutput.WriteErrorAsync(helpError, cancellationToken).ConfigureAwait(false);
+            }
+        }
+        else if (!hasHelp && parsed.Errors.Count > 0)
+        {
+            OperationError failure = ParseFailure(parsed, args);
+            return parsed.CommandResult.Command.Name == "mcp"
+                ? await WriteMcpErrorAsync(failure, cancellationToken).ConfigureAwait(false)
+                : await CliOutput.WriteErrorAsync(failure, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await parsed.InvokeAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    private static int CommandDepth(Command command)
+    {
+        int depth = 0;
+        for (Command? current = command; current?.Parents.OfType<Command>().FirstOrDefault() is Command parent; current = parent)
+        {
+            depth++;
+        }
+
+        return depth;
+    }
+
+    private static string? FindInvalidOption(IReadOnlyList<string> args, ParseResult parsed)
+    {
+        var names = parsed.RootCommandResult.Command.Options.Concat(parsed.CommandResult.Command.Options)
+            .SelectMany(option => option.Aliases.Append(option.Name))
+            .ToHashSet(StringComparer.Ordinal);
+        bool afterSeparator = false;
+        for (int index = 0; index < args.Count; index++)
+        {
+            string token = args[index];
+            if (token == "--")
+            {
+                afterSeparator = true;
+                continue;
+            }
+
+            if (afterSeparator || token == "-")
+            {
+                continue;
+            }
+
+            if (!token.StartsWith("-", StringComparison.Ordinal) && !token.StartsWith("/?", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            string name = token.Split('=', 2)[0];
+            if (name is "--help" or "-h" or "-?" or "/?" or "--version")
+            {
+                if (token != name)
+                {
+                    return token;
+                }
+
+                continue;
+            }
+
+            if (!names.Contains(name))
+            {
+                return token;
+            }
+
+            if (name == "--transport" && token.Length > name.Length && token[name.Length] == '='
+                && token[(name.Length + 1)..].StartsWith("-", StringComparison.Ordinal))
+            {
+                return token;
+            }
+
+            if (token == name && index + 1 < args.Count &&
+                args[index + 1] != "--" && !args[index + 1].StartsWith("--", StringComparison.Ordinal)
+                && (name != "--transport" || !args[index + 1].StartsWith("-", StringComparison.Ordinal)))
+            {
+                // The parser decides whether this token is an option value or a positional argument.
+                if (name is not ("--read-only" or "--strict" or "--allow-tenant-override" or "--clear" or "--lint")
+                    || args[index + 1] is "true" or "false" or "True" or "False")
+                {
+                    index++;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static OperationError ParseFailure(ParseResult parsed, IReadOnlyList<string> args)
+    {
+        string? option = parsed.Errors.Select(error => error.SymbolResult)
+            .OfType<OptionResult>().Select(result => result.Option.Name).FirstOrDefault();
+        if (option is null)
+        {
+            option = args.FirstOrDefault(token => token.StartsWith("--", StringComparison.Ordinal)
+                && token.Contains('=') && token.Split('=', 2)[0] is
+                    "--read-only" or "--strict" or "--allow-tenant-override" or "--clear" or "--lint");
+        }
+
+        string argument = option is null ? "arguments" : GlobalOptionsBinding.PublicArgumentName(option);
+        return Invalid(argument, "The command arguments are missing or invalid.");
+    }
+
+    private OperationError? ValidateHelp(ParseResult parsed)
+    {
+        string name = parsed.CommandResult.Command.Name;
+        string[] path = CommandPath(parsed.CommandResult.Command);
+        if (name == "mcp")
+        {
+            Option? transport = parsed.CommandResult.Command.Options.FirstOrDefault(option => option.Name == "--transport");
+            string? value = transport is null ? null : parsed.GetResult(transport)?.Tokens.LastOrDefault()?.Value;
+            if (value is not null && value != "stdio")
+            {
+                return new OperationError("unsupported_transport",
+                    Message: "Only stdio transport is available; HTTP transport is planned for the next release.");
+            }
+        }
+
+        try
+        {
+            SettingsInput input = _globals.Read(parsed);
+            SettingsResolution resolved = path.Length > 0 && path[0] == "config" && name != "current"
+                ? new SettingsBootstrap(_profileStore, _readEnvironment).ResolvePresentation(input)
+                : new SettingsBootstrap(_profileStore, _readEnvironment).Resolve(input);
+            if (resolved.Error is not null)
+            {
+                return resolved.Error;
+            }
+
+            if (name == "mcp" && input.Format is not null && input.Format != "json")
+            {
+                return Invalid("format", "MCP stdio accepts only explicit json format.");
+            }
+
+            if (name == "mcp" && input.Output is not null)
+            {
+                return Invalid("output", "MCP stdio cannot write protocol output to a file.");
+            }
+
+            string? operand = parsed.CommandResult.Children.OfType<ArgumentResult>().FirstOrDefault()?.Tokens.FirstOrDefault()?.Value;
+            if (name is "operations" or "describe" or "send" or "query" && string.IsNullOrWhiteSpace(operand))
+            {
+                return Invalid(name == "operations" ? "module" : "operation", "A non-empty name is required.");
+            }
+
+            if (name == "operations")
+            {
+                Option? kind = parsed.CommandResult.Command.Options.FirstOrDefault(option => option.Name == "--kind");
+                string? value = kind is null ? null : parsed.GetResult(kind)?.Tokens.LastOrDefault()?.Value;
+                if (value is not null && value is not ("read" or "write"))
+                {
+                    return Invalid("kind", "kind must be read or write");
+                }
+            }
+
+            if (name is "send" or "query")
+            {
+                Option? payload = parsed.CommandResult.Command.Options.FirstOrDefault(option => option.Name == "--payload");
+                if (payload is null || parsed.GetResult(payload)?.Tokens.Count == 0)
+                {
+                    return Invalid("payload", "payload JSON, @file, or stdin is required");
+                }
+            }
+
+            if (path.SequenceEqual(["config", "profile", "add"]))
+            {
+                if (string.IsNullOrWhiteSpace(operand))
+                {
+                    return Invalid("name", "profile name is required");
+                }
+
+                if (input.Url is null)
+                {
+                    return Invalid("url", "--url is required for profile add");
+                }
+
+                OperationError? rejected = RejectOperatorFlags(input);
+                if (rejected is not null)
+                {
+                    return rejected;
+                }
+
+                _profileStore.ValidateAdd(operand, new ConnectionProfile(input.Url, input.Token, input.Format));
+            }
+            else if (path.SequenceEqual(["config", "profile", "remove"]))
+            {
+                if (operand is null)
+                {
+                    return Invalid("name", "profile name is required");
+                }
+
+                _profileStore.ValidateRemove(operand);
+            }
+            else if (path.SequenceEqual(["config", "use"]))
+            {
+                Option? clear = parsed.CommandResult.Command.Options.FirstOrDefault(option => option.Name == "--clear");
+                bool shouldClear = clear is not null && parsed.GetValue((Option<bool>)clear);
+                if (shouldClear == (operand is not null))
+                {
+                    return Invalid("name", "provide a profile name or --clear");
+                }
+
+                _profileStore.ValidateUse(shouldClear ? null : operand);
+            }
+            else if (path.SequenceEqual(["config", "set"]))
+            {
+                string?[] values = parsed.CommandResult.Children.OfType<ArgumentResult>()
+                    .Select(result => result.Tokens.FirstOrDefault()?.Value).ToArray();
+                if (values.Length < 3 || values.Any(value => value is null))
+                {
+                    return Invalid("set", "profile, field, and value are required");
+                }
+
+                _profileStore.ValidateSet(values[0]!, values[1]!, values[2]!);
+            }
+        }
+        catch (InvalidDataException exception)
+        {
+            return new OperationError("configuration_invalid", Message: exception.Message);
+        }
+        catch (Exception)
+        {
+            return new OperationError("internal_error", Message: "The CLI action failed.");
+        }
+
+        return null;
+    }
+
+    private static string[] CommandPath(Command command)
+    {
+        var parts = new List<string>();
+        for (Command? current = command; current?.Parents.OfType<Command>().FirstOrDefault() is Command parent; current = parent)
+        {
+            parts.Add(current.Name);
+        }
+
+        parts.Reverse();
+        return parts.ToArray();
+    }
+
     private RootCommand CreateRoot()
     {
         RootCommand root = new("Hexalith MCP and CLI gateway tool");
@@ -87,6 +389,11 @@ internal sealed class CliRunner
             (services, settings, token) =>
             {
                 CatalogLookupResult<ModulesDocument> result = services.GetRequiredService<ICatalog>().ListModules();
+                if (result.Error is null)
+                {
+                    CliOutput.Preflight(settings.Output);
+                }
+
                 return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tOPERATIONS\tDESCRIPTION");
             }, cancellationToken));
         return command;
@@ -115,6 +422,11 @@ internal sealed class CliRunner
                 }
 
                 CatalogLookupResult<OperationsDocument> result = services.GetRequiredService<ICatalog>().ListOperations(name, filter);
+                if (result.Error is null)
+                {
+                    CliOutput.Preflight(settings.Output);
+                }
+
                 return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tKIND\tDESCRIPTION");
             }, cancellationToken));
         return command;
@@ -138,6 +450,11 @@ internal sealed class CliRunner
                 }
 
                 CatalogLookupResult<OperationDescriptionDocument> result = services.GetRequiredService<ICatalog>().Describe(name);
+                if (result.Error is null)
+                {
+                    CliOutput.Preflight(settings.Output);
+                }
+
                 int exit = await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
                 return exit == 0 && parsed.GetValue(lint) && result.Document!.LintFindings.Count > 0 ? 1 : exit;
             }, cancellationToken));
@@ -206,7 +523,8 @@ internal sealed class CliRunner
                     CorrelationId: parsed.GetValue(correlationId), IdempotencyKey: parsed.GetValue(idempotencyKey),
                     Extensions: map.Count == 0 ? null : map);
                 OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()
-                    .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token).ConfigureAwait(false);
+                    .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token,
+                        _ => { CliOutput.Preflight(settings.Output); return Task.CompletedTask; }).ConfigureAwait(false);
                 return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
             }, cancellationToken));
         return command;
@@ -256,7 +574,8 @@ internal sealed class CliRunner
                     EntityId: parsed.GetValue(entityId), PageSize: parsed.GetValue(pageSize),
                     Offset: parsed.GetValue(offset), Cursor: parsed.GetValue(cursor));
                 OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()
-                    .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token).ConfigureAwait(false);
+                    .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token,
+                        _ => { CliOutput.Preflight(settings.Output); return Task.CompletedTask; }).ConfigureAwait(false);
                 return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
             }, cancellationToken));
         return command;
@@ -288,6 +607,7 @@ internal sealed class CliRunner
                     settings.Strict,
                     settings.Sources,
                 };
+                CliOutput.Preflight(settings.Output);
                 return CliOutput.WriteAsync(document, null, settings, token, tableHeader: "FIELD\tVALUE");
             }, cancellationToken));
         config.Subcommands.Add(current);
@@ -320,6 +640,7 @@ internal sealed class CliRunner
                         allowedExtensions = entry.Value.AllowedExtensions ?? [],
                     }).ToArray(),
             };
+            CliOutput.Preflight(settings.Output);
             return CliOutput.WriteAsync(document, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
@@ -347,6 +668,8 @@ internal sealed class CliRunner
                 return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
             }
 
+            _profileStore.ValidateRemove(name);
+            CliOutput.Preflight(settings.Output);
             ProfileSnapshot snapshot = _profileStore.Remove(name);
             return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
@@ -374,7 +697,10 @@ internal sealed class CliRunner
 
         // Add replaces the whole record with only the supplied connection fields; the store rejects a
         // supplied-but-invalid name or value as configuration_invalid.
-        ProfileSnapshot snapshot = _profileStore.Add(name, new ConnectionProfile(input.Url, input.Token, input.Format));
+        var profile = new ConnectionProfile(input.Url, input.Token, input.Format);
+        _profileStore.ValidateAdd(name, profile);
+        CliOutput.Preflight(settings.Output);
+        ProfileSnapshot snapshot = _profileStore.Add(name, profile);
         return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
     }
 
@@ -403,6 +729,8 @@ internal sealed class CliRunner
                 return CliOutput.WriteErrorAsync(Invalid("name", "provide a profile name or --clear"), cancellationToken);
             }
 
+            _profileStore.ValidateUse(shouldClear ? null : selected);
+            CliOutput.Preflight(settings.Output);
             ProfileSnapshot snapshot = _profileStore.Use(shouldClear ? null : selected);
             return CliOutput.WriteAsync(new { activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
@@ -429,6 +757,8 @@ internal sealed class CliRunner
             }
 
             // Supplied names, fields, and values are validated by the store and fail as configuration_invalid.
+            _profileStore.ValidateSet(selected, key, content);
+            CliOutput.Preflight(settings.Output);
             _profileStore.Set(selected, key, content);
             return CliOutput.WriteAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
@@ -449,7 +779,7 @@ internal sealed class CliRunner
         if (transport is not null && transport != "stdio")
         {
             return await WriteMcpErrorAsync(new OperationError("unsupported_transport",
-                Message: "Only stdio transport is available."), cancellationToken).ConfigureAwait(false);
+                Message: "Only stdio transport is available; HTTP transport is planned for the next release."), cancellationToken).ConfigureAwait(false);
         }
 
         try

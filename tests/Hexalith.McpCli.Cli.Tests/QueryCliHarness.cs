@@ -95,8 +95,8 @@ internal sealed class QueryCliHarness : IAsyncDisposable
             var store = new ProfileStore(Path.Combine(_directory, "mcpcli.json"));
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(Lint.Module).Assembly, typeof(Routing.Module).Assembly, typeof(StringContracts.Module).Assembly];
             string[] invocation = withUrl ? [.. arguments, "--url", Url] : arguments;
-            int exit = await new CliRunner(store, manifest, key => key == "EVENTSTORE_READ_ONLY" ? readOnlyEnvironment : null).Parse(invocation)
-                .InvokeAsync(cancellationToken: _timeout.Token);
+            int exit = await new CliRunner(store, manifest, key => key == "EVENTSTORE_READ_ONLY" ? readOnlyEnvironment : null)
+                .InvokeAsync(invocation, _timeout.Token);
             return (exit, output.ToString(), error.ToString());
         }
         finally

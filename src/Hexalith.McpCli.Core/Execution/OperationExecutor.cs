@@ -23,13 +23,14 @@ public sealed class OperationExecutor(
     public async Task<OperationOutcome> ExecuteAsync(
         OperationCall call,
         EnvelopeContext context,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        Func<CancellationToken, Task>? beforeSubmit = null)
     {
         ArgumentNullException.ThrowIfNull(call);
         ArgumentNullException.ThrowIfNull(context);
         try
         {
-            return await ExecuteCoreAsync(call, context, cancellationToken).ConfigureAwait(false);
+            return await ExecuteCoreAsync(call, context, cancellationToken, beforeSubmit).ConfigureAwait(false);
         }
         catch (EventStoreGatewayException exception)
         {
@@ -44,7 +45,8 @@ public sealed class OperationExecutor(
     private async Task<OperationOutcome> ExecuteCoreAsync(
         OperationCall call,
         EnvelopeContext context,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        Func<CancellationToken, Task>? beforeSubmit)
     {
         CatalogAccess access = provider.Get(strict);
         if (access.Catalog is null)
@@ -227,6 +229,11 @@ public sealed class OperationExecutor(
 
         if (call is SendCommandArguments)
         {
+            if (beforeSubmit is not null)
+            {
+                await beforeSubmit(cancellationToken).ConfigureAwait(false);
+            }
+
             var request = new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,
                 operation.Routing.WireType, rebuilt, correlationId,
                 extensions, idempotencyKey);
@@ -236,6 +243,11 @@ public sealed class OperationExecutor(
         }
 
         var run = (RunQueryArguments)call;
+        if (beforeSubmit is not null)
+        {
+            await beforeSubmit(cancellationToken).ConfigureAwait(false);
+        }
+
         var queryRequest = new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,
             operation.Routing.ProjectionType, rebuilt.ValueKind == JsonValueKind.Null ? null : rebuilt,
             run.EntityId, operation.Routing.ProjectionActorType)

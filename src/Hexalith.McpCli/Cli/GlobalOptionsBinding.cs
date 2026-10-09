@@ -50,4 +50,11 @@ internal sealed class GlobalOptionsBinding
 
     private static bool? ExplicitFlag(ParseResult parsed, Option<bool> option)
         => parsed.GetResult(option) is { Implicit: false } ? parsed.GetValue(option) : null;
+
+    internal static string PublicArgumentName(string option)
+    {
+        string name = option.TrimStart('-').Split('=', 2)[0];
+        string[] parts = name.Split('-');
+        return parts[0] + string.Concat(parts.Skip(1).Select(part => char.ToUpperInvariant(part[0]) + part[1..]));
+    }
 }

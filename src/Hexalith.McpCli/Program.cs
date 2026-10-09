@@ -18,6 +18,6 @@ internal static class Program
             return Task.FromResult(0);
         }
 
-        return new CliRunner().Parse(args).InvokeAsync();
+        return new CliRunner().InvokeAsync(args);
     }
 }

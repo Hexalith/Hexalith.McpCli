@@ -7,5 +7,7 @@ public interface IOperationExecutor
     /// <param name="call">The requested command or query.</param>
     /// <param name="context">Trusted session envelope values.</param>
     /// <param name="cancellationToken">The request cancellation token.</param>
-    Task<OperationOutcome> ExecuteAsync(OperationCall call, EnvelopeContext context, CancellationToken cancellationToken = default);
+    /// <param name="beforeSubmit">Optional check immediately before the gateway request.</param>
+    Task<OperationOutcome> ExecuteAsync(OperationCall call, EnvelopeContext context, CancellationToken cancellationToken = default,
+        Func<CancellationToken, Task>? beforeSubmit = null);
 }

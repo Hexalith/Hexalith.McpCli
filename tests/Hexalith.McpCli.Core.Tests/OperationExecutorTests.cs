@@ -21,6 +21,33 @@ public sealed class OperationExecutorTests
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
     private const string CorrelationId = "01J9MZHXT3RKM0VWXRXGSJDATK";
 
+    /// <summary>A no-result validation failure skips the output check, and a failed check skips the Gateway.</summary>
+    [Fact]
+    public async Task PreSubmitCheckRunsOnlyAfterCoreValidationAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        int checks = 0;
+        Func<CancellationToken, Task> preflight = _ =>
+        {
+            checks++;
+            throw new IOException("The output destination is unavailable.");
+        };
+
+        OperationOutcome invalid = await executor.ExecuteAsync(
+            new SendCommandArguments("sample.create-item", "not json"), Context(),
+            TestContext.Current.CancellationToken, preflight);
+        invalid.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        checks.ShouldBe(0);
+
+        OperationOutcome valid = await executor.ExecuteAsync(
+            new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}"""), Context(),
+            TestContext.Current.CancellationToken, preflight);
+        valid.Error.ShouldNotBeNull().Code.ShouldBe("internal_error");
+        checks.ShouldBe(1);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>An interface-routed command reaches the gateway once with its declared wire type.</summary>
     [Fact]
     public async Task CommandUsesDeclaredRoutingAndCanonicalResponseAsync()

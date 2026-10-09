@@ -129,9 +129,9 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
-    /// <summary>An accepted command can fail while writing output; it must not be submitted again.</summary>
+    /// <summary>A predictable result-path failure prevents command submission.</summary>
     [Fact]
-    public async Task AcceptedCommandOutputFailureReportsErrorAfterOneRequestAsync()
+    public async Task BadCommandOutputPathPreventsRequestAsync()
     {
         string directory = NewDirectory();
         string outputDirectory = Path.Combine(directory, "result-directory");
@@ -142,9 +142,33 @@ public sealed class ExecutionFailureCommandTests
                 true, 202, "", outputDirectory, acceptedCommand: true);
 
             exit.ShouldBe(2, output);
-            AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
-            calls.ShouldBe(1);
+            AssertJson(output, """{"error":{"code":"internal_error","message":"Operation execution failed."}}""");
+            calls.ShouldBe(0);
             Directory.Exists(outputDirectory).ShouldBeTrue();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A successful command writes its canonical result to an existing file after one submission.</summary>
+    [Fact]
+    public async Task AcceptedCommandWritesExistingResultFileAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            string target = Path.Combine(directory, "result.json");
+            File.WriteAllText(target, "old result");
+            (int exit, string output, int calls) = await InvokeGatewayAsync(
+                true, 202, "", target, acceptedCommand: true);
+            exit.ShouldBe(0, output);
+            output.ShouldBeEmpty();
+            calls.ShouldBe(1);
+            using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
+            document.RootElement.GetProperty("operation").GetString().ShouldBe("sample.create-item");
+            document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");
         }
         finally
         {
@@ -1019,8 +1043,7 @@ public sealed class ExecutionFailureCommandTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(SampleContracts.CreateItemCommand).Assembly,
                 typeof(StringContracts.Module).Assembly];
-            int exit = await new CliRunner(store, manifest, _ => null).Parse(arguments)
-                .InvokeAsync(cancellationToken: cancellationToken);
+            int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(arguments, cancellationToken);
             return (exit, output.ToString(), error.ToString());
         }
         finally

@@ -167,6 +167,72 @@ public sealed partial class ProfileStore
         });
     }
 
+    /// <summary>Checks an add or replace without changing the profile file.</summary>
+    public void ValidateAdd(string name, ConnectionProfile profile)
+    {
+        ValidateName(name);
+        ValidateProfile(profile);
+        _ = Read();
+    }
+
+    /// <summary>Checks a removal without changing the profile file.</summary>
+    public void ValidateRemove(string name)
+    {
+        ValidateName(name);
+        if (!Read().Profiles.ContainsKey(name))
+        {
+            throw new InvalidDataException("The named mcpcli profile does not exist.");
+        }
+    }
+
+    /// <summary>Checks a selection or clear without changing the profile file.</summary>
+    public void ValidateUse(string? name)
+    {
+        if (name is not null)
+        {
+            ValidateName(name);
+        }
+
+        if (name is not null && !Read().Profiles.ContainsKey(name))
+        {
+            throw new InvalidDataException("The named mcpcli profile does not exist.");
+        }
+
+        if (name is null)
+        {
+            _ = Read();
+        }
+    }
+
+    /// <summary>Checks a profile setting and its resulting record without changing the file.</summary>
+    public void ValidateSet(string name, string field, string value)
+    {
+        ValidateName(name);
+        ArgumentNullException.ThrowIfNull(value);
+        if (field is not ("tenant" or "actor" or "allowTenantOverride" or "allowedExtensions"))
+        {
+            throw new InvalidDataException("Only tenant, actor, allowTenantOverride, and allowedExtensions can be set.");
+        }
+
+        if (!Read().Profiles.TryGetValue(name, out ConnectionProfile? existing))
+        {
+            throw new InvalidDataException("The named mcpcli profile does not exist.");
+        }
+
+        ConnectionProfile updated = field switch
+        {
+            "tenant" => existing with { Tenant = value },
+            "actor" => existing with { Actor = value },
+            "allowTenantOverride" => existing with { AllowTenantOverride = ParseBoolean(value) },
+            "allowedExtensions" => existing with
+            {
+                AllowedExtensions = value.Length == 0 ? [] : value.Split(',', StringSplitOptions.None),
+            },
+            _ => throw new InvalidDataException("Unsupported profile field."),
+        };
+        ValidateProfile(updated);
+    }
+
     /// <summary>Masks a token for a display document.</summary>
     public static string? MaskToken(string? token)
     {
