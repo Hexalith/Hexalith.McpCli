@@ -65,7 +65,7 @@ internal sealed class CliRunner
     /// <summary>Parses arguments with response-file expansion disabled so <c>@</c> values reach their options verbatim.</summary>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>The parse result ready for invocation.</returns>
-    internal ParseResult Parse(IReadOnlyList<string> args)
+    private ParseResult Parse(IReadOnlyList<string> args)
         => CreateRoot().Parse(args, new ParserConfiguration { ResponseFileTokenReplacer = null });
 
     /// <summary>Invokes one checked parse, including failures suppressed by help or version.</summary>
