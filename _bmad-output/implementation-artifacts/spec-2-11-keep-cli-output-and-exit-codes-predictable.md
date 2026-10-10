@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -432,6 +432,39 @@ Rejected:
 ### Review Findings
 
 Code review 2026-10-10 of the refreshed baseline diff used Blind Hunter, Edge Case Hunter, and Verification Gap. R10-B10 and R10-B11 were patched in `CliOutputContractTests`: parser, help, transport, version, send, and file-output cases now check complete documents and the expected stdout and stderr channels. The remaining findings repeat previously deferred platform or writer behavior, or previously rejected low-impact cases; the R10 rows above preserve each verdict. The seven open patches from the preceding review are also verified and checked off.
+
+### Review Findings
+
+Code review 2026-10-10 of `52cf2aa..b1fd464`, excluding this spec file. Layers: Blind Hunter, Edge Case Hunter, Verification Gap and Acceptance Auditor; none failed, and Verification Gap reported no gaps. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`. The Acceptance Auditor found all three acceptance criteria met.
+
+- [ ] [Review][Patch] The preflight sharing-conflict open has no test that fails when it is removed. Every existing-file failure test is refused earlier, by `RequireAccess`, the read-only attribute or `Inspect`, and every success test passes through the open. Reproduced: with `flock -x` held on the target, `config set dev actor locked --output locked.json` returns the preflight document with exit 2, and the profile and target are unchanged. Add a test that holds the target with `FileShare.None` and asserts the full document, empty stderr, unchanged profile bytes and an unchanged target. [src/Hexalith.McpCli/Cli/CliOutput.cs:74]
+- [ ] [Review][Patch] `InvokeGatewayAsync` discards stderr, so the new send output tests never assert it, against the repository rule; R10-B11 patched only `CliOutputContractTests`. Affected: `BadCommandOutputPathPreventsRequestAsync`, `AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync` and `AcceptedCommandWritesExistingResultFileAsync`. The first also checks only that the occupied directory still exists, not that it stayed empty. Return stderr from the helper and assert it. [tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs:1031]
+- [ ] [Review][Patch] The Story 2.11 ledger anchors point at the wrong lines or have none. `CliRunner.cs:712` should be the `RunAsync` catch-all at `:797`; `CliRunner.cs:624` should be the `config use` preflight at `:648`; `CliOutputContractTests.cs:811` should be the root skip at `:874`. The two 2026-10-09 entries cite `OutputFileType.cs`, `ci.yml`, `CliOutput.Preflight` and `WriteResultFileAsync` with no line. [_bmad-output/implementation-artifacts/deferred-work.md:385]
+- [ ] [Review][Patch] The spec-2-8 canonical-ULID ledger entry contradicts its new `seen-again` line. Its summary still says agent guidance prescribes `Ulid.TryParse`, and its evidence still lists `AGENTS.md:85`, `CLAUDE.md:85` and `.github/copilot-instructions.md:85`, which the refresh fixed. Narrow the summary and evidence to the planning and architecture citations and drop the annotation. [_bmad-output/implementation-artifacts/deferred-work.md:297]
+- [ ] [Review][Patch] The README says "The safe message points to `--help` for usage", but `Help must be requested without arguments or options.` and `Version must be requested alone.` do not. Limit the claim to the unknown-option and invalid-argument messages. [README.md:107]
+- [ ] [Review][Patch] The README says `describe`, `send` and `query` emit a format note whenever table format is requested, but `CliOutput.WriteAsync` writes it only for a result; a failed `send --format table` writes nothing to stderr. [README.md:95]
+- [ ] [Review][Patch] Everything after the parsing bullets now sits under `### Parsing and help`: Gateway error fields, `--output` preflight and restoration, Catalog diagnostics, `config profile add` and the MCP tools. "The restoration risks described below" therefore points into that section. Add a heading before the `gateway_error.status` paragraph. [README.md:112]
+- [ ] [Review][Patch] The README parse rules omit three user-visible behaviors. Parse failures name the option in `argument` (`pageSize`, `readOnly`) or fall back to `arguments`. Leading `[...]` directive tokens are now refused, including `[suggest]`, which worked at the baseline. After `--`, every token is positional, so options must come before it. [README.md:105]
+- [x] [Review][Defer] The agent-instruction channel summary says "CLI results and errors both go to stdout as JSON", but `--format table` writes tab-separated discovery and config results, `--output` writes results to a file, and `mcp` failures use stderr [AGENTS.md:110] — deferred: the fix edits the managed agent-context block in all three entry points; correct it in the next bmad-project-context refresh.
+- [x] [Review][Defer] The "Out of version one (PRD §8.2)" line files §8.3's OAuth non-goal under §8.2. It omits query correlation and extensions, search, filter, order-by and freshness arguments, command status lookup, and §8.3's rule against calling a Module's REST or Dapr API [AGENTS.md:86] — deferred: agent-context edit.
+- [x] [Review][Defer] The `\z` pitfall has no scope. `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`) is an ECMA-262 JSON Schema `pattern` sent to clients, where `\z` is not an end anchor, so applying the pitfall there would break client-side ULID validation [AGENTS.md:120] — deferred: agent-context edit; limit the line to .NET `Regex` and `[GeneratedRegex]`.
+
+Rejected:
+
+- `false` `modules --strict=bad --help` reports `argument: arguments` rather than `strict`. The reported failure is the help mixture, which the Design Notes classify as command syntax (`arguments`); `CliOutputContractTests.cs:47` pins this deliberately.
+- `low` An unwritable stdout escapes to System.CommandLine's default exception handler: `config current >/dev/full` exits 1 with a stack trace, and `config >/dev/full` aborts with 134. Reproduced, but it predates the story (the baseline invoked the parse result the same way) and needs a broken output stream; a new catch path is disproportionate. Carried R10-B5; raised by the Blind Hunter and the Acceptance Auditor.
+- `low` Sprint status says `review` while this spec says `done`. The fix is a status edit, which this review's closing step makes.
+- `false` DW-1 and DW-2 use the canonical ledger format. They carry no `gate:`, so `bmad-loop validate` adds no hard gate; canonical entries use `origin` and `location` rather than `source_spec`. No migration-numbering collision was shown.
+- `low` `tools/dependency-policy.json` moved from CRLF to LF without an end-of-line rule. Carried: cosmetic, and no repository rule exists.
+- `low` The Implementation Notes say no submodule pointer moved, but `dcd4dc1` moved `Hexalith.Builds`, and the matching policy update landed in a later commit. Correcting the note edits this spec, and the commits are history.
+- `maybe-false` On macOS or FreeBSD, `--output /dev/fd/N` naming a write-only regular file may fail the preflight read-write reopen although the writer's direct write would succeed. A macOS run would settle it; even if true, it is low, because `--output /dev/stdout` is unusual and the fix adds a branch.
+- `low` ABIs other than Linux, macOS x64 and arm64, FreeBSD x64 and Windows refuse every `--output`. .NET 10's supported platforms are covered, and a fallback adds branches.
+- `low` A block device outside `/dev` passes preflight, after which the writer stages a backup and fails. Creating such a node needs root. It shares the root cause of the seekable-device deferral (`deferred-work.md:377`), and a new branch is disproportionate.
+- `low` A new target name that its filesystem rejects (`:` on vfat, `?` on Windows) passes the fixed-name staging probe and fails at `File.Move` after a side effect. This is a rare typo, and probing at the target path changes the probe's semantics.
+- `low` Vertical tab, form feed, U+0085, U+2028, U+2029 and ESC are not escaped in table cells. Carried (R4-B10, R10-E2).
+- `low` Help or version prefixed by the internal root name is refused. Carried (R10-E1).
+- `low` `describe --strict x x` blames `strict` for the surplus positional. Carried (R10-B8).
+- `low` The parser names `--extension` failures `extension`, while Core uses `extensions`. Carried.
 
 ## Design Notes
 

@@ -395,6 +395,18 @@
   summary: No running test reaches the existing-file mode-bit preflight guard, the only preflight refusal a root process gets for a read-only or write-only result file.
   evidence: Medium. For root, `faccessat(..., AT_EACCESS)` in `OutputFileType.RequireAccess` succeeds whatever the mode bits are. That leaves the read/write mode-bit check in `CliOutput.PreflightCore` (`src/Hexalith.McpCli/Cli/CliOutput.cs:67-72`) as the only refusal of a 0400 or 0200 existing target before a Gateway request or profile mutation. As non-root, which is how CI runs, `RequireAccess` rejects such a file first. As root, `DeniedRegularAndNewFileParentPreventMutationAsync` is skipped entirely (`tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:811`), so deleting the guard keeps every run green. Without it, a root send or config mutation would complete and then fail in the writer's own mode check with "The CLI action failed." Settle with a privileged CI run that asserts the preflight document, an unchanged profile and zero Gateway calls for a 0400 target. As a cheaper partial step, split the existing-file case out of the root skip so root developer runs exercise it.
 
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+  summary: The agent-instruction channel summary says CLI results and errors both go to stdout as JSON, which misstates table, file and MCP output.
+  evidence: Low. `AGENTS.md:110` (synced to `CLAUDE.md:110` and `.github/copilot-instructions.md:110`): with `--format table`, `modules`, `operations` and `config` results are tab-separated tables (`src/Hexalith.McpCli/Cli/CliOutput.cs:110`); with `--output`, results go to the file and stdout stays empty; `mcp` failures use stderr. An agent following the line could "fix" table or file output. The line sits in the bmad-project-context managed block, so correct it in the next refresh.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+  summary: The agent instructions' "Out of version one (PRD §8.2)" refusal list mixes PRD sections and omits scoped-out items.
+  evidence: Low. `AGENTS.md:86` (and its synced copies) lists "any OAuth or identity server", which is a §8.3 non-goal (`_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:513`). It omits §8.2's query correlation and extensions, search, filter, order-by and freshness Query arguments, and command status lookup (`prd.md:506-507`), plus §8.3's rule that the tool never calls a Module's REST or Dapr API (`prd.md:514`). Correct it in the next bmad-project-context refresh.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+  summary: The `\z` regex pitfall in the agent instructions has no scope and could be applied to JSON Schema patterns.
+  evidence: Low. `AGENTS.md:120` (and its synced copies) says to anchor validation regexes with `\z`, while `AGENTS.md:85` names `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`, emitted at `:303` and `:390`) as the schema check. That pattern is an ECMA-262 JSON Schema `pattern`, where `\z` is not an end anchor, so applying the pitfall there would break client-side ULID validation; DW-1's planned `[GeneratedRegex]` scan would not catch it. Limit the line to .NET `Regex` and `[GeneratedRegex]` in the next bmad-project-context refresh.
+
 ## Deferred from: bmad-project-context refresh of the agent instructions (2026-10-10)
 
 ### DW-1: Fail tests on `$`-anchored validation regexes
