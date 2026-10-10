@@ -73,14 +73,11 @@ internal sealed class CliRunner
     {
         ParseResult parsed = Parse(args);
         HelpOption helpOption = parsed.RootCommandResult.Command.Options.OfType<HelpOption>().Single();
-        var helpAliases = helpOption.Aliases.Append(helpOption.Name)
-            .Concat(helpOption.Aliases.Where(alias => alias.StartsWith("-", StringComparison.Ordinal)
-                && !alias.StartsWith("--", StringComparison.Ordinal)).Select(alias => "/" + alias[1..]))
-            .ToHashSet(StringComparer.Ordinal);
+        var helpAliases = helpOption.Aliases.Append(helpOption.Name).ToHashSet(StringComparer.Ordinal);
         string? invalidToken = FindInvalidOption(args, parsed, helpAliases, out string invalidArgument);
         OperationError? failure = invalidToken is not null
             ? Invalid(args.TakeWhile(argument => argument != "--").Any(argument => helpAliases.Contains(argument) || argument == "--version")
-                ? "arguments" : invalidArgument, "The command contains an unknown or malformed option.")
+                ? "arguments" : invalidArgument, "The command contains an unknown or malformed option. Run with --help for usage.")
             : null;
 
         if (failure is null)
@@ -287,7 +284,7 @@ internal sealed class CliRunner
         }
 
         string argument = option is null ? "arguments" : GlobalOptionsBinding.PublicArgumentName(option);
-        return Invalid(argument, "The command arguments are missing or invalid.");
+        return Invalid(argument, "The command arguments are missing or invalid. Run with --help for usage.");
     }
 
     private static string[] CommandPath(Command command)

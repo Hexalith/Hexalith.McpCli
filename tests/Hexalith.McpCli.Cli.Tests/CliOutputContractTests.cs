@@ -1,3 +1,4 @@
+using System.CommandLine;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Net.Sockets;
@@ -18,6 +19,9 @@ namespace Hexalith.McpCli.Cli.Tests;
 public sealed class CliOutputContractTests
 {
     private static readonly Assembly[] SampleManifest = [typeof(CreateItemCommand).Assembly];
+    private const string ScanMessage = "The command contains an unknown or malformed option. Run with --help for usage.";
+    private const string ParseMessage = "The command arguments are missing or invalid. Run with --help for usage.";
+    private const string HelpMessage = "Help must be requested without arguments or options.";
 
     /// <summary>Malformed input is one safe error with no usage or supplied value.</summary>
     [Fact]
@@ -27,74 +31,87 @@ public sealed class CliOutputContractTests
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            (string[] Arguments, string Argument)[] cases =
+            (string[] Arguments, string Argument, string Message)[] cases =
             [
-                (["unknown-verb"], "arguments"),
-                (["operations", "-x"], "arguments"),
-                (["operations", "--clear"], "arguments"),
-                (["operations", "--bogus-secret"], "arguments"),
-                (["query", "--page-size", "99999999999999999999"], "pageSize"),
-                (["query", "--page-size"], "pageSize"),
-                (["config", "set", "dev", "tenant", "value", "extra"], "arguments"),
-                (["--help=secret"], "arguments"),
-                (["/?=secret"], "arguments"),
-                (["/h=secret"], "arguments"),
-                (["--version=secret"], "arguments"),
-                (["modules", "--strict=secret", "--help"], "arguments"),
-                (["modules", "--read-only=secret"], "readOnly"),
-                (["modules", "--strict=true", "--read-only=bad"], "readOnly"),
-                (["modules", "--read-only", "maybe"], "readOnly"),
-                (["modules", "--token", "/?=secret"], "arguments"),
-                (["operations", "sample", "--kind", "-?=secret"], "arguments"),
-                (["query", "--page-size:abc"], "pageSize"),
-                (["modules", "--strict:secret"], "strict"),
-                (["operations", "--strict=bad"], "strict"),
-                (["describe", "--lint=bad"], "lint"),
-                (["--version", "--bogus-secret"], "arguments"),
-                (["[suggest]", "unknown-verb-secret"], "arguments"),
-                (["[suggest:3]", "con"], "arguments"),
-                (["[bogus]", "modules"], "arguments"),
-                (["[x:secret]", "modules"], "arguments"),
-                (["[bogus]", "[suggest]", "config", "current"], "arguments"),
-                (["Hexalith.McpCli", "[bogus]", "config", "current"], "arguments"),
-                (["operations", "--read-only", "sample", "extra"], "arguments"),
-                (["describe", "--strict", "sample.create-item", "extra"], "arguments"),
+                (["unknown-verb"], "arguments", ParseMessage),
+                (["operations", "-x"], "arguments", ScanMessage),
+                (["operations", "--clear"], "arguments", ScanMessage),
+                (["operations", "--bogus-secret"], "arguments", ScanMessage),
+                (["query", "--page-size", "99999999999999999999"], "pageSize", ParseMessage),
+                (["query", "--page-size"], "pageSize", ParseMessage),
+                (["config", "set", "dev", "tenant", "value", "extra"], "arguments", ParseMessage),
+                (["--help=secret"], "arguments", ScanMessage),
+                (["/?=secret"], "arguments", ScanMessage),
+                (["/h=secret"], "arguments", ScanMessage),
+                (["--version=secret"], "arguments", ScanMessage),
+                (["modules", "--strict=secret", "--help"], "arguments", ScanMessage),
+                (["modules", "--read-only=secret"], "readOnly", ScanMessage),
+                (["modules", "--strict=true", "--read-only=bad"], "readOnly", ScanMessage),
+                (["modules", "--read-only", "maybe"], "readOnly", ParseMessage),
+                (["modules", "--token", "/?=secret"], "arguments", ScanMessage),
+                (["operations", "sample", "--kind", "-?=secret"], "arguments", ScanMessage),
+                (["query", "--page-size:abc"], "pageSize", ParseMessage),
+                (["modules", "--strict:secret"], "strict", ScanMessage),
+                (["operations", "--strict=bad"], "strict", ScanMessage),
+                (["describe", "--lint=bad"], "lint", ScanMessage),
+                (["--version", "--bogus-secret"], "arguments", ScanMessage),
+                (["[suggest]", "unknown-verb-secret"], "arguments", ScanMessage),
+                (["[suggest:3]", "con"], "arguments", ScanMessage),
+                (["[bogus]", "modules"], "arguments", ScanMessage),
+                (["[x:secret]", "modules"], "arguments", ScanMessage),
+                (["[bogus]", "[suggest]", "config", "current"], "arguments", ScanMessage),
+                (["operations", "--read-only", "sample", "extra"], "arguments", ParseMessage),
+                (["describe", "--strict", "sample.create-item", "extra"], "arguments", ParseMessage),
             ];
-            foreach ((string[] arguments, string expectedArgument) in cases)
+            foreach ((string[] arguments, string expectedArgument, string expectedMessage) in cases)
             {
                 (int exit, string output, string error) = await InvokeAsync(store, arguments);
                 exit.ShouldBe(2, string.Join(' ', arguments) + output + error);
                 error.ShouldBeEmpty();
                 output.ShouldNotContain("secret");
                 output.ShouldNotContain("Usage:");
-                AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe(expectedArgument);
+                AssertInvalidArguments(output, expectedMessage, expectedArgument);
+            }
+
+            foreach (string[] arguments in new[]
+                {
+                    Array.Empty<string>(), new[] { "config" }, new[] { "config", "profile" },
+                    new[] { "unknown-verb" },
+                })
+            {
+                (int exit, string output, string error) = await InvokeAsync(store, arguments);
+                exit.ShouldBe(2, output + error);
+                error.ShouldBeEmpty();
+                AssertInvalidArguments(output, ParseMessage, "arguments");
             }
 
             (int mcpExit, string mcpOutput, string mcpError) = await InvokeAsync(store,
                 ["mcp", "--transport", "-x"]);
             mcpExit.ShouldBe(2);
             mcpOutput.ShouldBeEmpty();
-            AssertError(mcpError, "invalid_arguments");
+            AssertInvalidArguments(mcpError, ScanMessage, "arguments");
 
             (int directiveExit, string directiveOutput, string directiveError) = await InvokeAsync(store,
                 ["[suggest]", "mcp", "--transport", "http"]);
             directiveExit.ShouldBe(2);
             directiveOutput.ShouldBeEmpty();
-            AssertError(directiveError, "invalid_arguments");
+            AssertInvalidArguments(directiveError, ScanMessage, "arguments");
 
             store.Add("dev", new ConnectionProfile("https://gateway.example/", Actor: "original"));
+            string rootName = RootCommand.ExecutableName;
             string profilePath = Path.Combine(directory, "mcpcli.json");
             byte[] originalProfile = File.ReadAllBytes(profilePath);
             foreach (string[] arguments in new[]
                 {
                     new[] { "[x]", "config", "set", "dev", "actor", "bracket" },
                     new[] { "[bogus]", "config", "profile", "remove", "dev" },
+                    new[] { rootName, "[bogus]", "config", "profile", "remove", "dev" },
                 })
             {
                 (int exit, string output, string error) = await InvokeAsync(store, arguments);
                 exit.ShouldBe(2, string.Join(' ', arguments) + output + error);
                 error.ShouldBeEmpty();
-                AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe("arguments");
+                AssertInvalidArguments(output, ScanMessage, "arguments");
                 File.ReadAllBytes(profilePath).ShouldBe(originalProfile);
             }
         }
@@ -118,6 +135,23 @@ public sealed class CliOutputContractTests
             using JsonDocument document = JsonDocument.Parse(output);
             document.RootElement.GetProperty("tenant").GetString().ShouldBe("foo");
             document.RootElement.GetProperty("readOnly").GetBoolean().ShouldBeTrue();
+            error.ShouldBeEmpty();
+
+            foreach ((string attached, string masked) in new[]
+                {
+                    ("--token=--abc", "--ab***"),
+                    ("--token:--abc", "--ab***"),
+                    ("--token=-h", "***"),
+                    ("--token:-h", "***"),
+                })
+            {
+                (int tokenExit, string tokenOutput, string tokenError) = await InvokeAsync(store,
+                    [attached, "config", "current"]);
+                tokenExit.ShouldBe(0, tokenOutput + tokenError);
+                tokenError.ShouldBeEmpty();
+                using JsonDocument tokenDocument = JsonDocument.Parse(tokenOutput);
+                tokenDocument.RootElement.GetProperty("token").GetString().ShouldBe(masked);
+            }
         }
         finally
         {
@@ -145,54 +179,54 @@ public sealed class CliOutputContractTests
                 error.ShouldBeEmpty();
             }
 
-            (string[] Arguments, string Code)[] invalid =
+            string[][] invalid =
             [
-                (["operations", "", "--help"], "invalid_arguments"),
-                (["describe", "", "-h"], "invalid_arguments"),
-                (["send", "--payload", "{}", "--help"], "invalid_arguments"),
-                (["query", "--payload", "{}", "-?"], "invalid_arguments"),
-                (["operations", "sample", "--kind", "bad", "/?"], "invalid_arguments"),
-                (["config", "set", "dev", "tenant", "--help"], "invalid_arguments"),
-                (["config", "use", "--clear=false", "--help"], "invalid_arguments"),
-                (["modules", "--url", "ftp://bad.example/", "--help"], "invalid_arguments"),
-                (["modules", "--format", "xml", "--help"], "invalid_arguments"),
-                (["config", "profile", "remove", "missing", "--help"], "invalid_arguments"),
-                (["config", "use", "missing", "-h"], "invalid_arguments"),
-                (["config", "set", "dev", "badfield", "x", "--help"], "invalid_arguments"),
-                (["config", "profile", "add", "dev", "--help"], "invalid_arguments"),
+                ["operations", "", "--help"],
+                ["describe", "", "-h"],
+                ["send", "--payload", "{}", "--help"],
+                ["query", "--payload", "{}", "-?"],
+                ["operations", "sample", "--kind", "bad", "/?"],
+                ["config", "set", "dev", "tenant", "--help"],
+                ["config", "use", "--clear=false", "--help"],
+                ["modules", "--url", "ftp://bad.example/", "--help"],
+                ["modules", "--format", "xml", "--help"],
+                ["config", "profile", "remove", "missing", "--help"],
+                ["config", "use", "missing", "-h"],
+                ["config", "set", "dev", "badfield", "x", "--help"],
+                ["config", "profile", "add", "dev", "--help"],
             ];
-            foreach ((string[] arguments, string code) in invalid)
+            foreach (string[] arguments in invalid)
             {
                 (int exit, string output, string error) = await InvokeAsync(store, arguments);
                 exit.ShouldBe(2, string.Join(' ', arguments) + output + error);
                 error.ShouldBeEmpty();
                 output.ShouldNotContain("Usage:");
-                AssertError(output, code);
+                AssertInvalidArguments(output, HelpMessage, "arguments");
             }
 
             (int httpExit, string httpOut, string httpError) = await InvokeAsync(store,
                 ["mcp", "--transport", "http", "--help"]);
             httpExit.ShouldBe(2);
             httpOut.ShouldBeEmpty();
-            AssertError(httpError, "invalid_arguments");
+            AssertInvalidArguments(httpError, HelpMessage, "arguments");
 
             (int slashHttpExit, string slashHttpOut, string slashHttpError) = await InvokeAsync(store,
                 ["mcp", "--transport", "http", "/h"]);
             slashHttpExit.ShouldBe(2);
             slashHttpOut.ShouldBeEmpty();
-            AssertError(slashHttpError, "invalid_arguments");
+            AssertInvalidArguments(slashHttpError, HelpMessage, "arguments");
 
             (int mcpSettingsExit, string mcpSettingsOut, string mcpSettingsError) = await InvokeAsync(store,
                 ["mcp", "--url", "ftp://bad.example/", "--help"]);
             mcpSettingsExit.ShouldBe(2);
             mcpSettingsOut.ShouldBeEmpty();
-            AssertError(mcpSettingsError, "invalid_arguments");
+            AssertInvalidArguments(mcpSettingsError, HelpMessage, "arguments");
 
             (int mcpFormatExit, string mcpFormatOut, string mcpFormatError) = await InvokeAsync(store,
                 ["mcp", "--format", "table", "--help"]);
             mcpFormatExit.ShouldBe(2);
             mcpFormatOut.ShouldBeEmpty();
-            AssertError(mcpFormatError, "invalid_arguments");
+            AssertInvalidArguments(mcpFormatError, HelpMessage, "arguments");
 
             store.Add("dev", new ConnectionProfile("https://gateway.example/"));
             (int literalExit, string literalOutput, string literalError) = await InvokeAsync(store,
@@ -244,7 +278,8 @@ public sealed class CliOutputContractTests
                 ["mcp", "--transport", "http"], manifest);
             exit.ShouldBe(2);
             output.ShouldBeEmpty();
-            AssertError(error, "unsupported_transport").GetProperty("message").GetString()!.ShouldContain("next release");
+            AssertErrorJson(error,
+                """{"error":{"code":"unsupported_transport","message":"Only stdio transport is available; HTTP transport is planned for the next release."}}""");
             manifestReads.ShouldBe(0);
 
             foreach (string[] malformed in new[]
@@ -258,7 +293,7 @@ public sealed class CliOutputContractTests
                 malformedExit.ShouldBe(2);
                 malformedOutput.ShouldBeEmpty();
                 malformedError.ShouldNotContain("bogus-secret");
-                AssertError(malformedError, "invalid_arguments");
+                AssertInvalidArguments(malformedError, ScanMessage, "arguments");
                 manifestReads.ShouldBe(0);
             }
         }
@@ -293,7 +328,7 @@ public sealed class CliOutputContractTests
                 ["config", "set", "dev", "actor", "--version"]);
             malformedExit.ShouldBe(2);
             malformedError.ShouldBeEmpty();
-            AssertError(malformedOutput, "invalid_arguments");
+            AssertInvalidArguments(malformedOutput, "Version must be requested alone.", "arguments");
             store.Read().Profiles["dev"].Actor.ShouldBe("--version");
         }
         finally
@@ -315,10 +350,12 @@ public sealed class CliOutputContractTests
             string bad = Path.Combine(directory, "occupied-directory");
             Directory.CreateDirectory(bad);
 
-            (int discoveryExit, string discovery, _) = await InvokeAsync(store,
+            (int discoveryExit, string discovery, string discoveryError) = await InvokeAsync(store,
                 ["operations", "missing", "--output", bad]);
             discoveryExit.ShouldBe(2);
-            AssertError(discovery, "unknown_module");
+            discoveryError.ShouldBeEmpty();
+            AssertErrorJson(discovery,
+                """{"error":{"code":"unknown_module","module":"missing","suggestions":["sample"]}}""");
 
             foreach (string[] arguments in new[]
                 {
@@ -339,18 +376,22 @@ public sealed class CliOutputContractTests
                 File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
             }
 
-            foreach (string[] arguments in new[]
+            foreach ((string[] arguments, string message) in new[]
                 {
-                    new[] { "config", "profile", "remove", "missing" },
-                    new[] { "config", "use", "missing" },
-                    new[] { "config", "profile", "add", "bad name", "--url", "https://gateway.example/" },
-                    new[] { "config", "set", "dev", "allowTenantOverride", "bad" },
-                    new[] { "config", "set", "dev", "allowedExtensions", "bad key" },
+                    (new[] { "config", "profile", "remove", "missing" }, "The named mcpcli profile does not exist."),
+                    (new[] { "config", "use", "missing" }, "The named mcpcli profile does not exist."),
+                    (new[] { "config", "profile", "add", "bad name", "--url", "https://gateway.example/" },
+                        "Profile names must contain 1 to 64 ASCII letters, digits, underscores, or hyphens."),
+                    (new[] { "config", "set", "dev", "allowTenantOverride", "bad" },
+                        "allowTenantOverride must be true, false, 1, or 0."),
+                    (new[] { "config", "set", "dev", "allowedExtensions", "bad key" },
+                        "A profile has invalid allowed extension keys."),
                 })
             {
-                (int exit, string output, _) = await InvokeAsync(store, [.. arguments, "--output", bad]);
+                (int exit, string output, string error) = await InvokeAsync(store, [.. arguments, "--output", bad]);
                 exit.ShouldBe(2);
-                AssertError(output, "configuration_invalid");
+                error.ShouldBeEmpty();
+                AssertErrorJson(output, $$$"""{"error":{"code":"configuration_invalid","message":"{{{message}}}"}}""");
                 File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
             }
 
@@ -361,9 +402,11 @@ public sealed class CliOutputContractTests
                     new[] { "config", "use", "--clear" },
                 })
             {
-                (int exit, string output, _) = await InvokeAsync(store, [.. arguments, "--output", bad]);
+                (int exit, string output, string error) = await InvokeAsync(store, [.. arguments, "--output", bad]);
                 exit.ShouldBe(2);
-                AssertError(output, "configuration_invalid");
+                error.ShouldBeEmpty();
+                AssertErrorJson(output,
+                    """{"error":{"code":"configuration_invalid","message":"The mcpcli profile document is malformed or has unknown or duplicate fields."}}""");
                 File.ReadAllText(store.ProfilePath).ShouldBe("{");
             }
         }
@@ -383,9 +426,10 @@ public sealed class CliOutputContractTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             string target = Path.Combine(directory, "result.json");
             File.WriteAllText(target, "old result");
-            (int exit, string output, _) = await InvokeAsync(store, ["config", "current", "--output", target]);
-            exit.ShouldBe(0, output);
+            (int exit, string output, string error) = await InvokeAsync(store, ["config", "current", "--output", target]);
+            exit.ShouldBe(0, output + error);
             output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
             using (JsonDocument document = JsonDocument.Parse(File.ReadAllText(target)))
             {
                 document.RootElement.GetProperty("format").GetString().ShouldBe("json");
@@ -395,9 +439,10 @@ public sealed class CliOutputContractTests
             {
                 string link = Path.Combine(directory, "result-link");
                 File.CreateSymbolicLink(link, target);
-                (exit, output, _) = await InvokeAsync(store, ["config", "profile", "list", "--output", link]);
-                exit.ShouldBe(0, output);
+                (exit, output, error) = await InvokeAsync(store, ["config", "profile", "list", "--output", link]);
+                exit.ShouldBe(0, output + error);
                 output.ShouldBeEmpty();
+                error.ShouldBeEmpty();
                 new FileInfo(link).LinkTarget.ShouldBe(target);
                 using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
                 document.RootElement.GetProperty("profiles").GetArrayLength().ShouldBe(0);
@@ -420,18 +465,20 @@ public sealed class CliOutputContractTests
             store.Add("dev", new ConnectionProfile("https://gateway.example/"));
             string[] beforeTemp = Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*");
             string created = Path.Combine(directory, "new-result.json");
-            (int newExit, string newOutput, _) = await InvokeAsync(store,
+            (int newExit, string newOutput, string newError) = await InvokeAsync(store,
                 ["config", "set", "dev", "actor", "first", "--output", created]);
-            newExit.ShouldBe(0, newOutput);
+            newExit.ShouldBe(0, newOutput + newError);
             newOutput.ShouldBeEmpty();
+            newError.ShouldBeEmpty();
             File.Exists(created).ShouldBeTrue();
             Directory.GetFiles(directory, ".mcpcli-probe-*").ShouldBeEmpty();
             Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
 
-            (int existingExit, string existingOutput, _) = await InvokeAsync(store,
+            (int existingExit, string existingOutput, string existingError) = await InvokeAsync(store,
                 ["config", "set", "dev", "actor", "second", "--output", created]);
-            existingExit.ShouldBe(0, existingOutput);
+            existingExit.ShouldBe(0, existingOutput + existingError);
             existingOutput.ShouldBeEmpty();
+            existingError.ShouldBeEmpty();
             Directory.GetFiles(directory, ".mcpcli-probe-*").ShouldBeEmpty();
             Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
 
@@ -439,10 +486,11 @@ public sealed class CliOutputContractTests
             {
                 string link = Path.Combine(directory, "result-link");
                 File.CreateSymbolicLink(link, created);
-                (int linkExit, string linkOutput, _) = await InvokeAsync(store,
+                (int linkExit, string linkOutput, string linkError) = await InvokeAsync(store,
                     ["config", "set", "dev", "actor", "third", "--output", link]);
-                linkExit.ShouldBe(0, linkOutput);
+                linkExit.ShouldBe(0, linkOutput + linkError);
                 linkOutput.ShouldBeEmpty();
+                linkError.ShouldBeEmpty();
                 new FileInfo(link).LinkTarget.ShouldBe(created);
                 Directory.GetFiles(Path.GetTempPath(), ".mcpcli-probe-*").ShouldBe(beforeTemp);
             }
@@ -464,29 +512,34 @@ public sealed class CliOutputContractTests
             string bad = Path.Combine(directory, "occupied-directory");
             Directory.CreateDirectory(bad);
 
-            (int unknownExit, string unknown, _) = await harness.InvokeAsync(
+            (int unknownExit, string unknown, string unknownError) = await harness.InvokeAsync(
                 ["query", "missing.operation", "--payload", "{}", "--output", bad]);
             unknownExit.ShouldBe(2);
-            AssertError(unknown, "unknown_operation");
+            QueryCliHarness.AssertDiagnostics(unknownError);
+            AssertErrorJson(unknown,
+                """{"error":{"code":"unknown_operation","operation":"missing.operation","suggestions":["lint-fixture.move-item","string-fixture.lookup","lint-fixture.inspect-item"]}}""");
 
-            (int invalidExit, string invalid, _) = await harness.InvokeAsync(
+            (int invalidExit, string invalid, string invalidError) = await harness.InvokeAsync(
                 ["query", "string-fixture.list-items", "--payload", "{", "--output", bad]);
             invalidExit.ShouldBe(2);
-            AssertError(invalid, "validation_failed");
+            QueryCliHarness.AssertDiagnostics(invalidError);
+            AssertErrorJson(invalid,
+                """{"error":{"code":"validation_failed","operation":"string-fixture.list-items","violations":[{"path":"/","message":"The payload must be valid JSON without duplicate properties."}]}}""");
 
-            (int badExit, string failed, _) = await harness.InvokeAsync(
+            (int badExit, string failed, string badError) = await harness.InvokeAsync(
                 ["query", "string-fixture.list-items", "--payload", "{}", "--output", bad]);
             badExit.ShouldBe(2);
-            AssertError(failed, "internal_error").GetProperty("message").GetString().ShouldBe(
-                "The result destination cannot be written; no request was sent.");
+            QueryCliHarness.AssertDiagnostics(badError);
+            AssertPreflightError(failed);
             harness.Calls.ShouldBe(0);
 
             string target = Path.Combine(directory, "query-result.json");
             File.WriteAllText(target, "old result");
-            (int successExit, string successOutput, _) = await harness.InvokeAsync(
+            (int successExit, string successOutput, string successError) = await harness.InvokeAsync(
                 ["query", "string-fixture.list-items", "--payload", "{}", "--output", target]);
-            successExit.ShouldBe(0, successOutput);
+            successExit.ShouldBe(0, successOutput + successError);
             successOutput.ShouldBeEmpty();
+            QueryCliHarness.AssertDiagnostics(successError);
             harness.Calls.ShouldBe(1);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("string-fixture.list-items");
@@ -508,22 +561,24 @@ public sealed class CliOutputContractTests
             await using var harness = new QueryCliHarness();
             string bad = Path.Combine(directory, "occupied-directory");
             Directory.CreateDirectory(bad);
-            (string[] Arguments, string Path)[] cases =
+            (string[] Arguments, string Expected)[] cases =
             [
-                (["query", "string-fixture.list-items", "--payload", "{}", "--page-size", "0"], "/pageSize"),
-                (["query", "string-fixture.list-items", "--payload", "{}", "--aggregate-id", "a/b"], "/aggregateId"),
+                (["query", "string-fixture.list-items", "--payload", "{}", "--page-size", "0"],
+                    """{"error":{"code":"validation_failed","operation":"string-fixture.list-items","violations":[{"path":"/pageSize","message":"Page size must be between 1 and 200."}]}}"""),
+                (["query", "string-fixture.list-items", "--payload", "{}", "--aggregate-id", "a/b"],
+                    """{"error":{"code":"validation_failed","operation":"string-fixture.list-items","violations":[{"path":"/aggregateId","message":"The aggregate identifier does not match the module and Gateway rules."}]}}"""),
                 (["send", "routing-fixture.renamed-aggregate", "--payload",
                     $$"""{"aggregate/~id":"{{QueryCliHarness.ItemId}}"}""", "--aggregate-id",
-                    "01ARZ3NDEKTSV4RRFFQ69G5FAW", "--tenant", "session-tenant"], "/aggregateId"),
+                    "01ARZ3NDEKTSV4RRFFQ69G5FAW", "--tenant", "session-tenant"],
+                    """{"error":{"code":"validation_failed","operation":"routing-fixture.renamed-aggregate","violations":[{"path":"/aggregateId","message":"The explicit aggregate identifier disagrees with the payload."}]}}"""),
             ];
 
-            foreach ((string[] arguments, string path) in cases)
+            foreach ((string[] arguments, string expected) in cases)
             {
-                (int exit, string output, _) = await harness.InvokeAsync([.. arguments, "--output", bad]);
-                exit.ShouldBe(2, output);
-                JsonElement failure = AssertError(output, "validation_failed");
-                failure.GetProperty("violations").EnumerateArray()
-                    .Select(violation => violation.GetProperty("path").GetString()).ShouldContain(path);
+                (int exit, string output, string error) = await harness.InvokeAsync([.. arguments, "--output", bad]);
+                exit.ShouldBe(2, output + error);
+                QueryCliHarness.AssertDiagnostics(error);
+                AssertErrorJson(output, expected);
                 harness.Calls.ShouldBe(0);
                 Directory.EnumerateFileSystemEntries(bad).ShouldBeEmpty();
             }
@@ -550,13 +605,15 @@ public sealed class CliOutputContractTests
                 ["send", "missing.operation", "--payload", "{}", "--output", bad]);
             unknownExit.ShouldBe(2);
             unknownError.ShouldBeEmpty();
-            AssertError(unknownOutput, "unknown_operation");
+            AssertErrorJson(unknownOutput,
+                """{"error":{"code":"unknown_operation","operation":"missing.operation","suggestions":["sample.create-item","sample.get-item","sample.rename-item"]}}""");
 
             (int invalidExit, string invalidOutput, string invalidError) = await InvokeAsync(store,
                 ["send", "sample.create-item", "--payload", "{", "--url", "http://127.0.0.1:1/", "--output", bad]);
             invalidExit.ShouldBe(2);
             invalidError.ShouldBeEmpty();
-            AssertError(invalidOutput, "validation_failed");
+            AssertErrorJson(invalidOutput,
+                """{"error":{"code":"validation_failed","operation":"sample.create-item","violations":[{"path":"/","message":"The payload must be valid JSON without duplicate properties."}]}}""");
 
             Directory.GetFileSystemEntries(directory).ShouldBe(before);
             Directory.EnumerateFileSystemEntries(bad).ShouldBeEmpty();
@@ -608,7 +665,8 @@ public sealed class CliOutputContractTests
             string error = await stderr;
             await process.WaitForExitAsync(TestContext.Current.CancellationToken);
             process.ExitCode.ShouldBe(2, output + error);
-            AssertError(output, "internal_error");
+            error.ShouldBeEmpty();
+            AssertPreflightError(output);
             File.ReadAllText(target).ShouldBe("old result");
             File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
         }
@@ -686,10 +744,11 @@ public sealed class CliOutputContractTests
                 : [link, socketPath];
             foreach (string target in targets)
             {
-                (int exit, string output, _) = await InvokeAsync(store,
+                (int exit, string output, string error) = await InvokeAsync(store,
                     ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", target]);
-                exit.ShouldBe(2, target + output);
-                AssertError(output, "internal_error");
+                exit.ShouldBe(2, target + output + error);
+                error.ShouldBeEmpty();
+                AssertPreflightError(output);
                 File.Exists(store.ProfilePath).ShouldBeFalse();
             }
         }
@@ -716,12 +775,14 @@ public sealed class CliOutputContractTests
                 ["config", "current", "--output", "/dev/null"]);
             deviceExit.ShouldBe(0, deviceOutput + deviceError);
             deviceOutput.ShouldBeEmpty();
+            deviceError.ShouldBeEmpty();
 
             store.Add("dev", new ConnectionProfile("https://gateway.example/"));
             (int mutationExit, string mutationOutput, string mutationError) = await InvokeAsync(store,
                 ["config", "set", "dev", "actor", "device", "--output", "/dev/null"]);
             mutationExit.ShouldBe(0, mutationOutput + mutationError);
             mutationOutput.ShouldBeEmpty();
+            mutationError.ShouldBeEmpty();
             store.Read().Profiles["dev"].Actor.ShouldBe("device");
 
             for (int index = 0; index < 2; index++)
@@ -735,6 +796,7 @@ public sealed class CliOutputContractTests
                 (int pipeExit, string pipeOutput, string pipeError) = await InvokeAsync(store, arguments);
                 pipeExit.ShouldBe(0, pipeOutput + pipeError);
                 pipeOutput.ShouldBeEmpty();
+                pipeError.ShouldBeEmpty();
                 server.Dispose();
                 using var reader = new StreamReader(client);
                 using JsonDocument result = JsonDocument.Parse(
@@ -783,10 +845,11 @@ public sealed class CliOutputContractTests
 
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             File.SetUnixFileMode(fifo, UnixFileMode.OtherWrite);
-            (int exit, string output, _) = await InvokeAsync(store,
+            (int exit, string output, string error) = await InvokeAsync(store,
                 ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", fifo]);
-            exit.ShouldBe(2, output);
-            AssertError(output, "internal_error");
+            exit.ShouldBe(2, output + error);
+            error.ShouldBeEmpty();
+            AssertPreflightError(output);
             File.Exists(store.ProfilePath).ShouldBeFalse();
 
             File.SetUnixFileMode(fifo, UnixFileMode.UserWrite);
@@ -822,10 +885,11 @@ public sealed class CliOutputContractTests
             File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserExecute);
             foreach (string target in new[] { existing, Path.Combine(parent, "new-result.json") })
             {
-                (int exit, string output, _) = await InvokeAsync(store,
+                (int exit, string output, string error) = await InvokeAsync(store,
                     ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", target]);
-                exit.ShouldBe(2, target + output);
-                AssertError(output, "internal_error");
+                exit.ShouldBe(2, target + output + error);
+                error.ShouldBeEmpty();
+                AssertPreflightError(output);
                 File.Exists(store.ProfilePath).ShouldBeFalse();
             }
 
@@ -863,7 +927,7 @@ public sealed class CliOutputContractTests
                 ["config", "set", "dev", "actor", "operator", "--output", target]);
             exit.ShouldBe(2, output + error);
             error.ShouldBeEmpty();
-            AssertError(output, "internal_error");
+            AssertPreflightError(output);
             File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
             File.ReadAllText(target).ShouldBe("old result");
         }
@@ -906,7 +970,7 @@ public sealed class CliOutputContractTests
                 ["config", "set", "dev", "actor", "operator", "--output", target]);
             exit.ShouldBe(2, output + error);
             error.ShouldBeEmpty();
-            AssertError(output, "internal_error");
+            AssertPreflightError(output);
             File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
 
             file.SetAccessControl(originalAcl);
@@ -947,7 +1011,7 @@ public sealed class CliOutputContractTests
         process.ExitCode.ShouldBe(2, output + error);
         error.ShouldBeEmpty();
         output.ShouldNotContain("bogus-secret");
-        AssertError(output, "invalid_arguments");
+        AssertInvalidArguments(output, ScanMessage, "arguments");
     }
 
     private static async Task<(int Exit, string Output, string Error)> InvokeAsync(ProfileStore store, string[] arguments,
@@ -972,14 +1036,21 @@ public sealed class CliOutputContractTests
         }
     }
 
-    private static JsonElement AssertError(string output, string code)
+    private static void AssertInvalidArguments(string output, string message, string argument)
+        => AssertErrorJson(output, JsonSerializer.Serialize(new
+        {
+            error = new { code = "invalid_arguments", message, argument },
+        }));
+
+    private static void AssertPreflightError(string output)
+        => AssertErrorJson(output,
+            """{"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}""");
+
+    private static void AssertErrorJson(string output, string expected)
     {
-        using JsonDocument document = JsonDocument.Parse(output);
-        JsonElement root = document.RootElement;
-        root.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
-        JsonElement error = root.GetProperty("error");
-        error.GetProperty("code").GetString().ShouldBe(code);
-        return error.Clone();
+        using JsonDocument actualDocument = JsonDocument.Parse(output);
+        using JsonDocument expectedDocument = JsonDocument.Parse(expected);
+        JsonElement.DeepEquals(actualDocument.RootElement, expectedDocument.RootElement).ShouldBeTrue(output);
     }
 
     private static string NewDirectory()
