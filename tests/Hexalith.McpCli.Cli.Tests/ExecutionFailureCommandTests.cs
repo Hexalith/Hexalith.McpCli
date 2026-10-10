@@ -28,11 +28,12 @@ public sealed class ExecutionFailureCommandTests
              "code":"fallback","reason":"legacy","retryable":false,"clientAction":"inspect",
              "retryAfter":"25","correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK"}
             """;
-        (int exit, string output, int calls) = await InvokeGatewayAsync(true, 409, body);
+        (int exit, string output, string error, int calls) = await InvokeGatewayAsync(true, 409, body);
         exit.ShouldBe(2, output);
         AssertJson(output,
             $$$"""{"error":{"code":"gateway_error","status":422,"detail":"The item already exists.","reason":"duplicate-item","retryable":false,"clientAction":"inspect","retryAfter":"25","correlationId":"{{{Id}}}"}}""");
         calls.ShouldBe(1);
+        AssertGatewayDiagnostics(error, true);
     }
 
     /// <summary>Blank or absent Problem Details retain only status and the client title fallback.</summary>
@@ -41,11 +42,12 @@ public sealed class ExecutionFailureCommandTests
     [InlineData("{\"title\":\" \",\"detail\":\" \",\"reasonCode\":\" \",\"code\":\" \",\"reason\":\" \",\"clientAction\":\" \",\"correlationId\":\"bad-id\"}")]
     public async Task BlankProblemDetailsOmitsMetadataAsync(string body)
     {
-        (int exit, string output, int calls) = await InvokeGatewayAsync(false, 409, body);
+        (int exit, string output, string error, int calls) = await InvokeGatewayAsync(false, 409, body);
         exit.ShouldBe(2, output);
         string detail = body == "{}" ? "Conflict" : "Gateway request failed.";
         AssertJson(output, "{\"error\":{\"code\":\"gateway_error\",\"status\":409,\"detail\":\"" + detail + "\"}}");
         calls.ShouldBe(1);
+        AssertGatewayDiagnostics(error, false);
     }
 
     /// <summary>Malformed successful responses and semantic query failure retain 2xx client statuses.</summary>
@@ -56,13 +58,14 @@ public sealed class ExecutionFailureCommandTests
     public async Task SuccessfulHttpFailureHasNoResultAsync(bool command, int httpStatus, string body,
         int expectedStatus, string detail, bool correlation)
     {
-        (int exit, string output, int calls) = await InvokeGatewayAsync(command, httpStatus, body);
+        (int exit, string output, string error, int calls) = await InvokeGatewayAsync(command, httpStatus, body);
         exit.ShouldBe(2, output);
         string expected = "{\"error\":{\"code\":\"gateway_error\",\"status\":" + expectedStatus
             + ",\"detail\":" + JsonSerializer.Serialize(detail)
             + (correlation ? ",\"correlationId\":\"" + Id + "\"" : "") + "}}";
         AssertJson(output, expected);
         calls.ShouldBe(1);
+        AssertGatewayDiagnostics(error, command);
     }
 
     /// <summary>A missing, empty, or unreadable @file is an invalid argument with a safe message and unchanged result file.</summary>
@@ -138,13 +141,15 @@ public sealed class ExecutionFailureCommandTests
         Directory.CreateDirectory(outputDirectory);
         try
         {
-            (int exit, string output, int calls) = await InvokeGatewayAsync(
+            (int exit, string output, string error, int calls) = await InvokeGatewayAsync(
                 true, 202, "", outputDirectory, acceptedCommand: true);
 
             exit.ShouldBe(2, output);
             AssertJson(output, """{"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}""");
             calls.ShouldBe(0);
+            error.ShouldBeEmpty();
             Directory.Exists(outputDirectory).ShouldBeTrue();
+            Directory.GetFileSystemEntries(outputDirectory).ShouldBeEmpty();
         }
         finally
         {
@@ -157,11 +162,12 @@ public sealed class ExecutionFailureCommandTests
     public async Task AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync()
     {
         Assert.SkipWhen(!OperatingSystem.IsLinux(), "The full-device fixture requires Linux.");
-        (int exit, string output, int calls) = await InvokeGatewayAsync(
+        (int exit, string output, string error, int calls) = await InvokeGatewayAsync(
             true, 202, "", "/dev/full", acceptedCommand: true);
         exit.ShouldBe(2, output);
         AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
         calls.ShouldBe(1);
+        AssertGatewayDiagnostics(error, true);
     }
 
     /// <summary>A successful command writes its canonical result to an existing file after one submission.</summary>
@@ -173,11 +179,12 @@ public sealed class ExecutionFailureCommandTests
         {
             string target = Path.Combine(directory, "result.json");
             File.WriteAllText(target, "old result");
-            (int exit, string output, int calls) = await InvokeGatewayAsync(
+            (int exit, string output, string error, int calls) = await InvokeGatewayAsync(
                 true, 202, "", target, acceptedCommand: true);
             exit.ShouldBe(0, output);
             output.ShouldBeEmpty();
             calls.ShouldBe(1);
+            AssertGatewayDiagnostics(error, true);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("sample.create-item");
             document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");
@@ -967,7 +974,7 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
-    private static async Task<(int Exit, string Output, int Calls)> InvokeGatewayAsync(bool command, int status, string body,
+    private static async Task<(int Exit, string Output, string Error, int Calls)> InvokeGatewayAsync(bool command, int status, string body,
         string? outputPath = null, bool acceptedCommand = false)
     {
         string directory = NewDirectory();
@@ -1028,10 +1035,10 @@ public sealed class ExecutionFailureCommandTests
                 invocation = [.. invocation, "--output", outputPath];
             }
 
-            (int exit, string output, _) = await InvokeCliAsync(invocation, directory, timeout.Token);
+            (int exit, string output, string error) = await InvokeCliAsync(invocation, directory, timeout.Token);
             await timeout.CancelAsync();
             await response.WaitAsync(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken);
-            return (exit, output, calls);
+            return (exit, output, error, calls);
         }
         finally
         {
@@ -1039,6 +1046,17 @@ public sealed class ExecutionFailureCommandTests
             gateway.Stop();
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    private static void AssertGatewayDiagnostics(string error, bool command)
+    {
+        error.ShouldContain("Start processing HTTP request POST http://127.0.0.1:");
+        error.ShouldContain(command ? "/api/v1/commands" : "/api/v1/queries");
+        error.ShouldContain("Sending HTTP request POST");
+        error.ShouldContain("Received HTTP response headers");
+        error.ShouldContain("End processing HTTP request");
+        error.ShouldNotContain("This result is emitted as JSON");
+        error.ShouldNotContain("The result destination cannot be written");
     }
 
     private static async Task<(int Exit, string Output, string Error)> InvokeCliAsync(string[] arguments, string directory,

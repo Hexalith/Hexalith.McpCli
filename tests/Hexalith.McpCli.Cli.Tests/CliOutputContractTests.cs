@@ -1036,6 +1036,37 @@ public sealed class CliOutputContractTests
         }
     }
 
+    /// <summary>A sharing conflict is refused before the profile or result file changes.</summary>
+    [Fact]
+    public async Task ExistingOutputSharingConflictPreventsProfileMutationAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            byte[] profileBefore = File.ReadAllBytes(store.ProfilePath);
+            string target = Path.Combine(directory, "locked-result.json");
+            File.WriteAllText(target, "old result");
+
+            using (new FileStream(target, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                (int exit, string output, string error) = await InvokeAsync(store,
+                    ["config", "set", "dev", "actor", "locked", "--output", target]);
+                exit.ShouldBe(2, output + error);
+                AssertPreflightError(output);
+                error.ShouldBeEmpty();
+                File.ReadAllBytes(store.ProfilePath).ShouldBe(profileBefore);
+            }
+
+            File.ReadAllText(target).ShouldBe("old result");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static void AssertInvalidArguments(string output, string message, string argument)
         => AssertErrorJson(output, JsonSerializer.Serialize(new
         {

@@ -92,7 +92,7 @@ With `--format table`, modules use tab-separated `NAME`, `OPERATIONS`, `DESCRIPT
 
 ### Output and exit codes
 
-Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. Tables apply only to module, operation, and configuration displays. `describe`, `send`, and `query` remain JSON and emit one format note on stderr when table format was requested.
+Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
 
 - Exit 0 means a result. Help, version, and normal MCP shutdown also exit 0.
 - Exit 1 is reserved for `describe --lint` with findings.
@@ -104,10 +104,14 @@ If an action does not stop after Ctrl+C or SIGTERM, System.CommandLine's termina
 
 ### Parsing and help
 
-- Parse failures return `invalid_arguments` and exit 2, without printing usage or echoing supplied values. The safe message points to `--help` for usage. MCP parse failures use stderr; other parse failures use stdout.
+- Parse failures return `invalid_arguments` and exit 2, without printing usage or echoing supplied values. Unknown-option and invalid-argument messages point to `--help` for usage. The `argument` member names a recognized option (for example, `pageSize` or `readOnly`), or uses `arguments` for command syntax. MCP parse failures use stderr; other parse failures use stdout.
 - Help must appear alone after its command path, such as `hexalith send --help`. `--version` must be the only argument.
+- Leading directive-shaped tokens such as `[suggest]` are refused.
 - Put `--` before a positional value beginning with `-` or matching a slash help alias or its attached-value form. Examples: `hexalith config set dev actor -- -bob`, `hexalith config set dev actor -- /h`, and `hexalith config set dev actor -- /h:x` (also for `/?`).
+- Every token after `--` is positional, so put options before it.
 - If an option value begins with `-` or looks like a help alias, attach it with `=` or `:`. Examples: `--token=--abc` and `--token=-h`.
+
+### Execution, configuration, and MCP
 
 `gateway_error.status` is copied from the EventStore client exception, including when the client reports a malformed or semantically failed `2xx` response. A Gateway Problem Details `status` may differ from the HTTP response status. `detail` falls back from the client exception's Detail to Title, then a generic message. `reason`, `retryable`, `clientAction`, `retryAfter`, and `correlationId` appear only when the exception provides them, and a `correlationId` that is not a canonical uppercase ULID is omitted; no message or retry identifier is invented. A Gateway error after a command submission is not proof that the command was rejected, so do not retry an uncertain outcome without a trusted idempotency mechanism.
 
