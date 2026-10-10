@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -258,6 +258,47 @@ Rejected:
 - `low` (unverified) A Windows `\\.\pipe\` output might be opened by preflight and use up a single-instance pipe. It would need a Windows run against a single-instance pipe server, and it is an exotic target even if true.
 - `low` `--output` under `~/.eventstore/` on a fresh home now fails preflight, where baseline let the mutation create the directory. Confirmed, but rare, and the fix needs a special case.
 - `low` The table-escaping test is in `CliOutputContractTests` rather than `DiscoveryCommandTests` and builds its documents by hand. It still covers the same `FormatTable` path that the verbs call.
+
+### Review Findings
+
+Code review 2026-10-10 of `52cf2aa..872745e`, excluding `references/` gitlinks and `_bmad-output/` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed). This pass covers the loop-7 patch commit `872745e`. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`.
+
+- [ ] [Review][Patch] No test pins that later Core validation stages win over a bad `--output`. Existing hook tests cover only malformed JSON, an invalid correlation ULID, an unknown operation and payload `{`. Merging the two `beforeSubmit` blocks above line 197, or moving the query hook above paging validation, would turn `--page-size 0`, an invalid query `--aggregate-id` or a mismatched send `--aggregate-id` into `internal_error` without failing a test (R5-B7 regression). Add those three cases with bad output, asserting `validation_failed` and zero hook or Gateway calls. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:404]
+- [ ] [Review][Patch] The query preflight message is not asserted. `QueryPreflightRunsAfterNoResultChecksAsync` checks only `internal_error` and zero calls. If the query hook threw instead of returning, the executor would answer "Operation execution failed." and the test would still pass; the Core test also checks only a throwing hook. Assert `The result destination cannot be written; no request was sent.` on the query failure. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:426]
+- [ ] [Review][Patch] Carried R6-V1 item still open: `ConfigCommandTests.cs:683` still runs `.Parse(["mcp", "--read-only"]).InvokeAsync(...)`, although loop 7 checked off switching it. It is the last raw `ParseResult.InvokeAsync` in the tests. Switch it to `CliRunner.InvokeAsync`. [tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:683]
+- [ ] [Review][Patch] The separated-Boolean fallback added in loop 7 blames a flag that is followed by a valid positional. Reproduced: `operations --read-only sample extra` reports `argument: readOnly` and `describe --strict sample.create-item extra` reports `strict`, while `operations sample extra` reports `arguments`. Blame the flag only when its following token is in `parsed.UnmatchedTokens`. [src/Hexalith.McpCli/Cli/CliRunner.cs:251]
+- [ ] [Review][Patch] The `[suggest]` directive bypasses the checked parse and exits 0 without a result. Reproduced: `[suggest] unknown-verb-secret` and `[suggest] mcp --transport http` exit 0 with empty stdout, and `[suggest:3] con` prints `config`; `[bogus] modules` already returns `invalid_arguments`. Nothing registers shell completion, so remove the root's default `SuggestDirective` and pin `[suggest]` as `invalid_arguments`, exit 2. [src/Hexalith.McpCli/Cli/CliRunner.cs:281]
+- [ ] [Review][Patch] The README does not document the new parser rules. Help must be bare (`hexalith send --help`), `--version` must be the only argument, and an operand beginning with `-` must follow `--` (`config set dev actor -- -bob`). Reproduced: `config set dev actor -bob` now returns `invalid_arguments`. [README.md:93]
+- [ ] [Review][Patch] The README lists "a pipe without a reader" as a runtime failure, but a named FIFO without a reader blocks in `open(2)` until one connects (tracked at `deferred-work.md:344`). Say that it waits. [README.md:97]
+- [ ] [Review][Patch] The README omits the table escaping added by this story. `NAME`, `KIND` and `DESCRIPTION` cells write `\` as `\\`, tab as `\t`, CR as `\r` and LF as `\n`, while configuration `VALUE` cells hold serialized JSON. [README.md:91]
+- [ ] [Review][Patch] The README's 0/1/2 contract omits System.CommandLine's termination exits. With the default 2-second `ProcessTerminationTimeout`, an action that does not stop after Ctrl+C or SIGTERM returns 130 or 143. Add one clause. [README.md:93]
+- [x] [Review][Defer] An accepted `send` whose runtime `--output` write fails loses its `messageId` and generated `correlationId`, because `RunAsync`'s catch-all writes only "The CLI action failed." [src/Hexalith.McpCli/Cli/CliRunner.cs:712] — deferred: pre-existing (baseline `AcceptedCommandOutputFailureReportsErrorAfterOneRequestAsync` asserted the same document). Reporting identifiers needs a new error member or channel; new ledger entry.
+- [x] [Review][Defer] `--output` naming the profile file overwrites it with the result. Reproduced: `config use dev --output ~/.eventstore/mcpcli.json` exits 0, leaves `{"activeProfile":"dev"}`, and the next `config current` returns `configuration_invalid`. [src/Hexalith.McpCli/Cli/CliRunner.cs:624] — deferred: pre-existing writer behavior (carried B1/R2-B4/R3-B7/R4-B7/R5-B9/R6-B7/R7-B1). Earlier loops said "defer once after loopback", but the ledger never received an entry, so one was added now.
+- [x] [Review][Defer] A named FIFO without a reader passes preflight, then the result write blocks after the Gateway call or profile mutation [src/Hexalith.McpCli/Cli/CliOutput.cs:145] — deferred: pre-existing, already tracked (`deferred-work.md:344`); no new ledger entry. A preflight refusal for an absent reader contradicts the Design Notes.
+- [x] [Review][Defer] (unverified, medium if true) A character device outside `/dev` passes device preflight, but a seekable handle is then staged as a regular file [src/Hexalith.McpCli/Cli/CliOutput.cs:54] — deferred: already tracked (`deferred-work.md:372`, carried R2-E4/R7-E2); no new ledger entry.
+- [x] [Review][Defer] (unverified, medium if true) `WindowsInaccessibleExistingOutputPreventsProfileMutationAsync` denies only `ReadAttributes`, but .NET's Windows attribute lookup falls back to `FindFirstFile` on access denied, so the setup assertion `Should.Throw<UnauthorizedAccessException>(File.GetAttributes)` may fail on Windows. The production `Inspect` path still fails closed later. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:793] — deferred: needs a Windows run of the CLI suite, which Story 4.16 owns (`deferred-work.md:184`); no new ledger entry.
+
+Rejected:
+
+- `false` Bad `--output` messages differ by verb (`config current` versus `config use`). The README scopes the stable preflight message to verbs that preflight before a Gateway request or profile mutation; loop 7 deliberately removed preflight from side-effect-free verbs.
+- `false` The preflight message says "no request was sent" for config mutations and has no `argument: output`. The 2026-10-09 decision fixed this exact message for every preflighting verb with no new members; changing it means editing the spec.
+- `false` The `beforeSubmit` call is duplicated in the send and query branches. The copies are identical and adjacent, and no caller or rule was named that would diverge.
+- `false` Unverified-ABI inspection throws `PlatformNotSupportedException`. The Design Notes require other native layouts to "be verified or fail explicitly".
+- `low` `statx` failing with EPERM or ENOSYS under an old seccomp profile blocks `--output`. Every .NET 10 Linux baseline has `statx`, and a managed fallback adds branches.
+- `false` A block device is accepted as a device target. The user names the device explicitly, the baseline writer wrote to it the same way, and neither the spec nor the README promises refusal.
+- `false` A probe file in the destination or temp directory is undocumented. The README already says staging files are created beside new destinations and in the temp directory, so watchers are already warned.
+- `false` The loopback guard can time out with a traceback. `subprocess.TimeoutExpired` is caught by `main`'s top-level handler.
+- `false` The loopback guard does not assert no echo. The host now reflects into `CliRunner.InvokeAsync`, whose no-echo contract is asserted at `CliOutputContractTests.cs:58,210,858`.
+- `low` The loopback guard raises `AttributeError` on non-object JSON stdout. The run still fails, and the fix adds a type guard.
+- `low` The FIFO preflight success test has no timeout. A regression would hang CI instead of failing it; a sync xUnit v3 test needs restructuring to bound the blocking `open`.
+- `low` The post-accept runtime write failure is now tested only on Linux (`/dev/full`). The failure path is platform-neutral C# and CI is Linux-only; a portable fixture needs new setup.
+- `low` The `--extension` argument is named `extension` by the parser and `extensions` by the duplicate-key check. Carried from the loop-7 rejection.
+- `low` Boolean flag names are hard-coded twice. Carried from the loop-7 rejection.
+- `low` `beforeSubmit` comes after the `CancellationToken`. Carried from the loop-7 rejection.
+- `low` (unverified) A Windows `\\.\pipe\` target might be consumed by preflight. Carried from the loop-7 rejection.
+- `low` Vertical tab, form feed, U+0085/U+2028/U+2029 and terminal escapes are unescaped in table cells. Carried (R2-E5, R3-E2, R4-B10, R4-E6).
+- `low` A failed probe deletion leaves a stray file. Carried from R7-B5 and the loop-7 rejection.
+- `false` A dash-leading positional value is rejected without `--` (`config set dev actor -bob`). The Design Notes require literal dash values only after `--`; the documentation gap is the README patch above.
 
 ## Design Notes
 
