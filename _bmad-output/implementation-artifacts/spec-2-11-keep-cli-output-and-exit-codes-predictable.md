@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -369,6 +369,48 @@ Rejected:
 - `low` `--extension` is named `extension` by the parser and `extensions` by the duplicate-key check. Carried.
 - `low` The post-accept runtime write failure is tested only on Linux (`/dev/full`). Carried from the previous review.
 - `false` Parse-failure argument names (`readOnly`, `arguments`) are not §E names. `readOnly` matches `config current`'s `readOnly` member and `sources.readOnly`, and the Design Notes prescribe the `arguments` fallback. Reconciling these with addendum §G means editing the spec.
+
+### Review Findings
+
+Code review 2026-10-10 of `52cf2aa..faf55bf`. Excluded: `references/` gitlinks, `_bmad-output/`, and the `AGENTS.md`/`CLAUDE.md`/copilot-instructions context refresh. Layers: Blind Hunter, Edge Case Hunter, Verification Gap and Acceptance Auditor; none failed. This pass covers patch commits `c1bb86f` and `53077b4`. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`.
+
+- [ ] [Review][Patch] The root-name directive case never reaches the guard it was added for. In-process, System.CommandLine names the root after the test host, `Hexalith.McpCli.Cli.Tests`. So `["Hexalith.McpCli", "[bogus]", "config", "current"]` fails as an unmatched command through `ParseFailure`, with the same code and argument the test asserts. If the root-name skip (`CliRunner.cs:162-165`) were deleted, the suite would stay green. Production `Hexalith.McpCli [bogus] config profile remove dev` would then drop `[bogus]` and delete the profile. Reproduced: the built CLI returns the scanner's "The command contains an unknown or malformed option." for that prefix. Fix: build the case from `RootCommand.ExecutableName`, add a mutating `<root> [bogus] config profile remove dev` case with the unchanged-profile assertion, and assert the scanner message. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:59]
+- [ ] [Review][Patch] New error-path tests assert only `error.code` and discard stderr, although the repository rule requires the full error document and both channels. Affected lines:
+  - `:318`, `:351`, `:364`: discovery and `configuration_invalid` precedence
+  - `:467`, `:472`, `:477`: query precedence
+  - `:522`: later Core validation
+  - `:689`, `:786`, `:825`: special targets, FIFO, denied parent
+
+  The child-process staging test (`:611`) captures stderr but never asserts it or the preflight message. A regression that leaked to stderr, or answered `:689`/`:786`/`:825` through the generic "The CLI action failed." catch, would still pass. Fix: assert the exact documents and an empty stderr. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:351]
+- [ ] [Review][Patch] The README's attached-value escape for option values has no test. Examples are `--token=--abc` and `--token=-h`; the built CLI accepts both. Today the attached-dash refusal (`CliRunner.cs:219`) is limited to `--transport`. Widening it to every option would refuse the documented form with every test green. Fix: extend `ColonAttachedOptionsRemainValidAsync` with a dash-prefixed token and a help-alias-shaped value, each attached with `=` and with `:`. Assert exit 0, empty stderr and the resolved values, with the token masked. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:109]
+- [ ] [Review][Patch] Bare and parent invocations give no path to help. Reproduced: `hexalith`, `hexalith config` and `hexalith config profile` return `invalid_arguments` "The command arguments are missing or invalid." with exit 2. The baseline printed usage, and an unknown verb gets the same message. Fix: append a fixed hint such as "Run with --help for usage." to both parse-failure messages (`CliRunner.cs:83` and `:290`). The hint echoes nothing the user supplied. Update the pinned message assertion and the README. [src/Hexalith.McpCli/Cli/CliRunner.cs:290]
+- [ ] [Review][Patch] The help-alias set re-derives slash forms that `HelpOption` already declares. System.CommandLine 2.0.12's `HelpOption` declares `--help`, `-h`, `/h`, `-?` and `/?`, yet `CliRunner.cs:77-79` adds `/h` and `/?` again. The Design Notes require the set to come from `HelpOption` alone. If a parser version dropped the slash aliases, the scanner would refuse a literal `/h` value that the parser accepts. Fix: delete the `.Concat(...)` derivation. [src/Hexalith.McpCli/Cli/CliRunner.cs:77]
+- [ ] [Review][Patch] The conformance host keeps an orphaned `using System.CommandLine;` and a direct `System.CommandLine` `PackageReference`. Both existed only for the removed `ParseResult` cast, and nothing else in the host uses them. Fix: remove both. The package still flows through the `Hexalith.McpCli` project reference. Rerun the conformance loopback afterwards. [tests/Hexalith.McpCli.ConformanceHost/Program.cs:1]
+- [ ] [Review][Patch] The README output-contract paragraph is now one block of about 2,300 characters. It mixes channels, parse rules, the `--` and attached-value escapes, exits 0/1/2/130/143, file-integrity guarantees, the error-code list and MCP. It also repeats the previous paragraph's `describe` format-note statement. Fix: split it into a short exit-code and channel list and a parse-rules list without changing any claim. [README.md:93]
+- [x] [Review][Defer] Only root can reach the existing-file mode-bit preflight guard, and no running test exercises it [src/Hexalith.McpCli/Cli/CliOutput.cs:67] — deferred. As a non-root user, which is how CI runs, `RequireAccess` rejects a 0400 file before this guard. As root, `DeniedRegularAndNewFileParentPreventMutationAsync` is skipped entirely (`CliOutputContractTests.cs:811`), although only its new-file-parent half needs the skip. Covering it needs a privileged CI run. Splitting the existing-file case out of the root skip would cover root developer runs. New ledger entry.
+- [x] [Review][Defer] `--output` naming the profile file overwrites the profile store [src/Hexalith.McpCli/Cli/CliRunner.cs:624] — deferred: pre-existing, already tracked (`deferred-work.md:386`).
+- [x] [Review][Defer] Profile names accept a trailing newline because the validation regex ends in `$` [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:364] — deferred: pre-existing, already tracked (`deferred-work.md:217`, plus the DW-1 regex gate).
+- [x] [Review][Defer] (unverified, medium if true) Preflight classifies the target with `OutputFileType.Inspect`, while the writer picks a direct or staged write from `CanSeek` and `IsSpecialDevicePath` [src/Hexalith.McpCli/Cli/CliOutput.cs:147] — deferred: already tracked (`deferred-work.md:377`). A privileged fixture with a seekable device outside `/dev` would settle it.
+
+Rejected:
+
+- `low` A block device is accepted as a device target. Carried: the user must name the device explicitly, and the baseline writer wrote to it the same way.
+- `low` A `statx` call that is missing or blocked (ENOSYS, EPERM) refuses every `--output`. Carried (R8-B8): every .NET 10 Linux baseline has `statx`.
+- `low` The parser names the `--extension` argument `extension`, and the duplicate-key check names it `extensions`. Carried.
+- `low` A root-name-prefixed bare help or version request (`Hexalith.McpCli --help`, `Hexalith.McpCli --version`) is refused with `invalid_arguments`. Reproduced, but nobody types the internal root name: dotnet tool and `dotnet <dll>` invocations never pass it. The fix adds root-stripping branches to the help and version checks. Raised by both the Edge Case Hunter and the Acceptance Auditor.
+- `low` A probe file stays behind if deletion fails or the process dies. Carried (R7-B5, R8-B10).
+- `low` Vertical tab, form feed, Unicode line separators and terminal escapes are not escaped in table cells. Carried (R2-E5 and later).
+- `low` The loopback guard raises `AttributeError` on stdout that is JSON but not an object. Carried.
+- `low` The probe-cleanup test compares a snapshot of the shared temp directory. It could flake only if another mcpcli process ran at the same time, and the Cli.Tests assembly disables parallelization. The fix needs a child process with a private `TMPDIR`.
+- `low` The FIFO preflight test can hang rather than fail. Carried.
+- `false` `Directives.OfType<SuggestDirective>().Single()` and `OfType<HelpOption>().Single()` could crash after a System.CommandLine bump. The version is pinned through Builds, and such a bump would fail every CLI test loudly before release.
+- `low` The dependency-policy bump is outside this story's scope, landed after its gitlink move (`dcd4dc1`), and rewrote the file from CRLF to LF. The spec's Implementation Notes acknowledge the bump, the earlier commit is history, and the line-ending churn is cosmetic and has no repository rule.
+- `false` The parser hardening is too large and repeats its scan of the arguments. No divergence between the three passes was named. `PublicArgumentName` receives option names that its callers have already split on `=` or `:`.
+- `false` The `beforeSubmit` contract and the `ProfileStore.Validate*` methods are under-documented. The only hook caller returns its error, as required, and the existing `Add`/`Remove`/`Use`/`Set` methods likewise carry no `<exception>` tags.
+- `low` `OutputFileType` uses unnamed native constants and `DllImport` rather than `LibraryImport`. The offsets and flags match the `statx`, macOS `stat64` and FreeBSD `stat` layouts, and the `LibraryImport` analyzer is informational.
+- `low` Two `[Fact]`s loop over many cases, so the first failing case hides the rest. Converting them to theories is a restructure.
+- `low` The conformance host's reflection lookup uses `!`, so a signature change surfaces as a `NullReferenceException`. It still fails loudly at that line, and the fix adds a guard for a rare rename.
+- `low` A symlinked profile lock makes a bad `--output` report the preflight `internal_error` instead of `configuration_invalid`. Both paths exit 2 without mutation, the setup is hostile and rare, and the fix adds a lock check to every validator.
 
 ## Design Notes
 

@@ -391,6 +391,10 @@
   summary: Verify the FreeBSD x64 native result-target inspection on an existing output file.
   evidence: Unverified, medium if wrong. `src/Hexalith.McpCli/Cli/OutputFileType.cs:51` reads `st_mode` from the FreeBSD x64 `stat` layout, but the shared CI job at `references/Hexalith.Builds/.github/workflows/domain-ci.yml:208` runs on Ubuntu x64. A FreeBSD x64 run of `CliOutputContractTests.MutationPreflightRemovesProbeFilesAsync` would settle whether valid existing-file output is classified correctly before a profile mutation.
 
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+  summary: No running test reaches the existing-file mode-bit preflight guard, the only preflight refusal a root process gets for a read-only or write-only result file.
+  evidence: Medium. For root, `faccessat(..., AT_EACCESS)` in `OutputFileType.RequireAccess` succeeds whatever the mode bits are. That leaves the read/write mode-bit check in `CliOutput.PreflightCore` (`src/Hexalith.McpCli/Cli/CliOutput.cs:67-72`) as the only refusal of a 0400 or 0200 existing target before a Gateway request or profile mutation. As non-root, which is how CI runs, `RequireAccess` rejects such a file first. As root, `DeniedRegularAndNewFileParentPreventMutationAsync` is skipped entirely (`tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:811`), so deleting the guard keeps every run green. Without it, a root send or config mutation would complete and then fail in the writer's own mode check with "The CLI action failed." Settle with a privileged CI run that asserts the preflight document, an unchanged profile and zero Gateway calls for a 0400 target. As a cheaper partial step, split the existing-file case out of the root skip so root developer runs exercise it.
+
 ## Deferred from: bmad-project-context refresh of the agent instructions (2026-10-10)
 
 ### DW-1: Fail tests on `$`-anchored validation regexes
