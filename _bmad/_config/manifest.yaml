@@ -1,27 +1,27 @@
 installation:
   version: 6.12.1
   installDate: 2026-09-21T09:15:24.588Z
-  lastUpdated: 2026-10-09T12:23:04.875Z
+  lastUpdated: 2026-10-10T17:28:19.149Z
   installShims: false
 modules:
   - name: core
     version: 6.12.1
     installDate: 2026-09-21T09:15:23.764Z
-    lastUpdated: 2026-10-09T12:23:04.858Z
+    lastUpdated: 2026-10-10T17:28:19.132Z
     source: built-in
     npmPackage: null
     repoUrl: null
   - name: bmm
     version: 6.12.1
     installDate: 2026-09-21T09:15:23.931Z
-    lastUpdated: 2026-10-09T12:23:04.861Z
+    lastUpdated: 2026-10-10T17:28:19.135Z
     source: built-in
     npmPackage: null
     repoUrl: null
   - name: bmb
     version: v2.2.2
     installDate: 2026-09-21T09:15:24.031Z
-    lastUpdated: 2026-10-09T12:23:04.864Z
+    lastUpdated: 2026-10-10T17:28:19.138Z
     source: external
     npmPackage: bmad-builder
     repoUrl: https://github.com/bmad-code-org/bmad-builder
@@ -30,7 +30,7 @@ modules:
   - name: cis
     version: v0.3.2
     installDate: 2026-09-21T09:15:24.062Z
-    lastUpdated: 2026-10-09T12:23:04.867Z
+    lastUpdated: 2026-10-10T17:28:19.141Z
     source: external
     npmPackage: bmad-creative-intelligence-suite
     repoUrl: https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite
@@ -39,21 +39,21 @@ modules:
   - name: tea
     version: v1.27.2
     installDate: 2026-09-21T09:15:24.434Z
-    lastUpdated: 2026-10-09T12:23:04.870Z
+    lastUpdated: 2026-10-10T17:28:19.144Z
     source: external
     npmPackage: bmad-method-test-architecture-enterprise
     repoUrl: https://github.com/bmad-code-org/bmad-method-test-architecture-enterprise
-    channel: stable
+    channel: pinned
     sha: d99ad29c62697c152e3393351406686d5bcd323c
   - name: bmad-loop
-    version: v0.13.1
+    version: v0.13.2
     installDate: 2026-09-21T09:15:24.463Z
-    lastUpdated: 2026-10-09T12:23:04.875Z
+    lastUpdated: 2026-10-10T17:28:19.149Z
     source: external
     npmPackage: null
     repoUrl: https://github.com/bmad-code-org/bmad-loop
     channel: stable
-    sha: 4ea247f46610821bdb5b7dcccf42d09c81e66625
+    sha: 4a5c45390ff46c0fc28d316004ffe0ed7c8eea60
 ides:
   - claude-code
   - codex
