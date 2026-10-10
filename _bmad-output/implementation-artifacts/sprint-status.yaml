@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 10-10-2026 20:13
+last_updated: 10-10-2026 20:28
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -58,7 +58,7 @@ development_status:
   2-9-explain-execution-failures-with-stable-documents: done
   2-10-refuse-writes-in-read-only-mode: done
   2-11-keep-cli-output-and-exit-codes-predictable: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: done
 
   epic-3: backlog
   3-1-discover-operations-through-a-fixed-mcp-surface: backlog
@@ -171,3 +171,34 @@ action_items:
     owner: "Product/architecture owner"
     status: open
     ref: "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/epic-1-retro-2026-09-27.md"
+  - id: "epic-2-retro-item-1-protect-profile-output"
+    epic: 2
+    action: "Reject result output paths that alias the private profile store or transaction
+      files for every result-writing verb, including config displays; test direct,
+      symlink, and hard-link aliases with intact profile bytes and a successful subsequent
+      read."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
+  - id: "epic-2-retro-item-2-anchor-profile-names"
+    epic: 2
+    action: "Anchor profile-name validation with absolute end and test trailing-newline
+      rejection through Core store and CLI error documents."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
+  - id: "epic-2-retro-item-3-platform-verification"
+    epic: 2
+    action: "Run Windows profile ACL and CLI output suites with isolated profile homes
+      and native output-preflight checks on supported non-Linux ABIs; record results
+      before platform acceptance."
+    owner: "McpCli maintainer and CI owner"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
+  - id: "epic-2-retro-item-4-reconcile-query-spike"
+    epic: 2
+    action: "Reconcile Epic 2 Story 2.5 and compiled context with the authorized running-topology
+      live query proof, retaining Tenants maintainer confirmation for Story 4.8."
+    owner: "Product/architecture owner"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
