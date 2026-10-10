@@ -11,6 +11,8 @@
 ## Deferred from: code review of spec-1-3-derive-the-operation-s-json-schema.md (2026-09-25)
 
 - **The CLAUDE.md dependency allowlist omits `JsonSchema.Net`.** `src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj` references `JsonSchema.Net`, which is outside the transitive closure of `Hexalith.EventStore.Contracts`. The story spec and the architecture spine approve it as a pinned Stack package, so update the shared `AGENTS.md` baseline (and its synced copies) to name it.
+  status: done 2026-10-10
+  resolution: The bmad-project-context refresh made the `AGENTS.md` policy line (and its synced copies) name `tools/dependency-policy.json`, which lists `JsonSchema.Net`, as the allowlist.
 - **`PayloadValidator` may fail open.** `src/Hexalith.McpCli.Core/Schema/PayloadValidator.cs:171` builds violations only from nodes that carry `Errors`, and `IsValid` is `Violations.Count == 0`. If JsonSchema.Net 9.4 ever returns an invalid `List` result without an error message, an invalid payload would pass. Unverified; settle by confirming the output guarantee or adding a fallback `/` violation when `results.IsValid` is false and none were collected.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-3-derive-the-operation-s-json-schema.md`
   summary: `/pushall` step 3 commits submodule changes on a detached HEAD with `git add -A`, so step 4's checkout orphans the commit and untracked files can be staged.
@@ -256,6 +258,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-5-run-a-valid-query-through-the-gateway.md`
   summary: The AGENTS.md/CLAUDE.md policy line allows a per-call MCP tenant "only under the operator gate", which is stricter than the approved tenant rule.
   evidence: `AGENTS.md:84` (byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`). epics.md (Story 2.5 tenant AC), epic-2-context.md, the Story 2.5 frozen spec and `OperationExecutor.ResolveTenant` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:297`) all honor a per-call tenant when no session tenant exists *or* override is enabled. `QueryExecutionTests` pins the no-session case. An agent that follows the policy line could "fix" the executor against the architecture. Pre-existing wording. Fix: edit `AGENTS.md`, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+  status: done 2026-10-10
+  resolution: The bmad-project-context refresh rewrote the tenant policy line in `AGENTS.md` and its synced copies to the approved rule, including the per-call tenant used as supplied when no session tenant exists.
 
 ## Deferred from: code review of spec-2-6-validate-and-page-query-calls.md (2026-10-02)
 
@@ -292,6 +296,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: Planning documents, architecture decisions, and agent guidance still prescribe acceptance when `Ulid.TryParse` succeeds, but Story 2.8 renegotiated the rule (Spec Change Log 2026-10-03). Core now also requires canonical uppercase text for ULID aggregates, marked identifiers, CLR `Ulid` properties, and caller correlation and idempotency keys.
   evidence: `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:103` and `:348`, `_bmad-output/planning-artifacts/epics.md:711`, `_bmad-output/implementation-artifacts/epic-2-context.md:32` and `:34`, `AGENTS.md:85`, `CLAUDE.md:85`, `.github/copilot-instructions.md:85`, and `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:106` (AD-8 aggregate validation) and `:200` (identifier convention) prescribe ULID parsing without the canonical-text requirement enforced by `OperationExecutor.IsCanonicalUlid` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:331`) and `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`). Every agent session loads the entry points, so this stale guidance can reintroduce parse-only acceptance. Deferred because the fix edits other planning specs, architecture, and synchronized agent-context files. Reconcile the planning and architecture documents through a correct-course note or epic-context regeneration before Story 2.9; update the three agent entry points together and run `scripts/check-agent-instructions-sync.sh`.
+  seen-again: 2026-10-10 (bmad-project-context refresh of the agent instructions; it fixed `AGENTS.md:85` and its synced copies, so only the planning and architecture citations remain open)
 
 ## Deferred from: final build review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 
@@ -385,3 +390,21 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify the FreeBSD x64 native result-target inspection on an existing output file.
   evidence: Unverified, medium if wrong. `src/Hexalith.McpCli/Cli/OutputFileType.cs:51` reads `st_mode` from the FreeBSD x64 `stat` layout, but the shared CI job at `references/Hexalith.Builds/.github/workflows/domain-ci.yml:208` runs on Ubuntu x64. A FreeBSD x64 run of `CliOutputContractTests.MutationPreflightRemovesProbeFilesAsync` would settle whether valid existing-file output is classified correctly before a profile mutation.
+
+## Deferred from: bmad-project-context refresh of the agent instructions (2026-10-10)
+
+### DW-1: Fail tests on `$`-anchored validation regexes
+
+origin: bmad-project-context refresh of the agent instructions, 2026-10-10
+location: src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:364
+severity: medium
+reason: Add a Core.Tests test that reflects over `[GeneratedRegex]` patterns in `src` and fails when a `^`-anchored pattern ends in `$` instead of `\z`, because .NET `$` also matches before a trailing newline and reviews reported this defect class about eight times. Fix the remaining `ProfileStore.ProfileNamePattern` instance first (the open spec-2-3 ninth-pass entry); once the test lands, a refresh deletes the `\z` pitfall line from the AGENTS.md managed block.
+status: open
+
+### DW-2: Fail tests when a CLI option or argument has no Description
+
+origin: bmad-project-context refresh of the agent instructions, 2026-10-10
+location: src/Hexalith.McpCli/Cli/CliRunner.cs
+severity: medium
+reason: Add a Cli.Tests test that walks the command tree and fails on any option or argument without a `Description`; reviews flagged missing descriptions eight times (specs 2.3, 2.8, 2.10) and about ten still lack one, overlapping the open spec-2-3 eleventh-pass and spec-2-8 follow-up-pass entries. The user chose this check over an AGENTS.md line, so no instruction covers the rule until it lands.
+status: open
