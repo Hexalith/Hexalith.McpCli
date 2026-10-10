@@ -1,4 +1,5 @@
 using System.CommandLine;
+using System.CommandLine.Completions;
 using System.CommandLine.Help;
 using System.CommandLine.Parsing;
 using System.Reflection;
@@ -76,9 +77,10 @@ internal sealed class CliRunner
             .Concat(helpOption.Aliases.Where(alias => alias.StartsWith("-", StringComparison.Ordinal)
                 && !alias.StartsWith("--", StringComparison.Ordinal)).Select(alias => "/" + alias[1..]))
             .ToHashSet(StringComparer.Ordinal);
-        string? invalidToken = FindInvalidOption(args, parsed, helpAliases);
+        string? invalidToken = FindInvalidOption(args, parsed, helpAliases, out string invalidArgument);
         OperationError? failure = invalidToken is not null
-            ? Invalid("arguments", "The command contains an unknown or malformed option.")
+            ? Invalid(args.TakeWhile(argument => argument != "--").Any(argument => helpAliases.Contains(argument) || argument == "--version")
+                ? "arguments" : invalidArgument, "The command contains an unknown or malformed option.")
             : null;
 
         if (failure is null)
@@ -144,8 +146,9 @@ internal sealed class CliRunner
     }
 
     private static string? FindInvalidOption(IReadOnlyList<string> args, ParseResult parsed,
-        HashSet<string> helpAliases)
+        HashSet<string> helpAliases, out string invalidArgument)
     {
+        invalidArgument = "arguments";
         var names = parsed.RootCommandResult.Command.Options.Concat(parsed.CommandResult.Command.Options)
             .SelectMany(option => option.Aliases.Append(option.Name))
             .ToHashSet(StringComparer.Ordinal);
@@ -162,6 +165,11 @@ internal sealed class CliRunner
             if (afterSeparator || token == "-")
             {
                 continue;
+            }
+
+            if (index == 0 && (token == "[suggest]" || token.StartsWith("[suggest:", StringComparison.Ordinal) && token.EndsWith(']')))
+            {
+                return token;
             }
 
             if (!token.StartsWith("-", StringComparison.Ordinal) && !token.StartsWith("/", StringComparison.Ordinal))
@@ -187,6 +195,13 @@ internal sealed class CliRunner
 
             if (!names.Contains(name))
             {
+                return token;
+            }
+
+            if (name is "--read-only" or "--strict" or "--allow-tenant-override" or "--clear" or "--lint"
+                && token != name && !bool.TryParse(token[(name.Length + 1)..], out _))
+            {
+                invalidArgument = GlobalOptionsBinding.PublicArgumentName(name);
                 return token;
             }
 
@@ -252,7 +267,7 @@ internal sealed class CliRunner
                     ? index + 1 < args.Count && args[index + 1] != "--"
                         && !args[index + 1].StartsWith("-", StringComparison.Ordinal) ? args[index + 1] : null
                     : token[(name.Length + 1)..];
-                if (value is not null && !bool.TryParse(value, out _))
+                if (value is not null && parsed.UnmatchedTokens.Contains(value) && !bool.TryParse(value, out _))
                 {
                     option = name;
                     break;
@@ -279,6 +294,7 @@ internal sealed class CliRunner
     private RootCommand CreateRoot()
     {
         RootCommand root = new("Hexalith MCP and CLI gateway tool");
+        root.Directives.Remove(root.Directives.OfType<SuggestDirective>().Single());
         _globals.AddTo(root);
         root.Subcommands.Add(CreateModules());
         root.Subcommands.Add(CreateOperations());

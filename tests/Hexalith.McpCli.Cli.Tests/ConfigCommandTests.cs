@@ -680,8 +680,7 @@ public sealed class ConfigCommandTests
                 () => [typeof(CreateItemCommand).Assembly],
                 _ => null,
                 InspectMcpAsync)
-                .Parse(["mcp", "--read-only"])
-                .InvokeAsync(cancellationToken: TestContext.Current.CancellationToken);
+                .InvokeAsync(["mcp", "--read-only"], TestContext.Current.CancellationToken);
 
             exit.ShouldBe(0);
             hostRuns.ShouldBe(1);

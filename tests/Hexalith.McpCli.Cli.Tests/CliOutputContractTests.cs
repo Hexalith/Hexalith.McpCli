@@ -48,7 +48,13 @@ public sealed class CliOutputContractTests
                 (["operations", "sample", "--kind", "-?=secret"], "arguments"),
                 (["query", "--page-size:abc"], "pageSize"),
                 (["modules", "--strict:secret"], "strict"),
+                (["operations", "--strict=bad"], "strict"),
+                (["describe", "--lint=bad"], "lint"),
                 (["--version", "--bogus-secret"], "arguments"),
+                (["[suggest]", "unknown-verb-secret"], "arguments"),
+                (["[suggest:3]", "con"], "arguments"),
+                (["operations", "--read-only", "sample", "extra"], "arguments"),
+                (["describe", "--strict", "sample.create-item", "extra"], "arguments"),
             ];
             foreach ((string[] arguments, string expectedArgument) in cases)
             {
@@ -65,6 +71,12 @@ public sealed class CliOutputContractTests
             mcpExit.ShouldBe(2);
             mcpOutput.ShouldBeEmpty();
             AssertError(mcpError, "invalid_arguments");
+
+            (int directiveExit, string directiveOutput, string directiveError) = await InvokeAsync(store,
+                ["[suggest]", "mcp", "--transport", "http"]);
+            directiveExit.ShouldBe(2);
+            directiveOutput.ShouldBeEmpty();
+            AssertError(directiveError, "invalid_arguments");
         }
         finally
         {
@@ -168,6 +180,24 @@ public sealed class CliOutputContractTests
             literalExit.ShouldBe(0, literalOutput + literalError);
             literalOutput.ShouldNotContain("Usage:");
             store.Read().Profiles["dev"].Actor.ShouldBe("--help");
+
+            foreach (string value in new[] { "[suggest]", "[suggest:3]" })
+            {
+                (int settingExit, string settingOutput, string settingError) = await InvokeAsync(store,
+                    ["config", "set", "dev", "actor", value]);
+                settingExit.ShouldBe(0, settingOutput + settingError);
+                settingError.ShouldBeEmpty();
+                store.Read().Profiles["dev"].Actor.ShouldBe(value);
+            }
+
+            foreach (string value in new[] { "/h", "/?" })
+            {
+                (int settingExit, string settingOutput, string settingError) = await InvokeAsync(store,
+                    ["config", "set", "dev", "actor", "--", value]);
+                settingExit.ShouldBe(0, settingOutput + settingError);
+                settingError.ShouldBeEmpty();
+                store.Read().Profiles["dev"].Actor.ShouldBe(value);
+            }
         }
         finally
         {
@@ -423,7 +453,8 @@ public sealed class CliOutputContractTests
             (int badExit, string failed, _) = await harness.InvokeAsync(
                 ["query", "string-fixture.list-items", "--payload", "{}", "--output", bad]);
             badExit.ShouldBe(2);
-            AssertError(failed, "internal_error");
+            AssertError(failed, "internal_error").GetProperty("message").GetString().ShouldBe(
+                "The result destination cannot be written; no request was sent.");
             harness.Calls.ShouldBe(0);
 
             string target = Path.Combine(directory, "query-result.json");
@@ -436,6 +467,42 @@ public sealed class CliOutputContractTests
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("string-fixture.list-items");
             document.RootElement.GetProperty("document").GetProperty("items").GetArrayLength().ShouldBe(0);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Late Core paging and aggregate validation wins over destination preflight.</summary>
+    [Fact]
+    public async Task LaterCoreValidationWinsOverBadOutputPathAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            await using var harness = new QueryCliHarness();
+            string bad = Path.Combine(directory, "occupied-directory");
+            Directory.CreateDirectory(bad);
+            (string[] Arguments, string Path)[] cases =
+            [
+                (["query", "string-fixture.list-items", "--payload", "{}", "--page-size", "0"], "/pageSize"),
+                (["query", "string-fixture.list-items", "--payload", "{}", "--aggregate-id", "a/b"], "/aggregateId"),
+                (["send", "routing-fixture.renamed-aggregate", "--payload",
+                    $$"""{"aggregate/~id":"{{QueryCliHarness.ItemId}}"}""", "--aggregate-id",
+                    "01ARZ3NDEKTSV4RRFFQ69G5FAW", "--tenant", "session-tenant"], "/aggregateId"),
+            ];
+
+            foreach ((string[] arguments, string path) in cases)
+            {
+                (int exit, string output, _) = await harness.InvokeAsync([.. arguments, "--output", bad]);
+                exit.ShouldBe(2, output);
+                JsonElement failure = AssertError(output, "validation_failed");
+                failure.GetProperty("violations").EnumerateArray()
+                    .Select(violation => violation.GetProperty("path").GetString()).ShouldContain(path);
+                harness.Calls.ShouldBe(0);
+                Directory.EnumerateFileSystemEntries(bad).ShouldBeEmpty();
+            }
         }
         finally
         {
