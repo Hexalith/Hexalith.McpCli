@@ -53,6 +53,10 @@ public sealed class CliOutputContractTests
                 (["--version", "--bogus-secret"], "arguments"),
                 (["[suggest]", "unknown-verb-secret"], "arguments"),
                 (["[suggest:3]", "con"], "arguments"),
+                (["[bogus]", "modules"], "arguments"),
+                (["[x:secret]", "modules"], "arguments"),
+                (["[bogus]", "[suggest]", "config", "current"], "arguments"),
+                (["Hexalith.McpCli", "[bogus]", "config", "current"], "arguments"),
                 (["operations", "--read-only", "sample", "extra"], "arguments"),
                 (["describe", "--strict", "sample.create-item", "extra"], "arguments"),
             ];
@@ -77,6 +81,22 @@ public sealed class CliOutputContractTests
             directiveExit.ShouldBe(2);
             directiveOutput.ShouldBeEmpty();
             AssertError(directiveError, "invalid_arguments");
+
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", Actor: "original"));
+            string profilePath = Path.Combine(directory, "mcpcli.json");
+            byte[] originalProfile = File.ReadAllBytes(profilePath);
+            foreach (string[] arguments in new[]
+                {
+                    new[] { "[x]", "config", "set", "dev", "actor", "bracket" },
+                    new[] { "[bogus]", "config", "profile", "remove", "dev" },
+                })
+            {
+                (int exit, string output, string error) = await InvokeAsync(store, arguments);
+                exit.ShouldBe(2, string.Join(' ', arguments) + output + error);
+                error.ShouldBeEmpty();
+                AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe("arguments");
+                File.ReadAllBytes(profilePath).ShouldBe(originalProfile);
+            }
         }
         finally
         {
@@ -190,7 +210,7 @@ public sealed class CliOutputContractTests
                 store.Read().Profiles["dev"].Actor.ShouldBe(value);
             }
 
-            foreach (string value in new[] { "/h", "/?" })
+            foreach (string value in new[] { "/h", "/?", "/h:x", "/?=x" })
             {
                 (int settingExit, string settingOutput, string settingError) = await InvokeAsync(store,
                     ["config", "set", "dev", "actor", "--", value]);
@@ -308,10 +328,14 @@ public sealed class CliOutputContractTests
                     new[] { "config", "set", "dev", "actor", "operator" },
                 })
             {
-                (int exit, string output, _) = await InvokeAsync(store, [.. arguments, "--output", bad]);
+                (int exit, string output, string error) = await InvokeAsync(store, [.. arguments, "--output", bad]);
                 exit.ShouldBe(2, string.Join(' ', arguments) + output);
-                AssertError(output, "internal_error").GetProperty("message").GetString().ShouldBe(
-                    "The result destination cannot be written; no request was sent.");
+                error.ShouldBeEmpty();
+                using JsonDocument actual = JsonDocument.Parse(output);
+                using JsonDocument expected = JsonDocument.Parse("""
+                    {"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}
+                    """);
+                JsonElement.DeepEquals(actual.RootElement, expected.RootElement).ShouldBeTrue(output);
                 File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
             }
 

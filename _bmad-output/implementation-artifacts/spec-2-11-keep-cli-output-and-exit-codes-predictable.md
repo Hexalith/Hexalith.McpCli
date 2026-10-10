@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -63,6 +63,10 @@ context:
 - Given `mcp --transport http`, when the CLI parses transport before Catalog construction, then stderr contains `unsupported_transport` and a next-release message, stdout is empty, and status is 2.
 
 ## Implementation Notes
+
+- The final parser patch rejects leading directive-shaped tokens before invoking a verb. The CLI-entry regression test checks that profile bytes remain unchanged. The README now documents attached option-like values and slash help-alias forms.
+- The table fixture exercises tab, newline, carriage return, and backslash descriptions through `modules` and `operations`. The Release CLI suite passed 451 tests with two Windows-only skips. Parse, result, table, preflight, and Catalog/MCP matrix rows are covered by passing CLI tests in `CliOutputContractTests`, `DiscoveryCommandTests`, and `ExecutionFailureCommandTests`.
+- The Builds submodule already pinned EventStore 3.119.0 while `tools/dependency-policy.json` still allowed 3.117.1. Aligning its two existing policy entries made the fresh-restore Manifest suite pass; no package reference or submodule pointer changed in this run.
 
 ## Spec Change Log
 
@@ -227,6 +231,21 @@ context:
 | R8-E3 seekable device outside /dev | maybe-false | Carried R7-E2 and R8-B7: the privileged fixture remains needed; retain the existing defer route. |
 | R8-E4 non-Linux effective credentials | maybe-false | Carried R4-E5/R5-E6: `access(2)` may use real rather than effective IDs on macOS or FreeBSD, but a switched-credential target is needed to show a bad write outcome. Retain the prior defer route. |
 | R8-V1 macOS and ARM CI | medium | Carried R7-B9 and R8-B9: the normal CI matrix omits these branches, and the existing deferred-work entry already records the gap. |
+| R9-B1 profile output collision | medium | Carried R8-B2: output can overwrite the profile file; it is pre-existing and already deferred. |
+| R9-B2 lost accepted-command identifiers | medium | Carried R8-B5: a runtime output failure returns only the generic error after an accepted send; the pre-existing contract gap is already deferred. |
+| R9-B3 readerless FIFO | medium | Carried R8-B6: the writer can wait after a side effect; its pre-existing behavior is already deferred. |
+| R9-B4 seekable device outside /dev | maybe-false | Carried R8-B7: a privileged seekable-device fixture is still needed to establish the claimed writer failure; retain the existing deferral. |
+| R9-B5 proc pseudo-file result | medium | Carried R8-B4: a proc pseudo-file can report success without retaining JSON; the pre-existing writer behavior remains deferred. |
+| R9-B6 executor binary signature | low | The CLR signature changed, but this pre-v1 Core interface has no supported external implementers or compiled callers. An overload would add public surface for a speculative compatibility need; reject. |
+| R9-B7 callback cancellation | low | A callback that throws cancellation is mapped to `internal_error`, but the only production callback is synchronous and does not throw cancellation. The generic executor catch also predates this story; adding a cancellation branch for hypothetical callers is disproportionate; reject. |
+| R9-B8 macOS and ARM native gate | medium | Carried R8-B9: shared CI omits those native branches and the existing deferred-work entry owns their platform run. |
+| R9-B9 console parallelism | false | `tests/Hexalith.McpCli.Cli.Tests/AssemblyInfo.cs` disables parallelization for the entire xUnit v3 assembly, so the alleged cross-class capture race cannot occur in this suite. |
+| R9-B10 profile preflight document assertions | medium | The config mutation test checks code/message/profile bytes but discards stderr and extra error members. A leak could pass; patch the test with an exact document and empty-stderr assertion. |
+| R9-E1 profile output collision | medium | Carried R9-B1 and R8-B2: the same pre-existing profile collision remains deferred. |
+| R9-E2 seekable device outside /dev | maybe-false | Carried R9-B4 and R8-B7: a reachable seekable device outside `/dev` is still needed; retain the existing deferral. |
+| R9-E3 repeated help | false | The frozen intent defines bare help as the command path plus help aliases. Repeating a help alias adds no operand or other option, so help with exit 0 is allowed. |
+| R9-V1 profile preflight document assertions | medium | Preverified gap: the profile mutation test discards stderr and does not assert the entire error document. Group with R9-B10 for a direct test patch. |
+| R9-V2 FreeBSD native gate | maybe-false | The shared CI lacks a FreeBSD x64 run, but a wrong `st_mode` offset and rejected valid target were not demonstrated. Defer the unverified medium portability risk until a FreeBSD x64 existing-file mutation run is available. |
 
 ### Review Findings
 
@@ -321,8 +340,8 @@ Rejected:
 
 Code review 2026-10-10 of `52cf2aa..5bc23e5`, excluding `references/` gitlinks and `_bmad-output/` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed; Verification Gap reported no gaps). This pass covers the patch commit `5bc23e5` for the previous review. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`.
 
-- [ ] [Review][Patch] Removing the root `SuggestDirective` makes System.CommandLine silently drop every unknown leading directive-shaped token, so a malformed invocation runs its verb (AC2 regression from `5bc23e5`). Reproduced: `[x] config set dev actor bracket` exits 0 and sets the actor, `[bogus] config profile remove dev` exits 0 and deletes the profile, `[x:secret] config current` and `[bogus] [suggest] config current` exit 0, and `Hexalith.McpCli [bogus] config current` (root name first) also exits 0. With the directive registered, the baseline reported `[bogus]` as unrecognized, which was the premise of the previous review's patch. Generalize the index-0 `[suggest]` check in `FindInvalidOption`: in the leading run of tokens, skip root-command name tokens and reject any token the tokenizer treats as a directive (length > 2, starts with `[`, second character neither `]` nor `:`, ends with `]`). Keep later literal values such as `config set dev actor [x]` and `[suggest]` (R8-E1) valid. Add `[bogus] modules`, `[x] config set …` with unchanged-profile assertions, `[bogus] [suggest] config current`, and a root-name-prefixed case to `ParserFailuresUseSafeDocumentsAsync`. [src/Hexalith.McpCli/Cli/CliRunner.cs:170]
-- [ ] [Review][Patch] The README does not say how to pass an option value that looks like an option or a help alias. Reproduced: `config current --token --abc` and `config current --token -h` return `invalid_arguments`, while `--token=--abc` and `--token=-h` succeed. The README's `--` advice covers only positional values, and `--` cannot help with option values. Positional values with an attached slash-alias form such as `/h:x` also need `--`, and the README's "matching a slash help alias" wording misses that. Add one sentence telling users to attach such option values with `=` or `:`, and widen the positional rule to cover attached help-alias forms. [README.md:93]
+- [x] [Review][Patch] Removing the root `SuggestDirective` makes System.CommandLine silently drop every unknown leading directive-shaped token, so a malformed invocation runs its verb (AC2 regression from `5bc23e5`). Reproduced: `[x] config set dev actor bracket` exits 0 and sets the actor, `[bogus] config profile remove dev` exits 0 and deletes the profile, `[x:secret] config current` and `[bogus] [suggest] config current` exit 0, and `Hexalith.McpCli [bogus] config current` (root name first) also exits 0. With the directive registered, the baseline reported `[bogus]` as unrecognized, which was the premise of the previous review's patch. Generalize the index-0 `[suggest]` check in `FindInvalidOption`: in the leading run of tokens, skip root-command name tokens and reject any token the tokenizer treats as a directive (length > 2, starts with `[`, second character neither `]` nor `:`, ends with `]`). Keep later literal values such as `config set dev actor [x]` and `[suggest]` (R8-E1) valid. Add `[bogus] modules`, `[x] config set …` with unchanged-profile assertions, `[bogus] [suggest] config current`, and a root-name-prefixed case to `ParserFailuresUseSafeDocumentsAsync`. [src/Hexalith.McpCli/Cli/CliRunner.cs:170]
+- [x] [Review][Patch] The README does not say how to pass an option value that looks like an option or a help alias. Reproduced: `config current --token --abc` and `config current --token -h` return `invalid_arguments`, while `--token=--abc` and `--token=-h` succeed. The README's `--` advice covers only positional values, and `--` cannot help with option values. Positional values with an attached slash-alias form such as `/h:x` also need `--`, and the README's "matching a slash help alias" wording misses that. Add one sentence telling users to attach such option values with `=` or `:`, and widen the positional rule to cover attached help-alias forms. [README.md:93]
 - [x] [Review][Defer] (unverified, medium if true) Preflight classifies targets with `OutputFileType.Inspect`, while the writer still decides between a direct and a staged write using `CanSeek` and `IsSpecialDevicePath`. A seekable character device outside `/dev` would pass device preflight and then be staged as a regular file after the side effect. [src/Hexalith.McpCli/Cli/CliOutput.cs:147] — deferred: already tracked (`deferred-work.md:372`, carried R2-E4/R7-E2/R8-B7 and the previous review); no new ledger entry. Settling it needs a privileged fixture with a mounted seekable device outside `/dev`.
 
 Rejected:

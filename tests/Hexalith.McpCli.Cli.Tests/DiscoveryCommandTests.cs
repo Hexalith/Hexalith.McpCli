@@ -10,6 +10,7 @@ using Explicit = global::Catalog.Explicit.Contracts;
 using Lint = global::Catalog.Lint.Contracts;
 using MarkedEmpty = global::Manifest.MarkedEmpty.Contracts;
 using Routing = global::Catalog.Routing.Contracts;
+using Table = global::Catalog.Table.Contracts;
 
 namespace Hexalith.McpCli.Cli.Tests;
 
@@ -440,6 +441,26 @@ public sealed class DiscoveryCommandTests
         unknownExit.ShouldBe(2);
         unknownError.ShouldBeEmpty();
         AssertJson(unknown, """{"error":{"code":"unknown_module","module":"Missing","suggestions":["sample"]}}""");
+    }
+
+    /// <summary>Raw module and operation descriptions cannot add table columns or physical rows.</summary>
+    [Fact]
+    public async Task TableDescriptionsEscapeStructuralCharactersThroughCliAsync()
+    {
+        Assembly[] manifest = [typeof(Table.Module).Assembly];
+        (int modulesExit, string modules, string modulesError) = await InvokeAsync(manifest,
+            "modules", "--format", "table");
+        modulesExit.ShouldBe(0);
+        modulesError.ShouldBeEmpty();
+        modules.ShouldBe("NAME\tOPERATIONS\tDESCRIPTION" + Environment.NewLine
+            + "table-fixture\t1\ttab\\tand\\nline\\r\\\\path" + Environment.NewLine);
+
+        (int operationsExit, string operations, string operationsError) = await InvokeAsync(manifest,
+            "operations", "table-fixture", "--format", "table");
+        operationsExit.ShouldBe(0);
+        operationsError.ShouldBeEmpty();
+        operations.ShouldBe("NAME\tKIND\tDESCRIPTION" + Environment.NewLine
+            + "table-fixture.inspect\tread\ttab\\tand\\nline\\r\\\\path" + Environment.NewLine);
     }
 
     /// <summary>Warnings and errors remain on stderr, ordinary mode keeps valid operations, and strict rejects diagnostics.</summary>

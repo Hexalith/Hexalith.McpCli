@@ -153,9 +153,25 @@ internal sealed class CliRunner
             .SelectMany(option => option.Aliases.Append(option.Name))
             .ToHashSet(StringComparer.Ordinal);
         bool afterSeparator = false;
+        bool leadingDirectiveRun = true;
         for (int index = 0; index < args.Count; index++)
         {
             string token = args[index];
+            if (leadingDirectiveRun)
+            {
+                if (token == parsed.RootCommandResult.Command.Name)
+                {
+                    continue;
+                }
+
+                if (token.Length > 2 && token[0] == '[' && token[1] is not (']' or ':') && token[^1] == ']')
+                {
+                    return token;
+                }
+
+                leadingDirectiveRun = false;
+            }
+
             if (token == "--")
             {
                 afterSeparator = true;
@@ -165,11 +181,6 @@ internal sealed class CliRunner
             if (afterSeparator || token == "-")
             {
                 continue;
-            }
-
-            if (index == 0 && (token == "[suggest]" || token.StartsWith("[suggest:", StringComparison.Ordinal) && token.EndsWith(']')))
-            {
-                return token;
             }
 
             if (!token.StartsWith("-", StringComparison.Ordinal) && !token.StartsWith("/", StringComparison.Ordinal))
