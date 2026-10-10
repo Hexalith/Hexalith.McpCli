@@ -24,25 +24,25 @@ public static class McpCliMcpServiceCollectionExtensions
 
         var collection = new McpServerPrimitiveCollection<McpServerTool>();
         collection.Add(Create((Func<IServiceProvider, ModelContextProtocol.Protocol.CallToolResult>)McpToolHandlers.ListModules,
-            "list_modules", "When: discover supported modules. Effect: read catalog. Returns: module names and descriptions.",
+            "list_modules", "Purpose: List modules, descriptions, and operation counts. Use when: Starting catalog discovery. Next: Call list_operations with a module name.",
             typeof(ModulesDocument), readOnly: true));
         collection.Add(Create((Func<string, IServiceProvider, string?, ModelContextProtocol.Protocol.CallToolResult>)McpToolHandlers.ListOperations,
-            "list_operations", "When: inspect a module. Effect: read catalog. Returns: declared read and write operations.",
+            "list_operations", "Purpose: List a module's operations, optionally filtered by read or write kind. Use when: Choosing an operation in a known module. Next: Call describe_operation with an operation name.",
             typeof(OperationsDocument), readOnly: true));
         collection.Add(Create((Func<string, IServiceProvider, ModelContextProtocol.Protocol.CallToolResult>)McpToolHandlers.DescribeOperation,
-            "describe_operation", "When: prepare an operation. Effect: read catalog. Returns: payload schema, routing and availability.",
+            "describe_operation", "Purpose: Show payload schema, optional example, envelope arguments, lint findings, and availability. Use when: Preparing a selected operation. Next: If submittable, call run_query for a read or send_command for a write.",
             typeof(OperationDescriptionDocument), readOnly: true));
         if (!settings.ReadOnly)
         {
             collection.Add(Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, string?,
                 IReadOnlyDictionary<string, string>?, Task<ModelContextProtocol.Protocol.CallToolResult>>)McpToolHandlers.SendCommand,
-                "send_command", "When: submit a declared command. Effect: write through EventStore. Returns: accepted command or error.",
+                "send_command", "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action.",
                 typeof(CommandResult), readOnly: false));
         }
 
         collection.Add(Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, int?, int?,
             string?, Task<ModelContextProtocol.Protocol.CallToolResult>>)McpToolHandlers.RunQuery,
-            "run_query", "When: execute a declared query. Effect: read through EventStore. Returns: document and paging.",
+            "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
             typeof(QueryResult), readOnly: true));
 
         string version = typeof(McpCliMcpServiceCollectionExtensions).Assembly

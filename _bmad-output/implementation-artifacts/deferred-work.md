@@ -431,3 +431,12 @@ location: src/Hexalith.McpCli/Cli/CliRunner.cs
 severity: medium
 reason: Add a Cli.Tests test that walks the command tree and fails on any option or argument without a `Description`; reviews flagged missing descriptions eight times (specs 2.3, 2.8, 2.10) and about ten still lack one, overlapping the open spec-2-3 eleventh-pass and spec-2-8 follow-up-pass entries. The user chose this check over an AGENTS.md line, so no instruction covers the rule until it lands.
 status: open
+
+## Deferred from: review of spec-3-1-discover-operations-through-a-fixed-mcp-surface.md (2026-10-10)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
+  summary: Validate each MCP output schema against actual success and error structured documents.
+  evidence: `tests/Hexalith.McpCli.Mcp.Tests/McpToolRegistrationTests.cs:34` checks only the `oneOf` branch count. Story 3.3 explicitly requires closed success and error branches validated under both protocol revisions.
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
+  summary: Verify distinct version-appropriate MCP session flows rather than varying only the requested protocol version.
+  evidence: `tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs:62` uses `McpClient.CreateAsync` for both revisions and does not assert the negotiated version or handshake-free discovery. Story 3.2 owns the stdio exchange through each version-appropriate flow.

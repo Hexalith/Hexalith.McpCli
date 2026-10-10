@@ -33,18 +33,43 @@ public sealed class McpToolRegistrationTests
             tool.ProtocolTool.OutputSchema.ShouldNotBeNull();
             tool.ProtocolTool.OutputSchema.Value.GetProperty("oneOf").GetArrayLength().ShouldBe(2);
             tool.ProtocolTool.Description.ShouldNotBeNullOrWhiteSpace();
+            string description = tool.ProtocolTool.Description!;
+            description.ShouldContain("Purpose:");
+            description.ShouldContain("Use when:");
+            description.ShouldContain("Next:");
+            (description.IndexOf("Purpose:", StringComparison.Ordinal)
+                < description.IndexOf("Use when:", StringComparison.Ordinal)).ShouldBeTrue();
+            (description.IndexOf("Use when:", StringComparison.Ordinal)
+                < description.IndexOf("Next:", StringComparison.Ordinal)).ShouldBeTrue();
+            tool.ProtocolTool.Annotations.ShouldNotBeNull().ReadOnlyHint.ShouldBe(tool.ProtocolTool.Name != "send_command");
         }
 
-        string[] operationRequired = collection["list_operations"].ProtocolTool.InputSchema
-            .GetProperty("required").EnumerateArray().Select(item => item.GetString()!).ToArray();
-        operationRequired.ShouldBe(new[] { "module" });
-        string[] queryRequired = collection["run_query"].ProtocolTool.InputSchema
-            .GetProperty("required").EnumerateArray().Select(item => item.GetString()!).ToArray();
-        queryRequired.ShouldBe(new[] { "operation", "payload" });
+        if (!readOnly)
+        {
+            var writeAnnotations = collection["send_command"].ProtocolTool.Annotations.ShouldNotBeNull();
+            writeAnnotations.IdempotentHint.ShouldBe(false);
+            writeAnnotations.DestructiveHint.ShouldBe(true);
+        }
+
+        static string[] Required(McpServerTool tool)
+            => tool.ProtocolTool.InputSchema.TryGetProperty("required", out var required)
+                ? required.EnumerateArray().Select(item => item.GetString()!).ToArray()
+                : [];
+
+        Required(collection["list_modules"]).ShouldBeEmpty();
+        Required(collection["list_operations"]).ShouldBe(new[] { "module" });
+        Required(collection["describe_operation"]).ShouldBe(new[] { "operation" });
+        Required(collection["run_query"]).ShouldBe(new[] { "operation", "payload" });
+        if (!readOnly)
+        {
+            Required(collection["send_command"]).ShouldBe(new[] { "operation", "payload" });
+        }
+
         int inputLength = collection.Sum(tool => tool.ProtocolTool.Name.Length
             + (tool.ProtocolTool.Description?.Length ?? 0) + tool.ProtocolTool.InputSchema.GetRawText().Length);
         inputLength.ShouldBeLessThan(8000);
 
+        options.Filters.Message.IncomingFilters.Count.ShouldBe(1);
         options.Filters.Request.ListToolsFilters.Count.ShouldBe(1);
     }
 
