@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'done'
+status: 'in-progress'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -316,6 +316,40 @@ Rejected:
 - `low` Vertical tab, form feed, U+0085/U+2028/U+2029 and terminal escapes are unescaped in table cells. Carried (R2-E5, R3-E2, R4-B10, R4-E6).
 - `low` A failed probe deletion leaves a stray file. Carried from R7-B5 and the loop-7 rejection.
 - `false` A dash-leading positional value is rejected without `--` (`config set dev actor -bob`). The Design Notes require literal dash values only after `--`; the documentation gap is the README patch above.
+
+### Review Findings
+
+Code review 2026-10-10 of `52cf2aa..5bc23e5`, excluding `references/` gitlinks and `_bmad-output/` (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor; no layer failed; Verification Gap reported no gaps). This pass covers the patch commit `5bc23e5` for the previous review. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`.
+
+- [ ] [Review][Patch] Removing the root `SuggestDirective` makes System.CommandLine silently drop every unknown leading directive-shaped token, so a malformed invocation runs its verb (AC2 regression from `5bc23e5`). Reproduced: `[x] config set dev actor bracket` exits 0 and sets the actor, `[bogus] config profile remove dev` exits 0 and deletes the profile, `[x:secret] config current` and `[bogus] [suggest] config current` exit 0, and `Hexalith.McpCli [bogus] config current` (root name first) also exits 0. With the directive registered, the baseline reported `[bogus]` as unrecognized, which was the premise of the previous review's patch. Generalize the index-0 `[suggest]` check in `FindInvalidOption`: in the leading run of tokens, skip root-command name tokens and reject any token the tokenizer treats as a directive (length > 2, starts with `[`, second character neither `]` nor `:`, ends with `]`). Keep later literal values such as `config set dev actor [x]` and `[suggest]` (R8-E1) valid. Add `[bogus] modules`, `[x] config set …` with unchanged-profile assertions, `[bogus] [suggest] config current`, and a root-name-prefixed case to `ParserFailuresUseSafeDocumentsAsync`. [src/Hexalith.McpCli/Cli/CliRunner.cs:170]
+- [ ] [Review][Patch] The README does not say how to pass an option value that looks like an option or a help alias. Reproduced: `config current --token --abc` and `config current --token -h` return `invalid_arguments`, while `--token=--abc` and `--token=-h` succeed. The README's `--` advice covers only positional values, and `--` cannot help with option values. Positional values with an attached slash-alias form such as `/h:x` also need `--`, and the README's "matching a slash help alias" wording misses that. Add one sentence telling users to attach such option values with `=` or `:`, and widen the positional rule to cover attached help-alias forms. [README.md:93]
+- [x] [Review][Defer] (unverified, medium if true) Preflight classifies targets with `OutputFileType.Inspect`, while the writer still decides between a direct and a staged write using `CanSeek` and `IsSpecialDevicePath`. A seekable character device outside `/dev` would pass device preflight and then be staged as a regular file after the side effect. [src/Hexalith.McpCli/Cli/CliOutput.cs:147] — deferred: already tracked (`deferred-work.md:372`, carried R2-E4/R7-E2/R8-B7 and the previous review); no new ledger entry. Settling it needs a privileged fixture with a mounted seekable device outside `/dev`.
+
+Rejected:
+
+- `false` The preflight message says "no request was sent" for config mutations. Carried from the previous review: the 2026-10-09 decision fixed this message for every verb that preflights, so changing it means editing the spec.
+- `false` The same bad `--output` gives different messages for `config current` and `config profile add`. Carried: loop 7 deliberately removed preflight from side-effect-free verbs, and the README scopes the stable message to verbs that preflight before a Gateway request or profile mutation.
+- `false` The README's "Unexpected failures return a fixed `internal_error` message" contradicts preflight's use of `internal_error`. The README's output paragraph separately documents the preflight `internal_error` and its stable message, and the 2026-10-09 decision settled the code.
+- `low` Block devices are accepted as device targets, and the README lists only character devices, pipes and FIFOs. Carried: the user must name the device explicitly, and the baseline writer wrote to it the same way.
+- `low` The five Boolean flag names are hard-coded three times. Carried from the loop-7 and previous-review rejections.
+- `false` Config verbs and `send`/`query` reach the same preflight document through different paths (exception catch and `PreflightError`). Both produce the identical `OperationError`; no divergent caller or broken rule was named.
+- `false` The duplicated `beforeSubmit` block in `OperationExecutor`. Carried from the previous review.
+- `low` `beforeSubmit` comes after the `CancellationToken` and adds a CLI-only concern to Core's interface. Carried; the Code Map authorizes this Core seam.
+- `false` The Core hook test only uses a throwing preflight. `BadCommandOutputPathPreventsRequestAsync` and `QueryPreflightRunsAfterNoResultChecksAsync` assert the exact preflight message and zero Gateway calls through the real executor, so dropping a returned error or skipping the query hook fails them.
+- `false` The `ProfileStore.Validate*` methods have no Core tests proving the file is untouched, and `ValidateUse` is convoluted. These methods call only `ValidateName`, `ValidateProfile` and `Read()`; `Read()` has no write path and returns an empty snapshot for a missing file. No harm was named for the branch style.
+- `low` On Unix, preflight opens an existing result file read-write, which fires a close-after-write notification, and the Design Notes say checks "must not open or alter" the target's contents. The open mirrors the writer's destination open (`CliOutput.cs:190`, `ReadWrite`/`FileShare.Read`), which on Unix also takes .NET's advisory `flock`. Limiting it to Windows would drop Unix sharing-conflict detection, a required preflight category. The only cost is a no-change notification, and rewording the spec is a spec edit.
+- `low` Preflight's catch-all reports a missing `statx`, an unlisted ABI or `DllNotFoundException` as an unwritable destination. Carried (R8-B8 and the previous review): every supported .NET 10 Linux baseline has `statx`, and an unverified ABI fails explicitly by design.
+- `low` The FIFO preflight test and the child-process tests can hang rather than fail. Carried from the previous review's FIFO-timeout rejection.
+- `false`/`low` The `run_loopback.py` guard does not assert no echo, raises `AttributeError` on non-object JSON, and does not convert `TimeoutExpired`. Carried from the previous review.
+- `false` Multi-hyphen argument names (`allowTenantOverride`, `clear`) are untested. The `readOnly` and `pageSize` cases exercise the same per-part capitalization loop in `PublicArgumentName`; a longer name only adds iterations.
+- `low` A `.mcpcli-probe-*` file stays behind if deletion fails or the process dies. Carried (R7-B5, R8-B10).
+- `low` `--output` under a fresh `~/.eventstore/` fails preflight. Carried from the 2026-10-09 rejection.
+- `low` Vertical tab, form feed, Unicode line separators and terminal escapes are unescaped in table cells. Carried (R2-E5 and later).
+- `low` A parse-failure error write that throws a non-EPIPE `IOException` (for example, stdout on a full disk) escapes `Program.Main` and crashes instead of exiting 2. Verified that `WriteDirectErrorAsync` and `Program.Main` have no catch. It needs a failing stdout, and the fix adds a guard.
+- `low` `ParseFailure` matches the flag's following token against `UnmatchedTokens` by value, so `operations --read-only foo foo` blames `readOnly` instead of `arguments`. It needs duplicated positional text, only the `argument` hint is wrong (code and exit stay `invalid_arguments`/2), and the fix needs position tracking.
+- `low` `--extension` is named `extension` by the parser and `extensions` by the duplicate-key check. Carried.
+- `low` The post-accept runtime write failure is tested only on Linux (`/dev/full`). Carried from the previous review.
+- `false` Parse-failure argument names (`readOnly`, `arguments`) are not §E names. `readOnly` matches `config current`'s `readOnly` member and `sources.readOnly`, and the Design Notes prescribe the `arguments` fallback. Reconciling these with addendum §G means editing the spec.
 
 ## Design Notes
 
