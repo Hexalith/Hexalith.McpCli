@@ -235,8 +235,16 @@ public sealed class CliOutputContractTests
             (int literalExit, string literalOutput, string literalError) = await InvokeAsync(store,
                 ["config", "set", "dev", "actor", "--", "--help"]);
             literalExit.ShouldBe(0, literalOutput + literalError);
-            literalOutput.ShouldNotContain("Usage:");
+            QueryCliHarness.AssertJson(literalOutput, """{"profile":"dev","field":"actor"}""");
+            literalError.ShouldBeEmpty();
             store.Read().Profiles["dev"].Actor.ShouldBe("--help");
+
+            (int dashExit, string dashOutput, string dashError) = await InvokeAsync(store,
+                ["config", "set", "dev", "actor", "-"]);
+            dashExit.ShouldBe(0, dashOutput + dashError);
+            QueryCliHarness.AssertJson(dashOutput, """{"profile":"dev","field":"actor"}""");
+            dashError.ShouldBeEmpty();
+            store.Read().Profiles["dev"].Actor.ShouldBe("-");
 
             foreach (string value in new[] { "[suggest]", "[suggest:3]" })
             {

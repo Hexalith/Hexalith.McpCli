@@ -538,6 +538,49 @@ Rejected:
 - `false` No test uses a relative `--output`. The shared `ResolveFinalSymlink`, which predates this story, makes the path absolute before any preflight branch; `config set dev actor bob --output rel.json` writes `rel.json` in the working directory.
 - `false` The config table escaping test uses only a backslash. `VALUE` cells are JSON-serialized, which always escapes tab and newline, and the test parses the cell as JSON, so emitting raw text would fail it.
 
+### Review Findings
+
+Code review 2026-10-10 of `52cf2aa..86f8a58`, limited to `src/`, `tests/`, `README.md`, `Hexalith.McpCli.slnx` and `tools/`; the last story code commit is `57e9d39`, and later commits change only BMAD tooling. Layers: Blind Hunter, Edge Case Hunter, Verification Gap and Acceptance Auditor; none failed. The Acceptance Auditor found no code-level violation of AC1–AC3 or of the Always/Never constraints, reproducing its claims on a current Debug build with an isolated `HOME`.
+
+- [x] [Review][Patch] The README does not warn that a config change can already be saved when its result write fails at runtime. `config set dev actor changed --output /dev/full` exits 2 with `internal_error` "The CLI action failed.", yet the stored actor is `changed`; a retried `config profile remove` would then fail as "does not exist". The residual-risk sentence names only `send`. Add one sentence: a `config profile add`/`remove`, `config use` or `config set` change may already be saved when a later runtime `--output` write fails, so check `config current` or `config profile list` before retrying. [README.md:118]
+- [x] [Review][Patch] No test reaches the bare `-` positional guard in `FindInvalidOption`. Every existing `-` follows `--payload`, which the scanner consumes as that option's value. Deleting `|| token == "-"` makes `config set dev actor -` return `invalid_arguments` with the suite still green. Add a CLI case asserting exit 0, the complete `{"profile":"dev","field":"actor"}` stdout document, empty stderr and a stored actor of `-`; removing the guard fails the new case on its exit code. [src/Hexalith.McpCli/Cli/CliRunner.cs:175]
+- [x] [Review][Patch] The literal `config set dev actor -- --help` success case asserts only exit 0, no `Usage:` and the stored actor. Unlike its neighbours, it never checks stderr or the stdout document, so an added diagnostic or a wrong result shape passes. Assert empty stderr and the complete `{"profile":"dev","field":"actor"}` document. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:236]
+- [x] [Review][Patch] Three Story 2.11 ledger anchors went stale in `57e9d39`:
+  - `deferred-work.md:392` cites `CliRunner.cs:797` for the `RunAsync` catch-all, now at `:794`.
+  - `:395` cites `CliRunner.cs:648` for the `config use` preflight, now at `:645`.
+  - `:403` cites `CliOutputContractTests.cs:874` for the root skip, now at `:969` after this review's test additions.
+
+  [_bmad-output/implementation-artifacts/deferred-work.md:392]
+- [x] [Review][Defer] The Windows, macOS and FreeBSD preflight inspection branches never run in CI [src/Hexalith.McpCli/Cli/OutputFileType.cs:13] — deferred: already tracked (`deferred-work.md:187`, `:381`, `:398`).
+- [x] [Review][Defer] The existing-file mode-bit preflight guard is the only refusal for root, whose test run is skipped [src/Hexalith.McpCli/Cli/CliOutput.cs:64] — deferred: already tracked (`deferred-work.md:402`).
+- [x] [Review][Defer] `--output` naming the profile file overwrites the profile store after the mutation [src/Hexalith.McpCli/Cli/CliOutput.cs:34] — deferred: pre-existing writer behavior; already tracked (`deferred-work.md:394`).
+- [x] [Review][Defer] Profile names accept a trailing newline because `ProfileNamePattern` ends in `$`, and the new `Validate*` methods reuse it [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:364] — deferred: pre-existing (Story 2.2); already tracked (`deferred-work.md:222`).
+
+Rejected:
+
+- `low` A first `config profile add --output` inside a not-yet-created `~/.eventstore` is now refused by the parent-directory probe. Writing a result into the profile directory before it exists is contrived, and the fix adds a special-case branch.
+- `low` An unlisted ABI refuses every preflighted `--output` (Edge Case Hunter). Failing explicitly is the Design Notes rule. Carried (R8-B8).
+- `low` `Preflight` maps every exception, including `PlatformNotSupportedException` and a missing native entry point, to the destination message (Blind Hunter). No request is sent either way; narrowing the catch adds branches for the same carried R8-B8 case.
+- `low` A root-name-prefixed help or version request is refused. Carried (R10-E1).
+- `low` Vertical tab, form feed, U+0085, U+2028, U+2029 and ESC are not escaped in table cells. Carried.
+- `low` A probe file stays behind if its deletion fails. Carried (R7-B5).
+- `low` `run_loopback.py` raises a traceback instead of `VectorError` when the host prints non-object JSON or times out. The gate still fails; only the message differs, and the fix adds guards.
+- `low` `beforeSubmit` follows the `CancellationToken`. Carried.
+- `false` The `beforeSubmit` block is duplicated in the send and query branches. Carried; the copies are identical and adjacent.
+- `low` The five Boolean flag names are hard-coded three times. Carried.
+- `low` An attached and a separated bad Boolean value produce different messages. Both carry the same code and `argument`; unifying them adds a branch.
+- `false` A bad `--output` on `modules`, `operations`, `describe`, `config current` or `config profile list` returns the generic message. The README scopes the stable preflight message to Gateway requests and profile mutations, and documents the fixed `internal_error` message for other unexpected failures.
+- `low` No test pins that the `ProfileStore.Validate*` messages match the mutations' messages. Every config mutation runs its validator first, and the CLI tests pin the `configuration_invalid` code and unchanged bytes, so divergence could change only message text. Carried (R3-B10).
+- `false` `ValidateUse` readability. No caller or rule was named. Carried.
+- `false` No test writes a successful table result to `--output`. `WriteAsync` formats the text before choosing the destination, so a combined test would exercise no additional branch.
+- `false` The README omits header-only empty tables and `FIELD` escaping. A header-only empty table follows from the documented columns, and `FIELD` names are fixed property names that never contain escaped characters.
+- `low` Test housekeeping: `unknown-verb` appears in two loops, a helper sits between tests, and child-process setup is repeated. No test outcome changes.
+- `false` `FindInvalidOption` returns the raw token. No caller echoes it; the harm is hypothetical.
+- `false` The Core hook test covers only a throwing hook. `BadCommandOutputPathPreventsRequestAsync` and `QueryPreflightRunsAfterNoResultChecksAsync` pin a returned preflight error with the exact message and zero Gateway calls on both branches.
+- `false` The "Execution, configuration, and MCP" heading does not match its content. The section holds the Gateway error, `--output`, `config profile add` and MCP tool paragraphs.
+- `low` The exit list omits an MCP failure after serving starts. This is pre-existing behavior consistent with "Exit 2 means no result", and the protocol and diagnostic channels are already documented.
+- `false` Control characters in Contracts descriptions should be linted. That is a new analyzer outside this story; JSON output already escapes them.
+
 ## Design Notes
 
 Map recognized option failures to their public argument (`pageSize`, `offset`, `tenant`, etc.); use `arguments` for unmatched command syntax. Never include `ParseError.Message` verbatim because it can contain a token or secret. Preflight detects ordinary path/permission failures before an action; it cannot promise that a later disk or device write succeeds. Keep Story 2.2's explicit null for `config use --clear`; addendum §G lists generic tool documents, not config management result shapes.
