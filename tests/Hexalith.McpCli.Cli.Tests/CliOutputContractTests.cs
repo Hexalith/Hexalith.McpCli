@@ -171,6 +171,7 @@ public sealed class CliOutputContractTests
                 {
                     new[] { "--help" }, new[] { "config", "--help" }, new[] { "config", "profile", "add", "-h" },
                     new[] { "operations", "-?" }, new[] { "operations", "/?" }, new[] { "operations", "/h" },
+                    new[] { "--help", "-h" }, new[] { "config", "profile", "add", "-h", "--help", "/?" },
                 })
             {
                 (int exit, string output, string error) = await InvokeAsync(store, arguments);
@@ -194,6 +195,8 @@ public sealed class CliOutputContractTests
                 ["config", "use", "missing", "-h"],
                 ["config", "set", "dev", "badfield", "x", "--help"],
                 ["config", "profile", "add", "dev", "--help"],
+                ["--help", "modules"],
+                ["config", "--help", "set"],
             ];
             foreach (string[] arguments in invalid)
             {
@@ -454,6 +457,86 @@ public sealed class CliOutputContractTests
         }
     }
 
+    /// <summary>An existing result file can be replaced when its directory cannot create new files.</summary>
+    [Fact]
+    public async Task ExistingFileWorksInUnwritableDirectoryThroughCliAsync()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("Unix file modes are required for this fixture.");
+            return;
+        }
+        string directory = NewDirectory();
+        string parent = Path.Combine(directory, "read-only-directory");
+        Directory.CreateDirectory(parent);
+        string target = Path.Combine(parent, "result.json");
+        File.WriteAllText(target, "old result");
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            File.SetUnixFileMode(target, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserExecute);
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                ["config", "set", "dev", "actor", "x", "--output", target]);
+            exit.ShouldBe(0, output + error);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+            store.Read().Profiles["dev"].Actor.ShouldBe("x");
+            using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
+            document.RootElement.GetProperty("profile").GetString().ShouldBe("dev");
+            document.RootElement.GetProperty("field").GetString().ShouldBe("actor");
+        }
+        finally
+        {
+            File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Discovery results, including lint findings, use the selected file and retain their exit code.</summary>
+    [Fact]
+    public async Task DiscoveryResultsUseOutputFileAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (string[] Arguments, Assembly[] Manifest, int Exit)[] cases =
+            [
+                (["modules"], SampleManifest, 0),
+                (["operations", "sample"], SampleManifest, 0),
+                (["describe", "sample.get-item"], SampleManifest, 0),
+                (["describe", "lint-fixture.inspect-hollow", "--lint"], [typeof(global::Catalog.Lint.Contracts.Module).Assembly], 1),
+            ];
+
+            for (int index = 0; index < cases.Length; index++)
+            {
+                (string[] arguments, Assembly[] manifest, int expectedExit) = cases[index];
+                (int baselineExit, string baselineOutput, string baselineError) = await InvokeAsync(store, arguments, () => manifest);
+                baselineExit.ShouldBe(expectedExit);
+                baselineError.ShouldBeEmpty();
+                string target = Path.Combine(directory, $"result-{index}.json");
+                (int exit, string output, string error) = await InvokeAsync(store,
+                    [.. arguments, "--output", target], () => manifest);
+                exit.ShouldBe(expectedExit, output + error);
+                output.ShouldBeEmpty();
+                error.ShouldBeEmpty();
+                File.ReadAllText(target).ShouldBe(baselineOutput);
+                using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
+                if (expectedExit == 1)
+                {
+                    document.RootElement.GetProperty("lintFindings").GetArrayLength().ShouldBeGreaterThan(0);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Successful profile writes leave no preflight probes in either staging location.</summary>
     [Fact]
     public async Task MutationPreflightRemovesProbeFilesAsync()
@@ -536,10 +619,14 @@ public sealed class CliOutputContractTests
             string target = Path.Combine(directory, "query-result.json");
             File.WriteAllText(target, "old result");
             (int successExit, string successOutput, string successError) = await harness.InvokeAsync(
-                ["query", "string-fixture.list-items", "--payload", "{}", "--output", target]);
+                ["query", "string-fixture.list-items", "--payload", "{}", "--format", "table", "--output", target]);
             successExit.ShouldBe(0, successOutput + successError);
             successOutput.ShouldBeEmpty();
-            QueryCliHarness.AssertDiagnostics(successError);
+            const string formatNote = "This result is emitted as JSON; no table view is defined.";
+            string noteLine = formatNote + Environment.NewLine;
+            successError.EndsWith(noteLine, StringComparison.Ordinal).ShouldBeTrue(successError);
+            successError.Split(formatNote, StringSplitOptions.None).Length.ShouldBe(2);
+            QueryCliHarness.AssertDiagnostics(successError[..^noteLine.Length]);
             harness.Calls.ShouldBe(1);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("string-fixture.list-items");

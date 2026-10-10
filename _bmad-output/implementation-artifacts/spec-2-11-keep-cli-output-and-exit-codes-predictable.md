@@ -2,7 +2,7 @@
 title: 'Keep CLI Output and Exit Codes Predictable'
 type: 'feature'
 created: '2026-10-09'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '52cf2aa31e40b04d2defaa39818e8a53c5eadbee'
 route: 'dispatch'
 review_loop_iteration: 6
@@ -278,6 +278,23 @@ context:
 | R11-B13 trailing-newline profile name | medium | Carried the existing `[Review][Defer]` decision: the pre-existing `$` regex accepts a trailing newline and is already tracked in the ledger and DW-1. |
 | R11-E1 repeated help aliases | false | Carried R9-E3: the frozen intent allows the command path plus help aliases, so repeating a help alias is still bare help and exit 0 is expected. |
 | R11-V1 Windows inaccessible target run | medium | Carried R10-V1: the Windows-only test is skipped by Ubuntu CI; the existing Story 4.16 deferral owns a Windows run. |
+| R12-B1 interleaved help | medium | `--help modules` exits 0 although README says help follows the complete command path. Direct parser and regression-test patch. |
+| R12-B2 dash-prefixed option value wording | low | `modules --token -x` reaches the catalog error, so the README's attachment instruction is stricter than the parser. Direct wording patch to describe attachment as the unambiguous form. |
+| R12-B3 profile output collision | medium | Carried R11-B1: the pre-existing profile/output collision remains deferred in the ledger; no duplicate entry. |
+| R12-B4 readerless FIFO | medium | Carried R11-B4: the pre-existing FIFO open can wait after an action; already deferred. |
+| R12-B5 proc pseudo-file result | medium | Carried R11-B5: a pseudo-regular proc target may not retain JSON; already deferred. |
+| R12-B6 lost accepted-command identifiers | medium | Carried R11-B2: a runtime result-write failure loses generated identifiers after acceptance; already deferred. |
+| R12-B7 unlisted native ABI | low | Carried the prior rejection of unlisted ABIs: verified native layouts fail explicitly, while adding an unverified branch for an uncommon ABI adds risk. |
+| R12-B8 privileged mode guard | medium | Carried R11-B8: the root-only mode-bit refusal has no running privileged test; already deferred. |
+| R12-B9 native platform CI | medium | Carried R11-B7: macOS, FreeBSD, and Windows native branches lack ordinary CI runs; existing platform deferrals own them. |
+| R12-B10 agent output summary | medium | Carried R11-B9: the managed agent-context block misstates table, file, and MCP channels; agent-context edit already deferred. |
+| R12-B11 agent version-one list | medium | Carried R11-B10: the managed block omits non-goals and mislabels the OAuth section; agent-context edit already deferred. |
+| R12-B12 agent regex scope | medium | Carried R11-B11: the managed `\\z` advice needs .NET scope; agent-context edit already deferred. |
+| R12-B13 loopback malformed document | low | Carried the prior rejection of this loopback smoke-check gap: CLI entry tests already assert the complete safe document and channels; widening the separate packaged-host smoke check adds little protection. |
+| R12-E1 interleaved or repeated help | medium | `--help modules` is the verified interleaving defect grouped with R12-B1; carried R9-E3 refutes the repeated-alias part because aliases alone remain bare help. |
+| R12-E2 profile output collision | medium | Carried R11-B1 and R12-B3: the same pre-existing profile/output collision is deferred. |
+| R12-E3 device outside /dev | maybe-false | Carried R11-B6: a privileged seekable-device fixture is needed to show a post-action write failure; already deferred. |
+| R12-V1 Windows inaccessible target run | medium | Carried R11-V1: Ubuntu CI skips the Windows ACL test; Story 4.16 owns the Windows run. |
 
 ### Review Findings
 
@@ -485,11 +502,11 @@ Rejected:
 
 Code review 2026-10-10 of `52cf2aa..9d97232`, excluding this spec file and the `references/` gitlinks. Layers: Blind Hunter, Edge Case Hunter, Verification Gap and Acceptance Auditor; none failed. This pass covers test commit `9d97232`. Runtime claims were reproduced against a Debug build of HEAD with an isolated `HOME`. The Acceptance Auditor found no code-level violation of AC1–AC3.
 
-- [ ] [Review][Patch] No preflight test covers an existing result file in a directory the user cannot write. For an existing file, preflight probes only the system temp directory (matching the writer, which stages there). `ExistingFileWorksInUnwritableDirectoryAsync` covers the case through `CliOutput.WriteAsync`, which skips preflight, and every preflight success test uses a writable directory. A destination-directory probe added beside the temp probe would refuse every such `send`, `query` and config mutation with the suite still green. Add a Unix case (skipped on Windows): an existing 0600 file in a 0500 directory, `config set dev actor x --output <file>`, asserting exit 0, empty stdout and stderr, the updated actor and the result JSON in the file. [src/Hexalith.McpCli/Cli/CliOutput.cs:78]
-- [ ] [Review][Patch] The matrix Result and Table rows are not exercised on every verb they list. No test writes a successful `modules`, `operations` or `describe` result to `--output` with stdout left empty, or checks that `describe --lint --output <file>` with findings exits 1 with the document in the file. No successful `send` or `query` runs with `--format table`, so the README's format-note claim for them (`README.md:95`) is unpinned; only `describe` asserts the note (`DiscoveryCommandTests.cs:340`). Task 4 requires every matrix row through the CLI entry path, and the Implementation Notes say the Result row is covered. Add these cases, asserting the file contents, empty stdout, the exact stderr (one format note for table-requested `send`/`query`) and the exit code. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:421]
-- [ ] [Review][Patch] `AssertGatewayDiagnostics` checks only that stderr contains five HTTP log phrases and lacks two strings. An extra warning, a stack trace or a leaked value on stderr still passes the send and Gateway-error tests that the previous patch meant to tighten. Count every stderr line, as `QueryCliHarness.AssertDiagnostics` does. [tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs:1051]
-- [ ] [Review][Patch] The README omits the uncertain outcome of an interrupted `send` that does stop. The EventStore client propagates caller cancellation unchanged (`EventStoreGatewayClient.SendTranslatingAsync`), so the executor's catch-all (`OperationExecutor.cs:39`) returns `internal_error` "Operation execution failed." with exit 2, even after the request reached the Gateway. The README's do-not-retry warnings cover only `gateway_error` and a failed `--output` write. Add one sentence to the interruption paragraph: an interrupted `send` can exit 2 with `internal_error` after the Gateway accepted it, so do not retry it without a trusted idempotency mechanism. [README.md:101]
-- [ ] [Review][Patch] Ledger entries this story resolved or explicitly declined are still open. Reproduced on HEAD:
+- [x] [Review][Patch] No preflight test covers an existing result file in a directory the user cannot write. For an existing file, preflight probes only the system temp directory (matching the writer, which stages there). `ExistingFileWorksInUnwritableDirectoryAsync` covers the case through `CliOutput.WriteAsync`, which skips preflight, and every preflight success test uses a writable directory. A destination-directory probe added beside the temp probe would refuse every such `send`, `query` and config mutation with the suite still green. Add a Unix case (skipped on Windows): an existing 0600 file in a 0500 directory, `config set dev actor x --output <file>`, asserting exit 0, empty stdout and stderr, the updated actor and the result JSON in the file. [src/Hexalith.McpCli/Cli/CliOutput.cs:78]
+- [x] [Review][Patch] The matrix Result and Table rows are not exercised on every verb they list. No test writes a successful `modules`, `operations` or `describe` result to `--output` with stdout left empty, or checks that `describe --lint --output <file>` with findings exits 1 with the document in the file. No successful `send` or `query` runs with `--format table`, so the README's format-note claim for them (`README.md:95`) is unpinned; only `describe` asserts the note (`DiscoveryCommandTests.cs:340`). Task 4 requires every matrix row through the CLI entry path, and the Implementation Notes say the Result row is covered. Add these cases, asserting the file contents, empty stdout, the exact stderr (one format note for table-requested `send`/`query`) and the exit code. [tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:421]
+- [x] [Review][Patch] `AssertGatewayDiagnostics` checks only that stderr contains five HTTP log phrases and lacks two strings. An extra warning, a stack trace or a leaked value on stderr still passes the send and Gateway-error tests that the previous patch meant to tighten. Count every stderr line, as `QueryCliHarness.AssertDiagnostics` does. [tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs:1051]
+- [x] [Review][Patch] The README omits the uncertain outcome of an interrupted `send` that does stop. The EventStore client propagates caller cancellation unchanged (`EventStoreGatewayClient.SendTranslatingAsync`), so the executor's catch-all (`OperationExecutor.cs:39`) returns `internal_error` "Operation execution failed." with exit 2, even after the request reached the Gateway. The README's do-not-retry warnings cover only `gateway_error` and a failed `--output` write. Add one sentence to the interruption paragraph: an interrupted `send` can exit 2 with `internal_error` after the Gateway accepted it, so do not retry it without a trusted idempotency mechanism. [README.md:101]
+- [x] [Review][Patch] Ledger entries this story resolved or explicitly declined are still open. Reproduced on HEAD:
   - Parse failures and unknown verbs return `invalid_arguments` with exit 2 (`deferred-work.md:189`, `:344`).
   - `config set dev actor x --output <missing dir>/f.json` returns the preflight error and leaves the profile unchanged (`:211`).
   - Predictable output failures are refused before a Gateway call (`:156`); runtime write failures remain tracked at `:383`.
@@ -497,7 +514,7 @@ Code review 2026-10-10 of `52cf2aa..9d97232`, excluding this spec file and the `
   - The README documents error codes and exits (`:237`).
 
   Add `status: resolved in Story 2.11 (2026-10-10)` lines with this evidence, as at `:171`. Also record that the spec keeps the explicit `activeProfile: null` (`:205`). Note under `:233` that Story 2.11 declined the encoder change ("Preserve JSON escaping"), so that entry has no owner. [_bmad-output/implementation-artifacts/deferred-work.md:156]
-- [ ] [Review][Patch] Three ledger anchors that this story wrote or edited do not match the files:
+- [x] [Review][Patch] Three ledger anchors that this story wrote or edited do not match the files:
   - `deferred-work.md:298` cites `OperationExecutor.cs:331` for `IsCanonicalUlid`, which this diff's `beforeSubmit` blocks moved to `:361`.
   - `:378` cites `CliOutput.cs:34` for `CliOutput.Preflight`, which is at `:17`; `:34` is `PreflightCore`, and device acceptance is at `:54`.
   - `:391` cites the pinned `references/Hexalith.Builds/.github/workflows/domain-ci.yml:208`, while `ci.yml:18` runs `domain-ci.yml@main`, as the entry at `:374` says.

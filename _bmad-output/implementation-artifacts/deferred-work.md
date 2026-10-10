@@ -156,6 +156,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: A nonblank output path can fail only after a Gateway action has completed.
   evidence: Pre-existing: `--output` is not validated before execution, so `send` can reach the Gateway and then fail writing the result file in `CliOutput.WriteAsync`; output-file preflight and retained-handle semantics belong to Story 2.11 output routing, and the frozen Story 2.1 intent excludes execution behavior changes.
+  status: resolved in Story 2.11 (2026-10-10); predictable output failures are preflighted before the Gateway call. Runtime write failures remain tracked in this ledger under the Story 2.11 accepted-send entry.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Cancellation during MCP host startup is mapped through the generic startup-error path.
@@ -189,6 +190,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: System.CommandLine parse errors on config verbs and query numeric options print help to stdout, echo the unmatched token on stderr, and exit 1 instead of a single error document with exit 2.
   evidence: Reproduced on the Release build: `config set dev tenant a b` prints the `set` help on stdout and `Unrecognized command or argument 'b'.` on stderr with exit 1. Pre-existing default ParseErrorAction; it breaks the epic's "stdout holds only the result document, exit 2 when no result" rule and can echo a mistyped positional secret. The same parse failure also bypasses the `config profile add` operator-flag refusal, so these cases never report `invalid_arguments` with exit 2: `add dev --url U --tenant` (no value; help on stdout, exit 1; second-pass acceptance audit), `add dev --url U --allow-tenant-override yes` (`Unrecognized command or argument 'yes'.`, help on stdout, exit 1) and `add dev --url U --tenant=` (`Required argument missing`, exit 1), the last two reproduced on the Release build in the fifth-pass review. Story 2.6's query paging options fail the same way: `--offset 2147483648` and `--page-size abc` on `query string-fixture.list-items --payload '{}'` print usage on stdout and a parse error on stderr with exit 1, before any executor call (Story 2.6 implementation review and code review, 2026-10-02). Test these through `QueryCliHarness` over the fixture catalog: the production CLI enrolls no Contracts, so once parsing is fixed the same command there exits 2 with `catalog_empty` and could pass for a fix. Owned by Story 2.11 (predictable output and exit codes); include every case above in that story's tests.
+  status: resolved in Story 2.11 (2026-10-10); `CliOutputContractTests.ParserFailuresUseSafeDocumentsAsync` and `QueryCliHarness` cases verify one safe `invalid_arguments` document at exit 2, with no usage or token echo.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Pre-existing process-level CLI tests redirect HOME/USERPROFILE, which Windows ignores, so running them on Windows mutates the developer's real `~/.eventstore/mcpcli.json`.
@@ -205,12 +207,14 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Profile-management success documents serialize `"activeProfile": null`, although addendum §G and the Epic 2 output rule require absent optional members to be omitted.
   evidence: `McpCliJson.Result` has no `WhenWritingNull`. Story 2.2's matrix specifies `use --clear → null`, and `ConfigCommandTests.ListUseAndClearMaskEveryTokenAsync`, `RemoveClearsOnlyItsOwnSelectionAsync`, and `AddAcceptsOtherGlobalOptionsAsync` assert `JsonValueKind.Null`; the last test also pins the exact result members `name` and `activeProfile`. The planning artifacts need to agree on null or omission before any code changes; Story 2.11 (predictable output) is the natural owner.
+  status: preserved by Story 2.11 (2026-10-10); its frozen Never rule keeps Story 2.2's explicit `activeProfile: null` clear result. Planning reconciliation remains open.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, sixth pass (2026-09-29)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: `config profile add`, `config set`, and `config profile remove` with an unwritable `--output` path report `internal_error` (exit 2) even though `mcpcli.json` was already changed.
   evidence: `CliRunner` commits through `ProfileStore` before `CliOutput.WriteAsync` writes the success document to `settings.Output`; a missing output directory raises `DirectoryNotFoundException`, which `RunManagementAsync` now maps to `internal_error`; the profile change still precedes the failed output. Pre-existing at baseline `6fe785e`; a retried `remove` then fails as "does not exist". Found in the sixth-pass review of Story 2.3; Story 2.11 (predictable output and exit codes) is the natural owner.
+  status: resolved in Story 2.11 (2026-10-10); `CliOutputContractTests` verifies a missing result directory returns the preflight error before `config set` changes the profile.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, ninth pass (2026-09-30)
 
@@ -233,10 +237,12 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Result and error documents escape `'`, `<`, `>`, `&` and `+` as `\u00XX`, so raw OS messages and values with those characters reach the terminal escaped.
   evidence: `McpCliJson.CreateResult` (`src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs:103-113`) sets no `Encoder`, so the default HTML-safe `JavaScriptEncoder` applies. Reproduced on the Release build: `config profile list --output /missing/dir/f` prints `"Could not find a part of the path \u0027/missing/dir/f\u0027."`. The thirteenth-pass blind-hunter also reproduced it for `config set` while the lock is held. The ninth-pass patch removed these characters from the new `add` refusal message only. Pre-existing: the encoder predates baseline `6fe785e` and is shared with execution and MCP output, which Story 2.3's Never excludes. Suggested owner: Story 2.11 (predictable CLI output). Fix: set `Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping` (or an equivalent) on the result options, and add focused checks for the specific HTML escapes (`\u0027`, `\u003C`, `\u003E`, `\u0026`, `\u002B`) or the expected decoded message content. Valid JSON control-character escapes must remain permitted.
+  status: open without an owner; Story 2.11 explicitly declined the encoder change under its frozen "Preserve JSON escaping" rule.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: The README documents no error codes, so a script that branches on `error.code` has no documented contract.
   evidence: `README.md` never mentions `invalid_arguments`, `configuration_invalid`, or the exit codes of any verb. Story 2.3 made a missing positional argument `invalid_arguments` and a supplied but invalid name, field or value `configuration_invalid`, both exit 2; these rules appear only in the spec and tests. Pre-existing: no verb's error codes were documented at baseline `6fe785e`. Story 2.11 owns the exit-code and addendum §G error-document contract. This entry is related to the eleventh-pass documentation entry above.
+  status: resolved in Story 2.11 (2026-10-10); `README.md` now lists the public error codes and exits 0, 1 and 2 with their output channels.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md (2026-10-01)
 
@@ -249,6 +255,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-4-browse-the-catalog-from-the-cli.md`
   summary: An empty `--format table` list prints the header followed by a blank row, which a line-oriented script reads as an empty record.
   evidence: `CliOutput.FormatTable` (`src/Hexalith.McpCli/Cli/CliOutput.cs:66-69`) returns `header + Environment.NewLine + string.Join(...)` and `WriteAsync` then writes it with a trailing newline, so `operations marked-empty --format table` (or a `--kind` filter with no matches) prints `NAME\tKIND\tDESCRIPTION`, then an empty line. Pre-existing: the baseline `edc459e` used the same concatenation, and Story 2.4's frozen intent preserves existing rows; `DiscoveryCommandTests.TablesPreserveModuleOperationAndEmptyRowsAsync` now pins `header + NewLine + NewLine`. Suggested owner: Story 2.11 (table rendering AC). Fix: append the separator only when rows exist and update that assertion.
+  status: resolved in Story 2.11 (2026-10-10); `DiscoveryCommandTests` verifies an empty table prints only its header and one newline.
 
 ## Deferred from: code review of spec-2-5-run-a-valid-query-through-the-gateway.md (2026-10-01)
 
@@ -295,7 +302,7 @@
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: Planning documents and architecture decisions still prescribe acceptance when `Ulid.TryParse` succeeds, but Story 2.8 renegotiated the rule (Spec Change Log 2026-10-03). Core now also requires canonical uppercase text for ULID aggregates, marked identifiers, CLR `Ulid` properties, and caller correlation and idempotency keys.
-  evidence: `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:103` and `:348`, `_bmad-output/planning-artifacts/epics.md:711`, `_bmad-output/implementation-artifacts/epic-2-context.md:32` and `:34`, and `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:106` (AD-8 aggregate validation) and `:200` (identifier convention) prescribe ULID parsing without the canonical-text requirement enforced by `OperationExecutor.IsCanonicalUlid` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:331`) and `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`). Reconcile the planning and architecture documents through a correct-course note or epic-context regeneration.
+  evidence: `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:103` and `:348`, `_bmad-output/planning-artifacts/epics.md:711`, `_bmad-output/implementation-artifacts/epic-2-context.md:32` and `:34`, and `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:106` (AD-8 aggregate validation) and `:200` (identifier convention) prescribe ULID parsing without the canonical-text requirement enforced by `OperationExecutor.IsCanonicalUlid` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:361`) and `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`). Reconcile the planning and architecture documents through a correct-course note or epic-context regeneration.
 
 ## Deferred from: final build review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 
@@ -344,6 +351,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Unknown CLI verbs use parser help and exit 1 instead of a stable error document.
   evidence: System.CommandLine rejects unknown verbs before a verb action; review loop 1 deferred this pre-existing parser behavior to Story 2.11.
+  status: resolved in Story 2.11 (2026-10-10); `CliOutputContractTests.ParserFailuresUseSafeDocumentsAsync` verifies unknown verbs return `invalid_arguments` at exit 2 without usage or stderr token echo.
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Writing CLI output to a FIFO with no reader can block before cancellation takes effect.
   evidence: `CliOutput.WriteResultFileAsync` opens an existing FIFO synchronously before checking `CanSeek`; the baseline `File.WriteAllTextAsync` likewise opened the FIFO before a reader arrived. A nonblocking FIFO open and error policy are needed to bound this pre-existing behavior.
@@ -375,7 +383,7 @@
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify output to a seekable character device located outside `/dev` before relying on preflight to protect mutations.
-  evidence: `CliOutput.Preflight` (`src/Hexalith.McpCli/Cli/CliOutput.cs:34`) accepts a writable device by native file type, while `WriteResultFileAsync` (`src/Hexalith.McpCli/Cli/CliOutput.cs:147`) writes directly only when the handle is nonseekable or the resolved path begins under `/dev/`. A privileged fixture that creates or mounts a character device outside `/dev` and confirms `FileStream.CanSeek` is true would show whether a later staged write can fail after a Gateway call or profile mutation. Such a target was not reachable in the current nonprivileged Linux test environment.
+  evidence: `CliOutput.Preflight` (`src/Hexalith.McpCli/Cli/CliOutput.cs:17`) accepts a writable device at `:54` by native file type, while `WriteResultFileAsync` (`src/Hexalith.McpCli/Cli/CliOutput.cs:147`) writes directly only when the handle is nonseekable or the resolved path begins under `/dev/`. A privileged fixture that creates or mounts a character device outside `/dev` and confirms `FileStream.CanSeek` is true would show whether a later staged write can fail after a Gateway call or profile mutation. Such a target was not reachable in the current nonprivileged Linux test environment.
 
 ## Deferred from: code review of spec-2-11-keep-cli-output-and-exit-codes-predictable.md (2026-10-10)
 
@@ -388,7 +396,7 @@
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify the FreeBSD x64 native result-target inspection on an existing output file.
-  evidence: Unverified, medium if wrong. `src/Hexalith.McpCli/Cli/OutputFileType.cs:51` reads `st_mode` from the FreeBSD x64 `stat` layout, but the shared CI job at `references/Hexalith.Builds/.github/workflows/domain-ci.yml:208` runs on Ubuntu x64. A FreeBSD x64 run of `CliOutputContractTests.MutationPreflightRemovesProbeFilesAsync` would settle whether valid existing-file output is classified correctly before a profile mutation.
+  evidence: Unverified, medium if wrong. `src/Hexalith.McpCli/Cli/OutputFileType.cs:51` reads `st_mode` from the FreeBSD x64 `stat` layout, but the shared CI job at `.github/workflows/ci.yml:18` invokes `domain-ci.yml@main` on Ubuntu x64. A FreeBSD x64 run of `CliOutputContractTests.MutationPreflightRemovesProbeFilesAsync` would settle whether valid existing-file output is classified correctly before a profile mutation.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: No running test reaches the existing-file mode-bit preflight guard, the only preflight refusal a root process gets for a read-only or write-only result file.

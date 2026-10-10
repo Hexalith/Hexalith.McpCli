@@ -180,11 +180,15 @@ public sealed class ExecutionFailureCommandTests
             string target = Path.Combine(directory, "result.json");
             File.WriteAllText(target, "old result");
             (int exit, string output, string error, int calls) = await InvokeGatewayAsync(
-                true, 202, "", target, acceptedCommand: true);
+                true, 202, "", target, acceptedCommand: true, table: true);
             exit.ShouldBe(0, output);
             output.ShouldBeEmpty();
             calls.ShouldBe(1);
-            AssertGatewayDiagnostics(error, true);
+            const string formatNote = "This result is emitted as JSON; no table view is defined.";
+            string noteLine = formatNote + Environment.NewLine;
+            error.EndsWith(noteLine, StringComparison.Ordinal).ShouldBeTrue(error);
+            error.Split(formatNote, StringSplitOptions.None).Length.ShouldBe(2);
+            AssertGatewayDiagnostics(error[..^noteLine.Length], true);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("sample.create-item");
             document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");
@@ -975,7 +979,7 @@ public sealed class ExecutionFailureCommandTests
     }
 
     private static async Task<(int Exit, string Output, string Error, int Calls)> InvokeGatewayAsync(bool command, int status, string body,
-        string? outputPath = null, bool acceptedCommand = false)
+        string? outputPath = null, bool acceptedCommand = false, bool table = false)
     {
         string directory = NewDirectory();
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
@@ -1035,6 +1039,11 @@ public sealed class ExecutionFailureCommandTests
                 invocation = [.. invocation, "--output", outputPath];
             }
 
+            if (table)
+            {
+                invocation = [.. invocation, "--format", "table"];
+            }
+
             (int exit, string output, string error) = await InvokeCliAsync(invocation, directory, timeout.Token);
             await timeout.CancelAsync();
             await response.WaitAsync(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken);
@@ -1050,6 +1059,9 @@ public sealed class ExecutionFailureCommandTests
 
     private static void AssertGatewayDiagnostics(string error, bool command)
     {
+        string[] lines = error.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        lines.Length.ShouldBe(8);
+        lines.Count(line => line.StartsWith("info: System.Net.Http.HttpClient.IEventStoreGatewayClient", StringComparison.Ordinal)).ShouldBe(4);
         error.ShouldContain("Start processing HTTP request POST http://127.0.0.1:");
         error.ShouldContain(command ? "/api/v1/commands" : "/api/v1/queries");
         error.ShouldContain("Sending HTTP request POST");

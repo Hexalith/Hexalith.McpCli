@@ -98,7 +98,7 @@ Results use the canonical JSON serializer on stdout, or in `--output` when a res
 - Exit 1 is reserved for `describe --lint` with findings.
 - Exit 2 means no result. Non-MCP failures are one JSON object on stdout containing only `error`; `--format table` and `--output` do not redirect or change it. MCP failures before request serving use stderr and leave stdout empty.
 
-If an action does not stop after Ctrl+C or SIGTERM, System.CommandLine's termination timeout can instead return 130 or 143. Failures before result writing leave an existing result file unchanged; runtime write failures and interruptions have the restoration risks described below.
+If an action does not stop after Ctrl+C or SIGTERM, System.CommandLine's termination timeout can instead return 130 or 143. Failures before result writing leave an existing result file unchanged; runtime write failures and interruptions have the restoration risks described below. An interrupted `send` can also exit 2 with `internal_error` after the Gateway accepted it; do not retry without a trusted idempotency mechanism.
 
 `error.code` is one of `validation_failed`, `gateway_error`, `unknown_operation`, `unknown_module`, `invalid_arguments`, `read_only`, `catalog_empty`, `catalog_invalid`, `unsupported_transport`, `configuration_invalid`, or `internal_error`. Validation errors identify the requested operation and all detected violations with JSON Pointer paths. Unknown names include up to three canonical suggestions. Unexpected failures return a fixed `internal_error` message without exception text or secrets. `mcp --transport http` is refused with `unsupported_transport` because HTTP is planned for the next release.
 
@@ -109,7 +109,7 @@ If an action does not stop after Ctrl+C or SIGTERM, System.CommandLine's termina
 - Leading directive-shaped tokens such as `[suggest]` are refused.
 - Put `--` before a positional value beginning with `-` or matching a slash help alias or its attached-value form. Examples: `hexalith config set dev actor -- -bob`, `hexalith config set dev actor -- /h`, and `hexalith config set dev actor -- /h:x` (also for `/?`).
 - Every token after `--` is positional, so put options before it.
-- If an option value begins with `-` or looks like a help alias, attach it with `=` or `:`. Examples: `--token=--abc` and `--token=-h`.
+- For an option value beginning with `-` or resembling a help alias, attaching it with `=` or `:` is unambiguous. Examples: `--token=--abc` and `--token=-h`.
 
 ### Execution, configuration, and MCP
 

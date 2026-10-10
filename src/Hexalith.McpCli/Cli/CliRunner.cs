@@ -85,13 +85,11 @@ internal sealed class CliRunner
             bool afterSeparator = false;
             bool hasHelp = false;
             bool hasVersion = false;
-            var supplied = new List<string>();
             foreach (string argument in args)
             {
                 if (argument == "--")
                 {
                     afterSeparator = true;
-                    supplied.Add(argument);
                     continue;
                 }
 
@@ -102,10 +100,7 @@ internal sealed class CliRunner
                 else if (!afterSeparator && helpAliases.Contains(argument))
                 {
                     hasHelp = true;
-                    continue;
                 }
-
-                supplied.Add(argument);
             }
 
             if (hasVersion && (args.Count != 1 || parsed.Errors.Count > 0))
@@ -115,7 +110,9 @@ internal sealed class CliRunner
             else if (hasHelp)
             {
                 // Bare help consists solely of the selected command path and help aliases.
-                failure = supplied.SequenceEqual(CommandPath(parsed.CommandResult.Command))
+                string[] commandPath = CommandPath(parsed.CommandResult.Command);
+                failure = args.Take(commandPath.Length).SequenceEqual(commandPath)
+                    && args.Skip(commandPath.Length).All(helpAliases.Contains)
                     ? null : Invalid("arguments", "Help must be requested without arguments or options.");
             }
             else if (parsed.Errors.Count > 0)
