@@ -23,5 +23,6 @@
     <Project Path="tests/fixtures/Catalog.Table.Contracts/Catalog.Table.Contracts.csproj" />
     <Project Path="tests/fixtures/Catalog.Lint.Contracts/Catalog.Lint.Contracts.csproj" />
     <Project Path="tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj" />
+    <Project Path="tests/fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj" />
   </Folder>
 </Solution>

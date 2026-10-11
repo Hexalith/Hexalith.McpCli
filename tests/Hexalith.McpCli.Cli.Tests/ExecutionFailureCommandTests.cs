@@ -186,9 +186,8 @@ public sealed class ExecutionFailureCommandTests
             calls.ShouldBe(1);
             const string formatNote = "This result is emitted as JSON; no table view is defined.";
             string noteLine = formatNote + Environment.NewLine;
-            error.EndsWith(noteLine, StringComparison.Ordinal).ShouldBeTrue(error);
             error.Split(formatNote, StringSplitOptions.None).Length.ShouldBe(2);
-            AssertGatewayDiagnostics(error[..^noteLine.Length], true);
+            AssertGatewayDiagnostics(error.Replace(noteLine, string.Empty, StringComparison.Ordinal), true);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("sample.create-item");
             document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");

@@ -22,6 +22,7 @@ internal sealed class CliRunner
     private readonly Func<IReadOnlyList<Assembly>>? _manifest;
     private readonly Func<string, string?>? _readEnvironment;
     private readonly Func<IHost, CancellationToken, Task<int>>? _runMcp;
+    private readonly Func<IHost, CancellationToken, Task>? _startMcp;
 
     /// <summary>Initializes a CLI runner with optional profile and manifest seams.</summary>
     /// <param name="profileStore">The private mcpcli profile store.</param>
@@ -50,16 +51,19 @@ internal sealed class CliRunner
     /// <param name="manifest">The lazy Contracts assembly manifest.</param>
     /// <param name="readEnvironment">The environment reader.</param>
     /// <param name="runMcp">The MCP host runner, or the production host runner by default.</param>
+    /// <param name="startMcp">An optional MCP startup seam for tests.</param>
     internal CliRunner(
         ProfileStore? profileStore,
         Func<IReadOnlyList<Assembly>>? manifest,
         Func<string, string?>? readEnvironment,
-        Func<IHost, CancellationToken, Task<int>>? runMcp)
+        Func<IHost, CancellationToken, Task<int>>? runMcp,
+        Func<IHost, CancellationToken, Task>? startMcp = null)
     {
         _profileStore = profileStore ?? new ProfileStore();
         _manifest = manifest;
         _readEnvironment = readEnvironment;
         _runMcp = runMcp;
+        _startMcp = startMcp;
     }
 
     /// <summary>Parses arguments with response-file expansion disabled so <c>@</c> values reach their options verbatim.</summary>
@@ -694,6 +698,7 @@ internal sealed class CliRunner
                 Message: "Only stdio transport is available; HTTP transport is planned for the next release."), cancellationToken).ConfigureAwait(false);
         }
 
+        IHost? host = null;
         try
         {
             SettingsInput input = _globals.Read(parsed);
@@ -709,9 +714,8 @@ internal sealed class CliRunner
                     cancellationToken).ConfigureAwait(false);
             }
 
-            IHost? created = HostFactory.Create(input, _profileStore, out OperationError? error,
+            host = HostFactory.Create(input, _profileStore, out OperationError? error,
                 mcp: true, _manifest, _readEnvironment);
-            using IHost? host = created;
             if (error is not null)
             {
                 return await WriteMcpErrorAsync(error, cancellationToken).ConfigureAwait(false);
@@ -722,18 +726,43 @@ internal sealed class CliRunner
             CatalogAccess catalog = invocationHost.Services.GetRequiredService<CatalogProvider>().Get(settings.Strict);
             if (catalog.Catalog is null)
             {
+                DisposeMcpHost(host);
+                host = null;
                 return await WriteMcpErrorAsync(new OperationError(catalog.ErrorCode ?? "internal_error",
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
             }
 
+            if (_startMcp is not null)
+            {
+                await _startMcp(invocationHost, cancellationToken).ConfigureAwait(false);
+            }
+            else if (_runMcp is null)
+            {
+                await invocationHost.StartAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (Exception)
+        {
+            DisposeMcpHost(host);
+            return await WriteMcpErrorAsync(new OperationError("internal_error", Message: "MCP server failed."),
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        try
+        {
+            IHost invocationHost = host ?? throw new InvalidOperationException("MCP startup produced no host or error.");
             return _runMcp is null
                 ? await RunMcpHostAsync(invocationHost, cancellationToken).ConfigureAwait(false)
                 : await _runMcp(invocationHost, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception)
         {
-            return await WriteMcpErrorAsync(new OperationError("internal_error", Message: "MCP server failed."),
-                cancellationToken).ConfigureAwait(false);
+            await Console.Error.WriteLineAsync("MCP server stopped unexpectedly.").ConfigureAwait(false);
+            return 2;
+        }
+        finally
+        {
+            DisposeMcpHost(host);
         }
     }
 
@@ -746,8 +775,20 @@ internal sealed class CliRunner
 
     private static async Task<int> RunMcpHostAsync(IHost host, CancellationToken cancellationToken)
     {
-        await host.RunAsync(cancellationToken).ConfigureAwait(false);
+        await host.WaitForShutdownAsync(cancellationToken).ConfigureAwait(false);
         return 0;
+    }
+
+    private static void DisposeMcpHost(IHost? host)
+    {
+        try
+        {
+            host?.Dispose();
+        }
+        catch (Exception)
+        {
+            // Cleanup must not replace the startup or serving result.
+        }
     }
 
     private Task<int> RunAsync(ParseResult parsed,

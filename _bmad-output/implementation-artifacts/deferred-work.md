@@ -441,6 +441,7 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: Verify distinct version-appropriate MCP session flows rather than varying only the requested protocol version.
   evidence: Medium. `tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs:65` asserts each requested revision is negotiated, but both revisions run over in-process streams and never check handshake-free discovery. Story 3.2 owns the stdio exchange through each version-appropriate flow.
+  status: resolved in Story 3.2 (2026-10-11); `McpStdioProcessTests.SdkClientDiscoversOverCleanStdioAsync` connects pinned SDK clients to the fixture process, records `initialize` as the 2025-06-18 first request and `server/discover` as the 2026-07-28 first request, then verifies discovery and normal shutdown.
 
 ## Deferred from: code review of spec-3-1-discover-operations-through-a-fixed-mcp-surface.md (2026-10-11)
 

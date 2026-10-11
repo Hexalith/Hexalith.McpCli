@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using Hexalith.McpCli.Cli;
+using Hexalith.McpCli.Core.Execution;
+using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
 using Microsoft.Extensions.DependencyInjection;
@@ -713,12 +715,10 @@ public sealed class ConfigCommandTests
             exit.ShouldBe(2);
             output.ShouldBeEmpty();
             hostRuns.ShouldBe(0);
-            JsonElement document = JsonDocument.Parse(error).RootElement;
-            document.EnumerateObject().Select(property => property.Name).ShouldBe(["error"]);
-            JsonElement configurationError = document.GetProperty("error");
-            configurationError.GetProperty("code").GetString().ShouldBe("configuration_invalid");
-            configurationError.GetProperty("message").GetString().ShouldNotBeNull()
-                .ShouldContain("EVENTSTORE_URL");
+            error.ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("configuration_invalid", Message: "Invalid gateway URL from EVENTSTORE_URL."),
+            }, McpCliJson.Result) + Environment.NewLine);
         }
         finally
         {
@@ -726,11 +726,15 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>An I/O failure after MCP host startup is a safe internal error on stderr.</summary>
+    /// <summary>A serving failure does not get misreported as a second startup error document.</summary>
     [Fact]
-    public async Task McpHostIoFailureIsInternalErrorOnStandardErrorAsync()
+    public async Task McpHostIoFailureDoesNotWriteStartupErrorAsync()
     {
         string directory = TemporaryDirectory();
+        TextWriter originalOut = Console.Out;
+        TextWriter originalError = Console.Error;
+        using var output = new StringWriter();
+        using var error = new StringWriter();
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
@@ -741,22 +745,61 @@ public sealed class ConfigCommandTests
                 return Task.FromException<int>(new IOException("token-secret /private/mcp-host.log"));
             }
 
-            (int exit, string output, string error) = await InvokeAsync(
-                store, new Dictionary<string, string?>(), () => [typeof(CreateItemCommand).Assembly],
-                FailDuringHostRunAsync, "mcp");
-
-            exit.ShouldBe(2);
-            output.ShouldBeEmpty();
+            Console.SetOut(output);
+            Console.SetError(error);
+            int exit = await new CliRunner(
+                store, () => [typeof(CreateItemCommand).Assembly], _ => null, FailDuringHostRunAsync)
+                .InvokeAsync(["mcp"], TestContext.Current.CancellationToken);
+            exit.ShouldBe(2, error.ToString());
+            output.ToString().ShouldBeEmpty();
             hostRuns.ShouldBe(1);
-            using JsonDocument document = JsonDocument.Parse(error);
-            JsonElement actual = document.RootElement.GetProperty("error");
-            actual.GetProperty("code").GetString().ShouldBe("internal_error");
-            actual.GetProperty("message").GetString().ShouldBe("MCP server failed.");
-            error.ShouldNotContain("token-secret");
-            error.ShouldNotContain("/private/mcp-host.log");
+            error.ToString().ShouldBe("MCP server stopped unexpectedly." + Environment.NewLine);
         }
         finally
         {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A host startup failure uses the canonical pre-serving error document.</summary>
+    [Fact]
+    public async Task McpHostStartupFailureUsesStructuredErrorAsync()
+    {
+        string directory = TemporaryDirectory();
+        TextWriter originalOut = Console.Out;
+        TextWriter originalError = Console.Error;
+        using var output = new StringWriter();
+        using var error = new StringWriter();
+        try
+        {
+            int servingRuns = 0;
+            Task FailStartAsync(IHost _, CancellationToken __)
+                => Task.FromException(new IOException("secret startup path"));
+            Task<int> FailIfServingAsync(IHost _, CancellationToken __)
+            {
+                servingRuns++;
+                return Task.FromResult(0);
+            }
+
+            Console.SetOut(output);
+            Console.SetError(error);
+            int exit = await new CliRunner(new ProfileStore(Path.Combine(directory, "mcpcli.json")),
+                () => [typeof(CreateItemCommand).Assembly], _ => null, FailIfServingAsync, FailStartAsync)
+                .InvokeAsync(["mcp"], TestContext.Current.CancellationToken);
+            exit.ShouldBe(2);
+            output.ToString().ShouldBeEmpty();
+            servingRuns.ShouldBe(0);
+            error.ToString().ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("internal_error", Message: "MCP server failed."),
+            }, McpCliJson.Result) + Environment.NewLine);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
             Directory.Delete(directory, recursive: true);
         }
     }
@@ -838,24 +881,166 @@ public sealed class ConfigCommandTests
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             var invalidEnvironment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = "not-a-url" };
+            string target = Path.Combine(directory, "untouched.json");
+            await File.WriteAllTextAsync(target, "sentinel", TestContext.Current.CancellationToken);
+            int manifestReads = 0;
+            IReadOnlyList<Assembly> ReadManifest()
+            {
+                manifestReads++;
+                throw new InvalidOperationException("Manifest must not be read.");
+            }
 
             (int formatExit, string formatOutput, string formatError) = await InvokeAsync(
-                store, invalidEnvironment, null, "mcp", "--format", "table", "--output", " ");
+                store, invalidEnvironment, ReadManifest, "mcp", "--format", "table", "--output", target);
             formatExit.ShouldBe(2);
             formatOutput.ShouldBeEmpty();
-            JsonElement formatDocument = JsonDocument.Parse(formatError).RootElement.GetProperty("error");
-            formatDocument.GetProperty("code").GetString().ShouldBe("invalid_arguments");
-            formatDocument.GetProperty("argument").GetString().ShouldBe("format");
-            formatDocument.GetProperty("message").GetString().ShouldNotBeNull().ShouldNotContain("EVENTSTORE_URL");
+            formatError.ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("invalid_arguments",
+                    Message: "MCP stdio accepts only explicit json format.", Argument: "format"),
+            }, McpCliJson.Result) + Environment.NewLine);
 
             (int outputExit, string output, string outputError) = await InvokeAsync(
-                store, invalidEnvironment, null, "mcp", "--output", " ");
+                store, invalidEnvironment, ReadManifest, "mcp", "--output", target);
             outputExit.ShouldBe(2);
             output.ShouldBeEmpty();
-            JsonElement outputDocument = JsonDocument.Parse(outputError).RootElement.GetProperty("error");
-            outputDocument.GetProperty("code").GetString().ShouldBe("invalid_arguments");
-            outputDocument.GetProperty("argument").GetString().ShouldBe("output");
-            outputDocument.GetProperty("message").GetString().ShouldNotBeNull().ShouldNotContain("EVENTSTORE_URL");
+            outputError.ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("invalid_arguments",
+                    Message: "MCP stdio cannot write protocol output to a file.", Argument: "output"),
+            }, McpCliJson.Result) + Environment.NewLine);
+            manifestReads.ShouldBe(0);
+            (await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken)).ShouldBe("sentinel");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>The MCP startup uses one environment snapshot and accepts inherited table format.</summary>
+    [Fact]
+    public async Task McpResolvesSettingsOnceBeforeServingAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var reads = new Dictionary<string, int>(StringComparer.Ordinal);
+            int hostRuns = 0;
+            string? ReadEnvironment(string name)
+            {
+                reads[name] = reads.GetValueOrDefault(name) + 1;
+                return name == "EVENTSTORE_FORMAT" ? "table" : null;
+            }
+
+            Task<int> InspectMcpAsync(IHost host, CancellationToken _)
+            {
+                hostRuns++;
+                host.Services.GetRequiredService<ResolvedSettings>().Format.ShouldBe("table");
+                return Task.FromResult(0);
+            }
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                new Dictionary<string, string?> { ["EVENTSTORE_FORMAT"] = "table" },
+                () => [typeof(CreateItemCommand).Assembly], InspectMcpAsync, "mcp");
+            exit.ShouldBe(0);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+            hostRuns.ShouldBe(1);
+
+            int directHostRuns = 0;
+            int catalogBuilds = 0;
+            IReadOnlyList<Assembly> ReadManifest()
+            {
+                catalogBuilds++;
+                return [typeof(CreateItemCommand).Assembly];
+            }
+
+            Task<int> InspectDirectAsync(IHost host, CancellationToken _)
+            {
+                directHostRuns++;
+                host.Services.GetRequiredService<ResolvedSettings>().Format.ShouldBe("table");
+                return Task.FromResult(0);
+            }
+
+            int directExit = await new CliRunner(store, ReadManifest,
+                ReadEnvironment, InspectDirectAsync).InvokeAsync(["mcp"], TestContext.Current.CancellationToken);
+            directExit.ShouldBe(0);
+            directHostRuns.ShouldBe(1);
+            catalogBuilds.ShouldBe(1);
+            reads.Count.ShouldBe(9);
+            reads.Values.ShouldAllBe(count => count == 1);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Explicit JSON format overrides an inherited table format in the resolved session.</summary>
+    [Fact]
+    public async Task McpExplicitJsonOverridesInheritedTableAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            Task<int> InspectMcpAsync(IHost host, CancellationToken _)
+            {
+                ResolvedSettings settings = host.Services.GetRequiredService<ResolvedSettings>();
+                settings.Format.ShouldBe("json");
+                settings.Sources["format"].ShouldBe("flag");
+                return Task.FromResult(0);
+            }
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                new Dictionary<string, string?> { ["EVENTSTORE_FORMAT"] = "table" },
+                () => [typeof(CreateItemCommand).Assembly], InspectMcpAsync, "mcp", "--format", "json");
+            exit.ShouldBe(0);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Catalog failure returns one complete document and never starts request serving.</summary>
+    [Theory]
+    [InlineData(false, "catalog_empty", "The Catalog exposes no valid Operations.")]
+    [InlineData(true, "catalog_invalid", "Strict mode rejects the Catalog because it has 1 diagnostic(s).")]
+    public async Task McpCatalogGatePreventsServingAsync(bool strict, string code, string message)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            int hostRuns = 0;
+            Task<int> FailIfRunAsync(IHost _, CancellationToken __)
+            {
+                hostRuns++;
+                return Task.FromResult(0);
+            }
+
+            Func<IReadOnlyList<Assembly>> manifest = strict
+                ? () => [typeof(Catalog.InvalidProvider.Contracts.Module).Assembly]
+                : () => [typeof(Manifest.MarkedEmpty.Contracts.Module).Assembly];
+            (int exit, string output, string error) = await InvokeAsync(store,
+                new Dictionary<string, string?>(), manifest, FailIfRunAsync,
+                strict ? ["mcp", "--strict"] : ["mcp"]);
+            exit.ShouldBe(2);
+            output.ShouldBeEmpty();
+            hostRuns.ShouldBe(0);
+            const string marker = "{\n  \"error\"";
+            int start = error.IndexOf(marker, StringComparison.Ordinal);
+            start.ShouldBeGreaterThanOrEqualTo(0);
+            error.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
+            error[start..].ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError(code, Message: message),
+            }, McpCliJson.Result) + Environment.NewLine);
         }
         finally
         {

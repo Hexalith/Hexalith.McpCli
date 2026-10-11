@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
+    <ProjectReference Include="../../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
+    <ProjectReference Include="../Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
+    <ProjectReference Include="../Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj" />
+  </ItemGroup>
+</Project>
