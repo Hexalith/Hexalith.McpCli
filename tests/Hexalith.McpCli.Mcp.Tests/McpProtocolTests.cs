@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using Hexalith.McpCli.Core;
 using Hexalith.McpCli.Core.Catalog;
+using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +38,7 @@ public sealed class McpProtocolTests
         bool expandedCatalog, string protocolVersion)
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        ResolvedSettings settings = new(hasGatewayUrl ? new Uri("https://gateway.example/") : null, null, "sample-tenant", null,
+        ResolvedSettings settings = new(hasGatewayUrl ? new Uri("https://gateway.example/") : null, null, "session-tenant", null,
             false, new HashSet<string>(), "json", null, readOnly, false, null, new Dictionary<string, string>());
         Assembly[] manifest = expandedCatalog
             ? [typeof(CreateItemCommand).Assembly, typeof(Catalog.Routing.Contracts.Module).Assembly,
@@ -61,6 +62,7 @@ public sealed class McpProtocolTests
         Task serverTask = server.RunAsync(timeout.Token);
         await using McpClient client = await McpClient.CreateAsync(clientTransport,
             new McpClientOptions { ProtocolVersion = protocolVersion }, cancellationToken: timeout.Token);
+        client.NegotiatedProtocolVersion.ShouldBe(protocolVersion);
 
         IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
         tools.Select(tool => tool.Name).ShouldBe(readOnly
@@ -86,9 +88,11 @@ public sealed class McpProtocolTests
 
         if (!readOnly)
         {
-            var write = tools.Single(tool => tool.Name == "send_command").ProtocolTool.Annotations.ShouldNotBeNull();
-            write.IdempotentHint.ShouldBe(false);
-            write.DestructiveHint.ShouldBe(true);
+            Tool write = tools.Single(tool => tool.Name == "send_command").ProtocolTool;
+            var annotations = write.Annotations.ShouldNotBeNull();
+            annotations.IdempotentHint.ShouldBe(false);
+            annotations.DestructiveHint.ShouldBe(true);
+            write.Description.ShouldNotBeNull().ShouldContain("does not prove rejection, so do not resubmit automatically");
         }
 
         ICatalog catalog = provider.GetRequiredService<ICatalog>();
@@ -126,6 +130,13 @@ public sealed class McpProtocolTests
                 rows.ShouldAllBe(row => row.GetProperty("kind").GetString() == kind);
             }
         }
+
+        CallToolResult invalidKind = await client.CallToolAsync("list_operations",
+            new Dictionary<string, object?> { ["module"] = "sample", ["kind"] = "Read" }, cancellationToken: timeout.Token);
+        AssertCoreDocument(invalidKind, new
+        {
+            error = new OperationError("invalid_arguments", Message: "kind must be read or write", Argument: "kind"),
+        }, isError: true);
 
         foreach (string operation in new[] { "sample.get-item", "sample.create-item" })
         {
@@ -184,6 +195,9 @@ public sealed class McpProtocolTests
             lintDocument.GetProperty("lintFindings").GetArrayLength().ShouldBeGreaterThan(0);
         }
 
+        IList<McpClientTool> toolsAfterCatalog = await client.ListToolsAsync(cancellationToken: timeout.Token);
+        toolsAfterCatalog.Select(tool => tool.Name).ShouldBe(tools.Select(tool => tool.Name));
+
         CallToolResult unknownModule = await client.CallToolAsync("list_operations",
             new Dictionary<string, object?> { ["module"] = "smple" }, cancellationToken: timeout.Token);
         JsonElement unknownDocument = AssertCoreDocument(unknownModule,
@@ -209,11 +223,13 @@ public sealed class McpProtocolTests
             McpProtocolException invalidModule = await Should.ThrowAsync<McpProtocolException>(() =>
                 client.CallToolAsync("list_operations", arguments, cancellationToken: timeout.Token).AsTask());
             invalidModule.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+            invalidModule.Message.ShouldBe("Request failed (remote): module is required and must be non-empty.");
         }
         McpProtocolException invalidOperation = await Should.ThrowAsync<McpProtocolException>(() =>
             client.CallToolAsync("describe_operation", new Dictionary<string, object?> { ["operation"] = " " },
                 cancellationToken: timeout.Token).AsTask());
         invalidOperation.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+        invalidOperation.Message.ShouldBe("Request failed (remote): operation is required and must be non-empty.");
 
         timeout.Cancel();
         try

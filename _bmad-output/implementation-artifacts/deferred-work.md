@@ -89,6 +89,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: MCP operation-kind filtering is not verified through the handler.
   evidence: Core filtering is tested, but MCP parity calls `list_operations` without `kind`; this belongs to MCP work.
+  status: resolved in Story 3.1 (2026-10-11); `McpProtocolTests.DiscoversAndCallsWithTheCoreDocumentAsync` lists `sample` operations through the SDK with no `kind`, `read`, and `write`, and pins the `invalid_arguments` document for `kind: "Read"`.
 
 ## Deferred from: resumed review of story 1.8 (2026-09-27)
 
@@ -436,7 +437,16 @@ status: open
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: Validate each MCP output schema against actual success and error structured documents.
-  evidence: `tests/Hexalith.McpCli.Mcp.Tests/McpToolRegistrationTests.cs:34` checks only the `oneOf` branch count. Story 3.3 explicitly requires closed success and error branches validated under both protocol revisions.
+  evidence: Medium. `tests/Hexalith.McpCli.Mcp.Tests/McpToolRegistrationTests.cs:34` checks only the `oneOf` branch count. Story 3.3 explicitly requires closed success and error branches validated under both protocol revisions.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: Verify distinct version-appropriate MCP session flows rather than varying only the requested protocol version.
-  evidence: `tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs:62` uses `McpClient.CreateAsync` for both revisions and does not assert the negotiated version or handshake-free discovery. Story 3.2 owns the stdio exchange through each version-appropriate flow.
+  evidence: Medium. `tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs:65` asserts each requested revision is negotiated, but both revisions run over in-process streams and never check handshake-free discovery. Story 3.2 owns the stdio exchange through each version-appropriate flow.
+
+## Deferred from: code review of spec-3-1-discover-operations-through-a-fixed-mcp-surface.md (2026-10-11)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
+  summary: The README does not say how MCP failures reach the client.
+  evidence: Low. `README.md:124` documents discovery only. Error delivery as `isError: true` with `{"error": …}` in `structuredContent` and the first text item (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:99-109`), and protocol InvalidParams for a missing or blank `module` or `operation` (`src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:70-76`), predate baseline `12b54bd`. Story 3.3's acceptance criteria pin the MCP error contract; document both channels in the README in that change.
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
+  summary: MCP input schemas carry no parameter descriptions or `kind` enum.
+  evidence: Medium. The `McpToolHandlers` parameters (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:20`, `:49-52`, `:62-65`) have no description attributes, so `McpServerTool.Create` advertises `kind` without its allowed values and `payload` as a bare string with no hint that it is JSON text. An agent learns either rule only from a failed call. Pre-existing at baseline `12b54bd`. Story 3.3 binds the §E arguments; add descriptions there and keep the input budget below 8,000 characters.

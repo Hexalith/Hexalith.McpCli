@@ -49,6 +49,8 @@ public sealed class McpToolRegistrationTests
             var writeAnnotations = collection["send_command"].ProtocolTool.Annotations.ShouldNotBeNull();
             writeAnnotations.IdempotentHint.ShouldBe(false);
             writeAnnotations.DestructiveHint.ShouldBe(true);
+            collection["send_command"].ProtocolTool.Description.ShouldNotBeNull()
+                .ShouldContain("does not prove rejection, so do not resubmit automatically");
         }
 
         static string[] Required(McpServerTool tool)

@@ -36,7 +36,7 @@ public static class McpCliMcpServiceCollectionExtensions
         {
             collection.Add(Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, string?,
                 IReadOnlyDictionary<string, string>?, Task<ModelContextProtocol.Protocol.CallToolResult>>)McpToolHandlers.SendCommand,
-                "send_command", "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action.",
+                "send_command", "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action; a gateway-timeout or gateway-unreachable error does not prove rejection, so do not resubmit automatically.",
                 typeof(CommandResult), readOnly: false));
         }
 
