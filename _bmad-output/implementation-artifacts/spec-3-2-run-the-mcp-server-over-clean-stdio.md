@@ -59,6 +59,37 @@ context:
 - Given profile or environment settings and a valid Catalog, when an SDK client connects under either revision, then one settings resolution and Catalog build precede parseable stdio discovery without a prompt.
 - Given a serving session, when a tool call fails or the client ends the session, then failure travels through MCP only and normal shutdown exits 0.
 
+### Review Findings
+
+Code review of 1107ea1..3388bc3 (2026-10-11): Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor.
+
+- [ ] [Review][Decision] A real serving fault exits 0, but the README promises exit 2 — The SDK's `SingleSessionMcpServerHostedService.ExecuteAsync` lets a `session.RunAsync` exception fault the task and then calls `StopApplication`. In Hosting 10.0.12, `BackgroundService.StopAsync` awaits that task with `ConfigureAwaitOptions.SuppressThrowing`, so `WaitForShutdownAsync` returns normally and `RunMcpHostAsync` returns 0 (`src/Hexalith.McpCli/Cli/CliRunner.cs:776-780`). The only output is the host's `BackgroundService failed` log on stderr. `MCP server stopped unexpectedly.` with exit 2 is reachable only through the `_runMcp` test seam. `README.md:126` claims exit 2. Either detect a faulted hosted service after shutdown and exit 2, or reword the README to describe the actual exit 0 with a stderr log. (blind-hunter+edge-case-hunter+acceptance-auditor)
+- [ ] [Review][Decision] The new `DisposeMcpHost` guard has no test that fails when the guard is removed — `CliRunner.cs:782-792` swallows every disposal exception on the Catalog-rejection, startup-catch, and serving-`finally` paths, but no test makes host disposal throw. `HostFactory.Create` has no way to inject a throwing service, and no throwing disposal was demonstrated with the shipped registrations. The repo rule requires a test that fails without the guard. Either add a host fault-injection seam with tests for both paths, or drop the guard as protecting an undemonstrated state. (blind-hunter+verification-gap)
+- [ ] [Review][Patch] Clean stdout is checked only after the session ends; the SDK client silently skips non-JSON lines it reads during the session [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:38] — record every stdout byte through a pass-through stream handed to `StreamClientTransport` (lines 38 and 103), then run `AssertProtocolOutput` over the full transcript plus the remainder (lines 75 and 116). (blind-hunter+edge-case-hunter+verification-gap+acceptance-auditor)
+- [ ] [Review][Patch] The profile scenario can't detect a child that ignores the profile [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:28] — `Format: "table"` has no protocol-visible effect, and if the fixture ignored `MCPCLI_STDIO_PROFILE_PATH`, `ProfileStore` would fall back to `$HOME/.eventstore/mcpcli.json` and the test would still pass. Give the profile a URL and assert `submittable: true` for `sample.get-item`; keep the URL-less `configuration_invalid` assertion for the environment case. (blind-hunter+acceptance-auditor)
+- [ ] [Review][Patch] The startup-document markers hard-code `\n`, so they fail on Windows [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:194] — `McpCliJson.Result` sets `WriteIndented` without overriding `NewLine`, so documents use `Environment.NewLine`. Build the marker from `Environment.NewLine` here and at `tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:1036`. (blind-hunter+edge-case-hunter+verification-gap)
+- [ ] [Review][Patch] Process cleanup can replace the original test failure [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:255] — `StopAsync` catches only `InvalidOperationException`. A 5-second `WaitForExitAsync` timeout (`OperationCanceledException`) or a `Kill` failure escapes from `finally`, masks the assertion, and skips `Directory.Delete`. (blind-hunter+edge-case-hunter)
+- [ ] [Review][Patch] The process tests don't assert that the format note stays off stderr under an inherited `table` format [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:79] — the matrix says "no prompt or note", but stderr is checked only for error text, so `This result is emitted as JSON; no table view is defined.` would pass. Add the absence assertion in both serving tests. (acceptance-auditor)
+
+Rejected:
+
+- `false` — The README omits pre-serving error codes: `README.md:99` and `:103` already document stderr pre-serving failures, `internal_error`, and `unsupported_transport`.
+- `false` — `McpResolvesSettingsOnceBeforeServingAsync` doesn't prove the build happens before serving: the seam never reads the manifest, so moving the Catalog build out of the pre-serving gate makes `catalogBuilds` 0 and the test fails. The fixed count of nine `EVENTSTORE_*` reads fails loudly by design.
+- `false` — The `ExecutionFailureCommandTests` relaxation hides a defect: the console logger writes asynchronously, and stderr ordering between logs and the note isn't part of the output contract.
+- `false` — The startup/serving split after `StartAsync` can write a startup document mid-session: with the single SDK hosted service and no lifecycle services, nothing after the transport starts can throw from `StartAsync`.
+- `low` — The 2026-07-28 case doesn't assert that `initialize` is absent: a fallback to `initialize` would also have to negotiate 2026-07-28 to pass, which the SDK behavior doesn't show.
+- `low` — The fixture calls `CliRunner` through reflection: it fails only when the internal signatures change, and the fix adds `InternalsVisibleTo` to the shipped project.
+- `low` — The fixture path assumes the default `bin/<config>/net10.0` layout: the repo and CI use only that layout.
+- `low` — Test setup is duplicated with `RunExecutableAsync`: no caller diverges in behavior the tests rely on.
+- `low` — Cancellation during startup writes with a cancelled token (reported twice): the same catch pattern predates this change, it only matters on Ctrl+C before serving, and `README.md:101` already documents interruption exits.
+- `low` — `_startMcp` without `_runMcp` hangs: this is test-seam misuse that no caller does.
+- `low` — Whitespace `--output " "` coverage was removed: any non-null `Output` is rejected, and restoring the case is an addition rather than a correction.
+- `low` — The real `StartAsync` failure is pinned only through the seam: the only reachable production `StartAsync` failure is cancellation.
+- `low` — Spec status `done` disagrees with sprint status `review`: the fix edits workflow-managed status, which this review updates.
+- `low` — The triage log is a table rather than one-line `[Review]` rows: the fix edits the spec under review.
+- `low` — The EventStore 3.120.0 policy alignment shipped inside the feature commit: this is commit history, not a code defect, and the ledger forbids reconfirmation entries.
+- `false` — "Press Ctrl+C to shut down." is a startup prompt: it is a `Microsoft.Hosting.Lifetime` info log on stderr, which the spec routes there, and no input is awaited.
+
 ## Implementation Notes
 
 - `tools/dependency-policy.json` now matches the already-pinned EventStore 3.120.0 restore; this clears the Manifest gate without changing dependencies.
