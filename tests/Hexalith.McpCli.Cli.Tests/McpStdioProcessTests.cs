@@ -1,6 +1,8 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using Hexalith.McpCli.Core.Settings;
+using ModelContextProtocol;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using Shouldly;
@@ -10,9 +12,10 @@ namespace Hexalith.McpCli.Cli.Tests;
 /// <summary>Exercises the built MCP host as a child process over its actual standard streams.</summary>
 public sealed class McpStdioProcessTests
 {
-    /// <summary>Both SDK revisions discover and call the fixed tools without a gateway or protocol notes on stdout.</summary>
+    /// <summary>Both SDK revisions discover and call the fixed tools with profile or offline environment settings.</summary>
     [Theory]
     [InlineData("2025-06-18", "initialize", true)]
+    [InlineData("2025-06-18", "initialize", false)]
     [InlineData("2026-07-28", "server/discover", false)]
     public async Task SdkClientDiscoversOverCleanStdioAsync(string version, string firstMethod, bool useProfile)
     {
@@ -25,7 +28,7 @@ public sealed class McpStdioProcessTests
             var environment = new Dictionary<string, string>();
             if (useProfile)
             {
-                store.Add("dev", new ConnectionProfile(Format: "table"));
+                store.Add("dev", new ConnectionProfile(Url: "https://profile.invalid", Format: "table"));
                 store.Use("dev");
             }
             else
@@ -35,8 +38,9 @@ public sealed class McpStdioProcessTests
 
             Process process = child = Start(directory, environment, "mcp", "--transport", "stdio");
             Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
+            var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
             var transport = new RecordingClientTransport(new StreamClientTransport(
-                process.StandardInput.BaseStream, process.StandardOutput.BaseStream));
+                process.StandardInput.BaseStream, standardOutput));
             await using (McpClient client = await McpClient.CreateAsync(transport,
                 new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
             {
@@ -55,8 +59,16 @@ public sealed class McpStdioProcessTests
                 CallToolResult description = await client.CallToolAsync("describe_operation",
                     new Dictionary<string, object?> { ["operation"] = "sample.get-item" },
                     cancellationToken: timeout.Token);
-                description.StructuredContent.ShouldNotBeNull().GetProperty("submittable").GetBoolean().ShouldBeFalse();
-                description.StructuredContent.Value.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+                JsonElement operation = description.StructuredContent.ShouldNotBeNull();
+                operation.GetProperty("submittable").GetBoolean().ShouldBe(useProfile);
+                if (useProfile)
+                {
+                    operation.TryGetProperty("reason", out _).ShouldBeFalse();
+                }
+                else
+                {
+                    operation.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+                }
 
                 CallToolResult failure = await client.CallToolAsync("describe_operation",
                     new Dictionary<string, object?> { ["operation"] = "sample.missing" },
@@ -67,16 +79,24 @@ public sealed class McpStdioProcessTests
                 using JsonDocument text = JsonDocument.Parse(failure.Content.Single()
                     .ShouldBeOfType<TextContentBlock>().Text);
                 JsonElement.DeepEquals(text.RootElement, error).ShouldBeTrue();
+
+                CallToolResult afterFailure = await client.CallToolAsync("list_modules", new Dictionary<string, object?>(),
+                    cancellationToken: timeout.Token);
+                afterFailure.IsError.ShouldBe(false);
+                JsonElement.DeepEquals(afterFailure.StructuredContent.ShouldNotBeNull(),
+                    modules.StructuredContent.Value).ShouldBeTrue();
             }
 
             process.StandardInput.Close();
             await process.WaitForExitAsync(timeout.Token);
             process.ExitCode.ShouldBe(0);
-            AssertProtocolOutput(await process.StandardOutput.ReadToEndAsync(timeout.Token));
+            await standardOutput.CopyToAsync(Stream.Null, timeout.Token);
+            AssertProtocolOutput(standardOutput.Transcript);
             string diagnostic = await standardError;
             diagnostic.ShouldNotContain("\"error\": {");
             diagnostic.ShouldNotContain("unknown_operation");
             diagnostic.ShouldNotContain("MCP server failed.");
+            diagnostic.ShouldNotContain("This result is emitted as JSON; no table view is defined.");
         }
         finally
         {
@@ -100,7 +120,8 @@ public sealed class McpStdioProcessTests
                 ["EVENTSTORE_READ_ONLY"] = "true",
             }, "mcp", "--format", "json");
             Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
-            var transport = new StreamClientTransport(process.StandardInput.BaseStream, process.StandardOutput.BaseStream);
+            var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
+            var transport = new StreamClientTransport(process.StandardInput.BaseStream, standardOutput);
             await using (McpClient client = await McpClient.CreateAsync(transport,
                 new McpClientOptions { ProtocolVersion = "2026-07-28" }, cancellationToken: timeout.Token))
             {
@@ -113,8 +134,11 @@ public sealed class McpStdioProcessTests
             process.StandardInput.Close();
             await process.WaitForExitAsync(timeout.Token);
             process.ExitCode.ShouldBe(0);
-            AssertProtocolOutput(await process.StandardOutput.ReadToEndAsync(timeout.Token));
-            (await standardError).ShouldNotContain("\"error\": {");
+            await standardOutput.CopyToAsync(Stream.Null, timeout.Token);
+            AssertProtocolOutput(standardOutput.Transcript);
+            string diagnostic = await standardError;
+            diagnostic.ShouldNotContain("\"error\": {");
+            diagnostic.ShouldNotContain("This result is emitted as JSON; no table view is defined.");
         }
         finally
         {
@@ -123,20 +147,68 @@ public sealed class McpStdioProcessTests
         }
     }
 
+    /// <summary>Cleanup races, timeouts, and kill failures preserve the session exception and allow directory cleanup.</summary>
+    [Theory]
+    [InlineData("exited")]
+    [InlineData("timeout")]
+    [InlineData("kill")]
+    public async Task CleanupFailurePreservesOriginalSessionFailureAsync(string scenario)
+    {
+        string directory = TemporaryDirectory();
+        var sessionFailure = new FormatException("Original session failure.");
+        Exception cleanupFailure = scenario switch
+        {
+            "exited" => new InvalidOperationException("Child already exited."),
+            "timeout" => new OperationCanceledException("Cleanup timed out."),
+            _ => new Win32Exception("Child could not be killed."),
+        };
+        using var child = new Process();
+        async Task FailSessionAsync()
+        {
+            try
+            {
+                throw sessionFailure;
+            }
+            finally
+            {
+                await StopAsync(child, _ => Task.FromException(cleanupFailure));
+                Directory.Delete(directory, recursive: true);
+            }
+        }
+
+        try
+        {
+            FormatException actual = await Should.ThrowAsync<FormatException>(FailSessionAsync);
+            actual.ShouldBeSameAs(sessionFailure);
+            Directory.Exists(directory).ShouldBeFalse();
+        }
+        finally
+        {
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, recursive: true);
+            }
+        }
+    }
+
     /// <summary>Presentation flags win before settings or manifest access and leave the requested path untouched.</summary>
     [Theory]
-    [InlineData(true, "format")]
-    [InlineData(false, "output")]
-    public async Task InvalidPresentationOptionsStopBeforeCatalogAsync(bool includeTable, string argument)
+    [InlineData(true, true, "format")]
+    [InlineData(true, false, "format")]
+    [InlineData(false, true, "output")]
+    public async Task InvalidPresentationOptionsStopBeforeCatalogAsync(bool includeTable, bool includeOutput, string argument)
     {
         string directory = TemporaryDirectory();
         try
         {
             string path = Path.Combine(directory, "untouched.json");
             await File.WriteAllTextAsync(path, "sentinel", TestContext.Current.CancellationToken);
-            string[] arguments = includeTable
-                ? ["mcp", "--format", "table", "--output", path]
-                : ["mcp", "--output", path];
+            string[] arguments = (includeTable, includeOutput) switch
+            {
+                (true, true) => ["mcp", "--format", "table", "--output", path],
+                (true, false) => ["mcp", "--format", "table"],
+                _ => ["mcp", "--output", path],
+            };
             (int exit, string output, string error) = await RunAsync(directory, new Dictionary<string, string>
             {
                 ["EVENTSTORE_URL"] = "not-a-url",
@@ -189,9 +261,23 @@ public sealed class McpStdioProcessTests
         }
     }
 
+    /// <summary>Only the last framing newline may produce an empty split segment.</summary>
+    [Fact]
+    public void ProtocolTranscriptRejectsExtraBlankLines()
+    {
+        const string message = "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}\n";
+        AssertProtocolOutput(message);
+        Should.Throw<ShouldAssertException>(() => AssertProtocolOutput(message + "\n"));
+    }
+
+    /// <summary>A protocol version alone is not a JSON-RPC message.</summary>
+    [Fact]
+    public void ProtocolTranscriptRejectsVersionOnlyObject()
+        => Should.Throw<JsonException>(() => AssertProtocolOutput("{\"jsonrpc\":\"2.0\"}\n"));
+
     private static void AssertStartupError(string diagnostic, string code, string? argument = null)
     {
-        const string marker = "{\n  \"error\"";
+        string marker = "{" + Environment.NewLine + "  \"error\"";
         int start = diagnostic.IndexOf(marker, StringComparison.Ordinal);
         start.ShouldBeGreaterThanOrEqualTo(0);
         diagnostic.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
@@ -228,14 +314,18 @@ public sealed class McpStdioProcessTests
 
     private static void AssertProtocolOutput(string output)
     {
-        foreach (string line in output.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        output.ShouldNotBeEmpty();
+        string messages = output.EndsWith('\n') ? output[..^1] : output;
+        foreach (string line in messages.Split('\n'))
         {
-            using JsonDocument document = JsonDocument.Parse(line);
-            document.RootElement.GetProperty("jsonrpc").GetString().ShouldBe("2.0");
+            line.ShouldNotBeNullOrWhiteSpace();
+            JsonRpcMessage message = JsonSerializer.Deserialize<JsonRpcMessage>(line, McpJsonUtilities.DefaultOptions)
+                .ShouldNotBeNull();
+            message.JsonRpc.ShouldBe("2.0");
         }
     }
 
-    private static async Task StopAsync(Process? process)
+    private static async Task StopAsync(Process? process, Func<Process, Task>? stopProcess = null)
     {
         if (process is null)
         {
@@ -244,21 +334,26 @@ public sealed class McpStdioProcessTests
 
         try
         {
-            if (!process.HasExited)
-            {
-                process.Kill(entireProcessTree: true);
-            }
-
-            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            await process.WaitForExitAsync(timeout.Token);
+            await (stopProcess ?? StopProcessAsync)(process);
         }
-        catch (InvalidOperationException)
+        catch (Exception exception) when (exception is InvalidOperationException or OperationCanceledException or Win32Exception)
         {
-            // The child may finish while cleanup checks its state.
+            // Best-effort cleanup must preserve the original session or assertion failure.
         }
         finally
         {
             process.Dispose();
+        }
+
+        static async Task StopProcessAsync(Process child)
+        {
+            if (!child.HasExited)
+            {
+                child.Kill(entireProcessTree: true);
+            }
+
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            await child.WaitForExitAsync(timeout.Token);
         }
     }
 

@@ -8,6 +8,7 @@ using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
 using Shouldly;
@@ -726,6 +727,37 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>A faulted hosted service must not look like a clean shutdown.</summary>
+    [Fact]
+    public async Task McpHostServingFaultExitsTwoAsync()
+    {
+        TextWriter originalOut = Console.Out;
+        TextWriter originalError = Console.Error;
+        using var output = new StringWriter();
+        using var error = new StringWriter();
+        try
+        {
+            Console.SetOut(output);
+            Console.SetError(error);
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+            builder.Logging.ClearProviders();
+            _ = builder.Services.AddHostedService<FaultingService>();
+            using IHost host = builder.Build();
+            await host.StartAsync(TestContext.Current.CancellationToken);
+
+            int exit = await CliRunner.RunMcpHostAsync(host, TestContext.Current.CancellationToken);
+
+            exit.ShouldBe(2);
+            output.ToString().ShouldBeEmpty();
+            error.ToString().ShouldBe("MCP server stopped unexpectedly." + Environment.NewLine);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
     /// <summary>A serving failure does not get misreported as a second startup error document.</summary>
     [Fact]
     public async Task McpHostIoFailureDoesNotWriteStartupErrorAsync()
@@ -960,6 +992,9 @@ public sealed class ConfigCommandTests
             Task<int> InspectDirectAsync(IHost host, CancellationToken _)
             {
                 directHostRuns++;
+                catalogBuilds.ShouldBe(1);
+                reads.Count.ShouldBe(9);
+                reads.Values.ShouldAllBe(count => count == 1);
                 host.Services.GetRequiredService<ResolvedSettings>().Format.ShouldBe("table");
                 return Task.FromResult(0);
             }
@@ -1017,6 +1052,13 @@ public sealed class ConfigCommandTests
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            int hostStarts = 0;
+            Task FailIfStartedAsync(IHost _, CancellationToken __)
+            {
+                hostStarts++;
+                return Task.CompletedTask;
+            }
+
             int hostRuns = 0;
             Task<int> FailIfRunAsync(IHost _, CancellationToken __)
             {
@@ -1028,12 +1070,13 @@ public sealed class ConfigCommandTests
                 ? () => [typeof(Catalog.InvalidProvider.Contracts.Module).Assembly]
                 : () => [typeof(Manifest.MarkedEmpty.Contracts.Module).Assembly];
             (int exit, string output, string error) = await InvokeAsync(store,
-                new Dictionary<string, string?>(), manifest, FailIfRunAsync,
+                new Dictionary<string, string?>(), manifest, FailIfRunAsync, FailIfStartedAsync,
                 strict ? ["mcp", "--strict"] : ["mcp"]);
             exit.ShouldBe(2);
             output.ShouldBeEmpty();
+            hostStarts.ShouldBe(0);
             hostRuns.ShouldBe(0);
-            const string marker = "{\n  \"error\"";
+            string marker = "{" + Environment.NewLine + "  \"error\"";
             int start = error.IndexOf(marker, StringComparison.Ordinal);
             start.ShouldBeGreaterThanOrEqualTo(0);
             error.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
@@ -2104,11 +2147,20 @@ public sealed class ConfigCommandTests
         params string[] args)
         => await InvokeAsync(store, environment, manifest, null, args);
 
+    private static Task<(int Exit, string Output, string Error)> InvokeAsync(
+        ProfileStore store,
+        IReadOnlyDictionary<string, string?> environment,
+        Func<IReadOnlyList<Assembly>>? manifest,
+        Func<IHost, CancellationToken, Task<int>>? runMcp,
+        params string[] args)
+        => InvokeAsync(store, environment, manifest, runMcp, null, args);
+
     private static async Task<(int Exit, string Output, string Error)> InvokeAsync(
         ProfileStore store,
         IReadOnlyDictionary<string, string?> environment,
         Func<IReadOnlyList<Assembly>>? manifest,
         Func<IHost, CancellationToken, Task<int>>? runMcp,
+        Func<IHost, CancellationToken, Task>? startMcp,
         params string[] args)
     {
         TextWriter originalOut = Console.Out;
@@ -2120,7 +2172,7 @@ public sealed class ConfigCommandTests
             Console.SetOut(output);
             Console.SetError(error);
             int exit = await new CliRunner(store, manifest,
-                name => environment.TryGetValue(name, out string? value) ? value : null, runMcp)
+                name => environment.TryGetValue(name, out string? value) ? value : null, runMcp, startMcp)
                 .InvokeAsync(args);
             return (exit, output.ToString(), error.ToString());
         }

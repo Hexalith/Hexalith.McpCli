@@ -21,6 +21,8 @@ internal sealed class CliRunner
     private readonly ProfileStore _profileStore;
     private readonly Func<IReadOnlyList<Assembly>>? _manifest;
     private readonly Func<string, string?>? _readEnvironment;
+    private const string StoppedUnexpectedly = "MCP server stopped unexpectedly.";
+
     private readonly Func<IHost, CancellationToken, Task<int>>? _runMcp;
     private readonly Func<IHost, CancellationToken, Task>? _startMcp;
 
@@ -726,7 +728,7 @@ internal sealed class CliRunner
             CatalogAccess catalog = invocationHost.Services.GetRequiredService<CatalogProvider>().Get(settings.Strict);
             if (catalog.Catalog is null)
             {
-                DisposeMcpHost(host);
+                host?.Dispose();
                 host = null;
                 return await WriteMcpErrorAsync(new OperationError(catalog.ErrorCode ?? "internal_error",
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
@@ -743,7 +745,7 @@ internal sealed class CliRunner
         }
         catch (Exception)
         {
-            DisposeMcpHost(host);
+            host?.Dispose();
             return await WriteMcpErrorAsync(new OperationError("internal_error", Message: "MCP server failed."),
                 cancellationToken).ConfigureAwait(false);
         }
@@ -757,12 +759,12 @@ internal sealed class CliRunner
         }
         catch (Exception)
         {
-            await Console.Error.WriteLineAsync("MCP server stopped unexpectedly.").ConfigureAwait(false);
+            await Console.Error.WriteLineAsync(StoppedUnexpectedly).ConfigureAwait(false);
             return 2;
         }
         finally
         {
-            DisposeMcpHost(host);
+            host?.Dispose();
         }
     }
 
@@ -773,22 +775,23 @@ internal sealed class CliRunner
         return 2;
     }
 
-    private static async Task<int> RunMcpHostAsync(IHost host, CancellationToken cancellationToken)
+    /// <summary>Waits for shutdown and distinguishes normal completion from a faulted hosted service.</summary>
+    /// <param name="host">The started MCP host.</param>
+    /// <param name="cancellationToken">The cancellation token for shutdown.</param>
+    /// <returns>Zero for a normal shutdown, or two for a serving failure.</returns>
+    internal static async Task<int> RunMcpHostAsync(IHost host, CancellationToken cancellationToken)
     {
         await host.WaitForShutdownAsync(cancellationToken).ConfigureAwait(false);
-        return 0;
-    }
 
-    private static void DisposeMcpHost(IHost? host)
-    {
-        try
+        // BackgroundService.StopAsync suppresses a faulted ExecuteTask, so a serving fault would otherwise exit 0.
+        if (host.Services.GetServices<IHostedService>().OfType<BackgroundService>()
+            .Any(service => service.ExecuteTask?.IsFaulted == true))
         {
-            host?.Dispose();
+            await Console.Error.WriteLineAsync(StoppedUnexpectedly).ConfigureAwait(false);
+            return 2;
         }
-        catch (Exception)
-        {
-            // Cleanup must not replace the startup or serving result.
-        }
+
+        return 0;
     }
 
     private Task<int> RunAsync(ParseResult parsed,
