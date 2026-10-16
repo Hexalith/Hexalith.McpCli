@@ -1,3 +1,11 @@
+> **Historical, unapproved snapshot.** The session-approved
+> [Projects inventory 1.0.0](projects-migration-inventory-v1.md) supersedes this
+> September draft, alongside the
+> [FrontComposer inventory 1.0.0](frontcomposer-migration-inventory-v1.md).
+> Its approval covers deferred scope only; external owning-maintainer approval,
+> Gateway readiness and retirement remain open. The original body below is
+> preserved verbatim and is not current source evidence.
+
 # Projects agent operation migration inventory (draft v0)
 
 **Source snapshot:** `Hexalith.Projects` commit

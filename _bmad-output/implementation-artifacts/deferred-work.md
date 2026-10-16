@@ -473,3 +473,9 @@ status: open
   summary: The inventory maps no expected outcome for `delete_party` on a missing or erased party, so Stories 4.11/4.13 have no oracle for that case.
   evidence: Unverified Medium. `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:124` (C05) covers only the already-inactive case. Settle it by reading the pinned Parties `delete_party` pre-read in `src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs` and checking whether C05 or T07 already defines not-found and erased behavior.
 
+## Deferred from: spec-4-3-approve-projects-and-frontcomposer-migration-inventories.md (2026-10-16)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-3-approve-projects-and-frontcomposer-migration-inventories.md`
+  summary: Reconcile the exact production dependency policy after the separately committed Builds bump, then verify it against a fresh restore.
+  evidence: Medium; pre-existing before the approved Story 4.3 implementation. Commit `1a6d725fb89545bce56b7be1e16683461cf9cfe7` advances `references/Hexalith.Builds`; its `Props/Directory.Packages.props:242` and `:244` require Microsoft.Extensions.Hosting/Http 10.0.13, while `tools/dependency-policy.json:51` and `:53` require 10.0.12. Current `src/Hexalith.McpCli/obj/project.assets.json` still contains 10.0.12 and is stale for those pins. `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:137` rejects restored versions outside the exact policy. The McpCli dependency maintainer should run `dotnet restore Hexalith.McpCli.slnx`, align every changed version in the policy, build and run Manifest.Tests; this documentation-only story neither changes those dependencies nor claims that broad gate passed.
+
