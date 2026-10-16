@@ -90,6 +90,26 @@ Rejected:
 - `low` — The EventStore 3.120.0 policy alignment shipped inside the feature commit: this is commit history, not a code defect, and the ledger forbids reconfirmation entries.
 - `false` — "Press Ctrl+C to shut down." is a startup prompt: it is a `Microsoft.Hosting.Lifetime` info log on stderr, which the spec routes there, and no input is awaited.
 
+### Review Findings (2026-10-16)
+
+Code review of 1107ea1..74c63af (2026-10-16): Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor.
+
+- [x] [Review][Defer] No test faults the real SDK hosted service, so the `OfType<BackgroundService>` fault detection is pinned only by a synthetic `FaultingService` [src/Hexalith.McpCli/Cli/CliRunner.cs:787] — deferred: already-unreachable until an SDK change; would be settled by asserting the hosted service registered by `HostFactory.Create(mcp: true)` is a `BackgroundService` (gate: none).
+
+Rejected (2026-10-16):
+
+- `false` — Plain-text serving-failure stderr line contradicts the structured-error rule: the spec's one-structured-error rule covers pre-serving failures, and `README.md:126` documents the fixed diagnostic.
+- `false` — A host built alongside an error leaks: `HostFactory.Create` returns null whenever `error` is set (`HostFactory.cs:38`).
+- `false` — Serving-phase cancellation reports a crash on Ctrl+C: `ConsoleLifetime` stops the host through `ApplicationStopping`, and no production code cancels the token passed to `WaitForShutdownAsync`; the startup variant is tracked at `deferred-work.md:164`.
+- `false` — The `EndsWith(noteLine)` relaxation hides a defect: already adjudicated in the earlier triage (asynchronous console logger ordering is not part of the output contract); the note is still asserted exactly once.
+- `low` — Canceled (not faulted) `ExecuteTask` exits 0: no demonstrated path; the fix adds a branch.
+- `low` — Cause of a serving fault is not written to stderr: the fixed diagnostic is intentional, and the host logger already records the exception.
+- `low` — Fixture reflection uses null-forgiving lookups and a hard-coded `bin/<config>/net10.0` path: already rejected in the earlier triage.
+- `low` — `RecordingReadStream` is unsynchronised and the stderr tasks are unobserved on failure: transcripts are read after the child exits, so no interleaving is demonstrated.
+- `low` — Missing process coverage (EOF without shutdown, SIGTERM, `--transport http`, write refusal) and README gaps for EOF/signals: speculative additions, not corrections.
+- `low` — Fifteen submodule gitlinks moved in `3e02d1e`: commit history, not a code defect; policy versions are aligned per the Implementation Notes.
+- `low` — Spec `status: done` vs sprint `review`, triage-log format, and `/tmp` commitlint log path: the fix edits the spec under review or workflow-managed status.
+
 ## Implementation Notes
 
 - `tools/dependency-policy.json` matches the current Builds restore: EventStore Client/Contracts 3.121.0, ByteAether.Ulid 1.4.2, JsonPointer.Net 7.0.3, and JsonSchema.Net 9.4.1. A fresh restore exposed five stale policy versions; aligning these entries changes no dependencies or allowed package identities.

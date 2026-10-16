@@ -451,3 +451,9 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: MCP input schemas carry no parameter descriptions or `kind` enum.
   evidence: Medium. The `McpToolHandlers` parameters (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:20`, `:49-52`, `:62-65`) have no description attributes, so `McpServerTool.Create` advertises `kind` without its allowed values and `payload` as a bare string with no hint that it is JSON text. An agent learns either rule only from a failed call. Pre-existing at baseline `12b54bd`. Story 3.3 binds the §E arguments; add descriptions there and keep the input budget below 8,000 characters.
+
+## Deferred from: code review of spec-3-2-run-the-mcp-server-over-clean-stdio.md (2026-10-16)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-2-run-the-mcp-server-over-clean-stdio.md`
+  summary: The real SDK hosted service is never faulted, so the fault detection in `RunMcpHostAsync` is pinned only by a synthetic `BackgroundService`.
+  evidence: Unverified Medium. `src/Hexalith.McpCli/Cli/CliRunner.cs:787-788` filters `OfType<BackgroundService>()`; `tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:732` uses its own `FaultingService`, and the process tests assert only exit 0. If an SDK upgrade registers the stdio server as a plain `IHostedService`, a serving fault exits 0 again. Assert that the hosted service from `HostFactory.Create(mcp: true)` is a `BackgroundService` to settle it.

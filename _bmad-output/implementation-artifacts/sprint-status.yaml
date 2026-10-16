@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 10-15-2026 19:02
+last_updated: 10-16-2026 09:00
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -62,7 +62,7 @@ development_status:
 
   epic-3: in-progress
   3-1-discover-operations-through-a-fixed-mcp-surface: done
-  3-2-run-the-mcp-server-over-clean-stdio: review
+  3-2-run-the-mcp-server-over-clean-stdio: done
   3-3-execute-calls-with-structured-mcp-results: backlog
   epic-3-retrospective: optional
 
