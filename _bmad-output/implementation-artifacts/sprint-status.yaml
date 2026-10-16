@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 10-16-2026 12:55
+last_updated: 10-16-2026 13:27
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -64,7 +64,7 @@ development_status:
   3-1-discover-operations-through-a-fixed-mcp-surface: done
   3-2-run-the-mcp-server-over-clean-stdio: done
   3-3-execute-calls-with-structured-mcp-results: done
-  epic-3-retrospective: optional
+  epic-3-retrospective: done
 
   epic-4: backlog
   4-1-approve-the-parties-migration-inventory: backlog
@@ -202,3 +202,29 @@ action_items:
     owner: "Product/architecture owner"
     status: open
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
+  - id: "epic-3-retro-item-1-complete-output-contract"
+    epic: 3
+    action: "Complete advertised addendum G output-schema constraints using Core-owned
+      contract rules and negative fixtures under both protocol revisions, including
+      ranges, canonical identity, cardinalities, availability conditions and lint
+      discriminator/property rules."
+    owner: "McpCli maintainer and architecture owner"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-10-16.md"
+  - id: "epic-3-retro-item-2-validate-call-envelopes"
+    epic: 3
+    action: "Reject non-object tools/call envelopes and SDK-case-colliding argument
+      keys as invalid parameters before binding; verify raw stdio protocol errors,
+      both channels and zero Gateway submissions."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-10-16.md"
+  - id: "epic-3-retro-item-3-close-deferral-handoffs"
+    epic: 3
+    action: "Add MCP parameter guidance for JSON-text payloads and kind values within
+      the tool budget; reconcile existing Epic 3 deferred-work rows with delivered
+      evidence and retain explicit owners for unresolved schema, hosted-service fault
+      and listener-race work."
+    owner: "McpCli maintainer"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-10-16.md"
