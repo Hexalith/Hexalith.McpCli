@@ -466,3 +466,10 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
   summary: An existing `QueryCommandTests` HTTP-listener cleanup race failed the first CLI test run.
   evidence: Low. `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md:106` records it; the affected method passed in isolation and no ledger entry tracked it.
+
+## Deferred from: code review of spec-4-1-approve-the-parties-migration-inventory.md (2026-10-16)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-1-approve-the-parties-migration-inventory.md`
+  summary: The inventory maps no expected outcome for `delete_party` on a missing or erased party, so Stories 4.11/4.13 have no oracle for that case.
+  evidence: Unverified Medium. `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:124` (C05) covers only the already-inactive case. Settle it by reading the pinned Parties `delete_party` pre-read in `src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs` and checking whether C05 or T07 already defines not-found and erased behavior.
+

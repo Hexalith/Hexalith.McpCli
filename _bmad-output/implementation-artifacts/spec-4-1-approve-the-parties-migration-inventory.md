@@ -186,3 +186,19 @@ again, confirmed frozen intent remained unchanged, and found no incomplete tasks
   source, all five tools/six variants, seven targets, all 24 approved rows and
   whitespace. A separate check confirmed frozen intent, seven triage entries,
   complete tasks, the evidence link and whitespace in every new artifact.
+
+### Review Findings
+
+- [x] [Review][Defer] Legacy `delete_party` behavior for missing or erased parties is unmapped [parties-migration-inventory-v1.md:78] — deferred: unverified Medium; C05 maps only the already-inactive case, so 4.11/4.13 have no oracle for not-found or erased IDs on T01/T07. Settle by reading the Parties `delete_party` pre-read and confirming whether C05 or T07 already defines the outcome.
+
+#### Rejected
+
+- Self-attested approval, no named maintainer signatory (blind-hunter, edge-case-hunter, acceptance-auditor): low; A1 states this openly and the frozen "Approved decisions" accept it, so the fix edits the spec under review.
+- Spec `status: 'done'` vs. `review` in sprint status and notes (all four layers): low; the fix edits the spec under review, and the notes say sprint tracking intentionally lags until this review.
+- Rows marked `include` while T01–T03 do not exist (blind-hunter, acceptance-auditor): low; the inventory already states `include` becomes eligible only after the Contracts prove readiness, and a readiness column adds structure for no demonstrated harm.
+- T01–T03 wire values not tabulated; C02 rejection error code and C07 canonical GUID form unspecified (edge-case-hunter): false; the inventory assigns each to Stories 4.9/4.10 (C02, C07) with 4.11/4.13 proof, so they are deliberate downstream decisions.
+- `OperationError.cs:41` listed under "relative to the pinned Parties repository" (edge-case-hunter): false; the entry is labelled "McpCli-local" in the same bullet.
+- `verification.md` checker weaknesses: substring `A0` and front-matter checks, unasserted row count, PASS wording, git checks (blind-hunter, edge-case-hunter): low; an on-demand evidence script, and each fix adds guards.
+- Evidence cited from `/tmp` files (all layers): low; `verification.md` supersedes the `/tmp` checker, and commitlint can be re-run on the committed message.
+- `review_loop_iteration: 0` and "no findings deferred" vs. seven patched findings (blind-hunter, edge-case-hunter): false; the notes say all seven were applied, which is consistent with nothing deferred.
+- Brittle `file:line` anchors, prose style, `epic-4-context.md` header, `epic-4` moved to in-progress, `C01`–`C08` approval attribution, missing ledger entries for downstream handoffs: low; none causes a named harm, and the handoffs are recorded in the inventory.
