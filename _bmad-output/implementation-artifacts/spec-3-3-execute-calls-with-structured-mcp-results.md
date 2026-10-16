@@ -122,3 +122,24 @@ Every covering test below ran and passed under both protocol revisions; the comp
 | Schema contract | `ActualResultsValidateAndDocumentMutationsFailAsync`, `QueryVariantsAndCoreErrorsValidateAsync`, `ReturnedValuesAndOptionalMembersValidateAsync`, `GatewayAndAvailabilityErrorsValidateAsync`, `DocumentDiscriminatorsAndPayloadSchemaRootsAreConstrainedAsync`, `ErrorCodesDiscriminateTheirDocumentShapesAsync` |
 
 Complete Core document comparisons protect execution parity and omission rules. `EveryAvailableToolExecutesOverCleanStdioAsync` protects every advertised tool, clean JSON-RPC, and continued discovery after a Gateway error in all four revision/mode combinations.
+
+### Review Findings
+
+Code review of `e8b7ed8..HEAD` (2026-10-16), four layers.
+
+- [x] [Review][Patch] README does not state that paging values not representable as Int32 (`2147483648`, `25.0`, `1e20`) return JSON-RPC invalid-parameters [README.md:132]
+- [x] [Review][Defer] Int32 paging check indexes exact `pageSize`/`offset` names; a differently-cased key may still reach case-insensitive SDK binding [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:89] — deferred: unverified Medium; settle by sending `{"PageSize": 2147483648}` over the stdio fixture and checking for a JsonException on stderr
+- [x] [Review][Defer] Existing `QueryCommandTests` HTTP-listener cleanup race seen on the first CLI run [_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md:106] — deferred: pre-existing, not caused by this change
+
+#### Rejected
+
+- README omits the output schemas (blind-hunter, first pass): false. `README.md:132` documents them.
+- Error-code enum can drift from Core, and four codes (`read_only`, `catalog_empty`, `catalog_invalid`, `unsupported_transport`) lack schema tests (all layers): low. Those codes are not returned by any registered tool call: read-only sessions do not register `send_command`, and the catalog codes are startup errors. Core has no shared code constant a test could enumerate, so the fix adds machinery for a drift nobody has shown.
+- `Json.Schema` used by `Hexalith.McpCli.Mcp` through `Core` only (blind-hunter, acceptance-auditor): low. A Core change that drops it fails the build loudly, and JsonSchema.Net is already on the approved list.
+- `IsOmittedWhenNull` recognizes only `WhenWritingNull`; `properties["status"]!`, `["kind"]!` and `errorProperties[name]!` lookups (edge-case, blind, verification-gap): low. `McpCliJson.Result` sets no default ignore condition, and a rename fails at startup in every test.
+- `25.0` and `1e2` rejected as not Int32 (edge-case): by design, B2 in the Review Triage Log.
+- Schema failures give a generic invalid-params message (blind): low.
+- Int32 check hard-codes `run_query`, `pageSize`, `offset` (blind): low, matches the B1 decision.
+- Spec `status: done` versus sprint `review` (acceptance, blind): resolved by this workflow's status sync.
+- Seam in `CliRunner` and `HostFactory`, fixture reflection, `MCPCLI_STDIO_GATEWAY` (acceptance, blind): disclosed in Implementation Notes; the variable is read only by the test fixture's `Program.cs`.
+- Process-lane error coverage, read-only negative over stdio, cancellation, 20 s shared timeout, pipe disposal, `AssertClosedObjects` exemptions, duplicated helpers and ULID constants, unasserted output size, `/tmp` evidence logs, extra boundary and negative paging cases, exact SDK message text (blind, edge-case, verification-gap, acceptance): low, no demonstrated defect; the fix adds tests, guards or edits to the spec.

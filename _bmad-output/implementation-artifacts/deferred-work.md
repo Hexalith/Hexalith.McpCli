@@ -457,3 +457,12 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-2-run-the-mcp-server-over-clean-stdio.md`
   summary: The real SDK hosted service is never faulted, so the fault detection in `RunMcpHostAsync` is pinned only by a synthetic `BackgroundService`.
   evidence: Unverified Medium. `src/Hexalith.McpCli/Cli/CliRunner.cs:787-788` filters `OfType<BackgroundService>()`; `tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:732` uses its own `FaultingService`, and the process tests assert only exit 0. If an SDK upgrade registers the stdio server as a plain `IHostedService`, a serving fault exits 0 again. Assert that the hosted service from `HostFactory.Create(mcp: true)` is a `BackgroundService` to settle it.
+
+## Deferred from: code review of spec-3-3-execute-calls-with-structured-mcp-results.md (2026-10-16)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
+  summary: The Int32 paging check reads `pageSize` and `offset` by exact name, so a differently cased key may still reach the SDK's case-insensitive binding.
+  evidence: Unverified Medium. `src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:89` loops over the two exact names. Settle it by sending `{"PageSize": 2147483648}` through the stdio fixture and checking stderr for a `JsonException`.
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
+  summary: An existing `QueryCommandTests` HTTP-listener cleanup race failed the first CLI test run.
+  evidence: Low. `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md:106` records it; the affected method passed in isolation and no ledger entry tracked it.
