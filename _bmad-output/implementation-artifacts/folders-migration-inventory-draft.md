@@ -1,3 +1,10 @@
+> **Historical, unapproved snapshot:** this September 27 draft is superseded by
+> [Folders migration inventory v1.0.0](folders-migration-inventory-v1.md), approved
+> as deferred scope in its A1 session decision on 2026-10-16. The source snapshot
+> below is preserved unchanged and is not current readiness evidence. Its 501
+> projection and dry-run claims are superseded by the pinned v1 reconciliation;
+> they must not be used to infer Gateway support or existing dry-run behavior.
+
 # Folders agent operation migration inventory (draft v0)
 
 **Source snapshot:** `Hexalith.Folders` commit `18cf524bc4e6943b5141afb9a79b976abce5fb2b` (2026-09-27),
