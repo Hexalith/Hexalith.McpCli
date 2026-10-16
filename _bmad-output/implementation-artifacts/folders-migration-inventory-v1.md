@@ -6,6 +6,7 @@ source_repository: 'https://github.com/Hexalith/Hexalith.Folders'
 source_revision: 'e2252f29a2dba2b64786ee483eb59fbceaadd387'
 source_spec: '_bmad-output/implementation-artifacts/spec-4-2-approve-the-folders-migration-inventory.md'
 maintainer_approval_ref: '#a1-session-approval-2026-10-16'
+approval_note: 'session approval by the requesting user; no named Folders maintainer'
 ---
 
 # Folders migration inventory v1
@@ -46,6 +47,11 @@ approved inventory revision plus the readiness gates below.
   retain the 48 unique roadmap candidates C01–C13 and Q01–Q35, their shared file
   mutation and split ACL mappings, V01–V10 compatibility decisions and N01–N04
   adjacent exclusions. G1–G6 remain unresolved prerequisites with owning roles.
+- **Amendments after approval:** the instruction was given on candidate
+  1.0.0-candidate.1. Review then added prerequisite clarifications (V04, V05,
+  V07, V09, G1/C05) and corrected the M22 and L38 rationales. These add no
+  coverage, exposure or disposition change; every legacy row stays
+  `defer / exclude`.
 - **Accepted current limitation:** no Folders operation is included in McpCli.
   The legacy surfaces and their local-file, auto-key, resource, freshness and
   other adapter conveniences stay available through the existing server/CLI.
@@ -114,7 +120,7 @@ scope in A1.
 | M19 | `get-effective-permissions` | defer | exclude | Q05 | Preserve route identifiers, operation-specific freshness and authorization (G1,G2,G4; V01–V03). | Protected operational read | `src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:121` | [A1](#a1-session-approval-2026-10-16) |
 | M20 | `get-failed-operation-diagnostics` | defer | exclude | Q06 | Preserve diagnostic visibility, authorization scope and freshness; no CLI leaf exists (G1,G2,G4,G5; V01,V06). | Protected diagnostic read | `src/Hexalith.Folders.Mcp/Tools/DiagnosticsTools.cs:78` | [A1](#a1-session-approval-2026-10-16) |
 | M21 | `get-folder-file-metadata` | defer | exclude | Q07 | Preserve typed context/search inputs, task scope, path/egress policy and metadata-only output (G1,G2,G4–G6; V01–V06). | Protected file/context metadata read | `src/Hexalith.Folders.Mcp/Tools/ContextTools.cs:36` | [A1](#a1-session-approval-2026-10-16) |
-| M22 | `get-folder-indexing-status` | defer | exclude | Q08 | Preserve typed context/search inputs, task scope, path/egress policy and metadata-only output (G1,G2,G4–G6; V01–V06). | Protected file/context metadata read | `src/Hexalith.Folders.Mcp/Tools/ContextTools.cs:106` | [A1](#a1-session-approval-2026-10-16) |
+| M22 | `get-folder-indexing-status` | defer | exclude | Q08 | Preserve typed context/search inputs, path/egress policy and metadata-only output (G1,G2,G4–G6; V01,V02,V04–V06). | Protected file/context metadata read | `src/Hexalith.Folders.Mcp/Tools/ContextTools.cs:106` | [A1](#a1-session-approval-2026-10-16) |
 | M23 | `get-folder-lifecycle-status` | defer | exclude | Q09 | Preserve route identifiers, operation-specific freshness and authorization (G1,G2,G4; V01–V03). | Protected operational read | `src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:69` | [A1](#a1-session-approval-2026-10-16) |
 | M24 | `get-lock-diagnostics` | defer | exclude | Q10 | Preserve diagnostic visibility, authorization scope and freshness; no CLI leaf exists (G1,G2,G4,G5; V01,V06). | Protected diagnostic read | `src/Hexalith.Folders.Mcp/Tools/DiagnosticsTools.cs:54` | [A1](#a1-session-approval-2026-10-16) |
 | M25 | `get-operation-timeline-entry` | defer | exclude | Q11 | Preserve audit visibility, redaction and filter/paging semantics (G1,G2,G4,G5; V01,V02,V06). | Audit/personal metadata read | `src/Hexalith.Folders.Mcp/Tools/AuditTools.cs:59` | [A1](#a1-session-approval-2026-10-16) |
@@ -269,7 +275,7 @@ placeholder adapter expectations do not manufacture diagnostic CLI leaves.
 | L35 | `context glob` | `glob-folder-files` | defer | exclude | Q27 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Context/ContextCommand.cs:79` | [A1](#a1-session-approval-2026-10-16) |
 | L36 | `context read-range` | `read-file-range` | defer | exclude | Q32 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Context/ContextCommand.cs:95` | [A1](#a1-session-approval-2026-10-16) |
 | L37 | `context index-search` | `search-folder-indexed-files` | defer | exclude | Q34 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Context/ContextCommand.cs:111` | [A1](#a1-session-approval-2026-10-16) |
-| L38 | `context indexing-status` | `get-folder-indexing-status` | defer | exclude | Q08 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Context/ContextCommand.cs:129` | [A1](#a1-session-approval-2026-10-16) |
+| L38 | `context indexing-status` | `get-folder-indexing-status` | defer | exclude | Q08 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01,V02,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Context/ContextCommand.cs:129` | [A1](#a1-session-approval-2026-10-16) |
 | L39 | `audit list` | `list-audit-trail` | defer | exclude | Q28 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Audit/AuditCommand.cs:22` | [A1](#a1-session-approval-2026-10-16) |
 | L40 | `audit get` | `get-audit-record` | defer | exclude | Q01 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Audit/AuditCommand.cs:34` | [A1](#a1-session-approval-2026-10-16) |
 | L41 | `audit timeline list` | `list-operation-timeline` | defer | exclude | Q31 | Retain legacy leaf until Gateway equivalent and adapter differences pass; V01–V03,V06,V09. Protected metadata read. | `src/Hexalith.Folders.Cli/Commands/Audit/AuditCommand.cs:56` | [A1](#a1-session-approval-2026-10-16) |

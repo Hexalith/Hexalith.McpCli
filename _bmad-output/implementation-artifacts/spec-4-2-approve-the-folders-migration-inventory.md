@@ -180,3 +180,24 @@ story review transition required by this workflow.
   swaps and invented command wires, preserves the clean pinned upstream source,
   and checks whitespace for tracked and new artifacts. All tasks and acceptance
   criteria are satisfied for the approved deferred inventory scope.
+
+### Review Findings
+
+Code review 2026-10-16 (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor). Diff `0965574..HEAD`.
+
+- [x] [Review][Decision] (resolved: A1 amended to name post-approval clarifications) A1 approval predates content added in review — A1 says the "approve and stop" instruction came "after presentation of the complete candidate" (1.0.0-candidate.1), and the spec's Implementation Notes say implementation and review had not started at that checkpoint. Triage items BH03–BH08 then changed G1/C05, V04, V05, V07 and V09, yet inventory 1.0.0 is `status: approved` with A1 on all 161 rows. BH02 was rejected on chronology, which does not address text added after approval. Options: (a) ask the user to re-confirm the amended 1.0.0; (b) amend A1 to say what was and was not seen at approval; (c) accept as is. [folders-migration-inventory-v1.md, A1 section; spec.md Review Triage Log]
+- [x] [Review][Decision] (resolved: `approval_note` added to front matter) `maintainer_approval_ref` and `status: approved` overstate the approval — A1 is the requesting user's session approval and says no Folders maintainer is asserted, but `epic-4-context.md` requires an "owning maintainer approval reference" per row. A later gate (Story 4.5) could read the front matter as maintainer sign-off. Options: rename the field (e.g. `approval_ref` plus `approval_kind: session`), add a limit note in the front matter, or leave it. [folders-migration-inventory-v1.md:1-9]
+- [x] [Review][Patch] M22 (and CLI row L38) cite V03, which excludes indexing status — M22's rationale says "task scope" and cites `V01–V06`, but V03 says the nine task-required reads are "except indexing status" and "Indexing status uses folder only". Cite `V01,V02,V04–V06` and drop "task scope". [folders-migration-inventory-v1.md:117]
+
+#### Rejected
+
+- Spec `status: done` vs sprint `review`, `review_loop_iteration: 0`, Task 5 `[x]`, empty Spec Change Log, frozen-block drift: the fix edits the spec under review. The spec's triage log also explains the separate review transition.
+- Source-evidence `path:line` anchors unchecked / may rot (BH, ECH): false. I resolved every `src/` and `tests/` anchor in the inventory against the pinned Folders checkout (`e2252f2…`) and none was missing or blank. The pin fixes the lines.
+- Verifier brittleness (regex parsing, hard-coded counts, 2 mutation classes, no CI hook, no runnable script, C/Q/G pair checks, cwd, shallow clone, draft-edit failure, testimony-only evidence, malformed row IDs): low. The ACs require repeatable static checks, which exist, and the fixes add guards.
+- Boilerplate row rationales: low. The fix is a large rewrite for little benefit.
+- Missing deferred-work entries for G/V/N: low. The prerequisites are tracked in the inventory with owners. The spec's ACs do not require ledger entries.
+- Commitlint log in `verification.md`: harmless and cosmetic.
+- No identifier-kind column on future-target tables: not required by any AC. Story 4.5 can add it.
+- Historical draft handling / dangling links: false. The only referencing files are the spec, verification and `spec-add-six-domain-modules.md`, and the draft keeps its path.
+- V03 "all mutations" over-generalized: maybe-false and only low if true. Settling it needs the per-DTO scope rules.
+- Local `git rev-parse` check depends on the checkout: false. `references/` is a declared submodule and the check runs where the pin exists.
