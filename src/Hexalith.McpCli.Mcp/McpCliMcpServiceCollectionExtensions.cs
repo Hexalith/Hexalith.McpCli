@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Schema;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Serialization;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol;
+using Json.Schema;
 
 namespace Hexalith.McpCli.Mcp;
 
@@ -45,6 +45,9 @@ public static class McpCliMcpServiceCollectionExtensions
             "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
             typeof(QueryResult), readOnly: true));
 
+        var inputSchemas = collection.ToDictionary(tool => tool.ProtocolTool.Name,
+            tool => JsonSchema.FromText(tool.ProtocolTool.InputSchema.GetRawText()), StringComparer.Ordinal);
+
         string version = typeof(McpCliMcpServiceCollectionExtensions).Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
         _ = services.AddMcpServer(options =>
@@ -74,6 +77,12 @@ public static class McpCliMcpServiceCollectionExtensions
                     {
                         throw new McpProtocolException($"{required} is required and must be non-empty.", McpErrorCode.InvalidParams);
                     }
+
+                    if (inputSchemas.TryGetValue(toolName, out JsonSchema? schema)
+                        && !schema.Evaluate(JsonSerializer.SerializeToElement(parameters["arguments"] ?? new JsonObject())).IsValid)
+                    {
+                        throw new McpProtocolException("Tool arguments do not match the input schema.", McpErrorCode.InvalidParams);
+                    }
                 }
 
                 await next(context, cancellationToken).ConfigureAwait(false);
@@ -99,21 +108,6 @@ public static class McpCliMcpServiceCollectionExtensions
 
     private static McpServerTool Create(Delegate method, string name, string description, Type successType, bool readOnly)
     {
-        JsonNode success = JsonSchemaExporter.GetJsonSchemaAsNode(McpCliJson.Result, successType);
-        JsonNode error = JsonSchemaExporter.GetJsonSchemaAsNode(McpCliJson.Result, typeof(OperationError));
-        var schema = new JsonObject
-        {
-            ["type"] = "object",
-            ["oneOf"] = new JsonArray(
-                Close(success),
-                new JsonObject
-                {
-                    ["type"] = "object",
-                    ["properties"] = new JsonObject { ["error"] = Close(error) },
-                    ["required"] = new JsonArray("error"),
-                    ["additionalProperties"] = false,
-                }),
-        };
         return McpServerTool.Create(method, new McpServerToolCreateOptions
         {
             Name = name,
@@ -122,18 +116,9 @@ public static class McpCliMcpServiceCollectionExtensions
             Destructive = !readOnly,
             Idempotent = readOnly,
             UseStructuredContent = true,
-            OutputSchema = JsonSerializer.SerializeToElement(schema, McpCliJson.Result),
+            OutputSchema = McpOutputSchema.Create(successType),
             SerializerOptions = McpCliJson.Result,
         });
     }
 
-    private static JsonNode Close(JsonNode schema)
-    {
-        if (schema is JsonObject objectSchema)
-        {
-            objectSchema["additionalProperties"] = false;
-        }
-
-        return schema;
-    }
 }

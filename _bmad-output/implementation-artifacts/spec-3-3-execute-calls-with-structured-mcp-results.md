@@ -2,7 +2,8 @@
 title: 'Execute Calls with Structured MCP Results'
 type: 'feature'
 created: '2026-10-16'
-status: 'ready-for-dev'
+status: 'in-progress'
+baseline_commit: e8b7ed89ff9265dd0cc7ec22489730e7fcef09bc
 route: 'dispatch'
 review_loop_iteration: 0
 context:
