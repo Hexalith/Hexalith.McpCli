@@ -5,6 +5,7 @@ using Hexalith.EventStore.Contracts.Queries;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Serialization;
+using Hexalith.McpCli.Core.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
@@ -38,7 +39,7 @@ public sealed class McpExecutionTests
         call.GetMethodInfo().Name.ShouldBe(nameof(IEventStoreGatewayClient.SubmitCommandAsync));
         object?[] values = call.GetArguments();
         SubmitCommandRequest request = values[0].ShouldBeOfType<SubmitCommandRequest>();
-        request.MessageId.Length.ShouldBe(26);
+        request.MessageId.ShouldMatch(SchemaDeriver.UlidPattern);
         request.MessageId.ShouldNotBe(CorrelationId);
         var expected = new SubmitCommandRequest(request.MessageId, "session-tenant", "routing", ItemId,
             "envelope-item", JsonSerializer.SerializeToElement(new Dictionary<string, string>
@@ -53,18 +54,23 @@ public sealed class McpExecutionTests
 
     /// <summary>Default correlation uses the generated attempt ID and optional command fields stay absent.</summary>
     [Theory]
-    [InlineData("2025-06-18")]
-    [InlineData("2026-07-28")]
-    public async Task CommandDefaultsDoNotInventOptionalMembersAsync(string version)
+    [InlineData("2025-06-18", false)]
+    [InlineData("2025-06-18", true)]
+    [InlineData("2026-07-28", false)]
+    [InlineData("2026-07-28", true)]
+    public async Task CommandDefaultsDoNotInventOptionalMembersAsync(string version, bool hasReturnedMessageId)
     {
-        await using McpTestSession session = await CreateAsync(version);
+        await using McpTestSession session = await CreateAsync(version, configure: (_, gateway) =>
+            gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new SubmitCommandResponse(CorrelationId, MessageId: hasReturnedMessageId ? MessageId : null))));
         CallToolResult result = await session.CallAsync("send_command", new SendCommandArguments("sample.create-item", CommandPayload));
         SubmitCommandRequest request = session.Gateway.ReceivedCalls().ShouldHaveSingleItem()
             .GetArguments()[0].ShouldBeOfType<SubmitCommandRequest>();
         request.CorrelationId.ShouldBe(request.MessageId);
         request.IdempotencyKey.ShouldBeNull();
         request.Extensions.ShouldBeNull();
-        AssertDocument(result, new CommandResult("sample.create-item", MessageId, request.MessageId,
+        request.MessageId.ShouldMatch(SchemaDeriver.UlidPattern);
+        AssertDocument(result, new CommandResult("sample.create-item", hasReturnedMessageId ? MessageId : request.MessageId, request.MessageId,
             "sample-tenant", ItemId, "accepted"));
     }
 
@@ -86,7 +92,7 @@ public sealed class McpExecutionTests
                 .Returns(Task.FromResult(new EventStoreQueryResult(CorrelationId,
                     response.ValueKind == JsonValueKind.Null ? null : response, false, null)
                 {
-                    Metadata = withPaging ? new QueryResponseMetadata(Paging: new QueryPagingMetadata(25, 0, "next", 50, true)) : null,
+                    Metadata = withPaging ? new QueryResponseMetadata(Paging: new QueryPagingMetadata(25, 0, "next", 0, false)) : null,
                 })));
         var arguments = new RunQueryArguments("sample.get-item", QueryPayload, Tenant: "sample-tenant",
             AggregateId: ItemId, EntityId: "entity-42", PageSize: 25, Cursor: "opaque-cursor");
@@ -105,6 +111,32 @@ public sealed class McpExecutionTests
             JsonSerializer.SerializeToElement(expected, McpCliJson.Result)).ShouldBeTrue();
         values[1].ShouldBeNull();
         ((CancellationToken)values[2]!).CanBeCanceled.ShouldBeTrue();
+    }
+
+    /// <summary>Omitted paging, zero offsets and empty cursors remain distinct on the query envelope.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task IndependentQueryPagingArgumentsMatchCoreAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        foreach ((int? pageSize, int? offset, string? cursor) in new (int?, int?, string?)[]
+        {
+            (null, null, null), (25, 0, null), (null, null, ""), (null, null, " "),
+        })
+        {
+            JsonElement result = await session.AssertParityAsync(new RunQueryArguments("sample.get-item", QueryPayload,
+                PageSize: pageSize, Offset: offset, Cursor: cursor));
+            result.TryGetProperty("paging", out _).ShouldBeFalse();
+            var call = session.Gateway.ReceivedCalls().ShouldHaveSingleItem();
+            var expected = new SubmitQueryRequest("sample-tenant", "sample", ItemId, "get-item", "sample-items",
+                JsonSerializer.Deserialize<JsonElement>(QueryPayload))
+            {
+                Paging = pageSize is null && offset is null && cursor is null ? null : new QueryPagingOptions(pageSize, offset, cursor),
+            };
+            JsonElement.DeepEquals(JsonSerializer.SerializeToElement(call.GetArguments()[0], McpCliJson.Result),
+                JsonSerializer.SerializeToElement(expected, McpCliJson.Result)).ShouldBeTrue();
+        }
     }
 
     /// <summary>Fixed and session tenant policy remains in Core and refusals never reach the Gateway.</summary>
@@ -134,6 +166,72 @@ public sealed class McpExecutionTests
             {
                 result.GetProperty("tenant").GetString().ShouldBe(supplied);
                 session.Gateway.ReceivedCalls().ShouldHaveSingleItem();
+            }
+        }
+    }
+
+    /// <summary>Commands and queries inherit session tenants, and command overrides use the same Core operator gate.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task SessionTenantFallbackAndCommandOverrideMatchCoreAsync(string version)
+    {
+        foreach ((bool command, string? supplied, bool gate, bool refused) in new (bool, string?, bool, bool)[]
+        {
+            (false, null, false, false), (true, null, false, false),
+            (true, "other", false, true), (true, "other", true, false),
+        })
+        {
+            await using McpTestSession session = await CreateAsync(version, Settings(allowOverride: gate));
+            OperationCall arguments = command
+                ? new SendCommandArguments("routing-fixture.envelope-item", QueryPayload, Tenant: supplied,
+                    AggregateId: ItemId, CorrelationId: CorrelationId, IdempotencyKey: Key)
+                : new RunQueryArguments("routing-fixture.get-http2-status", "{}", Tenant: supplied, AggregateId: ItemId);
+            JsonElement result = await session.AssertParityAsync(arguments);
+            if (refused)
+            {
+                result.GetProperty("error").GetProperty("code").GetString().ShouldBe("validation_failed");
+                session.Gateway.ReceivedCalls().ShouldBeEmpty();
+                continue;
+            }
+
+            string tenant = supplied ?? "session-tenant";
+            result.GetProperty("tenant").GetString().ShouldBe(tenant);
+            object request = session.Gateway.ReceivedCalls().ShouldHaveSingleItem().GetArguments()[0]!;
+            object expected = command
+                ? new SubmitCommandRequest(((SubmitCommandRequest)request).MessageId, tenant, "routing", ItemId,
+                    "envelope-item", JsonSerializer.SerializeToElement(new Dictionary<string, string>
+                    {
+                        ["ItemId"] = ItemId, ["tenant/~"] = tenant, ["Actor"] = "operator-1",
+                        ["Correlation"] = CorrelationId, ["Idempotency"] = Key,
+                    }), CorrelationId, IdempotencyKey: Key)
+                : new SubmitQueryRequest(tenant, "routing", ItemId, "get-http2-status", "routing-items",
+                    JsonSerializer.Deserialize<JsonElement>("{}"));
+            JsonElement.DeepEquals(JsonSerializer.SerializeToElement(request, McpCliJson.Result),
+                JsonSerializer.SerializeToElement(expected, McpCliJson.Result)).ShouldBeTrue();
+        }
+    }
+
+    /// <summary>JSON integer spellings that the SDK cannot bind to Int32 fail as protocol errors before execution.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task NonRepresentablePagingValuesUseInvalidParametersAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        foreach (string field in new[] { "pageSize", "offset" })
+        {
+            foreach (string number in new[] { "2147483648", "-2147483649", "25.0", "1e20" })
+            {
+                var arguments = new Dictionary<string, object?>
+                {
+                    ["operation"] = "sample.get-item", ["payload"] = QueryPayload,
+                    [field] = JsonSerializer.Deserialize<JsonElement>(number),
+                };
+                McpProtocolException exception = await Should.ThrowAsync<McpProtocolException>(() => session.CallAsync("run_query", arguments));
+                exception.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                exception.Message.ShouldBe($"Request failed (remote): {field} must be representable as an Int32 integer.");
+                session.Gateway.ReceivedCalls().ShouldBeEmpty();
             }
         }
     }
@@ -243,10 +341,13 @@ public sealed class McpExecutionTests
         await using McpTestSession session = await CreateAsync(version);
         foreach ((string tool, object arguments) in new (string, object)[]
         {
+            ("run_query", new { payload = QueryPayload }),
+            ("send_command", new { operation = (string?)null, payload = CommandPayload }),
             ("list_operations", new { module = 1 }), ("describe_operation", new { operation = "" }),
             ("send_command", new { operation = "sample.create-item" }),
             ("run_query", new { operation = "sample.get-item", payload = new { ItemId } }),
             ("run_query", new { operation = "sample.get-item", payload = QueryPayload, pageSize = "25" }),
+            ("run_query", new { operation = "sample.get-item", payload = QueryPayload, pageSize = 2.5 }),
             ("send_command", new { operation = "sample.create-item", payload = CommandPayload, extensions = new { task = 42 } }),
         })
         {

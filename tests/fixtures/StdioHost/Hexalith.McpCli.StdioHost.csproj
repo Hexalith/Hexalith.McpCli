@@ -4,6 +4,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="NSubstitute" />
     <ProjectReference Include="../../../src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
     <ProjectReference Include="../../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
     <ProjectReference Include="../Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />

@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
+using Hexalith.McpCli.Core.Execution;
+using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Core.Settings;
 using ModelContextProtocol;
 using ModelContextProtocol.Client;
@@ -68,6 +70,15 @@ public sealed class McpStdioProcessTests
                 else
                 {
                     operation.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+                    CallToolResult unavailable = await client.CallToolAsync("run_query", new Dictionary<string, object?>
+                    {
+                        ["operation"] = "sample.get-item",
+                        ["payload"] = "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}",
+                    }, cancellationToken: timeout.Token);
+                    AssertToolDocument(unavailable, new
+                    {
+                        error = new OperationError("configuration_invalid", Message: "Gateway URL is not configured."),
+                    }, isError: true);
                 }
 
                 CallToolResult failure = await client.CallToolAsync("describe_operation",
@@ -97,6 +108,128 @@ public sealed class McpStdioProcessTests
             diagnostic.ShouldNotContain("unknown_operation");
             diagnostic.ShouldNotContain("MCP server failed.");
             diagnostic.ShouldNotContain("This result is emitted as JSON; no table view is defined.");
+        }
+        finally
+        {
+            await StopAsync(child);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Each advertised tool runs through the actual CLI host and both SDK flows with a substituted Gateway.</summary>
+    [Theory]
+    [InlineData("2025-06-18", "initialize", false)]
+    [InlineData("2025-06-18", "initialize", true)]
+    [InlineData("2026-07-28", "server/discover", false)]
+    [InlineData("2026-07-28", "server/discover", true)]
+    public async Task EveryAvailableToolExecutesOverCleanStdioAsync(string version, string firstMethod, bool readOnly)
+    {
+        const string itemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
+        const string correlationId = "01J9MZHXT3RKM0VWXRXGSJDATK";
+        const string messageId = "01J9MZHXT3RKM0VWXRXGSJDATM";
+        const string key = "01J9MZHXT3RKM0VWXRXGSJDATN";
+        string directory = TemporaryDirectory();
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        Process? child = null;
+        try
+        {
+            Process process = child = Start(directory, new Dictionary<string, string>
+            {
+                ["MCPCLI_STDIO_GATEWAY"] = "substitute",
+                ["EVENTSTORE_URL"] = "https://gateway.invalid",
+                ["EVENTSTORE_READ_ONLY"] = readOnly ? "true" : "false",
+            }, "mcp", "--transport", "stdio");
+            Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
+            var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
+            var transport = new RecordingClientTransport(new StreamClientTransport(process.StandardInput.BaseStream, standardOutput));
+            await using (McpClient client = await McpClient.CreateAsync(transport,
+                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
+            {
+                transport.Methods[0].ShouldBe(firstMethod);
+                client.NegotiatedProtocolVersion.ShouldBe(version);
+                IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
+                tools.Select(tool => tool.Name).ShouldBe(readOnly
+                    ? ["list_modules", "list_operations", "describe_operation", "run_query"]
+                    : ["list_modules", "list_operations", "describe_operation", "send_command", "run_query"]);
+                foreach (McpClientTool tool in tools)
+                {
+                    Dictionary<string, object?> arguments = tool.Name switch
+                    {
+                        "list_modules" => [],
+                        "list_operations" => new() { ["module"] = "sample" },
+                        "describe_operation" => new() { ["operation"] = "sample.get-item" },
+                        "send_command" => new()
+                        {
+                            ["operation"] = "sample.create-item", ["payload"] = $$"""{"ItemId":"{{itemId}}","Title":"Hello"}""",
+                            ["aggregateId"] = itemId, ["correlationId"] = correlationId, ["idempotencyKey"] = key,
+                        },
+                        "run_query" => new()
+                        {
+                            ["operation"] = "sample.get-item", ["payload"] = $$"""{"ItemId":"{{itemId}}"}""",
+                            ["aggregateId"] = itemId, ["entityId"] = "entity-42", ["pageSize"] = 25, ["offset"] = 0,
+                        },
+                        _ => throw new InvalidOperationException(tool.Name),
+                    };
+                    CallToolResult result = await client.CallToolAsync(tool.Name, arguments, cancellationToken: timeout.Token);
+                    result.IsError.ShouldBe(false);
+                    JsonElement document = result.StructuredContent.ShouldNotBeNull();
+                    AssertToolDocument(result, document);
+                    if (tool.Name == "send_command")
+                    {
+                        AssertToolDocument(result, new CommandResult("sample.create-item", messageId, correlationId,
+                            "sample-tenant", itemId, "accepted", key, JsonSerializer.SerializeToElement(new { accepted = true })));
+                    }
+                    else if (tool.Name == "run_query")
+                    {
+                        AssertToolDocument(result, new QueryResult("sample.get-item", "sample-tenant",
+                            JsonSerializer.SerializeToElement(new { items = Array.Empty<string>() }),
+                            new QueryPagingDocument(25, 0, TotalCount: 0, HasMore: false)));
+                    }
+                }
+
+                CallToolResult failure = await client.CallToolAsync("run_query", new Dictionary<string, object?>
+                {
+                    ["operation"] = "sample.get-item", ["payload"] = $$"""{"ItemId":"{{itemId}}"}""",
+                    ["entityId"] = "gateway-error",
+                }, cancellationToken: timeout.Token);
+                AssertToolDocument(failure, new
+                {
+                    error = new OperationError("gateway_error", Status: 409, Detail: "Fixture Gateway refusal."),
+                }, isError: true);
+                foreach (string field in new[] { "pageSize", "offset" })
+                {
+                    foreach (string number in new[] { "2147483648", "-2147483649", "25.0", "1e20" })
+                    {
+                        McpProtocolException invalid = await Should.ThrowAsync<McpProtocolException>(() => client.CallToolAsync("run_query",
+                            new Dictionary<string, object?>
+                            {
+                                ["operation"] = "sample.get-item", ["payload"] = $$"""{"ItemId":"{{itemId}}"}""",
+                                [field] = JsonSerializer.Deserialize<JsonElement>(number),
+                            }, cancellationToken: timeout.Token).AsTask());
+                        invalid.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                        invalid.Message.ShouldBe($"Request failed (remote): {field} must be representable as an Int32 integer.");
+                    }
+                }
+
+                (await client.CallToolAsync("list_modules", new Dictionary<string, object?>(), cancellationToken: timeout.Token))
+                    .IsError.ShouldBe(false);
+                (await client.ListToolsAsync(cancellationToken: timeout.Token)).Select(tool => tool.Name)
+                    .ShouldBe(tools.Select(tool => tool.Name));
+            }
+
+            process.StandardInput.Close();
+            await process.WaitForExitAsync(timeout.Token);
+            process.ExitCode.ShouldBe(0);
+            await standardOutput.CopyToAsync(Stream.Null, timeout.Token);
+            AssertProtocolOutput(standardOutput.Transcript);
+            string diagnostic = await standardError;
+            diagnostic.ShouldNotContain("\"error\": {");
+            diagnostic.ShouldNotContain("Fixture Gateway refusal.");
+            diagnostic.ShouldNotContain("gateway_error");
+            diagnostic.ShouldNotContain("MCP server failed.");
+            diagnostic.ShouldNotContain("MCP server stopped unexpectedly.");
+            diagnostic.ShouldNotContain("JsonException");
+            diagnostic.ShouldNotContain("Error invoking");
         }
         finally
         {
@@ -292,6 +425,15 @@ public sealed class McpStdioProcessTests
         }
     }
 
+    private static void AssertToolDocument(CallToolResult result, object expected, bool isError = false)
+    {
+        result.IsError.ShouldBe(isError);
+        JsonElement actual = result.StructuredContent.ShouldNotBeNull();
+        JsonElement.DeepEquals(actual, JsonSerializer.SerializeToElement(expected, McpCliJson.Result)).ShouldBeTrue(actual.GetRawText());
+        using JsonDocument text = JsonDocument.Parse(result.Content.ShouldHaveSingleItem().ShouldBeOfType<TextContentBlock>().Text);
+        JsonElement.DeepEquals(text.RootElement, actual).ShouldBeTrue();
+    }
+
     private static async Task<(int Exit, string Output, string Error)> RunAsync(
         string directory, IReadOnlyDictionary<string, string> environment, params string[] arguments)
     {
@@ -378,6 +520,7 @@ public sealed class McpStdioProcessTests
         }
 
         start.Environment.Remove("MCPCLI_STDIO_CATALOG");
+        start.Environment.Remove("MCPCLI_STDIO_GATEWAY");
 
         start.Environment["HOME"] = directory;
         start.Environment["USERPROFILE"] = directory;

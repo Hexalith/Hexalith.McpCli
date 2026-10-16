@@ -22,6 +22,7 @@ internal static class HostFactory
     /// <param name="presentationOnly">
     /// Whether to resolve only presentation settings, ignoring profile selection and never reading the profile store.
     /// </param>
+    /// <param name="configureServices">Optional service overrides applied before the host is built.</param>
     /// <returns>The invocation host, or <see langword="null" /> when settings resolution fails.</returns>
     internal static IHost? Create(
         SettingsInput input,
@@ -30,16 +31,17 @@ internal static class HostFactory
         bool mcp = false,
         Func<IReadOnlyList<Assembly>>? manifest = null,
         Func<string, string?>? readEnvironment = null,
-        bool presentationOnly = false)
+        bool presentationOnly = false,
+        Action<IServiceCollection>? configureServices = null)
     {
         var bootstrap = new SettingsBootstrap(profileStore, readEnvironment);
         SettingsResolution resolved = presentationOnly ? bootstrap.ResolvePresentation(input) : bootstrap.Resolve(input);
         error = resolved.Error;
-        return resolved.Settings is null ? null : CreateHost(resolved.Settings, mcp, manifest);
+        return resolved.Settings is null ? null : CreateHost(resolved.Settings, mcp, manifest, configureServices);
     }
 
     private static IHost CreateHost(ResolvedSettings settings, bool mcp,
-        Func<IReadOnlyList<Assembly>>? manifest)
+        Func<IReadOnlyList<Assembly>>? manifest, Action<IServiceCollection>? configureServices)
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Logging.ClearProviders();
@@ -57,6 +59,7 @@ internal static class HostFactory
             _ = builder.Services.AddMcpCliMcpServer(settings);
         }
 
+        configureServices?.Invoke(builder.Services);
         return builder.Build();
     }
 }

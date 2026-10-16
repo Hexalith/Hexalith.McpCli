@@ -25,6 +25,7 @@ internal sealed class CliRunner
 
     private readonly Func<IHost, CancellationToken, Task<int>>? _runMcp;
     private readonly Func<IHost, CancellationToken, Task>? _startMcp;
+    private readonly Action<IServiceCollection>? _configureMcpServices;
 
     /// <summary>Initializes a CLI runner with optional profile and manifest seams.</summary>
     /// <param name="profileStore">The private mcpcli profile store.</param>
@@ -54,18 +55,21 @@ internal sealed class CliRunner
     /// <param name="readEnvironment">The environment reader.</param>
     /// <param name="runMcp">The MCP host runner, or the production host runner by default.</param>
     /// <param name="startMcp">An optional MCP startup seam for tests.</param>
+    /// <param name="configureMcpServices">An optional override of MCP services for process integration tests.</param>
     internal CliRunner(
         ProfileStore? profileStore,
         Func<IReadOnlyList<Assembly>>? manifest,
         Func<string, string?>? readEnvironment,
         Func<IHost, CancellationToken, Task<int>>? runMcp,
-        Func<IHost, CancellationToken, Task>? startMcp = null)
+        Func<IHost, CancellationToken, Task>? startMcp = null,
+        Action<IServiceCollection>? configureMcpServices = null)
     {
         _profileStore = profileStore ?? new ProfileStore();
         _manifest = manifest;
         _readEnvironment = readEnvironment;
         _runMcp = runMcp;
         _startMcp = startMcp;
+        _configureMcpServices = configureMcpServices;
     }
 
     /// <summary>Parses arguments with response-file expansion disabled so <c>@</c> values reach their options verbatim.</summary>
@@ -717,7 +721,7 @@ internal sealed class CliRunner
             }
 
             host = HostFactory.Create(input, _profileStore, out OperationError? error,
-                mcp: true, _manifest, _readEnvironment);
+                mcp: true, _manifest, _readEnvironment, configureServices: _configureMcpServices);
             if (error is not null)
             {
                 return await WriteMcpErrorAsync(error, cancellationToken).ConfigureAwait(false);

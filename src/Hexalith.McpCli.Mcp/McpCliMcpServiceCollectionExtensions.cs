@@ -83,6 +83,23 @@ public static class McpCliMcpServiceCollectionExtensions
                     {
                         throw new McpProtocolException("Tool arguments do not match the input schema.", McpErrorCode.InvalidParams);
                     }
+
+                    if (toolName == "run_query" && parameters["arguments"] is JsonObject queryArguments)
+                    {
+                        foreach (string name in new[] { "pageSize", "offset" })
+                        {
+                            if (queryArguments[name] is not JsonNode number)
+                            {
+                                continue;
+                            }
+
+                            JsonElement integer = JsonSerializer.SerializeToElement(number);
+                            if (integer.ValueKind != JsonValueKind.Number || !integer.TryGetInt32(out _))
+                            {
+                                throw new McpProtocolException($"{name} must be representable as an Int32 integer.", McpErrorCode.InvalidParams);
+                            }
+                        }
+                    }
                 }
 
                 await next(context, cancellationToken).ConfigureAwait(false);

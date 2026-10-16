@@ -1,6 +1,8 @@
 using System.Reflection;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Hexalith.McpCli.StdioHost;
 
@@ -18,9 +20,14 @@ internal static class Program
         Type runnerType = Assembly.Load(new AssemblyName("Hexalith.McpCli"))
             .GetType("Hexalith.McpCli.Cli.CliRunner", throwOnError: true)!;
         ConstructorInfo constructor = runnerType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
-            binder: null, [typeof(ProfileStore), typeof(Func<IReadOnlyList<Assembly>>)], modifiers: null)!;
+            binder: null, [typeof(ProfileStore), typeof(Func<IReadOnlyList<Assembly>>), typeof(Func<string, string?>),
+                typeof(Func<IHost, CancellationToken, Task<int>>), typeof(Func<IHost, CancellationToken, Task>),
+                typeof(Action<IServiceCollection>)], modifiers: null)!;
         string? profilePath = Environment.GetEnvironmentVariable("MCPCLI_STDIO_PROFILE_PATH");
-        object runner = constructor.Invoke([new ProfileStore(profilePath), (Func<IReadOnlyList<Assembly>>)(() => manifest)]);
+        Action<IServiceCollection>? configure = Environment.GetEnvironmentVariable("MCPCLI_STDIO_GATEWAY") == "substitute"
+            ? StdioGateway.Configure : null;
+        object runner = constructor.Invoke([new ProfileStore(profilePath), (Func<IReadOnlyList<Assembly>>)(() => manifest),
+            null, null, null, configure]);
         MethodInfo invoke = runnerType.GetMethod("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic,
             binder: null, [typeof(IReadOnlyList<string>), typeof(CancellationToken)], modifiers: null)!;
         return await ((Task<int>)invoke.Invoke(runner, [args, CancellationToken.None])!).ConfigureAwait(false);
