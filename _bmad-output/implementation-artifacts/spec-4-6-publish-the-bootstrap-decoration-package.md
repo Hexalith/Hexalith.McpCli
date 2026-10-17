@@ -65,9 +65,11 @@ and checks on committed source; any required commits must pass pinned commitlint
   validates again but can bypass phase preflight when invoked directly.
 - `.github/workflows/ci.yml` contains the local-source consumer/analyzer smoke;
   extract it into an independent gate. `release.yml` currently requires full CI.
-- `.github/workflows/recover-partial-release.yml` must migrate with staging and
-  taken-version rejection: recover an existing tag, validate public package content
-  before completing GitHub release, and never republish an already present package.
+- `.github/workflows/release.yml` now owns new publication and tagged recovery.
+  NuGet trusted publishing is bound to that exact workflow and its `production`
+  environment, so the former separate recovery workflow cannot acquire the
+  temporary publication key. Recovery validates public package content before
+  completing GitHub release and never republishes an already present package.
 - `.releaserc.json` supplies one semantic-release version and explicit scripts;
   `tools/release-packages.json` retains the future pair declaration.
 - Abstractions.Tests uses Sample.Contracts and EventStore.Contracts fixtures;
@@ -82,7 +84,7 @@ and checks on committed source; any required commits must pass pinned commitlint
   the actual prepared package before its receipt, and recheck the exact committed
   source and independent gates at final tag/publication boundaries. Direct publish
   must enforce the same source policy. Reject malformed registry version strings.
-- [x] `.github/workflows/recover-partial-release.yml` and recovery tests — migrate
+- [x] `.github/workflows/release.yml` recovery mode and recovery tests — migrate
   to bootstrap staging, recover missing publication after a tag, and verify an
   already published package before completing GitHub release without a second push.
   Preserve strict duplicate rejection for ordinary publication. Cover absent,
@@ -124,6 +126,15 @@ and checks on committed source; any required commits must pass pinned commitlint
   catalog exposes `HexalithMcpCliVersion` without editing the read-only checkout.
 
 ## Implementation Notes
+
+- 2026-10-17, trusted publishing correction: The first production release
+  selected `1.0.0` and tagged reviewed source, but the long-lived org secret's
+  NuGet push returned HTTP 403. The user supplied an active organization-owned
+  trusted-publishing policy for `release.yml` and `production`. Recovery moved
+  into that workflow, which requests OIDC credentials. It checks the exact
+  tagged source, successful original push gates and ancestry to current main;
+  this permits the workflow repair commit while preserving the original tag.
+  Public publication and Builds integration remain open.
 
 - 2026-10-17, review loop 1: Reused the preserved candidate and corrected source
   rechecks, fallback isolation, registry version validation, prepared-byte consumer

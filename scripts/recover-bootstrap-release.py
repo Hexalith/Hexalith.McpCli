@@ -27,15 +27,16 @@ def content(path):
                 if name != '.signature.p7s' and not name.startswith('package/services/metadata/core-properties/')}
 
 
-def verify_source(phase):
-    subprocess.run(['python3', 'scripts/verify-release-source.py',
-                    os.environ.get('DISPATCH_SHA', ''), os.environ.get('DISPATCH_REF', ''), phase], check=True)
+def verify_source(phase, version):
+    subprocess.run(['python3', str(Path(__file__).with_name('verify-release-source.py')),
+                    os.environ.get('DISPATCH_SHA', ''), os.environ.get('DISPATCH_REF', ''), phase,
+                    '--tagged-recovery', version], check=True)
 
 
 def recover(version, phase):
     request = load_script('release-request')
     request.validate_request(version, phase)
-    verify_source(phase)
+    verify_source(phase, version)
     staging = Path('nupkgs/bootstrap')
     subprocess.run(['python3', 'scripts/validate-release-packages.py', str(staging), version, phase], check=True)
     package_name = f'Hexalith.McpCli.Abstractions.{version}.nupkg'
@@ -43,8 +44,9 @@ def recover(version, phase):
     load_script('release-receipt').verify_receipt('nupkgs/bootstrap.sha256', prepared,
                                                  os.environ.get('DISPATCH_SHA', ''))
     if not request.version_is_published(version):
-        subprocess.run(['bash', 'scripts/release-publish.sh', version], check=True,
-                       env={**os.environ, 'MCPCLI_RELEASE_PHASE': phase})
+        subprocess.run(['bash', str(Path(__file__).with_name('release-publish.sh')), version], check=True,
+                       env={**os.environ, 'MCPCLI_RELEASE_PHASE': phase,
+                            'MCPCLI_RECOVERY_VERSION': version})
     else:
         print(f'Hexalith.McpCli.Abstractions {version} is already published; verifying without a second push.')
 
@@ -66,7 +68,7 @@ def recover(version, phase):
             raise ValueError('The published package content does not match the tagged bootstrap package.')
         subprocess.run(['bash', 'scripts/smoke-bootstrap-consumer.sh', version, str(public),
                         str(Path(temporary) / 'consumer')], check=True)
-        verify_source(phase)
+        verify_source(phase, version)
         print(f'Verified public package {url} SHA-256 {hashlib.sha256(downloaded.read_bytes()).hexdigest()}')
 
 

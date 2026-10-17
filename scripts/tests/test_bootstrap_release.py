@@ -119,6 +119,12 @@ state_file = Path(os.environ["RELEASE_TEST_ROOT"]) / "local-source-state"
 if state_file.exists(): state = state_file.read_text()
 if state == "not-git": sys.exit(128)
 if sys.argv[1:] == ["rev-parse", "HEAD"]: print("b" * 40 if state == "wrong-head" else os.environ.get("LOCAL_HEAD_SHA", "a" * 40))
+elif sys.argv[1:] == ["rev-parse", "--verify", "refs/tags/v1.0.0^{commit}"]:
+    print(os.environ.get("TAG_SHA", "a" * 40))
+elif sys.argv[1:] == ["rev-parse", "origin/main"]:
+    print(os.environ.get("FETCHED_MAIN_SHA", os.environ.get("LIVE_SHA", "a" * 40)))
+elif sys.argv[1:3] == ["merge-base", "--is-ancestor"]:
+    if os.environ.get("RECOVERY_ANCESTOR") == "false": sys.exit(1)
 elif sys.argv[1:] == ["branch", "--show-current"]: print("feature" if state == "feature" else "main")
 elif sys.argv[1:] == ["status", "--porcelain", "--untracked-files=normal"]:
     if state == "dirty": print(" M scripts/release-publish.sh")
@@ -130,13 +136,21 @@ import json, os, sys
 from pathlib import Path
 state = os.environ["SOURCE_STATE"]
 sha = os.environ.get("LIVE_SHA", "a" * 40)
+run_sha = os.environ.get("RUN_SHA", "a" * 40)
 with (Path(os.environ["RELEASE_TEST_ROOT"]) / "gh.log").open("a") as log: log.write(" ".join(sys.argv[1:]) + "\\n")
 endpoint = sys.argv[4]
 if endpoint.endswith("git/ref/heads/main"):
     print(json.dumps({"object":{"sha":"b" * 40 if state == "stale" else sha}}))
+elif endpoint.endswith("git/ref/tags/v1.0.0"):
+    if os.environ.get("REMOTE_TAG_ANNOTATED") == "1":
+        print(json.dumps({"object":{"type":"tag", "sha":"t" * 40}}))
+    else:
+        print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
+elif endpoint.endswith("git/tags/" + "t" * 40):
+    print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
 else:
     gate = "bootstrap" if "bootstrap-package" in endpoint else "commitlint"
-    run = {"head_sha":sha, "head_branch":"main", "event":"push", "status":"completed",
+    run = {"head_sha":run_sha, "head_branch":"main", "event":"push", "status":"completed",
            "conclusion":"success", "run_number":1, "run_attempt":1, "html_url":"https://example.test/" + gate}
     runs = [run]
     if state == gate + "-missing": runs = []
@@ -245,7 +259,8 @@ else:
     def test_older_preparation_cannot_publish_or_recover_from_new_green_source(self):
         result = self.run_script("release-prepare.sh", "1.0.0")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.env.update(LOCAL_HEAD_SHA="b" * 40, LIVE_SHA="b" * 40, DISPATCH_SHA="b" * 40)
+        self.env.update(LOCAL_HEAD_SHA="b" * 40, LIVE_SHA="b" * 40, DISPATCH_SHA="b" * 40,
+                        TAG_SHA="b" * 40, REMOTE_TAG_SHA="b" * 40, RUN_SHA="b" * 40)
         for script, args in (("release-publish.sh", ("1.0.0",)),
                              ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"))):
             with self.subTest(script=script):
@@ -570,6 +585,47 @@ else:
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("Verified public package", result.stdout)
         self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+
+    def test_tagged_recovery_uses_preserved_scripts_and_green_ancestor_after_main_moves(self):
+        staged = self.staged()
+        shutil.copy(staged, self.root / "public.nupkg")
+        self.env["LIVE_SHA"] = "b" * 40
+        self.env["REMOTE_TAG_ANNOTATED"] = "1"
+        preserved = self.root / "runner-temp/release-scripts"
+        shutil.copytree(self.root / "scripts", preserved)
+        (self.root / "scripts/release-publish.sh").write_text(
+            '#!/usr/bin/env bash\necho "tagged publisher cannot check moved main" >&2\nexit 91\n')
+        (self.root / "scripts/verify-release-source.py").write_text(
+            'import sys\nprint("tagged source verifier cannot check moved main", file=sys.stderr)\nsys.exit(91)\n')
+        result = subprocess.run(["python3", str(preserved / "recover-bootstrap-release.py"), "1.0.0", "bootstrap"],
+                                cwd=self.root, env=self.env, text=True, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Verified tagged recovery source", result.stdout)
+        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+
+    def test_tagged_recovery_rejects_wrong_tag_moved_main_nonancestor_and_failed_gate(self):
+        self.staged()
+        self.env["LIVE_SHA"] = "b" * 40
+        for changed, value, message in (("TAG_SHA", "c" * 40, "Recovery tag does not match"),
+                                        ("REMOTE_TAG_SHA", "c" * 40, "Remote recovery tag does not match"),
+                                        ("FETCHED_MAIN_SHA", "c" * 40, "Current main moved"),
+                                        ("RECOVERY_ANCESTOR", "false", "not an ancestor"),
+                                        ("SOURCE_STATE", "bootstrap-failed", "No successful latest")):
+            with self.subTest(changed=changed):
+                self.env[changed] = value
+                result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assert_no_push()
+                del self.env[changed]
+
+    def test_recovery_publisher_refuses_version_mismatch(self):
+        self.staged()
+        self.env["MCPCLI_RECOVERY_VERSION"] = "1.0.1"
+        result = self.run_script("release-publish.sh", "1.0.0")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Recovery version does not match", result.stderr)
+        self.assert_no_push()
 
     def test_recovery_absent_publisher_uses_validated_phase_over_ambient_phase(self):
         staged = self.staged()

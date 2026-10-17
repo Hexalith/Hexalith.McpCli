@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Require the current main SHA and its independent bootstrap/commitlint results."""
+"""Require exact, clean release source and independent bootstrap/commitlint results."""
 
 import argparse
 import json
@@ -22,6 +22,7 @@ def main() -> int:
     parser.add_argument("sha")
     parser.add_argument("ref")
     parser.add_argument("phase")
+    parser.add_argument("--tagged-recovery", metavar="VERSION")
     args = parser.parse_args()
     try:
         if args.phase != "bootstrap":
@@ -44,7 +45,38 @@ def main() -> int:
             raise ValueError("Release source has uncommitted changes.")
         repository = os.environ["REPOSITORY"]
         live_main = github_json(f"repos/{repository}/git/ref/heads/main")["object"]["sha"]
-        if args.sha != live_main:
+        if args.tagged_recovery is not None:
+            tag = f"refs/tags/v{args.tagged_recovery}^{{commit}}"
+            tagged_sha = subprocess.run(
+                ["git", "rev-parse", "--verify", tag],
+                check=True, capture_output=True, text=True,
+            ).stdout.strip()
+            if tagged_sha != args.sha:
+                raise ValueError("Recovery tag does not match the exact checked-out release SHA.")
+            remote_tag = github_json(
+                f"repos/{repository}/git/ref/tags/v{args.tagged_recovery}")["object"]
+            for _ in range(4):
+                if remote_tag["type"] == "commit":
+                    break
+                if remote_tag["type"] != "tag":
+                    raise ValueError("Remote recovery tag does not resolve to a commit.")
+                remote_tag = github_json(
+                    f"repos/{repository}/git/tags/{remote_tag['sha']}")["object"]
+            if remote_tag["type"] != "commit" or remote_tag["sha"] != args.sha:
+                raise ValueError("Remote recovery tag does not match the exact release SHA.")
+            fetched_main = subprocess.run(
+                ["git", "rev-parse", "origin/main"],
+                check=True, capture_output=True, text=True,
+            ).stdout.strip()
+            if fetched_main != live_main:
+                raise ValueError("Current main moved after recovery checkout; fetch and retry.")
+            ancestor = subprocess.run(
+                ["git", "merge-base", "--is-ancestor", args.sha, "origin/main"],
+                check=False, capture_output=True, text=True,
+            )
+            if ancestor.returncode != 0:
+                raise ValueError("Recovery tag is not an ancestor of current main.")
+        elif args.sha != live_main:
             raise ValueError("Dispatch SHA is not the current main SHA; main may have moved during approval.")
         for workflow in ("bootstrap-package.yml", "commitlint.yml"):
             response = github_json(
@@ -57,7 +89,10 @@ def main() -> int:
             if latest is None or latest["status"] != "completed" or latest["conclusion"] != "success":
                 raise ValueError(f"No successful latest {workflow} push run exists for {args.sha}.")
             print(f"Verified {workflow}: {latest['html_url']}")
-        print(f"Verified current main source {args.sha}")
+        if args.tagged_recovery is None:
+            print(f"Verified current main source {args.sha}")
+        else:
+            print(f"Verified tagged recovery source {args.sha} on current main {live_main}")
         return 0
     except (ValueError, KeyError, TypeError, subprocess.CalledProcessError, OSError) as error:
         print(f"Release source gate failed: {error}", file=sys.stderr)

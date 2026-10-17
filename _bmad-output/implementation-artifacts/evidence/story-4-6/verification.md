@@ -3,16 +3,18 @@
 ## State
 
 Local implementation and checks completed on 2026-10-17. The story remains
-**in-progress**: publication and the owning Builds integration have not occurred.
-No release workflow, NuGet push, release tag, commit or upstream catalog mutation
-was performed during implementation. Credentials are excluded from this evidence.
+**in-progress** while the production release and owning Builds integration run.
+Credentials are excluded from this evidence.
 
 - Starting committed source: `04178de98f30b0c5541f7efb978e9b9acc8e8c1d` on `main`.
-- Reviewed implementation commit SHA: pending review and committed-source integration.
-- Exact-source bootstrap push run: pending.
-- Exact-source commitlint push run: pending.
-- Production release run and GitHub release URL: pending.
-- Published package version, registry URL and downloaded-package SHA-256: pending.
+- Reviewed implementation commit SHA: `d9f822d64f7afa9bd51ca1698f5051147b86b554`, pushed to `main`.
+- Exact-source bootstrap push run: [39052313304](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39052313304), success.
+- Exact-source commitlint push run: [39052313562](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39052313562), success.
+- Full CI push run: [39052313593](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39052313593), success; bootstrap release does not require it.
+- Production release run: [39055956370](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39055956370), dispatched from exact `main` SHA with `phase=bootstrap`. Both source checks, preparation and package validation passed; NuGet rejected the push with HTTP 403.
+- Selected version: `1.0.0`; tag [`v1.0.0`](https://github.com/Hexalith/Hexalith.McpCli/tree/v1.0.0) points to the reviewed commit. No GitHub release exists yet.
+- Prepared production package SHA-256 before rejected push: `7779b0bd465e2013a720d799bebf17edd99f4da2910715b1c56327b64b840a92` (workflow log; not a published-package hash).
+- Published package version, registry URL and downloaded-package SHA-256: pending; public flat-container package URL returned HTTP 404 after the rejected push.
 - Public-feed consumer restore/build and analyzer proof: pending publication.
 - Owning Builds catalog/audit revision and integration evidence: pending publication.
 
@@ -92,6 +94,13 @@ with `NU1101`, proving the cached package cannot falsify source evidence. Positi
 and negative outputs are retained at `/tmp/mcpcli-4-6-source-proof.z3YdOL`; the
 negative output is `negative.log`.
 
+The final committed candidate repeated this isolation check with a parent
+`TreatWarningsAsErrors` props file. The positive relative-source consumer passed;
+the negative empty-source restore failed with `NU1101` despite inherited
+`RestoreSources`, `RestorePackagesPath` and fallback environment values aimed at
+the populated cache. Both logs are at
+`/tmp/mcpcli-4-6-final-isolation-h2nnkd5k`.
+
 ```sh
 actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml .github/workflows/recover-partial-release.yml
 bash -n scripts/release-prepare.sh scripts/release-preflight.sh scripts/release-publish.sh scripts/smoke-bootstrap-consumer.sh
@@ -103,20 +112,34 @@ the successful whitespace check.
 
 ## Remaining release and upstream steps
 
-The `gh` CLI is available and authenticated; the independent owning checkout
-`/home/administrator/projects/hexalith/builds` exists. Neither fact substitutes
-for reviewed source or published registry evidence. NuGet publication credentials
-have not been inspected or recorded locally.
+The `gh` CLI is authenticated; the independent owning checkout
+`/home/administrator/projects/hexalith/builds` is clean and fast-forwarded to
+`c8c72dc`. The prior organization `NUGET_API_KEY` secret was rejected by NuGet;
+its value has not been inspected or recorded locally. The user supplied an
+active, organization-owned nuget.org trusted-publishing policy for GitHub
+repository `Hexalith/Hexalith.McpCli`, workflow `release.yml`, environment
+`production`, with push scope for `*`. The GitHub owner/repository immutable IDs
+match the policy. The revised workflow requests a short-lived key via OIDC.
 
-1. Review and commit the implementation, validating each exact commit message
-   with this repository's pinned commitlint tooling. Integrate it into `main`.
-2. Record successful latest **push** runs of `bootstrap-package.yml` and
-   `commitlint.yml` for that exact current main SHA.
-3. Dispatch `release.yml` from main with `phase=bootstrap`. Its production job
+1. Completed: review, pinned commitlint validation, commit and main push at
+   `d9f822d64f7afa9bd51ca1698f5051147b86b554`.
+2. Completed: latest successful **push** runs of `bootstrap-package.yml` and
+   `commitlint.yml` for that exact main SHA. A live source guard invocation also
+   verified both runs and current main before release dispatch.
+3. Dispatched: `release.yml` from main with `phase=bootstrap`. Its production job
    rechecks committed HEAD, clean source, main and both independent results after
    approval, after preparation before tagging, and immediately before push; it retains
    semantic-release version selection, and publishes only the validated
-   Abstractions snapshot. Record the actual selected version and release hash.
+   Abstractions snapshot. This selected `1.0.0` and created `v1.0.0`, then
+   `dotnet nuget push` returned 403: "The specified API key is invalid, has
+   expired, or does not have permission to access the specified package."
+   The [failed run](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39055956370)
+   left no public package or GitHub release. The trusted-publishing policy applies
+   only to `release.yml`, so recovery is now in that workflow: dispatch from main
+   with `phase=bootstrap` and `recovery_version=1.0.0` after its repair commit
+   passes the independent gates. Recovery rebuilds the original tagged source,
+   which must be a green ancestor of current main. An ordinary new-release
+   dispatch would find the existing tag and cannot complete `1.0.0`.
 4. Download/inspect the published package and compile the isolated decorated
    consumer using source `https://api.nuget.org/v3/index.json`, proving the
    packaged analyzer loads. Record the registry and consumer evidence.
