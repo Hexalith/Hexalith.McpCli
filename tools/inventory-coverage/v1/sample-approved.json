@@ -1,0 +1,110 @@
+{
+  "formatVersion": 1,
+  "module": "sample",
+  "purpose": "fixture",
+  "targets": [
+    {
+      "id": "T01",
+      "name": "sample.create-item",
+      "contractType": "Hexalith.McpCli.Sample.Contracts.CreateItemCommand"
+    },
+    {
+      "id": "T02",
+      "name": "sample.get-item",
+      "contractType": "Hexalith.McpCli.Sample.Contracts.GetItemQuery"
+    },
+    {
+      "id": "T03",
+      "name": "sample.rename-item",
+      "contractType": "Hexalith.McpCli.Sample.Contracts.RenameItemCommand"
+    },
+    {
+      "id": "T04",
+      "name": "sample.withdrawn-operation",
+      "contractType": "Hexalith.McpCli.Sample.Contracts.WithdrawnOperationCommand"
+    },
+    {
+      "id": "T05",
+      "name": "sample.deferred-operation",
+      "contractType": "Hexalith.McpCli.Sample.Contracts.DeferredOperationQuery"
+    }
+  ],
+  "legacyRows": [
+    {
+      "id": "L01",
+      "legacyOperation": "synthetic_create_item",
+      "targetIds": [
+        "T01"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Exercise the built sample create command.",
+      "approval": {
+        "status": "approved",
+        "authority": "synthetic-fixture",
+        "reference": "README.md#synthetic-fixture-certification"
+      }
+    },
+    {
+      "id": "L02",
+      "legacyOperation": "synthetic_get_item",
+      "targetIds": [
+        "T02"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Exercise the built sample read query.",
+      "approval": {
+        "status": "approved",
+        "authority": "synthetic-fixture",
+        "reference": "README.md#synthetic-fixture-certification"
+      }
+    },
+    {
+      "id": "L03",
+      "legacyOperation": "synthetic_read_then_rename",
+      "targetIds": [
+        "T02",
+        "T03"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Exercise a shared read target and the built sample rename command.",
+      "approval": {
+        "status": "approved",
+        "authority": "synthetic-fixture",
+        "reference": "README.md#synthetic-fixture-certification"
+      }
+    },
+    {
+      "id": "L04",
+      "legacyOperation": "synthetic_withdrawn_operation",
+      "targetIds": [
+        "T04"
+      ],
+      "disposition": "withdraw",
+      "coverage": "exclude",
+      "rationale": "Exercise an explicitly withdrawn fixture operation that must remain absent.",
+      "approval": {
+        "status": "approved",
+        "authority": "synthetic-fixture",
+        "reference": "README.md#synthetic-fixture-certification"
+      }
+    },
+    {
+      "id": "L05",
+      "legacyOperation": "synthetic_deferred_operation",
+      "targetIds": [
+        "T05"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Exercise an explicitly deferred fixture operation that must remain absent.",
+      "approval": {
+        "status": "approved",
+        "authority": "synthetic-fixture",
+        "reference": "README.md#synthetic-fixture-certification"
+      }
+    }
+  ]
+}

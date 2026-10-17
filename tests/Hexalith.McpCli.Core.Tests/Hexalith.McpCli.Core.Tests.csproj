@@ -11,4 +11,7 @@
     <ProjectReference Include="../fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
     <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../tools/inventory-coverage/v1/sample-approved.json" Link="inventory-coverage/v1/sample-approved.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
