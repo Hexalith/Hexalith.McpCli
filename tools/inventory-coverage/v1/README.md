@@ -63,7 +63,9 @@ independently reads `provider.Get(false)` for internal descriptors. Every includ
 name must appear once publicly and once internally with exactly the recorded
 `OperationDescriptor.ContractType.FullName`. Excluded names/types must be absent;
 extra public or internal operations fail. Any Catalog declaration error fails,
-even if the surviving operations match. Catalog warnings alone are not errors.
+even if the surviving operations match, and the check is global: a declaration
+error in any enrolled module fails every module's gate, as strict mode does for the
+Catalog. Catalog warnings alone are not errors.
 The test also checks that public module, list and describe JSON expose neither
 contract-type fields nor mapped full CLR names.
 

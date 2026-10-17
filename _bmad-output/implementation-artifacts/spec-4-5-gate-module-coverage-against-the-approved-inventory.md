@@ -233,3 +233,27 @@ Commit tooling: `npm ci` succeeded. The exact local commit candidate
 `npx --no -- commitlint --verbose` with exit 0, zero problems and zero warnings.
 The full successful validator output is preserved in
 `/tmp/mcpcli-story-4-5-final-verification/commitlint.log`.
+
+### Review Findings
+
+Code review 2026-10-17 (range `9681ef8..20c8893`, full mode; Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor).
+
+- [x] [Review][Decision] (resolved: keep global, documented in README, tested) Catalog error diagnostics are not scoped to the module under check — medium. `Compare` fails on every `error` diagnostic in `access.Catalog.Diagnostics`; `CatalogDiagnostic` carries only `TypeName`, `Category`, `Severity`, `Message` (no module), so one enrolled module's declaration error fails every other module's inventory. Options: (1) keep global failure and document it in the README with a test; (2) scope by mapping `TypeName` to the module's descriptors, accepting that unmappable diagnostics stay global. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:242]
+- [x] [Review][Patch] Lone-surrogate JSON escape crashes the gate — medium. Verified by probe: `JsonDocument.Parse("{\"a\":\"\\ud800\"}")` parses, then `GetString()` and `Property.Name` throw `InvalidOperationException`, which `Check`/`Text`/`Object` do not catch, so the gate throws instead of emitting a diagnostic. Read once and catch in `Text` and the property-name path; add an exact-diagnostic test. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:356]
+- [x] [Review][Patch] Excluded-target name-match clause is not pinned — medium. Dropping `item.Name == target.Name` at the internal-presence check leaves every test green, since `RejectsPresentExclusion` cases match by CLR type. Add a case where the excluded name matches an internal descriptor with a different `contractType` and assert the exact diagnostics. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:302]
+- [x] [Review][Patch] README claims "JSON comments and trailing commas are not accepted" without a test — low. No test references either; changing the parse options would pass. Add a test for each. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs]
+
+#### Rejected
+
+- Duplicate internal descriptor branch (`matchingInternal.Length != 1`) untested (Acceptance Auditor) — low; the Catalog-error test covers the end-to-end behavior.
+- Duplicate public entry count `== 0` vs `!= 1` (Edge Case Hunter) — false; the separate duplicate-public finding already fires, tested per Acceptance Auditor.
+- Invalid module name returns before target/row checks; structural errors hide comparison; Duplicate-ID locations lacking index (Edge Case, Blind) — low or already handled by B04/B05; the fixes add branches.
+- Control characters in identifiers (Blind, B06) — low; already rejected in the Review Triage Log.
+- Privacy check not in reusable gate (Blind, B03) — already rejected in the Review Triage Log.
+- Excluded `contractType` format never validated (Blind) — low; fix adds a rule with no demonstrated harm.
+- Duplicate legacy rows accepted (Blind, B02) — already rejected in the Review Triage Log.
+- Diagnostic noise for present exclusions (Blind) — low; fix adds suppression branches.
+- `CheckFile` empty/invalid path exceptions (Edge Case) — low; test-only API called with fixed paths.
+- `.csproj` needs a hand-added entry per new inventory (Blind) — low; fail-loud via missing-file finding.
+- Stale `ready-for-dev` note, spec `done` vs sprint `review`, `/tmp` evidence paths (Blind, Acceptance Auditor) — fix edits the spec under review.
+- Scope-only authority stricter than spec wording (Acceptance Auditor) — matches the Implementation Notes.

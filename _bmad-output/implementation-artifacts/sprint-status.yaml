@@ -71,7 +71,7 @@ development_status:
   4-2-approve-the-folders-migration-inventory: done
   4-3-approve-projects-and-frontcomposer-migration-inventories: done
   4-4-approve-chatbot-and-memories-migration-inventories: done
-  4-5-gate-module-coverage-against-the-approved-inventory: review
+  4-5-gate-module-coverage-against-the-approved-inventory: done
   4-6-publish-the-bootstrap-decoration-package: backlog
   4-7-enforce-the-production-dependency-boundary: backlog
   4-8-make-tenants-gateway-ready-for-v1: backlog

@@ -60,6 +60,13 @@ internal static class InventoryCoverageGate
 
         using (parsed)
         {
+            // JsonDocument accepts a lone-surrogate escape but throws when the string is read.
+            CheckStrings(parsed.RootElement, "$", Add);
+            if (findings.Count > 0)
+            {
+                return findings.OrderBy(item => item, StringComparer.Ordinal).ToArray();
+            }
+
             CheckDuplicateKeys(parsed.RootElement, "$", Add);
             InventoryCoverageDocument? inventory = Load(parsed.RootElement, Add);
             if (inventory is not null && findings.Count == 0)
@@ -377,6 +384,48 @@ internal static class InventoryCoverageGate
         {
             yield return (value, path + "[" + index.ToString(CultureInfo.InvariantCulture) + "]");
             index++;
+        }
+    }
+
+    private static void CheckStrings(JsonElement item, string path, Action<string, string> add)
+    {
+        if (item.ValueKind == JsonValueKind.Object)
+        {
+            foreach (JsonProperty property in item.EnumerateObject())
+            {
+                string name;
+                try
+                {
+                    name = property.Name;
+                }
+                catch (InvalidOperationException)
+                {
+                    add(path, "invalid Unicode property name.");
+                    continue;
+                }
+
+                CheckStrings(property.Value, path + "." + name, add);
+            }
+        }
+        else if (item.ValueKind == JsonValueKind.Array)
+        {
+            int index = 0;
+            foreach (JsonElement value in item.EnumerateArray())
+            {
+                CheckStrings(value, path + "[" + index.ToString(CultureInfo.InvariantCulture) + "]", add);
+                index++;
+            }
+        }
+        else if (item.ValueKind == JsonValueKind.String)
+        {
+            try
+            {
+                _ = item.GetString();
+            }
+            catch (InvalidOperationException)
+            {
+                add(path, "invalid Unicode string.");
+            }
         }
     }
 

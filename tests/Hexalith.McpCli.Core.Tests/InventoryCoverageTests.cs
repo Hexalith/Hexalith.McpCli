@@ -210,6 +210,21 @@ public sealed class InventoryCoverageTests
         }
     }
 
+    /// <summary>An excluded name that is internally present fails even when the excluded CLR identity differs.</summary>
+    [Fact]
+    public void RejectsPresentExclusionByNameWithDifferentClrType()
+    {
+        JsonObject inventory = Inventory();
+        inventory["targets"]!.AsArray().RemoveAt(0);
+        inventory["legacyRows"]!.AsArray().RemoveAt(0);
+        inventory["targets"]![2]!["name"] = "sample.create-item";
+        Check(inventory).ShouldBe(Diagnostics(
+            "internal operation sample.create-item: unexpected operation / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'; no approved included target.",
+            "public operation sample.create-item: unexpected operation; no approved included target.",
+            "target T04: excluded name 'sample.create-item' is publicly present.",
+            "target T04: excluded target is internally present as 'sample.create-item' / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
+    }
+
     /// <summary>Conflicting identities and all invalid scope decisions fail with their stable row or target.</summary>
     /// <param name="mutation">The inventory mutation.</param>
     /// <param name="expected">The exact finding.</param>
@@ -347,6 +362,25 @@ public sealed class InventoryCoverageTests
         parent[field] = JsonNode.Parse(json);
         Check(inventory).ShouldBe(Diagnostics(expected));
     }
+
+    /// <summary>Lone-surrogate escapes become findings instead of crashing the gate.</summary>
+    /// <param name="json">The document containing the lone surrogate.</param>
+    /// <param name="expected">The exact finding.</param>
+    [Theory]
+    [InlineData("{\"formatVersion\":1,\"module\":\"\\ud800\"}", "$.module: invalid Unicode string.")]
+    [InlineData("{\"formatVersion\":1,\"targets\":[\"\\udc00\"]}", "$.targets[0]: invalid Unicode string.")]
+    [InlineData("{\"\\ud800\":1}", "$: invalid Unicode property name.")]
+    public void RejectsLoneSurrogateEscapes(string json, string expected)
+        => InventoryCoverageGate.Check(json, FileLabel, Service(Provider()), Provider()).ShouldBe(Diagnostics(expected));
+
+    /// <summary>JSON comments and trailing commas are not accepted.</summary>
+    /// <param name="json">The otherwise empty document using the extension.</param>
+    [Theory]
+    [InlineData("{\"formatVersion\":1 // comment\n}")]
+    [InlineData("{\"formatVersion\":1,}")]
+    public void RejectsJsonCommentsAndTrailingCommas(string json)
+        => InventoryCoverageGate.Check(json, FileLabel, Service(Provider()), Provider()).ShouldHaveSingleItem()
+            .ShouldStartWith(FileLabel + ":$: invalid JSON at line ");
 
     /// <summary>Required container and version fields cannot be omitted.</summary>
     /// <param name="path">The required field to remove.</param>
@@ -510,6 +544,18 @@ public sealed class InventoryCoverageTests
         Service(provider).ListOperations("future").Document.ShouldNotBeNull().Operations.Single().Name.ShouldBe("future.duplicate");
         Check(SingleOperationInventory("future"), Service(provider), provider).ShouldBe(Diagnostics(
             "catalog Catalog.Invalid.Contracts.DuplicateSecondQuery: duplicate_operation_name: Operation name future.duplicate is already declared by an earlier type."));
+    }
+
+    /// <summary>A Catalog error from another module still fails the checked module's gate.</summary>
+    [Fact]
+    public void RejectsCatalogErrorsFromOtherModules()
+    {
+        var provider = new CatalogProvider(() => [new InventoryCoverageContractsAssembly("future", typeof(global::Catalog.Invalid.Contracts.DuplicateFirstQuery)),
+            new InventoryCoverageContractsAssembly("other",
+                typeof(global::Catalog.Invalid.Contracts.DuplicateFirstQuery), typeof(global::Catalog.Invalid.Contracts.DuplicateSecondQuery))],
+            new RecordingLogger<CatalogProvider>());
+        Check(SingleOperationInventory("future"), Service(provider), provider).ShouldBe(Diagnostics(
+            "catalog Catalog.Invalid.Contracts.DuplicateSecondQuery: duplicate_operation_name: Operation name other.duplicate is already declared by an earlier type."));
     }
 
     /// <summary>An inaccessible internal Catalog and failed public discovery are both reported.</summary>
