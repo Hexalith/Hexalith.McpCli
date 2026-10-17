@@ -2,7 +2,7 @@
 title: '4.6 Publish the bootstrap Decoration Package'
 type: 'feature'
 created: '2026-10-17'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '04178de98f30b0c5541f7efb978e9b9acc8e8c1d'
@@ -101,18 +101,18 @@ and checks on committed source; any required commits must pass pinned commitlint
   extract the standalone gate, run author-time tests and packaged consumer smoke,
   and require its exact-source success for bootstrap. Keep paired release blocked.
 - [x] `README.md` — document gate, release sequence and exact consumer reference.
-- [ ] `_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md`
+- [x] `_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md`
   — record local checks, committed SHA, CI/release URLs, package hash, public-feed
   consumer proof and owning Builds revision. Execute the reviewed bootstrap
   workflow after integrating its validated changes into main.
-- [ ] `/home/administrator/projects/hexalith/builds/Props/Directory.Packages.props`
+- [x] `/home/administrator/projects/hexalith/builds/Props/Directory.Packages.props`
   — introduce the published version/property/package entry upstream; validate and
   integrate in that repository, preserving its existing work.
-- [ ] `/home/administrator/projects/hexalith/builds/Tools/package-version-audit.json`
+- [x] `/home/administrator/projects/hexalith/builds/Tools/package-version-audit.json`
   — preserve the previous audit, commit reviewed catalog declarations, then run
   the owning README's complete audit refresh for the new package family. Preserve
   all unrelated selected versions and historical observations.
-- [ ] This spec and `sprint-status.yaml` — synchronize status with actual evidence.
+- [x] This spec and `sprint-status.yaml` — synchronize status with actual evidence.
 
 **Acceptance Criteria:**
 
@@ -126,6 +126,15 @@ and checks on committed source; any required commits must pass pinned commitlint
   catalog exposes `HexalithMcpCliVersion` without editing the read-only checkout.
 
 ## Implementation Notes
+
+- 2026-10-17, completion: Trusted-publishing recovery pushed the exact tagged
+  Abstractions `1.0.0` package through `release.yml`, then verified the public
+  signed package and completed the GitHub release without a second push. An
+  isolated NuGet.org consumer compiled both decorations and loaded the analyzer.
+  The owning Builds catalog and complete revision-bound audit were validated and
+  pushed at `eeab884dead9e5da859d9cda57a028fcfca433ae`. Detailed links, hashes
+  and checks are in `evidence/story-4-6/verification.md`; no review finding was
+  deferred.
 
 - 2026-10-17, trusted publishing correction: The first production release
   selected `1.0.0` and tagged reviewed source, but the long-lived org secret's
