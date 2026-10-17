@@ -2,9 +2,10 @@
 title: '4.6 Publish the bootstrap Decoration Package'
 type: 'feature'
 created: '2026-10-17'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
-review_loop_iteration: 0
+review_loop_iteration: 1
+baseline_commit: '04178de98f30b0c5541f7efb978e9b9acc8e8c1d'
 context:
   - '_bmad-output/implementation-artifacts/epic-4-context.md'
 ---
@@ -64,6 +65,9 @@ and checks on committed source; any required commits must pass pinned commitlint
   validates again but can bypass phase preflight when invoked directly.
 - `.github/workflows/ci.yml` contains the local-source consumer/analyzer smoke;
   extract it into an independent gate. `release.yml` currently requires full CI.
+- `.github/workflows/recover-partial-release.yml` must migrate with staging and
+  taken-version rejection: recover an existing tag, validate public package content
+  before completing GitHub release, and never republish an already present package.
 - `.releaserc.json` supplies one semantic-release version and explicit scripts;
   `tools/release-packages.json` retains the future pair declaration.
 - Abstractions.Tests uses Sample.Contracts and EventStore.Contracts fixtures;
@@ -73,15 +77,28 @@ and checks on committed source; any required commits must pass pinned commitlint
 
 **Execution:**
 
-- [ ] `scripts/release-{prepare,preflight,publish}.sh` — isolate bootstrap builds
+- [x] `scripts/smoke-bootstrap-consumer.sh`, release preparation/publication and
+  source verification — clear inherited NuGet fallback folders/configuration, test
+  the actual prepared package before its receipt, and recheck the exact committed
+  source and independent gates at final tag/publication boundaries. Direct publish
+  must enforce the same source policy. Reject malformed registry version strings.
+- [x] `.github/workflows/recover-partial-release.yml` and recovery tests — migrate
+  to bootstrap staging, recover missing publication after a tag, and verify an
+  already published package before completing GitHub release without a second push.
+  Preserve strict duplicate rejection for ordinary publication. Cover absent,
+  matching, mismatching and uncertain public package states without network effects.
+- [x] `scripts/tests/test_bootstrap_release.py` — cover staging/receipt symlink
+  guards and existing paired-validator structural checks beyond its first guard.
+
+- [x] `scripts/release-{prepare,preflight,publish}.sh` — isolate bootstrap builds
   and staging; enforce supported phase, version and credentials before effects.
-- [ ] `scripts/validate-release-packages.py` and new
+- [x] `scripts/validate-release-packages.py` and new
   `scripts/tests/test_bootstrap_release.py` — cover every matrix rejection with
   synthetic packages and stubbed registry/push calls; protect existing checks.
-- [ ] `.github/workflows/bootstrap-package.yml`, `ci.yml`, `release.yml` —
+- [x] `.github/workflows/bootstrap-package.yml`, `ci.yml`, `release.yml` —
   extract the standalone gate, run author-time tests and packaged consumer smoke,
   and require its exact-source success for bootstrap. Keep paired release blocked.
-- [ ] `README.md` — document gate, release sequence and exact consumer reference.
+- [x] `README.md` — document gate, release sequence and exact consumer reference.
 - [ ] `_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md`
   — record local checks, committed SHA, CI/release URLs, package hash, public-feed
   consumer proof and owning Builds revision. Execute the reviewed bootstrap
@@ -108,6 +125,18 @@ and checks on committed source; any required commits must pass pinned commitlint
 
 ## Implementation Notes
 
+- 2026-10-17, review loop 1: Reused the preserved candidate and corrected source
+  rechecks, fallback isolation, registry version validation, prepared-byte consumer
+  proof and partial-release recovery. Expanded offline coverage passes 26 tests;
+  real package preparation, cache-isolation rejection, both author-time suites
+  (20 + 19 tests), four-workflow actionlint and shell/whitespace checks pass.
+  Publication, exact committed-main CI and owning Builds integration remain open.
+
+- 2026-10-17: Bootstrap scripts, independent CI gate, author-time/packaged-consumer
+  checks, source guard and rejection tests implemented. Local verification is
+  recorded in `evidence/story-4-6/verification.md`. Source review, committed-main
+  gates, publication/public-feed proof and owning Builds integration remain
+  pending; the story remains in-progress.
 - 2026-10-17: The requesting user answered "approve and stop" at Checkpoint 1.
   The approved intent is frozen; this spec and sprint tracking are ready-for-dev.
   Implementation and publication have not started. Resume with `bmad-build 4.6`
@@ -115,7 +144,63 @@ and checks on committed source; any required commits must pass pinned commitlint
 
 ## Spec Change Log
 
+- 2026-10-17, review loop 1: recovery workflow callers were missing from the code
+  map and task list. Moving staging and rejecting duplicate publication would
+  break both recovery upload and GitHub-only completion. Added explicit recovery
+  migration/tests and final publication proof requirements. Known-bad state:
+  tagged partial release cannot finish and a fallback cache can falsify feed proof.
+  KEEP: isolated Abstractions/analyzer builds, strict request/registry checks,
+  private validated snapshot, SHA-256 receipt, independent exact-source CI,
+  packaged analyzer proof, explicit incomplete external evidence, and existing
+  matrix tests. The previous candidate is available for reconstruction at
+  `/tmp/mcpcli-4-6-reviewed-candidate-2os__xtx`; inspect and reuse those working designs while
+  correcting the listed review findings. Frozen intent is unchanged.
+
 ## Review Triage Log
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B1 | medium | bad_spec | Consumer smoke inherits fallback folders; the reviewer reproduced success against an empty source using a cached package. Clear configuration and fallback folders. |
+| B2 | high | patch | Direct publisher calls only registry/package checks and succeeds in a non-Git fixture. Enforce exact committed-source checks at this entry point. |
+| B3 | medium | patch | Workflow source check precedes restore/build; source can become stale before tagging. Repeat after preparation and before push. |
+| B4 | medium | patch | The registry predicate accepts empty/whitespace/non-version strings. Validate each listed version before approving availability. |
+| B5 | medium | patch | Production rebuilds after the independent gate and does not consumer-test its prepared bytes. Smoke the prepared package before recording the receipt. |
+| B6 | medium | bad_spec | Pinned semantic-release tags before publication. Existing recovery is present, but the new staging and strict duplicate checks break it; migrate recovery and document it. |
+| B7 | medium | patch | Existing paired checks remain present, but the only fixture stops at missing files and cannot protect later structural checks. Extend fixture coverage. |
+| B8 | medium | patch | Only the package symlink is tested; staging-directory and receipt guards can disappear without detection. Add both rejection cases. |
+| E1 | medium | patch | Independently confirms B4: malformed registry version strings are accepted as a free-version result. |
+| V1 | medium | patch | Mutation controls removed directory/receipt symlink guards while all 16 tests passed. Add rejection and zero-push assertions for each. |
+| V2 | high | patch | Recovery upload/create uses nupkgs/*.nupkg while preparation now writes nupkgs/bootstrap/*.nupkg. Update the caller. |
+| V3 | high | bad_spec | Recovery unconditionally calls the now duplicate-rejecting publisher; when NuGet succeeded and GitHub failed, recovery stops. Add a verified existing-package completion path. |
+
+Loop 1: recovery/consumer proof planning gaps trigger re-derivation; patch findings
+are retained in the amended tasks. Publication and upstream integration stay open.
+
+
+### Review pass 2
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B2.1 | medium | patch | Real empty-source smoke succeeds with inherited RestoreSources pointing at staging; force selected source properties. |
+| B2.2 | medium | patch | Real empty-source smoke succeeds with inherited RestorePackagesPath pointing at a populated cache; force the fresh packages path. |
+| B2.3 | high | patch | Receipt stores only hash; ignored staging can survive switching source revisions and pass a newer source gate. Bind preparation SHA and clean state and verify before publishing. |
+| B2.4 | medium | patch | 2147483648.0.0 passes validation but NuGet cannot represent its major component. Reject overflow before requests/effects. |
+| B2.5 | low | patch | Relative local sources are resolved relative to generated configuration rather than caller; normalize local paths. |
+| B2.6 | low | patch | A consumer under Directory.Build.props inherits warning-as-error policy, breaking the intentional warning. Disable parent build imports for this probe. |
+| B2.7 | false | reject | Recovery intentionally requires byte-equivalent consumer content and rejects changed DLLs. Different build paths/compiler can produce different bytes; refusing those is the documented fail-closed content policy. The supported Actions path and pinned SDK are stable; no incorrect publication was shown. Record this recovery limitation explicitly. |
+| B2.8 | medium | patch | Recovery validates phase argument but absent-package publication reads ambient phase. Pass the validated phase to its subprocess. |
+| B2.9 | medium | patch | Matching recovery fixture does not vary the generated core-properties exclusion; add different metadata to protect documented comparison behavior. |
+| B2.10 | medium | patch | Source fixture only varies run_attempt; add conflicting run_number/attempt fixtures to protect latest-run ordering. |
+| E2.1 | high | patch | Independent stale-source reproduction confirms B2.3: matching old package/hash can be pushed after verifying another commit. |
+| V2.1 | medium | patch | Mutation replacing receipt creation with no-op leaves all 26 tests green. Assert exact preparation receipt and publish preparation output end to end. |
+
+Surviving findings group into source-bound preparation receipts, consumer
+isolation, numeric bounds, recovery phase propagation, and regression fixtures.
+All route to narrow patches; frozen intent remains unchanged.
+
+All surviving pass-2 patches were completed; 35 release tests and final local
+checks pass. Reviewed source is ready for committed-main gates. External
+publication and Builds acceptance remain open.
 
 ## Verification
 

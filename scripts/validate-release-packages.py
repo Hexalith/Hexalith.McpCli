@@ -4,6 +4,7 @@
 import json
 import re
 import sys
+import importlib.util
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import ZipFile
@@ -16,6 +17,10 @@ def main() -> int:
     staging = Path(sys.argv[1])
     version = sys.argv[2]
     phase = sys.argv[3]
+    request_spec = importlib.util.spec_from_file_location("release_request", Path(__file__).with_name("release-request.py"))
+    request_module = importlib.util.module_from_spec(request_spec)
+    request_spec.loader.exec_module(request_module)
+    request_module.validate_version(version)
     packages = json.loads(Path("tools/release-packages.json").read_text())["packages"]
     expected_ids = [package["id"] for package in packages]
     if expected_ids != ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]:
@@ -25,14 +30,20 @@ def main() -> int:
 
     active_ids = expected_ids[:1] if phase == "bootstrap" else expected_ids
     expected_names = {f"{package_id}.{version}.nupkg" for package_id in active_ids}
-    actual_names = {path.name for path in staging.glob("*.nupkg")}
+    if not staging.is_dir() or staging.is_symlink():
+        raise ValueError("Staging must be a real directory")
+    actual_names = {path.name for path in staging.iterdir()}
     if actual_names != expected_names:
         raise ValueError(f"Expected {sorted(expected_names)}, found {sorted(actual_names)}")
 
     for package_id in active_ids:
         path = staging / f"{package_id}.{version}.nupkg"
+        if not path.is_file() or path.is_symlink():
+            raise ValueError(f"{path} must be a regular package file")
         with ZipFile(path) as archive:
             names = set(archive.namelist())
+            if len(names) != len(archive.namelist()):
+                raise ValueError(f"{path} contains duplicate archive entries")
             if package_id.endswith(".Abstractions") and (
                 "lib/net10.0/Hexalith.McpCli.Abstractions.dll" not in names
             ):

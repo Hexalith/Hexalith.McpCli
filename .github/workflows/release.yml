@@ -23,40 +23,25 @@ jobs:
       actions: read
       contents: read
     steps:
-      - name: Require current main with successful exact-source CI and commitlint
-        shell: bash
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          submodules: false
+      - name: Require current main with exact-source bootstrap and commitlint success
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           DISPATCH_REF: ${{ github.ref }}
           DISPATCH_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          if [ "$DISPATCH_REF" != refs/heads/main ]; then
-            echo "Release must be dispatched from refs/heads/main, not ${DISPATCH_REF}." >&2
-            exit 1
-          fi
-          live_main_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
-          if [ "$DISPATCH_SHA" != "$live_main_sha" ]; then
-            echo "Dispatch SHA ${DISPATCH_SHA} is not the current main SHA ${live_main_sha}." >&2
-            exit 1
-          fi
-          for workflow in ci.yml commitlint.yml; do
-            runs="$(gh api --method GET "repos/${REPOSITORY}/actions/workflows/${workflow}/runs" \
-              -f branch=main -f event=push -f head_sha="$DISPATCH_SHA" -f status=success)"
-            if ! jq -e --arg sha "$DISPATCH_SHA" \
-              '[.workflow_runs[] | select(.head_sha == $sha and .head_branch == "main" and .event == "push" and .status == "completed" and .conclusion == "success")] | length > 0' \
-              <<< "$runs" >/dev/null; then
-              echo "No successful ${workflow} push run exists for ${DISPATCH_SHA}." >&2
-              exit 1
-            fi
-          done
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+        run: python3 scripts/verify-release-source.py "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
 
   publish:
     needs: verify-source
     runs-on: ubuntu-latest
     environment: production
     permissions:
+      actions: read
       contents: write
       issues: write
       pull-requests: write
@@ -78,22 +63,21 @@ jobs:
           node-version: '24'
       - name: Install pinned release tooling
         run: npm ci
-      - name: Recheck current main after production approval
-        shell: bash
+      - name: Recheck source and independent results after production approval
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
           DISPATCH_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          live_main_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
-          if [ "$DISPATCH_SHA" != "$live_main_sha" ]; then
-            echo "Main moved while release approval was pending." >&2
-            exit 1
-          fi
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+        run: python3 scripts/verify-release-source.py "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
       - name: Derive one version and publish the selected phase
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
+          DISPATCH_SHA: ${{ github.sha }}
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
         run: npx --no-install semantic-release

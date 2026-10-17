@@ -37,6 +37,34 @@ The module's identifier kind applies to `[HexalithIdentifier]` properties and ag
 
 The `Hexalith.McpCli.Abstractions` package includes a build analyzer. Diagnostic `MCPCLI001` warns on a command or query type whose `[HexalithCommand]` or `[HexalithQuery]` description is empty, whitespace, or null. Supply a nonblank description to resolve it. The analyzer requires .NET SDK 10.0.4xx or later; an older SDK may report `CS9057` because its compiler cannot load the analyzer's Roslyn version. Contracts projects need only the Abstractions package reference.
 
+## Bootstrap package release
+
+The independent [Bootstrap package workflow](.github/workflows/bootstrap-package.yml) restores and builds only Abstractions and its bundled analyzer production projects. It runs the Abstractions and analyzer author-time tests (including synthetic Contracts fixtures), release rejection tests, and a decorated consumer build with a fresh package cache, explicit NuGet configuration and cleared fallback folders. Its deliberately blank description must produce exactly one `MCPCLI001` warning, proving the packaged analyzer loads. This gate needs no decorated upstream module, tool build, Aspire tier, or FR-22 evidence.
+
+The first release version selected by semantic-release is `1.0.0`. After publication is verified, a .NET 10 Contracts consumer uses this single exact reference; the package has no consumer-visible package dependencies:
+
+```xml
+<PackageReference Include="Hexalith.McpCli.Abstractions" Version="[1.0.0]" />
+```
+
+For a local gate, use a fresh checkout with the root-declared Builds submodule available:
+
+```sh
+python3 -m unittest discover -s scripts/tests -p 'test_bootstrap_release.py'
+MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
+bash scripts/smoke-bootstrap-consumer.sh 1.0.0 "$PWD/nupkgs/bootstrap" /tmp/mcpcli-bootstrap-consumer
+```
+
+Preparation restores/builds the Abstractions project, packs exactly one package into a fresh `nupkgs/bootstrap` directory, and compiles the decorated consumer against those prepared bytes before recording their SHA-256, preparation HEAD and clean-source state in the JSON receipt `nupkgs/bootstrap.sha256`. Publication and recovery require a receipt from clean source at the exact release SHA; a local dirty-source preparation cannot later be published merely by cleaning the checkout. An existing staging directory or receipt is refused; preserve it elsewhere before another run. Other artifacts under `nupkgs` are retained. Local preparation and consumer checks require no publication credentials.
+
+Maintainers review and commit the validated source, validate every commit with the pinned commitlint tooling, and integrate it into `main`. Wait for successful **push** runs of `bootstrap-package.yml` and `commitlint.yml` at that exact current main SHA, then dispatch [Release](.github/workflows/release.yml) from `main` with phase `bootstrap`. The source gate requires the latest run of each workflow to succeed, checks the committed checkout, and rechecks current main and both results after production environment approval, after preparation before tagging, and immediately before publication. Full-tool CI is independent of bootstrap publication. Phase `paired` remains blocked.
+
+Semantic-release chooses the version, checks NuGet credentials and version availability, prepares and validates the package, and publishes a private snapshot whose hash must match the preparation receipt. Direct `release-publish.sh` invocation performs the same phase, version, credential, registry, staged-content and exact committed-source checks, using `DISPATCH_SHA`, `DISPATCH_REF`, `REPOSITORY` and GitHub authentication; a taken version or uncertain registry response stops publication. The scripts reject extra staged files, the wrong identity/version, missing compile/analyzer DLLs, and consumer dependency leakage. They do not rebuild during publication or skip duplicate versions.
+
+Semantic-release creates `v<version>` before the NuGet push. If publication or GitHub release completion fails after tagging, dispatch [Recover Partial Release](.github/workflows/recover-partial-release.yml) with that version and phase `bootstrap`; the tag must still identify the exact current main SHA with both independent gates green. Recovery rebuilds and consumer-tests the tagged package in bootstrap staging. It publishes only when the version is absent. If present, it downloads and validates the public package, compares all consumer content with the tagged build, and proves its analyzer loads before completing the GitHub release without another push. NuGet's repository signature and regenerated package core-properties metadata are excluded from content comparison. This fail-closed comparison requires matching build paths and toolchain versions; if rebuilding changes DLL bytes, recovery needs the original validated artifact and its source-bound receipt. Mismatching contents or uncertain registry responses stop recovery.
+
+After release, record the committed SHA, gate/release URLs, package hash and public-feed consumer proof in the [story 4.6 evidence](_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md). Run the same consumer check against `https://api.nuget.org/v3/index.json` in a fresh directory. Then introduce the verified published version as `HexalithMcpCliVersion` and the Abstractions package entry in the owning Hexalith.Builds catalog, run its documented complete audit refresh and validation, and record the integrated Builds revision. These publication and upstream integration steps remain required before claiming story completion.
+
 ## Gateway boundary
 
 The CLI and MCP server share one catalog and executor. McpCli discovers operations only from flagged, referenced `*.Contracts` packages. It submits commands and queries to the EventStore gateway; the gateway routes them to the owning module server. McpCli never connects to a module server or references its implementation packages.

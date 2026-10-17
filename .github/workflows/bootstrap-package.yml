@@ -1,0 +1,45 @@
+name: Bootstrap package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: bootstrap-package-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Verify release rejection and source gates without publication
+        run: python3 -m unittest discover -s scripts/tests -p 'test_bootstrap_release.py'
+      - name: Build and run author-time tests independently of the tool
+        run: |
+          for project in Abstractions Analyzers; do
+            test_project="tests/Hexalith.McpCli.${project}.Tests"
+            dotnet restore "$test_project"
+            dotnet build "$test_project" --configuration Release --no-restore -warnaserror
+            dotnet test "$test_project" --configuration Release --no-build
+          done
+      - name: Prepare and validate only the bootstrap production projects
+        env:
+          MCPCLI_RELEASE_PHASE: bootstrap
+        run: bash scripts/release-prepare.sh 1.0.0
+      - name: Compile decorated Contracts and prove the packaged analyzer loads
+        run: bash scripts/smoke-bootstrap-consumer.sh 1.0.0 "$PWD/nupkgs/bootstrap" "$RUNNER_TEMP/mcpcli-bootstrap-consumer"

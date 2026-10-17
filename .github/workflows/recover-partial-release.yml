@@ -2,8 +2,8 @@ name: Recover Partial Release
 
 # semantic-release pushes v<version> before publishCmd runs. When the NuGet push or the GitHub
 # release fails after that point, a rerun of release.yml finds no releasable commit. This workflow
-# rebuilds the existing tag with the release scripts, pushes idempotently, and completes the
-# GitHub release.
+# rebuilds the existing tag, verifies the public package (publishing only if absent), and
+# completes the GitHub release. It requires the tag to remain the exact green current main.
 
 on:
   workflow_dispatch:
@@ -30,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     permissions:
+      actions: read
       contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -45,14 +46,7 @@ jobs:
           RECOVERY_PHASE: ${{ inputs.phase }}
         run: |
           set -euo pipefail
-          if [[ ! "$RECOVERY_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
-            echo "Invalid release version: $RECOVERY_VERSION" >&2
-            exit 1
-          fi
-          if [ "$RECOVERY_PHASE" = paired ]; then
-            echo "Paired release is deferred until the tool, FR-22, and live gates are implemented." >&2
-            exit 1
-          fi
+          python3 scripts/release-request.py "$RECOVERY_VERSION" "$RECOVERY_PHASE"
           if ! git rev-parse -q --verify "refs/tags/v${RECOVERY_VERSION}" >/dev/null; then
             echo "Tag v${RECOVERY_VERSION} does not exist; run release.yml instead." >&2
             exit 1
@@ -62,6 +56,7 @@ jobs:
             exit 1
           fi
           git checkout --detach "v${RECOVERY_VERSION}"
+          printf 'DISPATCH_SHA=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - name: Initialize root-declared Builds submodule
         run: git submodule update --init -- references/Hexalith.Builds
       - name: Set up .NET
@@ -73,23 +68,30 @@ jobs:
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
           RECOVERY_VERSION: ${{ inputs.version }}
         run: bash scripts/release-prepare.sh "$RECOVERY_VERSION"
-      - name: Push missing packages
+      - name: Publish only if absent and verify the public package before completion
         env:
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           RECOVERY_VERSION: ${{ inputs.version }}
-        run: bash scripts/release-publish.sh "$RECOVERY_VERSION"
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: refs/heads/main
+        run: python3 scripts/recover-bootstrap-release.py "$RECOVERY_VERSION" "$MCPCLI_RELEASE_PHASE"
       - name: Complete the GitHub release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: refs/heads/main
+          MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
           RECOVERY_VERSION: ${{ inputs.version }}
         run: |
           set -euo pipefail
+          python3 scripts/verify-release-source.py "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
           tag="v${RECOVERY_VERSION}"
           if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" nupkgs/*.nupkg --clobber
+            gh release upload "$tag" nupkgs/bootstrap/*.nupkg --clobber
           else
-            gh release create "$tag" nupkgs/*.nupkg --verify-tag --title "$tag" --generate-notes
+            gh release create "$tag" nupkgs/bootstrap/*.nupkg --verify-tag --title "$tag" --generate-notes
           fi
