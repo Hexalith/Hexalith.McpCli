@@ -386,7 +386,7 @@ All three required review layers completed. Edge-case review found no issue;
 verification-gap review found no gap in this story's checks. The nine verified
 blind-hunter corrections were applied with no change to the approved deferred
 scope. The separate, pre-existing Builds/dependency-policy mismatch is tracked
-under this spec in `../../deferred-work.md:477`; no dependency or restore gate
+under this spec in `../../deferred-work.md:478`; no dependency or restore gate
 is claimed to have passed here.
 
 The parent executed the **entire revised Bash block** after the corrections,

@@ -148,7 +148,7 @@ Completion: BH01–BH09 were corrected and the parent reran the complete revised
 evidence block successfully (exit 0). Both inventories identify these additions
 as post-approval prerequisite clarifications; all 82 rows retain A1's approved
 deferred scope, authority and source pins. VG01 is tracked at
-`deferred-work.md:477` after checking for an existing matching entry. The frozen
+`deferred-work.md:478` after checking for an existing matching entry. The frozen
 approval block's SHA-256 is unchanged. All build tasks and the accepted session
 scope are complete; the sprint entry is `review` for the separate story-review
 transition required by this workflow. External owner and execution/retirement
@@ -180,3 +180,20 @@ gates remain open.
   The exact local commit message passed the repository's pinned commitlint CLI
   with zero problems and zero warnings after `npm ci`; the full evidence is in
   `evidence/story-4-3/verification.md`.
+
+### Review Findings
+
+Code review 2026-10-16 (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor). Diff `228fdaa..HEAD`.
+
+- [x] [Review][Patch] Ledger anchor `deferred-work.md:477` lands on a blank line — the VG01 entry heading is at line 476 and `- source_spec:` at 478. Cited in this spec's Completion note (line 151) and `evidence/story-4-3/verification.md:389`; both should cite `:478` (or `:476`). [verification.md:389, spec:151]
+
+#### Rejected
+
+- Spec `status: done` vs sprint `review`, status-pair whitelist accepting too many pairs, stale in-progress transcript: the fix edits the spec under review, and the spec's completion note explains the separate review transition (same disposition as Story 4.2).
+- Front matter `status: approved` overstates approval (AA, EC): low. `approval_status: session-approved`, `approval_authority`, `approval_ref` and `external_maintainer_approval: unasserted` sit beside it and the body restates the limits; renaming the value adds a convention change for little gain.
+- Anchor check only proves non-blank lines; bare `:NNN` continuations unchecked; hard-coded PASS counts; no CI hook; weak `'external' in text` assertions; link-slug duplicate suffixes; checker depends on pin checkouts (BH, EC, VG): low. Developer-only, fix is more checker complexity; same disposition as Story 4.2's verifier-brittleness rejection.
+- Frozen-block SHA-256 never verified (BH, AA): false. Edge Case Hunter recomputed `627de046…` over the full `<frozen-after-approval>` span and it matches.
+- Submodule gitlink bumps are "out of scope" / unrelated (BH, AA, VG): false. They come from `1a6d725`, which is in the baseline-to-HEAD range; story commit `874a697` touches only the seven Markdown/YAML files.
+- Builds 10.0.13 vs `dependency-policy.json` 10.0.12 mismatch left red (BH, VG): already tracked in `deferred-work.md:478` (VG01), pre-existing and outside this artifact-only story.
+- L01–L18 rows lack a per-row source column: low. Anchors exist in section prose; adding a column is a table rewrite for little benefit.
+- `/tmp` commit-message evidence files; no owners/dates on G prerequisite rows; no README pointer; no approval timestamp; upstream-pin-moves wording: low, not required by any AC.
