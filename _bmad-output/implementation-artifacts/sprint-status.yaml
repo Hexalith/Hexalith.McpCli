@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: 10-17-2026 10:21
+last_updated: 10-17-2026 10:44
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -71,7 +71,7 @@ development_status:
   4-2-approve-the-folders-migration-inventory: done
   4-3-approve-projects-and-frontcomposer-migration-inventories: done
   4-4-approve-chatbot-and-memories-migration-inventories: done
-  4-5-gate-module-coverage-against-the-approved-inventory: backlog
+  4-5-gate-module-coverage-against-the-approved-inventory: ready-for-dev
   4-6-publish-the-bootstrap-decoration-package: backlog
   4-7-enforce-the-production-dependency-boundary: backlog
   4-8-make-tenants-gateway-ready-for-v1: backlog
