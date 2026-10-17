@@ -479,3 +479,9 @@ status: open
   summary: Reconcile the exact production dependency policy after the separately committed Builds bump, then verify it against a fresh restore.
   evidence: Medium; pre-existing before the approved Story 4.3 implementation. Commit `1a6d725fb89545bce56b7be1e16683461cf9cfe7` advances `references/Hexalith.Builds`; its `Props/Directory.Packages.props:242` and `:244` require Microsoft.Extensions.Hosting/Http 10.0.13, while `tools/dependency-policy.json:51` and `:53` require 10.0.12. Current `src/Hexalith.McpCli/obj/project.assets.json` still contains 10.0.12 and is stale for those pins. `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:137` rejects restored versions outside the exact policy. The McpCli dependency maintainer should run `dotnet restore Hexalith.McpCli.slnx`, align every changed version in the policy, build and run Manifest.Tests; this documentation-only story neither changes those dependencies nor claims that broad gate passed.
 
+
+## Deferred from: code review of spec-4-5-gate-module-coverage-against-the-approved-inventory.md (2026-10-17)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-5-gate-module-coverage-against-the-approved-inventory.md`
+  summary: Nothing ties an enrolled module to a required coverage inventory, so a module can be enrolled without the gate ever running for it.
+  evidence: Medium. The gate runs only where a test calls `InventoryCoverageGate.CheckFile` with a hand-copied artifact (`tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj:15`); `tools/inventory-coverage/v1/README.md:92` hands off per-module test wiring, while enrollment is meant to be configuration only. No module is enrolled yet (`tools/dependency-policy.json` `modules: {}`). The first enrolling story (4.9/4.10) should fail CI when a `modules` entry has no approved inventory, without module-specific code.

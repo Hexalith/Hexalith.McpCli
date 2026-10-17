@@ -2,7 +2,7 @@
 title: '4.5 Gate module coverage against the approved inventory'
 type: 'feature'
 created: '2026-10-17'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 baseline_commit: '9681ef84c9d06adfac4f0bb1ea3e398953f6666e'
 review_loop_iteration: 0
@@ -257,3 +257,34 @@ Code review 2026-10-17 (range `9681ef8..20c8893`, full mode; Blind Hunter, Edge 
 - `.csproj` needs a hand-added entry per new inventory (Blind) — low; fail-loud via missing-file finding.
 - Stale `ready-for-dev` note, spec `done` vs sprint `review`, `/tmp` evidence paths (Blind, Acceptance Auditor) — fix edits the spec under review.
 - Scope-only authority stricter than spec wording (Acceptance Auditor) — matches the Implementation Notes.
+
+### Review Findings (second pass)
+
+Code review 2026-10-17 (range `9681ef8..c457561`, full mode; Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor).
+
+- [ ] [Review][Patch] Early-return guard `access.Catalog is null` has no protecting test — removing the clause leaves every test green, but a usable public document with an unavailable internal Catalog then throws `NullReferenceException` at `access.Catalog.Modules`. Add a mocked-`ICatalog` case with an empty provider and assert the single `catalog: internal Catalog error 'catalog_empty'` finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:269]
+- [ ] [Review][Patch] `UnauthorizedAccessException` branch of `CheckFile` has no protecting test — only `FileNotFoundException` is exercised; probe confirms `File.ReadAllBytes(AppContext.BaseDirectory)` throws `UnauthorizedAccessException` on Linux. Assert the exact `cannot read inventory (UnauthorizedAccessException).` finding for a directory path. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:33]
+- [ ] [Review][Patch] `exclude` with an unknown disposition is untested — narrowing the exclude clause to `Disposition == "replace"` keeps every test green, so a typo such as `withdrawn/exclude` would pass as an approved exclusion. Add `RejectsInvalidScope("exclude-unknown")` on L04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:184]
+- [ ] [Review][Patch] Target-name `\A` anchor is untested — dropping it keeps every test green and accepts `other.sample.withdrawn-operation` on an excluded target. Add `RejectsInvalidScope("target-prefix")` on T04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:165]
+- [ ] [Review][Patch] Comment and trailing-comma test asserts only a message prefix — the project rule requires the full diagnostic; probe confirms both inputs yield `line 0, byte 19`. Assert the exact finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs:382]
+- [ ] [Review][Patch] README implies the gate matches strict mode — `CatalogProvider.Get(true)` rejects any diagnostic, warnings included, while the gate accepts warnings-only Catalogs; state that difference explicitly. [tools/inventory-coverage/v1/README.md:67]
+- [ ] [Review][Patch] README diagnostics prefixes omit emitted forms — `catalog:` (internal access error), `public:` (ListOperations error, missing document, module mismatch) and `public operation <name>` duplicate entries are not listed. [tools/inventory-coverage/v1/README.md:72]
+- [x] [Review][Defer] Nothing ties enrolled modules to a required inventory [tools/inventory-coverage/v1/README.md:92] — deferred: no module is enrolled yet (`tools/dependency-policy.json` `modules: {}`); the enrolling story must decide how an enrolled module without an approved inventory fails CI and how that stays configuration-only.
+
+#### Rejected (second pass)
+
+- Excluded/included CLR type checked only within the module (Blind, Edge Case) — low; a CLR full name lives in one module-marked assembly, and another module's operations are governed by that module's own inventory; widening changes semantics.
+- `unknown_module` prints `<none>` and drops suggestions (Blind) — low; the `unknown_module` code already identifies the cause.
+- Severity filter `== "error"` vs provider `!= "warning"` (Blind, Edge Case, Acceptance Auditor) — false; `CatalogDiagnostic.Severity` is documented as error or warning and every producer emits only those.
+- Shared target mixing `withdraw` and `defer` (Blind) — false; dispositions are per legacy row by design and both require absence, which the gate checks.
+- Vacuous `Submittable`/`IsPathFullyQualified` assertions (Blind) — false; `IsPathFullyQualified` fails if `ArtifactPath` becomes relative, and the unfiltered call is pinned by `Received(1).ListOperations("sample", null)`.
+- Privacy check misses `+`-escaped or simple names (Blind, Edge Case) — low; sample types contain no escaped characters and the spec pins mapped full names.
+- Canonical regex duplicates `CatalogBuilder.IsCanonicalPart` (Blind) — low; rules are equivalent today, divergence fails loudly for included targets, and sharing needs new surface.
+- Reuse test is thin (Blind) — false; the checker has no module-dependent branch, so a richer second module exercises no new path.
+- Public `kind`/description not compared (Blind) — false; outside the specified name/type comparison and covered by `CatalogServiceTests`.
+- `CheckFile` empty/invalid path, control characters in IDs, excluded `contractType` format (Edge Case) — already rejected in the first pass (B06 and Rejected list).
+- Raw unpaired surrogate in `Check(string)` throws `ArgumentException` (Edge Case) — low; strict UTF-8 decoding in `CheckFile` cannot produce it, and the direct call fails loudly.
+- Synthetic `owning-maintainer` approvals in test inventories (Acceptance Auditor) — false; in-memory test inputs self-labelled synthetic, not persisted approval artifacts.
+- Privacy skip covers schema keyword level (Acceptance Auditor) — low; hypothetical metadata key, full CLR names still caught, precise skip adds schema-walking branches.
+- Spec verification record stale after `c457561` (Acceptance Auditor) — fix edits the spec under review.
+- JSON v1 omits security class and replacement/gap fields (Acceptance Auditor) — false; the frozen field list omits them and Markdown inventories remain authoritative.
