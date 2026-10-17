@@ -2,7 +2,7 @@
 title: '4.4 Approve ChatBot and Memories migration inventories'
 type: 'chore'
 created: '2026-10-17'
-status: 'draft'
+status: 'ready-for-dev'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -37,8 +37,8 @@ and enriched or compound submissions. State how each context would travel
 through Payload, allowed Envelope metadata or operator settings. Such mappings
 remain future proposals and confer no authenticated authority.
 
-Record Memories ingress JWT and per-user case authorization, trusted upstream
-identity propagation, search/traversal/ingestion behavior and CLI administrative
+Record Memories ingress JWT, tenant membership and subject provenance, upstream
+bearer propagation, search/traversal/ingestion behavior and CLI administrative
 boundaries. Its Legacy Server remains nondeletable until the HTTP release
 supports forwarded per-user identity and authorization, behavior and release
 gates pass. Explicitly exclude non-Gateway variants, erasure, key rotation and
@@ -56,21 +56,28 @@ resources/prompts, typed tools, dynamic plug-ins, executor retries, event stream
 reading or v1 HTTP identity. Trust payload identity, relax canonical ULIDs,
 execute migrations or infer withdrawal/deletion permission from an inventory.
 
+**Approved decision (2026-10-17):** The requesting user answered "approve and
+stop" to the recommended session scope: all rows in both source-pinned
+candidates remain `defer / exclude`, retaining legacy capabilities. This
+approves the spec for later finalization; external owning-maintainer sign-off
+remains unasserted. Stop at `ready-for-dev` before implementation and review.
+
 </frozen-after-approval>
 
 ## Code Map
 
 - ChatBot `src/Hexalith.ChatBot.Mcp/ChatBotMcpToolCatalog.cs` and
   `ChatBotMcpTools.cs` declare the 12 tools;
-  `src/Hexalith.ChatBot.Cli/ChatBotCliCommands.cs` declares corresponding CLI leaves. The inventory
-  supplies exact source paths/lines; reuse its map during finalization.
+  `src/Hexalith.ChatBot.Cli/ChatBotCliCommands.cs` declares corresponding CLI
+  leaves. The inventory supplies exact source paths/lines; reuse its map.
 - ChatBot services and Server Gateway stages own caller context and admission;
   Contracts command records are plain source types. Preserve the distinction
   between a business retry command and forbidden generic executor retries.
 - Memories `src/Hexalith.Memories.Mcp/McpCompositionRoot.cs:81` registers four
-  tools. `Authentication/` and the invocation handler own ingress and downstream
-  identity. CLI `Commands/RootCommandFactory.cs:106` declares wired leaves and
-  `:83` the four stubs. Contracts `V1/` contains REST DTOs, not decorated queries.
+  tools. `Authentication/` owns JWT/tenant checks; `McpCompositionRoot.cs:67`
+  configures scoped bearer forwarding. CLI `Commands/RootCommandFactory.cs:106`
+  declares wired leaves and `:84` the four stubs. Contracts `V1/` contains REST
+  DTOs, not decorated queries.
 - McpCli `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:127` fills
   trusted actor/tenant properties; `:149` handles Command correlation and
   extensions; `:259` builds Queries without correlation or extensions.
@@ -110,6 +117,10 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
   then explicit exclusions retain gaps instead of implying parity or retirement.
 
 ## Implementation Notes
+
+- 2026-10-17: Recorded "approve and stop". Candidate finalization and required
+  review remain pending. Resume implementation under this approval without
+  seeking the same scope approval again.
 
 ## Spec Change Log
 
