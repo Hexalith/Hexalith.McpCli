@@ -2,7 +2,7 @@
 title: '4.4 Approve ChatBot and Memories migration inventories'
 type: 'chore'
 created: '2026-10-17'
-status: 'in-review'
+status: 'done'
 baseline_commit: '2833aafba8ddf49222774a39eea5bf05a744f878'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -97,7 +97,7 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
   identity and administrative boundaries, exclusions and retirement gate.
 - [x] `evidence/story-4-4/verification.md` — preserve repeatable exact source-set,
   row, variant, reference and approval checks, including negative mutations.
-- [ ] This spec and `sprint-status.yaml` — synchronize after applicable approval,
+- [x] This spec and `sprint-status.yaml` — synchronize after applicable approval,
   implementation, review and verification gates pass; preserve unrelated work.
 
 **Acceptance Criteria:**
@@ -130,7 +130,8 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
   the mandated pin. Verification uses read-only pinned Git objects and reports
   current HEAD/status separately; no upstream source or gitlink was changed by
   this implementation. Required workflow review and final status synchronization
-  remain for the parent build workflow.
+  completed; the spec is done and sprint tracking is at the workflow's `review`
+  handoff.
 
 ## Spec Change Log
 
@@ -159,6 +160,13 @@ no verification gaps. BH03/04/06/07/08/09/10 share the incomplete static-integri
 checks root cause and route to one bounded evidence-check patch. No intent or
 scope change is required; no review deferral is created.
 
+All seven patch findings are resolved in the embedded verifier: duplicate keys,
+pinned-source associations, prerequisite-owner gates, complete retirement
+conditions, A1 authority limits, destructive exclusions and repository provenance
+now have rejecting mutations. The parent reran the complete evidence block and
+all 50 negative mutations passed. There are no remaining accepted findings and
+no new deferred work.
+
 ## Verification
 
 - Execute the evidence document's candidate/final source and row checks; expect
@@ -178,3 +186,15 @@ scope change is required; no review deferral is created.
   `6fcb8a85a4ea996683371a2b173b63678dc17635138657bcfabfff8a00a85a74`.
   `git diff --check` passed. No .NET build applies to these document-only changes;
   external owner, live security/behavior and retirement gates remain open.
+
+- 2026-10-17 final validation after review fixes: the parent reran the complete
+  Bash evidence block; exit 0 with 24 ChatBot and 26 Memories rejecting mutations,
+  exact pinned source/surface sets, all 88 limited A1 references, source/link
+  checks, absent decorations/resources/prompts and unchanged frozen-intent hash.
+  Markdown frontmatter and sprint YAML parsed successfully; `git diff --check`
+  passed. All four execution tasks and all five acceptance criteria are complete.
+- Local completion message validated after `npm ci` with the pinned commitlint
+  21.2.2 CLI: `npx --no -- commitlint --verbose` read the temporary message file
+  and exited 0 with `found 0 problems, 0 warnings`. The exact validated message
+  is `docs(review): complete story 4.4 verification and tracking`; successful
+  output is preserved in `/tmp/story-4-4-commitlint.BurJ8f`.

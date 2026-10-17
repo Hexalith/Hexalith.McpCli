@@ -133,6 +133,14 @@ def chatbot_sets():
         assert set(added) == set(leaf_map) and len(added) == len(leaf_map)
         leaves.extend(group[2] + ' ' + leaf_map[var] for var in added)
     assert len(leaves) == 12
+    # Pin row identity to source declaration order, independently of inventory rows.
+    associations['chatbot'] = {
+        'M': {f'M{index:02}': name for index, name in enumerate(tools, 1)},
+        'L': {f'L{index:02}': ('conversation' if name == 'chatbot.conversation.get' else
+              name.removeprefix('chatbot.').replace('ai_action', 'ai-action').replace('.', ' '))
+              for index, name in enumerate(tools, 1)},
+    }
+    assert Counter(associations['chatbot']['L'].values()) == Counter(leaves)
     return tools, leaves
 
 def memories_sets():
@@ -166,7 +174,18 @@ def rows(text, prefix):
             for line in text.splitlines() if re.match(r'\| ' + prefix + r'\d+ \|', line)]
 
 def metadata(text, key):
-    return re.search(r'^' + key + r':\s*(.*?)\s*$', text.split('---', 2)[1], re.M)[1].strip("'\"")
+    # This manifest uses bare top-level keys; reject ambiguous/duplicate YAML keys.
+    entries = []
+    for line in text.split('---', 2)[1].splitlines():
+        if not line.strip() or line.startswith((' ', '\t', '#')):
+            continue
+        entry = re.fullmatch(r'([A-Za-z_][A-Za-z0-9_-]*):[ \t]*(.*)', line)
+        assert entry is not None, ('unsupported frontmatter key', line)
+        entries.append(entry.groups())
+    keys = [name for name, value in entries]
+    assert len(keys) == len(set(keys)), 'duplicate frontmatter key'
+    assert key in keys, ('missing frontmatter key', key)
+    return dict(entries)[key].strip("'\"")
 
 def validate(module, text, expected):
     assert metadata(text, 'inventory_version') == '1.0.0'
@@ -175,6 +194,7 @@ def validate(module, text, expected):
     assert metadata(text, 'approval_authority') == 'requesting-user-session'
     assert metadata(text, 'external_maintainer_approval') == 'unasserted'
     assert metadata(text, 'source_revision') == pins[module][1]
+    assert metadata(text, 'source_repository') == 'https://github.com/Hexalith/' + pins[module][0]
     assert metadata(text, 'module') == module
     assert metadata(text, 'source_spec') == '_bmad-output/implementation-artifacts/spec-4-4-approve-chatbot-and-memories-migration-inventories.md'
     assert metadata(text, 'approval_ref') == approval_anchor
@@ -186,6 +206,14 @@ def validate(module, text, expected):
     scope = [row[0] for row in rows(text, '[A-Z]') if not row[0].startswith('G')]
     allowed = set(expected) | {'V', 'X'}
     assert all(key[0] in allowed for key in scope), 'unknown scope row family'
+    gates = rows(text, 'G')
+    gate_count = 5 if module == 'chatbot' else 6
+    assert Counter(row[0] for row in gates) == Counter(f'G{index}' for index in range(1, gate_count + 1)), 'prerequisite gates'
+    assert all(len(row) == 3 and all(row[1:]) for row in gates), 'gate owner/prerequisite'
+    limits = re.search(r'^- \*\*Limits:\*\*.*?(?=\n\n)', text, re.M | re.S)
+    assert limits is not None, 'missing A1 limits'
+    assert 'this approval supplies no' in ' '.join(limits[0].split())
+    assert 'publication, withdrawal, retention change or retirement permission' in ' '.join(limits[0].split()), 'A1 restrictions'
 
     all_rows = []
     for prefix, names in expected.items():
@@ -196,6 +224,8 @@ def validate(module, text, expected):
         for row in actual:
             assert len(row) == 8 and row[2:4] == ['defer', 'exclude'], row
             assert all(row[4:7]) and row[-1] == approval_ref, row
+            if module == 'chatbot':
+                assert row[1].strip('`') == associations[module][prefix][row[0]], (module, row[0], 'pinned row association')
             if module == 'memories' and prefix != 'S':
                 name = row[1].strip('`')
                 assert re.search(r'`' + re.escape(associations[module][name]) + r':\d+`', row[6]), (module, row[0], 'surface/source association')
@@ -206,16 +236,31 @@ def validate(module, text, expected):
         assert Counter(row[0] for row in actual) == Counter(f'{prefix}{n:02}' for n in range(1, count + 1)), (module, prefix)
         for row in actual:
             assert len(row) == 6 and all(row) and row[2] == 'defer / exclude' and row[-1] == approval_ref, row
+    security_rows = {row[0]: row[3] for prefix in ('V', 'X') for row in rows(text, prefix)}
+    required_security = {
+        'chatbot': {
+            'V14': ('Unsupported erasure/key-rotation variants remain defer/exclude', 'destructive-scope, retention, key-shred/tombstone/WORM semantics and approval evidence'),
+            'X01': ('owner-approved retention/key-shred/WORM decision before any exposure or retirement',),
+            'X02': ('privileged key lifecycle needs a separate approved generic contract and transport',),
+        },
+        'memories': {
+            'V14': ('not cryptographic erasure/retention proof', 'audit/derived stores and backup/legal retention need separate owner decisions', 'variants until policy+auth+semantic proof'),
+            'V15': ('Operational credential/key rotation remains explicitly excluded and requires approved generic/security/operations decision',),
+            'X02': ('not cryptographic erasure, legal retention or backup proof', 'owner approval remains absent'),
+            'X03': ('Requires security/operations decision',),
+        },
+    }[module]
+    for key, requirements in required_security.items():
+        assert all(term in security_rows[key] for term in requirements), (module, key, 'erasure/retention/key-rotation prerequisites')
     assert re.search(r'no\s+Gateway-ready\s+decorated replacement', text, re.I)
     if module == 'memories':
         assert 'not deletable before the HTTP release supports forwarded per-user identity' in text
+        normalized = ' '.join(text.split())
+        assert 'That is a necessary condition, not sufficient retirement evidence.' in normalized
+        assert 'Exact Contracts/routing, tenant and user-principal propagation, approved administrative scope, negative authorization, semantic behavior and release/rollback evidence must also pass.' in normalized, 'complete Memories retirement gate'
         assert 'ingestedBy' in text and 'bearer' in text and 'tenant list' in text
     else:
         assert all(term in text for term in ('commandCorrelationId', 'taskIntentId', 'StateOwnerAggregateId', 'actor', 'tenant', 'ExpectedApprovalSourceVersion', 'ExpectedProposalSourceVersion', 'Queries have no extension channel', 'proposed future mapping'))
-        pairs = {m[0][1:]: m[1].strip('`').removeprefix('chatbot.').replace('ai_action', 'ai-action').replace('.', ' ')
-                 for m in rows(text, 'M')}
-        pairs = {key: ('conversation' if value == 'conversation get' else value) for key, value in pairs.items()}
-        assert all(row[1].strip('`') == pairs[row[0][1:]] for row in rows(text, 'L')), 'CLI/MCP row association'
 
 def check_source_anchors(module, text):
     repo = pins[module][0]
@@ -289,15 +334,29 @@ for module in pins:
         'invented owner sign-off': text.replace('external_maintainer_approval: unasserted', 'external_maintainer_approval: approved', 1),
         'missing variant': '\n'.join(line for line in text.splitlines() if not line.startswith('| V01 |')) + '\n',
         'duplicate exclusion': text + '\n' + next(line for line in text.splitlines() if line.startswith('| X01 |')) + '\n',
+        'duplicate overriding frontmatter key': text.replace('approval_status: session-approved', 'approval_status: session-approved\napproval_status: owner-approved', 1),
+        'wrong source repository': text.replace('https://github.com/Hexalith/' + pins[module][0], 'https://github.com/Other/Repository', 1),
+        'missing prerequisite gates': '\n'.join(line for line in text.splitlines() if not re.match(r'\| G\d+ \|', line)) + '\n',
+        'empty prerequisite owner': re.sub(r'^\| G1 \| [^|]+ \|', '| G1 |  |', text, count=1, flags=re.M),
+        'empty prerequisite requirement': re.sub(r'^(\| G1 \| [^|]+ \|) [^|]+ \|$', r'\1  |', text, count=1, flags=re.M),
+        'missing A1 limits': re.sub(r'^- \*\*Limits:\*\*.*?(?=\n\n)', '', text, count=1, flags=re.M | re.S),
+        'A1 permission restrictions removed': re.sub(r'publication, withdrawal, retention change or\s+retirement permission', 'unrestricted permissions', text, count=1),
+        'erasure prerequisites replaced by filler': text.replace(rows(text, 'V')[13][3], 'Deferred compatibility details remain.', 1),
+        'erasure exclusion prerequisite removed': text.replace(rows(text, 'X')[0 if module == 'chatbot' else 1][3], 'Deferred compatibility details remain.', 1),
+        'key-rotation prerequisite removed': text.replace(rows(text, 'X')[1 if module == 'chatbot' else 2][3], 'Deferred compatibility details remain.', 1),
     }
     if module == 'chatbot':
         first, second = rows(text, 'L')[:2]
         mutations['swapped CLI associations'] = text.replace(first[1], '`__swap__`').replace(second[1], first[1]).replace('`__swap__`', second[1])
+        joint = mutations['swapped CLI associations']
+        first, second = rows(text, 'M')[:2]
+        mutations['jointly swapped MCP/CLI associations'] = joint.replace(first[1], '`__swap__`').replace(second[1], first[1]).replace('`__swap__`', second[1])
     if module == 'memories':
         first, second = rows(text, 'L')[:2]
         mutations['swapped CLI associations'] = text.replace(first[1], '`__swap__`').replace(second[1], first[1]).replace('`__swap__`', second[1])
         mutations['implemented stub'] = text.replace('| S01 |', '| L15 |', 1)
         mutations['weakened identity gate'] = text.replace('not deletable before the HTTP release supports forwarded per-user identity', 'deletable now')
+        mutations['identity-only retirement sufficiency'] = re.sub(r'That is a necessary condition.*?must also pass\.', 'Forwarded identity alone permits retirement.', text, count=1, flags=re.S)
     for name, mutant in mutations.items():
         try:
             validate(module, mutant, expected[module])
@@ -327,14 +386,24 @@ git diff --check
 
 ## Recorded result and limits
 
-The full Bash block above was executed through Python
-`subprocess.run(['bash', '-e'], input=block, text=True)` and exited 0:
+After the review corrections below, the parent executed the full Bash block
+through Python `subprocess.run(['bash', '-e'], input=block, text=True)`; exit 0:
 
 ```text
-PASS chatbot: exact source surface sets, row metadata, session approval, source anchors and 13 negative mutations.
-PASS memories: exact source surface sets, row metadata, session approval, source anchors and 15 negative mutations.
+PASS chatbot: exact source surface sets, row metadata, session approval, source anchors and 24 negative mutations.
+PASS memories: exact source surface sets, row metadata, session approval, source anchors and 26 negative mutations.
 PASS: 42 implemented surfaces, 4 executable stubs, 32 variants and 10 exclusions; all 88 scope rows session-approved defer/exclude. External owner and live parity gates remain open.
 ```
+
+The implementation worker first checked the review corrections with the embedded
+validator definitions and inventory/mutation loop. The parent's complete rerun
+then passed the full source, anchor, reference and snapshot checks as well as all
+**24 ChatBot** and **26 Memories** negative mutations. Markdown frontmatter and
+sprint YAML parsed successfully, and `git diff --check` passed. All three review
+layers completed; seven accepted checker findings were patched, with no new
+deferrals. The [spec's triage log](../../spec-4-4-approve-chatbot-and-memories-migration-inventories.md#review-triage-log)
+records every finding and its disposition. The spec is done; sprint tracking is
+at the build workflow's `review` handoff.
 
 Observed source state at that successful run: ChatBot HEAD
 `d6c4deb70dcce90344f86d7dee3d6e7027e61e24`, Memories HEAD
@@ -359,8 +428,11 @@ Negative mutations reject missing/duplicate rows, invented surfaces, unsupported
 inclusion, false or pending approval, invented authority or external owner
 sign-off, invalid row approval links, missing decision evidence, missing variants,
 duplicate exclusions, swapped surface/source associations, an implemented stub
-claim and a weakened Memories forwarded-identity gate. Candidate pending state
-cannot pass as final approval.
+claim and a weakened Memories forwarded-identity gate. They also reject duplicate
+overriding frontmatter keys, wrong repository URLs, jointly swapped ChatBot
+MCP/CLI names, missing or empty prerequisite-owner gates, removed A1 restrictions,
+erasure/retention/key-rotation prerequisite loss and identity-only Memories
+retirement sufficiency. Candidate pending state cannot pass as final approval.
 
 Source-reference checks prove file existence, nonblank line bounds and local
 link targets, including fragments. Behavior interpretations come from the pinned
