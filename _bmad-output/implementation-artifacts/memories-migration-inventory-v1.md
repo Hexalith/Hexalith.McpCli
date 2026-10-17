@@ -173,6 +173,15 @@ The Legacy Server remains nondeletable until the later HTTP release supports
 forwarded per-user identity and the owning authorization, behavior and release
 gates pass. Scope finalization must never close those evidence gates.
 
+The [human walkthrough decision](spec-4-4-approve-chatbot-and-memories-migration-inventories.md#human-walkthrough-decision-2026-10-17)
+accepts this limited inventory milestone. Future migration should prove one
+bounded operation through both generic heads after satisfying its applicable
+G1-G6 prerequisites, preserving the existing workflow and identity boundaries.
+Use the existing identity infrastructure for the later shared HTTP transport;
+caller-supplied tenant or actor strings cannot replace authenticated identity.
+Legacy Server retirement remains a separate owner-authorized decision after
+the full conditions above pass. All 45 scope rows remain `defer / exclude`.
+
 ## Explicit adjacent and unsupported exclusions
 
 These are scope-accounting families, not extra implemented MCP/CLI operations.

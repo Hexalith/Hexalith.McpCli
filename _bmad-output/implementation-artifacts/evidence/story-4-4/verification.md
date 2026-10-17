@@ -450,3 +450,30 @@ Its existing MCP host propagates the authenticated bearer; generic v1 stdio
 cannot replace that behavior. The Memories Legacy Server remains nondeletable
 until a later HTTP release supports forwarded per-user identity and all other
 owner, security, behavior and release gates pass.
+
+## Human walkthrough completion (2026-10-17)
+
+The requesting user's **"apply recommended"** instruction accepts the limited
+inventory milestone and the planning preferences recorded in the
+[spec's walkthrough decision](../../spec-4-4-approve-chatbot-and-memories-migration-inventories.md#human-walkthrough-decision-2026-10-17).
+The spec and sprint story are now `done`. The earlier `review` handoff described
+above is the historical build result, preceding this human acceptance.
+
+ChatBot's proposed handoff now prefers an explicit Payload field for required
+task provenance and makes current Command-only actor binding explicit. Both
+inventories retain incremental future migration, module-owned workflows and
+the complete Memories identity/retirement gate. All scope rows, A1 metadata,
+source pins, external owner gates and frozen intent are preserved. This decision
+adds no runtime behavior, inclusion, migration execution or retirement authority.
+The complete Bash block above remains the verification procedure for this
+document-only update; no broader checker or live-proof claim is introduced.
+
+Validation after applying the walkthrough recommendations: extracted the complete
+Bash block with Python 3 and executed it with `subprocess.run(['bash', '-e'],
+input=block, text=True)`; exit 0. Both immutable source checks passed, as did all
+88 scope rows and 24 ChatBot plus 26 Memories negative mutations. Separate
+SHA-256 comparisons confirmed unchanged frozen intent, both inventory
+frontmatters and every scope/prerequisite row. Markdown frontmatter and sprint
+YAML parsed successfully; only Story 4.4's sprint status and the update timestamp
+changed. `git diff --check` passed. No .NET build or live operation was run for
+these document-only clarifications.

@@ -132,6 +132,10 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
   this implementation. Required workflow review and final status synchronization
   completed; the spec is done and sprint tracking is at the workflow's `review`
   handoff.
+- 2026-10-17: The requesting user completed the human walkthrough with
+  "apply recommended". Recorded the limited acceptance and future implementation
+  preferences below; sprint tracking now advances from `review` to `done`.
+  Frozen intent, source pins, scope rows and external owner gates are preserved.
 
 ## Spec Change Log
 
@@ -139,6 +143,45 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
   candidate checks with final approval/source-object checks and negative
   mutations. Approved intent, dispositions, source pins and authority limits
   are unchanged.
+- 2026-10-17: Applied the human walkthrough recommendation: prefer explicit
+  payload task provenance, clarify Command-only actor binding, retain module
+  workflows and Memories identity/retirement gates, and record incremental
+  future migration. Completed the human review tracking transition without
+  changing runtime, approval authority or any row disposition.
+
+## Human walkthrough decision (2026-10-17)
+
+The requesting user instructed **"apply recommended"** after the walkthrough
+and the explanation of each proposed solution. This accepts Story 4.4 as the
+session-scoped inventory milestone and completes its human review. The spec
+and sprint story are `done`; all 88 inventory scope rows retain `defer / exclude`.
+The earlier A1 record remains the source of that limited disposition approval;
+this follow-up records the reviewed planning preferences without asserting
+external owning-maintainer sign-off or approving a future replacement contract.
+
+- Reuse generic Envelope tenant selection and command correlation. The owning
+  boundary must authorize the authenticated caller for the resolved tenant;
+  operator actor strings supply provenance only.
+- Prefer a declared Payload field with explicit identifier validation when
+  task provenance is required. Use Command extensions only after their owner
+  defines and approves the semantics and validation. Current Queries have no
+  extension/correlation channel or ActorProperty binding; preserve that gap
+  until an upstream contract or later transport decision resolves it.
+- Keep business correlation and task intent distinct from submission correlation
+  and provenance task IDs. Declare aggregate routing upstream and preserve
+  approval/proposal version inputs as business concurrency controls.
+- Retain existing module admission, payload enrichment and compound workflows.
+  Planning may attempt external effects before EventStore submission; a refusal
+  alone does not establish that nothing happened. McpCli gains no module-specific
+  executor path or retry behavior.
+- Retain Memories until the later HTTP transport supports forwarded per-user
+  identity and all owner, authorization, behavior and release gates pass. Reuse
+  existing identity infrastructure. Non-Gateway and destructive exclusions stay
+  explicit, and legacy retirement remains a separate authorized change.
+- Keep the bounded static verifier and focused human source interpretation.
+  Future migration should establish one bounded operation through both generic
+  heads after its prerequisites pass, with operation-specific authorization and
+  behavior evidence before expansion. No operation is selected or included now.
 
 ## Review Triage Log
 
@@ -198,3 +241,8 @@ no new deferred work.
   and exited 0 with `found 0 problems, 0 warnings`. The exact validated message
   is `docs(review): complete story 4.4 verification and tracking`; successful
   output is preserved in `/tmp/story-4-4-commitlint.BurJ8f`.
+- 2026-10-17 walkthrough completion validation: the complete evidence Bash block
+  exited 0 with all 88 scope rows and all 50 negative mutations passing. Separate
+  hashes confirmed unchanged frozen intent, inventory frontmatters and all
+  scope/prerequisite rows. Frontmatter and sprint YAML parsed successfully;
+  `git diff --check` passed. No runtime, dependency or upstream change was made.
