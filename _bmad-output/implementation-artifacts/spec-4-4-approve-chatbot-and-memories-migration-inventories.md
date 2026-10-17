@@ -2,7 +2,8 @@
 title: '4.4 Approve ChatBot and Memories migration inventories'
 type: 'chore'
 created: '2026-10-17'
-status: 'ready-for-dev'
+status: 'in-review'
+baseline_commit: '2833aafba8ddf49222774a39eea5bf05a744f878'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -90,11 +91,11 @@ remains unasserted. Stop at `ready-for-dev` before implementation and review.
 
 Paths below are under `_bmad-output/implementation-artifacts/`.
 
-- [ ] `chatbot-migration-inventory-v1.md` — finalize source-pinned rows, context
+- [x] `chatbot-migration-inventory-v1.md` — finalize source-pinned rows, context
   handoffs, security classes, prerequisites and actual approval references.
-- [ ] `memories-migration-inventory-v1.md` — finalize source-pinned rows,
+- [x] `memories-migration-inventory-v1.md` — finalize source-pinned rows,
   identity and administrative boundaries, exclusions and retirement gate.
-- [ ] `evidence/story-4-4/verification.md` — preserve repeatable exact source-set,
+- [x] `evidence/story-4-4/verification.md` — preserve repeatable exact source-set,
   row, variant, reference and approval checks, including negative mutations.
 - [ ] This spec and `sprint-status.yaml` — synchronize after applicable approval,
   implementation, review and verification gates pass; preserve unrelated work.
@@ -118,13 +119,45 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
 
 ## Implementation Notes
 
-- 2026-10-17: Recorded "approve and stop". Candidate finalization and required
-  review remain pending. Resume implementation under this approval without
-  seeking the same scope approval again.
+- 2026-10-17: Recorded "approve and stop" at the approval checkpoint. The
+  subsequent build request resumed finalization under the same session scope;
+  no second scope approval was requested.
+- 2026-10-17: Finalized both inventories at 1.0.0. All 88 scope rows reference
+  actual A1 session approval for `defer / exclude`; external owning-maintainer
+  sign-off remains unasserted. Preserved ChatBot context/routing/concurrency
+  handoffs and Memories identity, administrative and non-Gateway gaps.
+- Concurrent external reference updates advanced the ChatBot checkout beyond
+  the mandated pin. Verification uses read-only pinned Git objects and reports
+  current HEAD/status separately; no upstream source or gitlink was changed by
+  this implementation. Required workflow review and final status synchronization
+  remain for the parent build workflow.
 
 ## Spec Change Log
 
+- 2026-10-17: Completed the three document execution tasks and replaced pending
+  candidate checks with final approval/source-object checks and negative
+  mutations. Approved intent, dispositions, source pins and authority limits
+  are unchanged.
+
 ## Review Triage Log
+
+| ID | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| BH01 | false | reject | The six reference movements and dependency-policy edits were concurrent external work observed during implementation. This story changed only its five document/tracking files; the workflow requires the review snapshot to include all changes since baseline. Preserve the unrelated edits and do not claim or commit them as Story 4.4. |
+| BH02 | false | reject | The no-.NET-validation statement is explicitly about this document-only story. The concurrent dependency edits are not implementation output or evidence for this story; their validation belongs to their owning work. |
+| BH03 | medium | patch | Reproduced: appending an overriding duplicate approval key passes the first-match metadata parser while a YAML consumer can read a different value. Reject duplicate frontmatter keys and add a negative mutation. |
+| BH04 | medium | patch | Reproduced: swapping both ChatBot M01/M02 and L01/L02 names passes the inventory-derived association check with wrong rationales and anchors. Derive expected associations from pinned source instead of the inventory. |
+| BH05 | low | reject | Reproduced: nonblank line-1 anchors pass. The evidence explicitly promises file existence, bounds and nonblank lines and disclaims semantic proof for prose; source interpretation is separately reviewed. Automatically proving every cited behavior would add substantial source-text coupling for a contrived bulk replacement, beyond a direct correction. |
+| BH06 | medium | patch | Reproduced: deleting all G rows passes despite removing owning handoffs required by this scope. Check the expected gate IDs and nonempty owner/prerequisite fields and reject missing gates. |
+| BH07 | medium | patch | Reproduced: replacing Memories' post-HTTP authorization/behavior/release conditions with identity-only sufficiency passes. Protect the full necessary retirement conditions and add a negative mutation. |
+| BH08 | medium | patch | Reproduced: removing the complete A1 Limits paragraph passes while dropping explicit publication/withdrawal/retention/retirement restrictions. Check those authority limits and reject their removal. |
+| BH09 | medium | patch | Reproduced: erasure prerequisites in V14 can be replaced with filler while IDs/cell checks pass. Protect required erasure, retention and key-rotation exclusions and add a negative mutation. |
+| BH10 | medium | patch | Reproduced: an unrelated source_repository URL passes beside the required module/revision. Validate the exact pinned repository URL and reject a wrong URL. |
+
+The edge-case layer returned no findings; the verification-gap layer reported
+no verification gaps. BH03/04/06/07/08/09/10 share the incomplete static-integrity
+checks root cause and route to one bounded evidence-check patch. No intent or
+scope change is required; no review deferral is created.
 
 ## Verification
 
@@ -135,3 +168,13 @@ Paths below are under `_bmad-output/implementation-artifacts/`.
 - Run `git diff --check`; inspect local Markdown/YAML and upstream HEAD/status.
   No .NET build applies to these document-only artifacts. Static checks supply
   no live Gateway, authorization, persisted-effect or release proof.
+
+- 2026-10-17 implementation validation: executed the complete Bash block in
+  `evidence/story-4-4/verification.md` via Python
+  `subprocess.run(['bash', '-e'], input=block, text=True)`; exit 0. Verified exact
+  pinned source sets, all 88 A1 scope rows, local link fragments/source anchors,
+  13 ChatBot and 15 Memories negative mutations, absent Contracts decorations
+  and MCP resources/prompts, and the unchanged frozen approval block SHA-256
+  `6fcb8a85a4ea996683371a2b173b63678dc17635138657bcfabfff8a00a85a74`.
+  `git diff --check` passed. No .NET build applies to these document-only changes;
+  external owner, live security/behavior and retirement gates remain open.

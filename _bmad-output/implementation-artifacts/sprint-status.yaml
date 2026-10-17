@@ -70,7 +70,7 @@ development_status:
   4-1-approve-the-parties-migration-inventory: done
   4-2-approve-the-folders-migration-inventory: done
   4-3-approve-projects-and-frontcomposer-migration-inventories: done
-  4-4-approve-chatbot-and-memories-migration-inventories: ready-for-dev
+  4-4-approve-chatbot-and-memories-migration-inventories: in-progress
   4-5-gate-module-coverage-against-the-approved-inventory: backlog
   4-6-publish-the-bootstrap-decoration-package: backlog
   4-7-enforce-the-production-dependency-boundary: backlog
