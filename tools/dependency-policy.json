@@ -70,5 +70,20 @@
     "id": "Hexalith.McpCli.Abstractions",
     "version": "1.0.0"
   },
-  "modules": {}
+  "modules": {},
+  "testPackages": [
+    "Microsoft.NET.Test.Sdk",
+    "xunit.v3",
+    "Shouldly",
+    "NSubstitute",
+    "Verify.XunitV3",
+    "Microsoft.CodeAnalysis.CSharp",
+    "Aspire.Hosting.Testing",
+    "CommunityToolkit.Aspire.Hosting.Dapr",
+    "Hexalith.EventStore.Testing",
+    "Hexalith.EventStore.Testing.Integration",
+    "Hexalith.EventStore.Aspire",
+    "Hexalith.Tenants.Aspire"
+  ],
+  "sampleContracts": "Hexalith.McpCli.Sample.Contracts"
 }

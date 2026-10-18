@@ -1,0 +1,401 @@
+{
+  "rootId": "Hexalith.Projects.Contracts",
+  "rootVersion": "1.0.0",
+  "provenance": {
+    "source": "Hexalith.Projects.Contracts/1.0.0",
+    "nuspecSha256": "258759ef011cf557b09183b474f66b153ef76667fc0642e090f67adf0e98b0bd",
+    "capture": "net10.0 restore using only the local NuGet cache; target dependency and framework-reference fields retained",
+    "simulatedDecorationDependency": false
+  },
+  "targets": {
+    "ByteAether.Ulid/1.4.1": {
+      "type": "package"
+    },
+    "Fluxor/6.11.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+      }
+    },
+    "Fluxor.Blazor.Web/6.11.0": {
+      "type": "package",
+      "dependencies": {
+        "Fluxor": "6.11.0",
+        "Microsoft.AspNetCore.Components.Web": "8.0.0",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+      }
+    },
+    "Hexalith.Commons.Serialization/2.30.1": {
+      "type": "package"
+    },
+    "Hexalith.Commons.UniqueIds/2.30.1": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.0"
+      }
+    },
+    "Hexalith.Conversations.Contracts/1.0.0": {
+      "type": "package",
+      "dependencies": {
+        "Hexalith.Commons.Serialization": "1.0.0"
+      }
+    },
+    "Hexalith.EventStore.Contracts/3.106.0": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.0",
+        "Hexalith.Commons.UniqueIds": "2.30.0"
+      }
+    },
+    "Hexalith.FrontComposer.Contracts/4.5.0": {
+      "type": "package"
+    },
+    "Hexalith.FrontComposer.Contracts.UI/4.5.0": {
+      "type": "package",
+      "dependencies": {
+        "Hexalith.FrontComposer.Contracts": "4.5.0",
+        "Microsoft.FluentUI.AspNetCore.Components": "5.0.0-rc.5-26219.1"
+      },
+      "frameworkReferences": [
+        "Microsoft.AspNetCore.App"
+      ]
+    },
+    "Hexalith.FrontComposer.Shell/4.5.0": {
+      "type": "package",
+      "dependencies": {
+        "Fluxor": "6.11.0",
+        "Fluxor.Blazor.Web": "6.11.0",
+        "Hexalith.FrontComposer.Contracts": "4.5.0",
+        "Hexalith.FrontComposer.Contracts.UI": "4.5.0",
+        "Microsoft.AspNetCore.Authentication.OpenIdConnect": "10.0.12",
+        "Microsoft.AspNetCore.SignalR.Client": "10.0.12",
+        "Microsoft.FluentUI.AspNetCore.Components": "5.0.0-rc.5-26219.1",
+        "Microsoft.FluentUI.AspNetCore.Components.Icons": "5.0.0-rc.5-26219.1",
+        "Microsoft.IdentityModel.Abstractions": "8.23.0",
+        "Microsoft.IdentityModel.JsonWebTokens": "8.23.0",
+        "Microsoft.IdentityModel.Logging": "8.23.0",
+        "Microsoft.IdentityModel.Protocols": "8.23.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.23.0",
+        "Microsoft.IdentityModel.Tokens": "8.23.0",
+        "NUlid": "1.7.3",
+        "System.IdentityModel.Tokens.Jwt": "8.23.0",
+        "System.Reactive": "7.0.0"
+      },
+      "frameworkReferences": [
+        "Microsoft.AspNetCore.App"
+      ]
+    },
+    "Hexalith.Projects.Contracts/1.0.0": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.1",
+        "Fluxor": "6.11.0",
+        "Fluxor.Blazor.Web": "6.11.0",
+        "Hexalith.Commons.Serialization": "2.30.1",
+        "Hexalith.Commons.UniqueIds": "2.30.1",
+        "Hexalith.Conversations.Contracts": "1.0.0",
+        "Hexalith.EventStore.Contracts": "3.106.0",
+        "Hexalith.FrontComposer.Contracts": "4.5.0",
+        "Hexalith.FrontComposer.Shell": "4.5.0",
+        "Microsoft.AspNetCore.Authentication.OpenIdConnect": "10.0.12",
+        "Microsoft.AspNetCore.SignalR.Client": "10.0.12",
+        "Microsoft.FluentUI.AspNetCore.Components": "5.0.0-rc.5-26219.1",
+        "Microsoft.FluentUI.AspNetCore.Components.Icons": "5.0.0-rc.5-26219.1",
+        "Microsoft.IdentityModel.Abstractions": "8.23.0",
+        "Microsoft.IdentityModel.JsonWebTokens": "8.23.0",
+        "Microsoft.IdentityModel.Logging": "8.23.0",
+        "Microsoft.IdentityModel.Protocols": "8.23.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.23.0",
+        "Microsoft.IdentityModel.Tokens": "8.23.0",
+        "NUlid": "1.7.3",
+        "System.IdentityModel.Tokens.Jwt": "8.23.0",
+        "System.Reactive": "7.0.0"
+      },
+      "frameworkReferences": [
+        "Microsoft.AspNetCore.App"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.19.2"
+      },
+      "frameworkReferences": [
+        "Microsoft.AspNetCore.App"
+      ]
+    },
+    "Microsoft.AspNetCore.Authorization/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Metadata": "10.0.10",
+        "Microsoft.Extensions.Diagnostics": "10.0.10",
+        "Microsoft.Extensions.Logging.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options": "10.0.10"
+      }
+    },
+    "Microsoft.AspNetCore.Components/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Authorization": "10.0.10",
+        "Microsoft.AspNetCore.Components.Analyzers": "10.0.10"
+      }
+    },
+    "Microsoft.AspNetCore.Components.Analyzers/10.0.10": {
+      "type": "package"
+    },
+    "Microsoft.AspNetCore.Components.Forms/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Components": "10.0.10",
+        "Microsoft.Extensions.Validation": "10.0.10"
+      }
+    },
+    "Microsoft.AspNetCore.Components.Web/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Components": "10.0.10",
+        "Microsoft.AspNetCore.Components.Forms": "10.0.10",
+        "Microsoft.Extensions.DependencyInjection": "10.0.10",
+        "Microsoft.Extensions.Primitives": "10.0.10",
+        "Microsoft.JSInterop": "10.0.10"
+      }
+    },
+    "Microsoft.AspNetCore.Connections.Abstractions/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Features": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.Http.Connections.Client/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Http.Connections.Common": "10.0.12",
+        "Microsoft.Extensions.Logging.Abstractions": "10.0.12",
+        "Microsoft.Extensions.Options": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.Http.Connections.Common/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Connections.Abstractions": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.Metadata/10.0.10": {
+      "type": "package"
+    },
+    "Microsoft.AspNetCore.SignalR.Client/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Http.Connections.Client": "10.0.12",
+        "Microsoft.AspNetCore.SignalR.Client.Core": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.SignalR.Client.Core/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.SignalR.Common": "10.0.12",
+        "Microsoft.AspNetCore.SignalR.Protocols.Json": "10.0.12",
+        "Microsoft.Extensions.DependencyInjection": "10.0.12",
+        "Microsoft.Extensions.Logging": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.SignalR.Common/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Connections.Abstractions": "10.0.12",
+        "Microsoft.Extensions.Options": "10.0.12"
+      }
+    },
+    "Microsoft.AspNetCore.SignalR.Protocols.Json/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.SignalR.Common": "10.0.12"
+      }
+    },
+    "Microsoft.Bcl.Cryptography/10.0.2": {
+      "type": "package"
+    },
+    "Microsoft.Extensions.Configuration/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Primitives": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Primitives": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Configuration.Binder/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration": "10.0.10",
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.DependencyInjection/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.12"
+      }
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.12": {
+      "type": "package"
+    },
+    "Microsoft.Extensions.Diagnostics/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration": "10.0.10",
+        "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Diagnostics.Abstractions/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Features/10.0.12": {
+      "type": "package"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Primitives": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Hosting.Abstractions/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.10",
+        "Microsoft.Extensions.FileProviders.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Logging.Abstractions": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Http/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Diagnostics": "10.0.10",
+        "Microsoft.Extensions.Logging": "10.0.10",
+        "Microsoft.Extensions.Logging.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Logging/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection": "10.0.12",
+        "Microsoft.Extensions.Logging.Abstractions": "10.0.12",
+        "Microsoft.Extensions.Options": "10.0.12"
+      }
+    },
+    "Microsoft.Extensions.Logging.Abstractions/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.12"
+      }
+    },
+    "Microsoft.Extensions.Options/10.0.12": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.12",
+        "Microsoft.Extensions.Primitives": "10.0.12"
+      }
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Configuration.Binder": "10.0.10",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options": "10.0.10",
+        "Microsoft.Extensions.Primitives": "10.0.10"
+      }
+    },
+    "Microsoft.Extensions.Primitives/10.0.12": {
+      "type": "package"
+    },
+    "Microsoft.Extensions.Validation/10.0.10": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Options": "10.0.10"
+      }
+    },
+    "Microsoft.FluentUI.AspNetCore.Components/5.0.0-rc.5-26219.1": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.AspNetCore.Components.Web": "10.0.10",
+        "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Hosting.Abstractions": "10.0.10",
+        "Microsoft.Extensions.Http": "10.0.10"
+      }
+    },
+    "Microsoft.FluentUI.AspNetCore.Components.Icons/5.0.0-rc.5-26219.1": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.FluentUI.AspNetCore.Components": "4.14.4"
+      }
+    },
+    "Microsoft.IdentityModel.Abstractions/8.23.0": {
+      "type": "package"
+    },
+    "Microsoft.IdentityModel.JsonWebTokens/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.Tokens": "8.23.0"
+      }
+    },
+    "Microsoft.IdentityModel.Logging/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.Abstractions": "8.23.0"
+      }
+    },
+    "Microsoft.IdentityModel.Protocols/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.Tokens": "8.23.0"
+      }
+    },
+    "Microsoft.IdentityModel.Protocols.OpenIdConnect/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.Protocols": "8.23.0",
+        "System.IdentityModel.Tokens.Jwt": "8.23.0"
+      }
+    },
+    "Microsoft.IdentityModel.Tokens/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.Bcl.Cryptography": "10.0.2",
+        "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+        "Microsoft.IdentityModel.Logging": "8.23.0"
+      }
+    },
+    "Microsoft.JSInterop/10.0.10": {
+      "type": "package"
+    },
+    "NUlid/1.7.3": {
+      "type": "package"
+    },
+    "System.IdentityModel.Tokens.Jwt/8.23.0": {
+      "type": "package",
+      "dependencies": {
+        "Microsoft.IdentityModel.JsonWebTokens": "8.23.0",
+        "Microsoft.IdentityModel.Tokens": "8.23.0"
+      }
+    },
+    "System.Reactive/7.0.0": {
+      "type": "package"
+    }
+  }
+}

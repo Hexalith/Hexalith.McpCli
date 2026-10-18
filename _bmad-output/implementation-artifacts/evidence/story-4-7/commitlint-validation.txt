@@ -1,0 +1,7 @@
+Command: npx --no -- commitlint --verbose --edit /tmp/mcpcli-4-7-commit-message.txt
+
+⧗   --- input ---
+test(deps): enforce the production dependency boundary
+✔   found 0 problems, 0 warnings
+
+Exit code: 0

@@ -1,0 +1,40 @@
+{
+  "rootId": "Hexalith.Parties.Contracts",
+  "rootVersion": "1.4.0",
+  "provenance": {
+    "source": "Hexalith.Parties.Contracts/1.4.0",
+    "nuspecSha256": "cdbe13da1e275052a31bb4962873d7e7847f0b035b25eeaa7257dd96a393dc5b",
+    "capture": "net10.0 restore using only the local NuGet cache; target dependency and framework-reference fields retained",
+    "simulatedDecorationDependency": true
+  },
+  "targets": {
+    "ByteAether.Ulid/1.4.2": {
+      "type": "package"
+    },
+    "Hexalith.Commons.UniqueIds/2.30.1": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.0"
+      }
+    },
+    "Hexalith.EventStore.Contracts/3.120.0": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.1",
+        "Hexalith.Commons.UniqueIds": "2.30.1"
+      }
+    },
+    "Hexalith.Parties.Contracts/1.4.0": {
+      "type": "package",
+      "dependencies": {
+        "ByteAether.Ulid": "1.4.2",
+        "Hexalith.Commons.UniqueIds": "2.30.1",
+        "Hexalith.EventStore.Contracts": "3.120.0",
+        "Hexalith.McpCli.Abstractions": "1.0.0"
+      }
+    },
+    "Hexalith.McpCli.Abstractions/1.0.0": {
+      "type": "package"
+    }
+  }
+}
