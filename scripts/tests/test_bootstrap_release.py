@@ -49,8 +49,9 @@ class BootstrapReleaseTests(unittest.TestCase):
         shutil.copy(ROOT / "global.json", self.root / "global.json")
         self.bin = self.root / "stubs"
         self.bin.mkdir()
+        # LC_ALL=C keeps system messages such as mkdir's "File exists" untranslated.
         self.env = dict(os.environ, MCPCLI_RELEASE_PHASE="bootstrap", NUGET_API_KEY="fixture-secret-never-print",
-                        PATH=f"{self.bin}:{os.environ['PATH']}", PYTHONPATH=str(self.bin),
+                        LC_ALL="C", PATH=f"{self.bin}:{os.environ['PATH']}", PYTHONPATH=str(self.bin),
                         RELEASE_TEST_ROOT=str(self.root), REGISTRY_STATE="free", SOURCE_STATE="success",
                         REPOSITORY="fixture/repo", DISPATCH_SHA=SHA, DISPATCH_REF="refs/heads/main")
         self.workflow_exports = {}
@@ -832,8 +833,12 @@ else:
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assert_no_push()
 
-    def test_validator_rejects_changed_package_manifest_and_unknown_phase(self):
+    def test_validator_rejects_changed_package_manifest_unknown_phase_and_invalid_version(self):
         path = self.staged()
+        result = self.run_script("validate-release-packages.py", str(path.parent), "1.0", "bootstrap")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Invalid release version: 1.0", result.stderr)
+        self.assert_no_push()
         manifest = self.root / "tools/release-packages.json"
         original = manifest.read_text()
         packages = json.loads(original)
@@ -1303,6 +1308,26 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
                 del self.env[changed]
+
+    def test_direct_recovery_publish_requires_tagged_source_and_independent_gates(self):
+        self.staged()
+        # Main is ahead of the tag, so only the tagged-recovery source policy can pass.
+        self.env.update(MCPCLI_RECOVERY_VERSION="1.0.0", LIVE_SHA="b" * 40)
+        baseline = dict(self.env)
+        for changed, value, message in (("RECOVERY_ANCESTOR", "false", "Recovery tag is not an ancestor of current main"),
+                                        ("REMOTE_TAG_SHA", "c" * 40, "Remote recovery tag does not match the exact release SHA"),
+                                        ("SOURCE_STATE", "bootstrap-failed", "No successful latest bootstrap-package.yml push run")):
+            with self.subTest(changed=changed):
+                self.env = dict(baseline, **{changed: value})
+                result = self.run_script("release-publish.sh", "1.0.0")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assert_no_push()
+        self.env = baseline
+        result = self.run_script("release-publish.sh", "1.0.0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Verified tagged recovery source", result.stdout)
+        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
 
     def test_recovery_publisher_refuses_version_mismatch(self):
         self.staged()
