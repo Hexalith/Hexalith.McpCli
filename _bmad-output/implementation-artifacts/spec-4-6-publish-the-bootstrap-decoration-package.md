@@ -2,7 +2,7 @@
 title: '4.6 Publish the bootstrap Decoration Package'
 type: 'feature'
 created: '2026-10-17'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '04178de98f30b0c5541f7efb978e9b9acc8e8c1d'
