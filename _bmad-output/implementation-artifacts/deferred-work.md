@@ -491,3 +491,12 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-6-publish-the-bootstrap-decoration-package.md`
   summary: The agent instructions do not name the release script suite or the bootstrap gate that runs it.
   evidence: Low. `AGENTS.md:96` (`Running and verifying`, synced to `CLAUDE.md` and `.github/copilot-instructions.md`) lists only .NET test commands. It has no `python3 -m unittest discover -s scripts/tests` command and does not mention `.github/workflows/bootstrap-package.yml:31`, so an agent changing `scripts/release-*.sh` or the release Python scripts may skip `scripts/tests/test_bootstrap_release.py` until CI runs it. Add one line in the next bmad-project-context refresh, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+
+## Deferred from: code review of spec-4-7-enforce-the-production-dependency-boundary.md (2026-10-18)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-7-enforce-the-production-dependency-boundary.md`
+  summary: The production dependency gate does not inspect `Reference` (including `HintPath`) or `PackageDownload` items in `src/` projects.
+  evidence: Medium; pre-existing. `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs:33`, `:53` and `:62` read only `ProjectReference`, `FrameworkReference` and `PackageReference`, and `RestoredDependencyGraph.cs:87` reads only `project.assets.json`, which never lists these items. A `<Reference Include="X" HintPath="../../references/.../X.dll" />` in a production project would ship another module's assembly with every gate green. Add a source-project failure for any `Reference` or `PackageDownload` item, with an exact-diagnostic test.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-7-enforce-the-production-dependency-boundary.md`
+  summary: Per-project dependency direction (Abstractions has zero package references; Core has no MCP, System.CommandLine or ASP.NET dependency) is not enforced in CI.
+  evidence: Medium; pre-existing. `_bmad-output/planning-artifacts/epics.md:138` requires the hexagonal direction (AD1–AD3), but `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs:105` and `:218` accept any `directPackages` entry on any production project, so Abstractions adding `ModelContextProtocol` or Core adding `System.CommandLine` passes Manifest.Tests. Only `scripts/validate-release-packages.py:64` checks Abstractions, at release time. Add a reviewed per-project allowance to the policy or the gate, without module-specific code.
