@@ -51,12 +51,13 @@ class BootstrapReleaseTests(unittest.TestCase):
         self.bin.mkdir()
         self.env = dict(os.environ, MCPCLI_RELEASE_PHASE="bootstrap", NUGET_API_KEY="fixture-secret-never-print",
                         PATH=f"{self.bin}:{os.environ['PATH']}", PYTHONPATH=str(self.bin),
-                        RELEASE_TEST_ROOT=str(self.root), REGISTRY_STATE="404", SOURCE_STATE="success",
+                        RELEASE_TEST_ROOT=str(self.root), REGISTRY_STATE="free", SOURCE_STATE="success",
                         REPOSITORY="fixture/repo", DISPATCH_SHA=SHA, DISPATCH_REF="refs/heads/main")
+        self.workflow_exports = {}
         (self.bin / "sitecustomize.py").write_text('''
 import io, json, os, time
 from pathlib import Path
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 import urllib.request
 def registry(url, timeout):
     root = Path(os.environ["RELEASE_TEST_ROOT"])
@@ -68,11 +69,12 @@ def registry(url, timeout):
         previous_downloads = len(downloads.read_text().splitlines()) if downloads.exists() else 0
         with downloads.open("a") as log: log.write(url + "\\n")
         if public_state == "timeout": raise TimeoutError("fixture")
+        if public_state == "url-error": raise URLError(os.environ["NUGET_API_KEY"])
         if public_state in ("404", "500") or (public_state == "404-then-200" and previous_downloads == 0):
             raise HTTPError(url, 404 if public_state == "404-then-200" else int(public_state), "fixture", {}, None)
         body = (root / "public.nupkg").read_bytes()
         response = io.BytesIO(body)
-        response.status = 200
+        response.status = 201 if public_state == "unexpected-status" else 200
         return response
     if state in ("404", "403", "500"):
         raise HTTPError(url, int(state), "fixture", {}, None)
@@ -132,12 +134,16 @@ if "Bootstrap.Consumer.Contracts.csproj" in args[1]:
         print({"missing-diagnostic": "    1 Warning(s)",
                "wrong-file": "CreateItemCommand.cs(2,1): warning MCPCLI001: fixture\\n    1 Warning(s)",
                "extra-warning": diagnostic + "\\n    2 Warning(s)",
-               "load-failure": diagnostic + "\\nwarning CS8032: fixture\\n    1 Warning(s)"}
+               "load-failure": "warning CS8032: fixture\\n    1 Warning(s)",
+               "newer-analyzer": "warning CS9057: fixture\\n    1 Warning(s)"}
               .get(os.environ.get("SMOKE_OUTPUT"), diagnostic + "\\n    1 Warning(s)"))
 if args[:2] == ["nuget", "push"]:
     if os.environ.get("EXPECTED_PUBLICATION_KEY") and args[args.index("--api-key") + 1] != os.environ["EXPECTED_PUBLICATION_KEY"]:
         print("The publication key did not come from the NuGet login output.", file=sys.stderr)
         sys.exit(1)
+    if os.environ.get("PUSH_FAIL"):
+        print("fixture NuGet push failed: HTTP 403", file=sys.stderr)
+        sys.exit(43)
     package = Path(args[2])
     (root / "pushed.sha256").write_text(hashlib.sha256(package.read_bytes()).hexdigest())
     (root / "pushed.path").write_text(str(package))
@@ -235,6 +241,7 @@ else:
     elif state == gate + "-failed": run["conclusion"] = "failure"
     elif state == gate + "-pending": run["status"] = "in_progress"; run["conclusion"] = None
     elif state == gate + "-other-sha": run["head_sha"] = "c" * 40
+    elif state == gate + "-other-branch": run["head_branch"] = "feature"
     elif state == gate + "-pull-request": run["event"] = "pull_request"
     elif state == gate + "-rerun-failed": runs.append(dict(run, run_attempt=2, conclusion="failure"))
     elif state == gate + "-new-run-failed":
@@ -282,6 +289,7 @@ else:
         preserved.mkdir(parents=True, exist_ok=True)
         shutil.copy(self.root / "scripts/verify-release-source.py", preserved / "verify-release-source.py")
         self.env.update(RUNNER_TEMP=str(preserved.parent), RECOVERY_VERSION="1.0.0")
+        self.workflow_exports["DISPATCH_SHA"] = SHA
         return self.run_workflow_step("recover", "Complete the GitHub release")
 
     def workflow_step(self, job, name):
@@ -292,13 +300,22 @@ else:
     def run_workflow_step(self, job, name):
         block = self.workflow_step(job, name)
         environment = dict(self.env)
+        for key in ("DISPATCH_SHA", "DISPATCH_REF", "REPOSITORY", "MCPCLI_RELEASE_PHASE", "RECOVERY_VERSION",
+                    "RECOVERY_PHASE", "GH_TOKEN", "GH_REPO", "GITHUB_TOKEN", "NUGET_API_KEY"):
+            environment.pop(key, None)
+        environment.update(self.workflow_exports)
         if "        env:\n" in block:
             declarations = block.split("        env:\n", 1)[1].split("        run:", 1)[0]
             values = {"${{ inputs.phase }}": "bootstrap", "${{ inputs.recovery_version }}": "1.0.0",
                       "${{ github.token }}": "fixture-github-token", "${{ github.repository }}": "fixture/repo",
+                      "${{ secrets.GITHUB_TOKEN }}": "fixture-github-token",
+                      "${{ github.sha }}": self.env.get("WORKFLOW_SHA", SHA),
+                      "${{ github.ref }}": self.env.get("WORKFLOW_REF", "refs/heads/main"),
                       "${{ steps.nuget-login.outputs.NUGET_API_KEY }}": "fixture-secret-never-print"}
             for line in declarations.splitlines():
                 key, value = line.strip().split(": ", 1)
+                if "${{" in value:
+                    self.assertIn(value, values, f"Unmapped workflow expression for {key}: {value}")
                 environment[key] = values.get(value, value)
         command = block.split("        run: ", 1)[1]
         if command.startswith("|\n"):
@@ -306,6 +323,17 @@ else:
         result = subprocess.run(["bash", "-c", command], cwd=self.root,
                                 env=environment, text=True, capture_output=True)
         self.assertNotIn("fixture-secret-never-print", result.stdout + result.stderr)
+        if environment.get("GITHUB_ENV"):
+            github_env = Path(environment["GITHUB_ENV"])
+            if github_env.exists():
+                self.workflow_exports.update(line.split("=", 1) for line in github_env.read_text().splitlines())
+        return result
+
+    def run_workflow_steps(self, job, *names):
+        for name in names:
+            result = self.run_workflow_step(job, name)
+            if result.returncode:
+                break
         return result
 
     def release_calls(self):
@@ -512,20 +540,37 @@ else:
         self.assert_no_push()
 
     def test_invalid_requests_are_rejected_by_every_entry_point_before_effects(self):
-        for script in ("release-prepare.sh", "release-preflight.sh", "release-publish.sh"):
+        for script in ("release-prepare.sh", "release-preflight.sh", "release-publish.sh", "recover-bootstrap-release.py"):
             for phase, version, message in (("paired", "1.0.0", "deferred"), ("unknown", "1.0.0", "Unknown"),
+                    ("-h", "1.0.0", "Unknown"),
                     *(("bootstrap", version, "Invalid") for version in (
-                        "1.0", "01.0.0", "1.0.0-", "1.0.0-01", "1.0.0-a..b", "1.0.0+meta", "1.0.0\n",
+                        "-h", "1.0", "01.0.0", "1.0.0-", "1.0.0-01", "1.0.0-a..b", "1.0.0+meta", "1.0.0\n",
                         "2147483648.0.0", "0.2147483648.0", "0.0.2147483648"))):
                 with self.subTest(script=script, phase=phase, version=version):
                     self.env["MCPCLI_RELEASE_PHASE"] = phase
-                    result = self.run_script(script, version)
+                    arguments = ("--", version, phase) if script.endswith(".py") else (version,)
+                    result = self.run_script(script, *arguments)
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn(message, result.stderr)
                     self.assertEqual(self.calls(), [])
                     self.assert_no_push()
                     self.assertFalse((self.root / "registry.log").exists())
+                    self.assertFalse((self.root / "gh.log").exists())
                     self.assertFalse((self.root / "nupkgs").exists())
+
+    def test_option_like_source_identifiers_cannot_skip_receipt_or_source_checks(self):
+        self.staged()
+        for key, message in (("DISPATCH_SHA", "receipt source SHA does not match"),
+                             ("DISPATCH_REF", "Release must be dispatched from refs/heads/main")):
+            with self.subTest(key=key):
+                original = self.env[key]
+                self.env[key] = "-h"
+                result = self.run_script("release-publish.sh", "1.0.0")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertNotIn("usage:", result.stdout)
+                self.assert_no_push()
+                self.env[key] = original
 
     def test_missing_credentials_rejected_by_preflight_and_direct_publish(self):
         for script in ("release-preflight.sh", "release-publish.sh"):
@@ -539,7 +584,7 @@ else:
 
     def test_registry_rejections_prevent_direct_publication(self):
         self.staged()
-        for state in ("taken", "403", "500", "timeout", "bad-json", "bad-shape", "empty", "unexpected-status",
+        for state in ("taken", "404", "403", "500", "timeout", "bad-json", "bad-shape", "empty", "unexpected-status",
                       "blank-version", "whitespace-version", "nonsense-version", "partial-version"):
             with self.subTest(state=state):
                 self.env["REGISTRY_STATE"] = state
@@ -695,6 +740,23 @@ else:
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assert_no_push()
 
+    def test_validator_rejects_changed_package_manifest_and_unknown_phase(self):
+        path = self.staged()
+        manifest = self.root / "tools/release-packages.json"
+        original = manifest.read_text()
+        packages = json.loads(original)
+        packages["packages"].reverse()
+        manifest.write_text(json.dumps(packages))
+        result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "bootstrap")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("release manifest must declare exactly the paired package IDs", result.stderr)
+        self.assert_no_push()
+        manifest.write_text(original)
+        result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "unknown")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Unknown release phase: unknown", result.stderr)
+        self.assert_no_push()
+
     def test_staging_directory_and_receipt_symlinks_are_rejected(self):
         path = self.staged()
         actual = self.root / "preserved-staging"
@@ -768,6 +830,30 @@ else:
         self.assertIn(f"-p:RestoreSources={expected}", self.calls()[0])
         self.assert_no_push()
 
+    def test_consumer_preserves_url_sources_in_config_restore_and_build(self):
+        source = "https://api.nuget.org/v3/index.json"
+        result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", source, "consumer")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        from xml.etree import ElementTree
+        config = ElementTree.fromstring((self.root / "consumer-nuget.config").read_text())
+        self.assertEqual(config.find("packageSources/add").attrib["value"], source)
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
+        for call in self.calls():
+            self.assertIn(f"-p:RestoreSources={source}", call)
+        self.assert_no_push()
+
+    def test_consumer_references_only_abstractions_at_the_exact_requested_version(self):
+        from xml.etree import ElementTree
+        for version in ("1.0.0", "1.2.3-rc.4"):
+            with self.subTest(version=version):
+                consumer = self.root / ("consumer-" + version)
+                result = self.run_script("smoke-bootstrap-consumer.sh", version, "/selected/source", str(consumer))
+                self.assertEqual(result.returncode, 0, result.stderr)
+                project = ElementTree.parse(consumer / "Bootstrap.Consumer.Contracts.csproj")
+                self.assertEqual([node.attrib for node in project.findall(".//PackageReference")],
+                                 [{"Include": "Hexalith.McpCli.Abstractions", "Version": f"[{version}]"}])
+                self.assert_no_push()
+
     def test_consumer_disables_parent_build_and_package_imports(self):
         (self.root / "Directory.Build.props").write_text(
             '<Project><PropertyGroup><TargetFramework>invalid</TargetFramework></PropertyGroup></Project>')
@@ -816,15 +902,18 @@ else:
         self.assert_no_push()
 
     def test_analyzer_diagnostic_rejections_prevent_preparation_receipt(self):
-        for output in ("missing-diagnostic", "wrong-file", "extra-warning", "load-failure"):
+        for output, message in (("missing-diagnostic", "did not report MCPCLI001 on MissingDescriptionQuery.cs"),
+                                ("wrong-file", "did not report MCPCLI001 on MissingDescriptionQuery.cs"),
+                                ("extra-warning", "must report exactly one warning"),
+                                ("load-failure", "packaged analyzer could not load"),
+                                ("newer-analyzer", "packaged analyzer could not load")):
             with self.subTest(output=output):
                 self.env["SMOKE_OUTPUT"] = output
                 result = self.run_script("release-prepare.sh", "1.0.0")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
                 self.assertFalse((self.root / "nupkgs/bootstrap").exists())
-                if output == "load-failure":
-                    self.assertIn("packaged analyzer could not load", result.stderr)
+                self.assertIn(message, result.stderr)
                 self.assert_no_push()
 
     def test_source_is_rechecked_after_preparation_before_tagging(self):
@@ -887,7 +976,8 @@ else:
                 self.assertEqual(result.returncode, 0, result.stderr)
                 if name == "Require an existing release tag on main":
                     self.assertEqual(github_env.read_text(), f"DISPATCH_SHA={SHA}\n")
-                    self.env.update(line.split("=", 1) for line in github_env.read_text().splitlines())
+                    self.assertEqual(self.workflow_exports, {"DISPATCH_SHA": SHA})
+                    self.assertEqual(self.env["DISPATCH_SHA"], "b" * 40)
                 elif name == "Rebuild and consumer-test the tagged package":
                     shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
                 elif name == "Publish only if absent and verify the public package":
@@ -901,16 +991,84 @@ else:
 
     def test_publication_workflow_uses_nuget_login_output_instead_of_ambient_key(self):
         self.env["NUGET_API_KEY"] = "ambient-key-must-not-be-used"
+        self.env["DISPATCH_SHA"] = "ambient-sha-must-not-be-used"
+        self.env["EXPECTED_PUBLICATION_KEY"] = "fixture-secret-never-print"
+        shutil.copy(ROOT / ".releaserc.json", self.root / ".releaserc.json")
         self.executable("npx", '''#!/usr/bin/env python3
-import os, sys
+import json, os, subprocess, sys
 from pathlib import Path
 if sys.argv[1:] != ["--no-install", "semantic-release"]: sys.exit(1)
 Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_text(os.environ["NUGET_API_KEY"])
+configuration = json.loads(Path(".releaserc.json").read_text())
+hooks = next(plugin[1] for plugin in configuration["plugins"]
+             if isinstance(plugin, list) and plugin[0] == "@semantic-release/exec")
+for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
+    command = hooks[name].replace("${nextRelease.version}", "1.0.0")
+    subprocess.run(command, shell=True, check=True)
 ''')
         result = self.run_workflow_step("publish", "Derive one version and publish the selected phase")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual((self.root / "semantic-release-key").read_text(), "fixture-secret-never-print")
-        self.assert_no_push()
+        self.assertEqual(result.stdout.count("Verified current main source " + SHA), 2)
+        staged = self.root / "nupkgs/bootstrap" / PACKAGE
+        expected_hash = hashlib.sha256(staged.read_bytes()).hexdigest()
+        self.assertEqual((self.root / "pushed.sha256").read_text(), expected_hash)
+        self.assertEqual(json.loads((self.root / "nupkgs/bootstrap.sha256").read_text()),
+                         {"sha256": expected_hash, "source_sha": SHA, "source_clean": True})
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build", "nuget"])
+        push, = [call for call in self.calls() if call[:2] == ["nuget", "push"]]
+        self.assertEqual(Path(push[2]).name, PACKAGE)
+        self.assertEqual(len((self.root / "registry.log").read_text().splitlines()), 2)
+
+    def test_push_failures_stop_direct_publication_recovery_and_workflow_completion(self):
+        self.staged()
+        self.env["PUSH_FAIL"] = "1"
+        preserved = self.root / "runner-temp/release-scripts"
+        shutil.copytree(self.root / "scripts", preserved)
+        self.env["RUNNER_TEMP"] = str(preserved.parent)
+        self.workflow_exports["DISPATCH_SHA"] = SHA
+        for entry in ("direct", "recovery", "workflow"):
+            with self.subTest(entry=entry):
+                (self.root / "dotnet.log").unlink(missing_ok=True)
+                if entry == "direct":
+                    result = self.run_script("release-publish.sh", "1.0.0")
+                    self.assertEqual(result.returncode, 43)
+                elif entry == "recovery":
+                    result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+                else:
+                    result = self.run_workflow_steps("recover", "Publish only if absent and verify the public package",
+                                                     "Complete the GitHub release")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("fixture NuGet push failed: HTTP 403", result.stderr)
+                self.assertNotIn("Verified public package", result.stdout)
+                self.assertEqual(len(self.calls()), 1)
+                self.assertEqual(self.calls()[0][:2], ["nuget", "push"])
+                self.assertFalse((self.root / "pushed.sha256").exists())
+                self.assertFalse((self.root / "downloads.log").exists())
+                self.assertFalse((self.root / "consumer-environment.json").exists())
+                self.assertEqual(self.release_calls(), [])
+
+    def test_recovery_rejects_invalid_source_before_registry_download_or_consumer_calls(self):
+        shutil.copy(self.staged(), self.root / "public.nupkg")
+        self.env["REGISTRY_STATE"] = "taken"
+        for key, value, message in (("LOCAL_SOURCE_STATE", "dirty", "Release source has uncommitted changes"),
+                                    ("SOURCE_STATE", "bootstrap-failed", "No successful latest bootstrap-package.yml push run"),
+                                    ("DISPATCH_REF", "refs/heads/feature", "Release must be dispatched from refs/heads/main")):
+            with self.subTest(key=key):
+                original = self.env.get(key)
+                self.env[key] = value
+                result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertFalse((self.root / "registry.log").exists())
+                self.assertFalse((self.root / "downloads.log").exists())
+                self.assertEqual(self.calls(), [])
+                self.assertNotIn("Verified public package", result.stdout)
+                self.assert_no_push()
+                if original is None:
+                    del self.env[key]
+                else:
+                    self.env[key] = original
 
     def test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building(self):
         self.env.update(RECOVERY_VERSION="1.0.0", RECOVERY_PHASE="bootstrap")
@@ -947,12 +1105,30 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
         self.assertEqual(self.calls(), [])
         self.assert_no_push()
 
+    def test_recovery_public_download_diagnostics_preserve_only_status_or_exception_type(self):
+        shutil.copy(self.staged(), self.root / "public.nupkg")
+        self.env["REGISTRY_STATE"] = "taken"
+        for state, detail in (("404", "HTTP 404"), ("500", "HTTP 500"),
+                              ("timeout", "TimeoutError"), ("url-error", "URLError"),
+                              ("unexpected-status", "HTTP 201")):
+            with self.subTest(state=state):
+                self.env["PUBLIC_STATE"] = state
+                (self.root / "downloads.log").unlink(missing_ok=True)
+                result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(f"Could not verify the public package: uncertain registry response ({detail})", result.stderr)
+                self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 1)
+                self.assertEqual(self.calls(), [])
+                self.assertFalse((self.root / "consumer-environment.json").exists())
+                self.assertNotIn("Verified public package", result.stdout)
+                self.assert_no_push()
+
     def test_recovery_processing_wait_is_bounded_and_only_retries_new_package_404s(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
-        for registry, public, downloads, sleeps, pushes in (("404", "404", 91, 90, 1),
+        for registry, public, downloads, sleeps, pushes in (("free", "404", 91, 90, 1),
                                                           ("taken", "404", 1, 0, 0),
-                                                          ("404", "500", 1, 0, 1),
-                                                          ("404", "timeout", 1, 0, 1)):
+                                                          ("free", "500", 1, 0, 1),
+                                                          ("free", "timeout", 1, 0, 1)):
             with self.subTest(registry=registry, public=public):
                 self.env.update(REGISTRY_STATE=registry, PUBLIC_STATE=public)
                 for name in ("downloads.log", "sleeps.log", "dotnet.log"):
@@ -1043,10 +1219,10 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
         self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 3)
 
     def test_recovery_verifies_matching_existing_package_without_republishing(self):
-        staged = self.staged(core_properties="original generated build metadata")
+        staged = self.staged(core_properties="original packing NuGet version")
         with ZipFile(staged) as prepared, ZipFile(self.root / "public.nupkg", "w") as archive:
             for name in prepared.namelist():
-                contents = (b"different registry core properties" if name.endswith(".psmdcp") else prepared.read(name))
+                contents = (b"different packing NuGet version" if name.endswith(".psmdcp") else prepared.read(name))
                 archive.writestr(name, contents)
             archive.writestr(".signature.p7s", "registry signature fixture")
         self.env["REGISTRY_STATE"] = "taken"
@@ -1075,7 +1251,7 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
     def test_recovery_rejects_uncertain_registry_and_download_states_without_push(self):
         staged = self.staged()
         shutil.copy(staged, self.root / "public.nupkg")
-        for state in ("timeout", "500", "bad-json", "nonsense-version"):
+        for state in ("404", "timeout", "500", "bad-json", "nonsense-version"):
             with self.subTest(state=state):
                 self.env["REGISTRY_STATE"] = state
                 result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
@@ -1092,7 +1268,7 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
     def test_publication_pushes_one_validated_snapshot_with_exact_prepared_hash(self):
         path = self.staged()
         expected = hashlib.sha256(path.read_bytes()).hexdigest()
-        for state in ("404", "free"):
+        for state in ("free",):
             with self.subTest(state=state):
                 self.env["REGISTRY_STATE"] = state
                 result = self.run_script("release-publish.sh", "1.0.0")
@@ -1101,7 +1277,7 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
                 pushed = Path((self.root / "pushed.path").read_text())
                 self.assertNotEqual(pushed.parent, path.parent)
                 self.assertFalse(pushed.exists())  # Private snapshot is cleaned after push.
-        self.assertEqual(len(self.calls()), 2)
+        self.assertEqual(len(self.calls()), 1)
         for call in self.calls():
             self.assertEqual(call[:2], ["nuget", "push"])
             self.assertEqual(Path(call[2]).name, PACKAGE)
@@ -1120,7 +1296,7 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
                 self.assertIn(message, result.stderr)
                 self.assertFalse((self.root / "gh.log").exists())
         for state in ("stale", *(f"{gate}-{failure}" for gate in ("bootstrap", "commitlint") for failure in
-                                ("missing", "failed", "pending", "other-sha", "pull-request", "rerun-failed"))):
+                                ("missing", "failed", "pending", "other-sha", "other-branch", "pull-request", "rerun-failed"))):
             with self.subTest(state=state):
                 self.env["SOURCE_STATE"] = state
                 result = self.run_script("verify-release-source.py", SHA, "refs/heads/main", "bootstrap")
@@ -1175,9 +1351,58 @@ Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_tex
         for job in ("publish", "recover"):
             section = release.split(f"  {job}:\n", 1)[1].split("    steps:\n", 1)[0]
             self.assertIn("    needs: verify-source\n", section)
+            operator = "==" if job == "publish" else "!="
+            self.assertIn(f"    if: ${{{{ inputs.recovery_version {operator} '' }}}}\n", section)
         self.assertIn('run: bash "$RUNNER_TEMP/release-scripts/release-prepare.sh" "$RECOVERY_VERSION"', release)
         bootstrap = (ROOT / ".github/workflows/bootstrap-package.yml").read_text()
         self.assertIn("group: bootstrap-package-${{ github.event_name }}-${{ github.ref }}", bootstrap)
+
+    def test_workflow_source_steps_reject_stale_main_and_failed_bootstrap_before_effects(self):
+        for job, name in (("verify-source", "Require current main with exact-source bootstrap and commitlint success"),
+                          ("publish", "Recheck source and independent results after production approval"),
+                          ("recover", "Require current reviewed recovery workflow and independent gates")):
+            for state, message in (("stale", "Dispatch SHA is not the current main SHA"),
+                                   ("bootstrap-failed", f"No successful latest bootstrap-package.yml push run exists for {SHA}")):
+                with self.subTest(job=job, state=state):
+                    self.env["SOURCE_STATE"] = state
+                    result = self.run_workflow_step(job, name)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(message, result.stderr)
+                    self.assertEqual(self.calls(), [])
+                    self.assertEqual(self.release_calls(), [])
+                    self.assertFalse((self.root / "registry.log").exists())
+                    self.assert_no_push()
+
+    def test_workflow_source_steps_require_their_own_sha_declarations(self):
+        from unittest.mock import patch
+        self.env["DISPATCH_SHA"] = SHA
+        for job, name in (("verify-source", "Require current main with exact-source bootstrap and commitlint success"),
+                          ("publish", "Recheck source and independent results after production approval"),
+                          ("recover", "Require current reviewed recovery workflow and independent gates")):
+            with self.subTest(job=job):
+                result = self.run_workflow_step(job, name)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("Verified current main source " + SHA, result.stdout)
+                block = self.workflow_step(job, name)
+                declaration = "          DISPATCH_SHA: ${{ github.sha }}\n"
+                self.assertIn(declaration, block)
+                with patch.object(self, "workflow_step", return_value=block.replace(declaration, "")):
+                    result = self.run_workflow_step(job, name)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Release requires an exact source SHA", result.stderr)
+                self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+                self.assertFalse((self.root / "registry.log").exists())
+                self.assert_no_push()
+
+    def test_workflow_harness_rejects_unmapped_expressions(self):
+        from unittest.mock import patch
+        with patch.object(self, "workflow_step", return_value=(
+                "        env:\n          GH_TOKEN: ${{ steps.wrong.outputs.token }}\n        run: true")):
+            with self.assertRaisesRegex(AssertionError, "Unmapped workflow expression for GH_TOKEN"):
+                self.run_workflow_step("recover", "fixture")
+        self.assertEqual(self.calls(), [])
+        self.assert_no_push()
 
     def test_source_gate_orders_run_number_before_attempt_and_latest_attempt_within_run(self):
         for gate in ("bootstrap", "commitlint"):

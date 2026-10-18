@@ -4,7 +4,7 @@ script_directory="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 release_version="${1:?Release version is required}"
 release_phase="${MCPCLI_RELEASE_PHASE:?Release phase is required}"
-python3 "$script_directory/release-request.py" "$release_version" "$release_phase"
+python3 "$script_directory/release-request.py" -- "$release_version" "$release_phase"
 if [ "$#" -gt 2 ] || { [ "$#" -eq 2 ] && [ "$2" != --verify-source ]; }; then
   echo "Usage: release-prepare.sh VERSION [--verify-source]" >&2
   exit 1
@@ -27,7 +27,7 @@ project="src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj"
 dotnet restore "$project" -p:Version="$release_version"
 dotnet build "$project" --configuration Release --no-restore -warnaserror -p:Version="$release_version"
 dotnet pack "$project" --configuration Release --no-build -p:Version="$release_version" --output "$staging_directory"
-python3 "$script_directory/validate-release-packages.py" "$staging_directory" "$release_version" "$release_phase"
+python3 "$script_directory/validate-release-packages.py" -- "$staging_directory" "$release_version" "$release_phase"
 package_hash="$(sha256sum "$staging_directory/Hexalith.McpCli.Abstractions.$release_version.nupkg" | cut -d ' ' -f 1)"
 bash "$script_directory/smoke-bootstrap-consumer.sh" "$release_version" "$PWD/$staging_directory" "$consumer_root/consumer"
 if [ "$package_hash" != "$(sha256sum "$staging_directory/Hexalith.McpCli.Abstractions.$release_version.nupkg" | cut -d ' ' -f 1)" ]; then
@@ -35,10 +35,10 @@ if [ "$package_hash" != "$(sha256sum "$staging_directory/Hexalith.McpCli.Abstrac
   exit 1
 fi
 if [ "${2:-}" = --verify-source ]; then
-  python3 "$script_directory/verify-release-source.py" "${DISPATCH_SHA:?Exact release SHA is required}" \
+  python3 "$script_directory/verify-release-source.py" -- "${DISPATCH_SHA:?Exact release SHA is required}" \
     "${DISPATCH_REF:?Release dispatch ref is required}" "$release_phase"
 fi
-receipt_contents="$(python3 "$script_directory/release-receipt.py" record "$source_provenance" \
+receipt_contents="$(python3 "$script_directory/release-receipt.py" record -- "$source_provenance" \
   "$staging_directory/Hexalith.McpCli.Abstractions.$release_version.nupkg")"
 (set -o noclobber; printf '%s\n' "$receipt_contents" > "$receipt")
 prepared=true

@@ -56,7 +56,14 @@ Hexalith Contracts repositories use central package management. Their Builds cat
 For a local gate, use a fresh checkout with the root-declared Builds submodule available:
 
 ```sh
+set -eu
 python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+for project in Abstractions Analyzers; do
+  test_project="tests/Hexalith.McpCli.${project}.Tests"
+  dotnet restore "$test_project"
+  dotnet build "$test_project" --configuration Release --no-restore -warnaserror
+  dotnet test "$test_project" --configuration Release --no-build
+done
 MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
 ```
 
@@ -66,11 +73,17 @@ Maintainers review and commit the validated source, validate every commit with t
 
 Semantic-release chooses the version, requires a nonblank NuGet key and confirms version availability, prepares and validates the package, and publishes a private snapshot whose hash must match the preparation receipt. NuGet authenticates the key and checks its push permissions at publication; preflight does not validate those permissions. Direct `release-publish.sh` invocation performs the same phase, version, key-presence, registry, staged-content and exact committed-source checks, using `DISPATCH_SHA`, `DISPATCH_REF`, `REPOSITORY` and GitHub authentication; a taken version or uncertain registry response stops publication. The scripts reject extra staged files, the wrong identity/version, missing compile/analyzer DLLs, and consumer dependency leakage. They do not rebuild during publication or skip duplicate versions.
 
-Semantic-release creates `v<version>` before the NuGet push. If publication or GitHub release completion fails after tagging, dispatch [Release](https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/release.yml) from `main` with phase `bootstrap` and `recovery_version` set to that version. Recovery runs in the same trusted `release.yml`/`production` identity, checks that its workflow source is current green main, and checks the local tag against GitHub's tag, its ancestry to current main and successful independent **push** gates for its exact SHA. It preserves the reviewed preparation and recovery helpers before checking out the tag, then rebuilds and consumer-tests the tagged package in bootstrap staging. It publishes only when the version is absent. For a package this run just pushed, it retries a public-download 404 up to 91 attempts, ten seconds apart (15 minutes of waiting); other uncertain responses and a package still unavailable after that bound stop recovery. If already present, it downloads and validates the public package, compares all consumer content with the tagged build, and proves its analyzer loads before completing the GitHub release without another push. NuGet's repository signature and regenerated package core-properties metadata are excluded from content comparison. This fail-closed comparison requires matching build paths and toolchain versions; if rebuilding changes DLL bytes, recovery needs the original validated artifact and its source-bound receipt. Mismatching contents or uncertain registry responses stop recovery.
+Semantic-release creates `v<version>` before the NuGet push. If publication or GitHub release completion fails after tagging, dispatch [Release](https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/release.yml) from `main` with phase `bootstrap` and `recovery_version` set to that version. Recovery runs in the same trusted `release.yml`/`production` identity, checks that its workflow source is current green main, and checks the local tag against GitHub's tag, its ancestry to current main and successful independent **push** gates for its exact SHA. It preserves the reviewed preparation and recovery helpers before checking out the tag, then rebuilds and consumer-tests the tagged package in bootstrap staging. It publishes only when the version is absent. For a package this run just pushed, it retries a public-download 404 up to 91 attempts, ten seconds apart (15 minutes of waiting); other uncertain responses and a package still unavailable after that bound stop recovery. If already present, it downloads and validates the public package, compares all consumer content with the tagged build, and proves its analyzer loads before completing the GitHub release without another push. NuGet's repository signature and package core-properties metadata are excluded from content comparison; core properties record the packing NuGet version rather than consumer content. This fail-closed comparison requires matching build paths and toolchain versions; if rebuilding changes DLL bytes, recovery needs the original validated artifact and its source-bound receipt. Mismatching contents or uncertain registry responses stop recovery.
 
 The recovery orchestrator sets `MCPCLI_RECOVERY_VERSION` to the requested version when calling the publisher. This switches its source gate from exact current main to the matching green tagged ancestor of current main; a value that differs from the prepared package version is rejected. Direct invocation with this variable follows the same tagged-source policy and still requires the source-bound receipt and all ordinary publication checks.
 
-After each release, record the committed SHA, gate/release URLs, package hash and public-feed consumer proof with the release evidence. Run the same consumer check against `https://api.nuget.org/v3/index.json` in a fresh directory. Update the verified published version in `HexalithMcpCliVersion` and the Abstractions entry in the owning Hexalith.Builds catalog, run its documented complete audit refresh and validation, and record the integrated Builds revision.
+After each release, record the committed SHA, gate/release URLs, package hash and public-feed consumer proof with the release evidence. From the repository root, run the consumer check with the verified published version and a fresh target directory, for example:
+
+```sh
+bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.json "$(mktemp -d)/consumer"
+```
+
+Update the verified published version in `HexalithMcpCliVersion` and the Abstractions entry in the owning Hexalith.Builds catalog, run its documented complete audit refresh and validation, and record the integrated Builds revision.
 
 ## Gateway boundary
 

@@ -36,8 +36,6 @@ def version_is_published(version: str) -> bool:
                 raise ValueError(f"unexpected HTTP {response.status}")
             index = json.load(response)
     except HTTPError as error:
-        if error.code == 404:
-            return False
         raise ValueError(f"Could not confirm the NuGet version is free: HTTP {error.code}") from None
     except Exception:
         raise ValueError("Could not confirm the NuGet version is free: uncertain registry response") from None

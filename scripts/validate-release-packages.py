@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate exact staged IDs, versions, and bootstrap dependency closure."""
 
+import argparse
 import json
 import re
-import sys
 import importlib.util
 from pathlib import Path
 from xml.etree import ElementTree
@@ -11,12 +11,12 @@ from zipfile import ZipFile
 
 
 def main() -> int:
-    if len(sys.argv) != 4:
-        raise ValueError("Usage: validate-release-packages.py STAGING VERSION PHASE")
-
-    staging = Path(sys.argv[1])
-    version = sys.argv[2]
-    phase = sys.argv[3]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("staging", type=Path)
+    parser.add_argument("version")
+    parser.add_argument("phase")
+    args = parser.parse_args()
+    staging, version, phase = args.staging, args.version, args.phase
     request_spec = importlib.util.spec_from_file_location("release_request", Path(__file__).with_name("release-request.py"))
     request_module = importlib.util.module_from_spec(request_spec)
     request_spec.loader.exec_module(request_module)

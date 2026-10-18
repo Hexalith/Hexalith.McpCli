@@ -5,7 +5,7 @@ script_directory="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 release_version="${1:?Release version is required}"
 package_source="${2:?Package source is required}"
 consumer_directory="${3:?Fresh consumer directory is required}"
-python3 "$script_directory/release-request.py" "$release_version" bootstrap
+python3 "$script_directory/release-request.py" -- "$release_version" bootstrap
 package_source="$(python3 - "$package_source" <<'PY'
 from pathlib import Path
 import sys
@@ -69,9 +69,15 @@ dotnet restore "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" \
   "${consumer_properties[@]}"
 dotnet build "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" --configuration Release --no-restore -tl:off \
   "${consumer_properties[@]}" 2>&1 | tee "$consumer_directory/build.log"
-grep -Eq 'MissingDescriptionQuery\.cs\([^)]*\): warning MCPCLI001:' "$consumer_directory/build.log"
-grep -Eq '^[[:space:]]*1 Warning\(s\)$' "$consumer_directory/build.log"
 if grep -Eq 'CS8032|CS9057' "$consumer_directory/build.log"; then
   echo "The packaged analyzer could not load in the consumer." >&2
+  exit 1
+fi
+if ! grep -Eq 'MissingDescriptionQuery\.cs\([^)]*\): warning MCPCLI001:' "$consumer_directory/build.log"; then
+  echo "The packaged analyzer did not report MCPCLI001 on MissingDescriptionQuery.cs." >&2
+  exit 1
+fi
+if ! grep -Eq '^[[:space:]]*1 Warning\(s\)$' "$consumer_directory/build.log"; then
+  echo "The packaged consumer must report exactly one warning." >&2
   exit 1
 fi
