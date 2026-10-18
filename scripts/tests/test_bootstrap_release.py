@@ -108,14 +108,21 @@ root = Path(os.environ["RELEASE_TEST_ROOT"])
 args = sys.argv[1:]
 safe = ["REDACTED" if i and args[i-1] == "--api-key" else arg for i, arg in enumerate(args)]
 with (root / "dotnet.log").open("a") as log: log.write(json.dumps(safe) + "\\n")
+if args[0] in ("restore", "build") and args[1] == "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj":
+    if os.environ.get(args[0].upper() + "_FAIL"):
+        print("fixture production " + args[0] + " failed", file=sys.stderr)
+        sys.exit(1)
 if args[0] == "pack":
     if os.environ.get("PACK_FAIL"): sys.exit(1)
     directory = Path(args[args.index("--output") + 1])
     version = next(arg.split("=", 1)[1] for arg in args if arg.startswith("-p:Version="))
+    dependencies = '<dependencies><dependency id="Leak" version="1.0.0" /></dependencies>' if os.environ.get("PACK_INVALID") == "dependency" else ''
     with ZipFile(directory / f"Hexalith.McpCli.Abstractions.{version}.nupkg", "w") as archive:
-        archive.writestr("Abstractions.nuspec", f"<package><metadata><id>Hexalith.McpCli.Abstractions</id><version>{version}</version></metadata></package>")
+        archive.writestr("Abstractions.nuspec", f"<package><metadata><id>Hexalith.McpCli.Abstractions</id><version>{version}</version>{dependencies}</metadata></package>")
         archive.writestr("lib/net10.0/Hexalith.McpCli.Abstractions.dll", "compile fixture")
         archive.writestr("analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll", "analyzer fixture")
+    if os.environ.get("PACK_INVALID") == "symbols":
+        (directory / "symbols.snupkg").write_bytes(b"unexpected symbols")
     if os.environ.get("AFTER_PACK_SOURCE_STATE"):
         (root / "local-source-state").write_text(os.environ["AFTER_PACK_SOURCE_STATE"])
 if "Bootstrap.Consumer.Contracts.csproj" in args[1]:
@@ -177,6 +184,7 @@ elif sys.argv[1:] == ["checkout", "--detach", "v1.0.0"]:
 elif sys.argv[1:] == ["rev-parse", "origin/main"]:
     print(os.environ.get("FETCHED_MAIN_SHA", os.environ.get("LIVE_SHA", "a" * 40)))
 elif sys.argv[1:3] == ["merge-base", "--is-ancestor"]:
+    if sys.argv[3:] not in ([os.environ.get("TAG_SHA", "a" * 40), "origin/main"], ["v1.0.0", "origin/main"]): sys.exit(1)
     if os.environ.get("RECOVERY_ANCESTOR") == "false": sys.exit(1)
 elif sys.argv[1:] == ["branch", "--show-current"]: print("" if state == "detached" else "feature" if state == "feature" else "main")
 elif sys.argv[1:] == ["status", "--porcelain", "--untracked-files=normal"]:
@@ -205,10 +213,16 @@ if args[0] == "release":
         if (release is None) != (operation == "create"): sys.exit(3)
         assets = [Path(argument) for argument in args[3:] if argument.endswith(".nupkg")]
         if not assets or not all(asset.is_file() for asset in assets): sys.exit(4)
+        release = release or {"isDraft": False, "assets": []}
+        existing = set(release["assets"])
+        if operation == "upload" and "--clobber" not in args and any(asset.name in existing for asset in assets):
+            print("fixture release asset already exists; use --clobber", file=sys.stderr)
+            sys.exit(7)
         destination = root / "github-assets"
         destination.mkdir(exist_ok=True)
         for asset in assets: shutil.copyfile(asset, destination / asset.name)
-        state_path.write_text(json.dumps(release or {"isDraft": False}))
+        release["assets"] = sorted(existing | {asset.name for asset in assets})
+        state_path.write_text(json.dumps(release))
     elif operation == "edit":
         if release is None or args[3:] != ["--draft=false"]: sys.exit(5)
         release["isDraft"] = False
@@ -229,7 +243,7 @@ elif endpoint.endswith("git/ref/tags/v1.0.0"):
     if os.environ.get("REMOTE_TAG_ANNOTATED") == "1":
         print(json.dumps({"object":{"type":"tag", "sha":"t" * 40}}))
     else:
-        print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
+        print(json.dumps({"object":{"type":os.environ.get("REMOTE_TAG_TYPE", "commit"), "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
 elif endpoint.endswith("git/tags/" + "t" * 40):
     print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
 else:
@@ -306,7 +320,7 @@ else:
         environment.update(self.workflow_exports)
         if "        env:\n" in block:
             declarations = block.split("        env:\n", 1)[1].split("        run:", 1)[0]
-            values = {"${{ inputs.phase }}": "bootstrap", "${{ inputs.recovery_version }}": "1.0.0",
+            values = {"${{ inputs.phase }}": "bootstrap", "${{ inputs.recovery_version }}": self.env.get("WORKFLOW_RECOVERY_VERSION", "1.0.0"),
                       "${{ github.token }}": "fixture-github-token", "${{ github.repository }}": "fixture/repo",
                       "${{ secrets.GITHUB_TOKEN }}": "fixture-github-token",
                       "${{ github.sha }}": self.env.get("WORKFLOW_SHA", SHA),
@@ -340,22 +354,29 @@ else:
         path = self.root / "github-release.log"
         return [json.loads(line) for line in path.read_text().splitlines()] if path.exists() else []
 
-    def reset_github_release(self, state):
+    def reset_github_release(self, state, *, existing_asset=False):
         (self.root / "github-release.log").unlink(missing_ok=True)
         (self.root / "github-release.json").unlink(missing_ok=True)
         shutil.rmtree(self.root / "github-assets", ignore_errors=True)
         if state != "missing":
-            (self.root / "github-release.json").write_text(json.dumps({"isDraft": state == "draft"}))
+            (self.root / "github-release.json").write_text(json.dumps(
+                {"isDraft": state == "draft", "assets": [PACKAGE] if existing_asset else []}))
+        if existing_asset:
+            assets = self.root / "github-assets"
+            assets.mkdir()
+            (assets / PACKAGE).write_bytes(b"previous release asset")
 
     def test_workflow_completes_missing_published_and_draft_releases_with_exact_assets(self):
         staged = self.staged()
         unrelated = self.root / "nupkgs/unrelated.nupkg"
         unrelated.write_bytes(b"unrelated artifacts must not become release assets")
-        for state, operations in (("missing", ["view", "create"]),
-                                  ("published", ["view", "upload"]),
-                                  ("draft", ["view", "upload", "edit"])):
-            with self.subTest(state=state):
-                self.reset_github_release(state)
+        for state, existing_asset, operations in (("missing", False, ["view", "create"]),
+                                  ("published", False, ["view", "upload"]),
+                                  ("draft", False, ["view", "upload", "edit"]),
+                                  ("published", True, ["view", "upload"]),
+                                  ("draft", True, ["view", "upload", "edit"])):
+            with self.subTest(state=state, existing_asset=existing_asset):
+                self.reset_github_release(state, existing_asset=existing_asset)
                 result = self.complete_github_release()
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual([call[1] for call in self.release_calls()], operations)
@@ -363,6 +384,7 @@ else:
                 self.assertEqual([path.name for path in assets.iterdir()], [PACKAGE])
                 self.assertEqual((assets / PACKAGE).read_bytes(), staged.read_bytes())
                 self.assertIs(json.loads((self.root / "github-release.json").read_text())["isDraft"], False)
+                self.assertEqual(json.loads((self.root / "github-release.json").read_text())["assets"], [PACKAGE])
                 self.assertEqual(unrelated.read_bytes(), b"unrelated artifacts must not become release assets")
                 self.assert_no_push()
 
@@ -417,14 +439,40 @@ else:
         self.assertEqual(len(self.calls()), 5)
 
     def test_failed_prepare_cleans_only_its_own_staging(self):
-        self.env["PACK_FAIL"] = "1"
         other = self.root / "nupkgs/other.txt"
         other.parent.mkdir()
         other.write_text("keep")
-        self.assertNotEqual(self.run_script("release-prepare.sh", "1.0.0").returncode, 0)
-        self.assertEqual(other.read_text(), "keep")
-        self.assertFalse((other.parent / "bootstrap").exists())
-        self.assert_no_push()
+        for control, commands in (("RESTORE_FAIL", ["restore"]),
+                                  ("BUILD_FAIL", ["restore", "build"]),
+                                  ("PACK_FAIL", ["restore", "build", "pack"])):
+            with self.subTest(control=control):
+                self.env[control] = "1"
+                (self.root / "dotnet.log").unlink(missing_ok=True)
+                result = self.run_script("release-prepare.sh", "1.0.0")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual([call[0] for call in self.calls()], commands)
+                if control != "PACK_FAIL":
+                    self.assertIn(f"fixture production {commands[-1]} failed", result.stderr)
+                self.assertEqual(other.read_text(), "keep")
+                self.assertFalse((other.parent / "bootstrap").exists())
+                self.assertFalse((other.parent / "bootstrap.sha256").exists())
+                self.assert_no_push()
+                del self.env[control]
+
+    def test_prepare_rejects_invalid_packed_contents_before_consumer_or_receipt(self):
+        for invalid, message in (("symbols", f"Expected ['{PACKAGE}'], found ['{PACKAGE}', 'symbols.snupkg']"),
+                                 ("dependency", "consumer-visible package dependencies")):
+            with self.subTest(invalid=invalid):
+                self.env["PACK_INVALID"] = invalid
+                (self.root / "dotnet.log").unlink(missing_ok=True)
+                result = self.run_script("release-prepare.sh", "1.0.0")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack"])
+                self.assertFalse((self.root / "nupkgs/bootstrap").exists())
+                self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
+                self.assertNotIn("Prepared Hexalith.McpCli.Abstractions", result.stdout)
+                self.assert_no_push()
 
     def test_prepare_rejects_unknown_arguments_before_effects(self):
         for arguments in (("--verify-soruce",), ("--verify-source", "extra")):
@@ -480,16 +528,28 @@ else:
         self.assert_no_push()
 
     def test_prepare_to_publish_uses_the_generated_source_bound_receipt(self):
-        result = self.run_script("release-prepare.sh", "1.0.0", "--verify-source")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        path = self.root / "nupkgs/bootstrap" / PACKAGE
-        expected_hash = hashlib.sha256(path.read_bytes()).hexdigest()
-        receipt = json.loads((self.root / "nupkgs/bootstrap.sha256").read_text())
-        self.assertEqual(receipt, {"sha256": expected_hash, "source_sha": SHA, "source_clean": True})
-        result = self.run_script("release-publish.sh", "1.0.0")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual((self.root / "pushed.sha256").read_text(), expected_hash)
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+        for version in ("1.0.0", "1.2.3"):
+            with self.subTest(version=version):
+                shutil.rmtree(self.root / "nupkgs/bootstrap", ignore_errors=True)
+                (self.root / "nupkgs/bootstrap.sha256").unlink(missing_ok=True)
+                (self.root / "dotnet.log").unlink(missing_ok=True)
+                result = self.run_script("release-prepare.sh", version, "--verify-source")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build"])
+                for call in self.calls()[:3]:
+                    self.assertEqual([arg for arg in call if arg.startswith("-p:Version=")], [f"-p:Version={version}"])
+                name = f"Hexalith.McpCli.Abstractions.{version}.nupkg"
+                path = self.root / "nupkgs/bootstrap" / name
+                self.assertEqual([package.name for package in path.parent.iterdir()], [name])
+                expected_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+                receipt = json.loads((self.root / "nupkgs/bootstrap.sha256").read_text())
+                self.assertEqual(receipt, {"sha256": expected_hash, "source_sha": SHA, "source_clean": True})
+                result = self.run_script("release-publish.sh", version)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual((self.root / "pushed.sha256").read_text(), expected_hash)
+                pushes = [call for call in self.calls() if call[:2] == ["nuget", "push"]]
+                self.assertEqual(len(pushes), 1)
+                self.assertEqual(Path(pushes[0][2]).name, name)
 
     def test_dirty_preparation_cannot_publish_or_recover_after_source_is_cleaned(self):
         self.env["LOCAL_SOURCE_STATE"] = "dirty"
@@ -498,9 +558,12 @@ else:
         self.assertEqual(result.returncode, 0, result.stderr)
         receipt = json.loads((self.root / "nupkgs/bootstrap.sha256").read_text())
         self.assertIs(receipt["source_clean"], False)
-        for script, args in (("release-publish.sh", ("1.0.0",)),
-                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"))):
-            with self.subTest(script=script):
+        shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
+        for script, args, state in (("release-publish.sh", ("1.0.0",), "free"),
+                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"), "free"),
+                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"), "taken")):
+            with self.subTest(script=script, state=state):
+                self.env["REGISTRY_STATE"] = state
                 result = self.run_script(script, *args)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("receipt records dirty source", result.stderr)
@@ -523,9 +586,12 @@ else:
         self.assertEqual(result.returncode, 0, result.stderr)
         self.env.update(LOCAL_HEAD_SHA="b" * 40, LIVE_SHA="b" * 40, DISPATCH_SHA="b" * 40,
                         TAG_SHA="b" * 40, REMOTE_TAG_SHA="b" * 40, RUN_SHA="b" * 40)
-        for script, args in (("release-publish.sh", ("1.0.0",)),
-                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"))):
-            with self.subTest(script=script):
+        shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
+        for script, args, state in (("release-publish.sh", ("1.0.0",), "free"),
+                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"), "free"),
+                             ("recover-bootstrap-release.py", ("1.0.0", "bootstrap"), "taken")):
+            with self.subTest(script=script, state=state):
+                self.env["REGISTRY_STATE"] = state
                 result = self.run_script(script, *args)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("receipt source SHA does not match", result.stderr)
@@ -539,16 +605,29 @@ else:
         self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
         self.assert_no_push()
 
+    def test_preparation_requires_an_exact_source_head_before_building(self):
+        self.env["LOCAL_HEAD_SHA"] = "invalid"
+        result = self.run_script("release-prepare.sh", "1.0.0")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Preparation requires an exact source SHA.", result.stderr)
+        self.assertEqual(self.calls(), [])
+        self.assertFalse((self.root / "nupkgs").exists())
+        self.assert_no_push()
+
     def test_invalid_requests_are_rejected_by_every_entry_point_before_effects(self):
-        for script in ("release-prepare.sh", "release-preflight.sh", "release-publish.sh", "recover-bootstrap-release.py"):
+        for script in ("release-prepare.sh", "release-preflight.sh", "release-publish.sh", "recover-bootstrap-release.py",
+                       "smoke-bootstrap-consumer.sh"):
             for phase, version, message in (("paired", "1.0.0", "deferred"), ("unknown", "1.0.0", "Unknown"),
                     ("-h", "1.0.0", "Unknown"),
                     *(("bootstrap", version, "Invalid") for version in (
                         "-h", "1.0", "01.0.0", "1.0.0-", "1.0.0-01", "1.0.0-a..b", "1.0.0+meta", "1.0.0\n",
                         "2147483648.0.0", "0.2147483648.0", "0.0.2147483648"))):
                 with self.subTest(script=script, phase=phase, version=version):
+                    if script == "smoke-bootstrap-consumer.sh" and phase != "bootstrap":
+                        continue  # Consumer smoke always validates the bootstrap phase.
                     self.env["MCPCLI_RELEASE_PHASE"] = phase
-                    arguments = ("--", version, phase) if script.endswith(".py") else (version,)
+                    arguments = ((version, "source", "consumer") if script == "smoke-bootstrap-consumer.sh" else
+                                 ("--", version, phase) if script.endswith(".py") else (version,))
                     result = self.run_script(script, *arguments)
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn(message, result.stderr)
@@ -557,6 +636,7 @@ else:
                     self.assertFalse((self.root / "registry.log").exists())
                     self.assertFalse((self.root / "gh.log").exists())
                     self.assertFalse((self.root / "nupkgs").exists())
+                    self.assertFalse((self.root / "consumer").exists())
 
     def test_option_like_source_identifiers_cannot_skip_receipt_or_source_checks(self):
         self.staged()
@@ -622,12 +702,18 @@ else:
         for name in ("Unexpected.1.0.0.nupkg", "symbols.snupkg", "extra.txt", "subdirectory"):
             with self.subTest(name=name):
                 extra = path.parent / name
-                extra.write_text("unexpected")
+                if name == "subdirectory":
+                    extra.mkdir()
+                else:
+                    extra.write_text("unexpected")
                 result = self.run_script("release-publish.sh", "1.0.0")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("Expected", result.stderr)
                 self.assert_no_push()
-                extra.unlink()
+                if extra.is_dir():
+                    extra.rmdir()
+                else:
+                    extra.unlink()
 
     def test_duplicate_archive_entries_and_symlink_packages_are_rejected(self):
         path = self.staged()
@@ -659,7 +745,11 @@ else:
     def test_missing_or_invalid_receipt_is_rejected(self):
         self.staged()
         receipt = self.root / "nupkgs/bootstrap.sha256"
-        for contents in (None, "invalid", "a" * 64):
+        valid = json.loads(receipt.read_text())
+        malformed = [{key: value for key, value in valid.items() if key != "source_clean"},
+                     dict(valid, extra="unexpected"), dict(valid, source_clean=1),
+                     dict(valid, sha256="invalid"), dict(valid, source_sha="invalid")]
+        for contents in (None, "invalid", "a" * 64, *(json.dumps(value) for value in malformed)):
             with self.subTest(contents=contents):
                 if contents is None:
                     receipt.unlink()
@@ -667,7 +757,9 @@ else:
                     receipt.write_text(contents)
                 result = self.run_script("release-publish.sh", "1.0.0")
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn("receipt", result.stderr)
+                self.assertIn("The prepared bootstrap package hash receipt is " +
+                              ("missing or invalid." if contents is None else "invalid."), result.stderr)
+                self.assertNotIn("Traceback", result.stderr)
                 self.assert_no_push()
 
     def test_missing_package_and_malformed_archives_are_rejected(self):
@@ -790,6 +882,18 @@ else:
                 self.assertEqual(self.calls(), [])
                 self.assert_no_push()
                 guard.unlink()
+
+    def test_prepare_refuses_an_existing_regular_receipt_without_staging(self):
+        receipt = self.root / "nupkgs/bootstrap.sha256"
+        receipt.parent.mkdir()
+        receipt.write_text("preserved receipt")
+        result = self.run_script("release-prepare.sh", "1.0.0")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Bootstrap staging or its receipt already exists", result.stderr)
+        self.assertEqual(receipt.read_text(), "preserved receipt")
+        self.assertFalse((receipt.parent / "bootstrap").exists())
+        self.assertEqual(self.calls(), [])
+        self.assert_no_push()
 
     def test_consumer_uses_fresh_cache_config_and_clears_fallback_folders(self):
         self.env["NUGET_FALLBACK_PACKAGES"] = "/inherited/cache"
@@ -1072,9 +1176,11 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
 
     def test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building(self):
         self.env.update(RECOVERY_VERSION="1.0.0", RECOVERY_PHASE="bootstrap")
-        for changed, message in (("TAG_EXISTS", "does not exist"), ("RECOVERY_ANCESTOR", "not on main")):
+        for changed, value, message in (("TAG_EXISTS", "false", "does not exist"),
+                                       ("RECOVERY_ANCESTOR", "false", "not on main"),
+                                       ("WORKFLOW_RECOVERY_VERSION", "invalid", "Invalid release version: invalid")):
             with self.subTest(changed=changed):
-                self.env[changed] = "false"
+                self.env[changed] = value
                 result = self.run_workflow_step("recover", "Require an existing release tag on main")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
@@ -1186,6 +1292,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.env["LIVE_SHA"] = "b" * 40
         for changed, value, message in (("TAG_SHA", "c" * 40, "Recovery tag does not match"),
                                         ("REMOTE_TAG_SHA", "c" * 40, "Remote recovery tag does not match"),
+                                        ("REMOTE_TAG_TYPE", "tree", "Remote recovery tag does not resolve to a commit."),
                                         ("FETCHED_MAIN_SHA", "c" * 40, "Current main moved"),
                                         ("RECOVERY_ANCESTOR", "false", "not an ancestor"),
                                         ("SOURCE_STATE", "bootstrap-failed", "No successful latest")):
@@ -1268,15 +1375,13 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
     def test_publication_pushes_one_validated_snapshot_with_exact_prepared_hash(self):
         path = self.staged()
         expected = hashlib.sha256(path.read_bytes()).hexdigest()
-        for state in ("free",):
-            with self.subTest(state=state):
-                self.env["REGISTRY_STATE"] = state
-                result = self.run_script("release-publish.sh", "1.0.0")
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual((self.root / "pushed.sha256").read_text(), expected)
-                pushed = Path((self.root / "pushed.path").read_text())
-                self.assertNotEqual(pushed.parent, path.parent)
-                self.assertFalse(pushed.exists())  # Private snapshot is cleaned after push.
+        self.env["REGISTRY_STATE"] = "free"
+        result = self.run_script("release-publish.sh", "1.0.0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / "pushed.sha256").read_text(), expected)
+        pushed = Path((self.root / "pushed.path").read_text())
+        self.assertNotEqual(pushed.parent, path.parent)
+        self.assertFalse(pushed.exists())  # Private snapshot is cleaned after push.
         self.assertEqual(len(self.calls()), 1)
         for call in self.calls():
             self.assertEqual(call[:2], ["nuget", "push"])

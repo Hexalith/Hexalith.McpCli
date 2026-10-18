@@ -4,9 +4,10 @@
 
 Implementation, publication, public-feed proof and owning Builds integration
 completed on 2026-10-17. Earlier review corrections and their checks are recorded
-below. Third-pass implementation and parent review are complete; all surviving
-findings are patched and final verification passes. The spec is done and sprint
-tracking is review; no new work was deferred.
+below. Fourth-pass implementation, independent review and final parent checks
+are complete. All eleven earlier patches and three additional review patches
+are applied; no new work was deferred. The spec is done and sprint tracking
+is review.
 Credentials are excluded from this evidence.
 
 - Starting committed source: `04178de98f30b0c5541f7efb978e9b9acc8e8c1d` on `main`.
@@ -773,3 +774,158 @@ No new publication, remote write, Builds edit or gitlink change was performed.
 Future production use still requires successful gates on reviewed committed main.
 The completion step records a local commit after pinned commitlint validation,
 with its exact input and successful result retained in `commitlint-validation.txt`.
+
+## Fourth-pass review corrections (2026-10-18)
+
+Starting source is clean `main` at `93a591e8a27849ff523f4c3e51bf064a8037b87f`.
+All eleven fourth-pass patch rows are applied. Changes are restricted to release
+regression fixtures, the README runbook, and these implementation records. The
+fixtures reject invalid preparation output before consumer testing, model existing
+release asset names and `--clobber`, require the correct Git ancestry operands,
+and cover request, receipt and remote-tag guard failures. The README isolates
+fail-fast options in a child Bash, explains when to retry an expired post-push
+wait, and distinguishes prepared-receipt and public signed-package hashes.
+
+Executed from the repository root:
+
+```sh
+python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+for project in Abstractions Analyzers; do
+  test_project="tests/Hexalith.McpCli.${project}.Tests"
+  dotnet restore "$test_project" -tl:off
+  dotnet build "$test_project" --configuration Release --no-restore -warnaserror -tl:off
+  dotnet test "$test_project" --configuration Release --no-build
+done
+MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
+bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.json /tmp/mcpcli-4-6-fourth-pass-real-9hr2jc7f/public-consumer
+actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml
+bash -n scripts/release-prepare.sh scripts/release-preflight.sh scripts/release-publish.sh scripts/smoke-bootstrap-consumer.sh
+git diff --check
+```
+
+All pass, without skips. Decisive output:
+
+```text
+Ran 73 tests in 90.658s
+OK
+Abstractions: total 20, failed 0, succeeded 20, skipped 0
+Analyzers: total 19, failed 0, succeeded 19, skipped 0
+Prepared Hexalith.McpCli.Abstractions 1.0.0 SHA-256 e37ac65dd06a4f5d3ceaa0c9ac7828a2474dc29276f313d38c0ed10016108960
+MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description
+Build succeeded.
+    1 Warning(s)
+    0 Error(s)
+```
+
+After tightening the symbols rejection assertion to the complete expected/found
+artifact message, its focused regression also passed (one test, 0.916 seconds).
+Both author-time builds reported zero warnings and errors. The prepared package's
+README matches repository bytes. Its receipt correctly records `source_clean:
+false` for local uncommitted corrections, so it cannot authorize publication.
+The prior staging directory and receipt were preserved before real preparation
+and restored afterward; unrelated artifacts stayed in place.
+The fresh public consumer restored only from `https://api.nuget.org/v3/index.json`.
+Its downloaded signed package hash remains
+`1bd30a88863b07a30c1d3ba9985f588c2d30e0bbb08f16a459258a8eea12e224`,
+matching the original publication evidence.
+
+Twelve isolated mutation controls each fail their targeted regression; together
+they execute thirteen test methods. Each control uses a separate copied source
+and workflow tree, leaving repository scripts untouched:
+
+| Mutation | Regression evidence |
+| --- | --- |
+| Remove preparation package validator | Both extra-symbol and dependency-leak packed outputs are rejected only with the validator present; expected artifact message, exactly restore/build/pack, and cleanup are asserted. |
+| Remove recovery upload `--clobber` | Published and draft releases with an existing package asset refuse upload; valid workflow replaces the asset with exact staged bytes. |
+| Reverse ancestry operands in source helper | Executed recovery workflow fails its tagged-source gate when main is ahead of the tag. |
+| Reverse ancestry operands in workflow tag step | Executed recovery workflow refuses tag checkout when main is ahead of the tag. |
+| Remove consumer request validation | Invalid direct consumer versions reach effects or succeed, failing the request rejection matrix. |
+| Remove recovery receipt verification | Both dirty and stale receipts fail the already-published recovery subcases (two test methods). |
+| Remove workflow tag-step request validation | Invalid version loses its specific request diagnostic. |
+| Remove existing regular receipt guard | Preparation builds before its late receipt write failure, violating the early diagnostic and zero-call assertions. |
+| Remove preparation HEAD-format guard | Invalid HEAD reaches effects or succeeds, violating exact-source rejection. |
+| Remove receipt key-set validation | Missing/extra receipt keys lose the specific invalid-receipt refusal or raise a traceback. |
+| Remove receipt boolean validation | Numeric `source_clean` loses the specific invalid-receipt refusal. |
+| Remove remote tag-type refusal | A remote tree loses the specific “does not resolve to a commit” diagnostic. |
+
+Release-suite log: `/tmp/mcpcli-4-6-fourth-pass-release-tests.log`; mutation driver,
+per-control logs and result summary: `/tmp/mcpcli-4-6-fourth-pass-mutations/`;
+real preparation, receipt, package and public consumer:
+`/tmp/mcpcli-4-6-fourth-pass-real-9hr2jc7f/`. Commands, outputs and mutation
+results above are preserved here independently of those temporary artifacts.
+Parent review and workflow completion remain pending. No new publication, remote
+write, owning Builds edit or gitlink change occurred. Future production use
+requires successful gates on reviewed committed main.
+
+## Fourth-pass final parent verification (2026-10-18)
+
+All three independent review layers completed. Blind Hunter returned ten
+findings, Edge Case Hunter one, and Verification Gap none. The latter also
+passed all 73 release tests independently. Every finding has an individual
+verdict in the spec: three test patches applied, eight findings rejected,
+and no new deferrals. The earlier agent-context deferral remains tracked in
+`deferred-work.md:491`.
+
+The final patches create an actual unexpected staging directory, exercise
+preparation and publication at both `1.0.0` and `1.2.3`, and independently fail
+the initial production restore and build. They assert exact selected versions,
+source-bound receipts and pushed bytes, no subsequent phase after failure,
+cleanup of owned staging, and preservation of unrelated artifacts.
+
+Final commands, executed from the repository root:
+
+```sh
+python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+for project in Abstractions Analyzers; do
+  test_project="tests/Hexalith.McpCli.${project}.Tests"
+  dotnet restore "$test_project" -tl:off
+  dotnet build "$test_project" --configuration Release --no-restore -warnaserror -tl:off
+  dotnet test "$test_project" --configuration Release --no-build
+done
+MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
+bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.json /tmp/mcpcli-4-6-final-fourth-pass-wx56mllf/public-consumer
+actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml
+bash -n scripts/release-prepare.sh scripts/release-preflight.sh scripts/release-publish.sh scripts/smoke-bootstrap-consumer.sh
+git diff --check
+```
+
+All passed, without skips. Decisive output:
+
+```text
+Ran 73 tests in 109.709s
+OK
+Abstractions: total 20, failed 0, succeeded 20, skipped 0
+Analyzers: total 19, failed 0, succeeded 19, skipped 0
+Prepared Hexalith.McpCli.Abstractions 1.0.0 SHA-256 a23d17d6fcd383f9aed9e42c9fdbe2fb5a8e95fcda93c12b44bddca4a86e59dc
+Build succeeded.
+    1 Warning(s)
+    0 Error(s)
+```
+
+Both author-time builds have zero warnings/errors. The verbose release run
+records every frozen-matrix covering test as `ok`: valid preparation/publication,
+invalid package contents and extra artifacts, invalid requests and registry/key
+states, and invalid source or independent gate results. The fresh public
+consumer reports its single `MCPCLI001` warning on `MissingDescriptionQuery.cs`
+and lists only NuGet.org in its assets. Its signed package SHA-256 remains
+`1bd30a88863b07a30c1d3ba9985f588c2d30e0bbb08f16a459258a8eea12e224`.
+The locally prepared README matches repository bytes. Its receipt records dirty
+source and cannot authorize publication. Previous staging and receipt were
+restored after the check; unrelated artifacts were preserved.
+
+Five additional isolated mutations each fail the corresponding regression:
+ignore directories in the package validator; remove the restore version override;
+remove the build version override; ignore failed production restore; ignore
+failed production build. Together with the twelve earlier controls, seventeen
+mutations were detected in this invocation. Production files were never mutated.
+The README gate was also executed with a failing test stub: the gate exits 23,
+no build command runs, and the parent shell continues with its options unchanged.
+
+Commands and decisive results are durable above. Detailed logs and the five
+isolated source copies are under `/tmp/mcpcli-4-6-final-fourth-pass-wx56mllf`.
+The existing publication and owning Builds evidence still satisfy all four
+acceptance criteria. No publication, remote write, Builds edit or gitlink change
+occurred in this invocation. Future production use requires successful gates
+on reviewed committed main. The spec is done and sprint tracking is review.
+Completion creates a local commit after pinned commitlint validation; its exact
+input and successful output are retained in `commitlint-validation.txt`.

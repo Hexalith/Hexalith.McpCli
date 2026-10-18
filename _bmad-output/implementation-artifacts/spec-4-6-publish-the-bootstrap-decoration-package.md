@@ -2,7 +2,7 @@
 title: '4.6 Publish the bootstrap Decoration Package'
 type: 'feature'
 created: '2026-10-17'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '04178de98f30b0c5541f7efb978e9b9acc8e8c1d'
@@ -126,6 +126,32 @@ and checks on committed source; any required commits must pass pinned commitlint
   catalog exposes `HexalithMcpCliVersion` without editing the read-only checkout.
 
 ## Implementation Notes
+
+- 2026-10-18, fourth-pass completion: All three independent review layers are
+  complete and each finding is triaged below. Three additional test patches
+  protect real unexpected directories, selected-version propagation and early
+  production restore/build failures. Final parent verification passes all 73
+  release tests, 20 Abstractions tests and 19 analyzer tests without skips,
+  five additional isolated mutations, real preparation, a fresh NuGet.org
+  consumer, actionlint, shell syntax and whitespace checks. No new deferrals.
+  Previous staging and receipt are restored. The existing publication and
+  owning Builds acceptance remain satisfied. Completion records a validated
+  local commit; no new publication, remote write, Builds edit or gitlink change.
+
+- 2026-10-18, fourth-pass review corrections: Applied all eleven open patch
+  entries. Invalid pack output now exercises preparation-time rejection; GitHub
+  fixtures model existing asset names and replacement; Git ancestry fixtures
+  require the tagged ancestor before main. Regressions protect direct consumer
+  request validation, dirty/stale receipts when the package is already published,
+  workflow request validation, existing receipts, exact preparation HEAD, receipt
+  structure/booleans and remote tag type. README runs its fail-fast gate in a
+  child shell, explains post-wait recovery timing and identifies both package
+  hashes. All 73 release tests, 20 Abstractions tests and 19 analyzer tests pass
+  without skips; all 12 isolated guard mutations are detected across 13 targeted
+  regression executions. Real preparation, a fresh NuGet.org consumer, actionlint,
+  shell syntax and whitespace checks pass; prior staging and receipt are restored.
+  Parent review and workflow completion remain pending. No publication, remote
+  write, owning Builds edit or gitlink change occurred in this patch pass.
 
 - 2026-10-18, third-pass completion: All three review layers completed and
   every finding is individually triaged below. Nine surviving findings in eight
@@ -255,6 +281,33 @@ and checks on committed source; any required commits must pass pinned commitlint
   correcting the listed review findings. Frozen intent is unchanged.
 
 ## Review Triage Log
+
+### Fourth-pass build review (2026-10-18)
+
+All three independent layers completed. Blind Hunter returned ten findings,
+Edge Case Hunter one, and Verification Gap none; the latter independently ran
+all 73 release tests successfully. Each finding is triaged individually below.
+Three narrow test patches survive; eight findings are rejected, including
+carried decisions. No new deferrals or frozen-intent changes are required.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B6.1 | low | reject | Carried E5.3/B4.3: the deliberately mutating consumer fixture changes ignored staging after public-content proof. Supported consumers do not write staging, and another receipt/snapshot handoff addresses the same uncommon outside mutation already rejected. |
+| B6.2 | low | patch | The extra-artifact test writes a regular file named `subdirectory`; a demonstrated validator mutation ignoring directories survives. Create and remove an actual directory for this existing case so the exact staging-content contract is protected. |
+| B6.3 | low | reject | Completion uploads only the validated Abstractions staging glob; a draft containing a tool asset requires a separate external upload. Inspecting and rejecting pre-existing assets adds API calls and branches for that uncommon maintainer-created state. |
+| B6.4 | false | reject | Carried B4.8: the configured semantic-release branch is stable `main`, so the supported release path cannot create the alleged prerelease partial tag. Merely accepting SemVer syntax does not establish this recovery scenario. |
+| B6.5 | low | patch | All successful production preparation/publication fixtures select the default `1.0.0`, and their assertions do not protect restore/build version overrides. Add a later-version success case asserting the selected version on restore, build and pack, its receipt hash and the one matching pushed package. |
+| B6.6 | low | patch | The stub can fail packing and the consumer but always succeeds in the initial production restore/build. Add independent failures asserting no later production command, no receipt, owned-staging cleanup and preservation of unrelated artifacts. |
+| B6.7 | low | reject | The README specifies 91 attempts and 900 seconds between requests, described explicitly as minutes of waiting. Slow HTTP 404 responses can add request time; a monotonic deadline introduces another guard for unusual sustained network latency rather than correcting the documented retry count. |
+| B6.8 | low | reject | Carried B4.4: an uncertain `gh release view` enters create, which fails loudly if a release exists. Distinguishing service/authentication failures from absence adds branches for this already-assessed uncommon recovery failure. |
+| B6.9 | low | reject | Source status respects an explicitly configured submodule ignore policy, which could conceal locally modified Builds inputs. Production uses fresh checkouts with no such override; forcing inspection adds a new guard for an uncommon local Git configuration, with no incorrect production publication demonstrated. |
+| B6.10 | low | reject | Carried B5.8 for read-only preflight. The consumer similarly ignores trailing arguments but still validates the version and requires fresh output. Argument-count guards add branches for uncommon direct-invocation mistakes; the effectful publisher already rejects extra arguments. |
+| E6.1 | low | reject | Carried E5.1/B4.5: allocation failure before trap installation can strand staging and the next preparation explicitly refuses it. Cleanup restructuring for an uncommon temporary-filesystem failure remains the same rejected availability improvement. |
+
+The three surviving findings have separate causes and receive separate narrow
+test patches, all now applied. Final parent verification passes 73 release tests
+and both author-time suites; five further isolated mutations are detected.
+Existing publication and owning Builds acceptance remain satisfied.
 
 ### Third-pass build review (2026-10-18)
 
@@ -512,17 +565,17 @@ Code review 2026-10-18, third pass (range `04178de..4a5e935`, code only: `_bmad-
 
 Code review 2026-10-18, fourth pass (range `04178de..2afb33d`, code only: `_bmad-output/` and `references/` excluded by the user's scope choice; full mode; Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor, plus one parent observation). 30 findings: 11 survive in 11 patch entries, 19 rejected, none deferred. The Acceptance Auditor found no acceptance-criterion or frozen-constraint violation; it ran all 70 release tests green and confirmed AC4 in the owning Builds catalog.
 
-- [ ] [Review][Patch] Preparation-time package validation is unprotected — medium. Pre-verified: replacing `release-prepare.sh:30` with `:` leaves all 70 tests green, because every invalid-package test stages by hand and calls `release-publish.sh`, and the fake `dotnet pack` always writes one valid package. Without that line, an extra staged file (for example a `.snupkg` after symbol packaging is enabled in Builds) passes preparation and the gate, then fails at `publishCmd` after semantic-release has pushed the tag; recovery's preserved preparation would not reject it either, so the version is lost. Add a fake-pack option that writes invalid staging (extra symbol package or nuspec dependency) and assert the validator message, dotnet calls exactly `restore`, `build`, `pack`, no receipt and no staging left behind. [scripts/release-prepare.sh:30; scripts/tests/test_bootstrap_release.py:111]
-- [ ] [Review][Patch] The fake `gh` cannot observe `--clobber` on recovery upload — medium. Pre-verified: removing `--clobber` leaves all 70 tests green. `reset_github_release` seeds releases without assets and the fake upload ignores flags and never refuses an existing name, while real `gh release upload` refuses an existing asset without `--clobber`. A draft that already holds the package (semantic-release creates the draft and uploads before un-drafting; this step's own failed `gh release edit` leaves the same state) would then never be published. Record asset names in the fake, refuse an existing name unless `--clobber` is passed, and add draft-with-asset and published-with-asset completion cases asserting exact staged bytes. [.github/workflows/release.yml:180; scripts/tests/test_bootstrap_release.py:204; scripts/tests/test_bootstrap_release.py:343]
-- [ ] [Review][Patch] The fake `git` ignores `merge-base --is-ancestor` operands — medium. Pre-verified: swapping the operands in `verify-release-source.py` and, separately, in the workflow tag step each leave all 70 tests green; the fake fails only when `RECOVERY_ANCESTOR=false`. Real git exits 1 for the swapped order whenever main is ahead of the tag, which is the normal recovery case (the 1.0.0 recovery ran from a repair commit ahead of `v1.0.0`). Make the fake require the tag SHA or `v1.0.0` first and `origin/main` second, failing otherwise. [scripts/verify-release-source.py:85; .github/workflows/release.yml:135; scripts/tests/test_bootstrap_release.py:179]
-- [ ] [Review][Patch] The consumer smoke's own request validation is untested — low. Removing `smoke-bootstrap-consumer.sh:8` leaves all 70 tests green; the README tells maintainers to run this script directly, and it writes `$release_version` into the generated project XML. Add the script to `test_invalid_requests_are_rejected_by_every_entry_point_before_effects`. [scripts/smoke-bootstrap-consumer.sh:8; scripts/tests/test_bootstrap_release.py:543]
-- [ ] [Review][Patch] Recovery's own receipt check is untested on the already-published path — low. Removing `verify_receipt` from `recover-bootstrap-release.py:75` leaves all 70 tests green: the dirty and stale receipt tests use the absent-package path, where `release-publish.sh` checks the receipt again. With `REGISTRY_STATE=taken`, nothing else checks it, so a dirty or stale receipt would no longer stop GitHub completion, contrary to the README's "Publication and recovery require a receipt from clean source". Add `REGISTRY_STATE=taken` subtests to both receipt tests. [scripts/recover-bootstrap-release.py:75; scripts/tests/test_bootstrap_release.py:494; scripts/tests/test_bootstrap_release.py:521]
-- [ ] [Review][Patch] The workflow tag step's request validation is untested — low. Removing `release-request.py` from the "Require an existing release tag on main" step leaves all 70 tests green; `test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building` covers only a missing tag and a non-ancestor. Add an invalid-version case asserting the request message, no checkout and no dotnet calls. [.github/workflows/release.yml:130; scripts/tests/test_bootstrap_release.py:1073]
-- [ ] [Review][Patch] Four fail-closed checks have no test that fails when they are removed — low. Removing each left all 70 tests green: the regular-file receipt refusal without staging (only dangling symlinks are tested; without it preparation builds fully and then fails at the `noclobber` write with a bash error); the receipt HEAD-format check; the receipt key-set and boolean checks (a receipt missing `source_clean` then fails with an uncaught `KeyError` traceback); and the remote-tag "does not resolve to a commit" branch (the fake returns only `tag` or `commit`). Add one rejection case per check, asserting its specific message and no push. [scripts/release-prepare.sh:15; scripts/release-receipt.py:14; scripts/release-receipt.py:35; scripts/verify-release-source.py:72]
-- [ ] [Review][Patch] The README local gate's `set -eu` closes the maintainer's interactive shell — low. Parent observation, verified: pasted into an interactive bash, `set -eu` followed by a failing command exits the shell, so any failing test or build in this block (the B5.9 fail-fast fix) closes the terminal; `set -u` can also break interactive prompt and completion hooks. Run the block in a child shell, for example `bash -euo pipefail <<'EOF' … EOF`, or wrap it in a subshell. [README.md:59]
-- [ ] [Review][Patch] The README does not tell operators when to dispatch again after the post-push wait expires — low. Recovery "stops" after 15 minutes, and a re-dispatch while the flat-container index still lags sees the version as absent and its second push gets a 409. Add that the operator waits until nuget.org lists the version before dispatching recovery again, which then completes through the already-published path. [README.md:76]
-- [ ] [Review][Patch] "Record the package hash" does not say which hash — low. Preparation and publication print the unsigned prepared (receipt) hash; recovery prints the hash of the repository-signed public download, and the two always differ. Name both values in the runbook: the prepared receipt hash and the public signed-package hash. [README.md:80]
-- [ ] [Review][Patch] A test loops over a single registry state — low. `for state in ("free",): with self.subTest(...)` is left over from removing the `404` state and suggests more states are covered than are. Flatten the loop. [scripts/tests/test_bootstrap_release.py:1271]
+- [x] [Review][Patch] (applied 2026-10-18) Preparation-time package validation is unprotected — medium. Pre-verified: replacing `release-prepare.sh:30` with `:` leaves all 70 tests green, because every invalid-package test stages by hand and calls `release-publish.sh`, and the fake `dotnet pack` always writes one valid package. Without that line, an extra staged file (for example a `.snupkg` after symbol packaging is enabled in Builds) passes preparation and the gate, then fails at `publishCmd` after semantic-release has pushed the tag; recovery's preserved preparation would not reject it either, so the version is lost. Add a fake-pack option that writes invalid staging (extra symbol package or nuspec dependency) and assert the validator message, dotnet calls exactly `restore`, `build`, `pack`, no receipt and no staging left behind. [scripts/release-prepare.sh:30; scripts/tests/test_bootstrap_release.py:111]
+- [x] [Review][Patch] (applied 2026-10-18) The fake `gh` cannot observe `--clobber` on recovery upload — medium. Pre-verified: removing `--clobber` leaves all 70 tests green. `reset_github_release` seeds releases without assets and the fake upload ignores flags and never refuses an existing name, while real `gh release upload` refuses an existing asset without `--clobber`. A draft that already holds the package (semantic-release creates the draft and uploads before un-drafting; this step's own failed `gh release edit` leaves the same state) would then never be published. Record asset names in the fake, refuse an existing name unless `--clobber` is passed, and add draft-with-asset and published-with-asset completion cases asserting exact staged bytes. [.github/workflows/release.yml:180; scripts/tests/test_bootstrap_release.py:204; scripts/tests/test_bootstrap_release.py:343]
+- [x] [Review][Patch] (applied 2026-10-18) The fake `git` ignores `merge-base --is-ancestor` operands — medium. Pre-verified: swapping the operands in `verify-release-source.py` and, separately, in the workflow tag step each leave all 70 tests green; the fake fails only when `RECOVERY_ANCESTOR=false`. Real git exits 1 for the swapped order whenever main is ahead of the tag, which is the normal recovery case (the 1.0.0 recovery ran from a repair commit ahead of `v1.0.0`). Make the fake require the tag SHA or `v1.0.0` first and `origin/main` second, failing otherwise. [scripts/verify-release-source.py:85; .github/workflows/release.yml:135; scripts/tests/test_bootstrap_release.py:179]
+- [x] [Review][Patch] (applied 2026-10-18) The consumer smoke's own request validation is untested — low. Removing `smoke-bootstrap-consumer.sh:8` leaves all 70 tests green; the README tells maintainers to run this script directly, and it writes `$release_version` into the generated project XML. Add the script to `test_invalid_requests_are_rejected_by_every_entry_point_before_effects`. [scripts/smoke-bootstrap-consumer.sh:8; scripts/tests/test_bootstrap_release.py:543]
+- [x] [Review][Patch] (applied 2026-10-18) Recovery's own receipt check is untested on the already-published path — low. Removing `verify_receipt` from `recover-bootstrap-release.py:75` leaves all 70 tests green: the dirty and stale receipt tests use the absent-package path, where `release-publish.sh` checks the receipt again. With `REGISTRY_STATE=taken`, nothing else checks it, so a dirty or stale receipt would no longer stop GitHub completion, contrary to the README's "Publication and recovery require a receipt from clean source". Add `REGISTRY_STATE=taken` subtests to both receipt tests. [scripts/recover-bootstrap-release.py:75; scripts/tests/test_bootstrap_release.py:494; scripts/tests/test_bootstrap_release.py:521]
+- [x] [Review][Patch] (applied 2026-10-18) The workflow tag step's request validation is untested — low. Removing `release-request.py` from the "Require an existing release tag on main" step leaves all 70 tests green; `test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building` covers only a missing tag and a non-ancestor. Add an invalid-version case asserting the request message, no checkout and no dotnet calls. [.github/workflows/release.yml:130; scripts/tests/test_bootstrap_release.py:1073]
+- [x] [Review][Patch] (applied 2026-10-18) Four fail-closed checks have no test that fails when they are removed — low. Removing each left all 70 tests green: the regular-file receipt refusal without staging (only dangling symlinks are tested; without it preparation builds fully and then fails at the `noclobber` write with a bash error); the receipt HEAD-format check; the receipt key-set and boolean checks (a receipt missing `source_clean` then fails with an uncaught `KeyError` traceback); and the remote-tag "does not resolve to a commit" branch (the fake returns only `tag` or `commit`). Add one rejection case per check, asserting its specific message and no push. [scripts/release-prepare.sh:15; scripts/release-receipt.py:14; scripts/release-receipt.py:35; scripts/verify-release-source.py:72]
+- [x] [Review][Patch] (applied 2026-10-18) The README local gate's `set -eu` closes the maintainer's interactive shell — low. Parent observation, verified: pasted into an interactive bash, `set -eu` followed by a failing command exits the shell, so any failing test or build in this block (the B5.9 fail-fast fix) closes the terminal; `set -u` can also break interactive prompt and completion hooks. Run the block in a child shell, for example `bash -euo pipefail <<'EOF' … EOF`, or wrap it in a subshell. [README.md:59]
+- [x] [Review][Patch] (applied 2026-10-18) The README does not tell operators when to dispatch again after the post-push wait expires — low. Recovery "stops" after 15 minutes, and a re-dispatch while the flat-container index still lags sees the version as absent and its second push gets a 409. Add that the operator waits until nuget.org lists the version before dispatching recovery again, which then completes through the already-published path. [README.md:76]
+- [x] [Review][Patch] (applied 2026-10-18) "Record the package hash" does not say which hash — low. Preparation and publication print the unsigned prepared (receipt) hash; recovery prints the hash of the repository-signed public download, and the two always differ. Name both values in the runbook: the prepared receipt hash and the public signed-package hash. [README.md:80]
+- [x] [Review][Patch] (applied 2026-10-18) A test loops over a single registry state — low. `for state in ("free",): with self.subTest(...)` is left over from removing the `404` state and suggests more states are covered than are. Flatten the loop. [scripts/tests/test_bootstrap_release.py:1271]
 
 #### Rejected
 

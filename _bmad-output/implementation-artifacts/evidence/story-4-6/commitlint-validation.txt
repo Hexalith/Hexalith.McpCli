@@ -35,3 +35,16 @@ fix(release): complete story 4.6 bootstrap publication hardening
 ✔   found 0 problems, 0 warnings
 
 Exit code: 0
+
+2026-10-18 fourth-pass build completion
+Tooling installed with npm ci from the repository lockfile.
+Command: npx --no -- commitlint --verbose --edit /tmp/mcpcli-4-6-final-fourth-pass-wx56mllf/commit-message.txt
+
+Exact full commit message:
+test(release): close story 4.6 bootstrap review gaps
+
+⧗   --- input ---
+test(release): close story 4.6 bootstrap review gaps
+✔   found 0 problems, 0 warnings
+
+Exit code: 0
