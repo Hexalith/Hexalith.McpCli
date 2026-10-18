@@ -8,12 +8,19 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import time
+from urllib.error import HTTPError
 from urllib.request import urlopen
 from zipfile import ZipFile
 
 
+SCRIPT_DIRECTORY = Path(__file__).resolve().parent
+PUBLIC_DOWNLOAD_ATTEMPTS = 12
+PUBLIC_DOWNLOAD_DELAY_SECONDS = 10
+
+
 def load_script(name):
-    spec = importlib.util.spec_from_file_location(name.replace('-', '_'), Path(__file__).with_name(name + '.py'))
+    spec = importlib.util.spec_from_file_location(name.replace('-', '_'), SCRIPT_DIRECTORY / (name + '.py'))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -28,9 +35,32 @@ def content(path):
 
 
 def verify_source(phase, version):
-    subprocess.run(['python3', str(Path(__file__).with_name('verify-release-source.py')),
+    subprocess.run(['python3', str(SCRIPT_DIRECTORY / 'verify-release-source.py'),
                     os.environ.get('DISPATCH_SHA', ''), os.environ.get('DISPATCH_REF', ''), phase,
                     '--tagged-recovery', version], check=True)
+
+
+def download_public_package(url, downloaded, pushed):
+    # Newly pushed packages can return 404 while NuGet processes them. Existing
+    # packages and every other uncertain response still fail immediately.
+    attempts = PUBLIC_DOWNLOAD_ATTEMPTS if pushed else 1
+    for attempt in range(attempts):
+        try:
+            with urlopen(url, timeout=30) as response:
+                if response.status != 200:
+                    raise ValueError('unexpected package download status')
+                package_bytes = response.read()
+        except HTTPError as error:
+            if error.code == 404 and attempt + 1 < attempts:
+                print(f'Waiting for the pushed package to become public ({attempt + 1}/{attempts}).', flush=True)
+                time.sleep(PUBLIC_DOWNLOAD_DELAY_SECONDS)
+                continue
+        except Exception:
+            pass
+        else:
+            downloaded.write_bytes(package_bytes)
+            return
+        raise ValueError('Could not verify the public package: uncertain registry response') from None
 
 
 def recover(version, phase):
@@ -38,13 +68,14 @@ def recover(version, phase):
     request.validate_request(version, phase)
     verify_source(phase, version)
     staging = Path('nupkgs/bootstrap')
-    subprocess.run(['python3', 'scripts/validate-release-packages.py', str(staging), version, phase], check=True)
+    subprocess.run(['python3', str(SCRIPT_DIRECTORY / 'validate-release-packages.py'), str(staging), version, phase], check=True)
     package_name = f'Hexalith.McpCli.Abstractions.{version}.nupkg'
     prepared = staging / package_name
     load_script('release-receipt').verify_receipt('nupkgs/bootstrap.sha256', prepared,
                                                  os.environ.get('DISPATCH_SHA', ''))
-    if not request.version_is_published(version):
-        subprocess.run(['bash', str(Path(__file__).with_name('release-publish.sh')), version], check=True,
+    pushed = not request.version_is_published(version)
+    if pushed:
+        subprocess.run(['bash', str(SCRIPT_DIRECTORY / 'release-publish.sh'), version], check=True,
                        env={**os.environ, 'MCPCLI_RELEASE_PHASE': phase,
                             'MCPCLI_RECOVERY_VERSION': version})
     else:
@@ -56,17 +87,11 @@ def recover(version, phase):
         downloaded = public / package_name
         url = (f'https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/{version.lower()}/'
                f'hexalith.mcpcli.abstractions.{version.lower()}.nupkg')
-        try:
-            with urlopen(url, timeout=30) as response:
-                if response.status != 200:
-                    raise ValueError('unexpected package download status')
-                downloaded.write_bytes(response.read())
-        except Exception:
-            raise ValueError('Could not verify the public package: uncertain registry response') from None
-        subprocess.run(['python3', 'scripts/validate-release-packages.py', str(public), version, phase], check=True)
+        download_public_package(url, downloaded, pushed)
+        subprocess.run(['python3', str(SCRIPT_DIRECTORY / 'validate-release-packages.py'), str(public), version, phase], check=True)
         if content(prepared) != content(downloaded):
             raise ValueError('The published package content does not match the tagged bootstrap package.')
-        subprocess.run(['bash', 'scripts/smoke-bootstrap-consumer.sh', version, str(public),
+        subprocess.run(['bash', str(SCRIPT_DIRECTORY / 'smoke-bootstrap-consumer.sh'), version, str(public),
                         str(Path(temporary) / 'consumer')], check=True)
         verify_source(phase, version)
         print(f'Verified public package {url} SHA-256 {hashlib.sha256(downloaded.read_bytes()).hexdigest()}')

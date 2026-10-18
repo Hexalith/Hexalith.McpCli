@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
+script_directory="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 release_version="${1:?Release version is required}"
 package_source="${2:?Package source is required}"
 consumer_directory="${3:?Fresh consumer directory is required}"
-python3 scripts/release-request.py "$release_version" bootstrap
+python3 "$script_directory/release-request.py" "$release_version" bootstrap
 package_source="$(python3 - "$package_source" <<'PY'
 from pathlib import Path
 import sys
@@ -64,9 +65,9 @@ consumer_properties=(
   -p:ImportDirectoryBuildProps=false -p:ImportDirectoryBuildTargets=false -p:ImportDirectoryPackagesProps=false
 )
 dotnet restore "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" \
-  --configfile "$consumer_directory/NuGet.Config" --no-cache \
+  --configfile "$consumer_directory/NuGet.Config" --no-cache -tl:off \
   "${consumer_properties[@]}"
-dotnet build "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" --configuration Release --no-restore \
+dotnet build "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" --configuration Release --no-restore -tl:off \
   "${consumer_properties[@]}" 2>&1 | tee "$consumer_directory/build.log"
 grep -q 'warning MCPCLI001:' "$consumer_directory/build.log"
 grep -Eq '^[[:space:]]*1 Warning\(s\)$' "$consumer_directory/build.log"

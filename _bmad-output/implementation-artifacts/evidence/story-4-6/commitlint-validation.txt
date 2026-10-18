@@ -1,0 +1,11 @@
+Tooling installed with npm ci from the repository lockfile.
+Command: npx --no -- commitlint --verbose --edit /tmp/mcpcli-story-4-6-commit-qgoln7bj.txt
+
+Exact full commit message:
+fix(release): harden story 4.6 bootstrap recovery
+
+⧗   --- input ---
+fix(release): harden story 4.6 bootstrap recovery
+✔   found 0 problems, 0 warnings
+
+Exit code: 0

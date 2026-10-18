@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: bootstrap-package-${{ github.ref }}
+  group: bootstrap-package-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:

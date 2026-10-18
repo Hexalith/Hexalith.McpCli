@@ -23,7 +23,6 @@ permissions:
 
 jobs:
   verify-source:
-    if: ${{ inputs.recovery_version == '' }}
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -96,6 +95,7 @@ jobs:
         run: npx --no-install semantic-release
 
   recover:
+    needs: verify-source
     if: ${{ inputs.recovery_version != '' }}
     runs-on: ubuntu-latest
     environment: production
@@ -148,7 +148,7 @@ jobs:
         env:
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
           RECOVERY_VERSION: ${{ inputs.recovery_version }}
-        run: bash scripts/release-prepare.sh "$RECOVERY_VERSION"
+        run: bash "$RUNNER_TEMP/release-scripts/release-prepare.sh" "$RECOVERY_VERSION"
       - name: Get short-lived NuGet publication key
         id: nuget-login
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
@@ -176,8 +176,11 @@ jobs:
           set -euo pipefail
           python3 "$RUNNER_TEMP/release-scripts/verify-release-source.py" "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE" --tagged-recovery "$RECOVERY_VERSION"
           tag="v${RECOVERY_VERSION}"
-          if gh release view "$tag" >/dev/null 2>&1; then
+          if release_is_draft="$(gh release view "$tag" --json isDraft --jq .isDraft)"; then
             gh release upload "$tag" nupkgs/bootstrap/*.nupkg --clobber
+            if [ "$release_is_draft" = true ]; then
+              gh release edit "$tag" --draft=false
+            fi
           else
             gh release create "$tag" nupkgs/bootstrap/*.nupkg --verify-tag --title "$tag" --generate-notes
           fi
