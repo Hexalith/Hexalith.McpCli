@@ -1,0 +1,7 @@
+Command: npx --no -- commitlint --verbose --edit /tmp/mcpcli-4-7-review-commit-message.txt
+
+⧗   --- input ---
+test(deps): close story 4.7 dependency boundary review gaps
+✔   found 0 problems, 0 warnings
+
+Exit code: 0

@@ -18,7 +18,7 @@ internal static class DependencyPolicyGate
         CheckIntegrity(policy, failures);
         foreach ((string project, XDocument document) in projects.OrderBy(item => item.Key, StringComparer.Ordinal))
         {
-            if (Path.GetFileNameWithoutExtension(project) == "Hexalith.McpCli.Analyzers")
+            if (project == Path.Combine(root, "src", "Hexalith.McpCli.Analyzers", "Hexalith.McpCli.Analyzers.csproj"))
             {
                 continue;
             }
@@ -63,9 +63,11 @@ internal static class DependencyPolicyGate
             {
                 string id = (string?)reference.Attribute("Include") ?? (string?)reference.Attribute("Update")
                     ?? (string?)reference.Attribute("Remove") ?? string.Empty;
-                string path = paths.GetValueOrDefault(id, $"{projectPath} > {graph.Identity(id, Pin(policy, id) ?? "unresolved")}");
-                if (reference.Attribute("Version") is not null || reference.Attribute("VersionOverride") is not null
-                    || reference.Elements().Any(item => item.Name.LocalName is "Version" or "VersionOverride"))
+                string path = $"{projectPath} > {graph.Identity(id, Pin(policy, id) ?? "unresolved")}";
+                if (reference.Attributes().Select(item => item.Name.LocalName)
+                    .Concat(reference.Elements().Select(item => item.Name.LocalName))
+                    .Any(name => name.Equals("Version", StringComparison.OrdinalIgnoreCase)
+                        || name.Equals("VersionOverride", StringComparison.OrdinalIgnoreCase)))
                 {
                     failures.Add($"Project {projectId} pins {id} inline instead of centrally: {path}");
                 }
@@ -78,6 +80,7 @@ internal static class DependencyPolicyGate
                 if (id.Contains("$(", StringComparison.Ordinal))
                 {
                     failures.Add($"Project {projectId} has an unresolved package reference {id}: {projectPath}");
+                    continue;
                 }
 
                 if (IsTestOnly(policy, id))
