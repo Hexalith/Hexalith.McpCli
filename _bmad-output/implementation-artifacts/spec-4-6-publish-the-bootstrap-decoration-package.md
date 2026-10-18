@@ -2,7 +2,7 @@
 title: '4.6 Publish the bootstrap Decoration Package'
 type: 'feature'
 created: '2026-10-17'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '04178de98f30b0c5541f7efb978e9b9acc8e8c1d'
@@ -127,6 +127,32 @@ and checks on committed source; any required commits must pass pinned commitlint
 
 ## Implementation Notes
 
+- 2026-10-18, resumed build review: All three independent layers completed;
+  their eleven findings are individually triaged below. Both surviving patches
+  are applied: corrected evidence state wording and a dirty-after-public-consumer
+  regression protecting recovery's final source check. The regression detects
+  removal of that check. Final parent verification passed all 60 release tests,
+  20 Abstractions tests and 19 analyzer tests without skips, real preparation,
+  a fresh NuGet.org consumer, actionlint, shell syntax and whitespace checks.
+  Public package bytes match the recorded signed package hash. No new release,
+  remote write, owner Builds change or gitlink change was made. The workflow's
+  completion step records the reviewed corrections in a local commit.
+
+- 2026-10-18, second-pass review corrections: Applied all ten remaining patch
+  findings. The packaged README uses absolute links and version-neutral wording,
+  states the production approval caveat, and runs the consumer once through
+  preparation. Release test discovery includes every `test_*.py`. Recovery allows
+  900 seconds of post-push propagation waiting, and the consumer requires its
+  warning on `MissingDescriptionQuery.cs`. Executed workflow fixtures now cover
+  preserved helpers across the tag checkout, the exact `DISPATCH_SHA` handoff,
+  both NuGet-login output bindings, and missing/unmerged tag refusal. All 59
+  release tests, 20 Abstractions tests and 19 analyzer tests pass with no skips;
+  real package preparation, packaged README inspection, actionlint, shell syntax
+  and whitespace checks pass. Four isolated workflow mutations are rejected.
+  Evidence now records the prior committed-source gates and separate gitlink
+  sync history. These local corrections await the parent review; no publication,
+  Builds edit, gitlink change or remote write was performed.
+
 - 2026-10-18, final review: All three review layers completed. Seven surviving
   findings were patched (six fixes, with duplicate verification findings); four
   were rejected with evidence and none deferred. Recovery completes existing
@@ -205,6 +231,33 @@ and checks on committed source; any required commits must pass pinned commitlint
 
 ## Review Triage Log
 
+### Resumed build review (2026-10-18)
+
+All three layers completed: Blind Hunter returned ten findings, Edge Case Hunter
+returned none, and Verification Gap returned one demonstrated regression gap.
+Each finding is assessed independently below before grouping. No new deferrals
+are required; the earlier agent-context deferral remains tracked in
+`deferred-work.md:491`.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B4.1 | low | reject | Carried B3.4: retaining/importing original artifacts would improve recovery when rebuilding changes consumer bytes, but this uncommon mismatch already fails closed. Artifact retention and import add a recovery path beyond a direct correction. |
+| B4.2 | low | reject | Carried second-pass normal-publication readback finding: ordinary publication ends after NuGet push; the runbook requires a separate public-feed proof. Adding download/consumer orchestration to normal publication adds branches for an uncommon post-push registry failure. |
+| B4.3 | low | reject | Completion uploads staging without another receipt check, so an external modification between the recovery and completion steps could change the asset. No workflow step writes staging in that interval; adding another guarded snapshot addresses an unusual outside mutation, while the NuGet publisher already pushes a private validated snapshot. |
+| B4.4 | low | reject | Carried second-pass `gh release view` finding: any view error enters create; an existing release then makes the real create fail. Distinguishing transient errors from absence adds branches for an uncommon recovery failure. |
+| B4.5 | low | reject | Carried second-pass `mktemp` failure finding: failed allocation before trap installation can strand staging; the next preparation explicitly refuses it. Cleanup restructuring for a failed temporary-directory allocation remains an uncommon availability improvement. |
+| B4.6 | low | reject | A previously pushed package becoming visible between the two index reads makes preflight stop as already published, without a second push. A later recovery verifies it; handling this narrow propagation race requires a new duplicate-to-verification branch. |
+| B4.7 | low | reject | Carried B3.5: recovery intentionally acquires its trusted identity for both paths, although an already-published package needs no push key. Conditional key acquisition adds orchestration branches for unavailable trusted-publishing configuration. |
+| B4.8 | false | reject | `.releaserc.json` configures only the normal `main` release branch; pinned semantic-release `lib/get-next-version.js` emits prereleases only for a prerelease branch. The supported release path cannot produce the alleged prerelease partial tag; accepting SemVer syntax alone does not create one. |
+| B4.9 | low | reject | Recovery accepts an existing remote tag on a green main ancestor without proving the originating release attempt. Exploiting that difference requires deliberately creating a tag and approving recovery; recording and enforcing release-attempt provenance adds a new gate for that unusual maintainer action. Ordinary version selection remains semantic-release-owned. |
+| B4.10 | low | patch | The evidence opening says both artifacts remain in-progress; the spec is now in-review while sprint tracking is still in-progress. Replace the transient status claim with accurate wording about completed checks and pending review. |
+| V4.1 | medium | patch | Deleting only recovery's final source recheck leaves all 59 tests green. A demonstrated consumer-build source mutation then returns success; add a dirty-after-consumer regression asserting the specific source error, nonzero exit, no verification-success message, and zero pushes. |
+
+The two surviving findings have separate causes and receive separate narrow
+patches. Existing publication and owning Builds acceptance remain satisfied.
+Both patches are applied; parent verification passed 60 release tests and both
+author-time suites. No surviving finding remains open.
+
 | ID | Verdict | Route | Evidence |
 | --- | --- | --- | --- |
 | B1 | medium | bad_spec | Consumer smoke inherits fallback folders; the reviewer reproduced success against an empty source using a cached package. Clear configuration and fallback folders. |
@@ -272,10 +325,10 @@ run also passed all 51 release tests (64.170 seconds), with no skips.
 
 ## Verification
 
-- `python3 -m unittest discover -s scripts/tests -p 'test_bootstrap_release.py'`
+- `python3 -m unittest discover -s scripts/tests -p 'test_*.py'`
 - `MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0`
 - Build/run Abstractions.Tests and Analyzers.Tests individually in Release.
-- Run the extracted local-source consumer smoke with isolated package cache.
+- Preparation runs the extracted local-source consumer smoke with an isolated package cache.
 - `actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml`
 - `git diff --check`; in Builds, run `pwsh -NoProfile -File` with
   `Tools/validate-central-package-versions.ps1`,
@@ -334,16 +387,16 @@ Code review 2026-10-18 (range `04178de..34bc4b3`, full mode; Blind Hunter, Edge 
 Code review 2026-10-18, second pass (range `04178de..55ed6e9`, code only: `_bmad-output/` and `references/` excluded by the user's scope choice; full mode; Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor).
 
 - [x] [Review][Decision] (resolved: option 1 — became the patch below; options 2 and 3 are left to Story 4.16, which decides each package README) The release runbook ships as the NuGet package README — low. `Hexalith.McpCli.Abstractions.csproj` packs the root `README.md` as `PackageReadmeFile`, so the new "Bootstrap package release" section (production approval, trusted publishing, recovery, `MCPCLI_RECOVERY_VERSION`) is on the nuget.org page, and `v1.0.0` already ships it. Its three repo-relative workflow links (`bootstrap-package.yml` once, `release.yml` twice) are broken on nuget.org, like the existing `_bmad-output/…` link in "Gateway boundary", and every later package will still say "1.0.0 is published" with `Version="[1.0.0]"`. The spec task requires the README to document the release sequence, so the fix depends on intent. Options: (1) keep the section, make its links absolute GitHub URLs and word the version text so it does not go stale; (2) give the package its own short README and keep the runbook in the repository README; (3) move the runbook to a maintainer document linked from the README; (4) accept as is. [README.md:40; src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj:5]
-- [ ] [Review][Patch] Make the packaged README work on nuget.org — low. Resolved from the decision above: make the four repo-relative links (three workflow links and the existing `_bmad-output/…` link) absolute `https://github.com/Hexalith/Hexalith.McpCli/blob/main/…` URLs, link the package page without a version, present `[1.0.0]` as an example of pinning one exact version, and drop the fixed `(1.0.0)` after `HexalithMcpCliVersion`. [README.md:42; README.md:44; README.md:52; README.md:80]
-- [ ] [Review][Patch] Recover-job wiring of the preserved scripts and the tag handoff is never executed by tests — medium. The reviewer pointed `release.yml:165` and `:177` back at `scripts/…` and all 57 tests still passed: the preserved-scripts test calls the preserved copies itself, and `complete_github_release` leaves a working-tree `verify-release-source.py` that also satisfies a reverted block. The "Require an existing release tag on main" step and its `DISPATCH_SHA` write to `$GITHUB_ENV` never run, and no test checks that both production jobs take `NUGET_API_KEY` from the `nuget-login` output. A reverted path would make recovery of `v1.0.0` run the tag's helpers and fail. Run the recover job's preserve, tag, rebuild, publish and complete steps in order with `RUNNER_TEMP` and a temporary `GITHUB_ENV`, sabotage the working-tree scripts after the preserve step, and assert one push, no tagged-helper call and `DISPATCH_SHA=<tag sha>`. [.github/workflows/release.yml:121; scripts/tests/test_bootstrap_release.py:834]
-- [ ] [Review][Patch] The post-push public-download wait is too short for NuGet processing — medium. 12 attempts 10 s apart allow about 110 s. In the only observed case, run 39057687505 got a 404 right after its push, and the package was available when run 39058088252 started about five minutes later. If the bound expires, recovery fails after an irreversible push, and a re-dispatch while the index still lags sees the version as absent and gets a 409 from a second push. Raise the bound to cover NuGet's usual processing time (for example 15 minutes), and update the README sentence and the bounded-wait test. [scripts/recover-bootstrap-release.py:18]
-- [ ] [Review][Patch] Evidence does not record the final committed source or its gate runs — low. `verification.md` never mentions `55ed6e9`, `c60ffa9` or `844776f`, and still says the corrections "require their own committed-main gates before any production use", although the CI, Commitlint and Bootstrap package push runs for `55ed6e9` succeeded. Record the commit and the three run URLs. [_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md:464]
-- [ ] [Review][Patch] Evidence claims no gitlink changed, but the story's range moves 14 — low. `verification.md:159` says "No read-only `references/` checkout or gitlink is changed by this work". `4a84c16` (`/pushall`) moved all 14 gitlinks, including Builds to `544fd2e` with this story's catalog commits, and `c60ffa9`, which also edits this story's evidence, moved Conversations from `e753cf8` to `476369f` rather than back to the baseline `4e93736`. State that the story implementation changed no gitlink and that the moves came from those sync commits. [_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md:159]
-- [ ] [Review][Patch] Deferred-work anchor is stale again — low. `deferred-work.md:6` cites `scripts/verify-release-source.py:28`, which is now `return json.loads(result.stdout)`; the bootstrap phase check moved to line 39 when `failure_detail` was added. [_bmad-output/implementation-artifacts/deferred-work.md:6]
-- [ ] [Review][Patch] README overstates the production approval gate — low. The README says the environment "requires a maintainer's approval", but the evidence records that admin bypass is enabled and self-approval is allowed ("a deliberate pause, not an independent review"). Add that caveat. [README.md:66]
-- [ ] [Review][Patch] The consumer smoke does not check which type raised `MCPCLI001` — low. `grep -q 'warning MCPCLI001:'` plus one total warning accepts a warning on `CreateItemCommand` with none on `MissingDescriptionQuery`. Match `MissingDescriptionQuery.cs(` on the warning line, and add a stub variant that reports the wrong file. [scripts/smoke-bootstrap-consumer.sh:72]
-- [ ] [Review][Patch] The bootstrap gate runs the consumer smoke twice on the same bytes — low. `release-prepare.sh:32` already runs `smoke-bootstrap-consumer.sh` against the prepared package; the workflow's last step repeats it, and so does the README local gate's third command. Remove both duplicates. [.github/workflows/bootstrap-package.yml:44]
-- [ ] [Review][Patch] The release test discovery is pinned to one file name — low. `-p 'test_bootstrap_release.py'` would silently skip any new `scripts/tests/test_*.py`, the same "CI silently skips it" pitfall the agent instructions record for .NET test projects. Use `-p 'test_*.py'` in the workflow and the README. [.github/workflows/bootstrap-package.yml:31]
+- [x] [Review][Patch] (applied 2026-10-18) Make the packaged README work on nuget.org — low. Resolved from the decision above: make the four repo-relative links (three workflow links and the existing `_bmad-output/…` link) absolute `https://github.com/Hexalith/Hexalith.McpCli/blob/main/…` URLs, link the package page without a version, present `[1.0.0]` as an example of pinning one exact version, and drop the fixed `(1.0.0)` after `HexalithMcpCliVersion`. [README.md:42; README.md:44; README.md:52; README.md:80]
+- [x] [Review][Patch] (applied 2026-10-18) Recover-job wiring of the preserved scripts and the tag handoff is never executed by tests — medium. The reviewer pointed `release.yml:165` and `:177` back at `scripts/…` and all 57 tests still passed: the preserved-scripts test calls the preserved copies itself, and `complete_github_release` leaves a working-tree `verify-release-source.py` that also satisfies a reverted block. The "Require an existing release tag on main" step and its `DISPATCH_SHA` write to `$GITHUB_ENV` never run, and no test checks that both production jobs take `NUGET_API_KEY` from the `nuget-login` output. A reverted path would make recovery of `v1.0.0` run the tag's helpers and fail. Run the recover job's preserve, tag, rebuild, publish and complete steps in order with `RUNNER_TEMP` and a temporary `GITHUB_ENV`, sabotage the working-tree scripts after the preserve step, and assert one push, no tagged-helper call and `DISPATCH_SHA=<tag sha>`. [.github/workflows/release.yml:121; scripts/tests/test_bootstrap_release.py:834]
+- [x] [Review][Patch] (applied 2026-10-18) The post-push public-download wait is too short for NuGet processing — medium. 12 attempts 10 s apart allow about 110 s. In the only observed case, run 39057687505 got a 404 right after its push, and the package was available when run 39058088252 started about five minutes later. If the bound expires, recovery fails after an irreversible push, and a re-dispatch while the index still lags sees the version as absent and gets a 409 from a second push. Raise the bound to cover NuGet's usual processing time (for example 15 minutes), and update the README sentence and the bounded-wait test. [scripts/recover-bootstrap-release.py:18]
+- [x] [Review][Patch] (applied 2026-10-18) Evidence does not record the final committed source or its gate runs — low. `verification.md` never mentions `55ed6e9`, `c60ffa9` or `844776f`, and still says the corrections "require their own committed-main gates before any production use", although the CI, Commitlint and Bootstrap package push runs for `55ed6e9` succeeded. Record the commit and the three run URLs. [_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md:464]
+- [x] [Review][Patch] (applied 2026-10-18) Evidence claims no gitlink changed, but the story's range moves 14 — low. `verification.md:159` says "No read-only `references/` checkout or gitlink is changed by this work". `4a84c16` (`/pushall`) moved all 14 gitlinks, including Builds to `544fd2e` with this story's catalog commits, and `c60ffa9`, which also edits this story's evidence, moved Conversations from `e753cf8` to `476369f` rather than back to the baseline `4e93736`. State that the story implementation changed no gitlink and that the moves came from those sync commits. [_bmad-output/implementation-artifacts/evidence/story-4-6/verification.md:159]
+- [x] [Review][Patch] (applied 2026-10-18) Deferred-work anchor is stale again — low. `deferred-work.md:6` cites `scripts/verify-release-source.py:28`, which is now `return json.loads(result.stdout)`; the bootstrap phase check moved to line 39 when `failure_detail` was added. [_bmad-output/implementation-artifacts/deferred-work.md:6]
+- [x] [Review][Patch] (applied 2026-10-18) README overstates the production approval gate — low. The README says the environment "requires a maintainer's approval", but the evidence records that admin bypass is enabled and self-approval is allowed ("a deliberate pause, not an independent review"). Add that caveat. [README.md:66]
+- [x] [Review][Patch] (applied 2026-10-18) The consumer smoke does not check which type raised `MCPCLI001` — low. `grep -q 'warning MCPCLI001:'` plus one total warning accepts a warning on `CreateItemCommand` with none on `MissingDescriptionQuery`. Match `MissingDescriptionQuery.cs(` on the warning line, and add a stub variant that reports the wrong file. [scripts/smoke-bootstrap-consumer.sh:72]
+- [x] [Review][Patch] (applied 2026-10-18) The bootstrap gate runs the consumer smoke twice on the same bytes — low. `release-prepare.sh:32` already runs `smoke-bootstrap-consumer.sh` against the prepared package; the workflow's last step repeats it, and so does the README local gate's third command. Remove both duplicates. [.github/workflows/bootstrap-package.yml:44]
+- [x] [Review][Patch] (applied 2026-10-18) The release test discovery is pinned to one file name — low. `-p 'test_bootstrap_release.py'` would silently skip any new `scripts/tests/test_*.py`, the same "CI silently skips it" pitfall the agent instructions record for .NET test projects. Use `-p 'test_*.py'` in the workflow and the README. [.github/workflows/bootstrap-package.yml:31]
 - [x] [Review][Defer] Agent instructions do not name the release script suite or its gate [AGENTS.md:96] — deferred: the fix edits agent-context files. `Running and verifying` has no `python3 -m unittest discover -s scripts/tests` command and no mention of `bootstrap-package.yml`, so an agent changing release scripts may skip the suite until CI runs it.
 
 #### Rejected

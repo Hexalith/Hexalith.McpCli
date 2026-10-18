@@ -69,7 +69,7 @@ dotnet restore "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" \
   "${consumer_properties[@]}"
 dotnet build "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" --configuration Release --no-restore -tl:off \
   "${consumer_properties[@]}" 2>&1 | tee "$consumer_directory/build.log"
-grep -q 'warning MCPCLI001:' "$consumer_directory/build.log"
+grep -Eq 'MissingDescriptionQuery\.cs\([^)]*\): warning MCPCLI001:' "$consumer_directory/build.log"
 grep -Eq '^[[:space:]]*1 Warning\(s\)$' "$consumer_directory/build.log"
 if grep -Eq 'CS8032|CS9057' "$consumer_directory/build.log"; then
   echo "The packaged analyzer could not load in the consumer." >&2

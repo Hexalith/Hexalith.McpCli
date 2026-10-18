@@ -15,7 +15,7 @@ from zipfile import ZipFile
 
 
 SCRIPT_DIRECTORY = Path(__file__).resolve().parent
-PUBLIC_DOWNLOAD_ATTEMPTS = 12
+PUBLIC_DOWNLOAD_ATTEMPTS = 91
 PUBLIC_DOWNLOAD_DELAY_SECONDS = 10
 
 

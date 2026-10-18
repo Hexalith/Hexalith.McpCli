@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -122,14 +123,21 @@ if "Bootstrap.Consumer.Contracts.csproj" in args[1]:
     if args[0] == "restore":
         (root / "consumer-nuget.config").write_text(Path(args[args.index("--configfile") + 1]).read_text())
     if args[0] == "build":
+        if os.environ.get("AFTER_CONSUMER_SOURCE_STATE"):
+            (root / "local-source-state").write_text(os.environ["AFTER_CONSUMER_SOURCE_STATE"])
         if os.environ.get("SMOKE_MUTATE_PACKAGE"):
             with ZipFile(root / "nupkgs/bootstrap/Hexalith.McpCli.Abstractions.1.0.0.nupkg", "a") as archive:
                 archive.writestr("changed-during-consumer.txt", "bytes the restore did not consume")
+        diagnostic = "MissingDescriptionQuery.cs(2,1): warning MCPCLI001: fixture"
         print({"missing-diagnostic": "    1 Warning(s)",
-               "extra-warning": "warning MCPCLI001: fixture\\n    2 Warning(s)",
-               "load-failure": "warning MCPCLI001: fixture\\nwarning CS8032: fixture\\n    1 Warning(s)"}
-              .get(os.environ.get("SMOKE_OUTPUT"), "warning MCPCLI001: fixture\\n    1 Warning(s)"))
+               "wrong-file": "CreateItemCommand.cs(2,1): warning MCPCLI001: fixture\\n    1 Warning(s)",
+               "extra-warning": diagnostic + "\\n    2 Warning(s)",
+               "load-failure": diagnostic + "\\nwarning CS8032: fixture\\n    1 Warning(s)"}
+              .get(os.environ.get("SMOKE_OUTPUT"), diagnostic + "\\n    1 Warning(s)"))
 if args[:2] == ["nuget", "push"]:
+    if os.environ.get("EXPECTED_PUBLICATION_KEY") and args[args.index("--api-key") + 1] != os.environ["EXPECTED_PUBLICATION_KEY"]:
+        print("The publication key did not come from the NuGet login output.", file=sys.stderr)
+        sys.exit(1)
     package = Path(args[2])
     (root / "pushed.sha256").write_text(hashlib.sha256(package.read_bytes()).hexdigest())
     (root / "pushed.path").write_text(str(package))
@@ -137,15 +145,29 @@ if args[:2] == ["nuget", "push"]:
         self.executable("git", '''#!/usr/bin/env python3
 import os, sys
 from pathlib import Path
+root = Path(os.environ["RELEASE_TEST_ROOT"])
 state = os.environ.get("LOCAL_SOURCE_STATE", "clean")
-state_file = Path(os.environ["RELEASE_TEST_ROOT"]) / "local-source-state"
+state_file = root / "local-source-state"
 if state_file.exists(): state = state_file.read_text()
 if state == "not-git":
     print(os.environ.get("SUBPROCESS_STDERR", "") + chr(0), file=sys.stderr)
     sys.exit(128)
-if sys.argv[1:] == ["rev-parse", "HEAD"]: print("b" * 40 if state == "wrong-head" else os.environ.get("LOCAL_HEAD_SHA", "a" * 40))
-elif sys.argv[1:] == ["rev-parse", "--verify", "refs/tags/v1.0.0^{commit}"]:
+if sys.argv[1:] == ["rev-parse", "HEAD"]:
+    checkout = root / "checkout-sha"
+    print(checkout.read_text() if checkout.exists() else "b" * 40 if state == "wrong-head" else os.environ.get("LOCAL_HEAD_SHA", "a" * 40))
+elif sys.argv[1:] in (["rev-parse", "--verify", "refs/tags/v1.0.0^{commit}"],
+                      ["rev-parse", "-q", "--verify", "refs/tags/v1.0.0^{commit}"]):
+    if os.environ.get("TAG_EXISTS") == "false": sys.exit(1)
     print(os.environ.get("TAG_SHA", "a" * 40))
+elif sys.argv[1:] == ["checkout", "--detach", "v1.0.0"]:
+    (root / "checkout-sha").write_text(os.environ.get("TAG_SHA", "a" * 40))
+    state_file.write_text("detached")
+    if os.environ.get("SABOTAGE_TAGGED_SCRIPTS"):
+        for script in (root / "scripts").iterdir():
+            if script.suffix == ".sh":
+                script.write_text('#!/usr/bin/env bash\\necho "tagged helper called" >> "$RELEASE_TEST_ROOT/tagged-helper.log"\\nexit 91\\n')
+            elif script.suffix == ".py":
+                script.write_text('from pathlib import Path\\nimport os\\nPath(os.environ["RELEASE_TEST_ROOT"]).joinpath("tagged-helper.log").write_text("called")\\nraise RuntimeError("tagged helper must not run")\\n')
 elif sys.argv[1:] == ["rev-parse", "origin/main"]:
     print(os.environ.get("FETCHED_MAIN_SHA", os.environ.get("LIVE_SHA", "a" * 40)))
 elif sys.argv[1:3] == ["merge-base", "--is-ancestor"]:
@@ -260,15 +282,29 @@ else:
         preserved.mkdir(parents=True, exist_ok=True)
         shutil.copy(self.root / "scripts/verify-release-source.py", preserved / "verify-release-source.py")
         self.env.update(RUNNER_TEMP=str(preserved.parent), RECOVERY_VERSION="1.0.0")
+        return self.run_workflow_step("recover", "Complete the GitHub release")
+
+    def workflow_step(self, job, name):
         workflow = (ROOT / ".github/workflows/release.yml").read_text()
-        block = workflow.split("      - name: Complete the GitHub release\n", 1)[1].split("        run: |\n", 1)[1]
-        commands = []
-        for line in block.splitlines():
-            if line and not line.startswith("          "):
-                break
-            commands.append(line[10:] if line else "")
-        result = subprocess.run(["bash", "-c", "\n".join(commands)], cwd=self.root,
-                                env=self.env, text=True, capture_output=True)
+        job_block = re.split(r"(?m)^  [\w-]+:\n", workflow.split(f"  {job}:\n", 1)[1], maxsplit=1)[0]
+        return job_block.split(f"      - name: {name}\n", 1)[1].split("\n      - ", 1)[0]
+
+    def run_workflow_step(self, job, name):
+        block = self.workflow_step(job, name)
+        environment = dict(self.env)
+        if "        env:\n" in block:
+            declarations = block.split("        env:\n", 1)[1].split("        run:", 1)[0]
+            values = {"${{ inputs.phase }}": "bootstrap", "${{ inputs.recovery_version }}": "1.0.0",
+                      "${{ github.token }}": "fixture-github-token", "${{ github.repository }}": "fixture/repo",
+                      "${{ steps.nuget-login.outputs.NUGET_API_KEY }}": "fixture-secret-never-print"}
+            for line in declarations.splitlines():
+                key, value = line.strip().split(": ", 1)
+                environment[key] = values.get(value, value)
+        command = block.split("        run: ", 1)[1]
+        if command.startswith("|\n"):
+            command = "\n".join(line[10:] if line else "" for line in command.splitlines()[1:])
+        result = subprocess.run(["bash", "-c", command], cwd=self.root,
+                                env=environment, text=True, capture_output=True)
         self.assertNotIn("fixture-secret-never-print", result.stdout + result.stderr)
         return result
 
@@ -780,7 +816,7 @@ else:
         self.assert_no_push()
 
     def test_analyzer_diagnostic_rejections_prevent_preparation_receipt(self):
-        for output in ("missing-diagnostic", "extra-warning", "load-failure"):
+        for output in ("missing-diagnostic", "wrong-file", "extra-warning", "load-failure"):
             with self.subTest(output=output):
                 self.env["SMOKE_OUTPUT"] = output
                 result = self.run_script("release-prepare.sh", "1.0.0")
@@ -831,25 +867,62 @@ else:
         self.assertIn("Verified public package", result.stdout)
         self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
 
-    def test_tagged_recovery_uses_preserved_scripts_and_green_ancestor_after_main_moves(self):
-        self.env["LIVE_SHA"] = "b" * 40
-        self.env["REMOTE_TAG_ANNOTATED"] = "1"
-        preserved = self.root / "runner-temp/release-scripts"
-        shutil.copytree(self.root / "scripts", preserved)
-        for tagged_script in (self.root / "scripts").iterdir():
-            if tagged_script.suffix == ".sh":
-                tagged_script.write_text('#!/usr/bin/env bash\necho "tagged helper must not run" >&2\nexit 91\n')
-            elif tagged_script.suffix == ".py":
-                tagged_script.write_text('raise RuntimeError("tagged helper must not run")\n')
-        prepared = subprocess.run(["bash", str(preserved / "release-prepare.sh"), "1.0.0"],
-                                  cwd=self.root, env=self.env, text=True, capture_output=True)
-        self.assertEqual(prepared.returncode, 0, prepared.stderr)
-        shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
-        result = subprocess.run(["python3", str(preserved / "recover-bootstrap-release.py"), "1.0.0", "bootstrap"],
-                                cwd=self.root, env=self.env, text=True, capture_output=True)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Verified tagged recovery source", result.stdout)
+    def test_recover_workflow_preserves_scripts_checks_out_tag_and_uses_login_key(self):
+        runner = self.root / "runner-temp"
+        runner.mkdir()
+        github_env = runner / "github-env"
+        github_env.touch()
+        self.env.update(LIVE_SHA="b" * 40, LOCAL_HEAD_SHA="b" * 40, DISPATCH_SHA="b" * 40,
+                        REMOTE_TAG_ANNOTATED="1", SABOTAGE_TAGGED_SCRIPTS="1",
+                        RUNNER_TEMP=str(runner), GITHUB_ENV=str(github_env),
+                        NUGET_API_KEY="ambient-key-must-not-be-used",
+                        EXPECTED_PUBLICATION_KEY="fixture-secret-never-print")
+        for name in ("Preserve reviewed recovery scripts before checking out the release tag",
+                     "Require an existing release tag on main",
+                     "Rebuild and consumer-test the tagged package",
+                     "Publish only if absent and verify the public package",
+                     "Complete the GitHub release"):
+            with self.subTest(step=name):
+                result = self.run_workflow_step("recover", name)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                if name == "Require an existing release tag on main":
+                    self.assertEqual(github_env.read_text(), f"DISPATCH_SHA={SHA}\n")
+                    self.env.update(line.split("=", 1) for line in github_env.read_text().splitlines())
+                elif name == "Rebuild and consumer-test the tagged package":
+                    shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
+                elif name == "Publish only if absent and verify the public package":
+                    self.assertIn("Verified tagged recovery source", result.stdout)
+                    self.assertIn("Verified public package", result.stdout)
+        self.assertFalse((self.root / "tagged-helper.log").exists())
         self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+        self.assertEqual([call[1] for call in self.release_calls()], ["view", "create"])
+        self.assertEqual((self.root / "github-assets" / PACKAGE).read_bytes(),
+                         (self.root / "nupkgs/bootstrap" / PACKAGE).read_bytes())
+
+    def test_publication_workflow_uses_nuget_login_output_instead_of_ambient_key(self):
+        self.env["NUGET_API_KEY"] = "ambient-key-must-not-be-used"
+        self.executable("npx", '''#!/usr/bin/env python3
+import os, sys
+from pathlib import Path
+if sys.argv[1:] != ["--no-install", "semantic-release"]: sys.exit(1)
+Path(os.environ["RELEASE_TEST_ROOT"]).joinpath("semantic-release-key").write_text(os.environ["NUGET_API_KEY"])
+''')
+        result = self.run_workflow_step("publish", "Derive one version and publish the selected phase")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / "semantic-release-key").read_text(), "fixture-secret-never-print")
+        self.assert_no_push()
+
+    def test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building(self):
+        self.env.update(RECOVERY_VERSION="1.0.0", RECOVERY_PHASE="bootstrap")
+        for changed, message in (("TAG_EXISTS", "does not exist"), ("RECOVERY_ANCESTOR", "not on main")):
+            with self.subTest(changed=changed):
+                self.env[changed] = "false"
+                result = self.run_workflow_step("recover", "Require an existing release tag on main")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertFalse((self.root / "checkout-sha").exists())
+                self.assertEqual(self.calls(), [])
+                del self.env[changed]
 
     def test_recovery_waits_for_its_newly_pushed_package_after_a_404(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
@@ -876,7 +949,7 @@ else:
 
     def test_recovery_processing_wait_is_bounded_and_only_retries_new_package_404s(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
-        for registry, public, downloads, sleeps, pushes in (("404", "404", 12, 11, 1),
+        for registry, public, downloads, sleeps, pushes in (("404", "404", 91, 90, 1),
                                                           ("taken", "404", 1, 0, 0),
                                                           ("404", "500", 1, 0, 1),
                                                           ("404", "timeout", 1, 0, 1)):
@@ -890,6 +963,8 @@ else:
                 self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), downloads)
                 sleep_log = self.root / "sleeps.log"
                 self.assertEqual(len(sleep_log.read_text().splitlines()) if sleep_log.exists() else 0, sleeps)
+                self.assertEqual(sum(int(delay) for delay in sleep_log.read_text().splitlines()) if sleep_log.exists() else 0,
+                                 900 if sleeps else 0)
                 self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), pushes)
 
     def test_recovery_requires_consumer_analyzer_proof_from_the_download_directory(self):
@@ -903,6 +978,19 @@ else:
         source, = [option.split("=", 1)[1] for option in restore if option.startswith("-p:RestoreSources=")]
         self.assertEqual(Path(source).name, "public")
         self.assertNotEqual(Path(source), self.root / "nupkgs/bootstrap")
+        self.assert_no_push()
+
+    def test_recovery_rejects_source_becoming_dirty_during_public_consumer_build(self):
+        shutil.copy(self.staged(), self.root / "public.nupkg")
+        source_state = self.root / "local-source-state"
+        source_state.write_text("clean")
+        self.env.update(REGISTRY_STATE="taken", AFTER_CONSUMER_SOURCE_STATE="dirty")
+        result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Release source has uncommitted changes.", result.stderr)
+        self.assertNotIn("Verified public package", result.stdout)
+        self.assertEqual(source_state.read_text(), "dirty")
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
         self.assert_no_push()
 
     def test_recovery_rejects_changed_compile_bytes_with_identical_entry_names(self):

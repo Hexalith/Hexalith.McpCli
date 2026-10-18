@@ -3,7 +3,9 @@
 ## State
 
 Implementation, publication, public-feed proof and owning Builds integration
-completed on 2026-10-17. The story implementation and required reviews are complete; sprint tracking is **review** for human assessment.
+completed on 2026-10-17. The second-pass review corrections are implemented,
+checked and reviewed; the human assessment remains pending.
+The spec is **done** and sprint tracking is **review**.
 Credentials are excluded from this evidence.
 
 - Starting committed source: `04178de98f30b0c5541f7efb978e9b9acc8e8c1d` on `main`.
@@ -156,7 +158,11 @@ match the policy. The revised workflow requests a short-lived key via OIDC;
 
 All four acceptance criteria are met. The public package, independent consumer,
 and owning Builds revision are linked above.
-No read-only `references/` checkout or gitlink is changed by this work.
+The story implementation changed no read-only `references/` checkout or gitlink.
+The broader story range includes separate sync commits: `4a84c16` (`/pushall`)
+moved 14 gitlinks, including Builds to `544fd2e` containing the catalog work;
+`c60ffa9` moved Conversations from `e753cf8` to `476369f` (the original baseline
+was `4e93736`). These pre-existing sync changes are preserved.
 
 ## Governance deviation and production gate
 
@@ -460,10 +466,174 @@ copied above so this evidence does not depend on retaining that directory.
 The final local receipt records dirty source and cannot authorize publication.
 No publication, remote write, Builds change or gitlink move was performed in this
 resumed run. The original reviewed-tag publication and upstream integration
-are documented in the earlier sections. The new corrections require their own
-committed-main gates before any production use.
+are documented in the earlier sections. Those corrections subsequently passed
+the committed-main gates recorded below.
 
 Pinned commitlint was restored with `npm ci` and passed with zero problems and
 zero warnings for the final exact full message. The command, message and
 successful validation output are preserved in `commitlint-validation.txt` beside
 this document.
+
+## Committed source after first-pass corrections
+
+The committed correction history includes `844776f`, `c60ffa9` and final source
+`55ed6e9cec45999d1f6bb67bcb513d203e9e2429`. Read-only verification on 2026-10-18:
+
+```sh
+gh run list --commit 55ed6e9cec45999d1f6bb67bcb513d203e9e2429 --event push --limit 20 --json databaseId,workflowName,url,headSha,conclusion,status,createdAt
+```
+
+All exact-source push runs completed successfully:
+
+- [Bootstrap package 39108007979](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39108007979).
+- [Commitlint 39108008209](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39108008209).
+- [CI 39108008228](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39108008228).
+
+These are the gates for the committed first-pass corrections. The second-pass
+changes below remain local and require their own committed-main gates before
+future production use; no release is dispatched by this patch pass.
+
+## Second-pass review corrections (2026-10-18)
+
+The ten remaining patch findings are implemented. Recovery's actual workflow
+steps now run in order against offline stubs: preserve reviewed scripts, require
+and check out the existing tag, export its exact `DISPATCH_SHA` through a temporary
+`GITHUB_ENV`, rebuild, publish/verify, and complete the GitHub release. The fake
+checkout replaces every tagged shell/Python helper with a failing marker. The
+workflow succeeds using the preserved helpers with exactly one fake push, no
+tagged-helper call, and exactly the prepared package bytes attached to GitHub.
+Both production modes are checked with an incorrect ambient key and must receive
+the temporary key from `steps.nuget-login.outputs.NUGET_API_KEY`. Missing and
+unmerged tags stop before checkout or build.
+
+The propagation bound is 91 public-download attempts with 90 ten-second sleeps:
+900 seconds of waiting. Offline coverage confirms the full bound for a newly
+pushed 404, no retries for an existing package or uncertain non-404 response,
+and successful 404-then-200 verification. A warning on `CreateItemCommand.cs`
+instead of `MissingDescriptionQuery.cs` now rejects preparation without a receipt.
+
+Exact release-suite command and result:
+
+```sh
+python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+```
+
+```text
+Ran 59 tests in 60.999s
+OK
+```
+
+The first run found a test-helper extraction error: the final publish step also
+included the following YAML job. The extractor now stops at the job boundary;
+the full rerun above passed. Four isolated mutations of temporary workflow
+copies were also rejected by these tests: reverting the recovery helper to
+`scripts/`, reverting the completion source helper to `scripts/`, and replacing
+the NuGet-login key binding with an unrelated secret in each production mode.
+No repository workflow was modified for these probes.
+
+Both author-time projects were restored, built and run individually:
+
+```sh
+for project in Abstractions Analyzers; do
+  test_project="tests/Hexalith.McpCli.${project}.Tests"
+  dotnet restore "$test_project" || exit
+  dotnet build "$test_project" --configuration Release --no-restore -warnaserror || exit
+  dotnet test "$test_project" --configuration Release --no-build || exit
+done
+```
+
+Abstractions passed 20/20; Analyzers passed 19/19, with zero skips. Both builds
+reported zero warnings and errors.
+
+Prior ignored `nupkgs/bootstrap` and `nupkgs/bootstrap.sha256` were preserved at
+`/tmp/mcpcli-4-6-second-pass.WINHkd/preserved`; unrelated `nupkgs` artifacts remain.
+The reviewed README local command then passed:
+
+```sh
+MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
+```
+
+```text
+Validated bootstrap packages at version 1.0.0
+MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description
+Build succeeded.
+    1 Warning(s)
+    0 Error(s)
+Prepared Hexalith.McpCli.Abstractions 1.0.0 SHA-256 e07a4569a6cce1ebb66821d5db4cdd27bb80978c5643e1b24876ba4fffc07461
+```
+
+The production project build preceding that consumer reported zero warnings and
+errors. The resulting package's `README.md` was compared byte-for-byte with the
+repository README; all four affected links use absolute GitHub URLs. This is
+local packaging evidence; its dirty-source receipt cannot authorize publication.
+
+```sh
+actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml
+bash -n scripts/release-prepare.sh scripts/release-preflight.sh scripts/release-publish.sh scripts/smoke-bootstrap-consumer.sh
+git diff --check
+```
+
+All passed. This patch pass changes no `references/` checkout or gitlink, performs
+no publication or remote write, and requires no further owner Builds change.
+The previously published package and upstream integration remain as recorded.
+
+## Final resumed-build verification (2026-10-18)
+
+All three independent review layers completed. Eleven findings received individual
+verdicts in the spec: two narrow patches, eight low findings rejected under the
+workflow's complexity rule (including carried decisions), and one false finding.
+Edge Case Hunter returned no findings. The two patches correct the opening state
+wording and protect recovery's final source check with a dirty-after-consumer
+regression. Removing that check makes the new test fail. No new work was deferred;
+the existing agent-context entry remains in `deferred-work.md:491`.
+
+Final parent commands:
+
+```sh
+python3 -m unittest discover -v -s scripts/tests -p 'test_*.py'
+for project in Abstractions Analyzers; do
+  test_project="tests/Hexalith.McpCli.${project}.Tests"
+  dotnet restore "$test_project" -tl:off
+  dotnet build "$test_project" --configuration Release --no-restore -warnaserror -tl:off
+  dotnet test "$test_project" --configuration Release --no-build
+done
+MCPCLI_RELEASE_PHASE=bootstrap bash scripts/release-prepare.sh 1.0.0
+bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.json /tmp/mcpcli-4-6-parent.jUzTqm/public-consumer
+actionlint .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/release.yml
+bash -n scripts/release-prepare.sh scripts/release-preflight.sh scripts/release-publish.sh scripts/smoke-bootstrap-consumer.sh
+git diff --check
+```
+
+All passed. Decisive output:
+
+```text
+Ran 60 tests in 65.108s
+OK
+Abstractions: total 20, failed 0, succeeded 20, skipped 0
+Analyzers: total 19, failed 0, succeeded 19, skipped 0
+Prepared Hexalith.McpCli.Abstractions 1.0.0 SHA-256 a5fbfe86d259a72e0cdc65da28e885cdcf13154d912cf1dd1fec1e2ac41ae1b1
+public-consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description
+Build succeeded.
+    1 Warning(s)
+    0 Error(s)
+```
+
+The verbose release run records every matrix-covering case as `ok`, with no
+skips. Both author-time builds have zero warnings/errors. Local preparation also
+produces exactly one warning on `MissingDescriptionQuery.cs`, and its packaged
+README matches the current repository bytes. Its dirty-source receipt cannot
+authorize publication. Prior staging and receipt were preserved under
+`/tmp/mcpcli-4-6-parent.jUzTqm/preserved`.
+
+The fresh public consumer's assets list only
+`https://api.nuget.org/v3/index.json` as its source. Its downloaded signed package
+has SHA-256 `1bd30a88863b07a30c1d3ba9985f588c2d30e0bbb08f16a459258a8eea12e224`,
+matching the original publication proof. Logs are retained under
+`/tmp/mcpcli-4-6-parent.jUzTqm`; the commands and decisive results above remain
+durable if that directory is deleted.
+
+These corrections remain local and need committed-main gates before any future
+production run. The workflow's completion step records a local commit after
+pinned commitlint validation, whose evidence is retained in
+`commitlint-validation.txt`. This invocation performed no publication, remote
+write, owner Builds edit or gitlink move.

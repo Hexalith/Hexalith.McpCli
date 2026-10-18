@@ -28,7 +28,7 @@ jobs:
         with:
           global-json-file: global.json
       - name: Verify release rejection and source gates without publication
-        run: python3 -m unittest discover -s scripts/tests -p 'test_bootstrap_release.py'
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py'
       - name: Build and run author-time tests independently of the tool
         run: |
           for project in Abstractions Analyzers; do
@@ -41,5 +41,3 @@ jobs:
         env:
           MCPCLI_RELEASE_PHASE: bootstrap
         run: bash scripts/release-prepare.sh 1.0.0
-      - name: Compile decorated Contracts and prove the packaged analyzer loads
-        run: bash scripts/smoke-bootstrap-consumer.sh 1.0.0 "$PWD/nupkgs/bootstrap" "$RUNNER_TEMP/mcpcli-bootstrap-consumer"
