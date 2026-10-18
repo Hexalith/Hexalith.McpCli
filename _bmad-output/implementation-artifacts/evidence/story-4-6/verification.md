@@ -158,6 +158,32 @@ All four acceptance criteria are met. The public package, independent consumer,
 and owning Builds revision are linked above.
 No read-only `references/` checkout or gitlink is changed by this work.
 
+## Governance deviation and production gate
+
+- Trusted-publishing repair `e3a3f05c1c3bb6f0166f4e6722706afef609a6fe` was
+  pushed to `main` and used by recovery runs 39057687505 (NuGet push) and
+  39058088252 (GitHub release completion) before any review pass covered it.
+  The frozen intent requires review before publication.
+- That commit controlled the recovery orchestration, the `--tagged-recovery`
+  source check, the NuGet OIDC login and the `MCPCLI_RECOVERY_VERSION` publisher
+  switch. The pushed package was rebuilt from reviewed tag `v1.0.0` (`d9f822d`)
+  and checked by that tag's reviewed validator, receipt and preflight scripts;
+  its public copy was content-compared and consumer-tested.
+- The code review of 2026-10-18 (range `04178de..34bc4b3`) covers `e3a3f05` and
+  is accepted as its retroactive review. None of its findings affects the
+  published `1.0.0` package; open findings are in the spec's Review Findings.
+- Root cause: the `production` environment had no protection rules and no
+  deployment branch policy, so production approval was not a gate, and the
+  recorded trusted-publishing policy names no branch. On 2026-10-18 `production`
+  was configured with required reviewer `jpiquot` and a custom deployment branch
+  policy admitting only `main`. Read back with
+  `gh api repos/Hexalith/Hexalith.McpCli/environments/production`
+  (`required_reviewers` = `jpiquot`, `branch_policy`,
+  `custom_branch_policies: true`) and
+  `gh api repos/Hexalith/Hexalith.McpCli/environments/production/deployment-branch-policies`
+  (`main`, type `branch`). Admin bypass remains enabled and self-approval is
+  allowed, so the gate is a deliberate pause, not an independent review.
+
 ## Review-loop correction details
 
 - Direct publication now enforces the exact committed-source policy, including
