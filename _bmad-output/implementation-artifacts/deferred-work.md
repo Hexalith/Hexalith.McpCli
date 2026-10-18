@@ -485,3 +485,9 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-5-gate-module-coverage-against-the-approved-inventory.md`
   summary: Nothing ties an enrolled module to a required coverage inventory, so a module can be enrolled without the gate ever running for it.
   evidence: Medium. The gate runs only where a test calls `InventoryCoverageGate.CheckFile` with a hand-copied artifact (`tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj:15`); `tools/inventory-coverage/v1/README.md:92` hands off per-module test wiring, while enrollment is meant to be configuration only. No module is enrolled yet (`tools/dependency-policy.json` `modules: {}`). The first enrolling story (4.9/4.10) should fail CI when a `modules` entry has no approved inventory, without module-specific code.
+
+## Deferred from: code review of spec-4-6-publish-the-bootstrap-decoration-package.md (2026-10-18)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-6-publish-the-bootstrap-decoration-package.md`
+  summary: The agent instructions do not name the release script suite or the bootstrap gate that runs it.
+  evidence: Low. `AGENTS.md:96` (`Running and verifying`, synced to `CLAUDE.md` and `.github/copilot-instructions.md`) lists only .NET test commands. It has no `python3 -m unittest discover -s scripts/tests` command and does not mention `.github/workflows/bootstrap-package.yml:31`, so an agent changing `scripts/release-*.sh` or the release Python scripts may skip `scripts/tests/test_bootstrap_release.py` until CI runs it. Add one line in the next bmad-project-context refresh, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
