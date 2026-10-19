@@ -281,6 +281,16 @@ public sealed class DependencyPolicyTests
         Assert.Equal(Array.Empty<string>(), Check(policy, graph, projects));
     }
 
+    /// <summary>A source project may reference the Decoration Package as a package instead of a project.</summary>
+    [Fact]
+    public void PackagedDecorationIsAnApprovedSourceReference()
+    {
+        var (policy, graph, projects) = Minimal();
+        AddReference(projects, ToolProject, $"<PackageReference Include=\"{policy.DecorationPackage.Key}\" />");
+        graph = Replace(graph, Package(policy.DecorationPackage.Key, "1.0.0"));
+        Assert.Equal(Array.Empty<string>(), Check(policy, graph, projects));
+    }
+
     /// <summary>Contracts roots must be flagged, approved, and placed on the tool itself.</summary>
     [Theory]
     [InlineData("unflagged")]
@@ -782,6 +792,39 @@ public sealed class DependencyPolicyTests
         }
     }
 
+    /// <summary>Items the project file gates behind a property neither configuration sets are still checked, once each.</summary>
+    [Fact]
+    public void ConditionedTestItemsCannotBypassTheBoundary()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "mcpcli-policy-condition-" + Guid.NewGuid().ToString("N"));
+        string directory = Path.Combine(root, "tests", "Topology.Tests");
+        Directory.CreateDirectory(directory);
+        try
+        {
+            File.WriteAllText(Path.Combine(root, "NuGet.Config"), "<configuration><packageSources><clear /></packageSources></configuration>");
+            File.WriteAllText(Path.Combine(directory, "Topology.Tests.csproj"), """
+                <Project>
+                  <ItemGroup><PackageReference Include="Common.Package" /></ItemGroup>
+                  <ItemGroup Condition="'$(UseHexalithProjectReferences)' == 'true'">
+                    <ProjectReference Include="../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj" />
+                    <PackageReference Include="Hexalith.Parties.Aspire" />
+                  </ItemGroup>
+                </Project>
+                """);
+            var (policy, _, _) = Minimal();
+            Assert.Equal(
+            [
+                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Common.Package",
+                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Aspire",
+                "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj",
+            ], CheckTestProjectDirectory(policy, Path.Combine(root, "tests"), root));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     /// <summary>Tests reject unapproved roots, including unpublished Parties helpers, and sibling source projects.</summary>
     [Theory]
     [InlineData("<PackageReference Include=\"Unexpected.Package\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Unexpected.Package")]
@@ -847,8 +890,13 @@ public sealed class DependencyPolicyTests
 
     private static XDocument EvaluateReferences(string project)
     {
+        // Literal declarations ignore conditions, so a property toggle in the project file cannot hide an item.
+        IEnumerable<XElement> declared = XDocument.Load(project).Descendants()
+            .Where(item => item.Name.LocalName is "PackageReference" or "ProjectReference" && item.Attribute("Include") is not null)
+            .Select(item => new XElement(item.Name.LocalName, new XAttribute("Include", (string)item.Attribute("Include")!)));
         IEnumerable<XElement> items = new[] { "Debug", "Release" }
             .SelectMany(configuration => EvaluateReferences(project, configuration).Descendants("ItemGroup").Elements())
+            .Concat(declared)
             .DistinctBy(item => (item.Name, (string?)item.Attribute("Include")));
         return new XDocument(new XElement("Project", new XElement("ItemGroup", items)));
     }
