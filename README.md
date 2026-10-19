@@ -98,6 +98,18 @@ Offline captured closures prove that decorated Tenants- and Parties-shaped packa
 
 The requested Works, Timesheets, Agents, Conversations, Projects, and Folders packages are not enrolled yet. Their current Contracts assemblies lack declarations or live gateway paths required by the [integration spec](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/spec-add-six-domain-modules.md). Until decorated, verified packages are published and pinned, `hexalith modules` returns `catalog_empty`. This is a release readiness state, not a connection failure.
 
+## Run and debug from the Platform workspace
+
+Run and debug McpCli from the Hexalith.Platform workspace, where this repository is the direct `references/Hexalith.McpCli` submodule. [`module/hexalith.module-manifest.v2.json`](https://github.com/Hexalith/Hexalith.McpCli/blob/main/module/hexalith.module-manifest.v2.json) declares McpCli with no servers and no interfaces. Its only dependency is `eventstore`, the gateway McpCli targets, so that gateway is its whole minimum environment. From the Platform root, use the tool version that Platform pins:
+
+```sh
+dotnet tool run hexalith-module -- debug --manifest references/Hexalith.McpCli/module/hexalith.module-manifest.v2.json
+```
+
+The tool starts the EventStore gateway from source. It builds this checkout's `src/Hexalith.McpCli` in Debug into the run workspace, never packs or publishes it, and leaves this checkout's `bin` and `obj` untouched. When the environment is ready, an `HXI010` diagnostic names the run-scoped `Hexalith.McpCli.dll`, and `down` deletes it with the run. A CLI exits after each command, so launch that DLL under a debugger rather than attaching to a process; the [Platform README](https://github.com/Hexalith/Hexalith.Platform/blob/main/README.md#launch-mcpcli-under-a-debugger) has the recipe. Offline discovery verbs such as `modules` need no gateway URL and return `catalog_empty` until modules are enrolled.
+
+This repository's own `references/*`, including `references/Hexalith.Platform`, serve only this repository's own builds and tests. A run from this repository's root is not Platform evidence. Inside a Platform checkout, leave them uninitialized: the tool refuses any initialized nested submodule (`HXW003`).
+
 ## CLI and MCP
 
 Run the executable from source with `dotnet run --project src/Hexalith.McpCli --`, or use `hexalith` after installing the tool package. A gateway URL is required for execution, but discovery works offline.

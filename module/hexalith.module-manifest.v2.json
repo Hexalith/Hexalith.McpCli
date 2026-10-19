@@ -1,0 +1,48 @@
+{
+  "schema": "hexalith.module-manifest.v2",
+  "modules": [
+    {
+      "identity": {
+        "moduleId": "mcpcli",
+        "servers": [],
+        "dependencies": [
+          "eventstore"
+        ]
+      },
+      "runtime": {
+        "dapr": [],
+        "extensions": [],
+        "resources": []
+      },
+      "surfaces": {
+        "interfaces": []
+      },
+      "integration": {
+        "topics": [],
+        "secrets": [],
+        "dynamicSecretNamespaces": [],
+        "identityNeeds": [],
+        "egress": [],
+        "providers": [],
+        "workers": []
+      },
+      "lifecycle": {
+        "readiness": [],
+        "tasks": [],
+        "recoveryHooks": [],
+        "fenceHooks": [],
+        "replay": {
+          "reopenBeforeReplay": false
+        },
+        "startup": {},
+        "criticalFlows": [],
+        "smokeSurfaces": [],
+        "classification": {
+          "changeClass": "additive",
+          "reason": "Declare the McpCli minimum environment: the EventStore gateway it targets. McpCli is a run-scoped tool with no hosted server or interface; MCP stays stdio only."
+        },
+        "recoveryInventory": []
+      }
+    }
+  ]
+}
