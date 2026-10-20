@@ -320,3 +320,70 @@ The complete source manifest now matches committed Parties revision
 `836c315269b196a49455aacf7534c48fba3cb834`, recorded in
 `evidence/story-4-9/review-pass-2/completion.json`. This independent commit
 includes the final graph tests; approval applies to those exact verified bytes.
+
+### Review Findings (pass 3)
+
+Code review 2026-10-20, pass 3. Scope: the Parties story code from `836b2ba4` to `836c3152`, covering story commits `bec09f01`, `e1db1b61`, `48bed005`, `f48d5b9d` and `836c3152`.
+
+- **Left out:** the files of the independent commits `14ad39f8`, `b776849c`, `3608e121` and `3e4e6449`, and the `e1db1b61` `PlatformApiPrerequisitesTests` pin reconciliation. The `836c3152` layout tests are kept.
+- **Code-only scope:** excludes `references/`, `_bmad-output/`, `tests/conformance-vectors/` and `*.md`.
+- **Size and mode:** 21 files, 1,199 diff lines, full mode.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Parties HEAD:** it has since moved to `a5102784`, which changes CI accessibility only; the reviewed files are identical.
+- **Result:** 35 normalized findings. 7 survive as 3 patch and 4 defer entries, 3 of the defers already tracked; 28 are rejected.
+
+Paths are Parties-relative unless prefixed `mcpcli:`.
+
+G10 and G11 change Contracts description text, so the packed Contracts bytes change. Applying them needs a fresh scratch pack, a Catalog and lint run, a recorded wording delta and refreshed maintainer approval. The alternative is to carry them into the Story 4.10 artifact rebind. G12 changes tests only.
+
+- [x] [Review][Patch] G10 — low. The `create-party` description gives a 128-character limit to "PartyId, ContactChannelId, IdentifierId and removal ID entries", but `CreatePartyComposite` has no removal lists; the sentence was copied from `update-party`. Drop "and removal ID entries" from the summary and the `[HexalithCommand]` text (BH). [src/Hexalith.Parties.Contracts/Commands/CreatePartyComposite.cs:9]
+- [x] [Review][Patch] G11 — low. `AddContactChannel.Value` and `AddIdentifier.Value` are described as "nonempty", but the composite child rules use FluentValidation `NotEmpty`, which also rejects whitespace-only strings. An agent that sends `" "` gets a rejection the description does not predict. Say the value must contain a non-whitespace character, in both the summary and the `[Description]` (BH). [src/Hexalith.Parties.Contracts/Commands/AddContactChannel.cs:27; src/Hexalith.Parties.Contracts/Commands/AddIdentifier.cs:27]
+- [x] [Review][Patch] G12 — low. The spec task says to "pin exact declarations, examples, routing", but `McpCliDecorationTests` only deserializes each `Example` and checks `PartyId`. Any edit that keeps an example valid passes Parties CI, yet it changes the Catalog bytes the vectors and maintainer approval are bound to. Assert each command's `Example` against its literal (AA). [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:46]
+- [x] [Review][Defer] D4 — medium. `update-party` and `deactivate-party` act on a never-created party when its stream holds only rejection events [src/Hexalith.Parties/Domain/PartyDomainProcessor.cs:427; src/Hexalith.Parties/Domain/PartyAggregate.cs:232,870] — deferred: pre-existing aggregate behavior, now reachable through McpCli. New ledger entry (`deferred-work.md:548`) (EC).
+- [x] [Review][Defer] Changing a preferred channel's `Type` without `IsPreferred` leaves two preferred channels [src/Hexalith.Parties/Domain/PartyAggregate.cs:554] — deferred: already tracked (`deferred-work.md:539`), pass-2 D1 (EC).
+- [x] [Review][Defer] A null removal ID gets two failures (`NotNullValidator` and `NotEmptyValidator`) [src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:31,37] — deferred: already tracked (`deferred-work.md:542`). Pass-2 D2 names this second route, and G3 pinned both failures (BH).
+- [x] [Review][Defer] An `Example` that McpCli's case-sensitive schema enum rejects (`"Type":"person"` or `1`) passes Parties CI [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:46] — deferred: already tracked (`deferred-work.md:545`), pass-2 D3. VG suggests a cheaper Parties-only check: re-serialize each example with McpCli-equivalent payload options (`JsonStringEnumConverter(allowIntegerValues: false)`) and compare (VG).
+
+#### Rejected (pass 3)
+
+- `false` — The McpCli root misses the `..\..` layout used when McpCli holds Parties in `references/` (BH, AA, EC). McpCli never builds its `references/Hexalith.Parties` from source: no McpCli project or script references it, and module enrollment is PackageReference-only by policy. Source mode is also opt-in, because `UseHexalithProjectReferences` defaults to false in every configuration (`Directory.Build.props:23-27`). FrontComposer's `..\..` probe serves a repository that builds Parties; McpCli does not.
+- `low` — The repo's own `references\Hexalith.McpCli` candidate and its precedence are never evaluated, and `HexalithMcpCliRoot` is fetched but not asserted (VG, BH). The claim holds. However, source mode is opt-in, deleting or reordering `Directory.Build.props:20` is unlikely, and the fix restructures the layout test (its nested-absence assertion plus a two-location case).
+- `low` — `Hexalith.McpCli.Abstractions` transitive dependencies are not checked (VG, BH, EC). Carried from pass 2: the restored 1.0.0 nuspec has no dependencies, and McpCli's own dependency gate rejects any unapproved direct package on Abstractions (`mcpcli:tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:586`). The check would guard only a future version, and the fix adds a test. The nuget.org point is `false`: an unpublished pinned version fails restore loudly.
+- `low` — Descriptions on shared child types fit only the composite path, and the standalone validators lack the new bounds, empty-update and enum rules (BH ×2, EC). Carried from pass 2: the standalone commands are not exposed through McpCli. The summaries state a stricter limit than the standalone path enforces, so a caller who follows them is never rejected. The fix needs validator changes or repacked wording.
+- `low` — Each description appears in both `<summary>` and `[Description]`, with seven `PartyId` copies (BH). Carried from pass 2: drift would affect developers only, and an XML summary cannot reference a constant.
+- `low` — Required names accept blank, empty or null values, and the boundary test uses a 512-space `FirstName` (BH, EC). Carried from pass 2: this predates the story, and name rules are a domain change outside its boundary.
+- `false` — The duplicate-ID behavior is described wrongly (BH). The description states the caller's obligation ("must be unique ignoring case"). A caller who follows it never reaches the aggregate's exact-duplicate skip or case-variant rejection. Same verdict as pass 2.
+- `low` — An exact duplicate `ContactChannelId` within one composite is silently skipped (EC). Real, but it is pre-existing aggregate behavior (`src/Hexalith.Parties/Domain/PartyAggregate.cs:151-157`), compliant callers never hit it, and rejecting it is a domain change.
+- `low` — An update carrying both detail blocks passes validation and is rejected only after state access (BH). This is pre-existing aggregate behavior, and the descriptions already say such an update is rejected. The spec requires rejection before state access only for empty updates, and the fix adds a domain rule.
+- `low` — The operation cap, the child-ID match and the 128-character ID guards share the generic `PredicateValidator` code (BH). These rules predate the story, and new error codes would be public surface.
+- `false` — The personal-data leak check exercises only one marker row (BH). Every rejection passes through the single mapping at `src/Hexalith.Parties/Domain/PartyDomainProcessor.cs:610` into `PartyValidationFailure { PropertyName, ErrorCode }`. The exact-record assertions would fail if a field carrying values were added, and the marker row covers the shared serialization path.
+- `low` — `OversizedCompositeStrings` rows do not carry the mutated path, and the string lists are hand-coded (BH). The missing path only affects diagnostics when the test fails; the hand-coded lists are carried from pass 2.
+- `low` — The deactivation guard order ("unchanged only after these checks") is not pinned for an already-inactive party (BH). The claim holds: `tests/Hexalith.Parties.Server.Tests/Aggregates/PartyAggregateRestrictionTests.cs:127` and `PartyAggregateErasureTests.cs:148` use active states. But the aggregate order predates the story, a reorder is unlikely, and the fix adds tests.
+- `false` — The exposed names `reactivate-party` and `deactivate-party` are not asserted (BH). `Name` is pinned to null and the CLR type names are fixed, so McpCli's kebab-case derivation makes the names deterministic. A rename would also break compilation of the typed tests.
+- `false` — The examples omit child lists and `Type` strings (BH). The spec only requires valid examples. The schema carries the enum names, and the descriptions state the child `PartyId` rule.
+- `false` — The update-contact `IsInEnum` rule is outside the approved scope (AA). It mirrors the existing `AddContactChannels` rule (`src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:75-77`), only tightens validation and breaks no "Never" item. Its only fixes would be a spec edit or removing a correct guard.
+- `false` — The envelope-tenant matrix row has no Parties-side test (AA). Parties controls only the absence of `TenantProperty`, `FixedTenant` and any tenant member, which `McpCliDecorationTests` pins. Using the envelope tenant is McpCli and Gateway behavior.
+- `false` — `UpdateContactChannel.Value = ""` stores an empty value (EC). This is documented, intended clearing behavior; carried from pass 2.
+- `low` — AdminPortal shows root-level `Composite*` failures as "required" on the Type field (EC). Real: `src/Hexalith.Parties.AdminPortal/Components/CreateEditPartyPage.razor:543-573` maps an empty property name to `TypeValue`. But only a name over 512 units, or input over 4,096 units in total, from an admin form triggers it, and the fix adds an AdminPortal mapping branch.
+- `low` — Per-item rules still iterate oversized lists (EC). The cost is linear, a constant factor over the existing per-item rules; the growing failure count is already tracked as D2.
+- `false` — Commit `e1db1b61` overclaims the gateway safeguards (EC). Its safeguards are the spec's composite-scoped C03/C04 protections. The phantom-party path is deferred separately as D4.
+
+#### Pass 3 patch resolution (2026-10-20)
+
+G10–G12 are committed and pushed as Parties `e3e25fd144cec0f67623dec5c311310ee5f08d8c`, which changes only these four files:
+
+- **G10:** the `create-party` summary and `[HexalithCommand]` text now read "PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit".
+- **G11:** both `Value` summaries and `[Description]`s now require "at least one non-whitespace character".
+- **G12:** `McpCliDecorationTests` pins all four `Example` literals. A mutation that changed the `create-party` example to `"LastName":"Byron"` failed the test, which then passed again once the file was restored.
+
+**Checks:**
+
+- `dotnet build tests/Hexalith.Parties.Contracts.Tests -c Release -warnaserror` and the same build for `tests/Hexalith.Parties.Tests` both pass with 0 warnings and 0 errors.
+- `dotnet test tests/Hexalith.Parties.Contracts.Tests --no-build -c Release` passes **201/201**.
+- `PartyDomainProcessorValidationTests` passes **126/126**.
+
+The full solution build and the Server.Tests and Parties.Tests suites were not rerun. Those projects only consume the description text.
+
+**Packed artifact:** G10 and G11 change the packed Contracts description bytes, so the approved `0.0.0-story49` artifact and its maintainer approval still describe the earlier wording. Neither was refreshed. The wording delta goes into the Story 4.10 artifact rebind, which repacks from current source.
+
+Concurrent Parties working-tree changes from DW-77 were left untouched.
