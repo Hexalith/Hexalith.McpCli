@@ -1,0 +1,21 @@
+$ python3 references/Hexalith.McpCli/tools/conformance-vectors/v1/validate.py --artifact <scratchpad>/story48/Hexalith.Tenants.Contracts.0.0.0-story48.nupkg --expected-package-id Hexalith.Tenants.Contracts --expected-package-version 0.0.0-story48 --operations-file <evidence>/operations.json tests/conformance-vectors/mcpcli-v1/*.json
+Validated 14 vector(s) against <scratchpad>/story48/Hexalith.Tenants.Contracts.0.0.0-story48.nupkg
+exit 0
+
+artifact: <scratchpad>/story48/Hexalith.Tenants.Contracts.0.0.0-story48.nupkg
+artifact hash: sha512-Od2hpUmNTlE9Zd6DV4LEQ+IdFIkDhp1X9Oo0M5EZ25ALSMMC0Udb3URXXV3bDLA/8KnQT658QjAQ9MdU+lcnnA==
+validator: McpCli tools/conformance-vectors/v1 at references/Hexalith.McpCli 447085c42ec606f642240c4cae0415e7c2f97467, unchanged at McpCli HEAD 742f5b6ead66937f62025b73d77452e0f8126658; jsonschema 4.26.0
+
+Negative coverage checks (expected exit 1):
+- vector for tenants.get-tenant-audit omitted:
+    /operations/tenants.get-tenant-audit: missing conformance vector
+    exit 1
+- tenants.get-tenant-audit absent from the operations list (extra vector):
+    get-tenant-audit.json:/operation: 'tenants.get-tenant-audit' is absent from the restored Catalog
+    exit 1
+- get-tenant.json passed twice (duplicate):
+    get-tenant.json:/operation: duplicate 'tenants.get-tenant'; first declared in get-tenant.json
+    exit 1
+- wrong expected version:
+    <scratchpad>/story48/Hexalith.Tenants.Contracts.0.0.0-story48.nupkg:/metadata: artifact Hexalith.Tenants.Contracts@0.0.0-story48 does not match restored package Hexalith.Tenants.Contracts@0.0.0-other
+    exit 1

@@ -1,0 +1,16 @@
+[
+  "tenants.add-user-to-tenant",
+  "tenants.change-user-role",
+  "tenants.create-tenant",
+  "tenants.disable-tenant",
+  "tenants.enable-tenant",
+  "tenants.get-tenant",
+  "tenants.get-tenant-audit",
+  "tenants.get-tenant-users",
+  "tenants.get-user-tenants",
+  "tenants.list-tenants",
+  "tenants.remove-tenant-configuration",
+  "tenants.remove-user-from-tenant",
+  "tenants.set-tenant-configuration",
+  "tenants.update-tenant"
+]

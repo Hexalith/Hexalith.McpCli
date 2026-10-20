@@ -1,0 +1,3 @@
+$ hexalith modules --strict --format json -> exit 0 stderr_bytes=0
+$ hexalith operations tenants --strict --format json -> exit 0 stderr_bytes=0
+Catalog diagnostics: none (strict rejects any diagnostic, including warnings, with catalog_invalid exit 2).

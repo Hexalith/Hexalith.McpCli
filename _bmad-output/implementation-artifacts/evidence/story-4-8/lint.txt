@@ -1,0 +1,18 @@
+$ hexalith describe <operation> --lint --strict   (scratch host, Hexalith.Tenants.Contracts 0.0.0-story48)
+tenants.add-user-to-tenant	exit=0	stderr=empty	findings=[]
+tenants.change-user-role	exit=0	stderr=empty	findings=[]
+tenants.create-tenant	exit=0	stderr=empty	findings=[]
+tenants.disable-tenant	exit=0	stderr=empty	findings=[]
+tenants.enable-tenant	exit=0	stderr=empty	findings=[]
+tenants.get-tenant	exit=0	stderr=empty	findings=[]
+tenants.get-tenant-audit	exit=1	stderr=empty	findings=[('payload_paging_member', '/properties/Cursor'), ('payload_paging_member', '/properties/PageSize')]
+tenants.get-tenant-users	exit=1	stderr=empty	findings=[('payload_paging_member', '/properties/Cursor'), ('payload_paging_member', '/properties/PageSize')]
+tenants.get-user-tenants	exit=1	stderr=empty	findings=[('payload_paging_member', '/properties/Cursor'), ('payload_paging_member', '/properties/PageSize')]
+tenants.list-tenants	exit=1	stderr=empty	findings=[('payload_paging_member', '/properties/Cursor'), ('payload_paging_member', '/properties/PageSize')]
+tenants.remove-tenant-configuration	exit=0	stderr=empty	findings=[]
+tenants.remove-user-from-tenant	exit=0	stderr=empty	findings=[]
+tenants.set-tenant-configuration	exit=0	stderr=empty	findings=[]
+tenants.update-tenant	exit=0	stderr=empty	findings=[]
+
+Operations: 14
+Distinct lint codes: ['payload_paging_member']

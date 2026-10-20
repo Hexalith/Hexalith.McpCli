@@ -1,0 +1,795 @@
+{
+  "list_modules": {
+    "modules": [
+      {
+        "name": "tenants",
+        "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while list-tenants and get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+        "operationCount": 14
+      }
+    ]
+  },
+  "list_operations": {
+    "module": "tenants",
+    "operations": [
+      {
+        "name": "tenants.add-user-to-tenant",
+        "kind": "write",
+        "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use change-user-role to change an existing member's role."
+      },
+      {
+        "name": "tenants.change-user-role",
+        "kind": "write",
+        "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+      },
+      {
+        "name": "tenants.create-tenant",
+        "kind": "write",
+        "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+      },
+      {
+        "name": "tenants.disable-tenant",
+        "kind": "write",
+        "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+      },
+      {
+        "name": "tenants.enable-tenant",
+        "kind": "write",
+        "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+      },
+      {
+        "name": "tenants.get-tenant",
+        "kind": "read",
+        "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+      },
+      {
+        "name": "tenants.get-tenant-audit",
+        "kind": "read",
+        "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+      },
+      {
+        "name": "tenants.get-tenant-users",
+        "kind": "read",
+        "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+      },
+      {
+        "name": "tenants.get-user-tenants",
+        "kind": "read",
+        "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+      },
+      {
+        "name": "tenants.list-tenants",
+        "kind": "read",
+        "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+      },
+      {
+        "name": "tenants.remove-tenant-configuration",
+        "kind": "write",
+        "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+      },
+      {
+        "name": "tenants.remove-user-from-tenant",
+        "kind": "write",
+        "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+      },
+      {
+        "name": "tenants.set-tenant-configuration",
+        "kind": "write",
+        "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+      },
+      {
+        "name": "tenants.update-tenant",
+        "kind": "write",
+        "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+      }
+    ]
+  },
+  "describe_operation": {
+    "tenants.add-user-to-tenant": {
+      "name": "tenants.add-user-to-tenant",
+      "kind": "write",
+      "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use change-user-role to change an existing member's role.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to add the user to."
+          },
+          "UserId": {
+            "type": "string",
+            "description": "Identifier of the user to add: the subject (sub) claim the identity provider issues for that user. It is not checked against the identity provider."
+          },
+          "Role": {
+            "enum": [
+              "Unknown",
+              "TenantOwner",
+              "TenantContributor",
+              "TenantReader"
+            ],
+            "description": "Role to grant. Every role can read the tenant and its members; TenantContributor can also update its name and description; TenantOwner can also manage its members, roles and configuration. Unknown is rejected."
+          }
+        },
+        "required": [
+          "TenantId",
+          "UserId",
+          "Role"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90",
+        "Role": "TenantContributor"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.change-user-role": {
+      "name": "tenants.change-user-role",
+      "kind": "write",
+      "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant whose member changes role."
+          },
+          "UserId": {
+            "type": "string",
+            "description": "Identifier of the member whose role changes: the subject (sub) claim the identity provider issues for that user."
+          },
+          "NewRole": {
+            "enum": [
+              "Unknown",
+              "TenantOwner",
+              "TenantContributor",
+              "TenantReader"
+            ],
+            "description": "Role that replaces the member's current role. Every role can read the tenant and its members; TenantContributor can also update its name and description; TenantOwner can also manage its members, roles and configuration. Unknown is rejected."
+          }
+        },
+        "required": [
+          "TenantId",
+          "UserId",
+          "NewRole"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90",
+        "NewRole": "TenantOwner"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.create-tenant": {
+      "name": "tenants.create-tenant",
+      "kind": "write",
+      "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the new tenant: 1 to 256 ASCII letters, digits, '.', '_' or '-', starting and ending with a letter or digit. It is case-sensitive and cannot be changed later."
+          },
+          "Name": {
+            "type": "string",
+            "description": "Display name of the tenant."
+          },
+          "Description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Free-text description of the tenant. The key is required; send null for no description."
+          }
+        },
+        "required": [
+          "TenantId",
+          "Name",
+          "Description"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "Name": "Acme Corporation",
+        "Description": "Production workspace for Acme"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.disable-tenant": {
+      "name": "tenants.disable-tenant",
+      "kind": "write",
+      "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to disable."
+          }
+        },
+        "required": [
+          "TenantId"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.enable-tenant": {
+      "name": "tenants.enable-tenant",
+      "kind": "write",
+      "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to enable."
+          }
+        },
+        "required": [
+          "TenantId"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.get-tenant": {
+      "name": "tenants.get-tenant",
+      "kind": "read",
+      "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+      "schema": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+          }
+        },
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "entityId",
+          "pageSize",
+          "offset",
+          "cursor"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.get-tenant-audit": {
+      "name": "tenants.get-tenant-audit",
+      "kind": "read",
+      "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+      "schema": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant whose audit trail is read. Required; a call without it is rejected."
+          },
+          "From": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Optional inclusive lower bound on the entry time, as an ISO 8601 date and time with an offset."
+          },
+          "To": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Optional inclusive upper bound on the entry time, as an ISO 8601 date and time with an offset."
+          },
+          "Category": {
+            "enum": [
+              "Access",
+              "Administrative",
+              null
+            ],
+            "description": "Optional category filter: Access keeps membership and role changes; Administrative keeps tenant creation, name and description changes, disabling, enabling and configuration changes. Omit it for both."
+          },
+          "Stream": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Has no effect for calls made with this tool. Leave unset."
+          },
+          "Cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          },
+          "PageSize": {
+            "type": "integer",
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          }
+        },
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "From": "2026-01-01T00:00:00Z",
+        "To": "2026-12-31T23:59:59Z",
+        "Category": "Access"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "entityId",
+          "pageSize",
+          "offset",
+          "cursor"
+        ]
+      },
+      "lintFindings": [
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member Cursor to the query envelope argument.",
+          "property": "/properties/Cursor"
+        },
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member PageSize to the query envelope argument.",
+          "property": "/properties/PageSize"
+        }
+      ],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.get-tenant-users": {
+      "name": "tenants.get-tenant-users",
+      "kind": "read",
+      "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+      "schema": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant whose members are listed. Required; a call without it is rejected."
+          },
+          "Cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          },
+          "PageSize": {
+            "type": "integer",
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          }
+        },
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "entityId",
+          "pageSize",
+          "offset",
+          "cursor"
+        ]
+      },
+      "lintFindings": [
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member Cursor to the query envelope argument.",
+          "property": "/properties/Cursor"
+        },
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member PageSize to the query envelope argument.",
+          "property": "/properties/PageSize"
+        }
+      ],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.get-user-tenants": {
+      "name": "tenants.get-user-tenants",
+      "kind": "read",
+      "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+      "schema": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "UserId": {
+            "type": "string",
+            "description": "Identifier of the user whose memberships are listed: the subject (sub) claim the identity provider issues for that user. Always set it, including for your own memberships: an omitted UserId does not default to you and usually returns an empty list. To list your own tenants without knowing your subject, use tenants.list-tenants."
+          },
+          "Cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          },
+          "PageSize": {
+            "type": "integer",
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          }
+        },
+        "additionalProperties": false
+      },
+      "example": {
+        "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "entityId",
+          "pageSize",
+          "offset",
+          "cursor"
+        ]
+      },
+      "lintFindings": [
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member Cursor to the query envelope argument.",
+          "property": "/properties/Cursor"
+        },
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member PageSize to the query envelope argument.",
+          "property": "/properties/PageSize"
+        }
+      ],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.list-tenants": {
+      "name": "tenants.list-tenants",
+      "kind": "read",
+      "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+      "schema": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "Cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          },
+          "PageSize": {
+            "type": "integer",
+            "description": "Has no effect: use the pageSize and cursor call arguments instead."
+          }
+        },
+        "additionalProperties": false
+      },
+      "example": {},
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "entityId",
+          "pageSize",
+          "offset",
+          "cursor"
+        ]
+      },
+      "lintFindings": [
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member Cursor to the query envelope argument.",
+          "property": "/properties/Cursor"
+        },
+        {
+          "code": "payload_paging_member",
+          "severity": "warning",
+          "message": "Move paging member PageSize to the query envelope argument.",
+          "property": "/properties/PageSize"
+        }
+      ],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.remove-tenant-configuration": {
+      "name": "tenants.remove-tenant-configuration",
+      "kind": "write",
+      "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant whose setting is deleted."
+          },
+          "Key": {
+            "type": "string",
+            "description": "Exact, case-sensitive configuration key to delete."
+          }
+        },
+        "required": [
+          "TenantId",
+          "Key"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "Key": "billing.plan"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.remove-user-from-tenant": {
+      "name": "tenants.remove-user-from-tenant",
+      "kind": "write",
+      "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to remove the user from."
+          },
+          "UserId": {
+            "type": "string",
+            "description": "Identifier of the member to remove: the subject (sub) claim the identity provider issues for that user."
+          }
+        },
+        "required": [
+          "TenantId",
+          "UserId"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.set-tenant-configuration": {
+      "name": "tenants.set-tenant-configuration",
+      "kind": "write",
+      "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to configure."
+          },
+          "Key": {
+            "type": "string",
+            "description": "Configuration key, 1 to 256 characters, case-sensitive. An existing key is overwritten."
+          },
+          "Value": {
+            "type": "string",
+            "description": "Configuration value, at most 1024 characters; an empty string is allowed."
+          }
+        },
+        "required": [
+          "TenantId",
+          "Key",
+          "Value"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "Key": "billing.plan",
+        "Value": "enterprise"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    },
+    "tenants.update-tenant": {
+      "name": "tenants.update-tenant",
+      "kind": "write",
+      "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "TenantId": {
+            "type": "string",
+            "description": "Identifier of the tenant to update."
+          },
+          "Name": {
+            "type": "string",
+            "description": "New display name; replaces the current one."
+          },
+          "Description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "New description; replaces the current one and null clears it. To keep the current description while renaming, send it again (read it with tenants.get-tenant)."
+          }
+        },
+        "required": [
+          "TenantId",
+          "Name",
+          "Description"
+        ],
+        "additionalProperties": false
+      },
+      "example": {
+        "TenantId": "acme",
+        "Name": "Acme Corporation EMEA",
+        "Description": "European production workspace"
+      },
+      "envelope": {
+        "fixedTenant": "system",
+        "aggregateIdRequired": false,
+        "idempotencyKeyRequired": false,
+        "arguments": [
+          "aggregateId",
+          "correlationId",
+          "idempotencyKey",
+          "extensions"
+        ]
+      },
+      "lintFindings": [],
+      "submittable": false,
+      "reason": "configuration_invalid"
+    }
+  }
+}
