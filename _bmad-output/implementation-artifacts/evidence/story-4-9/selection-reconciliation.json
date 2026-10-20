@@ -1,0 +1,126 @@
+{
+  "parties": "14ad39f85eae152c7a7e22ff261cc534ff5dab1e",
+  "dependencies": [
+    {
+      "path": "references/Hexalith.AI.Tools",
+      "committed": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+      "checkout": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+      "describe": "3f194e17",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "committed": "5d03f1db9c38db34ecac7fe6048937478ffb82cc",
+      "checkout": "5d03f1db9c38db34ecac7fe6048937478ffb82cc",
+      "describe": "v4.33.1-49-g5d03f1db",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.Commons",
+      "committed": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+      "checkout": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+      "describe": "v2.30.3",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.EventStore",
+      "committed": "c9f47dd5ba72918445dfd24a674a5b2c310589bd",
+      "checkout": "c9f47dd5ba72918445dfd24a674a5b2c310589bd",
+      "describe": "v3.126.0-17-gc9f47dd5",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.FrontComposer",
+      "committed": "d52526a4bd1272760543e6a65840dc2b0ed93cee",
+      "checkout": "d52526a4bd1272760543e6a65840dc2b0ed93cee",
+      "describe": "v4.7.0-9-gd52526a4",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.McpCli",
+      "committed": "b616db3092a9b1c5af196538a3de37a5c7f2d7ca",
+      "checkout": "b616db3092a9b1c5af196538a3de37a5c7f2d7ca",
+      "describe": "v1.0.0-23-gb616db30",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.Memories",
+      "committed": "c082f8151328b1ac91939cda8733ab78ae68e1c4",
+      "checkout": "c082f8151328b1ac91939cda8733ab78ae68e1c4",
+      "describe": "v2.29.3-1-gc082f815",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.Platform",
+      "committed": "bb81fc9e98533246cfeed43ffcce08866a2a57f6",
+      "checkout": "bb81fc9e98533246cfeed43ffcce08866a2a57f6",
+      "describe": "bb81fc9e",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.PolymorphicSerializations",
+      "committed": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "checkout": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "describe": "v1.19.5",
+      "status": ""
+    },
+    {
+      "path": "references/Hexalith.Tenants",
+      "committed": "ce88a70b6af777c059b5fb4335d429b9272911bd",
+      "checkout": "ce88a70b6af777c059b5fb4335d429b9272911bd",
+      "describe": "v5.9.0-13-gce88a70b",
+      "status": ""
+    }
+  ],
+  "eventStoreReleaseTag": "v3.126.0",
+  "eventStoreReleaseDescribe": "v3.126.0-17-gc9f47dd5",
+  "evaluationCommand": [
+    "dotnet",
+    "msbuild",
+    "src/Hexalith.Parties/Hexalith.Parties.csproj",
+    "-getProperty:HexalithEventStoreVersion,HexalithCommonsVersion,HexalithFrontComposerVersion,HexalithMemoriesVersion,HexalithTenantsVersion,HexalithPartiesVersion,HexalithAspireHostingDaprVersion,UseHexalithProjectReferences,UseNuGetDeps",
+    "-p:Configuration=Release"
+  ],
+  "evaluation": {
+    "Properties": {
+      "HexalithEventStoreVersion": "3.126.0",
+      "HexalithCommonsVersion": "2.30.3",
+      "HexalithFrontComposerVersion": "4.7.0",
+      "HexalithMemoriesVersion": "2.27.1",
+      "HexalithTenantsVersion": "5.9.0",
+      "HexalithPartiesVersion": "1.5.0",
+      "HexalithAspireHostingDaprVersion": "13.6.1-beta.935",
+      "UseHexalithProjectReferences": "false",
+      "UseNuGetDeps": "true"
+    }
+  },
+  "classification": "verification housekeeping; present-tense selection facts only",
+  "eventStoreReleaseCommit": "fcf78d6cafb6c0c9f52dc350a9a09aff54ded288",
+  "historicalObservationsPreservedByteForByte": true,
+  "authorityGatesChanged": false,
+  "dependencyVersionsOrGitlinksChangedByThisTask": false,
+  "changedSourceHashes": {
+    "docs/ci.md": "311419596c1313ce93c7f16004a5b697e95b95f19ccc0468ca7cd616041a46d7",
+    "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs": "7726ca25fd0d1de53d9cdf2e0b7e83d08717fb60ce4046b8ac54b32d5d902e73",
+    "_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md": "846c8029b7dcd111558d3225561ce1f597d957311f0c3b619cbea385cac1826a"
+  },
+  "verification": [
+    {
+      "command": "dotnet build tests/Hexalith.Parties.Tests --no-restore -c Release -warnaserror -m:1",
+      "exitCode": 0,
+      "output": "selection-reconciliation-build.txt"
+    },
+    {
+      "command": "dotnet tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll -method Hexalith.Parties.Tests.FitnessTests.DocumentationFitnessTests.MaintainedTechnologyTablesMatchCentralPackageCatalog",
+      "exitCode": 0,
+      "passed": 1,
+      "output": "selection-reconciliation-docs-test.txt"
+    },
+    {
+      "command": "dotnet tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll -method Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph",
+      "exitCode": 0,
+      "passed": 1,
+      "output": "selection-reconciliation-receipts-test.txt"
+    }
+  ]
+}

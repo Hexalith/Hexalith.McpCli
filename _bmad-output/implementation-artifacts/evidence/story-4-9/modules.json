@@ -1,0 +1,9 @@
+{
+  "modules": [
+    {
+      "name": "parties",
+      "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+      "operationCount": 4
+    }
+  ]
+}

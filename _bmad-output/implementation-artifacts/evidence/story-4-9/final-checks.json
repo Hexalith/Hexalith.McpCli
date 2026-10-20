@@ -1,0 +1,166 @@
+[
+  {
+    "name": "final-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.Parties.slnx"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 2.74,
+    "output": "final-restore.txt"
+  },
+  {
+    "name": "final-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.Parties.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 26.4,
+    "output": "final-build.txt"
+  },
+  {
+    "name": "final-parties-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 2,
+    "seconds": 15.94,
+    "output": "final-parties-tests.txt"
+  },
+  {
+    "name": "final-domain-validation",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Tests.Domain.PartyDomainProcessorValidationTests"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 0.96,
+    "output": "final-domain-validation.txt"
+  },
+  {
+    "name": "final-server-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Server.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 1.39,
+    "output": "final-server-tests.txt"
+  },
+  {
+    "name": "final-contracts-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Contracts.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 8.62,
+    "output": "final-contracts-tests.txt"
+  },
+  {
+    "name": "final-package-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 0.78,
+    "output": "final-package-restore.txt"
+  },
+  {
+    "name": "final-package-build",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 0.63,
+    "output": "final-package-build.txt"
+  },
+  {
+    "name": "final-pack",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "--no-build",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-p:PackageVersion=0.0.0-story49",
+      "-p:MinVerVersionOverride=0.0.0-story49",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/artifacts"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 0.77,
+    "output": "final-pack.txt"
+  },
+  {
+    "name": "final-verifier-tests",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9",
+      "-p",
+      "test_verify_scratch.py"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "seconds": 0.09,
+    "output": "final-verifier-tests.txt"
+  },
+  {
+    "name": "final-scratch",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/verify-scratch.py"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "seconds": 44.88,
+    "output": "final-scratch.txt"
+  }
+]

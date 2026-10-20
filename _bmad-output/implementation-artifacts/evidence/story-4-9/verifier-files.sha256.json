@@ -1,0 +1,6 @@
+{
+  "verify-scratch.py": "675a72fee03fdc7c177670ce76accab449a8cf6a997bba0ed2be7b568c8231d0",
+  "ScratchProgram.cs": "75ea4bee50d6f340a226fe7a9314990046581b0b295471ba072652ee596073f1",
+  "expected-operations.json": "6a02c5bfc3f453d9de1d9cf7b8fc9e135b165b5a3068a41b1dbb76b935a28486",
+  "test_verify_scratch.py": "9bb3ed02410e5b32d3d03cd973396e18433618f672465c2372134aeeff58b3bc"
+}

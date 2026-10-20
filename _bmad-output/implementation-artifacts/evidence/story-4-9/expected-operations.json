@@ -1,0 +1,6 @@
+[
+  "parties.create-party",
+  "parties.deactivate-party",
+  "parties.reactivate-party",
+  "parties.update-party"
+]

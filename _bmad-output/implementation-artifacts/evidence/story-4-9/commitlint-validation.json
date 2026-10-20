@@ -1,0 +1,30 @@
+[
+  {
+    "repository": "/home/administrator/projects/hexalith/parties",
+    "messageFile": "/tmp/story49-parties-commit-message.txt",
+    "message": "fix(contracts): complete parties gateway safeguards\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "evidence": "commitlint-parties-validation.txt"
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/mcpcli",
+    "messageFile": "/tmp/story49-mcpcli-commit-message.txt",
+    "message": "docs(story): complete parties gateway story 4.9\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "evidence": "commitlint-mcpcli-validation.txt"
+  }
+]

@@ -1,0 +1,11 @@
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Validated 1 vector(s)
+Scratch Catalog, lint, strict, command-routing smoke, restored artifact identity and four-vector coverage passed; production assets unchanged.
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.027s
+
+OK

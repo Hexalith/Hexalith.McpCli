@@ -1,0 +1,76 @@
+[
+  {
+    "name": "accepted-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.Parties.slnx"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 1.74,
+    "output": "accepted-restore.txt"
+  },
+  {
+    "name": "accepted-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.Parties.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 7.64,
+    "output": "accepted-build.txt"
+  },
+  {
+    "name": "accepted-parties-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 15.97,
+    "output": "accepted-parties-tests.txt"
+  },
+  {
+    "name": "accepted-server-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Server.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 1.35,
+    "output": "accepted-server-tests.txt"
+  },
+  {
+    "name": "accepted-contracts-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Contracts.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "exitCode": 0,
+    "seconds": 7.26,
+    "output": "accepted-contracts-tests.txt"
+  }
+]

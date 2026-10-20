@@ -1,0 +1,38 @@
+{
+  "formatVersion": 1,
+  "status": "approved",
+  "implementationStartRevision": "836b2ba4aa41cdf8a7812b97a5da7c08896c0c7c",
+  "approvedSpecPartiesBaselineRevision": "4d4be476687cff4210774ec62558131ff8659558",
+  "vectorRepositoryRevision": "e1db1b61de4d47336e474d41eed18b68d43d7377",
+  "vectorRevisionNote": "The maintainer approved the recorded artifact and exact vector SHA-256 values before the local completion commit. Every committed vector blob matches those approved bytes. Release package/version binding remains Story 4.10 work.",
+  "vectorFileHashes": "vector-files.sha256.json",
+  "validatorRevision": "b616db3092a9b1c5af196538a3de37a5c7f2d7ca",
+  "validatorFileSha256": "879d6f95c2c035074d57f2709408ddea77c02646c7eff6f5b4358b41cbb8ebe9",
+  "package": {
+    "id": "Hexalith.Parties.Contracts",
+    "version": "0.0.0-story49"
+  },
+  "artifactLocation": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/artifacts/Hexalith.Parties.Contracts.0.0.0-story49.nupkg",
+  "artifactHash": "sha512-uymAVLI8EOJuTGHmBim7wcfasYTIyaz3WyAW6lXSxhHYLE4sp51VWtEzimZpM8/UOeIZoKeuH4PIxqH+np0PRA==",
+  "validationCommand": "python3 tools/conformance-vectors/v1/validate.py --artifact /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/artifacts/Hexalith.Parties.Contracts.0.0.0-story49.nupkg --expected-package-id Hexalith.Parties.Contracts --expected-package-version 0.0.0-story49 --operations-file /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/expected-operations.json /home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json /home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json /home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json /home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json",
+  "validationWorkingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+  "validationExitCode": 0,
+  "validationOutput": "vector-validation.txt",
+  "approvingMaintainer": "Requesting maintainer (user in this conversation)",
+  "scope": "Format, artifact identity, exact four-command vector coverage only; Query contracts/postconditions and live effects remain pending downstream stories.",
+  "supersededRound1ArtifactHash": "sha512-vTRzCDhnpvMWINNY3xGHi14EOPitkuj5k9Soh9+VvVNcSkl8V0IImFvNVHyxemCptEfBqqYAq8BGXQzHQ+prHA==",
+  "supersededRound2ArtifactHash": "sha512-cRNu1OfMO46WwXg5IGMURPhux+sMb/iPsaBajLHv7kNXcd+6SkubQR+uJ+5EJm2TZHH4GPgixRfmgoHzDktDhQ==",
+  "sourceRepositoryBaseRevision": "14ad39f85eae152c7a7e22ff261cc534ff5dab1e",
+  "vectorManifestSha256": "6f1f183dfa102ab52f95b32a563bdb63d5ea27f71ef9ce15d848ea676b962701",
+  "sourceManifestSha256": "f03b9e9fdd12ff26fe0055d81a7641be3791923c7be2212ce5a8bee6a47d1952",
+  "verificationEvidence": [
+    "accepted-checks.json",
+    "final-checks.json",
+    "matrix-test-audit.md"
+  ],
+  "approvalText": "I approve",
+  "approvedAtUtc": "2026-10-20T09:01:29.880319+00:00",
+  "approvalSource": "Explicit conversation approval of the final vector/artifact record after implementation and technical review.",
+  "approvalValidationOutput": "approval-vector-validation.txt",
+  "approvalValidationExitCode": 0
+}

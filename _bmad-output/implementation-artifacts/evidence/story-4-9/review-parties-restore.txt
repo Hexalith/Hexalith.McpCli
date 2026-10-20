@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Security/Hexalith.Parties.Security.csproj (in 256 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj (in 256 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj (in 256 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj (in 256 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj (in 256 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Projections/Hexalith.Parties.Projections.csproj (in 257 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties/Hexalith.Parties.csproj (in 262 ms).
+  4 of 11 projects are up-to-date for restore.

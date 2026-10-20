@@ -1,0 +1,2 @@
+[main e1db1b61] fix(contracts): complete parties gateway safeguards
+ 12 files changed, 146 insertions(+), 45 deletions(-)

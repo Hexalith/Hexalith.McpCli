@@ -1,0 +1,115 @@
+{
+  "reviewVerdict": "PASS WITH NOTES",
+  "reviewedArtifactHash": "sha512-cRNu1OfMO46WwXg5IGMURPhux+sMb/iPsaBajLHv7kNXcd+6SkubQR+uJ+5EJm2TZHH4GPgixRfmgoHzDktDhQ==",
+  "replacementArtifactHash": "sha512-UHgnmCGrOMVroYfvxenA7XV76/EuImZWQoK4hiJBnjbtkNBEy9zllnV+nQYo32P3GvdUq+W4rMjnABRVwE23dQ==",
+  "reviewedCatalog": "artifacts/round-2/catalog.json",
+  "replacementCatalog": "catalog.json",
+  "nonDescriptionCatalogContentUnchanged": true,
+  "descriptionChanges": [
+    {
+      "path": "/modules/0/operations/0/description",
+      "before": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs; identifiers remain limited to 128 characters. The configured sub-operation cap defaults to 100.",
+      "after": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/ContactChannels/items/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/ContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied contact-channel identifier; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/Identifiers/items/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/Identifiers/items/properties/IdentifierId/description",
+      "before": "The supplied identifier-record ID, distinct from the business identifier value.",
+      "after": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/Identifiers/items/properties/Value/description",
+      "before": "The nonempty business identifier value, stored without trimming; distinct from the IdentifierId used to address this record.",
+      "after": "The nonempty business identifier Value, at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+    },
+    {
+      "path": "/modules/0/operations/1/schemaDocument/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/2/schemaDocument/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/3/description",
+      "before": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs; identifiers remain limited to 128 characters. The configured sub-operation cap defaults to 100.",
+      "after": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddContactChannels/items/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied contact-channel identifier; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddContactChannels/description",
+      "before": "Contact channels to add in this atomic update, with explicit child IDs and matching PartyId.",
+      "after": "Contact channels to add with explicit child IDs and matching PartyId. An existing exact ID is skipped even when also listed in UpdateContactChannels; that update still applies."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/UpdateContactChannels/items/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/UpdateContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied contact-channel identifier; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/RemoveContactChannelIds/description",
+      "before": "Exact existing contact-channel IDs to remove; case is significant.",
+      "after": "Exact existing ContactChannelId values to remove, at most 128 characters each; case is significant. An ID also in AddContactChannels or UpdateContactChannels rejects the whole update. Null entries reject."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddIdentifiers/items/properties/PartyId/description",
+      "before": "The supplied party identifier, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddIdentifiers/items/properties/IdentifierId/description",
+      "before": "The supplied identifier-record ID, distinct from the business identifier value.",
+      "after": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddIdentifiers/items/properties/Value/description",
+      "before": "The nonempty business identifier value, stored without trimming; distinct from the IdentifierId used to address this record.",
+      "after": "The nonempty business identifier Value, at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/RemoveIdentifierIds/description",
+      "before": "Exact existing business-identifier IDs to remove; case is significant.",
+      "after": "Exact existing IdentifierId values to remove, at most 128 characters each; case is significant. An ID also in AddIdentifiers rejects the whole update. Null entries reject."
+    }
+  ]
+}

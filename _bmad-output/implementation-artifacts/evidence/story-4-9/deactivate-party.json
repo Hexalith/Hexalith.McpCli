@@ -1,0 +1,35 @@
+{
+  "name": "parties.deactivate-party",
+  "kind": "write",
+  "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "PartyId": {
+        "type": "string",
+        "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+      }
+    },
+    "required": [
+      "PartyId"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "PartyId": "party-49"
+  },
+  "envelope": {
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "tenant",
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

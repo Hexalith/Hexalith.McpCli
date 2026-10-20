@@ -1,0 +1,6 @@
+{
+  "tests/conformance-vectors/mcpcli-v1/create-party.json": "106b215c1ff4fbbb972587c1adcdcb5f081458fa96e93ff9fbcb249cb4d2b0c7",
+  "tests/conformance-vectors/mcpcli-v1/deactivate-party.json": "9ce33ff2749f1cc5b9d7d5f62c4385585a86d43ba12797b34531e26d7c418650",
+  "tests/conformance-vectors/mcpcli-v1/reactivate-party.json": "b912ef6ad00ec3a211f731e0fcfb9366e76ae30d8ef30061b733644453554e46",
+  "tests/conformance-vectors/mcpcli-v1/update-party.json": "bf77da1e2c5e3564bf37cc533a9a96bbd48c0bff44d4a21faf033e3d6b4da4fd"
+}

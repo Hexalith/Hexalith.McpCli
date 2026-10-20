@@ -1,0 +1,25 @@
+{
+  "module": "parties",
+  "operations": [
+    {
+      "name": "parties.create-party",
+      "kind": "write",
+      "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+    },
+    {
+      "name": "parties.deactivate-party",
+      "kind": "write",
+      "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+    },
+    {
+      "name": "parties.reactivate-party",
+      "kind": "write",
+      "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+    },
+    {
+      "name": "parties.update-party",
+      "kind": "write",
+      "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+    }
+  ]
+}

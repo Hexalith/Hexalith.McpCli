@@ -1,0 +1,24 @@
+{
+  "parties": {
+    "revision": "e1db1b61de4d47336e474d41eed18b68d43d7377",
+    "files": [
+      "_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md",
+      "docs/ci.md",
+      "src/Hexalith.Parties.Contracts/Commands/AddContactChannel.cs",
+      "src/Hexalith.Parties.Contracts/Commands/AddIdentifier.cs",
+      "src/Hexalith.Parties.Contracts/Commands/CreatePartyComposite.cs",
+      "src/Hexalith.Parties.Contracts/Commands/DeactivateParty.cs",
+      "src/Hexalith.Parties.Contracts/Commands/ReactivateParty.cs",
+      "src/Hexalith.Parties.Contracts/Commands/UpdateContactChannel.cs",
+      "src/Hexalith.Parties.Contracts/Commands/UpdatePartyComposite.cs",
+      "tests/Hexalith.Parties.Tests/Domain/PartyDomainProcessorValidationTests.cs",
+      "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs",
+      "tests/conformance-vectors/mcpcli-v1/create-party.json"
+    ],
+    "validationEvidence": "commitlint-parties-validation.txt",
+    "commitOutput": "parties-completion-commit.txt"
+  },
+  "mcpcli": {
+    "note": "The McpCli completion commit contains this record; obtain its revision from Git history."
+  }
+}

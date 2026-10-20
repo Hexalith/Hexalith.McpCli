@@ -1,0 +1,30 @@
+{
+  "status": "technical-review-recorded-with-direct-followups",
+  "artifactHash": "sha512-uymAVLI8EOJuTGHmBim7wcfasYTIyaz3WyAW6lXSxhHYLE4sp51VWtEzimZpM8/UOeIZoKeuH4PIxqH+np0PRA==",
+  "catalog": "catalog.json",
+  "requirements": [
+    "Reader can select the correct command without source context",
+    "Descriptions convey explicit IDs, typed nested payloads and update/lifecycle semantics",
+    "Every exposed nested member has a useful description"
+  ],
+  "reviewer": "story49_description_review_final",
+  "findings": [],
+  "supersededRound1ArtifactHash": "sha512-vTRzCDhnpvMWINNY3xGHi14EOPitkuj5k9Soh9+VvVNcSkl8V0IImFvNVHyxemCptEfBqqYAq8BGXQzHQ+prHA==",
+  "previousVerdict": "PASS WITH NOTES",
+  "resolutionEvidence": "description-review-fixes.md",
+  "supersededRound2ArtifactHash": "sha512-cRNu1OfMO46WwXg5IGMURPhux+sMb/iPsaBajLHv7kNXcd+6SkubQR+uJ+5EJm2TZHH4GPgixRfmgoHzDktDhQ==",
+  "exactDescriptionDelta": "description-delta-round-2.json",
+  "reviewedArtifactHash": "sha512-cRNu1OfMO46WwXg5IGMURPhux+sMb/iPsaBajLHv7kNXcd+6SkubQR+uJ+5EJm2TZHH4GPgixRfmgoHzDktDhQ==",
+  "technicalVerdict": "PASS WITH NOTES",
+  "reviewReports": [
+    "description-review-round-1.md",
+    "description-review-round-2.md"
+  ],
+  "subsequentDirectDescriptionDeltas": [
+    "description-delta-round-2.json",
+    "description-delta-scalar-id-guidance.json"
+  ],
+  "pendingPackageRefresh": false,
+  "maintainerVectorApproval": "approved",
+  "maintainerVectorApprovalRecord": "maintainer-vector-approval.json"
+}

@@ -1,0 +1,7 @@
+  Determining projects to restore...
+  Restored /tmp/hexalith-story49-scratch/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 244 ms).
+  Restored /tmp/hexalith-story49-scratch/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 403 ms).
+  Restored /tmp/hexalith-story49-scratch/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 370 ms).
+  Restored /tmp/hexalith-story49-scratch/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 372 ms).
+  Restored /tmp/hexalith-story49-scratch/host/ScratchHost.csproj (in 399 ms).
+  Restored /tmp/hexalith-story49-scratch/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 388 ms).

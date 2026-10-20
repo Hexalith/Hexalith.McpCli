@@ -1,0 +1,130 @@
+{
+  "baseArtifactHash": "sha512-UHgnmCGrOMVroYfvxenA7XV76/EuImZWQoK4hiJBnjbtkNBEy9zllnV+nQYo32P3GvdUq+W4rMjnABRVwE23dQ==",
+  "packageRefresh": "completed",
+  "descriptionChanges": [
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/AddContactChannel.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/AddContactChannel.cs",
+      "before": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/AddIdentifier.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/AddIdentifier.cs",
+      "before": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit.",
+      "after": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/CreatePartyComposite.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/DeactivateParty.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/ReactivateParty.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/UpdateContactChannel.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/UpdateContactChannel.cs",
+      "before": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "source": "src/Hexalith.Parties.Contracts/Commands/UpdatePartyComposite.cs",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    }
+  ],
+  "replacementArtifactHash": "sha512-uymAVLI8EOJuTGHmBim7wcfasYTIyaz3WyAW6lXSxhHYLE4sp51VWtEzimZpM8/UOeIZoKeuH4PIxqH+np0PRA==",
+  "catalogDescriptionChanges": [
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/ContactChannels/items/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/ContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/Identifiers/items/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/0/schemaDocument/properties/Identifiers/items/properties/IdentifierId/description",
+      "before": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit.",
+      "after": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/1/schemaDocument/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/2/schemaDocument/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddContactChannels/items/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/UpdateContactChannels/items/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/UpdateContactChannels/items/properties/ContactChannelId/description",
+      "before": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case.",
+      "after": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddIdentifiers/items/properties/PartyId/description",
+      "before": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope.",
+      "after": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    },
+    {
+      "path": "/modules/0/operations/3/schemaDocument/properties/AddIdentifiers/items/properties/IdentifierId/description",
+      "before": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit.",
+      "after": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+    }
+  ],
+  "nonDescriptionCatalogContentIdentical": true
+}

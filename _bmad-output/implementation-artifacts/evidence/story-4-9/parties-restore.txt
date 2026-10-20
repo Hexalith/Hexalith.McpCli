@@ -1,0 +1,31 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj (in 293 ms).
+  Restored /home/administrator/projects/hexalith/parties/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations.CodeGenerators/Hexalith.PolymorphicSerializations.CodeGenerators.csproj (in 242 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Projections/Hexalith.Parties.Projections.csproj (in 310 ms).
+  Restored /home/administrator/projects/hexalith/parties/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations/Hexalith.PolymorphicSerializations.csproj (in 294 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj (in 301 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Security/Hexalith.Parties.Security.csproj (in 299 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj (in 259 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.ConsumerPortal/Hexalith.Parties.ConsumerPortal.csproj (in 296 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Contracts.Tests/Hexalith.Parties.Contracts.Tests.csproj (in 310 ms).
+  Restored /home/administrator/projects/hexalith/parties/samples/Hexalith.Parties.Sample/Hexalith.Parties.Sample.csproj (in 258 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Picker/Hexalith.Parties.Picker.csproj (in 299 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Picker.Tests/Hexalith.Parties.Picker.Tests.csproj (in 309 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj (in 262 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj (in 307 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj (in 7 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Security.Tests/Hexalith.Parties.Security.Tests.csproj (in 15 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj (in 26 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.AdminPortal.Tests/Hexalith.Parties.AdminPortal.Tests.csproj (in 21 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Projections.Tests/Hexalith.Parties.Projections.Tests.csproj (in 29 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Authentication.Tests/Hexalith.Parties.Authentication.Tests.csproj (in 54 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Mcp.Tests/Hexalith.Parties.Mcp.Tests.csproj (in 70 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Client.Tests/Hexalith.Parties.Client.Tests.csproj (in 65 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.ConsumerPortal.Tests/Hexalith.Parties.ConsumerPortal.Tests.csproj (in 70 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj (in 83 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.UI.Tests/Hexalith.Parties.UI.Tests.csproj (in 99 ms).
+  Restored /home/administrator/projects/hexalith/parties/src/Hexalith.Parties/Hexalith.Parties.csproj (in 154 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Server.Tests/Hexalith.Parties.Server.Tests.csproj (in 166 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj (in 166 ms).
+  Restored /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.IntegrationTests/Hexalith.Parties.IntegrationTests.csproj (in 157 ms).
+  30 of 59 projects are up-to-date for restore.
