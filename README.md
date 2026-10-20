@@ -100,9 +100,10 @@ The requested Works, Timesheets, Agents, Conversations, Projects, and Folders pa
 
 ## Run and debug from the Platform workspace
 
-Run and debug McpCli from the Hexalith.Platform workspace, where this repository is the direct `references/Hexalith.McpCli` submodule. [`module/hexalith.module-manifest.v2.json`](https://github.com/Hexalith/Hexalith.McpCli/blob/main/module/hexalith.module-manifest.v2.json) declares McpCli with no servers and no interfaces. Its only dependency is `eventstore`, the gateway McpCli targets, so that gateway is its whole minimum environment. From the Platform root, use the tool version that Platform pins:
+Run and debug McpCli from the Hexalith.Platform workspace, where this repository is the direct `references/Hexalith.McpCli` submodule. [`module/hexalith.module-manifest.v2.json`](https://github.com/Hexalith/Hexalith.McpCli/blob/main/module/hexalith.module-manifest.v2.json) declares McpCli with no servers and no interfaces. Its only dependency is `eventstore`, the gateway McpCli targets, so that gateway is its whole minimum environment. Platform pins Builds tool `4.34.0`, the first release that builds run-scoped McpCli. From the Platform root, restore and run that pinned tool:
 
 ```sh
+dotnet tool restore
 dotnet tool run hexalith-module -- debug --manifest references/Hexalith.McpCli/module/hexalith.module-manifest.v2.json
 ```
 
