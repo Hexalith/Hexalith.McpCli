@@ -1,0 +1,116 @@
+{
+  "recordedAtUtc": "2026-10-20T10:41:17.837651+00:00",
+  "implementationStartRevision": "3608e121364198e2ea0643769e680df29bc8efe0",
+  "partiesHead": "48bed0054dddca785dd0089d9cfc63384f9ad7c2",
+  "mcpcliHead": "040fd406d71723772fb14cb3a3bac9434003b6a4",
+  "artifactHash": "sha512-2y0Jw2K2PuWVpfdJLMfQdAoo4REb41uGtAocjkPfpuExmtA6RR6zE9y9JC+mKMq06XTTVn8m7is/YrOzlVnkdQ==",
+  "checks": [
+    {
+      "command": "dotnet restore Hexalith.Parties.slnx",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-restore.txt",
+      "outputSha256": "43acd3b9142fa839c5b850956b5a4ef69db94ff2cba1957376e64a925d5a7e9d"
+    },
+    {
+      "command": "dotnet build Hexalith.Parties.slnx --no-restore --configuration Release -warnaserror",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-build.txt",
+      "outputSha256": "33aea9e156e9d61c1f4b51d61bda9094323ca6336f4100ebd4c1ff33978da3fb"
+    },
+    {
+      "command": "dotnet tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll -class Hexalith.Parties.Tests.Domain.PartyDomainProcessorValidationTests",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-domain-validation.txt",
+      "outputSha256": "dc8b616db78768ad1813685460e44295dab6741e5677c9cf3c4df3c71eb28008"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.Parties.Tests --no-build --configuration Release",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-parties-tests.txt",
+      "outputSha256": "c737cafebdd8f3527dbb688b979fb6e1ff8086ed719b0c9696700ebab61b6de7"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.Parties.Server.Tests --no-build --configuration Release",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-server-tests.txt",
+      "outputSha256": "c485294fb05f15a1f4ef2925c25a47fcc4109cbb38156d2a439b119d420f2878"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.Parties.Contracts.Tests --no-build --configuration Release",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-contracts-tests.txt",
+      "outputSha256": "7b996bc00b25859923df7450a38e61f5daba0e645ba75f87f704b0ef93deaebb"
+    },
+    {
+      "command": "dotnet build src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj --no-restore --configuration Release -warnaserror -p:PackageVersion=0.0.0-story49 -p:MinVerVersionOverride=0.0.0-story49",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-package-build.txt",
+      "outputSha256": "feb766b6d709d36cd0e1d18baec45351b18cb6c31cd90be11c40cba3b551cd66"
+    },
+    {
+      "command": "dotnet pack src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj --no-build --no-restore --configuration Release -p:PackageVersion=0.0.0-story49 -p:MinVerVersionOverride=0.0.0-story49 --output /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2/artifacts",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-pack.txt",
+      "outputSha256": "52789175bfe4235d72e3f2e435be0be5da51662b867afd1480a7975f85961fe7"
+    },
+    {
+      "command": "python3 -m unittest discover -s _bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2 -p test_verify_scratch.py -v",
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-verifier-tests.txt",
+      "outputSha256": "09d6a0192d678a8b921ac43bd46d7c48443393428b021c50d949be66ce18fae2"
+    },
+    {
+      "command": "python3 _bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2/verify-scratch.py --mcpcli-root /home/administrator/projects/hexalith/mcpcli --parties-root /home/administrator/projects/hexalith/parties",
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-scratch.txt",
+      "outputSha256": "98a32da7285beaeab67910dcad78379a39fd1b10143973aafd313f7f35370e80"
+    }
+  ],
+  "summary": {
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "domainValidation": {
+      "passed": 126,
+      "failed": 0
+    },
+    "parties": {
+      "passed": 2011,
+      "failed": 0,
+      "skipped": 0
+    },
+    "server": {
+      "passed": 315,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contracts": {
+      "passed": 201,
+      "failed": 0,
+      "skipped": 0
+    },
+    "verifierUnitTests": 7,
+    "catalogCommands": 4,
+    "catalogDiagnostics": 0,
+    "lintFindings": 0,
+    "vectors": 4,
+    "productionAssetsUnchanged": true,
+    "historicalArtifactAndApprovalPreserved": true
+  },
+  "sourceProbeEvidence": "review-pass-2-source-probes.json",
+  "descriptionDelta": "review-pass-2/description-delta.json",
+  "remaining": [
+    "Fresh-context description review of the refreshed candidate",
+    "Maintainer approval bound to the refreshed artifact",
+    "Existing downstream Query/effects and C06-C08 replacement/retirement gates"
+  ]
+}

@@ -1,0 +1,1 @@
+Validated 4 vector(s) against /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2/artifacts/Hexalith.Parties.Contracts.0.0.0-story49.nupkg

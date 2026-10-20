@@ -1,0 +1,1 @@
+[{"packageId":"Hexalith.Parties.Contracts","assemblyName":"Hexalith.Parties.Contracts","operations":[{"name":"parties.create-party","kind":"command"},{"name":"parties.deactivate-party","kind":"command"},{"name":"parties.reactivate-party","kind":"command"},{"name":"parties.update-party","kind":"command"}]}]

@@ -1,0 +1,97 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "--full-catalog"
+    ],
+    "exitCode": 0,
+    "stdout": "catalog.json",
+    "stderr": "catalog.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "--manifest-catalog"
+    ],
+    "exitCode": 0,
+    "stdout": "manifest-catalog.json",
+    "stderr": "manifest-catalog.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "modules",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "modules.json",
+    "stderr": "modules.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "operations",
+      "parties",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "operations.json",
+    "stderr": "operations.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "describe",
+      "parties.create-party",
+      "--lint",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "create-party.json",
+    "stderr": "create-party.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "describe",
+      "parties.deactivate-party",
+      "--lint",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "deactivate-party.json",
+    "stderr": "deactivate-party.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "describe",
+      "parties.reactivate-party",
+      "--lint",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "reactivate-party.json",
+    "stderr": "reactivate-party.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "/tmp/hexalith-story49-vd99592f/host/bin/Release/net10.0/ScratchHost.dll",
+      "describe",
+      "parties.update-party",
+      "--lint",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "stdout": "update-party.json",
+    "stderr": "update-party.stderr.txt"
+  }
+]

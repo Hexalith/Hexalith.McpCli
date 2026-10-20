@@ -1,0 +1,221 @@
+{
+  "name": "parties.create-party",
+  "kind": "write",
+  "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "PartyId": {
+        "type": "string",
+        "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+      },
+      "Type": {
+        "enum": [
+          "Unknown",
+          "Person",
+          "Organization"
+        ],
+        "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+      },
+      "PersonDetails": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "FirstName": {
+            "type": "string",
+            "description": "The person\u0027s supplied first name."
+          },
+          "LastName": {
+            "type": "string",
+            "description": "The person\u0027s supplied last name."
+          },
+          "DateOfBirth": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The optional date of birth with an explicit UTC offset."
+          },
+          "Prefix": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name prefix, such as a title."
+          },
+          "Suffix": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name suffix."
+          }
+        },
+        "required": [
+          "FirstName",
+          "LastName"
+        ],
+        "additionalProperties": false,
+        "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+      },
+      "OrganizationDetails": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "LegalName": {
+            "type": "string",
+            "description": "The organization\u0027s complete legal name."
+          },
+          "TradingName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name the organization trades under."
+          },
+          "LegalForm": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional legal form of the organization."
+          },
+          "RegistrationNumber": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional organization registration number."
+          },
+          "IsNaturalPerson": {
+            "type": "boolean",
+            "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+          }
+        },
+        "required": [
+          "LegalName"
+        ],
+        "additionalProperties": false,
+        "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+      },
+      "ContactChannels": {
+        "type": "array",
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "ContactChannelId": {
+              "type": "string",
+              "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+            },
+            "Type": {
+              "enum": [
+                "Email",
+                "Phone",
+                "PostalAddress",
+                "SocialMedia"
+              ],
+              "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+            },
+            "Value": {
+              "type": "string",
+              "description": "A nonempty raw string for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+            },
+            "IsPreferred": {
+              "type": "boolean",
+              "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+            }
+          },
+          "required": [
+            "PartyId",
+            "ContactChannelId",
+            "Type",
+            "Value"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+      },
+      "Identifiers": {
+        "type": "array",
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "IdentifierId": {
+              "type": "string",
+              "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+            },
+            "Type": {
+              "enum": [
+                "VAT",
+                "SIRET",
+                "NationalId",
+                "CompanyRegistration",
+                "TaxId",
+                "Other"
+              ],
+              "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+            },
+            "Value": {
+              "type": "string",
+              "description": "The nonempty business identifier Value, at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+            }
+          },
+          "required": [
+            "PartyId",
+            "IdentifierId",
+            "Type",
+            "Value"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+      }
+    },
+    "required": [
+      "PartyId",
+      "Type"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "PartyId": "party-49",
+    "Type": "Person",
+    "PersonDetails": {
+      "FirstName": "Ada",
+      "LastName": "Lovelace"
+    }
+  },
+  "envelope": {
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "tenant",
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

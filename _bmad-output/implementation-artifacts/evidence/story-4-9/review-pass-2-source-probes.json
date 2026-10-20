@@ -1,0 +1,34 @@
+[
+  {
+    "layout": "sibling",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "probe.proj",
+      "-nologo",
+      "-p:UseHexalithProjectReferences=true",
+      "-getProperty:HexalithMcpCliRoot,HexalithMcpCliFromSource"
+    ],
+    "exitCode": 0,
+    "evaluatedProperties": {
+      "HexalithMcpCliRoot": "/tmp/parties-mcpcli-probes-7j6oqf6_/sibling/Hexalith.Parties/../Hexalith.McpCli",
+      "HexalithMcpCliFromSource": "true"
+    }
+  },
+  {
+    "layout": "workspace-sibling",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "probe.proj",
+      "-nologo",
+      "-p:UseHexalithProjectReferences=true",
+      "-getProperty:HexalithMcpCliRoot,HexalithMcpCliFromSource"
+    ],
+    "exitCode": 0,
+    "evaluatedProperties": {
+      "HexalithMcpCliRoot": "/tmp/parties-mcpcli-probes-7j6oqf6_/workspace-sibling/Hexalith.Parties/../references/Hexalith.McpCli",
+      "HexalithMcpCliFromSource": "true"
+    }
+  }
+]

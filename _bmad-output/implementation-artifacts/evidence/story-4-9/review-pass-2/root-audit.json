@@ -1,0 +1,28 @@
+{
+  "recordedAtUtc": "2026-10-20T10:57:46.821579+00:00",
+  "reviewer": "root",
+  "artifactHash": "sha512-2y0Jw2K2PuWVpfdJLMfQdAoo4REb41uGtAocjkPfpuExmtA6RR6zE9y9JC+mKMq06XTTVn8m7is/YrOzlVnkdQ==",
+  "checkLogHashesVerified": 17,
+  "sourceVectorVerifierAndValidatorPreflight": "passed",
+  "unchangedVectorBytes": true,
+  "nonDescriptionCatalogContentIdentical": true,
+  "catalogDiagnostics": 0,
+  "productionAssetsUnchanged": true,
+  "exactOperations": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.reactivate-party",
+    "parties.update-party"
+  ],
+  "freshContextDescriptionReview": "PASS",
+  "maintainerApproval": "approved",
+  "finalVerification": "passed",
+  "partiesTests": 2013,
+  "serverTests": 315,
+  "contractsTests": 201,
+  "verifierTests": 11,
+  "optimizedVerifierTests": 11,
+  "sourceLayoutCases": 2,
+  "approvalTimePreflight": "passed",
+  "approvalTimeVectorValidation": "passed"
+}

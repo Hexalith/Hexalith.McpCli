@@ -1,0 +1,7 @@
+{
+  "path": "docs/ci.md",
+  "previousSha256": "619856e29a4f21c6eb2bf1ad5572ee07dd5716e3af478400f730fcc47e1c27bd",
+  "currentSha256": "999fd5ae02536719ce4af14b063e610a78e60b9d38ba1ab6f8f4fabaf491a3fd",
+  "reason": "Concurrent release-publication documentation; root inspected the diff. No Contracts, validator, vector or scratch-host change. User edits preserved; historical manifest and approval unchanged.",
+  "recordedAtUtc": "2026-10-20T10:54:48.981206+00:00"
+}

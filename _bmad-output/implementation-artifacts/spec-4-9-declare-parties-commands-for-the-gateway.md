@@ -2,7 +2,7 @@
 title: '4.9 Declare Parties commands for the gateway'
 type: 'feature'
 created: '2026-10-20'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'b616db3092a9b1c5af196538a3de37a5c7f2d7ca'
@@ -94,8 +94,11 @@ Paths below belong to `/home/administrator/projects/hexalith/parties`.
   `docs/api-contracts.md` — four vectors, prerequisite writes and semantic
   `parties.get-party` postconditions; document limits and explicit typed payloads.
 - [x] McpCli `evidence/story-4-9/` beside this spec — record scratch-package hash,
-  Catalog, lint, validation, fresh-context description review and maintainer
-  vector approval; record outstanding C06–C08 and Query dependencies.
+  Catalog, lint, validation and fresh-context description review; record
+  outstanding C06–C08 and Query dependencies.
+- [x] McpCli `evidence/story-4-9/review-pass-2/maintainer-vector-approval.json`
+  — obtain explicit maintainer approval bound to the refreshed artifact and
+  validator revision; the earlier approval applies to the preserved artifact.
 
 **Acceptance Criteria:**
 - Given the scratch Contracts package, when CatalogBuilder inspects it, then
@@ -106,6 +109,46 @@ Paths below belong to `/home/administrator/projects/hexalith/parties`.
   maintainer approval records the artifact and validator revision.
 
 ## Implementation Notes
+
+### Current review pass 2 implementation (2026-10-20)
+
+G1–G9 and all seven subsequent review patch groups are resolved. Final Release
+build passes with zero warnings/errors; required suites pass **2013/2013
+Parties**, **315/315 Server** and **201/201 Contracts**, zero failures/skips.
+The focused validation class passes **126/126**; both source-layout graph cases
+pass. The candidate verifier passes **11/11** tests normally and under Python
+optimization. Exact final commands, outputs and hashes are in
+`evidence/story-4-9/review-pass-2-final-checks.json`.
+
+The retained `0.0.0-story49` Contracts candidate passes Catalog, examples,
+strict discovery, lint, exact artifact identity, four-vector coverage and
+both-head routing/error parity. Production McpCli assets are unchanged.
+Fresh-context description review returned **PASS**, with no wording changes.
+`evidence/story-4-9/review-pass-2/description-delta.json` records seven source
+wording deltas and nine Catalog PartyId descriptions; every other Catalog field
+and all vector bytes match the prior approved artifact. That earlier artifact
+and its approval remain intact. The requesting maintainer explicitly approved the refreshed artifact with
+“I approve” after final verification and independent review. Approval-time exact
+input preflight and four-vector validation pass; all Story 4.9 acceptance items
+are complete.
+
+Implementation started at Parties
+`3608e121364198e2ea0643769e680df29bc8efe0`; an independent action committed the
+initial fixes as `48bed0054dddca785dd0089d9cfc63384f9ad7c2`. Final verification
+ran with Parties HEAD `3e4e6449fcafe511727913a390c411ba292576a5`, including the
+working-tree graph tests. The implementation worker made no commits. Current source and
+verifier manifests bind the final bytes. Concurrent release-publication edits
+were preserved; `source-reconciliation.json` records the independently reviewed
+CI documentation hash change without altering the historical receipt.
+
+Current evidence is indexed in `evidence/story-4-9/review-pass-2/verification.md`.
+D1–D3 are already tracked at `deferred-work.md:539`, `:542` and `:545`.
+The existing production dependency-policy mismatch is already tracked at
+`deferred-work.md:480`; this run does not claim that production Manifest gate
+passed. Query/effect proof and C06–C08 remain downstream gates. No duplicate
+ledger entry, reference edit, enrollment, publication or push was made.
+
+### Earlier accepted implementation
 
 Implemented in the owning Parties working tree, starting from clean
 `836b2ba4aa41cdf8a7812b97a5da7c08896c0c7c`; the approved baseline above is
@@ -170,6 +213,37 @@ All seven patch groups are resolved and covered by the final passing checks.
 No review finding remains open. Final package/Catalog identity and direct
 wording deltas and explicit maintainer vector approval are recorded.
 
+### Resumed workflow review (2026-10-20)
+
+All three review layers completed against `/tmp/bmad-4-9-review-z874a5cx.diff`.
+The diff includes the preserved original McpCli evidence, the new candidate and
+Parties changes from `3608e121364198e2ea0643769e680df29bc8efe0`.
+Each finding is classified below before grouping. B = blind hunter,
+E = edge-case hunter, V = verification-gap reviewer.
+
+| ID | Finding | Verdict | Evidence and route |
+| --- | --- | --- | --- |
+| B1 | Selected Builds defaults exceed production dependency-policy pins | medium | Props selects EventStore 3.126.0/Commons 2.30.3 while policy still pins 3.124.0/2.30.1. This gitlink advance predates this resumed run; no reference was changed here. **defer**, already tracked (`deferred-work.md:480`); no duplicate entry. The scratch checks do not claim the production Manifest gate passed. |
+| B2 | Nested verifier's default root resolves to `_bmad-output` | low | Candidate `verify-scratch.py:149` retains `parents[4]` after moving down a directory. The documented explicit-root command works, but the default fails. **patch**, grouped with E1. |
+| B3 | Optimization removes required integrity assertions | medium | Candidate optimized unittest reproduces artifact-drift acceptance and premature publication. **patch** the active candidate with explicit failures; preserve historical parent evidence. Grouped with E2. |
+| B4 | Binding receipt's manifest/artifact hashes are unenforced | medium | `check_recorded_inputs` checks per-file manifests and validator identity but does not compare the manifests/artifact to the receipt's own hashes. A rehashed input could diverge from its binding. **patch** candidate checks and mismatch regressions. |
+| B5 | Ignored artifact lacks a durable handoff or rebuild procedure | false | **carried** from pass-1 B4: verification documents the retained local artifact, exact pack command and new-candidate/rebinding requirement. This is an unpublished local increment, with no portable or byte-identical rebuild claim. **reject**. |
+| B6 | Missing production assets prevent isolated verification | low | Candidate unconditionally reads `obj/project.assets.json` before its independent scratch restore. A clean checkout fails unnecessarily. **patch** preservation of original bytes or absence. |
+| B7 | Python children can select a different interpreter/environment | low | Two commands use literal `python3`, so direct virtual-environment execution can select a different child. **patch** to `sys.executable` and assert the child choice. The recorded dependency prerequisite remains `jsonschema==4.26.0`; no differing installed-version failure was demonstrated. |
+| B8 | Parties default path is machine-specific | low | The old local default is machine-specific, but the current candidate's documented reproduction command supplies `--parties-root`. Automatic checkout discovery adds branches to a local evidence helper; **reject** under the low-impact complexity rule. |
+| B9 | External verifier processes have no timeouts | low | A tool could hang; none did in this run. A configurable timeout interface adds behavior to the local evidence helper without a demonstrated failing stage. **reject** under the low-impact complexity rule. |
+| B10 | Captured subprocess diagnostics disappear on failure | low | `CalledProcessError` does not print its captured stdout/stderr. A stale revision/Catalog/vector failure therefore hides its useful explanation. **patch** diagnostics at the CLI boundary without publishing failed outputs. |
+| E1 | Nested verifier default root is incorrect | low | Same verified path-depth defect as B2. **patch**, grouped with B2. |
+| E2 | Optimized execution disables verification guards | medium | Same artifact-drift/publication reproduction as B3. **patch**, grouped with B3. |
+| V1 | New source-root layouts lack repeatable evaluated-graph coverage | low | Temporary probes pass, but the existing tracked fitness test covers EventStore/Commons/Memories only. Removing either new fallback would silently select the package in that layout. **patch** minimal graph cases; the filed defer recommendation is superseded by the direct test correction. |
+
+All seven patch groups were resolved by the original implementation worker and
+passed root's final verification. Candidate guards survive optimization, bind
+receipt hashes, preserve absent assets, use the current Python interpreter and
+report captured failures; both source-layout graph regressions pass. No intent
+gap or bad-spec loopback was identified. Existing D1–D3 and production
+dependency-pin work remain in their original ledger entries.
+
 ## Design Notes
 
 Pack locally as `0.0.0-story49`; no release is authorized. Query postconditions
@@ -194,15 +268,15 @@ Code review 2026-10-20, pass 2 (Parties range `836b2ba4..e1db1b61`: the story co
 
 The G6 and G7 patches change Contracts description text that the description review, `evidence/story-4-9/catalog.json` and `maintainer-vector-approval.json` (bound to the exact local package) recorded. Applying them needs a fresh scratch pack, Catalog and lint run, and a recorded wording delta, or they carry into the Story 4.10 artifact rebind. The other patches do not change the packed Contracts bytes.
 
-- [ ] [Review][Patch] G1 — medium. No test shows that an `update-party` payload carrying only `AddContactChannels`, only `RemoveContactChannelIds` or only `AddIdentifiers` passes the new empty-update rule. Deleting any of those three `HaveSupportedChange` terms keeps every test green while rejecting such updates, including the remove-only and add-only commands the legacy MCP `update_party` tool builds (`src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:835-848`). Add a validator theory with one valid payload per list (VG, BH). [src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:151]
-- [ ] [Review][Patch] G2 — medium. The command `Example` payloads are never run through production deserialization and validation. The only check deserializes them with ad-hoc options and asserts `PartyId`, so an `update-party` example of `{"PartyId":"party-49"}` would pass it and Catalog, then be rejected with `CompositeEmptyUpdate`. In Parties.Tests, deserialize each decorated type's `Example` with `PartiesJsonOptions.Default` and assert its registered validator accepts it. The examples omit the lists, so the same test covers the matrix's "omitted collections retain defaults" over JSON, which no test exercises today (VG, AA, BH). [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:42]
-- [ ] [Review][Patch] G3 — low. A null collection, or a null item, also emits "Child PartyId must match PartyId." (`PredicateValidator`, empty property name) beside `NotNullValidator`. That failure cannot be told apart from a real root/child mismatch or the operation cap, and the null rows assert with `ShouldContain`, so it goes unseen. Treat null collections and items as matching in `HaveMatchingChildPartyIds`, since the `NotNull` rules own them, and assert the exact failure list for the null rows (BH, AA, EC). [src/Hexalith.Parties/Validation/CreatePartyCompositeValidator.cs:119; src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:168]
-- [ ] [Review][Patch] G4 — low. The package test pins `Hexalith.McpCli.Abstractions` to the literal `1.0.0`, while the line above resolves EventStore through `ResolveMsbuildProperty(..., "HexalithEventStoreVersion")`. The version comes from `HexalithMcpCliVersion` in the Builds catalog, so the next Builds bump of that property turns Contracts.Tests red. Resolve `HexalithMcpCliVersion` the same way (BH, EC). [tests/Hexalith.Parties.Contracts.Tests/Package/ContractsPackageTests.cs:87]
-- [ ] [Review][Patch] G5 — low. `HexalithMcpCliRoot` probes only Parties' own `references\Hexalith.McpCli`. Every other Hexalith root also probes `..\Hexalith.X` and `..\references\Hexalith.X`, the "existing package/source reference pattern" this spec names. Hexalith.Agents builds Parties from source at `references/Hexalith.Parties`, beside `references/Hexalith.McpCli` (`agents/Directory.Build.props:44-58`), where nested submodules stay uninitialized. In that layout source mode silently compiles Parties.Contracts against the 1.0.0 package while EventStore and the other roots come from source. This reverses pass-1 B7: the Agents layout is the supported layout B7 lacked. Add the two sibling probes (AA, EC, VG). [Directory.Build.props:20]
-- [ ] [Review][Patch] G6 — low. Every `PartyId` description says legacy braced, parenthesized and X-format GUID IDs have "unproven" McpCli/Gateway reachability, but McpCli always refuses them. `mcpcli:src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:219-227` applies `RoutingResolver.IsAggregateId`, which requires an ASCII letter or digit first and last (`mcpcli:src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:127-130`), and child `PartyId` values must equal the root. Only `ContactChannelId` and `IdentifierId` stay plausibly reachable, because String identifiers get no schema pattern. State the refusal in the seven `PartyId` descriptions and keep the child-ID wording (AA). [src/Hexalith.Parties.Contracts/Commands/CreatePartyComposite.cs:17; UpdatePartyComposite.cs:16; ReactivateParty.cs:14; DeactivateParty.cs:14; AddContactChannel.cs:13; UpdateContactChannel.cs:13; AddIdentifier.cs:13]
-- [ ] [Review][Patch] G7 — low. `ReactivateParty` and `DeactivateParty` reuse the `PartyId` text "shared by the root and every child operation", but those commands have no child operations. Give them their own wording (BH). [src/Hexalith.Parties.Contracts/Commands/ReactivateParty.cs:14; src/Hexalith.Parties.Contracts/Commands/DeactivateParty.cs:14]
-- [ ] [Review][Patch] G8 — low. The decoration test pins routing but not `CorrelationProperty`, `IdempotencyKeyProperty`, `ActorProperty` or the module's `SerializerOptionsProvider`. Adding an idempotency binding would make McpCli require a key for that operation while the "existing routing" test stays green. Assert all four are null (BH, EC). [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:35]
-- [ ] [Review][Patch] G9 — low. `HaveSupportedChange` repeats the per-entry "Type, Value or IsPreferred" predicate. An update whose only entry is empty fails twice (`CompositeEmptyUpdate` and `CompositeEmptyContactUpdate`), and a new mutable member would need edits in both places, or updates carrying only that member would be rejected as empty. Count a non-empty `UpdateContactChannels` list as a change and let the entry rule reject empty entries (BH). [src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:157]
+- [x] [Review][Patch] G1 — medium. No test shows that an `update-party` payload carrying only `AddContactChannels`, only `RemoveContactChannelIds` or only `AddIdentifiers` passes the new empty-update rule. Deleting any of those three `HaveSupportedChange` terms keeps every test green while rejecting such updates, including the remove-only and add-only commands the legacy MCP `update_party` tool builds (`src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:835-848`). Add a validator theory with one valid payload per list (VG, BH). [src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:151]
+- [x] [Review][Patch] G2 — medium. The command `Example` payloads are never run through production deserialization and validation. The only check deserializes them with ad-hoc options and asserts `PartyId`, so an `update-party` example of `{"PartyId":"party-49"}` would pass it and Catalog, then be rejected with `CompositeEmptyUpdate`. In Parties.Tests, deserialize each decorated type's `Example` with `PartiesJsonOptions.Default` and assert its registered validator accepts it. The examples omit the lists, so the same test covers the matrix's "omitted collections retain defaults" over JSON, which no test exercises today (VG, AA, BH). [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:42]
+- [x] [Review][Patch] G3 — low. A null collection, or a null item, also emits "Child PartyId must match PartyId." (`PredicateValidator`, empty property name) beside `NotNullValidator`. That failure cannot be told apart from a real root/child mismatch or the operation cap, and the null rows assert with `ShouldContain`, so it goes unseen. Treat null collections and items as matching in `HaveMatchingChildPartyIds`, since the `NotNull` rules own them, and assert the exact failure list for the null rows (BH, AA, EC). [src/Hexalith.Parties/Validation/CreatePartyCompositeValidator.cs:119; src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:168]
+- [x] [Review][Patch] G4 — low. The package test pins `Hexalith.McpCli.Abstractions` to the literal `1.0.0`, while the line above resolves EventStore through `ResolveMsbuildProperty(..., "HexalithEventStoreVersion")`. The version comes from `HexalithMcpCliVersion` in the Builds catalog, so the next Builds bump of that property turns Contracts.Tests red. Resolve `HexalithMcpCliVersion` the same way (BH, EC). [tests/Hexalith.Parties.Contracts.Tests/Package/ContractsPackageTests.cs:87]
+- [x] [Review][Patch] G5 — low. `HexalithMcpCliRoot` probes only Parties' own `references\Hexalith.McpCli`. Every other Hexalith root also probes `..\Hexalith.X` and `..\references\Hexalith.X`, the "existing package/source reference pattern" this spec names. Hexalith.Agents builds Parties from source at `references/Hexalith.Parties`, beside `references/Hexalith.McpCli` (`agents/Directory.Build.props:44-58`), where nested submodules stay uninitialized. In that layout source mode silently compiles Parties.Contracts against the 1.0.0 package while EventStore and the other roots come from source. This reverses pass-1 B7: the Agents layout is the supported layout B7 lacked. Add the two sibling probes (AA, EC, VG). [Directory.Build.props:20]
+- [x] [Review][Patch] G6 — low. Every `PartyId` description says legacy braced, parenthesized and X-format GUID IDs have "unproven" McpCli/Gateway reachability, but McpCli always refuses them. `mcpcli:src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:219-227` applies `RoutingResolver.IsAggregateId`, which requires an ASCII letter or digit first and last (`mcpcli:src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:127-130`), and child `PartyId` values must equal the root. Only `ContactChannelId` and `IdentifierId` stay plausibly reachable, because String identifiers get no schema pattern. State the refusal in the seven `PartyId` descriptions and keep the child-ID wording (AA). [src/Hexalith.Parties.Contracts/Commands/CreatePartyComposite.cs:17; UpdatePartyComposite.cs:16; ReactivateParty.cs:14; DeactivateParty.cs:14; AddContactChannel.cs:13; UpdateContactChannel.cs:13; AddIdentifier.cs:13]
+- [x] [Review][Patch] G7 — low. `ReactivateParty` and `DeactivateParty` reuse the `PartyId` text "shared by the root and every child operation", but those commands have no child operations. Give them their own wording (BH). [src/Hexalith.Parties.Contracts/Commands/ReactivateParty.cs:14; src/Hexalith.Parties.Contracts/Commands/DeactivateParty.cs:14]
+- [x] [Review][Patch] G8 — low. The decoration test pins routing but not `CorrelationProperty`, `IdempotencyKeyProperty`, `ActorProperty` or the module's `SerializerOptionsProvider`. Adding an idempotency binding would make McpCli require a key for that operation while the "existing routing" test stays green. Assert all four are null (BH, EC). [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:35]
+- [x] [Review][Patch] G9 — low. `HaveSupportedChange` repeats the per-entry "Type, Value or IsPreferred" predicate. An update whose only entry is empty fails twice (`CompositeEmptyUpdate` and `CompositeEmptyContactUpdate`), and a new mutable member would need edits in both places, or updates carrying only that member would be rejected as empty. Count a non-empty `UpdateContactChannels` list as a change and let the entry rule reject empty entries (BH). [src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs:157]
 - [x] [Review][Defer] D1 — medium. Changing a preferred channel's `Type` without `IsPreferred` leaves two preferred channels of the target type [src/Hexalith.Parties/Domain/PartyAggregate.cs:554] — deferred: pre-existing aggregate behavior, also on the standalone path (`:1228`); the apply step keeps the old flag (`:1697`). The new descriptions document the `IsPreferred=true` workaround, and a domain change is outside this story (BH, EC).
 - [x] [Review][Defer] D2 — medium. A validation rejection carries one failure per invalid list item, with no cap [src/Hexalith.Parties/Domain/PartyDomainProcessor.cs:610] — deferred: pre-existing, since empty-string removal IDs already produce one failure each. The story's per-item `NotNull` adds null items as a second route, with two failures per null removal ID. A long list of nulls or empty IDs persists a rejection event that grows with the request (EC).
 - [x] [Review][Defer] D3 — medium. Parties CI never builds McpCli's Catalog over the Contracts, so an example that the case-sensitive schema enum rejects (for example `"Type":"person"`, which the case-insensitive STJ enum read accepts) ships green [tests/Hexalith.Parties.Contracts.Tests/McpCliDecorationTests.cs:42] — deferred: needs a cross-repository harness, and binding vectors to the complete artifact belongs to Story 4.10 (VG).
@@ -221,3 +295,28 @@ The G6 and G7 patches change Contracts description text that the description rev
 - `low` The repeat-deactivation test duplicates a lifecycle test (BH). This is a placement issue, not a defect. An empty event list means NoOp here, because a rejection always carries events.
 - `false` Descriptions omit the duplicate-skip behavior and per-member limits (AA). "Must be unique" states what callers must do, and the command descriptions give the 512 and 4096 limits for every string.
 - `false` The aggregate's empty-update NoOp branch is now unreachable (EC, deletion). Direct `PartyAggregate.Handle` callers still reach it, and rejecting empty updates in the validator is what the spec requires.
+
+#### Pass 2 patch resolution (2026-10-20)
+
+G1–G9 are resolved by the code and checks indexed in
+`evidence/story-4-9/review-pass-2/verification.md`. G1 pins all three sole-list
+positive branches; G2 exercises all four examples with production options and
+registered validators; G3 pins the complete null failure lists; G4 resolves the
+central McpCli version; G5 verifies both sibling layouts; G6/G7 record the exact
+repacked wording delta; G8 pins the four null routing/serializer bindings; G9
+pins the single empty-contact rejection. Fresh-context description review has
+passed. Refreshed-artifact maintainer approval is recorded; all acceptance
+items are complete.
+
+### Refreshed artifact approval
+
+The requesting maintainer approved the presented refreshed artifact with
+“I approve”. `evidence/story-4-9/review-pass-2/maintainer-vector-approval.json`
+binds the explicit approval to the retained package hash, exact vector/source/
+verifier manifests and validator revision. Approval-time input preflight and
+four-vector validation pass. Prior approval and its artifact remain historical.
+
+The complete source manifest now matches committed Parties revision
+`836c315269b196a49455aacf7534c48fba3cb834`, recorded in
+`evidence/story-4-9/review-pass-2/completion.json`. This independent commit
+includes the final graph tests; approval applies to those exact verified bytes.

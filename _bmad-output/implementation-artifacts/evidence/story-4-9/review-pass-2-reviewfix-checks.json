@@ -1,0 +1,48 @@
+{
+  "recordedAtUtc": "2026-10-20T10:54:01.415957+00:00",
+  "scope": "Review-fix focused checks only; full verification delegated to root.",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s _bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2 -p test_verify_scratch.py -v",
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-reviewfix-verifier-tests.txt",
+      "outputSha256": "d2ba82bb45f321dd1c368487eb8a8a755bca6e8aec555dd4f3de72a73aaba9a4"
+    },
+    {
+      "command": "python3 -O -m unittest discover -s _bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2 -p test_verify_scratch.py -v",
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-reviewfix-verifier-tests-optimized.txt",
+      "outputSha256": "9407bd15f0a60bf696634821ac4921efbb2c1ef82947953f07b508fbb4bddc4d"
+    },
+    {
+      "command": "dotnet build tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj --no-restore --configuration Release -warnaserror",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-reviewfix-graph-build.txt",
+      "outputSha256": "b3cbe9e48a97ee0637860ae64d4d21783a65231a3539f457fb52d815e62c181b"
+    },
+    {
+      "command": "dotnet tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll -method '*McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout'",
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-reviewfix-graph-tests.txt",
+      "outputSha256": "dabd2be82ec9c9b0bbd8cd74fb8d144d879291f7d9d6ac875b9a79c691174741"
+    }
+  ],
+  "summary": {
+    "pythonTests": 11,
+    "optimizedPythonTests": 11,
+    "sourceLayoutGraphCases": 2,
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "contractsSourcesUnchanged": true,
+    "contractsPackageUnchanged": true,
+    "candidateApprovalStatus": "pending-maintainer-approval"
+  },
+  "remainingInputReconciliation": {
+    "path": "docs/ci.md",
+    "reason": "Unrelated concurrent release-publication documentation; root will bind the inspected bytes during final verification."
+  }
+}

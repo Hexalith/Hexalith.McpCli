@@ -1,0 +1,119 @@
+{
+  "recordedAtUtc": "2026-10-20T10:54:49.008904+00:00",
+  "partiesHead": "3e4e6449fcafe511727913a390c411ba292576a5",
+  "artifactHash": "sha512-2y0Jw2K2PuWVpfdJLMfQdAoo4REb41uGtAocjkPfpuExmtA6RR6zE9y9JC+mKMq06XTTVn8m7is/YrOzlVnkdQ==",
+  "checks": [
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.Parties.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-final-build.txt",
+      "outputSha256": "10cf64f5287c95b8db3d027d3055e0a821744644bd100111d854d016cc0bac67"
+    },
+    {
+      "label": "parties-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Parties.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-final-parties-tests.txt",
+      "outputSha256": "74b3b3943140598f1e45544b467ea2641573b9f63ba76e812a91d1e1e92d5aa4"
+    },
+    {
+      "label": "server-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Parties.Server.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-final-server-tests.txt",
+      "outputSha256": "601fb970c881a6d79d673890e684f83bd2ffbf97220844f632a67bc128d77398"
+    },
+    {
+      "label": "contracts-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Parties.Contracts.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0,
+      "output": "review-pass-2-final-contracts-tests.txt",
+      "outputSha256": "cb5b94175682ee4be471401874ee3fff6ac47c14f195f5e8a40d0b9a418f296a"
+    },
+    {
+      "label": "verifier-tests",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2",
+        "-p",
+        "test_verify_scratch.py",
+        "-v"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-final-verifier-tests.txt",
+      "outputSha256": "04e9dfb4ad452f8b9c2fdd38eadbebcdcd8619cc1a54c2f882affbe7ed350820"
+    },
+    {
+      "label": "optimized-verifier-tests",
+      "command": [
+        "/usr/bin/python3",
+        "-O",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2",
+        "-p",
+        "test_verify_scratch.py",
+        "-v"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-final-optimized-verifier-tests.txt",
+      "outputSha256": "399250f52efcf9d5ff640bdf5c7b15c533f4ed009290e06460acf5da71d390d9"
+    },
+    {
+      "label": "scratch",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-9/review-pass-2/verify-scratch.py",
+        "--parties-root",
+        "/home/administrator/projects/hexalith/parties"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "output": "review-pass-2-final-scratch.txt",
+      "outputSha256": "020199f67a665f02e6cbacf4e2d7cec3d139799f07f51050d71d9b695cbc4feb"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "reviewer": "/root/description_review",
+  "artifactHash": "sha512-2y0Jw2K2PuWVpfdJLMfQdAoo4REb41uGtAocjkPfpuExmtA6RR6zE9y9JC+mKMq06XTTVn8m7is/YrOzlVnkdQ==",
+  "catalog": "catalog.json",
+  "exactDescriptionDelta": "description-delta.json",
+  "requirements": [
+    "Review the corrected seven PartyId descriptions without source context",
+    "Confirm lifecycle descriptions refer to their single party",
+    "Confirm child ContactChannelId and IdentifierId descriptions are unchanged"
+  ],
+  "previousReviewRecord": "../description-review.json",
+  "maintainerVectorApproval": "approved",
+  "technicalVerdict": "PASS",
+  "reviewReport": "description-review.md",
+  "findings": [],
+  "reviewedAtUtc": "2026-10-20T10:49:49.260689+00:00"
+}

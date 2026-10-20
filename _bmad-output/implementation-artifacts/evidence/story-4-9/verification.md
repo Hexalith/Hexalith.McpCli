@@ -1,5 +1,21 @@
 # Story 4.9 verification
 
+## Current review pass 2 candidate
+
+The nine follow-up patches are implemented and verified in a separate
+[review-pass-2 candidate](review-pass-2/verification.md). Its exact package,
+Catalog and wording delta are recorded there. The required suites now pass
+2013 Parties, 315 Server and 201 Contracts tests; the isolated four-command
+Catalog, lint, routing and vector gates pass. Fresh-context description review
+returned PASS. The requesting maintainer explicitly approved the refreshed
+package; its receipt and successful approval-time checks are recorded alongside it.
+
+The rest of this document records the earlier accepted artifact. Its package,
+Catalog, receipts and approval remain preserved; that approval does not extend
+to the new candidate's changed package bytes.
+
+## Historical accepted verification
+
 The implementation and technical review are complete. Final Release verification
 passes: **2004 Parties tests, 315 Server tests and 201 Contracts tests**, zero
 failures/skips; full solution restore/build succeeds with zero warnings/errors.

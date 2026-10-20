@@ -1,0 +1,27 @@
+test_absent_production_assets_remain_absent_and_unexpected_creation_blocks_publication (test_verify_scratch.VerifyScratchTests.test_absent_production_assets_remain_absent_and_unexpected_creation_blocks_publication) ... Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Validated 1 vector(s)
+Scratch Catalog, lint, strict, command-routing smoke, restored artifact identity and four-vector coverage passed; production assets unchanged.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+ok
+test_binding_manifest_and_artifact_receipt_mismatches_fail_before_git_or_publication (test_verify_scratch.VerifyScratchTests.test_binding_manifest_and_artifact_receipt_mismatches_fail_before_git_or_publication) ... ok
+test_cli_emits_captured_failure_diagnostics_and_preserves_published_evidence (test_verify_scratch.VerifyScratchTests.test_cli_emits_captured_failure_diagnostics_and_preserves_published_evidence) ... Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+ok
+test_declared_revision_checks_host_and_validator_changes (test_verify_scratch.VerifyScratchTests.test_declared_revision_checks_host_and_validator_changes) ... ok
+test_default_cli_root_reaches_the_repository_without_an_override (test_verify_scratch.VerifyScratchTests.test_default_cli_root_reaches_the_repository_without_an_override) ... ok
+test_later_routing_artifact_or_vector_failure_preserves_published_evidence (test_verify_scratch.VerifyScratchTests.test_later_routing_artifact_or_vector_failure_preserves_published_evidence) ... Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+ok
+test_recorded_validator_hash_is_enforced_before_git_or_build (test_verify_scratch.VerifyScratchTests.test_recorded_validator_hash_is_enforced_before_git_or_build) ... ok
+test_source_vector_and_adapter_drift_fail_before_any_git_or_build (test_verify_scratch.VerifyScratchTests.test_source_vector_and_adapter_drift_fail_before_any_git_or_build) ... ok
+test_success_publishes_only_after_all_checks_and_sanitizes_every_runtime_call (test_verify_scratch.VerifyScratchTests.test_success_publishes_only_after_all_checks_and_sanitizes_every_runtime_call) ... Command-routing smoke: temporary copies omit only unavailable Query postconditions; no semantic-effects claim.
+ok
+test_unrecorded_vector_is_rejected_before_build (test_verify_scratch.VerifyScratchTests.test_unrecorded_vector_is_rejected_before_build) ... ok
+test_untracked_host_code_is_rejected (test_verify_scratch.VerifyScratchTests.test_untracked_host_code_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.075s
+
+OK
+Validated 1 vector(s)
+Scratch Catalog, lint, strict, command-routing smoke, restored artifact identity and four-vector coverage passed; production assets unchanged.

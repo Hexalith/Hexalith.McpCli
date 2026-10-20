@@ -1,0 +1,11 @@
+{
+  "recordedAtUtc": "2026-10-20T11:04:36.657352+00:00",
+  "partiesCompletionRevision": "836c315269b196a49455aacf7534c48fba3cb834",
+  "partiesCommitCreatedByThisWorkflow": false,
+  "allCommittedSourceManifestEntriesMatch": true,
+  "mcpcliBaseRevision": "040fd406d71723772fb14cb3a3bac9434003b6a4",
+  "commitlintEvidence": "completion-commitlint.json",
+  "artifactHash": "sha512-2y0Jw2K2PuWVpfdJLMfQdAoo4REb41uGtAocjkPfpuExmtA6RR6zE9y9JC+mKMq06XTTVn8m7is/YrOzlVnkdQ==",
+  "approvalStatus": "approved",
+  "publicationOrPushPerformed": false
+}
