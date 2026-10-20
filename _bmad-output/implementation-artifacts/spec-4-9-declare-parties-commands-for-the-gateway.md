@@ -2,7 +2,7 @@
 title: '4.9 Declare Parties commands for the gateway'
 type: 'feature'
 created: '2026-10-20'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'b616db3092a9b1c5af196538a3de37a5c7f2d7ca'
