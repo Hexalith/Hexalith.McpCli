@@ -779,3 +779,52 @@ retain their existing deferrals, with no new deferral or approval introduced.
 - `low` — UTF-8 BOM handling differs between the Python and C# gates (EC). Carried from the first pass.
 - `false` — `WithCandidate` throws `KeyNotFoundException` when a fixture lacks its root (EC). Carried: every committed fixture contains its root.
 - `low` — A deleted inventory stays in `bin` on incremental builds (EC). Carried from the first pass.
+
+### Review Findings (code review pass 3, 2026-10-21)
+
+Code review 2026-10-21 of the complete committed story range `9354dc0..0ef98db` (`39f75e8`, `558ce91`, `ea00721`, `fc37ea7`, `0ef98db`).
+
+- **Code-only scope:** excludes `_bmad-output/` and the `references/` gitlink moves; includes the seven copied vector files. The upstream Parties code is outside this repository's range.
+- **Size and mode:** 38 files, +3,766/−25, 4,200 diff lines, full mode, with `parties-migration-inventory-v1.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed. VG found no verification gaps.
+- **Result:** 36 normalized findings. 4 survive as 3 patch and 1 defer entries; 32 are rejected. No decision is needed.
+
+Parent checks during triage: upstream Parties `docs/api-contracts.md:327` and `README.md:193` state that the vectors "include prerequisite writes, repeat deactivation and semantic `parties.get-party`" checks. `git ls-files '_bmad-output/**/*.vector.json'` lists no evidence vector outside `evidence/story-4-10/`.
+
+- [x] [Review][Patch] R20 — medium. No test reaches `EnrolledInventoryCoverageGate`'s propagation of `InventoryCoverageGate.CheckFile` findings. `MissingInventoryCannotSilentlySkipAnEnrolledModule` takes the missing-file branch. `SyntheticFixtureCannotAuthorizeProductionEnrollment` and `AnotherModulesValidReleaseInventoryCannotAuthorizeEnrollment` reach the purpose and module checks only because `CheckFile` returned no findings. AA deleted `findings.AddRange(moduleFindings)` in a scratch copy, and all four `EnrolledModuleCoverageTests` still passed. The C# lane would then pass an enrolled module whose inventory has a missing or extra target, a wrong type or a pending approval. Only the Python `--inventory` lane would still fail it, which breaks AC3's "fail independently". Add a fact with a release-purpose sample inventory holding one `pending` row, and assert the exact propagated `row L01: approval.status must be 'approved'; actual 'pending'.` finding (AA). [tests/Hexalith.McpCli.Core.Tests/EnrolledInventoryCoverageGate.cs:30]
+- [x] [Review][Patch] R21 — low. The enrolled-modules section says each module requires "authentic owner decisions". The same README says at `:43` that `owning-maintainer` "records the claimed owner decision, not proof of authenticity", and at `:116` that "Approval authenticity remains an owner responsibility". The gate checks only the recorded `status`/`authority` values. Say "recorded `owning-maintainer` decisions" (AA). [tools/inventory-coverage/v1/README.md:105]
+- [x] [Review][Patch] R22 — low. The root README lists the remaining migration gates as "Live authorization, domain effects, and legacy-host retirement". The frozen intent keeps C06–C08 as downstream gates. C06 (Parties/Gateway must sanitize public errors before Gateway detail/title reaches generic error documents) and C07 (legacy ID reachability) are missing. Now that the shipped CLI exposes Parties, a reader can take error-message privacy as proven. Name both alongside live authorization (AA). [README.md:101]
+- [x] [Review][Defer] R23 — low. The agent instructions still call enrollment "configuration only". They omit the approval receipt, the hash-bound vectors, the release inventory, `check_enrolled.py` and the `enrolled-module-conformance` job. They also don't warn that a Builds bump that moves `HexalithPartiesVersion` fails until someone writes a fresh receipt (BH) [AGENTS.md:83] — deferred: already tracked (`deferred-work.md:559`); the fix edits agent-context files.
+
+R20–R22 are applied. `InventoryCoverageFindingsFailEnrollment` covers the gate's propagation of findings and shares the release-inventory helper with the module-mismatch case. Both READMEs now carry the corrected wording. A Release build of Core.Tests with `-warnaserror` has zero warnings and zero errors. `EnrolledModuleCoverageTests` passes 5/5, and the full Core.Tests project passes 669 with 0 failures and the two existing Windows-only skips. Deleting `findings.AddRange(moduleFindings)` fails only the new test (1 of 5), and the gate file was restored byte-identical to HEAD. No approved input, vector or reference changed. R23 keeps its existing deferral.
+
+#### Rejected (code review pass 3)
+
+- `false` — The `deactivate-party` vector deactivates twice, so its postcondition never tests the invocation (BH). The repeat is deliberate: upstream `docs/api-contracts.md:327` documents "repeat deactivation", and A1 C05 requires safe repeated soft deactivation. Prerequisite 1 asserts its own `accepted` result through the same expected Gateway routing.
+- `low` — All seven vectors share `party-story49` in `tenant-a`, and the list/search vectors assume an otherwise empty tenant in a live lane (BH). Scripted replay resets state for each vector, and the live lane belongs to Story 4.13. New IDs would change approved bytes and need a fresh approval.
+- `false` — The approval receipt does not bind accepted lint, so new exceptions could pass (BH, EC). Carried: both gates require exact set equality with the findings of the hash-bound artifact. Parties 1.5.1 has none, so any added row fails as stale.
+- `low` — Receipt provenance fields (`approvalReference` content, `publishedArtifactBinding`, `publication`) are not verified (BH). Carried from both earlier passes.
+- `false` — The C# and Python gates disagree on warning-level Catalog diagnostics (BH). Carried: strict `CatalogProvider.Get` (`CatalogProvider.cs:30`) refuses any diagnostic, so the test's strict `Describe` already fails on warnings.
+- `low` — Lint acceptance is implemented twice (BH). Carried from both earlier passes.
+- `low` — The enrolled job's `-class` filter exits 0 when it matches no tests (BH, EC, VG). Carried: the `ci` job runs all of Core.Tests (`ci.yml:25`), so the class still executes. VG confirms the behavior stays protected.
+- `low` — Core.Tests references the CLI and reads the generated manifest by reflection (BH). Carried: a generator change fails loudly, and moving the test is a refactor.
+- `low` — Unexercised claims: the empty-manifest branch, the README discovery order, `parties-candidate.json` and `tenants-accepted-lint.json` (BH). Carried. AA checked the README order against the built CLI in this pass.
+- `low` — Orphan approval directories, inventories and accepted-lint files are never reported (BH). Carried: they are inert.
+- `low` — `enrolled.json` stays `pending` on exceptions outside the caught tuple, earlier package results are dropped, and the fixture prints a traceback (BH, EC). Carried: the process exits nonzero, `pending` is not success, and one package is enrolled.
+- `low` — The vectors omit the organization type, not-found results and partial-update postconditions, and allow one vector per operation (BH). Carried from FB10 and pass 2's success-path ruling. More vectors would change approved inputs.
+- `false` — The `.gitattributes` binary rule for evidence vectors covers only Story 4.10 (BH). No tracked evidence vector exists outside `evidence/story-4-10/`, so no file is normalized.
+- `low` — `verify_artifact.py` cannot reproduce the enrolled check because candidate alignment cannot be turned off (BH). The README sends enrolled packages through `check_enrolled.py`, which runs locally with `--output`; candidate overrides are documented and recorded. A new flag adds surface.
+- `low` — The Python gate accepts a `fixture`-purpose inventory (EC). Carried: `EnrolledModuleCoverageTests` requires `release`, and the fix redesigns fixture authority.
+- `low` — The receipt's `module` can differ from the Catalog module (EC). It needs a committed duplicate inventory under the wrong name. Even then, the host's `--inventory` check compares the hashed inventory's module with the Catalog, and the C# gate checks `<catalog-module>-approved.json`. This extends pass 2's ruling.
+- `low` — One package exposing several Catalog modules binds only one inventory hash (EC). Hypothetical: Parties exposes one module, and the C# gate checks every module's inventory.
+- `low` — A nuspec dependency without a version raises `KeyError` (EC). Carried.
+- `maybe-false` — A nested `.nuspec` listed first supplies the dependencies (EC). Carried: no NuGet-produced Hexalith package with that layout has been shown. Would be `low` if true.
+- `low` — A non-normalized nuspec version breaks the cache path (EC). Carried.
+- `low` — `run_loopback` prints a traceback for assets without `packageFolders` or a library path (EC). Only malformed NuGet data reaches this, and the process still exits nonzero. Same ruling as the carried `TypeError`/`ParseError` rows.
+- `low` — A reused output directory keeps stale logs and `inputs-*` copies (EC). Carried.
+- `low` — No subprocess timeouts (EC). Carried.
+- `low` — `tenants-accepted-lint.json` is never validated (EC). Carried: the exact-equality check runs once Tenants is enrolled.
+- `low` — A deleted inventory stays in `bin` on incremental builds (EC). Carried.
+- `false` — `WithCandidate` throws `KeyNotFoundException` when a fixture lacks its root (EC). Carried: every committed fixture contains its root.
+- `low` — The `0ef98db` subject ("harden Parties query coverage verification") overstates its query-specific scope (EC, claim). The commit hardens the generic enrollment verification that gates Parties. It is already pushed, so rewording it would rewrite history.
+- `false` — The null-catalog branch of `EnrolledInventoryCoverageGate` is untested (AA). Removing it does not pass silently: `access.Catalog.Modules` then throws `NullReferenceException`.
