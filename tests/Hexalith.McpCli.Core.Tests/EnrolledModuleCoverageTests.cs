@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Nodes;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Sample.Contracts;
@@ -61,5 +62,37 @@ public sealed class EnrolledModuleCoverageTests
         ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: false);
         string directory = Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1");
         EnrolledInventoryCoverageGate.Check(directory, catalog, provider).ShouldBe(new[] { "sample: enrolled modules require purpose 'release'." });
+    }
+
+    /// <summary>A valid inventory for one enrolled module cannot authorize a different enrolled module.</summary>
+    [Fact]
+    public void AnotherModulesValidReleaseInventoryCannotAuthorizeEnrollment()
+    {
+        var provider = new CatalogProvider(() => [typeof(CreateItemCommand).Assembly, typeof(global::Catalog.String.Contracts.LookupQuery).Assembly],
+            new RecordingLogger<CatalogProvider>());
+        ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: false);
+        JsonObject inventory = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1", "sample-approved.json")))!.AsObject();
+        inventory["purpose"] = "release";
+        foreach (JsonNode? row in inventory["legacyRows"]!.AsArray())
+        {
+            row!["approval"]!["authority"] = "owning-maintainer";
+        }
+
+        string directory = Path.Combine(Path.GetTempPath(), "mismatched-inventory-" + Path.GetRandomFileName());
+        Directory.CreateDirectory(directory);
+        try
+        {
+            string sample = Path.Combine(directory, "sample-approved.json");
+            File.WriteAllText(sample, inventory.ToJsonString());
+            InventoryCoverageGate.CheckFile(sample, catalog, provider).ShouldBeEmpty();
+            File.Copy(sample, Path.Combine(directory, "string-fixture-approved.json"));
+
+            EnrolledInventoryCoverageGate.Check(directory, catalog, provider)
+                .ShouldBe(new[] { "string-fixture: inventory declares a different module." });
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 }

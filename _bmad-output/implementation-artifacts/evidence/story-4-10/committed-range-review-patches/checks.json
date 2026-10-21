@@ -1,0 +1,95 @@
+[
+  {
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "environment": {
+      "TMPDIR": "/tmp/story410-real-temp-ems5n2to-symlink"
+    },
+    "temporaryPathWasSymlink": true,
+    "exitCode": 0,
+    "stdout": "sample-loopback.stdout.txt",
+    "stderr": "sample-loopback.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "stdout": "post-loopback-restore.stdout.txt",
+    "stderr": "post-loopback-restore.stderr.txt"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "test_enrolled.CandidateHostPreparationTests",
+      "-v"
+    ],
+    "cwd": "isolated copy of current Python tests with HEAD verify_artifact.py",
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "expectedFailures": 3,
+    "stdout": "original-verifier-regressions.stdout.txt",
+    "stderr": "original-verifier-regressions.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+      "--configuration",
+      "Release",
+      "--artifacts-path",
+      "/tmp/story410-candidate-regression-xhio768j/artifacts",
+      "-p:Version=1.0.0",
+      "--output",
+      "/tmp/story410-candidate-regression-xhio768j/feed",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "stdout": "pack-abstractions.stdout.txt",
+    "stderr": "pack-abstractions.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "pack",
+      "tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "--artifacts-path",
+      "/tmp/story410-candidate-regression-xhio768j/artifacts",
+      "-p:Version=1.0.0",
+      "--output",
+      "/tmp/story410-candidate-regression-xhio768j/feed",
+      "-m:1",
+      "-p:IsPackable=true"
+    ],
+    "exitCode": 0,
+    "stdout": "pack-sample.stdout.txt",
+    "stderr": "pack-sample.stderr.txt"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/conformance-vectors/v1/verify_artifact.py",
+      "--artifact",
+      "/tmp/story410-candidate-regression-xhio768j/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg",
+      "--output",
+      "/tmp/story410-candidate-regression-xhio768j/verification",
+      "--inventory",
+      "tools/inventory-coverage/v1/sample-approved.json",
+      "tools/conformance-vectors/v1/sample-command.json",
+      "tools/conformance-vectors/v1/sample-query.json",
+      "tools/conformance-vectors/v1/sample-rename.json"
+    ],
+    "exitCode": 0,
+    "stdout": "real-candidate.stdout.txt",
+    "stderr": "real-candidate.stderr.txt"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdinFile": "/tmp/story410-commit-message-f9e4vdwp.txt",
+  "message": "fix(conformance): close Parties coverage review findings\n",
+  "exitCode": 0,
+  "evidence": "commitlint.txt"
+}

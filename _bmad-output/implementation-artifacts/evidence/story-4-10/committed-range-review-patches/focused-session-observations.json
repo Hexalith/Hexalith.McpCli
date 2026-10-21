@@ -1,0 +1,118 @@
+[
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/conformance-vectors/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "passed": 105,
+    "failed": 0,
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj"
+    ],
+    "exitCode": 0,
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.DescriptionLintGateTests"
+    ],
+    "exitCode": 0,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "modules",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "modules": [
+      "parties"
+    ],
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "operations",
+      "parties",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "operations": [
+      "parties.create-party",
+      "parties.deactivate-party",
+      "parties.get-party",
+      "parties.list-parties",
+      "parties.reactivate-party",
+      "parties.search-parties",
+      "parties.update-party"
+    ],
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "describe",
+      "parties.search-parties",
+      "--lint",
+      "--strict"
+    ],
+    "exitCode": 0,
+    "lintFindings": [],
+    "observedInSession": true
+  },
+  {
+    "command": [
+      "git",
+      "check-attr",
+      "text",
+      "eol",
+      "--",
+      "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/approval.json",
+      "tools/inventory-coverage/v1/parties-approved.json"
+    ],
+    "exitCode": 0,
+    "text": "set",
+    "eol": "lf",
+    "observedInSession": true
+  }
+]

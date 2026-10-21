@@ -1,0 +1,21 @@
+.........................F...............................................................................
+======================================================================
+FAIL: test_mutating_original_inputs_during_restore_cannot_change_verified_bytes (test_enrolled.FrozenArtifactInputTests.test_mutating_original_inputs_during_restore_cannot_change_verified_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_enrolled.py", line 479, in test_mutating_original_inputs_during_restore_cannot_change_verified_bytes
+    self.assertEqual({self.artifact: 1, vector: 1}, source_reads)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {Posi[87 chars]g'): 1, PosixPath('/tmp/story410-real-temp-l_m[43 chars]): 1} != {Posi[87 chars]g'): 0, PosixPath('/tmp/story410-real-temp-l_m[43 chars]): 1}
+- {PosixPath('/tmp/story410-real-temp-l_m8_g7b-symlink/tmpvt_0915y/Module.Contracts.1.0.0.nupkg'): 1,
+?                                                                                                  ^
+
++ {PosixPath('/tmp/story410-real-temp-l_m8_g7b-symlink/tmpvt_0915y/Module.Contracts.1.0.0.nupkg'): 0,
+?                                                                                                  ^
+
+   PosixPath('/tmp/story410-real-temp-l_m8_g7b-symlink/tmpvt_0915y/read.vector.json'): 1}
+
+----------------------------------------------------------------------
+Ran 105 tests in 26.407s
+
+FAILED (failures=1)

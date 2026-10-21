@@ -1,0 +1,5 @@
+{
+  "error": "ValueError: '/tmp/story410-feed-path-voidk3nz/sentinel.1.0.0.nupkg' is not in the subpath of '/tmp/story410-feed-path-voidk3nz/evidence'",
+  "sentinelIntact": false,
+  "scope": "All files were confined to a disposable temporary directory."
+}

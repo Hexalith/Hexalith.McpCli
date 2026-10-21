@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-21T12:58:03.363433+00:00",
+  "result": "passed",
+  "rootHead": "ea00721326b30ab5a243f4f803cd0c27c0fe8d14",
+  "protectedInputSha256": {
+    "tools/inventory-coverage/v1/parties-approved.json": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-approval.json": "ef9788ece5e19363139d0cb252998b68ff9f454c56d19001441c926990a701a7",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-pending-approval.json": "842e35f4f90b72be12ffea9f18f6a5042b731a0747d7e35edf38abd8c579314a",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-artifact-binding.json": "de3da4c4c7e2ea462139f25c30b64869a9ad4f513e5b030b05a7ca9d2577f42a"
+  },
+  "frozenIntentSha256": "31abb46110ade1eae1bc2a2b398a5ad97a1ebb69feb71dac83280a9ece0e1f95",
+  "referencesUnchangedFromHead": true,
+  "agentInstructionsByteIdentical": true,
+  "upstreamMatrixTestSourceSha256": "3f95010067943b030b5ef2e08d760a8ccdb3f59fd501f4c144e4f2e3418ed85c",
+  "retainedUpstreamMatrixExecution": "../release-readiness/approved-dependency-continuation/stable-main-build-and-test.json",
+  "matrixAudit": "../release-readiness/approved-dependency-continuation/matrix-test-audit-current.json",
+  "matrixCoveringTestsAllPresent": true,
+  "currentCoreExecution": "test-core.txt",
+  "limits": "Unchanged upstream source uses retained passing upstream execution; this run freshly executes the McpCli projects. Scripted replay does not establish live effects, authorization or legacy retirement."
+}

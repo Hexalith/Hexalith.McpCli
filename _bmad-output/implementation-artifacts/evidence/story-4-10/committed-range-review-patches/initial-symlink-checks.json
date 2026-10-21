@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "environment": {
+      "TMPDIR": "/tmp/story410-real-temp-l_m8_g7b-symlink"
+    },
+    "temporaryPathWasSymlink": true,
+    "exitCode": 1,
+    "stdout": "sample-loopback.stdout.txt",
+    "stderr": "sample-loopback.stderr.txt"
+  },
+  {
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "stdout": "post-loopback-restore.stdout.txt",
+    "stderr": "post-loopback-restore.stderr.txt"
+  }
+]

@@ -1,0 +1,6 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 71 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 243 ms).
+  Hexalith.McpCli.Analyzers -> /tmp/story410-candidate-regression-xhio768j/artifacts/bin/Hexalith.McpCli.Analyzers/release/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/story410-candidate-regression-xhio768j/artifacts/bin/Hexalith.McpCli.Abstractions/release/Hexalith.McpCli.Abstractions.dll
+  Successfully created package '/tmp/story410-candidate-regression-xhio768j/feed/Hexalith.McpCli.Abstractions.1.0.0.nupkg'.

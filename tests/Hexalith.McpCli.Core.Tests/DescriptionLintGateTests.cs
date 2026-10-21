@@ -13,23 +13,45 @@ public sealed class DescriptionLintGateTests
     public void ExactApprovalPassesButOtherOperationsPropertiesAndCodesFail()
     {
         DescriptionLintGate.Check([("tenants.list-tenants", new LintFinding("payload_paging_member", "warning", "message", "/properties/PageSize"))], Accepted).ShouldBeEmpty();
-        foreach (var finding in new[] {
-            ("tenants.other", new LintFinding("payload_paging_member", "warning", "message", "/properties/PageSize")),
-            ("tenants.list-tenants", new LintFinding("payload_paging_member", "warning", "message", "/properties/Cursor")),
-            ("tenants.list-tenants", new LintFinding("missing_description", "warning", "message", "/properties/PageSize")) })
-        {
-            DescriptionLintGate.Check([finding], Accepted).Count.ShouldBe(2);
-        }
+        DescriptionLintGate.Check([("tenants.other", new LintFinding("payload_paging_member", "warning", "message", "/properties/PageSize"))], Accepted)
+            .ShouldBe(new[] { "stale accepted lint [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/PageSize\"].",
+                "unapproved lint [\"tenants.other\",\"payload_paging_member\",\"/properties/PageSize\"]." });
+        DescriptionLintGate.Check([("tenants.list-tenants", new LintFinding("payload_paging_member", "warning", "message", "/properties/Cursor"))], Accepted)
+            .ShouldBe(new[] { "stale accepted lint [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/PageSize\"].",
+                "unapproved lint [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/Cursor\"]." });
+        DescriptionLintGate.Check([("tenants.list-tenants", new LintFinding("missing_description", "warning", "message", "/properties/PageSize"))], Accepted)
+            .ShouldBe(new[] { "stale accepted lint [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/PageSize\"].",
+                "unapproved lint [\"tenants.list-tenants\",\"missing_description\",\"/properties/PageSize\"]." });
     }
 
     /// <summary>Unrecorded findings, stale exceptions and absent approval references fail.</summary>
     [Fact]
     public void MissingApprovalAndStaleExceptionsFail()
     {
-        DescriptionLintGate.Check([], Accepted).ShouldHaveSingleItem().ShouldStartWith("stale accepted lint");
+        DescriptionLintGate.Check([], Accepted).ShouldBe(new[] { "stale accepted lint [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/PageSize\"]." });
         DescriptionLintGate.Check([("parties.list-parties", new LintFinding("payload_paging_member", "warning", "message", "/properties/PageSize"))], null)
-            .ShouldHaveSingleItem().ShouldStartWith("unapproved lint");
-        DescriptionLintGate.Check([], Accepted.Replace("test-only recorded approval", "")).ShouldHaveSingleItem()
-            .ShouldContain("nonempty approvalReference");
+            .ShouldBe(new[] { "unapproved lint [\"parties.list-parties\",\"payload_paging_member\",\"/properties/PageSize\"]." });
+        DescriptionLintGate.Check([], Accepted.Replace("test-only recorded approval", ""))
+            .ShouldBe(new[] { "accepted lint: expected operation, code, property and nonempty approvalReference." });
     }
+
+    /// <summary>Malformed approval documents fail with complete deterministic diagnostics.</summary>
+    /// <param name="json">The malformed acceptance document.</param>
+    /// <param name="expected">The full expected diagnostic.</param>
+    [Theory]
+    [InlineData("{}", "accepted lint: expected array.")]
+    [InlineData("null", "accepted lint: expected array.")]
+    [InlineData("{", "accepted lint: invalid JSON.")]
+    [InlineData("[null]", "accepted lint: expected operation, code, property and nonempty approvalReference.")]
+    [InlineData("[{\"operation\":\"tenants.list-tenants\",\"code\":\"payload_paging_member\",\"property\":\"/properties/PageSize\"}]", "accepted lint: expected operation, code, property and nonempty approvalReference.")]
+    [InlineData("[{\"operation\":\"tenants.list-tenants\",\"code\":\"payload_paging_member\",\"property\":\"/properties/PageSize\",\"approvalReference\":\"test-only\",\"extra\":\"unapproved\"}]", "accepted lint: expected operation, code, property and nonempty approvalReference.")]
+    [InlineData("[{\"operation\":\"tenants.list-tenants\",\"code\":\"payload_paging_member\",\"property\":\"/properties/PageSize\",\"reference\":\"test-only\"}]", "accepted lint: expected operation, code, property and nonempty approvalReference.")]
+    public void MalformedApprovalDocumentsFail(string json, string expected)
+        => DescriptionLintGate.Check([], json).ShouldBe(new[] { expected });
+
+    /// <summary>Repeated exact acceptances cannot hide duplicate approval rows.</summary>
+    [Fact]
+    public void DuplicateApprovalRowsFail()
+        => DescriptionLintGate.Check([], "[" + Accepted[1..^1] + "," + Accepted[1..^1] + "]")
+            .ShouldBe(new[] { "accepted lint: duplicate exception [\"tenants.list-tenants\",\"payload_paging_member\",\"/properties/PageSize\"]." });
 }

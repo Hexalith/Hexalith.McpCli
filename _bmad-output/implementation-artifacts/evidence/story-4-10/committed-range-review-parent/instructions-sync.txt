@@ -1,0 +1,1 @@
+agent instructions out of sync: CLAUDE.md differs from AGENTS.md

@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-10-21T13:04:46.139571+00:00",
+  "status": "review-complete",
+  "baselineCommit": "9354dc08176744c75c2ddb61d924c0948b373b98",
+  "rootHead": "ea00721326b30ab5a243f4f803cd0c27c0fe8d14",
+  "reviewDiff": "/tmp/story410-review-t1yqtwo2.diff",
+  "reviewDiffSha256": "2d0753ba018ad703c42eeb4776c2be978030a513bfecb6971eafd8ff6c653d40",
+  "reviewers": [
+    "/root/review_blind",
+    "/root/review_edges",
+    "/root/review_verification"
+  ],
+  "individualFindingsIncludingParent": 14,
+  "patchedFindingIds": [
+    "BH1",
+    "BH2",
+    "EC2",
+    "VG1",
+    "PF1"
+  ],
+  "newDeferredFindings": [],
+  "existingDeferredFinding": "R13; deferred-work.md:559",
+  "triage": "../../../spec-4-10-add-parties-queries-and-pin-complete-coverage.md",
+  "finalChangedFilesSha256": {
+    ".gitattributes": "776e9c97ddd0431aad9e8fc344db75c37c8cca28636bbc27ed7c7427184ae1fa",
+    "CLAUDE.md": "42d873ba982878f9550d13aead00b33684e23d82df3181a818b8ab7ea62a467e",
+    "README.md": "d807ad55961eac77bd03602868ee78fb72d4f9a6ef821898556bb6056afaa39a",
+    "tests/Hexalith.McpCli.Core.Tests/DescriptionLintGateTests.cs": "bf8bc7dfa2a0b77c576477bc025607e006512decc5021392e4e9844deef0287a",
+    "tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs": "3c3729b94a5b92274dc7e0b08e6066d24bffe8a275db6d6e9a244bd7fe0bec3e",
+    "tools/conformance-vectors/v1/README.md": "c7f2b562eca7b230238f43089c7928bf6eb6ae4099458b0db9094bca374b824a",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "4c81a1cdff378230e727dfe5606d5d934415276aa4d6e1beb3b30070b5f28bf7",
+    "tools/conformance-vectors/v1/test_enrolled.py": "8d8b282ad0b2569070b3db1b7442389b354c571032ba234ebb9f30fc8995e2ea",
+    "tools/conformance-vectors/v1/verify_artifact.py": "6f092c18a6f3ce4faeaf07e8319e70251e42a9c1ecf72d315ac536150f7d2486"
+  },
+  "guardRemovalMutations": "final/mutations/results.json",
+  "verification": "final/checks.json",
+  "limits": "CLAUDE synchronization restores only comments required by the explicit user-provided repository guidance. No instruction behavior or enrollment-context wording changed.",
+  "reviewedSnapshot": "/tmp/story410-reviewed-before-patches-zm0j7z3_.diff",
+  "reviewDiffSha256Meaning": "SHA256 of reviewedSnapshot before review patches; reviewDiff is rewritten to include final patches.",
+  "evidenceEncoding": "Hash-bound retained vector copies are binary; insignificant transcript trailing spaces are trimmed for the staged whitespace gate."
+}

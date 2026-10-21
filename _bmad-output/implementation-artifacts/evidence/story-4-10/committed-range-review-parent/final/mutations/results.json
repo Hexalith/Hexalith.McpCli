@@ -1,0 +1,28 @@
+[
+  {
+    "mutation": "bypass-lint",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_enrolled.FrozenArtifactInputTests.test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion",
+      "-v"
+    ],
+    "exitCode": 1,
+    "expectedFailureDetected": true,
+    "log": "bypass-lint.txt"
+  },
+  {
+    "mutation": "bypass-filename-guard",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_enrolled.VerifierFailureTests.test_path_bearing_package_identity_cannot_escape_the_frozen_feed",
+      "-v"
+    ],
+    "exitCode": 1,
+    "expectedFailureDetected": true,
+    "log": "bypass-filename-guard.txt"
+  }
+]

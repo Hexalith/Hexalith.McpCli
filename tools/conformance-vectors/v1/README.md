@@ -82,6 +82,7 @@ The existing sample parity gate remains available independently as `bash tools/c
 
 `verify_artifact.py --artifact <Contracts.nupkg> --output <evidence-directory>
 [--inventory <approved-inventory.json>] [--expected-hash <sha512-receipt>]
+[--accepted-lint <module>-accepted-lint.json]
 <vector.json>...` creates an isolated generic host around that exact package.
 It verifies restored bytes, complete Catalog coverage, strict discovery, every
 operation's description lint, and complete CLI/MCP replay without removing Query
@@ -128,7 +129,6 @@ from the inventory directory when present. Acceptance is exact by operation,
 code and property, with a required approval reference. New findings and stale
 exceptions fail. This preserves the eight accepted Tenants paging-member findings
 from Story 4.8 while Parties continues to require an empty lint set.
-
 
 Each artifact verification starts with `result: pending` and removes the old
 success hash receipt. Failures retain `result: failed` and captured subprocess

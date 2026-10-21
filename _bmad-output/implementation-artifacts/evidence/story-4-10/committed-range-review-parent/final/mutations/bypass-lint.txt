@@ -1,0 +1,16 @@
+test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion (test_enrolled.FrozenArtifactInputTests.test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion) ...
+  test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion (test_enrolled.FrozenArtifactInputTests.test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion) (accepted=False) ... FAIL
+
+======================================================================
+FAIL: test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion (test_enrolled.FrozenArtifactInputTests.test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion) (accepted=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-parent-mutations-t891emwp/v1/test_enrolled.py", line 552, in test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion
+    with self.assertRaisesRegex(RuntimeError, 'Description lint differs from exact approvals: unapproved='):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.015s
+
+FAILED (failures=1)

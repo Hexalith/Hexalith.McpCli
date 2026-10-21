@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -108,9 +109,13 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
         input_root = Path(tempfile.mkdtemp(prefix='inputs-', dir=output))
         frozen_feed = input_root / 'artifacts'
         frozen_feed.mkdir(parents=True, exist_ok=True)
-        artifact = frozen_feed / original_artifact.name
+        artifact = input_root / 'artifact.nupkg'
         artifact.write_bytes(artifact_bytes)
         package_id, version = package_identity(artifact)
+        filename = f'{package_id}.{version}.nupkg'
+        if re.fullmatch(r'[A-Za-z0-9_.+-]+', filename) is None or re.match(r'(?i)(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)', filename):
+            raise RuntimeError('Artifact package identity must form a single safe filename.')
+        artifact = artifact.rename(frozen_feed / filename)
         receipt.update(packageId=package_id, version=version, artifactHash=digest,
                        vectors=vector_hashes,
                        artifactSource=str(original_artifact),
@@ -129,7 +134,7 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             receipt['retainedInputs']['vectors'][str(source)] = frozen.relative_to(output).as_posix()
         # Retain other packages in a local candidate feed, without rereading the selected artifact.
         for source in original_artifact.parent.glob('*.nupkg'):
-            if source != original_artifact:
+            if source != original_artifact and source.name.casefold() != artifact.name.casefold():
                 (frozen_feed / source.name).write_bytes(source.read_bytes())
         frozen_inputs = {}
         for key, source in [('inventory', inventory), ('acceptedLint', accepted_lint)]:
@@ -152,6 +157,14 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
                 if (repo / name).exists():
                     shutil.copy2(repo / name, scratch / name)
+            # The isolated host selects its own candidate; shipped module references must not leak into its graph.
+            tool_project = scratch / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+            tree = ET.parse(tool_project)
+            for parent in tree.getroot().iter():
+                for item in list(parent):
+                    if item.tag == 'PackageReference' and item.get('HexalithContracts', item.findtext('HexalithContracts', '')).casefold() == 'true':
+                        parent.remove(item)
+            tree.write(tool_project, encoding='unicode')
             # Select the exact candidate dependency versions; record them so this cannot masquerade as shipped enrollment.
             with zipfile.ZipFile(artifact) as archive:
                 nuspec = ET.fromstring(archive.read(next(n for n in archive.namelist() if n.endswith('.nuspec'))))
@@ -165,7 +178,9 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             receipt['candidateDependencyOverrides'] = common
             props = scratch / 'Directory.Packages.props'
             tree = ET.parse(props)
-            ET.SubElement(ET.SubElement(tree.getroot(), 'ItemGroup'), 'PackageVersion', Update=package_id, Version=version)
+            group = ET.SubElement(tree.getroot(), 'ItemGroup')
+            ET.SubElement(group, 'PackageVersion', Remove=package_id)
+            ET.SubElement(group, 'PackageVersion', Include=package_id, Version=version)
             tree.write(props, encoding='unicode')
             host = scratch / 'host'
             host.mkdir()

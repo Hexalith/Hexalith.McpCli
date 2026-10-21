@@ -70,6 +70,9 @@ Before working in a Hexalith repository, locate, read, and follow
 - Keep repository-specific instructions in repository documentation or
   configuration, not in these universal entry points.
 
+<!-- bmad:context -->
+<!-- Verified 2026-10-10 against 5bc23e5. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+
 ## Hexalith.McpCli
 
 One generic MCP server and one thin CLI, both driven by a catalog of commands and queries discovered from decorated `*.Contracts` assemblies and submitted through the EventStore gateway client. .NET 10, ModelContextProtocol 2.2.0, System.CommandLine 2.0.12, xUnit v3; every package version comes from `references/Hexalith.Builds/Props/Directory.Packages.props`. Planning (brief, PRD, architecture spine, epics) lives in `_bmad-output/planning-artifacts/`; story specs and the deferred-work ledger in `_bmad-output/implementation-artifacts/`.

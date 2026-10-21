@@ -1,0 +1,43 @@
+{
+  "projects": {
+    "test-abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "test-analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "test-cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "test-core": {
+      "total": 670,
+      "failed": 0,
+      "succeeded": 668,
+      "skipped": 2
+    },
+    "test-manifest": {
+      "total": 104,
+      "failed": 0,
+      "succeeded": 104,
+      "skipped": 0
+    },
+    "test-mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    }
+  },
+  "passed": 1348,
+  "failed": 0,
+  "skipped": 4
+}

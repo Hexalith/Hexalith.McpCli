@@ -40,7 +40,7 @@ def fixture(repo: Path, artifact: Path):
     artifact = artifact.resolve(strict=True)
     package_id, version = 'Hexalith.McpCli.Sample.Contracts', '1.0.0'
     with tempfile.TemporaryDirectory(prefix='mcpcli-packaged-process-') as temporary:
-        root = Path(temporary)
+        root = Path(temporary).resolve()
         # The synthetic receipt, inventory and flagged project exist only in this temporary repository.
         for name in ['src', 'references/Hexalith.Builds/Props', 'tools/conformance-vectors/v1']:
             shutil.copytree(repo / name, root / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
@@ -91,6 +91,8 @@ def fixture(repo: Path, artifact: Path):
         if report['result'] != 'passed' or report['packages'] != [package_id] or len(report['results']) != 1:
             raise RuntimeError('Nonempty sample enrollment did not reach successful artifact verification.')
         verified = report['results'][0]
+        if verified['candidateDependencyOverrides'] != []:
+            raise RuntimeError('Enrolled verification must use the shipped dependency pins without candidate overrides.')
         if not verified['resolvedPackages'] or any(item['cacheContentHash'] != item['assetsHash'] or not item['artifactHash'].startswith('sha512-') for item in verified['resolvedPackages']):
             raise RuntimeError('Actual restored package identities/hashes were not retained.')
         for kind, source in [('inventory', inventory), ('acceptedLint', accepted)]:

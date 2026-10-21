@@ -1,0 +1,129 @@
+test_candidate_host_removes_inherited_contracts_but_preserves_stack_references (test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references) ... FAIL
+test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages (test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages) ...
+  test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages (test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages) (prior_version=None) ... FAIL
+  test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages (test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages) (prior_version='0.9.0') ... FAIL
+
+======================================================================
+FAIL: test_candidate_host_removes_inherited_contracts_but_preserves_stack_references (test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 246, in test_candidate_host_removes_inherited_contracts_but_preserves_stack_references
+    verify(self.repo, self.artifact, [], self.output)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 185, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 86, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 239, in inspect_restore
+    self.assertEqual(['Hexalith.EventStore.Contracts', 'Microsoft.Extensions.Hosting'],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     [item.get('Include') for item in selected.iter('PackageReference')])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Hexalith.EventStore.Contracts', 'Microsof[17 chars]ing'] != ['Existing.Contracts', 'Metadata.Contracts'[61 chars]ing']
+
+First differing element 0:
+'Hexalith.EventStore.Contracts'
+'Existing.Contracts'
+
+Second list contains 2 additional elements.
+First extra element 2:
+'Hexalith.EventStore.Contracts'
+
+- ['Hexalith.EventStore.Contracts', 'Microsoft.Extensions.Hosting']
++ ['Existing.Contracts',
++  'Metadata.Contracts',
++  'Hexalith.EventStore.Contracts',
++  'Microsoft.Extensions.Hosting']
+
+======================================================================
+FAIL: test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages (test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages) (prior_version=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 262, in test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages
+    verify(self.repo, self.artifact, [], self.output)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 185, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 86, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 258, in inspect_restore
+    self.assertEqual([{'Remove': 'Module.Contracts'}, {'Include': 'Module.Contracts', 'Version': '1.0.0'}], pins[-2:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'Remove': 'Module.Contracts'}, {'Include':[36 chars].0'}] != [{'Update': 'Module.Contracts', 'Version': '1.0.0'}]
+
+First differing element 0:
+{'Remove': 'Module.Contracts'}
+{'Update': 'Module.Contracts', 'Version': '1.0.0'}
+
+First list contains 1 additional elements.
+First extra element 1:
+{'Include': 'Module.Contracts', 'Version': '1.0.0'}
+
+- [{'Remove': 'Module.Contracts'},
+-  {'Include': 'Module.Contracts', 'Version': '1.0.0'}]
+? ^  ^^^^^
+
++ [{'Update': 'Module.Contracts', 'Version': '1.0.0'}]
+? ^  ^^ ++
+
+
+======================================================================
+FAIL: test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages (test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages) (prior_version='0.9.0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 262, in test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages
+    verify(self.repo, self.artifact, [], self.output)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 185, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/verify_artifact.py", line 86, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-candidate-regression-xhio768j/original-verifier/test_enrolled.py", line 258, in inspect_restore
+    self.assertEqual([{'Remove': 'Module.Contracts'}, {'Include': 'Module.Contracts', 'Version': '1.0.0'}], pins[-2:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'Remove': 'Module.Contracts'}, {'Include':[36 chars].0'}] != [{'Include': 'Module.Contracts', 'Version': [56 chars].0'}]
+
+First differing element 0:
+{'Remove': 'Module.Contracts'}
+{'Include': 'Module.Contracts', 'Version': '0.9.0'}
+
+- [{'Remove': 'Module.Contracts'},
+-  {'Include': 'Module.Contracts', 'Version': '1.0.0'}]
+? ^                                            ^ ^    ^
+
++ [{'Include': 'Module.Contracts', 'Version': '0.9.0'},
+? ^                                            ^ ^    ^
+
++  {'Update': 'Module.Contracts', 'Version': '1.0.0'}]
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.020s
+
+FAILED (failures=3)

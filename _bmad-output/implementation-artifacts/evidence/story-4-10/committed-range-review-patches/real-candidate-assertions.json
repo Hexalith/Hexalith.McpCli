@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "operations": [
+    "sample.create-item",
+    "sample.get-item",
+    "sample.rename-item"
+  ],
+  "inheritedPartiesPackagePresent": false,
+  "candidateWasAbsentFromCentralVersions": true,
+  "resolvedPackageCount": 53,
+  "evidenceLimit": "Synthetic sample replay does not prove live authorization or domain effects."
+}

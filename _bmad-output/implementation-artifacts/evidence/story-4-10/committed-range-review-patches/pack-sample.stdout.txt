@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 143 ms).
+  2 of 3 projects are up-to-date for restore.
+  Hexalith.McpCli.Analyzers -> /tmp/story410-candidate-regression-xhio768j/artifacts/bin/Hexalith.McpCli.Analyzers/release/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/story410-candidate-regression-xhio768j/artifacts/bin/Hexalith.McpCli.Abstractions/release/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/story410-candidate-regression-xhio768j/artifacts/bin/Hexalith.McpCli.Sample.Contracts/release/Hexalith.McpCli.Sample.Contracts.dll
+  The package Hexalith.McpCli.Sample.Contracts.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package '/tmp/story410-candidate-regression-xhio768j/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg'.

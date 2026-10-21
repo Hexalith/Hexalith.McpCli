@@ -1,0 +1,81 @@
+{
+  "files": [
+    {
+      "path": ".github/copilot-instructions.md",
+      "sha256": "42d873ba982878f9550d13aead00b33684e23d82df3181a818b8ab7ea62a467e",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "42d873ba982878f9550d13aead00b33684e23d82df3181a818b8ab7ea62a467e",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "a35361177cab772166ff484af580bc08f63e472fc0157e06f60d6f6c56195ae9",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/approval.json",
+      "sha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/inventory-coverage/v1/parties-approved.json",
+      "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/inventory-coverage/v1/parties-candidate.json",
+      "sha256": "d01c48bbe7dd472a8a6a3a2df3a65f7d5e7c410b5d8c7e7fdef03aa16ff9098b",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/inventory-coverage/v1/sample-approved.json",
+      "sha256": "b3697b75772b398b3c63d43fb0cd5f926200c1579aa71ec698dc7a1b7864e1e3",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/inventory-coverage/v1/tenants-accepted-lint.json",
+      "sha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+      "unchangedFromHead": true
+    }
+  ],
+  "referenceChanges": [],
+  "publishedArtifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw=="
+}

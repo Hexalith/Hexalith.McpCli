@@ -2,7 +2,7 @@
 title: '4.10 Add Parties queries and pin complete coverage'
 type: 'feature'
 created: '2026-10-20'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9354dc08176744c75c2ddb61d924c0948b373b98'
@@ -118,8 +118,9 @@ Existing C06–C08 and Stories 4.11/4.13 remain downstream gates.
 ## Implementation Notes
 
 Current state: implementation, protected Parties 1.5.1 publication, owning Builds
-integration and production enrollment are verified. Final independent workflow
-review and all required verification have passed, with no deferred findings.
+integration and production enrollment are verified. The resumed independent
+review patches and all required verification pass. R13 remains the already
+tracked agent-context refresh; this run adds no deferral.
 The dated sections below retain the historical decisions
 and intermediate states; [current verification](evidence/story-4-10/release-readiness/approved-dependency-continuation/verification.md)
 records the complete release/enrollment and review result.
@@ -223,6 +224,41 @@ verification and all protected publication/enrollment gates remain open.
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Resumed build review (2026-10-21)
+
+Three context-free layers reviewed the complete baseline diff at
+`/tmp/story410-review-t1yqtwo2.diff`, including untracked evidence. All layers
+returned before triage. Each finding is assessed individually below; duplicated
+sync findings share one correction. Historical dispositions are carried only
+where the claim, location and implementation still match.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| BH1: removed CLAUDE context markers | Medium. The existing HEAD omits the opening managed-context comments only in `CLAUDE.md`; the exact sync command exits 1. The user's repository instructions explicitly require copying `AGENTS.md` to both entry points and passing that check. Restore the identical comments; this changes no instruction text or agent behavior. | Required mechanical synchronization |
+| BH2: arbitrary artifact filename breaks restore | Medium. The feed snapshot keeps the supplied filename; the reviewer restored identical valid package bytes successfully under their canonical ID/version filename after `download.nupkg` failed NU1101. Normalize the captured feed name from the root manifest while retaining the source path. | Patch |
+| BH3: copied DLL is not separately hashed | Low. The standalone guard binds archive/cache/assets/deps metadata rather than separately hashing copied DLLs. The candidate verifier builds fresh isolated outputs; the unit guard tests deliberately do not launch a process, while real replay does. No affected execution was demonstrated. Another binary-tampering guard adds complexity for a state outside ordinary verification. | Reject low, nontrivial additional guard |
+| BH4: shipped executable smoke | Low, carried from FB9 and the committed-range rejection. The generated host still uses the CLI composition entry point; shipped discovery was executed separately and the production manifest/closure have independent tests. The proposed additional process lane and its disposition are unchanged. | Reject carried low extra orchestration |
+| BH5: inventory is read twice | Low. `CheckFile` and the subsequent enrolled-purpose/module checks independently read a tracked local document. A concurrent edit between these synchronous reads is possible, but no affected run is shown; sharing parsed input requires changing the checker boundary. | Reject low, nontrivial snapshot plumbing |
+| BH6: receipt lacks verifier/source byte hashes | Low. The Git revision identifies the tracked verifier and host sources; detached receipts alone do not reconstruct those sources. A new source-manifest format would add bookkeeping without correcting demonstrated routing or artifact validation. | Reject low, nontrivial additional evidence format |
+| BH7: approval receipt digest is absent | Low, carried from the committed-range evidence-retention rejection. The commit identifies the approval receipt; artifact, inventory and vector bytes remain independently bound. The same receipt-retention claim and implementation are unchanged. | Reject carried low bookkeeping |
+| BH8: current-state prose precedes later pending review | Low. The dated historical summary and resumed handoff describe different workflow points. The proposed correction edits only this build's spec. | Reject spec-only finding per workflow |
+| BH9: subprocess timeouts | Low, carried from the committed-range timeout rejection. The commands still fail or hang visibly and CI retains its job-level execution limit; no new hang is demonstrated. The requested timeout parameters remain additional policy. | Reject carried low, nontrivial parameters |
+| BH10: complete closure evidence lacks a multi-package mutation test | Low. `resolved_packages` enumerates every package library, and real candidate/enrolled evidence records the full 53-package closure. Existing tests protect package identity/hash integrity; no current omission occurs. The proposed extra assets comparison would protect a hypothetical future truncation. | Reject low, nontrivial extra verification |
+| EC1: first nested nuspec supplies overrides | Maybe-false, carried from the committed-range nested-nuspec rejection. The selector and claim are unchanged. The new reproduction is a synthetic archive; no affected NuGet-produced Hexalith package was established, which was the prior unresolved condition. The prior rejection for a low-impact hypothetical remains. | Reject carried finding |
+| EC2: deleted CLAUDE opening markers | Medium. Independently reproduces BH1's exact sync failure. The explicit repository synchronization requirement controls this mechanical repair; enrollment-context wording remains deferred under R13. | Same required correction as BH1 |
+| VG1: verifier lint call can be removed undetected | Medium, pre-verified. Removing only `verify()`'s `check_lint` call in an isolated copy leaves all 105 Python tests green. Existing pipeline fixtures report empty lint, and helper-only tests cannot protect candidate acceptance. Add a pipeline rejection test covering failed receipt, removed success hash, blocked replay, and exact-approval success. | Patch |
+| PF1: normalized filename trusts path-bearing identity | Medium. Parent inspection of BH2's patch found that `package_identity` accepts any nonempty ID/version. A disposable reproduction with an absolute ID overwrote a sentinel outside the captured feed before `relative_to` rejected the result; [the failed isolation check](evidence/story-4-10/committed-range-review-parent/filename-traversal-before.json) retains the observation. Require a single safe POSIX/Windows filename before moving the snapshot, and test sentinel preservation and zero subprocesses. | Patch |
+
+BH2, VG1 and PF1 are corrected and independently verified. Removing the lint call
+or the filename guard now fails its regression. The parent restored only the
+missing synchronization comments as required by the user's repository guidance.
+[Final resumed-build verification](evidence/story-4-10/committed-range-review-parent/verification.md)
+records both sample gates, 107 Python tests, the clean Release build, all six
+.NET projects (1,348 passed; four existing Windows-only skips), seven-vector
+production replay without overrides, byte-identical reviewed descriptions and
+successful instruction synchronization. Protected inputs and reference gitlinks
+are unchanged. No new deferral or approval is introduced; R13 remains tracked.
 
 ### Published enrollment review (2026-10-21)
 
@@ -590,18 +626,35 @@ Code review 2026-10-21 of the committed story range `9354dc0..558ce91` (`39f75e8
 Parent check during triage: a scratch host holding only a `ProjectReference` to a copy of `src/Hexalith.McpCli` restored `Hexalith.Parties.Contracts/1.5.1` transitively. With `-p:HexalithEventStoreVersion=3.124.0` the restore failed with NU1109 through `Hexalith.Parties.Contracts 1.5.1 -> Hexalith.EventStore.Contracts (>= 3.126.0)`.
 
 - [x] [Review][Decision] R1 — low. The sample loopback still restores and builds the tracked ConformanceHost but no longer replays it. `39f75e8` replaced the direct `run_loopback.py --host tests/Hexalith.McpCli.ConformanceHost/...` call with `run_packaged_process_fixture.py`, whose positive path replays the same three vectors through a generated `ArtifactHost`. The tracked host's `--force` restore into the deleted task cache has no consumer left, `tools/conformance-vectors/v1/README.md:75` still says the script executes all three vectors through that host, and `:151` says CI "also runs" the fixture. Options: (1) restore the five-line direct replay so every existing statement holds; (2) delete the unused restore/build and rewrite `README.md:75` and `:151` (BH, VG, AA, EC). **Resolved 2026-10-21:** the user chose option 1 ("apply recommended"). Both options comply with the pinned Platform rules (`references/Hexalith.Platform` at `bc36d21`). The direct replay is restored before the fixture call, byte-identical to the baseline [tools/conformance-vectors/v1/run-sample-loopback.sh:31]. `bash tools/conformance-vectors/v1/run-sample-loopback.sh` exited 0 in 1 m 43 s: 100 Python tests, all three tracked-host replays without `--assets`, and all three fixture checks. A fresh `dotnet restore Hexalith.McpCli.slnx` followed.
-- [ ] [Review][Patch] R2 — medium. `verify_artifact.py` copies `src/` unchanged, so every generic candidate host inherits the shipped tool's flagged `Hexalith.Parties.Contracts` reference. The candidate's restore and `resolvedPackages` evidence include Parties 1.5.1, and an `align_candidate_dependencies` override below EventStore 3.126.0 fails with NU1109 (reproduced above); the decorated Tenants candidate needs 3.125.1 (`deferred-work.md:528`). Strip `HexalithContracts` PackageReferences from the scratch tool project before restore, as `run_packaged_process_fixture.enroll_fixture` does, and add a regression (EC). [tools/conformance-vectors/v1/verify_artifact.py:151]
-- [ ] [Review][Patch] R3 — medium. The candidate pin uses `PackageVersion Update=`, which does nothing when no central `PackageVersion` exists. The Builds props have none for the Works, Timesheets or Agents Contracts, so their pre-pin candidate verification fails restore with NU1010; the process fixture passes only because it adds an `Include` first. Emit `Remove` then `Include` (EC). [tools/conformance-vectors/v1/verify_artifact.py:168]
-- [ ] [Review][Patch] R4 — medium. The `EnrolledInventoryCoverageGate` module-mismatch branch has no test: deleting it leaves all three `EnrolledModuleCoverageTests` green, and with a second enrolled module a copied inventory could stand in for the named one. Add a two-module fact (sample plus `string-fixture`) where one module's file is the other's valid release inventory, asserting exactly `string-fixture: inventory declares a different module.` (VG, BH, AA). [tests/Hexalith.McpCli.Core.Tests/EnrolledInventoryCoverageGate.cs:40]
-- [ ] [Review][Patch] R5 — medium. The structural accepted-lint guards are untested in both gates: in C#, the non-array root, field count, duplicate row and invalid JSON; in Python, the exact key set and duplicate row. A Python mutation that drops them still passes 31/31 and then accepts a row without `approvalReference`. The existing C# assertions check only counts or prefixes. Add the cases with full messages (VG, BH, AA). [tests/Hexalith.McpCli.Core.Tests/DescriptionLintGateTests.cs:13; tools/conformance-vectors/v1/verify_artifact.py:26]
-- [ ] [Review][Patch] R6 — medium. Nothing asserts that enrolled verification runs without candidate dependency overrides. Flipping `align_candidate_dependencies=False` to `True` passes every test, because the current nuspec versions equal the Builds pins; after a later Builds bump the gate could verify against older stacks. Assert the kwarg in `test_existing_approval_directory_and_package_id_ignore_case`, and assert `candidateDependencyOverrides == []` in the fixture's positive path (VG). [tools/conformance-vectors/v1/check_enrolled.py:106]
-- [ ] [Review][Patch] R7 — low. Two `check_enrolled` preflight guards have no removal test. Replacing the receipt `module` check with `if False:` still passes, and `None` then raises an uncaught `TypeError` that leaves `enrolled.json` pending. The zero-match approval directory is also untested; only the ambiguous case is. Add subtests asserting exit 1, `failed`, the diagnostic and no `verify` call (VG, BH, AA). [tools/conformance-vectors/v1/check_enrolled.py:98; tools/conformance-vectors/v1/check_enrolled.py:51]
-- [ ] [Review][Patch] R8 — low. The digest and malformed-root tests seed the child receipt once in `setUp`, so from the second subtest on, `assert_invalidated_child` passes trivially. Re-seed `verification.json` and `artifact.sha512` at the start of each subtest (EC). [tools/conformance-vectors/v1/test_enrolled.py:252; tools/conformance-vectors/v1/test_enrolled.py:271]
-- [ ] [Review][Patch] R9 — low. The fixture builds `expected_diagnostic` from the unresolved temporary root, while `verify` resolves its output path. The pending-inventory check therefore fails spuriously wherever the temporary path is a symlink, such as macOS `/var` → `/private/var`, a platform the validation README supports. Resolve the temporary root (EC). [tools/conformance-vectors/v1/run_packaged_process_fixture.py:43]
-- [ ] [Review][Patch] R10 — low. The new hash-bound files have no end-of-line rule; `.gitattributes` covers only `*.cs`. Git for Windows' default `core.autocrlf=true` checks them out as CRLF and breaks `vectorFilesSha256` and `inventorySha256` locally. Add `text eol=lf` for `tools/conformance-vectors/v1/modules/**` and `tools/inventory-coverage/v1/*.json` (BH). [.gitattributes:1]
-- [ ] [Review][Patch] R11 — low. `README.md:99` says `hexalith operations parties --strict` lists `get-party`, `list-parties`, …, but the built CLI prints the full names, `parties.create-party` first, in alphabetical order (checked independently by two layers). Match the actual output (AA, BH). [README.md:99]
-- [ ] [Review][Patch] R12 — low. Documentation drift: the `verify_artifact.py` synopsis omits `--accepted-lint`, a double blank line follows the lint paragraph, and the root README's hard-wrapped enrollment paragraph sits at the end of the MCP section, repeating line 99. Add the option, drop the blank line, and merge the paragraph into the enrollment section (BH). [tools/conformance-vectors/v1/README.md:83; tools/conformance-vectors/v1/README.md:131; README.md:204]
+- [x] [Review][Patch] R2 — medium. `verify_artifact.py` copies `src/` unchanged, so every generic candidate host inherits the shipped tool's flagged `Hexalith.Parties.Contracts` reference. The candidate's restore and `resolvedPackages` evidence include Parties 1.5.1, and an `align_candidate_dependencies` override below EventStore 3.126.0 fails with NU1109 (reproduced above); the decorated Tenants candidate needs 3.125.1 (`deferred-work.md:528`). Strip `HexalithContracts` PackageReferences from the scratch tool project before restore, as `run_packaged_process_fixture.enroll_fixture` does, and add a regression (EC). [tools/conformance-vectors/v1/verify_artifact.py:151]
+- [x] [Review][Patch] R3 — medium. The candidate pin uses `PackageVersion Update=`, which does nothing when no central `PackageVersion` exists. The Builds props have none for the Works, Timesheets or Agents Contracts, so their pre-pin candidate verification fails restore with NU1010; the process fixture passes only because it adds an `Include` first. Emit `Remove` then `Include` (EC). [tools/conformance-vectors/v1/verify_artifact.py:168]
+- [x] [Review][Patch] R4 — medium. The `EnrolledInventoryCoverageGate` module-mismatch branch has no test: deleting it leaves all three `EnrolledModuleCoverageTests` green, and with a second enrolled module a copied inventory could stand in for the named one. Add a two-module fact (sample plus `string-fixture`) where one module's file is the other's valid release inventory, asserting exactly `string-fixture: inventory declares a different module.` (VG, BH, AA). [tests/Hexalith.McpCli.Core.Tests/EnrolledInventoryCoverageGate.cs:40]
+- [x] [Review][Patch] R5 — medium. The structural accepted-lint guards are untested in both gates: in C#, the non-array root, field count, duplicate row and invalid JSON; in Python, the exact key set and duplicate row. A Python mutation that drops them still passes 31/31 and then accepts a row without `approvalReference`. The existing C# assertions check only counts or prefixes. Add the cases with full messages (VG, BH, AA). [tests/Hexalith.McpCli.Core.Tests/DescriptionLintGateTests.cs:13; tools/conformance-vectors/v1/verify_artifact.py:26]
+- [x] [Review][Patch] R6 — medium. Nothing asserts that enrolled verification runs without candidate dependency overrides. Flipping `align_candidate_dependencies=False` to `True` passes every test, because the current nuspec versions equal the Builds pins; after a later Builds bump the gate could verify against older stacks. Assert the kwarg in `test_existing_approval_directory_and_package_id_ignore_case`, and assert `candidateDependencyOverrides == []` in the fixture's positive path (VG). [tools/conformance-vectors/v1/check_enrolled.py:106]
+- [x] [Review][Patch] R7 — low. Two `check_enrolled` preflight guards have no removal test. Replacing the receipt `module` check with `if False:` still passes, and `None` then raises an uncaught `TypeError` that leaves `enrolled.json` pending. The zero-match approval directory is also untested; only the ambiguous case is. Add subtests asserting exit 1, `failed`, the diagnostic and no `verify` call (VG, BH, AA). [tools/conformance-vectors/v1/check_enrolled.py:98; tools/conformance-vectors/v1/check_enrolled.py:51]
+- [x] [Review][Patch] R8 — low. The digest and malformed-root tests seed the child receipt once in `setUp`, so from the second subtest on, `assert_invalidated_child` passes trivially. Re-seed `verification.json` and `artifact.sha512` at the start of each subtest (EC). [tools/conformance-vectors/v1/test_enrolled.py:252; tools/conformance-vectors/v1/test_enrolled.py:271]
+- [x] [Review][Patch] R9 — low. The fixture builds `expected_diagnostic` from the unresolved temporary root, while `verify` resolves its output path. The pending-inventory check therefore fails spuriously wherever the temporary path is a symlink, such as macOS `/var` → `/private/var`, a platform the validation README supports. Resolve the temporary root (EC). [tools/conformance-vectors/v1/run_packaged_process_fixture.py:43]
+- [x] [Review][Patch] R10 — low. The new hash-bound files have no end-of-line rule; `.gitattributes` covers only `*.cs`. Git for Windows' default `core.autocrlf=true` checks them out as CRLF and breaks `vectorFilesSha256` and `inventorySha256` locally. Add `text eol=lf` for `tools/conformance-vectors/v1/modules/**` and `tools/inventory-coverage/v1/*.json` (BH). [.gitattributes:1]
+- [x] [Review][Patch] R11 — low. `README.md:99` says `hexalith operations parties --strict` lists `get-party`, `list-parties`, …, but the built CLI prints the full names, `parties.create-party` first, in alphabetical order (checked independently by two layers). Match the actual output (AA, BH). [README.md:99]
+- [x] [Review][Patch] R12 — low. Documentation drift: the `verify_artifact.py` synopsis omits `--accepted-lint`, a double blank line follows the lint paragraph, and the root README's hard-wrapped enrollment paragraph sits at the end of the MCP section, repeating line 99. Add the option, drop the blank line, and merge the paragraph into the enrollment section (BH). [tools/conformance-vectors/v1/README.md:83; tools/conformance-vectors/v1/README.md:131; README.md:204]
 - [x] [Review][Defer] R13 — low. `AGENTS.md:83` (and its synced copies) still describes enrollment as a flagged PackageReference plus a `modules` pin. Enrollment now also needs `modules/<PackageId>/approval.json` with hash-bound vectors, a release `<module>-approved.json` and a passing `check_enrolled.py` [AGENTS.md:83] — deferred: the fix edits agent-context files. New ledger entry (`deferred-work.md:559`) for the next bmad-project-context refresh (BH).
+
+### Committed-range review patch implementation (2026-10-21)
+
+R2–R12 are implemented. Candidate scratch hosts now remove inherited module
+references and use central `Remove`/`Include` pins, with regressions that fail
+against the original verifier. The two-module coverage case, full structural
+lint diagnostics, no-override enrollment assertions, preflight refusal cases
+and per-subtest stale-success seeds protect the reviewed gates. Temporary roots
+resolve symlinks, hash-bound files have LF checkout rules, and both READMEs match
+the built CLI and verifier options.
+
+[Focused implementation evidence](evidence/story-4-10/committed-range-review-patches/verification.md)
+records 105 Python tests, 14 affected Core cases, a warning-free focused Release
+build, symlinked sample loopback/fixture checks, actual unlisted-candidate restore
+and replay with no inherited Parties package, and unchanged protected inputs.
+Parent full verification and independent review remain open. R13 retains its
+existing deferred context-refresh disposition; no new deferral is added.
 
 #### Rejected (committed story range)
 
