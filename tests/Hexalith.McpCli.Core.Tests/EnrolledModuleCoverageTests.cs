@@ -71,12 +71,7 @@ public sealed class EnrolledModuleCoverageTests
         var provider = new CatalogProvider(() => [typeof(CreateItemCommand).Assembly, typeof(global::Catalog.String.Contracts.LookupQuery).Assembly],
             new RecordingLogger<CatalogProvider>());
         ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: false);
-        JsonObject inventory = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1", "sample-approved.json")))!.AsObject();
-        inventory["purpose"] = "release";
-        foreach (JsonNode? row in inventory["legacyRows"]!.AsArray())
-        {
-            row!["approval"]!["authority"] = "owning-maintainer";
-        }
+        JsonObject inventory = ReleaseSampleInventory();
 
         string directory = Path.Combine(Path.GetTempPath(), "mismatched-inventory-" + Path.GetRandomFileName());
         Directory.CreateDirectory(directory);
@@ -94,5 +89,42 @@ public sealed class EnrolledModuleCoverageTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    /// <summary>Coverage findings in an enrolled module's own inventory fail the enrolled gate.</summary>
+    [Fact]
+    public void InventoryCoverageFindingsFailEnrollment()
+    {
+        var provider = new CatalogProvider(() => [typeof(CreateItemCommand).Assembly], new RecordingLogger<CatalogProvider>());
+        ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: false);
+        JsonObject inventory = ReleaseSampleInventory();
+        inventory["legacyRows"]![0]!["approval"]!["status"] = "pending";
+
+        string directory = Path.Combine(Path.GetTempPath(), "pending-inventory-" + Path.GetRandomFileName());
+        Directory.CreateDirectory(directory);
+        try
+        {
+            string sample = Path.Combine(directory, "sample-approved.json");
+            File.WriteAllText(sample, inventory.ToJsonString());
+
+            EnrolledInventoryCoverageGate.Check(directory, catalog, provider)
+                .ShouldBe(new[] { $"{sample}:row L01: approval.status must be 'approved'; actual 'pending'." });
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static JsonObject ReleaseSampleInventory()
+    {
+        JsonObject inventory = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1", "sample-approved.json")))!.AsObject();
+        inventory["purpose"] = "release";
+        foreach (JsonNode? row in inventory["legacyRows"]!.AsArray())
+        {
+            row!["approval"]!["authority"] = "owning-maintainer";
+        }
+
+        return inventory;
     }
 }

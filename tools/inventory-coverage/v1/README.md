@@ -102,9 +102,10 @@ Contracts pins, Gateway behavior and retirement gates remain separate work.
 
 `EnrolledModuleCoverageTests` reads the built production manifest and checks every
 module with the generic `EnrolledInventoryCoverageGate`. Each requires
-`<module>-approved.json`, purpose `release`, authentic owner decisions and exact
-public-name/internal-type coverage. A missing inventory fails independently of
-the dependency-policy gate; synthetic fixture approval cannot authorize shipping.
+`<module>-approved.json`, purpose `release`, recorded `owning-maintainer`
+decisions and exact public-name/internal-type coverage. A missing inventory fails
+independently of the dependency-policy gate; synthetic fixture approval cannot
+authorize shipping.
 The shipped manifest enrolls the verified `Hexalith.Parties.Contracts` 1.5.1
 artifact. Its seven operations are checked against `parties-approved.json`.
 
