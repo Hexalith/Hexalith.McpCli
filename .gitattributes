@@ -1,4 +1,6 @@
 *.cs text eol=crlf
 tools/conformance-vectors/v1/modules/** text eol=lf
+# Approved vector hashes bind exact bytes, including line endings.
+tools/conformance-vectors/v1/modules/**/*.vector.json -text
 tools/inventory-coverage/v1/*.json text eol=lf
 _bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-*/**/*.vector.json binary
