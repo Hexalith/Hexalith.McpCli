@@ -1,0 +1,34 @@
+[
+  {
+    "guard": "required-result",
+    "test": "test_loopback.RequiredResultExecutionTests",
+    "testsRun": 1,
+    "mutationDetected": true,
+    "failures": 2,
+    "errors": 0
+  },
+  {
+    "guard": "result-identifiers",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_fixed_response_message_id_stays_unmasked_and_binds_to_result",
+    "testsRun": 1,
+    "mutationDetected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "guard": "payload-depth",
+    "test": "test_validate.PayloadDepthCompatibilityTests",
+    "testsRun": 1,
+    "mutationDetected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "guard": "required-scope",
+    "test": "test_enrolled.EnrolledPreflightTests.test_missing_required_module_fails_full_gate_after_available_replay",
+    "testsRun": 1,
+    "mutationDetected": true,
+    "failures": 1,
+    "errors": 0
+  }
+]

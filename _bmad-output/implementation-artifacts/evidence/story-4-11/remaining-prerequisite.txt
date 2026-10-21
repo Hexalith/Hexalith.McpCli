@@ -1,0 +1,5 @@
+Story 4.11 remains in progress.
+
+Tenants has no approved decorated published release enrolled in the production manifest, no release inventory and no release-bound vector/receipt set. The pinned 5.9.0 package predates decoration. Approval for the 0.0.0-story48 candidate cannot authorize release bytes.
+
+The next upstream step must prepare the exact release candidate for publication approval before publication. After the approved bytes are published, enrollment requires exact package/version/hash binding, complete approved vectors and a release inventory. Then rerun production replay and the fresh-process 500 ms gate with both parties and tenants. Local Parties and synthetic green checks cannot close Story 4.11.

@@ -734,6 +734,40 @@ class VectorContractTests(unittest.TestCase):
                 self.assertEqual(findings, result.stderr.splitlines())
                 self.assertTrue(all(item.startswith((str(source) + ":/", str(self.artifact) + ":/")) for item in findings), findings)
 
+class PayloadDepthCompatibilityTests(unittest.TestCase):
+    def test_five_hundred_level_payload_returns_a_located_finding_through_the_validator(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            artifact = root / 'sample.nupkg'
+            with zipfile.ZipFile(artifact, 'w') as archive:
+                archive.writestr('sample.nuspec', '<package><metadata><id>Hexalith.McpCli.Sample.Contracts</id><version>1.0.0</version></metadata></package>')
+            vector = json.loads((HERE / 'sample-command.json').read_text())
+            payload = 1
+            for _ in range(500):
+                payload = {'nested': payload}
+            vector['invocation']['payload'] = payload
+            source = root / 'deep.vector.json'
+            source.write_text(json.dumps(vector))
+            self.assertEqual([f'{source}:/invocation/payload: exceeds Core JSON maximum depth 64'],
+                             validate_vectors([source], artifact))
+
+    def test_payload_limit_is_counted_independently_from_vector_framing(self):
+        from validate import _check_step
+        import copy
+        vector = json.loads((Path(__file__).parent / 'sample-command.json').read_text())
+        for depth in [64, 65, 500]:
+            step = copy.deepcopy(vector['invocation'])
+            payload = 1
+            for _ in range(depth):
+                payload = {'nested': payload}
+            step['payload'] = payload
+            findings = []
+            _check_step(step, 'case.json:/postconditions/0', findings)
+            if depth == 64:
+                self.assertEqual([], findings)
+            else:
+                self.assertEqual(['case.json:/postconditions/0/payload: exceeds Core JSON maximum depth 64'], findings)
+
 
 if __name__ == "__main__":
     unittest.main()

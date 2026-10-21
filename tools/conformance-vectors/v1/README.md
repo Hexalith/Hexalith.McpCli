@@ -70,11 +70,11 @@ Approval establishes format, script consistency, and artifact identity compatibi
 
 The reusable entry point `validate_vectors(paths, artifact, expected_package, expected_operations)` applies the same schema, consistency, and artifact checks as the CLI. A JSON array of canonical Catalog names can be passed with `--operations-file` to reject missing, extra, or duplicate vectors. The validator itself has no production Catalog dependency.
 
-**Story 4.11** owns production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and exact version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks coverage and kinds against the owning Catalog, and checks Payload compatibility. It must also verify that the immutable artifact matches the package restored into the host. This catches a stale approval after a package update.
+**Story 4.11** implements production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and exact version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks coverage and kinds against the owning Catalog, and checks Payload compatibility. It must also verify that the immutable artifact matches the package restored into the host. This catches a stale approval after a package update.
 
 The existing sample parity gate remains available independently as `bash tools/conformance-vectors/v1/run-sample-loopback.sh`, and CI retains it in the separate `conformance-vector-loopback` job. It packs the sample and Abstractions into a temporary feed, restores the test-only host into an isolated NuGet cache, builds it, runs the validator tests, and executes all three vectors through separate CLI and MCP stdio processes. The generated manifest contains only the flagged sample package; production source and its package manifest stay unchanged. The test host invokes the actual CLI/MCP composition through a reflection adapter because the sample package is intentionally absent from the production tool. The runner compares the immutable artifact's SHA-512 with the package restored into that host.
 
-`run_loopback.py` drives both Heads out of process. For every vector it compares discovery documents, invokes each prerequisite, invocation, and postcondition against separately reset HTTP response scripts, checks semantic result assertions, compares complete captured Gateway requests and their required fields, and checks malformed-Payload error parity without a Gateway request. Only generated Command message and correlation ULIDs are masked; caller-supplied values remain exact. Run it once per owning package, supplying all of that package's vectors and the host containing its flagged Contracts release. Passing offline author approval does not require running this parity gate.
+`run_loopback.py` drives both Heads out of process. For every vector it compares discovery documents, invokes each prerequisite, invocation, and postcondition against separately reset HTTP response scripts, checks semantic result assertions, compares complete captured Gateway requests and their required fields, and checks malformed-Payload error parity without a Gateway request. Only generated Command message and correlation ULIDs are masked; caller-supplied values remain exact. The single-package entry point still verifies each owning package independently. Enrollment additionally invokes `run_catalog` against the complete production manifest with every approved vector and no sample injection. All prerequisite, invocation and postcondition kinds, payload schemas, envelope arguments and complete expected requests pass Core validation before a replay gateway starts. Payload JSON has Core's depth limit of 64, counted independently of the vector framing. An isolated profile allowlists only the vector extension keys. Required success/error result fields, supplied identifiers and key omission are checked independently of head equality. Passing offline author approval does not require running this parity gate.
 
 **Story 4.13** owns the separate live EventStore/Aspire semantic lane. It rechecks the approved vectors against the restored owning package using the shared validator, runs each vector once, and verifies actual Query contents and persistent Command effects. The synthetic sample's scripted Query response illustrates assertions; it does not prove a real handler's persistent effect. Live Commands are not submitted twice solely for cross-head byte equality.
 
@@ -154,7 +154,58 @@ retained inputs and subprocess diagnostics; an absent directory produces a warni
 The existing sample loopback CI path also runs `run_packaged_process_fixture.py`.
 It creates a temporary repository with one flagged packaged sample and synthetic
 fixture-only inventory/receipt, exercises nonempty enrollment through complete
-verification/replay, then proves a pending inventory decision is rejected by the
+verification/replay, verifies offline Core rejection of incompatible steps in every
+position, then combines the real production enrollment with the temporary sample
+and proves complete combined-manifest replay. It also proves a pending inventory decision is rejected by the
 real C# checker before replay. It also proves a structurally valid vector with a false
 semantic assertion fails with replay diagnostics and invalidates stale success.
 Synthetic authority and enrollment data never enter the production repository.
+
+
+## Production parity and first-construction gate
+
+From the repository root, after installing `requirements.txt`:
+
+```bash
+dotnet restore Hexalith.McpCli.slnx
+dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror
+python3 tools/conformance-vectors/v1/check_enrolled.py --output /tmp/mcpcli-story411-evidence
+MCPCLI_BENCHMARK_REQUIRE_V1=true MCPCLI_BENCHMARK_OUTPUT=/tmp/mcpcli-story411-evidence/catalog-benchmark.json \
+  dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll \
+  -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests
+```
+
+`check_enrolled.py` preserves each independent artifact gate, builds the production
+ConformanceHost, and repeats replay against the combined shipped manifest. The host
+defaults to `ConformanceProduction=true` and reads the tool's generated manifest.
+Only the sample script explicitly builds it with `ConformanceProduction=false`.
+Production replay consumes retained artifact/vector snapshots, rechecks their
+identity and bytes against the production host restore, and records complete
+success documents and captured requests under `production-observations/`, including
+partial observations when an assertion fails. The enclosing `enrolled.json`, build
+logs and replay diagnostics remain available on failures.
+
+`v1-scope.json` requires `parties` and `tenants`. A missing required module fails
+the default production replay command and the strict benchmark even if all
+available packages pass. `check_enrolled.py --local --output <directory>` collects
+available-package evidence with `result: local-only` and `fullV1Accepted: false`.
+Omitting `MCPCLI_BENCHMARK_REQUIRE_V1` similarly measures the local population and
+records missing modules without claiming full acceptance. CI on `ubuntu-latest`
+runs both strict gates and always uploads their evidence.
+
+The benchmark starts a fresh test process, loads the production manifest assemblies
+and exactly one Ulid sample assembly, and times that process's first
+`CatalogBuilder.Build`. Process startup and assembly loading are excluded;
+construction, first-use schema work and diagnostics remain included. There are no
+warm-up builds or retries. Evidence records the assembly/module/operation population,
+identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
+The existing isolated String-kind Catalog test remains part of Core.Tests.
+
+Tenants currently has no approved published decorated artifact, enrollment,
+release inventory or release-bound vector set. The Story 4.8 `0.0.0-story48`
+candidate approval cannot authorize release bytes; the pinned 5.9.0 package predates
+decoration. Story 4.11 stays open until the exact Tenants candidate receives the
+required publication approval, is published/enrolled, and both production modules
+pass replay and the strict benchmark. Scripted replay establishes transport parity;
+live authorization, privacy sanitization, persisted effects and legacy retirement
+retain their Story 4.13 and retirement gates.

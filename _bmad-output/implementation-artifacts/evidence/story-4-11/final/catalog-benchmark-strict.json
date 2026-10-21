@@ -1,0 +1,33 @@
+{
+  "result": "failed",
+  "fullV1Accepted": false,
+  "elapsedMilliseconds": 127.8717,
+  "limitMilliseconds": 500,
+  "processId": 43475,
+  "assemblies": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.McpCli.Sample.Contracts"
+  ],
+  "productionPackages": [
+    "Hexalith.Parties.Contracts"
+  ],
+  "modules": [
+    {
+      "Name": "parties",
+      "identifierKind": "String",
+      "operationCount": 7
+    },
+    {
+      "Name": "sample",
+      "identifierKind": "Ulid",
+      "operationCount": 3
+    }
+  ],
+  "missingRequiredModules": [
+    "tenants"
+  ],
+  "diagnostics": [],
+  "failures": [
+    "Full-v1 gate: missing required production module(s): tenants"
+  ]
+}

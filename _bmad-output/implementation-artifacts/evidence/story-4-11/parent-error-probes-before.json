@@ -1,0 +1,69 @@
+[
+  {
+    "httpStatus": 304,
+    "scriptedBody": {},
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 502,
+        "detail": "Not-modified query response requires projection-backed provenance and a strong ETag."
+      }
+    }
+  },
+  {
+    "httpStatus": 409,
+    "scriptedBody": {
+      "status": 422,
+      "title": "Conflict",
+      "detail": "safe conflict",
+      "reasonCode": "duplicate",
+      "retryable": false,
+      "clientAction": "inspect",
+      "retryAfter": "25",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+    },
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 422,
+        "detail": "safe conflict",
+        "reason": "duplicate",
+        "retryable": false,
+        "clientAction": "inspect",
+        "retryAfter": "25",
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  },
+  {
+    "httpStatus": 200,
+    "scriptedBody": {
+      "success": false,
+      "errorMessage": "Access denied.",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+    },
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Access denied.",
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  },
+  {
+    "httpStatus": 204,
+    "scriptedBody": {},
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 204,
+        "detail": "Query response body could not be parsed."
+      }
+    }
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "result": "local-only",
+  "fullV1Accepted": false,
+  "elapsedMilliseconds": 228.7059,
+  "limitMilliseconds": 500,
+  "processId": 4359,
+  "assemblies": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.McpCli.Sample.Contracts"
+  ],
+  "productionPackages": [
+    "Hexalith.Parties.Contracts"
+  ],
+  "modules": [
+    {
+      "Name": "parties",
+      "identifierKind": "String",
+      "operationCount": 7
+    },
+    {
+      "Name": "sample",
+      "identifierKind": "Ulid",
+      "operationCount": 3
+    }
+  ],
+  "missingRequiredModules": [
+    "tenants"
+  ],
+  "diagnostics": [],
+  "failures": []
+}

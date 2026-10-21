@@ -1,0 +1,66 @@
+[
+  {
+    "guard": "required-result",
+    "test": "test_loopback.RequiredResultExecutionTests",
+    "testsRun": 1,
+    "failures": 2,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "result-identifiers",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_fixed_response_message_id_stays_unmasked_and_binds_to_result",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "payload-depth",
+    "test": "test_validate.PayloadDepthCompatibilityTests",
+    "testsRun": 2,
+    "failures": 2,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "required-scope",
+    "test": "test_enrolled.EnrolledPreflightTests.test_missing_required_module_fails_full_gate_after_available_replay",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "generated-message-reuse",
+    "test": "test_loopback.RetainedFailureEvidenceTests.test_reused_generated_request_ids_fail_before_masking_can_hide_them",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "retained-vector-hash",
+    "test": "test_enrolled.CombinedConsumptionHashTests",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "mutationDetected": true
+  },
+  {
+    "guard": "receipt-module-binding",
+    "test": "test_loopback.ReceiptModuleBindingTests",
+    "testsRun": 1,
+    "failures": 0,
+    "errors": 1,
+    "mutationDetected": true
+  },
+  {
+    "guard": "failing-observation-retention",
+    "test": "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request",
+    "testsRun": 1,
+    "failures": 0,
+    "errors": 1,
+    "mutationDetected": true
+  }
+]

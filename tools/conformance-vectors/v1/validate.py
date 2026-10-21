@@ -123,7 +123,24 @@ def _schema_errors(document: Any, source: Path, validator: Draft202012Validator)
     return findings
 
 
+def _payload_depth(value: Any, depth: int = 0) -> int:
+    if not isinstance(value, (dict, list)):
+        return depth
+    depth += 1
+    if depth > 64:
+        return depth
+    children = value.values() if isinstance(value, dict) else value
+    deepest = depth
+    for item in children:
+        deepest = max(deepest, _payload_depth(item, depth))
+        if deepest > 64:
+            break
+    return deepest
+
+
 def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None:
+    if _payload_depth(step["payload"]) > 64:
+        findings.append(f"{pointer}/payload: exceeds Core JSON maximum depth 64")
     kind = step["kind"]
     envelope = step["envelope"]
     gateway = step["expectedGateway"]

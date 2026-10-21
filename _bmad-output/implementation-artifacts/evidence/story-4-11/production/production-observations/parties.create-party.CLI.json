@@ -1,0 +1,95 @@
+{
+  "source": "/tmp/mcpcli-story411-evidence-final/Hexalith.Parties.Contracts/inputs-lnszfr_i/vectors/0/create-party.vector.json",
+  "documents": [
+    {
+      "operation": "parties.create-party",
+      "messageId": "01M5FMB9VCZ08M6AKMKPMTBTSB",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "tenant": "tenant-a",
+      "aggregateId": "party-story49",
+      "status": "accepted"
+    },
+    {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "id": "party-story49",
+        "isActive": true,
+        "personDetails": {
+          "firstName": "Ada",
+          "lastName": "Lovelace"
+        },
+        "isErased": false,
+        "contactChannels": [
+          {
+            "id": "email-story49",
+            "type": "Email",
+            "value": "ada@example.test",
+            "isPreferred": true
+          }
+        ],
+        "identifiers": [
+          {
+            "id": "external-story49",
+            "type": "Other",
+            "value": "customer-49"
+          }
+        ]
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FMB9VCZ08M6AKMKPMTBTSB",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "ContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "IsPreferred": true,
+              "PartyId": "party-story49",
+              "Type": "Email",
+              "Value": "ada@example.test"
+            }
+          ],
+          "Identifiers": [
+            {
+              "IdentifierId": "external-story49",
+              "PartyId": "party-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ],
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "Type": "Person"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

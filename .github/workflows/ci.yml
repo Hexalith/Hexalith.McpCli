@@ -85,7 +85,13 @@ jobs:
           dotnet restore Hexalith.McpCli.slnx
           dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror
           dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests
+      - name: Benchmark first v1 Catalog construction in a fresh process
+        env:
+          MCPCLI_BENCHMARK_REQUIRE_V1: 'true'
+          MCPCLI_BENCHMARK_OUTPUT: ${{ runner.temp }}/enrolled-evidence/catalog-benchmark.json
+        run: dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests
       - name: Validate approved artifacts, complete vectors and both heads
+        if: ${{ !cancelled() }}
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-enrolled-venv"
           source "$RUNNER_TEMP/mcpcli-enrolled-venv/bin/activate"

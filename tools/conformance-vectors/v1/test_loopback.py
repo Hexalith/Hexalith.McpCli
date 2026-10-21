@@ -232,6 +232,381 @@ class LoopbackRulesTests(unittest.TestCase):
                         _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
                     self.assertEqual(f"{assets}: restored package does not match {identity}", str(caught.exception))
 
+class Story411CompatibilityTests(unittest.TestCase):
+    def setUp(self):
+        self.command = json.loads((HERE / 'sample-command.json').read_text())['invocation']
+        self.query = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+
+    def test_equal_documents_cannot_hide_required_result_fields(self):
+        from run_loopback import _assert_result_contract
+        command = {'operation': self.command['operation'], 'tenant': 'sample-tenant',
+                   'aggregateId': '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'status': 'accepted',
+                   'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+                   'correlationId': self.command['envelope']['correlationId'],
+                   'idempotencyKey': self.command['envelope']['idempotencyKey'],
+                   'result': {'accepted': True}}
+        query = {'operation': self.query['operation'], 'tenant': 'sample-tenant',
+                 'document': {'title': 'Conformance item'}}
+        for step, document in [(self.command, command), (self.query, query)]:
+            _assert_result_contract(document, step, 'result')
+            for field in document:
+                with self.subTest(kind=step['kind'], field=field):
+                    missing = dict(document)
+                    missing.pop(field)
+                    _assert_document_parity(missing, missing, 'equal heads')
+                    with self.assertRaises(VectorError):
+                        _assert_result_contract(missing, step, 'result')
+
+    def test_supplied_ids_and_key_omission_are_independent_of_head_equality(self):
+        from run_loopback import _assert_result_contract
+        import copy
+        step = copy.deepcopy(self.command)
+        step['envelope'].pop('idempotencyKey')
+        document = {'operation': step['operation'], 'tenant': 'sample-tenant',
+                    'aggregateId': '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'status': 'accepted',
+                    'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+                    'correlationId': step['envelope']['correlationId'], 'result': {'accepted': True}}
+        _assert_result_contract(document, step, 'result')
+        for field, value in [('correlationId', '01J9MZHXT3RKM0VWXRXGSJDATN'),
+                             ('idempotencyKey', '01J9MZHXT3RKM0VWXRXGSJDATM')]:
+            with self.subTest(field=field), self.assertRaises(VectorError):
+                _assert_result_contract(dict(document, **{field: value}), step, 'result')
+
+    def test_every_step_kind_is_checked_before_core_preflight(self):
+        from run_loopback import _preflight_vectors
+        from unittest.mock import Mock
+        import copy
+        for group in ['prerequisites', 'postconditions']:
+            with tempfile.TemporaryDirectory() as directory:
+                vector = json.loads((HERE / 'sample-command.json').read_text())
+                bad = copy.deepcopy(vector['invocation'])
+                bad['operation'] = 'sample.get-item'
+                vector[group] = [bad]
+                source = Path(directory) / 'case.json'
+                source.write_text(json.dumps(vector))
+                with patch('run_loopback.subprocess.run') as process, self.assertRaisesRegex(VectorError, group + '/0/operation'):
+                    _preflight_vectors(Mock(), [source], {'sample.create-item': 'write', 'sample.get-item': 'read'})
+                process.assert_not_called()
+
+    def test_core_failure_blocks_replay_with_source_and_step_location(self):
+        from run_loopback import _preflight_vectors
+        from unittest.mock import Mock
+        import subprocess
+        source = HERE / 'sample-query.json'
+        diagnostic = f'{source}:/invocation: Core compatibility failed: invalid payload'
+        with patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 1,
+                   json.dumps({'findings': [diagnostic], 'requests': []}), '')):
+            with self.assertRaisesRegex(VectorError, '/invocation: Core compatibility failed'):
+                _preflight_vectors(Mock(_base=Mock(return_value=[])), [source], {'sample.get-item': 'read'})
+
+    def test_preflight_compares_complete_request_and_rejects_missing_steps(self):
+        from run_loopback import _preflight_vectors
+        from unittest.mock import Mock
+        import subprocess
+        import copy
+        source = HERE / 'sample-query.json'
+        body = self.query['expectedGateway']['body']
+        for mutation in ['extra-field', 'wrong-paging', 'missing-step']:
+            requests = [{'source': str(source), 'pointer': '/invocation', 'body': copy.deepcopy(body)}]
+            if mutation == 'extra-field':
+                requests[0]['body']['unexpected'] = True
+            elif mutation == 'wrong-paging':
+                requests[0]['body']['paging']['pageSize'] = 24
+            else:
+                requests = []
+            head = Mock(_base=Mock(return_value=[]))
+            with self.subTest(mutation=mutation), patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 0,
+                    json.dumps({'findings': [], 'requests': requests}), '')), self.assertRaises(VectorError):
+                _preflight_vectors(head, [source], {'sample.get-item': 'read'})
+            head.allow_extensions.assert_not_called()
+
+    def test_extension_allowlist_is_isolated_and_exact(self):
+        from run_loopback import HeadProcess
+        import os
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {'EVENTSTORE_TENANT': 'outside'}):
+            head = HeadProcess(Path('Host.dll'), directory, 15)
+            head.allow_extensions({'trace-id', 'task-id'})
+            self.assertNotIn('EVENTSTORE_TENANT', head.env)
+            profile = json.loads((Path(directory) / 'mcpcli.json').read_text())
+            self.assertEqual(['task-id', 'trace-id'], profile['profiles']['conformance']['allowedExtensions'])
+            self.assertEqual(str(Path(directory) / 'mcpcli.json'), head.env['MCPCLI_CONFORMANCE_PROFILE_PATH'])
+
+class ProductionReplayOrderingTests(unittest.TestCase):
+    def test_incompatible_last_vector_stops_every_gateway_before_replay(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+        first = HERE / 'sample-command.json'
+        last = HERE / 'sample-query.json'
+        operations = {'sample.create-item': 'command', 'sample.get-item': 'query'}
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': name, 'kind': 'write' if kind == 'command' else 'read'}
+                                  for name, kind in operations.items()]}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect = [(0, modules), (0, listed)]
+        head.mcp.side_effect = [(False, modules), (False, listed)]
+        malformed = subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')
+        incompatible = subprocess.CompletedProcess([], 1, json.dumps({
+            'findings': [f'{last}:/postconditions/0: Core compatibility failed: schema mismatch'], 'requests': []}), '')
+        with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+             patch('run_loopback._manifest_operations', return_value=operations), \
+             patch('run_loopback.HeadProcess', return_value=head), \
+             patch('run_loopback.subprocess.run', side_effect=[malformed, incompatible]), \
+             patch('run_loopback.ReplayGateway') as gateway:
+            with self.assertRaisesRegex(VectorError, 'sample-query.json:/postconditions/0: Core compatibility failed'):
+                run_catalog(Path('Host.dll'), [(Path('module.nupkg'), ('Sample.Contracts', '1.0.0'), [first, last])])
+        gateway.assert_not_called()
+
+    def test_fixed_response_message_id_stays_unmasked_and_binds_to_result(self):
+        from run_loopback import _assert_result_request_binding
+        step = json.loads((HERE / 'sample-command.json').read_text())['invocation']
+        supplied = '01J9MZHXT3RKM0VWXRXGSJDATK'
+        step['scriptedResponse']['body']['messageId'] = supplied
+        step['scriptedResponse']['echoRequestFields'].remove('messageId')
+        document = {'messageId': supplied, 'correlationId': supplied}
+        request = {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN', 'correlationId': supplied}
+        self.assertEqual(supplied, _mask_result(document, step, 'result')['messageId'])
+        _assert_result_request_binding(document, request, step, 'result')
+        with self.assertRaisesRegex(VectorError, 'submitted/returned identifier'):
+            _assert_result_request_binding(dict(document, correlationId=request['messageId']), request, step, 'result')
+
+    def test_generated_correlation_is_bound_to_its_message_before_masking(self):
+        step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
+        with self.assertRaisesRegex(VectorError, 'default correlation must equal'):
+            _mask({'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+                   'correlationId': '01J9MZHXT3RKM0VWXRXGSJDATK'}, step, 'request')
+
+class RequiredResultExecutionTests(unittest.TestCase):
+    def test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions(self):
+        from run_loopback import _run_step
+        from unittest.mock import Mock
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        step['assertions'] = [{'path': '/document/title', 'operator': 'equals', 'value': 'Conformance item'}]
+        document = {'tenant': 'sample-tenant', 'document': {'title': 'Conformance item'}}
+        head = Mock()
+        head.cli.return_value = (0, document)
+        head.mcp.return_value = (False, document)
+        for label in ['CLI', 'MCP']:
+            with self.subTest(head=label), self.assertRaisesRegex(VectorError, '/operation: required result'):
+                _run_step(head, step, 'http://127.0.0.1/', label)
+
+class RequiredErrorExecutionTests(unittest.TestCase):
+    def test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads(self):
+        from run_loopback import _run_step
+        from unittest.mock import Mock
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        step['scriptedResponse'] = {'statusCode': 503, 'body': {'detail': 'scripted failure'}, 'echoRequestFields': []}
+        full = {'code': 'gateway_error', 'status': 503, 'detail': 'scripted failure'}
+        for field in full:
+            missing = dict(full)
+            missing.pop(field)
+            head = Mock()
+            head.cli.return_value = (2, {'error': missing})
+            head.mcp.return_value = (True, {'error': missing})
+            for label in ['CLI', 'MCP']:
+                with self.subTest(field=field, head=label), self.assertRaises(VectorError):
+                    _run_step(head, step, 'http://127.0.0.1/', label, verify_assertions=False)
+
+class OptionalResultContractTests(unittest.TestCase):
+    def test_null_optional_paging_fields_are_omitted_and_extra_results_are_rejected(self):
+        from run_loopback import _assert_result_contract
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        step['scriptedResponse']['body']['metadata'] = {'paging': {'pageSize': 25, 'offset': None, 'hasMore': False}}
+        document = {'operation': step['operation'], 'tenant': 'sample-tenant',
+                    'document': {'title': 'Conformance item'}, 'paging': {'pageSize': 25, 'hasMore': False}}
+        _assert_result_contract(document, step, 'result')
+        with self.assertRaisesRegex(VectorError, 'unexpected result field'):
+            _assert_result_contract(dict(document, unexpected=True), step, 'result')
+
+
+class SdkErrorOutcomeTests(unittest.TestCase):
+    def test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata(self):
+        from run_loopback import _run_step
+        from unittest.mock import Mock
+        import copy
+        correlation = '01J9MZHXT3RKM0VWXRXGSJDATK'
+        cases = [
+            (409, {}, {'code': 'gateway_error', 'status': 409, 'detail': 'Conflict'}),
+            (409, {'title': ' ', 'detail': ' '}, {'code': 'gateway_error', 'status': 409, 'detail': 'Gateway request failed.'}),
+            (304, {}, {'code': 'gateway_error', 'status': 502,
+                       'detail': 'Not-modified query response requires projection-backed provenance and a strong ETag.'}),
+            (409, {'status': 422, 'title': 'Conflict', 'detail': 'safe conflict', 'reasonCode': 'duplicate',
+                   'retryable': False, 'clientAction': 'inspect', 'retryAfter': '25', 'correlationId': correlation},
+                  {'code': 'gateway_error', 'status': 422, 'detail': 'safe conflict', 'reason': 'duplicate',
+                   'retryable': False, 'clientAction': 'inspect', 'retryAfter': '25', 'correlationId': correlation}),
+            (200, {'success': False, 'errorMessage': 'Access denied.', 'correlationId': correlation},
+                  {'code': 'gateway_error', 'status': 200, 'detail': 'Access denied.', 'correlationId': correlation}),
+            (204, {}, {'code': 'gateway_error', 'status': 204, 'detail': 'Query response body could not be parsed.'}),
+        ]
+        for status, body, expected in cases:
+            step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+            step['scriptedResponse'] = {'statusCode': status, 'body': body, 'echoRequestFields': []}
+            step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': expected}]
+            for label in ['CLI', 'MCP']:
+                def execute(error):
+                    head = Mock()
+                    head.cli.return_value = (2, {'error': error})
+                    head.mcp.return_value = (True, {'error': error})
+                    return _run_step(head, step, 'http://127.0.0.1/', label, verify_assertions=False)[0]
+                with self.subTest(status=status, head=label):
+                    self.assertEqual({'error': expected}, execute(expected))
+                for field in expected:
+                    broken = copy.deepcopy(expected)
+                    broken.pop(field)
+                    with self.subTest(status=status, head=label, missing=field), self.assertRaises(VectorError):
+                        execute(broken)
+                for field, value in [('reason', 'invented'), ('correlationId', correlation),
+                                     ('retryable', False), ('clientAction', 'invented'), ('retryAfter', '25')]:
+                    if field not in expected:
+                        with self.subTest(status=status, head=label, extra=field), self.assertRaises(VectorError):
+                            execute(dict(expected, **{field: value}))
+
+    def test_problem_metadata_precedence_and_blank_or_invalid_values_are_omitted(self):
+        from run_loopback import _assert_result_contract
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        step['scriptedResponse'] = {'statusCode': 409, 'echoRequestFields': [], 'body': {
+            'detail': 'safe conflict', 'reasonCode': ' ', 'code': 'preferred-code', 'reason': 'fallback',
+            'clientAction': ' ', 'retryAfter': '', 'retryable': None, 'correlationId': 'invalid'}}
+        expected = {'error': {'code': 'gateway_error', 'status': 409, 'detail': 'safe conflict', 'reason': 'preferred-code'}}
+        _assert_result_contract(expected, step, 'result')
+        for field, value in [('reason', 'fallback'), ('clientAction', ' '), ('retryAfter', ''),
+                             ('retryable', None), ('correlationId', 'invalid')]:
+            broken = {'error': dict(expected['error'], **{field: value})}
+            with self.subTest(field=field), self.assertRaises(VectorError):
+                _assert_result_contract(broken, step, 'result')
+
+
+class RetainedFailureEvidenceTests(unittest.TestCase):
+    def test_failing_head_retains_full_document_and_captured_request(self):
+        import copy
+        import subprocess
+        from unittest.mock import Mock, MagicMock
+        from run_loopback import run_catalog
+        source = HERE / 'sample-query.json'
+        step = json.loads(source.read_text())['invocation']
+        request = {'method': 'POST', 'path': '/api/v1/queries', 'body': copy.deepcopy(step['expectedGateway']['body'])}
+        healthy = {'operation': step['operation'], 'tenant': 'sample-tenant', 'document': {'title': 'Conformance item'}}
+        broken = {'operation': step['operation'], 'tenant': 'sample-tenant', 'document': {'title': 'broken', 'all': [False, None, 3]}}
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': step['operation'], 'kind': 'read'}]}
+        described = {'name': step['operation']}
+        for failing, inconsistent in [('CLI', False), ('MCP', False), ('CLI', True), ('MCP', True)]:
+            head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+            head.cli.side_effect = [(0, modules), (0, listed), (0, described), (2 if failing == 'CLI' and inconsistent else 0, broken if failing == 'CLI' else healthy)]
+            head.mcp.side_effect = [(False, modules), (False, listed), (False, described), (inconsistent, broken)]
+            gateway = MagicMock()
+            gateway.__enter__.return_value = gateway
+            gateway.captured = [request]
+            gateway.assert_consumed = Mock()
+            with tempfile.TemporaryDirectory() as directory, \
+                    patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                    patch('run_loopback._manifest_operations', return_value={step['operation']: 'query'}), \
+                    patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
+                    patch('run_loopback.ReplayGateway', return_value=gateway), \
+                    patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+                output = Path(directory)
+                with self.subTest(head=failing, inconsistent=inconsistent), self.assertRaisesRegex(VectorError, 'inconsistent' if inconsistent else '/document: required result'):
+                    run_catalog(Path('Host.dll'), [(Path('module.nupkg'), ('Sample.Contracts', '1.0.0'), [source])], evidence_dir=output)
+                retained = json.loads((output / f"{step['operation']}.{failing}.json").read_text())
+                self.assertEqual({'source': str(source), 'documents': [broken], 'requests': [request]}, retained)
+
+    def test_reused_generated_request_ids_fail_before_masking_can_hide_them(self):
+        from run_loopback import _assert_fresh_message
+        step = json.loads((HERE / 'sample-command.json').read_text())['invocation']
+        request = {'body': {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN'}}
+        seen = set()
+        _assert_fresh_message(request, step, seen, 'CLI first')
+        with self.assertRaisesRegex(VectorError, 'reused across distinct calls'):
+            _assert_fresh_message(request, step, seen, 'MCP second')
+
+
+class GeneratedMessageReuseExecutionTests(unittest.TestCase):
+    def test_two_real_runner_calls_cannot_reuse_a_generated_request_message(self):
+        import copy
+        import subprocess
+        from unittest.mock import Mock, MagicMock
+        from run_loopback import run_catalog
+        vector = json.loads((HERE / 'sample-rename.json').read_text())
+        step = vector['invocation']
+        vector['prerequisites'] = [copy.deepcopy(step)]
+        message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        body = copy.deepcopy(step['expectedGateway']['body'])
+        body.update(messageId=message, correlationId=message)
+        request = {'method': 'POST', 'path': '/api/v1/commands', 'body': body}
+        document = {'operation': step['operation'], 'tenant': step['envelope']['tenant'],
+                    'aggregateId': body['aggregateId'], 'status': 'accepted',
+                    'messageId': message, 'correlationId': message}
+        if step['scriptedResponse']['body'].get('resultPayload') is not None:
+            document['result'] = step['scriptedResponse']['body']['resultPayload']
+        gateway = MagicMock()
+        gateway.__enter__.return_value = gateway
+        gateway.captured = []
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': step['operation'], 'kind': 'write'}]}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        def cli(args, *unused):
+            if args[0] == 'modules':
+                return 0, modules
+            if args[0] == 'operations':
+                return 0, listed
+            if args[0] == 'describe':
+                return 0, {'name': step['operation']}
+            gateway.captured.append(copy.deepcopy(request))
+            return 0, copy.deepcopy(document)
+        head.cli.side_effect = cli
+        head.mcp.side_effect = [(False, modules), (False, listed), (False, {'name': step['operation']})]
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'rename.vector.json'
+            source.write_text(json.dumps(vector))
+            with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                    patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
+                    patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
+                    patch('run_loopback.ReplayGateway', return_value=gateway), \
+                    patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+                with self.assertRaisesRegex(VectorError, 'reused across distinct calls'):
+                    run_catalog(Path('Host.dll'), [(Path('module.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
+            self.assertEqual([request, request], gateway.captured)
+
+
+class ReceiptModuleBindingTests(unittest.TestCase):
+    def test_a_receipt_label_cannot_replace_the_package_discovered_module(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+        modules = {'modules': [{'name': 'sample'}]}
+        operations = {'operations': [{'name': 'sample.get-item', 'kind': 'read'}]}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect = [(0, modules), (0, operations)]
+        head.mcp.side_effect = [(False, modules), (False, operations)]
+        with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query'}), \
+                patch('run_loopback.HeadProcess', return_value=head), \
+                patch('run_loopback._preflight_vectors') as preflight, patch('run_loopback.ReplayGateway') as gateway, \
+                patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+            with self.assertRaisesRegex(VectorError, "receipt module 'tenants' differs from discovered module"):
+                run_catalog(Path('Host.dll'), [(Path('module.nupkg'), ('Sample.Contracts', '1.0.0'), [HERE / 'sample-query.json'])],
+                            expected_modules={'Sample.Contracts': 'tenants'})
+        preflight.assert_not_called()
+        gateway.assert_not_called()
+
+
+class GeneratedErrorCorrelationTests(unittest.TestCase):
+    def test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation(self):
+        from run_loopback import _assert_result_contract, _assert_result_request_binding
+        step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
+        message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        step['scriptedResponse'] = {'statusCode': 409, 'body': {'detail': 'conflict'}, 'echoRequestFields': ['correlationId']}
+        document = {'error': {'code': 'gateway_error', 'status': 409, 'detail': 'conflict', 'correlationId': message}}
+        _assert_result_contract(document, step, 'result')
+        _assert_result_request_binding(document, {'correlationId': message}, step, 'result')
+        self.assertEqual('<generated>', _mask_result(document, step, 'result')['error']['correlationId'])
+        step['envelope']['correlationId'] = message
+        self.assertEqual(message, _mask_result(document, step, 'result')['error']['correlationId'])
+        step['envelope'].pop('correlationId')
+        step['scriptedResponse']['echoRequestFields'] = []
+        step['scriptedResponse']['body']['correlationId'] = message
+        self.assertEqual(message, _mask_result(document, step, 'result')['error']['correlationId'])
+
 
 if __name__ == "__main__":
     unittest.main()

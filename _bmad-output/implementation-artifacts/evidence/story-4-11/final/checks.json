@@ -1,0 +1,216 @@
+[
+  {
+    "label": "python",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/conformance-vectors/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 21.41
+  },
+  {
+    "label": "python-direct-loopback",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/test_loopback.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 0.14
+  },
+  {
+    "label": "python-direct-validate",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/test_validate.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 22.08
+  },
+  {
+    "label": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 0.97
+  },
+  {
+    "label": "release-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 1.79
+  },
+  {
+    "label": "abstractions-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 1.19
+  },
+  {
+    "label": "analyzers-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 3.19
+  },
+  {
+    "label": "core-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 2.0
+  },
+  {
+    "label": "manifest-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 23.94
+  },
+  {
+    "label": "cli-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 17.8
+  },
+  {
+    "label": "mcp-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 2.06
+  },
+  {
+    "label": "sample-validation",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 23.61
+  },
+  {
+    "label": "sample-loopback",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 302.89
+  },
+  {
+    "label": "restore-after-loopback",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 1.37
+  },
+  {
+    "label": "production-gate",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/final/production"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "elapsedSeconds": 160.34
+  },
+  {
+    "label": "benchmark-local",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "elapsedSeconds": 0.81
+  },
+  {
+    "label": "benchmark-strict",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "elapsedSeconds": 0.88
+  }
+]

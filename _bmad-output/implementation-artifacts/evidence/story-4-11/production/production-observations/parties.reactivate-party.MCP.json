@@ -1,0 +1,126 @@
+{
+  "source": "/tmp/mcpcli-story411-evidence-final/Hexalith.Parties.Contracts/inputs-lnszfr_i/vectors/4/reactivate-party.vector.json",
+  "documents": [
+    {
+      "operation": "parties.create-party",
+      "messageId": "01M5FMCTA1YBYB0ZXZ52815C9P",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "tenant": "tenant-a",
+      "aggregateId": "party-story49",
+      "status": "accepted"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "messageId": "01M5FMCV7AESF5HX5F0K356T00",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "tenant": "tenant-a",
+      "aggregateId": "party-story49",
+      "status": "accepted"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "messageId": "01M5FMCW3S52B2CMMGCRC9Q8TT",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "tenant": "tenant-a",
+      "aggregateId": "party-story49",
+      "status": "accepted"
+    },
+    {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "id": "party-story49",
+        "isActive": true,
+        "personDetails": {
+          "firstName": "Ada",
+          "lastName": "Lovelace"
+        },
+        "isErased": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FMCTA1YBYB0ZXZ52815C9P",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "ContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "IsPreferred": true,
+              "PartyId": "party-story49",
+              "Type": "Email",
+              "Value": "ada@example.test"
+            }
+          ],
+          "Identifiers": [
+            {
+              "IdentifierId": "external-story49",
+              "PartyId": "party-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ],
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "Type": "Person"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FMCV7AESF5HX5F0K356T00",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FMCW3S52B2CMMGCRC9Q8TT",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.ReactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

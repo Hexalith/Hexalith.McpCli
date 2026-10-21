@@ -187,7 +187,8 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             tree.write(props, encoding='unicode')
             host = scratch / 'host'
             host.mkdir()
-            shutil.copy2(repo / 'tests/Hexalith.McpCli.ConformanceHost/Program.cs', host / 'Program.cs')
+            for source in (repo / 'tests/Hexalith.McpCli.ConformanceHost').glob('*.cs'):
+                shutil.copy2(source, host / source.name)
             for source in (repo / 'tests/Hexalith.McpCli.Core.Tests').glob('InventoryCoverage*.cs'):
                 if source.name not in ('InventoryCoverageTests.cs', 'InventoryCoverageContractsAssembly.cs'):
                     shutil.copy2(source, host / source.name)

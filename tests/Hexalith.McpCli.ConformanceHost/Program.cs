@@ -5,23 +5,39 @@ using Hexalith.McpCli.Core.Settings;
 
 namespace Hexalith.McpCli.Hosting;
 
-/// <summary>Out-of-process adapter around the built CLI and MCP heads with a flagged test Contracts package.</summary>
+/// <summary>Out-of-process adapter around the production or explicitly packaged fixture CLI and MCP heads.</summary>
 internal static class Program
 {
+    private static (string PackageId, string AssemblyName)[] ManifestEntries()
+    {
+#if CONFORMANCE_PRODUCTION
+        Type manifest = Assembly.Load("Hexalith.McpCli").GetType("Hexalith.McpCli.Hosting.ModuleAssemblyManifest", throwOnError: true)!;
+        return ((string PackageId, string AssemblyName)[])manifest.GetField("Entries", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
+#else
+        return ModuleAssemblyManifest.Entries;
+#endif
+    }
+
+    private static IReadOnlyList<Assembly> ManifestAssemblies()
+        => ManifestEntries().Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName))).ToArray();
+
     private static async Task<int> Main(string[] args)
     {
+        if (args is ["--validate-vectors", .. var vectors])
+        {
+            return await VectorCompatibilityValidator.ValidateAsync(ManifestAssemblies(), vectors).ConfigureAwait(false);
+        }
+
         if (args is ["--full-catalog"])
         {
-            CatalogSnapshot snapshot = CatalogBuilder.Build(ModuleAssemblyManifest.Entries
-                .Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName))).ToArray());
+            CatalogSnapshot snapshot = CatalogBuilder.Build(ManifestAssemblies());
             Console.Out.WriteLine(JsonSerializer.Serialize(snapshot, Hexalith.McpCli.Core.Serialization.McpCliJson.Result));
             return snapshot.Diagnostics.Count == 0 ? 0 : 1;
         }
 
         if (args is ["--inventory", string inventory])
         {
-            var provider = new CatalogProvider(() => ModuleAssemblyManifest.Entries
-                .Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName))).ToArray(),
+            var provider = new CatalogProvider(() => ManifestAssemblies(),
                 Microsoft.Extensions.Logging.Abstractions.NullLogger<CatalogProvider>.Instance);
             var catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: true);
             var findings = Hexalith.McpCli.Core.Tests.InventoryCoverageGate.CheckFile(inventory, catalog, provider);
@@ -31,7 +47,7 @@ internal static class Program
 
         if (args is ["--manifest-catalog"])
         {
-            object[] packages = ModuleAssemblyManifest.Entries.Select(entry => new
+            object[] packages = ManifestEntries().Select(entry => new
             {
                 packageId = entry.PackageId,
                 assemblyName = entry.AssemblyName,
@@ -48,9 +64,7 @@ internal static class Program
             .GetType("Hexalith.McpCli.Cli.CliRunner", throwOnError: true)!;
         ConstructorInfo constructor = runnerType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
             binder: null, [typeof(ProfileStore), typeof(Func<IReadOnlyList<Assembly>>)], modifiers: null)!;
-        Func<IReadOnlyList<Assembly>> manifest = () => ModuleAssemblyManifest.Entries
-            .Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName)))
-            .ToArray();
+        Func<IReadOnlyList<Assembly>> manifest = ManifestAssemblies;
         string? profilePath = Environment.GetEnvironmentVariable("MCPCLI_CONFORMANCE_PROFILE_PATH");
         object runner = constructor.Invoke([new ProfileStore(profilePath), manifest]);
         MethodInfo invoke = runnerType.GetMethod("InvokeAsync", BindingFlags.Instance | BindingFlags.NonPublic,

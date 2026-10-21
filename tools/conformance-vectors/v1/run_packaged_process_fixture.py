@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import os
@@ -24,14 +25,15 @@ def run(command, cwd, env, expected=0):
     return result
 
 
-def enroll_fixture(project: ET.Element, package_id: str) -> None:
-    """Select only the synthetic fixture in the temporary production manifest."""
+def enroll_fixture(project: ET.Element, package_id: str, preserve_existing: bool = False) -> None:
+    """Select the synthetic fixture, optionally retaining the temporary combined population."""
     for parent in project.iter():
         for item in list(parent):
             if item.tag == 'PackageReference':
                 metadata = {child.tag.casefold(): child.text or '' for child in item}
                 metadata.update((name.casefold(), value) for name, value in item.attrib.items())
-                if metadata.get('hexalithcontracts', '').casefold() == 'true':
+                if metadata.get('hexalithcontracts', '').casefold() == 'true' and (
+                        not preserve_existing or item.get('Include', '').casefold() == package_id.casefold()):
                     parent.remove(item)
     ET.SubElement(ET.SubElement(project, 'ItemGroup'), 'PackageReference',
                   Include=package_id, HexalithContracts='true')
@@ -43,14 +45,19 @@ def fixture(repo: Path, artifact: Path):
     with tempfile.TemporaryDirectory(prefix='mcpcli-packaged-process-') as temporary:
         root = Path(temporary).resolve()
         # The synthetic receipt, inventory and flagged project exist only in this temporary repository.
-        for name in ['src', 'references/Hexalith.Builds/Props', 'tools/conformance-vectors/v1']:
+        for name in ['src', 'references/Hexalith.Builds/Props', 'tools/conformance-vectors/v1', 'tools/inventory-coverage/v1']:
             shutil.copytree(repo / name, root / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
         for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
             if (repo / name).exists():
                 shutil.copy2(repo / name, root / name)
         host = root / 'tests/Hexalith.McpCli.ConformanceHost'
         host.mkdir(parents=True)
-        shutil.copy2(repo / 'tests/Hexalith.McpCli.ConformanceHost/Program.cs', host / 'Program.cs')
+        for source in (repo / 'tests/Hexalith.McpCli.ConformanceHost').glob('*.cs'):
+            shutil.copy2(source, host / source.name)
+        for name in ['Hexalith.McpCli.ConformanceHost.csproj', 'Directory.Packages.props']:
+            shutil.copy2(repo / 'tests/Hexalith.McpCli.ConformanceHost' / name, host / name)
+        (host / 'Directory.Packages.props').write_text('<Project><Import Project="../../Directory.Packages.props" /></Project>')
+        (root / 'tools/conformance-vectors/v1/v1-scope.json').write_text(json.dumps({'requiredModules': ['sample']}))
         core = root / 'tests/Hexalith.McpCli.Core.Tests'
         core.mkdir(parents=True)
         for source in (repo / 'tests/Hexalith.McpCli.Core.Tests').glob('InventoryCoverage*.cs'):
@@ -73,9 +80,16 @@ def fixture(repo: Path, artifact: Path):
         for source in ['sample-command.json', 'sample-query.json', 'sample-rename.json']:
             destination = directory / source.replace('.json', '.vector.json')
             shutil.copy2(repo / 'tools/conformance-vectors/v1' / source, destination)
+            document = json.loads(destination.read_text())
+            for step in document['prerequisites'] + [document['invocation']] + document['postconditions']:
+                if step['kind'] == 'command':
+                    extensions = {'trace-id': 'story411 value=preserved'}
+                    step['envelope']['extensions'] = extensions
+                    step['expectedGateway']['body']['extensions'] = extensions
+            destination.write_text(json.dumps(document))
             vectors.append(destination)
         inventories = root / 'tools/inventory-coverage/v1'
-        inventories.mkdir(parents=True)
+        inventories.mkdir(parents=True, exist_ok=True)
         inventory = inventories / 'sample-approved.json'
         shutil.copy2(repo / 'tools/inventory-coverage/v1/sample-approved.json', inventory)
         accepted = inventories / 'sample-accepted-lint.json'
@@ -102,6 +116,55 @@ def fixture(repo: Path, artifact: Path):
         if not any(check['label'] == 'replay' and check['exitCode'] == 0 for check in verified['checks']):
             raise RuntimeError('Nonempty orchestration did not execute complete replay.')
         print(f'PASS nonempty enrollment: exact packaged sample, {len(verified["resolvedPackages"])} resolved packages, approval input hashes and complete replay.', flush=True)
+
+        # The real Core adapter must reject every incompatible step before any Gateway exists.
+        host_dll = host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        for group in ['prerequisites', 'invocation', 'postconditions']:
+            for mutation in ['unknown-property', 'wrong-kind', 'invalid-id', 'depth64-schema', 'excess-depth']:
+                document = json.loads((repo / 'tools/conformance-vectors/v1/sample-command.json').read_text())
+                step = copy.deepcopy(document['invocation'])
+                if mutation == 'unknown-property':
+                    step['payload']['Unknown'] = 1
+                elif mutation == 'wrong-kind':
+                    step['kind'] = 'query'
+                elif mutation == 'invalid-id':
+                    step['payload']['ItemId'] = 'not-a-ulid'
+                else:
+                    nested = 1
+                    for _ in range(64 if mutation == 'depth64-schema' else 65):
+                        nested = {'nested': nested}
+                    step['payload'] = nested
+                pointer = '/invocation' if group == 'invocation' else '/' + group + '/0'
+                document[group] = step if group == 'invocation' else [step]
+                source = root / 'incompatible.vector.json'
+                source.write_text(json.dumps(document))
+                failed = run(['dotnet', host_dll, '--validate-vectors', source], root, env, expected=1)
+                if failed.stderr:
+                    raise RuntimeError('Core preflight wrote unexpected stderr: ' + failed.stderr)
+                findings = json.loads(failed.stdout)['findings']
+                if not any(str(source) + ':' + pointer in finding and 'Core compatibility failed' in finding for finding in findings):
+                    raise RuntimeError('Core preflight lost the source/step diagnostic: ' + failed.stdout)
+                if mutation in ['depth64-schema', 'excess-depth']:
+                    parse_failure = any('The payload must be valid JSON' in finding for finding in findings)
+                    if parse_failure != (mutation == 'excess-depth'):
+                        raise RuntimeError('Core depth 64/65 boundary differs from parser/schema rules: ' + failed.stdout)
+        print('PASS all prerequisite/invocation/postcondition kinds, schemas, identifiers and excessive depth fail offline with located Core diagnostics.', flush=True)
+
+        # Preserve the real enrolled packages and add the synthetic fixture only in this temporary repository.
+        combined_project = ET.parse(repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj')
+        enroll_fixture(combined_project.getroot(), package_id, preserve_existing=True)
+        combined_project.write(project, encoding='unicode')
+        run(['dotnet', 'restore', project, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], root, env)
+        combined_output = root / 'combined'
+        run([sys.executable, root / 'tools/conformance-vectors/v1/check_enrolled.py', '--output', combined_output], root, env)
+        combined = json.loads((combined_output / 'enrolled.json').read_text())
+        expected_packages = [p['Identity'] for p in json.loads(run(['dotnet', 'msbuild', project,
+            '-getItem:PackageReference'], root, env).stdout)['Items']['PackageReference']
+            if p.get('HexalithContracts', '').lower() == 'true']
+        if combined['result'] != 'passed' or set(combined['packages']) != set(expected_packages) \
+                or len(expected_packages) < 2 or combined['productionReplay']['packageCount'] != len(expected_packages):
+            raise RuntimeError('Combined production manifest was not completely replayed.')
+        print('PASS combined manifest: all production packages plus the explicit temporary sample pass independent artifact and complete Catalog replay.', flush=True)
 
         # Reach the real C# inventory adapter with valid vectors and a rejected decision.
         pending_inventory = inventories / 'sample-pending.json'

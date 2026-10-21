@@ -26,5 +26,17 @@ class ProcessFixtureEnrollmentTests(unittest.TestCase):
         self.assertEqual(3, len(list(project.iter('PackageReference'))))
 
 
+    def test_combined_population_preserves_all_existing_enrollments_without_duplicates(self):
+        project = ET.fromstring('''<Project><ItemGroup>
+          <PackageReference Include="First.Contracts" HexalithContracts="true" />
+          <PackageReference Include="Second.Contracts"><HexalithContracts>TRUE</HexalithContracts></PackageReference>
+          <PackageReference Include="Stack.Root" />
+        </ItemGroup></Project>''')
+        for _ in range(2):
+            enroll_fixture(project, 'Synthetic.Contracts', preserve_existing=True)
+            self.assertEqual(['First.Contracts', 'Second.Contracts', 'Stack.Root', 'Synthetic.Contracts'],
+                             [item.get('Include') for item in project.iter('PackageReference')])
+
+
 if __name__ == '__main__':
     unittest.main()

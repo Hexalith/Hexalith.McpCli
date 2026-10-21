@@ -1,0 +1,110 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds [FAIL]
+      Shouldly.ShouldAssertException : process.ExitCode
+          should be
+      0
+          but was
+      1
+      
+      Additional Info:
+          xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+        Discovering: Hexalith.McpCli.Core.Tests
+        Discovered:  Hexalith.McpCli.Core.Tests
+        Starting:    Hexalith.McpCli.Core.Tests
+          Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction [FAIL]
+            Shouldly.ShouldAssertException : failures
+                should be empty but had
+            1
+                item and was
+            ["Full-v1 gate: missing required production module(s): tenants"]
+            
+            Additional Info:
+                {
+              "result": "failed",
+              "fullV1Accepted": false,
+              "elapsedMilliseconds": 151.0163,
+              "limitMilliseconds": 500,
+              "processId": 82582,
+              "assemblies": [
+                "Hexalith.Parties.Contracts",
+                "Hexalith.McpCli.Sample.Contracts"
+              ],
+              "productionPackages": [
+                "Hexalith.Parties.Contracts"
+              ],
+              "modules": [
+                {
+                  "Name": "parties",
+                  "identifierKind": "String",
+                  "operationCount": 7
+                },
+                {
+                  "Name": "sample",
+                  "identifierKind": "Ulid",
+                  "operationCount": 3
+                }
+              ],
+              "missingRequiredModules": [
+                "tenants"
+              ],
+              "diagnostics": [],
+              "failures": [
+                "Full-v1 gate: missing required production module(s): tenants"
+              ]
+            }
+            Stack Trace:
+              /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs(84,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction()
+                 at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+                 at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+        Finished:    Hexalith.McpCli.Core.Tests (ID = 'ae0c0868f52edca51b7ef4dbc399fbca06f32fd0f28fc32fc8408f57f3b1d1f3')
+      === TEST EXECUTION SUMMARY ===
+         Hexalith.McpCli.Core.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.406s
+      {
+        "result": "failed",
+        "fullV1Accepted": false,
+        "elapsedMilliseconds": 151.0163,
+        "limitMilliseconds": 500,
+        "processId": 82582,
+        "assemblies": [
+          "Hexalith.Parties.Contracts",
+          "Hexalith.McpCli.Sample.Contracts"
+        ],
+        "productionPackages": [
+          "Hexalith.Parties.Contracts"
+        ],
+        "modules": [
+          {
+            "Name": "parties",
+            "identifierKind": "String",
+            "operationCount": 7
+          },
+          {
+            "Name": "sample",
+            "identifierKind": "Ulid",
+            "operationCount": 3
+          }
+        ],
+        "missingRequiredModules": [
+          "tenants"
+        ],
+        "diagnostics": [],
+        "failures": [
+          "Full-v1 gate: missing required production module(s): tenants"
+        ]
+      }
+      
+      Stack Trace:
+        tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs(35,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds()
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+        --- End of stack trace from previous location ---
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+  Finished:    Hexalith.McpCli.Core.Tests (ID = 'ae0c0868f52edca51b7ef4dbc399fbca06f32fd0f28fc32fc8408f57f3b1d1f3')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 2, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 1.135s

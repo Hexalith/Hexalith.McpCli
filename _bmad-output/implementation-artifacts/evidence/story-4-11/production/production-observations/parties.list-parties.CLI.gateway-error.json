@@ -1,0 +1,36 @@
+{
+  "source": "/tmp/mcpcli-story411-evidence-final/Hexalith.Parties.Contracts/inputs-lnszfr_i/vectors/3/list-parties.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "parties",
+        "queryType": "PartyIndex",
+        "projectionType": "party-index",
+        "payload": {
+          "Active": true,
+          "CreatedAfter": "2026-01-01T00:00:00Z",
+          "Type": "Person"
+        },
+        "entityId": "parties",
+        "projectionActorType": "PartyIndexProjectionQueryActor",
+        "paging": {
+          "pageSize": 2,
+          "offset": 0
+        }
+      }
+    }
+  ]
+}

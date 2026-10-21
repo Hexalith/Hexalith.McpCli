@@ -1,0 +1,11 @@
+{
+  "sourceHashes": "match verified source",
+  "approvedIntent": "byte-identical",
+  "protectedInputs": "unchanged",
+  "approvedArtifactVectorsInventory": "all hashes match",
+  "requestAndResultDocumentsAudited": 52,
+  "generatedRequestIdsChecked": 32,
+  "filesRead": 115,
+  "fullV1Accepted": false,
+  "strictBlocker": "missing tenants"
+}

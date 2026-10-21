@@ -1,0 +1,43 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/final/production/Hexalith.Parties.Contracts/inputs-450ai8yo/vectors/6/update-party.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FP5S0S2JF1NVRS1W415BN5",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.UpdatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Augusta Ada",
+            "LastName": "Lovelace"
+          },
+          "RemoveIdentifierIds": [
+            "external-story49"
+          ],
+          "UpdateContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "PartyId": "party-story49",
+              "Value": "augusta@example.test"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  ]
+}

@@ -367,15 +367,17 @@ class EnrolledPreflightTests(unittest.TestCase):
         (self.child / 'verification.json').write_text('{"result":"passed","checks":[{"label":"replay","exitCode":0}]}')
         (self.child / 'artifact.sha512').write_text('previous successful artifact')
 
-    def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts'):
+    def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts', local=False, missing=None, required=None):
         (self.directory / 'approval.json').write_text(json.dumps(self.receipt))
         evaluation = subprocess.CompletedProcess([], 0, json.dumps({'Items': {'PackageReference': [
             {'Identity': self.package_id, contracts_metadata: 'true'}]}}), '')
         captured = io.StringIO()
         with patch.object(check_enrolled, '__file__', str(self.repo / 'tools/conformance-vectors/v1/check_enrolled.py')), \
-             patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)]), \
+             patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)] + (['--local'] if local else [])), \
              patch('check_enrolled.subprocess.run', side_effect=evaluation_error, return_value=evaluation), \
              patch('check_enrolled.verify', side_effect=verifier, return_value={'result': 'passed'}) as mocked, \
+             patch('check_enrolled.production_replay', return_value={'result': 'passed', 'modules': ['module']}), \
+             patch('check_enrolled.required_scope', side_effect=lambda path, modules: sorted(set(required) - modules) if required is not None else missing or []), \
              redirect_stderr(captured), redirect_stdout(io.StringIO()):
             code = check_enrolled.main()
         return code, json.loads((self.output / 'enrolled.json').read_text()), captured.getvalue(), mocked
@@ -445,7 +447,7 @@ class EnrolledPreflightTests(unittest.TestCase):
                 self.assertEqual(0, code)
                 self.assertEqual('passed', report['result'])
                 self.assertEqual([self.package_id], report['packages'])
-                self.assertEqual([{'result': 'passed'}], report['results'])
+                self.assertEqual([{'result': 'passed', 'approvedModule': 'module'}], report['results'])
                 self.assertEqual('', diagnostic)
                 verifier.assert_called_once()
                 self.assertEqual(self.artifact.read_bytes(), verifier.call_args.args[1].read_bytes())
@@ -503,6 +505,37 @@ class EnrolledPreflightTests(unittest.TestCase):
         self.assertEqual('failed', report['result'])
         self.assertIn('approved inventorySha256 during snapshot capture', diagnostic)
         self.assert_invalidated_child()
+
+
+    def test_missing_required_module_fails_full_gate_after_available_replay(self):
+        code, report, diagnostic, verifier = self.invoke(missing=['tenants'])
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertFalse(report['fullV1Accepted'])
+        self.assertEqual(['tenants'], report['missingRequiredModules'])
+        self.assertEqual({'result': 'passed', 'modules': ['module']}, report['productionReplay'])
+        self.assertIn('Full-v1 gate: missing required production module(s): tenants', diagnostic)
+        verifier.assert_called_once()
+
+    def test_local_evidence_cannot_grant_full_acceptance_even_when_scope_is_present(self):
+        for missing in [[], ['tenants']]:
+            with self.subTest(missing=missing):
+                code, report, diagnostic, _ = self.invoke(local=True, missing=missing)
+                self.assertEqual(0, code)
+                self.assertEqual('local-only', report['result'])
+                self.assertFalse(report['fullV1Accepted'])
+                self.assertEqual(missing, report['missingRequiredModules'])
+                self.assertEqual('', diagnostic)
+
+
+    def test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels(self):
+        self.receipt['module'] = 'tenants'
+        shutil.copy2(self.inventory, self.inventory.with_name('tenants-approved.json'))
+        code, report, diagnostic, _ = self.invoke(required=['tenants'])
+        self.assertEqual(1, code)
+        self.assertFalse(report['fullV1Accepted'])
+        self.assertEqual(['tenants'], report['missingRequiredModules'])
+        self.assertIn('missing required production module(s): tenants', diagnostic)
 
 
 class FrozenArtifactInputTests(unittest.TestCase):
@@ -667,3 +700,40 @@ class SignedPackageHashTests(unittest.TestCase):
         self.artifact.write_bytes(b'changed signed archive bytes')
         with self.assertRaisesRegex(RuntimeError, 'cached archive hash'):
             artifact_for(self.assets, 'Module.Contracts', self.receipt)
+
+class FullV1ScopeTests(unittest.TestCase):
+    def test_required_modules_cannot_be_replaced_by_local_green(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'v1-scope.json'
+            source.write_text(json.dumps({'requiredModules': ['parties', 'tenants']}))
+            self.assertEqual(['tenants'], check_enrolled.required_scope(source, {'parties', 'sample'}))
+            self.assertEqual([], check_enrolled.required_scope(source, {'parties', 'tenants'}))
+            for invalid in [{}, {'requiredModules': []}, {'requiredModules': ['parties', 'parties']},
+                            {'requiredModules': [None]}, []]:
+                source.write_text(json.dumps(invalid))
+                with self.subTest(invalid=invalid), self.assertRaisesRegex(RuntimeError, 'requiredModules'):
+                    check_enrolled.required_scope(source, {'parties', 'tenants'})
+
+
+class CombinedConsumptionHashTests(unittest.TestCase):
+    def test_retained_vector_mutation_during_production_build_blocks_replay(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / 'evidence'
+            package = output / 'Module.Contracts'
+            package.mkdir(parents=True)
+            vector = package / 'read.vector.json'
+            vector.write_text('{"operation":"module.read"}')
+            receipt = {'packageId': 'Module.Contracts', 'version': '1.0.0', 'approvedModule': 'module',
+                       'operations': ['module.read'],
+                       'retainedInputs': {'artifact': 'module.nupkg', 'vectors': {'original.json': vector.name}},
+                       'vectors': {'original.json': hashlib.sha256(vector.read_bytes()).hexdigest()}}
+            def build(command, **kwargs):
+                if command[1] == 'build':
+                    vector.write_text('{"operation":"module.read","changed":true}')
+                return subprocess.CompletedProcess(command, 0, '', '')
+            with patch('check_enrolled.subprocess.run', side_effect=build), \
+                    patch('check_enrolled.run_catalog') as replay:
+                with self.assertRaisesRegex(RuntimeError, 'retained vector bytes differ from recorded verification hash'):
+                    check_enrolled.production_replay(root, output, [receipt])
+            replay.assert_not_called()

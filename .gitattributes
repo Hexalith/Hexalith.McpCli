@@ -4,3 +4,4 @@ tools/conformance-vectors/v1/modules/** text eol=lf
 tools/conformance-vectors/v1/modules/**/*.vector.json -text
 tools/inventory-coverage/v1/*.json text eol=lf
 _bmad-output/implementation-artifacts/evidence/story-4-10/**/*.vector.json binary
+_bmad-output/implementation-artifacts/evidence/story-4-11/**/*.vector.json binary

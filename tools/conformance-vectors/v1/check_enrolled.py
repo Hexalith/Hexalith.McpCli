@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import redirect_stdout, redirect_stderr
 import hashlib
 import json
 from pathlib import Path
@@ -12,6 +13,7 @@ import sys
 
 from verify_artifact import restored_package, verify
 from validate import _load_json
+from run_loopback import run_catalog
 
 
 def artifact_for(assets: dict, package_id: str, receipt: dict) -> Path:
@@ -69,17 +71,70 @@ def invalidate_children(output: Path) -> None:
         path.write_text(json.dumps({'result': 'invalidated', 'error': 'Enrollment preflight has not verified this package.'}, indent=2) + '\n')
 
 
+def required_scope(path: Path, modules: set[str]) -> list[str]:
+    document = _load_json(path)
+    required = document.get('requiredModules') if isinstance(document, dict) else None
+    if not isinstance(required, list) or not required or any(not isinstance(name, str) or not name for name in required) \
+            or len(required) != len(set(required)):
+        raise RuntimeError(f'{path}: /requiredModules must be a nonempty array of unique module names.')
+    return sorted(set(required) - modules)
+
+
+def production_replay(repo: Path, output: Path, results: list[dict]) -> dict:
+    """Exercise the real combined manifest; independent artifact hosts remain a separate gate."""
+    project = repo / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj'
+    checks = []
+    for command, label in [
+        (['dotnet', 'restore', str(project), '-p:ConformanceProduction=true'], 'production-restore'),
+        (['dotnet', 'build', str(project), '--no-restore', '-c', 'Release', '-m:1', '-warnaserror',
+          '-p:ConformanceProduction=true'], 'production-build')]:
+        result = subprocess.run(command, cwd=repo, capture_output=True, text=True)
+        (output / (label + '.stdout.txt')).write_text(result.stdout)
+        (output / (label + '.stderr.txt')).write_text(result.stderr)
+        checks.append({'command': command, 'exitCode': result.returncode})
+        if result.returncode != 0:
+            raise RuntimeError(f'{label} failed with exit {result.returncode}; see {output}: {result.stderr[-4000:]}')
+    host = project.parent / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+    selections = []
+    for receipt in results:
+        root = output / receipt['packageId']
+        inputs = receipt['retainedInputs']
+        selections.append((root / inputs['artifact'], (receipt['packageId'], receipt['version']),
+                           [root / path for path in inputs['vectors'].values()]))
+        if set(inputs['vectors']) != set(receipt['vectors']):
+            raise RuntimeError(f"{receipt['packageId']}: retained vector map differs from recorded verification hashes.")
+        for source, path in inputs['vectors'].items():
+            if hashlib.sha256((root / path).read_bytes()).hexdigest() != receipt['vectors'][source]:
+                raise RuntimeError(f"{root / path}: retained vector bytes differ from recorded verification hash.")
+    with (output / 'production-replay.stdout.txt').open('w') as stdout, \
+            (output / 'production-replay.stderr.txt').open('w') as stderr:
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                discovered = run_catalog(host, selections, assets_path=project.parent / 'obj/project.assets.json',
+                            evidence_dir=output / 'production-observations',
+                            expected_modules={receipt['packageId']: receipt['approvedModule'] for receipt in results})
+        except Exception as error:
+            stderr.write(str(error) + '\n')
+            raise
+    return {'result': 'passed', 'checks': checks, 'packageCount': len(selections),
+            'operationCount': sum(len(result['operations']) for result in results), **discovered}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--local', action='store_true', help='collect available-package evidence; never grants full-v1 acceptance')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[3]
     args.output.mkdir(parents=True, exist_ok=True)
-    status = {'result': 'pending', 'packages': [], 'results': []}
+    status = {'result': 'pending', 'fullV1Accepted': False, 'packages': [], 'results': []}
     report = args.output / 'enrolled.json'
     report.write_text(json.dumps(status, indent=2) + '\n')
     try:
         invalidate_children(args.output)
+        required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set())
+        for stale in (args.output / 'production-observations').glob('*.json'):
+            stale.unlink()
         project = repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         evaluation = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
                                     cwd=repo, capture_output=True, text=True, check=True)
@@ -106,11 +161,21 @@ def main():
                                   inventory, receipt['artifactHash'], accepted if accepted.exists() else None,
                                   align_candidate_dependencies=False, expected_inventory_hash=inventory_hash,
                                   expected_vector_hashes=vector_hashes))
+            results[-1]['approvedModule'] = module
         args.output.mkdir(parents=True, exist_ok=True)
-        status.update(result='passed', packages=packages, results=results)
+        if not packages:
+            raise RuntimeError('Production manifest has no enrolled Contracts packages.')
+        status.update(results=results)
         report.write_text(json.dumps(status, indent=2) + '\n')
-        print(f'Validated {len(packages)} enrolled production package(s).')
-    except (RuntimeError, OSError, ValueError, KeyError, subprocess.CalledProcessError) as error:
+        status['productionReplay'] = production_replay(repo, args.output.resolve(), results)
+        missing = required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set(status['productionReplay']['modules']))
+        status.update(missingRequiredModules=missing, fullV1Accepted=not missing and not args.local)
+        if missing and not args.local:
+            raise RuntimeError('Full-v1 gate: missing required production module(s): ' + ', '.join(missing))
+        status.update(result='local-only' if args.local else 'passed', packages=packages, results=results)
+        report.write_text(json.dumps(status, indent=2) + '\n')
+        print(f'Validated {len(packages)} enrolled production package(s); full-v1 acceptance: {status["fullV1Accepted"]}.')
+    except (RuntimeError, OSError, ValueError, KeyError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
         status.update(result='failed', error=str(error))
         report.write_text(json.dumps(status, indent=2) + '\n')
         if isinstance(error, subprocess.CalledProcessError):

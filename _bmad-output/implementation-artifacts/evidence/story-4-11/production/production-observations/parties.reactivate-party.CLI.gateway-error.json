@@ -1,0 +1,29 @@
+{
+  "source": "/tmp/mcpcli-story411-evidence-final/Hexalith.Parties.Contracts/inputs-lnszfr_i/vectors/4/reactivate-party.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FMD09D8VN75B9MABF206NM",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.ReactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  ]
+}

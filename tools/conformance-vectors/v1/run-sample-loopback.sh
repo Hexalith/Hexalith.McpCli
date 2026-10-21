@@ -15,9 +15,9 @@ dotnet pack tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contra
 
 host_project=tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj
 NUGET_PACKAGES="$task_dir/packages" dotnet restore "$host_project" \
-    -p:RestoreAdditionalProjectSources="$artifact_dir" --force
+    -p:ConformanceProduction=false -p:RestoreAdditionalProjectSources="$artifact_dir" --force
 NUGET_PACKAGES="$task_dir/packages" dotnet build "$host_project" \
-    --configuration Release --no-restore -m:1
+    --configuration Release --no-restore -m:1 -p:ConformanceProduction=false
 
 artifact="$artifact_dir/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg"
 vectors=(tools/conformance-vectors/v1/sample-command.json

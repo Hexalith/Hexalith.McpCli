@@ -1,0 +1,107 @@
+{
+  "status": "Initial local implementation evidence before review corrections; superseded by final/verification.md.",
+  "fullV1Accepted": false,
+  "requiredModules": [
+    "parties",
+    "tenants"
+  ],
+  "productionPackages": [
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "operations": 7
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'",
+      "exitCode": 0,
+      "tests": 129
+    },
+    {
+      "command": "dotnet restore Hexalith.McpCli.slnx",
+      "exitCode": 0
+    },
+    {
+      "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "exitCode": 0,
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": "dotnet test tests/<Project> --no-build --configuration Release",
+      "projects": {
+        "Hexalith.McpCli.Abstractions.Tests": {
+          "passed": 20,
+          "skipped": 0
+        },
+        "Hexalith.McpCli.Analyzers.Tests": {
+          "passed": 19,
+          "skipped": 0
+        },
+        "Hexalith.McpCli.Core.Tests": {
+          "passed": 671,
+          "skipped": 2
+        },
+        "Hexalith.McpCli.Manifest.Tests": {
+          "passed": 104,
+          "skipped": 0
+        },
+        "Hexalith.McpCli.Cli.Tests": {
+          "passed": 479,
+          "skipped": 2
+        },
+        "Hexalith.McpCli.Mcp.Tests": {
+          "passed": 58,
+          "skipped": 0
+        }
+      },
+      "exitCode": 0
+    },
+    {
+      "command": "bash tools/conformance-vectors/v1/run-sample-validation.sh Release",
+      "exitCode": 0
+    },
+    {
+      "command": "bash tools/conformance-vectors/v1/run-sample-loopback.sh",
+      "exitCode": 0,
+      "processCases": [
+        "reset CLI/MCP sample replay",
+        "isolated valid extension values",
+        "all-step offline Core kind/schema/identifier rejection",
+        "Core depth 64 reaches schema, depth 65 fails parsing",
+        "combined production plus explicit sample population",
+        "pending inventory blocks replay",
+        "false semantic assertion invalidates success"
+      ]
+    },
+    {
+      "command": "python3 tools/conformance-vectors/v1/check_enrolled.py --output /tmp/mcpcli-story411-evidence-final",
+      "exitCode": 1,
+      "packageVerification": "passed",
+      "productionReplay": "passed",
+      "reason": "Full-v1 gate: missing required production module(s): tenants"
+    },
+    {
+      "command": "MCPCLI_BENCHMARK_OUTPUT=/tmp/story411-catalog-local.json dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests",
+      "exitCode": 0,
+      "elapsedMilliseconds": 228.7059,
+      "fullV1Accepted": false
+    },
+    {
+      "command": "MCPCLI_BENCHMARK_REQUIRE_V1=true MCPCLI_BENCHMARK_OUTPUT=/tmp/story411-catalog-strict.json dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests",
+      "exitCode": 1,
+      "elapsedMilliseconds": 151.0163,
+      "reason": "Full-v1 gate: missing required production module(s): tenants"
+    },
+    {
+      "check": "Final required result/error contracts and identifier bindings against retained real production observations",
+      "documents": 52,
+      "result": "passed"
+    }
+  ],
+  "outstandingPrerequisite": "Prepare the exact decorated Tenants release candidate and obtain publication approval, then publish/enroll it with release-bound vectors, receipt and inventory. Story 4.8 candidate approval does not approve release bytes. Rerun both strict gates with both modules.",
+  "evidenceLimit": "Scripted replay proves transport routing and result/error parity. Live authorization, privacy sanitization, persisted domain effects and retirement remain separate gates.",
+  "artifactRetention": "The production directory retains exact vector and approval-input snapshots, hashes and diagnostics. NuGet archives remain in the original /tmp output/cache and are excluded from committed evidence; restore the published package by its recorded identity and verify its exact archive hash.",
+  "supersededBy": "final/verification.md"
+}

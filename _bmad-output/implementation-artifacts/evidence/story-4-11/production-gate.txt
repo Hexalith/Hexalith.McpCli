@@ -1,0 +1,2 @@
+Full-v1 gate: missing required production module(s): tenants
+Verified Hexalith.Parties.Contracts@1.5.1: 7 operations; complete vector replay passed.
