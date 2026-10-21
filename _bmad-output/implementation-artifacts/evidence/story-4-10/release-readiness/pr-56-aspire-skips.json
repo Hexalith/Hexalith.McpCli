@@ -1,0 +1,32 @@
+{
+  "source": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "passed": 98,
+  "failed": 0,
+  "skipped": [
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.AliveEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+      "reason": "Tier 3 AppHost runtime health proof is blocked by the deferred Tenants sidecar readiness path; static topology plus Tier 2 health coverage remain active."
+    },
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthEndpoint_WithAllDaprComponentsRunning_DoesNotIncludeDegradationHeadersAsync",
+      "reason": "Tier 3 AppHost runtime health proof is blocked by the deferred Tenants sidecar readiness path; static topology plus Tier 2 health coverage remain active."
+    },
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.ReadyEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+      "reason": "Story 12.1 deferred the DAPR /ready invocation contract for the Tenants sidecar; keep static and Tier 2 readiness coverage until that follow-up lands."
+    },
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+      "reason": "Tier 3 AppHost runtime health proof is blocked by the deferred Tenants sidecar readiness path; static topology plus Tier 2 health coverage remain active."
+    },
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthAndReadyEndpoints_WithDaprSidecarStopped_Return503ThenRecoverAsync",
+      "reason": "Story 12.1 deferred full DAPR sidecar stop/restart recovery proof; this Tier 3 runtime check is re-enabled when the Tenants readiness invocation path is stabilized."
+    },
+    {
+      "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.QueryEndpoints_WithPubSubUnavailable_ReturnCachedDataWithDegradationHeaders",
+      "reason": "In-memory DAPR components share the sidecar process \u2014 pub/sub cannot be failed independently of the state store. Degradation header scenarios are covered by Tier 1 (DegradedResponseMiddlewareTests) and Tier 2 (HealthEndpointIntegrationTests)."
+    }
+  ],
+  "limits": "Existing health/readiness/degradation deferrals are preserved; this is not full live authorization, parity or retirement proof."
+}

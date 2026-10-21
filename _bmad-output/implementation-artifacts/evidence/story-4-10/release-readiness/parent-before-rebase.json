@@ -1,0 +1,38 @@
+[
+  {
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "source": "e55da59006f55410b9390403c67253b4f8423e18",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "passed": 2074,
+    "failed": 0,
+    "skipped": 0,
+    "log": "parent-domain.log",
+    "logSha256": "531ea0b9b8d6f1216cb9caca051f359bdf1f9df679cca3d43088d25f472e462a"
+  },
+  {
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "source": "e55da59006f55410b9390403c67253b4f8423e18",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0,
+    "log": "parent-sample.log",
+    "logSha256": "5080fde6a5cd594fcffb2466b8242ae85359d989ca379ce9fb244a7db4e30251"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "workingDirectory": "/tmp/hexalith-parties-story410-release",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "messageFile": "/tmp/story410-aspire-timeout-commit.txt",
+  "message": "ci: allow time for blocking Aspire tests\n\nCold setup used 470 seconds of the 600-second whole-job limit, leaving\ninsufficient time for host startup and test results. Use the supported\n30-minute allowance while retaining the blocking test policy.\n",
+  "messageSha256": "c07795ee20b51ceeb82a71d6f9c9d8eb2fb95c1aef5a644d060013c4c875cca5",
+  "exitCode": 0,
+  "log": "aspire-timeout-commitlint.log",
+  "logSha256": "e8e6645d7c67cdce922b86d95a64f3e5af55fcadd8db8b164043846efa3e1db4"
+}

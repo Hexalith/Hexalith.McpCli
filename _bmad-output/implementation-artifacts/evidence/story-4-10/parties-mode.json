@@ -1,0 +1,9 @@
+{
+  "Properties": {
+    "UseHexalithProjectReferences": "",
+    "HexalithEventStoreFromSource": "",
+    "HexalithMcpCliFromSource": "",
+    "HexalithEventStoreVersion": "3.126.0",
+    "HexalithCommonsVersion": "2.30.3"
+  }
+}

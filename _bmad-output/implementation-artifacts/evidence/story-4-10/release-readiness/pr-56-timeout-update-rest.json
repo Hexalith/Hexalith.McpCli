@@ -1,0 +1,19 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "--method",
+    "PATCH",
+    "repos/Hexalith/Hexalith.Parties/pulls/56",
+    "--input",
+    "/tmp/story410-pr-56-body-payload.json",
+    "--jq",
+    ".html_url"
+  ],
+  "exitCode": 0,
+  "output": "https://github.com/Hexalith/Hexalith.Parties/pull/56\n",
+  "payloadSha256": "fa4138bba969c2b68ac90f5cc88d9f1123bac3ea610360ec6606b4e87f726554",
+  "preservedExternalSummary": true,
+  "source": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "previousCliFailure": "pr-56-timeout-update.json"
+}

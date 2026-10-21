@@ -1,0 +1,22 @@
+{
+  "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "command": [
+    "gh",
+    "pr",
+    "create",
+    "--repo",
+    "Hexalith/Hexalith.Parties",
+    "--base",
+    "main",
+    "--head",
+    "fix/story-4-10-release-readiness",
+    "--title",
+    "test(release): align prerequisite fitness checks",
+    "--body-file",
+    "/tmp/story410-release-prerequisites-pr.md"
+  ],
+  "body": "Current Parties CI fails two stale prerequisite checks after module-tool adoption and committed reference advances. Update the fitness checks and current source receipt to match the adopted selection behavior, and update the Sample onboarding guard to protect the documented tool commands and direct reference list.\n\nThe fitness suite now evaluates default Release packages, explicit package mode, the unmapped Debug switch and explicit source property fixtures. Consumer discovery uses dependency identities; effective versions and selected project existence are checked. Regression cases cover selector removal/typos, version overrides, missing project files and unsafe Git options. The receipt describes the limits of property fixtures and retains historical approvals.\n\nValidation on main base `defb8d2f9a8b2c8732226227413c1808f3d7cafb`:\n\n- Release restores and warning-as-error builds passed for both affected projects.\n- Full domain suite: 2,119 passed, zero failures or skips.\n- Full Sample suite: 66 passed, zero failures or skips.\n- Three independent review layers completed; all seven verified findings were corrected.\n- The 180 approved Contracts/vector source files and the historical receipt section retain their verified bytes.\n\nThe separate release gate still requires owner sign-off for the nine root dependency advances since v1.5.0. This correction does not enter those sign-offs or dispatch publication.\n",
+  "bodySha256": "3e577b0198e5a02ceefe69421477cd992865cec5afe5ed79d72e8f432a894c4e",
+  "exitCode": 0,
+  "output": "https://github.com/Hexalith/Hexalith.Parties/pull/56\n"
+}

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "gh",
+    "pr",
+    "edit",
+    "56",
+    "--repo",
+    "Hexalith/Hexalith.Parties",
+    "--body-file",
+    "/tmp/story410-release-prerequisites-pr-current.md"
+  ],
+  "exitCode": 1,
+  "output": "GraphQL: Projects (classic) is being deprecated in favor of the new Projects experience, see: https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/. (repository.pullRequest.projectCards)\n",
+  "bodySha256": "7c76be448e29118c575be7f6cf1352b10b0e40a9ec9598b2db9ab20d364e0306",
+  "preservedExternalSummary": true,
+  "source": "df8173f04bd65cb86bc0d060dc75914e421f7640"
+}

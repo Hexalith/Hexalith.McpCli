@@ -1,0 +1,61 @@
+[
+  {
+    "command": [
+      "gh",
+      "api",
+      "repos/Hexalith/Hexalith.Parties/git/ref/heads/main"
+    ],
+    "exitCode": 0,
+    "output": {
+      "ref": "refs/heads/main",
+      "node_id": "REF_kwDORb3i1K9yZWZzL2hlYWRzL21haW4",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/git/refs/heads/main",
+      "object": {
+        "sha": "35d891d202a87fd4f494f2cadd26c277df44b84a",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/git/commits/35d891d202a87fd4f494f2cadd26c277df44b84a"
+      }
+    }
+  },
+  {
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "--repo",
+      "Hexalith/Hexalith.Parties",
+      "--workflow",
+      "ci.yml",
+      "--branch",
+      "main",
+      "--limit",
+      "3",
+      "--json",
+      "databaseId,headSha,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "output": [
+      {
+        "conclusion": "failure",
+        "databaseId": 39437932572,
+        "headSha": "35d891d202a87fd4f494f2cadd26c277df44b84a",
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39437932572"
+      },
+      {
+        "conclusion": "failure",
+        "databaseId": 39426175591,
+        "headSha": "32fa72e2cb223d7f8554d3a5439fa6e15212ec26",
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39426175591"
+      },
+      {
+        "conclusion": "failure",
+        "databaseId": 39421494362,
+        "headSha": "b38fcdb7200f0ed4a46627b460caf84d0fb30499",
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39421494362"
+      }
+    ]
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "label": "focused-restore",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "log": "focused-restore.log",
+    "logSha256": "b10f58e51e9092447f56c93a6bdb7a9ebad477d26060f5121d83005de3615ac5",
+    "summary": "passed; NuGet audit active"
+  },
+  {
+    "label": "focused-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "focused-build.log",
+    "logSha256": "240438e0705ce1abd222fc98ff44043bc30dda10fff3f80fba6a295c1889ee54",
+    "summary": "passed; zero warnings/errors"
+  },
+  {
+    "label": "sample-restore",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "log": "sample-restore.log",
+    "logSha256": "d0cdb037b12af7ba6d792ea973eebbffeaad7fa76290d294add3c2331a0f7ad8",
+    "summary": "passed; NuGet audit active"
+  },
+  {
+    "label": "sample-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "sample-build.log",
+    "logSha256": "955b4003cf58d7387af98ad01948315fd3857f7f4794d359b95a4e4fd279cf71",
+    "summary": "passed; zero warnings/errors"
+  },
+  {
+    "label": "focused-fitness",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests",
+      "-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/focused-fitness.xml"
+    ],
+    "exitCode": 0,
+    "log": "focused-fitness.log",
+    "logSha256": "534615aefe15399b746453243eec6b9d4f0321bcd897f17288b80517cf2de454",
+    "summary": "37 passed; zero failed/skipped"
+  },
+  {
+    "label": "sample-guardrails",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Sample.Tests.SampleOnboardingGuardrailTests",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/sample-guardrails.xml"
+    ],
+    "exitCode": 0,
+    "log": "sample-guardrails.log",
+    "logSha256": "e9ca342f95d70317b732cfccdea8956ab6d4ea77deb0613225edbf1eff24f8b8",
+    "summary": "7 passed; zero failed/skipped"
+  }
+]

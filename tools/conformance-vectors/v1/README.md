@@ -77,3 +77,57 @@ The existing sample parity gate remains available independently as `bash tools/c
 `run_loopback.py` drives both Heads out of process. For every vector it compares discovery documents, invokes each prerequisite, invocation, and postcondition against separately reset HTTP response scripts, checks semantic result assertions, compares complete captured Gateway requests and their required fields, and checks malformed-Payload error parity without a Gateway request. Only generated Command message and correlation ULIDs are masked; caller-supplied values remain exact. Run it once per owning package, supplying all of that package's vectors and the host containing its flagged Contracts release. Passing offline author approval does not require running this parity gate.
 
 **Story 4.13** owns the separate live EventStore/Aspire semantic lane. It rechecks the approved vectors against the restored owning package using the shared validator, runs each vector once, and verifies actual Query contents and persistent Command effects. The synthetic sample's scripted Query response illustrates assertions; it does not prove a real handler's persistent effect. Live Commands are not submitted twice solely for cross-head byte equality.
+
+## Exact artifact and enrolled-module gates
+
+`verify_artifact.py --artifact <Contracts.nupkg> --output <evidence-directory>
+[--inventory <approved-inventory.json>] [--expected-hash <sha512-receipt>]
+<vector.json>...` creates an isolated generic host around that exact package.
+It verifies restored bytes, complete Catalog coverage, strict discovery, every
+operation's description lint, and complete CLI/MCP replay without removing Query
+postconditions. Artifact dependency versions and the evidence limit are recorded
+in `verification.json`; candidate dependency overrides do not enroll a package.
+An optional inventory runs the same strict C# coverage checker as Core.Tests.
+
+The `enrolled-module-conformance` CI job evaluates every flagged production
+PackageReference, requires its exact restored `.nupkg`, and calls
+`check_enrolled.py`. Each package needs a directory
+`tools/conformance-vectors/v1/modules/<PackageId>/` containing complete
+`*.vector.json` files and `approval.json` with `packageId`, `version`, `module`,
+`artifactHash` (`sha512-` plus base64 SHA-512) and an owning-maintainer
+`approvalReference`, plus `vectorFilesSha256`: an exact map of relative
+`*.vector.json` names (including subdirectories) to lowercase SHA-256 hex digests.
+Added, removed, renamed or changed vectors require fresh approval. The artifact
+receipt hash must match exact restored package bytes. The NuGet restore content
+hash independently matches `project.assets.json` and cache metadata. The module also needs its approved release inventory under
+`tools/inventory-coverage/v1/<module>-approved.json`. Missing vectors, receipt,
+inventory, coverage or approval fail; the dependency gate remains independent.
+No production packages are currently enrolled.
+
+Passing replay establishes transport envelopes and result/error parity against
+a scripted Gateway. It supplies no live authorization, domain-effect or retirement
+approval. Protected publication and verification of published bytes precede
+production enrollment.
+
+Previously accepted lint can be supplied to `verify_artifact.py` with
+`--accepted-lint <module>-accepted-lint.json`; enrolled checks select that file
+from the inventory directory when present. Acceptance is exact by operation,
+code and property, with a required approval reference. New findings and stale
+exceptions fail. This preserves the eight accepted Tenants paging-member findings
+from Story 4.8 while Parties continues to require an empty lint set.
+
+
+Each artifact verification starts with `result: pending` and removes the old
+success hash receipt. Failures retain `result: failed` and captured subprocess
+logs; useful captured diagnostics also appear in CI output. Verification retains
+exact inventory/lint input copies with SHA-256 hashes and records every actual
+restored package identity/version, NuGet assets/cache content hashes and exact
+archive SHA-512 hashes. Repository signatures can make the archive-byte hash
+differ from the restore content hash; each retains its own meaning.
+
+The existing sample loopback CI path also runs `run_packaged_process_fixture.py`.
+It creates a temporary repository with one flagged packaged sample and synthetic
+fixture-only inventory/receipt, exercises nonempty enrollment through complete
+verification/replay, then proves that a structurally valid vector with a false
+semantic assertion fails with replay diagnostics and invalidates stale success.
+Synthetic authority and enrollment data never enter the production repository.

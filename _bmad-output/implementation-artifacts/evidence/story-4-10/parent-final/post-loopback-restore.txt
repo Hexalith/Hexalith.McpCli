@@ -1,0 +1,7 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 98 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 185 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 187 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 189 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 194 ms).
+  17 of 22 projects are up-to-date for restore.

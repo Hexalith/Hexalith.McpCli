@@ -1,0 +1,31 @@
+{
+  "result": "passed",
+  "timestamp": "2026-10-20T14:10:28.318353+00:00",
+  "artifactHash": "sha512-+gUcg4QyUd/GldA6JcYdBO8jzyWXavP7hg1fBikv0j6uO62gi3C/hyC9dp+IAQ3KLC8qQXxu726EfA6/NoT5/g==",
+  "verifiedManifestEntries": {
+    "source": 196,
+    "vector": 7,
+    "verifier": 30
+  },
+  "descriptionDocuments": 7,
+  "vectorFiles": 7,
+  "resolvedPackages": 53,
+  "firstReviewArchive": {
+    "fileCount": 68,
+    "checks": "Original receipt/manifests, exact artifact and first-review description document hashes still match."
+  },
+  "baselineInputsUnchanged": {
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "HEAD",
+      "--",
+      "Directory.Build.props",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs"
+    ],
+    "exitCode": 0
+  }
+}

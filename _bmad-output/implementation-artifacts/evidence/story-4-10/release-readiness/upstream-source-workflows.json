@@ -1,0 +1,340 @@
+{
+  "purpose": "Read-only upstream workflow observations; no owner approval is inferred.",
+  "records": [
+    {
+      "repo": "Hexalith.Builds",
+      "sha": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "workflow_dispatch",
+          "head_sha": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+          "name": "Release",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39431435493"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39426403061"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39426403044"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.Commons",
+      "sha": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "schedule",
+          "head_sha": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Commons/actions/runs/39384454176"
+        },
+        {
+          "conclusion": "success",
+          "event": "schedule",
+          "head_sha": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Commons/actions/runs/39227660343"
+        },
+        {
+          "conclusion": "success",
+          "event": "schedule",
+          "head_sha": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Commons/actions/runs/39214892430"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.EventStore",
+      "sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "Integration Tests",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425201010"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425201301"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425201302"
+        },
+        {
+          "conclusion": "failure",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425201200"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "P1R Qualification Preparation",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425200892"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "Payload Protection",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425200895"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "Corrective Work Authorization",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425200920"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+          "name": "Advisory Tests",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39425200891"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.FrontComposer",
+      "sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "workflow_run",
+          "head_sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+          "name": "Flaky Test Governance",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/39439518684"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/39438673662"
+        },
+        {
+          "conclusion": "failure",
+          "event": "push",
+          "head_sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/39438673845"
+        },
+        {
+          "conclusion": "cancelled",
+          "event": "push",
+          "head_sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/39438673682"
+        },
+        {
+          "conclusion": "cancelled",
+          "event": "push",
+          "head_sha": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+          "name": "Quality",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/39438673276"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.McpCli",
+      "sha": "9354dc08176744c75c2ddb61d924c0948b373b98",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "9354dc08176744c75c2ddb61d924c0948b373b98",
+          "name": "Agent instructions sync",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39420289542"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "9354dc08176744c75c2ddb61d924c0948b373b98",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39420290084"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "9354dc08176744c75c2ddb61d924c0948b373b98",
+          "name": "Bootstrap package",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39420289573"
+        },
+        {
+          "conclusion": "failure",
+          "event": "push",
+          "head_sha": "9354dc08176744c75c2ddb61d924c0948b373b98",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39420290069"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.Memories",
+      "sha": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/39411992046"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+          "name": "Release",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/39411991498"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/39411992171"
+        },
+        {
+          "conclusion": "failure",
+          "event": "push",
+          "head_sha": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/39411991532"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.Platform",
+      "sha": "4f036ced45aa40700948c19949bb874881c960b5",
+      "exitCode": 0,
+      "runs": [],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.PolymorphicSerializations",
+      "sha": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "schedule",
+          "head_sha": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.PolymorphicSerializations/actions/runs/39228207264"
+        }
+      ],
+      "error": null
+    },
+    {
+      "repo": "Hexalith.Tenants",
+      "sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+      "exitCode": 0,
+      "runs": [
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+          "name": "Commitlint",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39426911566"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+          "name": "CodeQL",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39426911567"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+          "name": "CI",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39426911343"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+          "name": "Story Guards",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39426910956"
+        },
+        {
+          "conclusion": "success",
+          "event": "push",
+          "head_sha": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+          "name": "Source-reference integration",
+          "status": "completed",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39426910888"
+        }
+      ],
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "modules": {},
+  "changedVersions": {
+    "Hexalith.Commons.UniqueIds": {
+      "before": "2.30.1",
+      "after": "2.30.3"
+    },
+    "Hexalith.EventStore.Client": {
+      "before": "3.124.0",
+      "after": "3.126.0"
+    },
+    "Hexalith.EventStore.Contracts": {
+      "before": "3.124.0",
+      "after": "3.126.0"
+    }
+  },
+  "freshRestoreAndManifest": "passed; see checks.json"
+}

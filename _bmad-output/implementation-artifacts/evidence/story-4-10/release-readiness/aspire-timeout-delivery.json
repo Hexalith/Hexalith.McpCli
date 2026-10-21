@@ -1,0 +1,55 @@
+{
+  "commit": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "remoteMain": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        ".github/workflows/ci.yml"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/story410-aspire-timeout-commit.txt"
+      ],
+      "exitCode": 0,
+      "output": "[fix/story-4-10-release-readiness df8173f0] ci: allow time for blocking Aspire tests\n 1 file changed, 1 insertion(+)\n"
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "--no-recurse-submodules",
+        "origin",
+        "main"
+      ],
+      "exitCode": 0,
+      "output": "From https://github.com/Hexalith/Hexalith.Parties\n * branch              main       -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/fix/story-4-10-release-readiness"
+      ],
+      "exitCode": 0,
+      "output": "remote: \nremote: GitHub found 10 vulnerabilities on Hexalith/Hexalith.Parties's default branch (2 critical, 1 high, 6 moderate, 1 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.Parties/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.Parties.git\n   9a4a0657..df8173f0  HEAD -> fix/story-4-10-release-readiness\n"
+    }
+  ],
+  "approvedContractsAndVectorsUnchanged": true,
+  "onlyChange": {
+    "path": ".github/workflows/ci.yml",
+    "input": "aspire-timeout-minutes",
+    "value": 30
+  },
+  "commitlintEvidence": "aspire-timeout-commitlint.json",
+  "parentChecks": "parent-timeout-checks.json"
+}

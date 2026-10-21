@@ -1,0 +1,11 @@
+{
+  "status": "pending",
+  "purpose": "complete artifact, vectors and release scope need fresh owning-maintainer approval",
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "0.0.0-story410",
+  "artifactHash": "sha512-hZfPC0pZaJa/gTFc5EwLInXwFvCrHoqXbTSezEbHkr9ss681wpf1muvcD6ipJ1eezxCyEttwzszSlI/ks9X1og==",
+  "sourceManifestSha256": "d10c9b2f87d6f9a744ec903bb2ee3bd25b62630de3a1b231b29ab2f5ef783ecf",
+  "vectorManifestSha256": "51bf5b2775ee1ed23fb1b1ee0d302b13c1035610306bb8aabd2824c293e871df",
+  "verifierManifestSha256": "3a926d4ceab443698abc43f15211c0c7ec4179d0dd944c7628e6b023f5be1397",
+  "historicalApprovals": "Story 4.9 evidence remains unchanged; scope A1 does not approve this release candidate."
+}

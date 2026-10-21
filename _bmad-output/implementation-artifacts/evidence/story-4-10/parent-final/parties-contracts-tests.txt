@@ -1,0 +1,9 @@
+Running tests from /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll (net10.0|x64)
+/home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll (net10.0|x64) passed (9s 261ms)
+
+Test run summary: Passed!
+  total: 201
+  failed: 0
+  succeeded: 201
+  skipped: 0
+  duration: 9s 439ms

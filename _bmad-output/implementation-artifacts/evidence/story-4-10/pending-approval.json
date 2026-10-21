@@ -1,0 +1,36 @@
+{
+  "status": "pending",
+  "purpose": "complete artifact, vectors and release scope need fresh owning-maintainer approval",
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "0.0.0-story410",
+  "artifactHash": "sha512-+gUcg4QyUd/GldA6JcYdBO8jzyWXavP7hg1fBikv0j6uO62gi3C/hyC9dp+IAQ3KLC8qQXxu726EfA6/NoT5/g==",
+  "sourceManifestSha256": "5b40bd048dc7c12b192ef5f285f54e501313b7ca7fc09371459e818c6284b89e",
+  "vectorManifestSha256": "346a2ed685e4ffb581ea1a31b113ec21a0690b957137b8da92d8e70f2b3e546e",
+  "verifierManifestSha256": "95b470ed9c63161415eca754f1739c5d6331852c73cffcdafc80a2353637b8c0",
+  "historicalApprovals": "Story 4.9 evidence remains unchanged; scope A1 does not approve this release candidate.",
+  "previousReview": "review-pass-1 preserves the earlier candidate and first review evidence; approval is still pending for these final bytes.",
+  "scopeInventory": {
+    "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+    "sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+    "scope": "A1, L01-L05, T01-T07, N01-N04 and C01-C08; historical scope approval is preserved."
+  },
+  "releaseInventory": {
+    "path": "tools/inventory-coverage/v1/parties-candidate.json",
+    "sha256": "d01c48bbe7dd472a8a6a3a2df3a65f7d5e7c410b5d8c7e7fdef03aa16ff9098b",
+    "status": "pending"
+  },
+  "vectorFilesSha256": {
+    "tests/conformance-vectors/mcpcli-v1/create-party.json": "3b02624aaa032d18ef73707f97f8789a68b24bbed5fae7843edddf5c747580c5",
+    "tests/conformance-vectors/mcpcli-v1/deactivate-party.json": "ad710e24c1610549006d13dc397f4a6c5289c2bac418a18876e8b10bd5dab832",
+    "tests/conformance-vectors/mcpcli-v1/get-party.json": "0200a7bb84feadeda147c6bdf63a01b27005717a7191607a3e33278899cb612e",
+    "tests/conformance-vectors/mcpcli-v1/list-parties.json": "805a69f47ccd2e44b045b892477485f81d0ebaffd4d7ae47ddacf36b389a9df0",
+    "tests/conformance-vectors/mcpcli-v1/reactivate-party.json": "1b5c610fe1842c48b62f0ba0a22e552a2ddbc4363e2466b2fef941fe351ca294",
+    "tests/conformance-vectors/mcpcli-v1/search-parties.json": "bc88eb3f444a66379738a4705e7b0a9d087728a14f34db168ef09e10a4f85bd1",
+    "tests/conformance-vectors/mcpcli-v1/update-party.json": "86793dc6d1df7662e99bd455ccf1e1fab38798e3052e1e923e6bd24cb13386cf"
+  },
+  "descriptionReview": {
+    "path": "description-review-final.json",
+    "sha256": "2f7492d9fbab3eb9c5813d21b714993b8472ded7e1bf9d25b881c386a4d1345c",
+    "result": "passed"
+  }
+}

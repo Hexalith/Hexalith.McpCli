@@ -1,0 +1,124 @@
+{
+  "formatVersion": 1,
+  "module": "parties",
+  "purpose": "release",
+  "targets": [
+    {
+      "id": "T01",
+      "name": "parties.get-party",
+      "contractType": "Hexalith.Parties.Contracts.Queries.GetParty"
+    },
+    {
+      "id": "T02",
+      "name": "parties.list-parties",
+      "contractType": "Hexalith.Parties.Contracts.Queries.ListParties"
+    },
+    {
+      "id": "T03",
+      "name": "parties.search-parties",
+      "contractType": "Hexalith.Parties.Contracts.Queries.SearchParties"
+    },
+    {
+      "id": "T04",
+      "name": "parties.create-party",
+      "contractType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite"
+    },
+    {
+      "id": "T05",
+      "name": "parties.update-party",
+      "contractType": "Hexalith.Parties.Contracts.Commands.UpdatePartyComposite"
+    },
+    {
+      "id": "T06",
+      "name": "parties.reactivate-party",
+      "contractType": "Hexalith.Parties.Contracts.Commands.ReactivateParty"
+    },
+    {
+      "id": "T07",
+      "name": "parties.deactivate-party",
+      "contractType": "Hexalith.Parties.Contracts.Commands.DeactivateParty"
+    }
+  ],
+  "legacyRows": [
+    {
+      "id": "L01",
+      "legacyOperation": "get_party",
+      "targetIds": [
+        "T01"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "A1 approves intended scope only; fresh complete-artifact and release-inventory approval remains required.",
+      "approval": {
+        "status": "pending",
+        "authority": "scope-only",
+        "reference": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md#a1-session-approval-2026-10-16"
+      }
+    },
+    {
+      "id": "L02",
+      "legacyOperation": "find_parties list and display-name search",
+      "targetIds": [
+        "T02",
+        "T03"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "A1 approves intended scope only; fresh complete-artifact and release-inventory approval remains required.",
+      "approval": {
+        "status": "pending",
+        "authority": "scope-only",
+        "reference": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md#a1-session-approval-2026-10-16"
+      }
+    },
+    {
+      "id": "L03",
+      "legacyOperation": "create_party",
+      "targetIds": [
+        "T04"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "A1 approves intended scope only; fresh complete-artifact and release-inventory approval remains required.",
+      "approval": {
+        "status": "pending",
+        "authority": "scope-only",
+        "reference": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md#a1-session-approval-2026-10-16"
+      }
+    },
+    {
+      "id": "L04",
+      "legacyOperation": "update_party details and optional activation",
+      "targetIds": [
+        "T01",
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "A1 approves intended scope only; fresh complete-artifact and release-inventory approval remains required.",
+      "approval": {
+        "status": "pending",
+        "authority": "scope-only",
+        "reference": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md#a1-session-approval-2026-10-16"
+      }
+    },
+    {
+      "id": "L05",
+      "legacyOperation": "delete_party soft deactivation",
+      "targetIds": [
+        "T01",
+        "T07"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "A1 approves intended scope only; fresh complete-artifact and release-inventory approval remains required.",
+      "approval": {
+        "status": "pending",
+        "authority": "scope-only",
+        "reference": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md#a1-session-approval-2026-10-16"
+      }
+    }
+  ]
+}

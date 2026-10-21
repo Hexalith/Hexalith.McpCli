@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-10-20T15:52:34.225513+00:00",
+  "command": [
+    "gh",
+    "api",
+    "--method",
+    "PUT",
+    "repos/Hexalith/Hexalith.Parties/pulls/56/merge",
+    "--input",
+    "/tmp/story410-pr-56-merge.json"
+  ],
+  "exitCode": 0,
+  "stdout": "{\"sha\":\"fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef\",\"merged\":true,\"message\":\"Pull Request successfully merged\"}",
+  "stderr": "",
+  "source": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "mergeMethod": "rebase",
+  "ciEvidence": "pr-56-ci-green.json",
+  "approvalScope": "Approved story release prerequisite correction; separate dependency owner sign-off remains pending."
+}

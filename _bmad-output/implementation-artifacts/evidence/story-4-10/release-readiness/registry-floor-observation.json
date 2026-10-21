@@ -1,0 +1,101 @@
+{
+  "status": "passed",
+  "observedAt": "2026-10-20T16:01:45.075811+00:00",
+  "source": "fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef",
+  "releaseFloorTag": "v1.5.0",
+  "releaseFloorCommit": "750cf80f2f6f8380057cea9d834cd1a90bccc6be",
+  "manifestSha256": "aabb6041baf44b0fcc1e02c2922406d4c7355e3a0be8aa1bbcea2c9f749ee399",
+  "packages": [
+    {
+      "packageId": "Hexalith.Parties.Contracts",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.contracts.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Client",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.client/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.client.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.AdminPortal",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.adminportal/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.adminportal.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.ConsumerPortal",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.consumerportal/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.consumerportal.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Picker",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.picker/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.picker.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Authentication",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.authentication/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.authentication.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Projections",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.projections/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.projections.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Security",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.security/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.security.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    },
+    {
+      "packageId": "Hexalith.Parties.Testing",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.testing/index.json",
+      "httpStatus": 200,
+      "status": "passed",
+      "latestStable": "1.5.0",
+      "aboveFloor": [],
+      "retainedInput": "registry-floor/hexalith.parties.testing.json",
+      "sha256": "7b62bf53d391ba6781cef11e42380c570716019e4d1c1a0c87d4682c4e34ee4c"
+    }
+  ],
+  "limits": "Read-only registry observation. Protected workflow repeats its own preflight at actual dispatch; no release, owner sign-off, package publication or gate waiver occurred."
+}

@@ -1,0 +1,346 @@
+[
+  {
+    "label": "mcpcli-restore",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-restore.txt",
+    "summary": []
+  },
+  {
+    "label": "mcpcli-build",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-build.txt",
+    "summary": [
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)"
+    ]
+  },
+  {
+    "label": "mcpcli-abstractions",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-abstractions.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 20",
+      "  failed: 0",
+      "  succeeded: 20",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "mcpcli-analyzers",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-analyzers.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 19",
+      "  failed: 0",
+      "  succeeded: 19",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "mcpcli-core",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-core.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 661",
+      "  failed: 0",
+      "  succeeded: 659",
+      "  skipped: 2"
+    ]
+  },
+  {
+    "label": "mcpcli-cli",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-cli.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 481",
+      "  failed: 0",
+      "  succeeded: 479",
+      "  skipped: 2"
+    ]
+  },
+  {
+    "label": "mcpcli-mcp",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-mcp.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 58",
+      "  failed: 0",
+      "  succeeded: 58",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "parties-restore",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.Parties.slnx",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "log": "parties-restore.txt",
+    "summary": []
+  },
+  {
+    "label": "parties-build",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.Parties.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "parties-build.txt",
+    "summary": [
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)"
+    ]
+  },
+  {
+    "label": "parties-contracts-tests",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Contracts.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "parties-contracts-tests.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 201",
+      "  failed: 0",
+      "  succeeded: 201",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "parties-server-tests",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Server.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "parties-server-tests.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 315",
+      "  failed: 0",
+      "  succeeded: 315",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "parties-client-tests",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Client.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "parties-client-tests.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 330",
+      "  failed: 0",
+      "  succeeded: 330",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "parties-tests",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 2,
+    "log": "parties-tests.txt",
+    "summary": [
+      "failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph (773ms)",
+      "failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(relativeMcpCliRoot: \"Hexalith.McpCli\") (370ms)",
+      "failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(relativeMcpCliRoot: \"references/Hexalith.McpCli\") (330ms)",
+      "  {\"EventId\":103,\"LogLevel\":\"Error\",\"Category\":\"Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService\",\"Message\":\"Health check dapr-sidecar with status Unhealthy completed after 0.7441ms with message \\u0027Dapr sidecar health check failed: HttpRequestException\\u0027\",\"Exception\":\"System.Net.Http.HttpRequestException: Exception of type \\u0027System.Net.Http.HttpRequestException\\u0027 was thrown.\\n   at Hexalith.Parties.HealthChecks.DaprSidecarHealthCheck.CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken) in /home/administrator/projects/hexalith/parties/src/Hexalith.Parties/HealthChecks/DaprSidecarHealthCheck.cs:line 30\",\"State\":{\"HealthCheckName\":\"dapr-sidecar\",\"HealthStatus\":\"Unhealthy\",\"ElapsedMilliseconds\":0.7441,\"HealthCheckDescription\":\"Dapr sidecar health check failed: HttpRequestException\",\"{OriginalFormat}\":\"Health check {HealthCheckName} with status {HealthStatus} completed after {ElapsedMilliseconds}ms with message \\u0027{HealthCheckDescription}\\u0027\"}}",
+      "  {\"EventId\":1021,\"LogLevel\":\"Warning\",\"Category\":\"Hexalith.EventStore.Pipeline.AuthorizationBehavior\",\"Message\":\"Authorization failed: SecurityEvent=AuthorizationDenied, CorrelationId=01M5CT5T90X5JQZX90EJF5GKGG, CausationId=01M5CT5T90X5JQZX90EJF5GKGG, TenantClaims=tenant-a, Tenant=tenant-a, Domain=party, MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, Reason=Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for domain \\u0027party\\u0027., SourceIp=(null), FailureLayer=MediatR.AuthorizationBehavior, Stage=AuthorizationFailed\",\"State\":{\"Message\":\"SecurityEvent=AuthorizationDenied,FailureLayer=MediatR.AuthorizationBehavior,SourceIp=,Reason=Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for domain \\u0027party\\u0027.,MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite,Domain=party,Tenant=tenant-a,TenantClaims=tenant-a,CausationId=01M5CT5T90X5JQZX90EJF5GKGG,CorrelationId=01M5CT5T90X5JQZX90EJF5GKGG,{OriginalFormat}=Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\",\"SecurityEvent\":\"AuthorizationDenied\",\"FailureLayer\":\"MediatR.AuthorizationBehavior\",\"SourceIp\":null,\"Reason\":\"Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for domain \\u0027party\\u0027.\",\"MessageType\":\"Hexalith.Parties.Contracts.Commands.CreatePartyComposite\",\"Domain\":\"party\",\"Tenant\":\"tenant-a\",\"TenantClaims\":\"tenant-a\",\"CausationId\":\"01M5CT5T90X5JQZX90EJF5GKGG\",\"CorrelationId\":\"01M5CT5T90X5JQZX90EJF5GKGG\",\"{OriginalFormat}\":\"Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\"}}",
+      "  {\"EventId\":103,\"LogLevel\":\"Error\",\"Category\":\"Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService\",\"Message\":\"Health check dapr-sidecar with status Unhealthy completed after 0.2919ms with message \\u0027Dapr sidecar health check failed: HttpRequestException\\u0027\",\"Exception\":\"System.Net.Http.HttpRequestException: Exception of type \\u0027System.Net.Http.HttpRequestException\\u0027 was thrown.\\n   at Hexalith.Parties.HealthChecks.DaprSidecarHealthCheck.CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken) in /home/administrator/projects/hexalith/parties/src/Hexalith.Parties/HealthChecks/DaprSidecarHealthCheck.cs:line 30\",\"State\":{\"HealthCheckName\":\"dapr-sidecar\",\"HealthStatus\":\"Unhealthy\",\"ElapsedMilliseconds\":0.2919,\"HealthCheckDescription\":\"Dapr sidecar health check failed: HttpRequestException\",\"{OriginalFormat}\":\"Health check {HealthCheckName} with status {HealthStatus} completed after {ElapsedMilliseconds}ms with message \\u0027{HealthCheckDescription}\\u0027\"}}",
+      "  {\"EventId\":1021,\"LogLevel\":\"Warning\",\"Category\":\"Hexalith.EventStore.Pipeline.AuthorizationBehavior\",\"Message\":\"Authorization failed: SecurityEvent=AuthorizationDenied, CorrelationId=01M5CT5XV8HHMT0RCRM6AQN21J, CausationId=01M5CT5XV8HHMT0RCRM6AQN21J, TenantClaims=N/A, Tenant=tenant-a, Domain=party, MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, Reason=Not authorized for tenant \\u0027tenant-a\\u0027., SourceIp=(null), FailureLayer=MediatR.AuthorizationBehavior, Stage=AuthorizationFailed\",\"State\":{\"Message\":\"SecurityEvent=AuthorizationDenied,FailureLayer=MediatR.AuthorizationBehavior,SourceIp=,Reason=Not authorized for tenant \\u0027tenant-a\\u0027.,MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite,Domain=party,Tenant=tenant-a,TenantClaims=N/A,CausationId=01M5CT5XV8HHMT0RCRM6AQN21J,CorrelationId=01M5CT5XV8HHMT0RCRM6AQN21J,{OriginalFormat}=Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\",\"SecurityEvent\":\"AuthorizationDenied\",\"FailureLayer\":\"MediatR.AuthorizationBehavior\",\"SourceIp\":null,\"Reason\":\"Not authorized for tenant \\u0027tenant-a\\u0027.\",\"MessageType\":\"Hexalith.Parties.Contracts.Commands.CreatePartyComposite\",\"Domain\":\"party\",\"Tenant\":\"tenant-a\",\"TenantClaims\":\"N/A\",\"CausationId\":\"01M5CT5XV8HHMT0RCRM6AQN21J\",\"CorrelationId\":\"01M5CT5XV8HHMT0RCRM6AQN21J\",\"{OriginalFormat}\":\"Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\"}}",
+      "  {\"EventId\":1021,\"LogLevel\":\"Warning\",\"Category\":\"Hexalith.EventStore.Pipeline.AuthorizationBehavior\",\"Message\":\"Authorization failed: SecurityEvent=AuthorizationDenied, CorrelationId=01M5CT5YTJXRMS3QCHGM0S31HH, CausationId=01M5CT5YTJXRMS3QCHGM0S31HH, TenantClaims=tenant-a, Tenant=tenant-a, Domain=party, MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, Reason=Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for command type \\u0027Hexalith.Parties.Contracts.Commands.CreatePartyComposite\\u0027., SourceIp=(null), FailureLayer=MediatR.AuthorizationBehavior, Stage=AuthorizationFailed\",\"State\":{\"Message\":\"SecurityEvent=AuthorizationDenied,FailureLayer=MediatR.AuthorizationBehavior,SourceIp=,Reason=Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for command type \\u0027Hexalith.Parties.Contracts.Commands.CreatePartyComposite\\u0027.,MessageType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite,Domain=party,Tenant=tenant-a,TenantClaims=tenant-a,CausationId=01M5CT5YTJXRMS3QCHGM0S31HH,CorrelationId=01M5CT5YTJXRMS3QCHGM0S31HH,{OriginalFormat}=Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\",\"SecurityEvent\":\"AuthorizationDenied\",\"FailureLayer\":\"MediatR.AuthorizationBehavior\",\"SourceIp\":null,\"Reason\":\"Not authorized for tenant \\u0027tenant-a\\u0027. Not authorized for command type \\u0027Hexalith.Parties.Contracts.Commands.CreatePartyComposite\\u0027.\",\"MessageType\":\"Hexalith.Parties.Contracts.Commands.CreatePartyComposite\",\"Domain\":\"party\",\"Tenant\":\"tenant-a\",\"TenantClaims\":\"tenant-a\",\"CausationId\":\"01M5CT5YTJXRMS3QCHGM0S31HH\",\"CorrelationId\":\"01M5CT5YTJXRMS3QCHGM0S31HH\",\"{OriginalFormat}\":\"Authorization failed: SecurityEvent={SecurityEvent}, CorrelationId={CorrelationId}, CausationId={CausationId}, TenantClaims={TenantClaims}, Tenant={Tenant}, Domain={Domain}, MessageType={MessageType}, Reason={Reason}, SourceIp={SourceIp}, FailureLayer={FailureLayer}, Stage=AuthorizationFailed\"}}",
+      "Test run summary: Failed!",
+      "  total: 2067",
+      "  failed: 3",
+      "  succeeded: 2064",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "sample-validation",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "sample-validation.txt",
+    "summary": [
+      "Ran 87 tests in 21.883s",
+      "OK"
+    ]
+  },
+  {
+    "label": "sample-loopback",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "exitCode": 0,
+    "log": "sample-loopback.txt",
+    "summary": [
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "Ran 87 tests in 21.088s",
+      "OK",
+      "PASS nonempty enrollment: exact packaged sample, 53 resolved packages, approval input hashes and complete replay.",
+      "PASS false semantic assertion: replay failed with useful diagnostics; stale success/hash invalidated."
+    ]
+  },
+  {
+    "label": "post-loopback-restore",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "log": "post-loopback-restore.txt",
+    "summary": []
+  },
+  {
+    "label": "mcpcli-manifest",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "mcpcli-manifest.txt",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 103",
+      "  failed: 0",
+      "  succeeded: 103",
+      "  skipped: 0"
+    ]
+  },
+  {
+    "label": "enrolled",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/parent-final/enrolled"
+    ],
+    "exitCode": 0,
+    "log": "enrolled.txt",
+    "summary": []
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "result": "passed",
+  "source": "ea926163fb51033b226541f069ebf6a5941922af",
+  "historicalMatrixSha256": "49a2b30559633912d4bfc4910486c5e6d341c6f12fd77da404008586615e08a9",
+  "contractsAndVectorsDiffExitCode": 0,
+  "parentCommands": "parent-rebased-checks.json",
+  "domainPassed": 2099,
+  "samplePassed": 58,
+  "skipped": 0,
+  "reviewDiff": "/tmp/story410-release-readiness-review.diff"
+}

@@ -1,0 +1,19 @@
+{
+  "result": "job-timeout",
+  "run": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39445674969",
+  "jobId": 118711352640,
+  "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "jobLimitMinutes": 10,
+  "setupAndBuildSeconds": 470,
+  "testSecondsBeforeCancellation": 142,
+  "testResultsProduced": false,
+  "blockingInput": "aspire-continue-on-error: false",
+  "supportedCorrection": {
+    "input": "aspire-timeout-minutes",
+    "value": 30
+  },
+  "workflowExecutionPinUnchanged": "332b2c144defba546fe0a09626a4a72f2340e22f",
+  "log": "pr-56-aspire-job.log",
+  "logSha256": "8d1692918b8184ada8d6025bc84e300879f4e0c243f8b9f27b82903cabe1e984",
+  "testJobEvidence": "pr-56-test-results.json"
+}

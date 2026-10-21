@@ -1,0 +1,12 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 53317110..22a3b300 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -44,6 +44,7 @@ jobs:
+         tests/Hexalith.Parties.Sample.Tests
+         tests/Hexalith.Parties.Ci.Tests
+       aspire-test-project: tests/Hexalith.Parties.IntegrationTests
++      aspire-timeout-minutes: 30
+       aspire-continue-on-error: false
+ 
+   ui-a11y:

@@ -1,0 +1,176 @@
+[
+  {
+    "phase": "review-patch",
+    "label": "enrollment-regressions",
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/conformance-vectors/v1",
+      "-p",
+      "test_enrolled.py"
+    ],
+    "exitCode": 0,
+    "log": "review-enrolled-tests.log",
+    "logSha256": "2dfc52c2ecd3d9207cf921c9c2597d0ceb4802d7ba9a98a319755dfd4342fcf7",
+    "summary": [
+      "20 passed; 0 failures"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "query-handler-regressions",
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Tests.Gateway.PartySdkQueryHandlerTests",
+      "-xml",
+      "/tmp/story410-review-query-tests.xml"
+    ],
+    "exitCode": 0,
+    "log": "review-query-tests.log",
+    "logSha256": "2b7109a7b461832a3ce94affa931384491eb61444bcb34788bc4d9f926c42ccb",
+    "summary": [
+      "738 passed; 0 failures; 0 skips"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "final-before-read-assertions",
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-method",
+      "Hexalith.Parties.Tests.Gateway.PartySdkQueryHandlerTests.PublicQueryPayloads_RejectAmbiguousAliasesAndInvalidFiltersBeforeReadAsync"
+    ],
+    "exitCode": 0,
+    "log": "review-unicode-tests.log",
+    "logSha256": "7da0c8cfb706a68a1c0351220fad8e8031140c7fe9eb48a876b1ca3cf5923c15",
+    "summary": [
+      "18 passed; 0 failures; 0 skips; includes final no-metadata/no-projection assertions"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "decoration-descriptions",
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Contracts.Tests.McpCliDecorationTests"
+    ],
+    "exitCode": 0,
+    "log": "review-decoration-tests.log",
+    "logSha256": "af25a07a44fe23f79228d97f020207406be9c1031c9880a16bf80d3c907566be",
+    "summary": [
+      "2 passed; 0 failures; 0 skips"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "packaged-process-fixture",
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/run_packaged_process_fixture.py",
+      "--artifact",
+      "/tmp/story410-review-sample-feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg"
+    ],
+    "exitCode": 0,
+    "log": "review-process-fixture.log",
+    "logSha256": "1dd3467bfcde46a387bcabb15e2d15a02ecad1e64c4908c4d6069d22137fdd15",
+    "summary": [
+      "PASS nonempty enrollment through exact packaged sample verifier and complete replay; 53 resolved package records",
+      "PASS well-formed false semantic assertion fails in replay with useful diagnostics; old success/hash invalidated"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "final-unapproved-pack",
+    "workingDirectory": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:HexalithMcpCliFromSource=false",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithCommonsFromSource=false",
+      "-p:MinVerVersionOverride=0.0.0-story410",
+      "-p:PackageVersion=0.0.0-story410",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "review-pack.log",
+    "logSha256": "c022a9d8fbf4af5fb7f40de5a2c128ef67fff745edb2729b91acbac7ac2a0035",
+    "summary": [
+      "Created exact retained candidate"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "final-candidate-artifact",
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/verify_artifact.py",
+      "--artifact",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/get-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/list-parties.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/search-parties.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json"
+    ],
+    "exitCode": 0,
+    "log": "review-artifact-check.log",
+    "logSha256": "938151713db9c7edb8dbac93501b637883ba7806c048ca053646ebeccbe90203",
+    "summary": [
+      "7 operations, strict discovery and all descriptions clean; 7 complete vectors replayed; 53 actual resolved package identities/versions/hashes retained"
+    ]
+  },
+  {
+    "phase": "review-patch",
+    "label": "unapproved-release-inventory-rejected",
+    "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/verify_artifact.py",
+      "--artifact",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/approval-gate-negative",
+      "--inventory",
+      "tools/inventory-coverage/v1/parties-candidate.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/get-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/list-parties.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/search-parties.json",
+      "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json"
+    ],
+    "exitCode": 1,
+    "log": "review-approval-gate.log",
+    "logSha256": "0c766553ab9f5549756beb4c975ff92adabb018bcd6a2f7cbefe29c46aa43198",
+    "summary": [
+      "EXPECTED failure: 10 pending/scope-only findings; failed receipt; inventory input bytes retained/hashed; no success hash"
+    ]
+  }
+]

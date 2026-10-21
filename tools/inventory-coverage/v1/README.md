@@ -86,8 +86,8 @@ inventory.json:row L01: dangling target reference 'T99'.
 Keep existing Markdown inventories and session decisions as their authoritative
 human evidence. Independently enumerate every source surface and variant, obtain
 owning-maintainer decisions, and transcribe them into a new versioned JSON artifact
-outside `src/` without inventing approvals. Pending intended Parties targets are
-still undelivered; do not turn their names into a coverage or release claim.
+outside `src/` without inventing approvals. Intended target names alone do not
+establish delivery, coverage or release readiness.
 
 For a later owner-approved module, supply its decorated Contracts assembly to the
 existing `CatalogProvider`/`CatalogService`, copy the new inventory into test output,
@@ -96,3 +96,34 @@ branch is needed. Use `purpose: "release"` and genuine `owning-maintainer` evide
 for release coverage; synthetic fixture authority is rejected there. Verify
 approval references and source completeness separately. Enrollment, published
 Contracts pins, Gateway behavior and retirement gates remain separate work.
+
+## Enrolled production modules
+
+`EnrolledModuleCoverageTests` reads the built production manifest and checks every
+module with the generic `EnrolledInventoryCoverageGate`. Each requires
+`<module>-approved.json`, purpose `release`, authentic owner decisions and exact
+public-name/internal-type coverage. A missing inventory fails independently of
+the dependency-policy gate; synthetic fixture approval cannot authorize shipping.
+The shipped manifest remains empty until published Contracts approval succeeds.
+
+`parties-candidate.json` transcribes the seven A1 intended targets for review. Its
+five rows explicitly remain `pending` / `scope-only`, so it fails the gate. It is
+not copied as an approved inventory, supplies no fresh maintainer approval and
+does not replace the authoritative Markdown inventory or its N01–N04 exclusions.
+Complete artifact/vector and release-scope approval is required before converting
+it into a release inventory. Approval authenticity remains an owner responsibility.
+
+`parties-approved.json` transcribes the requesting user's 2026-10-20 approval of
+the exact reviewed seven-operation candidate, vectors and release inventory.
+Its rows reference `evidence/story-4-10/candidate-approval.json` under the
+implementation artifacts. The original pending candidate remains unchanged as
+historical input. The approval retains A1's N01–N04 exclusions and C01–C08
+compatibility obligations in the authoritative Markdown inventory; it does not
+certify publication, live execution or legacy-host retirement. Production
+enrollment still requires verification of the exact published package and vectors.
+
+Description lint is checked against exact operation/code/property acceptances in
+`<module>-accepted-lint.json`, each with an approval reference. New findings and
+stale exceptions both fail. `tenants-accepted-lint.json` transcribes only the eight
+paging-member findings already accepted in Story 4.8; it grants no new approval.
+Parties has no accepted-lint file and therefore requires empty lint.

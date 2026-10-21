@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-10-20T14:32:08.768564+00:00",
+  "result": "passed",
+  "approvalEvidence": "candidate-approval.json",
+  "artifactVerification": "approved-candidate/verification.json",
+  "inventory": "tools/inventory-coverage/v1/parties-approved.json",
+  "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+  "inventoryFindings": [],
+  "verifiedOperations": 7,
+  "completeVectors": 7,
+  "publication": "not performed",
+  "productionEnrollment": "not performed"
+}

@@ -1,0 +1,300 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-abstractions-tests.log",
+    "logSha256": "b20eddfcf21491a1dc9a5423f035d4bd3fe132c4238d1cdd1e69b486284ac605",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 20",
+      "  failed: 0",
+      "  succeeded: 20",
+      "  skipped: 0",
+      "  duration: 753ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-analyzers-tests.log",
+    "logSha256": "10cece73b7e166d77b8868cc542725f940fe2f2d3f8f833dc9c27b33dc0ceb56",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 19",
+      "  failed: 0",
+      "  succeeded: 19",
+      "  skipped: 0",
+      "  duration: 3s 259ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-core-tests.log",
+    "logSha256": "9a3515bfbd0e79163c8c2efd2a1a74e8f304e5861306d497c3d9548ce4b6ff38",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 661",
+      "  failed: 0",
+      "  succeeded: 659",
+      "  skipped: 2",
+      "  duration: 1s 893ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-cli-tests.log",
+    "logSha256": "f24abc3449bd1217b04e840943bb942cf3ca340e6668bd94f882b7e7e6ff4c59",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 481",
+      "  failed: 0",
+      "  succeeded: 479",
+      "  skipped: 2",
+      "  duration: 21s 532ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-mcp-tests.log",
+    "logSha256": "26a6136f2b4254fcc924c1e8bb1a8d8c177df0e0eb72e2c1845ebb5e96e568ce",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 58",
+      "  failed: 0",
+      "  succeeded: 58",
+      "  skipped: 0",
+      "  duration: 5s 152ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Contracts.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-parties-contracts-tests.log",
+    "logSha256": "e457778245bdc9e7aa3d81de058ad06a721161a7ec1f81c7fde9d4ab5cd03436",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 201",
+      "  failed: 0",
+      "  succeeded: 201",
+      "  skipped: 0",
+      "  duration: 9s 688ms"
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Server.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-parties-server-tests.log",
+    "logSha256": "7d159548acead3e32fa9579de1867f27b93bc55f3296b13d548ec1e2327b985e",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 315",
+      "  failed: 0",
+      "  succeeded: 315",
+      "  skipped: 0",
+      "  duration: 1s 113ms"
+    ]
+  },
+  {
+    "label": "sample-validation",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-sample-validation.log",
+    "logSha256": "9af08a761d1c78a352e89546fad88e8a04134a8b5b2d1478ed497b95fb7bfa93",
+    "summary": [
+      "  Hexalith.McpCli.Sample.Contracts -> /tmp/tmp.cRgzhjmar0/artifacts/bin/Hexalith.McpCli.Sample.Contracts/release/Hexalith.McpCli.Sample.Contracts.dll",
+      "  The package Hexalith.McpCli.Sample.Contracts.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.",
+      "  Successfully created package '/tmp/tmp.cRgzhjmar0/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg'.",
+      "Validated 3 vector(s) against /tmp/tmp.cRgzhjmar0/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg",
+      "sha512-5IQfVYlHaXtrn/7EP+7y0WxjgAYSC9IevVpmRMLkVLO1XDqfiq7L/RqqRLh5X2k+RgcOVPWYmWyTCjxKHP7Msg==  /tmp/tmp.cRgzhjmar0/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg",
+      "................................................................................",
+      "----------------------------------------------------------------------",
+      "Ran 80 tests in 22.685s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "label": "sample-loopback",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "exitCode": 0,
+    "log": "story410-sample-loopback.log",
+    "logSha256": "f7c9565a165c8555d6fee0ca401501bb96fa309f5b29c34e9129d936eb0f831a",
+    "summary": [
+      "Time Elapsed 00:00:02.22",
+      "Validated 3 vector(s) against /tmp/tmp.jUIzLC94BF/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg",
+      "PASS sample.create-item: discovery, 2 reset Gateway step(s), documents, requests, validation/Gateway error parity",
+      "PASS sample.get-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity",
+      "PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity",
+      "................................................................................",
+      "----------------------------------------------------------------------",
+      "Ran 80 tests in 22.951s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "label": "final-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "log": "story410-final-restore.log",
+    "logSha256": "785fd2c7841db2c3e95e66239b90c44463d1c6b2e6f77e09337fb301e6a00343",
+    "summary": [
+      "  Determining projects to restore...",
+      "  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 113 ms).",
+      "  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 223 ms).",
+      "  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 179 ms).",
+      "  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 179 ms).",
+      "  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 228 ms).",
+      "  17 of 22 projects are up-to-date for restore."
+    ]
+  },
+  {
+    "label": "final-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "story410-final-build.log",
+    "logSha256": "fcfa352aa06e661a0b5512ae9e446df453be4bb697c7c9cdd7fb2e44868b548e",
+    "summary": [
+      "  Hexalith.McpCli.Cli.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+      "  Hexalith.McpCli.Core.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "  Hexalith.McpCli.Manifest.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "  Hexalith.McpCli.Mcp.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll",
+      "",
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "",
+      "Time Elapsed 00:00:03.98"
+    ]
+  },
+  {
+    "label": "manifest-final",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-manifest-final.log",
+    "logSha256": "f44202eedb49a911ff66c18d9841a03abe569d745830a9eb1c50274a013d39c0",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 103",
+      "  failed: 0",
+      "  succeeded: 103",
+      "  skipped: 0",
+      "  duration: 25s 166ms"
+    ]
+  },
+  {
+    "label": "enrolled",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-10/enrolled"
+    ],
+    "exitCode": 0,
+    "log": "story410-enrolled.log",
+    "logSha256": "a03a60871f89db4fde94298824e3d525fec8082588283067fd46d27dd50a4d52",
+    "summary": [
+      "Validated 0 enrolled production package(s)."
+    ]
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Client.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "log": "story410-parties-client-tests.log",
+    "logSha256": "00c29f9f84b2425ae608550792d67ff65ceed629471eb19c312d46bc581eeec7",
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 330",
+      "  failed: 0",
+      "  succeeded: 330",
+      "  skipped: 0",
+      "  duration: 20s 251ms"
+    ]
+  }
+]

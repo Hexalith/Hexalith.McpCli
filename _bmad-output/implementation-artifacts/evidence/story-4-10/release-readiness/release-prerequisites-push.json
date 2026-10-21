@@ -1,0 +1,17 @@
+{
+  "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "remoteMain": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+  "fetch": {
+    "exitCode": 0,
+    "output": "From https://github.com/Hexalith/Hexalith.Parties\n * branch              main       -> FETCH_HEAD\n"
+  },
+  "command": [
+    "git",
+    "push",
+    "--set-upstream",
+    "origin",
+    "HEAD:refs/heads/fix/story-4-10-release-readiness"
+  ],
+  "exitCode": 0,
+  "output": "remote: \nremote: Create a pull request for 'fix/story-4-10-release-readiness' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Parties/pull/new/fix/story-4-10-release-readiness        \nremote: \nremote: GitHub found 10 vulnerabilities on Hexalith/Hexalith.Parties's default branch (2 critical, 1 high, 6 moderate, 1 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.Parties/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.Parties.git\n * [new branch]        HEAD -> fix/story-4-10-release-readiness\nbranch 'fix/story-4-10-release-readiness' set up to track 'origin/fix/story-4-10-release-readiness'.\n"
+}

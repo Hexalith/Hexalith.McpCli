@@ -1,0 +1,91 @@
+[
+  {
+    "label": "solution-restore",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.Parties.slnx"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.429,
+    "log": "parent-timeout-solution-restore.log",
+    "logSha256": "50d401b2e6be00922c0be38014e068455b956cf506f0b3602d529329fd251c64",
+    "summaryTail": [
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Schema/Hexalith.FrontComposer.Schema.csproj (in 41 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj (in 11 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj (in 3 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj (in 19 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.AppHost/Hexalith.Parties.AppHost.csproj (in 162 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server/Hexalith.EventStore.Admin.Server.csproj (in 24 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj (in 24 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server.Host/Hexalith.EventStore.Admin.Server.Host.csproj (in 15 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj (in 34 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.IntegrationTests/Hexalith.Parties.IntegrationTests.csproj (in 290 ms).",
+      "  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.UI/Hexalith.EventStore.Admin.UI.csproj (in 12 ms).",
+      "  12 of 59 projects are up-to-date for restore."
+    ]
+  },
+  {
+    "label": "ui-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 4.285,
+    "log": "parent-timeout-ui-build.log",
+    "logSha256": "9102edcfe9786b5e6fe23e8c08a895ab304245e33940bb0dce7023540d5849bf",
+    "summaryTail": [
+      "  Hexalith.Parties.Client -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll",
+      "  Hexalith.Parties.AdminPortal -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.AdminPortal/bin/Release/net10.0/Hexalith.Parties.AdminPortal.dll",
+      "  Hexalith.Parties.Authentication -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Authentication/bin/Release/net10.0/Hexalith.Parties.Authentication.dll",
+      "  Hexalith.Parties.ConsumerPortal -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.ConsumerPortal/bin/Release/net10.0/Hexalith.Parties.ConsumerPortal.dll",
+      "  Hexalith.Parties.Picker -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Picker/bin/Release/net10.0/Hexalith.Parties.Picker.dll",
+      "  Hexalith.Parties.UI -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.UI/bin/Release/net10.0/Hexalith.Parties.UI.dll",
+      "",
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "",
+      "Time Elapsed 00:00:03.92"
+    ]
+  },
+  {
+    "label": "ci-tests",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Ci.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 8.071,
+    "log": "parent-timeout-ci-tests.log",
+    "logSha256": "a77290c4c3273c91c526ff18025ad54088e7686f678bcab478d6c8c5e4d2e06b",
+    "summaryTail": [
+      "Running tests from /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll (net10.0|x64)",
+      "/tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll (net10.0|x64) passed (7s 466ms)",
+      "",
+      "Test run summary: Passed!",
+      "  total: 188",
+      "  failed: 0",
+      "  succeeded: 188",
+      "  skipped: 0",
+      "  duration: 7s 622ms"
+    ]
+  }
+]

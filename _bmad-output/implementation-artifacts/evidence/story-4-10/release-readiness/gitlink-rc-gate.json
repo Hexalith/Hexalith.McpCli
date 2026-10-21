@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-20T14:51:01.365125+00:00",
+  "cwd": "/tmp/hexalith-parties-story410-release",
+  "source": "ea926163fb51033b226541f069ebf6a5941922af",
+  "command": [
+    "bash",
+    "scripts/gitlink-rc-gate.sh",
+    "--diff",
+    "v1.5.0"
+  ],
+  "exitCode": 1,
+  "log": "gitlink-rc-gate.log",
+  "logSha256": "d35b11aaad5fa1bb4a9ddb31749a362c7796845a84596216ab6362683c633b20",
+  "result": "blocked",
+  "limit": "The candidate approval does not invent owner validation for unrelated dependency pointer advances; sign-off ledger remains unchanged."
+}

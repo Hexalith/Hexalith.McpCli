@@ -1,0 +1,357 @@
+{
+  "runUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39437932572",
+  "headSha": "35d891d202a87fd4f494f2cadd26c277df44b84a",
+  "sourceArtifactId": 12272348957,
+  "artifactName": "blocking-test-results",
+  "results": [
+    {
+      "project": "Hexalith.Parties.AdminPortal.Tests",
+      "sha256": "4e86703def64c05fad82f96c2bdeba0c071a7d80a5ce9e54d7ccf061c44668fb",
+      "counters": {
+        "total": "190",
+        "executed": "190",
+        "passed": "190",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Authentication.Tests",
+      "sha256": "52350cc4c85638566cbd1e5607f124c131380861e6506ebe76e12fb06b50ce66",
+      "counters": {
+        "total": "12",
+        "executed": "12",
+        "passed": "12",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Ci.Tests",
+      "sha256": "49ba830f991026ef998cdce4a8fd66aca7a9f30d011316f3cdb04f74b870cfce",
+      "counters": {
+        "total": "188",
+        "executed": "188",
+        "passed": "188",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Client.Tests",
+      "sha256": "ba1c6bf1f0a5488c755319427f3ed34d084d2e2c08733d95ac77c8086ff98b7d",
+      "counters": {
+        "total": "330",
+        "executed": "330",
+        "passed": "328",
+        "failed": "2",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": [
+        {
+          "name": "Hexalith.Parties.Client.Tests.FitnessTests.ClientArchitecturalFitnessTests.ClientCsproj_TransitiveDependenciesAreOnlySharedFrameworkPackages",
+          "messages": [
+            "Shouldly.ShouldAssertException : violations\n    should be empty but had\n1\n    item and was\n[\"Hexalith.McpCli.Abstractions\"]\n\nAdditional Info:\n    Client transitive packages must remain limited to Microsoft.Extensions shared framework packages plus the Dapr/Grpc/Protobuf actor-transport stack and identity infrastructure inherited through Hexalith.EventStore.Contracts. Found unexpected: Hexalith.McpCli.Abstractions"
+          ]
+        },
+        {
+          "name": "Hexalith.Parties.Client.Tests.Package.ClientPackageTests.PackedClientPackage_HasOnlyApprovedDeclaredDependenciesAndFitsSizeBudget",
+          "messages": [
+            "Shouldly.ShouldAssertException : dependencyIds.OrderBy(static value => value, StringComparer.OrdinalIgnoreCase)\n    should be\n[\"ByteAether.Ulid\", \"Hexalith.Commons.Http\", \"Hexalith.Commons.UniqueIds\", \"Hexalith.EventStore.Contracts\", \"Hexalith.Parties.Contracts\", \"Microsoft.Extensions.Configuration\", \"Microsoft.Extensions.Configuration.Abstractions\", \"Microsoft.Extensions.Configuration.Binder\", \"Microsoft.Extensions.DependencyInjection\", \"Microsoft.Extensions.DependencyInjection.Abstractions\", \"Microsoft.Extensions.Diagnostics.Abstractions\", \"Microsoft.Extensions.Http\", \"Microsoft.Extensions.Logging.Abstractions\", \"Microsoft.Extensions.Options\", \"Microsoft.Extensions.Options.ConfigurationExtensions\"]\n    but was (case sensitive comparison)\n[\"ByteAether.Ulid\", \"Hexalith.Commons.Http\", \"Hexalith.Commons.UniqueIds\", \"Hexalith.EventStore.Contracts\", \"Hexalith.McpCli.Abstractions\", \"Hexalith.Parties.Contracts\", \"Microsoft.Extensions.Configuration\", \"Microsoft.Extensions.Configuration.Abstractions\", \"Microsoft.Extensions.Configuration.Binder\", \"Microsoft.Extensions.DependencyInjection\", \"Microsoft.Extensions.DependencyInjection.Abstractions\", \"Microsoft.Extensions.Diagnostics.Abstractions\", \"Microsoft.Extensions.Http\", \"Microsoft.Extensions.Logging.Abstractions\", \"Microsoft.Extensions.Options\", \"Microsoft.Extensions.Options.ConfigurationExtensions\"]\n    difference\n[\"ByteAether.Ulid\", \"Hexalith.Commons.Http\", \"Hexalith.Commons.UniqueIds\", \"Hexalith.EventStore.Contracts\", *\"Hexalith.McpCli.Abstractions\"*, *\"Hexalith.Parties.Contracts\"*, *\"Microsoft.Extensions.Configuration\"*, *\"Microsoft.Extensions.Configuration.Abstractions\"*, *\"Microsoft.Extensions.Configuration.Binder\"*, *\"Microsoft.Extensions.DependencyInjection\"*, *\"Microsoft.Extensions.DependencyInjection.Abstractions\"*, *\"Microsoft.Extensions.Diagnostics.Abstractions\"*, *\"Microsoft.Extensions.Http\"*, *\"Microsoft.Extensions.Logging.Abstractions\"*, *\"Microsoft.Extensions.Options\"*, *\"Microsoft.Extensions.Options.ConfigurationExtensions\"*]"
+          ]
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Parties.ConsumerPortal.Tests",
+      "sha256": "56f0cf3e2c95cd586e2877aa6a441eb881fc7844bab3c274b65ffb6ca2f2cbab",
+      "counters": {
+        "total": "82",
+        "executed": "82",
+        "passed": "82",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Contracts.Tests",
+      "sha256": "1839677a72d0639ef2ab9aa2ac5703209016bbbb78ffc4b6a5cb3349def9cb8f",
+      "counters": {
+        "total": "201",
+        "executed": "201",
+        "passed": "201",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Mcp.Tests",
+      "sha256": "2ae12f9c0d3e94f308e431d96d6e50815eb6e9de1e339e50841e86266bccd69f",
+      "counters": {
+        "total": "94",
+        "executed": "94",
+        "passed": "94",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Picker.Tests",
+      "sha256": "55085a0a71501a4c8d2e8dd910887a6693b18d8ef8521289646a1b2b94396787",
+      "counters": {
+        "total": "171",
+        "executed": "171",
+        "passed": "171",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Projections.Tests",
+      "sha256": "20fb8b42611ef4231d180809bc03b9c0c42516a42269e6cacabe1cac9a24c3ab",
+      "counters": {
+        "total": "399",
+        "executed": "399",
+        "passed": "399",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Sample.Tests",
+      "sha256": "02356575aa6b8bfe019f87f646fcaa4905c7deb8b69fef1fad30e98385d026c5",
+      "counters": {
+        "total": "58",
+        "executed": "58",
+        "passed": "57",
+        "failed": "1",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": [
+        {
+          "name": "Hexalith.Parties.Sample.Tests.SampleOnboardingGuardrailTests.GettingStartedRunnableSnippets_UseAcceptedGatewayShape",
+          "messages": [
+            "Shouldly.ShouldAssertException : gettingStarted\n    should contain (case insensitive comparison)\n\"git submodule update --init references/Hexalith.Builds references/Hexalith.Commons references/Hexalith.EventStore references/Hexalith.FrontComposer references/Hexalith.PolymorphicSerializations references/Hexalith.Tenants\"\n    but was actually\n\"# Getting Started with Hexalith.Parties\n\nThis guide starts the local EventStore-fronted topology, se...\""
+          ]
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Parties.Security.Tests",
+      "sha256": "fc0b08fa2af42b7be78b437effc37e4bc2da77d7029b0748cefda8c0284bc402",
+      "counters": {
+        "total": "250",
+        "executed": "250",
+        "passed": "250",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Server.Tests",
+      "sha256": "fb72ec6f8fb28421e1e71b3d8430b0bcafe54e9bd02d35185f7218d7d428e6a2",
+      "counters": {
+        "total": "315",
+        "executed": "315",
+        "passed": "315",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    },
+    {
+      "project": "Hexalith.Parties.Tests",
+      "sha256": "418da19b789694eb55118669c1ce63fae8ae2d86172d0efaa0c5a56df3968b89",
+      "counters": {
+        "total": "2019",
+        "executed": "2019",
+        "passed": "2018",
+        "failed": "1",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": [
+        {
+          "name": "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph",
+          "messages": [
+            "Shouldly.ShouldAssertException : RunGit(root, \"-C\", path, \"describe\", \"--tags\", \"--always\", \"--abbrev=8\", \"HEAD\")\n                    .Trim()\n    should be\n\"v4.33.1-49-g5d03f1db\"\n    but was\n\"v4.34.0\"\n    difference\nDifference     |                      |         |    |    |    |    |    |    |    |    |    |    |    |    |    |   \n               |                     \\|/       \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16   17   18   19   \nExpected Value | v    4    .    3    3    .    1    -    4    9    -    g    5    d    0    3    f    1    d    b    \nActual Value   | v    4    .    3    4    .    0                                                                     \nExpected Code  | 118  52   46   51   51   46   49   45   52   57   45   103  53   100  48   51   102  49   100  98   \nActual Code    | 118  52   46   51   52   46   48                                                                    \n\nAdditional Info:\n    references/Hexalith.Builds"
+          ]
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Parties.UI.Tests",
+      "sha256": "166309c2602f81ec692b98d51981707dc0742cf8baf43d0130f62bc00247b374",
+      "counters": {
+        "total": "388",
+        "executed": "388",
+        "passed": "388",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failedCases": []
+    }
+  ]
+}

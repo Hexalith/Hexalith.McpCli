@@ -1,0 +1,14 @@
+{
+  "source": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "workingDirectory": "/tmp/hexalith-parties-story410-release",
+  "command": [
+    "bash",
+    "scripts/gitlink-rc-gate.sh",
+    "--diff",
+    "v1.5.0"
+  ],
+  "exitCode": 1,
+  "log": "candidate-gitlink-rc-gate.log",
+  "observedAt": "2026-10-20T15:17:03.583602+00:00",
+  "approvalEntered": false
+}

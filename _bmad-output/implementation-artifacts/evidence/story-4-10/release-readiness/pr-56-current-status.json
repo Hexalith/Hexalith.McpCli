@@ -1,0 +1,152 @@
+{
+  "observedAt": "2026-10-20T15:37:02.688523+00:00",
+  "command": [
+    "gh",
+    "pr",
+    "view",
+    "56",
+    "--repo",
+    "Hexalith/Hexalith.Parties",
+    "--json",
+    "state,headRefOid,mergeStateStatus,statusCheckRollup,url"
+  ],
+  "exitCode": 0,
+  "result": {
+    "headRefOid": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+    "mergeStateStatus": "UNSTABLE",
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:35:19Z",
+        "conclusion": "CANCELLED",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737201/job/118721047780",
+        "name": "commitlint / commitlint",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Commitlint"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737463/job/118721049918",
+        "name": "ci / build-and-test",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737111/job/118721093010",
+        "name": "codeql / analyze",
+        "startedAt": "2026-10-20T15:35:05Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "CodeQL"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:34:55Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449736640/job/118721049345",
+        "name": "Root gitlink RC gate",
+        "startedAt": "2026-10-20T15:34:56Z",
+        "status": "COMPLETED",
+        "workflowName": "Release Candidate Gate"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:35:39Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449794721/job/118721270381",
+        "name": "commitlint / commitlint",
+        "startedAt": "2026-10-20T15:35:23Z",
+        "status": "COMPLETED",
+        "workflowName": "Commitlint"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:36:55Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449973440/job/118721870657",
+        "name": "commitlint / commitlint",
+        "startedAt": "2026-10-20T15:36:30Z",
+        "status": "COMPLETED",
+        "workflowName": "Commitlint"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:35:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737228/job/118721047857",
+        "name": "dependency-review / dependency-review",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Dependency Review"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:36:08Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737463/job/118721049529",
+        "name": "UI accessibility",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:35:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737463/job/118721049574",
+        "name": "BMAD configuration tests",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-20T15:36:10Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737463/job/118721049081",
+        "name": "Parties Platform declaration",
+        "startedAt": "2026-10-20T15:34:59Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/agents/bc-638f3bc9-0969-4827-a665-2c419b17bc1a",
+        "name": "Cursor Approval Agent: Pull Request Router",
+        "startedAt": "2026-10-20T15:34:52Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/docs/bugbot",
+        "name": "Cursor Bugbot",
+        "startedAt": "2026-10-20T15:34:58Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/agents/bc-cec6e275-49f7-4df2-a6ef-50d706d7f508",
+        "name": "Cursor Security Agent: Security Reviewer",
+        "startedAt": "2026-10-20T15:34:51Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      }
+    ],
+    "url": "https://github.com/Hexalith/Hexalith.Parties/pull/56"
+  }
+}

@@ -1,0 +1,69 @@
+Command: dotnet test tests/Hexalith.Parties.Tests --no-build --configuration Release
+Exit: 2
+
+failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph (1s 076ms)
+  from /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64)
+  Shouldly.ShouldAssertException : File.ReadAllText(Path.Combine(root, "Directory.Build.props"));
+          rootBuildProps
+      should contain (case insensitive comparison)
+  "<UseHexalithProjectReferences Condition="'$(UseHexalithProjectReferences)' == ''">false</UseHexalithProjectReferences>"
+      but was actually
+  "<Project>
+  
+    <PropertyGroup>
+      <!-- Only the pinned module tool supplies source roots and mode sel..."
+    at Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph() in /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs:729
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(relativeMcpCliRoot: "Hexalith.McpCli") (449ms)
+  from /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64)
+  Shouldly.ShouldAssertException : EvaluateProjectGraph(partiesRoot, contractsProject, useSource: true);
+  
+              graph.Properties["HexalithMcpCliFromSource"]
+      should be
+  "true"
+      but was
+  ""
+      difference
+  Difference     |  |    |    |    |   
+                 | \|/  \|/  \|/  \|/  
+  Index          | 0    1    2    3    
+  Expected Value | t    r    u    e    
+  Actual Value   |                     
+  Expected Code  | 116  114  117  101  
+  Actual Code    |                     
+    at Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(String relativeMcpCliRoot) in /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs:845
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+failed Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(relativeMcpCliRoot: "references/Hexalith.McpCli") (542ms)
+  from /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64)
+  Shouldly.ShouldAssertException : EvaluateProjectGraph(partiesRoot, contractsProject, useSource: true);
+  
+              graph.Properties["HexalithMcpCliFromSource"]
+      should be
+  "true"
+      but was
+  ""
+      difference
+  Difference     |  |    |    |    |   
+                 | \|/  \|/  \|/  \|/  
+  Index          | 0    1    2    3    
+  Expected Value | t    r    u    e    
+  Actual Value   |                     
+  Expected Code  | 116  114  117  101  
+  Actual Code    |                     
+    at Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(String relativeMcpCliRoot) in /home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs:845
+    at InvokeStub_PlatformApiPrerequisitesTests.McpCliSiblingLayoutsSelectAbstractionsProjectWithoutNestedCheckout(Object, Span`1)
+    at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+/home/administrator/projects/hexalith/parties/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64) failed with 3 error(s) (17s 508ms)
+Exit code: 2
+  Standard output: {"EventId":0,"LogLevel":"Warning","Category":"Hexalith.Parties","Message":"Hexalith.Parties MVP is not for regulated EU personal data until v1.1 GDPR features are active.","State":{"ComplianceWarning":"Hexalith.Parties MVP is not for regulated EU personal data until v1.1 GDPR features are active.","{OriginalFormat}":"{ComplianceWarning}"}}
+
+
+Test run summary: Failed!
+  total: 2045
+  failed: 3
+  succeeded: 2042
+  skipped: 0
+  duration: 17s 691ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

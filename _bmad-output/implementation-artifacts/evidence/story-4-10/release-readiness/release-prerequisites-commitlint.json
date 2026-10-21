@@ -1,0 +1,16 @@
+{
+  "workingDirectory": "/tmp/hexalith-parties-story410-release",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "messageFile": "/tmp/story410-release-prerequisites-commit.txt",
+  "message": "test(release): align prerequisite fitness checks\n\nVerify package defaults and explicit source property fixtures after module\ntool adoption. Refresh current source receipts while preserving historical\napprovals, and retain direct-reference onboarding safeguards.\n",
+  "messageSha256": "51397c36936a84ed7939c8045cffe4c19718ca204f6c8e41d2a62d754947a80c",
+  "exitCode": 0,
+  "log": "release-prerequisites-commitlint.log",
+  "logSha256": "f6805f8709d234d6adee3f18f6dd92d5777f0b5aee51389f10b01ed1198f3ea4"
+}

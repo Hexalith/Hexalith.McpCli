@@ -1,0 +1,6 @@
+{
+  "mcpcliHead": "9354dc08176744c75c2ddb61d924c0948b373b98",
+  "partiesStartingHead": "b38fcdb7200f0ed4a46627b460caf84d0fb30499",
+  "partiesCurrentHead": "32fa72e2cb223d7f8554d3a5439fa6e15212ec26",
+  "note": "An external process advanced Parties HEAD during implementation; this worker did not stage or commit."
+}

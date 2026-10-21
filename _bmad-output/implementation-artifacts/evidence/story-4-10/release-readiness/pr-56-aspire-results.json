@@ -1,0 +1,42 @@
+{
+  "source": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "run": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39449737463",
+  "command": [
+    "gh",
+    "run",
+    "download",
+    "39449737463",
+    "--repo",
+    "Hexalith/Hexalith.Parties",
+    "--name",
+    "aspire-test-results",
+    "--dir",
+    "/tmp/story410-pr-56-aspire-results"
+  ],
+  "exitCode": 0,
+  "results": [
+    {
+      "file": "aspire/aspire-results.trx",
+      "sha256": "13028397c30e584b20d5d06e6be0ec9aaa14dd8bed50575f6e861b636b34d2f8",
+      "counters": {
+        "total": "104",
+        "executed": "98",
+        "passed": "98",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "6",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "failures": []
+    }
+  ]
+}

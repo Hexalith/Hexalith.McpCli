@@ -1,0 +1,12 @@
+{
+  "previousBase": "ea926163fb51033b226541f069ebf6a5941922af",
+  "currentBase": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+  "changedFiles": [
+    "_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md",
+    "tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs"
+  ],
+  "patchSha256": "fd66265403dd42ede16d8c6b6be5439812558517e9f57bacf6b5acdf346b9cf1",
+  "changedBytesPreserved": true,
+  "rootGitlinksUnchanged": true
+}

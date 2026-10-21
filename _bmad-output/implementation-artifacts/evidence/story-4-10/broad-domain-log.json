@@ -1,0 +1,8 @@
+{
+  "command": "dotnet test tests/Hexalith.Parties.Tests --no-build --configuration Release",
+  "exitCode": 2,
+  "fullLog": "/tmp/story410-domain-tests.log",
+  "fullLogSha256": "43afd05ad204917aa49eb0739c0b2d2fefcfb46721450215cf7d54f0ac3bd91d",
+  "baselineInputsUnchangedCommand": "git diff --exit-code HEAD -- Directory.Build.props src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs",
+  "baselineInputsUnchangedExitCode": 0
+}

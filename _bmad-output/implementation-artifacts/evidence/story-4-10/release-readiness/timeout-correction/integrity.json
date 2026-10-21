@@ -1,0 +1,73 @@
+{
+  "base": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "branch": "fix/story-4-10-release-readiness",
+  "onlyChangedFile": ".github/workflows/ci.yml",
+  "onlyInsertedLine": "aspire-timeout-minutes: 30",
+  "allOtherWorkflowBytesAndFormattingPreserved": true,
+  "blockingAspireGatePreserved": true,
+  "contractsAndVectorsUnchanged": true,
+  "rootDependencies": [
+    {
+      "path": "references/Hexalith.AI.Tools",
+      "gitlink": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+      "checkout": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "gitlink": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+      "checkout": "fff4a212180d8cd1c5c0759655a9bc4fb6963c45",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.Commons",
+      "gitlink": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+      "checkout": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.EventStore",
+      "gitlink": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+      "checkout": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.FrontComposer",
+      "gitlink": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+      "checkout": "913c4132c71cd7f77fcdf6befa9e396d284dd4bc",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.McpCli",
+      "gitlink": "9354dc08176744c75c2ddb61d924c0948b373b98",
+      "checkout": "9354dc08176744c75c2ddb61d924c0948b373b98",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.Memories",
+      "gitlink": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+      "checkout": "35df7e2080c369003cacac12f5b44117d7f3ed35",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.Platform",
+      "gitlink": "4f036ced45aa40700948c19949bb874881c960b5",
+      "checkout": "4f036ced45aa40700948c19949bb874881c960b5",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.PolymorphicSerializations",
+      "gitlink": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "checkout": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "clean": true
+    },
+    {
+      "path": "references/Hexalith.Tenants",
+      "gitlink": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+      "checkout": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+      "clean": true
+    }
+  ],
+  "ciSha256": "5aefcfb1baeaeec51095085415e566199ff1857c11c26bbf44163185f0d9821d",
+  "whitespaceCheck": "passed"
+}

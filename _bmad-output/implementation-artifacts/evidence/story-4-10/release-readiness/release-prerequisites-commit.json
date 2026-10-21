@@ -1,0 +1,39 @@
+{
+  "commit": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "branch": "fix/story-4-10-release-readiness",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "switch",
+        "-c",
+        "fix/story-4-10-release-readiness"
+      ],
+      "exitCode": 0,
+      "output": "Switched to a new branch 'fix/story-4-10-release-readiness'\n"
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        "_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md",
+        "tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs",
+        "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/story410-release-prerequisites-commit.txt"
+      ],
+      "exitCode": 0,
+      "output": "[fix/story-4-10-release-readiness 9a4a0657] test(release): align prerequisite fitness checks\n 3 files changed, 617 insertions(+), 308 deletions(-)\n"
+    }
+  ],
+  "commitlintEvidence": "release-prerequisites-commitlint.json"
+}

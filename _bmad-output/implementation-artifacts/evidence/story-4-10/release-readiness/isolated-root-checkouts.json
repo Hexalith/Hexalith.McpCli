@@ -1,0 +1,52 @@
+[
+  {
+    "path": "references/Hexalith.AI.Tools",
+    "sha": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.Builds",
+    "sha": "5d03f1db9c38db34ecac7fe6048937478ffb82cc",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.Commons",
+    "sha": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.EventStore",
+    "sha": "c9f47dd5ba72918445dfd24a674a5b2c310589bd",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.FrontComposer",
+    "sha": "d52526a4bd1272760543e6a65840dc2b0ed93cee",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.McpCli",
+    "sha": "b616db3092a9b1c5af196538a3de37a5c7f2d7ca",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.Memories",
+    "sha": "c082f8151328b1ac91939cda8733ab78ae68e1c4",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.Platform",
+    "sha": "17179e59843ee8cfb35892a74a2c18d3136fc9cf",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.PolymorphicSerializations",
+    "sha": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  },
+  {
+    "path": "references/Hexalith.Tenants",
+    "sha": "9a94131a26d0c5d80d5540706e267ee123d54b68",
+    "source": "existing local repository objects; no remote or recursive initialization"
+  }
+]

@@ -1,0 +1,203 @@
+{
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "0.0.0-story410",
+  "artifactHash": "sha512-hZfPC0pZaJa/gTFc5EwLInXwFvCrHoqXbTSezEbHkr9ss681wpf1muvcD6ipJ1eezxCyEttwzszSlI/ks9X1og==",
+  "vectors": {
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json": "3b02624aaa032d18ef73707f97f8789a68b24bbed5fae7843edddf5c747580c5",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json": "ad710e24c1610549006d13dc397f4a6c5289c2bac418a18876e8b10bd5dab832",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/get-party.json": "0200a7bb84feadeda147c6bdf63a01b27005717a7191607a3e33278899cb612e",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/list-parties.json": "3f503c1218091316949d6942de0f6f94da0340cadffec91ab5032328b78d5ab0",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json": "1b5c610fe1842c48b62f0ba0a22e552a2ddbc4363e2466b2fef941fe351ca294",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/search-parties.json": "cac2613410f8f25edf4182d9f8456f3c79289e9dd0655beeb0699678ea9e35f3",
+    "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json": "86793dc6d1df7662e99bd455ccf1e1fab38798e3052e1e923e6bd24cb13386cf"
+  },
+  "checks": [
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "host/ArtifactHost.csproj",
+        "-p:HexalithEventStoreVersion=3.126.0",
+        "-p:HexalithCommonsVersion=2.30.3",
+        "-p:RestoreAdditionalProjectSources=/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "host/ArtifactHost.csproj",
+        "--no-restore",
+        "-c",
+        "Release",
+        "-m:1",
+        "-warnaserror",
+        "-p:HexalithEventStoreVersion=3.126.0",
+        "-p:HexalithCommonsVersion=2.30.3"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "catalog",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "--full-catalog"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "operations-parties",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "operations",
+        "parties",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "modules",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "modules",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.create-party",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.create-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.deactivate-party",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.deactivate-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.get-party",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.get-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.list-parties",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.list-parties",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.reactivate-party",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.reactivate-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.search-parties",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.search-parties",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.update-party",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "describe",
+        "parties.update-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "replay",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/run_loopback.py",
+        "--host",
+        "/tmp/mcpcli-artifact-1cxvr5ao/host/bin/Release/net10.0/ArtifactHost.dll",
+        "--artifact",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+        "--expected-package-id",
+        "Hexalith.Parties.Contracts",
+        "--expected-package-version",
+        "0.0.0-story410",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/get-party.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/list-parties.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/search-parties.json",
+        "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "evidenceLimit": "Scripted Gateway replay proves head routing and result parity; it does not prove live authorization or domain effects.",
+  "artifactDependencies": {
+    "Hexalith.EventStore.Contracts": "3.126.0",
+    "Hexalith.McpCli.Abstractions": "1.0.0",
+    "ByteAether.Ulid": "1.4.2",
+    "Hexalith.Commons.UniqueIds": "2.30.3"
+  },
+  "candidateDependencyOverrides": [
+    "-p:HexalithEventStoreVersion=3.126.0",
+    "-p:HexalithCommonsVersion=2.30.3"
+  ],
+  "operations": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party"
+  ],
+  "acceptedLint": null,
+  "result": "passed"
+}

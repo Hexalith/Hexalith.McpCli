@@ -10,6 +10,25 @@ internal static class Program
 {
     private static async Task<int> Main(string[] args)
     {
+        if (args is ["--full-catalog"])
+        {
+            CatalogSnapshot snapshot = CatalogBuilder.Build(ModuleAssemblyManifest.Entries
+                .Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName))).ToArray());
+            Console.Out.WriteLine(JsonSerializer.Serialize(snapshot, Hexalith.McpCli.Core.Serialization.McpCliJson.Result));
+            return snapshot.Diagnostics.Count == 0 ? 0 : 1;
+        }
+
+        if (args is ["--inventory", string inventory])
+        {
+            var provider = new CatalogProvider(() => ModuleAssemblyManifest.Entries
+                .Select(entry => Assembly.Load(new AssemblyName(entry.AssemblyName))).ToArray(),
+                Microsoft.Extensions.Logging.Abstractions.NullLogger<CatalogProvider>.Instance);
+            var catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: true);
+            var findings = Hexalith.McpCli.Core.Tests.InventoryCoverageGate.CheckFile(inventory, catalog, provider);
+            Console.Out.WriteLine(JsonSerializer.Serialize(findings));
+            return findings.Count == 0 ? 0 : 1;
+        }
+
         if (args is ["--manifest-catalog"])
         {
             object[] packages = ModuleAssemblyManifest.Entries.Select(entry => new

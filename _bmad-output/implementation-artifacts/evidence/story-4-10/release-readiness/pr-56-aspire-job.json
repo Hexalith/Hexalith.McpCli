@@ -1,0 +1,148 @@
+{
+  "id": 118711352640,
+  "run_id": 39445674969,
+  "workflow_name": "CI",
+  "head_branch": "fix/story-4-10-release-readiness",
+  "run_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/39445674969",
+  "run_attempt": 1,
+  "node_id": "CR_kwDORb3i1M8AAAAbo799QA",
+  "head_sha": "9a4a0657e6c928fbf923fceb9550b28e0b1c571c",
+  "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/jobs/118711352640",
+  "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39445674969/job/118711352640",
+  "status": "completed",
+  "conclusion": "cancelled",
+  "created_at": "2026-10-20T15:17:05Z",
+  "started_at": "2026-10-20T15:17:08Z",
+  "completed_at": "2026-10-20T15:27:23Z",
+  "name": "ci / aspire-tests",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-10-20T15:17:08Z",
+      "completed_at": "2026-10-20T15:17:11Z"
+    },
+    {
+      "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-10-20T15:17:11Z",
+      "completed_at": "2026-10-20T15:17:13Z"
+    },
+    {
+      "name": "Initialize root-declared submodules",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-10-20T15:17:13Z",
+      "completed_at": "2026-10-20T15:21:57Z"
+    },
+    {
+      "name": "Initialize .NET",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-10-20T15:21:57Z",
+      "completed_at": "2026-10-20T15:21:58Z"
+    },
+    {
+      "name": "Cache NuGet packages",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-10-20T15:21:58Z",
+      "completed_at": "2026-10-20T15:22:04Z"
+    },
+    {
+      "name": "Restore and Build",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6,
+      "started_at": "2026-10-20T15:22:04Z",
+      "completed_at": "2026-10-20T15:24:45Z"
+    },
+    {
+      "name": "Install and initialize Dapr",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7,
+      "started_at": "2026-10-20T15:24:45Z",
+      "completed_at": "2026-10-20T15:24:58Z"
+    },
+    {
+      "name": "Aspire contract tests (Tier 3, non-Performance, VSTest)",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 8,
+      "started_at": "2026-10-20T15:24:58Z",
+      "completed_at": "2026-10-20T15:24:58Z"
+    },
+    {
+      "name": "Aspire contract tests (Tier 3, non-Performance, Microsoft.Testing.Platform)",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "number": 9,
+      "started_at": "2026-10-20T15:24:58Z",
+      "completed_at": "2026-10-20T15:27:20Z"
+    },
+    {
+      "name": "Test summary",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 10,
+      "started_at": "2026-10-20T15:27:20Z",
+      "completed_at": "2026-10-20T15:27:20Z"
+    },
+    {
+      "name": "Upload test results",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11,
+      "started_at": "2026-10-20T15:27:20Z",
+      "completed_at": "2026-10-20T15:27:21Z"
+    },
+    {
+      "name": "Post Cache NuGet packages",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 20,
+      "started_at": "2026-10-20T15:27:21Z",
+      "completed_at": "2026-10-20T15:27:21Z"
+    },
+    {
+      "name": "Post Initialize .NET",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 21,
+      "started_at": "2026-10-20T15:27:21Z",
+      "completed_at": "2026-10-20T15:27:21Z"
+    },
+    {
+      "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 22,
+      "started_at": "2026-10-20T15:27:21Z",
+      "completed_at": "2026-10-20T15:27:21Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 23,
+      "started_at": "2026-10-20T15:27:21Z",
+      "completed_at": "2026-10-20T15:27:22Z"
+    }
+  ],
+  "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/check-runs/118711352640",
+  "labels": [
+    "ubuntu-latest"
+  ],
+  "runner_id": 1000049835,
+  "runner_name": "GitHub Actions 1000049835",
+  "runner_group_id": 0,
+  "runner_group_name": "GitHub Actions"
+}

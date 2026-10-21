@@ -1,0 +1,19 @@
+[
+  "python3",
+  "tools/conformance-vectors/v1/verify_artifact.py",
+  "--artifact",
+  "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+  "--output",
+  "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/approved-candidate",
+  "--inventory",
+  "/home/administrator/projects/hexalith/mcpcli/tools/inventory-coverage/v1/parties-approved.json",
+  "--expected-hash",
+  "sha512-+gUcg4QyUd/GldA6JcYdBO8jzyWXavP7hg1fBikv0j6uO62gi3C/hyC9dp+IAQ3KLC8qQXxu726EfA6/NoT5/g==",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/create-party.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/deactivate-party.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/get-party.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/list-parties.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/reactivate-party.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/search-parties.json",
+  "/home/administrator/projects/hexalith/parties/tests/conformance-vectors/mcpcli-v1/update-party.json"
+]

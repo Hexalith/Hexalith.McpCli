@@ -1,0 +1,29 @@
+{
+  "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Core.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 3.078,
+  "log": "approved-inventory-core-tests.log",
+  "logSha256": "3e599d9a23427f8f12a781f440182fe139ba63c0c08b24005883224a15151763",
+  "summaryTail": [
+    "  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)",
+    "skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten",
+    "  Windows ACLs are exercised only on Windows.",
+    "  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)",
+    "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64) passed (2s 127ms)",
+    "",
+    "Test run summary: Passed!",
+    "  total: 661",
+    "  failed: 0",
+    "  succeeded: 659",
+    "  skipped: 2",
+    "  duration: 2s 447ms"
+  ]
+}

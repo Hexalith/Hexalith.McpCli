@@ -1,0 +1,124 @@
+[
+  {
+    "label": "domain-restore",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Tests",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "summary": [],
+    "log": "rebased-domain-restore.log",
+    "logSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+  },
+  {
+    "label": "domain-build",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Tests",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "summary": [
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)"
+    ],
+    "log": "rebased-domain-build.log",
+    "logSha256": "e13686e3f4634db9b64c2dd1cc67547b5caa4562fd1ad8dd862b63c28b3a017a"
+  },
+  {
+    "label": "domain-tests",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 2099",
+      "  failed: 0",
+      "  succeeded: 2099",
+      "  skipped: 0"
+    ],
+    "log": "rebased-domain-tests.log",
+    "logSha256": "7a0abcfe49ea23da2d0f13236cb01161bb3b3fd864937d6cc993c0b3bce4ed5d"
+  },
+  {
+    "label": "sample-restore",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "summary": [],
+    "log": "rebased-sample-restore.log",
+    "logSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+  },
+  {
+    "label": "sample-build",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "summary": [
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)"
+    ],
+    "log": "rebased-sample-build.log",
+    "logSha256": "b3980ba56c49a2233cc9749b43c5110093632bde8096657b19fce0def60173f4"
+  },
+  {
+    "label": "sample-tests",
+    "source": "ea926163fb51033b226541f069ebf6a5941922af",
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "summary": [
+      "Test run summary: Passed!",
+      "  total: 58",
+      "  failed: 0",
+      "  succeeded: 58",
+      "  skipped: 0"
+    ],
+    "log": "rebased-sample-tests.log",
+    "logSha256": "a0f48fff0c0f304e5b45f14b868acd89b5d9720235cc4fc9eb38cbf201eadb21"
+  }
+]

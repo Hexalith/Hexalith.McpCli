@@ -1,0 +1,70 @@
+[
+  {
+    "label": "review-fitness-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "review-fitness-build.log",
+    "logSha256": "e899706f0c97424cea83758529b3ca5572582bc23b0a4cfe4ec428f085b87143",
+    "summary": "passed; zero warnings/errors"
+  },
+  {
+    "label": "review-fitness",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/review-fitness.xml"
+    ],
+    "exitCode": 0,
+    "log": "review-fitness.log",
+    "logSha256": "dc7275587daac389b202850fafb4ce0abe8a33ebfb466bd6d64d19efabca6866",
+    "summary": "45 passed; zero failed/skipped"
+  },
+  {
+    "label": "review-sample-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "review-sample-build.log",
+    "logSha256": "bf687074512954d149fabb66bf321c0a945a2b13034d4d417bde716fdf24a462",
+    "summary": "passed; zero warnings/errors"
+  },
+  {
+    "label": "review-sample",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Sample.Tests.SampleOnboardingGuardrailTests",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/review-sample.xml"
+    ],
+    "exitCode": 0,
+    "log": "review-sample.log",
+    "logSha256": "72a32399a0ca7265e6c53b9a851afebfa6ab18f662e06ed18fadc7355709b836",
+    "summary": "15 passed; zero failed/skipped"
+  }
+]

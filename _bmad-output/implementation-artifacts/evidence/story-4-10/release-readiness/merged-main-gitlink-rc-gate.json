@@ -1,0 +1,15 @@
+{
+  "source": "fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef",
+  "workingDirectory": "/tmp/hexalith-parties-story410-release",
+  "command": [
+    "bash",
+    "scripts/gitlink-rc-gate.sh",
+    "--diff",
+    "v1.5.0"
+  ],
+  "exitCode": 1,
+  "log": "merged-main-gitlink-rc-gate.log",
+  "logSha256": "d35b11aaad5fa1bb4a9ddb31749a362c7796845a84596216ab6362683c633b20",
+  "requestedPointersUnchanged": true,
+  "dependencyOwnerDecisionReceived": false
+}

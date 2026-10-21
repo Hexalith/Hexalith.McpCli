@@ -1,0 +1,21 @@
+{
+  "baseline-inputs.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "enrolled.txt": "a03a60871f89db4fde94298824e3d525fec8082588283067fd46d27dd50a4d52",
+  "mcpcli-abstractions.txt": "3ebbe19940da2968a93443e12616d4eeb7839ae90f0674756ba6cbae05fab948",
+  "mcpcli-analyzers.txt": "00f1dffbe4d95a256560bb3d0b08a8bc240260ff1f2e55a602d340db1885a12b",
+  "mcpcli-build.txt": "53899ea7a41f5e0957fe45c62bd1012d7b84e38d7001426422c4a9af358bc6e0",
+  "mcpcli-cli.txt": "cc8dba33a46bbbdabd1bc4a27413caa01dc4d4d655a4cefde7a508b92edfe030",
+  "mcpcli-core.txt": "8a1997d8a9e8647e1111593b216231476bb8814bca98c7aea24867d8e15c0314",
+  "mcpcli-manifest.txt": "540c7d5d67038140e53199fb86c6d6e1246337f39ba2573610697aa4e4ec4073",
+  "mcpcli-mcp.txt": "52e031ff0cff03cee4c79a5429d5a0eee19cfff444ea4e0007416c120f64f4bc",
+  "mcpcli-restore.txt": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+  "parties-build.txt": "d312ded96326df6fedb6aae133e733274595f19d201ed379b1aac90baa744d4d",
+  "parties-client-tests.txt": "95af9f7a15a7ed50d618ddaa326ae965cfb821d788a07f855842dbd7f27f33d3",
+  "parties-contracts-tests.txt": "5d7b5491cf4c3b2cad2cb236ba5b08465c0156195bb8863c2267579adf9ba3ed",
+  "parties-restore.txt": "6b5359a178df3095864e324ec2e67e15a77e03c079ef3eea62a665e87d8c32ab",
+  "parties-server-tests.txt": "ec410c8c9a4eb99f7d89e7ae9bbb770ce5164faee8d23e9764c0eef107bdf481",
+  "parties-tests.txt": "2239c6b123fdc79dc66ab70bab39e4080ec800dced7fbebb1f7ccc2092765922",
+  "post-loopback-restore.txt": "f414621959e1d109498e6127372266484676eac6de4d8d2d99f23112a34a1d63",
+  "sample-loopback.txt": "2a1219cf40f4069199e4171e5d95761ef8e126b45f7e72d99c86556f651c11e2",
+  "sample-validation.txt": "50236dea8069fe0522cd7b6b7a3023bd45342bf27bd2944824bf0f3e737ef0fc"
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "label": "parent-review-domain-restore",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.04,
+    "log": "parent-review-domain-restore.log",
+    "logSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+    "summaryTail": [
+      "  Determining projects to restore...",
+      "  All projects are up-to-date for restore."
+    ]
+  },
+  {
+    "label": "parent-review-domain-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 5.44,
+    "log": "parent-review-domain-build.log",
+    "logSha256": "fba4fe9372fc8ad869a9df7585b965fa600912cb68714e2da4f784e6bb919fd0",
+    "summaryTail": [
+      "  Hexalith.Parties.Security -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Security/bin/Release/net10.0/Hexalith.Parties.Security.dll",
+      "  Hexalith.Parties -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll",
+      "  Hexalith.Parties.Client -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll",
+      "  Hexalith.Parties.Testing -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Testing/bin/Release/net10.0/Hexalith.Parties.Testing.dll",
+      "  Hexalith.Parties.EventStoreGateway.TestHost -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.Parties.EventStoreGateway.TestHost.dll",
+      "  Hexalith.Parties.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "",
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "",
+      "Time Elapsed 00:00:05.21"
+    ]
+  },
+  {
+    "label": "parent-review-domain-tests",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 27.433,
+    "log": "parent-review-domain-tests.log",
+    "logSha256": "23cf0b20426565e4856aa7621a69633b87792aacec03119dcf1ab80e80432b6c",
+    "summaryTail": [
+      "Running tests from /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64)",
+      "/tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll (net10.0|x64) passed (26s 808ms)",
+      "",
+      "Test run summary: Passed!",
+      "  total: 2119",
+      "  failed: 0",
+      "  succeeded: 2119",
+      "  skipped: 0",
+      "  duration: 26s 972ms"
+    ]
+  },
+  {
+    "label": "parent-review-sample-restore",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.906,
+    "log": "parent-review-sample-restore.log",
+    "logSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+    "summaryTail": [
+      "  Determining projects to restore...",
+      "  All projects are up-to-date for restore."
+    ]
+  },
+  {
+    "label": "parent-review-sample-build",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Sample.Tests/Hexalith.Parties.Sample.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.444,
+    "log": "parent-review-sample-build.log",
+    "logSha256": "c64be18fbf35397407b325cd835f8e3c544e41376cdce504e46022a281f4a53a",
+    "summaryTail": [
+      "  Hexalith.Parties.Contracts -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll",
+      "  Hexalith.Parties.Client -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll",
+      "  Hexalith.Parties.Sample -> /tmp/hexalith-parties-story410-release/samples/Hexalith.Parties.Sample/bin/Release/net10.0/Hexalith.Parties.Sample.dll",
+      "  Hexalith.Parties.Sample.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll",
+      "",
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "",
+      "Time Elapsed 00:00:01.21"
+    ]
+  },
+  {
+    "label": "parent-review-sample-tests",
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "source": "defb8d2f9a8b2c8732226227413c1808f3d7cafb",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.696,
+    "log": "parent-review-sample-tests.log",
+    "logSha256": "f635e251648db020ea86dfac039b676e38bd2cc9cb0d9dd998f733ebfa3bde67",
+    "summaryTail": [
+      "Running tests from /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll (net10.0|x64)",
+      "/tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll (net10.0|x64) passed (1s 045ms)",
+      "",
+      "Test run summary: Passed!",
+      "  total: 66",
+      "  failed: 0",
+      "  succeeded: 66",
+      "  skipped: 0",
+      "  duration: 1s 208ms"
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 1,
+    "log": "build-before-restore.log",
+    "logSha256": "086330ceff8c31400ea2b2f8621727c38d12be05311205a4d13d65f8b6025d0c",
+    "result": "NETSDK1004: missing project.assets.json; resolved by narrow restore"
+  },
+  {
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj",
+      "-p:Configuration=Release"
+    ],
+    "exitCode": 0,
+    "log": "restore.log",
+    "logSha256": "42a03acb00deac38f8768ff5ae46573b57e7331b10f018ead5e0f8d80938f643",
+    "result": "passed"
+  },
+  {
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "exitCode": 0,
+    "log": "build.log",
+    "logSha256": "14e8f250e79fd01e10a760f2fb12f86e332f898cb164d71bf93804b0ad2e759c",
+    "result": "passed; zero warnings/errors"
+  },
+  {
+    "workingDirectory": "/tmp/hexalith-parties-story410-release",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Ci.Tests.PartiesContainerPublishWorkflowTests",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/timeout-correction/workflow-tests.xml"
+    ],
+    "exitCode": 0,
+    "log": "workflow-tests.log",
+    "logSha256": "daad78b5e9c82724be30a74fd10b0c39dc35941e308f42fac84328380dffe34b",
+    "result": "48 passed; zero failed/skipped"
+  }
+]

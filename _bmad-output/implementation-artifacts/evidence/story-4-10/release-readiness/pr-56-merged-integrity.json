@@ -1,0 +1,12 @@
+{
+  "mergedMainCommit": "fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef",
+  "originalReviewedHead": "df8173f04bd65cb86bc0d060dc75914e421f7640",
+  "sourceTreesIdentical": true,
+  "validatedCommitMessagesPreserved": true,
+  "commitMessages": [
+    "test(release): align prerequisite fitness checks\n\nVerify package defaults and explicit source property fixtures after module\ntool adoption. Refresh current source receipts while preserving historical\napprovals, and retain direct-reference onboarding safeguards.",
+    "ci: allow time for blocking Aspire tests\n\nCold setup used 470 seconds of the 600-second whole-job limit, leaving\ninsufficient time for host startup and test results. Use the supported\n30-minute allowance while retaining the blocking test policy."
+  ],
+  "dependencyOwnerDecisionReceived": false,
+  "published": false
+}

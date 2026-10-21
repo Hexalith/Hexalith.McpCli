@@ -1,0 +1,25 @@
+{
+  "result": "wording-gaps",
+  "reviewer": "independent context-free reviewer; built discovery documents only",
+  "documents": {
+    "parties.create-party.stdout.txt": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c",
+    "parties.deactivate-party.stdout.txt": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a",
+    "parties.get-party.stdout.txt": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab",
+    "parties.list-parties.stdout.txt": "2e0ff0ab44bd78c74292bce1e50fec311b6c5eb23c0178fc6a9609cd3eb30232",
+    "parties.reactivate-party.stdout.txt": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056",
+    "parties.search-parties.stdout.txt": "97d0a2e70f69304b47d0bcb48848395fa229f3a2058416c7b55c63786b15c6b7",
+    "parties.update-party.stdout.txt": "fee47093167b066da4f683f0c158c395c698f493503da68ed80b4c2ce389a86a"
+  },
+  "findings": [
+    {
+      "operation": "parties.list-parties; parties.search-parties",
+      "field": "operation description",
+      "finding": "Explain where continuation cursor comes from, which scope it binds, and which paging/filter arguments may accompany it."
+    },
+    {
+      "operation": "parties.update-party",
+      "field": "PersonDetails; OrganizationDetails",
+      "finding": "Explain clearing/default behavior of omitted optional members inside a supplied complete replacement."
+    }
+  ]
+}

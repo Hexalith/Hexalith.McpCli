@@ -1,0 +1,82 @@
+{
+  "name": "parties.list-parties",
+  "kind": "read",
+  "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.",
+  "schema": {
+    "type": [
+      "object",
+      "null"
+    ],
+    "properties": {
+      "Type": {
+        "enum": [
+          "Unknown",
+          "Person",
+          "Organization",
+          null
+        ],
+        "description": "Optional party kind: Person or Organization; Unknown and other values reject. Applied before paging."
+      },
+      "Active": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Optional active-status filter, applied before paging; omitted includes active and inactive parties."
+      },
+      "CreatedAfter": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Inclusive earliest creation instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+      },
+      "CreatedBefore": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Inclusive latest creation instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+      },
+      "ModifiedAfter": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Inclusive earliest modification instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+      },
+      "ModifiedBefore": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Inclusive latest modification instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+      }
+    },
+    "additionalProperties": false
+  },
+  "example": {
+    "Type": "Person",
+    "Active": true,
+    "CreatedAfter": "2026-01-01T00:00:00Z"
+  },
+  "envelope": {
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "tenant",
+      "aggregateId",
+      "entityId",
+      "pageSize",
+      "offset",
+      "cursor"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

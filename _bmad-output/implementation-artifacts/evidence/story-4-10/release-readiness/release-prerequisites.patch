@@ -1,0 +1,756 @@
+diff --git a/_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md b/_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md
+index 13584d29..9c32474f 100644
+--- a/_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md
++++ b/_bmad-output/implementation-artifacts/story-8-3-platform-api-prerequisite-matrix.md
+@@ -50,8 +50,8 @@ not the G5 runtime engine.
+ 
+ ### Current source observation — 2026-10-20
+ 
+-Story 4.9 verification housekeeping reconciles the independently committed
+-source graph at Parties `14ad39f85eae152c7a7e22ff261cc534ff5dab1e`. Every root checkout below
++Story 4.10 release-prerequisite verification reconciles the independently committed
++source graph at Parties `e55da59006f55410b9390403c67253b4f8423e18`. Every root checkout below
+ matches its committed gitlink and has an empty `git status --porcelain` result.
+ This records present-tense selection facts only; it does not extend dated owner
+ approvals, parity/runtime/custody qualification or migration authority. The
+@@ -60,14 +60,17 @@ approvals, parity/runtime/custody qualification or migration authority. The
+ The imported Builds catalog and evaluated default Release graph select EventStore package `3.126.0`, Commons `2.30.3`, FrontComposer `4.7.0`,
+ Memories `2.27.1`, Tenants `5.9.0`, and Parties `1.5.0`.
+ CommunityToolkit.Aspire.Hosting.Dapr remains `13.6.1-beta.935`. Default package
+-mode and the explicit source graph remain distinct; Commons HTTP continues to
+-use its configured source fallback. Catalog selection is separate from the
++mode and the explicit source graph remain distinct; ordinary Release builds
++consume Commons HTTP from its package. The pinned `hexalith-module` tool is the
++sole source-root/mode authority. Repository-local autodetection is absent;
++`UseHexalithProjectReferences=true` alone does not supply roots or select source.
++Catalog selection is separate from the
+ immutable validation/release workflow pins and their approval receipts.
+ 
+ Reproduce the committed source selection with:
+ 
+ ```bash
+-git ls-tree 14ad39f85eae152c7a7e22ff261cc534ff5dab1e references/Hexalith.<dependency>
++git ls-tree e55da59006f55410b9390403c67253b4f8423e18 references/Hexalith.<dependency>
+ git -C references/Hexalith.<dependency> rev-parse HEAD
+ git -C references/Hexalith.<dependency> describe --tags --always --abbrev=8 HEAD
+ git -C references/Hexalith.<dependency> status --porcelain
+@@ -77,15 +80,31 @@ dotnet msbuild src/Hexalith.Parties/Hexalith.Parties.csproj -p:Configuration=Rel
+ | Root dependency | Current source identity | Release use |
+ | --- | --- | --- |
+ | AI.Tools | `3f194e17174994d308ec84af9ee2b5aa68674d0d` (`3f194e17`) | Instruction baseline. |
+-| Builds | `5d03f1db9c38db34ecac7fe6048937478ffb82cc` (`v4.33.1-49-g5d03f1db`) | Imported package catalog and build tooling; EventStore 3.126.0 selected. |
+-| Commons | `5c23c818f639c5bb3175f964c5549440bd5b876d` (`v2.30.3`) | Source fallback; catalog package is `2.30.3`. |
++| Builds | `5d03f1db9c38db34ecac7fe6048937478ffb82cc` (`v4.34.0`) | Imported package catalog and build tooling; EventStore 3.126.0 selected. |
++| Commons | `5c23c818f639c5bb3175f964c5549440bd5b876d` (`v2.30.3`) | Default Release package is `2.30.3`; source requires explicit tool mapping. |
+ | EventStore | `c9f47dd5ba72918445dfd24a674a5b2c310589bd` (`v3.126.0-17-gc9f47dd5`) | Source inspection; runtime consumers restore package `3.126.0`. |
+ | FrontComposer | `d52526a4bd1272760543e6a65840dc2b0ed93cee` (`v4.7.0-9-gd52526a4`) | Selected package is `4.7.0`. |
+ | McpCli | `b616db3092a9b1c5af196538a3de37a5c7f2d7ca` (`v1.0.0-23-gb616db30`) | Committed root pointer; not used for G5 proof. |
+-| Memories | `c082f8151328b1ac91939cda8733ab78ae68e1c4` (`v2.29.3-1-gc082f815`) | Selected package remains `2.27.1`. |
+-| Platform | `bb81fc9e98533246cfeed43ffcce08866a2a57f6` (`bb81fc9e`) | Committed root pointer; not used for G5 proof. |
++| Memories | `c082f8151328b1ac91939cda8733ab78ae68e1c4` (`v2.29.4`) | Selected package remains `2.27.1`. |
++| Platform | `17179e59843ee8cfb35892a74a2c18d3136fc9cf` (`17179e59`) | Committed root pointer; not used for G5 proof. |
+ | PolymorphicSerializations | `221ac4592ba908ae7661ba1fa9e2d1fcc23baee0` (`v1.19.5`) | Existing source dependency. |
+-| Tenants | `ce88a70b6af777c059b5fb4335d429b9272911bd` (`v5.9.0-13-gce88a70b`) | Selected package is `5.9.0`. |
++| Tenants | `9a94131a26d0c5d80d5540706e267ee123d54b68` (`v5.9.0-24-g9a94131a`) | Selected package is `5.9.0`. |
++
++Source-mode graph checks use Debug and explicit tool-equivalent mappings, for
++example:
++
++```bash
++dotnet msbuild src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj -p:Configuration=Debug -p:UseHexalithProjectReferences=true -p:HexalithEventStoreRoot="$PWD/references/Hexalith.EventStore" -p:HexalithEventStoreFromSource=true -p:HexalithCommonsRoot="$PWD/references/Hexalith.Commons" -p:HexalithCommonsHttpFromSource=true -getItem:PackageReference,ProjectReference
++```
++
++The fitness gate evaluates every EventStore and Commons HTTP consumer in both
++modes. It retains negative sibling-layout coverage without mapping and positive
++coverage with explicit `HexalithMcpCliRoot`/`HexalithMcpCliFromSource=true` mapping
++for both supported McpCli layouts; only Abstractions may be a source reference.
++The source graph is diagnostic compatibility evidence, not package release or
++historical parity proof. Builds and Memories now have exact release tags at the
++same committed SHAs; those describe values do not change their selected package
++versions.
+ 
+ Selection does not revalidate historical parity receipts or authorize deletion
+ of migration rollback paths. Historical owner approvals remain attached to their
+diff --git a/tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs b/tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs
+index 6af184cb..8446e534 100644
+--- a/tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs
++++ b/tests/Hexalith.Parties.Sample.Tests/SampleOnboardingGuardrailTests.cs
+@@ -1,230 +1,264 @@
+-using System.Xml.Linq;
+-
+-using Shouldly;
+-
+-namespace Hexalith.Parties.Sample.Tests;
+-
+-public sealed class SampleOnboardingGuardrailTests
+-{
+-    private static readonly string[] DocAndSampleScannedFiles =
+-    [
+-        "README.md",
+-        "docs/getting-started.md",
+-        "samples/Hexalith.Parties.Sample/Program.cs",
+-        "samples/Hexalith.Parties.Sample/appsettings.json",
+-        "samples/Hexalith.Parties.Sample/Properties/launchSettings.json",
+-    ];
+-
+-    private static readonly string[] CurrentSurfaceForbiddenLiterals =
+-    [
+-        "api/v1/parties",
+-        "api/v1/admin",
+-        "openapi/v1.json",
+-        "/openapi",
+-        "Swagger",
+-        "OpenAPI",
+-        "X-GDPR-Warning",
+-        "https://localhost:5001/mcp",
+-        "http://localhost:5000/mcp",
+-        "PartyActor",
+-        "PartyDetailProjectionActor",
+-        "PartyIndexProjectionActor",
+-        "IPartySearchService",
+-    ];
+-
+-    [Fact]
+-    public void CurrentAdopterDocsAndSampleProduction_DoNotAdvertiseRetiredPartiesSurfaces()
+-    {
+-        foreach (string relativePath in DocAndSampleScannedFiles)
+-        {
+-            string path = GetRepositoryFilePath(relativePath);
+-            File.Exists(path).ShouldBeTrue($"Required onboarding artifact is missing: {relativePath}");
+-            string text = File.ReadAllText(path);
+-
+-            foreach (string forbiddenLiteral in CurrentSurfaceForbiddenLiterals)
+-            {
+-                text.ShouldNotContain(forbiddenLiteral, Case.Insensitive, $"{relativePath} must not advertise retired surface '{forbiddenLiteral}'.");
+-            }
+-        }
+-    }
+-
+-    [Fact]
+-    public void SampleTests_DoNotAssertRetiredPartiesRoutes()
+-    {
+-        string testsRoot = GetRepositoryFilePath("tests/Hexalith.Parties.Sample.Tests");
+-        string[] forbiddenLiterals =
+-        [
+-            "api/v1/parties",
+-            "api/v1/admin",
+-            "openapi/v1.json",
+-            "/openapi",
+-            "X-GDPR-Warning",
+-            "https://localhost:5001/mcp",
+-            "http://localhost:5000/mcp",
+-        ];
+-
+-        foreach (string file in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories)
+-                     .Where(static file => !file.EndsWith(nameof(SampleOnboardingGuardrailTests) + ".cs", StringComparison.Ordinal))
+-                     .Where(static file => !IsBuildArtifact(file)))
+-        {
+-            string text = File.ReadAllText(file);
+-
+-            foreach (string forbiddenLiteral in forbiddenLiterals)
+-            {
+-                text.ShouldNotContain(forbiddenLiteral, Case.Insensitive, $"{file} must not assert retired surface '{forbiddenLiteral}'.");
+-            }
+-        }
+-    }
+-
+-    [Fact]
+-    public void SampleProjectReferences_StayWithinApprovedConsumerBoundary()
+-    {
+-        string projectPath = GetRepositoryFilePath("samples/Hexalith.Parties.Sample/Hexalith.Parties.Sample.csproj");
+-        XDocument project = XDocument.Load(projectPath);
+-
+-        string[] projectReferences = project
+-            .Descendants("ProjectReference")
+-            .Select(static reference => reference.Attribute("Include")?.Value.Replace('\\', '/'))
+-            .Where(static include => !string.IsNullOrWhiteSpace(include))
+-            .Cast<string>()
+-            .ToArray();
+-
+-        projectReferences.ShouldNotBeEmpty("Sample must reference at least Hexalith.Parties.Client to compile against the typed gateway boundary.");
+-        projectReferences.ShouldAllBe(
+-            static include =>
+-                include.EndsWith("src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj", StringComparison.Ordinal)
+-                || include.EndsWith("src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj", StringComparison.Ordinal),
+-            "Sample production project references must stay limited to approved consumer packages.");
+-
+-        string[] packageReferences = project
+-            .Descendants("PackageReference")
+-            .Select(static reference => reference.Attribute("Include")?.Value)
+-            .Where(static include => !string.IsNullOrWhiteSpace(include))
+-            .Cast<string>()
+-            .ToArray();
+-
+-        packageReferences.ShouldNotBeEmpty("Sample must reference at least Dapr.AspNetCore for the subscriber endpoint.");
+-        packageReferences.ShouldAllBe(
+-            static include => include == "Dapr.AspNetCore",
+-            "Sample production packages should only include subscriber-owned DAPR ASP.NET Core support.");
+-    }
+-
+-    [Fact]
+-    public void Docs_NameEventStoreGatewayPartiesActorHostAndSeparateMcpHost()
+-    {
+-        string readme = File.ReadAllText(GetRepositoryFilePath("README.md"));
+-        string gettingStarted = File.ReadAllText(GetRepositoryFilePath("docs/getting-started.md"));
+-        string combined = readme + Environment.NewLine + gettingStarted;
+-
+-        combined.ShouldContain("EventStore");
+-        combined.ShouldContain("POST /api/v1/commands");
+-        combined.ShouldContain("POST /api/v1/queries");
+-        combined.ShouldContain("Domain=\"party\"");
+-        combined.ShouldContain("`eventstore`");
+-        combined.ShouldContain("`eventstore-admin`");
+-        combined.ShouldContain("`eventstore-admin-ui`");
+-        combined.ShouldContain("`parties`");
+-        combined.ShouldContain("`tenants`");
+-        combined.ShouldContain("parties-mcp");
+-        combined.ShouldContain("EventStore owns public authentication, tenant validation, RBAC, command/query routing, and generic response mapping");
+-        combined.ShouldContain("Parties owns domain execution");
+-    }
+-
+-    [Fact]
+-    public void GettingStartedRunnableSnippets_UseAcceptedGatewayShape()
+-    {
+-        string gettingStarted = File.ReadAllText(GetRepositoryFilePath("docs/getting-started.md"));
+-
+-        gettingStarted.ShouldContain("dotnet aspire run --project src/Hexalith.Parties.AppHost");
+-        gettingStarted.ShouldContain("git submodule update --init references/Hexalith.Builds references/Hexalith.Commons references/Hexalith.EventStore references/Hexalith.FrontComposer references/Hexalith.PolymorphicSerializations references/Hexalith.Tenants");
+-        gettingStarted.ShouldContain("Do not use --recursive");
+-        gettingStarted.ShouldContain("Aspire");
+-        gettingStarted.ShouldContain("DAPR");
+-        gettingStarted.ShouldContain("/ready");
+-        gettingStarted.ShouldContain("Docker Desktop");
+-        gettingStarted.ShouldContain("\"domain\": \"party\"");
+-        gettingStarted.ShouldContain("\"commandType\": \"Hexalith.Parties.Contracts.Commands.CreateParty\"");
+-        gettingStarted.ShouldContain("\"queryType\": \"PartyDetail\"");
+-        gettingStarted.ShouldContain("\"queryType\": \"PartySearch\"");
+-        gettingStarted.ShouldContain("\"queryType\": \"PartyIndex\"");
+-        gettingStarted.ShouldContain("\"payload\"");
+-        gettingStarted.ShouldContain("command -> event -> projection flow");
+-        gettingStarted.ShouldContain("Freshness and Eventual Consistency");
+-        gettingStarted.ShouldContain("AddPartiesClient(builder.Configuration)");
+-        gettingStarted.ShouldContain("\"Parties\"");
+-        gettingStarted.ShouldContain("\"BaseUrl\"");
+-        gettingStarted.ShouldContain("\"Tenant\"");
+-        gettingStarted.ShouldContain("not approved for regulated EU personal data until v1.1 GDPR features are active");
+-        gettingStarted.ShouldNotContain("submodule update --init --recursive");
+-        gettingStarted.ShouldNotContain("contract_unavailable");
+-        gettingStarted.ShouldNotContain("Story 12.5 is blocked");
+-        gettingStarted.ShouldNotContain("Story 12.6 is blocked");
+-    }
+-
+-    [Fact]
+-    public void SampleConfiguration_PointsClientAtEventStoreGatewayAndTenant()
+-    {
+-        string program = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/Program.cs"));
+-        string appSettings = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/appsettings.json"));
+-
+-        program.ShouldContain("EventStore gateway URL");
+-        program.ShouldContain("Parties:Tenant");
+-        program.ShouldContain("parties-mcp host");
+-        program.ShouldContain("AddPartiesClient(builder.Configuration)");
+-        program.ShouldContain("CreatePartyWithResultAsync");
+-        program.ShouldContain("AddContactChannelWithResultAsync");
+-        program.ShouldContain("AddIdentifierWithResultAsync");
+-        program.ShouldContain("PartiesClientException");
+-        program.ShouldContain("ListPartiesAsync");
+-        program.ShouldContain("PartyType.Person");
+-        program.ShouldContain("SearchPartiesAsync");
+-        program.ShouldContain("GetPartyAsync");
+-        program.ShouldContain("PrintFreshness");
+-        appSettings.ShouldContain("\"BaseUrl\"");
+-        appSettings.ShouldContain("\"Tenant\": \"tenant-a\"");
+-    }
+-
+-    [Fact]
+-    public void SampleEventHandler_DemonstratesSubscriberOwnedLifecycleAndFutureErasureCleanup()
+-    {
+-        string handler = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/PartyEventHandler.cs"));
+-        string subscription = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/DaprComponents/subscription-sample.yaml"));
+-
+-        handler.ShouldContain("PartyCreated");
+-        handler.ShouldContain("ContactChannelAdded");
+-        handler.ShouldContain("IdentifierAdded");
+-        handler.ShouldContain("PartyDeactivated");
+-        handler.ShouldContain("PartyReactivated");
+-        handler.ShouldContain("PartyErased");
+-        handler.ShouldContain("TryAcceptSequence");
+-        handler.ShouldContain("_lastSequenceByAggregate");
+-        handler.ShouldContain("CustomerSummaryStore.Customers.TryRemove");
+-        handler.ShouldContain("Unknown event type");
+-        subscription.ShouldContain("tenant-a.parties.events");
+-        subscription.ShouldContain("/events/parties");
+-        subscription.ShouldContain("sample");
+-    }
+-
+-    private static bool IsBuildArtifact(string path)
+-        => path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase)
+-            || path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
+-
+-    private static string GetRepositoryFilePath(string relativePath)
+-        => Path.Combine(GetRepositoryRoot(), relativePath);
+-
+-    private static string GetRepositoryRoot()
+-    {
+-        DirectoryInfo? current = new(AppContext.BaseDirectory);
+-        while (current is not null)
+-        {
+-            if (File.Exists(Path.Combine(current.FullName, "Hexalith.Parties.slnx")))
+-            {
+-                return current.FullName;
+-            }
+-
+-            current = current.Parent;
+-        }
+-
+-        throw new InvalidOperationException("Unable to locate repository root.");
+-    }
+-}
++using System.Text.RegularExpressions;
++using System.Xml.Linq;
++
++using Shouldly;
++
++namespace Hexalith.Parties.Sample.Tests;
++
++public sealed class SampleOnboardingGuardrailTests
++{
++    private static readonly string[] DocAndSampleScannedFiles =
++    [
++        "README.md",
++        "docs/getting-started.md",
++        "samples/Hexalith.Parties.Sample/Program.cs",
++        "samples/Hexalith.Parties.Sample/appsettings.json",
++        "samples/Hexalith.Parties.Sample/Properties/launchSettings.json",
++    ];
++
++    private static readonly string[] CurrentSurfaceForbiddenLiterals =
++    [
++        "api/v1/parties",
++        "api/v1/admin",
++        "openapi/v1.json",
++        "/openapi",
++        "Swagger",
++        "OpenAPI",
++        "X-GDPR-Warning",
++        "https://localhost:5001/mcp",
++        "http://localhost:5000/mcp",
++        "PartyActor",
++        "PartyDetailProjectionActor",
++        "PartyIndexProjectionActor",
++        "IPartySearchService",
++    ];
++
++    [Fact]
++    public void CurrentAdopterDocsAndSampleProduction_DoNotAdvertiseRetiredPartiesSurfaces()
++    {
++        foreach (string relativePath in DocAndSampleScannedFiles)
++        {
++            string path = GetRepositoryFilePath(relativePath);
++            File.Exists(path).ShouldBeTrue($"Required onboarding artifact is missing: {relativePath}");
++            string text = File.ReadAllText(path);
++
++            foreach (string forbiddenLiteral in CurrentSurfaceForbiddenLiterals)
++            {
++                text.ShouldNotContain(forbiddenLiteral, Case.Insensitive, $"{relativePath} must not advertise retired surface '{forbiddenLiteral}'.");
++            }
++        }
++    }
++
++    [Fact]
++    public void SampleTests_DoNotAssertRetiredPartiesRoutes()
++    {
++        string testsRoot = GetRepositoryFilePath("tests/Hexalith.Parties.Sample.Tests");
++        string[] forbiddenLiterals =
++        [
++            "api/v1/parties",
++            "api/v1/admin",
++            "openapi/v1.json",
++            "/openapi",
++            "X-GDPR-Warning",
++            "https://localhost:5001/mcp",
++            "http://localhost:5000/mcp",
++        ];
++
++        foreach (string file in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories)
++                     .Where(static file => !file.EndsWith(nameof(SampleOnboardingGuardrailTests) + ".cs", StringComparison.Ordinal))
++                     .Where(static file => !IsBuildArtifact(file)))
++        {
++            string text = File.ReadAllText(file);
++
++            foreach (string forbiddenLiteral in forbiddenLiterals)
++            {
++                text.ShouldNotContain(forbiddenLiteral, Case.Insensitive, $"{file} must not assert retired surface '{forbiddenLiteral}'.");
++            }
++        }
++    }
++
++    [Fact]
++    public void SampleProjectReferences_StayWithinApprovedConsumerBoundary()
++    {
++        string projectPath = GetRepositoryFilePath("samples/Hexalith.Parties.Sample/Hexalith.Parties.Sample.csproj");
++        XDocument project = XDocument.Load(projectPath);
++
++        string[] projectReferences = project
++            .Descendants("ProjectReference")
++            .Select(static reference => reference.Attribute("Include")?.Value.Replace('\\', '/'))
++            .Where(static include => !string.IsNullOrWhiteSpace(include))
++            .Cast<string>()
++            .ToArray();
++
++        projectReferences.ShouldNotBeEmpty("Sample must reference at least Hexalith.Parties.Client to compile against the typed gateway boundary.");
++        projectReferences.ShouldAllBe(
++            static include =>
++                include.EndsWith("src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj", StringComparison.Ordinal)
++                || include.EndsWith("src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj", StringComparison.Ordinal),
++            "Sample production project references must stay limited to approved consumer packages.");
++
++        string[] packageReferences = project
++            .Descendants("PackageReference")
++            .Select(static reference => reference.Attribute("Include")?.Value)
++            .Where(static include => !string.IsNullOrWhiteSpace(include))
++            .Cast<string>()
++            .ToArray();
++
++        packageReferences.ShouldNotBeEmpty("Sample must reference at least Dapr.AspNetCore for the subscriber endpoint.");
++        packageReferences.ShouldAllBe(
++            static include => include == "Dapr.AspNetCore",
++            "Sample production packages should only include subscriber-owned DAPR ASP.NET Core support.");
++    }
++
++    [Fact]
++    public void Docs_NameEventStoreGatewayPartiesActorHostAndSeparateMcpHost()
++    {
++        string readme = File.ReadAllText(GetRepositoryFilePath("README.md"));
++        string gettingStarted = File.ReadAllText(GetRepositoryFilePath("docs/getting-started.md"));
++        string combined = readme + Environment.NewLine + gettingStarted;
++
++        combined.ShouldContain("EventStore");
++        combined.ShouldContain("POST /api/v1/commands");
++        combined.ShouldContain("POST /api/v1/queries");
++        combined.ShouldContain("Domain=\"party\"");
++        combined.ShouldContain("`eventstore`");
++        combined.ShouldContain("`eventstore-admin`");
++        combined.ShouldContain("`eventstore-admin-ui`");
++        combined.ShouldContain("`parties`");
++        combined.ShouldContain("`tenants`");
++        combined.ShouldContain("parties-mcp");
++        combined.ShouldContain("EventStore owns public authentication, tenant validation, RBAC, command/query routing, and generic response mapping");
++        combined.ShouldContain("Parties owns domain execution");
++    }
++
++    [Fact]
++    public void GettingStartedRunnableSnippets_UseAcceptedGatewayShape()
++    {
++        string gettingStarted = File.ReadAllText(GetRepositoryFilePath("docs/getting-started.md"));
++
++        gettingStarted.ShouldContain("dotnet tool restore");
++        gettingStarted.ShouldContain("dotnet tool run hexalith-module -- debug --manifest module/hexalith.module-manifest.v2.json");
++        gettingStarted.ShouldContain("dotnet tool run hexalith-module -- down --manifest module/hexalith.module-manifest.v2.json --run-id <run-id>");
++        gettingStarted.ShouldContain("dotnet aspire run --project src/Hexalith.Parties.AppHost");
++        gettingStarted.ShouldContain("Legacy hosting scope");
++
++        string[] initializationCommands = gettingStarted.Split('\n', StringSplitOptions.TrimEntries)
++            .Where(static line => line.StartsWith("git submodule update", StringComparison.Ordinal))
++            .ToArray();
++        string[] initialization = initializationCommands.ShouldHaveSingleItem()
++            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
++        initialization[..4].ShouldBe(["git", "submodule", "update", "--init"]);
++        string[] directReferences = initialization[4..];
++        string[] requiredReferences =
++        [
++            "references/Hexalith.Platform",
++            "references/Hexalith.Builds",
++            "references/Hexalith.Commons",
++            "references/Hexalith.EventStore",
++            "references/Hexalith.FrontComposer",
++            "references/Hexalith.PolymorphicSerializations",
++            "references/Hexalith.Tenants",
++            "references/Hexalith.Memories",
++            "references/Hexalith.McpCli",
++        ];
++        directReferences.Order(StringComparer.Ordinal).ShouldBe(requiredReferences.Order(StringComparer.Ordinal));
++        HashSet<string> declaredReferences = Regex.Matches(
++                File.ReadAllText(GetRepositoryFilePath(".gitmodules")),
++                @"(?m)^\s*path\s*=\s*(?<path>\S+)\s*$",
++                RegexOptions.CultureInvariant)
++            .Select(static match => match.Groups["path"].Value)
++            .ToHashSet(StringComparer.Ordinal);
++        directReferences.ShouldAllBe(path => declaredReferences.Contains(path),
++            "Only root-declared direct references may be initialized.");
++        gettingStarted.ShouldMatch(@"(?i)\b(?:do\s+not|never|avoid)\b[^\r\n.!]*--recursive\b");
++        gettingStarted.ShouldMatch(@"(?i)\b(?:do\s+not|never|avoid)\s+(?:initialize|update)\b[^.]*\b(?:nested|inside)\b");
++        gettingStarted.ShouldContain("Aspire");
++        gettingStarted.ShouldContain("DAPR");
++        gettingStarted.ShouldContain("/ready");
++        gettingStarted.ShouldContain("Docker Desktop");
++        gettingStarted.ShouldContain("\"domain\": \"party\"");
++        gettingStarted.ShouldContain("\"commandType\": \"Hexalith.Parties.Contracts.Commands.CreateParty\"");
++        gettingStarted.ShouldContain("\"queryType\": \"PartyDetail\"");
++        gettingStarted.ShouldContain("\"queryType\": \"PartySearch\"");
++        gettingStarted.ShouldContain("\"queryType\": \"PartyIndex\"");
++        gettingStarted.ShouldContain("\"payload\"");
++        gettingStarted.ShouldContain("command -> event -> projection flow");
++        gettingStarted.ShouldContain("Freshness and Eventual Consistency");
++        gettingStarted.ShouldContain("AddPartiesClient(builder.Configuration)");
++        gettingStarted.ShouldContain("\"Parties\"");
++        gettingStarted.ShouldContain("\"BaseUrl\"");
++        gettingStarted.ShouldContain("\"Tenant\"");
++        gettingStarted.ShouldContain("not approved for regulated EU personal data until v1.1 GDPR features are active");
++        gettingStarted.ShouldNotContain("submodule update --init --recursive");
++        gettingStarted.ShouldNotContain("contract_unavailable");
++        gettingStarted.ShouldNotContain("Story 12.5 is blocked");
++        gettingStarted.ShouldNotContain("Story 12.6 is blocked");
++    }
++
++    [Fact]
++    public void SampleConfiguration_PointsClientAtEventStoreGatewayAndTenant()
++    {
++        string program = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/Program.cs"));
++        string appSettings = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/appsettings.json"));
++
++        program.ShouldContain("EventStore gateway URL");
++        program.ShouldContain("Parties:Tenant");
++        program.ShouldContain("parties-mcp host");
++        program.ShouldContain("AddPartiesClient(builder.Configuration)");
++        program.ShouldContain("CreatePartyWithResultAsync");
++        program.ShouldContain("AddContactChannelWithResultAsync");
++        program.ShouldContain("AddIdentifierWithResultAsync");
++        program.ShouldContain("PartiesClientException");
++        program.ShouldContain("ListPartiesAsync");
++        program.ShouldContain("PartyType.Person");
++        program.ShouldContain("SearchPartiesAsync");
++        program.ShouldContain("GetPartyAsync");
++        program.ShouldContain("PrintFreshness");
++        appSettings.ShouldContain("\"BaseUrl\"");
++        appSettings.ShouldContain("\"Tenant\": \"tenant-a\"");
++    }
++
++    [Fact]
++    public void SampleEventHandler_DemonstratesSubscriberOwnedLifecycleAndFutureErasureCleanup()
++    {
++        string handler = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/PartyEventHandler.cs"));
++        string subscription = File.ReadAllText(GetRepositoryFilePath("samples/Hexalith.Parties.Sample/DaprComponents/subscription-sample.yaml"));
++
++        handler.ShouldContain("PartyCreated");
++        handler.ShouldContain("ContactChannelAdded");
++        handler.ShouldContain("IdentifierAdded");
++        handler.ShouldContain("PartyDeactivated");
++        handler.ShouldContain("PartyReactivated");
++        handler.ShouldContain("PartyErased");
++        handler.ShouldContain("TryAcceptSequence");
++        handler.ShouldContain("_lastSequenceByAggregate");
++        handler.ShouldContain("CustomerSummaryStore.Customers.TryRemove");
++        handler.ShouldContain("Unknown event type");
++        subscription.ShouldContain("tenant-a.parties.events");
++        subscription.ShouldContain("/events/parties");
++        subscription.ShouldContain("sample");
++    }
++
++    private static bool IsBuildArtifact(string path)
++        => path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase)
++            || path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
++
++    private static string GetRepositoryFilePath(string relativePath)
++        => Path.Combine(GetRepositoryRoot(), relativePath);
++
++    private static string GetRepositoryRoot()
++    {
++        DirectoryInfo? current = new(AppContext.BaseDirectory);
++        while (current is not null)
++        {
++            if (File.Exists(Path.Combine(current.FullName, "Hexalith.Parties.slnx")))
++            {
++                return current.FullName;
++            }
++
++            current = current.Parent;
++        }
++
++        throw new InvalidOperationException("Unable to locate repository root.");
++    }
++}
+diff --git a/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs b/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs
+index d3b400c4..bdd8581d 100644
+--- a/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs
++++ b/tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs
+@@ -56,16 +56,23 @@ public sealed class PlatformApiPrerequisitesTests
+         ["references/Hexalith.FrontComposer"] = "d52526a4bd1272760543e6a65840dc2b0ed93cee",
+         ["references/Hexalith.Memories"] = "c082f8151328b1ac91939cda8733ab78ae68e1c4",
+         ["references/Hexalith.PolymorphicSerializations"] = "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+-        ["references/Hexalith.Tenants"] = "ce88a70b6af777c059b5fb4335d429b9272911bd",
++        ["references/Hexalith.Tenants"] = "9a94131a26d0c5d80d5540706e267ee123d54b68",
++        ["references/Hexalith.McpCli"] = "b616db3092a9b1c5af196538a3de37a5c7f2d7ca",
++        ["references/Hexalith.Platform"] = "17179e59843ee8cfb35892a74a2c18d3136fc9cf",
+     };
+ 
+     private static readonly IReadOnlyDictionary<string, string> CurrentSourceDescribes = new Dictionary<string, string>(StringComparer.Ordinal)
+     {
+-        ["references/Hexalith.Builds"] = "v4.33.1-49-g5d03f1db",
++        ["references/Hexalith.Builds"] = "v4.34.0",
+         [EventStoreRelativePath] = CurrentReleaseEventStoreDescribe,
+         ["references/Hexalith.FrontComposer"] = "v4.7.0-9-gd52526a4",
+-        ["references/Hexalith.Memories"] = "v2.29.3-1-gc082f815",
+-        ["references/Hexalith.Tenants"] = "v5.9.0-13-gce88a70b",
++        ["references/Hexalith.Memories"] = "v2.29.4",
++        ["references/Hexalith.Tenants"] = "v5.9.0-24-g9a94131a",
++        ["references/Hexalith.AI.Tools"] = "3f194e17",
++        ["references/Hexalith.Commons"] = "v2.30.3",
++        ["references/Hexalith.McpCli"] = "v1.0.0-23-gb616db30",
++        ["references/Hexalith.Platform"] = "17179e59",
++        ["references/Hexalith.PolymorphicSerializations"] = "v1.19.5",
+     };
+ 
+     private static readonly string[] RequiredAbsentPayloadProtectionPaths =
+@@ -727,12 +734,12 @@ public sealed class PlatformApiPrerequisitesTests
+         }
+ 
+         string rootBuildProps = File.ReadAllText(Path.Combine(root, "Directory.Build.props"));
+-        rootBuildProps.ShouldContain("<UseHexalithProjectReferences Condition=\"'$(UseHexalithProjectReferences)' == ''\">false</UseHexalithProjectReferences>");
+-        rootBuildProps.ShouldContain("<HexalithEventStoreFromSource Condition=\"'$(UseHexalithProjectReferences)' == 'true'");
+-        rootBuildProps.ShouldContain("<HexalithCommonsHttpFromSource Condition=\"'$(HexalithCommonsHttpFromSource)' == '' and Exists('$(HexalithCommonsRoot)\\src\\libraries\\Hexalith.Commons.Http\\Hexalith.Commons.Http.csproj')\">true</HexalithCommonsHttpFromSource>");
++        rootBuildProps.ShouldNotContain("<UseHexalithProjectReferences");
++        rootBuildProps.ShouldNotContain("<HexalithEventStoreFromSource");
++        rootBuildProps.ShouldNotContain("<HexalithCommonsHttpFromSource");
+ 
+         string rootPackages = File.ReadAllText(Path.Combine(root, "Directory.Packages.props"));
+-        rootPackages.ShouldContain("references/Hexalith.Builds/Props/Directory.Packages.props");
++        rootPackages.ShouldContain("$(HexalithBuildsRoot)/Props/Directory.Packages.props");
+         string rootBuildTargets = string.Join(
+             '\n',
+             File.ReadAllText(Path.Combine(root, "Directory.Build.props")),
+@@ -782,7 +789,12 @@ public sealed class PlatformApiPrerequisitesTests
+             packageGraph.ProjectReferences.Any(static reference => reference.Contains("/references/Hexalith.EventStore/", StringComparison.Ordinal))
+                 .ShouldBeFalse($"{projectFile} package graph");
+ 
+-            EvaluatedProjectGraph sourceGraph = EvaluateProjectGraph(root, projectFile, useSource: true);
++            EvaluatedProjectGraph sourceGraph = EvaluateProjectGraph(
++                root,
++                projectFile,
++                useSource: true,
++                $"-p:HexalithEventStoreRoot={Path.Combine(root, EventStoreRelativePath)}",
++                "-p:HexalithEventStoreFromSource=true");
+             sourceGraph.ProjectReferences.Any(static reference => reference.Contains("/references/Hexalith.EventStore/", StringComparison.Ordinal))
+                 .ShouldBeTrue($"{projectFile} source graph");
+             sourceGraph.PackageReferences.Any(static reference => reference.StartsWith("Hexalith.EventStore.", StringComparison.Ordinal))
+@@ -796,13 +808,24 @@ public sealed class PlatformApiPrerequisitesTests
+         commonsConsumers.ShouldNotBeEmpty();
+         foreach (string projectFile in commonsConsumers)
+         {
+-            EvaluatedProjectGraph selectedGraph = EvaluateProjectGraph(root, projectFile, useSource: false);
+-            selectedGraph.Properties["HexalithCommonsVersion"].ShouldBe("2.30.3", projectFile);
+-            selectedGraph.Properties["HexalithCommonsHttpFromSource"].ShouldBe("true", projectFile);
+-            selectedGraph.ProjectReferences.Any(static reference => reference.EndsWith("/Hexalith.Commons.Http.csproj", StringComparison.Ordinal))
+-                .ShouldBeTrue($"{projectFile} selected Commons HTTP graph");
+-            selectedGraph.PackageReferences.Contains("Hexalith.Commons.Http", StringComparer.Ordinal)
+-                .ShouldBeFalse($"{projectFile} selected Commons HTTP graph");
++            EvaluatedProjectGraph packageGraph = EvaluateProjectGraph(root, projectFile, useSource: false);
++            packageGraph.Properties["HexalithCommonsVersion"].ShouldBe("2.30.3", projectFile);
++            packageGraph.Properties["HexalithCommonsHttpFromSource"].ShouldNotBe("true", projectFile);
++            packageGraph.ProjectReferences.Any(static reference => reference.EndsWith("/Hexalith.Commons.Http.csproj", StringComparison.Ordinal))
++                .ShouldBeFalse($"{projectFile} package Commons HTTP graph");
++            packageGraph.PackageReferences.ShouldContain("Hexalith.Commons.Http", projectFile);
++
++            EvaluatedProjectGraph sourceGraph = EvaluateProjectGraph(
++                root,
++                projectFile,
++                useSource: true,
++                $"-p:HexalithCommonsRoot={Path.Combine(root, "references/Hexalith.Commons")}",
++                "-p:HexalithCommonsHttpFromSource=true");
++            sourceGraph.Properties["HexalithCommonsHttpFromSource"].ShouldBe("true", projectFile);
++            sourceGraph.ProjectReferences.ShouldContain(
++                Path.Combine(root, "references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/Hexalith.Commons.Http.csproj").Replace('\\', '/'),
++                $"{projectFile} explicitly mapped Commons HTTP graph");
++            sourceGraph.PackageReferences.ShouldNotContain("Hexalith.Commons.Http", projectFile);
+         }
+ 
+         string[] memoriesConsumers = projectFiles
+@@ -857,6 +880,50 @@ public sealed class PlatformApiPrerequisitesTests
+         }
+     }
+ 
++    [Theory]
++    [InlineData("Hexalith.McpCli")]
++    [InlineData("references/Hexalith.McpCli")]
++    public void ExplicitlyMappedMcpCliSiblingLayoutsSelectOnlyAbstractionsProject(string relativeMcpCliRoot)
++    {
++        string root = RepositoryRoot.Locate();
++        string temporaryRoot = Path.Combine(Path.GetTempPath(), $"parties-mcpcli-mapped-layout-{Guid.NewGuid():N}");
++        string partiesRoot = Path.Combine(temporaryRoot, "Hexalith.Parties");
++        string contractsRelativePath = "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj";
++        string contractsProject = Path.Combine(partiesRoot, contractsRelativePath);
++        string mcpCliRoot = Path.Combine(temporaryRoot, relativeMcpCliRoot);
++        string abstractionsProject = Path.Combine(mcpCliRoot,
++            "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj");
++        try
++        {
++            Directory.CreateDirectory(Path.GetDirectoryName(contractsProject)!);
++            Directory.CreateDirectory(Path.GetDirectoryName(abstractionsProject)!);
++            File.Copy(Path.Combine(root, "Directory.Build.props"), Path.Combine(partiesRoot, "Directory.Build.props"));
++            File.Copy(Path.Combine(root, contractsRelativePath), contractsProject);
++            File.WriteAllText(abstractionsProject, "<Project />");
++            Directory.Exists(Path.Combine(partiesRoot, "references/Hexalith.McpCli")).ShouldBeFalse();
++
++            EvaluatedProjectGraph graph = EvaluateProjectGraph(
++                partiesRoot,
++                contractsProject,
++                useSource: true,
++                $"-p:HexalithMcpCliRoot={mcpCliRoot}",
++                "-p:HexalithMcpCliFromSource=true");
++
++            graph.Properties["HexalithMcpCliRoot"].ShouldBe(mcpCliRoot);
++            graph.Properties["HexalithMcpCliFromSource"].ShouldBe("true");
++            graph.ProjectReferences.ShouldBe([Path.GetFullPath(abstractionsProject).Replace('\\', '/')]);
++            graph.PackageReferences.ShouldNotContain("Hexalith.McpCli.Abstractions");
++            graph.PackageReferences.ShouldContain("Hexalith.EventStore.Contracts");
++        }
++        finally
++        {
++            if (Directory.Exists(temporaryRoot))
++            {
++                Directory.Delete(temporaryRoot, recursive: true);
++            }
++        }
++    }
++
+     [Theory]
+     [InlineData("", PayloadProtectionEventStoreSha, "missing")]
+     [InlineData("0000000000000000000000000000000000000000", PayloadProtectionEventStoreSha, "mismatched")]
+@@ -1171,20 +1238,28 @@ public sealed class PlatformApiPrerequisitesTests
+             .Select(static token => $"missing:{token}")
+             .ToArray();
+ 
+-    private static EvaluatedProjectGraph EvaluateProjectGraph(string root, string projectFile, bool useSource)
++    private static EvaluatedProjectGraph EvaluateProjectGraph(
++        string root,
++        string projectFile,
++        bool useSource,
++        params string[] mappedSourceProperties)
+     {
+         string relativeProject = Path.GetRelativePath(root, projectFile);
+         string output = RunProcess(
+             root,
+             "dotnet",
+-            "msbuild",
+-            relativeProject,
+-            "-nologo",
+-            "-getProperty:HexalithEventStoreVersion,HexalithCommonsVersion,HexalithMemoriesVersion,UseHexalithProjectReferences,HexalithEventStoreFromSource,HexalithCommonsHttpFromSource,HexalithMemoriesFromSource,HexalithMcpCliRoot,HexalithMcpCliFromSource",
+-            "-getItem:PackageReference,ProjectReference",
+-            $"-p:UseHexalithProjectReferences={useSource.ToString().ToLowerInvariant()}",
+-            "-p:NuGetAudit=false",
+-            "-p:MinVerVersionOverride=1.0.0");
++            [
++                "msbuild",
++                relativeProject,
++                "-nologo",
++                "-getProperty:HexalithEventStoreVersion,HexalithCommonsVersion,HexalithMemoriesVersion,UseHexalithProjectReferences,HexalithEventStoreFromSource,HexalithCommonsHttpFromSource,HexalithMemoriesFromSource,HexalithMcpCliRoot,HexalithMcpCliFromSource",
++                "-getItem:PackageReference,ProjectReference",
++                $"-p:UseHexalithProjectReferences={useSource.ToString().ToLowerInvariant()}",
++                $"-p:Configuration={(useSource ? "Debug" : "Release")}",
++                "-p:NuGetAudit=false",
++                "-p:MinVerVersionOverride=1.0.0",
++                .. mappedSourceProperties
++            ]);
+         // MSBuild can emit restore or NuGet preamble on stdout ahead of the JSON payload; parsing
+         // the raw stream throws JsonException instead of reporting a graph difference.
+         int jsonStart = output.IndexOf('{', StringComparison.Ordinal);
