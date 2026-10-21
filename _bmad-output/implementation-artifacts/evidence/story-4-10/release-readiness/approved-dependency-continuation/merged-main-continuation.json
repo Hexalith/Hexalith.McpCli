@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-10-21T09:08:29.169676+00:00",
+  "sourceCommit": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "sourceTree": "100ce7c1bdc782473759715ed806fb700806d1a2",
+  "approvedSourceManifest": "refreshed-source-files.sha256.json",
+  "srcFilesCompared": 583,
+  "contractsFilesCompared": 173,
+  "changedSourceFiles": [],
+  "otherManifestChanges": [
+    "tests/Hexalith.Parties.Contracts.Tests/Package/PackageTestProcessTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/EpicEightClosureFitnessTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/IdentifierHygieneFitnessTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs",
+    "tests/Hexalith.Parties.Tests/FitnessTests/RepositoryRoot.cs",
+    "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+    "tests/PackageTests.Shared/PackageTestProcess.cs"
+  ],
+  "unchangedApprovedVectorCount": 7,
+  "pullRequest": "https://github.com/Hexalith/Hexalith.Parties/pull/57",
+  "prCi": {
+    "runId": 39567317827,
+    "result": "success",
+    "unitIntegrationPassed": 4931,
+    "unitIntegrationFailed": 0,
+    "unitIntegrationSkipped": 0,
+    "aspireJobId": 119116325932,
+    "aspireLog": "pr57-aspire.txt",
+    "aspireSummary": [
+      "2026-10-21T08:30:45.1968794Z Test run summary: Passed!",
+      "2026-10-21T08:30:45.1972888Z   total: 104",
+      "2026-10-21T08:30:45.1973165Z   failed: 0",
+      "2026-10-21T08:30:45.1973908Z   skipped: 6"
+    ],
+    "aspirePassed": 98,
+    "aspireFailed": 0,
+    "aspireExistingSkipped": 6
+  },
+  "currentPushCi": {
+    "runId": 39573997934,
+    "state": "completed",
+    "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39573997934",
+    "buildAndTest": "passed",
+    "buildEvidence": "stable-main-build-and-test.json",
+    "aspire": "passed",
+    "result": "success",
+    "runEvidence": "stable-main-ci.json"
+  },
+  "rcRun": {
+    "runId": 39573997308,
+    "result": "success"
+  },
+  "authorization": "refreshed-candidate-approval.json",
+  "coordinationInstruction": "Other writes are paused; continue",
+  "publication": "not performed",
+  "enrollment": "not performed",
+  "completeTrackedSrcSetMatches": true,
+  "gitSourceDiff": {
+    "base": "160db8990c74d0a15c89cc09add95f7a256ec758",
+    "head": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "paths": [
+      "src/"
+    ],
+    "changes": []
+  }
+}

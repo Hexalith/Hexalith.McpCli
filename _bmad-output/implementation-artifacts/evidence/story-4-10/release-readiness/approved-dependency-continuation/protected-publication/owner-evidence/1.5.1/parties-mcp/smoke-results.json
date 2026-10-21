@@ -1,0 +1,21 @@
+{
+  "endpoint": "/alive",
+  "environment": "Development",
+  "image_repository": "registry.hexalith.com/parties-mcp",
+  "platforms": [
+    {
+      "cleanup": "pass",
+      "digest": "sha256:7d6f981375e0a1129584bbf11ff5d35ff343287ad3b34fcaaceeda22359d0d91",
+      "outcome": "pass",
+      "platform": "linux/amd64"
+    },
+    {
+      "cleanup": "pass",
+      "digest": "sha256:86e1315ac1a22995601b466cd548578aba8aedcc6f5ce98fc0132cc2e44fe690",
+      "outcome": "pass",
+      "platform": "linux/arm64"
+    }
+  ],
+  "result": "pass",
+  "timeout_seconds": 180.0
+}

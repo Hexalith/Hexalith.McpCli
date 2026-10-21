@@ -4,13 +4,16 @@ import copy
 import hashlib
 import io
 import json
+import shutil
 import subprocess
+import sys
 import zipfile
-from contextlib import redirect_stderr
-from unittest.mock import patch
+from contextlib import redirect_stderr, redirect_stdout
+from unittest.mock import Mock, patch
 from pathlib import Path
 import tempfile
 import unittest
+import check_enrolled
 from check_enrolled import artifact_for, approved_vectors
 from verify_artifact import check_lint, resolved_packages, verify
 
@@ -31,6 +34,10 @@ class EnrolledArtifactTests(unittest.TestCase):
 
     def test_matches_both_restored_and_approved_bytes(self):
         self.assertEqual(self.artifact, artifact_for(self.assets, 'Module.Contracts', self.receipt))
+
+    def test_package_identity_is_case_insensitive(self):
+        self.receipt['packageId'] = 'MODULE.contracts'
+        self.assertEqual(self.artifact, artifact_for(self.assets, 'module.CONTRACTS', self.receipt))
 
     def test_replacing_restored_package_bytes_fails(self):
         self.artifact.write_bytes(b'same package version, different bytes')
@@ -162,6 +169,15 @@ class VerifierFailureTests(unittest.TestCase):
             verify(self.repo, self.artifact, [], self.output, expected_hash='old approved bytes')
         self.assertEqual('Module.Contracts', self.assert_failed_without_old_success()['packageId'])
 
+    def test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture(self):
+        vector = self.root / 'read.vector.json'
+        vector.write_text('{"operation":"module.read"}')
+        with patch('verify_artifact.subprocess.run') as run:
+            with self.assertRaisesRegex(RuntimeError, 'Duplicate vector paths'):
+                verify(self.repo, self.artifact, [vector, vector], self.output)
+        run.assert_not_called()
+        self.assert_failed_without_old_success()
+
     def test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs(self):
         inventory = self.root / 'inventory.json'
         accepted = self.root / 'lint.json'
@@ -187,6 +203,201 @@ class VerifierFailureTests(unittest.TestCase):
         self.assertEqual(7, receipt['checks'][0]['exitCode'])
 
 
+class EnrolledPreflightTests(unittest.TestCase):
+    def setUp(self):
+        VerifierFailureTests.setUp(self)
+        self.package_id = 'Module.Contracts'
+        self.directory = self.repo / 'tools/conformance-vectors/v1/modules' / self.package_id
+        self.directory.mkdir(parents=True)
+        self.vector = self.directory / 'read.vector.json'
+        self.vector.write_text('{"operation":"module.read"}')
+        self.inventory = self.repo / 'tools/inventory-coverage/v1/module-approved.json'
+        self.inventory.parent.mkdir(parents=True)
+        self.inventory.write_text('{"purpose":"fixture"}')
+        cached = self.root / 'packages/module.contracts/1.0.0/module.contracts.1.0.0.nupkg'
+        cached.parent.mkdir(parents=True)
+        shutil.copy2(self.artifact, cached)
+        digest = base64.b64encode(hashlib.sha512(cached.read_bytes()).digest()).decode('ascii')
+        project = self.repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+        (project.parent / 'obj').mkdir(parents=True)
+        (project.parent / 'obj/project.assets.json').write_text(json.dumps({
+            'libraries': {'Module.Contracts/1.0.0': {'type': 'package', 'path': 'module.contracts/1.0.0', 'sha512': digest}},
+            'packageFolders': {str(self.root / 'packages'): {}}}))
+        self.receipt = {'packageId': self.package_id, 'version': '1.0.0', 'module': 'module',
+                        'artifactHash': 'sha512-' + digest, 'approvalReference': 'test-only fixture',
+                        'inventorySha256': hashlib.sha256(self.inventory.read_bytes()).hexdigest(),
+                        'vectorFilesSha256': {'read.vector.json': hashlib.sha256(self.vector.read_bytes()).hexdigest()}}
+        self.child = self.output / self.package_id
+        self.child.mkdir()
+        (self.child / 'verification.json').write_text('{"result":"passed","checks":[{"label":"replay","exitCode":0}]}')
+        (self.child / 'artifact.sha512').write_text('previous successful artifact')
+
+    def invoke(self, verifier=None, evaluation_error=None):
+        (self.directory / 'approval.json').write_text(json.dumps(self.receipt))
+        evaluation = subprocess.CompletedProcess([], 0, json.dumps({'Items': {'PackageReference': [
+            {'Identity': self.package_id, 'HexalithContracts': 'true'}]}}), '')
+        captured = io.StringIO()
+        with patch.object(check_enrolled, '__file__', str(self.repo / 'tools/conformance-vectors/v1/check_enrolled.py')), \
+             patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)]), \
+             patch('check_enrolled.subprocess.run', side_effect=evaluation_error, return_value=evaluation), \
+             patch('check_enrolled.verify', side_effect=verifier, return_value={'result': 'passed'}) as mocked, \
+             redirect_stderr(captured), redirect_stdout(io.StringIO()):
+            code = check_enrolled.main()
+        return code, json.loads((self.output / 'enrolled.json').read_text()), captured.getvalue(), mocked
+
+    def assert_invalidated_child(self):
+        self.assertNotEqual('passed', json.loads((self.child / 'verification.json').read_text())['result'])
+        self.assertFalse((self.child / 'artifact.sha512').exists())
+
+    def test_inventory_requires_the_exact_approved_digest_before_verification(self):
+        for mutation in ['changed bytes', 'missing digest', 'wrong digest', 'malformed digest']:
+            with self.subTest(mutation=mutation):
+                original = copy.deepcopy(self.receipt)
+                if mutation == 'changed bytes':
+                    self.inventory.write_text('{"purpose":"fixture","changed":true}')
+                elif mutation == 'missing digest':
+                    self.receipt.pop('inventorySha256')
+                else:
+                    self.receipt['inventorySha256'] = '0' * 64 if mutation == 'wrong digest' else []
+                code, report, diagnostic, verifier = self.invoke()
+                self.assertEqual(1, code)
+                self.assertEqual('failed', report['result'])
+                self.assertIn('inventorySha256', diagnostic)
+                verifier.assert_not_called()
+                self.assert_invalidated_child()
+                self.receipt = original
+                self.inventory.write_text('{"purpose":"fixture"}')
+
+    def test_malformed_receipt_roots_fail_deterministically(self):
+        for value in [[], 'text', 1, None, False]:
+            with self.subTest(value=value):
+                self.receipt = value
+                code, report, diagnostic, verifier = self.invoke()
+                self.assertEqual(1, code)
+                self.assertEqual('failed', report['result'])
+                self.assertIn('approval receipt must be a JSON object', diagnostic)
+                self.assertNotIn('AttributeError', diagnostic)
+                verifier.assert_not_called()
+                self.assert_invalidated_child()
+
+    def test_evaluation_failure_invalidates_old_child_success_before_preflight(self):
+        code, report, diagnostic, verifier = self.invoke(evaluation_error=subprocess.CalledProcessError(9, ['dotnet'], stderr='specific evaluation failure'))
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertIn('specific evaluation failure', diagnostic)
+        verifier.assert_not_called()
+        self.assert_invalidated_child()
+
+    def test_existing_approval_directory_and_package_id_ignore_case(self):
+        self.package_id = 'module.CONTRACTS'
+        self.receipt['packageId'] = 'MODULE.contracts'
+        self.directory = self.directory.rename(self.directory.with_name('mOdUlE.cOnTrAcTs'))
+        self.vector = self.directory / self.vector.name
+        code, report, _, verifier = self.invoke()
+        self.assertEqual(0, code)
+        self.assertEqual('passed', report['result'])
+        self.assertEqual(self.receipt['inventorySha256'], verifier.call_args.kwargs['expected_inventory_hash'])
+        self.assertEqual({str(self.vector.resolve()): self.receipt['vectorFilesSha256'][self.vector.name]},
+                         verifier.call_args.kwargs['expected_vector_hashes'])
+
+    def test_ambiguous_case_variant_directories_fail(self):
+        entries = [Mock(), Mock()]
+        for entry, name in zip(entries, ['Module.Contracts', 'module.contracts']):
+            entry.name = name
+            entry.is_dir.return_value = True
+        with patch('check_enrolled.Path.iterdir', return_value=iter(entries)):
+            code, report, diagnostic, verifier = self.invoke()
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertIn('expected one approval directory', diagnostic)
+        verifier.assert_not_called()
+
+    def test_vector_mutation_between_preflight_and_capture_cannot_pass(self):
+        def mutate(*args, **kwargs):
+            self.vector.write_text('{"changed":"between preflight and verification"}')
+            return verify(*args, **kwargs)
+        code, report, diagnostic, _ = self.invoke(verifier=mutate)
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertIn('Vector files differ from approval during snapshot capture', diagnostic)
+        self.assert_invalidated_child()
+
+    def test_inventory_mutation_between_preflight_and_capture_cannot_pass(self):
+        def mutate(*args, **kwargs):
+            self.inventory.write_text('{"changed":"between preflight and verification"}')
+            return verify(*args, **kwargs)
+        code, report, diagnostic, _ = self.invoke(verifier=mutate)
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertIn('approved inventorySha256 during snapshot capture', diagnostic)
+        self.assert_invalidated_child()
+
+
+class FrozenArtifactInputTests(unittest.TestCase):
+    setUp = VerifierFailureTests.setUp
+
+    def test_mutating_original_inputs_during_restore_cannot_change_verified_bytes(self):
+        vector = self.root / 'read.vector.json'
+        vector.write_text('{"operation":"module.read"}')
+        inventory = self.root / 'approved.json'
+        inventory.write_text('{"purpose":"fixture"}')
+        artifact_bytes, vector_bytes, inventory_bytes = self.artifact.read_bytes(), vector.read_bytes(), inventory.read_bytes()
+        source_reads = {self.artifact: 0, vector: 0}
+        original_read = Path.read_bytes
+        def count_reads(path):
+            if path in source_reads:
+                source_reads[path] += 1
+            return original_read(path)
+        def execute(command, cwd, **kwargs):
+            cwd = Path(cwd)
+            stdout = '{}'
+            if command[1] == 'restore':
+                self.artifact.write_bytes(b'changed original artifact during restore')
+                vector.write_text('{"changed":"during restore"}')
+                inventory.write_text('{"changed":"during restore"}')
+                feed = Path(next(value.split('=', 1)[1] for value in command if value.startswith('-p:RestoreAdditionalProjectSources=')))
+                self.assertNotEqual(self.artifact.parent, feed)
+                self.assertEqual(artifact_bytes, (feed / self.artifact.name).read_bytes())
+                cached = cwd / 'packages/module.contracts/1.0.0/module.contracts.1.0.0.nupkg'
+                cached.parent.mkdir(parents=True)
+                cached.write_bytes(artifact_bytes)
+                assets = cwd / 'host/obj/project.assets.json'
+                assets.parent.mkdir()
+                assets.write_text('{}')
+            elif '--full-catalog' in command:
+                stdout = json.dumps({'diagnostics': [], 'modules': [{'name': 'module', 'operations': [{'name': 'module.read'}]}]})
+            elif 'describe' in command:
+                stdout = '{"lintFindings":[]}'
+            elif '--inventory' in command:
+                self.assertEqual(inventory_bytes, Path(command[-1]).read_bytes())
+            elif '--artifact' in command:
+                supplied_artifact = Path(command[command.index('--artifact') + 1])
+                self.assertNotEqual(self.artifact, supplied_artifact)
+                self.assertEqual(artifact_bytes, supplied_artifact.read_bytes())
+                self.assertNotEqual(vector, Path(command[-1]))
+                self.assertEqual(vector_bytes, Path(command[-1]).read_bytes())
+            return subprocess.CompletedProcess(command, 0, stdout, '')
+        def validate(vectors, artifact, package, operations):
+            self.assertEqual(artifact_bytes, artifact.read_bytes())
+            self.assertEqual([vector_bytes], [path.read_bytes() for path in vectors])
+            self.assertEqual(('Module.Contracts', '1.0.0'), package)
+            self.assertEqual(['module.read'], operations)
+            return []
+        with patch('verify_artifact.subprocess.run', side_effect=execute), \
+             patch('verify_artifact.resolved_packages', return_value=[]), \
+             patch('verify_artifact.validate_vectors', side_effect=validate) as validation, \
+             patch.object(Path, 'read_bytes', count_reads), redirect_stdout(io.StringIO()):
+            receipt = verify(self.repo, self.artifact, [vector], self.output, inventory=inventory)
+        self.assertEqual('passed', receipt['result'])
+        self.assertEqual({self.artifact: 1, vector: 1}, source_reads)
+        self.assertEqual(str(self.artifact), receipt['artifactSource'])
+        self.assertEqual({str(vector): hashlib.sha256(vector_bytes).hexdigest()}, receipt['vectors'])
+        self.assertEqual(artifact_bytes, (self.output / receipt['retainedInputs']['artifact']).read_bytes())
+        self.assertEqual(vector_bytes, (self.output / receipt['retainedInputs']['vectors'][str(vector)]).read_bytes())
+        validation.assert_called_once()
+        self.assertTrue((self.output / 'artifact.sha512').exists())
+
+
 class ResolvedPackageEvidenceTests(unittest.TestCase):
     setUp = EnrolledArtifactTests.setUp
 
@@ -205,6 +416,16 @@ class ResolvedPackageEvidenceTests(unittest.TestCase):
 
 class SignedPackageHashTests(unittest.TestCase):
     setUp = EnrolledArtifactTests.setUp
+
+    def test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes(self):
+        canonical = 'NuGet canonical restore content hash'
+        self.assets['libraries']['Module.Contracts/1.0.0']['sha512'] = canonical
+        (self.artifact.parent / '.nupkg.metadata').write_text(json.dumps({'contentHash': canonical}))
+        for archive in [b'original signed archive', b'changed signed dependency archive']:
+            with self.subTest(archive=archive):
+                self.artifact.write_bytes(archive)
+                with self.assertRaisesRegex(RuntimeError, 'independent cached archive hash is required'):
+                    resolved_packages(self.assets)
 
     def test_restore_content_hash_and_exact_archive_hash_can_differ(self):
         canonical = 'NuGet canonical restore content hash'

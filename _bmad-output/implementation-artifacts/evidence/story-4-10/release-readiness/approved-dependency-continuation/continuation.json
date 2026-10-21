@@ -1,0 +1,37 @@
+{
+  "recordedAt": "2026-10-21T08:09:36.985289+00:00",
+  "approval": "../gitlink-signoff-approval.json",
+  "originalApprovedSource": "fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef",
+  "laterRemoteMain": "24ae57ea2386702ca9e7368e6b1f728b8956ca62",
+  "laterMainCiRun": 39562552213,
+  "laterMainCiConclusion": "failure",
+  "laterMainCiError": "CS0246: NativeSourceProof missing in Tenants.Contracts under the pinned EventStore package.",
+  "action": "Preserve current Parties source changes and pin the owning release to the nine exact approved dependency revisions.",
+  "branch": "docs/story-4-10-dependency-signoff",
+  "head": "160db8990c74d0a15c89cc09add95f7a256ec758",
+  "commitlint": {
+    "command": "npx --no -- commitlint --verbose < <message-file>",
+    "messages": [
+      {
+        "message": "docs(release): record approved dependency revisions\n",
+        "exitCode": 0,
+        "output": "found 0 problems, 0 warnings"
+      },
+      {
+        "message": "build(release): pin approved dependency revisions\n\nUse the nine exact revisions approved by jpiquot for Story 4.10.\nKeep the current Parties fixes and the pinned-tool source selection.\n",
+        "exitCode": 0,
+        "output": "found 0 problems, 0 warnings"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "command": "bash scripts/gitlink-rc-gate.sh --diff v1.5.0",
+      "exitCode": 0
+    },
+    {
+      "command": "bash scripts/gitlink-rc-gate.sh --worktree",
+      "exitCode": 0
+    }
+  ]
+}

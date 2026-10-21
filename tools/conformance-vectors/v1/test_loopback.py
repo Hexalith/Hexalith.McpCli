@@ -132,13 +132,65 @@ class LoopbackRulesTests(unittest.TestCase):
             with self.subTest(operator=operator, value=value), self.assertRaises(VectorError):
                 _assert_result(result, {"path": path, "operator": operator, "value": value}, "result")
 
+    def test_host_signed_archive_matches_restore_content_hash_independently(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            host = root / "host/bin/Release/net10.0/Host.dll"
+            host.parent.mkdir(parents=True)
+            artifact = root / "immutable.nupkg"
+            artifact.write_bytes(b"exact signed archive bytes")
+            cached = root / "packages/sample.contracts/1.0.0/sample.contracts.1.0.0.nupkg"
+            cached.parent.mkdir(parents=True)
+            cached.write_bytes(artifact.read_bytes())
+            raw_hash = base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode()
+            content_hash = base64.b64encode(hashlib.sha512(b"NuGet restore content").digest()).decode()
+            (cached.parent / ".nupkg.metadata").write_text(json.dumps({"contentHash": content_hash}))
+            cached.with_suffix(".nupkg.sha512").write_text(raw_hash)
+            assets = root / "host/obj/project.assets.json"
+            assets.parent.mkdir(parents=True)
+            assets.write_text(json.dumps({
+                "libraries": {"Sample.Contracts/1.0.0": {
+                    "type": "package", "path": "sample.contracts/1.0.0", "sha512": content_hash}},
+                "packageFolders": {str(root / "packages"): {}}}))
+            host.with_suffix(".deps.json").write_text(json.dumps({"libraries": {
+                "Sample.Contracts/1.0.0": {"type": "package", "sha512": "sha512-" + content_hash}}}))
+            _verify_artifact_in_host(host, artifact, ("Sample.Contracts", "1.0.0"))
+            for changed in (artifact, cached, cached.with_suffix(".nupkg.sha512"), cached.parent / ".nupkg.metadata", assets, host.with_suffix(".deps.json")):
+                original = changed.read_bytes()
+                with self.subTest(changed=changed.name):
+                    if changed == cached.parent / ".nupkg.metadata":
+                        changed.write_text(json.dumps({"contentHash": raw_hash}))
+                    elif changed == assets:
+                        doc = json.loads(original)
+                        doc["libraries"]["Sample.Contracts/1.0.0"]["sha512"] = raw_hash
+                        changed.write_text(json.dumps(doc))
+                    elif changed == host.with_suffix(".deps.json"):
+                        doc = json.loads(original)
+                        doc["libraries"]["Sample.Contracts/1.0.0"]["sha512"] = "sha512-" + raw_hash
+                        changed.write_text(json.dumps(doc))
+                    else:
+                        changed.write_bytes(b"changed archive or sidecar")
+                    with self.assertRaises(VectorError):
+                        _verify_artifact_in_host(host, artifact, ("Sample.Contracts", "1.0.0"))
+                changed.write_bytes(original)
+
     def test_host_restored_artifact_hash_must_match(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            host = Path(directory) / "Host.dll"
-            artifact = Path(directory) / "sample.nupkg"
+            root = Path(directory)
+            host = root / "host/bin/Release/net10.0/Host.dll"
+            host.parent.mkdir(parents=True)
+            artifact = root / "sample.nupkg"
             artifact.write_bytes(b"immutable artifact")
             identity = "Hexalith.McpCli.Sample.Contracts/1.0.0"
             digest = "sha512-" + base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode()
+            cached = root / "packages/hexalith.mcpcli.sample.contracts/1.0.0/hexalith.mcpcli.sample.contracts.1.0.0.nupkg"
+            cached.parent.mkdir(parents=True)
+            cached.write_bytes(artifact.read_bytes())
+            assets = root / "host/obj/project.assets.json"
+            assets.parent.mkdir(parents=True)
+            assets.write_text(json.dumps({"libraries": {identity: {
+                "type": "package", "path": "hexalith.mcpcli.sample.contracts/1.0.0", "sha512": digest}},
+                "packageFolders": {str(root / "packages"): {}}}))
             deps = host.with_suffix(".deps.json")
             deps.write_text(json.dumps({"libraries": {identity: {"type": "package", "sha512": digest}}}), encoding="utf-8")
             _verify_artifact_in_host(host, artifact, ("Hexalith.McpCli.Sample.Contracts", "1.0.0"))

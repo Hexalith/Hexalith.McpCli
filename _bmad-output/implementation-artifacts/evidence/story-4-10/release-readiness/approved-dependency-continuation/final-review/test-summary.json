@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "projects": {
+    "abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "core": {
+      "total": 661,
+      "failed": 0,
+      "succeeded": 659,
+      "skipped": 2
+    },
+    "mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    "cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "manifest": {
+      "total": 104,
+      "failed": 0,
+      "succeeded": 104,
+      "skipped": 0
+    }
+  },
+  "totalPassed": 1339,
+  "totalFailed": 0,
+  "totalSkipped": 4,
+  "pythonRegressions": 100,
+  "skipLimit": "Four existing Windows profile/ACL cases; no frozen matrix case skipped."
+}

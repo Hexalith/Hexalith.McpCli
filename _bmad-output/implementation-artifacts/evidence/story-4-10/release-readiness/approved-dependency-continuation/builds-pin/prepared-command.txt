@@ -1,0 +1,24 @@
+central-versions exit 0
+authoritative-catalog exit 0
+⧗   --- input ---
+build(deps): pin parties 1.5.1
+
+Select the owning Parties release for Contracts enrollment.
+✔   found 0 problems, 0 warnings
+diff --git a/Props/Directory.Packages.props b/Props/Directory.Packages.props
+index a456728..2ab74a1 100644
+--- a/Props/Directory.Packages.props
++++ b/Props/Directory.Packages.props
+@@ -12,7 +12,7 @@
+     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">1.0.0</HexalithMcpCliVersion>
+     <HexalithMemoriesVersion Condition="'$(HexalithMemoriesVersion)' == ''">2.27.1</HexalithMemoriesVersion>
+     <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">5.9.0</HexalithTenantsVersion>
+-    <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.0</HexalithPartiesVersion>
++    <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.1</HexalithPartiesVersion>
+     <HexalithProjectsVersion Condition="'$(HexalithProjectsVersion)' == ''">1.0.0</HexalithProjectsVersion>
+     <!-- Folders.Aspire is a stable public package; all other consumers retain the preview integration. -->
+     <HexalithAspireHostingDaprVersion>13.6.1-beta.935</HexalithAspireHostingDaprVersion>
+[build/story-4-10-parties-pin 4878668] build(deps): pin parties 1.5.1
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+4878668412fe8803c3ef232e1775b1dd09f2f857
+

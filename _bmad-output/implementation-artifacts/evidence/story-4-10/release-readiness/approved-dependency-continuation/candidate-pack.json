@@ -1,0 +1,25 @@
+{
+  "command": [
+    "dotnet",
+    "pack",
+    "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:HexalithMcpCliFromSource=false",
+    "-p:HexalithEventStoreFromSource=false",
+    "-p:HexalithCommonsFromSource=false",
+    "-p:MinVerVersionOverride=0.0.0-story410",
+    "-p:PackageVersion=0.0.0-story410",
+    "--output",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/candidate-artifacts",
+    "-m:1"
+  ],
+  "cwd": "/tmp/hexalith-parties-story410-release",
+  "exitCode": 0,
+  "source": "160db8990c74d0a15c89cc09add95f7a256ec758",
+  "log": "candidate-pack.txt",
+  "artifact": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/candidate-artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+  "artifactHash": "sha512-KGjggm+dn1aA9S80MM+nXOGzFyqKBXWQVDGWhfHieB+rmbKZAGbOA+2t6TF5vRy5eK5m+RCZSdd2DHVwn+ZIUg=="
+}

@@ -1,0 +1,16 @@
+E
+======================================================================
+ERROR: test_package_identity_is_case_insensitive (test_enrolled.EnrolledArtifactTests.test_package_identity_is_case_insensitive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/package-case/test_enrolled.py", line 40, in test_package_identity_is_case_insensitive
+    self.assertEqual(self.artifact, artifact_for(self.assets, 'module.CONTRACTS', self.receipt))
+                                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/package-case/check_enrolled.py", line 28, in artifact_for
+    raise RuntimeError(f'{package_id}: approval receipt does not match the restored package version.')
+RuntimeError: module.CONTRACTS: approval receipt does not match the restored package version.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (errors=1)

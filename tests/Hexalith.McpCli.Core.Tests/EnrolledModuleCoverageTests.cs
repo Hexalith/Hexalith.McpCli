@@ -17,7 +17,7 @@ public sealed class EnrolledModuleCoverageTests
         Type manifest = cli.GetType("Hexalith.McpCli.Hosting.ModuleAssemblyManifest", throwOnError: true)!;
         var entries = ((string PackageId, string AssemblyName)[])manifest.GetField("Entries", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
         var provider = new CatalogProvider(() => entries.Select(e => Assembly.Load(e.AssemblyName)).ToArray(), new RecordingLogger<CatalogProvider>());
-        // The empty shipping manifest is deliberate until published module approval succeeds.
+        // A build with no enrolled packages must still report the generic empty-catalog error.
         if (entries.Length == 0)
         {
             provider.Get(false).ErrorCode.ShouldBe("catalog_empty");

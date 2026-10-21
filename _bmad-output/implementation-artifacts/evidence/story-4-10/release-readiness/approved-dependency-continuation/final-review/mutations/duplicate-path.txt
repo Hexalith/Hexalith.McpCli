@@ -1,0 +1,23 @@
+E
+======================================================================
+ERROR: test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture (test_enrolled.VerifierFailureTests.test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/duplicate-path/test_enrolled.py", line 177, in test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture
+    verify(self.repo, self.artifact, [vector, vector], self.output)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/duplicate-path/verify_artifact.py", line 183, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/duplicate-path/verify_artifact.py", line 87, in run
+    (output / (label + '.stdout.txt')).write_text(result.stdout)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 808, in write_text
+    raise TypeError('data must be str, not %s' %
+                    data.__class__.__name__)
+TypeError: data must be str, not MagicMock
+
+----------------------------------------------------------------------
+Ran 1 test in 0.007s
+
+FAILED (errors=1)

@@ -1,0 +1,280 @@
+{
+  "name": "parties.update-party",
+  "kind": "write",
+  "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "PartyId": {
+        "type": "string",
+        "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+      },
+      "PersonDetails": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "FirstName": {
+            "type": "string",
+            "description": "The person's supplied first name."
+          },
+          "LastName": {
+            "type": "string",
+            "description": "The person's supplied last name."
+          },
+          "DateOfBirth": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The optional date of birth with an explicit UTC offset."
+          },
+          "Prefix": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name prefix, such as a title."
+          },
+          "Suffix": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name suffix."
+          }
+        },
+        "required": [
+          "FirstName",
+          "LastName"
+        ],
+        "additionalProperties": false,
+        "description": "Complete replacement for an existing Person party only. Omitting this object or supplying null leaves details unchanged; supplying this for another party type rejects the whole update. Inside a supplied replacement, omitted optional members become null. Party type cannot change."
+      },
+      "OrganizationDetails": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "LegalName": {
+            "type": "string",
+            "description": "The organization's complete legal name."
+          },
+          "TradingName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional name the organization trades under."
+          },
+          "LegalForm": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional legal form of the organization."
+          },
+          "RegistrationNumber": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional organization registration number."
+          },
+          "IsNaturalPerson": {
+            "type": "boolean",
+            "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+          }
+        },
+        "required": [
+          "LegalName"
+        ],
+        "additionalProperties": false,
+        "description": "Complete replacement for an existing Organization party only. Omitting this object or supplying null leaves details unchanged; supplying this for another party type rejects the whole update. Inside a supplied replacement, omitted optional members become null and IsNaturalPerson defaults to false. The established root classification remains unchanged. Party type cannot change."
+      },
+      "AddContactChannels": {
+        "type": "array",
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "ContactChannelId": {
+              "type": "string",
+              "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+            },
+            "Type": {
+              "enum": [
+                "Email",
+                "Phone",
+                "PostalAddress",
+                "SocialMedia"
+              ],
+              "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+            },
+            "Value": {
+              "type": "string",
+              "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+            },
+            "IsPreferred": {
+              "type": "boolean",
+              "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+            }
+          },
+          "required": [
+            "PartyId",
+            "ContactChannelId",
+            "Type",
+            "Value"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Contact channels to add with explicit child IDs and matching PartyId. An existing exact ID is skipped even when also listed in UpdateContactChannels; that update still applies."
+      },
+      "UpdateContactChannels": {
+        "type": "array",
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "ContactChannelId": {
+              "type": "string",
+              "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+            },
+            "Type": {
+              "enum": [
+                "Email",
+                "Phone",
+                "PostalAddress",
+                "SocialMedia",
+                null
+              ],
+              "description": "The replacement kind: Email, Phone, PostalAddress or SocialMedia. Omitted or null preserves the kind. When moving a preferred channel to another kind, also supply IsPreferred=true to reconcile preferences."
+            },
+            "Value": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Omitted or null preserves the value; a supplied string replaces it verbatim, including an empty string to clear it. All kinds, including PostalAddress and SocialMedia, use raw strings without a defined structured format."
+            },
+            "IsPreferred": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Omitted or null preserves preference; false clears only this channel. True selects this channel within its target type and clears other preferences when becoming preferred or changing type. Supply true with a type change to reconcile preferences."
+            }
+          },
+          "required": [
+            "PartyId",
+            "ContactChannelId"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Existing contact channels to change; each entry must supply at least one non-null Type, Value or IsPreferred. False is a supported preference change; omitted or null members preserve existing values."
+      },
+      "RemoveContactChannelIds": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": "Exact existing ContactChannelId values to remove, at most 128 characters each; case is significant. An ID also in AddContactChannels or UpdateContactChannels rejects the whole update. Null entries reject."
+      },
+      "AddIdentifiers": {
+        "type": "array",
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "IdentifierId": {
+              "type": "string",
+              "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+            },
+            "Type": {
+              "enum": [
+                "VAT",
+                "SIRET",
+                "NationalId",
+                "CompanyRegistration",
+                "TaxId",
+                "Other"
+              ],
+              "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+            },
+            "Value": {
+              "type": "string",
+              "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+            }
+          },
+          "required": [
+            "PartyId",
+            "IdentifierId",
+            "Type",
+            "Value"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Business identifiers to add in this atomic update, with explicit child IDs and matching PartyId."
+      },
+      "RemoveIdentifierIds": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": "Exact existing IdentifierId values to remove, at most 128 characters each; case is significant. An ID also in AddIdentifiers rejects the whole update. Null entries reject."
+      }
+    },
+    "required": [
+      "PartyId"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "PartyId": "party-49",
+    "PersonDetails": {
+      "FirstName": "Augusta Ada",
+      "LastName": "Lovelace"
+    }
+  },
+  "envelope": {
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "tenant",
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "Tools/validate-central-package-versions.ps1"
+    ],
+    "cwd": "/tmp/hexalith-builds-story410-pin-20261021",
+    "exitCode": 0,
+    "log": "central-versions.txt"
+  },
+  {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "Tools/test-authoritative-package-catalog.ps1"
+    ],
+    "cwd": "/tmp/hexalith-builds-story410-pin-20261021",
+    "exitCode": 0,
+    "log": "authoritative-catalog.txt"
+  }
+]

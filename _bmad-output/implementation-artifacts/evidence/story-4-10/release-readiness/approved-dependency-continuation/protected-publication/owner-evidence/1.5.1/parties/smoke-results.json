@@ -1,0 +1,21 @@
+{
+  "endpoint": "/alive",
+  "environment": "Development",
+  "image_repository": "registry.hexalith.com/parties",
+  "platforms": [
+    {
+      "cleanup": "pass",
+      "digest": "sha256:2df26cb209bfe64c42b71a69729a5b7630e41bdbf991829905134beb49929b4e",
+      "outcome": "pass",
+      "platform": "linux/amd64"
+    },
+    {
+      "cleanup": "pass",
+      "digest": "sha256:3c35e9ec9a4947b61c68e2ce246c9e48a7fe6b3d2f4206aa6678c73d08fc4309",
+      "outcome": "pass",
+      "platform": "linux/arm64"
+    }
+  ],
+  "result": "pass",
+  "timeout_seconds": 180.0
+}

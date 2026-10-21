@@ -1,0 +1,1 @@
+Verified Hexalith.Parties.Contracts@0.0.0-story410: 7 operations; complete vector replay passed.

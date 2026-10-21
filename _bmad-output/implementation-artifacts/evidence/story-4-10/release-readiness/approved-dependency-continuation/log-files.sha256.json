@@ -1,0 +1,13 @@
+{
+  "restore.txt": "1a64e40ce13161d4ecb790270c2bb548639e4f221c2db7b032bc620216819fc9",
+  "build.txt": "5cc0b22c9c42e87fb877536ff502b198091e6a6d5db34460822f810049c5fc4d",
+  "Hexalith.Parties.Contracts.Tests.txt": "d78ec2dc4db5133af51dcd4310502dea00973ecb2143deb693b155b9942ba4c0",
+  "Hexalith.Parties.Tests.txt": "370ef3074a13a5165b3ae20eaa016c34d652045f6a4955fe6bb3c8cbee700a04",
+  "Hexalith.Parties.Projections.Tests.txt": "8d8037bd9c43c31f37b44f768497b72a934f2081757acd33aaf50953b6706a09",
+  "Hexalith.Parties.Client.Tests.txt": "a23624e6455e1ef5faf2347d2541b637dd3d99749cf7810455d408bb8e298291",
+  "Hexalith.Parties.Server.Tests.txt": "8ea9ffe2a46fb706444a1c019a5487c7ac61987146fda5943e52965956724889",
+  "Hexalith.Parties.Sample.Tests.txt": "1943878185e1bcb6de2da01f750dae5400c5d2c46e2bb4105bdb6b64660ec8f1",
+  "Hexalith.Parties.Ci.Tests.txt": "a6bd2f4c56df97bad6f5fc8bec82757e8c65ab51e59ab2bb8ed07bf6b9739e98",
+  "candidate-pack.txt": "292a8f4fcabceba45b26c7d1254e8cda1265f71b64c6043c5dee40afa4ada033",
+  "candidate-verification.txt": "938151713db9c7edb8dbac93501b637883ba7806c048ca053646ebeccbe90203"
+}

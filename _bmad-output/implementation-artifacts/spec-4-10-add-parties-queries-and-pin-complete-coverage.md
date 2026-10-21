@@ -2,7 +2,7 @@
 title: '4.10 Add Parties queries and pin complete coverage'
 type: 'feature'
 created: '2026-10-20'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9354dc08176744c75c2ddb61d924c0948b373b98'
@@ -98,10 +98,10 @@ Existing C06–C08 and Stories 4.11/4.13 remain downstream gates.
   complete Catalog, lint, inventory and vector checks against exact artifacts.
 - [x] `evidence/story-4-10/` beside this spec — retain artifact/source hashes,
   actual routing evidence, independent description review and fresh approvals.
-- [ ] Owning Parties release workflow; owning Builds
+- [x] Owning Parties release workflow; owning Builds
   `/home/administrator/projects/hexalith/builds/Props/Directory.Packages.props`
   — deliver verified publication and its central pin through normal owner gates.
-- [ ] `src/Hexalith.McpCli/Hexalith.McpCli.csproj`, `tools/dependency-policy.json`,
+- [x] `src/Hexalith.McpCli/Hexalith.McpCli.csproj`, `tools/dependency-policy.json`,
   root Builds gitlink, `README.md` — enroll the published Contracts version,
   reconcile restored closure and document/test shipped discovery behavior.
 
@@ -116,6 +116,13 @@ Existing C06–C08 and Stories 4.11/4.13 remain downstream gates.
   then its exact version/hash is verified and all seven Parties operations appear.
 
 ## Implementation Notes
+
+Current state: implementation, protected Parties 1.5.1 publication, owning Builds
+integration and production enrollment are verified. Final independent workflow
+review and all required verification have passed, with no deferred findings.
+The dated sections below retain the historical decisions
+and intermediate states; [current verification](evidence/story-4-10/release-readiness/approved-dependency-continuation/verification.md)
+records the complete release/enrollment and review result.
 
 Approved for implementation by the requesting user on 2026-10-20.
 The implementation step requires sequential execution, no pushes and no remote
@@ -216,6 +223,52 @@ verification and all protected publication/enrollment gates remain open.
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Published enrollment review (2026-10-21)
+
+All three independent layers completed before classification. They reviewed
+`/tmp/story410-final-implementation-amo4kk4x.diff`; only the edge layer received
+this spec. Each finding below was assessed before grouping. Earlier triage rows
+do not describe these remaining states: the earlier diagnostic patch prints
+captured output, and the earlier stale-success patch covers `verify`, whereas
+the new findings concern durable CI uploads and enrollment preflight.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| FB1: approved inventory digest is not enforced | Medium. `check_enrolled` supplies the current inventory without comparing its bytes to the approved digest; the verifier records whichever bytes it receives. A structurally valid edited scope could reuse the artifact approval. Bind the existing exact approved inventory digest in the generic enrollment receipt and enforce it before verification. | Patch |
+| FB2: artifact/vector paths are reread after hashing | Medium. `verify` hashes the original paths before restore/build, then rereads them for restore, validation and replay. Editing a vector during those long subprocesses can make the replay differ from the recorded hash. Capture immutable local inputs once and use them for every later read, retaining the original source names in evidence and preserving enrollment's approved vector binding. | Patch, grouped with FE2 |
+| FB3: signed dependency archive sidecar is optional | Medium. A local reproduction supplied matching assets/metadata content hashes with changed archive bytes and no sidecar; `resolved_packages` returned success with different archive and content hashes. Require the independent archive binding when those hashes differ. | Patch, grouped with FE1 |
+| FB4: enrollment preflight leaves successful child receipts | Medium. `main` resets only `enrolled.json`; artifact/receipt/vector rejection happens before `verify` invalidates the existing package result. The old child `verification.json` and `artifact.sha512` remain successful. Invalidate prior child success before preflight. | Patch |
+| FB5: malformed receipt root leaves a pending result | Medium. `_load_json` can return an array, then `artifact_for` calls `.get`; the uncaught `AttributeError` bypasses the failed enrollment receipt. Validate the receipt's object root and report deterministic failure. | Patch |
+| FB6: case variants of a package ID are rejected | Low. A local reproduction with `Module.Contracts` and `module.contracts` rejects the same NuGet identity; directory selection also uses case-sensitive spelling. Correct both identity comparison and existing approval-directory lookup. | Direct correction |
+| FB7: operation-level lint cannot receive an acceptance | Low. Both implementations intentionally require a nonempty property, so a root finding cannot match an exception. Existing acceptances are only the eight approved member findings; no current approval is blocked. State that operation-level findings require correcting Contracts, rather than adding a new acceptance representation. | Direct documentation patch |
+| FB8: complete CI evidence is discarded with the runner | Medium. The enrolled job retains full diagnostics and receipts only in `RUNNER_TEMP`; the existing failure path prints at most the final 16,000 characters and there is no upload. Preserve the evidence directory with an always-running, pinned artifact step. | Patch |
+| FB9: automate a shipped CLI/MCP composition smoke | Low. Current shipped entry points were executed successfully for modules, all seven operations/descriptions and stdio MCP parity in `production-discovery/checks.json`; the production manifest is also checked automatically, while existing process tests cover CLI/MCP composition with fixture manifests. Adding another process orchestration path would protect a hypothetical future composition regression, not a demonstrated current failure. | Reject low, nontrivial extra orchestration |
+| FB10: add cursor continuation to approved vectors | Low. These scripts deliberately cover exact routing, results and nondefault paging; their single-page shape does not test domain cursor execution. Actual continuation, effective metadata and scope rejection are exercised by the unfiltered upstream domain tests recorded in `matrix-test-audit-current.json`. Expanding the already approved scripts adds another scripted response and requires changing approved inputs without establishing a missing current runtime behavior. | Reject low, nontrivial change to approved vectors |
+| FE1: missing sidecar permits changed signed dependency | Medium. Independently reproduced as FB3: matching metadata/assets plus a missing archive sidecar accepts changed archive bytes. | Patch, grouped with FB3 |
+| FE2: vector edits after hashing change the replay input | Medium. Validation and replay use the original vector paths after restore/build, confirming FB2's receipt/input race. | Patch, grouped with FB2 |
+| FV1: rejected inventory is not protected at the process boundary | Medium. Pre-verified gap: direct checker tests reject pending approval, but both automated process cases use a valid inventory. Replacing the adapter's conditional exit with zero leaves those cases green and could produce successful artifact evidence despite inventory findings. Add a real pending-inventory negative case using valid vectors; assert the inventory diagnostic/check failure and absence of a successful artifact hash. | Patch |
+| FP1: snapshot map could hide a duplicate vector path | Medium. Parent inspection of the review patch found that a dictionary keyed by resolved path collapses repeated inputs before the existing duplicate-vector validation. Reject duplicate captured paths before restore and retain a regression that fails if that rejection is removed. | Patch |
+| FP2: ambiguity test assumes a case-sensitive filesystem | Low. Creating both `Module.Contracts` and `module.contracts` raises `FileExistsError` on a case-insensitive filesystem before testing the guard. Use a synthetic directory listing for this case so it remains deterministic without an OS skip. | Direct test correction |
+
+The patch routes change generic verification and CI evidence handling only.
+Approved Contracts, vector bytes, release inventory and upstream publication
+remain unchanged. All 13 patch findings, including the two parent corrections,
+are resolved; the two low findings retain their dispositions above. No finding
+is deferred. [Final review evidence](evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/review.json)
+retains the reviewed diff identity, exact protected-input hashes and all ten
+detected guard-removal mutations. Independent parent verification passes both
+sample gates, Release restore/build with zero warnings/errors, all six McpCli
+projects (1,339 passed, zero failed, four existing Windows-only skips), and all
+100 Python regressions. Fresh production verification again passes all seven
+vectors, clean inventory/lint and strict discovery without dependency overrides;
+all seven description documents match the independently reviewed artifact.
+[Exact commands and results](evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/checks.json)
+and [final integrity audit](evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/integrity.json)
+retain those observations. The unchanged upstream tests and source-equivalence
+proof continue to cover every frozen matrix row. New CI evidence upload syntax
+and its pinned action were checked locally; this working tree has not been
+submitted as a McpCli CI run.
 
 ### Local candidate review, pass 1 (2026-10-20)
 
@@ -330,6 +383,124 @@ The merged-main RC command still returns exit 1 for the same nine exact pointers
 The concrete owner request remains pending; no sign-off or publication occurred.
 Release and enrollment acceptance tasks remain open. The six historical runtime
 skips do not extend this story's approval or live qualification claims.
+
+### Approved dependency continuation (2026-10-21)
+
+The requesting user replied **"I approve"** to the exact nine-pointer owner
+decision and subsequently instructed **"continue"**. The immutable
+[owner receipt](evidence/story-4-10/release-readiness/gitlink-signoff-approval.json)
+records `jpiquot`, all nine full revisions and the proposal hashes. This decision
+does not extend to later dependency revisions or a changed Contracts artifact.
+
+The previously observed exact-main CI on
+`fa708d1cdb71a8926c9ed82e2e18a3ce58fd52ef` completed successfully. Remote main
+subsequently advanced to `24ae57ea2386702ca9e7368e6b1f728b8956ca62`, changing
+seven pointers and adding independently implemented bounded-search and corrupt-index
+safeguards. Its push CI failed with CS0246: the newer Tenants Contracts source
+uses `NativeSourceProof`, absent from its selected EventStore package.
+
+[Parties PR #57](https://github.com/Hexalith/Hexalith.Parties/pull/57), initially
+at `160db8990c74d0a15c89cc09add95f7a256ec758`, preserves the current Parties fixes,
+records the actual owner decision and pins the release to the nine exact approved
+revisions. No module source was edited and the pinned-tool source-selection model
+is unchanged. Both local RC modes and the remote release-candidate gate pass.
+Both full commit messages pass the owning pinned commitlint. The ordinary Release
+restore/build and seven affected test projects pass: 3,690 tests, zero skips.
+[Commands and delivery evidence](evidence/story-4-10/release-readiness/approved-dependency-continuation/continuation.json)
+retain the initial and later source identities and scope.
+
+The current search declaration documents the upstream 512 UTF-16-unit query limit.
+Its [refreshed candidate receipt](evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-pending-approval.json)
+binds artifact `sha512-KGjggm+dn1aA9S80MM+nXOGzFyqKBXWQVDGWhfHieB+rmbKZAGbOA+2t6TF5vRy5eK5m+RCZSdd2DHVwn+ZIUg==`,
+949 current source inputs, the unchanged seven vectors, release inventory and a
+fresh independent Catalog-only description review. Complete artifact verification
+passes strict discovery, lint, inventory and seven-vector replay. The historical
+candidate approval is preserved. The requesting user approved the refreshed
+artifact, unchanged vectors and release inventory with **"Approve refreshed
+candidate and continue"**; the actual
+[fresh decision](evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-approval.json)
+binds that answer to the pending receipt's exact inputs. Full owning CI,
+protected publication, published-byte validation,
+the owning Builds pin and production enrollment remain open.
+
+PR #57 completed successfully, including 4,931 unit/integration tests and
+98 Aspire tests with six existing runtime qualification skips. Its normal merge
+included later test-helper changes; every production source file and all seven
+approved vectors remain byte-identical. Two subsequent external pointer updates
+cancelled exact-main CI and reintroduced the incompatible dependency selection.
+The requesting user then confirmed **"Other writes are paused; continue"**.
+The restored release source is `8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021`,
+tree `100ce7c1bdc782473759715ed806fb700806d1a2`, identical to the reviewed
+merged tree. [Source comparison and CI provenance](evidence/story-4-10/release-readiness/approved-dependency-continuation/merged-main-continuation.json)
+and [the exact restoration checks](evidence/story-4-10/release-readiness/approved-dependency-continuation/stable-release-source.json)
+retain the actual coordination instruction, validated commit message and passing
+RC checks. Required push CI is running for this exact current main source.
+
+During enrollment preparation, strengthen the offline dependency fixture helper
+so a captured candidate replaces its own already-restored module root while
+preserving the selected non-module stack. Otherwise enrollment silently changes
+the Parties fixture test into another check of the installed package. The two
+new existing-root cases fail against the old helper; retain that evidence and
+verify the complete Manifest test project after the correction and final enrollment.
+
+### Published artifact and enrollment continuation (2026-10-21)
+
+Exact-main push CI `39573997934` passed all 4,931 unit/integration tests and
+98 Aspire tests, with six existing runtime qualification skips. Protected
+[release run 39576141445](https://github.com/Hexalith/Hexalith.Parties/actions/runs/39576141445)
+passed its source/registry preflight, normal required-reviewer approval by
+`jpiquot`, publication and exact-source publication guard. It published
+[Parties 1.5.1](https://github.com/Hexalith/Hexalith.Parties/releases/tag/v1.5.1)
+from `8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021`; all nine declared packages
+are available from NuGet. [Protected publication evidence](evidence/story-4-10/release-readiness/approved-dependency-continuation/protected-publication/dispatch.json)
+retains the actual environment approval and completed run.
+
+The public Contracts archive is
+`sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==`.
+Its repository metadata matches that source. The seven copied vectors change
+only `/package/version`; all remaining bytes and semantic assertions are
+preserved. [Publication binding](evidence/story-4-10/release-readiness/approved-dependency-continuation/published-artifact-binding.json)
+links the actual fresh approval, source equivalence, transformation hashes and
+successful public-byte verification without dependency overrides. All seven
+description documents remain byte-identical to the independently reviewed ones.
+
+Initial public replay exposed an unsigned-only assumption in the loopback host
+guard: `.deps.json` carries NuGet's restore-content hash, which differs from
+the repository-signed archive-byte hash. Preserve that failed receipt. The
+corrected generic guard checks restore assets/cache metadata and independently
+compares exact cached archive bytes with the immutable artifact. A signed-hash
+regression first fails against the old guard, then all 88 Python regressions
+pass; corruption of either archive, sidecar, cache metadata, assets or deps hash
+still fails. [Regression and replay evidence](evidence/story-4-10/release-readiness/approved-dependency-continuation/signed-replay-regression/checks.json)
+records the correction and successful full seven-vector replay.
+
+[Builds PR #126](https://github.com/Hexalith/Hexalith.Builds/pull/126) pins
+`HexalithPartiesVersion` to 1.5.1 and refreshes only the Parties audit family.
+All other families, source observations and direct consumers are preserved.
+Central versions, authoritative catalog, audit provenance, consumer authority
+and exception validation pass locally; both commit messages pass pinned
+commitlint. Merge must preserve the audit's exact catalog-source ancestor
+`4878668412fe8803c3ef232e1775b1dd09f2f857`. Full owning CI `39578987205` passed
+all required checks, including source/package qualification. Normal merge
+`2744d549270298cfe73679f76b477a7368429006` preserves that ancestor and the exact
+tested tree. McpCli's Builds gitlink selects this merged revision.
+[Integration proof](evidence/story-4-10/release-readiness/approved-dependency-continuation/builds-pin/integration.json)
+records tree equality and the preserved validated merge message.
+
+McpCli's fresh Release restore/build and all six projects pass **1,339 tests**,
+with zero failures and four existing Windows-only skips. Both sample gates,
+89 Python regressions, the dedicated CI enrollment class and complete production
+artifact replay pass. The sample process fixture now explicitly removes inherited
+production flags before selecting its synthetic package; its prior failure and
+corrected positive/negative replay checks are retained.
+[Enrolled verification](evidence/story-4-10/release-readiness/approved-dependency-continuation/enrollment-checks/summary.json)
+and [actual production discovery](evidence/story-4-10/release-readiness/approved-dependency-continuation/production-discovery/checks.json)
+prove the built CLI and stdio MCP expose exactly seven lint-clean Parties
+operations, with checked CLI stdout/stderr and exit codes. All three agent entry
+points remain byte-identical. [Current matrix audit](evidence/story-4-10/release-readiness/approved-dependency-continuation/matrix-test-audit-current.json)
+ties every frozen scenario to executed passing tests; none of the existing skips
+covers a frozen matrix row. The final merged pin receives another fresh restore
+and Manifest check before independent review.
 
 ## Verification
 

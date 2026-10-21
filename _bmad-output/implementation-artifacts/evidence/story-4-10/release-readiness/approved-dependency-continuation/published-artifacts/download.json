@@ -1,0 +1,39 @@
+{
+  "observedAt": "2026-10-21T09:34:27.067367+00:00",
+  "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/1.5.1/hexalith.parties.contracts.1.5.1.nupkg",
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "1.5.1",
+  "artifact": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+  "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hexalith/Hexalith.Parties",
+    "commit": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021"
+  },
+  "length": 129134,
+  "headers": {
+    "Date": "Wed, 21 Oct 2026 09:34:26 GMT",
+    "Content-Type": "application/octet-stream",
+    "Content-Length": "129134",
+    "Connection": "close",
+    "Cache-Control": "public, max-age=86400",
+    "Last-Modified": "Wed, 21 Oct 2026 09:31:54 GMT",
+    "ETag": "0x8DF2F5624ED6344",
+    "x-ms-request-id": "c021cc53-301e-0036-3d3f-613087000000",
+    "x-ms-version": "2009-09-19",
+    "x-ms-meta-da7b2905_0f3c_4262_921c_b1593d1336f1_ESRP_RequestId": "8f67706d-1dee-46a6-b488-40cf59445d11",
+    "x-ms-meta-SHA512": "ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "x-ms-lease-status": "unlocked",
+    "x-ms-blob-type": "BlockBlob",
+    "Access-Control-Expose-Headers": "x-ms-request-id,Server,x-ms-version,x-ms-meta-da7b2905_0f3c_4262_921c_b1593d1336f1_ESRP_RequestId,x-ms-meta-SHA512,Content-Type,Cache-Control,ETag,Last-Modified,x-ms-lease-status,x-ms-blob-type,Content-Length,Date,Transfer-Encoding",
+    "Access-Control-Allow-Origin": "*",
+    "x-azure-ref": "20261021T093426Z-r1866899488cn7jmhC1PARy48c0000004690000000002cuf",
+    "x-fd-int-roxy-purgeid": "0",
+    "X-Cache": "TCP_MISS",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Content-Type-Options": "nosniff",
+    "Accept-Ranges": "bytes"
+  },
+  "releaseRunId": 39576141445,
+  "workflowStatus": "in_progress; archive availability is not release completion"
+}

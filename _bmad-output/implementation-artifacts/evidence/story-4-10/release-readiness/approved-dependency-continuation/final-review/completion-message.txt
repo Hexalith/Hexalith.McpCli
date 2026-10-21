@@ -1,0 +1,4 @@
+feat(parties): enroll published queries and pin complete coverage
+
+Enroll Parties Contracts 1.5.1 after protected publication and exact-byte verification.
+Enforce inventory and vector approvals with retained replay evidence.

@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_inventory_mutation_between_preflight_and_capture_cannot_pass (test_enrolled.EnrolledPreflightTests.test_inventory_mutation_between_preflight_and_capture_cannot_pass)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/inventory-recapture/test_enrolled.py", line 328, in test_inventory_mutation_between_preflight_and_capture_cannot_pass
+    self.assertIn('approved inventorySha256 during snapshot capture', diagnostic)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'approved inventorySha256 during snapshot capture' not found in "/tmp/mcpcli-artifact-e110wbey/host/obj/project.assets.json:/: [Errno 2] No such file or directory: '/tmp/mcpcli-artifact-e110wbey/host/obj/project.assets.json'\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.008s
+
+FAILED (failures=1)

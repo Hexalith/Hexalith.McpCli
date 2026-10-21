@@ -95,19 +95,32 @@ PackageReference, requires its exact restored `.nupkg`, and calls
 `tools/conformance-vectors/v1/modules/<PackageId>/` containing complete
 `*.vector.json` files and `approval.json` with `packageId`, `version`, `module`,
 `artifactHash` (`sha512-` plus base64 SHA-512) and an owning-maintainer
-`approvalReference`, plus `vectorFilesSha256`: an exact map of relative
+`approvalReference`, plus `inventorySha256` (the lowercase SHA-256 of the exact
+approved inventory input) and `vectorFilesSha256`: an exact map of relative
 `*.vector.json` names (including subdirectories) to lowercase SHA-256 hex digests.
 Added, removed, renamed or changed vectors require fresh approval. The artifact
 receipt hash must match exact restored package bytes. The NuGet restore content
 hash independently matches `project.assets.json` and cache metadata. The module also needs its approved release inventory under
 `tools/inventory-coverage/v1/<module>-approved.json`. Missing vectors, receipt,
 inventory, coverage or approval fail; the dependency gate remains independent.
-No production packages are currently enrolled.
+Inventory bytes must match the approved digest before verification, and the
+verifier checks that digest again when freezing its input. Package IDs and their
+approval directory names compare case-insensitively; versions remain exact.
+`Hexalith.Parties.Contracts` 1.5.1 is enrolled with all seven vectors and its
+exact signed-archive receipt under `modules/Hexalith.Parties.Contracts/`.
+The receipt links the actual candidate approval and the published-artifact
+binding; only `/package/version` changes when copying the approved vectors.
 
 Passing replay establishes transport envelopes and result/error parity against
 a scripted Gateway. It supplies no live authorization, domain-effect or retirement
 approval. Protected publication and verification of published bytes precede
 production enrollment.
+
+The replay host check uses its restore assets (the default project `obj/` path,
+or explicit `--assets`) to bind the NuGet restore-content hash in `.deps.json`
+to cache metadata. It independently compares the cached archive bytes with the
+supplied immutable artifact. Both checks apply when repository signing makes
+the restore-content hash differ from the archive-byte hash.
 
 Previously accepted lint can be supplied to `verify_artifact.py` with
 `--accepted-lint <module>-accepted-lint.json`; enrolled checks select that file
@@ -123,11 +136,22 @@ logs; useful captured diagnostics also appear in CI output. Verification retains
 exact inventory/lint input copies with SHA-256 hashes and records every actual
 restored package identity/version, NuGet assets/cache content hashes and exact
 archive SHA-512 hashes. Repository signatures can make the archive-byte hash
-differ from the restore content hash; each retains its own meaning.
+differ from the restore content hash; each retains its own meaning. When they
+differ, the cached archive must also have an independently matching `.nupkg.sha512`
+sidecar. Content metadata alone cannot authorize changed signed archive bytes.
+
+Artifact and vector bytes are captured once into retained input snapshots before
+restore/build. Restore, validation and replay consume those snapshots; receipts
+retain original paths, filenames and hashes. Enrolled vector digests are checked
+again during capture so changes after enrollment preflight cannot pass. Every
+enrollment attempt invalidates previous child success/hash receipts before its
+preflight. CI always uploads `enrolled-evidence`, including failed receipts,
+retained inputs and subprocess diagnostics; an absent directory produces a warning.
 
 The existing sample loopback CI path also runs `run_packaged_process_fixture.py`.
 It creates a temporary repository with one flagged packaged sample and synthetic
 fixture-only inventory/receipt, exercises nonempty enrollment through complete
-verification/replay, then proves that a structurally valid vector with a false
+verification/replay, then proves a pending inventory decision is rejected by the
+real C# checker before replay. It also proves a structurally valid vector with a false
 semantic assertion fails with replay diagnostics and invalidates stale success.
 Synthetic authority and enrollment data never enter the production repository.

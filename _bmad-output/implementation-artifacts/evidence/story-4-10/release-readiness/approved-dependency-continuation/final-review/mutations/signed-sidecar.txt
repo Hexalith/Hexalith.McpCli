@@ -1,0 +1,23 @@
+FF
+======================================================================
+FAIL: test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes (test_enrolled.SignedPackageHashTests.test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes) (archive=b'original signed archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/signed-sidecar/test_enrolled.py", line 423, in test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes
+    with self.assertRaisesRegex(RuntimeError, 'independent cached archive hash is required'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes (test_enrolled.SignedPackageHashTests.test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes) (archive=b'changed signed dependency archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/signed-sidecar/test_enrolled.py", line 423, in test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes
+    with self.assertRaisesRegex(RuntimeError, 'independent cached archive hash is required'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=2)

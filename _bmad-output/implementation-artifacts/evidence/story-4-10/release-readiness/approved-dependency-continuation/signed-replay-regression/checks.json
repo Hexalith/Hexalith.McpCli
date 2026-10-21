@@ -1,0 +1,15 @@
+{
+  "completedAt": "2026-10-21T09:40:32.835488+00:00",
+  "signedArchiveRegression": {
+    "red": "red.txt",
+    "oldHelperResult": "failed on distinct NuGet content hash vs signed archive hash",
+    "green": "green.txt",
+    "testsPassed": 88,
+    "testsFailed": 0
+  },
+  "publicArtifactReverification": "../published-verification/verification.json",
+  "publicArtifactResult": "passed",
+  "descriptionByteChanges": [],
+  "completeVectors": 7,
+  "dependencyOverrides": false
+}

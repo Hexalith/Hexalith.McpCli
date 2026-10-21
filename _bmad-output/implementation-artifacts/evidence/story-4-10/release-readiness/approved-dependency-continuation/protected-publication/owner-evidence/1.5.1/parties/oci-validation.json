@@ -1,0 +1,55 @@
+{
+  "children": [
+    {
+      "config_digest": "sha256:293a9845c3d8b91065ace77dee2b39fd353a9d59eb4d085223e05a660b6cadd5",
+      "config_media_type": "application/vnd.oci.image.config.v1+json",
+      "config_raw_file": "child-linux-amd64.config.raw",
+      "config_raw_sha256": "293a9845c3d8b91065ace77dee2b39fd353a9d59eb4d085223e05a660b6cadd5",
+      "config_size": 4149,
+      "digest": "sha256:2df26cb209bfe64c42b71a69729a5b7630e41bdbf991829905134beb49929b4e",
+      "manifest_raw_file": "child-linux-amd64.manifest.raw",
+      "manifest_raw_sha256": "2df26cb209bfe64c42b71a69729a5b7630e41bdbf991829905134beb49929b4e",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "platform": "linux/amd64",
+      "provenance_labels": {
+        "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.Parties/blob/8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021/README.md",
+        "org.opencontainers.image.revision": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+        "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.Parties",
+        "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.Parties/releases/tag/v1.5.1",
+        "org.opencontainers.image.version": "1.5.1"
+      },
+      "size": 1399
+    },
+    {
+      "config_digest": "sha256:4c3d071272a29d147903dfc035e56d9073952056ab190c09c3d8aab5a9d8941e",
+      "config_media_type": "application/vnd.oci.image.config.v1+json",
+      "config_raw_file": "child-linux-arm64.config.raw",
+      "config_raw_sha256": "4c3d071272a29d147903dfc035e56d9073952056ab190c09c3d8aab5a9d8941e",
+      "config_size": 4150,
+      "digest": "sha256:3c35e9ec9a4947b61c68e2ce246c9e48a7fe6b3d2f4206aa6678c73d08fc4309",
+      "manifest_raw_file": "child-linux-arm64.manifest.raw",
+      "manifest_raw_sha256": "3c35e9ec9a4947b61c68e2ce246c9e48a7fe6b3d2f4206aa6678c73d08fc4309",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "platform": "linux/arm64",
+      "provenance_labels": {
+        "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.Parties/blob/8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021/README.md",
+        "org.opencontainers.image.revision": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+        "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.Parties",
+        "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.Parties/releases/tag/v1.5.1",
+        "org.opencontainers.image.version": "1.5.1"
+      },
+      "size": 1399
+    }
+  ],
+  "image": "registry.hexalith.com/parties:1.5.1",
+  "index_digest": "sha256:85afc9e954146883da56edce78e2ddaf401a47b35241bdceed87dfc20217aceb",
+  "index_size": 493,
+  "media_type": "application/vnd.oci.image.index.v1+json",
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ],
+  "raw_index_file": "index.raw",
+  "raw_index_sha256": "85afc9e954146883da56edce78e2ddaf401a47b35241bdceed87dfc20217aceb",
+  "result": "pass"
+}

@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-21T10:50:44.001062+00:00",
+  "result": "passed",
+  "checkedFileCountBeforeThisReceipt": 399,
+  "stagingSelection": "Only enumerated story paths; index was empty before staging; no unrelated dirty paths found.",
+  "whitespaceCommand": "git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol diff --cached --check -- <explicit non-evidence paths>",
+  "whitespaceExitCode": 0,
+  "whitespaceMeaning": "Recognizes the approved CRLF vector line endings; immutable captured evidence is retained verbatim.",
+  "approvedVectorIndexHashesMatch": true,
+  "approvedInventoryIndexHashMatches": true,
+  "unstagedTrackedChanges": [],
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "commitlintEvidence": "completion-commitlint.json"
+}

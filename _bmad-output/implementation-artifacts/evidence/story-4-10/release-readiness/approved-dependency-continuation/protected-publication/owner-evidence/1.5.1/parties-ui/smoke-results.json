@@ -1,0 +1,21 @@
+{
+  "endpoint": "/alive",
+  "environment": "Development",
+  "image_repository": "registry.hexalith.com/parties-ui",
+  "platforms": [
+    {
+      "cleanup": "pass",
+      "digest": "sha256:d75a8d176e74c9327756ff812c59a4195af65f50b1bf8f757839db244216ae63",
+      "outcome": "pass",
+      "platform": "linux/amd64"
+    },
+    {
+      "cleanup": "pass",
+      "digest": "sha256:2e3d17f2dbfa303ceca1f9ed784be8acbf90ccf79d85c881ad2588140565b8e9",
+      "outcome": "pass",
+      "platform": "linux/arm64"
+    }
+  ],
+  "result": "pass",
+  "timeout_seconds": 180.0
+}

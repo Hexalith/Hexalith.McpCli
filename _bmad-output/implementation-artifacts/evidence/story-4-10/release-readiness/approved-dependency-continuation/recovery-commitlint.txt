@@ -1,0 +1,6 @@
+⧗   --- input ---
+build(release): retain approved dependency revisions
+
+Restore the nine exact owner-approved pointers after workspace sync.
+Retain the reviewed release tree and all current Parties source fixes.
+✔   found 0 problems, 0 warnings

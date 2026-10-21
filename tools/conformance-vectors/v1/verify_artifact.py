@@ -51,6 +51,8 @@ def restored_package(assets: dict, identity: str, library: dict) -> tuple[Path, 
     if content_hash != assets_hash:
         raise RuntimeError(f'{identity}: restored bytes differ from the assets content hash.')
     sidecar = artifact.with_suffix('.nupkg.sha512')
+    if digest != content_hash and not sidecar.is_file():
+        raise RuntimeError(f'{identity}: independent cached archive hash is required when archive and content hashes differ.')
     if sidecar.exists() and normalize(sidecar.read_text().strip()) != digest:
         raise RuntimeError(f'{identity}: restored bytes differ from the cached archive hash.')
     return artifact, {'id': package_id, 'version': version, 'artifactHash': digest,
@@ -64,7 +66,9 @@ def resolved_packages(assets: dict) -> list[dict]:
 
 
 def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
-           inventory: Path | None = None, expected_hash: str | None = None, accepted_lint: Path | None = None, align_candidate_dependencies: bool = True) -> dict:
+           inventory: Path | None = None, expected_hash: str | None = None, accepted_lint: Path | None = None,
+           align_candidate_dependencies: bool = True, expected_inventory_hash: str | None = None,
+           expected_vector_hashes: dict[str, str] | None = None) -> dict:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     # Invalidate stale success before even resolving the new artifact or reading inputs.
@@ -94,13 +98,39 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
 
     try:
         artifact = artifact.resolve(strict=True)
+        original_artifact = artifact
+        artifact_bytes = artifact.read_bytes()
+        digest = 'sha512-' + base64.b64encode(hashlib.sha512(artifact_bytes).digest()).decode('ascii')
+        vector_bytes = {path.resolve(): path.read_bytes() for path in vectors}
+        if len(vector_bytes) != len(vectors):
+            raise RuntimeError('Duplicate vector paths are not allowed.')
+        vector_hashes = {str(path): hashlib.sha256(data).hexdigest() for path, data in vector_bytes.items()}
+        input_root = Path(tempfile.mkdtemp(prefix='inputs-', dir=output))
+        frozen_feed = input_root / 'artifacts'
+        frozen_feed.mkdir(parents=True, exist_ok=True)
+        artifact = frozen_feed / original_artifact.name
+        artifact.write_bytes(artifact_bytes)
         package_id, version = package_identity(artifact)
-        digest = 'sha512-' + base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode('ascii')
         receipt.update(packageId=package_id, version=version, artifactHash=digest,
-                       vectors={str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in vectors})
+                       vectors=vector_hashes,
+                       artifactSource=str(original_artifact),
+                       retainedInputs={'artifact': artifact.relative_to(output).as_posix(), 'vectors': {}})
         save()
         if expected_hash is not None and digest != expected_hash:
             raise RuntimeError('Artifact hash differs from the approved receipt.')
+        if expected_vector_hashes is not None and vector_hashes != expected_vector_hashes:
+            raise RuntimeError('Vector files differ from approval during snapshot capture.')
+        vectors = []
+        for index, (source, data) in enumerate(vector_bytes.items()):
+            frozen = input_root / 'vectors' / str(index) / source.name
+            frozen.parent.mkdir(parents=True, exist_ok=True)
+            frozen.write_bytes(data)
+            vectors.append(frozen)
+            receipt['retainedInputs']['vectors'][str(source)] = frozen.relative_to(output).as_posix()
+        # Retain other packages in a local candidate feed, without rereading the selected artifact.
+        for source in original_artifact.parent.glob('*.nupkg'):
+            if source != original_artifact:
+                (frozen_feed / source.name).write_bytes(source.read_bytes())
         frozen_inputs = {}
         for key, source in [('inventory', inventory), ('acceptedLint', accepted_lint)]:
             if source is not None:
@@ -110,6 +140,8 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
                 frozen_inputs[key] = frozen
                 receipt['approvalInputs'][key] = {'path': str(source.resolve()), 'sha256': hashlib.sha256(data).hexdigest(), 'retainedInput': frozen.name}
         save()
+        if expected_inventory_hash is not None and receipt['approvalInputs']['inventory']['sha256'] != expected_inventory_hash:
+            raise RuntimeError('Inventory bytes differ from the approved inventorySha256 during snapshot capture.')
         with tempfile.TemporaryDirectory(prefix='mcpcli-artifact-') as temporary:
             scratch = Path(temporary)
             env = {k: v for k, v in os.environ.items() if not k.startswith(('MCPCLI_', 'EVENTSTORE_'))}
@@ -178,7 +210,8 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             if inventory is not None:
                 run([*command, '--inventory', frozen_inputs['inventory']], scratch, env, 'inventory')
             run([sys.executable, repo / 'tools/conformance-vectors/v1/run_loopback.py', '--host', command[1],
-                 '--artifact', artifact, '--expected-package-id', package_id, '--expected-package-version', version, *vectors], repo, env, 'replay')
+                 '--assets', host / 'obj/project.assets.json', '--artifact', artifact,
+                 '--expected-package-id', package_id, '--expected-package-version', version, *vectors], repo, env, 'replay')
         receipt['result'] = 'passed'
         save()
         (output / 'artifact.sha512').write_text(digest + '  ' + artifact.name + '\n')

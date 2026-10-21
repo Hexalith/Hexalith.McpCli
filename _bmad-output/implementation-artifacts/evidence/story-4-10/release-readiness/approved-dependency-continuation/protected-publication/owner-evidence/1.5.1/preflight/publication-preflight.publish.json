@@ -1,0 +1,205 @@
+{
+  "checked_at": "2026-10-21T09:27:21.183193Z",
+  "destinations": {
+    "absence": {
+      "container_count": 3,
+      "container_repositories": [
+        "registry.hexalith.com/parties",
+        "registry.hexalith.com/parties-mcp",
+        "registry.hexalith.com/parties-ui"
+      ],
+      "package_count": 9,
+      "package_ids": [
+        "Hexalith.Parties.Contracts",
+        "Hexalith.Parties.Client",
+        "Hexalith.Parties.AdminPortal",
+        "Hexalith.Parties.ConsumerPortal",
+        "Hexalith.Parties.Picker",
+        "Hexalith.Parties.Authentication",
+        "Hexalith.Parties.Projections",
+        "Hexalith.Parties.Security",
+        "Hexalith.Parties.Testing"
+      ],
+      "result": "pass",
+      "version": "1.5.1"
+    },
+    "result": "pass",
+    "version_floor": {
+      "candidate": "1.5.1",
+      "destinations": [
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith/Hexalith.Parties",
+          "kind": "github-release",
+          "observed_versions_sha256": "9153581540a9fb683cc13ee67c6d1467104791f6f003e5a02ad076737acfa88e"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith/Hexalith.Parties",
+          "kind": "git-tag",
+          "observed_versions_sha256": "e82d853e7510b427fa22f0c5c5783d199f6a79e2e00b63c2bc6d928dcd54155a"
+        },
+        {
+          "highest_stable": null,
+          "identity": "Hexalith/Hexalith.Parties#refs/tags/v1.5.1@8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+          "kind": "semantic-release-tag",
+          "observed_versions_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Contracts",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Client",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.AdminPortal",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.ConsumerPortal",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Picker",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Authentication",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Projections",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Security",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "Hexalith.Parties.Testing",
+          "kind": "nuget",
+          "observed_versions_sha256": "154b2567ff2d9b36b019eea89a351b2b14ef4eb7b3b0e8b2d16a35d32adb80e1"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "registry.hexalith.com/parties",
+          "kind": "oci-registry",
+          "observed_versions_sha256": "47fc9b5edde40cab4b28a9dea58c7b598f390e1905d356ace0cde6cc21383508"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "registry.hexalith.com/parties-mcp",
+          "kind": "oci-registry",
+          "observed_versions_sha256": "d07162254d94265da555c437bbf60972afcf31ce10e90791d4b771b115dadf92"
+        },
+        {
+          "highest_stable": "1.5.0",
+          "identity": "registry.hexalith.com/parties-ui",
+          "kind": "oci-registry",
+          "observed_versions_sha256": "2090ade8012093366b67fb82a2f67cf6ae764624122b3148ef941f369a856844"
+        }
+      ],
+      "result": "pass"
+    }
+  },
+  "identity": {
+    "builds": {
+      "action_sha": "397c94a4e246c90b21cf408790fa0d55bf32d795",
+      "files": {
+        "oci_registry_validator.py": "0fff2281ecb9d8a46c48d65d1b0de58b724f2439138da43395004232e5942045",
+        "publication_preflight.py": "f87b48e649092cc68de8f07977bae48c65f0570007f60de42887201988ee0062",
+        "publish-containers.sh": "7e64bb1f744b9e3cb793df5c47813d15db00aaa8bc76e1875088f259574e9622",
+        "smoke-container-platforms.sh": "f11865658a24ecea906da087d8446c7f631dc5a9328e294676534d590ef0e89e",
+        "smoke_container_platforms.py": "7f1161d6f477c77ddf6a1e2f381df03451168565dd8cabc28010ab23db443491"
+      },
+      "workflow_sha": "397c94a4e246c90b21cf408790fa0d55bf32d795"
+    },
+    "container_repositories": [
+      "registry.hexalith.com/parties",
+      "registry.hexalith.com/parties-mcp",
+      "registry.hexalith.com/parties-ui"
+    ],
+    "environment": "production",
+    "packages": {
+      "ids": [
+        "Hexalith.Parties.Contracts",
+        "Hexalith.Parties.Client",
+        "Hexalith.Parties.AdminPortal",
+        "Hexalith.Parties.ConsumerPortal",
+        "Hexalith.Parties.Picker",
+        "Hexalith.Parties.Authentication",
+        "Hexalith.Parties.Projections",
+        "Hexalith.Parties.Security",
+        "Hexalith.Parties.Testing"
+      ],
+      "manifest_sha256": "aabb6041baf44b0fcc1e02c2922406d4c7355e3a0be8aa1bbcea2c9f749ee399",
+      "normalized_ids": [
+        "hexalith.parties.contracts",
+        "hexalith.parties.client",
+        "hexalith.parties.adminportal",
+        "hexalith.parties.consumerportal",
+        "hexalith.parties.picker",
+        "hexalith.parties.authentication",
+        "hexalith.parties.projections",
+        "hexalith.parties.security",
+        "hexalith.parties.testing"
+      ]
+    },
+    "platforms": [
+      "linux/amd64",
+      "linux/arm64"
+    ],
+    "repository": "Hexalith/Hexalith.Parties",
+    "run": {
+      "actor": "jpiquot",
+      "attempt": "1",
+      "event": "workflow_dispatch",
+      "id": "39576141445",
+      "number": "82",
+      "ref": "refs/heads/main",
+      "triggering_actor": "jpiquot",
+      "workflow_ref": "Hexalith/Hexalith.Parties/.github/workflows/release.yml@refs/heads/main",
+      "workflow_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021"
+    },
+    "schema": "hexalith.release-publication-preflight.v4",
+    "source": {
+      "branch": "main",
+      "ci_run": {
+        "conclusion": "success",
+        "event": "push",
+        "head_branch": "main",
+        "head_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+        "id": 39573997934,
+        "status": "completed"
+      },
+      "ci_workflow": "ci.yml",
+      "live_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+      "ref": "refs/heads/main"
+    },
+    "source_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "version": "1.5.1"
+  },
+  "identity_sha256": "961e8538e1c7a90075bd58888e665ff9fb485e1fda19f73a71a72e3bb564c093",
+  "phase": "publish",
+  "result": "pass",
+  "schema": "hexalith.release-publication-preflight.v4"
+}

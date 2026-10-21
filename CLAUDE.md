@@ -116,7 +116,7 @@ One generic MCP server and one thin CLI, both driven by a catalog of commands an
 
 - Every new guard needs a test that fails when the guard is removed; assert the full error document and both stdout and stderr, not only the exit code. Reviews keep finding guards no test protects.
 - Update `README.md` in the same change as any user-visible CLI or MCP behavior (options, error codes, precedence, output channels, exit codes), and check each new claim against the built CLI on every verb it covers.
-- The shipped CLI enrolls no modules and returns `catalog_empty`; reproduce behavior through `CliRunner.InvokeAsync` with fixture contracts or `tests/Hexalith.McpCli.ConformanceHost`, not `dotnet run --project src/Hexalith.McpCli`.
+- The shipped CLI discovers the enrolled production Contracts packages. Use `CliRunner.InvokeAsync` with fixture contracts or `tests/Hexalith.McpCli.ConformanceHost` when reproducing isolated module or empty-catalog behavior.
 - Anchor validation regexes with `\z`, not `$`: .NET `$` also matches before a trailing newline.
 - In `_bmad-output/implementation-artifacts/deferred-work.md`, grep before appending: a deferral already there goes only in the spec's `[Review][Defer]` row as "already tracked (`deferred-work.md:<line>`)", never as a reconfirmation entry. A spec row saying "defer after loopback" does not prove the entry exists; append it when the grep finds none.
 - File new ledger entries under their source spec's heading, with a repo-relative `source_spec` and `path:line` anchors that match the current files.

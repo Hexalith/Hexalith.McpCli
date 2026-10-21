@@ -1,0 +1,55 @@
+{
+  "recordedAt": "2026-10-21T09:11:16.557240+00:00",
+  "red": {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release",
+      "--filter",
+      "FullyQualifiedName~CandidateInjectionKeepsExistingNodesAndVersions"
+    ],
+    "observedTestExitCode": 2,
+    "failed": 2,
+    "reason": "The previously restored module root silently replaced both captured fixtures.",
+    "log": "red.txt"
+  },
+  "checks": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "log": "restore.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "log": "build.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "log": "test.txt"
+    }
+  ]
+}

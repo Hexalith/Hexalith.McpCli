@@ -1,0 +1,170 @@
+{
+  "recordedAt": "2026-10-21T10:44:33.374491+00:00",
+  "checks": [
+    {
+      "label": "sample-validation",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 27.26,
+      "log": "sample-validation.txt"
+    },
+    {
+      "label": "sample-loopback",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 78.88,
+      "log": "sample-loopback.txt"
+    },
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.47,
+      "log": "restore.txt"
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 3.4,
+      "log": "build.txt"
+    },
+    {
+      "label": "test-abstractions",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.19,
+      "log": "test-abstractions.txt"
+    },
+    {
+      "label": "test-analyzers",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.85,
+      "log": "test-analyzers.txt"
+    },
+    {
+      "label": "test-core",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 2.0,
+      "log": "test-core.txt"
+    },
+    {
+      "label": "test-mcp",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 2.08,
+      "log": "test-mcp.txt"
+    },
+    {
+      "label": "test-cli",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 16.02,
+      "log": "test-cli.txt"
+    },
+    {
+      "label": "test-manifest",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 25.15,
+      "log": "test-manifest.txt"
+    },
+    {
+      "label": "enrolled",
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 81.67,
+      "log": "enrolled.txt"
+    },
+    {
+      "label": "instructions-sync",
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.01,
+      "log": "instructions-sync.txt"
+    },
+    {
+      "label": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.09,
+      "log": "diff-check.txt"
+    }
+  ],
+  "result": "passed"
+}

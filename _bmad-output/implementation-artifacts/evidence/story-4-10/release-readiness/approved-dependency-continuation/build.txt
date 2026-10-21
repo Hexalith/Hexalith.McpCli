@@ -1,0 +1,74 @@
+  Hexalith.Commons.UniqueIds -> /tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/net10.0/Hexalith.Commons.UniqueIds.dll
+  Hexalith.Commons.ServiceDefaults -> /tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults/bin/Release/net10.0/Hexalith.Commons.ServiceDefaults.dll
+  Hexalith.EventStore.Aspire -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/bin/Release/net10.0/Hexalith.EventStore.Aspire.dll
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/Hexalith.Commons.UniqueIds.1.0.0.nupkg'.
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/Hexalith.Commons.UniqueIds.1.0.0.snupkg'.
+  The package Hexalith.Commons.ServiceDefaults.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults/bin/Release/Hexalith.Commons.ServiceDefaults.1.0.0.nupkg'.
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults/bin/Release/Hexalith.Commons.ServiceDefaults.1.0.0.snupkg'.
+  Hexalith.FrontComposer.Contracts -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts/bin/Release/net10.0/Hexalith.FrontComposer.Contracts.dll
+  Hexalith.Commons.Http -> /tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/bin/Release/net10.0/Hexalith.Commons.Http.dll
+  Hexalith.Tenants.Contracts -> /tmp/hexalith-parties-story410-release/references/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.PolymorphicSerializations -> /tmp/hexalith-parties-story410-release/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations/bin/Release/net10.0/Hexalith.PolymorphicSerializations.dll
+  Hexalith.Parties.Ci.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll
+  Hexalith.Parties.Contracts -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll
+  Hexalith.FrontComposer.Contracts -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts/bin/Release/netstandard2.0/Hexalith.FrontComposer.Contracts.dll
+  Hexalith.Tenants.Client -> /tmp/hexalith-parties-story410-release/references/Hexalith.Tenants/src/Hexalith.Tenants.Client/bin/Release/net10.0/Hexalith.Tenants.Client.dll
+  Hexalith.EventStore.Contracts -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll
+  Hexalith.Parties.EventStoreGateway.TestHost -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.Parties.EventStoreGateway.TestHost.dll
+  Hexalith.PolymorphicSerializations.CodeGenerators -> /tmp/hexalith-parties-story410-release/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations.CodeGenerators/bin/Release/netstandard2.0/Hexalith.PolymorphicSerializations.CodeGenerators.dll
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/bin/Release/Hexalith.Commons.Http.1.0.0.nupkg'.
+  Successfully created package '/tmp/hexalith-parties-story410-release/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/bin/Release/Hexalith.Commons.Http.1.0.0.snupkg'.
+  Hexalith.FrontComposer.Schema -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Schema/bin/Release/netstandard2.0/Hexalith.FrontComposer.Schema.dll
+  Hexalith.Tenants.Server -> /tmp/hexalith-parties-story410-release/references/Hexalith.Tenants/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.EventStore.SignalR -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.SignalR/bin/Release/net10.0/Hexalith.EventStore.SignalR.dll
+  Hexalith.FrontComposer.SourceTools -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.SourceTools/bin/Release/netstandard2.0/Hexalith.FrontComposer.SourceTools.dll
+  Hexalith.FrontComposer.Schema -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Schema/bin/Release/net10.0/Hexalith.FrontComposer.Schema.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.FrontComposer.Contracts.UI -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts.UI/bin/Debug/net10.0/Hexalith.FrontComposer.Contracts.UI.dll
+  Hexalith.EventStore.Client -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Client/bin/Release/net10.0/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.Tenants.Testing -> /tmp/hexalith-parties-story410-release/references/Hexalith.Tenants/src/Hexalith.Tenants.Testing/bin/Release/net10.0/Hexalith.Tenants.Testing.dll
+  Hexalith.FrontComposer.Mcp -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/bin/Release/net10.0/Hexalith.FrontComposer.Mcp.dll
+  Hexalith.Parties.Testing -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Testing/bin/Release/net10.0/Hexalith.Parties.Testing.dll
+  Hexalith.Parties.Client -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll
+  Hexalith.Parties.ConsumerPortal -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.ConsumerPortal/bin/Release/net10.0/Hexalith.Parties.ConsumerPortal.dll
+  Hexalith.EventStore.Admin.Server -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server/bin/Release/net10.0/Hexalith.EventStore.Admin.Server.dll
+  Hexalith.Parties.Sample -> /tmp/hexalith-parties-story410-release/samples/Hexalith.Parties.Sample/bin/Release/net10.0/Hexalith.Parties.Sample.dll
+  Hexalith.Parties.Sample.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Sample.Tests/bin/Release/net10.0/Hexalith.Parties.Sample.Tests.dll
+  Hexalith.Parties.Mcp -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Mcp/bin/Release/net10.0/Hexalith.Parties.Mcp.dll
+  Hexalith.Parties.AdminPortal -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.AdminPortal/bin/Release/net10.0/Hexalith.Parties.AdminPortal.dll
+  Hexalith.Parties.ConsumerPortal.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.ConsumerPortal.Tests/bin/Release/net10.0/Hexalith.Parties.ConsumerPortal.Tests.dll
+  Hexalith.Parties.Mcp.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Mcp.Tests/bin/Release/net10.0/Hexalith.Parties.Mcp.Tests.dll
+  Hexalith.Parties.Contracts.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll
+  Hexalith.Parties.Client.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Client.Tests/bin/Release/net10.0/Hexalith.Parties.Client.Tests.dll
+  Hexalith.Parties.Picker -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Picker/bin/Release/net10.0/Hexalith.Parties.Picker.dll
+  Hexalith.FrontComposer.Shell -> /tmp/hexalith-parties-story410-release/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell/bin/Release/net10.0/Hexalith.FrontComposer.Shell.dll
+  Hexalith.Parties.Projections -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Projections/bin/Release/net10.0/Hexalith.Parties.Projections.dll
+  Hexalith.Parties.AdminPortal.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.AdminPortal.Tests/bin/Release/net10.0/Hexalith.Parties.AdminPortal.Tests.dll
+  Hexalith.Parties.Security -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Security/bin/Release/net10.0/Hexalith.Parties.Security.dll
+  Hexalith.Parties.Authentication -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.Authentication/bin/Release/net10.0/Hexalith.Parties.Authentication.dll
+  Hexalith.Parties.Projections.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Projections.Tests/bin/Release/net10.0/Hexalith.Parties.Projections.Tests.dll
+  Hexalith.EventStore.DomainService -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/bin/Release/net10.0/Hexalith.EventStore.DomainService.dll
+  Hexalith.EventStore.Admin.UI -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.UI/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.dll
+  Hexalith.EventStore.Admin.Server.Host -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server.Host/bin/Release/net10.0/Hexalith.EventStore.Admin.Server.Host.dll
+  Hexalith.Parties.Authentication.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Authentication.Tests/bin/Release/net10.0/Hexalith.Parties.Authentication.Tests.dll
+  Hexalith.Parties.Security.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Security.Tests/bin/Release/net10.0/Hexalith.Parties.Security.Tests.dll
+  Hexalith.Parties.UI -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.UI/bin/Release/net10.0/Hexalith.Parties.UI.dll
+  Hexalith.Parties -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll
+  Hexalith.Parties.UI.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.UI.Tests/bin/Release/net10.0/Hexalith.Parties.UI.Tests.dll
+  Hexalith.Parties.Server.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Server.Tests/bin/Release/net10.0/Hexalith.Parties.Server.Tests.dll
+  Hexalith.Parties.AppHost -> /tmp/hexalith-parties-story410-release/src/Hexalith.Parties.AppHost/bin/Release/net10.0/Hexalith.Parties.AppHost.dll
+  Hexalith.EventStore.Server -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Server/bin/Release/net10.0/Hexalith.EventStore.Server.dll
+  Hexalith.EventStore.Testing -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/bin/Release/net10.0/Hexalith.EventStore.Testing.dll
+  Hexalith.Parties.IntegrationTests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.IntegrationTests/bin/Release/net10.0/Hexalith.Parties.IntegrationTests.dll
+  Hexalith.Parties.Picker.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Picker.Tests/bin/Release/net10.0/Hexalith.Parties.Picker.Tests.dll
+  Hexalith.Parties.Tests -> /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll
+  Hexalith.EventStore.Gateway -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/bin/Debug/net10.0/Hexalith.EventStore.Gateway.dll
+  Hexalith.EventStore -> /tmp/hexalith-parties-story410-release/references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:14.24

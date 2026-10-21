@@ -1,0 +1,77 @@
+{
+  "createdAt": "2026-10-21T09:34:27.068825+00:00",
+  "version": "1.5.1",
+  "source": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+  "approvalReference": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-approval.json",
+  "approvalInstruction": "Approve refreshed candidate and continue",
+  "approvedInventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+  "sourceEquivalence": "merged-main-continuation.json",
+  "vectorBindings": [
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/create-party.json",
+      "sourceSha256": "3b02624aaa032d18ef73707f97f8789a68b24bbed5fae7843edddf5c747580c5",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/create-party.vector.json",
+      "destinationSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/deactivate-party.json",
+      "sourceSha256": "ad710e24c1610549006d13dc397f4a6c5289c2bac418a18876e8b10bd5dab832",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/deactivate-party.vector.json",
+      "destinationSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/get-party.json",
+      "sourceSha256": "0200a7bb84feadeda147c6bdf63a01b27005717a7191607a3e33278899cb612e",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/get-party.vector.json",
+      "destinationSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/list-parties.json",
+      "sourceSha256": "805a69f47ccd2e44b045b892477485f81d0ebaffd4d7ae47ddacf36b389a9df0",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/list-parties.vector.json",
+      "destinationSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/reactivate-party.json",
+      "sourceSha256": "1b5c610fe1842c48b62f0ba0a22e552a2ddbc4363e2466b2fef941fe351ca294",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/reactivate-party.vector.json",
+      "destinationSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/search-parties.json",
+      "sourceSha256": "bc88eb3f444a66379738a4705e7b0a9d087728a14f34db168ef09e10a4f85bd1",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/search-parties.vector.json",
+      "destinationSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/update-party.json",
+      "sourceSha256": "86793dc6d1df7662e99bd455ccf1e1fab38798e3052e1e923e6bd24cb13386cf",
+      "destination": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/update-party.vector.json",
+      "destinationSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "onlyChangedJsonPointer": "/package/version",
+      "allOtherBytesPreserved": true
+    }
+  ],
+  "verification": "passed",
+  "limits": "Normal protected release completion and fresh public-byte verification are still required; this records a mechanical binding, not a new human approval.",
+  "verificationReceipt": "published-verification/verification.json",
+  "dependencyOverrides": false,
+  "verifierInputs": {
+    "tools/conformance-vectors/v1/verify_artifact.py": "d1e2bf666394bf6b8b3c90d1b06825b3362dfaf2b6db9e7474f7d5ef780b84f4",
+    "tools/conformance-vectors/v1/run_loopback.py": "08b123bb0f52e54f7fdb7f2276ecbd2466ea6c7d7b5cd39fa817da87914d68bb",
+    "tools/conformance-vectors/v1/validate.py": "879d6f95c2c035074d57f2709408ddea77c02646c7eff6f5b4358b41cbb8ebe9"
+  }
+}

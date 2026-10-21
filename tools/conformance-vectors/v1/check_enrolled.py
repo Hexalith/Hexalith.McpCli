@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -14,13 +15,16 @@ from validate import _load_json
 
 
 def artifact_for(assets: dict, package_id: str, receipt: dict) -> Path:
+    if not isinstance(receipt, dict):
+        raise RuntimeError(f'{package_id}: approval receipt must be a JSON object.')
     matches = [(key, library) for key, library in assets['libraries'].items()
                if key.rsplit('/', 1)[0].casefold() == package_id.casefold() and library['type'] == 'package']
     if len(matches) != 1:
         raise RuntimeError(f'{package_id}: expected one exact restored package.')
     identity, library = matches[0]
     version = identity.rsplit('/', 1)[1]
-    if receipt.get('packageId') != package_id or receipt.get('version') != version:
+    approved_id = receipt.get('packageId')
+    if not isinstance(approved_id, str) or approved_id.casefold() != package_id.casefold() or receipt.get('version') != version:
         raise RuntimeError(f'{package_id}: approval receipt does not match the restored package version.')
     if not isinstance(receipt.get('approvalReference'), str) or not receipt['approvalReference'].strip():
         raise RuntimeError(f'{package_id}: missing owning-maintainer approval reference.')
@@ -41,6 +45,30 @@ def approved_vectors(directory: Path, receipt: dict) -> list[Path]:
     return vectors
 
 
+def approval_directory(modules: Path, package_id: str) -> Path:
+    matches = [path for path in modules.iterdir() if path.is_dir() and path.name.casefold() == package_id.casefold()]
+    if len(matches) != 1:
+        raise RuntimeError(f'{package_id}: expected one approval directory (package IDs are case-insensitive).')
+    return matches[0]
+
+
+def approved_inventory(inventory: Path, receipt: dict) -> str:
+    expected = receipt.get('inventorySha256')
+    if not isinstance(expected, str) or re.fullmatch('[0-9a-f]{64}', expected) is None:
+        raise RuntimeError('Approval receipt requires inventorySha256 as a lowercase SHA256 digest.')
+    if hashlib.sha256(inventory.read_bytes()).hexdigest() != expected:
+        raise RuntimeError('Inventory bytes differ from the approved inventorySha256.')
+    return expected
+
+
+def invalidate_children(output: Path) -> None:
+    """An enrollment preflight must never leave a previous successful child receipt current."""
+    for path in output.glob('*/artifact.sha512'):
+        path.unlink()
+    for path in output.glob('*/verification.json'):
+        path.write_text(json.dumps({'result': 'invalidated', 'error': 'Enrollment preflight has not verified this package.'}, indent=2) + '\n')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
@@ -51,6 +79,7 @@ def main():
     report = args.output / 'enrolled.json'
     report.write_text(json.dumps(status, indent=2) + '\n')
     try:
+        invalidate_children(args.output)
         project = repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         evaluation = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
                                     cwd=repo, capture_output=True, text=True, check=True)
@@ -61,16 +90,21 @@ def main():
         assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
         results = []
         for package_id in packages:
-            directory = repo / 'tools/conformance-vectors/v1/modules' / package_id
+            directory = approval_directory(repo / 'tools/conformance-vectors/v1/modules', package_id)
             receipt = _load_json(directory / 'approval.json')
             artifact = artifact_for(assets, package_id, receipt)
             module = receipt.get('module')
             if not isinstance(module, str) or not module or '/' in module or '\\' in module:
                 raise RuntimeError(f'{package_id}: receipt requires a canonical module name.')
             vectors = approved_vectors(directory, receipt)
+            inventory = repo / 'tools/inventory-coverage/v1' / (module + '-approved.json')
+            inventory_hash = approved_inventory(inventory, receipt)
+            vector_hashes = {str((directory / name).resolve()): digest for name, digest in receipt['vectorFilesSha256'].items()}
             accepted = repo / 'tools/inventory-coverage/v1' / (module + '-accepted-lint.json')
             results.append(verify(repo, artifact, vectors, args.output.resolve() / package_id,
-                                  repo / 'tools/inventory-coverage/v1' / (module + '-approved.json'), receipt['artifactHash'], accepted if accepted.exists() else None, align_candidate_dependencies=False))
+                                  inventory, receipt['artifactHash'], accepted if accepted.exists() else None,
+                                  align_candidate_dependencies=False, expected_inventory_hash=inventory_hash,
+                                  expected_vector_hashes=vector_hashes))
         args.output.mkdir(parents=True, exist_ok=True)
         status.update(result='passed', packages=packages, results=results)
         report.write_text(json.dumps(status, indent=2) + '\n')

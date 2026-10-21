@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-21T09:41:13.703191+00:00",
+  "version": "1.5.1",
+  "pinCommit": "4878668412fe8803c3ef232e1775b1dd09f2f857",
+  "auditCommit": "5c250c67d26129a5e46f7821da5b41396ce585f8",
+  "message": "build(deps): refresh parties 1.5.1 audit\n\nBind the published package selection to fresh registry metadata.\n",
+  "commitlintExitCode": 0,
+  "commitlintLog": "audit-commitlint.txt",
+  "catalogSha256": "d6d1a24c53dd309588abadc6e2a8cb8d9e8a206861f0907cb5794d1afc497531",
+  "auditSha256": "6ef9f57a405b5c0192ab3498fea18974d6504f74f6ee916919202f7ca5999d28",
+  "unchangedOtherFamilyObservations": true,
+  "publication": "https://github.com/Hexalith/Hexalith.Parties/releases/tag/v1.5.1"
+}

@@ -1,0 +1,17 @@
+{
+  "url": "https://github.com/Hexalith/Hexalith.Parties/pull/57",
+  "number": 57,
+  "head": "160db8990c74d0a15c89cc09add95f7a256ec758",
+  "branch": "docs/story-4-10-dependency-signoff",
+  "files": [
+    ".gitlink-signoff.tsv",
+    "references/Hexalith.Builds",
+    "references/Hexalith.EventStore",
+    "references/Hexalith.FrontComposer",
+    "references/Hexalith.McpCli",
+    "references/Hexalith.Memories",
+    "references/Hexalith.Platform",
+    "references/Hexalith.Tenants"
+  ],
+  "status": "open"
+}

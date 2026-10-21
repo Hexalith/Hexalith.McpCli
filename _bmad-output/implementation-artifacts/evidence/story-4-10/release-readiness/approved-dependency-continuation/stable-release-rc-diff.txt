@@ -1,0 +1,11 @@
+gitlink-rc-gate: recorded-pointer diff vs v1.5.0
+  references/Hexalith.Builds                    BUMP ok — validated-advance @ fff4a212180d
+  references/Hexalith.Commons                   BUMP ok — validated-advance @ 5c23c818f639
+  references/Hexalith.EventStore                BUMP ok — validated-advance @ 54261aeccb1d
+  references/Hexalith.FrontComposer             BUMP ok — validated-advance @ 913c4132c71c
+  references/Hexalith.McpCli                    BUMP ok — validated-advance @ 9354dc081767
+  references/Hexalith.Memories                  BUMP ok — validated-advance @ 35df7e2080c3
+  references/Hexalith.Platform                  BUMP ok — validated-advance @ 4f036ced45aa
+  references/Hexalith.PolymorphicSerializations BUMP ok — validated-advance @ 221ac4592ba9
+  references/Hexalith.Tenants                   BUMP ok — validated-advance @ 3ae9db014dfe
+gitlink-rc-gate: PASS — all root gitlinks validated or clean.

@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-21T10:21:51.827820+00:00",
+  "buildsRevision": "2744d549270298cfe73679f76b477a7368429006",
+  "sameTreeAsFullVerification": "5c250c67d26129a5e46f7821da5b41396ce585f8",
+  "checks": [
+    {
+      "label": "restore-final-merged-pin",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "log": "restore-final-merged-pin.txt"
+    },
+    {
+      "label": "manifest-final-merged-pin",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "log": "manifest-final-merged-pin.txt"
+    }
+  ]
+}

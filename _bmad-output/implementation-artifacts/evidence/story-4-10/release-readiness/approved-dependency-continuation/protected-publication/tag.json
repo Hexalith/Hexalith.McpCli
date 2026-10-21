@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v1.5.1",
+  "node_id": "REF_kwDORb3i1LByZWZzL3RhZ3MvdjEuNS4x",
+  "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/git/refs/tags/v1.5.1",
+  "object": {
+    "sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "type": "commit",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/git/commits/8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021"
+  }
+}

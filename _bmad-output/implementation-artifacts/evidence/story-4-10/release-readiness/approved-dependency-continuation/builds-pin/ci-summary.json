@@ -1,0 +1,30 @@
+{
+  "runId": 39578987205,
+  "jobId": 119151580542,
+  "result": "success",
+  "projectCounts": {
+    "total": [
+      1293,
+      107,
+      13
+    ],
+    "failed": [
+      0,
+      0,
+      0
+    ],
+    "succeeded": [
+      1290,
+      107,
+      1
+    ],
+    "skipped": [
+      3,
+      0,
+      12
+    ]
+  },
+  "allQualificationAndContractSteps": "passed",
+  "log": "ci-build-and-test.txt",
+  "limits": "Existing Windows and opt-in integration skips do not certify live qualification."
+}

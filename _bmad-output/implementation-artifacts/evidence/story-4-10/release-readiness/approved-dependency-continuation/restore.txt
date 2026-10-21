@@ -1,0 +1,4 @@
+  Determining projects to restore...
+  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations.CodeGenerators/Hexalith.PolymorphicSerializations.CodeGenerators.csproj (in 172 ms).
+  Restored /tmp/hexalith-parties-story410-release/references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations/Hexalith.PolymorphicSerializations.csproj (in 185 ms).
+  57 of 59 projects are up-to-date for restore.

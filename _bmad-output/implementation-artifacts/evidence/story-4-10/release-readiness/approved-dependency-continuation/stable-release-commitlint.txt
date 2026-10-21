@@ -1,0 +1,5 @@
+⧗   --- input ---
+build(release): restore approved dependency selection
+
+Retain the reviewed release tree while exact-source CI completes.
+✔   found 0 problems, 0 warnings

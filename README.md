@@ -96,7 +96,9 @@ Test projects may use the policy's `directPackages`, enrolled modules, the Decor
 
 Offline captured closures prove that decorated Tenants- and Parties-shaped packages can depend on McpCli Abstractions without adding production dependencies. `Hexalith.Projects.Contracts` 1.0.0 remains excluded: its closure adds `Microsoft.AspNetCore.App` and UI/web dependencies such as Fluxor, Fluent UI, and FrontComposer.Shell. Adding those packages to the baseline still fails the gate. Run a fresh `dotnet restore Hexalith.McpCli.slnx` before building and running `tests/Hexalith.McpCli.Manifest.Tests`; the candidate checks read committed fixtures and require no network restore.
 
-The requested Works, Timesheets, Agents, Conversations, Projects, and Folders packages are not enrolled yet. Their current Contracts assemblies lack declarations or live gateway paths required by the [integration spec](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/spec-add-six-domain-modules.md). Until decorated, verified packages are published and pinned, `hexalith modules` returns `catalog_empty`. This is a release readiness state, not a connection failure.
+The shipped manifest enrolls `Hexalith.Parties.Contracts` **1.5.1**. Offline discovery with `hexalith modules --strict` lists `parties`; `hexalith operations parties --strict` lists `get-party`, `list-parties`, `search-parties`, `create-party`, `update-party`, `reactivate-party`, and `deactivate-party`. Inspect any complete name with, for example, `hexalith describe parties.search-parties --lint --strict`. The published artifact and all seven vectors pass strict discovery, lint, approved inventory coverage, and CLI/MCP replay. Live authorization, domain effects, and legacy-host retirement retain their separate migration gates.
+
+The requested Works, Timesheets, Agents, Conversations, Projects, and Folders packages are not enrolled yet. Their current Contracts assemblies lack declarations or live gateway paths required by the [integration spec](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/spec-add-six-domain-modules.md).
 
 ## Run and debug from the Platform workspace
 
@@ -107,7 +109,7 @@ dotnet tool restore
 dotnet tool run hexalith-module -- debug --manifest references/Hexalith.McpCli/module/hexalith.module-manifest.v2.json
 ```
 
-The tool starts the EventStore gateway from source. It builds this checkout's `src/Hexalith.McpCli` in Debug into the run workspace, never packs or publishes it, and leaves this checkout's `bin` and `obj` untouched. When the environment is ready, an `HXI010` diagnostic names the run-scoped `Hexalith.McpCli.dll`, and `down` deletes it with the run. A CLI exits after each command, so launch that DLL under a debugger rather than attaching to a process; the [Platform README](https://github.com/Hexalith/Hexalith.Platform/blob/main/README.md#launch-mcpcli-under-a-debugger) has the recipe. Offline discovery verbs such as `modules` need no gateway URL and return `catalog_empty` until modules are enrolled.
+The tool starts the EventStore gateway from source. It builds this checkout's `src/Hexalith.McpCli` in Debug into the run workspace, never packs or publishes it, and leaves this checkout's `bin` and `obj` untouched. When the environment is ready, an `HXI010` diagnostic names the run-scoped `Hexalith.McpCli.dll`, and `down` deletes it with the run. A CLI exits after each command, so launch that DLL under a debugger rather than attaching to a process; the [Platform README](https://github.com/Hexalith/Hexalith.Platform/blob/main/README.md#launch-mcpcli-under-a-debugger) has the recipe. Offline discovery verbs such as `modules` need no gateway URL and list the enrolled Parties module.
 
 This repository's own `references/*`, including `references/Hexalith.Platform`, serve only this repository's own builds and tests. A run from this repository's root is not Platform evidence. Inside a Platform checkout, leave them uninitialized: the tool refuses any initialized nested submodule (`HXW003`).
 
@@ -205,5 +207,5 @@ the built manifest, strict Catalog discovery, description lint, name/type covera
 artifact hashes and complete CLI/MCP replay independently of dependency policy.
 See [inventory coverage](tools/inventory-coverage/v1/README.md) and
 [artifact verification](tools/conformance-vectors/v1/README.md). The Parties
-seven-operation local candidate has recorded owner approval and remains unenrolled
-pending protected publication and verification of the published bytes.
+seven-operation release has recorded owner approval, passed protected publication
+and verification of the published bytes, and is enrolled at version 1.5.1.

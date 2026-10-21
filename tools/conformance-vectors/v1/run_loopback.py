@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from validate import VectorError, _json_equal, validate_vectors
+from verify_artifact import restored_package
 
 
 ULID = re.compile(r"^[0-7][0-9A-HJKMNP-TV-Z]{25}$")
@@ -368,7 +369,8 @@ def _run_step(head: HeadProcess, step: dict[str, Any], url: str, label: str,
     return document, {}
 
 
-def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str]) -> None:
+def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str],
+                             assets_path: Path | None = None) -> None:
     deps = host.with_suffix(".deps.json")
     data = json.loads(deps.read_text(encoding="utf-8"))
     package_id, version = package
@@ -376,9 +378,26 @@ def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str
                if name.rsplit("/", 1)[0].casefold() == package_id.casefold() and metadata.get("type") == "package"]
     if len(matches) != 1 or matches[0][0].rsplit("/", 1)[1] != version:
         _fail(f"{deps}: restored flagged package does not match {package_id}@{version}: {[name for name, _ in matches]}")
+    if assets_path is None:
+        if len(host.parents) < 4:
+            _fail(f"{host}: restore assets are required; supply --assets")
+        assets_path = host.parents[3] / "obj/project.assets.json"
+    if not assets_path.is_file():
+        _fail(f"{assets_path}: restore assets are unavailable; supply --assets")
+    assets = json.loads(assets_path.read_text(encoding="utf-8"))
+    identity = matches[0][0]
+    library = assets.get("libraries", {}).get(identity)
+    if not isinstance(library, dict) or library.get("type") != "package":
+        _fail(f"{assets_path}: restored package does not match {identity}")
+    try:
+        _, restored = restored_package(assets, identity, library)
+    except RuntimeError as error:
+        _fail(str(error))
     actual_hash = "sha512-" + base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode("ascii")
-    if matches[0][1].get("sha512") != actual_hash:
+    if restored["artifactHash"] != actual_hash:
         _fail(f"{deps}: restored package hash differs from immutable artifact {artifact}")
+    if matches[0][1].get("sha512") != restored["assetsHash"]:
+        _fail(f"{deps}: package restore content hash differs from {assets_path}")
 
 
 def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:
@@ -397,8 +416,9 @@ def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:
     return {item["name"]: item["kind"] for item in operations}
 
 
-def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path], timeout: float = 15) -> None:
-    _verify_artifact_in_host(host, artifact, package)
+def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path], timeout: float = 15,
+        assets_path: Path | None = None) -> None:
+    _verify_artifact_in_host(host, artifact, package, assets_path)
     with tempfile.TemporaryDirectory(prefix="mcpcli-conformance-home-") as home:
         head = HeadProcess(host, home, timeout)
         malformed = subprocess.run(head._base() + ["modules", "--bogus-secret"],
@@ -514,6 +534,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", type=Path, required=True, help="built test-only ConformanceHost DLL")
     parser.add_argument("--artifact", type=Path, required=True, help="immutable Contracts .nupkg used by the host")
+    parser.add_argument("--assets", type=Path, help="host restore assets; defaults to obj/project.assets.json under the host project")
     parser.add_argument("--expected-package-id", required=True)
     parser.add_argument("--expected-package-version", required=True)
     parser.add_argument("--timeout", type=float, default=15)
@@ -521,7 +542,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         run(args.host.resolve(), args.artifact.resolve(),
-            (args.expected_package_id, args.expected_package_version), args.vectors, args.timeout)
+            (args.expected_package_id, args.expected_package_version), args.vectors, args.timeout, args.assets)
     except (VectorError, OSError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
         print(exc, file=sys.stderr)
         return 1

@@ -1,0 +1,29 @@
+{
+  "runId": 39567317827,
+  "jobId": 119112609057,
+  "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39567317827",
+  "head": "160db8990c74d0a15c89cc09add95f7a256ec758",
+  "conclusion": "success",
+  "projectPassedCounts": [
+    208,
+    12,
+    330,
+    315,
+    428,
+    280,
+    201,
+    82,
+    388,
+    171,
+    94,
+    2168,
+    66,
+    188
+  ],
+  "totalPassed": 4931,
+  "failed": 0,
+  "skipped": 0,
+  "log": "ci-build-and-test.txt",
+  "logNormalization": "CRLF normalized to LF; content otherwise retained.",
+  "scope": "PR workflow includes the current base branch's test-helper consolidation. All 14 configured unit/integration projects passed; the separate Aspire lane is still required."
+}

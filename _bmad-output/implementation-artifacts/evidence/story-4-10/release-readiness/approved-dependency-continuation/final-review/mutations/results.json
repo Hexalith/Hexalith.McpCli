@@ -1,0 +1,92 @@
+[
+  {
+    "mutation": "inventory-preflight",
+    "test": "EnrolledPreflightTests.test_inventory_requires_the_exact_approved_digest_before_verification",
+    "exitCode": 1,
+    "detected": true,
+    "log": "inventory-preflight.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/inventory-preflight/result.log",
+    "logSha256": "a6c7bcc1669ca53c45de58a638666323e463ed593aceba9c958bc0cd1107b661"
+  },
+  {
+    "mutation": "child-invalidation",
+    "test": "EnrolledPreflightTests.test_evaluation_failure_invalidates_old_child_success_before_preflight",
+    "exitCode": 1,
+    "detected": true,
+    "log": "child-invalidation.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/child-invalidation/result.log",
+    "logSha256": "dfc6f400d2dfb5b81c2d83efbf70f2c25b49e340ddc1a1483d1816db478096b5"
+  },
+  {
+    "mutation": "receipt-root",
+    "test": "EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically",
+    "exitCode": 1,
+    "detected": true,
+    "log": "receipt-root.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/result.log",
+    "logSha256": "2dec5deff3c75634ae9da69b90457741407f478c88f6aa990301e17073240020"
+  },
+  {
+    "mutation": "package-case",
+    "test": "EnrolledArtifactTests.test_package_identity_is_case_insensitive",
+    "exitCode": 1,
+    "detected": true,
+    "log": "package-case.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/package-case/result.log",
+    "logSha256": "c3be134b8c266d583a849e8eba9ea5e70214178674f3a2de0079da48515783fd"
+  },
+  {
+    "mutation": "directory-case",
+    "test": "EnrolledPreflightTests.test_existing_approval_directory_and_package_id_ignore_case",
+    "exitCode": 1,
+    "detected": true,
+    "log": "directory-case.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/directory-case/result.log",
+    "logSha256": "6df92e74b87f9b16c4bbaec47e6477eefb389634ca8a85b0357be9ab71984c45"
+  },
+  {
+    "mutation": "signed-sidecar",
+    "test": "SignedPackageHashTests.test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes",
+    "exitCode": 1,
+    "detected": true,
+    "log": "signed-sidecar.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/signed-sidecar/result.log",
+    "logSha256": "0e6796b05ac87d1800c13a846285acdc84abb29ced2f661894bab9d7eadae704"
+  },
+  {
+    "mutation": "vector-recapture",
+    "test": "EnrolledPreflightTests.test_vector_mutation_between_preflight_and_capture_cannot_pass",
+    "exitCode": 1,
+    "detected": true,
+    "log": "vector-recapture.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/vector-recapture/result.log",
+    "logSha256": "b55e03dc36e54a3fc14ccd411bee3a316bfcb5d4a787d3e920b4c97e2837c731"
+  },
+  {
+    "mutation": "inventory-recapture",
+    "test": "EnrolledPreflightTests.test_inventory_mutation_between_preflight_and_capture_cannot_pass",
+    "exitCode": 1,
+    "detected": true,
+    "log": "inventory-recapture.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/inventory-recapture/result.log",
+    "logSha256": "2280786734770f2b17f35a913d060f2ae1004061095d983b5ba3f1ca07fc23d6"
+  },
+  {
+    "mutation": "duplicate-path",
+    "test": "VerifierFailureTests.test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture",
+    "exitCode": 1,
+    "detected": true,
+    "log": "duplicate-path.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/duplicate-path/result.log",
+    "logSha256": "5081f19ebdd8e14ff55ebb2227b0fd75f03601351252c21e5255a080e5ba0775"
+  },
+  {
+    "mutation": "original-input-reuse",
+    "test": "FrozenArtifactInputTests.test_mutating_original_inputs_during_restore_cannot_change_verified_bytes",
+    "exitCode": 1,
+    "detected": true,
+    "log": "original-input-reuse.txt",
+    "originalLog": "/tmp/story410-review-fix-mutations-xoyjcs03/original-input-reuse/result.log",
+    "logSha256": "e641e79a11a66bc6d011cd9beee75a1c22432a76741d6ba5b11fc7d9a0501bbc"
+  }
+]

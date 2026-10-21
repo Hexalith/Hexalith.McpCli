@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-21T08:49:36.972949+00:00",
+  "sourceBefore": "c149e7208347640e8902dd3de53fbbddfe056452",
+  "restoredTree": "100ce7c1bdc782473759715ed806fb700806d1a2",
+  "sameTreeAs": "1aabca216888b8584b96a9e9b44770f9bed786c0",
+  "sourceInputsMatchApprovedCandidate": 583,
+  "message": "build(release): retain approved dependency revisions\n\nRestore the nine exact owner-approved pointers after workspace sync.\nRetain the reviewed release tree and all current Parties source fixes.\n",
+  "commitlint": {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "log": "recovery-commitlint.txt"
+  },
+  "reason": "An external workspace sync reintroduced seven unapproved pointers and cancelled exact-main CI. Restore the already-reviewed, owner-approved tree; no force push or gate exemption.",
+  "independentClone": "/tmp/codex-story410-parties-o1yy9cyh"
+}

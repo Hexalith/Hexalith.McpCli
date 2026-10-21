@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise real nonempty enrollment and failed semantic replay using temporary synthetic sample data."""
+"""Exercise real enrollment, rejected inventory and failed semantic replay with temporary sample data."""
 from __future__ import annotations
 
 import argparse
@@ -24,6 +24,18 @@ def run(command, cwd, env, expected=0):
     return result
 
 
+def enroll_fixture(project: ET.Element, package_id: str) -> None:
+    """Select only the synthetic fixture in the temporary production manifest."""
+    for parent in project.iter():
+        for item in list(parent):
+            if item.tag == 'PackageReference':
+                marked = item.get('HexalithContracts', item.findtext('HexalithContracts', ''))
+                if marked.casefold() == 'true':
+                    parent.remove(item)
+    ET.SubElement(ET.SubElement(project, 'ItemGroup'), 'PackageReference',
+                  Include=package_id, HexalithContracts='true')
+
+
 def fixture(repo: Path, artifact: Path):
     artifact = artifact.resolve(strict=True)
     package_id, version = 'Hexalith.McpCli.Sample.Contracts', '1.0.0'
@@ -45,7 +57,7 @@ def fixture(repo: Path, artifact: Path):
                 shutil.copy2(source, core / source.name)
         project = root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         tree = ET.parse(project)
-        ET.SubElement(ET.SubElement(tree.getroot(), 'ItemGroup'), 'PackageReference', Include=package_id, HexalithContracts='true')
+        enroll_fixture(tree.getroot(), package_id)
         tree.write(project, encoding='unicode')
         props = root / 'Directory.Packages.props'
         tree = ET.parse(props)
@@ -69,6 +81,7 @@ def fixture(repo: Path, artifact: Path):
         accepted.write_text('[]')
         digest = 'sha512-' + base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode('ascii')
         receipt = {'packageId': package_id, 'version': version, 'module': 'sample', 'artifactHash': digest,
+                   'inventorySha256': hashlib.sha256(inventory.read_bytes()).hexdigest(),
                    'approvalReference': 'temporary synthetic sample fixture only; no owner release approval',
                    'vectorFilesSha256': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in vectors}}
         (directory / 'approval.json').write_text(json.dumps(receipt))
@@ -86,6 +99,31 @@ def fixture(repo: Path, artifact: Path):
         if not any(check['label'] == 'replay' and check['exitCode'] == 0 for check in verified['checks']):
             raise RuntimeError('Nonempty orchestration did not execute complete replay.')
         print(f'PASS nonempty enrollment: exact packaged sample, {len(verified["resolvedPackages"])} resolved packages, approval input hashes and complete replay.', flush=True)
+
+        # Reach the real C# inventory adapter with valid vectors and a rejected decision.
+        pending_inventory = inventories / 'sample-pending.json'
+        pending = json.loads(inventory.read_text())
+        pending['legacyRows'][0]['approval']['status'] = 'pending'
+        pending_inventory.write_text(json.dumps(pending))
+        rejected_output = root / 'rejected-inventory'
+        rejected_output.mkdir()
+        (rejected_output / 'verification.json').write_text('{"result":"passed"}')
+        (rejected_output / 'artifact.sha512').write_text('stale successful artifact receipt')
+        result = run([sys.executable, root / 'tools/conformance-vectors/v1/verify_artifact.py', '--artifact', artifact,
+                      '--output', rejected_output, '--inventory', pending_inventory, '--accepted-lint', accepted,
+                      '--expected-hash', digest, *vectors], root, env, expected=1)
+        rejected = json.loads((rejected_output / 'verification.json').read_text())
+        expected_diagnostic = str(rejected_output / 'inventory.input.json') + ":row L01: approval.status must be 'approved'; actual 'pending'."
+        findings = json.loads((rejected_output / 'inventory.stdout.txt').read_text())
+        if findings != [expected_diagnostic] or 'approval.status must be' not in result.stderr:
+            raise RuntimeError('Rejected inventory did not expose its exact useful diagnostic: ' + result.stderr)
+        if rejected['result'] != 'failed' or (rejected_output / 'artifact.sha512').exists():
+            raise RuntimeError('A rejected inventory retained stale success evidence.')
+        if not any(check['label'] == 'inventory' and check['exitCode'] == 1 for check in rejected['checks']):
+            raise RuntimeError('The rejected inventory did not reach the real inventory checker.')
+        if any(check['label'] == 'replay' for check in rejected['checks']):
+            raise RuntimeError('Replay ran despite rejected inventory approval.')
+        print('PASS pending inventory: exact approval diagnostic from the real checker; replay blocked and stale success/hash invalidated.', flush=True)
 
         # Keep the vector structurally valid while making one semantic assertion deliberately false.
         query = directory / 'sample-query.vector.json'

@@ -1,0 +1,1339 @@
+﻿2026-10-21T09:42:10.7355735Z Current runner version: '2.337.0'
+2026-10-21T09:42:10.7381715Z ##[group]Runner Image Provisioner
+2026-10-21T09:42:10.7382593Z Hosted Compute Agent
+2026-10-21T09:42:10.7383184Z Version: 20261012.601
+2026-10-21T09:42:10.7383891Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-21T09:42:10.7384672Z Build Date: 2026-10-12T17:48:21Z
+2026-10-21T09:42:10.7385335Z Worker ID: {a37e15b9-e617-42c2-9510-b21a2bf48b62}
+2026-10-21T09:42:10.7386162Z Region: westus3
+2026-10-21T09:42:10.7387067Z Cloud: Azure
+2026-10-21T09:42:10.7387700Z ##[endgroup]
+2026-10-21T09:42:10.7389314Z ##[group]Operating System
+2026-10-21T09:42:10.7389995Z Ubuntu
+2026-10-21T09:42:10.7390620Z 24.04.5
+2026-10-21T09:42:10.7391142Z LTS
+2026-10-21T09:42:10.7391685Z ##[endgroup]
+2026-10-21T09:42:10.7392271Z ##[group]Runner Image
+2026-10-21T09:42:10.7392853Z Image: ubuntu-24.04
+2026-10-21T09:42:10.7393506Z Version: 20261012.334.1
+2026-10-21T09:42:10.7394725Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T09:42:10.7396379Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-21T09:42:10.7397667Z ##[endgroup]
+2026-10-21T09:42:10.7398859Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T09:42:10.7400767Z Contents: read
+2026-10-21T09:42:10.7401654Z Metadata: read
+2026-10-21T09:42:10.7402222Z ##[endgroup]
+2026-10-21T09:42:10.7404409Z Secret source: Actions
+2026-10-21T09:42:10.7405358Z Cache mode: write
+2026-10-21T09:42:10.7406171Z Prepare workflow directory
+2026-10-21T09:42:10.7760747Z Prepare all required actions
+2026-10-21T09:42:10.7811296Z Getting action download info
+2026-10-21T09:42:11.1681001Z Download action repository 'actions/checkout@v7.0.1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-21T09:42:11.2804088Z Download action repository 'actions/setup-node@v7.1.0' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-10-21T09:42:12.2046064Z Complete job name: Build and test
+2026-10-21T09:42:12.3373202Z ##[group]Run actions/checkout@v7.0.1
+2026-10-21T09:42:12.3374719Z with:
+2026-10-21T09:42:12.3375545Z   fetch-depth: 0
+2026-10-21T09:42:12.3376422Z   submodules: false
+2026-10-21T09:42:12.3377734Z   persist-credentials: false
+2026-10-21T09:42:12.3378833Z   repository: Hexalith/Hexalith.Builds
+2026-10-21T09:42:12.3388707Z   token: ***
+2026-10-21T09:42:12.3389571Z   ssh-strict: true
+2026-10-21T09:42:12.3390444Z   ssh-user: git
+2026-10-21T09:42:12.3391296Z   clean: true
+2026-10-21T09:42:12.3392202Z   sparse-checkout-cone-mode: true
+2026-10-21T09:42:12.3393264Z   fetch-tags: false
+2026-10-21T09:42:12.3394168Z   show-progress: true
+2026-10-21T09:42:12.3395067Z   lfs: false
+2026-10-21T09:42:12.3395943Z   set-safe-directory: true
+2026-10-21T09:42:12.3397238Z   allow-unsafe-pr-checkout: false
+2026-10-21T09:42:12.3398635Z ##[endgroup]
+2026-10-21T09:42:12.4469774Z Syncing repository: Hexalith/Hexalith.Builds
+2026-10-21T09:42:12.4473736Z ##[group]Getting Git version info
+2026-10-21T09:42:12.4476344Z Working directory is '/home/runner/work/Hexalith.Builds/Hexalith.Builds'
+2026-10-21T09:42:12.4478927Z [command]/usr/bin/git version
+2026-10-21T09:42:12.4581014Z git version 2.55.0
+2026-10-21T09:42:12.4621070Z ##[endgroup]
+2026-10-21T09:42:12.4632018Z Temporarily overriding HOME='/home/runner/work/_temp/e37cf2bd-3a3d-49c5-b720-963da3e373d8' before making global git config changes
+2026-10-21T09:42:12.4637295Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T09:42:12.4641611Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.Builds/Hexalith.Builds
+2026-10-21T09:42:12.4686276Z Deleting the contents of '/home/runner/work/Hexalith.Builds/Hexalith.Builds'
+2026-10-21T09:42:12.4690640Z ##[group]Determining repository object format
+2026-10-21T09:42:12.4695424Z ##[endgroup]
+2026-10-21T09:42:12.4698081Z ##[group]Initializing the repository
+2026-10-21T09:42:12.4700778Z [command]/usr/bin/git init /home/runner/work/Hexalith.Builds/Hexalith.Builds
+2026-10-21T09:42:12.4873475Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T09:42:12.4876000Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T09:42:12.4878498Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T09:42:12.4880086Z hint: call:
+2026-10-21T09:42:12.4880918Z hint:
+2026-10-21T09:42:12.4882011Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T09:42:12.4883359Z hint:
+2026-10-21T09:42:12.4884548Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T09:42:12.4886486Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T09:42:12.4888156Z hint:
+2026-10-21T09:42:12.4889006Z hint: 	git branch -m <name>
+2026-10-21T09:42:12.4889963Z hint:
+2026-10-21T09:42:12.4891232Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T09:42:12.4898102Z Initialized empty Git repository in /home/runner/work/Hexalith.Builds/Hexalith.Builds/.git/
+2026-10-21T09:42:12.4909855Z [command]/usr/bin/git remote add origin https://github.com/Hexalith/Hexalith.Builds
+2026-10-21T09:42:12.5007301Z ##[endgroup]
+2026-10-21T09:42:12.5010363Z ##[group]Disabling automatic garbage collection
+2026-10-21T09:42:12.5013299Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T09:42:12.5056965Z ##[endgroup]
+2026-10-21T09:42:12.5059754Z ##[group]Setting up auth
+2026-10-21T09:42:12.5061949Z Removing SSH command configuration
+2026-10-21T09:42:12.5064874Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:42:12.5105261Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:42:12.5541631Z Removing HTTP extra header
+2026-10-21T09:42:12.5549135Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T09:42:12.5587631Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T09:42:12.5812058Z Removing includeIf entries pointing to credentials config files
+2026-10-21T09:42:12.5817749Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T09:42:12.5862820Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T09:42:12.6099242Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T09:42:12.6141729Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git.path /home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:12.6175987Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:12.6214292Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:12.6249856Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:12.6282621Z ##[endgroup]
+2026-10-21T09:42:12.6284358Z ##[group]Fetching the repository
+2026-10-21T09:42:12.6289644Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +5673ad841a93c1774b5d2fb319fcb33556683f71:refs/remotes/pull/126/merge
+2026-10-21T09:42:16.4470071Z From https://github.com/Hexalith/Hexalith.Builds
+2026-10-21T09:42:16.4472249Z  * [new branch]      build/story-4-10-parties-pin             -> origin/build/story-4-10-parties-pin
+2026-10-21T09:42:16.4473097Z  * [new branch]      main                                     -> origin/main
+2026-10-21T09:42:16.4474072Z  * [new tag]         v1.60.0                                  -> v1.60.0
+2026-10-21T09:42:16.4475116Z  * [new tag]         v1.61.0                                  -> v1.61.0
+2026-10-21T09:42:16.4476124Z  * [new tag]         v1.62.0                                  -> v1.62.0
+2026-10-21T09:42:16.4477252Z  * [new tag]         v1.63.0                                  -> v1.63.0
+2026-10-21T09:42:16.4478116Z  * [new tag]         v2.0.0                                   -> v2.0.0
+2026-10-21T09:42:16.4478947Z  * [new tag]         v2.0.1                                   -> v2.0.1
+2026-10-21T09:42:16.4479895Z  * [new tag]         v2.0.2                                   -> v2.0.2
+2026-10-21T09:42:16.4480955Z  * [new tag]         v2.0.3                                   -> v2.0.3
+2026-10-21T09:42:16.4481980Z  * [new tag]         v3.0.0                                   -> v3.0.0
+2026-10-21T09:42:16.4482745Z  * [new tag]         v3.0.1                                   -> v3.0.1
+2026-10-21T09:42:16.4483493Z  * [new tag]         v3.0.2                                   -> v3.0.2
+2026-10-21T09:42:16.4484322Z  * [new tag]         v3.0.3                                   -> v3.0.3
+2026-10-21T09:42:16.4485185Z  * [new tag]         v3.0.4                                   -> v3.0.4
+2026-10-21T09:42:16.4485929Z  * [new tag]         v3.0.5                                   -> v3.0.5
+2026-10-21T09:42:16.4486941Z  * [new tag]         v3.1.0                                   -> v3.1.0
+2026-10-21T09:42:16.4487771Z  * [new tag]         v3.10.0                                  -> v3.10.0
+2026-10-21T09:42:16.4489086Z  * [new tag]         v3.10.1                                  -> v3.10.1
+2026-10-21T09:42:16.4489978Z  * [new tag]         v3.10.2                                  -> v3.10.2
+2026-10-21T09:42:16.4490748Z  * [new tag]         v3.10.3                                  -> v3.10.3
+2026-10-21T09:42:16.4491503Z  * [new tag]         v3.11.0                                  -> v3.11.0
+2026-10-21T09:42:16.4492218Z  * [new tag]         v3.11.1                                  -> v3.11.1
+2026-10-21T09:42:16.4492867Z  * [new tag]         v3.12.0                                  -> v3.12.0
+2026-10-21T09:42:16.4493580Z  * [new tag]         v3.12.1                                  -> v3.12.1
+2026-10-21T09:42:16.4494290Z  * [new tag]         v3.12.2                                  -> v3.12.2
+2026-10-21T09:42:16.4495015Z  * [new tag]         v3.13.0                                  -> v3.13.0
+2026-10-21T09:42:16.4495730Z  * [new tag]         v3.14.0                                  -> v3.14.0
+2026-10-21T09:42:16.4496849Z  * [new tag]         v3.14.1                                  -> v3.14.1
+2026-10-21T09:42:16.4498041Z  * [new tag]         v3.14.2                                  -> v3.14.2
+2026-10-21T09:42:16.4498768Z  * [new tag]         v3.14.3                                  -> v3.14.3
+2026-10-21T09:42:16.4499458Z  * [new tag]         v3.14.4                                  -> v3.14.4
+2026-10-21T09:42:16.4500442Z  * [new tag]         v3.14.5                                  -> v3.14.5
+2026-10-21T09:42:16.4501020Z  * [new tag]         v3.14.6                                  -> v3.14.6
+2026-10-21T09:42:16.4501463Z  * [new tag]         v3.15.0                                  -> v3.15.0
+2026-10-21T09:42:16.4501893Z  * [new tag]         v3.16.0                                  -> v3.16.0
+2026-10-21T09:42:16.4502331Z  * [new tag]         v3.17.0                                  -> v3.17.0
+2026-10-21T09:42:16.4502768Z  * [new tag]         v3.17.1                                  -> v3.17.1
+2026-10-21T09:42:16.4503223Z  * [new tag]         v3.17.10                                 -> v3.17.10
+2026-10-21T09:42:16.4503674Z  * [new tag]         v3.17.11                                 -> v3.17.11
+2026-10-21T09:42:16.4504312Z  * [new tag]         v3.17.12                                 -> v3.17.12
+2026-10-21T09:42:16.4504738Z  * [new tag]         v3.17.13                                 -> v3.17.13
+2026-10-21T09:42:16.4505166Z  * [new tag]         v3.17.14                                 -> v3.17.14
+2026-10-21T09:42:16.4505582Z  * [new tag]         v3.17.15                                 -> v3.17.15
+2026-10-21T09:42:16.4506000Z  * [new tag]         v3.17.16                                 -> v3.17.16
+2026-10-21T09:42:16.4506417Z  * [new tag]         v3.17.17                                 -> v3.17.17
+2026-10-21T09:42:16.4507155Z  * [new tag]         v3.17.18                                 -> v3.17.18
+2026-10-21T09:42:16.4507594Z  * [new tag]         v3.17.19                                 -> v3.17.19
+2026-10-21T09:42:16.4508033Z  * [new tag]         v3.17.2                                  -> v3.17.2
+2026-10-21T09:42:16.4508466Z  * [new tag]         v3.17.20                                 -> v3.17.20
+2026-10-21T09:42:16.4508903Z  * [new tag]         v3.17.21                                 -> v3.17.21
+2026-10-21T09:42:16.4509318Z  * [new tag]         v3.17.22                                 -> v3.17.22
+2026-10-21T09:42:16.4509737Z  * [new tag]         v3.17.3                                  -> v3.17.3
+2026-10-21T09:42:16.4510516Z  * [new tag]         v3.17.4                                  -> v3.17.4
+2026-10-21T09:42:16.4511263Z  * [new tag]         v3.17.5                                  -> v3.17.5
+2026-10-21T09:42:16.4512077Z  * [new tag]         v3.17.6                                  -> v3.17.6
+2026-10-21T09:42:16.4512628Z  * [new tag]         v3.17.7                                  -> v3.17.7
+2026-10-21T09:42:16.4513083Z  * [new tag]         v3.17.8                                  -> v3.17.8
+2026-10-21T09:42:16.4513753Z  * [new tag]         v3.17.9                                  -> v3.17.9
+2026-10-21T09:42:16.4514212Z  * [new tag]         v3.18.0                                  -> v3.18.0
+2026-10-21T09:42:16.4514662Z  * [new tag]         v3.18.1                                  -> v3.18.1
+2026-10-21T09:42:16.4515097Z  * [new tag]         v3.18.2                                  -> v3.18.2
+2026-10-21T09:42:16.4515537Z  * [new tag]         v3.2.0                                   -> v3.2.0
+2026-10-21T09:42:16.4515986Z  * [new tag]         v3.3.0                                   -> v3.3.0
+2026-10-21T09:42:16.4516491Z  * [new tag]         v3.4.0                                   -> v3.4.0
+2026-10-21T09:42:16.4517272Z  * [new tag]         v3.4.1                                   -> v3.4.1
+2026-10-21T09:42:16.4517708Z  * [new tag]         v3.5.0                                   -> v3.5.0
+2026-10-21T09:42:16.4518143Z  * [new tag]         v3.5.1                                   -> v3.5.1
+2026-10-21T09:42:16.4518588Z  * [new tag]         v3.5.2                                   -> v3.5.2
+2026-10-21T09:42:16.4519027Z  * [new tag]         v3.5.3                                   -> v3.5.3
+2026-10-21T09:42:16.4519471Z  * [new tag]         v3.6.0                                   -> v3.6.0
+2026-10-21T09:42:16.4519907Z  * [new tag]         v3.6.1                                   -> v3.6.1
+2026-10-21T09:42:16.4520341Z  * [new tag]         v3.6.2                                   -> v3.6.2
+2026-10-21T09:42:16.4520777Z  * [new tag]         v3.7.0                                   -> v3.7.0
+2026-10-21T09:42:16.4521209Z  * [new tag]         v3.7.1                                   -> v3.7.1
+2026-10-21T09:42:16.4521649Z  * [new tag]         v3.7.2                                   -> v3.7.2
+2026-10-21T09:42:16.4522088Z  * [new tag]         v3.8.0                                   -> v3.8.0
+2026-10-21T09:42:16.4522524Z  * [new tag]         v3.8.1                                   -> v3.8.1
+2026-10-21T09:42:16.4522982Z  * [new tag]         v3.8.2                                   -> v3.8.2
+2026-10-21T09:42:16.4523473Z  * [new tag]         v3.8.3                                   -> v3.8.3
+2026-10-21T09:42:16.4524071Z  * [new tag]         v3.9.0                                   -> v3.9.0
+2026-10-21T09:42:16.4524509Z  * [new tag]         v3.9.1                                   -> v3.9.1
+2026-10-21T09:42:16.4524978Z  * [new tag]         v4.0.0                                   -> v4.0.0
+2026-10-21T09:42:16.4525409Z  * [new tag]         v4.1.0                                   -> v4.1.0
+2026-10-21T09:42:16.4525849Z  * [new tag]         v4.10.0                                  -> v4.10.0
+2026-10-21T09:42:16.4526291Z  * [new tag]         v4.11.0                                  -> v4.11.0
+2026-10-21T09:42:16.4527001Z  * [new tag]         v4.12.0                                  -> v4.12.0
+2026-10-21T09:42:16.4527479Z  * [new tag]         v4.13.0                                  -> v4.13.0
+2026-10-21T09:42:16.4527932Z  * [new tag]         v4.13.1                                  -> v4.13.1
+2026-10-21T09:42:16.4528388Z  * [new tag]         v4.13.2                                  -> v4.13.2
+2026-10-21T09:42:16.4528837Z  * [new tag]         v4.13.3                                  -> v4.13.3
+2026-10-21T09:42:16.4529271Z  * [new tag]         v4.13.4                                  -> v4.13.4
+2026-10-21T09:42:16.4529703Z  * [new tag]         v4.14.0                                  -> v4.14.0
+2026-10-21T09:42:16.4530134Z  * [new tag]         v4.15.0                                  -> v4.15.0
+2026-10-21T09:42:16.4530569Z  * [new tag]         v4.16.0                                  -> v4.16.0
+2026-10-21T09:42:16.4531010Z  * [new tag]         v4.16.1                                  -> v4.16.1
+2026-10-21T09:42:16.4531450Z  * [new tag]         v4.16.2                                  -> v4.16.2
+2026-10-21T09:42:16.4531885Z  * [new tag]         v4.16.3                                  -> v4.16.3
+2026-10-21T09:42:16.4532319Z  * [new tag]         v4.16.4                                  -> v4.16.4
+2026-10-21T09:42:16.4532898Z  * [new tag]         v4.16.5                                  -> v4.16.5
+2026-10-21T09:42:16.4533351Z  * [new tag]         v4.17.0                                  -> v4.17.0
+2026-10-21T09:42:16.4533787Z  * [new tag]         v4.17.1                                  -> v4.17.1
+2026-10-21T09:42:16.4534231Z  * [new tag]         v4.17.10                                 -> v4.17.10
+2026-10-21T09:42:16.4534677Z  * [new tag]         v4.17.2                                  -> v4.17.2
+2026-10-21T09:42:16.4535122Z  * [new tag]         v4.17.3                                  -> v4.17.3
+2026-10-21T09:42:16.4535751Z  * [new tag]         v4.17.4                                  -> v4.17.4
+2026-10-21T09:42:16.4536194Z  * [new tag]         v4.17.5                                  -> v4.17.5
+2026-10-21T09:42:16.4536861Z  * [new tag]         v4.17.6                                  -> v4.17.6
+2026-10-21T09:42:16.4537315Z  * [new tag]         v4.17.7                                  -> v4.17.7
+2026-10-21T09:42:16.4537765Z  * [new tag]         v4.17.8                                  -> v4.17.8
+2026-10-21T09:42:16.4538232Z  * [new tag]         v4.17.9                                  -> v4.17.9
+2026-10-21T09:42:16.4538701Z  * [new tag]         v4.18.0                                  -> v4.18.0
+2026-10-21T09:42:16.4539165Z  * [new tag]         v4.18.1                                  -> v4.18.1
+2026-10-21T09:42:16.4539639Z  * [new tag]         v4.18.10                                 -> v4.18.10
+2026-10-21T09:42:16.4540256Z  * [new tag]         v4.18.11                                 -> v4.18.11
+2026-10-21T09:42:16.4540726Z  * [new tag]         v4.18.2                                  -> v4.18.2
+2026-10-21T09:42:16.4541185Z  * [new tag]         v4.18.3                                  -> v4.18.3
+2026-10-21T09:42:16.4541634Z  * [new tag]         v4.18.4                                  -> v4.18.4
+2026-10-21T09:42:16.4542070Z  * [new tag]         v4.18.5                                  -> v4.18.5
+2026-10-21T09:42:16.4542658Z  * [new tag]         v4.18.6                                  -> v4.18.6
+2026-10-21T09:42:16.4543279Z  * [new tag]         v4.18.7                                  -> v4.18.7
+2026-10-21T09:42:16.4543852Z  * [new tag]         v4.18.8                                  -> v4.18.8
+2026-10-21T09:42:16.4544697Z  * [new tag]         v4.18.9                                  -> v4.18.9
+2026-10-21T09:42:16.4545599Z  * [new tag]         v4.19.0                                  -> v4.19.0
+2026-10-21T09:42:16.4546490Z  * [new tag]         v4.19.1                                  -> v4.19.1
+2026-10-21T09:42:16.4547684Z  * [new tag]         v4.19.2                                  -> v4.19.2
+2026-10-21T09:42:16.4548532Z  * [new tag]         v4.2.0                                   -> v4.2.0
+2026-10-21T09:42:16.4549344Z  * [new tag]         v4.20.0                                  -> v4.20.0
+2026-10-21T09:42:16.4550126Z  * [new tag]         v4.21.0                                  -> v4.21.0
+2026-10-21T09:42:16.4550912Z  * [new tag]         v4.21.1                                  -> v4.21.1
+2026-10-21T09:42:16.4551728Z  * [new tag]         v4.21.2                                  -> v4.21.2
+2026-10-21T09:42:16.4552633Z  * [new tag]         v4.21.3                                  -> v4.21.3
+2026-10-21T09:42:16.4553602Z  * [new tag]         v4.21.4                                  -> v4.21.4
+2026-10-21T09:42:16.4554544Z  * [new tag]         v4.21.5                                  -> v4.21.5
+2026-10-21T09:42:16.4555482Z  * [new tag]         v4.21.6                                  -> v4.21.6
+2026-10-21T09:42:16.4556373Z  * [new tag]         v4.21.7                                  -> v4.21.7
+2026-10-21T09:42:16.4557439Z  * [new tag]         v4.22.0                                  -> v4.22.0
+2026-10-21T09:42:16.4558221Z  * [new tag]         v4.23.0                                  -> v4.23.0
+2026-10-21T09:42:16.4558977Z  * [new tag]         v4.24.0                                  -> v4.24.0
+2026-10-21T09:42:16.4559948Z  * [new tag]         v4.25.0                                  -> v4.25.0
+2026-10-21T09:42:16.4560730Z  * [new tag]         v4.25.1                                  -> v4.25.1
+2026-10-21T09:42:16.4561492Z  * [new tag]         v4.26.0                                  -> v4.26.0
+2026-10-21T09:42:16.4562257Z  * [new tag]         v4.27.0                                  -> v4.27.0
+2026-10-21T09:42:16.4563013Z  * [new tag]         v4.27.1                                  -> v4.27.1
+2026-10-21T09:42:16.4563825Z  * [new tag]         v4.27.2                                  -> v4.27.2
+2026-10-21T09:42:16.4564811Z  * [new tag]         v4.27.3                                  -> v4.27.3
+2026-10-21T09:42:16.4565276Z  * [new tag]         v4.27.4                                  -> v4.27.4
+2026-10-21T09:42:16.4565731Z  * [new tag]         v4.27.5                                  -> v4.27.5
+2026-10-21T09:42:16.4566180Z  * [new tag]         v4.28.0                                  -> v4.28.0
+2026-10-21T09:42:16.4566906Z  * [new tag]         v4.29.0                                  -> v4.29.0
+2026-10-21T09:42:16.4567394Z  * [new tag]         v4.29.1                                  -> v4.29.1
+2026-10-21T09:42:16.4567838Z  * [new tag]         v4.3.0                                   -> v4.3.0
+2026-10-21T09:42:16.4568281Z  * [new tag]         v4.30.0                                  -> v4.30.0
+2026-10-21T09:42:16.4568735Z  * [new tag]         v4.30.1                                  -> v4.30.1
+2026-10-21T09:42:16.4569178Z  * [new tag]         v4.31.0                                  -> v4.31.0
+2026-10-21T09:42:16.4569620Z  * [new tag]         v4.31.1                                  -> v4.31.1
+2026-10-21T09:42:16.4570062Z  * [new tag]         v4.31.2                                  -> v4.31.2
+2026-10-21T09:42:16.4570498Z  * [new tag]         v4.32.0                                  -> v4.32.0
+2026-10-21T09:42:16.4570929Z  * [new tag]         v4.33.0                                  -> v4.33.0
+2026-10-21T09:42:16.4571371Z  * [new tag]         v4.33.1                                  -> v4.33.1
+2026-10-21T09:42:16.4571981Z  * [new tag]         v4.34.0                                  -> v4.34.0
+2026-10-21T09:42:16.4572417Z  * [new tag]         v4.35.0                                  -> v4.35.0
+2026-10-21T09:42:16.4572935Z  * [new tag]         v4.35.1                                  -> v4.35.1
+2026-10-21T09:42:16.4573736Z  * [new tag]         v4.4.0                                   -> v4.4.0
+2026-10-21T09:42:16.4574636Z  * [new tag]         v4.5.0                                   -> v4.5.0
+2026-10-21T09:42:16.4575375Z  * [new tag]         v4.5.1                                   -> v4.5.1
+2026-10-21T09:42:16.4575832Z  * [new tag]         v4.6.0                                   -> v4.6.0
+2026-10-21T09:42:16.4576274Z  * [new tag]         v4.6.1                                   -> v4.6.1
+2026-10-21T09:42:16.4577122Z  * [new tag]         v4.6.2                                   -> v4.6.2
+2026-10-21T09:42:16.4577601Z  * [new tag]         v4.6.3                                   -> v4.6.3
+2026-10-21T09:42:16.4578049Z  * [new tag]         v4.6.4                                   -> v4.6.4
+2026-10-21T09:42:16.4578481Z  * [new tag]         v4.7.0                                   -> v4.7.0
+2026-10-21T09:42:16.4578923Z  * [new tag]         v4.8.0                                   -> v4.8.0
+2026-10-21T09:42:16.4579360Z  * [new tag]         v4.9.0                                   -> v4.9.0
+2026-10-21T09:42:16.4579792Z  * [new tag]         v4.9.1                                   -> v4.9.1
+2026-10-21T09:42:16.4580231Z  * [new tag]         v4.9.2                                   -> v4.9.2
+2026-10-21T09:42:16.4580665Z  * [new tag]         v4.9.3                                   -> v4.9.3
+2026-10-21T09:42:16.4581195Z  * [new ref]         5673ad841a93c1774b5d2fb319fcb33556683f71 -> pull/126/merge
+2026-10-21T09:42:16.4582408Z ##[endgroup]
+2026-10-21T09:42:16.4582868Z ##[group]Determining the checkout info
+2026-10-21T09:42:16.4583363Z ##[endgroup]
+2026-10-21T09:42:16.4583838Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T09:42:16.4584970Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T09:42:16.4591210Z ##[group]Checking out the ref
+2026-10-21T09:42:16.4595775Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/126/merge
+2026-10-21T09:42:16.7640757Z Note: switching to 'refs/remotes/pull/126/merge'.
+2026-10-21T09:42:16.7641252Z 
+2026-10-21T09:42:16.7641630Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-21T09:42:16.7642512Z changes and commit them, and you can discard any commits you make in this
+2026-10-21T09:42:16.7643374Z state without impacting any branches by switching back to a branch.
+2026-10-21T09:42:16.7643840Z 
+2026-10-21T09:42:16.7644163Z If you want to create a new branch to retain commits you create, you may
+2026-10-21T09:42:16.7644920Z do so (now or later) by using -c with the switch command. Example:
+2026-10-21T09:42:16.7645329Z 
+2026-10-21T09:42:16.7645541Z   git switch -c <new-branch-name>
+2026-10-21T09:42:16.7645848Z 
+2026-10-21T09:42:16.7646145Z Or undo this operation with:
+2026-10-21T09:42:16.7646417Z 
+2026-10-21T09:42:16.7646825Z   git switch -
+2026-10-21T09:42:16.7647042Z 
+2026-10-21T09:42:16.7647435Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-21T09:42:16.7647973Z 
+2026-10-21T09:42:16.7648552Z HEAD is now at 5673ad8 Merge 5c250c67d26129a5e46f7821da5b41396ce585f8 into f8599224457dda99e7c0ae4870147dd51b464feb
+2026-10-21T09:42:16.7679278Z ##[endgroup]
+2026-10-21T09:42:16.7733005Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T09:42:16.7761170Z 5673ad841a93c1774b5d2fb319fcb33556683f71
+2026-10-21T09:42:16.7771932Z ##[group]Removing auth
+2026-10-21T09:42:16.7772413Z Removing SSH command configuration
+2026-10-21T09:42:16.7777560Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:42:16.7818337Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:42:16.8051178Z Removing HTTP extra header
+2026-10-21T09:42:16.8055203Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T09:42:16.8092520Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T09:42:16.8321562Z Removing includeIf entries pointing to credentials config files
+2026-10-21T09:42:16.8324900Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T09:42:16.8356285Z includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git.path
+2026-10-21T09:42:16.8357392Z includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git/worktrees/*.path
+2026-10-21T09:42:16.8357944Z includeif.gitdir:/github/workspace/.git.path
+2026-10-21T09:42:16.8358367Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-21T09:42:16.8365647Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git.path
+2026-10-21T09:42:16.8391690Z /home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:16.8401458Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-888224e6\-e225\-47f4\-bca5\-082a6901f174\.config
+2026-10-21T09:42:16.8438263Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git/worktrees/*.path
+2026-10-21T09:42:16.8465671Z /home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:16.8474003Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.Builds/Hexalith.Builds/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-888224e6\-e225\-47f4\-bca5\-082a6901f174\.config
+2026-10-21T09:42:16.8508159Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-21T09:42:16.8533038Z /github/runner_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:16.8540743Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-888224e6\-e225\-47f4\-bca5\-082a6901f174\.config
+2026-10-21T09:42:16.8583493Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-21T09:42:16.8610027Z /github/runner_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config
+2026-10-21T09:42:16.8623012Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-888224e6\-e225\-47f4\-bca5\-082a6901f174\.config
+2026-10-21T09:42:16.8660062Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T09:42:16.8884600Z Removing credentials config '/home/runner/work/_temp/git-credentials-888224e6-e225-47f4-bca5-082a6901f174.config'
+2026-10-21T09:42:16.8894283Z ##[endgroup]
+2026-10-21T09:42:16.9168533Z Prepare all required actions
+2026-10-21T09:42:16.9169244Z Getting action download info
+2026-10-21T09:42:17.0378951Z Download action repository 'actions/setup-dotnet@v6.0.0' (SHA:a98b56852c35b8e3190ac28c8c2271da59106c68)
+2026-10-21T09:42:17.8911518Z ##[group]Run ./Github/initialize-dotnet
+2026-10-21T09:42:17.8911820Z with:
+2026-10-21T09:42:17.8912039Z   global-json-file: global.json
+2026-10-21T09:42:17.8912304Z   dotnet-version: 10.0.402
+2026-10-21T09:42:17.8912545Z ##[endgroup]
+2026-10-21T09:42:17.8969833Z ##[start-action display=Setup .NET from global.json;id=__self.__actions_setup-dotnet]
+2026-10-21T09:42:17.9054921Z ##[group]Run actions/setup-dotnet@v6.0.0
+2026-10-21T09:42:17.9055403Z with:
+2026-10-21T09:42:17.9055614Z   global-json-file: global.json
+2026-10-21T09:42:17.9055862Z   cache: false
+2026-10-21T09:42:17.9056061Z ##[endgroup]
+2026-10-21T09:42:18.0438022Z [command]/home/runner/work/_actions/actions/setup-dotnet/v6.0.0/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+2026-10-21T09:42:18.3272777Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.13/dotnet-runtime-10.0.13-linux-x64.tar.gz
+2026-10-21T09:42:18.5159148Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.13/dotnet-runtime-10.0.13-linux-x64.tar.gz size is 36648012 bytes.
+2026-10-21T09:42:18.5166471Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.13/dotnet-runtime-10.0.13-linux-x64.tar.gz
+2026-10-21T09:42:19.1783790Z dotnet-install: Downloaded file size is 36648012 bytes.
+2026-10-21T09:42:19.1784977Z dotnet-install: The remote and local file sizes are equal.
+2026-10-21T09:42:19.2071299Z dotnet-install: Installed version is 10.0.13
+2026-10-21T09:42:19.2129502Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+2026-10-21T09:42:19.2133017Z dotnet-install: Note that the script does not resolve dependencies during installation.
+2026-10-21T09:42:19.2134728Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+2026-10-21T09:42:19.2136169Z dotnet-install: Installation finished successfully.
+2026-10-21T09:42:19.2157883Z [command]/home/runner/work/_actions/actions/setup-dotnet/v6.0.0/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0.4xx
+2026-10-21T09:42:19.4586035Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-linux-x64.tar.gz
+2026-10-21T09:42:20.6751663Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-linux-x64.tar.gz size is 240279509 bytes.
+2026-10-21T09:42:20.6758228Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-linux-x64.tar.gz
+2026-10-21T09:42:25.2932483Z dotnet-install: Downloaded file size is 240279509 bytes.
+2026-10-21T09:42:25.2933237Z dotnet-install: The remote and local file sizes are equal.
+2026-10-21T09:42:26.0144602Z dotnet-install: Installed version is 10.0.402
+2026-10-21T09:42:26.0201219Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+2026-10-21T09:42:26.0202667Z dotnet-install: Note that the script does not resolve dependencies during installation.
+2026-10-21T09:42:26.0204823Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+2026-10-21T09:42:26.0206887Z dotnet-install: Installation finished successfully.
+2026-10-21T09:42:26.0327374Z ##[end-action id=__self.__actions_setup-dotnet;outcome=success;conclusion=success;duration_ms=8135]
+2026-10-21T09:42:26.0356155Z ##[start-action display=Setup .NET 10.0.402;id=__self.__actions_setup-dotnet_2]
+2026-10-21T09:42:26.0364676Z ##[end-action id=__self.__actions_setup-dotnet_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-21T09:42:26.0366972Z ##[start-action display=Add Aspire Workloads;id=__self.__run]
+2026-10-21T09:42:26.0370659Z ##[end-action id=__self.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-21T09:42:26.0418984Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-central-package-versions.ps1
+2026-10-21T09:42:26.0419674Z [36;1mpwsh -NoProfile -File ./Tools/validate-central-package-versions.ps1[0m
+2026-10-21T09:42:26.0449363Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:42:26.0449663Z env:
+2026-10-21T09:42:26.0450083Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:42:26.0450355Z ##[endgroup]
+2026-10-21T09:42:30.6324610Z Central package version validation passed for 307 entries in '/home/runner/work/Hexalith.Builds/Hexalith.Builds/Props/Directory.Packages.props'.
+2026-10-21T09:42:31.4575949Z ##[group]Run pwsh -NoProfile -File ./Tools/test-authoritative-package-catalog.ps1
+2026-10-21T09:42:31.4576886Z [36;1mpwsh -NoProfile -File ./Tools/test-authoritative-package-catalog.ps1[0m
+2026-10-21T09:42:31.4602278Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:42:31.4602569Z env:
+2026-10-21T09:42:31.4602779Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:42:31.4603037Z ##[endgroup]
+2026-10-21T09:42:34.2357068Z Authoritative package catalog tests passed for 50 approved package identities and 3 shared package versions.
+2026-10-21T09:42:34.9175096Z ##[group]Run pwsh -NoProfile -File ./Tools/test-central-package-version-validator.ps1
+2026-10-21T09:42:34.9176284Z [36;1mpwsh -NoProfile -File ./Tools/test-central-package-version-validator.ps1[0m
+2026-10-21T09:42:34.9201352Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:42:34.9201646Z env:
+2026-10-21T09:42:34.9201857Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:42:34.9202117Z ##[endgroup]
+2026-10-21T09:42:51.2759935Z Central package validator tests passed: 17 scenarios.
+2026-10-21T09:42:51.4203831Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-package-version-audit.ps1
+2026-10-21T09:42:51.4204430Z [36;1mpwsh -NoProfile -File ./Tools/validate-package-version-audit.ps1[0m
+2026-10-21T09:42:51.4229119Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:42:51.4229406Z env:
+2026-10-21T09:42:51.4229615Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:42:51.4229873Z ##[endgroup]
+2026-10-21T09:43:33.7868259Z Package version audit validation passed for 307 packages, 148 families, and 1 source(s).
+2026-10-21T09:43:33.9833719Z ##[group]Run pwsh -NoProfile -File ./Tools/test-package-version-audit-generator.ps1
+2026-10-21T09:43:33.9834378Z [36;1mpwsh -NoProfile -File ./Tools/test-package-version-audit-generator.ps1[0m
+2026-10-21T09:43:33.9858795Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:43:33.9859092Z env:
+2026-10-21T09:43:33.9859301Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:43:33.9859568Z ##[endgroup]
+2026-10-21T09:43:35.3271463Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/audit.json'.
+2026-10-21T09:43:36.8767378Z Central package freshness audit wrote 3 packages in complete mode (2 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/multi-package-prior.json'.
+2026-10-21T09:43:37.3509670Z Central package freshness audit wrote 3 packages in incremental mode (1 refreshed, 1 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/multi-package-refreshed.json'.
+2026-10-21T09:43:38.8530336Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/accepted-prior.json'.
+2026-10-21T09:43:39.1525262Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/preserved.json'.
+2026-10-21T09:43:40.9413773Z Central package freshness audit wrote 3 packages in incremental mode (1 refreshed, 2 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/incremental.json'.
+2026-10-21T09:43:42.5627188Z Central package freshness audit wrote 3 packages in incremental mode (1 refreshed, 2 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/incremental-deduplicated.json'.
+2026-10-21T09:43:42.8335331Z Central package freshness audit failed: incremental family selection contains unknown family 'package:unknown'.
+2026-10-21T09:43:43.0710652Z Central package freshness audit failed: incremental family selection contains a blank or duplicate family 'package:fixture.listed'.
+2026-10-21T09:43:43.3192705Z Central package freshness audit failed: incremental family selection contains unknown family 'PACKAGE:FIXTURE.LISTED'.
+2026-10-21T09:43:54.1148168Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/declaration-drift.json'.
+2026-10-21T09:43:54.3749974Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/catalog-byte-drift.json'.
+2026-10-21T09:43:54.6321029Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/legacy-refresh.json'.
+2026-10-21T09:43:55.7448296Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/consumer-drift.json'.
+2026-10-21T09:43:56.0041314Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/metadata-drift.json'.
+2026-10-21T09:43:56.2446209Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/diagnostic-prior.json'.
+2026-10-21T09:43:56.4971986Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/diagnostic-drift.json'.
+2026-10-21T09:43:56.7502262Z Central package freshness audit wrote 3 packages in complete mode (3 refreshed, 0 preserved) to '/tmp/package-audit-generator-5de045afd42c4afaa5b57fe382a07f20/source-drift.json'.
+2026-10-21T09:43:56.7552290Z Central package freshness audit failed: prior audit contains a blank or duplicate package identity 'Fixture.Listed'.
+2026-10-21T09:43:56.7585416Z Central package freshness audit failed: prior audit package 'Fixture.Listed' has no family identity.
+2026-10-21T09:43:56.7628529Z Central package freshness audit failed: prior audit family 'package:fixture.listed' package identities do not exactly match its package rows.
+2026-10-21T09:43:56.7667255Z Central package freshness audit failed: prior audit package 'Fixture.Listed' disposition does not match family 'package:fixture.listed'.
+2026-10-21T09:43:56.7705985Z Central package freshness audit failed: prior audit package 'Fixture.Listed' rollback group does not match family 'package:fixture.listed'.
+2026-10-21T09:43:56.7780123Z Central package freshness audit failed: prior audit package family 'package:fixture.listed' has no family decision identity.
+2026-10-21T09:43:56.7816277Z Central package freshness audit failed: prior audit package 'Fixture.Listed' contains a blank, undeclared, or duplicate source-result identity 'https://fixture.test/v3/index.json'.
+2026-10-21T09:43:56.7874998Z Central package freshness audit failed: prior audit contains a blank, unknown-package, or duplicate consumer identity 'Fixture.Consumer|Fixture.Unknown'.
+2026-10-21T09:43:56.7919200Z Central package freshness audit failed: prior audit contains a blank or duplicate source identity 'https://fixture.test/v3/index.json'.
+2026-10-21T09:43:56.7966753Z Central package freshness audit failed: prior audit package 'Fixture.Listed' does not contain exactly one result for every source identity.
+2026-10-21T09:43:56.8041751Z Central package freshness audit failed: prior audit contains a blank or duplicate family identity 'package:fixture.listed'.
+2026-10-21T09:43:56.8157761Z Central package freshness audit failed: prior audit family 'orphan-family' has no package identities.
+2026-10-21T09:43:56.8244459Z Central package freshness audit failed: prior audit contains a blank, unknown-package, or duplicate consumer identity 'Fixture.Consumer|Fixture.Listed'.
+2026-10-21T09:43:56.8313039Z Central package freshness audit failed: prior audit consumer 'Fixture.Consumer|Fixture.Listed' has an inconsistent family identity 'wrong-family'.
+2026-10-21T09:43:56.8376902Z Central package freshness audit failed: prior audit consumer evidence SHA-256 does not match its relations and declaration bytes.
+2026-10-21T09:43:56.8435526Z Central package freshness audit failed: prior audit consumer provenance has an incomplete declaration-byte binding.
+2026-10-21T09:43:56.8494658Z Central package freshness audit failed: prior package history for 'Fixture.Listed' uses unsupported schema 'unknown.package-history.v1'.
+2026-10-21T09:43:56.8535443Z Central package freshness audit failed: prior family history for 'package:fixture.listed' uses unsupported schema 'unknown.family-history.v1'.
+2026-10-21T09:43:56.9056554Z warning: in the working copy of 'Consumer.csproj', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T09:43:56.9058510Z warning: in the working copy of 'Props/Directory.Packages.props', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T09:44:00.0679430Z warning: in the working copy of 'Consumer.csproj', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T09:44:01.0604161Z warning: in the working copy of 'Consumer.csproj', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T09:44:02.0583887Z warning: in the working copy of 'Props/Directory.Packages.props', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T09:44:07.9267200Z Package version audit generator tests passed: 115 scenarios.
+2026-10-21T09:44:08.1067362Z ##[group]Run pwsh -NoProfile -File ./Tools/test-package-version-audit-validator.ps1
+2026-10-21T09:44:08.1068069Z [36;1mpwsh -NoProfile -File ./Tools/test-package-version-audit-validator.ps1[0m
+2026-10-21T09:44:08.1092775Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:44:08.1093072Z env:
+2026-10-21T09:44:08.1093281Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:44:08.1093541Z ##[endgroup]
+2026-10-21T09:54:30.5768387Z Package version audit validator tests passed: 103 scenarios.
+2026-10-21T09:54:30.7854668Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-consumer-package-authority.ps1 -RepositoryRoot . -CatalogPath ./Props/Directory.Packages.props
+2026-10-21T09:54:30.7855808Z [36;1mpwsh -NoProfile -File ./Tools/validate-consumer-package-authority.ps1 -RepositoryRoot . -CatalogPath ./Props/Directory.Packages.props[0m
+2026-10-21T09:54:30.7879808Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:54:30.7880101Z env:
+2026-10-21T09:54:30.7880312Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:54:30.7880574Z ##[endgroup]
+2026-10-21T09:54:58.0010038Z Consumer package authority validation passed for 21 projects in '/home/runner/work/Hexalith.Builds/Hexalith.Builds'.
+2026-10-21T09:54:58.1540904Z ##[group]Run pwsh -NoProfile -File ./Tools/test-consumer-package-authority-validator.ps1
+2026-10-21T09:54:58.1542095Z [36;1mpwsh -NoProfile -File ./Tools/test-consumer-package-authority-validator.ps1[0m
+2026-10-21T09:54:58.1577224Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:54:58.1577608Z env:
+2026-10-21T09:54:58.1577870Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:54:58.1578175Z ##[endgroup]
+2026-10-21T09:55:27.0125610Z Consumer package authority validator tests passed: 32 scenarios.
+2026-10-21T09:55:27.1558113Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-package-version-exceptions.ps1 -InventoryPath ./Tools/package-version-exceptions.json -CatalogPath ./Props/Directory.Packages.props
+2026-10-21T09:55:27.1559536Z [36;1mpwsh -NoProfile -File ./Tools/validate-package-version-exceptions.ps1 -InventoryPath ./Tools/package-version-exceptions.json -CatalogPath ./Props/Directory.Packages.props[0m
+2026-10-21T09:55:27.1587733Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:55:27.1588026Z env:
+2026-10-21T09:55:27.1588240Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:55:27.1588504Z ##[endgroup]
+2026-10-21T09:55:28.3476367Z Package version exception inventory validated 15 allowlisted exceptions.
+2026-10-21T09:55:28.4913366Z ##[group]Run pwsh -NoProfile -File ./Tools/test-package-version-exception-validator.ps1
+2026-10-21T09:55:28.4914211Z [36;1mpwsh -NoProfile -File ./Tools/test-package-version-exception-validator.ps1[0m
+2026-10-21T09:55:28.4938379Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:55:28.4938668Z env:
+2026-10-21T09:55:28.4938875Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:55:28.4939205Z ##[endgroup]
+2026-10-21T09:56:39.5841787Z Package version exception validator tests passed: 30 scenarios.
+2026-10-21T09:56:39.7508828Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-platform-version-catalog.ps1
+2026-10-21T09:56:39.7509583Z [36;1mpwsh -NoProfile -File ./Tools/validate-platform-version-catalog.ps1[0m
+2026-10-21T09:56:39.7534830Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:56:39.7535221Z env:
+2026-10-21T09:56:39.7535624Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:56:39.7536002Z ##[endgroup]
+2026-10-21T09:56:43.1575961Z Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T09:56:43.3334409Z ##[group]Run pwsh -NoProfile -File ./Tools/test-platform-version-catalog.ps1
+2026-10-21T09:56:43.3335013Z [36;1mpwsh -NoProfile -File ./Tools/test-platform-version-catalog.ps1[0m
+2026-10-21T09:56:43.3359298Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:56:43.3359588Z env:
+2026-10-21T09:56:43.3359794Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:56:43.3360049Z ##[endgroup]
+2026-10-21T09:56:45.5433958Z PASS: current authoritative catalog with real selected package metadata
+2026-10-21T09:56:48.2028161Z PASS: current-pair
+2026-10-21T09:56:50.6825872Z PASS: historical-3-109-beta-767
+2026-10-21T09:56:51.9310191Z PASS: historical-preview-too-old
+2026-10-21T09:56:53.2511374Z PASS: eventstore-pin-changes-required-range
+2026-10-21T09:56:54.5542714Z PASS: toolkit-pin-outside-selected-range
+2026-10-21T09:56:57.1971257Z PASS: both-hosting-pins-compatible
+2026-10-21T09:56:59.8170651Z PASS: nuget-beta-numeric-ordering
+2026-10-21T09:57:02.4219244Z PASS: nuget-metadata-is-ignored
+2026-10-21T09:57:03.6544516Z PASS: missing-Hexalith.EventStore.Aspire
+2026-10-21T09:57:04.8948520Z PASS: duplicate-Hexalith.EventStore.Aspire
+2026-10-21T09:57:06.1674495Z PASS: missing-Hexalith.FrontComposer.Shell
+2026-10-21T09:57:07.4175122Z PASS: duplicate-Hexalith.FrontComposer.Shell
+2026-10-21T09:57:08.6829771Z PASS: missing-Dapr.Client
+2026-10-21T09:57:09.8680527Z PASS: duplicate-Dapr.Client
+2026-10-21T09:57:11.1023736Z PASS: missing-Aspire.Hosting
+2026-10-21T09:57:12.3821740Z PASS: duplicate-Aspire.Hosting
+2026-10-21T09:57:13.6475546Z PASS: missing-CommunityToolkit.Aspire.Hosting.Dapr
+2026-10-21T09:57:14.8955560Z PASS: duplicate-CommunityToolkit.Aspire.Hosting.Dapr
+2026-10-21T09:57:16.0908189Z PASS: missing-HexalithAspireAppHostSdkVersion
+2026-10-21T09:57:17.3069858Z PASS: missing-HexalithDaprRuntimeVersion
+2026-10-21T09:57:18.5090326Z PASS: missing-HexalithDaprCliVersion
+2026-10-21T09:57:19.7182133Z PASS: missing-HexalithRedisImage
+2026-10-21T09:57:20.9077381Z PASS: missing-HexalithRedisImageTag
+2026-10-21T09:57:22.1193143Z PASS: missing-HexalithRedisImageDigest
+2026-10-21T09:57:23.3802097Z PASS: missing-eventstore-property-names-package
+2026-10-21T09:57:24.2767934Z PASS: duplicate-property-HexalithAspireAppHostSdkVersion
+2026-10-21T09:57:25.1713247Z PASS: duplicate-property-HexalithDaprRuntimeVersion
+2026-10-21T09:57:26.0824094Z PASS: duplicate-property-HexalithDaprCliVersion
+2026-10-21T09:57:26.9999273Z PASS: duplicate-property-HexalithRedisImage
+2026-10-21T09:57:27.9009462Z PASS: duplicate-property-HexalithRedisImageTag
+2026-10-21T09:57:28.8302774Z PASS: duplicate-property-HexalithRedisImageDigest
+2026-10-21T09:57:29.7453363Z PASS: duplicate-property-HexalithEventStoreVersion
+2026-10-21T09:57:30.6731524Z PASS: duplicate-property-HexalithFrontComposerVersion
+2026-10-21T09:57:31.5730572Z PASS: duplicate-property-HexalithAspireHostingDaprVersion
+2026-10-21T09:57:32.4808585Z PASS: duplicate-self-default-HexalithEventStoreVersion
+2026-10-21T09:57:33.3740414Z PASS: default-then-unconditional-HexalithEventStoreVersion
+2026-10-21T09:57:34.2909443Z PASS: duplicate-self-default-HexalithFrontComposerVersion
+2026-10-21T09:57:35.2320664Z PASS: default-then-unconditional-HexalithFrontComposerVersion
+2026-10-21T09:57:37.8316036Z PASS: intentional-conditional-property
+2026-10-21T09:57:39.0679395Z PASS: invalid-image-40
+2026-10-21T09:57:40.3110225Z PASS: invalid-image-41
+2026-10-21T09:57:41.5341138Z PASS: invalid-image-42
+2026-10-21T09:57:42.7458280Z PASS: invalid-image-43
+2026-10-21T09:57:43.9876326Z PASS: invalid-image-44
+2026-10-21T09:57:45.1991545Z PASS: invalid-image-45
+2026-10-21T09:57:46.3997890Z PASS: invalid-image-46
+2026-10-21T09:57:47.6278468Z PASS: invalid-image-47
+2026-10-21T09:57:50.2076227Z PASS: valid-image-48
+2026-10-21T09:57:52.7503304Z PASS: valid-image-49
+2026-10-21T09:57:55.3439759Z PASS: valid-image-50
+2026-10-21T09:57:57.9795440Z PASS: valid-image-51
+2026-10-21T09:58:00.6303351Z PASS: valid-redis-tag
+2026-10-21T09:58:03.2385062Z PASS: valid-redis-digest
+2026-10-21T09:58:05.8435561Z PASS: wildcard-range
+2026-10-21T09:58:08.4407662Z PASS: short-range-bounds
+2026-10-21T09:58:09.6953811Z PASS: inverted-range
+2026-10-21T09:58:10.9848037Z PASS: nonnumeric-range-bound
+2026-10-21T09:58:12.1839975Z PASS: numeric-prerelease-leading-zero
+2026-10-21T09:58:13.4042341Z PASS: misplaced-dependency
+2026-10-21T09:58:16.0016279Z PASS: different-valid-framework-ranges
+2026-10-21T09:58:17.2937839Z PASS: net8-selects-incompatible-net8-range
+2026-10-21T09:58:19.8224143Z PASS: net8-selects-compatible-net8-range
+2026-10-21T09:58:21.0915682Z PASS: net8-has-no-compatible-group
+2026-10-21T09:58:21.6434384Z PASS: invalid-supplied-framework
+2026-10-21T09:58:24.1442325Z PASS: nearest-compatible-framework
+2026-10-21T09:58:25.3784047Z PASS: effective-framework-missing-dependency
+2026-10-21T09:58:26.5917517Z PASS: invalid-framework-group
+2026-10-21T09:58:27.7953578Z PASS: malformed-sdk
+2026-10-21T09:58:29.0247566Z PASS: malformed-package
+2026-10-21T09:58:30.2633269Z PASS: missing-dependency-metadata
+2026-10-21T09:58:31.5007079Z PASS: invalid-dependency-range
+2026-10-21T09:58:32.7132376Z PASS: wrong-metadata-identity
+2026-10-21T09:58:33.9342317Z PASS: missing-metadata-element
+2026-10-21T09:58:35.1301859Z PASS: duplicate-metadata-elements
+2026-10-21T09:58:36.3336774Z PASS: missing-metadata-id
+2026-10-21T09:58:37.5312910Z PASS: duplicate-metadata-ids
+2026-10-21T09:58:38.7310001Z PASS: missing-metadata-version
+2026-10-21T09:58:39.9467765Z PASS: duplicate-metadata-versions
+2026-10-21T09:58:41.2824038Z PASS: release validation wrapper propagates metadata failure
+2026-10-21T09:58:42.8238595Z PASS: environment-override-rejected
+2026-10-21T09:58:45.9843402Z PASS: matching-environment-selection
+2026-10-21T09:58:49.0961552Z PASS: overwritten-environment-property-is-not-effective-drift
+2026-10-21T09:58:52.2297432Z PASS: conditional-release-context
+2026-10-21T09:58:55.4287267Z PASS: evaluated-item-update
+2026-10-21T09:59:09.0030594Z PASS: alternate production catalog with matching override cannot replace the owning authority
+2026-10-21T09:59:28.5304101Z PASS: relative and absolute intermediate paths, including incremental resources
+2026-10-21T09:59:42.5914728Z PASS: controlled overrides reject divergence and permit matching selections
+2026-10-21T09:59:56.9220948Z PASS: all successful generated snapshots load with offline NuGet semantics
+2026-10-21T09:59:56.9224505Z PASS: isolated catalog mutation and incremental rebuild
+2026-10-21T09:59:56.9225981Z Platform version catalog tests passed: 96 scenarios. No Platform acceptance granted.
+2026-10-21T09:59:57.1575257Z ##[group]Run pwsh -NoProfile -File ./Tools/validate-dapr-package-versions.ps1
+2026-10-21T09:59:57.1576281Z [36;1mpwsh -NoProfile -File ./Tools/validate-dapr-package-versions.ps1[0m
+2026-10-21T09:59:57.1611692Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:59:57.1612200Z env:
+2026-10-21T09:59:57.1612565Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:59:57.1613038Z ##[endgroup]
+2026-10-21T09:59:58.4002600Z Dapr package validation passed: 8 unique Dapr.* package IDs use 1.18.10 and all required shared SDK IDs are present.
+2026-10-21T09:59:58.5662280Z ##[group]Run pwsh -NoProfile -File ./Tools/test-dapr-package-version-validator.ps1
+2026-10-21T09:59:58.5663405Z [36;1mpwsh -NoProfile -File ./Tools/test-dapr-package-version-validator.ps1[0m
+2026-10-21T09:59:58.5698220Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T09:59:58.5698696Z env:
+2026-10-21T09:59:58.5699077Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T09:59:58.5699504Z ##[endgroup]
+2026-10-21T10:00:00.2121861Z [PASS] canonical catalog uses the validator production default
+2026-10-21T10:00:01.3697122Z [PASS] imported PackageVersion items are evaluated
+2026-10-21T10:00:02.3694139Z [PASS] mixed-case required identity uses NuGet identity semantics
+2026-10-21T10:00:03.3154426Z [PASS] aligned additional Dapr family item is allowed
+2026-10-21T10:00:04.1973733Z [PASS] mismatched additional Dapr family item is rejected
+2026-10-21T10:00:05.1238534Z [PASS] case-insensitive duplicate SDK identity is rejected
+2026-10-21T10:00:06.0328890Z [PASS] property-expanded versions are evaluated
+2026-10-21T10:00:06.8995059Z [PASS] inactive conditional items are ignored
+2026-10-21T10:00:07.7858197Z [PASS] case-variant bare Dapr ID is rejected
+2026-10-21T10:00:08.6468897Z [PASS] all SDK packages follow a changed evaluated Dapr.Client selection
+2026-10-21T10:00:09.5119599Z [PASS] numeric prerelease leading zero is rejected: 1.18.10-beta.01
+2026-10-21T10:00:10.3267347Z [PASS] numeric prerelease leading zero is rejected: 1.18.10-01
+2026-10-21T10:00:11.0964508Z [PASS] valid prerelease follows evaluated Dapr.Client: 1.18.10-beta.0
+2026-10-21T10:00:11.8533731Z [PASS] valid prerelease follows evaluated Dapr.Client: 1.18.10-beta.1
+2026-10-21T10:00:12.6049652Z [PASS] valid prerelease follows evaluated Dapr.Client: 1.18.10-beta01
+2026-10-21T10:00:13.3604296Z [PASS] valid prerelease follows evaluated Dapr.Client: 1.18.10-beta.1+build.01
+2026-10-21T10:00:14.0914054Z [PASS] catalog with no Dapr family is rejected
+2026-10-21T10:00:14.8785369Z [PASS] Update-driven required package mismatch is rejected
+2026-10-21T10:00:15.6560508Z [PASS] missing required SDK ID Dapr.Client is rejected
+2026-10-21T10:00:16.4136257Z [PASS] missing required SDK ID Dapr.AspNetCore is rejected
+2026-10-21T10:00:17.1622616Z [PASS] missing required SDK ID Dapr.Actors.AspNetCore is rejected
+2026-10-21T10:00:17.9163470Z [PASS] missing required SDK ID Dapr.Actors.Generators is rejected
+2026-10-21T10:00:18.6562965Z [PASS] missing required SDK ID Dapr.Actors is rejected
+2026-10-21T10:00:19.3956934Z [PASS] missing required SDK ID Dapr.Workflow is rejected
+2026-10-21T10:00:20.0853473Z [PASS] benign stderr does not corrupt valid stdout JSON
+2026-10-21T10:00:21.5308355Z [PASS] evaluator timeout is controlled and bounded
+2026-10-21T10:00:25.0232992Z [PASS] evaluator timeout terminates its long-lived process tree
+2026-10-21T10:00:25.6670379Z [PASS] nonzero evaluator exit preserves useful output tail
+2026-10-21T10:00:26.4065104Z [PASS] nonzero evaluator drains large stdout and stderr without deadlock
+2026-10-21T10:00:27.0632986Z [PASS] empty evaluator stdout is rejected
+2026-10-21T10:00:27.7382152Z [PASS] malformed evaluator JSON is rejected
+2026-10-21T10:00:28.4129522Z [PASS] missing evaluator JSON schema object is rejected
+2026-10-21T10:00:29.1794395Z [PASS] blank evaluator identity violates JSON schema
+2026-10-21T10:00:29.8644567Z [PASS] blank evaluator version violates JSON schema
+2026-10-21T10:00:31.5605318Z [PASS] redirected stream drain timeout is controlled and bounded
+2026-10-21T10:00:31.5643916Z [PASS] release workflow orders initializer and both gates before release
+2026-10-21T10:00:31.5793940Z Dapr validator fixture suite passed: 36 scenarios.
+2026-10-21T10:00:31.7490670Z ##[group]Run pwsh -NoProfile -File ./Tools/test-domain-workflow-test-platforms.ps1
+2026-10-21T10:00:31.7491316Z [36;1mpwsh -NoProfile -File ./Tools/test-domain-workflow-test-platforms.ps1[0m
+2026-10-21T10:00:31.7516997Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:00:31.7517309Z env:
+2026-10-21T10:00:31.7517523Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:31.7518017Z ##[endgroup]
+2026-10-21T10:00:32.9330083Z Domain workflow test-platform checks passed: 207 assertions.
+2026-10-21T10:00:33.0875199Z ##[group]Run python3 Tools/test-prepare-domain-release.py
+2026-10-21T10:00:33.0876032Z [36;1mpython3 Tools/test-prepare-domain-release.py[0m
+2026-10-21T10:00:33.0941766Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T10:00:33.0942130Z env:
+2026-10-21T10:00:33.0942347Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:33.0942605Z ##[endgroup]
+2026-10-21T10:00:33.9349362Z .........
+2026-10-21T10:00:33.9350128Z ----------------------------------------------------------------------
+2026-10-21T10:00:33.9350785Z Ran 9 tests in 0.774s
+2026-10-21T10:00:33.9351041Z 
+2026-10-21T10:00:33.9351181Z OK
+2026-10-21T10:00:33.9522816Z ##[group]Run actions/setup-node@v7.1.0
+2026-10-21T10:00:33.9523148Z with:
+2026-10-21T10:00:33.9523353Z   node-version: 24
+2026-10-21T10:00:33.9523578Z   check-latest: false
+2026-10-21T10:00:33.9526303Z   token: ***
+2026-10-21T10:00:33.9526548Z   package-manager-cache: true
+2026-10-21T10:00:33.9527105Z env:
+2026-10-21T10:00:33.9527311Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:33.9527561Z ##[endgroup]
+2026-10-21T10:00:34.0920645Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-21T10:00:34.1999969Z ##[group]Environment details
+2026-10-21T10:00:34.5825581Z node: v24.21.0
+2026-10-21T10:00:34.5826122Z npm: 11.19.0
+2026-10-21T10:00:34.5826473Z yarn: 1.22.22
+2026-10-21T10:00:34.5827554Z ##[endgroup]
+2026-10-21T10:00:34.5968137Z ##[group]Run npm ci --ignore-scripts
+2026-10-21T10:00:34.5968504Z [36;1mnpm ci --ignore-scripts[0m
+2026-10-21T10:00:34.6040447Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:00:34.6040731Z env:
+2026-10-21T10:00:34.6040956Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:34.6041243Z ##[endgroup]
+2026-10-21T10:00:41.2639417Z 
+2026-10-21T10:00:41.2650555Z added 352 packages, and audited 496 packages in 7s
+2026-10-21T10:00:41.2651050Z 
+2026-10-21T10:00:41.2651399Z 106 packages are looking for funding
+2026-10-21T10:00:41.2651988Z   run `npm fund` for details
+2026-10-21T10:00:41.2776834Z 
+2026-10-21T10:00:41.2778725Z 8 high severity vulnerabilities
+2026-10-21T10:00:41.2779420Z 
+2026-10-21T10:00:41.2780238Z To address all issues (including breaking changes), run:
+2026-10-21T10:00:41.2781255Z   npm audit fix --force
+2026-10-21T10:00:41.2781778Z 
+2026-10-21T10:00:41.2782310Z Run `npm audit` for details.
+2026-10-21T10:00:41.3431161Z ##[group]Run npm audit signatures
+2026-10-21T10:00:41.3431676Z [36;1mnpm audit signatures[0m
+2026-10-21T10:00:41.3515994Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:00:41.3516439Z env:
+2026-10-21T10:00:41.3517282Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:41.3517651Z ##[endgroup]
+2026-10-21T10:00:47.8407246Z audited 495 packages in 6s
+2026-10-21T10:00:47.8413815Z 
+2026-10-21T10:00:47.8418273Z 495 packages have verified registry signatures
+2026-10-21T10:00:47.8458711Z 
+2026-10-21T10:00:47.8459862Z 129 packages have verified attestations
+2026-10-21T10:00:47.8461530Z (use --json --include-attestations to view attestation details)
+2026-10-21T10:00:47.8462259Z 
+2026-10-21T10:00:47.8840314Z ##[group]Run pwsh -NoProfile -File ./Tools/test-commitlint-workflow.ps1
+2026-10-21T10:00:47.8840868Z [36;1mpwsh -NoProfile -File ./Tools/test-commitlint-workflow.ps1[0m
+2026-10-21T10:00:47.8864975Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:00:47.8865262Z env:
+2026-10-21T10:00:47.8865469Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:47.8865721Z ##[endgroup]
+2026-10-21T10:00:48.3889899Z test_builds_caller_registers_exact_title_check_on_edits (test_commitlint_workflow.CommitlintWorkflowTests.test_builds_caller_registers_exact_title_check_on_edits) ... ok
+2026-10-21T10:00:51.1295583Z test_pinned_commitlint_rejects_malformed_and_default_ignored_titles (test_commitlint_workflow.CommitlintWorkflowTests.test_pinned_commitlint_rejects_malformed_and_default_ignored_titles) ... ok
+2026-10-21T10:00:51.1299346Z test_pull_request_title_is_an_explicit_input_transferred_by_environment_and_stdin (test_commitlint_workflow.CommitlintWorkflowTests.test_pull_request_title_is_an_explicit_input_transferred_by_environment_and_stdin) ... ok
+2026-10-21T10:00:51.4589365Z test_pull_request_title_is_not_evaluated_as_shell_code (test_commitlint_workflow.CommitlintWorkflowTests.test_pull_request_title_is_not_evaluated_as_shell_code) ... ok
+2026-10-21T10:00:51.4592879Z test_release_installs_locked_node_dependencies_before_commitlint_contracts (test_commitlint_workflow.CommitlintWorkflowTests.test_release_installs_locked_node_dependencies_before_commitlint_contracts) ... ok
+2026-10-21T10:00:51.4596205Z test_shared_guidance_requires_title_edit_events_and_exact_title_input (test_commitlint_workflow.CommitlintWorkflowTests.test_shared_guidance_requires_title_edit_events_and_exact_title_input) ... ok
+2026-10-21T10:00:51.4597917Z 
+2026-10-21T10:00:51.4598679Z ----------------------------------------------------------------------
+2026-10-21T10:00:51.4599358Z Ran 6 tests in 3.070s
+2026-10-21T10:00:51.4599624Z 
+2026-10-21T10:00:51.4599774Z OK
+2026-10-21T10:00:51.4841666Z Commitlint workflow tests passed.
+2026-10-21T10:00:51.6343861Z ##[group]Run pwsh -NoProfile -File ./Tools/test-publish-packages.ps1
+2026-10-21T10:00:51.6344749Z [36;1mpwsh -NoProfile -File ./Tools/test-publish-packages.ps1[0m
+2026-10-21T10:00:51.6381385Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:00:51.6381873Z env:
+2026-10-21T10:00:51.6382219Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:51.6382663Z ##[endgroup]
+2026-10-21T10:00:52.1635974Z Publishing release 9.8.7 to NuGet.org
+2026-10-21T10:00:52.2628795Z Publishing pre-release 9.8.7-preview.1 to GitHub Packages
+2026-10-21T10:00:52.3088196Z Legacy package publisher checks passed.
+2026-10-21T10:00:52.4606270Z ##[group]Run pwsh -NoProfile -File ./Tools/test-publish-g4-tool-packages.ps1
+2026-10-21T10:00:52.4607338Z [36;1mpwsh -NoProfile -File ./Tools/test-publish-g4-tool-packages.ps1[0m
+2026-10-21T10:00:52.4632015Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:00:52.4632327Z env:
+2026-10-21T10:00:52.4632538Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:00:52.4632805Z ##[endgroup]
+2026-10-21T10:01:03.6399934Z Publishing the verified G-4 tool package inventory to NuGet.org stable release.
+2026-10-21T10:01:03.6620164Z Verified remote 'Hexalith.Builds.Evidence.Cli' '9.8.7' SHA-256 9BF05F220598D83F2B323068C61052D95D7D71D4A906E8747768C0EAFF5D31C7 (qualified local SHA-256 9BF05F220598D83F2B323068C61052D95D7D71D4A906E8747768C0EAFF5D31C7).
+2026-10-21T10:01:03.6657196Z Verified remote 'Hexalith.Builds.Module.Cli' '9.8.7' SHA-256 F5AF36086E27FEFD67D29A8F787686C335C3BDC9E7A5621873F8769F5C168701 (qualified local SHA-256 F5AF36086E27FEFD67D29A8F787686C335C3BDC9E7A5621873F8769F5C168701).
+2026-10-21T10:01:12.1877035Z Publishing the verified G-4 tool package inventory to NuGet.org stable release.
+2026-10-21T10:01:12.2042253Z Verified remote 'Hexalith.Builds.Evidence.Cli' '9.8.30' SHA-256 5C871E61EDF5A2E80778F65FC3E4628907C909A61F66B9DE8253789A2C69176B (qualified local SHA-256 9BAEDE28648A9ACAFE8613ACC4A23AC759510D062F6C2FD7B5B40F90FAE34949).
+2026-10-21T10:01:12.2073848Z Verified remote 'Hexalith.Builds.Module.Cli' '9.8.30' SHA-256 2F5E0949BDB40DF65B99164319C477569BE7F5EFD8A62E096C2324CE651F10BA (qualified local SHA-256 FBCB426BC8C3F465BD19CE79B5E997EAA2EAD01CD3653E9E80100BDB8A1835DE).
+2026-10-21T10:01:20.6064384Z Publishing the verified G-4 tool package inventory to NuGet.org stable release.
+2026-10-21T10:01:20.6178822Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.32' is not available yet (attempt 1 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:20.6210995Z Verified remote 'Hexalith.Builds.Evidence.Cli' '9.8.32' SHA-256 8CF50407DCA9350FE83227336A8ED98E7D9B758EB275AF378ED709501CA9F2F5 (qualified local SHA-256 8CF50407DCA9350FE83227336A8ED98E7D9B758EB275AF378ED709501CA9F2F5).
+2026-10-21T10:01:20.6224970Z Remote 'Hexalith.Builds.Module.Cli' '9.8.32' is not available yet (attempt 1 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:20.6237746Z Verified remote 'Hexalith.Builds.Module.Cli' '9.8.32' SHA-256 8120C035A17AE419162408D2541FF78FC07AB7A43E0B2E723723B4E00BEE376F (qualified local SHA-256 8120C035A17AE419162408D2541FF78FC07AB7A43E0B2E723723B4E00BEE376F).
+2026-10-21T10:01:29.4371062Z Publishing the verified G-4 tool package inventory to NuGet.org stable release.
+2026-10-21T10:01:29.4388670Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 1 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4391059Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 2 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4406024Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 3 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4408725Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 4 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4411026Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 5 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4413313Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 6 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4415615Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 7 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4420594Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 8 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4455390Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 9 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4458242Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 10 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4459702Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 11 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4461062Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 12 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4462404Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 13 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4463751Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 14 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4484378Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 15 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4486989Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 16 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4508511Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 17 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4510896Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 18 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4513344Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 19 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4515743Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 20 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4518371Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 21 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4521221Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 22 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4523457Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 23 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4525777Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 24 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4528581Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 25 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4565166Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 26 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4578584Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 27 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4608499Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 28 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4648361Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 29 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4678312Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 30 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4698875Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 31 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4705661Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 32 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4708350Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 33 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4710713Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 34 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4713060Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 35 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4715424Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 36 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4718066Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 37 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4720557Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 38 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4723866Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 39 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4727188Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 40 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4729494Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 41 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4732016Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 42 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4734531Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 43 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:29.4737171Z Remote 'Hexalith.Builds.Evidence.Cli' '9.8.33' is not available yet (attempt 44 of 45); waiting 20s for repository signing to publish the package blob.
+2026-10-21T10:01:38.2737317Z Publishing the verified G-4 tool package inventory to NuGet.org stable release.
+2026-10-21T10:01:46.8894773Z Publishing the verified G-4 tool package inventory to GitHub Packages prerelease.
+2026-10-21T10:01:46.8950941Z Verified remote 'Hexalith.Builds.Evidence.Cli' '9.8.7-preview.1' SHA-256 680983268F915160ADB1BCC82F513386C81DE1A70A2A005A52F483F2146119D4 (qualified local SHA-256 680983268F915160ADB1BCC82F513386C81DE1A70A2A005A52F483F2146119D4).
+2026-10-21T10:01:46.8959498Z Verified remote 'Hexalith.Builds.Module.Cli' '9.8.7-preview.1' SHA-256 0ABCE6CA44D840F3D0F28CF969C7F47C18D2BC0CCCAE5AAB38F4AD82DB3B763C (qualified local SHA-256 0ABCE6CA44D840F3D0F28CF969C7F47C18D2BC0CCCAE5AAB38F4AD82DB3B763C).
+2026-10-21T10:07:14.9807398Z G-4 tool package publisher checks passed.
+2026-10-21T10:07:15.1519110Z ##[group]Run pwsh -NoProfile -File ./Tools/test-g4-release-contract.ps1
+2026-10-21T10:07:15.1519683Z [36;1mpwsh -NoProfile -File ./Tools/test-g4-release-contract.ps1[0m
+2026-10-21T10:07:15.1543521Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:07:15.1543814Z env:
+2026-10-21T10:07:15.1544030Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:07:15.1544290Z ##[endgroup]
+2026-10-21T10:07:15.7748516Z G-4 release lifecycle and pre-tag credential contracts passed.
+2026-10-21T10:07:15.9147533Z ##[group]Run bash ./Tools/test-g4-release-source.sh
+2026-10-21T10:07:15.9147956Z [36;1mbash ./Tools/test-g4-release-source.sh[0m
+2026-10-21T10:07:15.9211186Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T10:07:15.9211532Z env:
+2026-10-21T10:07:15.9211737Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:07:15.9211997Z ##[endgroup]
+2026-10-21T10:07:16.0010484Z G-4 release source guard checks passed.
+2026-10-21T10:07:16.0055124Z ##[group]Run pwsh -NoProfile -File ./Tools/test-g4-tool-package-contract-gate.ps1
+2026-10-21T10:07:16.0055745Z [36;1mpwsh -NoProfile -File ./Tools/test-g4-tool-package-contract-gate.ps1[0m
+2026-10-21T10:07:16.0080089Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:07:16.0080381Z env:
+2026-10-21T10:07:16.0080589Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:07:16.0080849Z ##[endgroup]
+2026-10-21T10:07:53.4674399Z Packing Hexalith.Builds.Module.Cli at 4.31.2 in Release configuration.
+2026-10-21T10:07:53.4910849Z Packing Hexalith.Builds.Evidence.Cli at 4.31.2 in Release configuration.
+2026-10-21T10:07:53.5411682Z Official package wrapper controls passed: version propagation and post-pack loader refusal.
+2026-10-21T10:07:55.4886539Z Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:07:56.7592763Z Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:07:58.1614793Z warning: in the working copy of 'test/fixtures/eol/Sample.cs', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T10:07:58.4678399Z G-4 tool package artifact validator tests passed: 63 scenarios.
+2026-10-21T10:07:58.5162658Z G-4 tool package qualification gate checks passed: reused, pre-package, post-package, and duplicate-output failures expose no inventory.
+2026-10-21T10:07:58.6850905Z ##[group]Run pwsh -NoProfile -File ./Tools/test-g4-tool-package-artifact-validator.ps1
+2026-10-21T10:07:58.6851609Z [36;1mpwsh -NoProfile -File ./Tools/test-g4-tool-package-artifact-validator.ps1[0m
+2026-10-21T10:07:58.6877060Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:07:58.6877363Z env:
+2026-10-21T10:07:58.6877577Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:07:58.6877837Z ##[endgroup]
+2026-10-21T10:07:59.8186319Z warning: in the working copy of 'test/fixtures/eol/Sample.cs', LF will be replaced by CRLF the next time Git touches it
+2026-10-21T10:08:00.1228709Z G-4 tool package artifact validator tests passed: 63 scenarios.
+2026-10-21T10:08:00.2713297Z ##[group]Run dotnet restore Hexalith.Builds.slnx
+2026-10-21T10:08:00.2713697Z [36;1mdotnet restore Hexalith.Builds.slnx[0m
+2026-10-21T10:08:00.2778778Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:08:00.2779062Z env:
+2026-10-21T10:08:00.2779288Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:08:00.2779566Z ##[endgroup]
+2026-10-21T10:08:01.7535501Z   Determining projects to restore...
+2026-10-21T10:08:03.0303100Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Orders.Descriptor/P0Fixture.Orders.Descriptor.csproj (in 281 ms).
+2026-10-21T10:08:03.0305902Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Inventory.Descriptor/P0Fixture.Inventory.Descriptor.csproj (in 281 ms).
+2026-10-21T10:08:03.0387983Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Ui.Descriptor/P0Fixture.Ui.Descriptor.csproj (in 3 ms).
+2026-10-21T10:08:03.3838539Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Ui/P0Fixture.Ui.csproj (in 657 ms).
+2026-10-21T10:08:04.0967371Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.UiHost/Hexalith.Builds.Module.UiHost.csproj (in 1.05 sec).
+2026-10-21T10:08:04.1743043Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Inventory/P0Fixture.Inventory.csproj (in 1.42 sec).
+2026-10-21T10:08:04.4239689Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Orders/P0Fixture.Orders.csproj (in 1.11 sec).
+2026-10-21T10:08:04.4245261Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj (in 238 ms).
+2026-10-21T10:08:04.4427316Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/Hexalith.Builds.Evidence.Cli.csproj (in 251 ms).
+2026-10-21T10:08:04.7932608Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.EventStoreHost/Hexalith.Builds.Module.EventStoreHost.csproj (in 1.39 sec).
+2026-10-21T10:08:06.5409297Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj (in 1.52 sec).
+2026-10-21T10:08:06.5438934Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj (in 1.89 sec).
+2026-10-21T10:08:07.8865348Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.AppHost/Hexalith.Builds.Module.AppHost.csproj (in 3.78 sec).
+2026-10-21T10:08:07.8893754Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj (in 3.43 sec).
+2026-10-21T10:08:07.8934427Z   1 of 15 projects are up-to-date for restore.
+2026-10-21T10:08:07.9557879Z ##[group]Run dotnet build Hexalith.Builds.slnx --no-restore --configuration Release -warnaserror -p:GeneratePackageOnBuild=false
+2026-10-21T10:08:07.9558842Z [36;1mdotnet build Hexalith.Builds.slnx --no-restore --configuration Release -warnaserror -p:GeneratePackageOnBuild=false[0m
+2026-10-21T10:08:07.9623774Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:08:07.9624049Z env:
+2026-10-21T10:08:07.9624262Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:08:07.9624520Z ##[endgroup]
+2026-10-21T10:08:10.4269271Z   P0Fixture.Inventory.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Inventory.Descriptor/P0Fixture.Inventory.Descriptor.dll
+2026-10-21T10:08:13.6319756Z   Hexalith.Builds.Module.EventStoreHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.EventStoreHost/bin/Release/net10.0/Hexalith.Builds.Module.EventStoreHost.dll
+2026-10-21T10:08:13.6590610Z   P0Fixture.Inventory -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Inventory/P0Fixture.Inventory.dll
+2026-10-21T10:08:14.8558819Z   P0Fixture.Orders.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Orders.Descriptor/P0Fixture.Orders.Descriptor.dll
+2026-10-21T10:08:15.0669036Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:08:15.0912136Z   Hexalith.Builds.Module.UiHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.UiHost/bin/Release/net10.0/Hexalith.Builds.Module.UiHost.dll
+2026-10-21T10:08:15.2339039Z   P0Fixture.Orders -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Orders/P0Fixture.Orders.dll
+2026-10-21T10:08:15.4139041Z   P0Fixture.Ui.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Ui.Descriptor/P0Fixture.Ui.Descriptor.dll
+2026-10-21T10:08:15.5760646Z   P0Fixture.Ui -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Ui/P0Fixture.Ui.dll
+2026-10-21T10:08:48.4259797Z   Hexalith.Builds.Tooling -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/bin/Release/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:08:48.8525963Z   Hexalith.Builds.Evidence.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Release/net10.0/Hexalith.Builds.Evidence.Cli.dll
+2026-10-21T10:08:48.8844300Z   Hexalith.Builds.Module.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/bin/Release/net10.0/Hexalith.Builds.Module.Cli.dll
+2026-10-21T10:08:52.4903345Z   Hexalith.Builds.Module.AppHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.AppHost/bin/Release/net10.0/Hexalith.Builds.Module.AppHost.dll
+2026-10-21T10:08:55.2705360Z   Hexalith.Builds.Evidence.Tests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/bin/Release/net10.0/Hexalith.Builds.Evidence.Tests.dll
+2026-10-21T10:09:12.6643925Z   Hexalith.Builds.Module.Tests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll
+2026-10-21T10:09:12.7128006Z   Hexalith.Builds.Tooling.IntegrationTests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll
+2026-10-21T10:09:12.7506283Z 
+2026-10-21T10:09:12.7514575Z Build succeeded.
+2026-10-21T10:09:12.7515082Z     0 Warning(s)
+2026-10-21T10:09:12.7515521Z     0 Error(s)
+2026-10-21T10:09:12.7516410Z 
+2026-10-21T10:09:12.7517258Z Time Elapsed 00:01:04.39
+2026-10-21T10:09:12.7805970Z ##[group]Run dotnet test test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj --no-restore --configuration Release
+2026-10-21T10:09:12.7809196Z [36;1mdotnet test test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj --no-restore --configuration Release[0m
+2026-10-21T10:09:12.7872458Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:09:12.7872733Z env:
+2026-10-21T10:09:12.7872948Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:09:12.7873215Z ##[endgroup]
+2026-10-21T10:09:20.2369354Z Running tests from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll (net10.0|x64)
+2026-10-21T10:12:07.4222874Z [33mskipped[m Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceAppHostTests.PlatformPlanDelegatesToThePinnedModelAsync
+2026-10-21T10:12:07.4226966Z   This integration assertion requires the enclosing Platform checkout.
+2026-10-21T10:12:07.4231644Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll (net10.0|x64)
+2026-10-21T10:12:13.4122249Z [33mskipped[m Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceMsBuildTests.RootDeclaredCommonsLibraryCandidateSelectsSourceAsync
+2026-10-21T10:12:13.4123302Z   This repository is not inside the Platform root with its Commons checkout.
+2026-10-21T10:12:13.4124315Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll (net10.0|x64)
+2026-10-21T10:12:39.1950086Z [33mskipped[m Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceMsBuildTests.RootDeclaredEventStoreCandidatesExcludeArchivedEvidenceAsync
+2026-10-21T10:12:39.1972950Z   This repository is not inside the Platform root with its EventStore checkout.
+2026-10-21T10:12:39.1998610Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll (net10.0|x64)
+2026-10-21T10:15:17.2776269Z [m/home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll (net10.0|x64) [32mpassed[m [90m(5m 57s 043ms)[m
+2026-10-21T10:15:17.2821271Z 
+2026-10-21T10:15:17.2830996Z [32mTest run summary: Passed!
+2026-10-21T10:15:17.2836264Z [m  total: 1293
+2026-10-21T10:15:17.2836847Z   failed: 0
+2026-10-21T10:15:17.2838129Z [32m  succeeded: 1290
+2026-10-21T10:15:17.2838433Z [m  skipped: 3
+2026-10-21T10:15:17.2838824Z   duration: 5m 57s 290ms
+2026-10-21T10:15:17.3054426Z ##[group]Run dotnet test test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj --no-restore --configuration Release
+2026-10-21T10:15:17.3055426Z [36;1mdotnet test test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj --no-restore --configuration Release[0m
+2026-10-21T10:15:17.3118887Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:15:17.3119152Z env:
+2026-10-21T10:15:17.3119365Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:15:17.3119621Z ##[endgroup]
+2026-10-21T10:15:21.3092025Z Running tests from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/bin/Release/net10.0/Hexalith.Builds.Evidence.Tests.dll (net10.0|x64)
+2026-10-21T10:15:22.7540417Z [m/home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/bin/Release/net10.0/Hexalith.Builds.Evidence.Tests.dll (net10.0|x64) [32mpassed[m [90m(1s 447ms)[m
+2026-10-21T10:15:22.7585310Z 
+2026-10-21T10:15:22.7595336Z [32mTest run summary: Passed!
+2026-10-21T10:15:22.7600685Z [m  total: 107
+2026-10-21T10:15:22.7601115Z   failed: 0
+2026-10-21T10:15:22.7601462Z [32m  succeeded: 107
+2026-10-21T10:15:22.7601889Z [m  skipped: 0
+2026-10-21T10:15:22.7602369Z   duration: 1s 692ms
+2026-10-21T10:15:22.7855835Z ##[group]Run dotnet test test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj --no-restore --configuration Release
+2026-10-21T10:15:22.7858984Z [36;1mdotnet test test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj --no-restore --configuration Release[0m
+2026-10-21T10:15:22.7921996Z shell: /usr/bin/bash -e {0}
+2026-10-21T10:15:22.7922246Z env:
+2026-10-21T10:15:22.7922452Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:15:22.7922711Z ##[endgroup]
+2026-10-21T10:15:28.1429492Z Running tests from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5342040Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePersistedRunTests.FrontComposerHostShowsBothBoundedContextsAsync
+2026-10-21T10:15:28.5349094Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5352189Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5369963Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePersistedRunTests.AuthenticatedCommandsPersistEventsAtExpectedSequenceAsync(domain: "p0-inventory", commandType: "ReserveStock", eventType: "Hexalith.Builds.P0Fixture.Inventory.StockReserved")
+2026-10-21T10:15:28.5376312Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5380240Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5387097Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePersistedRunTests.AuthenticatedCommandsPersistEventsAtExpectedSequenceAsync(domain: "p0-orders", commandType: "PlaceOrder", eventType: "Hexalith.Builds.P0Fixture.Orders.OrderPlaced")
+2026-10-21T10:15:28.5392080Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5395802Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5399763Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePersistedRunTests.IdentityRejectsAnonymousForeignKeyAndForeignTenantAsync
+2026-10-21T10:15:28.5403127Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5406211Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5417453Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePersistedRunTests.EventStoreInvokesModulesThroughDaprSidecarsAsync
+2026-10-21T10:15:28.5419843Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5423381Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5468785Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LiveRunIsolationTests.ConcurrentRunsAreIsolatedAndDownOfOneLeavesTheOtherHealthyAsync
+2026-10-21T10:15:28.5471979Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5475803Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5505767Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LivePublicCommandTests.RunDownAndTestUseRunScopedLiveCompositionAsync
+2026-10-21T10:15:28.5508932Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5511864Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5528251Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LiveCancellationTests.CancellingMidStartupLeavesNoProcessOrContainerAsync
+2026-10-21T10:15:28.5531159Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5532822Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5560465Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LiveLifecycleTests.RunStartsHealthyCarriesRunIdentityAndStopsAsync
+2026-10-21T10:15:28.5563830Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5567312Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5581724Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.LiveLifecycleTests.DownLeavesNothingTaggedAndIsIdempotentAsync
+2026-10-21T10:15:28.5585367Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5589254Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5613008Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.PackagedPersistedProfileTests.InstalledToolPassesPersistedProfileWithNativeReportAsync(profile: "full", platform: "vstest")
+2026-10-21T10:15:28.5616959Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5620217Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.5626484Z [33mskipped[m Hexalith.Builds.Tooling.IntegrationTests.Live.PackagedPersistedProfileTests.InstalledToolPassesPersistedProfileWithNativeReportAsync(profile: "full-mtp", platform: "mtp")
+2026-10-21T10:15:28.5630504Z   Live G-4 composition is opt-in: set HEXALITH_G4_LIVE=1 and HEXALITH_DAPR_HOME to a verified Dapr CLI 1.18.0 / runtime 1.18.2 home with Docker available, and install an Aspire CLI 13.6.1. A skipped live test is not passing evidence.
+2026-10-21T10:15:28.5633565Z   from /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64)
+2026-10-21T10:15:28.9620094Z [m/home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll (net10.0|x64) [32mpassed[m [90m(821ms)[m
+2026-10-21T10:15:28.9666035Z 
+2026-10-21T10:15:28.9675387Z [32mTest run summary: Passed!
+2026-10-21T10:15:28.9681113Z [m  total: 13
+2026-10-21T10:15:28.9681545Z   failed: 0
+2026-10-21T10:15:28.9681934Z [32m  succeeded: 1
+2026-10-21T10:15:28.9682420Z [m  skipped: 12
+2026-10-21T10:15:28.9682846Z   duration: 1s 069ms
+2026-10-21T10:15:28.9937155Z ##[group]Run pwsh -NoProfile -File ./Tools/test-g4-tool-package-contracts.ps1 -Version "0.0.0-ci.$env:GITHUB_RUN_NUMBER" -RequireControls -SkipSourceValidation
+2026-10-21T10:15:28.9939279Z [36;1mpwsh -NoProfile -File ./Tools/test-g4-tool-package-contracts.ps1 -Version "0.0.0-ci.$env:GITHUB_RUN_NUMBER" -RequireControls -SkipSourceValidation[0m
+2026-10-21T10:15:28.9967890Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:15:28.9968185Z env:
+2026-10-21T10:15:28.9968400Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:15:28.9968673Z ##[endgroup]
+2026-10-21T10:16:22.2703853Z Packing Hexalith.Builds.Module.Cli at 0.0.0-ci.396 in Release configuration.
+2026-10-21T10:16:28.0118973Z Packing Hexalith.Builds.Evidence.Cli at 0.0.0-ci.396 in Release configuration.
+2026-10-21T10:16:34.7544530Z Packaged Platform loader passed offline; contract Hexalith.Builds.Tooling, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null; runtime start reached the run-private Aspire store '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/platform-loader/workspace/aspire-store/.aspire'; no resources started. Receipt: /tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/platform-loader
+2026-10-21T10:16:34.7582687Z   Determining projects to restore...
+2026-10-21T10:16:34.7584226Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj (in 329 ms).
+2026-10-21T10:16:34.7586475Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/Hexalith.Builds.Evidence.Cli.csproj (in 329 ms).
+2026-10-21T10:16:34.7588967Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj (in 329 ms).
+2026-10-21T10:16:34.7590888Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Ui/P0Fixture.Ui.csproj (in 329 ms).
+2026-10-21T10:16:34.7592723Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Ui.Descriptor/P0Fixture.Ui.Descriptor.csproj (in 5 ms).
+2026-10-21T10:16:34.7594218Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.UiHost/Hexalith.Builds.Module.UiHost.csproj (in 49 ms).
+2026-10-21T10:16:34.7595893Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Orders.Descriptor/P0Fixture.Orders.Descriptor.csproj (in 4 ms).
+2026-10-21T10:16:34.7598418Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Orders/P0Fixture.Orders.csproj (in 71 ms).
+2026-10-21T10:16:34.7600781Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.EventStoreHost/Hexalith.Builds.Module.EventStoreHost.csproj (in 69 ms).
+2026-10-21T10:16:34.7603531Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Inventory.Descriptor/P0Fixture.Inventory.Descriptor.csproj (in 4 ms).
+2026-10-21T10:16:34.7606019Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/fixtures/module/executable/P0Fixture.Inventory/P0Fixture.Inventory.csproj (in 13 ms).
+2026-10-21T10:16:34.7609077Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj (in 80 ms).
+2026-10-21T10:16:34.7611535Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj (in 69 ms).
+2026-10-21T10:16:34.7613831Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.AppHost/Hexalith.Builds.Module.AppHost.csproj (in 194 ms).
+2026-10-21T10:16:34.7616086Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj (in 109 ms).
+2026-10-21T10:16:34.7619601Z   Hexalith.Builds.Module.EventStoreHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.EventStoreHost/bin/Release/net10.0/Hexalith.Builds.Module.EventStoreHost.dll
+2026-10-21T10:16:34.7622933Z   P0Fixture.Inventory.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Inventory.Descriptor/P0Fixture.Inventory.Descriptor.dll
+2026-10-21T10:16:34.7625680Z   P0Fixture.Orders.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Orders.Descriptor/P0Fixture.Orders.Descriptor.dll
+2026-10-21T10:16:34.7628772Z   Hexalith.Builds.Module.UiHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.UiHost/bin/Release/net10.0/Hexalith.Builds.Module.UiHost.dll
+2026-10-21T10:16:34.7631306Z   P0Fixture.Ui.Descriptor -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Ui.Descriptor/P0Fixture.Ui.Descriptor.dll
+2026-10-21T10:16:34.7633445Z   P0Fixture.Ui -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Ui/P0Fixture.Ui.dll
+2026-10-21T10:16:34.7635427Z   P0Fixture.Orders -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Orders/P0Fixture.Orders.dll
+2026-10-21T10:16:34.7637998Z   P0Fixture.Inventory -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/artifacts/g4-fixture/bin/P0Fixture.Inventory/P0Fixture.Inventory.dll
+2026-10-21T10:16:34.7640439Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:16:34.7642962Z   Hexalith.Builds.Tooling -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/bin/Release/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:16:34.7645618Z   Hexalith.Builds.Evidence.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Release/net10.0/Hexalith.Builds.Evidence.Cli.dll
+2026-10-21T10:16:34.7648599Z   Hexalith.Builds.Module.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/bin/Release/net10.0/Hexalith.Builds.Module.Cli.dll
+2026-10-21T10:16:34.7651414Z   Hexalith.Builds.Evidence.Tests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Evidence.Tests/bin/Release/net10.0/Hexalith.Builds.Evidence.Tests.dll
+2026-10-21T10:16:34.7654197Z   Hexalith.Builds.Module.AppHost -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/hosts/Hexalith.Builds.Module.AppHost/bin/Release/net10.0/Hexalith.Builds.Module.AppHost.dll
+2026-10-21T10:16:34.7657548Z   Hexalith.Builds.Tooling.IntegrationTests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Tooling.IntegrationTests/bin/Release/net10.0/Hexalith.Builds.Tooling.IntegrationTests.dll
+2026-10-21T10:16:34.7659411Z   Hexalith.Builds.Module.Tests -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/test/Hexalith.Builds.Module.Tests/bin/Release/net10.0/Hexalith.Builds.Module.Tests.dll
+2026-10-21T10:16:34.7660072Z 
+2026-10-21T10:16:34.7660172Z Build succeeded.
+2026-10-21T10:16:34.7660397Z     0 Warning(s)
+2026-10-21T10:16:34.7660606Z     0 Error(s)
+2026-10-21T10:16:34.7660723Z 
+2026-10-21T10:16:34.7660870Z Time Elapsed 00:00:49.95
+2026-10-21T10:16:34.7661749Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:16:34.7663094Z   Hexalith.Builds.Tooling -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/bin/Release/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:16:34.7664448Z   Hexalith.Builds.Module.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/bin/Release/net10.0/Hexalith.Builds.Module.Cli.dll
+2026-10-21T10:16:34.7666013Z   Hexalith.Builds.Module.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/bin/Release/net10.0/Hexalith.Builds.Module.Cli.dll
+2026-10-21T10:16:34.7667610Z   Hexalith.Builds.Module.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/bin/Release/net10.0/publish/
+2026-10-21T10:16:34.7669014Z   Successfully created package '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/Hexalith.Builds.Module.Cli.0.0.0-ci.396.nupkg'.
+2026-10-21T10:16:34.7670246Z   Successfully created package '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/Hexalith.Builds.Module.Cli.0.0.0-ci.396.snupkg'.
+2026-10-21T10:16:34.7671544Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:16:34.7672871Z   Hexalith.Builds.Tooling -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/bin/Release/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:16:34.7674244Z   Hexalith.Builds.Evidence.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Release/net10.0/Hexalith.Builds.Evidence.Cli.dll
+2026-10-21T10:16:34.7675670Z   Hexalith.Builds.Evidence.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Release/net10.0/Hexalith.Builds.Evidence.Cli.dll
+2026-10-21T10:16:34.7677238Z   Hexalith.Builds.Evidence.Cli -> /home/runner/work/Hexalith.Builds/Hexalith.Builds/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Release/net10.0/publish/
+2026-10-21T10:16:34.7678497Z   Successfully created package '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/Hexalith.Builds.Evidence.Cli.0.0.0-ci.396.nupkg'.
+2026-10-21T10:16:34.7679746Z   Successfully created package '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/Hexalith.Builds.Evidence.Cli.0.0.0-ci.396.snupkg'.
+2026-10-21T10:16:35.9663138Z Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:16:36.7011673Z Tool 'hexalith.builds.module.cli' (version '0.0.0-ci.396') was restored. Available commands: hexalith-module
+2026-10-21T10:16:36.7013685Z Tool 'hexalith.builds.evidence.cli' (version '0.0.0-ci.396') was restored. Available commands: hexalith-evidence
+2026-10-21T10:16:36.7014583Z 
+2026-10-21T10:16:36.7015089Z Restore was successful.
+2026-10-21T10:17:23.2070824Z   Determining projects to restore...
+2026-10-21T10:17:23.2073197Z   Restored /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj (in 926 ms).
+2026-10-21T10:17:23.2079956Z   Restored /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj (in 926 ms).
+2026-10-21T10:17:23.2083160Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:17:23.2086239Z   Hexalith.Builds.Tooling -> /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Tooling/bin/Debug/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:17:23.2089873Z   Hexalith.Builds.Module.Cli -> /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Module.Cli/bin/Debug/net10.0/Hexalith.Builds.Module.Cli.dll
+2026-10-21T10:17:23.2091608Z 
+2026-10-21T10:17:23.2091995Z Build succeeded.
+2026-10-21T10:17:23.2092489Z     0 Warning(s)
+2026-10-21T10:17:23.2093064Z     0 Error(s)
+2026-10-21T10:17:23.2093510Z 
+2026-10-21T10:17:23.2093993Z Time Elapsed 00:00:33.01
+2026-10-21T10:17:27.2264812Z   Determining projects to restore...
+2026-10-21T10:17:27.2267832Z   Restored /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Evidence.Cli/Hexalith.Builds.Evidence.Cli.csproj (in 309 ms).
+2026-10-21T10:17:27.2269751Z   1 of 2 projects are up-to-date for restore.
+2026-10-21T10:17:27.2271715Z   Platform version catalog validated: Hexalith.EventStore.Aspire/3.126.0, CommunityToolkit.Aspire.Hosting.Dapr/13.6.1-beta.935, required range 13.6.1-beta.935 for net10.0.
+2026-10-21T10:17:27.2274596Z   Hexalith.Builds.Tooling -> /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Tooling/bin/Debug/net10.0/Hexalith.Builds.Tooling.dll
+2026-10-21T10:17:27.2278048Z   Hexalith.Builds.Evidence.Cli -> /tmp/hexalith-builds-g4-source-d13a706c272c4d7ca39dbb71ae796a44/src/libraries/Hexalith.Builds.Evidence.Cli/bin/Debug/net10.0/Hexalith.Builds.Evidence.Cli.dll
+2026-10-21T10:17:27.2279620Z 
+2026-10-21T10:17:27.2279827Z Build succeeded.
+2026-10-21T10:17:27.2280244Z     0 Warning(s)
+2026-10-21T10:17:27.2280637Z     0 Error(s)
+2026-10-21T10:17:27.2280864Z 
+2026-10-21T10:17:27.2281111Z Time Elapsed 00:00:03.73
+2026-10-21T10:18:12.2648271Z   Determining projects to restore...
+2026-10-21T10:18:12.2649626Z   Restored /home/runner/work/Hexalith.Builds/Hexalith.Builds/Tools/PackagedSeedProbe/PackagedSeedProbe.csproj (in 626 ms).
+2026-10-21T10:18:12.2651321Z   PackagedSeedProbe -> /tmp/hexalith-g4-seed-probe-185be0d1af5d41c7ad4d88629fc70ad9/PackagedSeedProbe.dll
+2026-10-21T10:18:12.2652117Z 
+2026-10-21T10:18:12.2652266Z Build succeeded.
+2026-10-21T10:18:12.2652638Z     0 Warning(s)
+2026-10-21T10:18:12.2652983Z     0 Error(s)
+2026-10-21T10:18:12.2653175Z 
+2026-10-21T10:18:12.2653416Z Time Elapsed 00:00:02.49
+2026-10-21T10:18:12.2655970Z {"EventId":35,"LogLevel":"Warning","Category":"Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager","Message":"No XML encryptor configured. Key {393b262a-0584-4884-8fd4-9c618737af22} may be persisted to storage in unencrypted form.","State":{"KeyId":"393b262a-0584-4884-8fd4-9c618737af22","{OriginalFormat}":"No XML encryptor configured. Key {KeyId:B} may be persisted to storage in unencrypted form."}}
+2026-10-21T10:18:12.2663889Z {"EventId":7105,"LogLevel":"Warning","Category":"Hexalith.EventStore.Server.Configuration.FoldedSnapshotQualificationHostedService","Message":"Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent","State":{"Message":"{OriginalFormat}=Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent","{OriginalFormat}":"Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent"}}
+2026-10-21T10:18:12.2672607Z {"EventId":1120,"LogLevel":"Information","Category":"Hexalith.EventStore.Server.Projections.ProjectionDiscoveryHostedService","Message":"Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime.","State":{"Message":"{OriginalFormat}=Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime.","{OriginalFormat}":"Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime."}}
+2026-10-21T10:18:12.2679299Z {"EventId":1200,"LogLevel":"Information","Category":"Hexalith.EventStore.Server.Projections.ActiveRebuildIndexCleanupService","Message":"Active-rebuild-index cleanup service started: CadenceSeconds=60, Stage=ActiveRebuildIndexCleanupServiceStarted","State":{"Message":"CadenceSeconds=60,{OriginalFormat}=Active-rebuild-index cleanup service started: CadenceSeconds={CadenceSeconds}, Stage=ActiveRebuildIndexCleanupServiceStarted","CadenceSeconds":60,"{OriginalFormat}":"Active-rebuild-index cleanup service started: CadenceSeconds={CadenceSeconds}, Stage=ActiveRebuildIndexCleanupServiceStarted"}}
+2026-10-21T10:18:12.2682738Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Application started. Press Ctrl\u002BC to shut down.","State":{"{OriginalFormat}":"Application started. Press Ctrl\u002BC to shut down."}}
+2026-10-21T10:18:12.2684519Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Hosting environment: Development","State":{"EnvName":"Development","{OriginalFormat}":"Hosting environment: {EnvName}"}}
+2026-10-21T10:18:12.2688321Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Content root path: /tmp/hexalith-g4-seed-probe-185be0d1af5d41c7ad4d88629fc70ad9/seed-ea7827a30e124bf18a9c986a07302e70/tools/net10.0/any/g4-host/bin/EventStoreHost","State":{"ContentRoot":"/tmp/hexalith-g4-seed-probe-185be0d1af5d41c7ad4d88629fc70ad9/seed-ea7827a30e124bf18a9c986a07302e70/tools/net10.0/any/g4-host/bin/EventStoreHost","{OriginalFormat}":"Content root path: {ContentRoot}"}}
+2026-10-21T10:18:12.2703146Z {"EventId":0,"LogLevel":"Warning","Category":"Hexalith.EventStore.Configuration.DaprRateLimitConfigSync","Message":"DAPR config store unavailable for rate limit sync. Falling back to appsettings.json values.","Exception":"Dapr.DaprException: GetConfiguration operation failed: the Dapr endpoint indicated a failure. See InnerException for details.\n ---\u003E Grpc.Core.RpcException: Status(StatusCode=\u0022Unavailable\u0022, Detail=\u0022Error connecting to subchannel.\u0022, DebugException=\u0022System.Net.Sockets.SocketException: Connection refused\u0022)\n ---\u003E System.Net.Sockets.SocketException (111): Connection refused\n   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)\n   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)\n   at Grpc.Net.Client.Balancer.Internal.SocketConnectivitySubchannelTransport.TryConnectAsync(ConnectContext context, Int32 attempt)\n   --- End of inner exception stack trace ---\n   at Grpc.Net.Client.Balancer.Internal.ConnectionManager.PickAsync(PickContext context, Boolean waitForReady, CancellationToken cancellationToken)\n   at Grpc.Net.Client.Balancer.Internal.BalancerHttpHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)\n   at Grpc.Net.Client.Internal.GrpcCall\u00602.RunCall(HttpRequestMessage request, Nullable\u00601 timeout)\n   at Dapr.Client.DaprClientGrpc.GetConfiguration(String storeName, IReadOnlyList\u00601 keys, IReadOnlyDictionary\u00602 metadata, CancellationToken cancellationToken)\n   --- End of inner exception stack trace ---\n   at Dapr.Client.DaprClientGrpc.GetConfiguration(String storeName, IReadOnlyList\u00601 keys, IReadOnlyDictionary\u00602 metadata, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.FetchConfigurationAsync(DaprClient daprClient, String[] keys, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.LoadTenantIdsAsync(DaprClient daprClient, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.SyncTenantOverridesAsync(DaprClient daprClient, CancellationToken cancellationToken)","State":{"{OriginalFormat}":"DAPR config store unavailable for rate limit sync. Falling back to appsettings.json values."}}
+2026-10-21T10:18:12.2713671Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Application is shutting down...","State":{"{OriginalFormat}":"Application is shutting down..."}}
+2026-10-21T10:18:12.2720298Z {"EventId":7105,"LogLevel":"Warning","Category":"Hexalith.EventStore.Server.Configuration.FoldedSnapshotQualificationHostedService","Message":"Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent","State":{"Message":"{OriginalFormat}=Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent","{OriginalFormat}":"Folded snapshot qualification is not registered on the actor host; automatic snapshots are skipped and manual snapshot creation is unsupported. Enroll reviewed profiles on both hosts. Legacy history-bearing snapshots require full event replay. FailureClass=SnapshotCaptureUnsupported, Stage=FoldedSnapshotQualificationAbsent"}}
+2026-10-21T10:18:12.2728680Z {"EventId":1120,"LogLevel":"Information","Category":"Hexalith.EventStore.Server.Projections.ProjectionDiscoveryHostedService","Message":"Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime.","State":{"Message":"{OriginalFormat}=Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime.","{OriginalFormat}":"Projection discovery: no domain service registrations found in EventStore:DomainServices:Registrations. Projections will activate on first domain service resolution at runtime."}}
+2026-10-21T10:18:12.2734283Z {"EventId":1200,"LogLevel":"Information","Category":"Hexalith.EventStore.Server.Projections.ActiveRebuildIndexCleanupService","Message":"Active-rebuild-index cleanup service started: CadenceSeconds=60, Stage=ActiveRebuildIndexCleanupServiceStarted","State":{"Message":"CadenceSeconds=60,{OriginalFormat}=Active-rebuild-index cleanup service started: CadenceSeconds={CadenceSeconds}, Stage=ActiveRebuildIndexCleanupServiceStarted","CadenceSeconds":60,"{OriginalFormat}":"Active-rebuild-index cleanup service started: CadenceSeconds={CadenceSeconds}, Stage=ActiveRebuildIndexCleanupServiceStarted"}}
+2026-10-21T10:18:12.2749367Z {"EventId":0,"LogLevel":"Warning","Category":"Hexalith.EventStore.Configuration.DaprRateLimitConfigSync","Message":"DAPR config store unavailable for rate limit sync. Falling back to appsettings.json values.","Exception":"Dapr.DaprException: GetConfiguration operation failed: the Dapr endpoint indicated a failure. See InnerException for details.\n ---\u003E Grpc.Core.RpcException: Status(StatusCode=\u0022Unavailable\u0022, Detail=\u0022Error connecting to subchannel.\u0022, DebugException=\u0022System.Net.Sockets.SocketException: Connection refused\u0022)\n ---\u003E System.Net.Sockets.SocketException (111): Connection refused\n   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)\n   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)\n   at Grpc.Net.Client.Balancer.Internal.SocketConnectivitySubchannelTransport.TryConnectAsync(ConnectContext context, Int32 attempt)\n   --- End of inner exception stack trace ---\n   at Grpc.Net.Client.Balancer.Internal.ConnectionManager.PickAsync(PickContext context, Boolean waitForReady, CancellationToken cancellationToken)\n   at Grpc.Net.Client.Balancer.Internal.BalancerHttpHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)\n   at Grpc.Net.Client.Internal.GrpcCall\u00602.RunCall(HttpRequestMessage request, Nullable\u00601 timeout)\n   at Dapr.Client.DaprClientGrpc.GetConfiguration(String storeName, IReadOnlyList\u00601 keys, IReadOnlyDictionary\u00602 metadata, CancellationToken cancellationToken)\n   --- End of inner exception stack trace ---\n   at Dapr.Client.DaprClientGrpc.GetConfiguration(String storeName, IReadOnlyList\u00601 keys, IReadOnlyDictionary\u00602 metadata, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.FetchConfigurationAsync(DaprClient daprClient, String[] keys, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.LoadTenantIdsAsync(DaprClient daprClient, CancellationToken cancellationToken)\n   at Hexalith.EventStore.Configuration.DaprRateLimitConfigSync.SyncTenantOverridesAsync(DaprClient daprClient, CancellationToken cancellationToken)","State":{"{OriginalFormat}":"DAPR config store unavailable for rate limit sync. Falling back to appsettings.json values."}}
+2026-10-21T10:18:12.2759741Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Application started. Press Ctrl\u002BC to shut down.","State":{"{OriginalFormat}":"Application started. Press Ctrl\u002BC to shut down."}}
+2026-10-21T10:18:12.2761471Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Hosting environment: Development","State":{"EnvName":"Development","{OriginalFormat}":"Hosting environment: {EnvName}"}}
+2026-10-21T10:18:12.2764507Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Content root path: /tmp/hexalith-g4-seed-probe-185be0d1af5d41c7ad4d88629fc70ad9/seed-ea7827a30e124bf18a9c986a07302e70/tools/net10.0/any/g4-host/bin/EventStoreHost","State":{"ContentRoot":"/tmp/hexalith-g4-seed-probe-185be0d1af5d41c7ad4d88629fc70ad9/seed-ea7827a30e124bf18a9c986a07302e70/tools/net10.0/any/g4-host/bin/EventStoreHost","{OriginalFormat}":"Content root path: {ContentRoot}"}}
+2026-10-21T10:18:12.2767351Z {"EventId":0,"LogLevel":"Information","Category":"Microsoft.Hosting.Lifetime","Message":"Application is shutting down...","State":{"{OriginalFormat}":"Application is shutting down..."}}
+2026-10-21T10:18:12.2768383Z Packaged seed configured/declarative HTTP and receiver metadata checks passed.
+2026-10-21T10:18:40.9204871Z Packed G-4 tool contract qualification passed for version '0.0.0-ci.396'; inventory recorded at '/tmp/hexalith-builds-g4-packages-44d01e5bcee94411a6f5dbc4a89bf659/g4-tool-package-inventory.json'.
+2026-10-21T10:18:41.5470316Z ##[group]Run pwsh -NoProfile -File ./Tools/test-publish-containers.ps1
+2026-10-21T10:18:41.5470853Z [36;1mpwsh -NoProfile -File ./Tools/test-publish-containers.ps1[0m
+2026-10-21T10:18:41.5494967Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:18:41.5495300Z env:
+2026-10-21T10:18:41.5495510Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:18:41.5495771Z ##[endgroup]
+2026-10-21T10:18:42.1893666Z test_a_failed_dry_run_fails_closed_instead_of_publishing (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_failed_dry_run_fails_closed_instead_of_publishing) ... ok
+2026-10-21T10:18:42.2355026Z test_a_matching_package_count_is_accepted (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_matching_package_count_is_accepted) ... ok
+2026-10-21T10:18:42.2508084Z test_a_package_count_that_contradicts_the_caller_declaration_is_refused (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_package_count_that_contradicts_the_caller_declaration_is_refused) ... ok
+2026-10-21T10:18:42.2968512Z test_a_resolved_version_produces_an_attestable_inventory (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_resolved_version_produces_an_attestable_inventory) ... ok
+2026-10-21T10:18:42.3007016Z test_a_symlinked_candidate_directory_is_refused (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_symlinked_candidate_directory_is_refused) ... ok
+2026-10-21T10:18:42.3164709Z test_a_symlinked_package_is_refused (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_symlinked_package_is_refused) ... ok
+2026-10-21T10:18:42.3308739Z test_a_version_with_no_packages_fails_closed (test_governed_release_workflow.GovernedCandidatePhaseTests.test_a_version_with_no_packages_fails_closed) ... ok
+2026-10-21T10:18:42.4233499Z test_an_undeclared_package_count_does_not_constrain_the_inventory (test_governed_release_workflow.GovernedCandidatePhaseTests.test_an_undeclared_package_count_does_not_constrain_the_inventory) ... ok
+2026-10-21T10:18:42.4391135Z test_an_unparseable_dry_run_version_line_fails_closed (test_governed_release_workflow.GovernedCandidatePhaseTests.test_an_unparseable_dry_run_version_line_fails_closed) ... ok
+2026-10-21T10:18:42.4536378Z test_no_resolvable_version_records_that_no_release_was_warranted (test_governed_release_workflow.GovernedCandidatePhaseTests.test_no_resolvable_version_records_that_no_release_was_warranted) ... ok
+2026-10-21T10:18:42.4750081Z test_the_candidate_phase_refuses_an_unsafe_directory_at_the_point_of_delete (test_governed_release_workflow.GovernedCandidatePhaseTests.test_the_candidate_phase_refuses_an_unsafe_directory_at_the_point_of_delete) ... ok
+2026-10-21T10:18:42.4753910Z test_both_governed_stages_hand_their_expected_digest_to_the_evaluator (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_both_governed_stages_hand_their_expected_digest_to_the_evaluator) ... ok
+2026-10-21T10:18:42.4757760Z test_domain_ci_no_longer_resolves_builds_composites_from_a_branch (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_domain_ci_no_longer_resolves_builds_composites_from_a_branch) ... ok
+2026-10-21T10:18:42.4778620Z test_every_governed_workflow_reference_is_literal_40_hex_or_local (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_every_governed_workflow_reference_is_literal_40_hex_or_local) ... ok
+2026-10-21T10:18:42.5447003Z test_governed_ci_proves_its_reusable_workflow_identity (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_governed_ci_proves_its_reusable_workflow_identity) ... ok
+2026-10-21T10:18:42.5450213Z test_governed_provenance_is_exposed_to_callers_as_workflow_outputs (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_governed_provenance_is_exposed_to_callers_as_workflow_outputs) ... ok
+2026-10-21T10:18:42.5453504Z test_governed_release_reuses_the_existing_builds_identity_gate (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_governed_release_reuses_the_existing_builds_identity_gate) ... ok
+2026-10-21T10:18:42.5581186Z test_governed_release_validates_its_workflow_ref_path_like_governed_ci (test_governed_release_workflow.GovernedIdentityAndPinningTests.test_governed_release_validates_its_workflow_ref_path_like_governed_ci) ... ok
+2026-10-21T10:18:42.5583927Z test_every_governed_input_defaults_to_the_legacy_behavior (test_governed_release_workflow.GovernedOffParityTests.test_every_governed_input_defaults_to_the_legacy_behavior) ... ok
+2026-10-21T10:18:42.5586102Z test_governed_ci_inputs_default_off_and_add_no_permission (test_governed_release_workflow.GovernedOffParityTests.test_governed_ci_inputs_default_off_and_add_no_permission) ... ok
+2026-10-21T10:18:42.5588699Z test_only_the_governed_job_requests_attestation_permissions (test_governed_release_workflow.GovernedOffParityTests.test_only_the_governed_job_requests_attestation_permissions) ... ok
+2026-10-21T10:18:42.5593980Z test_the_governed_job_mirrors_the_legacy_step_sequence (test_governed_release_workflow.GovernedOffParityTests.test_the_governed_job_mirrors_the_legacy_step_sequence) ... ok
+2026-10-21T10:18:42.5595620Z test_the_legacy_job_carries_no_governed_step (test_governed_release_workflow.GovernedOffParityTests.test_the_legacy_job_carries_no_governed_step) ... ok
+2026-10-21T10:18:42.5629026Z test_the_signing_secrets_are_optional_and_scoped_to_governed_steps (test_governed_release_workflow.GovernedOffParityTests.test_the_signing_secrets_are_optional_and_scoped_to_governed_steps) ... ok
+2026-10-21T10:18:42.5630864Z test_the_two_release_jobs_are_mutually_exclusive (test_governed_release_workflow.GovernedOffParityTests.test_the_two_release_jobs_are_mutually_exclusive) ... ok
+2026-10-21T10:18:42.5668138Z test_a_complete_governed_request_is_accepted (test_governed_release_workflow.GovernedReleaseContractTests.test_a_complete_governed_request_is_accepted) ... ok
+2026-10-21T10:18:42.5707151Z test_a_missing_attestation_bundle_blocks_publication (test_governed_release_workflow.GovernedReleaseContractTests.test_a_missing_attestation_bundle_blocks_publication) ... ok
+2026-10-21T10:18:42.5804971Z test_a_safe_relative_candidate_directory_is_accepted (test_governed_release_workflow.GovernedReleaseContractTests.test_a_safe_relative_candidate_directory_is_accepted) ... ok
+2026-10-21T10:18:42.6194677Z test_an_unsafe_candidate_directory_is_rejected_before_any_delete (test_governed_release_workflow.GovernedReleaseContractTests.test_an_unsafe_candidate_directory_is_rejected_before_any_delete) ... ok
+2026-10-21T10:18:42.6196347Z test_governed_evidence_upload_never_omits_the_artifact (test_governed_release_workflow.GovernedReleaseContractTests.test_governed_evidence_upload_never_omits_the_artifact) ... ok
+2026-10-21T10:18:42.6200773Z test_governed_mode_consumes_only_the_release_commit (test_governed_release_workflow.GovernedReleaseContractTests.test_governed_mode_consumes_only_the_release_commit) ... ok
+2026-10-21T10:18:42.6673839Z test_malformed_governed_coordinates_are_rejected (test_governed_release_workflow.GovernedReleaseContractTests.test_malformed_governed_coordinates_are_rejected) ... ok
+2026-10-21T10:18:42.6772437Z test_missing_signing_secrets_fail_closed_with_an_explicit_diagnostic (test_governed_release_workflow.GovernedReleaseContractTests.test_missing_signing_secrets_fail_closed_with_an_explicit_diagnostic) ... ok
+2026-10-21T10:18:42.6774794Z test_the_candidate_is_attested_before_any_publication_side_effect (test_governed_release_workflow.GovernedReleaseContractTests.test_the_candidate_is_attested_before_any_publication_side_effect) ... ok
+2026-10-21T10:18:42.7122887Z test_verification_data_is_always_collected_with_closed_null_fields (test_governed_release_workflow.GovernedReleaseContractTests.test_verification_data_is_always_collected_with_closed_null_fields) ... ok
+2026-10-21T10:18:42.7479097Z test_verification_data_records_a_successful_governed_publication (test_governed_release_workflow.GovernedReleaseContractTests.test_verification_data_records_a_successful_governed_publication) ... ok
+2026-10-21T10:18:42.7557225Z test_a_candidate_that_went_stale_during_setup_is_refused (test_governed_release_workflow.GovernedSourceRevalidationTests.test_a_candidate_that_went_stale_during_setup_is_refused) ... ok
+2026-10-21T10:18:42.7605358Z test_a_checkout_that_is_not_the_release_commit_is_refused (test_governed_release_workflow.GovernedSourceRevalidationTests.test_a_checkout_that_is_not_the_release_commit_is_refused) ... ok
+2026-10-21T10:18:42.7682051Z test_a_matching_checkout_and_live_tip_is_accepted (test_governed_release_workflow.GovernedSourceRevalidationTests.test_a_matching_checkout_and_live_tip_is_accepted) ... ok
+2026-10-21T10:18:42.7719634Z test_a_frozen_caller_still_fails_on_a_malformed_coordinate (test_governed_release_workflow.ReleaseFreezeGateTests.test_a_frozen_caller_still_fails_on_a_malformed_coordinate) ... ok
+2026-10-21T10:18:42.7788592Z test_a_frozen_governed_caller_does_not_need_its_signing_secrets (test_governed_release_workflow.ReleaseFreezeGateTests.test_a_frozen_governed_caller_does_not_need_its_signing_secrets) ... ok
+2026-10-21T10:18:42.7826406Z test_an_absent_or_empty_gate_verdict_still_runs_the_source_guard (test_governed_release_workflow.ReleaseFreezeGateTests.test_an_absent_or_empty_gate_verdict_still_runs_the_source_guard) ... ok
+2026-10-21T10:18:42.7828972Z test_both_freeze_gates_bind_the_caller_repository_variable (test_governed_release_workflow.ReleaseFreezeGateTests.test_both_freeze_gates_bind_the_caller_repository_variable) ... ok
+2026-10-21T10:18:42.7874647Z test_both_release_jobs_evaluate_the_same_gate (test_governed_release_workflow.ReleaseFreezeGateTests.test_both_release_jobs_evaluate_the_same_gate) ... ok
+2026-10-21T10:18:42.7897351Z test_exact_true_is_the_only_value_that_authorizes_publication (test_governed_release_workflow.ReleaseFreezeGateTests.test_exact_true_is_the_only_value_that_authorizes_publication) ... ok
+2026-10-21T10:18:42.8335690Z test_missing_or_malformed_values_skip_without_failing (test_governed_release_workflow.ReleaseFreezeGateTests.test_missing_or_malformed_values_skip_without_failing) ... ok
+2026-10-21T10:18:42.8344427Z test_release_jobs_install_and_run_lockfile_node_binaries_only (test_governed_release_workflow.ReleaseFreezeGateTests.test_release_jobs_install_and_run_lockfile_node_binaries_only) ... ok
+2026-10-21T10:18:42.8348127Z test_semantic_release_requires_both_the_gate_and_an_attested_candidate (test_governed_release_workflow.ReleaseFreezeGateTests.test_semantic_release_requires_both_the_gate_and_an_attested_candidate) ... ok
+2026-10-21T10:18:42.8354712Z test_the_frozen_verdict_skips_every_governed_publication_step (test_governed_release_workflow.ReleaseFreezeGateTests.test_the_frozen_verdict_skips_every_governed_publication_step) ... ok
+2026-10-21T10:18:42.8357854Z test_the_gate_precedes_and_conditions_semantic_release (test_governed_release_workflow.ReleaseFreezeGateTests.test_the_gate_precedes_and_conditions_semantic_release) ... ok
+2026-10-21T10:18:42.8363039Z test_the_governed_gate_is_the_first_step_of_the_governed_job (test_governed_release_workflow.ReleaseFreezeGateTests.test_the_governed_gate_is_the_first_step_of_the_governed_job) ... ok
+2026-10-21T10:18:42.8388141Z test_the_notice_documents_the_repository_over_organization_shadowing_hazard (test_governed_release_workflow.ReleaseFreezeGateTests.test_the_notice_documents_the_repository_over_organization_shadowing_hazard) ... ok
+2026-10-21T10:18:42.8410173Z test_the_source_guard_skips_only_on_an_explicit_frozen_verdict (test_governed_release_workflow.ReleaseFreezeGateTests.test_the_source_guard_skips_only_on_an_explicit_frozen_verdict) ... ok
+2026-10-21T10:18:43.0162078Z test_every_run_block_in_the_governed_workflows_parses (test_governed_release_workflow.ShellBlockSyntaxTests.test_every_run_block_in_the_governed_workflows_parses) ... ok
+2026-10-21T10:18:43.0169373Z test_the_candidate_phase_heredoc_terminates_at_column_zero (test_governed_release_workflow.ShellBlockSyntaxTests.test_the_candidate_phase_heredoc_terminates_at_column_zero) ... ok
+2026-10-21T10:18:43.0360183Z test_cli_inputs_reject_path_escape_and_option_shaped_image (test_oci_registry_validator.OciRegistryValidatorTests.test_cli_inputs_reject_path_escape_and_option_shaped_image) ... ok
+2026-10-21T10:18:43.0363458Z test_cross_origin_redirect_does_not_forward_registry_authorization (test_oci_registry_validator.OciRegistryValidatorTests.test_cross_origin_redirect_does_not_forward_registry_authorization) ... ok
+2026-10-21T10:18:43.0398365Z test_exact_provenance_labels_are_required_in_both_raw_child_configs (test_oci_registry_validator.OciRegistryValidatorTests.test_exact_provenance_labels_are_required_in_both_raw_child_configs) ... ok
+2026-10-21T10:18:43.0582622Z test_fixture_matrix (test_oci_registry_validator.OciRegistryValidatorTests.test_fixture_matrix) ... ok
+2026-10-21T10:18:43.0585291Z test_historical_evidence_is_exact_and_non_authorizing (test_oci_registry_validator.OciRegistryValidatorTests.test_historical_evidence_is_exact_and_non_authorizing) ... ok
+2026-10-21T10:18:43.0595314Z test_historical_single_manifest_is_rejected (test_oci_registry_validator.OciRegistryValidatorTests.test_historical_single_manifest_is_rejected) ... ok
+2026-10-21T10:18:43.0616196Z test_pass_evidence_preserves_exact_index_bytes (test_oci_registry_validator.OciRegistryValidatorTests.test_pass_evidence_preserves_exact_index_bytes) ... ok
+2026-10-21T10:18:43.0634925Z test_registry_http_adapter_preserves_bytes_headers_and_immutable_references (test_oci_registry_validator.OciRegistryValidatorTests.test_registry_http_adapter_preserves_bytes_headers_and_immutable_references) ... ok
+2026-10-21T10:18:43.0979536Z test_authority_issue_paginates_and_rejects_ambiguous_or_untrusted_consumption (test_publication_preflight.PublicationPreflightTests.test_authority_issue_paginates_and_rejects_ambiguous_or_untrusted_consumption) ... ok
+2026-10-21T10:18:43.0982557Z test_case_insensitive_duplicate_or_non_exact_package_inventory_fails_closed (test_publication_preflight.PublicationPreflightTests.test_case_insensitive_duplicate_or_non_exact_package_inventory_fails_closed) ... ok
+2026-10-21T10:18:43.0985991Z test_consumption_freezes_reread_comment_instead_of_post_response (test_publication_preflight.PublicationPreflightTests.test_consumption_freezes_reread_comment_instead_of_post_response) ... ok
+2026-10-21T10:18:43.0988520Z test_container_identity_rejects_empty_duplicate_or_malformed_sets (test_publication_preflight.PublicationPreflightTests.test_container_identity_rejects_empty_duplicate_or_malformed_sets) ... ok
+2026-10-21T10:18:43.1009618Z test_container_phase_requires_publish_recheck (test_publication_preflight.PublicationPreflightTests.test_container_phase_requires_publish_recheck) ... ok
+2026-10-21T10:18:43.1012332Z test_corrective_version_must_be_stable_and_newer_than_every_destination (test_publication_preflight.PublicationPreflightTests.test_corrective_version_must_be_stable_and_newer_than_every_destination) ... ok
+2026-10-21T10:18:43.1015079Z test_declared_package_count_gates_the_inventory_for_any_module_size (test_publication_preflight.PublicationPreflightTests.test_declared_package_count_gates_the_inventory_for_any_module_size) ... ok
+2026-10-21T10:18:43.1018109Z test_destination_probe_sends_exact_read_only_nuget_and_oci_requests (test_publication_preflight.PublicationPreflightTests.test_destination_probe_sends_exact_read_only_nuget_and_oci_requests) ... ok
+2026-10-21T10:18:43.1021954Z test_destination_redirects_and_non_authoritative_statuses_fail_closed (test_publication_preflight.PublicationPreflightTests.test_destination_redirects_and_non_authoritative_statuses_fail_closed) ... ok
+2026-10-21T10:18:43.1025840Z test_duplicate_ids_fail_closed_at_a_small_module_inventory (test_publication_preflight.PublicationPreflightTests.test_duplicate_ids_fail_closed_at_a_small_module_inventory) ... ok
+2026-10-21T10:18:43.1043141Z test_exact_identity_records_repository_source_builds_run_environment_and_hashes (test_publication_preflight.PublicationPreflightTests.test_exact_identity_records_repository_source_builds_run_environment_and_hashes) ... ok
+2026-10-21T10:18:43.1133707Z test_expected_package_count_argument_is_required_and_must_be_positive (test_publication_preflight.PublicationPreflightTests.test_expected_package_count_argument_is_required_and_must_be_positive) ... ok
+2026-10-21T10:18:43.1158396Z test_github_authority_binds_identity_owner_expiry_and_one_use_consumption (test_publication_preflight.PublicationPreflightTests.test_github_authority_binds_identity_owner_expiry_and_one_use_consumption) ... ok
+2026-10-21T10:18:43.1188457Z test_github_authority_proves_redacted_role_from_repository_permission (test_publication_preflight.PublicationPreflightTests.test_github_authority_proves_redacted_role_from_repository_permission) ... ok
+2026-10-21T10:18:43.1215146Z test_github_authority_rejects_expired_wrong_owner_and_identity_mismatch (test_publication_preflight.PublicationPreflightTests.test_github_authority_rejects_expired_wrong_owner_and_identity_mismatch) ... ok
+2026-10-21T10:18:43.1303007Z test_main_freezes_and_revalidates_three_container_repositories (test_publication_preflight.PublicationPreflightTests.test_main_freezes_and_revalidates_three_container_repositories) ... ok
+2026-10-21T10:18:43.1385449Z test_main_runs_all_three_fail_closed_destination_and_authority_phases (test_publication_preflight.PublicationPreflightTests.test_main_runs_all_three_fail_closed_destination_and_authority_phases) ... ok
+2026-10-21T10:18:43.1388487Z test_main_without_an_authority_declaration_skips_the_gate_but_not_destinations (test_publication_preflight.PublicationPreflightTests.test_main_without_an_authority_declaration_skips_the_gate_but_not_destinations)
+2026-10-21T10:18:43.1461201Z An undeclared authority is a supported posture, not a bypassed check. ... ok
+2026-10-21T10:18:43.1470837Z test_manifest_identity_honours_the_declared_count_and_rejects_drift (test_publication_preflight.PublicationPreflightTests.test_manifest_identity_honours_the_declared_count_and_rejects_drift) ... ok
+2026-10-21T10:18:43.1614757Z test_manifest_order_case_and_content_mutation_fail_frozen_identity (test_publication_preflight.PublicationPreflightTests.test_manifest_order_case_and_content_mutation_fail_frozen_identity) ... ok
+2026-10-21T10:18:43.1633796Z test_multi_container_identity_is_a_canonical_order_independent_set (test_publication_preflight.PublicationPreflightTests.test_multi_container_identity_is_a_canonical_order_independent_set) ... ok
+2026-10-21T10:18:43.1659578Z test_multi_container_sequence_rejects_set_drift_before_publish (test_publication_preflight.PublicationPreflightTests.test_multi_container_sequence_rejects_set_drift_before_publish) ... ok
+2026-10-21T10:18:43.1662682Z test_package_and_container_destinations_must_all_be_absent (test_publication_preflight.PublicationPreflightTests.test_package_and_container_destinations_must_all_be_absent) ... ok
+2026-10-21T10:18:43.1665947Z test_package_and_multi_container_destinations_are_checked_as_one_set (test_publication_preflight.PublicationPreflightTests.test_package_and_multi_container_destinations_are_checked_as_one_set) ... ok
+2026-10-21T10:18:43.1669101Z test_partial_authority_declaration_fails_closed (test_publication_preflight.PublicationPreflightTests.test_partial_authority_declaration_fails_closed)
+2026-10-21T10:18:43.1685694Z Half a declaration must never be read as an absent one. ... [publication-preflight] authority-owner-invalid: Authority issue URL was supplied without an authority owner.
+2026-10-21T10:18:43.1712158Z [publication-preflight] authority-url-invalid: Authority owner was supplied without an authority issue URL.
+2026-10-21T10:18:43.1717337Z ok
+2026-10-21T10:18:43.1727414Z test_publish_floor_allows_only_semantic_release_exact_source_self_tag (test_publication_preflight.PublicationPreflightTests.test_publish_floor_allows_only_semantic_release_exact_source_self_tag) ... ok
+2026-10-21T10:18:43.1735956Z test_registry_version_observation_follows_same_repository_pagination (test_publication_preflight.PublicationPreflightTests.test_registry_version_observation_follows_same_repository_pagination) ... ok
+2026-10-21T10:18:43.1796894Z test_runtime_repository_source_and_run_mismatches_fail_closed (test_publication_preflight.PublicationPreflightTests.test_runtime_repository_source_and_run_mismatches_fail_closed) ... ok
+2026-10-21T10:18:43.1799572Z test_source_proof_queries_exact_main_and_successful_push_ci (test_publication_preflight.PublicationPreflightTests.test_source_proof_queries_exact_main_and_successful_push_ci) ... ok
+2026-10-21T10:18:43.1801962Z test_source_proof_rejects_missing_successful_push_ci (test_publication_preflight.PublicationPreflightTests.test_source_proof_rejects_missing_successful_push_ci) ... ok
+2026-10-21T10:18:43.1803991Z test_source_proof_rejects_stale_main (test_publication_preflight.PublicationPreflightTests.test_source_proof_rejects_stale_main) ... ok
+2026-10-21T10:18:43.1827974Z test_source_race_during_probe_blocks_phase_evidence (test_publication_preflight.PublicationPreflightTests.test_source_race_during_probe_blocks_phase_evidence) ... ok
+2026-10-21T10:18:43.1860278Z test_verify_publish_container_sequence_freezes_exact_identity (test_publication_preflight.PublicationPreflightTests.test_verify_publish_container_sequence_freezes_exact_identity) ... ok
+2026-10-21T10:18:43.2220718Z test_absent_or_invalid_expected_package_count_blocks_publication (test_publish_script_contract.PublishScriptContractTests.test_absent_or_invalid_expected_package_count_blocks_publication) ... ok
+2026-10-21T10:18:43.2417700Z test_action_byte_mismatch_fails_behaviorally (test_publish_script_contract.PublishScriptContractTests.test_action_byte_mismatch_fails_behaviorally) ... ok
+2026-10-21T10:18:43.2420401Z test_action_installs_immutable_registry_validator (test_publish_script_contract.PublishScriptContractTests.test_action_installs_immutable_registry_validator) ... ok
+2026-10-21T10:18:43.2423264Z test_action_installs_platform_smoke_helper (test_publish_script_contract.PublishScriptContractTests.test_action_installs_platform_smoke_helper) ... ok
+2026-10-21T10:18:43.2424977Z test_action_installs_preflight_and_binds_approved_builds_bytes (test_publish_script_contract.PublishScriptContractTests.test_action_installs_preflight_and_binds_approved_builds_bytes) ... ok
+2026-10-21T10:18:43.2426929Z test_action_installs_publication_preflight (test_publish_script_contract.PublishScriptContractTests.test_action_installs_publication_preflight) ... ok
+2026-10-21T10:18:43.2428793Z test_authority_declaration_must_be_exactly_true_or_false (test_publish_script_contract.PublishScriptContractTests.test_authority_declaration_must_be_exactly_true_or_false)
+2026-10-21T10:18:43.2705071Z Anything other than the two declared postures fails closed. ... ok
+2026-10-21T10:18:43.2708420Z test_builds_release_is_manual_protected_and_does_not_push_git (test_publish_script_contract.PublishScriptContractTests.test_builds_release_is_manual_protected_and_does_not_push_git) ... ok
+2026-10-21T10:18:43.2711745Z test_builds_release_runs_publisher_contract_suite_before_release (test_publish_script_contract.PublishScriptContractTests.test_builds_release_runs_publisher_contract_suite_before_release) ... ok
+2026-10-21T10:18:43.2715108Z test_disabled_authority_gate_publishes_without_reservation_or_authority (test_publish_script_contract.PublishScriptContractTests.test_disabled_authority_gate_publishes_without_reservation_or_authority)
+2026-10-21T10:18:43.2982860Z The opted-out posture publishes with no reserved version and no authority argument. ... ok
+2026-10-21T10:18:43.2984500Z test_disabled_authority_gate_rejects_every_silently_ignored_input (test_publish_script_contract.PublishScriptContractTests.test_disabled_authority_gate_rejects_every_silently_ignored_input)
+2026-10-21T10:18:43.3122646Z A value that the disabled posture would ignore fails closed instead. ... ok
+2026-10-21T10:18:43.3204611Z test_domain_release_late_source_guard_accepts_matching_source (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_accepts_matching_source) ... ok
+2026-10-21T10:18:43.3285949Z test_domain_release_late_source_guard_fails_closed_on_api_error (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_fails_closed_on_api_error) ... ok
+2026-10-21T10:18:43.3339512Z test_domain_release_late_source_guard_rejects_checkout_mismatch (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_checkout_mismatch) ... ok
+2026-10-21T10:18:43.3515848Z test_domain_release_late_source_guard_rejects_malformed_source_proofs (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_malformed_source_proofs) ... ok
+2026-10-21T10:18:43.3594107Z test_domain_release_late_source_guard_rejects_stale_source_before_semantic_release (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_stale_source_before_semantic_release) ... ok
+2026-10-21T10:18:43.3605653Z test_domain_release_requires_one_exact_builds_identity_for_workflow_and_action (test_publish_script_contract.PublishScriptContractTests.test_domain_release_requires_one_exact_builds_identity_for_workflow_and_action) ... ok
+2026-10-21T10:18:43.3609659Z test_domain_release_sha_pins_arm64_emulation_setup_before_publisher (test_publish_script_contract.PublishScriptContractTests.test_domain_release_sha_pins_arm64_emulation_setup_before_publisher) ... ok
+2026-10-21T10:18:43.3612944Z test_enabled_authority_gate_still_forwards_reservation_and_authority (test_publish_script_contract.PublishScriptContractTests.test_enabled_authority_gate_still_forwards_reservation_and_authority)
+2026-10-21T10:18:43.3885116Z The guarded posture is unchanged and still reaches the preflight. ... ok
+2026-10-21T10:18:43.4026050Z test_invalid_later_mapping_blocks_preflight_and_every_mutation (test_publish_script_contract.PublishScriptContractTests.test_invalid_later_mapping_blocks_preflight_and_every_mutation) ... ok
+2026-10-21T10:18:43.4310712Z test_multi_platform_publish_is_exact_and_validation_gated (test_publish_script_contract.PublishScriptContractTests.test_multi_platform_publish_is_exact_and_validation_gated) ... ok
+2026-10-21T10:18:43.4463392Z test_rejected_preflight_blocks_sdk_container_mutation (test_publish_script_contract.PublishScriptContractTests.test_rejected_preflight_blocks_sdk_container_mutation) ... ok
+2026-10-21T10:18:43.4564950Z test_repository_path_escape_is_rejected_before_evidence_or_publication (test_publish_script_contract.PublishScriptContractTests.test_repository_path_escape_is_rejected_before_evidence_or_publication) ... ok
+2026-10-21T10:18:43.4614323Z test_reserved_version_mismatch_blocks_preflight_login_and_dotnet_publication (test_publish_script_contract.PublishScriptContractTests.test_reserved_version_mismatch_blocks_preflight_login_and_dotnet_publication) ... ok
+2026-10-21T10:18:43.4616354Z test_reusable_workflow_declares_and_forwards_the_authority_posture (test_publish_script_contract.PublishScriptContractTests.test_reusable_workflow_declares_and_forwards_the_authority_posture)
+2026-10-21T10:18:43.4617805Z The caller-facing input exists and reaches both release jobs. ... ok
+2026-10-21T10:18:43.4844462Z test_three_container_collision_blocks_login_and_every_container_write (test_publish_script_contract.PublishScriptContractTests.test_three_container_collision_blocks_login_and_every_container_write) ... ok
+2026-10-21T10:18:43.5380856Z test_three_container_set_is_preflighted_once_before_any_write (test_publish_script_contract.PublishScriptContractTests.test_three_container_set_is_preflighted_once_before_any_write) ... ok
+2026-10-21T10:18:43.5382878Z test_unset_authority_declaration_keeps_the_gate_required (test_publish_script_contract.PublishScriptContractTests.test_unset_authority_declaration_keeps_the_gate_required)
+2026-10-21T10:18:43.5426218Z Absence of the declaration must not be readable as opting out. ... ok
+2026-10-21T10:18:43.5448038Z test_workflow_sha_mismatch_fails_behaviorally (test_publish_script_contract.PublishScriptContractTests.test_workflow_sha_mismatch_fails_behaviorally) ... ok
+2026-10-21T10:18:43.6679408Z test_both_child_digests_pass_the_same_loopback_liveness_smoke (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_both_child_digests_pass_the_same_loopback_liveness_smoke) ... ok
+2026-10-21T10:18:43.8006858Z test_container_exit_during_liveness_preserves_start_failure_and_diagnostics (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_container_exit_during_liveness_preserves_start_failure_and_diagnostics) ... ok
+2026-10-21T10:18:43.8021315Z test_default_timeout_allows_bounded_emulated_startup (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_default_timeout_allows_bounded_emulated_startup) ... ok
+2026-10-21T10:18:43.8905374Z test_emulation_preflight_failure_is_not_a_product_failure (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_emulation_preflight_failure_is_not_a_product_failure) ... ok
+2026-10-21T10:18:43.9924269Z test_image_start_failure_is_classified (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_image_start_failure_is_classified) ... ok
+2026-10-21T10:18:44.6722261Z test_liveness_timeout_is_classified (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_liveness_timeout_is_classified) ... ok
+2026-10-21T10:18:44.9243018Z test_non_finite_timing_is_rejected (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_non_finite_timing_is_rejected) ... ok
+2026-10-21T10:18:45.6100880Z test_redirect_is_not_accepted_as_liveness (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_redirect_is_not_accepted_as_liveness) ... ok
+2026-10-21T10:18:45.8240944Z test_registry_pull_and_cleanup_failures_are_preserved (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_registry_pull_and_cleanup_failures_are_preserved) ... ok
+2026-10-21T10:18:45.9198137Z test_runtime_emulation_failure_is_classified_before_product_smoke (test_smoke_container_platforms.SmokeContainerPlatformsTests.test_runtime_emulation_failure_is_classified_before_product_smoke) ... ok
+2026-10-21T10:18:45.9199878Z 
+2026-10-21T10:18:45.9200344Z ----------------------------------------------------------------------
+2026-10-21T10:18:45.9200978Z Ran 135 tests in 3.743s
+2026-10-21T10:18:45.9201200Z 
+2026-10-21T10:18:45.9201356Z OK
+2026-10-21T10:18:45.9202326Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+2026-10-21T10:18:45.9203727Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+2026-10-21T10:18:45.9205084Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+2026-10-21T10:18:45.9206412Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+2026-10-21T10:18:45.9207936Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+2026-10-21T10:18:45.9209277Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+2026-10-21T10:18:45.9210564Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+2026-10-21T10:18:45.9211834Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+2026-10-21T10:18:45.9213136Z [publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+2026-10-21T10:18:45.9214071Z [container-smoke] pass: linux/amd64,linux/arm64
+2026-10-21T10:18:45.9530953Z Container publisher fixture tests passed.
+2026-10-21T10:18:46.0964857Z ##[group]Run pwsh -NoProfile -File ./Tools/test-governed-provenance.ps1
+2026-10-21T10:18:46.0965394Z [36;1mpwsh -NoProfile -File ./Tools/test-governed-provenance.ps1[0m
+2026-10-21T10:18:46.0990601Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-10-21T10:18:46.0990891Z env:
+2026-10-21T10:18:46.0991104Z   DOTNET_ROOT: /usr/share/dotnet
+2026-10-21T10:18:46.0991377Z ##[endgroup]
+2026-10-21T10:18:46.6104411Z test_a_builds_action_pinned_to_another_commit_stays_an_external_coordinate (test_governed_provenance.ClosureResolutionTests.test_a_builds_action_pinned_to_another_commit_stays_an_external_coordinate) ... ok
+2026-10-21T10:18:46.6108197Z test_a_builds_action_pinned_to_the_executing_commit_is_hashed_locally (test_governed_provenance.ClosureResolutionTests.test_a_builds_action_pinned_to_the_executing_commit_is_hashed_locally) ... ok
+2026-10-21T10:18:46.6134273Z test_a_composite_cycle_is_refused (test_governed_provenance.ClosureResolutionTests.test_a_composite_cycle_is_refused) ... ok
+2026-10-21T10:18:46.6156983Z test_a_diamond_is_visited_once_and_projected_once (test_governed_provenance.ClosureResolutionTests.test_a_diamond_is_visited_once_and_projected_once) ... ok
+2026-10-21T10:18:46.6169707Z test_a_docker_action_in_the_closure_is_refused (test_governed_provenance.ClosureResolutionTests.test_a_docker_action_in_the_closure_is_refused) ... ok
+2026-10-21T10:18:46.6173462Z test_a_local_reference_must_load_from_the_approved_checkout (test_governed_provenance.ClosureResolutionTests.test_a_local_reference_must_load_from_the_approved_checkout) ... ok
+2026-10-21T10:18:46.6176997Z test_a_mutable_reference_is_rejected (test_governed_provenance.ClosureResolutionTests.test_a_mutable_reference_is_rejected) ... ok
+2026-10-21T10:18:46.6180088Z test_a_source_outside_the_checkout_is_refused (test_governed_provenance.ClosureResolutionTests.test_a_source_outside_the_checkout_is_refused) ... ok
+2026-10-21T10:18:46.6183250Z test_an_expression_or_docker_reference_is_rejected (test_governed_provenance.ClosureResolutionTests.test_an_expression_or_docker_reference_is_rejected) ... ok
+2026-10-21T10:18:46.6199590Z test_composite_helper_files_are_hashed_alongside_the_metadata (test_governed_provenance.ClosureResolutionTests.test_composite_helper_files_are_hashed_alongside_the_metadata) ... ok
+2026-10-21T10:18:46.6819574Z test_helper_bytes_count_toward_the_source_ceiling (test_governed_provenance.ClosureResolutionTests.test_helper_bytes_count_toward_the_source_ceiling) ... ok
+2026-10-21T10:18:46.6841261Z test_helpers_in_nested_directories_are_hashed_too (test_governed_provenance.ClosureResolutionTests.test_helpers_in_nested_directories_are_hashed_too) ... ok
+2026-10-21T10:18:46.6864995Z test_never_tracked_build_output_is_not_hashed (test_governed_provenance.ClosureResolutionTests.test_never_tracked_build_output_is_not_hashed) ... ok
+2026-10-21T10:18:46.6869208Z test_only_reusable_workflow_paths_may_be_the_closure_root (test_governed_provenance.ClosureResolutionTests.test_only_reusable_workflow_paths_may_be_the_closure_root) ... ok
+2026-10-21T10:18:46.6882223Z test_the_closure_digest_covers_every_recorded_source (test_governed_provenance.ClosureResolutionTests.test_the_closure_digest_covers_every_recorded_source) ... ok
+2026-10-21T10:18:46.6885019Z test_a_complete_coordinate_is_normalized (test_governed_provenance.DependencyPolicyProjectionTests.test_a_complete_coordinate_is_normalized) ... ok
+2026-10-21T10:18:46.6887851Z test_a_partial_coordinate_is_rejected (test_governed_provenance.DependencyPolicyProjectionTests.test_a_partial_coordinate_is_rejected) ... ok
+2026-10-21T10:18:46.6890892Z test_an_absent_coordinate_projects_to_the_closed_null (test_governed_provenance.DependencyPolicyProjectionTests.test_an_absent_coordinate_projects_to_the_closed_null) ... ok
+2026-10-21T10:18:46.6893461Z test_an_unnormalized_coordinate_is_rejected (test_governed_provenance.DependencyPolicyProjectionTests.test_an_unnormalized_coordinate_is_rejected) ... ok
+2026-10-21T10:18:46.6983179Z test_a_digest_mismatch_writes_no_provenance_document (test_governed_provenance.EndToEndTests.test_a_digest_mismatch_writes_no_provenance_document) ... ::error title=Governed provenance rejected::the evaluated closure digest does not match the expected evaluator digest (computed 4af4687591ace42c5252e05f3f180e70c3a564cb44df5ee5f893dbcbb0c426aa, expected cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc); the authorized closure and the executing closure are not the same bytes
+2026-10-21T10:18:46.6985658Z ok
+2026-10-21T10:18:46.6986323Z test_an_unknown_stage_is_rejected (test_governed_provenance.EndToEndTests.test_an_unknown_stage_is_rejected) ... ok
+2026-10-21T10:18:46.7110997Z test_both_shipped_governed_workflows_evaluate_to_a_complete_closure (test_governed_provenance.EndToEndTests.test_both_shipped_governed_workflows_evaluate_to_a_complete_closure) ... ok
+2026-10-21T10:18:46.7228473Z test_github_output_values_must_fit_the_actions_limit (test_governed_provenance.EndToEndTests.test_github_output_values_must_fit_the_actions_limit) ... ok
+2026-10-21T10:18:46.7276892Z test_governed_ci_loads_builds_composites_from_the_reusable_workflow_commit (test_governed_provenance.EndToEndTests.test_governed_ci_loads_builds_composites_from_the_reusable_workflow_commit) ... ok
+2026-10-21T10:18:46.7334792Z test_one_canonical_serialization_backs_the_file_the_output_and_the_digest (test_governed_provenance.EndToEndTests.test_one_canonical_serialization_backs_the_file_the_output_and_the_digest) ... ok
+2026-10-21T10:18:46.7343174Z test_the_command_line_fails_closed_with_a_support_safe_diagnostic (test_governed_provenance.EndToEndTests.test_the_command_line_fails_closed_with_a_support_safe_diagnostic) ... ::error title=Governed provenance rejected::job.workflow_sha does not match the approved builds-execution-sha
+2026-10-21T10:18:46.7344544Z ok
+2026-10-21T10:18:46.7433234Z test_the_document_is_deterministic_apart_from_its_timestamp (test_governed_provenance.EndToEndTests.test_the_document_is_deterministic_apart_from_its_timestamp) ... ok
+2026-10-21T10:18:46.7489198Z test_the_emitted_outputs_describe_the_written_document (test_governed_provenance.EndToEndTests.test_the_emitted_outputs_describe_the_written_document) ... ok
+2026-10-21T10:18:46.7854224Z test_the_expected_evaluator_digest_is_enforced_for_both_stages (test_governed_provenance.EndToEndTests.test_the_expected_evaluator_digest_is_enforced_for_both_stages) ... ok
+2026-10-21T10:18:46.7902740Z test_the_output_path_must_stay_inside_the_workspace (test_governed_provenance.EndToEndTests.test_the_output_path_must_stay_inside_the_workspace) ... ok
+2026-10-21T10:18:46.7984024Z test_the_release_closure_includes_the_container_publisher (test_governed_provenance.EndToEndTests.test_the_release_closure_includes_the_container_publisher) ... ok
+2026-10-21T10:18:46.7987335Z test_a_hash_inside_a_quoted_scalar_is_not_a_comment (test_governed_provenance.ScalarParsingTests.test_a_hash_inside_a_quoted_scalar_is_not_a_comment) ... ok
+2026-10-21T10:18:46.7989675Z test_ambiguous_or_unsupported_scalars_fail_closed (test_governed_provenance.ScalarParsingTests.test_ambiguous_or_unsupported_scalars_fail_closed) ... ok
+2026-10-21T10:18:46.7992659Z test_plain_quoted_and_commented_scalars_are_read_identically (test_governed_provenance.ScalarParsingTests.test_plain_quoted_and_commented_scalars_are_read_identically) ... ok
+2026-10-21T10:18:46.7994583Z test_prose_that_merely_mentions_uses_is_not_an_edge (test_governed_provenance.ScalarParsingTests.test_prose_that_merely_mentions_uses_is_not_an_edge) ... ok
+2026-10-21T10:18:46.7996256Z test_a_matching_identity_is_accepted (test_governed_provenance.WorkflowIdentityTests.test_a_matching_identity_is_accepted) ... ok
+2026-10-21T10:18:46.7997995Z test_a_mismatched_identity_is_rejected (test_governed_provenance.WorkflowIdentityTests.test_a_mismatched_identity_is_rejected) ... ok
+2026-10-21T10:18:46.7999683Z test_an_absent_workflow_file_path_is_tolerated (test_governed_provenance.WorkflowIdentityTests.test_an_absent_workflow_file_path_is_tolerated) ... ok
+2026-10-21T10:18:46.8000482Z 
+2026-10-21T10:18:46.8001064Z ----------------------------------------------------------------------
+2026-10-21T10:18:46.8001532Z Ran 38 tests in 0.190s
+2026-10-21T10:18:46.8001687Z 
+2026-10-21T10:18:46.8001782Z OK
+2026-10-21T10:18:46.8268764Z Governed workflow provenance tests passed.
+2026-10-21T10:18:46.9765810Z Post job cleanup.
+2026-10-21T10:18:47.1068615Z Post job cleanup.
+2026-10-21T10:18:47.1072507Z ##[start-action display=Setup .NET from global.json;id=__98232ec1-aadc-4b1f-bec1-51deba45d263.__actions_setup-dotnet]
+2026-10-21T10:18:47.1110699Z Post job cleanup.
+2026-10-21T10:18:47.2409232Z ##[end-action id=__98232ec1-aadc-4b1f-bec1-51deba45d263.__actions_setup-dotnet;outcome=success;conclusion=success;duration_ms=133]
+2026-10-21T10:18:47.2478269Z Post job cleanup.
+2026-10-21T10:18:47.3445555Z [command]/usr/bin/git version
+2026-10-21T10:18:47.3503082Z git version 2.55.0
+2026-10-21T10:18:47.3547673Z Temporarily overriding HOME='/home/runner/work/_temp/bb97c818-1461-4341-bc07-c2ec0d094b6e' before making global git config changes
+2026-10-21T10:18:47.3549445Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T10:18:47.3553892Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.Builds/Hexalith.Builds
+2026-10-21T10:18:47.3590336Z Removing SSH command configuration
+2026-10-21T10:18:47.3597799Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T10:18:47.3635036Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T10:18:47.3907851Z Removing HTTP extra header
+2026-10-21T10:18:47.3919988Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T10:18:47.3972115Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T10:18:47.4247555Z Removing includeIf entries pointing to credentials config files
+2026-10-21T10:18:47.4256426Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T10:18:47.4301824Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T10:18:47.4701129Z Cleaning up orphan processes
+2026-10-21T10:18:47.4942404Z Terminate orphan process: pid (24828) (VBCSCompiler)
+2026-10-21T10:18:47.5011751Z Terminate orphan process: pid (67340) (dotnet)
+2026-10-21T10:18:47.5047774Z Terminate orphan process: pid (67341) (dotnet)
+2026-10-21T10:18:47.5084865Z Terminate orphan process: pid (67342) (dotnet)
+

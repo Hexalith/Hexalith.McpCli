@@ -1,0 +1,31 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(module: "Parties", version: "1.4.0") (24ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Strings differ
+             ↓ (pos 0)
+  Expected: "1.4.0"
+  Actual:   "99.0.0"
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(String module, String version) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:114
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(module: "Tenants", version: "5.8.0") (1ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Strings differ
+             ↓ (pos 0)
+  Expected: "5.8.0"
+  Actual:   "99.0.0"
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(String module, String version) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:114
+    at InvokeStub_DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(Object, Span`1)
+    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) failed with 2 error(s) (567ms)
+Exit code: 2
+
+Test run summary: Failed!
+  total: 2
+  failed: 2
+  succeeded: 0
+  skipped: 0
+  duration: 743ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

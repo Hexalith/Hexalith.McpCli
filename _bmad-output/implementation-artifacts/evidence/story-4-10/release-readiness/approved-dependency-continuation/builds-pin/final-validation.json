@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-21T09:39:52.542838+00:00",
+  "commands": [
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/validate-central-package-versions.ps1"
+      ],
+      "exitCode": 0,
+      "log": "final-central-versions.txt"
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/validate-package-version-audit.ps1"
+      ],
+      "exitCode": 0,
+      "log": "final-audit-validation.txt"
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/validate-consumer-package-authority.ps1",
+        "-RepositoryRoot",
+        ".",
+        "-CatalogPath",
+        "./Props/Directory.Packages.props"
+      ],
+      "exitCode": 0,
+      "log": "final-consumer-authority.txt"
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/validate-package-version-exceptions.ps1",
+        "-InventoryPath",
+        "./Tools/package-version-exceptions.json",
+        "-CatalogPath",
+        "./Props/Directory.Packages.props"
+      ],
+      "exitCode": 0,
+      "log": "final-version-exceptions.txt"
+    }
+  ]
+}

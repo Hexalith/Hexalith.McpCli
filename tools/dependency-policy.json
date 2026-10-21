@@ -70,7 +70,9 @@
     "id": "Hexalith.McpCli.Abstractions",
     "version": "1.0.0"
   },
-  "modules": {},
+  "modules": {
+    "Hexalith.Parties.Contracts": "1.5.1"
+  },
   "testPackages": [
     "Microsoft.NET.Test.Sdk",
     "xunit.v3",

@@ -98,14 +98,21 @@ public sealed class DependencyPolicyTests
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckProduction(policy, graph, projects, root));
     }
 
-    /// <summary>Candidate injection preserves central pins instead of downgrading the existing restored stack.</summary>
-    [Fact]
-    public void CandidateInjectionKeepsExistingNodesAndVersions()
+    /// <summary>Captured candidates replace an enrolled root while preserving the restored stack pins.</summary>
+    [Theory]
+    [InlineData("Tenants", "5.8.0")]
+    [InlineData("Parties", "1.4.0")]
+    public void CandidateInjectionKeepsExistingNodesAndVersions(string module, string version)
     {
         string root = FindRepositoryRoot();
         RestoredDependencyGraph graph = LoadProductionGraph(root);
-        using JsonDocument fixture = LoadFixture("Tenants", "5.8.0");
+        using JsonDocument fixture = LoadFixture(module, version);
+        string candidateId = fixture.RootElement.GetProperty("rootId").GetString()!;
+        graph = Replace(graph, Package(candidateId, "99.0.0", new() { ["Unexpected.Dependency"] = "99.0.0" }));
         RestoredDependencyGraph candidate = graph.WithCandidate(fixture.RootElement);
+
+        Assert.Equal(version, candidate.Nodes[candidateId].Version);
+        Assert.False(candidate.Nodes[candidateId].Dependencies.ContainsKey("Unexpected.Dependency"));
 
         Assert.Same(graph.Nodes["ByteAether.Ulid"], candidate.Nodes["ByteAether.Ulid"]);
         Assert.Equal(graph.Nodes["ByteAether.Ulid"].Version, candidate.Nodes["ByteAether.Ulid"].Version);
@@ -979,6 +986,7 @@ public sealed class DependencyPolicyTests
         {
             AddReference(projects, Path.Combine(root, "src", "Hexalith.McpCli", "Hexalith.McpCli.csproj"), $"<PackageReference Include=\"Hexalith.{module}.Contracts\" HexalithContracts=\"true\" />");
         }
+        policy.Modules[$"Hexalith.{module}.Contracts"] = version;
         using JsonDocument fixture = LoadFixture(module, version);
         return (policy, graph.WithCandidate(fixture.RootElement), projects, root);
     }

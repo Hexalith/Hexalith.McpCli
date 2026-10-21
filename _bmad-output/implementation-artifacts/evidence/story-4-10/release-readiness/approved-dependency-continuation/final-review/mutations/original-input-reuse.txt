@@ -1,0 +1,29 @@
+F
+======================================================================
+FAIL: test_mutating_original_inputs_during_restore_cannot_change_verified_bytes (test_enrolled.FrozenArtifactInputTests.test_mutating_original_inputs_during_restore_cannot_change_verified_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/original-input-reuse/test_enrolled.py", line 386, in test_mutating_original_inputs_during_restore_cannot_change_verified_bytes
+    receipt = verify(self.repo, self.artifact, [vector], self.output, inventory=inventory)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/original-input-reuse/verify_artifact.py", line 187, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/original-input-reuse/verify_artifact.py", line 86, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/original-input-reuse/test_enrolled.py", line 355, in execute
+    self.assertNotEqual(self.artifact.parent, feed)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PosixPath('/tmp/tmpqdea4jfg') == PosixPath('/tmp/tmpqdea4jfg')
+
+----------------------------------------------------------------------
+Ran 1 test in 0.007s
+
+FAILED (failures=1)

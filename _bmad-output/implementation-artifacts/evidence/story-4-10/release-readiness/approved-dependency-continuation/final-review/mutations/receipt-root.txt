@@ -1,0 +1,85 @@
+EEEEE
+======================================================================
+ERROR: test_malformed_receipt_roots_fail_deterministically (test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically) (value=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 275, in test_malformed_receipt_roots_fail_deterministically
+    code, report, diagnostic, verifier = self.invoke()
+                                         ~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 245, in invoke
+    code = check_enrolled.main()
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 93, in main
+    artifact = artifact_for(assets, package_id, receipt)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 24, in artifact_for
+    approved_id = receipt.get('packageId')
+                  ^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'get'
+
+======================================================================
+ERROR: test_malformed_receipt_roots_fail_deterministically (test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically) (value='text')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 275, in test_malformed_receipt_roots_fail_deterministically
+    code, report, diagnostic, verifier = self.invoke()
+                                         ~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 245, in invoke
+    code = check_enrolled.main()
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 93, in main
+    artifact = artifact_for(assets, package_id, receipt)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 24, in artifact_for
+    approved_id = receipt.get('packageId')
+                  ^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+
+======================================================================
+ERROR: test_malformed_receipt_roots_fail_deterministically (test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically) (value=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 275, in test_malformed_receipt_roots_fail_deterministically
+    code, report, diagnostic, verifier = self.invoke()
+                                         ~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 245, in invoke
+    code = check_enrolled.main()
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 93, in main
+    artifact = artifact_for(assets, package_id, receipt)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 24, in artifact_for
+    approved_id = receipt.get('packageId')
+                  ^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'get'
+
+======================================================================
+ERROR: test_malformed_receipt_roots_fail_deterministically (test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically) (value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 275, in test_malformed_receipt_roots_fail_deterministically
+    code, report, diagnostic, verifier = self.invoke()
+                                         ~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 245, in invoke
+    code = check_enrolled.main()
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 93, in main
+    artifact = artifact_for(assets, package_id, receipt)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 24, in artifact_for
+    approved_id = receipt.get('packageId')
+                  ^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+======================================================================
+ERROR: test_malformed_receipt_roots_fail_deterministically (test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically) (value=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 275, in test_malformed_receipt_roots_fail_deterministically
+    code, report, diagnostic, verifier = self.invoke()
+                                         ~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/test_enrolled.py", line 245, in invoke
+    code = check_enrolled.main()
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 93, in main
+    artifact = artifact_for(assets, package_id, receipt)
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/receipt-root/check_enrolled.py", line 24, in artifact_for
+    approved_id = receipt.get('packageId')
+                  ^^^^^^^^^^^
+AttributeError: 'bool' object has no attribute 'get'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (errors=5)

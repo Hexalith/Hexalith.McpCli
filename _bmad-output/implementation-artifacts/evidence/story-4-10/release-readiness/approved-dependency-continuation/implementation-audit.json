@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-21T10:23:03.134600+00:00",
+  "baselineCommit": "9354dc08176744c75c2ddb61d924c0948b373b98",
+  "sessionStartCommit": "39f75e8c8e2bec0824e8f0b93f72bd94c9a73789",
+  "diffFile": "/tmp/story410-step03-snapshot-ptp1mevw.diff",
+  "diffSha256": "22cca7a3a2cbd4c7ea86715cc1c0bceda93ea31fbd5e4bbe8b82d45f70412fe3",
+  "diffBytes": 6010745,
+  "allTasksChecked": true,
+  "matrixAudit": "matrix-test-audit-current.json",
+  "publication": "protected-publication/dispatch.json",
+  "centralIntegration": "builds-pin/integration.json",
+  "enrollment": "enrollment-checks/summary.json",
+  "productionDiscovery": "production-discovery/checks.json",
+  "otherSessionStartGitlinksPreserved": true,
+  "reviewState": "ready for independent review",
+  "diffPurpose": "Immutable step-03 snapshot; the review diff is staged separately."
+}

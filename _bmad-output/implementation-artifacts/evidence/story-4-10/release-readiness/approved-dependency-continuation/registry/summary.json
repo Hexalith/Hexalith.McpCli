@@ -1,0 +1,57 @@
+{
+  "packages": [
+    {
+      "packageId": "Hexalith.Parties.Contracts",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Client",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.client/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.AdminPortal",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.adminportal/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.ConsumerPortal",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.consumerportal/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Picker",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.picker/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Authentication",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.authentication/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Projections",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.projections/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Security",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.security/index.json"
+    },
+    {
+      "packageId": "Hexalith.Parties.Testing",
+      "latestStable": "1.5.0",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.testing/index.json"
+    }
+  ],
+  "reachableTags": [
+    "v1.5.0",
+    "v1.4.0",
+    "v1.3.0",
+    "v1.2.1",
+    "v1.2.0"
+  ],
+  "source": "160db8990c74d0a15c89cc09add95f7a256ec758"
+}

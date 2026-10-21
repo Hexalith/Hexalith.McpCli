@@ -1,0 +1,23 @@
+FF
+======================================================================
+FAIL: test_inventory_requires_the_exact_approved_digest_before_verification (test_enrolled.EnrolledPreflightTests.test_inventory_requires_the_exact_approved_digest_before_verification) (mutation='changed bytes')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/inventory-preflight/test_enrolled.py", line 263, in test_inventory_requires_the_exact_approved_digest_before_verification
+    self.assertEqual(1, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_inventory_requires_the_exact_approved_digest_before_verification (test_enrolled.EnrolledPreflightTests.test_inventory_requires_the_exact_approved_digest_before_verification) (mutation='wrong digest')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/inventory-preflight/test_enrolled.py", line 263, in test_inventory_requires_the_exact_approved_digest_before_verification
+    self.assertEqual(1, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=2)

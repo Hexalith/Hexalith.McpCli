@@ -1,0 +1,77 @@
+{
+  "builds": {
+    "action_sha": "397c94a4e246c90b21cf408790fa0d55bf32d795",
+    "files": {
+      "oci_registry_validator.py": "0fff2281ecb9d8a46c48d65d1b0de58b724f2439138da43395004232e5942045",
+      "publication_preflight.py": "f87b48e649092cc68de8f07977bae48c65f0570007f60de42887201988ee0062",
+      "publish-containers.sh": "7e64bb1f744b9e3cb793df5c47813d15db00aaa8bc76e1875088f259574e9622",
+      "smoke-container-platforms.sh": "f11865658a24ecea906da087d8446c7f631dc5a9328e294676534d590ef0e89e",
+      "smoke_container_platforms.py": "7f1161d6f477c77ddf6a1e2f381df03451168565dd8cabc28010ab23db443491"
+    },
+    "workflow_sha": "397c94a4e246c90b21cf408790fa0d55bf32d795"
+  },
+  "container_repositories": [
+    "registry.hexalith.com/parties",
+    "registry.hexalith.com/parties-mcp",
+    "registry.hexalith.com/parties-ui"
+  ],
+  "environment": "production",
+  "packages": {
+    "ids": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Parties.Client",
+      "Hexalith.Parties.AdminPortal",
+      "Hexalith.Parties.ConsumerPortal",
+      "Hexalith.Parties.Picker",
+      "Hexalith.Parties.Authentication",
+      "Hexalith.Parties.Projections",
+      "Hexalith.Parties.Security",
+      "Hexalith.Parties.Testing"
+    ],
+    "manifest_sha256": "aabb6041baf44b0fcc1e02c2922406d4c7355e3a0be8aa1bbcea2c9f749ee399",
+    "normalized_ids": [
+      "hexalith.parties.contracts",
+      "hexalith.parties.client",
+      "hexalith.parties.adminportal",
+      "hexalith.parties.consumerportal",
+      "hexalith.parties.picker",
+      "hexalith.parties.authentication",
+      "hexalith.parties.projections",
+      "hexalith.parties.security",
+      "hexalith.parties.testing"
+    ]
+  },
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ],
+  "repository": "Hexalith/Hexalith.Parties",
+  "run": {
+    "actor": "jpiquot",
+    "attempt": "1",
+    "event": "workflow_dispatch",
+    "id": "39576141445",
+    "number": "82",
+    "ref": "refs/heads/main",
+    "triggering_actor": "jpiquot",
+    "workflow_ref": "Hexalith/Hexalith.Parties/.github/workflows/release.yml@refs/heads/main",
+    "workflow_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021"
+  },
+  "schema": "hexalith.release-publication-preflight.v4",
+  "source": {
+    "branch": "main",
+    "ci_run": {
+      "conclusion": "success",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+      "id": 39573997934,
+      "status": "completed"
+    },
+    "ci_workflow": "ci.yml",
+    "live_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "ref": "refs/heads/main"
+  },
+  "source_sha": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "version": "1.5.1"
+}

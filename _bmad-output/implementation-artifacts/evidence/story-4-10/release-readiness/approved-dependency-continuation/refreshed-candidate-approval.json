@@ -1,0 +1,55 @@
+{
+  "status": "approved",
+  "purpose": "Fresh approval of the current complete Contracts candidate, seven unchanged vectors and release inventory following later upstream changes.",
+  "createdAt": "2026-10-21T08:17:51.967708+00:00",
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "0.0.0-story410",
+  "artifact": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/candidate-artifacts/Hexalith.Parties.Contracts.0.0.0-story410.nupkg",
+  "artifactHash": "sha512-KGjggm+dn1aA9S80MM+nXOGzFyqKBXWQVDGWhfHieB+rmbKZAGbOA+2t6TF5vRy5eK5m+RCZSdd2DHVwn+ZIUg==",
+  "sourceCommit": "160db8990c74d0a15c89cc09add95f7a256ec758",
+  "sourceTree": "1bdd4b373800b7fd637494340aabd93c889a889b",
+  "sourceManifest": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-source-files.sha256.json",
+    "sha256": "deca1a9d6d15de7b6e27439f761dd383286373ffacbc0ac94e2b15456a333a3c"
+  },
+  "verification": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/candidate-verification/verification.json",
+    "sha256": "f0592ca97e7ee0c14631351792bfa601683a7681ba73fe14128169806a42672a"
+  },
+  "descriptionReview": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-description-review.json",
+    "sha256": "f9df141ebe65a5667483ca6c597efb301de2fc535e1f4f66ab006bf1d6ddb242"
+  },
+  "releaseInventory": {
+    "path": "tools/inventory-coverage/v1/parties-approved.json",
+    "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+  },
+  "vectorFilesSha256": {
+    "tests/conformance-vectors/mcpcli-v1/create-party.json": "3b02624aaa032d18ef73707f97f8789a68b24bbed5fae7843edddf5c747580c5",
+    "tests/conformance-vectors/mcpcli-v1/deactivate-party.json": "ad710e24c1610549006d13dc397f4a6c5289c2bac418a18876e8b10bd5dab832",
+    "tests/conformance-vectors/mcpcli-v1/get-party.json": "0200a7bb84feadeda147c6bdf63a01b27005717a7191607a3e33278899cb612e",
+    "tests/conformance-vectors/mcpcli-v1/list-parties.json": "805a69f47ccd2e44b045b892477485f81d0ebaffd4d7ae47ddacf36b389a9df0",
+    "tests/conformance-vectors/mcpcli-v1/reactivate-party.json": "1b5c610fe1842c48b62f0ba0a22e552a2ddbc4363e2466b2fef941fe351ca294",
+    "tests/conformance-vectors/mcpcli-v1/search-parties.json": "bc88eb3f444a66379738a4705e7b0a9d087728a14f34db168ef09e10a4f85bd1",
+    "tests/conformance-vectors/mcpcli-v1/update-party.json": "86793dc6d1df7662e99bd455ccf1e1fab38798e3052e1e923e6bd24cb13386cf"
+  },
+  "dependencyApproval": "../gitlink-signoff-approval.json",
+  "pullRequest": "https://github.com/Hexalith/Hexalith.Parties/pull/57",
+  "changeSincePreviousCandidate": "SearchParties.Query now documents the subsequently committed 512 UTF-16-unit input limit. Current query and projection source retains the later bounded-input and corrupt-index safeguards. Seven operation names, routes, DTO structure, vector bytes and release target scope are unchanged.",
+  "localVerification": {
+    "restore": 0,
+    "releaseBuild": 0,
+    "affectedTestsPassed": 3690,
+    "affectedTestsSkipped": 0,
+    "artifactOperations": 7,
+    "completeVectorsReplayed": 7,
+    "catalogDiagnostics": 0,
+    "lintFindings": 0
+  },
+  "limits": "Approves the exact reviewed candidate and unchanged release scope. Normal merge, exact-source CI, protected publication, and fresh verification of published bytes and mechanically version-rebound vectors remain required before production enrollment. No live authorization, domain-effect or legacy-retirement qualification is asserted.",
+  "approvedAtRecordedUtc": "2026-10-21T08:28:30.854037+00:00",
+  "exactInstruction": "Approve refreshed candidate and continue",
+  "approvalContext": "Direct answer to the request linking refreshed-candidate-pending-approval.json for this artifact, seven unchanged vectors and release inventory.",
+  "approver": "The requesting user in this conversation; no separate external signatory is asserted.",
+  "approvedReceiptSha256": "842e35f4f90b72be12ffea9f18f6a5042b731a0747d7e35edf38abd8c579314a"
+}

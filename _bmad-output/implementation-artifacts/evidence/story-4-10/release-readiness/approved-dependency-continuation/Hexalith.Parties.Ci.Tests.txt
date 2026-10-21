@@ -1,0 +1,9 @@
+Running tests from /tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll (net10.0|x64)
+/tmp/hexalith-parties-story410-release/tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll (net10.0|x64) passed (6s 635ms)
+
+Test run summary: Passed!
+  total: 188
+  failed: 0
+  succeeded: 188
+  skipped: 0
+  duration: 6s 801ms

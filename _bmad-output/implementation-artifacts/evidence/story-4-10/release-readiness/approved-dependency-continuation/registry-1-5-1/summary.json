@@ -1,0 +1,52 @@
+{
+  "observedAt": "2026-10-21T09:34:50.593028+00:00",
+  "version": "1.5.1",
+  "packages": [
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Client",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.client/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.AdminPortal",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.adminportal/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.ConsumerPortal",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.consumerportal/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Picker",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.picker/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Authentication",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.authentication/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Projections",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.projections/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Security",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.security/index.json",
+      "versionAvailable": true
+    },
+    {
+      "id": "Hexalith.Parties.Testing",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.testing/index.json",
+      "versionAvailable": true
+    }
+  ],
+  "releaseWorkflowStillRequired": true
+}

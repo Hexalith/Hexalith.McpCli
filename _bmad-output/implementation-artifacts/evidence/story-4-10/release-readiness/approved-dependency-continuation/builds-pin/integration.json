@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-10-21T10:20:58.161008+00:00",
+  "mergedCommit": "2744d549270298cfe73679f76b477a7368429006",
+  "testedCommit": "5c250c67d26129a5e46f7821da5b41396ce585f8",
+  "identicalTree": "ae78d0ea0931d32eabf0d66bc4b2da5d72f7b8cf",
+  "catalogSourceAncestor": "4878668412fe8803c3ef232e1775b1dd09f2f857",
+  "catalogSourcePreserved": true,
+  "validatedCommitMessagePreserved": true,
+  "pullRequest": "https://github.com/Hexalith/Hexalith.Builds/pull/126",
+  "successfulPrCi": 39578987205,
+  "rootBuildsGitlink": "2744d549270298cfe73679f76b477a7368429006"
+}

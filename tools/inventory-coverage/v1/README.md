@@ -3,7 +3,8 @@
 This test-only format checks declared migration scope against the built Catalog.
 The artifact and checker stay outside production source and configuration. They
 are never read at runtime and do not enroll modules. The existing Core.Tests CI
-lane executes the sample gate without a Parties package or Gateway.
+lane executes the sample gate against fixture declarations and checks the
+production manifest separately; neither check needs a Gateway.
 
 Run from the repository root after the normal solution restore and Release build:
 
@@ -104,7 +105,8 @@ module with the generic `EnrolledInventoryCoverageGate`. Each requires
 `<module>-approved.json`, purpose `release`, authentic owner decisions and exact
 public-name/internal-type coverage. A missing inventory fails independently of
 the dependency-policy gate; synthetic fixture approval cannot authorize shipping.
-The shipped manifest remains empty until published Contracts approval succeeds.
+The shipped manifest enrolls the verified `Hexalith.Parties.Contracts` 1.5.1
+artifact. Its seven operations are checked against `parties-approved.json`.
 
 `parties-candidate.json` transcribes the seven A1 intended targets for review. Its
 five rows explicitly remain `pending` / `scope-only`, so it fails the gate. It is
@@ -120,10 +122,16 @@ implementation artifacts. The original pending candidate remains unchanged as
 historical input. The approval retains A1's N01–N04 exclusions and C01–C08
 compatibility obligations in the authoritative Markdown inventory; it does not
 certify publication, live execution or legacy-host retirement. Production
-enrollment still requires verification of the exact published package and vectors.
+enrollment uses the 2026-10-21 refreshed candidate decision and successful
+protected publication, followed by verification of the exact published package
+and seven mechanically version-rebound vectors. The binding and verification
+receipts are linked from `tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/approval.json`.
 
 Description lint is checked against exact operation/code/property acceptances in
 `<module>-accepted-lint.json`, each with an approval reference. New findings and
 stale exceptions both fail. `tenants-accepted-lint.json` transcribes only the eight
 paging-member findings already accepted in Story 4.8; it grants no new approval.
 Parties has no accepted-lint file and therefore requires empty lint.
+Operation-level findings without a property cannot be accepted by this format;
+they must be corrected in the owning Contracts. Member exceptions do not waive
+operation-level description or example requirements.

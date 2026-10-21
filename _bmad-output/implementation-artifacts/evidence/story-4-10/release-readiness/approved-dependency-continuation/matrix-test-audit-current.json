@@ -1,0 +1,166 @@
+{
+  "recordedAt": "2026-10-21T09:52:23.546301+00:00",
+  "result": "passed",
+  "rows": [
+    {
+      "matrixRow": "Detail",
+      "test": "DetailHandler_ReadsCanonicalStoreAndSurfacesPersistedFreshnessAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 34,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Detail",
+      "test": "MissingDetailExportAndIndexModelsFailClosedAsActorNotFoundAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 246,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Detail",
+      "test": "DetailHandlers_ErasedPartyReturnSameSafeMissingResultAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 92,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Identity",
+      "test": "DetailHandlers_PreserveSupportedIdentifiersAndOptionalEntityFallbackAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2184,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Identity",
+      "test": "DetailHandler_AggregateAndEntityMismatchFailsClosedBeforeStoreReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 1972,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Identity",
+      "test": "PublicIndexRoutes_RetainOptionalEntityFallbackAndSdkDispatchAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2344,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Identity",
+      "test": "PublicIndexRoutes_RejectMismatchedIdentityBeforeReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2359,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Filters",
+      "test": "PublicQueries_FilterErasedAndMixedRowsBeforePagingAndReturnEffectiveTotalsAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2408,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Filters",
+      "test": "PublicQueryPayloads_RejectAmbiguousAliasesAndInvalidFiltersBeforeReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2390,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Filters",
+      "test": "SearchCaseFilterIsRejectedBeforeReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2518,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Filters",
+      "test": "SearchProviderNeverReceivesErasedEntriesAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2577,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Paging",
+      "test": "PublicQueries_FilterErasedAndMixedRowsBeforePagingAndReturnEffectiveTotalsAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2408,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Paging",
+      "test": "PublicPaging_RejectsInvalidBoundsCursorAndOffsetBeforeReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2505,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Paging",
+      "test": "PublicContinuationRejectsScopeChangesBeforeAnotherReadAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2541,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Paging",
+      "test": "EnvelopePagingAloneGovernsAndLegacyPayloadPagingRemainsAvailableAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2468,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Compatibility",
+      "test": "EnvelopePagingAloneGovernsAndLegacyPayloadPagingRemainsAvailableAsync",
+      "path": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "line": 2468,
+      "execution": "Unfiltered Parties domain CI project: 2168 passed, zero failed/skipped; source test file unchanged from approved manifest."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "RejectsPublicDiscoveryMismatch",
+      "path": "tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs",
+      "line": 107,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "RejectsWrongClrTypeDespiteMatchingPublicNames",
+      "path": "tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs",
+      "line": 157,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "RejectsInvalidScope",
+      "path": "tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs",
+      "line": 256,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "EveryProductionModuleHasApprovedExactCoverageAndReviewedDescriptions",
+      "path": "tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs",
+      "line": 14,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "MissingInventoryCannotSilentlySkipAnEnrolledModule",
+      "path": "tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs",
+      "line": 47,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    },
+    {
+      "matrixRow": "Coverage",
+      "test": "SyntheticFixtureCannotAuthorizeProductionEnrollment",
+      "path": "tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs",
+      "line": 58,
+      "execution": "Unfiltered Core project: 659 passed, zero failed; two Windows-only ProfileStore cases skipped, neither covers this matrix."
+    }
+  ],
+  "upstreamSource": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "sourceEquivalence": "merged-main-continuation.json",
+  "upstreamExecution": "stable-main-build-and-test.json",
+  "coreExecution": "enrollment-checks/test-core.txt",
+  "enrolledPackageReplay": "enrollment-checks/enrolled/enrolled.json",
+  "limits": "CI and scripted replay do not establish live authorization, domain effects, or legacy retirement."
+}

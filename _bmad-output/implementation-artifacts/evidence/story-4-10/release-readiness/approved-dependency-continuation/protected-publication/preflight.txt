@@ -1,0 +1,271 @@
+﻿2026-10-21T09:20:14.3512665Z Current runner version: '2.337.0'
+2026-10-21T09:20:14.3530316Z ##[group]Runner Image Provisioner
+2026-10-21T09:20:14.3530868Z Hosted Compute Agent
+2026-10-21T09:20:14.3531264Z Version: 20261015.610
+2026-10-21T09:20:14.3531807Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T09:20:14.3532264Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T09:20:14.3532734Z Worker ID: {ed15019c-7cf8-4a27-9fc9-5a6c3fda20a6}
+2026-10-21T09:20:14.3533176Z Region: westus3
+2026-10-21T09:20:14.3533554Z Cloud: Azure
+2026-10-21T09:20:14.3533947Z ##[endgroup]
+2026-10-21T09:20:14.3534843Z ##[group]Operating System
+2026-10-21T09:20:14.3535261Z Ubuntu
+2026-10-21T09:20:14.3535606Z 24.04.5
+2026-10-21T09:20:14.3535970Z LTS
+2026-10-21T09:20:14.3536337Z ##[endgroup]
+2026-10-21T09:20:14.3536723Z ##[group]Runner Image
+2026-10-21T09:20:14.3537123Z Image: ubuntu-24.04
+2026-10-21T09:20:14.3537500Z Version: 20261018.339.1
+2026-10-21T09:20:14.3538369Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T09:20:14.3539299Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T09:20:14.3540141Z ##[endgroup]
+2026-10-21T09:20:14.3540919Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T09:20:14.3542309Z Actions: read
+2026-10-21T09:20:14.3542689Z Contents: read
+2026-10-21T09:20:14.3543042Z Metadata: read
+2026-10-21T09:20:14.3543434Z ##[endgroup]
+2026-10-21T09:20:14.3545257Z Secret source: Actions
+2026-10-21T09:20:14.3545909Z Cache mode: write
+2026-10-21T09:20:14.3546351Z Prepare workflow directory
+2026-10-21T09:20:14.3751790Z Prepare all required actions
+2026-10-21T09:20:14.3817638Z Complete job name: Verify exact green main source
+2026-10-21T09:20:14.4334878Z ##[group]Run set -euo pipefail
+2026-10-21T09:20:14.4335606Z [36;1mset -euo pipefail[0m
+2026-10-21T09:20:14.4336179Z [36;1mif [ "$DISPATCH_REF" != "refs/heads/main" ]; then[0m
+2026-10-21T09:20:14.4336770Z [36;1m  echo "Release must be dispatched from refs/heads/main." >&2[0m
+2026-10-21T09:20:14.4337315Z [36;1m  exit 1[0m
+2026-10-21T09:20:14.4337649Z [36;1mfi[0m
+2026-10-21T09:20:14.4338112Z [36;1mif [[ ! "$DISPATCH_SHA" =~ ^[0-9a-f]{40}$ ]]; then[0m
+2026-10-21T09:20:14.4338675Z [36;1m  echo "The dispatch source must be an exact lowercase commit SHA." >&2[0m
+2026-10-21T09:20:14.4339209Z [36;1m  exit 1[0m
+2026-10-21T09:20:14.4339625Z [36;1mfi[0m
+2026-10-21T09:20:14.4339942Z [36;1m[0m
+2026-10-21T09:20:14.4340486Z [36;1mlive_main_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"[0m
+2026-10-21T09:20:14.4341099Z [36;1mif [[ ! "$live_main_sha" =~ ^[0-9a-f]{40}$ ]]; then[0m
+2026-10-21T09:20:14.4341773Z [36;1m  echo "The live main SHA could not be resolved safely." >&2[0m
+2026-10-21T09:20:14.4342259Z [36;1m  exit 1[0m
+2026-10-21T09:20:14.4342621Z [36;1mfi[0m
+2026-10-21T09:20:14.4343017Z [36;1mif [ "$DISPATCH_SHA" != "$live_main_sha" ]; then[0m
+2026-10-21T09:20:14.4343561Z [36;1m  echo "The dispatched source is no longer the live main tip." >&2[0m
+2026-10-21T09:20:14.4344130Z [36;1m  exit 1[0m
+2026-10-21T09:20:14.4344691Z [36;1mfi[0m
+2026-10-21T09:20:14.4345058Z [36;1m[0m
+2026-10-21T09:20:14.4345420Z [36;1mci_runs="$(gh api --method GET \[0m
+2026-10-21T09:20:14.4345908Z [36;1m  "repos/${REPOSITORY}/actions/workflows/ci.yml/runs" \[0m
+2026-10-21T09:20:14.4346447Z [36;1m  -f branch=main \[0m
+2026-10-21T09:20:14.4346825Z [36;1m  -f event=push \[0m
+2026-10-21T09:20:14.4347198Z [36;1m  -f head_sha="$DISPATCH_SHA" \[0m
+2026-10-21T09:20:14.4347648Z [36;1m  -f status=success \[0m
+2026-10-21T09:20:14.4348029Z [36;1m  -f per_page=100)"[0m
+2026-10-21T09:20:14.4348617Z [36;1mif ! printf '%s\n' "$ci_runs" | jq -e --arg sha "$DISPATCH_SHA" '[0m
+2026-10-21T09:20:14.4349114Z [36;1m  def positive_integer:[0m
+2026-10-21T09:20:14.4349562Z [36;1m    if type == "number" then . > 0 and . == floor else false end;[0m
+2026-10-21T09:20:14.4350162Z [36;1m  if type == "object" and (.workflow_runs | type == "array") then[0m
+2026-10-21T09:20:14.4350850Z [36;1m    [.workflow_runs[] | select([0m
+2026-10-21T09:20:14.4351313Z [36;1m      type == "object" and[0m
+2026-10-21T09:20:14.4351733Z [36;1m      (.id | positive_integer) and[0m
+2026-10-21T09:20:14.4352167Z [36;1m      .head_sha == $sha and[0m
+2026-10-21T09:20:14.4352609Z [36;1m      .head_branch == "main" and[0m
+2026-10-21T09:20:14.4353014Z [36;1m      .event == "push" and[0m
+2026-10-21T09:20:14.4353461Z [36;1m      .status == "completed" and[0m
+2026-10-21T09:20:14.4353884Z [36;1m      .conclusion == "success"[0m
+2026-10-21T09:20:14.4354282Z [36;1m    )] | length > 0[0m
+2026-10-21T09:20:14.4354764Z [36;1m  else false end[0m
+2026-10-21T09:20:14.4355134Z [36;1m' >/dev/null; then[0m
+2026-10-21T09:20:14.4355723Z [36;1m  echo "No successful push ci.yml run exists for the exact current main SHA." >&2[0m
+2026-10-21T09:20:14.4356270Z [36;1m  exit 1[0m
+2026-10-21T09:20:14.4356602Z [36;1mfi[0m
+2026-10-21T09:20:14.4908874Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T09:20:14.4909950Z env:
+2026-10-21T09:20:14.4913614Z   GH_TOKEN: ***
+2026-10-21T09:20:14.4914334Z   REPOSITORY: Hexalith/Hexalith.Parties
+2026-10-21T09:20:14.4915094Z   DISPATCH_REF: refs/heads/main
+2026-10-21T09:20:14.4915826Z   DISPATCH_SHA: 8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021
+2026-10-21T09:20:14.4916492Z ##[endgroup]
+2026-10-21T09:20:15.5751061Z ##[group]Run set -euo pipefail
+2026-10-21T09:20:15.5752359Z [36;1mset -euo pipefail[0m
+2026-10-21T09:20:15.5753746Z [36;1m# Semantic Release derives the next version from the highest release tag reachable from[0m
+2026-10-21T09:20:15.5755835Z [36;1m# the released branch, so a published package version above that floor makes every[0m
+2026-10-21T09:20:15.5758265Z [36;1m# proposal land on an occupied version. If release tags are deleted while nuget.org keeps[0m
+2026-10-21T09:20:15.5760856Z [36;1m# those versions, detect the resulting collision before entering the protected release[0m
+2026-10-21T09:20:15.5762610Z [36;1m# job. Prove the floor covers the registry here before any secret is reachable.[0m
+2026-10-21T09:20:15.5764831Z [36;1mif [[ ! "$DISPATCH_SHA" =~ ^[0-9a-f]{40}$ ]]; then[0m
+2026-10-21T09:20:15.5766212Z [36;1m  echo "The dispatch source must be an exact lowercase commit SHA." >&2[0m
+2026-10-21T09:20:15.5767398Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5768102Z [36;1mfi[0m
+2026-10-21T09:20:15.5768792Z [36;1m[0m
+2026-10-21T09:20:15.5769953Z [36;1mif ! tag_refs="$(gh api --paginate "repos/${REPOSITORY}/git/refs/tags?per_page=100" | jq -s '.')"; then[0m
+2026-10-21T09:20:15.5771592Z [36;1m  echo "The repository tag refs could not be queried safely." >&2[0m
+2026-10-21T09:20:15.5772675Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5773323Z [36;1mfi[0m
+2026-10-21T09:20:15.5774022Z [36;1mif ! printf '%s\n' "$tag_refs" | jq -e '[0m
+2026-10-21T09:20:15.5775045Z [36;1m  type == "array" and[0m
+2026-10-21T09:20:15.5775833Z [36;1m  all(.[]; type == "array") and[0m
+2026-10-21T09:20:15.5776658Z [36;1m  all(.[][];[0m
+2026-10-21T09:20:15.5777359Z [36;1m    type == "object" and[0m
+2026-10-21T09:20:15.5778183Z [36;1m    (.ref | type == "string") and[0m
+2026-10-21T09:20:15.5779084Z [36;1m    (.ref | startswith("refs/tags/"))[0m
+2026-10-21T09:20:15.5779946Z [36;1m  )[0m
+2026-10-21T09:20:15.5780582Z [36;1m' >/dev/null; then[0m
+2026-10-21T09:20:15.5781697Z [36;1m  echo "The repository tag refs response could not be validated safely." >&2[0m
+2026-10-21T09:20:15.5782903Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5783542Z [36;1mfi[0m
+2026-10-21T09:20:15.5784145Z [36;1m[0m
+2026-10-21T09:20:15.5785320Z [36;1m# Only plain vMAJOR.MINOR.PATCH tags are release tags here, matching tagFormat in[0m
+2026-10-21T09:20:15.5787032Z [36;1m# release.config.cjs. The regex is also what makes the tag name safe to interpolate below.[0m
+2026-10-21T09:20:15.5788458Z [36;1mrelease_tags="$(printf '%s\n' "$tag_refs" | jq -r '[0m
+2026-10-21T09:20:15.5789411Z [36;1m  [ .[][].ref[0m
+2026-10-21T09:20:15.5790131Z [36;1m    | ltrimstr("refs/tags/")[0m
+2026-10-21T09:20:15.5791190Z [36;1m    | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))[0m
+2026-10-21T09:20:15.5792070Z [36;1m  ][0m
+2026-10-21T09:20:15.5792679Z [36;1m  | unique[0m
+2026-10-21T09:20:15.5793481Z [36;1m  | sort_by(ltrimstr("v") | split(".") | map(tonumber))[0m
+2026-10-21T09:20:15.5794570Z [36;1m  | reverse[0m
+2026-10-21T09:20:15.5795237Z [36;1m  | .[]')"[0m
+2026-10-21T09:20:15.5795874Z [36;1m[0m
+2026-10-21T09:20:15.5796903Z [36;1m# Semantic Release considers only tags merged into the released branch and takes the[0m
+2026-10-21T09:20:15.5798646Z [36;1m# highest, so walk candidates highest-first and stop at the first one that is an ancestor[0m
+2026-10-21T09:20:15.5800371Z [36;1m# of the dispatched source. A higher tag on an unmerged branch is correctly ignored.[0m
+2026-10-21T09:20:15.5801589Z [36;1m#[0m
+2026-10-21T09:20:15.5802598Z [36;1m# compare/{base}...{head} reports the status of HEAD RELATIVE TO BASE. With the tag as[0m
+2026-10-21T09:20:15.5804206Z [36;1m# base and the dispatched source as head, a reachable tag is therefore "ahead" (the[0m
+2026-10-21T09:20:15.5805939Z [36;1m# source is ahead of it) and "behind" means the tag is a DESCENDANT of the source, which[0m
+2026-10-21T09:20:15.5807605Z [36;1m# Semantic Release will not see. Accepting "behind" here would adopt an unreachable tag[0m
+2026-10-21T09:20:15.5809076Z [36;1m# as the floor and pass vacuously.[0m
+2026-10-21T09:20:15.5809882Z [36;1mfloor_tag=''[0m
+2026-10-21T09:20:15.5810576Z [36;1mwhile IFS= read -r candidate_tag; do[0m
+2026-10-21T09:20:15.5811453Z [36;1m  [ -n "$candidate_tag" ] || continue[0m
+2026-10-21T09:20:15.5812882Z [36;1m  if ! comparison="$(gh api "repos/${REPOSITORY}/compare/${candidate_tag}...${DISPATCH_SHA}?per_page=1")"; then[0m
+2026-10-21T09:20:15.5814870Z [36;1m    echo "Tag '${candidate_tag}' could not be compared with the dispatched source." >&2[0m
+2026-10-21T09:20:15.5816080Z [36;1m    exit 1[0m
+2026-10-21T09:20:15.5816681Z [36;1m  fi[0m
+2026-10-21T09:20:15.5817490Z [36;1m  comparison_status="$(printf '%s\n' "$comparison" | jq -r '[0m
+2026-10-21T09:20:15.5819044Z [36;1m    if type == "object" and (.status | type == "string") then .status else "" end' 2>/dev/null || printf '')"[0m
+2026-10-21T09:20:15.5820398Z [36;1m  case "$comparison_status" in[0m
+2026-10-21T09:20:15.5821177Z [36;1m    identical | ahead)[0m
+2026-10-21T09:20:15.5821916Z [36;1m      floor_tag="$candidate_tag"[0m
+2026-10-21T09:20:15.5822669Z [36;1m      break[0m
+2026-10-21T09:20:15.5823249Z [36;1m      ;;[0m
+2026-10-21T09:20:15.5823839Z [36;1m    behind | diverged) ;;[0m
+2026-10-21T09:20:15.5824720Z [36;1m    *)[0m
+2026-10-21T09:20:15.5825891Z [36;1m      echo "Comparison of '${candidate_tag}' with the dispatched source could not be validated safely." >&2[0m
+2026-10-21T09:20:15.5827245Z [36;1m      exit 1[0m
+2026-10-21T09:20:15.5827839Z [36;1m      ;;[0m
+2026-10-21T09:20:15.5828392Z [36;1m  esac[0m
+2026-10-21T09:20:15.5828976Z [36;1mdone <<< "$release_tags"[0m
+2026-10-21T09:20:15.5829669Z [36;1m[0m
+2026-10-21T09:20:15.5830222Z [36;1mif [ -z "$floor_tag" ]; then[0m
+2026-10-21T09:20:15.5831629Z [36;1m  echo "No release tag is reachable from the dispatched source, so the version floor cannot be proved." >&2[0m
+2026-10-21T09:20:15.5832994Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5833554Z [36;1mfi[0m
+2026-10-21T09:20:15.5834138Z [36;1mfloor_version="${floor_tag#v}"[0m
+2026-10-21T09:20:15.5835035Z [36;1m[0m
+2026-10-21T09:20:15.5836025Z [36;1m# tools/release-packages.json is the authoritative inventory. Read it at the exact[0m
+2026-10-21T09:20:15.5837612Z [36;1m# dispatched source rather than checking out: this workflow deliberately uses no[0m
+2026-10-21T09:20:15.5839155Z [36;1m# third-party actions, so the caller stays free of unpinned supply-chain surface.[0m
+2026-10-21T09:20:15.5840954Z [36;1mif ! manifest_response="$(gh api "repos/${REPOSITORY}/contents/${PACKAGE_MANIFEST}?ref=${DISPATCH_SHA}")"; then[0m
+2026-10-21T09:20:15.5842768Z [36;1m  echo "The release package manifest could not be read at the dispatched source." >&2[0m
+2026-10-21T09:20:15.5844084Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5844801Z [36;1mfi[0m
+2026-10-21T09:20:15.5845618Z [36;1mmanifest_content="$(printf '%s\n' "$manifest_response" | jq -r '[0m
+2026-10-21T09:20:15.5846945Z [36;1m  if type == "object" and .type == "file" and .path == $ENV.PACKAGE_MANIFEST[0m
+2026-10-21T09:20:15.5848210Z [36;1m    and .encoding == "base64" and (.content | type == "string")[0m
+2026-10-21T09:20:15.5849352Z [36;1m  then .content else "" end' 2>/dev/null || printf '')"[0m
+2026-10-21T09:20:15.5850324Z [36;1mif [ -z "$manifest_content" ]; then[0m
+2026-10-21T09:20:15.5851503Z [36;1m  echo "The release package manifest response could not be validated safely." >&2[0m
+2026-10-21T09:20:15.5852680Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5853241Z [36;1mfi[0m
+2026-10-21T09:20:15.5854069Z [36;1mif ! manifest="$(printf '%s\n' "$manifest_content" | base64 -d)"; then[0m
+2026-10-21T09:20:15.5855467Z [36;1m  echo "The release package manifest could not be decoded." >&2[0m
+2026-10-21T09:20:15.5856469Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5857029Z [36;1mfi[0m
+2026-10-21T09:20:15.5857934Z [36;1m# Manifest ids reach a request URL, so they are validated as untrusted input.[0m
+2026-10-21T09:20:15.5859350Z [36;1mif ! package_ids="$(printf '%s\n' "$manifest" | jq -er '[0m
+2026-10-21T09:20:15.5860279Z [36;1m  .packages[0m
+2026-10-21T09:20:15.5861149Z [36;1m  | if type == "array" and length > 0 then . else error("no packages") end[0m
+2026-10-21T09:20:15.5862168Z [36;1m  | map([0m
+2026-10-21T09:20:15.5862727Z [36;1m      .id[0m
+2026-10-21T09:20:15.5863524Z [36;1m      | if type == "string" and test("^[A-Za-z0-9][A-Za-z0-9._-]*$")[0m
+2026-10-21T09:20:15.5864740Z [36;1m        then . else error("invalid package id") end)[0m
+2026-10-21T09:20:15.5865613Z [36;1m  | unique[0m
+2026-10-21T09:20:15.5866213Z [36;1m  | .[]')"; then[0m
+2026-10-21T09:20:15.5867183Z [36;1m  echo "The release package manifest could not be validated safely." >&2[0m
+2026-10-21T09:20:15.5868261Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5868818Z [36;1mfi[0m
+2026-10-21T09:20:15.5869344Z [36;1m[0m
+2026-10-21T09:20:15.5869916Z [36;1mpublished_response="$(mktemp)"[0m
+2026-10-21T09:20:15.5870762Z [36;1mtrap 'rm -f "$published_response"' EXIT[0m
+2026-10-21T09:20:15.5871571Z [36;1m[0m
+2026-10-21T09:20:15.5872113Z [36;1mviolations=''[0m
+2026-10-21T09:20:15.5872793Z [36;1mwhile IFS= read -r package_id; do[0m
+2026-10-21T09:20:15.5873614Z [36;1m  [ -n "$package_id" ] || continue[0m
+2026-10-21T09:20:15.5875284Z [36;1m  index_url="https://api.nuget.org/v3-flatcontainer/$(printf '%s' "$package_id" | tr '[:upper:]' '[:lower:]')/index.json"[0m
+2026-10-21T09:20:15.5877229Z [36;1m  # Retry transient transport faults: a single CDN blip across nine serial probes would[0m
+2026-10-21T09:20:15.5878818Z [36;1m  # otherwise abort an operator-initiated release and read as permanent drift.[0m
+2026-10-21T09:20:15.5880272Z [36;1m  if ! index_status="$(curl --silent --show-error --location --max-time 30 \[0m
+2026-10-21T09:20:15.5881513Z [36;1m    --retry 3 --retry-connrefused --retry-all-errors \[0m
+2026-10-21T09:20:15.5882788Z [36;1m    --output "$published_response" --write-out '%{http_code}' "$index_url")"; then[0m
+2026-10-21T09:20:15.5884315Z [36;1m    echo "The published version index for ${package_id} could not be retrieved." >&2[0m
+2026-10-21T09:20:15.5885588Z [36;1m    exit 1[0m
+2026-10-21T09:20:15.5886161Z [36;1m  fi[0m
+2026-10-21T09:20:15.5886736Z [36;1m  case "$index_status" in[0m
+2026-10-21T09:20:15.5887432Z [36;1m    404)[0m
+2026-10-21T09:20:15.5888196Z [36;1m      # Never published: no version can sit above the floor.[0m
+2026-10-21T09:20:15.5889132Z [36;1m      continue[0m
+2026-10-21T09:20:15.5889737Z [36;1m      ;;[0m
+2026-10-21T09:20:15.5890302Z [36;1m    200) ;;[0m
+2026-10-21T09:20:15.5890863Z [36;1m    *)[0m
+2026-10-21T09:20:15.5892001Z [36;1m      echo "The published version index for ${package_id} returned unexpected status ${index_status}." >&2[0m
+2026-10-21T09:20:15.5893422Z [36;1m      exit 1[0m
+2026-10-21T09:20:15.5894010Z [36;1m      ;;[0m
+2026-10-21T09:20:15.5894704Z [36;1m  esac[0m
+2026-10-21T09:20:15.5895243Z [36;1m[0m
+2026-10-21T09:20:15.5896173Z [36;1m  # Compare numerically: 3.15.1 is above 3.2.18, which a lexical comparison reverses.[0m
+2026-10-21T09:20:15.5897662Z [36;1m  # Equality is not a collision, so only strictly greater versions are reported.[0m
+2026-10-21T09:20:15.5898764Z [36;1m  #[0m
+2026-10-21T09:20:15.5899759Z [36;1m  # A version this cannot parse is unprovable, not absent, so an unrecognised shape fails[0m
+2026-10-21T09:20:15.5901379Z [36;1m  # closed rather than being dropped. Four-segment versions are compared on their first[0m
+2026-10-21T09:20:15.5902954Z [36;1m  # three because NuGet normalises 3.16.0.0 to 3.16.0, which would otherwise occupy a[0m
+2026-10-21T09:20:15.5904565Z [36;1m  # version this reported as free. Prereleases are excluded: 4.1.0-rc.1 does not occupy[0m
+2026-10-21T09:20:15.5906091Z [36;1m  # 4.1.0, so treating one as a collision would block releases that cannot collide.[0m
+2026-10-21T09:20:15.5907355Z [36;1m  if ! above_floor="$(jq -er --arg floor "$floor_version" '[0m
+2026-10-21T09:20:15.5908649Z [36;1m    def parts: split("-")[0] | split(".") | map(tonumber) | (. + [0, 0, 0])[0:3];[0m
+2026-10-21T09:20:15.5909847Z [36;1m    if type == "object" and (.versions | type == "array") then[0m
+2026-10-21T09:20:15.5910768Z [36;1m      .versions[0m
+2026-10-21T09:20:15.5911392Z [36;1m      | map([0m
+2026-10-21T09:20:15.5912267Z [36;1m          if type == "string" and test("^[0-9]+(\\.[0-9]+){1,3}(-[0-9A-Za-z.-]+)?$")[0m
+2026-10-21T09:20:15.5913514Z [36;1m          then . else error("unrecognised published version") end)[0m
+2026-10-21T09:20:15.5914571Z [36;1m      | map(select(test("-") | not))[0m
+2026-10-21T09:20:15.5915422Z [36;1m      | map(select(parts > ($floor | parts)))[0m
+2026-10-21T09:20:15.5916248Z [36;1m      | sort_by(parts)[0m
+2026-10-21T09:20:15.5916941Z [36;1m      | (last // "")[0m
+2026-10-21T09:20:15.5917975Z [36;1m    else error("invalid published version index") end' "$published_response")"; then[0m
+2026-10-21T09:20:15.5919547Z [36;1m    echo "The published version index for ${package_id} could not be validated safely." >&2[0m
+2026-10-21T09:20:15.5920708Z [36;1m    exit 1[0m
+2026-10-21T09:20:15.5921265Z [36;1m  fi[0m
+2026-10-21T09:20:15.5921837Z [36;1m  if [ -n "$above_floor" ]; then[0m
+2026-10-21T09:20:15.5922782Z [36;1m    violations="${violations}  ${package_id} ${above_floor}"$'\n'[0m
+2026-10-21T09:20:15.5923728Z [36;1m  fi[0m
+2026-10-21T09:20:15.5924290Z [36;1mdone <<< "$package_ids"[0m
+2026-10-21T09:20:15.5925003Z [36;1m[0m
+2026-10-21T09:20:15.5925550Z [36;1mif [ -n "$violations" ]; then[0m
+2026-10-21T09:20:15.5926632Z [36;1m  echo "Published package versions exceed the release tag floor ${floor_tag}:" >&2[0m
+2026-10-21T09:20:15.5927758Z [36;1m  printf '%s' "$violations" >&2[0m
+2026-10-21T09:20:15.5929163Z [36;1m  echo "Semantic Release would propose a version that already exists, and the publication preflight would reject it." >&2[0m
+2026-10-21T09:20:15.5931088Z [36;1m  echo "Restore the missing release tag at or above the highest published version, then redispatch." >&2[0m
+2026-10-21T09:20:15.5932323Z [36;1m  exit 1[0m
+2026-10-21T09:20:15.5932872Z [36;1mfi[0m
+2026-10-21T09:20:15.5933908Z [36;1mecho "Release tag floor ${floor_tag} is at or above every published version of the declared packages."[0m
+2026-10-21T09:20:15.5935441Z [36;1mprintf 'release-floor-tag=%s\n' "$floor_tag" >> "$GITHUB_OUTPUT"[0m
+2026-10-21T09:20:15.5981760Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T09:20:15.5982593Z env:
+2026-10-21T09:20:15.5988148Z   GH_TOKEN: ***
+2026-10-21T09:20:15.5988755Z   REPOSITORY: Hexalith/Hexalith.Parties
+2026-10-21T09:20:15.5989597Z   DISPATCH_SHA: 8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021
+2026-10-21T09:20:15.5990513Z   PACKAGE_MANIFEST: tools/release-packages.json
+2026-10-21T09:20:15.5991400Z ##[endgroup]
+2026-10-21T09:20:18.6120443Z Release tag floor v1.5.0 is at or above every published version of the declared packages.
+2026-10-21T09:20:18.6207126Z Evaluate and set job outputs
+2026-10-21T09:20:18.6213369Z Set output 'release-floor-tag'
+2026-10-21T09:20:18.6214927Z Cleaning up orphan processes
+

@@ -1,0 +1,5 @@
+⧗   --- input ---
+build(deps): integrate parties 1.5.1 pin
+
+Preserve byte-bound audit provenance for Contracts enrollment.
+✔   found 0 problems, 0 warnings

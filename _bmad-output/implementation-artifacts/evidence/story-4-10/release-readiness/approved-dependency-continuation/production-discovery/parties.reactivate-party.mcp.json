@@ -1,0 +1,35 @@
+{
+  "name": "parties.reactivate-party",
+  "kind": "write",
+  "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "PartyId": {
+        "type": "string",
+        "description": "The supplied PartyId of the party to reactivate, at most 128 characters; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+      }
+    },
+    "required": [
+      "PartyId"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "PartyId": "party-49"
+  },
+  "envelope": {
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "tenant",
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

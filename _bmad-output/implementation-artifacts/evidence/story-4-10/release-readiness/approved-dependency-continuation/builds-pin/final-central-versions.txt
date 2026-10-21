@@ -1,0 +1,1 @@
+Central package version validation passed for 307 entries in '/tmp/hexalith-builds-story410-pin-20261021/Props/Directory.Packages.props'.

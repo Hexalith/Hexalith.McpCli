@@ -44,7 +44,7 @@ internal sealed record RestoredDependencyGraph(
         return new(rootId, nodes, failures);
     }
 
-    /// <summary>Adds an offline candidate closure while retaining every already-restored version.</summary>
+    /// <summary>Selects an offline candidate root while retaining already-restored dependency versions.</summary>
     public RestoredDependencyGraph WithCandidate(JsonElement fixture)
     {
         var failures = LoadFailures.ToList();
@@ -56,6 +56,7 @@ internal sealed record RestoredDependencyGraph(
         }
 
         string candidate = fixture.GetProperty("rootId").GetString()!;
+        nodes[candidate] = candidates[candidate];
         var dependencies = new Dictionary<string, string>(nodes[RootId].Dependencies, StringComparer.OrdinalIgnoreCase)
         {
             [candidate] = fixture.GetProperty("rootVersion").GetString()!,

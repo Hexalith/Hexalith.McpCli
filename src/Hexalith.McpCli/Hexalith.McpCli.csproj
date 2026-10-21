@@ -21,6 +21,7 @@
     <ProjectReference Include="../Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Hexalith.Parties.Contracts" HexalithContracts="true" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
   <!-- Enroll each production *.Contracts package with a direct, versionless

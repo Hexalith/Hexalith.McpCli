@@ -1,0 +1,135 @@
+[
+  {
+    "label": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.Parties.slnx"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:10:43.212835+00:00",
+    "exitCode": 0,
+    "log": "restore.txt"
+  },
+  {
+    "label": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.Parties.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:10:45.148972+00:00",
+    "exitCode": 0,
+    "log": "build.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Contracts.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Contracts.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:11:35.909407+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Contracts.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:11:44.922280+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Projections.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Projections.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:12:10.939009+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Projections.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Client.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Client.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:12:12.637266+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Client.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Server.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Server.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:12:31.549539+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Server.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Sample.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Sample.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:12:32.899313+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Sample.Tests.txt"
+  },
+  {
+    "label": "Hexalith.Parties.Ci.Tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.Parties.Ci.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/tmp/hexalith-parties-story410-release",
+    "startedAt": "2026-10-21T08:12:34.352071+00:00",
+    "exitCode": 0,
+    "log": "Hexalith.Parties.Ci.Tests.txt"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-10-21T10:41:30.397658+00:00",
+  "result": "passed",
+  "rootHead": "39f75e8c8e2bec0824e8f0b93f72bd94c9a73789",
+  "buildsPin": "2744d549270298cfe73679f76b477a7368429006",
+  "protectedInputSha256": {
+    "tools/inventory-coverage/v1/parties-approved.json": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-approval.json": "ef9788ece5e19363139d0cb252998b68ff9f454c56d19001441c926990a701a7",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-pending-approval.json": "842e35f4f90b72be12ffea9f18f6a5042b731a0747d7e35edf38abd8c579314a",
+    "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-artifact-binding.json": "de3da4c4c7e2ea462139f25c30b64869a9ad4f513e5b030b05a7ca9d2577f42a"
+  },
+  "frozenIntentSha256": "31abb46110ade1eae1bc2a2b398a5ad97a1ebb69feb71dac83280a9ece0e1f95",
+  "verifierAndRegressionSha256": {
+    "tools/conformance-vectors/v1/check_enrolled.py": "c340243bc5aeed96de2ce95748c7cb2c57bb62124320c4ee94c1183b322c9d33",
+    "tools/conformance-vectors/v1/verify_artifact.py": "d56febba181ceeb19e6122ac259acdacf76db34d480d41a331f4504daa90215b",
+    "tools/conformance-vectors/v1/run_loopback.py": "08b123bb0f52e54f7fdb7f2276ecbd2466ea6c7d7b5cd39fa817da87914d68bb",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "2953869a03c4ab431ede776f748bfa2db950fe561e9a09c065859e809cb5ffb6",
+    "tools/conformance-vectors/v1/test_enrolled.py": "26f53a1fab5c6f8c150a20af81e3663b0aeed4fc5d1c62b8b15ccfb137ff6065",
+    "tools/conformance-vectors/v1/test_process_fixture.py": "c629e9fbe8a2d9f5f690e41d434f1aafb2acbefbe868d53b27fb7bc602712750",
+    ".github/workflows/ci.yml": "45d862f4ef42f9fc2bcf41b2c5b909d48d7128066a7ee7cb7aea1f3920e4fae8",
+    "tools/conformance-vectors/v1/validate.py": "879d6f95c2c035074d57f2709408ddea77c02646c7eff6f5b4358b41cbb8ebe9",
+    "tests/Hexalith.McpCli.ConformanceHost/Program.cs": "774b3c0eaa6466256bb77876e146e0ed7ec3126ef86d4d608612a4cc821aa701"
+  },
+  "inventoryReceiptMatchesApprovedBytes": true,
+  "upstreamSource": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "upstreamTestEvidence": "../stable-main-build-and-test.json",
+  "sourceEquivalenceEvidence": "../merged-main-continuation.json",
+  "matrixAuditSha256": "1fad213c19afdf29e673ddfeebd1b9adce7cd7ec05b06cb827c4b4df1c66def9",
+  "productionSourceWorkingChanges": [
+    "src/Hexalith.McpCli/Hexalith.McpCli.csproj"
+  ],
+  "finalReceipt": "enrolled/enrolled.json",
+  "freshDescriptionDocumentsMatchReviewedArtifact": true,
+  "resolvedPackageCount": 53
+}

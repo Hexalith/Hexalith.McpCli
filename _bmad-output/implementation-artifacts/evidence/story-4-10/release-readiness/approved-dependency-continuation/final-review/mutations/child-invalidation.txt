@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_evaluation_failure_invalidates_old_child_success_before_preflight (test_enrolled.EnrolledPreflightTests.test_evaluation_failure_invalidates_old_child_success_before_preflight)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/child-invalidation/test_enrolled.py", line 289, in test_evaluation_failure_invalidates_old_child_success_before_preflight
+    self.assert_invalidated_child()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/tmp/story410-review-fix-mutations-xoyjcs03/child-invalidation/test_enrolled.py", line 249, in assert_invalidated_child
+    self.assertNotEqual('passed', json.loads((self.child / 'verification.json').read_text())['result'])
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'passed' == 'passed'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)

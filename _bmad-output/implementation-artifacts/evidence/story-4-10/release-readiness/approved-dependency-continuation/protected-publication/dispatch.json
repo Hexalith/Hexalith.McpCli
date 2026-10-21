@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-21T09:20:52.688711+00:00",
+  "runId": 39576141445,
+  "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39576141445",
+  "source": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "event": "workflow_dispatch",
+  "preflight": "passed",
+  "exactSourcePushCi": 39573997934,
+  "reviewer": "jpiquot",
+  "approvalRequest": {
+    "environment_ids": [
+      19131558330
+    ],
+    "state": "approved",
+    "comment": "Proceed with the user-approved Story 4.10 refreshed candidate and dependency selection after successful exact-main CI 39573997934. Source: 8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021."
+  },
+  "authorization": "../refreshed-candidate-approval.json",
+  "normalEnvironmentApproval": true,
+  "protectionBypass": false,
+  "publication": "passed",
+  "publishedVersion": "1.5.1",
+  "publishedRelease": "https://github.com/Hexalith/Hexalith.Parties/releases/tag/v1.5.1",
+  "completedAtRecordedUtc": "2026-10-21T09:39:31.877628+00:00"
+}

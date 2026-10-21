@@ -1,0 +1,8 @@
+{
+  "repository_full_name": "Hexalith/Hexalith.Builds",
+  "pr_number": 126,
+  "merge_method": "merge",
+  "expected_head_sha": "5c250c67d26129a5e46f7821da5b41396ce585f8",
+  "commit_title": "build(deps): integrate parties 1.5.1 pin",
+  "commit_message": "Preserve byte-bound audit provenance for Contracts enrollment."
+}

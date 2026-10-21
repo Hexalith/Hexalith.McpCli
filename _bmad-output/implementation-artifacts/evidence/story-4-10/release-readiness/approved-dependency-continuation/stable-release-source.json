@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-10-21T09:03:27.825205+00:00",
+  "sourceBefore": "457031c91fea0857321399722b5a89aeb7ce64b3",
+  "source": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "tree": "100ce7c1bdc782473759715ed806fb700806d1a2",
+  "treeIdenticalTo": "1aabca216888b8584b96a9e9b44770f9bed786c0",
+  "ownerCoordination": "Other writes are paused; continue",
+  "ownerCoordinationContext": "Direct answer after two external updates replaced the selected pointers and cancelled exact-source CI.",
+  "message": "build(release): restore approved dependency selection\n\nRetain the reviewed release tree while exact-source CI completes.\n",
+  "commitlint": {
+    "exitCode": 0,
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "log": "stable-release-commitlint.txt"
+  },
+  "checks": [
+    {
+      "command": [
+        "bash",
+        "scripts/gitlink-rc-gate.sh",
+        "--diff",
+        "v1.5.0"
+      ],
+      "exitCode": 0,
+      "log": "stable-release-rc-diff.txt"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/gitlink-rc-gate.sh",
+        "--worktree"
+      ],
+      "exitCode": 0,
+      "log": "stable-release-rc-worktree.txt"
+    }
+  ],
+  "independentClone": "/tmp/codex-story410-parties-o1yy9cyh",
+  "publication": "not performed",
+  "enrollment": "not performed"
+}

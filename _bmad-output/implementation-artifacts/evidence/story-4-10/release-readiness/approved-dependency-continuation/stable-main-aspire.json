@@ -1,0 +1,14 @@
+{
+  "runId": 39573997934,
+  "jobId": 119137790332,
+  "source": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+  "result": "passed",
+  "summary": {
+    "total": 104,
+    "failed": 0,
+    "succeeded": 98,
+    "skipped": 6
+  },
+  "log": "stable-main-aspire.txt",
+  "limits": "Six existing runtime qualification skips do not provide live authorization, domain-effect, or retirement evidence."
+}

@@ -1,0 +1,14 @@
+{
+  "recordedAt": "2026-10-21T09:36:22.263878+00:00",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/audit-central-package-versions.ps1",
+    "-ChangedFamily",
+    "hexalith-parties"
+  ],
+  "catalogCommit": "4878668412fe8803c3ef232e1775b1dd09f2f857",
+  "exitCode": 0,
+  "log": "audit-refresh.txt"
+}

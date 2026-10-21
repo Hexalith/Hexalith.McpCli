@@ -1,0 +1,121 @@
+{
+  "recordedAt": "2026-10-21T09:49:45.382650+00:00",
+  "result": "passed",
+  "entryPoint": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+  "cliChecks": [
+    {
+      "label": "modules",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "modules",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "operations",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "operations",
+        "parties",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.create-party",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.create-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.deactivate-party",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.deactivate-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.get-party",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.get-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.list-parties",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.list-parties",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.reactivate-party",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.reactivate-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.search-parties",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.search-parties",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "parties.update-party",
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.update-party",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "mcpChecks": {
+    "list_modules": "passed",
+    "list_operations": "passed",
+    "describe_operation": 7
+  },
+  "module": "parties",
+  "operationCount": 7,
+  "lintFindings": 0,
+  "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw=="
+}

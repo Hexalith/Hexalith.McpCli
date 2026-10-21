@@ -1,0 +1,19 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/story410-mcpcli-completion-message.txt"
+  ],
+  "exitCode": 0,
+  "owningPinnedCliVersion": "21.2.2",
+  "messageSha256": "cdbd6f744687659d7e9b738039ea06b9af57a34173a2c17e0358c2e50b73a7dd",
+  "message": "completion-message.txt",
+  "stdout": "completion-commitlint.stdout.txt",
+  "stderr": "completion-commitlint.stderr.txt",
+  "dependencyInstallCommand": "npm ci",
+  "dependencyInstallExitCode": 0
+}

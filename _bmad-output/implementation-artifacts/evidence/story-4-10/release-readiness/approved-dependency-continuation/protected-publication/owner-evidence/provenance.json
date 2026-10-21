@@ -1,0 +1,48 @@
+{
+  "runId": 39576141445,
+  "artifactId": 12335156527,
+  "artifactName": "release-evidence-39576141445-1",
+  "retainedJsonFiles": [
+    {
+      "path": "1.5.1/parties/oci-validation.json",
+      "sha256": "ae22f1dc4b3fff4387c39b763de3b10d8985305593de6b2db699531d59020bdd"
+    },
+    {
+      "path": "1.5.1/parties/smoke-results.json",
+      "sha256": "8783befb29cd8e869a43538d47be8a501866d07b1a5cd5cc415ae34d2215f30c"
+    },
+    {
+      "path": "1.5.1/parties-mcp/oci-validation.json",
+      "sha256": "9731085dc41d99efca3970dbb76bf6a633741437d1d5963d6d538c67f50c7fcf"
+    },
+    {
+      "path": "1.5.1/parties-mcp/smoke-results.json",
+      "sha256": "1433b1f4efff58301f42c74dffd4ac0e37bb9b2ada41a96b972fd6e98e0bbb31"
+    },
+    {
+      "path": "1.5.1/parties-ui/oci-validation.json",
+      "sha256": "ccd26986bc194503b8b57d211260c9f530a934027e74e3e57a82d758e1b1c419"
+    },
+    {
+      "path": "1.5.1/parties-ui/smoke-results.json",
+      "sha256": "185e62f8d4c8b65d90327d6d24a3006f2ac66496b635458e0c3a9cab196efbd9"
+    },
+    {
+      "path": "1.5.1/preflight/publication-identity.json",
+      "sha256": "961e8538e1c7a90075bd58888e665ff9fb485e1fda19f73a71a72e3bb564c093"
+    },
+    {
+      "path": "1.5.1/preflight/publication-preflight.container.json",
+      "sha256": "219e50b2488ebff87b290705fd3345804a287dae12ee628bc1dca23fb6e629e9"
+    },
+    {
+      "path": "1.5.1/preflight/publication-preflight.publish.json",
+      "sha256": "4864cccf2b147793dad86de8d4597e71cca6e7092a2b78feb16d92ca6e55879f"
+    },
+    {
+      "path": "1.5.1/preflight/publication-preflight.verify.json",
+      "sha256": "036f1362671d98aa4d174da5d814bac909a03f179b7bb8fffb5b4802a69053c6"
+    }
+  ],
+  "limits": "Container smoke results check process liveness on two platforms, not live migration authorization or behavior parity."
+}
