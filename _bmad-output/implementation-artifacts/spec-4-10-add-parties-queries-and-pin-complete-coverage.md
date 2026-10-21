@@ -2,7 +2,7 @@
 title: '4.10 Add Parties queries and pin complete coverage'
 type: 'feature'
 created: '2026-10-20'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9354dc08176744c75c2ddb61d924c0948b373b98'
@@ -684,3 +684,55 @@ existing deferred context-refresh disposition; no new deferral is added.
 - `false` — `WithCandidate` throws `KeyNotFoundException` for a fixture without its root (EC). Every committed fixture contains its root, and a malformed one fails the test loudly.
 - `low` — A deleted inventory stays in `bin` on incremental builds (EC). This is the existing copy pattern, and CI builds clean.
 - `low` — Python and C# handle a UTF-8 BOM differently (EC). The strict Python loader fails closed, and that shared loader predates the story.
+
+### Review Findings (code review pass 2, 2026-10-21)
+
+Code review 2026-10-21 of the complete committed story range `9354dc0..fc37ea7` (`39f75e8`, `558ce91`, `ea00721`, `fc37ea7`).
+
+- **Code-only scope:** excludes `_bmad-output/` and the `references/` gitlink moves. Unlike the first pass, it includes the seven copied vector files. The upstream Parties code is outside this repository's range.
+- **Size and mode:** 38 files, +3,662/−25, 4,082 diff lines, full mode, with `parties-migration-inventory-v1.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 37 normalized findings. 6 survive as 4 patch and 2 defer entries; 31 are rejected. No decision is needed.
+
+Parent checks during triage: `dotnet msbuild -getItem:PackageReference` on a scratch project prints item metadata under its declared casing (`hexalithcontracts`, `hexalithContracts`). `validate.py:249-257` requires exactly one vector per restored Catalog operation, in both directions.
+
+- [ ] [Review][Patch] R14 — medium. Nothing tests that candidate verification applies its dependency overrides. With `align_candidate_dependencies` at its default `True`, which is the documented direct `verify_artifact.py` path, `verify()` turns the artifact's declared `Hexalith.EventStore.Contracts` and `Hexalith.Commons.UniqueIds` versions into `-p:` overrides for restore and build (`:200`, `:203`). Every test nuspec declares no dependencies, and the process fixture only asserts that the enrolled run has none. A condition that is never true, or a dropped `*common`, passes every Python test and the fixture, and the candidate then builds silently against the shipped Builds pins. Add a `CandidateHostPreparationTests` case whose nuspec declares both dependencies, then assert the restore command and the receipt's `candidateDependencyOverrides`/`artifactDependencies` for both flag values (VG). [tools/conformance-vectors/v1/verify_artifact.py:176]
+- [ ] [Review][Patch] R15 — low. Three new `_verify_artifact_in_host` guards have no removal test: assets required (`:383`), assets unavailable (`:386`), and a library that is missing or not a package (`:391`). Deleting all three leaves the 107 Python tests green, and failures fall back to a raw `OSError` or an uncaught `TypeError` traceback instead of the located `VectorError`. Add the three cases beside `test_host_restored_artifact_hash_must_match` (`test_loopback.py:177`) and assert each full message (AA). [tools/conformance-vectors/v1/run_loopback.py:381]
+- [ ] [Review][Patch] R16 — low. Nothing tests that `verify()` deletes a previous `artifact.sha512` before the run starts. The `except` handler (`:236`) deletes it again, so every test and the fixture's stale-seed runs reach the same final state without line 76. A stale success hash could then sit beside a `pending` receipt while a run is in progress or after it is killed. Assert that the file is absent inside `fail_restore` (`test_enrolled.py:236`) (VG). [tools/conformance-vectors/v1/verify_artifact.py:76]
+- [ ] [Review][Patch] R17 — low. `check_enrolled.py` reads the `HexalithContracts` metadata key case-sensitively, but MSBuild keeps whatever casing was declared, and `ModuleAssemblyManifest.targets:28` enrolls case-insensitively. A flag written `hexalithcontracts="true"` ships the package while the Python gate validates zero packages and passes. Only the dependency gate's "unapproved Contracts root" (`DependencyPolicyGate.cs:92-101`) still turns CI red. Look the metadata name up case-insensitively and add an `EnrolledPreflightTests` case (EC). [tools/conformance-vectors/v1/check_enrolled.py:87]
+- [x] [Review][Defer] R18 — low. The agent instructions still describe enrollment as configuration only: a flagged reference plus a `modules` pin. They omit the approval receipt, the hash-bound vectors, the release inventory and `check_enrolled.py` (BH) [AGENTS.md:83] — deferred: already tracked (`deferred-work.md:559`); the fix edits agent-context files.
+- [x] [Review][Defer] R19 — low. The A1 inventory makes `include` values "eligible for enrollment only after the missing Contracts, authorization and behavior evidence proves readiness". This range enrolls Parties while C06–C08 and Stories 4.11/4.13 remain downstream gates. The code follows the frozen intent, which explicitly orders that sequence, but agents reading the inventory as context for 4.11/4.13 meet a contradictory rule (AA) [_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:31] — deferred: the inventory is owner-approved A1 evidence, so reconciling its eligibility sentence with the 4.10 intent needs owner wording, not a code patch. New ledger entry (`deferred-work.md:562`).
+
+#### Rejected (code review pass 2)
+
+- `low` — The Python gate accepts a `purpose: "fixture"` inventory and never matches module identity (BH). The purpose half is carried from the first pass. The module half is false: `InventoryCoverageGate.cs:266-275` compares the inventory's module with the Catalog.
+- `low` — `check_enrolled.py` certifies a synthetic-fixture inventory, and only the C# CI step rejects it (EC). Same claim as the previous row; the first pass's ruling stands.
+- `low` — Receipt provenance fields (`approvalReference`, `publishedArtifactBinding`, `publication`, unknown keys) are not verified (BH). Carried from the first pass.
+- `false` — The C# and Python gates disagree on warning-level Catalog diagnostics (BH). Carried: strict `CatalogProvider.Get` (`CatalogProvider.cs:30`) rejects any diagnostic, so the test's strict `Describe` already fails on warnings.
+- `low` — Reflection over the generated manifest, Core.Tests referencing the CLI, and a now-unreachable empty-manifest branch (BH). Carried: a generator change fails loudly, and moving the test is a refactor.
+- `low` — The `InventoryCoverage*.cs` glob and its exclusions are repeated in three places (BH). Carried from the first pass.
+- `low` — Lint acceptance is implemented twice (BH). Carried from the first pass.
+- `low` — Nothing loads `parties-candidate.json` (BH). Carried from the first pass.
+- `low` — `tenants-accepted-lint.json` is never checked, and its reference is a spec line number (BH). Carried: the exact-equality check runs once Tenants is enrolled.
+- `low` — The Parties 1.4.0 candidate cases inject a 1.4.0 root into the restored 1.5.1 stack (BH). `WithCandidate` deliberately models that injection, and the production gate checks the real 1.5.1 restore. The first pass's ruling on the same fixture stands.
+- `low` — The vectors cover only success paths, yet the docs call them "complete" (BH). "Complete" means exact per-operation coverage, which `validate.py:249-257` enforces. Error vectors would change approved inputs (FB10).
+- `low` — The Platform README still says `modules` returns `catalog_empty` (BH). The sentence is conditional ("Until modules are enrolled") and describes whichever McpCli version Platform pins. The fix belongs in the Platform repository.
+- `low` — CI rebuilds the solution and repeats cold restores and Python suites across jobs (BH). Nothing fails, and sharing builds or caches adds workflow complexity.
+- `low` — `EnrolledInventoryCoverageGate` reports purpose and module mismatches only once coverage passes (BH). The mismatch surfaces one fix later. Checking unconditionally needs parse guards for malformed inventories.
+- `low` — Orphan approval directories and a misnamed vector go unnoticed (BH). Orphan directories are inert (carried). A misnamed vector cannot drop out silently, because `validate.py:254-255` reports any Catalog operation without a vector.
+- `low` — `parties-approved.json` has no exclusion rows for N01–N04 (AA). The gate still rejects any decorated operation without an approved include target. Adding the rows changes the approved inventory bytes (`inventorySha256`) and would need a fresh approval. The README deliberately keeps N01–N04 in the Markdown inventory.
+- `false` — The reason recorded for deferring R13 is wrong because the range already edits the agent files (AA). The workflow routes every agent-context edit to defer, whatever else the range touches, and the proposed fix edits this spec.
+- `low` — `tenants-accepted-lint.json` and `parties-candidate.json` have no consumer, so their README claims never run (VG, other). Same as the two BH rows above.
+- `low` — `invalidate_children` overwrites unrelated child receipts in a reused `--output` directory (EC). This needs an output directory that already holds unrelated receipts. CI uses a fresh `RUNNER_TEMP`, the evidence is in Git, and the fix adds a guard.
+- `false` — Accepted lint is not bound by a digest, so it could be edited after approval (EC). Carried: both gates require exact set equality with the hash-bound artifact's findings.
+- `low` — A non-canonical receipt `module` (EC). Linux fails loudly on the missing inventory. On a case-insensitive filesystem the inventory's own module is still compared with the Catalog. The fix adds a guard.
+- `low` — `ParseError`, `TypeError` and `AttributeError` from `verify()` leave `enrolled.json` pending (EC). Carried: the process exits nonzero, and `pending` is not success.
+- `low` — With several enrolled packages, a digest failure does not name its package (EC). One package is enrolled, `enrolled.json` lists the packages, and the fix adds parameters.
+- `low` — A nuspec dependency without a version raises `KeyError` (EC). Carried: `dotnet pack` always writes versions, and the failure is loud.
+- `low` — A nuspec version that is not normalized breaks the cache path and deps lookups (EC). Carried from the first pass.
+- `low` — Rerunning into the same output directory leaves stale logs and `inputs-*` copies (EC). Carried from the first pass.
+- `false` — An enrolled assembly without `[HexalithModule]` is skipped, so the C# gate passes it without an inventory (EC). The assembly exposes no operation. Its approved vectors then name operations absent from the restored Catalog (`validate.py:256-257`), and a manifest holding only that assembly yields `catalog_empty`, which the C# gate reports.
+- `low` — A lone-surrogate escape in accepted lint throws instead of producing a diagnostic (EC). The test still fails loudly on a hand-edited committed file, and the fix adds a catch branch.
+- `low` — UTF-8 BOM handling differs between the Python and C# gates (EC). Carried from the first pass.
+- `false` — `WithCandidate` throws `KeyNotFoundException` when a fixture lacks its root (EC). Carried: every committed fixture contains its root.
+- `low` — A deleted inventory stays in `bin` on incremental builds (EC). Carried from the first pass.
