@@ -1,0 +1,37 @@
+[
+  {
+    "operation": "parties.create-party",
+    "sha256": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.deactivate-party",
+    "sha256": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.get-party",
+    "sha256": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.list-parties",
+    "sha256": "4b1879c5f3e0b9f8a9f080456d30a3effd9ffdf7edcc60935c3525101fced6ac",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.reactivate-party",
+    "sha256": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.search-parties",
+    "sha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269",
+    "matchesPreviouslyReviewedDescription": true
+  },
+  {
+    "operation": "parties.update-party",
+    "sha256": "4fa014790069345c9c918e771726edb662ccdf6dc8c189c725032056b6b44bb6",
+    "matchesPreviouslyReviewedDescription": true
+  }
+]

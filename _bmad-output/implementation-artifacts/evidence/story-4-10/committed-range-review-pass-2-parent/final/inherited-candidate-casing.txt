@@ -1,0 +1,48 @@
+F
+======================================================================
+FAIL: test_candidate_host_removes_inherited_contracts_but_preserves_stack_references (test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-xgx6fdt5/vectors/test_enrolled.py", line 318, in test_candidate_host_removes_inherited_contracts_but_preserves_stack_references
+    verify(self.repo, self.artifact, [], self.output)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-final-mutation-xgx6fdt5/vectors/verify_artifact.py", line 200, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-final-mutation-xgx6fdt5/vectors/verify_artifact.py", line 87, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-final-mutation-xgx6fdt5/vectors/test_enrolled.py", line 311, in inspect_restore
+    self.assertEqual(['Hexalith.EventStore.Contracts', 'Microsoft.Extensions.Hosting'],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     [item.get('Include') for item in selected.iter('PackageReference')])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Hexalith.EventStore.Contracts', 'Microsof[17 chars]ing'] != ['LowerAttribute.Contracts', 'MixedAttribut[125 chars]ing']
+
+First differing element 0:
+'Hexalith.EventStore.Contracts'
+'LowerAttribute.Contracts'
+
+Second list contains 4 additional elements.
+First extra element 2:
+'LowerElement.Contracts'
+
+- ['Hexalith.EventStore.Contracts', 'Microsoft.Extensions.Hosting']
++ ['LowerAttribute.Contracts',
++  'MixedAttribute.Contracts',
++  'LowerElement.Contracts',
++  'MixedElement.Contracts',
++  'Hexalith.EventStore.Contracts',
++  'Microsoft.Extensions.Hosting']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=1)

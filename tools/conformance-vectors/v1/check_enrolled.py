@@ -84,7 +84,8 @@ def main():
         evaluation = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
                                     cwd=repo, capture_output=True, text=True, check=True)
         packages = [p['Identity'] for p in json.loads(evaluation.stdout)['Items']['PackageReference']
-                    if p.get('HexalithContracts', '').casefold() == 'true']
+                    if any(name.casefold() == 'hexalithcontracts' and value.casefold() == 'true'
+                           for name, value in p.items())]
         status['packages'] = packages
         report.write_text(json.dumps(status, indent=2) + '\n')
         assets = json.loads((project.parent / 'obj/project.assets.json').read_text())

@@ -2,7 +2,7 @@
 title: '4.10 Add Parties queries and pin complete coverage'
 type: 'feature'
 created: '2026-10-20'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9354dc08176744c75c2ddb61d924c0948b373b98'
@@ -118,12 +118,12 @@ Existing C06–C08 and Stories 4.11/4.13 remain downstream gates.
 ## Implementation Notes
 
 Current state: implementation, protected Parties 1.5.1 publication, owning Builds
-integration and production enrollment are verified. The resumed independent
-review patches and all required verification pass. R13 remains the already
-tracked agent-context refresh; this run adds no deferral.
-The dated sections below retain the historical decisions
-and intermediate states; [current verification](evidence/story-4-10/release-readiness/approved-dependency-continuation/verification.md)
-records the complete release/enrollment and review result.
+integration and production enrollment are verified. R14–R17 and all resumed
+independent-review corrections pass final verification. R18/R19 remain existing
+deferred work; this run adds no deferral. The dated sections below retain historical
+decisions and intermediate states; [current verification](evidence/story-4-10/committed-range-review-pass-2-parent/final/verification.md)
+records the final build, all six test projects, both sample gates, production
+replay, ten detected removal mutations and protected-input integrity.
 
 Approved for implementation by the requesting user on 2026-10-20.
 The implementation step requires sequential execution, no pushes and no remote
@@ -538,6 +538,33 @@ ties every frozen scenario to executed passing tests; none of the existing skips
 covers a frozen matrix row. The final merged pin receives another fresh restore
 and Manifest check before independent review.
 
+### Resumed code review pass 2 build review (2026-10-21)
+
+All three context-free layers reviewed `/tmp/story410-resumed-qmrdr539.diff`
+(SHA-256 `c0b867a17bdcf336014b51e41e5732990548b62bfe9e41e285ea546cb230218e`).
+The verification-gap layer found no gaps. Each blind/edge finding is assessed
+individually before grouping; existing dispositions are carried only for the
+same claim and unchanged implementation.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| BH1: inherited metadata lookup is case-sensitive | Medium. Valid lower-case attribute and child-element forms survive `enroll_fixture`; the verifier repeats the same exact-case lookup. [Reproduction](evidence/story-4-10/committed-range-review-pass-2-parent/casing-before.json) retains the inherited package in both forms. Normalize names in both isolation paths and cover both forms. | Patch, grouped with EC1 |
+| BH2: isolated replay omits the combined production graph | Low. One module is enrolled; production restore and the independent dependency gate lock every module to the non-module baseline, and enrolled replay uses the shipped pins. No changed binding is demonstrated. Another combined-host lane or graph-comparison policy is additional orchestration for future multi-module states. | Reject low, nontrivial additional orchestration |
+| BH3: Python enrollment accepts fixture-purpose inventory | Low, carried from the committed-range and published-enrollment reviews. The synthetic process fixture deliberately exercises it; production CI independently requires release purpose through `EnrolledModuleCoverageTests`, and the inventory digest is bound. Changing this means redesigning fixture authority. | Reject carried low, nontrivial fixture redesign |
+| BH4: accepted lint has no approval digest | False, carried from both committed-range reviews. Both gates require exact equality with findings from the hash-bound artifact; an added or removed exception fails as new or stale. Parties has no findings or accepted-lint file. | Reject carried refutation |
+| BH5: subprocesses have no timeout | Low, carried from prior resumed and committed-range reviews. A hang fails visibly; timeout parameters and new handling remain additional policy without a demonstrated new hang. | Reject carried low, nontrivial parameters |
+| BH6: top-level results omit children when a later package fails | Low, carried from the committed-range evidence-retention finding. The top-level result is failed, child receipts remain available, and one package is enrolled. Incremental result bookkeeping adds branches for a future multi-package failure. | Reject carried low, nontrivial bookkeeping |
+| BH7: nested nuspec / framework dependency selection | Maybe-false, carried from the nested-nuspec/framework-group findings. No affected NuGet-produced Hexalith artifact has been shown; the two overridden dependencies are from single-target packages. An affected producer artifact would settle the claim; its demonstrated impact remains low. | Reject carried unverified low claim |
+| BH8: receipt alone lacks verifier/source revision hashes | Low, carried from resumed review BH6. Git and surrounding evidence identify the source; a standalone provenance manifest adds bookkeeping without a demonstrated incorrect artifact result. | Reject carried low, nontrivial evidence format |
+| BH9: historical vectors lack byte-preservation attributes | Low. A disposable checkout of fourteen actual published/final-review snapshots with `core.autocrlf=true` changes six SHA-256 values; [results](evidence/story-4-10/committed-range-review-pass-2-parent/checkout-before.json) retain each comparison. Broaden the existing story-vector binary attribute without editing approved bytes. | Patch |
+| BH10: ignored archives leave Git snapshot references unresolved | Low. The verifier retains archives locally, but `.nupkg` is ignored by Git. Published package coordinates/hash remain available in receipts. Clarify local output retention versus committed evidence in the verifier README; no storage redesign is needed. | Direct documentation patch |
+| EC1: case-insensitive enrollment disagrees with candidate isolation | Medium. Independently identifies BH1 at `verify_artifact.py:165-166`; the same supported casing can retain a production dependency in a candidate host. | Patch, grouped with BH1 |
+
+All three patch groups are corrected. [Final parent verification](evidence/story-4-10/committed-range-review-pass-2-parent/final/verification.md)
+passes all required checks, ten removal mutations and exact published-artifact
+replay. Approved inputs and reference gitlinks remain unchanged. No new deferral
+is added; R18/R19 retain their prior dispositions.
+
 ## Verification
 
 - Parties: Release restore/build; run Contracts, domain, Server and Client test
@@ -696,12 +723,28 @@ Code review 2026-10-21 of the complete committed story range `9354dc0..fc37ea7` 
 
 Parent checks during triage: `dotnet msbuild -getItem:PackageReference` on a scratch project prints item metadata under its declared casing (`hexalithcontracts`, `hexalithContracts`). `validate.py:249-257` requires exactly one vector per restored Catalog operation, in both directions.
 
-- [ ] [Review][Patch] R14 — medium. Nothing tests that candidate verification applies its dependency overrides. With `align_candidate_dependencies` at its default `True`, which is the documented direct `verify_artifact.py` path, `verify()` turns the artifact's declared `Hexalith.EventStore.Contracts` and `Hexalith.Commons.UniqueIds` versions into `-p:` overrides for restore and build (`:200`, `:203`). Every test nuspec declares no dependencies, and the process fixture only asserts that the enrolled run has none. A condition that is never true, or a dropped `*common`, passes every Python test and the fixture, and the candidate then builds silently against the shipped Builds pins. Add a `CandidateHostPreparationTests` case whose nuspec declares both dependencies, then assert the restore command and the receipt's `candidateDependencyOverrides`/`artifactDependencies` for both flag values (VG). [tools/conformance-vectors/v1/verify_artifact.py:176]
-- [ ] [Review][Patch] R15 — low. Three new `_verify_artifact_in_host` guards have no removal test: assets required (`:383`), assets unavailable (`:386`), and a library that is missing or not a package (`:391`). Deleting all three leaves the 107 Python tests green, and failures fall back to a raw `OSError` or an uncaught `TypeError` traceback instead of the located `VectorError`. Add the three cases beside `test_host_restored_artifact_hash_must_match` (`test_loopback.py:177`) and assert each full message (AA). [tools/conformance-vectors/v1/run_loopback.py:381]
-- [ ] [Review][Patch] R16 — low. Nothing tests that `verify()` deletes a previous `artifact.sha512` before the run starts. The `except` handler (`:236`) deletes it again, so every test and the fixture's stale-seed runs reach the same final state without line 76. A stale success hash could then sit beside a `pending` receipt while a run is in progress or after it is killed. Assert that the file is absent inside `fail_restore` (`test_enrolled.py:236`) (VG). [tools/conformance-vectors/v1/verify_artifact.py:76]
-- [ ] [Review][Patch] R17 — low. `check_enrolled.py` reads the `HexalithContracts` metadata key case-sensitively, but MSBuild keeps whatever casing was declared, and `ModuleAssemblyManifest.targets:28` enrolls case-insensitively. A flag written `hexalithcontracts="true"` ships the package while the Python gate validates zero packages and passes. Only the dependency gate's "unapproved Contracts root" (`DependencyPolicyGate.cs:92-101`) still turns CI red. Look the metadata name up case-insensitively and add an `EnrolledPreflightTests` case (EC). [tools/conformance-vectors/v1/check_enrolled.py:87]
+- [x] [Review][Patch] R14 — medium. Nothing tests that candidate verification applies its dependency overrides. With `align_candidate_dependencies` at its default `True`, which is the documented direct `verify_artifact.py` path, `verify()` turns the artifact's declared `Hexalith.EventStore.Contracts` and `Hexalith.Commons.UniqueIds` versions into `-p:` overrides for restore and build (`:200`, `:203`). Every test nuspec declares no dependencies, and the process fixture only asserts that the enrolled run has none. A condition that is never true, or a dropped `*common`, passes every Python test and the fixture, and the candidate then builds silently against the shipped Builds pins. Add a `CandidateHostPreparationTests` case whose nuspec declares both dependencies, then assert the restore command and the receipt's `candidateDependencyOverrides`/`artifactDependencies` for both flag values (VG). [tools/conformance-vectors/v1/verify_artifact.py:176]
+- [x] [Review][Patch] R15 — low. Three new `_verify_artifact_in_host` guards have no removal test: assets required (`:383`), assets unavailable (`:386`), and a library that is missing or not a package (`:391`). Deleting all three leaves the 107 Python tests green, and failures fall back to a raw `OSError` or an uncaught `TypeError` traceback instead of the located `VectorError`. Add the three cases beside `test_host_restored_artifact_hash_must_match` (`test_loopback.py:177`) and assert each full message (AA). [tools/conformance-vectors/v1/run_loopback.py:381]
+- [x] [Review][Patch] R16 — low. Nothing tests that `verify()` deletes a previous `artifact.sha512` before the run starts. The `except` handler (`:236`) deletes it again, so every test and the fixture's stale-seed runs reach the same final state without line 76. A stale success hash could then sit beside a `pending` receipt while a run is in progress or after it is killed. Assert that the file is absent inside `fail_restore` (`test_enrolled.py:236`) (VG). [tools/conformance-vectors/v1/verify_artifact.py:76]
+- [x] [Review][Patch] R17 — low. `check_enrolled.py` reads the `HexalithContracts` metadata key case-sensitively, but MSBuild keeps whatever casing was declared, and `ModuleAssemblyManifest.targets:28` enrolls case-insensitively. A flag written `hexalithcontracts="true"` ships the package while the Python gate validates zero packages and passes. Only the dependency gate's "unapproved Contracts root" (`DependencyPolicyGate.cs:92-101`) still turns CI red. Look the metadata name up case-insensitively and add an `EnrolledPreflightTests` case (EC). [tools/conformance-vectors/v1/check_enrolled.py:87]
 - [x] [Review][Defer] R18 — low. The agent instructions still describe enrollment as configuration only: a flagged reference plus a `modules` pin. They omit the approval receipt, the hash-bound vectors, the release inventory and `check_enrolled.py` (BH) [AGENTS.md:83] — deferred: already tracked (`deferred-work.md:559`); the fix edits agent-context files.
 - [x] [Review][Defer] R19 — low. The A1 inventory makes `include` values "eligible for enrollment only after the missing Contracts, authorization and behavior evidence proves readiness". This range enrolls Parties while C06–C08 and Stories 4.11/4.13 remain downstream gates. The code follows the frozen intent, which explicitly orders that sequence, but agents reading the inventory as context for 4.11/4.13 meet a contradictory rule (AA) [_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:31] — deferred: the inventory is owner-approved A1 evidence, so reconciling its eligibility sentence with the 4.10 intent needs owner wording, not a code patch. New ledger entry (`deferred-work.md:562`).
+
+### Code review pass 2 patch implementation (2026-10-21)
+
+R14–R17 are implemented. Candidate preparation tests pin both dependency
+versions in restore/build commands and receipt fields with default alignment
+and explicit no-alignment. Loopback tests assert the full located errors for
+missing restore assets and absent/non-package libraries. The restore callback
+now checks that a pending verification has already removed its previous success
+hash. Enrollment recognizes every casing of the MSBuild Contracts metadata name,
+with regressions proving each spelling reaches verification.
+
+[Focused implementation evidence](evidence/story-4-10/code-review-pass-2-patches/verification.md)
+records 55 affected Python tests passing and all eight isolated guard-removal
+mutations detected. Approved inputs, upstream source and reference gitlinks are
+unchanged. Parent full verification and independent review remain open; R18/R19
+retain their existing deferrals, with no new deferral or approval introduced.
 
 #### Rejected (code review pass 2)
 

@@ -1,0 +1,18 @@
+[
+  {
+    "declaration": "<PackageReference Include=\"Other.Contracts\" hexalithcontracts=\"true\" />",
+    "afterFixtureIsolation": [
+      "Other.Contracts",
+      "Fixture.Contracts"
+    ],
+    "inheritedPackageSurvived": true
+  },
+  {
+    "declaration": "<PackageReference Include=\"Other.Contracts\"><hexalithContracts>true</hexalithContracts></PackageReference>",
+    "afterFixtureIsolation": [
+      "Other.Contracts",
+      "Fixture.Contracts"
+    ],
+    "inheritedPackageSurvived": true
+  }
+]

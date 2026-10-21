@@ -1,0 +1,53 @@
+FFF
+======================================================================
+FAIL: test_enrollment_metadata_name_is_case_insensitive (test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive) (metadata='hexalithcontracts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-4riywco3/vectors/test_enrolled.py", line 447, in test_enrollment_metadata_name_is_case_insensitive
+    self.assertEqual([self.package_id], report['packages'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Module.Contracts'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'Module.Contracts'
+
+- ['Module.Contracts']
++ []
+
+======================================================================
+FAIL: test_enrollment_metadata_name_is_case_insensitive (test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive) (metadata='hexalithContracts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-4riywco3/vectors/test_enrolled.py", line 447, in test_enrollment_metadata_name_is_case_insensitive
+    self.assertEqual([self.package_id], report['packages'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Module.Contracts'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'Module.Contracts'
+
+- ['Module.Contracts']
++ []
+
+======================================================================
+FAIL: test_enrollment_metadata_name_is_case_insensitive (test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive) (metadata='HEXALITHCONTRACTS')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-4riywco3/vectors/test_enrolled.py", line 447, in test_enrollment_metadata_name_is_case_insensitive
+    self.assertEqual([self.package_id], report['packages'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Module.Contracts'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'Module.Contracts'
+
+- ['Module.Contracts']
++ []
+
+----------------------------------------------------------------------
+Ran 1 test in 0.017s
+
+FAILED (failures=3)

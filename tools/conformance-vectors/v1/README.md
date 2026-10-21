@@ -143,7 +143,10 @@ sidecar. Content metadata alone cannot authorize changed signed archive bytes.
 Artifact and vector bytes are captured once into retained input snapshots before
 restore/build. Restore, validation and replay consume those snapshots; receipts
 retain original paths, filenames and hashes. Enrolled vector digests are checked
-again during capture so changes after enrollment preflight cannot pass. Every
+again during capture so changes after enrollment preflight cannot pass. The
+verification output retains local archive copies named by `retainedInputs.artifact`;
+`.gitignore` excludes these `.nupkg` files from committed evidence. Git evidence
+retains artifact hashes and published package IDs/versions instead. Every
 enrollment attempt invalidates previous child success/hash receipts before its
 preflight. CI always uploads `enrolled-evidence`, including failed receipts,
 retained inputs and subprocess diagnostics; an absent directory produces a warning.

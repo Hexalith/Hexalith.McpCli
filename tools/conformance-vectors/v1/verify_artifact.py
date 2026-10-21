@@ -162,8 +162,11 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             tree = ET.parse(tool_project)
             for parent in tree.getroot().iter():
                 for item in list(parent):
-                    if item.tag == 'PackageReference' and item.get('HexalithContracts', item.findtext('HexalithContracts', '')).casefold() == 'true':
-                        parent.remove(item)
+                    if item.tag == 'PackageReference':
+                        metadata = {child.tag.casefold(): child.text or '' for child in item}
+                        metadata.update((name.casefold(), value) for name, value in item.attrib.items())
+                        if metadata.get('hexalithcontracts', '').casefold() == 'true':
+                            parent.remove(item)
             tree.write(tool_project, encoding='unicode')
             # Select the exact candidate dependency versions; record them so this cannot masquerade as shipped enrollment.
             with zipfile.ZipFile(artifact) as archive:

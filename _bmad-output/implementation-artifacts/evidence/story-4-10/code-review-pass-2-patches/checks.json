@@ -1,0 +1,178 @@
+{
+  "checks": [
+    {
+      "label": "focused-python",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled",
+        "test_loopback"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1",
+      "exitCode": 0,
+      "expectedFailure": false,
+      "passed": true
+    },
+    {
+      "label": "r14-disabled-alignment",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-223ec8ja/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "if align_candidate_dependencies and name in dependencies:",
+        "after": "if False and name in dependencies:",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r14-missing-restore-overrides",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-ox3ysmfa/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "'host/ArtifactHost.csproj', *common,",
+        "after": "'host/ArtifactHost.csproj',",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r14-missing-build-overrides",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-o_enyflu/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "'Release', '-m:1', '-warnaserror', *common]",
+        "after": "'Release', '-m:1', '-warnaserror']",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-assets-required-guard",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_loopback.LoopbackRulesTests.test_host_requires_explicit_assets_when_project_path_cannot_be_inferred"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-c0400cpv/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "        if len(host.parents) < 4:\n            _fail(f\"{host}: restore assets are required; supply --assets\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-assets-unavailable-guard",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_loopback.LoopbackRulesTests.test_host_reports_unavailable_restore_assets"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-_juxmrvs/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "    if not assets_path.is_file():\n        _fail(f\"{assets_path}: restore assets are unavailable; supply --assets\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-package-library-guard",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-c6ys5epx/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "    if not isinstance(library, dict) or library.get(\"type\") != \"package\":\n        _fail(f\"{assets_path}: restored package does not match {identity}\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r16-missing-initial-success-invalidation",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled.VerifierFailureTests.test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-t3i40rf0/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "    (output / 'artifact.sha512').unlink(missing_ok=True)\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r17-case-sensitive-metadata",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive"
+      ],
+      "cwd": "/tmp/story410-review2-mutation-_eeuh84x/vectors",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "passed": true,
+      "mutation": {
+        "file": "tools/conformance-vectors/v1/check_enrolled.py",
+        "before": "if any(name.casefold() == 'hexalithcontracts' and value.casefold() == 'true'\n                           for name, value in p.items())]",
+        "after": "if p.get('HexalithContracts', '').casefold() == 'true']",
+        "replacementCount": 1
+      }
+    }
+  ],
+  "focusedTestsPassed": 55,
+  "detectedRemovalMutations": 8,
+  "sourceFilesSha256": {
+    "tools/conformance-vectors/v1/check_enrolled.py": "caa84607aa4470916cba03f844c8f04b262cf4dee8c8c06c20496fabe7731ab4",
+    "tools/conformance-vectors/v1/test_enrolled.py": "5716ccb705b353d8bd3d604e791ad12639e9776a0c5609ac32ad78384b0129cb",
+    "tools/conformance-vectors/v1/test_loopback.py": "284ea3e6b1e64bde577203ba7b63e6e71390eb294fddf9f7047adc3bae5bd213"
+  },
+  "limits": "Focused Python checks only. Full repository and conformance verification is delegated to the parent workflow."
+}

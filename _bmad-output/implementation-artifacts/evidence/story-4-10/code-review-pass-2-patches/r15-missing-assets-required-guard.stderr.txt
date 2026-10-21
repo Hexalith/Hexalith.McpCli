@@ -1,0 +1,19 @@
+E
+======================================================================
+ERROR: test_host_requires_explicit_assets_when_project_path_cannot_be_inferred (test_loopback.LoopbackRulesTests.test_host_requires_explicit_assets_when_project_path_cannot_be_inferred)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-c0400cpv/vectors/test_loopback.py", line 207, in test_host_requires_explicit_assets_when_project_path_cannot_be_inferred
+    _verify_artifact_in_host(host, Path("immutable.nupkg"), ("Sample.Contracts", "1.0.0"))
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c0400cpv/vectors/run_loopback.py", line 382, in _verify_artifact_in_host
+    assets_path = host.parents[3] / "obj/project.assets.json"
+                  ~~~~~~~~~~~~^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 67, in __getitem__
+    raise IndexError(idx)
+IndexError: 3
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)

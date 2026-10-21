@@ -29,8 +29,9 @@ def enroll_fixture(project: ET.Element, package_id: str) -> None:
     for parent in project.iter():
         for item in list(parent):
             if item.tag == 'PackageReference':
-                marked = item.get('HexalithContracts', item.findtext('HexalithContracts', ''))
-                if marked.casefold() == 'true':
+                metadata = {child.tag.casefold(): child.text or '' for child in item}
+                metadata.update((name.casefold(), value) for name, value in item.attrib.items())
+                if metadata.get('hexalithcontracts', '').casefold() == 'true':
                     parent.remove(item)
     ET.SubElement(ET.SubElement(project, 'ItemGroup'), 'PackageReference',
                   Include=package_id, HexalithContracts='true')

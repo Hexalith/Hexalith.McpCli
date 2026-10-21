@@ -1,0 +1,65 @@
+EEEE
+======================================================================
+ERROR: test_host_requires_matching_package_library_in_restore_assets (test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets) (libraries={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/test_loopback.py", line 232, in test_host_requires_matching_package_library_in_restore_assets
+    _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/run_loopback.py", line 391, in _verify_artifact_in_host
+    _, restored = restored_package(assets, identity, library)
+                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/verify_artifact.py", line 42, in restored_package
+    for folder in assets['packageFolders']]
+                  ~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'packageFolders'
+
+======================================================================
+ERROR: test_host_requires_matching_package_library_in_restore_assets (test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets) (libraries={'Sample.Contracts/1.0.0': None})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/test_loopback.py", line 232, in test_host_requires_matching_package_library_in_restore_assets
+    _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/run_loopback.py", line 391, in _verify_artifact_in_host
+    _, restored = restored_package(assets, identity, library)
+                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/verify_artifact.py", line 42, in restored_package
+    for folder in assets['packageFolders']]
+                  ~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'packageFolders'
+
+======================================================================
+ERROR: test_host_requires_matching_package_library_in_restore_assets (test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets) (libraries={'Sample.Contracts/1.0.0': []})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/test_loopback.py", line 232, in test_host_requires_matching_package_library_in_restore_assets
+    _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/run_loopback.py", line 391, in _verify_artifact_in_host
+    _, restored = restored_package(assets, identity, library)
+                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/verify_artifact.py", line 42, in restored_package
+    for folder in assets['packageFolders']]
+                  ~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'packageFolders'
+
+======================================================================
+ERROR: test_host_requires_matching_package_library_in_restore_assets (test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets) (libraries={'Sample.Contracts/1.0.0': {'type': 'project'}})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/test_loopback.py", line 232, in test_host_requires_matching_package_library_in_restore_assets
+    _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/run_loopback.py", line 391, in _verify_artifact_in_host
+    _, restored = restored_package(assets, identity, library)
+                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-c6ys5epx/vectors/verify_artifact.py", line 42, in restored_package
+    for folder in assets['packageFolders']]
+                  ~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'packageFolders'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (errors=4)

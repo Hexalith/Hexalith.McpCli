@@ -10,8 +10,12 @@ class ProcessFixtureEnrollmentTests(unittest.TestCase):
         project = ET.fromstring('''<Project><ItemGroup>
           <PackageReference Include="Existing.Contracts" HexalithContracts="true" />
           <PackageReference Include="Metadata.Contracts"><HexalithContracts>TRUE</HexalithContracts></PackageReference>
-          <PackageReference Include="Hexalith.EventStore.Contracts" />
-          <PackageReference Include="Microsoft.Extensions.Hosting" />
+          <PackageReference Include="LowerAttribute.Contracts" hexalithcontracts="true" />
+          <PackageReference Include="MixedAttribute.Contracts" hexalithContracts="TRUE" />
+          <PackageReference Include="LowerElement.Contracts"><hexalithcontracts>true</hexalithcontracts></PackageReference>
+          <PackageReference Include="MixedElement.Contracts"><hexalithContracts>TRUE</hexalithContracts></PackageReference>
+          <PackageReference Include="Hexalith.EventStore.Contracts" hexalithcontracts="false" />
+          <PackageReference Include="Microsoft.Extensions.Hosting"><hexalithContracts>FALSE</hexalithContracts></PackageReference>
         </ItemGroup></Project>''')
         enroll_fixture(project, 'Synthetic.Contracts')
         references = list(project.iter('PackageReference'))

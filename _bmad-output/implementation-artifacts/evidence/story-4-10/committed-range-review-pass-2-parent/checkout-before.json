@@ -1,0 +1,114 @@
+[
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/create-party.vector.json",
+    "originalSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "checkoutSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "same": true,
+    "crlfLines": 200,
+    "lfLines": 200
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/deactivate-party.vector.json",
+    "originalSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "checkoutSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "same": true,
+    "crlfLines": 254,
+    "lfLines": 254
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/get-party.vector.json",
+    "originalSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+    "checkoutSha256": "d1edb0922cf96dea8c4677a7caa66621d7cdddb5b26ff84b89442eec6d747ea6",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 202
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/list-parties.vector.json",
+    "originalSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+    "checkoutSha256": "cc18608246ac0fb6438b88c34ebee26c70f2b636f3eb52a7b8ddebd193c663a1",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 221
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/reactivate-party.vector.json",
+    "originalSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "checkoutSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "same": true,
+    "crlfLines": 254,
+    "lfLines": 254
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/search-parties.vector.json",
+    "originalSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "checkoutSha256": "9bb185d8a195dc438e274162203e75b92d864f3059b7ad23459262cd701f5a15",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 230
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/update-party.vector.json",
+    "originalSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "checkoutSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "same": true,
+    "crlfLines": 257,
+    "lfLines": 257
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/0/create-party.vector.json",
+    "originalSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "checkoutSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "same": true,
+    "crlfLines": 200,
+    "lfLines": 200
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/1/deactivate-party.vector.json",
+    "originalSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "checkoutSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "same": true,
+    "crlfLines": 254,
+    "lfLines": 254
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/2/get-party.vector.json",
+    "originalSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+    "checkoutSha256": "d1edb0922cf96dea8c4677a7caa66621d7cdddb5b26ff84b89442eec6d747ea6",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 202
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/3/list-parties.vector.json",
+    "originalSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+    "checkoutSha256": "cc18608246ac0fb6438b88c34ebee26c70f2b636f3eb52a7b8ddebd193c663a1",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 221
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/4/reactivate-party.vector.json",
+    "originalSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "checkoutSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "same": true,
+    "crlfLines": 254,
+    "lfLines": 254
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/5/search-parties.vector.json",
+    "originalSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "checkoutSha256": "9bb185d8a195dc438e274162203e75b92d864f3059b7ad23459262cd701f5a15",
+    "same": false,
+    "crlfLines": 0,
+    "lfLines": 230
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/6/update-party.vector.json",
+    "originalSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "checkoutSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "same": true,
+    "crlfLines": 257,
+    "lfLines": 257
+  }
+]

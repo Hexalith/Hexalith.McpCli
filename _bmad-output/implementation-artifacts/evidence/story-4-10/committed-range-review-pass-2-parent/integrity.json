@@ -1,0 +1,56 @@
+{
+  "result": "passed",
+  "protectedInputs": [
+    {
+      "path": "tools/inventory-coverage/v1/parties-approved.json",
+      "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/approval.json",
+      "sha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "unchangedFromHead": true
+    }
+  ],
+  "frozenIntentSha256": "31abb46110ade1eae1bc2a2b398a5ad97a1ebb69feb71dac83280a9ece0e1f95",
+  "frozenIntentUnchanged": true,
+  "referenceGitlinksUnchanged": true,
+  "allSpecTasksChecked": true,
+  "upstreamMatrixEvidence": "../release-readiness/approved-dependency-continuation/matrix-test-audit-current.json",
+  "unchangedUpstreamExecution": "../release-readiness/approved-dependency-continuation/stable-main-build-and-test.json"
+}

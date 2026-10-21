@@ -236,6 +236,7 @@ class VerifierFailureTests(unittest.TestCase):
         def fail_restore(command, **kwargs):
             pending = json.loads((self.output / 'verification.json').read_text())
             self.assertEqual('pending', pending['result'])
+            self.assertFalse((self.output / 'artifact.sha512').exists())
             inventory.write_text('{"changed":"after input capture"}')
             return subprocess.CompletedProcess(command, 7, 'useful restore stdout', 'specific restore failure')
         captured = io.StringIO()
@@ -255,13 +256,55 @@ class VerifierFailureTests(unittest.TestCase):
 class CandidateHostPreparationTests(unittest.TestCase):
     setUp = VerifierFailureTests.setUp
 
+    def test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled(self):
+        dependencies = {'Hexalith.EventStore.Contracts': '3.125.1', 'Hexalith.Commons.UniqueIds': '2.30.2'}
+        nuspec = ET.Element('package')
+        metadata = ET.SubElement(nuspec, 'metadata')
+        ET.SubElement(metadata, 'id').text = 'Module.Contracts'
+        ET.SubElement(metadata, 'version').text = '1.0.0'
+        group = ET.SubElement(metadata, 'dependencies')
+        for name, version in dependencies.items():
+            ET.SubElement(group, 'dependency', id=name, version=version)
+        with zipfile.ZipFile(self.artifact, 'w') as archive:
+            archive.writestr('Module.Contracts.nuspec', ET.tostring(nuspec))
+        for align in [True, False]:
+            with self.subTest(align_candidate_dependencies=align):
+                expected = ['-p:HexalithEventStoreVersion=3.125.1', '-p:HexalithCommonsVersion=2.30.2'] if align else []
+                def execute(command, cwd, **kwargs):
+                    if command[1] == 'restore':
+                        assets = Path(cwd) / 'host/obj/project.assets.json'
+                        assets.parent.mkdir()
+                        assets.write_text('{}')
+                        feed = command[-1]
+                        self.assertTrue(feed.startswith('-p:RestoreAdditionalProjectSources='))
+                        self.assertEqual(['dotnet', 'restore', 'host/ArtifactHost.csproj', *expected, feed], command)
+                        return subprocess.CompletedProcess(command, 0, '', '')
+                    self.assertEqual(['dotnet', 'build', 'host/ArtifactHost.csproj', '--no-restore', '-c',
+                                      'Release', '-m:1', '-warnaserror', *expected], command)
+                    return subprocess.CompletedProcess(command, 7, '', '')
+                # Omitting the true flag also pins the documented default candidate path.
+                options = {} if align else {'align_candidate_dependencies': False}
+                with patch('verify_artifact.subprocess.run', side_effect=execute) as run, \
+                     patch('verify_artifact.resolved_packages', return_value=[]):
+                    with self.assertRaisesRegex(RuntimeError, 'build failed with exit 7'):
+                        verify(self.repo, self.artifact, [], self.output, **options)
+                self.assertEqual(2, run.call_count)
+                receipt = json.loads((self.output / 'verification.json').read_text())
+                self.assertEqual('failed', receipt['result'])
+                self.assertEqual(dependencies, receipt['artifactDependencies'])
+                self.assertEqual(expected, receipt['candidateDependencyOverrides'])
+
     def test_candidate_host_removes_inherited_contracts_but_preserves_stack_references(self):
         project = self.repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         project.write_text('''<Project><ItemGroup>
           <PackageReference Include="Existing.Contracts" HexalithContracts="true" />
           <PackageReference Include="Metadata.Contracts"><HexalithContracts>TRUE</HexalithContracts></PackageReference>
-          <PackageReference Include="Hexalith.EventStore.Contracts" />
-          <PackageReference Include="Microsoft.Extensions.Hosting" />
+          <PackageReference Include="LowerAttribute.Contracts" hexalithcontracts="true" />
+          <PackageReference Include="MixedAttribute.Contracts" hexalithContracts="TRUE" />
+          <PackageReference Include="LowerElement.Contracts"><hexalithcontracts>true</hexalithcontracts></PackageReference>
+          <PackageReference Include="MixedElement.Contracts"><hexalithContracts>TRUE</hexalithContracts></PackageReference>
+          <PackageReference Include="Hexalith.EventStore.Contracts" hexalithcontracts="false" />
+          <PackageReference Include="Microsoft.Extensions.Hosting"><hexalithContracts>FALSE</hexalithContracts></PackageReference>
         </ItemGroup></Project>''')
         def inspect_restore(command, cwd, **kwargs):
             selected = ET.parse(Path(cwd) / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj')
@@ -324,10 +367,10 @@ class EnrolledPreflightTests(unittest.TestCase):
         (self.child / 'verification.json').write_text('{"result":"passed","checks":[{"label":"replay","exitCode":0}]}')
         (self.child / 'artifact.sha512').write_text('previous successful artifact')
 
-    def invoke(self, verifier=None, evaluation_error=None):
+    def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts'):
         (self.directory / 'approval.json').write_text(json.dumps(self.receipt))
         evaluation = subprocess.CompletedProcess([], 0, json.dumps({'Items': {'PackageReference': [
-            {'Identity': self.package_id, 'HexalithContracts': 'true'}]}}), '')
+            {'Identity': self.package_id, contracts_metadata: 'true'}]}}), '')
         captured = io.StringIO()
         with patch.object(check_enrolled, '__file__', str(self.repo / 'tools/conformance-vectors/v1/check_enrolled.py')), \
              patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)]), \
@@ -394,6 +437,19 @@ class EnrolledPreflightTests(unittest.TestCase):
         self.assertEqual(self.receipt['inventorySha256'], verifier.call_args.kwargs['expected_inventory_hash'])
         self.assertEqual({str(self.vector.resolve()): self.receipt['vectorFilesSha256'][self.vector.name]},
                          verifier.call_args.kwargs['expected_vector_hashes'])
+
+    def test_enrollment_metadata_name_is_case_insensitive(self):
+        for metadata in ['HexalithContracts', 'hexalithcontracts', 'hexalithContracts', 'HEXALITHCONTRACTS']:
+            with self.subTest(metadata=metadata):
+                code, report, diagnostic, verifier = self.invoke(contracts_metadata=metadata)
+                self.assertEqual(0, code)
+                self.assertEqual('passed', report['result'])
+                self.assertEqual([self.package_id], report['packages'])
+                self.assertEqual([{'result': 'passed'}], report['results'])
+                self.assertEqual('', diagnostic)
+                verifier.assert_called_once()
+                self.assertEqual(self.artifact.read_bytes(), verifier.call_args.args[1].read_bytes())
+                self.assertIs(False, verifier.call_args.kwargs['align_candidate_dependencies'])
 
     def test_ambiguous_case_variant_directories_fail(self):
         entries = [Mock(), Mock()]

@@ -1,0 +1,155 @@
+{
+  "result": "passed",
+  "detectedMutations": 10,
+  "sourceFilesSha256": {
+    "tools/conformance-vectors/v1/test_process_fixture.py": "cd65bce215cfd49f879fa2d9be5fa890f9694324bb22153c5f520829d7bf827b",
+    "tools/conformance-vectors/v1/test_validate.py": "c90475a727b2b5c43e08fe0805902ffee5eb128cfab0801d7c7cd8cdc5788411",
+    "tools/conformance-vectors/v1/run_loopback.py": "08b123bb0f52e54f7fdb7f2276ecbd2466ea6c7d7b5cd39fa817da87914d68bb",
+    "tools/conformance-vectors/v1/verify_artifact.py": "311116dee30bdb92ccd200a2d61a682ff7af1210b37d078c7b4a1b57d853c3e2",
+    "tools/conformance-vectors/v1/check_enrolled.py": "caa84607aa4470916cba03f844c8f04b262cf4dee8c8c06c20496fabe7731ab4",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "9ffabeb6eaca5b2b6d8fa8cff66bba166855d4c3f9cf2d9443df49a81fe589dd",
+    "tools/conformance-vectors/v1/test_loopback.py": "284ea3e6b1e64bde577203ba7b63e6e71390eb294fddf9f7047adc3bae5bd213",
+    "tools/conformance-vectors/v1/validate.py": "879d6f95c2c035074d57f2709408ddea77c02646c7eff6f5b4358b41cbb8ebe9",
+    "tools/conformance-vectors/v1/test_enrolled.py": "e186ac98bf1e42752a1240e556bc03ba5c807720df9f3615d205ec9e735330c9"
+  },
+  "checks": [
+    {
+      "label": "r14-disabled-alignment",
+      "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r14-disabled-alignment",
+        "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "if align_candidate_dependencies and name in dependencies:",
+        "after": "if False and name in dependencies:",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r14-missing-restore-overrides",
+      "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r14-missing-restore-overrides",
+        "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "'host/ArtifactHost.csproj', *common,",
+        "after": "'host/ArtifactHost.csproj',",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r14-missing-build-overrides",
+      "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r14-missing-build-overrides",
+        "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "'Release', '-m:1', '-warnaserror', *common]",
+        "after": "'Release', '-m:1', '-warnaserror']",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-assets-required-guard",
+      "test": "test_loopback.LoopbackRulesTests.test_host_requires_explicit_assets_when_project_path_cannot_be_inferred",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r15-missing-assets-required-guard",
+        "test": "test_loopback.LoopbackRulesTests.test_host_requires_explicit_assets_when_project_path_cannot_be_inferred",
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "        if len(host.parents) < 4:\n            _fail(f\"{host}: restore assets are required; supply --assets\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-assets-unavailable-guard",
+      "test": "test_loopback.LoopbackRulesTests.test_host_reports_unavailable_restore_assets",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r15-missing-assets-unavailable-guard",
+        "test": "test_loopback.LoopbackRulesTests.test_host_reports_unavailable_restore_assets",
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "    if not assets_path.is_file():\n        _fail(f\"{assets_path}: restore assets are unavailable; supply --assets\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r15-missing-package-library-guard",
+      "test": "test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r15-missing-package-library-guard",
+        "test": "test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets",
+        "file": "tools/conformance-vectors/v1/run_loopback.py",
+        "before": "    if not isinstance(library, dict) or library.get(\"type\") != \"package\":\n        _fail(f\"{assets_path}: restored package does not match {identity}\")\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r16-missing-initial-success-invalidation",
+      "test": "test_enrolled.VerifierFailureTests.test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r16-missing-initial-success-invalidation",
+        "test": "test_enrolled.VerifierFailureTests.test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs",
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "before": "    (output / 'artifact.sha512').unlink(missing_ok=True)\n",
+        "after": "",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "r17-case-sensitive-metadata",
+      "test": "test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "r17-case-sensitive-metadata",
+        "test": "test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive",
+        "file": "tools/conformance-vectors/v1/check_enrolled.py",
+        "before": "if any(name.casefold() == 'hexalithcontracts' and value.casefold() == 'true'\n                           for name, value in p.items())]",
+        "after": "if p.get('HexalithContracts', '').casefold() == 'true']",
+        "replacementCount": 1
+      }
+    },
+    {
+      "label": "inherited-candidate-casing",
+      "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "inherited-candidate-casing",
+        "file": "tools/conformance-vectors/v1/verify_artifact.py",
+        "test": "test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references",
+        "before": "                    if item.tag == 'PackageReference':\n                        metadata = {child.tag.casefold(): child.text or '' for child in item}\n                        metadata.update((name.casefold(), value) for name, value in item.attrib.items())\n                        if metadata.get('hexalithcontracts', '').casefold() == 'true':\n                            parent.remove(item)",
+        "after": "                    if item.tag == 'PackageReference' and item.get('HexalithContracts', item.findtext('HexalithContracts', '')).casefold() == 'true':\n                        parent.remove(item)"
+      }
+    },
+    {
+      "label": "inherited-fixture-casing",
+      "test": "test_process_fixture.ProcessFixtureEnrollmentTests.test_replaces_existing_enrollments_and_preserves_stack_references",
+      "exitCode": 1,
+      "detected": true,
+      "mutation": {
+        "label": "inherited-fixture-casing",
+        "file": "tools/conformance-vectors/v1/run_packaged_process_fixture.py",
+        "test": "test_process_fixture.ProcessFixtureEnrollmentTests.test_replaces_existing_enrollments_and_preserves_stack_references",
+        "before": "                metadata = {child.tag.casefold(): child.text or '' for child in item}\n                metadata.update((name.casefold(), value) for name, value in item.attrib.items())\n                if metadata.get('hexalithcontracts', '').casefold() == 'true':",
+        "after": "                marked = item.get('HexalithContracts', item.findtext('HexalithContracts', ''))\n                if marked.casefold() == 'true':"
+      }
+    }
+  ]
+}

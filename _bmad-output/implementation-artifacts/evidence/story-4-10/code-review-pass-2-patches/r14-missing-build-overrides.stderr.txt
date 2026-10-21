@@ -1,0 +1,52 @@
+F
+======================================================================
+FAIL: test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled (test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled) (align_candidate_dependencies=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-review2-mutation-o_enyflu/vectors/test_enrolled.py", line 290, in test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled
+    verify(self.repo, self.artifact, [], self.output, **options)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-o_enyflu/vectors/verify_artifact.py", line 203, in verify
+    run(['dotnet', 'build', 'host/ArtifactHost.csproj', '--no-restore', '-c', 'Release', '-m:1', '-warnaserror'], scratch, env, 'build')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-review2-mutation-o_enyflu/vectors/verify_artifact.py", line 87, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-review2-mutation-o_enyflu/vectors/test_enrolled.py", line 282, in execute
+    self.assertEqual(['dotnet', 'build', 'host/ArtifactHost.csproj', '--no-restore', '-c',
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      'Release', '-m:1', '-warnaserror', *expected], command)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['dot[93 chars]rror', '-p:HexalithEventStoreVersion=3.125.1',[31 chars]0.2'] != ['dot[93 chars]rror']
+
+First list contains 2 additional elements.
+First extra element 8:
+'-p:HexalithEventStoreVersion=3.125.1'
+
+  ['dotnet',
+   'build',
+   'host/ArtifactHost.csproj',
+   '--no-restore',
+   '-c',
+   'Release',
+   '-m:1',
+-  '-warnaserror',
+?                ^
+
++  '-warnaserror']
+?                ^
+
+-  '-p:HexalithEventStoreVersion=3.125.1',
+-  '-p:HexalithCommonsVersion=2.30.2']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (failures=1)

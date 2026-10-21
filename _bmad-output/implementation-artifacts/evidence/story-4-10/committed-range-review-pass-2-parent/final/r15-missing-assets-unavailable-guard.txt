@@ -1,0 +1,23 @@
+E
+======================================================================
+ERROR: test_host_reports_unavailable_restore_assets (test_loopback.LoopbackRulesTests.test_host_reports_unavailable_restore_assets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-guwsbk15/vectors/test_loopback.py", line 218, in test_host_reports_unavailable_restore_assets
+    _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-final-mutation-guwsbk15/vectors/run_loopback.py", line 385, in _verify_artifact_in_host
+    assets = json.loads(assets_path.read_text(encoding="utf-8"))
+                        ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 788, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 772, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpbs7t31zn/missing/project.assets.json'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)

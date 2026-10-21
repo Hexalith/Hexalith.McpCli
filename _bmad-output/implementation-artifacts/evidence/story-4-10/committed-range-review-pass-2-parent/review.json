@@ -1,0 +1,35 @@
+{
+  "reviewedDiff": "/tmp/story410-resumed-qmrdr539.diff",
+  "sha256": "c0b867a17bdcf336014b51e41e5732990548b62bfe9e41e285ea546cb230218e",
+  "baselineCommit": "9354dc08176744c75c2ddb61d924c0948b373b98",
+  "layers": {
+    "blind-hunter": {
+      "findingFloor": 10,
+      "findings": 10
+    },
+    "edge-case-hunter": {
+      "findings": 1
+    },
+    "verification-gap": {
+      "findings": 0
+    }
+  },
+  "triage": "../../../spec-4-10-add-parties-queries-and-pin-complete-coverage.md",
+  "patchGroups": [
+    [
+      "BH1",
+      "EC1"
+    ],
+    [
+      "BH9"
+    ],
+    [
+      "BH10"
+    ]
+  ],
+  "result": "passed",
+  "newDeferrals": 0,
+  "patchGroupsResolved": true,
+  "finalChecks": "final/checks.json",
+  "finalMutations": "final/mutations.json"
+}

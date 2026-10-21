@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 118 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 322 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 321 ms).
+  Hexalith.McpCli.Analyzers -> /tmp/tmp.qWieHjfr4y/artifacts/bin/Hexalith.McpCli.Analyzers/release/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/tmp.qWieHjfr4y/artifacts/bin/Hexalith.McpCli.Abstractions/release/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/tmp.qWieHjfr4y/artifacts/bin/Hexalith.McpCli.Sample.Contracts/release/Hexalith.McpCli.Sample.Contracts.dll
+  The package Hexalith.McpCli.Sample.Contracts.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package '/tmp/tmp.qWieHjfr4y/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg'.
+................................................................................................................
+----------------------------------------------------------------------
+Ran 112 tests in 25.779s
+
+OK
+Validated 3 vector(s) against /tmp/tmp.qWieHjfr4y/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg
+sha512-7jnjFezKu88OflQ5Nt0Nk5JdSlZ1y+Va/mfz7laDnyzKhy3mWPnZV1TW2OIM24In7VsCqpvDKlKcf/b0lyEi2g==  /tmp/tmp.qWieHjfr4y/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg

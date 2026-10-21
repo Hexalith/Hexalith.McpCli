@@ -1,0 +1,181 @@
+{
+  "result": "passed",
+  "core.autocrlf": true,
+  "snapshots": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/0/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/1/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/2/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/3/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/4/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/5/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/enrolled/Hexalith.Parties.Contracts/inputs-5gri9cfs/vectors/6/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/0/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/1/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/2/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/3/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/4/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/5/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-parent/final/enrolled/Hexalith.Parties.Contracts/inputs-jxub9yj6/vectors/6/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/0/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/1/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/2/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/3/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/4/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/5/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/committed-range-review-pass-2-parent/enrolled/Hexalith.Parties.Contracts/inputs-f2k9izxy/vectors/6/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/0/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/1/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/2/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/3/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/4/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/5/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/final-review/enrolled/Hexalith.Parties.Contracts/inputs-0qffovim/vectors/6/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/create-party.vector.json",
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/deactivate-party.vector.json",
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/get-party.vector.json",
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/list-parties.vector.json",
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/reactivate-party.vector.json",
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/search-parties.vector.json",
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+      "checkoutBytesUnchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-vectors/update-party.vector.json",
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+      "checkoutBytesUnchanged": true
+    }
+  ]
+}

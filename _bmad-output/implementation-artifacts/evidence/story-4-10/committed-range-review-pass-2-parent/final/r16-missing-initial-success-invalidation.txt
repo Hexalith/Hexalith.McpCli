@@ -1,0 +1,30 @@
+F
+======================================================================
+FAIL: test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs (test_enrolled.VerifierFailureTests.test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-etlpvf8e/vectors/test_enrolled.py", line 245, in test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs
+    verify(self.repo, self.artifact, [], self.output, inventory=inventory, accepted_lint=accepted)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-final-mutation-etlpvf8e/vectors/verify_artifact.py", line 202, in verify
+    run(['dotnet', 'restore', 'host/ArtifactHost.csproj', *common, f'-p:RestoreAdditionalProjectSources={artifact.parent}'], scratch, env, 'restore')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/story410-final-mutation-etlpvf8e/vectors/verify_artifact.py", line 86, in run
+    result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/story410-final-mutation-etlpvf8e/vectors/test_enrolled.py", line 239, in fail_restore
+    self.assertFalse((self.output / 'artifact.sha512').exists())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (failures=1)

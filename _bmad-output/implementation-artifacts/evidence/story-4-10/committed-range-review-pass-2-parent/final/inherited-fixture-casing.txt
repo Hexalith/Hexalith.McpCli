@@ -1,0 +1,37 @@
+F
+======================================================================
+FAIL: test_replaces_existing_enrollments_and_preserves_stack_references (test_process_fixture.ProcessFixtureEnrollmentTests.test_replaces_existing_enrollments_and_preserves_stack_references)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story410-final-mutation-zum2v0xx/vectors/test_process_fixture.py", line 22, in test_replaces_existing_enrollments_and_preserves_stack_references
+    self.assertEqual(['Hexalith.EventStore.Contracts', 'Microsoft.Extensions.Hosting',
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      'Synthetic.Contracts'], [item.get('Include') for item in references])
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['Hexalith.EventStore.Contracts', 'Microsof[40 chars]cts'] != ['LowerAttribute.Contracts', 'MixedAttribut[148 chars]cts']
+
+First differing element 0:
+'Hexalith.EventStore.Contracts'
+'LowerAttribute.Contracts'
+
+Second list contains 4 additional elements.
+First extra element 3:
+'MixedElement.Contracts'
+
++ ['LowerAttribute.Contracts',
++  'MixedAttribute.Contracts',
++  'LowerElement.Contracts',
++  'MixedElement.Contracts',
+- ['Hexalith.EventStore.Contracts',
+? ^
+
++  'Hexalith.EventStore.Contracts',
+? ^
+
+   'Microsoft.Extensions.Hosting',
+   'Synthetic.Contracts']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

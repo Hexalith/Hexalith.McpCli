@@ -8,6 +8,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from run_loopback import (
     _assert_discovery_parity,
@@ -197,6 +198,39 @@ class LoopbackRulesTests(unittest.TestCase):
             artifact.write_bytes(b"changed artifact")
             with self.assertRaisesRegex(VectorError, "hash differs"):
                 _verify_artifact_in_host(host, artifact, ("Hexalith.McpCli.Sample.Contracts", "1.0.0"))
+
+    def test_host_requires_explicit_assets_when_project_path_cannot_be_inferred(self) -> None:
+        host = Path("Host.dll")
+        deps = {"libraries": {"Sample.Contracts/1.0.0": {"type": "package"}}}
+        with patch.object(Path, "read_text", return_value=json.dumps(deps)):
+            with self.assertRaises(VectorError) as caught:
+                _verify_artifact_in_host(host, Path("immutable.nupkg"), ("Sample.Contracts", "1.0.0"))
+        self.assertEqual("Host.dll: restore assets are required; supply --assets", str(caught.exception))
+
+    def test_host_reports_unavailable_restore_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            host = root / "Host.dll"
+            host.with_suffix(".deps.json").write_text(json.dumps({"libraries": {
+                "Sample.Contracts/1.0.0": {"type": "package"}}}))
+            assets = root / "missing/project.assets.json"
+            with self.assertRaises(VectorError) as caught:
+                _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+            self.assertEqual(f"{assets}: restore assets are unavailable; supply --assets", str(caught.exception))
+
+    def test_host_requires_matching_package_library_in_restore_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            host = root / "Host.dll"
+            identity = "Sample.Contracts/1.0.0"
+            host.with_suffix(".deps.json").write_text(json.dumps({"libraries": {identity: {"type": "package"}}}))
+            assets = root / "project.assets.json"
+            for libraries in [{}, {identity: None}, {identity: []}, {identity: {"type": "project"}}]:
+                with self.subTest(libraries=libraries):
+                    assets.write_text(json.dumps({"libraries": libraries}))
+                    with self.assertRaises(VectorError) as caught:
+                        _verify_artifact_in_host(host, root / "immutable.nupkg", ("Sample.Contracts", "1.0.0"), assets)
+                    self.assertEqual(f"{assets}: restored package does not match {identity}", str(caught.exception))
 
 
 if __name__ == "__main__":

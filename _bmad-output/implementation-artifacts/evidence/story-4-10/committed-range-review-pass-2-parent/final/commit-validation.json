@@ -1,0 +1,15 @@
+{
+  "message": "fix(conformance): harden Parties query coverage verification\n",
+  "messageSha256": "422f31f9ac32ff57a32af3ed4298192c90520b2f268739ee391a951aeeea2346",
+  "toolingPreparation": {
+    "command": "npm ci",
+    "exitCode": 0,
+    "output": "npm-ci.txt"
+  },
+  "validation": {
+    "command": "npx --no -- commitlint --verbose < /tmp/story410-final-commit-message.txt",
+    "exitCode": 0,
+    "output": "commitlint.txt",
+    "pinnedCliVersion": "21.2.2"
+  }
+}
