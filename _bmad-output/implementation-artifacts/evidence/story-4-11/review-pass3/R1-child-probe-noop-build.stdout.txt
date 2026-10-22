@@ -1,0 +1,21 @@
+  Hexalith.McpCli.Analyzers -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Core -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+  Catalog.String.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.String.Contracts/bin/Release/net10.0/Catalog.String.Contracts.dll
+  Catalog.InvalidProvider.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.InvalidProvider.Contracts/bin/Release/net10.0/Catalog.InvalidProvider.Contracts.dll
+  Catalog.Explicit.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.Explicit.Contracts/bin/Release/net10.0/Catalog.Explicit.Contracts.dll
+  Catalog.Routing.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.Routing.Contracts/bin/Release/net10.0/Catalog.Routing.Contracts.dll
+  Catalog.Lint.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.Lint.Contracts/bin/Release/net10.0/Catalog.Lint.Contracts.dll
+  Catalog.Invalid.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Catalog.Invalid.Contracts/bin/Release/net10.0/Catalog.Invalid.Contracts.dll
+  Manifest.Unmarked.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+  Manifest.MarkedEmpty.Contracts -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+  Hexalith.McpCli.Core.Tests -> /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.40

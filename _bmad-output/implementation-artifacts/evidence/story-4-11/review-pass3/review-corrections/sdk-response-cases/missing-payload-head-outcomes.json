@@ -1,0 +1,14 @@
+{
+  "CLI": {
+    "error": {
+      "code": "internal_error",
+      "message": "The CLI action failed."
+    }
+  },
+  "MCP": {
+    "error": {
+      "code": "internal_error",
+      "message": "MCP tool invocation failed."
+    }
+  }
+}

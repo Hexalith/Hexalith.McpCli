@@ -44,7 +44,7 @@ class LoopbackRulesTests(unittest.TestCase):
         self.rename = json.loads((HERE / "sample-rename.json").read_text(encoding="utf-8"))["invocation"]
 
     def test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact(self) -> None:
-        body = {"messageId": "01J9MZHXT3RKM0VWXRXGSJDATN", "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+        body = {"messageId": "01J9MZHXT3RKM0VWXRXGSJDATP", "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
                 "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"}
         self.assertEqual({"messageId": "<generated>", "correlationId": body["correlationId"],
                           "idempotencyKey": body["idempotencyKey"]}, _mask(body, self.command, "request"))
@@ -57,7 +57,7 @@ class LoopbackRulesTests(unittest.TestCase):
             _mask({"messageId": "not-a-ulid"}, self.command, "request")
 
     def test_command_result_masks_only_generated_identifiers(self) -> None:
-        result = {"messageId": "01J9MZHXT3RKM0VWXRXGSJDATN",
+        result = {"messageId": "01J9MZHXT3RKM0VWXRXGSJDATP",
                   "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
                   "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"}
         self.assertEqual("<generated>", _mask_result(result, self.command, "result")["messageId"])
@@ -261,7 +261,7 @@ class Story411CompatibilityTests(unittest.TestCase):
         from run_loopback import _assert_result_contract
         command = {'operation': self.command['operation'], 'tenant': 'sample-tenant',
                    'aggregateId': '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'status': 'accepted',
-                   'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+                   'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP',
                    'correlationId': self.command['envelope']['correlationId'],
                    'idempotencyKey': self.command['envelope']['idempotencyKey'],
                    'result': {'accepted': True}}
@@ -284,10 +284,10 @@ class Story411CompatibilityTests(unittest.TestCase):
         step['envelope'].pop('idempotencyKey')
         document = {'operation': step['operation'], 'tenant': 'sample-tenant',
                     'aggregateId': '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'status': 'accepted',
-                    'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+                    'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP',
                     'correlationId': step['envelope']['correlationId'], 'result': {'accepted': True}}
         _assert_result_contract(document, step, 'result')
-        for field, value in [('correlationId', '01J9MZHXT3RKM0VWXRXGSJDATN'),
+        for field, value in [('correlationId', '01J9MZHXT3RKM0VWXRXGSJDATP'),
                              ('idempotencyKey', '01J9MZHXT3RKM0VWXRXGSJDATM')]:
             with self.subTest(field=field), self.assertRaises(VectorError):
                 _assert_result_contract(dict(document, **{field: value}), step, 'result')
@@ -405,7 +405,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
         step['scriptedResponse']['body']['messageId'] = supplied
         step['scriptedResponse']['echoRequestFields'].remove('messageId')
         document = {'messageId': supplied, 'correlationId': supplied}
-        request = {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN', 'correlationId': supplied}
+        request = {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP', 'correlationId': supplied}
         self.assertEqual(supplied, _mask_result(document, step, 'result')['messageId'])
         _assert_result_request_binding(document, request, step, 'result')
         with self.assertRaisesRegex(VectorError, 'submitted/returned identifier'):
@@ -414,7 +414,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
     def test_generated_correlation_is_bound_to_its_message_before_masking(self):
         step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
         with self.assertRaisesRegex(VectorError, 'default correlation must equal'):
-            _mask({'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN',
+            _mask({'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP',
                    'correlationId': '01J9MZHXT3RKM0VWXRXGSJDATK'}, step, 'request')
 
 class RequiredResultExecutionTests(unittest.TestCase):
@@ -554,7 +554,7 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
     def test_reused_generated_request_ids_fail_before_masking_can_hide_them(self):
         from run_loopback import _assert_fresh_message
         step = json.loads((HERE / 'sample-command.json').read_text())['invocation']
-        request = {'body': {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATN'}}
+        request = {'body': {'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP'}}
         seen = set()
         _assert_fresh_message(request, step, seen, 'CLI first')
         with self.assertRaisesRegex(VectorError, 'reused across distinct calls'):
@@ -562,6 +562,74 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
 
 
 class GeneratedMessageReuseExecutionTests(unittest.TestCase):
+    def test_matching_heads_cannot_return_an_identifier_different_from_the_captured_request(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+        vector = json.loads((HERE / 'sample-command.json').read_text())
+        vector['prerequisites'], vector['postconditions'] = [], []
+        step = vector['invocation']
+        state = {'gateway': None, 'counter': 0}
+        observed = []
+
+        class Gateway:
+            url = 'http://unused.invalid/'
+            def __init__(self, steps):
+                self.steps, self.captured = steps, []
+            def __enter__(self):
+                state['gateway'] = self
+                return self
+            def __exit__(self, *_):
+                pass
+            def assert_consumed(self, location):
+                if len(self.captured) != len(self.steps):
+                    raise AssertionError(location)
+
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': step['operation'], 'kind': 'write'}]}
+        def execute(payload):
+            if payload == '{invalid':
+                return 2, {'error': {'code': 'validation_failed', 'operation': step['operation'],
+                    'violations': [{'path': '/', 'message': 'The payload must be valid JSON without duplicate properties.'}]}}
+            gateway = state['gateway']
+            script = gateway.steps[len(gateway.captured)]
+            state['counter'] += 1
+            body = dict(step['expectedGateway']['body'], messageId=f"{state['counter']:026d}")
+            gateway.captured.append({'method': 'POST', 'path': '/api/v1/commands', 'body': body})
+            if script['scriptedResponse']['statusCode'] == 503:
+                return 2, {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'scripted Gateway failure'}}
+            document = {'operation': step['operation'], 'tenant': step['envelope']['tenant'],
+                'aggregateId': body['aggregateId'], 'status': 'accepted',
+                'messageId': '01J9MZHXT3RKM0VWXRXGSJDATP', 'correlationId': body['correlationId'],
+                'idempotencyKey': body['idempotencyKey'], 'result': {'accepted': True}}
+            observed.append(document)
+            return 0, document
+        def cli(args, *unused):
+            if args[0] == 'modules': return 0, modules
+            if args[0] == 'operations': return 0, listed
+            if args[0] == 'describe': return 0, {'name': step['operation']}
+            return execute(args[args.index('--payload') + 1])
+        def mcp(tool, args, *unused):
+            if tool == 'list_modules': return False, modules
+            if tool == 'list_operations': return False, listed
+            if tool == 'describe_operation': return False, {'name': step['operation']}
+            code, document = execute(args['payload'])
+            return code == 2, document
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect, head.mcp.side_effect = cli, mcp
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'wrong-identifier.vector.json'
+            source.write_text(json.dumps(vector))
+            with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                    patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
+                    patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
+                    patch('run_loopback.ReplayGateway', Gateway), \
+                    patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+                with self.assertRaisesRegex(VectorError, 'result does not preserve the submitted/returned identifier'):
+                    run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
+        self.assertEqual(2, len(observed))
+        self.assertEqual(observed[0], observed[1])
+
     def test_two_real_runner_calls_cannot_reuse_a_generated_request_message(self):
         import copy
         import subprocess
@@ -570,7 +638,7 @@ class GeneratedMessageReuseExecutionTests(unittest.TestCase):
         vector = json.loads((HERE / 'sample-rename.json').read_text())
         step = vector['invocation']
         vector['prerequisites'] = [copy.deepcopy(step)]
-        message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        message = '01J9MZHXT3RKM0VWXRXGSJDATP'
         body = copy.deepcopy(step['expectedGateway']['body'])
         body.update(messageId=message, correlationId=message)
         request = {'method': 'POST', 'path': '/api/v1/commands', 'body': body}
@@ -709,7 +777,7 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
     def test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation(self):
         from run_loopback import _assert_result_contract, _assert_result_request_binding
         step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
-        message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        message = '01J9MZHXT3RKM0VWXRXGSJDATP'
         step['scriptedResponse'] = {'statusCode': 409, 'body': {'detail': 'conflict'}, 'echoRequestFields': ['correlationId']}
         document = {'error': {'code': 'gateway_error', 'status': 409, 'detail': 'conflict', 'correlationId': message}}
         _assert_result_contract(document, step, 'result')
@@ -726,7 +794,7 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
         from run_loopback import _assert_result_contract, _assert_result_request_binding
         step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
         step['scriptedResponse'] = {'statusCode': 409, 'body': {'detail': 'conflict'}, 'echoRequestFields': ['correlationId']}
-        expected = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        expected = '01J9MZHXT3RKM0VWXRXGSJDATP'
         with self.assertRaisesRegex(VectorError, 'required echoed Gateway correlationId'):
             _assert_result_contract({'error': {'code': 'gateway_error', 'status': 409, 'detail': 'conflict'}}, step, 'result')
         wrong = {'error': {'code': 'gateway_error', 'status': 409, 'detail': 'conflict',
@@ -736,6 +804,67 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
 
 
 class SdkTypedResponseTests(unittest.TestCase):
+    def test_quoted_integer_signs_and_leading_zeroes_follow_the_sdk(self):
+        from run_loopback import _sdk_response
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        for value, expected in [('+7', 7), ('007', 7), ('-0', 0), ('+0007', 7), ('-7', -7)]:
+            step['scriptedResponse']['body']['metadata'] = {'paging': {'pageSize': value, 'offset': value, 'totalCount': value}}
+            with self.subTest(value=value):
+                self.assertEqual({'pageSize': expected, 'offset': expected, 'totalCount': expected}, _sdk_response(step)['paging'])
+        for value in [' 7', '7 ', '7.0', '7e0', '+', '--7']:
+            step['scriptedResponse']['body']['metadata'] = {'paging': {'pageSize': value}}
+            with self.subTest(value=value):
+                self.assertIsNone(_sdk_response(step))
+
+    def test_served_at_uses_the_sdk_calendar_timestamp_grammar(self):
+        from run_loopback import _sdk_response
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        valid = ['2026-10-22', '2026-10-22T12:34', '2026-10-22T12:34Z',
+                 '2026-10-22T12:34:56Z', '2026-10-22T12:34:56.1234567890123456+02:00',
+                 '2026-10-22T12:34:56', '2026-10-22T12:34:56+14:00']
+        invalid = ['2026-W43-4T12:34:56Z', '2026-10-22 12:34:56Z', '2026-10-22T12:34:56,5Z',
+                   '2026-10-22t12:34:56z', '2026-10-22T12:34:56.12345678901234567Z',
+                   '2026-10-22T12:34:56+14:01', '2026-10-22T12:34:56+00:60', '2026-02-30T12:34:56Z']
+        for value in valid + invalid:
+            step['scriptedResponse']['body']['metadata'] = {'servedAt': value}
+            with self.subTest(value=value):
+                self.assertEqual(value in valid, _sdk_response(step) is not None)
+
+    def test_case_variants_validate_each_typed_value_in_input_order(self):
+        from run_loopback import _sdk_response
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        base = {'correlationId': '01J9MZHXT3RKM0VWXRXGSJDATK', 'payload': None}
+        invalid = [dict(base, success='true', Success=True),
+                   dict(base, correlationId=False, CorrelationId=base['correlationId']),
+                   dict(base, metadata={'servedAt': 'not a date', 'ServedAt': '2026-10-22T12:34:56Z'}),
+                   dict(base, metadata={'paging': {'pageSize': 'bad', 'PageSize': 7}})]
+        for body in invalid:
+            step['scriptedResponse']['body'] = body
+            with self.subTest(body=body):
+                self.assertIsNone(_sdk_response(step))
+        step['scriptedResponse']['body'] = dict(base, success=False, Success=True)
+        self.assertTrue(_sdk_response(step)['success'])
+        step['scriptedResponse']['body'] = dict(base, **{'ſuccess': False})
+        self.assertTrue(_sdk_response(step)['success'])
+
+    def test_missing_payload_and_invalid_problem_status_preserve_actual_internal_errors(self):
+        from run_loopback import _assert_result_contract
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        step['scriptedResponse']['body'] = {'correlationId': '01J9MZHXT3RKM0VWXRXGSJDATK'}
+        for head, message in [('CLI', 'The CLI action failed.'), ('MCP', 'MCP tool invocation failed.')]:
+            with self.subTest(head=head):
+                _assert_result_contract({'error': {'code': 'internal_error', 'message': message}}, step, 'result', head=head)
+                with self.assertRaises(VectorError):
+                    _assert_result_contract({'operation': step['operation'], 'tenant': 'sample-tenant', 'document': None}, step, 'result', head=head)
+        step['scriptedResponse']['body']['payload'] = None
+        _assert_result_contract({'operation': step['operation'], 'tenant': 'sample-tenant', 'document': None}, step, 'result')
+        for status in ['422', None, True]:
+            step['scriptedResponse'] = {'statusCode': 503, 'body': {'status': status, 'detail': 'bad status'}, 'echoRequestFields': []}
+            with self.subTest(status=status):
+                _assert_result_contract({'error': {'code': 'internal_error', 'message': 'Operation execution failed.'}}, step, 'result')
+                with self.assertRaises(VectorError):
+                    _assert_result_contract({'error': {'code': 'gateway_error', 'status': 503, 'detail': 'bad status'}}, step, 'result')
+
     def test_query_defaults_case_insensitive_properties_and_typed_paging_preserve_payload(self):
         from run_loopback import _assert_result_contract
         opaque = {'MixedCase': [True, 1], 'payload': {'SUCCESS': 'true'}}
@@ -791,7 +920,7 @@ class SdkTypedResponseTests(unittest.TestCase):
     def test_command_result_properties_are_case_insensitive_but_result_payload_is_opaque(self):
         from run_loopback import _assert_result_contract, _assert_result_request_binding
         step = json.loads((HERE / 'sample-command.json').read_text())['invocation']
-        message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+        message = '01J9MZHXT3RKM0VWXRXGSJDATP'
         opaque = {'MixedCase': [False, 0], 'RESULTPAYLOAD': {'Success': 'true'}}
         step['scriptedResponse']['body'] = {'MESSAGEID': message, 'RESULTPAYLOAD': opaque}
         step['scriptedResponse']['echoRequestFields'] = ['correlationId']

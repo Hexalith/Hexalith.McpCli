@@ -1,0 +1,7 @@
+{
+  "mutation": "Remove only the full-run invocation of _assert_result_request_binding",
+  "testsRun": 148,
+  "suiteStillPassed": true,
+  "failures": 0,
+  "errors": 0
+}

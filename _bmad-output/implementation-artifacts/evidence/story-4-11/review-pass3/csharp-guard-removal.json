@@ -1,0 +1,214 @@
+{
+  "checks": [
+    {
+      "mutation": "R1-child-filter-noop",
+      "removed": "typeof(CatalogPerformanceTests).FullName + \".\" + nameof(MeasureFirstConstruction)",
+      "replacement": "typeof(CatalogPerformanceTests).FullName + \".DoesNotExist\"",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true,
+      "retainedEvidence": {
+        "result": "failed",
+        "fullV1Accepted": false,
+        "elapsedMilliseconds": null,
+        "failures": [
+          "root.GetProperty(\"result\").GetString()\r\n    should be\r\n\"passed\"\r\n    but was\r\n\"pending\"\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\"result\":\"pending\",\"fullV1Accepted\":false}\n"
+        ],
+        "error": "Shouldly.ShouldAssertException: root.GetProperty(\"result\").GetString()\r\n    should be\r\n\"passed\"\r\n    but was\r\n\"pending\"\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\"result\":\"pending\",\"fullV1Accepted\":false}\n\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.AssertCompletedEvidence(String evidence, Boolean requireV1, Int32 parentProcessId) in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 186\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds() in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 40"
+      }
+    },
+    {
+      "mutation": "R1-child-probe-noop",
+      "removed": "start.Environment[\"MCPCLI_BENCHMARK_PROBE\"]",
+      "replacement": "start.Environment[\"MCPCLI_BENCHMARK_DISABLED_PROBE\"]",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true,
+      "retainedEvidence": {
+        "result": "failed",
+        "fullV1Accepted": false,
+        "elapsedMilliseconds": null,
+        "failures": [
+          "root.GetProperty(\"result\").GetString()\r\n    should be\r\n\"passed\"\r\n    but was\r\n\"pending\"\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\"result\":\"pending\",\"fullV1Accepted\":false}\n"
+        ],
+        "error": "Shouldly.ShouldAssertException: root.GetProperty(\"result\").GetString()\r\n    should be\r\n\"passed\"\r\n    but was\r\n\"pending\"\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\"result\":\"pending\",\"fullV1Accepted\":false}\n\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.AssertCompletedEvidence(String evidence, Boolean requireV1, Int32 parentProcessId) in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 186\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds() in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 40"
+      }
+    },
+    {
+      "mutation": "R1-completed-result",
+      "removed": "        root.GetProperty(\"result\").GetString().ShouldBe(requireV1 ? \"passed\" : \"local-only\", evidence);\n",
+      "replacement": "",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.CompletedChildEvidenceRequiresTheRequestedMode",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "R1-completed-elapsed",
+      "removed": "        (root.TryGetProperty(\"elapsedMilliseconds\", out JsonElement elapsed) && elapsed.ValueKind == JsonValueKind.Number\n            && elapsed.TryGetDouble(out double milliseconds) && double.IsFinite(milliseconds) && milliseconds >= 0 && milliseconds <= 500).ShouldBeTrue(evidence);\n",
+      "replacement": "",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.IncompleteChildEvidenceCannotPassAsAMeasurement",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "R1-completed-pid",
+      "removed": "        root.GetProperty(\"processId\").GetInt32().ShouldNotBe(parentProcessId, evidence);\n",
+      "replacement": "",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.IncompleteChildEvidenceCannotPassAsAMeasurement",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "R2-construction-budget",
+      "removed": "            .. (LimitViolation(elapsed) is { } violation ? new[] { violation } : []),\n",
+      "replacement": "",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "R2-construction-scope",
+      "removed": "            .. (requireV1 && missing.Length > 0 ? new[] { \"Full-v1 gate: missing required production module(s): \" + string.Join(\", \", missing) } : []),\n",
+      "replacement": "",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "buildExitCode": 0,
+      "testCommand": [
+        "dotnet",
+        "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics",
+        "-reporter",
+        "verbose"
+      ],
+      "testExitCode": 1,
+      "detected": true
+    }
+  ],
+  "scope": "Guard removal against an isolated source copy; original repository source is never edited.",
+  "originalSourceSha256": "3e8ffe1d14cac4da02032a316a4f2012d69a7046eace0d7d2384ed0cc9cc819a",
+  "restoreCommand": [
+    "dotnet",
+    "restore",
+    "/tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj"
+  ],
+  "restoreExitCode": 0,
+  "result": "passed",
+  "finishedUtc": "2026-10-22T10:16:40.803877+00:00"
+}

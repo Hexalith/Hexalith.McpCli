@@ -1,0 +1,84 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3/production/Hexalith.Tenants.Contracts/inputs-zm6x6ydk/vectors/13/update-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5HJK10Q0AD4709TAG8QM6K7",
+      "correlationId": "01M5HJK10Q0AD4709TAG8QM6K7",
+      "tenant": "system",
+      "aggregateId": "vector-update",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "messageId": "01M5HJK1W91ZNSG3DEDYYX7HY9",
+      "correlationId": "01M5HJK1W91ZNSG3DEDYYX7HY9",
+      "tenant": "system",
+      "aggregateId": "vector-update",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "system",
+      "document": {
+        "tenantId": "vector-update",
+        "name": "Vector Update Renamed",
+        "description": null,
+        "status": "Active",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HJK10Q0AD4709TAG8QM6K7",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": "Description cleared by the update",
+          "Name": "Vector Update Original",
+          "TenantId": "vector-update"
+        },
+        "correlationId": "01M5HJK10Q0AD4709TAG8QM6K7"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HJK1W91ZNSG3DEDYYX7HY9",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Update Renamed",
+          "TenantId": "vector-update"
+        },
+        "correlationId": "01M5HJK1W91ZNSG3DEDYYX7HY9"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-update"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 61 ms).
+  Restored /tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 1 sec).
+  Hexalith.McpCli.Analyzers -> /tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+/home/administrator/.dotnet/sdk/10.0.402/NuGet.Build.Tasks.Pack.targets(226,5): error NU5019: File not found: '/tmp/mcpcli-response-corrections-f42ecack/README.md'. [/tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj]

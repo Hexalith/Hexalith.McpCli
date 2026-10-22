@@ -1,0 +1,117 @@
+{
+  "result": "passed",
+  "checkedAtUtc": "2026-10-22T11:16:49.943917+00:00",
+  "scope": "Final parent local acceptance after independent review fixes; historical Ubuntu proof remains separate, no new remote run claimed.",
+  "verificationChecksPassed": 21,
+  "sourceInputsUnchanged": true,
+  "sourceFileCount": 361,
+  "dotnetProjects": [
+    {
+      "log": "test-abstractions.stdout.txt",
+      "passed": 20,
+      "skipped": 0
+    },
+    {
+      "log": "test-analyzers.stdout.txt",
+      "passed": 19,
+      "skipped": 0
+    },
+    {
+      "log": "test-cli.stdout.txt",
+      "passed": 479,
+      "skipped": 2
+    },
+    {
+      "log": "test-core.stdout.txt",
+      "passed": 687,
+      "skipped": 3
+    },
+    {
+      "log": "test-manifest.stdout.txt",
+      "passed": 104,
+      "skipped": 0
+    },
+    {
+      "log": "test-mcp.stdout.txt",
+      "passed": 58,
+      "skipped": 0
+    }
+  ],
+  "dotnetPassed": 1367,
+  "dotnetSkipped": 5,
+  "pythonNamedPassed": 153,
+  "matrix": [
+    {
+      "row": "Missing/duplicate/stale vector or wrong step kind/schema",
+      "actualNamedPythonPassed": [
+        "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected",
+        "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt",
+        "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight",
+        "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay"
+      ]
+    },
+    {
+      "row": "Payload depth64/65",
+      "actualNamedPythonPassed": [
+        "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing",
+        "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator"
+      ]
+    },
+    {
+      "row": "Supplied/omitted correlation and idempotency key",
+      "actualNamedPythonPassed": [
+        "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality",
+        "test_loopback.GeneratedErrorCorrelationTests.test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation",
+        "test_loopback.ProductionReplayOrderingTests.test_generated_correlation_is_bound_to_its_message_before_masking",
+        "test_loopback.GeneratedMessageReuseExecutionTests.test_two_real_runner_calls_cannot_reuse_a_generated_request_message"
+      ]
+    },
+    {
+      "row": "Extra request field, wrong paging, equal missing result fields",
+      "actualNamedPythonPassed": [
+        "test_loopback.LoopbackRulesTests.test_expected_gateway_payload_and_paging_are_exact",
+        "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps",
+        "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions"
+      ]
+    },
+    {
+      "row": "Validation failure or scripted Gateway failure",
+      "actualNamedPythonPassed": [
+        "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads",
+        "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata",
+        "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request"
+      ]
+    },
+    {
+      "row": "Valid extensions",
+      "actualNamedPythonPassed": [
+        "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact",
+        "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position"
+      ]
+    },
+    {
+      "row": "Missing v1 Module or construction over500ms",
+      "actualNamedPythonPassed": [
+        "test_enrolled.FullV1ScopeTests.test_required_modules_cannot_be_replaced_by_local_green",
+        "test_enrolled.EnrolledPreflightTests.test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels"
+      ]
+    }
+  ],
+  "fullRunBindingNegativeActuallyPassed": "test_loopback.GeneratedMessageReuseExecutionTests.test_matching_heads_cannot_return_an_identifier_different_from_the_captured_request",
+  "unchangedBenchmarkSourceMatchesNamedNativeEvidence": true,
+  "namedNativeEvidenceDirectory": "../review-pass3",
+  "productionOperations": 21,
+  "preflightCalls": 78,
+  "documents": 198,
+  "capturedRequests": 198,
+  "coldCatalogMilliseconds": 217.6124,
+  "exactlyOneUlidSample": true,
+  "frozenIntentUnchanged": true,
+  "originalApprovedVectorsAndReceiptsUnchanged": true,
+  "newDeferrals": 0,
+  "existingDeferrals": [
+    "R17",
+    "R18",
+    "successful-process stderr retention"
+  ]
+}

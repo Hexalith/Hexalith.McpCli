@@ -59,11 +59,28 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
         ('typed-paging', dict(base, metadata={'paging': {'pageSize': '7', 'offset': '2',
              'totalCount': '3', 'hasMore': False, 'nextCursor': None, 'unknown': True}}),
              {'pageSize': 7, 'offset': 2, 'totalCount': 3, 'hasMore': False}),
+        ('signed-paging', dict(base, metadata={'paging': {'pageSize': '+007', 'offset': '+2', 'totalCount': '+3'}}),
+             {'pageSize': 7, 'offset': 2, 'totalCount': 3}),
+        ('explicit-null-payload', dict(base, payload=None), None),
+        ('unicode-lookalike-is-unknown', dict(base, **{'ſuccess': False}), None),
+        ('valid-later-case-variant', dict(base, success=False, Success=True), None),
         ('depth64', dict(base, ignored=nested), None),
         ('paging-array-parse-error', dict(base, metadata={'paging': []}), 'parse-error'),
         ('success-string-parse-error', dict(base, success='true'), 'parse-error'),
         ('depth65-parse-error', dict(base, ignored={'nested': nested}), 'parse-error'),
+        ('invalid-earlier-success', dict(base, success='true', Success=True), 'parse-error'),
+        ('invalid-earlier-correlation', dict(base, correlationId=False, CorrelationId=correlation), 'parse-error'),
+        ('invalid-earlier-metadata', dict(base, metadata={'servedAt': 'bad', 'ServedAt': '2026-10-22T12:34:56Z'}), 'parse-error'),
+        ('invalid-earlier-paging', dict(base, metadata={'paging': {'pageSize': 'bad', 'PageSize': 7}}), 'parse-error'),
     ]
+    for timestamp in ['2026-10-22', '2026-10-22T12:34', '2026-10-22T12:34Z',
+                      '2026-10-22T12:34:56Z', '2026-10-22T12:34:56.1234567890123456+02:00',
+                      '2026-10-22T12:34:56', '2026-10-22T12:34:56+14:00']:
+        cases.append(('valid-timestamp', dict(base, metadata={'servedAt': timestamp}), None))
+    for timestamp in ['2026-W43-4T12:34:56Z', '2026-10-22 12:34:56Z', '2026-10-22T12:34:56,5Z',
+                      '2026-10-22t12:34:56z', '2026-10-22T12:34:56.12345678901234567Z',
+                      '2026-10-22T12:34:56+14:01', '2026-10-22T12:34:56+00:60']:
+        cases.append(('invalid-timestamp', dict(base, metadata={'servedAt': timestamp}), 'parse-error'))
     query['prerequisites'] = []
     for _, body, paging in cases:
         step = copy.deepcopy(query['invocation'])
@@ -72,12 +89,27 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
             step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': {
                 'code': 'gateway_error', 'status': 200, 'detail': 'Query response body could not be parsed.'}}]
         else:
-            step['assertions'] = [{'path': '/document', 'operator': 'equals', 'value': opaque},
+            step['assertions'] = [{'path': '/document', 'operator': 'equals', 'value': body.get('payload', body.get('PAYLOAD', opaque))},
                                   {'path': '/paging', 'operator': 'exists', 'value': paging is not None}]
             if paging is not None:
                 step['assertions'].append({'path': '/paging', 'operator': 'equals', 'value': paging})
         query['prerequisites'].append(step)
-    message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+    errors = [
+        (304, {}, {'code': 'gateway_error', 'status': 502,
+                   'detail': 'Not-modified query response requires projection-backed provenance and a strong ETag.'}),
+        (200, dict(base, success=False, errorMessage='scripted semantic failure'),
+                   {'code': 'gateway_error', 'status': 200, 'detail': 'scripted semantic failure', 'correlationId': correlation}),
+        (409, {'status': 422, 'detail': 'status override'}, {'code': 'gateway_error', 'status': 422, 'detail': 'status override'}),
+    ]
+    for status in ['422', None, True]:
+        errors.append((503, {'status': status, 'detail': 'bad status'},
+                       {'code': 'internal_error', 'message': 'Operation execution failed.'}))
+    for status, body, expected in errors:
+        step = copy.deepcopy(query['invocation'])
+        step['scriptedResponse'] = {'statusCode': status, 'body': body, 'echoRequestFields': []}
+        step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': expected}]
+        query['prerequisites'].append(step)
+    message = '01J9MZHXT3RKM0VWXRXGSJDATP'
     command['invocation']['scriptedResponse'] = {'statusCode': 202,
         'body': {'MESSAGEID': message, 'RESULTPAYLOAD': opaque}, 'echoRequestFields': ['correlationId']}
     command['invocation']['assertions'] = [
@@ -102,7 +134,28 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
                   '--expected-package-version', '1.0.0', *vectors], root, env)
     (sources / 'replay.stdout.txt').write_text(result.stdout)
     (sources / 'replay.stderr.txt').write_text(result.stderr)
-    print('PASS real SDK response defaults, typed casing/paging, opaque payloads, depth64/65, typed parse errors and supplied/generated command204 complete replay.', flush=True)
+    # An omitted JsonElement remains Undefined, which fails in each head's
+    # serializer. Preserve the two actual error documents and require parity refusal.
+    from run_loopback import HeadProcess, ReplayGateway, _assert_error_parity, _run_step
+    from validate import VectorError
+    missing = copy.deepcopy(query['invocation'])
+    missing['scriptedResponse']['body'] = {'correlationId': correlation}
+    observed = {}
+    head = HeadProcess(host, str(sources), 30)
+    head.env.update(env)
+    for label, message in [('CLI', 'The CLI action failed.'), ('MCP', 'MCP tool invocation failed.')]:
+        missing['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': {'code': 'internal_error', 'message': message}}]
+        with ReplayGateway([missing]) as gateway:
+            observed[label], _ = _run_step(head, missing, gateway.url, label)
+            gateway.assert_consumed('missing-payload ' + label)
+    (sources / 'missing-payload-head-outcomes.json').write_text(json.dumps(observed, indent=2) + '\n')
+    try:
+        _assert_error_parity(observed['CLI'], observed['MCP'], 'missing-payload')
+    except VectorError:
+        pass
+    else:
+        raise RuntimeError('Missing-payload head-specific internal errors falsely passed parity.')
+    print('PASS real SDK signed paging, timestamp grammar, ordered ASCII property matching, explicit-null/missing payload, internal errors, 304/semantic/status-override outcomes and command204 replay; missing-payload head differences refuse parity.', flush=True)
 
 
 def fixture(repo: Path, artifact: Path):
@@ -120,8 +173,8 @@ def fixture(repo: Path, artifact: Path):
         host.mkdir(parents=True)
         for source in (repo / 'tests/Hexalith.McpCli.ConformanceHost').glob('*.cs'):
             shutil.copy2(source, host / source.name)
-        for name in ['Hexalith.McpCli.ConformanceHost.csproj', 'Directory.Packages.props']:
-            shutil.copy2(repo / 'tests/Hexalith.McpCli.ConformanceHost' / name, host / name)
+        shutil.copy2(repo / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
+                     host / 'Hexalith.McpCli.ConformanceHost.csproj')
         (host / 'Directory.Packages.props').write_text('<Project><Import Project="../../Directory.Packages.props" /></Project>')
         (root / 'tools/conformance-vectors/v1/v1-scope.json').write_text(json.dumps({'requiredModules': ['sample']}))
         core = root / 'tests/Hexalith.McpCli.Core.Tests'

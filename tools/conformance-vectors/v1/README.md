@@ -70,7 +70,7 @@ Approval establishes format, script consistency, and artifact identity compatibi
 
 The reusable entry point `validate_vectors(paths, artifact, expected_package, expected_operations)` applies the same schema, consistency, and artifact checks as the CLI. A JSON array of canonical Catalog names can be passed with `--operations-file` to reject missing, extra, or duplicate vectors. The validator itself has no production Catalog dependency.
 
-**Story 4.11** implements production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and exact version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks coverage and kinds against the owning Catalog, and checks Payload compatibility. It must also verify that the immutable artifact matches the package restored into the host. This catches a stale approval after a package update.
+**Story 4.11** implements production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and exact version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks coverage and kinds against the owning Catalog, and checks Payload compatibility. It also verifies that the immutable artifact matches the package restored into the host. This catches a stale approval after a package update.
 
 The existing sample parity gate remains available independently as `bash tools/conformance-vectors/v1/run-sample-loopback.sh`, and CI retains it in the separate `conformance-vector-loopback` job. It packs the sample and Abstractions into a temporary feed, restores the test-only host into an isolated NuGet cache, builds it, runs the validator tests, and executes all three vectors through separate CLI and MCP stdio processes. The generated manifest contains only the flagged sample package; production source and its package manifest stay unchanged. The test host invokes the actual CLI/MCP composition through a reflection adapter because the sample package is intentionally absent from the production tool. The runner compares the immutable artifact's SHA-512 with the package restored into that host.
 
@@ -160,11 +160,10 @@ It creates a temporary repository with one flagged packaged sample and synthetic
 fixture-only inventory/receipt, exercises nonempty enrollment through complete
 verification/replay, verifies offline Core rejection of incompatible steps in every
 position, then combines the real production enrollment with the temporary sample
-and proves complete combined-manifest replay. It also proves a pending inventory decision is rejected by the
-real C# checker before replay. It also proves a structurally valid vector with a false
-semantic assertion fails with replay diagnostics and invalidates stale success.
+and proves complete combined-manifest replay. A pending inventory decision is rejected by the
+real C# checker before replay. A structurally valid vector with a false semantic assertion
+fails with replay diagnostics and invalidates stale success.
 Synthetic authority and enrollment data never enter the production repository.
-
 
 ## Production parity and first-construction gate
 
@@ -195,12 +194,16 @@ available packages pass. `check_enrolled.py --local --output <directory>` collec
 available-package evidence with `result: local-only` and `fullV1Accepted: false`.
 Omitting `MCPCLI_BENCHMARK_REQUIRE_V1` similarly measures the local population and
 records missing modules without claiming full acceptance. CI on `ubuntu-latest`
-runs both strict gates and always uploads their evidence.
+runs both strict gates and always uploads their evidence. Each `fullV1Accepted` flag
+in `enrolled.json` and `catalog-benchmark.json` covers only that file's replay or
+construction gate. Full-v1 acceptance requires both flags to be `true` and the
+enclosing CI job to pass for the same source SHA.
 
 The benchmark starts a fresh test process, loads the production manifest assemblies
 and exactly one Ulid sample assembly, and times that process's first
-`CatalogBuilder.Build`. Process startup and assembly loading are excluded;
-construction, first-use schema work and diagnostics remain included. There are no
+`CatalogBuilder.Build`. Process startup and loading those top-level assemblies are
+excluded. Dependencies loaded on demand inside `Build`, construction, first-use
+schema work and diagnostics remain included. There are no
 warm-up builds or retries. Evidence records the assembly/module/operation population,
 identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
 The existing isolated String-kind Catalog test remains part of Core.Tests.

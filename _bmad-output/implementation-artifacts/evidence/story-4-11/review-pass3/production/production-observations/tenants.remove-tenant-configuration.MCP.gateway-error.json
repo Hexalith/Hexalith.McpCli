@@ -1,0 +1,30 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3/production/Hexalith.Tenants.Contracts/inputs-zm6x6ydk/vectors/10/remove-tenant-configuration.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HJJ3WJN8ZWV8H3P82AV1RP",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "remove-tenant-configuration",
+        "payload": {
+          "Key": "billing.plan",
+          "TenantId": "vector-config-removal"
+        },
+        "correlationId": "01M5HJJ3WJN8ZWV8H3P82AV1RP"
+      }
+    }
+  ]
+}

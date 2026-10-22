@@ -151,9 +151,12 @@ def main():
     report.write_text(json.dumps(status, indent=2) + '\n')
     try:
         invalidate_children(args.output)
-        required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set())
         for stale in (args.output / 'production-observations').glob('*.json'):
             stale.unlink()
+        for phase in ['restore', 'build', 'replay']:
+            for stream in ['stdout', 'stderr']:
+                (args.output / f'production-{phase}.{stream}.txt').unlink(missing_ok=True)
+        required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set())
         project = repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         evaluation = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
                                     cwd=repo, capture_output=True, text=True, check=True)

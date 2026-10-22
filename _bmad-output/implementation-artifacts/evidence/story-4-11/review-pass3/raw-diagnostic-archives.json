@@ -1,0 +1,55 @@
+{
+  "archivedAtUtc": "2026-10-22T11:19:23.087288+00:00",
+  "reason": "Preserve raw Shouldly diagnostic whitespace without introducing whitespace errors in tracked text. No diagnostic bytes were edited.",
+  "archives": [
+    {
+      "original": "R1-child-filter-noop.stdout.txt",
+      "archive": "R1-child-filter-noop.stdout.txt.gz",
+      "uncompressedSha256": "233cd93fe4a8da7cf6597c0794f4ca2674fe977ea1a0e92bbc34ca7abb8a1696",
+      "archiveSha256": "5c991533d724eb04ef5c1569aef738d878d91222d5b310bb432e75aeb07e8520",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R1-child-probe-noop.stdout.txt",
+      "archive": "R1-child-probe-noop.stdout.txt.gz",
+      "uncompressedSha256": "0a124d1c2ca68506c2c47a2e67703bb79c1251c932afb8697d62ac8eb15743b6",
+      "archiveSha256": "f5fd2857ab6f773a105356294910f1874d57440ccce28d6328a94da84e589e67",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R1-completed-elapsed.stdout.txt",
+      "archive": "R1-completed-elapsed.stdout.txt.gz",
+      "uncompressedSha256": "c73c946361b54c0598d92e9b3590eed6304fe2abd6c9e8495f47483f65e1075f",
+      "archiveSha256": "2e1d68d00854e48dd525f0023eeba92c24f8f7258dc32517272ef707e0081077",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R1-completed-pid.stdout.txt",
+      "archive": "R1-completed-pid.stdout.txt.gz",
+      "uncompressedSha256": "00941f5023828a8465f77d4f97c73a418049156738e8762823d34a0f9e9dc8ed",
+      "archiveSha256": "17c1ee2eb8af647d6457ac503c6214a4c36a4c90d5d5089a3cd6c14fd8640f0d",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R1-completed-result.stdout.txt",
+      "archive": "R1-completed-result.stdout.txt.gz",
+      "uncompressedSha256": "9fbeba2c80a077faa13966adb90a1ffc4722f107df3d94b1f901920a4e345857",
+      "archiveSha256": "3683a4341b05bbc88ffa9f849c0bd0674327b73ed63f6b5f9c439bb27e4a53cb",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R2-construction-budget.stdout.txt",
+      "archive": "R2-construction-budget.stdout.txt.gz",
+      "uncompressedSha256": "bdcdc9809c8f7039a2fcce31cf548340fa89722e7a1557a8e7011d855482b2e2",
+      "archiveSha256": "980c38641b0cc07f671eba07e9670569a9b74710ce1950166658970693b9a187",
+      "allOriginalBytesPreserved": true
+    },
+    {
+      "original": "R2-construction-scope.stdout.txt",
+      "archive": "R2-construction-scope.stdout.txt.gz",
+      "uncompressedSha256": "5c52c051a495a068198b8cd62586aba3efe42fa085f358b274685ea41cd8edcf",
+      "archiveSha256": "527c2485cced4d28979448511447f02a0b6dc8018040dc6f8020737676d7ee4c",
+      "allOriginalBytesPreserved": true
+    }
+  ]
+}

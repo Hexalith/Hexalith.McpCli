@@ -367,7 +367,8 @@ class EnrolledPreflightTests(unittest.TestCase):
         (self.child / 'verification.json').write_text('{"result":"passed","checks":[{"label":"replay","exitCode":0}]}')
         (self.child / 'artifact.sha512').write_text('previous successful artifact')
 
-    def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts', local=False, missing=None, required=None):
+    def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts', local=False, missing=None, required=None,
+               production_error=None):
         (self.directory / 'approval.json').write_text(json.dumps(self.receipt))
         evaluation = subprocess.CompletedProcess([], 0, json.dumps({'Items': {'PackageReference': [
             {'Identity': self.package_id, contracts_metadata: 'true'}]}}), '')
@@ -376,7 +377,8 @@ class EnrolledPreflightTests(unittest.TestCase):
              patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)] + (['--local'] if local else [])), \
              patch('check_enrolled.subprocess.run', side_effect=evaluation_error, return_value=evaluation), \
              patch('check_enrolled.verify', side_effect=verifier, return_value={'result': 'passed'}) as mocked, \
-             patch('check_enrolled.production_replay', return_value={'result': 'passed', 'modules': ['module']}), \
+             patch('check_enrolled.production_replay', side_effect=production_error,
+                   return_value={'result': 'passed', 'modules': ['module']}), \
              patch('check_enrolled.required_scope', side_effect=lambda path, modules: sorted(set(required) - modules) if required is not None else missing or []), \
              redirect_stderr(captured), redirect_stdout(io.StringIO()):
             code = check_enrolled.main()
@@ -385,6 +387,25 @@ class EnrolledPreflightTests(unittest.TestCase):
     def assert_invalidated_child(self):
         self.assertNotEqual('passed', json.loads((self.child / 'verification.json').read_text())['result'])
         self.assertFalse((self.child / 'artifact.sha512').exists())
+
+    def test_failed_production_rerun_removes_previous_observations_and_all_production_logs(self):
+        observations = self.output / 'production-observations'
+        observations.mkdir()
+        stale = observations / 'old.json'
+        stale.write_text('{"documents":[{"status":"accepted"}]}')
+        logs = [self.output / f'production-{phase}.{stream}.txt'
+                for phase in ['restore', 'build', 'replay'] for stream in ['stdout', 'stderr']]
+        for log in logs:
+            log.write_text('PASS previous production run')
+        code, report, diagnostic, verifier = self.invoke(production_error=RuntimeError('production restore failed'))
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertFalse(report['fullV1Accepted'])
+        self.assertEqual('production restore failed', report['error'])
+        self.assertEqual('production restore failed\n', diagnostic)
+        self.assertFalse(stale.exists())
+        self.assertEqual([], [log.name for log in logs if log.exists()])
+        verifier.assert_called_once()
 
     def test_inventory_requires_the_exact_approved_digest_before_verification(self):
         for mutation in ['changed bytes', 'missing digest', 'wrong digest', 'malformed digest']:
@@ -716,6 +737,35 @@ class FullV1ScopeTests(unittest.TestCase):
 
 
 class CombinedConsumptionHashTests(unittest.TestCase):
+    def test_combined_replay_uses_retained_inputs_host_assets_and_every_approved_module(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+            output = repo / 'evidence'
+            receipts, selections = [], []
+            for module in ['first', 'second']:
+                package_id = module.title() + '.Contracts'
+                retained = output / package_id / 'inputs-retained'
+                retained.mkdir(parents=True)
+                artifact = retained / 'contracts.nupkg'
+                artifact.write_bytes(b'retained package bytes')
+                vector = retained / 'read.vector.json'
+                vector.write_text(json.dumps({'operation': module + '.read'}))
+                receipts.append({'packageId': package_id, 'version': '1.0.0', 'approvedModule': module,
+                    'operations': [module + '.read'], 'retainedInputs': {
+                        'artifact': 'inputs-retained/contracts.nupkg',
+                        'vectors': {'original/read.json': 'inputs-retained/read.vector.json'}},
+                    'vectors': {'original/read.json': hashlib.sha256(vector.read_bytes()).hexdigest()}})
+                selections.append((artifact, (package_id, '1.0.0'), [vector]))
+            with patch('check_enrolled.subprocess.run', return_value=subprocess.CompletedProcess([], 0, '', '')), \
+                    patch('check_enrolled.run_catalog', return_value={'modules': ['first', 'second']}) as replay:
+                progress = check_enrolled.production_replay(repo, output, receipts)
+            host = repo / 'tests/Hexalith.McpCli.ConformanceHost'
+            replay.assert_called_once_with(host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll', selections,
+                assets_path=host / 'obj/project.assets.json', evidence_dir=output / 'production-observations',
+                expected_modules={'First.Contracts': 'first', 'Second.Contracts': 'second'})
+            self.assertEqual('passed', progress['result'])
+            self.assertEqual(2, progress['operationCount'])
+
     def test_retained_vector_mutation_during_production_build_blocks_replay(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

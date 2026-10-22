@@ -1,0 +1,94 @@
+{
+  "name": "tenants.get-tenant-audit",
+  "kind": "read",
+  "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+  "schema": {
+    "type": [
+      "object",
+      "null"
+    ],
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant whose audit trail is read. Required; a call without it is rejected."
+      },
+      "From": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Optional inclusive lower bound on the entry time, as an ISO 8601 date and time with an offset."
+      },
+      "To": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Optional inclusive upper bound on the entry time, as an ISO 8601 date and time with an offset."
+      },
+      "Category": {
+        "enum": [
+          "Access",
+          "Administrative",
+          null
+        ],
+        "description": "Optional category filter: Access keeps membership and role changes; Administrative keeps tenant creation, name and description changes, disabling, enabling and configuration changes. Omit it for both."
+      },
+      "Stream": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Has no effect for calls made with this tool. Leave unset."
+      },
+      "Cursor": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      },
+      "PageSize": {
+        "type": "integer",
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      }
+    },
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme",
+    "From": "2026-01-01T00:00:00Z",
+    "To": "2026-12-31T23:59:59Z",
+    "Category": "Access"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "entityId",
+      "pageSize",
+      "offset",
+      "cursor"
+    ]
+  },
+  "lintFindings": [
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member Cursor to the query envelope argument.",
+      "property": "/properties/Cursor"
+    },
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member PageSize to the query envelope argument.",
+      "property": "/properties/PageSize"
+    }
+  ],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

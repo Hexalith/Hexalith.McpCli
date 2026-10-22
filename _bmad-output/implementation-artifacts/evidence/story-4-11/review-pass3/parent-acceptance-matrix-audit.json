@@ -1,0 +1,94 @@
+{
+  "result": "passed",
+  "checkedAtUtc": "2026-10-22T10:31:58.777494+00:00",
+  "scope": "Independent parent local audit of review-pass3 implementation and evidence; historical Ubuntu evidence is unchanged, no new remote run claimed.",
+  "verificationChecksPassed": 21,
+  "matrix": [
+    {
+      "row": "Missing/duplicate/stale vector or wrong step kind/schema",
+      "namedPythonActuallyPassed": {
+        "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected": true,
+        "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt": true,
+        "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight": true,
+        "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay": true
+      }
+    },
+    {
+      "row": "Payload depth64/65",
+      "namedPythonActuallyPassed": {
+        "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing": true,
+        "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator": true
+      }
+    },
+    {
+      "row": "Supplied/omitted correlation and idempotency key",
+      "namedPythonActuallyPassed": {
+        "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality": true,
+        "test_loopback.GeneratedErrorCorrelationTests.test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation": true,
+        "test_loopback.ProductionReplayOrderingTests.test_generated_correlation_is_bound_to_its_message_before_masking": true,
+        "test_loopback.GeneratedMessageReuseExecutionTests.test_two_real_runner_calls_cannot_reuse_a_generated_request_message": true
+      }
+    },
+    {
+      "row": "Extra request field, wrong paging, equal missing result fields",
+      "namedPythonActuallyPassed": {
+        "test_loopback.LoopbackRulesTests.test_expected_gateway_payload_and_paging_are_exact": true,
+        "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps": true,
+        "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions": true
+      }
+    },
+    {
+      "row": "Validation failure or scripted Gateway failure",
+      "namedPythonActuallyPassed": {
+        "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads": true,
+        "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata": true,
+        "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request": true
+      }
+    },
+    {
+      "row": "Valid extensions",
+      "namedPythonActuallyPassed": {
+        "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact": true,
+        "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position": true
+      }
+    },
+    {
+      "row": "Missing v1 Module or construction over500ms",
+      "namedPythonActuallyPassed": {
+        "test_enrolled.FullV1ScopeTests.test_required_modules_cannot_be_replaced_by_local_green": true,
+        "test_enrolled.EnrolledPreflightTests.test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels": true
+      }
+    }
+  ],
+  "benchmarkNamedPassed": 18,
+  "isolatedStringActuallyPassed": true,
+  "productionOperations": 21,
+  "preflightCalls": 78,
+  "observationFiles": 84,
+  "documents": 198,
+  "requests": 198,
+  "coldCatalogMilliseconds": 140.873,
+  "exactlyOneUlidSample": true,
+  "approvedArtifacts": {
+    "Hexalith.Parties.Contracts": {
+      "unchanged": true,
+      "approvedVectorCount": 7
+    },
+    "Hexalith.Tenants.Contracts": {
+      "unchanged": true,
+      "approvedVectorCount": 14
+    }
+  },
+  "frozenIntentUnchanged": true,
+  "allSixteenPatchRowsComplete": true,
+  "finalSevenSourceHashesVerified": {
+    "README.md": "f7cada85bdb962f23740d36399a4bd4fa3848e8b8a65962838fbb0e2f75df02a",
+    "tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs": "3e8ffe1d14cac4da02032a316a4f2012d69a7046eace0d7d2384ed0cc9cc819a",
+    "tools/conformance-vectors/v1/README.md": "53610863bd60e660692f41f4b90470201d39d06cd4c81cd49d6fa6ecf57728bf",
+    "tools/conformance-vectors/v1/check_enrolled.py": "6ee1f34c27005cd7ba0f4484203958591498bc0299d59cf5b85d8843b6673da1",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "3cd892b248429bd8be1c1daecfe3a4db2dffa7d0005e218bf6d7d256085ab2fb",
+    "tools/conformance-vectors/v1/test_enrolled.py": "efaa6705daa2835a2569ced3309c0ffde8be30558835c9021a24319d8a3de824",
+    "tools/conformance-vectors/v1/test_loopback.py": "388c3d7d281f054608c61e63911c519ffbc156cc7959c3cf6810c395a1979134"
+  },
+  "namedPythonEvidence": "python-tests-final.stderr.txt"
+}

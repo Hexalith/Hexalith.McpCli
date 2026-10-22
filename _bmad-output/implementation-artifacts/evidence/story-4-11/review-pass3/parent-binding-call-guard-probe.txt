@@ -1,0 +1,7 @@
+..................................................PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+..................................................................................................
+----------------------------------------------------------------------
+Ran 148 tests in 19.628s
+
+OK

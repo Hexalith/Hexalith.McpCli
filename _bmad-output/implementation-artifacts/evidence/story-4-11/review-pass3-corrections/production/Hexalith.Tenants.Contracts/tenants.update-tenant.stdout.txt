@@ -1,0 +1,50 @@
+{
+  "name": "tenants.update-tenant",
+  "kind": "write",
+  "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant to update."
+      },
+      "Name": {
+        "type": "string",
+        "description": "New display name; replaces the current one."
+      },
+      "Description": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "New description; replaces the current one and null clears it. To keep the current description while renaming, send it again (read it with tenants.get-tenant)."
+      }
+    },
+    "required": [
+      "TenantId",
+      "Name",
+      "Description"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme",
+    "Name": "Acme Corporation EMEA",
+    "Description": "European production workspace"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}
