@@ -1,6 +1,6 @@
 {
-  "recordedAtUtc": "2026-10-22T05:05:17.797463+00:00",
-  "status": "in-review-corrections-before-final-acceptance",
+  "recordedAtUtc": "2026-10-22T06:08:37.386962+00:00",
+  "status": "approved-and-verified-for-production-enrollment",
   "packageId": "Hexalith.Tenants.Contracts",
   "version": "5.10.0",
   "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
@@ -132,16 +132,16 @@
     "publicationLinkPolicy": "This owning release-bound change record links the exact public discovery review. The normal root PR description additionally links that review at the actual committed source revision once known; no future revision URL is invented."
   },
   "productionAccepted": false,
-  "fullV1Accepted": false,
+  "fullV1Accepted": true,
   "finalUbuntuAcceptance": {
     "status": "passed",
-    "source": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
-    "run": 39724191822,
-    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39724191822",
-    "audit": "parent-root-ubuntu-acceptance-audit.json",
+    "source": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+    "run": 39730145591,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39730145591",
+    "audit": "parent-root-review-fixed-ubuntu-acceptance-audit.json",
     "operationCount": 21,
-    "coldCatalogMilliseconds": 242.6181
+    "coldCatalogMilliseconds": 194.5002
   },
-  "finalIndependentReviewPending": true,
-  "currentTreeReverificationPending": true
+  "finalIndependentReviewPending": false,
+  "currentTreeReverificationPending": false
 }

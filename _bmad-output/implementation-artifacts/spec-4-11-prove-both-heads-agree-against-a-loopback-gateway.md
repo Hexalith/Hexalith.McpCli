@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -368,3 +368,11 @@ The [parent artifact and matrix audit](evidence/story-4-11/publication-20261021/
 | First Catalog construction with exactly one sample is at most 500 ms; alternate kind remains covered | Actual fresh-process Ubuntu measurement was 242.6181 ms, with exactly Parties, Tenants and one Ulid sample, no failures/missing modules/diagnostics. The isolated String test and 500/500.0001 ms boundary and failure-evidence cases actually passed in the ordinary native TRX. |
 
 The unchanged strict gates now report `fullV1Accepted: true`. All execution tasks and acceptance criteria are verified. Story and sprint remain in progress for the next sequential BMAD independent review and completion record. No live authorization, sanitization, persisted effects or retirement acceptance is claimed.
+
+## Completion — 2026-10-22
+
+The five final-review correction groups are resolved. The [corrected-source Ubuntu acceptance audit](evidence/story-4-11/publication-20261021/parent-root-review-fixed-ubuntu-acceptance-audit.json) binds normal CI [39730145591](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39730145591), reviewed source `c887634d4dad1f536bc888c7294d3e3ffa0da8f4`, its equal-tree actual PR checkout, all four required jobs and every acceptance/matrix row. It rechecks all 21 production operations, 78 preflight calls and 198 documents/requests; first Catalog construction with exactly one Ulid sample is 194.5002 ms. All 1,356 ordinary tests, 146 named Python cases, both Sample gates and the isolated String/budget/failure-evidence cases passed.
+
+The [complete parent local re-verification](evidence/story-4-11/publication-20261021/parent-final-review-local-verification.json) also passed after the corrections. Both original approval records, fourteen Tenants vector bytes, twenty inventory decisions, exact lint exceptions and frozen intent remain unchanged. The separate normal Tenants 5.10.1 full release remains qualified; enrollment stays on authentic Contracts 5.10.0. The nine final patched claims are verified, three are rejected on their logged evidence, and the one pre-existing low stderr-retention limitation is tracked at `deferred-work.md:568`.
+
+The spec is done and Story 4.11 is in sprint review under BMAD completion rules. Root [PR1](https://github.com/Hexalith/Hexalith.McpCli/pull/1) contains the implementation; no root merge or release is performed. This proves scripted transport parity and Catalog construction, while live authorization, privacy, persisted effects and retirement keep their later gates.

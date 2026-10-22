@@ -1,0 +1,189 @@
+{
+  "checkedAtUtc": "2026-10-22T06:05:19.221986+00:00",
+  "result": "passed",
+  "repository": "Hexalith/Hexalith.McpCli",
+  "pullRequest": 1,
+  "head": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+  "actualCheckoutMerge": "13da711662a945c598b2cc104195cc4cc18855d6",
+  "actualCheckoutTreeEqualsReviewedHead": "f9b1acf45fa1a41a2c768c9011d2fc882d00e94a",
+  "ciRun": 39730145591,
+  "ciUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39730145591",
+  "wholeCiConclusion": "success",
+  "resolvedSharedWorkflow": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "requiredJobs": {
+    "ordinarySixProjectTests": 119663066803,
+    "sampleContract": 119663066718,
+    "sampleLoopback": 119663066706,
+    "strictProductionReplayAndColdCatalog": 119663066585
+  },
+  "ordinaryTests": {
+    "Passed": 1356,
+    "NotExecuted": 4
+  },
+  "namedPythonPassed": 146,
+  "productionPackages": [
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "vectorCount": 7,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 14
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "vectorCount": 14,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 21
+    }
+  ],
+  "operationCount": 21,
+  "preflightCallCount": 78,
+  "capturedDocumentsAndRequestsRechecked": 198,
+  "coldBenchmark": {
+    "elapsedMilliseconds": 194.5002,
+    "limitMilliseconds": 500,
+    "exactProductionModules": [
+      "parties",
+      "tenants"
+    ],
+    "exactlyOneSample": "Hexalith.McpCli.Sample.Contracts",
+    "sampleIdentifierKind": "Ulid",
+    "isolatedStringTestActuallyPassed": true
+  },
+  "matrix": [
+    {
+      "row": "Missing/duplicate/stale vector or wrong step kind/schema",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected",
+        "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt",
+        "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight",
+        "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay"
+      ]
+    },
+    {
+      "row": "Payload depth64/65",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing",
+        "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator"
+      ]
+    },
+    {
+      "row": "Supplied/omitted correlation and idempotency key",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality",
+        "test_loopback.GeneratedErrorCorrelationTests.test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation",
+        "test_loopback.ProductionReplayOrderingTests.test_generated_correlation_is_bound_to_its_message_before_masking",
+        "test_loopback.GeneratedMessageReuseExecutionTests.test_two_real_runner_calls_cannot_reuse_a_generated_request_message"
+      ]
+    },
+    {
+      "row": "Extra request field, wrong paging, equal missing result fields",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.LoopbackRulesTests.test_expected_gateway_payload_and_paging_are_exact",
+        "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps",
+        "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions"
+      ]
+    },
+    {
+      "row": "Validation failure or scripted Gateway failure",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads",
+        "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata",
+        "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request"
+      ]
+    },
+    {
+      "row": "Valid extensions",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact",
+        "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position"
+      ]
+    },
+    {
+      "row": "Missing v1 Module or construction over500ms",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_enrolled.FullV1ScopeTests.test_required_modules_cannot_be_replaced_by_local_green",
+        "test_enrolled.EnrolledPreflightTests.test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels"
+      ]
+    }
+  ],
+  "actualNamedTrxGuards": [
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"loading\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"construction\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False)",
+      "outcome": "Passed"
+    }
+  ],
+  "sampleLogs": [
+    {
+      "job": 119663066718,
+      "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/ubuntu-review-fixed/logs/conformance-vector-contract.log",
+      "bytes": 25674,
+      "sha256": "026b62c03c24bb51e2c42f43028c1117dc4e5721e9d346706aa43c1c1796445b",
+      "allRequiredOutcomesActuallyPassed": true
+    },
+    {
+      "job": 119663066706,
+      "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/ubuntu-review-fixed/logs/conformance-vector-loopback.log",
+      "bytes": 27977,
+      "sha256": "67c2d5758239f04fdd81e04c4c313c062894018b6b33e0fac92095a981700a13",
+      "allRequiredOutcomesActuallyPassed": true
+    }
+  ],
+  "artifactAudits": [
+    "parent-root-review-fixed-ubuntu-six-trx-audit.json",
+    "parent-root-review-fixed-ubuntu-enrolled-artifact-audit.json"
+  ],
+  "source": {
+    "parentReadAllFiveCorrectedPythonFilesAndNoOtherRuntimeOrTestCodeChanged": true,
+    "frozenIntentUnchanged": true,
+    "original14TenantsVectorBytesAnd20InventoryDecisionsUnchanged": true
+  },
+  "allThreeAcceptanceCriteriaSatisfied": true,
+  "scope": "Exact approved published production artifacts, actual Ubuntu strict combined transport parity, all matrix regressions, first cold Catalog<=500ms with exactlyone Ulid sample and isolated String,146namedPython,6ordinarytestprojects and both existing Sample gates passed. All final review patches and complete parent local checks passed. Step05 marks the spec done and the sprint story review. This supplies no live authorization/privacy/persisted-effect/retirement acceptance.",
+  "fullV1Accepted": true,
+  "fullStoryAccepted": true,
+  "completion": {
+    "atUtc": "2026-10-22T06:08:37.386962+00:00",
+    "specStatus": "done",
+    "sprintStatus": "review",
+    "reviewResult": "All five correction groups resolved; nine final filed claims patched, three rejected and one pre-existing low limitation deferred.",
+    "deferred": "_bmad-output/implementation-artifacts/deferred-work.md:568",
+    "parentFullLocalVerification": "parent-final-review-local-verification.json",
+    "rootPullRequest": 1,
+    "rootPullRequestMerged": false
+  }
+}
