@@ -577,3 +577,9 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: The agent instructions still present the ConformanceHost as the way to reproduce isolated-module or empty-catalog behavior.
   evidence: Low. `AGENTS.md:119` is byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`. `tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj:6` now defaults to `ConformanceProduction=true`, which loads the production manifest without the sample. Only `-p:ConformanceProduction=false` restores the isolated sample host (`tools/conformance-vectors/v1/run-sample-loopback.sh:18-20`). An agent that follows the line reproduces against Parties and Tenants instead of an isolated module. Correct this in the next bmad-project-context refresh, together with the open enrollment-wording entry under the Story 4.10 heading. Then copy `AGENTS.md` to the other two entry points and run `scripts/check-agent-instructions-sync.sh`.
+
+## Deferred from: resumed pass 4 implementation review of spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md (2026-10-22)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
+  summary: Preserve completed package results in the root enrollment receipt when a later package fails.
+  evidence: Low; inherited from baseline `fce41d05e25b8c2076cc02266608460ec86ed635`. `tools/conformance-vectors/v1/check_enrolled.py:182-190` accumulates successful child results locally and assigns root `results` only after the complete package loop. A later verification failure leaves root results empty, although the completed package's separate verification receipt remains available. Persist each completed result as progress without changing overall acceptance.

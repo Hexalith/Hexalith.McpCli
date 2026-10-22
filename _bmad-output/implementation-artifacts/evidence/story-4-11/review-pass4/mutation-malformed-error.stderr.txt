@@ -1,0 +1,19 @@
+test_identical_malformed_payload_errors_cannot_change_the_required_message (test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message) ... FAIL
+
+======================================================================
+FAIL: test_identical_malformed_payload_errors_cannot_change_the_required_message (test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message)
+----------------------------------------------------------------------
+validate.VectorError: /home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/sample-query.json: Gateway error document lost code or status: {'operation': 'sample.get-item', 'tenant': 'sample-tenant', 'document': {'title': 'Conformance item'}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 442, in test_identical_malformed_payload_errors_cannot_change_the_required_message
+    with self.assertRaisesRegex(VectorError, 'required malformed-Payload error document differs'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "required malformed-Payload error document differs" does not match "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/sample-query.json: Gateway error document lost code or status: {'operation': 'sample.get-item', 'tenant': 'sample-tenant', 'document': {'title': 'Conformance item'}}"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.012s
+
+FAILED (failures=1)

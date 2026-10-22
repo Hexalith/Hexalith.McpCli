@@ -1,0 +1,50 @@
+[
+  {
+    "operation": "tenants.get-tenant-audit",
+    "code": "payload_paging_member",
+    "property": "/properties/Cursor",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.get-tenant-audit",
+    "code": "payload_paging_member",
+    "property": "/properties/PageSize",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.get-tenant-users",
+    "code": "payload_paging_member",
+    "property": "/properties/Cursor",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.get-tenant-users",
+    "code": "payload_paging_member",
+    "property": "/properties/PageSize",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.get-user-tenants",
+    "code": "payload_paging_member",
+    "property": "/properties/Cursor",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.get-user-tenants",
+    "code": "payload_paging_member",
+    "property": "/properties/PageSize",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.list-tenants",
+    "code": "payload_paging_member",
+    "property": "/properties/Cursor",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  },
+  {
+    "operation": "tenants.list-tenants",
+    "code": "payload_paging_member",
+    "property": "/properties/PageSize",
+    "approvalReference": "_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md:84"
+  }
+]

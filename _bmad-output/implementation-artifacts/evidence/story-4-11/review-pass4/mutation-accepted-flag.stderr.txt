@@ -1,0 +1,15 @@
+test_strict_success_records_full_v1_acceptance_without_missing_modules (test_enrolled.EnrolledPreflightTests.test_strict_success_records_full_v1_acceptance_without_missing_modules) ... FAIL
+
+======================================================================
+FAIL: test_strict_success_records_full_v1_acceptance_without_missing_modules (test_enrolled.EnrolledPreflightTests.test_strict_success_records_full_v1_acceptance_without_missing_modules)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_enrolled.py", line 395, in test_strict_success_records_full_v1_acceptance_without_missing_modules
+    self.assertIs(True, report['fullV1Accepted'])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not False
+
+----------------------------------------------------------------------
+Ran 1 test in 0.018s
+
+FAILED (failures=1)

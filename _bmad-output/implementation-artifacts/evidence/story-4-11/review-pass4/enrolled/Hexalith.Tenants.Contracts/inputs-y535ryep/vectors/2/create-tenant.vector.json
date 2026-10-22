@@ -1,0 +1,159 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.create-tenant",
+  "kind": "command",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "tenants.create-tenant",
+    "kind": "command",
+    "payload": {
+      "TenantId": "vector-create",
+      "Name": "Vector Create Corporation",
+      "Description": "Created by the McpCli v1 vector"
+    },
+    "envelope": {
+      "tenant": "system",
+      "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-create",
+          "Name": "Vector Create Corporation",
+          "Description": "Created by the McpCli v1 vector"
+        },
+        "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+      },
+      "maskGenerated": [
+        "/messageId"
+      ]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": {},
+      "echoRequestFields": [
+        "correlationId",
+        "messageId"
+      ]
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.create-tenant"
+      },
+      {
+        "path": "/status",
+        "operator": "equals",
+        "value": "accepted"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/aggregateId",
+        "operator": "equals",
+        "value": "vector-create"
+      },
+      {
+        "path": "/correlationId",
+        "operator": "equals",
+        "value": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-create"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-create",
+          "queryType": "get-tenant",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-create"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "tenantId": "vector-create",
+            "name": "Vector Create Corporation",
+            "description": "Created by the McpCli v1 vector",
+            "status": "Active",
+            "members": [],
+            "configuration": {},
+            "createdAt": "2026-10-19T08:00:00+00:00"
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/tenantId",
+          "operator": "equals",
+          "value": "vector-create"
+        },
+        {
+          "path": "/document/name",
+          "operator": "equals",
+          "value": "Vector Create Corporation"
+        },
+        {
+          "path": "/document/description",
+          "operator": "equals",
+          "value": "Created by the McpCli v1 vector"
+        },
+        {
+          "path": "/document/status",
+          "operator": "equals",
+          "value": "Active"
+        },
+        {
+          "path": "/document/members",
+          "operator": "arrayLength",
+          "value": 0
+        }
+      ]
+    }
+  ]
+}

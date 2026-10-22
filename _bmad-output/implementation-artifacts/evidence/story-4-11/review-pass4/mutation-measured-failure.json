@@ -1,0 +1,29 @@
+{
+  "source": "tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs",
+  "originalSha256": "c27b3ab69e29f1031f94c9e6e8a9b67875ed9211217812483005506a88d58fe0",
+  "mutatedSha256": "9bb3ebcccb1b94aeff4a5302084c7b09d561807946c77a0930fe29218e6e3680",
+  "before": "if (current.RootElement.GetProperty(\"result\").GetString() == \"failed\")",
+  "after": "if (current.RootElement.GetProperty(\"result\").GetString() == \"__removed_measured_failure_guard__\")",
+  "buildCommand": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "buildExitCode": 0,
+  "testCommand": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+    "-method",
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence",
+    "-reporter",
+    "verbose",
+    "-noColor"
+  ],
+  "testExitCode": 1,
+  "detected": true,
+  "normalizedOriginalSha256": "d3d5840cd516e9559a96ca808e377b9607522df742daa6a8ba461a4411031b19",
+  "sourceNormalization": "The scratch mutation normalizes CRLF to LF; original byte and normalized text hashes are both retained."
+}

@@ -1,0 +1,59 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4-corrections/enrolled/Hexalith.Tenants.Contracts/inputs-65i7gf7i/vectors/2/create-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5JA6A3TXHWYVKMER9EB8749",
+      "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E",
+      "tenant": "system",
+      "aggregateId": "vector-create",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "system",
+      "document": {
+        "tenantId": "vector-create",
+        "name": "Vector Create Corporation",
+        "description": "Created by the McpCli v1 vector",
+        "status": "Active",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5JA6A3TXHWYVKMER9EB8749",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": "Created by the McpCli v1 vector",
+          "Name": "Vector Create Corporation",
+          "TenantId": "vector-create"
+        },
+        "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-create"
+        }
+      }
+    }
+  ]
+}

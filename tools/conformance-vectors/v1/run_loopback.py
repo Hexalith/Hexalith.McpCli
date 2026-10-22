@@ -463,7 +463,8 @@ def _sdk_response(step: dict) -> dict | None:
             return None
         # JsonSerializerDefaults.Web permits quoted numbers, not bools/floats.
         if isinstance(value, str) and re.fullmatch(r"[+-]?[0-9]+", value):
-            value = int(value)
+            sign = value[0] if value[0] in "+-" else ""
+            value = int(sign + (value[len(sign):].lstrip("0") or "0"))
         if type(value) is not int or not -(2 ** (bits - 1)) <= value < 2 ** (bits - 1):
             raise ValueError("typed integer required")
         return value
@@ -473,9 +474,9 @@ def _sdk_response(step: dict) -> dict | None:
             return None
         value = string(value)
         # System.Text.Json's extended ISO profile requires calendar dates, T,
-        # decimal-point fractions (up to 16 digits), and colon-delimited offsets.
+        # decimal-point fractions (zero to 16 digits), and colon-delimited offsets.
         if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}(?:T[0-9]{2}:[0-9]{2}"
-                        r"(?::[0-9]{2}(?:\.[0-9]{1,16})?)?(?:Z|[+-][0-9]{2}:[0-9]{2})?)?", value) is None:
+                        r"(?::[0-9]{2}(?:\.[0-9]{0,16})?)?(?:Z|[+-][0-9]{2}:[0-9]{2})?)?", value) is None:
             raise ValueError("typed timestamp required")
         offset = re.search(r"([+-])([0-9]{2}):([0-9]{2})\Z", value)
         if offset is not None and (int(offset[3]) > 59 or int(offset[2]) > 14
@@ -801,7 +802,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             if findings:
                 _fail("\n".join(findings))
         if complete and set(owned) != set(catalog):
-            _fail("complete production Catalog contains uncovered operations")
+            _fail(f"complete production Catalog contains uncovered operations: {sorted(set(catalog) - set(owned))}")
         _preflight_vectors(head, vectors, catalog, evidence_dir / "preflight.json" if evidence_dir is not None else None)
         seen_messages: set[str] = set()
         for source in vectors:

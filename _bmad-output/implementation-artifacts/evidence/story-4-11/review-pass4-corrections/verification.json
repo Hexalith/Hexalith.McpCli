@@ -1,0 +1,381 @@
+{
+  "result": "passed",
+  "baseCommit": "b84285f9d45e98c5cc762a646cd68db6fa5b5183",
+  "checks": [
+    {
+      "label": "python",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:53:35.345574+00:00",
+      "completed": "2026-10-22T16:54:07.605062+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:07.605419+00:00",
+      "completed": "2026-10-22T16:54:10.904197+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:10.904494+00:00",
+      "completed": "2026-10-22T16:54:16.551018+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-abstractions",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:16.551312+00:00",
+      "completed": "2026-10-22T16:54:18.340118+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-analyzers",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:18.340505+00:00",
+      "completed": "2026-10-22T16:54:23.611795+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-core",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:23.612360+00:00",
+      "completed": "2026-10-22T16:54:28.058227+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-manifest",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:54:28.058712+00:00",
+      "completed": "2026-10-22T16:55:41.091836+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-cli",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:55:41.092197+00:00",
+      "completed": "2026-10-22T16:56:22.091798+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "tests-mcp",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:56:22.092138+00:00",
+      "completed": "2026-10-22T16:56:26.802458+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "sample-validation",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:56:26.802772+00:00",
+      "completed": "2026-10-22T16:57:11.506116+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "sample-loopback",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "environment": {},
+      "started": "2026-10-22T16:57:11.507966+00:00",
+      "completed": "2026-10-22T17:15:41.164028+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "restore-after-loopback",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "environment": {},
+      "started": "2026-10-22T17:15:41.164398+00:00",
+      "completed": "2026-10-22T17:15:43.086740+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "build-after-loopback",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "environment": {},
+      "started": "2026-10-22T17:15:43.087083+00:00",
+      "completed": "2026-10-22T17:15:47.004992+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "production-replay",
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4-corrections/enrolled"
+      ],
+      "environment": {},
+      "started": "2026-10-22T17:15:47.005348+00:00",
+      "completed": "2026-10-22T17:25:55.583151+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "strict-benchmark",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "environment": {
+        "MCPCLI_BENCHMARK_REQUIRE_V1": "true",
+        "MCPCLI_BENCHMARK_OUTPUT": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4-corrections/catalog-benchmark.json"
+      },
+      "started": "2026-10-22T17:25:55.583522+00:00",
+      "completed": "2026-10-22T17:25:56.557529+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "matrix-core",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+        "-reporter",
+        "verbose",
+        "-noColor",
+        "-result-xml",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4-corrections/matrix-core.xml"
+      ],
+      "environment": {},
+      "started": "2026-10-22T17:25:56.558020+00:00",
+      "completed": "2026-10-22T17:25:56.996731+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "environment": {},
+      "started": "2026-10-22T17:25:56.997094+00:00",
+      "completed": "2026-10-22T17:25:57.123652+00:00",
+      "exitCode": 0
+    }
+  ],
+  "sourceInputsUnchanged": true,
+  "sourceInputCount": 3740,
+  "unitProjects": [
+    {
+      "project": "Abstractions",
+      "passed": 20,
+      "skipped": 0
+    },
+    {
+      "project": "Analyzers",
+      "passed": 19,
+      "skipped": 0
+    },
+    {
+      "project": "Core",
+      "passed": 688,
+      "skipped": 3
+    },
+    {
+      "project": "Manifest",
+      "passed": 104,
+      "skipped": 0
+    },
+    {
+      "project": "Cli",
+      "passed": 479,
+      "skipped": 2
+    },
+    {
+      "project": "Mcp",
+      "passed": 58,
+      "skipped": 0
+    }
+  ],
+  "unitPassed": 1368,
+  "unitSkipped": 5,
+  "namedPythonPassed": 157,
+  "benchmark": {
+    "result": "passed",
+    "fullV1Accepted": true,
+    "elapsedMilliseconds": 157.3627,
+    "limitMilliseconds": 500,
+    "processId": 998317,
+    "assemblies": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts",
+      "Hexalith.McpCli.Sample.Contracts"
+    ],
+    "productionPackages": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts"
+    ],
+    "modules": [
+      {
+        "name": "parties",
+        "identifierKind": "String",
+        "operationCount": 7
+      },
+      {
+        "name": "sample",
+        "identifierKind": "Ulid",
+        "operationCount": 3
+      },
+      {
+        "name": "tenants",
+        "identifierKind": "String",
+        "operationCount": 14
+      }
+    ],
+    "missingRequiredModules": [],
+    "diagnostics": [],
+    "failures": []
+  },
+  "productionReplay": {
+    "result": "passed",
+    "checks": [
+      {
+        "command": [
+          "dotnet",
+          "restore",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "dotnet",
+          "build",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "--no-restore",
+          "-c",
+          "Release",
+          "-m:1",
+          "-warnaserror",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      }
+    ],
+    "phase": "production-replay",
+    "packageCount": 2,
+    "operationCount": 21,
+    "modules": [
+      "parties",
+      "tenants"
+    ],
+    "packageModules": {
+      "Hexalith.Parties.Contracts": [
+        "parties"
+      ],
+      "Hexalith.Tenants.Contracts": [
+        "tenants"
+      ]
+    },
+    "preflightCalls": 78,
+    "documents": 198,
+    "capturedRequests": 198
+  },
+  "scope": "Story 4.11 final corrected-source verification after pass 4 independent review",
+  "newNormalUbuntuCiRunClaimed": false
+}

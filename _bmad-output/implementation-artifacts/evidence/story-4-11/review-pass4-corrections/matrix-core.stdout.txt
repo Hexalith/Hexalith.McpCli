@@ -1,0 +1,27 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence [FINISHED] Time: 0.047s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 500.00009999999997, requireV1: True, hasTenants: True, diagnostic: null, result: "failed", accepted: False, failure: "First Catalog construction exceeded 500 ms.") [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 500.00009999999997, requireV1: True, hasTenants: True, diagnostic: null, result: "failed", accepted: False, failure: "First Catalog construction exceeded 500 ms.") [FINISHED] Time: 0.004s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: True, hasTenants: False, diagnostic: null, result: "failed", accepted: False, failure: "Full-v1 gate: missing required production module(s"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: True, hasTenants: False, diagnostic: null, result: "failed", accepted: False, failure: "Full-v1 gate: missing required production module(s"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: False, hasTenants: False, diagnostic: null, result: "local-only", accepted: False, failure: null) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: False, hasTenants: False, diagnostic: null, result: "local-only", accepted: False, failure: null) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 500, requireV1: True, hasTenants: True, diagnostic: null, result: "passed", accepted: True, failure: null) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 500, requireV1: True, hasTenants: True, diagnostic: null, result: "passed", accepted: True, failure: null) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: False, hasTenants: True, diagnostic: null, result: "local-only", accepted: False, failure: null) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: False, hasTenants: True, diagnostic: null, result: "local-only", accepted: False, failure: null) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: True, hasTenants: True, diagnostic: "Invalid contract", result: "failed", accepted: False, failure: "Invalid contract") [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics(elapsed: 100, requireV1: True, hasTenants: True, diagnostic: "Invalid contract", result: "failed", accepted: False, failure: "Invalid contract") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False) [STARTING]
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern [FINISHED] Time: 0.105s
+  Finished:    Hexalith.McpCli.Core.Tests (ID = 'ae0c0868f52edca51b7ef4dbc399fbca06f32fd0f28fc32fc8408f57f3b1d1f3')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 10, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.209s

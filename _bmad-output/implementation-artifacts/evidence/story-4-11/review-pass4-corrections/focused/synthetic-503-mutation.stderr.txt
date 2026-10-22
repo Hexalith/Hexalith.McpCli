@@ -1,0 +1,26 @@
+test_valid_command_204_completes_runner_without_inventing_error_correlation (test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation) ... 
+  test_valid_command_204_completes_runner_without_inventing_error_correlation (test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation) (supplied=False, reuse_503=True) ... FAIL
+  test_valid_command_204_completes_runner_without_inventing_error_correlation (test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation) (supplied=True, reuse_503=True) ... FAIL
+
+======================================================================
+FAIL: test_valid_command_204_completes_runner_without_inventing_error_correlation (test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation) (supplied=False, reuse_503=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 849, in test_valid_command_204_completes_runner_without_inventing_error_correlation
+    with self.assertRaisesRegex(VectorError, 'gateway-error/messageId:.*reused across distinct calls'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+======================================================================
+FAIL: test_valid_command_204_completes_runner_without_inventing_error_correlation (test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation) (supplied=True, reuse_503=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 849, in test_valid_command_204_completes_runner_without_inventing_error_correlation
+    with self.assertRaisesRegex(VectorError, 'gateway-error/messageId:.*reused across distinct calls'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (failures=2)

@@ -1,0 +1,120 @@
+[
+  {
+    "label": "empty-fraction-z",
+    "exitCode": 0,
+    "actual": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "value": true
+      }
+    },
+    "oracleError": {
+      "code": "gateway_error",
+      "status": 200,
+      "detail": "Query response body could not be parsed."
+    }
+  },
+  {
+    "label": "empty-fraction-offset",
+    "exitCode": 0,
+    "actual": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "value": true
+      }
+    },
+    "oracleError": {
+      "code": "gateway_error",
+      "status": 200,
+      "detail": "Query response body could not be parsed."
+    }
+  },
+  {
+    "label": "control-correlation",
+    "exitCode": 0,
+    "actual": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "value": true
+      }
+    },
+    "oracleError": {
+      "code": "gateway_error",
+      "status": 200,
+      "detail": "Query response did not contain a valid correlationId."
+    }
+  },
+  {
+    "label": "control-detail",
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 409,
+        "detail": "\u001c"
+      }
+    },
+    "oracleError": {
+      "code": "gateway_error",
+      "status": 409,
+      "detail": "Conflict"
+    }
+  },
+  {
+    "label": "surrogate-typed",
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleError": null
+  },
+  {
+    "label": "surrogate-cursor",
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleError": null
+  },
+  {
+    "label": "surrogate-payload",
+    "exitCode": 2,
+    "actual": {
+      "error": {
+        "code": "internal_error",
+        "message": "The CLI action failed."
+      }
+    },
+    "oracleError": null
+  },
+  {
+    "label": "long-leading-zero",
+    "exitCode": 0,
+    "actual": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "value": true
+      },
+      "paging": {
+        "pageSize": 7
+      }
+    },
+    "oracleError": {
+      "code": "gateway_error",
+      "status": 200,
+      "detail": "Query response body could not be parsed."
+    }
+  }
+]

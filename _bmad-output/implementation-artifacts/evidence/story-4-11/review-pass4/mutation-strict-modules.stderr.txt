@@ -1,0 +1,26 @@
+test_unselected_exposed_operation_fails_before_core_preflight_or_gateway (test_loopback.ProductionReplayOrderingTests.test_unselected_exposed_operation_fails_before_core_preflight_or_gateway) ... FAIL
+
+======================================================================
+FAIL: test_unselected_exposed_operation_fails_before_core_preflight_or_gateway (test_loopback.ProductionReplayOrderingTests.test_unselected_exposed_operation_fails_before_core_preflight_or_gateway)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 391, in test_unselected_exposed_operation_fails_before_core_preflight_or_gateway
+    self.assertEqual([(['modules', '--strict'],), (['operations', 'sample', '--strict'],)],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     [call.args for call in head.cli.call_args_list])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [(['modules', '--strict'],), (['operations', 'sample', '--strict'],)] != [(['modules'],), (['operations', 'sample', '--strict'],)]
+
+First differing element 0:
+(['modules', '--strict'],)
+(['modules'],)
+
+- [(['modules', '--strict'],), (['operations', 'sample', '--strict'],)]
+?             ------------
+
++ [(['modules'],), (['operations', 'sample', '--strict'],)]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=1)

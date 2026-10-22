@@ -388,6 +388,25 @@ class EnrolledPreflightTests(unittest.TestCase):
         self.assertNotEqual('passed', json.loads((self.child / 'verification.json').read_text())['result'])
         self.assertFalse((self.child / 'artifact.sha512').exists())
 
+    def test_strict_success_records_full_v1_acceptance_without_missing_modules(self):
+        code, report, diagnostic, verifier = self.invoke()
+        self.assertEqual(0, code)
+        self.assertEqual('passed', report['result'])
+        self.assertIs(True, report['fullV1Accepted'])
+        self.assertEqual([], report['missingRequiredModules'])
+        self.assertEqual('', diagnostic)
+        verifier.assert_called_once()
+
+    def test_empty_production_manifest_fails_even_in_local_mode(self):
+        code, report, diagnostic, verifier = self.invoke(contracts_metadata='Unmarked', local=True)
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertFalse(report['fullV1Accepted'])
+        self.assertEqual([], report['packages'])
+        self.assertEqual('Production manifest has no enrolled Contracts packages.', report['error'])
+        self.assertEqual('Production manifest has no enrolled Contracts packages.\n', diagnostic)
+        verifier.assert_not_called()
+
     def test_failed_production_rerun_removes_previous_observations_and_all_production_logs(self):
         observations = self.output / 'production-observations'
         observations.mkdir()

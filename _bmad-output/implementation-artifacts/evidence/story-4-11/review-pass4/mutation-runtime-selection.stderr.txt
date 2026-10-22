@@ -1,0 +1,40 @@
+test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) ... 
+  test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='empty-runtime') ... FAIL
+  test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='unknown-runtime-target') ... FAIL
+  test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='unrestored-dll') ... FAIL
+
+======================================================================
+FAIL: test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='empty-runtime')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 204, in test_host_signed_archive_matches_restore_content_hash_independently
+    with self.assertRaisesRegex(VectorError, 'selected package runtime DLL assets differ'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+======================================================================
+FAIL: test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='unknown-runtime-target')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 204, in test_host_signed_archive_matches_restore_content_hash_independently
+    with self.assertRaisesRegex(VectorError, 'selected package runtime DLL assets differ'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+======================================================================
+FAIL: test_host_signed_archive_matches_restore_content_hash_independently (test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently) (runtime_selection='unrestored-dll')
+----------------------------------------------------------------------
+validate.VectorError: /tmp/tmpz1rvzhj6/host/bin/Release/net10.0/Unrestored.Contracts.dll: host runtime DLL bytes differ from immutable artifact entry lib/net10.0/Unrestored.Contracts.dll
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 204, in test_host_signed_archive_matches_restore_content_hash_independently
+    with self.assertRaisesRegex(VectorError, 'selected package runtime DLL assets differ'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "selected package runtime DLL assets differ" does not match "/tmp/tmpz1rvzhj6/host/bin/Release/net10.0/Unrestored.Contracts.dll: host runtime DLL bytes differ from immutable artifact entry lib/net10.0/Unrestored.Contracts.dll"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (failures=3)

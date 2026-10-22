@@ -1,0 +1,51 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4-corrections/enrolled/Hexalith.Parties.Contracts/inputs-ifsaum5_/vectors/0/create-party.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5JA2ZCSV5JKDR3A7WVEKFG3",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "ContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "IsPreferred": true,
+              "PartyId": "party-story49",
+              "Type": "Email",
+              "Value": "ada@example.test"
+            }
+          ],
+          "Identifiers": [
+            {
+              "IdentifierId": "external-story49",
+              "PartyId": "party-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ],
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "Type": "Person"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  ]
+}
