@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -376,3 +376,70 @@ The five final-review correction groups are resolved. The [corrected-source Ubun
 The [complete parent local re-verification](evidence/story-4-11/publication-20261021/parent-final-review-local-verification.json) also passed after the corrections. Both original approval records, fourteen Tenants vector bytes, twenty inventory decisions, exact lint exceptions and frozen intent remain unchanged. The separate normal Tenants 5.10.1 full release remains qualified; enrollment stays on authentic Contracts 5.10.0. The nine final patched claims are verified, three are rejected on their logged evidence, and the one pre-existing low stderr-retention limitation is tracked at `deferred-work.md:568`.
 
 The spec is done and Story 4.11 is in sprint review under BMAD completion rules. Root [PR1](https://github.com/Hexalith/Hexalith.McpCli/pull/1) contains the implementation; no root merge or release is performed. This proves scripted transport parity and Catalog construction, while live authorization, privacy, persisted effects and retirement keep their later gates.
+
+### Review Findings (code review pass 3, 2026-10-22)
+
+Code review 2026-10-22 of the complete committed story range `fce41d0..2a2d88b` (`7f4a08c`, `f20a4e0`, `bf9c49a`, `c887634`, `2a2d88b`).
+
+- **Code-only scope:** excludes `_bmad-output/` and the `references/Hexalith.Builds` gitlink move; includes the fourteen approved Tenants vectors and `tenants-approved.json`.
+- **Size and mode:** 39 files, +6,476/−74, 7,240 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 46 normalized findings. 26 survive as 16 patch and 2 defer entries; 20 are rejected. No decision is needed.
+
+Parent checks during triage:
+- With `MCPCLI_BENCHMARK_PROBE=1`, the built Core.Tests DLL run with `-method Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.DoesNotExist` reports `Total: 0`, exits 0 and writes no evidence. This is the reachable zero-exit no-op state that the final enrollment review's BH18 refutation said had not been shown.
+- Two complete local Core.Tests runs (14 cores, parallel classes) recorded the child at 146.2998 and 124.8679 ms (`local-only`). Six `mcpcli-catalog-*.json` files remained in `/tmp` afterwards.
+- `validate.py:166` requires `expectedGateway.body.tenant` to equal the envelope tenant. `schema.json` bounds `pageSize` and `offset` to int32 and extension values to strings. `run_catalog` runs `validate_vectors` before every `--validate-vectors` call.
+- Story 4.16 gates on "a green `main` source SHA" (`_bmad-output/planning-artifacts/epics.md:1537`), not on `enrolled.json`.
+
+- [ ] [Review][Patch] R1 — medium. The benchmark parent asserts only the child's exit code. xUnit v3 exits 0 when `-method` matches nothing, and outside the probe the child returns early as a pass. Either change leaves `catalog-benchmark.json` at `pending` while the unit tier and the strict CI step both pass, so the 500 ms gate disappears everywhere:
+  - rename `MeasureFirstConstruction` (the filter at `:31` is a string literal);
+  - rename the probe variable at only one of `:32` and `:51`.
+
+  Fix: after exit 0, parse the evidence and require all of:
+  - `result` equal to `passed` under `MCPCLI_BENCHMARK_REQUIRE_V1=true`, and `local-only` otherwise;
+  - a numeric `elapsedMilliseconds` of at most 500;
+  - a `processId` different from the parent's.
+
+  Build the filter with `nameof`. The enrolled job's separate `-class` filter keeps the carried Story 4.10 ruling, because the `ci` job runs all of Core.Tests (VG, BH, EC). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:38]
+- [ ] [Review][Patch] R2 — medium. No test reaches the benchmark's failure composition with a violation present. `ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds` tests only `LimitViolation`, and the strict CI run always has both modules.
+  - Deleting `:76` lets an over-500 ms construction write `result: passed` and exit 0. No other code enforces the limit.
+  - Deleting `:77` lets a strict run without Tenants write `fullV1Accepted: true`.
+
+  Fix: extract the failures, `result` and `fullV1Accepted` computation into a static helper that takes diagnostics, elapsed time, required and discovered modules, and `requireV1`. Cover it with a `[Theory]` for the over-limit, strict-missing and local-missing cases (VG, BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:74]
+- [ ] [Review][Patch] R3 — low. No test protects the stale `production-observations/*.json` cleanup. VG deleted `:155-156` in a scratch copy, and all 46 `test_enrolled` tests still passed. A rerun into the README's fixed output path that fails before or during replay would keep the previous run's success documents. Fix: seed `production-observations/old.json`, run `main()` with `production_replay` failing, and assert the file is gone and `enrolled.json` reports `failed` (VG). [tools/conformance-vectors/v1/check_enrolled.py:155]
+- [ ] [Review][Patch] R4 — low. The same cleanup leaves `production-{restore,build,replay}.{stdout,stderr}.txt` from the previous run. When a rerun's restore fails, the old build log and the `PASS` replay lines stay next to the failed `enrolled.json`. Story 4.10 pass 3 rejected stale `inputs-*` copies and logs as carried. This case differs: this story added the cleanup to this function, and the fix unlinks six known names there (AA, EC). [tools/conformance-vectors/v1/check_enrolled.py:155]
+- [ ] [Review][Patch] R5 — low. Without `MCPCLI_BENCHMARK_OUTPUT`, every ordinary Core.Tests run writes `mcpcli-catalog-<random>.json` to the temp directory and never deletes it. Delete the default-path file in `finally` (VG, BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:19]
+- [ ] [Review][Patch] R6 — low. Outside the probe, `MeasureFirstConstruction` returns early and counts as passed, which inflates the passed totals the evidence cites. Skip it with the probe condition instead (`Assert.SkipUnless`) (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:51]
+- [ ] [Review][Patch] R7 — low. The `scope`, `loading` and `construction` cases of `EarlyFailureInvalidatesPriorSuccessfulEvidence` all run the same synthetic throw, so none exercises a real phase. Collapse them into one `[Fact]` named for the wrapper behavior it proves (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:110]
+- [ ] [Review][Patch] R8 — low. `sample.GetCustomAttribute<HexalithModuleAttribute>()` and `JsonDocument.Parse` run before `Stopwatch.StartNew()`. They warm the attribute and System.Text.Json first-use paths that `CatalogBuilder.Build` uses (`CatalogBuilder.cs:31`, `:149`), so the measured first construction is slightly optimistic. Move both after `clock.Stop()` (AA). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:64]
+- [ ] [Review][Patch] R9 — low. The tools README says "Process startup and assembly loading are excluded". Only the manifest's top-level assemblies and the sample load before timing. Their dependencies, such as Core's `JsonSchema.Net`, load on demand inside the measured `Build`. Say so (BH, EC). [tools/conformance-vectors/v1/README.md:202]
+- [ ] [Review][Patch] R10 — low. `_response_body` fills a missing echoed field with `01J9MZHXT3RKM0VWXRXGSJDATN`. Several tests and `run_packaged_process_fixture.py:80` use the same literal as the scripted message ID, so a regression that substitutes the placeholder for a scripted value keeps those checks green. Use a distinct scripted message ID in those tests (BH). [tools/conformance-vectors/v1/run_loopback.py:419]
+- [ ] [Review][Patch] R11 — low. No test pins the arguments `production_replay` passes to `run_catalog`: the retained artifact and vector copies, the ConformanceHost `obj/project.assets.json`, and the receipt-derived `expected_modules`. `CombinedConsumptionHashTests` asserts the call is not made, and `ProductionProgressTests` raises from a mock. Dropping `expected_modules` passes every unit and process test. Fix: assert the call arguments with a mocked `run_catalog` (BH). [tools/conformance-vectors/v1/check_enrolled.py:126]
+- [ ] [Review][Patch] R12 — low. The root README replaced the ordered list of the seven Parties operations with a count, and it names no Tenants operation. A reader can no longer see what ships without running the CLI. List both modules' operations in the order `operations <module> --strict` prints them, checked against the built CLI (BH). [README.md:99]
+- [ ] [Review][Patch] R13 — low. The root README sentence "The repaired normal Tenants 5.10.1 five-package/container release has qualified separately from the enrolled Contracts 5.10.0 artifact" does not say why 5.10.0 stays enrolled. Fix: say that 5.10.1 is the separately qualified release that repairs the container source labels, and that enrollment stays on 5.10.0 because the approved vectors and inventory bind its signed Contracts archive (BH). [README.md:101]
+- [ ] [Review][Patch] R14 — low. The packaged process fixture copies the host's `Directory.Packages.props` and overwrites it on the next line. Drop it from the copy list (BH). [tools/conformance-vectors/v1/run_packaged_process_fixture.py:122]
+- [ ] [Review][Patch] R15 — low. Prose problems in the tools README (BH): [tools/conformance-vectors/v1/README.md:73]
+  - `:73` says Story 4.11 "implements" the rechecks but still says "It must also verify".
+  - `:163-164` start two consecutive sentences with "It also proves".
+  - `:167-168` leave a double blank line before the new heading.
+- [ ] [Review][Patch] R16 — low. `enrolled.json` and `catalog-benchmark.json` each set `fullV1Accepted` from their own gate only. CI runs the replay step after a failed benchmark (`if: ${{ !cancelled() }}`), so one uploaded run can hold `fullV1Accepted: true` in `enrolled.json` next to a failed benchmark. The job is red, and Story 4.16 gates on the green SHA, so no consumer is misled today. Fix: state that each flag covers only its own gate, and that full-v1 acceptance needs both flags plus the green job (AA). [tools/conformance-vectors/v1/README.md:195]
+- [x] [Review][Defer] R17 — `maybe-false`; medium if true. `FirstConstructionStaysWithinFiveHundredMilliseconds` is a plain `[Fact]` in the ordinary unit tier (`.github/workflows/ci.yml:25`), and `LimitViolation` applies without `MCPCLI_BENCHMARK_REQUIRE_V1`. On ubuntu-latest the child competes for CPU with Core.Tests' parallel classes, which could make the 500 ms limit flake (BH, EC). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:15] — deferred: unverified. Settle it by recording the unit-tier child's `elapsedMilliseconds` across several ubuntu-latest `ci` runs. Two local 14-core parallel runs measured 146.3 and 124.9 ms; the dedicated Ubuntu step measured 194.5 and 242.6 ms.
+- [x] [Review][Defer] R18 — low. The agent instructions say to use `tests/Hexalith.McpCli.ConformanceHost` to reproduce isolated-module or empty-catalog behavior. The host now defaults to `ConformanceProduction=true` and loads the production manifest, so an isolated run needs `-p:ConformanceProduction=false` (AA, EC). [AGENTS.md:119] — deferred: the fix edits agent-context files.
+
+#### Rejected (code review pass 3)
+
+- `low` — The benchmark child, cancellation and `check_enrolled` restore/build have no timeouts, so a hang could hold the runner or orphan a late writer (BH, EC ×2). Carried from this spec's BH9/EC4 and Story 4.10 pass 3: no hang was shown, the CI job limit bounds it, and timeout/kill machinery is more than a direct correction.
+- `false` — `VectorGatewayCapture` serializes with different JSON options from the real gateway client (BH, EC). Core sets no enum- or converter-typed request member today. Preflight compares the capture with exact equality against the same `expectedGateway` body that replay compares the real wire request with, so a divergence fails loudly in one of them and never passes falsely.
+- `false` — The validator's catch filter misses `KeyNotFoundException` and `UnauthorizedAccessException`; zero paths exit 0; one `try` per vector loses later locations; the 256 framing depth is not Core's (BH, EC ×2, AA). `run_catalog` runs schema validation first. It requires the members, bounds paging to int32, requires string-valued extensions and has already read every file. Every selection also has complete, nonempty coverage. These exceptions and the empty call are therefore unreachable. The reachable framing-depth `JsonException` carries its JSON path and line. `_response_depth` runs only after this 256-depth preflight, well inside Python's recursion limit.
+- `low` — The private `Entries` reflection is duplicated and unchecked (BH). Test-only; a generator change fails loudly; a shared helper is a refactor. Carried from Story 4.10 pass 3.
+- `low` — `run_catalog` validates each selection twice and `_sdk_response` is recomputed (BH). The cost is negligible for 21 vectors, and the first pass fails before any host process starts. The related claim that `operationCount` comes from receipts is `false`: complete-coverage validation forces each receipt's operations to equal the replayed ones.
+- `false` — The READMEs hard-code a one-off 194.5002 ms, and the evidence lacks OS and SHA context (BH). The statements are past tense and bound to the linked audit, which records the run, source and runner. The uploaded artifact belongs to a run that carries its commit and runner.
+- `low` — The rationale of the approved Tenants inventory says "require fresh owning-maintainer approval", yet the status is `approved` (BH). The wording is confirmed, but the status and reference fields are authoritative. The bytes are owner-approved and bound by `inventorySha256`, so rewording needs a new approval cycle.
+- `low` — `RetainFailure` throws on truncated or non-JSON output (EC). Every write path writes complete JSON, so only a kill mid-write reaches it, and the fix adds guards.
+- `low` — The benchmark accepts an empty or duplicate `requiredModules` (EC). This needs a bad configuration edit, and `required_scope` rejects it in the same CI job.
+- `low` — Malformed adapter output raises `KeyError` (EC). Only a stale host reaches it. `production_replay` always rebuilds the host, and the standalone path still exits nonzero.
+- `low` — Retained vectors could change between the hash check and consumption (EC). The same process owns the output directory, and passing bytes would be a redesign.
+- `false` — The README promises partial observations, but malformed-Payload and describe documents are never written (EC). The README scopes those files to success documents and captured requests. Those failures put both documents into the `_fail` diagnostic, which is retained in `production-replay.stderr.txt` and `enrolled.json`.
+- `false` — The result oracle takes the expected tenant from the session tenant rather than the fixed module tenant (AA). `validate.py:166` requires `expectedGateway.body.tenant` to equal the envelope tenant, so the two comparisons are identical for every valid vector.
+- `false` — MCP runs `send_command` and `run_query` with `--strict` but the CLI does not (AA). `strict` only refuses a Catalog with diagnostics (`OperationExecutor.cs:51`), and strict discovery of the same host has already failed on any diagnostic before execution.
