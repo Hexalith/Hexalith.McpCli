@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story411-eventstore-final-pr-title.txt"
+  ],
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nci(p1r): complete qualification and bind sanitized evidence\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

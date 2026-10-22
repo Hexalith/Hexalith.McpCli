@@ -1,0 +1,67 @@
+{
+  "observedAtUtc": "2026-10-22T00:29:47.632239+00:00",
+  "assessment": "Two green normal squash PRs do not avoid the existing intermediate-main audit gate.",
+  "scope": "Read-only source inspection and in-memory hash verification; no PR, source, Git, validator or protection mutation.",
+  "owningTree": "3f7f45556fa460a6300ebf68a3c38657228bc74e",
+  "currentMain": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+  "baselineCanonicalCatalogSha256": "d6d1a24c53dd309588abadc6e2a8cb8d9e8a206861f0907cb5794d1afc497531",
+  "baselineAuditMatches": true,
+  "hashCases": [
+    {
+      "kind": "In-memory illustrative declaration-only edit; no owning file written",
+      "property": "HexalithEventStoreVersion",
+      "before": "3.126.0",
+      "hypotheticalAfter": "3.126.1",
+      "candidateCanonicalCatalogSha256": "e038186c98d585ae566e54578b2efab11ad95faaa5a0a6921802f8cdbe39bda5",
+      "unchangedAuditCatalogSha256": "d6d1a24c53dd309588abadc6e2a8cb8d9e8a206861f0907cb5794d1afc497531",
+      "mismatch": true
+    },
+    {
+      "kind": "In-memory illustrative declaration-only edit; no owning file written",
+      "property": "HexalithTenantsVersion",
+      "before": "5.9.0",
+      "hypotheticalAfter": "5.10.0",
+      "candidateCanonicalCatalogSha256": "58f6e5c8ca067f798e577264649bbd2165decd4baf07b9d113da017afda32dd8",
+      "unchangedAuditCatalogSha256": "d6d1a24c53dd309588abadc6e2a8cb8d9e8a206861f0907cb5794d1afc497531",
+      "mismatch": true
+    }
+  ],
+  "stepOne": "Declaration-only PR changes the canonical catalog hash while leaving the tracked audit hash unchanged. The unconditional validator guard adds a failure before the ordinary CI build can pass.",
+  "stepTwo": "If declaration-only main were merged despite that failure, an audit-only follow-up could legitimately bind its actual main ancestor. The final ancestry idea is sound, but the first PR is not green under unchanged ordinary CI.",
+  "noShortcut": "Changing only the audit hash while retaining old generatedFromRevision also fails exact committed-catalog blob binding. Generating the audit on the first PR branch loses that declaration ancestry when squashed.",
+  "enforcementDistinction": "Effective GitHub rules require Codacy, Sonar and commitlint; the CI build job is additionally binding under the authorized normal-gate workflow for this task and owning deterministic audit contract. Server ability to merge a known failing ordinary CI job is not authorization to do so.",
+  "sourceAnchors": [
+    {
+      "path": "Tools/validate-package-version-audit.ps1",
+      "lines": "1264-1268",
+      "fact": "Audit canonical hash must equal current evaluated catalog bytes.",
+      "failureLine": 1267,
+      "derivedFromCommit": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+      "gitBlobContentSha256": "0a21097035d235dc7345e7e6cb2dad522ce4b35ae2a461f9d64fb65168c21065"
+    },
+    {
+      "path": "Tools/validate-package-version-audit.ps1",
+      "lines": "1280-1308",
+      "fact": "Generated-from must be an actual ancestor containing exact audited catalog blobs."
+    },
+    {
+      "path": "Tools/test-package-version-audit-validator.ps1",
+      "lines": "1030-1035",
+      "fact": "Existing negative fixture requires declaration-hash mismatch rejection."
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "lines": "56-66",
+      "fact": "Ordinary CI runs deterministic audit validation and both fail-closed fixture suites."
+    },
+    {
+      "path": "Tools/README.md",
+      "lines": "220-253,289-325",
+      "fact": "Commit declarations before source-bound refresh; CI/release validate audited declarations."
+    }
+  ],
+  "exactExpectedGuardText": "Audit catalogSha256 does not match the evaluated catalog declaration bytes.",
+  "verificationLimit": "No declaration-only remote PR or full validator invocation with altered source was performed; the result is a direct inference from the unconditional production guard, protected negative fixture and independently matched hash implementation.",
+  "proposalStatus": "Existing temporary merge-method policy question remains pending and unapplied; no new bypass or exception proposed.",
+  "anchorCorrection": "Canonical hash comparison is at lines1264-1268, exact failure line1267 in merged b693 Git blob; earlier1255-1263 shorthand was incorrect."
+}

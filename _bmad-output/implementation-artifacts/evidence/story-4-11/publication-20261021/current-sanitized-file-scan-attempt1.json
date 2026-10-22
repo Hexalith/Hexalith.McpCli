@@ -1,0 +1,7 @@
+{
+  "status": "tool invocation failed before scanning",
+  "commandConfiguration": "Debug (default)",
+  "exitCode": 1,
+  "reason": "Scratch inspector was built only in Release; Debug executable absent.",
+  "supersededBy": "current-sanitized-file-scan-check.json"
+}

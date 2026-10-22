@@ -1,0 +1,186 @@
+[
+  {
+    "endpoint": "repos/Hexalith/Hexalith.Builds/check-runs/119467379889",
+    "response": {
+      "id": 119467379889,
+      "name": "Codacy Static Code Analysis",
+      "node_id": "CR_kwDOOMzNRc8AAAAb0M-MsQ",
+      "head_sha": "1e606d458f92cb6562c21d2e2777d070cfb02a39",
+      "external_id": "",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds/check-runs/119467379889",
+      "html_url": "https://github.com/Hexalith/Hexalith.Builds/runs/119467379889",
+      "details_url": "https://app.codacy.com/gh/Hexalith/Hexalith.Builds/pull-requests/128",
+      "status": "completed",
+      "conclusion": "action_required",
+      "started_at": "2026-10-21T20:28:55Z",
+      "completed_at": "2026-10-21T20:28:55Z",
+      "output": {
+        "title": "6 new issues (0 max.) of at least minor severity.",
+        "summary": "\n![Codacy](https://app.codacy.com/assets/images/favicon.png) Here is an overview of what got changed by this pull request:\n\n\n```diff\n\nIssues\n======\n- Added 6\n           \n\nComplexity increasing per file\n==============================\n- Github/publish-containers/tests/test_container_provenance_targets.py  17\n         \n```\n\n\nSee the complete overview on [Codacy](https://app.codacy.com/gh/Hexalith/Hexalith.Builds/pull-requests/128)\n        ",
+        "text": null,
+        "annotations_count": 6,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.Builds/check-runs/119467379889/annotations"
+      },
+      "check_suite": {
+        "id": 107513094853
+      },
+      "app": {
+        "id": 56611,
+        "client_id": "Iv1.4a97e692dda8878b",
+        "slug": "codacy-production",
+        "node_id": "MDM6QXBwNTY2MTE=",
+        "owner": {
+          "login": "codacy",
+          "id": 1834093,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjE4MzQwOTM=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/1834093?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/codacy",
+          "html_url": "https://github.com/codacy",
+          "followers_url": "https://api.github.com/users/codacy/followers",
+          "following_url": "https://api.github.com/users/codacy/following{/other_user}",
+          "gists_url": "https://api.github.com/users/codacy/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/codacy/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/codacy/subscriptions",
+          "organizations_url": "https://api.github.com/users/codacy/orgs",
+          "repos_url": "https://api.github.com/users/codacy/repos",
+          "events_url": "https://api.github.com/users/codacy/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/codacy/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Codacy Production",
+        "description": "We need these permissions to access your repositories in order to provide you with the best experience possible. We will be setting up commit hooks to analyze every commit and pull request faster. Don\u2019t worry, we don\u2019t modify any of your code!\r\n\r\n[Learn more about the required permissions](https://docs.codacy.com/getting-started/which-permissions-does-codacy-need-from-my-account/#github-cloud)",
+        "external_url": "https://www.codacy.com",
+        "html_url": "https://github.com/apps/codacy-production",
+        "created_at": "2020-03-06T11:23:10Z",
+        "updated_at": "2026-10-07T14:14:18Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "members": "read",
+          "merge_queues": "read",
+          "metadata": "read",
+          "organization_custom_properties": "read",
+          "organization_hooks": "write",
+          "pull_requests": "write",
+          "repository_custom_properties": "read",
+          "repository_hooks": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "custom_property",
+          "custom_property_values",
+          "merge_group",
+          "organization",
+          "repository"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds/pulls/128",
+          "id": 4957908315,
+          "number": 128,
+          "head": {
+            "ref": "fix/container-provenance-protected-reapply",
+            "sha": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+            "repo": {
+              "id": 952945989,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds",
+              "name": "Hexalith.Builds"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+            "repo": {
+              "id": 952945989,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds",
+              "name": "Hexalith.Builds"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "endpoint": "repos/Hexalith/Hexalith.Builds/check-runs/119467379889/annotations?per_page=100",
+    "response": [
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 3,
+        "start_column": null,
+        "end_line": 3,
+        "end_column": null,
+        "annotation_level": "notice",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L3",
+        "message": "Consider possible security implications associated with the subprocess module.",
+        "raw_details": null
+      },
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 6,
+        "start_column": null,
+        "end_line": 6,
+        "end_column": null,
+        "annotation_level": "warning",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L6",
+        "message": "Using xml.etree.ElementTree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.",
+        "raw_details": null
+      },
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 6,
+        "start_column": null,
+        "end_line": 6,
+        "end_column": null,
+        "annotation_level": "notice",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L6",
+        "message": "camelcase 'xml.etree.ElementTree' imported as acronym 'ET' (N817)",
+        "raw_details": null
+      },
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 45,
+        "start_column": null,
+        "end_line": 45,
+        "end_column": null,
+        "annotation_level": "warning",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L45",
+        "message": "subprocess call - check for execution of untrusted input.",
+        "raw_details": null
+      },
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 112,
+        "start_column": null,
+        "end_line": 112,
+        "end_column": null,
+        "annotation_level": "failure",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L112",
+        "message": "The native Python `xml` library is vulnerable to XML External Entity (XXE) attacks.",
+        "raw_details": null
+      },
+      {
+        "path": "Github/publish-containers/tests/test_container_provenance_targets.py",
+        "blob_href": "https://github.com/Hexalith/Hexalith.Builds/blob/1e606d458f92cb6562c21d2e2777d070cfb02a39/Github/publish-containers/tests/test_container_provenance_targets.py",
+        "start_line": 112,
+        "start_column": null,
+        "end_line": 112,
+        "end_column": null,
+        "annotation_level": "warning",
+        "title": "Github/publish-containers/tests/test_container_provenance_targets.py#L112",
+        "message": "Using xml.etree.ElementTree.parse to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree.parse with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called",
+        "raw_details": null
+      }
+    ]
+  }
+]

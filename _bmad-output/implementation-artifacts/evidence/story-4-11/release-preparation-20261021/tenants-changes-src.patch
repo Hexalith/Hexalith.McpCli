@@ -1,0 +1,18 @@
+diff --git a/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj b/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj
+index 50f28d28..697f1601 100644
+--- a/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj
++++ b/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj
+@@ -8,6 +8,13 @@
+     <UserSecretsId>hexalith-tenants</UserSecretsId>
+   </PropertyGroup>
+ 
++  <!-- Bind model-test evidence to the evaluated mode of the actual AppHost binary. -->
++  <ItemGroup>
++    <AssemblyMetadata Include="UseNuGetDeps" Value="$(UseNuGetDeps)" />
++    <AssemblyMetadata Include="UseHexalithProjectReferences" Value="$(UseHexalithProjectReferences)" />
++    <AssemblyMetadata Include="HexalithMemoriesFromSource" Value="$(HexalithMemoriesFromSource)" />
++  </ItemGroup>
++
+   <ItemGroup>
+     <!-- Platform Aspire helper libraries consumed for their hosting extensions only (not added to the Aspire
+          resource graph). They are added with SuppressBuild via path-only IProjectMetadata; the Debug

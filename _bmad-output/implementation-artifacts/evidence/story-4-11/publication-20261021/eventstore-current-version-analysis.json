@@ -1,0 +1,228 @@
+{
+  "sourceCommit": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+  "baseTag": "v3.126.0",
+  "commits": [
+    {
+      "hash": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+      "message": "test: allow slow CI source binding before the SIGINT control\n\nThe descendants receipt can appear after several minutes of cold source binding, so the interruption wait matches that budget.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "19b673af1f09019ccf06201d17a4c92738f54cdd",
+      "message": "test: accept compacted read on released store shape\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "09db4d11ebeb0f8de10c50404d09b5c428daf263",
+      "message": "fix: retry identical artifact reads during concurrent publication\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "c91f520270388080b950feb869c68b43964285f3",
+      "message": "fix: re-include only the selected evidence package packet\n\nGenerated evidence archives stay ignored, while the Story 3.13 selected packet remains the final gitignore match.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "2fe185c2948f9ca703bd3d9206fa9c04d469fa0a",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "b5244d2454676db0019429fa3b883eba73f98a17",
+      "message": "fix: keep manifest fingerprints stable for non-canonical bytes\n\nNon-canonical retained manifests keep a v1 digest, and evidence package negations stay last so selected archives remain tracked.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "2cee11ab55860a5d2267faf8a8f376217c5e13ec",
+      "message": "build: merge origin/main into main via /pushall\n"
+    },
+    {
+      "hash": "f6da64b7642d3bba9fb8c4a09f5f3eb11f7403e3",
+      "message": "build: merge origin/main into main via /pushall\n"
+    },
+    {
+      "hash": "5ce5f1d84b88c808cc8a526b9decf149de977e55",
+      "message": "build: advance root submodule pointers to current main\n\nFast-forward Builds, FrontComposer, McpCli, Memories, Platform, and Tenants onto their published main tips.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "7115d8f8b8846e98e3b52d6afb35bc4181b23d84",
+      "message": "fix(evidence): complete bounded qualification evidence admission\n"
+    },
+    {
+      "hash": "7442485b72bc016cd486f6a2aab527069854987e",
+      "message": "build: merge remote updates with local startup index fix\n"
+    },
+    {
+      "hash": "4767dc37ae3398a554fe4c4bca63a81bf9d722a7",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "ff6865fa1415d04f2bae4411505d9bc0220fd511",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+      "message": "fix: story 3.22\n"
+    },
+    {
+      "hash": "dc46742471a678cb39800789a7ab637e03fbb495",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "f4d29263bd9d22dd432a6a464ee145e57eff3acd",
+      "message": "fix: story 2.13\n"
+    },
+    {
+      "hash": "a23969a2c067c1c8ede1108172c065cfe4f15e33",
+      "message": "docs: record EXT-PROTECTION-1 qualification blockers\n\nName the observed HEAD, proposed integration date, Live command, and the missing custody, guard, runtime, and trust-anchor references without accepting a target.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "d01c6756c769dcbd8d4d5fff472d07339ebeb22a",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "fa1e394d36a07d8e49990c626d03ce2a7bfb6f6c",
+      "message": "fix: repos size issue\n"
+    },
+    {
+      "hash": "efae564708d48cdd9affdb293d0375d9b5b1dc47",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "77c3300c12c07494530e1f203389d3147d04ea37",
+      "message": "fix: story 2.13\n"
+    },
+    {
+      "hash": "bbfd0fada14ce11e137365637238af4fec2f7f7f",
+      "message": "fix: story 2.13\n"
+    },
+    {
+      "hash": "ae917d3e4dbab20b8982c5222a13611c3e3faf35",
+      "message": "build: merge docs/es-diag-authorization-bootstrap into main via /pushall\n"
+    },
+    {
+      "hash": "4ec35102db3483ec3ad35bd05ee037e91d11a321",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "7217b5bf740b80ae92858378785b496e6b564285",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "c9c56cbc041d56b46721d35b933615e00591548e",
+      "message": "build: merge origin/main into main\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "a6ff39b213ac5c55256e6bf4f4373327f30878aa",
+      "message": "test(authority): refresh ES-DIAG issuance after registry approval\n"
+    },
+    {
+      "hash": "aa2e4e3233601337a3152311977751d8be457b0c",
+      "message": "fix(projections): retain story 12.2 expiry and scratch recovery\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "a07265f00994a3ad093184cec0f329d11184c3e9",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "060cabe87b996f4b01b66655ea016a8edec4bc4a",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "f03d7a700afe7aa3dbc9d9924576e98ffc8268c5",
+      "message": "test(authority): bind the scoped ES-DIAG authorization\n"
+    },
+    {
+      "hash": "b1f8207858095d61ea2e89a3af3639073f37c6f4",
+      "message": "test(authority): prepare the ES-DIAG bootstrap baseline\n"
+    },
+    {
+      "hash": "54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa",
+      "message": "fix: story 3.21\n"
+    },
+    {
+      "hash": "f6b545cd02632f662136d0b4b8e6952baa7afec3",
+      "message": "fix: story 3.21\n"
+    },
+    {
+      "hash": "b1237244f1ef15fcb5c3889c9787ad4ff9b3711b",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "0785238dfe88e5d85b282a2edbdcbd0494d51b34",
+      "message": "fix: story 2.13\n"
+    },
+    {
+      "hash": "c9f47dd5ba72918445dfd24a674a5b2c310589bd",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "cc7bc9bc8a53f6c8fd2840307732e45ee7315a8e",
+      "message": "build: merge origin/main into main via /pushall\n"
+    },
+    {
+      "hash": "946d50d0ec295bd0382ffbf043497406f3cc26cf",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "bab927c0895cdc618f1da905c23d49c5bcddd4b7",
+      "message": "fix: story 2.13\n"
+    },
+    {
+      "hash": "509dbe3733956a86c2ee2fddfd9c0d0006bbfea3",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "6c56c27bc1a8d63c83f9631f7162cf79fdde0a1e",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "5d140359cc4021156ef32e8cb5e7bfa763a1f00c",
+      "message": "fix(signalr): enforce serialized metadata limits\n\nShare the 16-entry and 2,048 serialized UTF-8 byte ceiling across\nnotification producers, callback validation, and SignalR broadcasts.\n\nAdd replica restart, scoped rejoin, rejection and persisted-readback\nproofs with retained qualification evidence. Keep story 2.13 in progress\npending distribution/profile qualification and owner decisions.\n\nValidation: Debug builds, 93 focused tests, five live runtime checks,\npacket integrity verification and git diff --check.\n"
+    },
+    {
+      "hash": "b16be63521e8b784fc68828e0267f892b8e45924",
+      "message": "docs: scope the own AppHost in the quickstart\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n"
+    },
+    {
+      "hash": "e04e324b9105391637639a7b509ba37f28450c4c",
+      "message": "test(signalr): expand Dapr distribution qualification\n\nStrengthen two-host tenant isolation, provenance denials, metadata bounds, and recovery checks.\nRetain source-bound qualification evidence and unresolved production transition gates.\n"
+    },
+    {
+      "hash": "dfe963ffd44c4df1d3b43891234e30231a9a28e8",
+      "message": "build: merge origin/main into main via /pushall\n"
+    },
+    {
+      "hash": "12c63f81e3101e056dc357d2037dacb0df09428f",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "d4d05f871991ec2af305267f59dcefeae3f127ed",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "72f622a31d1c9d4df72ac319e4a378a57c79e114",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "af2449972c55467e19ed2a42729451f04ca679f2",
+      "message": "fix: story 6.1 P1R\n"
+    },
+    {
+      "hash": "1eaabca4f8d3597a3a1f9fadf341be5cb9a3a8c0",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "6fccf5f235cebdcb2ae412fc03ee019904e611a7",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "136d83dd725eb5d37f97bbb4fdb07df938951105",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "7520cb915690a44f1ff31390ea36c5a6eb061853",
+      "message": "build: sync local changes via /pushall\n"
+    },
+    {
+      "hash": "c343f46974a3b394efeca658dcd6af53fbe998b2",
+      "message": "build: sync local changes via /pushall\n"
+    }
+  ],
+  "releaseType": "patch",
+  "candidateVersion": "3.126.1"
+}

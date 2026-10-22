@@ -1,0 +1,72 @@
+{
+  "startedAtUtc": "2026-10-22T01:12:56.238578+00:00",
+  "sourceBase": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "worktree": "/tmp/mcpcli-story411-builds-owner-audit",
+  "scope": "Audit-only refresh of the two already committed family declarations. No catalog change or branch-protection edit.",
+  "checks": [
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/validate-package-version-audit.ps1"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/validate-package-version-audit.stdout.txt",
+          "bytes": 89,
+          "sha256": "3c1bb6fe826018940d0d08e32e5059e952755e7799f863f6833664aec90b212d"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/validate-package-version-audit.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-package-version-audit-generator.ps1"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/test-package-version-audit-generator.stdout.txt",
+          "bytes": 2801,
+          "sha256": "2c010eefff3be82958fb43f0d40909cce7a957b28b5c443f2872ff8ccece3242"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/test-package-version-audit-generator.stderr.txt",
+          "bytes": 3358,
+          "sha256": "71ca7fb6f431fddaadf5d54d28f3c5743618a283dce1bcfd262002e3bae044c2"
+        }
+      ]
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-package-version-audit-validator.ps1"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/test-package-version-audit-validator.stdout.txt",
+          "bytes": 61,
+          "sha256": "ee6231c09505b89be3b071d0b9cdbdd853f99974284a44b9d4b013ed0a2596c3"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/test-package-version-audit-validator.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "completedAtUtc": "2026-10-22T01:24:46.322738+00:00"
+}

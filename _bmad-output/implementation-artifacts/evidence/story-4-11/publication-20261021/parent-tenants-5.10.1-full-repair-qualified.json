@@ -1,0 +1,42 @@
+{
+  "checkedAtUtc": "2026-10-22T04:38:23.656567+00:00",
+  "result": "repaired-full-release-qualified",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "source": "205cbc5019343d344643b530fb03aee82af2840d",
+  "version": "5.10.1",
+  "releaseRun": 39721533752,
+  "releaseUrl": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.1",
+  "packageCount": 5,
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ],
+  "bindingReports": [
+    {
+      "path": "parent-tenants-5.10.1-published-run-binding.json",
+      "bytes": 5938,
+      "sha256": "a72f0392ffb6b7b1b2e4a24287d4f649377451d940826c695789e39b87c557c3"
+    },
+    {
+      "path": "parent-tenants-5.10.1-actual-nuget-binding.json",
+      "bytes": 35105,
+      "sha256": "570761092a18a0c22f267e391f060beeb25416c3fda6d3b0b1032d1b56a9527c"
+    },
+    {
+      "path": "parent-tenants-5.10.1-actual-oci-binding.json",
+      "bytes": 8220,
+      "sha256": "5861132bc6e7551ed8d196f9fe0091bdf4ce6aac6294cd24d688d1b5a157b220"
+    }
+  ],
+  "normalControls": "Exact green source and normal protected production approval passed. No release/control bypass or publication-enabled variable modification. Registry reads used the already configured Docker credential helper in memory; no credentials retained.",
+  "separateRootEnrollment": {
+    "package": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0",
+    "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+    "selectionRationale": "exact-enrollment-version-selection.md",
+    "originalVectorBytesAndInventoryUnchanged": true
+  },
+  "scope": "Clears the repaired Tenants full-release prerequisite only. Actual root Ubuntu strict replay/cold benchmark and final BMAD review remain required. No live authorization/persistence/effect visibility claim.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

@@ -1,0 +1,10 @@
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase verify
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase publish
+[publication-preflight] pass: Hexalith/Hexalith.EventStore 3.78.0 run 29713052827/1 phase container
+[container-smoke] pass: linux/amd64,linux/arm64

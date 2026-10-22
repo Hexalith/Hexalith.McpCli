@@ -1,0 +1,139 @@
+{
+  "capturedAtUtc": "2026-10-22T04:04:27.778578+00:00",
+  "parentAudit": true,
+  "rootHead": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+  "qualifiedBuilds": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "sourceAndShippedInputCount": 364,
+  "beforeAndAfterFullManifestsEqual": true,
+  "all364CurrentFileByteHashesAlsoEqual": true,
+  "privateFileBindingsVerified": 24,
+  "actualProjects": [
+    {
+      "project": "Hexalith.McpCli.Abstractions.Tests",
+      "actualResults": {
+        "Passed": 20
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+        "bytes": 30162,
+        "sha256": "5226da320d9948bd49928ac8e89833bc6ea3e24f63b1e4abc9e19498625a89f3"
+      }
+    },
+    {
+      "project": "Hexalith.McpCli.Analyzers.Tests",
+      "actualResults": {
+        "Passed": 19
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+        "bytes": 29886,
+        "sha256": "b618667f353134484fef0c479beecad357c0649ae5d8509bdd0ab250839e9683"
+      }
+    },
+    {
+      "project": "Hexalith.McpCli.Core.Tests",
+      "actualResults": {
+        "Passed": 676,
+        "NotExecuted": 2
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+        "bytes": 985409,
+        "sha256": "41b74c5be6bb492680cdcb1ae8e5eecea85267c0a139018ce4a192cf7fb04249"
+      }
+    },
+    {
+      "project": "Hexalith.McpCli.Manifest.Tests",
+      "actualResults": {
+        "Passed": 104
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+        "bytes": 153921,
+        "sha256": "963c13267433a2905e032b2c0acccbbfeea9014bf7348394a9d84b7f4f31ce71"
+      }
+    },
+    {
+      "project": "Hexalith.McpCli.Cli.Tests",
+      "actualResults": {
+        "Passed": 479,
+        "NotExecuted": 2
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+        "bytes": 717306,
+        "sha256": "e19667d44e2b823eea07f3cf33ada389840801590379c64c7dceded20b7f3fd3"
+      }
+    },
+    {
+      "project": "Hexalith.McpCli.Mcp.Tests",
+      "actualResults": {
+        "Passed": 58
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+        "bytes": 85569,
+        "sha256": "f91d43100a2309cb2bac5b2f46ef999061c85c09900e4a3d9530931fb70db638"
+      }
+    }
+  ],
+  "actualTotals": {
+    "Passed": 1356,
+    "NotExecuted": 4
+  },
+  "specificMatrixCasesActuallyPassed": [
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"loading\")",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"construction\")",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False)",
+      "outcome": "Passed"
+    }
+  ],
+  "declaredSkips": [
+    {
+      "project": "Hexalith.McpCli.Core.Tests",
+      "testName": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls",
+      "message": ""
+    },
+    {
+      "project": "Hexalith.McpCli.Core.Tests",
+      "testName": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten",
+      "message": ""
+    },
+    {
+      "project": "Hexalith.McpCli.Cli.Tests",
+      "testName": "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync",
+      "message": ""
+    },
+    {
+      "project": "Hexalith.McpCli.Cli.Tests",
+      "testName": "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync",
+      "message": ""
+    }
+  ],
+  "scope": "Independent native TRX rows/counters, all command exit/log hashes, exact before/after source manifests and current file-byte scan. Six local projects pass on the uncommitted exact-artifact proposal. Upstream full repaired release and strict actual Ubuntu replay/benchmark remain pending.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

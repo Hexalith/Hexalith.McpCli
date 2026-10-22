@@ -1,0 +1,44 @@
+{
+  "outcome": "available",
+  "document": {
+    "before": {
+      "identity": {
+        "name": "Hexalith.EventStore.Contracts",
+        "version": "3.126.1.0",
+        "culture": null,
+        "publicKeyToken": null
+      },
+      "scope": 0,
+      "isComplete": true,
+      "issues": []
+    },
+    "after": {
+      "identity": {
+        "name": "Hexalith.EventStore.Contracts",
+        "version": "3.126.1.0",
+        "culture": null,
+        "publicKeyToken": null
+      },
+      "scope": 0,
+      "isComplete": true,
+      "issues": []
+    },
+    "summary": {
+      "changedTypeCount": 0,
+      "addedTypeCount": 0,
+      "removedTypeCount": 0,
+      "changedMemberCount": 0,
+      "breakingCount": 0,
+      "additiveCount": 0,
+      "potentiallyBreakingCount": 0
+    },
+    "comparison": {
+      "schema_version": 1,
+      "subject_coordinate_basis": "root-relative",
+      "identifier": "library-api.v1|29:HEXALITH.EVENTSTORE.CONTRACTS|0:|0:",
+      "display": "Hexalith.EventStore.Contracts",
+      "subjects": [],
+      "change_descriptions": []
+    }
+  }
+}

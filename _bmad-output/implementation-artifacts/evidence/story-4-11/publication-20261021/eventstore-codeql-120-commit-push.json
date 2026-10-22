@@ -1,0 +1,98 @@
+{
+  "completedAtUtc": "2026-10-21T23:27:41.812034+00:00",
+  "previousHead": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "newHead": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "normalPrBranchPush": true,
+  "protectedBranchPushed": false,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": " M .github/workflows/codeql.yml\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\trefs/heads/fix/p1r-qualification-time-budget\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        ".github/workflows/codeql.yml"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/mcpcli-story411-codeql-120-commit.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "[fix/p1r-qualification-time-budget c8a0e9af] ci(codeql): allow complete source extraction\n 1 file changed, 4 insertions(+), 3 deletions(-)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   af6299d49..c8a0e9af8  HEAD -> fix/p1r-qualification-time-budget\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+        "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+        "--",
+        ".github/workflows/codeql.yml"
+      ],
+      "exitCode": 0,
+      "stdout": "diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml\nindex 2cd0359e8..3af144cdd 100644\n--- a/.github/workflows/codeql.yml\n+++ b/.github/workflows/codeql.yml\n@@ -23,6 +23,7 @@ jobs:\n       contents: read\n     with:\n       languages: csharp\n-      # The complete tracked-source scan exceeded the former 30-minute job cap.\n-      # Retain its scope and analysis settings with a bounded longer allowance.\n-      timeout-minutes: 60\n+      # Complete tracked-source extraction exhausted the previous sixty-minute cap.\n+      # Retain all source inputs, build mode and analysis settings with a bounded\n+      # allowance for the enlarged input set and the following query phase.\n+      timeout-minutes: 120\n",
+      "stderr": ""
+    }
+  ],
+  "patchSha256": "b94155d7b6afcd31726ea4cdd94209cabbc7d6ffbb179b88013d2255f418ad85",
+  "allNewHeadGatesPending": true
+}

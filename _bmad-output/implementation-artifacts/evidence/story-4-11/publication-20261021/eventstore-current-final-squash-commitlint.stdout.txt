@@ -1,0 +1,17 @@
+⧗   --- input ---
+ci: allow full qualification and bind sanitized evidence
+
+Allow complete P1R, CodeQL and live integration within thirty, sixty and
+ninety bounded minutes respectively. Retain all tests, source analysis,
+registration, isolation, authority and OQ8 capture without narrowing scope.
+
+Wait for the asynchronous Blazor dashboard title with a bounded native
+assertion while retaining the shell and expected title conditions.
+
+Construct unrelated synthetic retry work independently of the original
+stream bindings, retaining the real native proof and scheduler guards.
+
+Preserve current owning source repairs and record separate source-bound
+manifests for successive sanitized historical diagnostics. Keep original
+packet manifests and outcomes intact without new qualification credit.
+✔   found 0 problems, 0 warnings

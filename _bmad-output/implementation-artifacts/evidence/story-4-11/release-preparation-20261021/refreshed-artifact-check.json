@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python3",
+    "tools/conformance-vectors/v1/verify_artifact.py",
+    "--artifact",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/conformance-feed/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+    "--output",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/refreshed-artifact-verification",
+    "--inventory",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approved-inventory.json",
+    "--accepted-lint",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/accepted-lint.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/add-user-to-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/change-user-role.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/create-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/disable-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/enable-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant-audit.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant-users.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-user-tenants.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/list-tenants.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/remove-tenant-configuration.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/remove-user-from-tenant.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/set-tenant-configuration.vector.json",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/update-tenant.vector.json"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "durationSeconds": 238.19512412100448,
+  "evidenceLimit": "Fresh bytes and source are not transferred artifact/publication approval. Existing vector/scope decisions remain approved."
+}

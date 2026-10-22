@@ -1,0 +1,118 @@
+{
+  "startedAtUtc": "2026-10-22T00:46:55.831124+00:00",
+  "status": "first-trace-completed-final-input-preservation-refused",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Private causal ablation only. Collapse exact-byte duplicate tracked C# occurrences; preserve every distinct tracked C# blob and all non-C# tracked blob bytes. Not a source exclusion proposal, workflow mode change, security qualification or production/full-v1 acceptance.",
+  "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-dedup-ablation",
+  "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2",
+  "resourceHints": {
+    "CODEQL_RAM": "14570",
+    "CODEQL_THREADS": "4",
+    "traceRamMiB": 14570,
+    "traceThreads": 4
+  },
+  "localBound": {
+    "traceSeconds": 900,
+    "aggregateRssCeilingMiB": 16384,
+    "samplingSeconds": 2
+  },
+  "environmentCaveat": "Same task host and CLI hints as the earlier local runs; not GitHub runner parity. Physical memory, affinity and cgroup constraints differ. Cache state, paths and duplicate-path contexts also differ. No CI duration extrapolation or coverage-equivalence claim.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "preparationRetry": "Reuse untouched clean detached source from initial newline-normalization refusal; no files had been removed.",
+  "gitTree": "2b4f209969737367807973757cadc535bd66ed06",
+  "allTrackedEntryCount": 45336,
+  "trackedBlobCount": 45327,
+  "trackedSymlinkBlobCount": 1,
+  "uninitializedGitlinkCount": 9,
+  "checkoutNormalizedBlobCount": 83,
+  "bytePreservationScope": "Every actual initial clean-checkout tracked blob byte, including symlink target bytes; canonical Git blob IDs and any checkout-normalized working-tree blob IDs are both recorded. Gitlinks are identities rather than file bytes and remain uninitialized.",
+  "csharpOccurrencesBefore": 15180,
+  "distinctCsharpBlobs": 3891,
+  "removedExactDuplicateOccurrences": 11289,
+  "nonCsharpTrackedBlobs": 30147,
+  "canonicalSelection": "Prefer src/, then tests/, samples/, perf/, tools/, docs/, then other; within rank prefer shorter path, then ordinal path. Full mapping retained privately.",
+  "canonicalTopLevelCounts": {
+    "_bmad-output": 160,
+    "tools": 31,
+    "src": 2001,
+    "tests": 1646,
+    "samples": 33,
+    "docs": 14,
+    "perf": 6
+  },
+  "allTrackedBefore": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/all-tracked-before.json",
+    "bytes": 22812318,
+    "sha256": "a2fded92a56eab81ca4aef1634bf641633ac263680c18f60c6609a62db1f0a42"
+  },
+  "expectedAfterAblation": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/all-tracked-expected-after-ablation.json",
+    "bytes": 24466452,
+    "sha256": "d6cbee54fbbba5c26d6a5b69c3ed9ff48b3969c25ef9079c18958fa7f6ccd9e7"
+  },
+  "pathToCanonical": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/csharp-path-to-canonical.json",
+    "bytes": 6562070,
+    "sha256": "7f4dfd8721bcc7cf5e35536f133da51a1d909e6c14da5fa3f33c03581ca9091b"
+  },
+  "preparedReconciliation": {
+    "trackedEntriesChecked": 45336,
+    "retainedBlobHashesMatch": true,
+    "allDistinctCsharpBlobHashesRetained": true,
+    "onlyExpectedDuplicatePathsDeleted": true,
+    "gitlinksRemainUninitialized": true,
+    "failures": []
+  },
+  "initCommand": [
+    "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/codeql",
+    "database",
+    "init",
+    "--force-overwrite",
+    "--db-cluster",
+    "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/database",
+    "--source-root=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-dedup-ablation",
+    "--no-calculate-baseline",
+    "--extractor-include-aliases",
+    "--language=csharp",
+    "--build-mode=none"
+  ],
+  "initExitCode": 0,
+  "traceCommand": [
+    "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/codeql",
+    "database",
+    "trace-command",
+    "--use-build-mode",
+    "--threads=4",
+    "--ram=14570",
+    "--extractor-option=csharp.logging.verbosity=progress+",
+    "--working-dir=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-dedup-ablation",
+    "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/database/csharp"
+  ],
+  "traceStartedAtUtc": "2026-10-22T00:47:07.692078+00:00",
+  "peakAggregateRssMiB": 5686.59375,
+  "peakCsharpToolGroupRssMiB": 5518.0,
+  "stopReason": null,
+  "ownedProcessGroup": 48450,
+  "elapsedSeconds": 273.48449764499674,
+  "terminalControllerExitCode": 1,
+  "controllerFailure": "Final reconciliation found task-generated packages.lock.json rewrites; original before bytes restored after preserving every generated copy. No claim of unchanged non-C# bytes during this attempt.",
+  "trackedLockFilesModifiedDuringTrace": 362,
+  "restoredAllGeneratedTrackedChanges": true,
+  "privateModificationReceipt": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/tracked-modification-receipt.json",
+    "bytes": 270229,
+    "sha256": "41a5937b03f36b91db54cd159c0f5c126eae88b054465de3ca8544646d70614e"
+  },
+  "safeTerminalLogLines": [
+    "[2026-10-22 02:51:48] [build-stdout] [001] Extraction completed in 00:01:20.5246874",
+    "[2026-10-22 02:51:48] [build-stdout] [001] Total time: 00:04:40.4007734",
+    "[2026-10-22 02:51:50] Terminating normally."
+  ],
+  "processPeaks": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/process-peaks.json",
+    "bytes": 63914,
+    "sha256": "02958416445d07143dccba8ca6aba49d5b99c44c0734b5e8a3dfc281685299f2"
+  },
+  "observedAtUtc": "2026-10-22T00:54:02.146963+00:00"
+}

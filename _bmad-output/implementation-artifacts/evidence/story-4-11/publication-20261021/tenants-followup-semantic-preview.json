@@ -1,0 +1,28 @@
+{
+  "observedAtUtc": "2026-10-22T01:47:20.747Z",
+  "releasedTag": "v5.10.0",
+  "releasedTagSource": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "existingCommitsAfterReleasedTag": [],
+  "proposedMessageSha256": "a5d659fffc2e99ad4ca0133575917be46ec14ec9357ff97393cfd2c709a42e15",
+  "analyzerVersion": "13.0.1",
+  "semanticReleaseVersion": "25.0.9",
+  "releaseType": "patch",
+  "provisionalVersion": "5.10.1",
+  "logs": [
+    [
+      "Analyzing commit: %s",
+      "fix(build): preserve published container provenance\n\nImport the shared publisher metadata target and execute the approved\nBuilds publisher so both container architectures retain the exact source,\nversion and creation metadata. Declare the documented normal release\nmode explicitly and keep corrective authority inputs absent.\n\nUse the qualified Builds audit snapshot without changing package scope.\n"
+    ],
+    [
+      "The release type for the commit is %s",
+      "patch"
+    ],
+    [
+      "Analysis of %s commits complete: %s release",
+      1,
+      "patch"
+    ]
+  ],
+  "scope": "Proposed repair message analyzed by the owning pinned semantic-release plugin against local v5.10.0=82c source. Provisional only; actual merged source/tag/registry preflight and normal semantic publication remain mandatory.",
+  "publicationPerformed": false
+}

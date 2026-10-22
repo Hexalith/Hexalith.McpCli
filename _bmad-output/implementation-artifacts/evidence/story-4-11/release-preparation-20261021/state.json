@@ -1,0 +1,46 @@
+{
+  "evidence": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021",
+  "publicationAuthorized": false,
+  "fullV1Accepted": false,
+  "productionAccepted": false,
+  "repositories": {
+    "eventstore": {
+      "owner": "/home/administrator/projects/hexalith/eventstore",
+      "sourceCommit": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+      "sourceTree": "8aa548b82499bf5adf5c9daad6c62ed004db5863",
+      "previousCandidateSource": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+      "snapshot": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7",
+      "buildsCommit": "2744d549270298cfe73679f76b477a7368429006",
+      "archiveExcludes": "Reference contents and historical _bmad-output, except one source-owned test resource. Focused tests retain any missing-fixture blockers separately.",
+      "candidateVersion": "3.126.1"
+    },
+    "tenants": {
+      "owner": "/home/administrator/projects/hexalith/tenants",
+      "sourceCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "sourceTree": "f0497a77bb1cef47325576c42c4b4fb53859ef41",
+      "previousCandidateSource": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+      "snapshot": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+      "buildsCommit": "17d0c6ffec5fb3c8d8058e67cb85644460cb5256",
+      "archiveExcludes": "Reference contents and historical _bmad-output, except one source-owned test resource. Focused tests retain any missing-fixture blockers separately.",
+      "candidateVersion": "5.10.0"
+    }
+  },
+  "provenanceRepair": {
+    "buildsSnapshot": "/tmp/mcpcli-story411-provenance-builds-v09n73fb",
+    "buildsBaseCommit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+    "tenantsBaseCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "sharedTarget": "Props/ContainerProvenance.targets",
+    "originalCheckoutsModified": false,
+    "sourceCommitPending": true,
+    "rationale": "Share the EventStore SDK label repair through the technical Builds repository; do not duplicate it as module runtime code.",
+    "finalBuildsPatch": "proposed-builds-container-provenance-scoped.patch",
+    "historicalPrototypePatch": "proposed-builds-container-provenance.patch",
+    "scope": "Changes labels/generation only with EnableContainer true and all three publisher-owned source SHA, version and creation fields supplied. Ordinary and partial-metadata SDK behavior is preserved.",
+    "finalTenantsPatch": "proposed-tenants-container-provenance-and-publisher.patch",
+    "publisherExecutionPin": {
+      "previous": "53d53ae42abf7c87d385a078ab260531480bbf8a",
+      "proposed": "22a578b576a515d2af214fe81859447fffc97981",
+      "reason": "The previous publisher supplies no provenance fields and has no provenance-label validation; the established EventStore publisher supplies and verifies the five release-identity labels."
+    }
+  }
+}

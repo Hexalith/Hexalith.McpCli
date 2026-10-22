@@ -1,0 +1,12 @@
+  Hexalith.McpCli.Analyzers -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Core -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.ConformanceHost -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.85

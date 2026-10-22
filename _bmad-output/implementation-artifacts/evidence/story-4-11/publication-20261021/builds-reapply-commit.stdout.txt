@@ -1,0 +1,4 @@
+[fix/container-provenance-protected-reapply 1e606d4] fix(container): preserve publisher provenance across RIDs
+ 2 files changed, 152 insertions(+)
+ create mode 100644 Github/publish-containers/tests/test_container_provenance_targets.py
+ create mode 100644 Props/ContainerProvenance.targets

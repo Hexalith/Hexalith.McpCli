@@ -1,0 +1,127 @@
+{
+  "checkedAtUtc": "2026-10-21T22:16:47.950289+00:00",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": " M .github/workflows/integration.yml\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "origin",
+        "main",
+        "fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.EventStore\n * branch                main       -> FETCH_HEAD\n * branch                fix/p1r-qualification-time-budget -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "83e5f2d257d91f98f827443f960832322a63da94\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "83e5f2d257d91f98f827443f960832322a63da94\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        ".github/workflows/integration.yml"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/mcpcli-story411-eventstore-integration-budget-commit.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "[fix/p1r-qualification-time-budget af6299d4] ci(integration): budget the complete serial live suite\n 1 file changed, 4 insertions(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "-1",
+        "--format=%B"
+      ],
+      "exitCode": 0,
+      "stdout": "ci(integration): budget the complete serial live suite\n\nAllow ninety bounded minutes for the full live suite and OQ8 capture.\nA complete 10001-owner case measured about 300 seconds; linear sizing for\nfour large cases is about 43 minutes plus the historical 20-minute base.\n\nKeep every test, capture and validation step and each existing 20-minute\nprocess-phase bound. Preserve exact source qualification before release.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   83e5f2d25..af6299d49  HEAD -> fix/p1r-qualification-time-budget\n"
+    }
+  ],
+  "patchSha256": "576c936e7ad4fdcee089608096be4a6cc638607006a18275556fad90e6aec787",
+  "sizingReceipt": "eventstore-integration-budget-sizing.json",
+  "head": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "mainPushedDirectly": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

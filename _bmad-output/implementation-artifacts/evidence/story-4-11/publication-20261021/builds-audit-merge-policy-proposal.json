@@ -1,0 +1,24 @@
+{
+  "status": "proposal only; no repository control changed",
+  "rulesetId": 19196298,
+  "repositoryAlreadyAllowsMergeCommits": true,
+  "currentRuleTypes": [
+    "deletion",
+    "non_fast_forward",
+    "pull_request",
+    "required_status_checks"
+  ],
+  "proposedOnlyChange": {
+    "jsonPointer": "/rules/2/parameters/allowed_merge_methods",
+    "before": [
+      "squash"
+    ],
+    "after": [
+      "squash",
+      "merge"
+    ]
+  },
+  "requiredPrChecksReviewsStrictSourceAndAllOtherRules": "unchanged",
+  "purpose": "Permit a normal checked merge commit for revision-bound source declaration plus audit updates so the audited declaration remains an ancestor.",
+  "currentDecision": "Pending parent independent assessment; publication not dispatched."
+}

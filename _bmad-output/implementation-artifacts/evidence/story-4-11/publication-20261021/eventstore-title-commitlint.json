@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "candidateFile": "/tmp/mcpcli-story411-eventstore-title-commit.txt",
+  "exactFullCandidate": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\ntest(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

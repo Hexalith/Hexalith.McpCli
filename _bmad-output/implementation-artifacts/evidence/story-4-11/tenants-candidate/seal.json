@@ -1,0 +1,13 @@
+{
+  "status": "pending-owner-approval",
+  "fullV1Accepted": false,
+  "productionAccepted": false,
+  "fileCount": 229,
+  "fileManifestSha256": "4e690000755d1ced07ac0837f01419a9ead72a78c37e9b5fe2e8fd5e53f6e000",
+  "approvalPacketSha256": "609fa7d2b4620afa82efc3d51e643d50b076c8b57af12ec4474471f301a1b8ff",
+  "verifiedPackageCount": 3,
+  "verifiedVectorCount": 14,
+  "combinedOperationCount": 21,
+  "hashAudit": "passed",
+  "descriptionReview": "pass-with-notes; no blocking findings"
+}

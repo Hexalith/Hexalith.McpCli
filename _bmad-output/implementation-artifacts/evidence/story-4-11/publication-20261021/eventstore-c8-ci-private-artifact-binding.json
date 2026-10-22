@@ -1,0 +1,38 @@
+{
+  "checkedAtUtc": "2026-10-22T00:01:30.376322+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "runId": 39693568192,
+  "retention": "Exact raw CI ZIP archives retained privately; no raw test output, signed download URLs or secrets copied to Git.",
+  "archives": [
+    {
+      "id": 12390409157,
+      "name": "blocking-test-results",
+      "path": "/tmp/mcpcli-story411-c8-ci-artifacts-qfbrctz0/12390409157-blocking-test-results.zip",
+      "bytes": 2074930,
+      "sha256": "sha256:a12e7d851574994ffa1f48f8ce8e5dd74f95d0b658bce474658cd494c0181bfc",
+      "officialDigestMatched": true,
+      "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+      "runId": 39693568192
+    },
+    {
+      "id": 12390239187,
+      "name": "contracts-test-results",
+      "path": "/tmp/mcpcli-story411-c8-ci-artifacts-qfbrctz0/12390239187-contracts-test-results.zip",
+      "bytes": 406934,
+      "sha256": "sha256:cfb24d2c70d235f9fdd75e66927ef0a995a350291d3432a5c3ae3f35b5d7f0c9",
+      "officialDigestMatched": true,
+      "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+      "runId": 39693568192
+    },
+    {
+      "id": 12390106250,
+      "name": "tenants-source-mode-test-results",
+      "path": "/tmp/mcpcli-story411-c8-ci-artifacts-qfbrctz0/12390106250-tenants-source-mode-test-results.zip",
+      "bytes": 2131,
+      "sha256": "sha256:6aa75036ffa940e354f8f58646cb26472bf442345d9a00e52bb8cf2216acf8c6",
+      "officialDigestMatched": true,
+      "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+      "runId": 39693568192
+    }
+  ]
+}

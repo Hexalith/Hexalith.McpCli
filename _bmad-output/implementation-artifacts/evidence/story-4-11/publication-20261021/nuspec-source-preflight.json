@@ -1,0 +1,42 @@
+[
+  {
+    "repository": "/home/administrator/projects/hexalith/eventstore",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "-nologo",
+      "-t:_InitializeNuspecRepositoryInformationProperties",
+      "-getProperty:RepositoryCommit,SourceRevisionId,SourceControlInformationFeatureSupported"
+    ],
+    "exitCode": 0,
+    "result": {
+      "Properties": {
+        "RepositoryCommit": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+        "SourceRevisionId": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+        "SourceControlInformationFeatureSupported": "true"
+      }
+    },
+    "scope": "MSBuild package metadata evaluation only; final published nuspec source binding is still required."
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/tenants",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "-nologo",
+      "-t:_InitializeNuspecRepositoryInformationProperties",
+      "-getProperty:RepositoryCommit,SourceRevisionId,SourceControlInformationFeatureSupported"
+    ],
+    "exitCode": 0,
+    "result": {
+      "Properties": {
+        "RepositoryCommit": "b02452a16869f265c21b1ae6c15f2f299677f139",
+        "SourceRevisionId": "b02452a16869f265c21b1ae6c15f2f299677f139",
+        "SourceControlInformationFeatureSupported": "true"
+      }
+    },
+    "scope": "MSBuild package metadata evaluation only; final published nuspec source binding is still required."
+  }
+]

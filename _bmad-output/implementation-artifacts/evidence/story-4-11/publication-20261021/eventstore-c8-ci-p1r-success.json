@@ -1,0 +1,558 @@
+{
+  "checkedAtUtc": "2026-10-22 00:01:46 UTC",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "ci": {
+    "id": 39693568192,
+    "conclusion": "success",
+    "event": "pull_request",
+    "path": ".github/workflows/ci.yml",
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693568192",
+    "completedMetadataAt": "2026-10-21T23:59:40Z",
+    "jobs": {
+      "jobs": [
+        {
+          "id": 119545391734,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Verify published and current folded snapshot compatibility",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 119545391937,
+          "name": "ci / contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run generated API smoke preflight regression",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Install pinned OQ8 validator dependency",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Restore Contracts tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Build Contracts tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run Contracts tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Upload Contracts test results",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 19
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 20
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            }
+          ]
+        },
+        {
+          "id": 119545392029,
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Restore source-mode AppHost tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build source-mode AppHost tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Verify Tenants source-mode topology guardrails",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Upload Tenants source-mode test results",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            }
+          ]
+        },
+        {
+          "id": 119545392104,
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Prove checkpointed process Release packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 119545392131,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Validate governed CI contract",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 3
+            },
+            {
+              "name": "Checkout approved Builds actions",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 4
+            },
+            {
+              "name": "Evaluate governed workflow provenance",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 5
+            },
+            {
+              "name": "Initialize root-declared submodules (governed)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 6
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Cache NuGet packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Validate test platform input",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 10
+            },
+            {
+              "name": "Restore",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Validate package consumer references",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Unit tests (Tier 1, VSTest)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 14
+            },
+            {
+              "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Install and initialize Dapr (governed)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 16
+            },
+            {
+              "name": "Install and initialize Dapr",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 17
+            },
+            {
+              "name": "Integration tests (Tier 2, VSTest)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 18
+            },
+            {
+              "name": "Integration tests (Tier 2, Microsoft.Testing.Platform)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 19
+            },
+            {
+              "name": "Validate coverage gates",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 20
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Upload test and coverage evidence",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Post Cache NuGet packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 42
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 43
+            },
+            {
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 44
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 45
+            }
+          ]
+        },
+        {
+          "id": 119545392202,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Set up supported Node",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Install locked npm dependencies",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Verify semantic-release GitHub success lifecycle",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Set up supported Node",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 119556445524,
+          "name": "ci / aspire-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 119556446464,
+          "name": "ci / performance-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "run_id": 39693568192,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    }
+  },
+  "p1r": {
+    "id": 39693567713,
+    "conclusion": "success",
+    "event": "pull_request",
+    "path": ".github/workflows/p1r-qualification.yml",
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693567713",
+    "completedMetadataAt": "2026-10-21T23:44:50Z"
+  },
+  "artifactBinding": "eventstore-c8-ci-private-artifact-binding.json",
+  "artifactSummary": "eventstore-c8-ci-artifact-summary.json",
+  "stillPending": [
+    "CodeQL required context",
+    "Live integration required context",
+    "Fresh final merge readiness audit",
+    "Actual merged-main push qualification and release controls"
+  ],
+  "releaseDispatched": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}
+

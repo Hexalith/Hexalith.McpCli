@@ -1,0 +1,16 @@
+{
+  "checkedAtUtc": "2026-10-22T01:13:46.160926+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "candidateMessageFile": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-family-audit-commit-message.txt",
+  "candidateMessage": "build(deps): refresh published family audit\n\nBind EventStore 3.126.1 and Tenants 5.10.0 observations to the\nalready committed declarations at 25ba30d6. Preserve every\nunrefreshed family and prior observation as historical context.\n\nKeep the unresolved, nonpackable Tenants.UI row explicit.\n",
+  "sha256": "cd032170b2f23f20e47e0d2d2aeb56059e4a5e0d13fddc6828a8b2394fd54122",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nbuild(deps): refresh published family audit\n\nBind EventStore 3.126.1 and Tenants 5.10.0 observations to the\nalready committed declarations at 25ba30d6. Preserve every\nunrefreshed family and prior observation as historical context.\n\nKeep the unresolved, nonpackable Tenants.UI row explicit.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

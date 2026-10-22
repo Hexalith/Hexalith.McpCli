@@ -1,0 +1,208 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.update-tenant",
+  "kind": "command",
+  "prerequisites": [
+    {
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-update",
+        "Name": "Vector Update Original",
+        "Description": "Description cleared by the update"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-update",
+          "commandType": "create-tenant",
+          "payload": {
+            "TenantId": "vector-update",
+            "Name": "Vector Update Original",
+            "Description": "Description cleared by the update"
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.create-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-update"
+        }
+      ]
+    }
+  ],
+  "invocation": {
+    "operation": "tenants.update-tenant",
+    "kind": "command",
+    "payload": {
+      "TenantId": "vector-update",
+      "Name": "Vector Update Renamed",
+      "Description": null
+    },
+    "envelope": {
+      "tenant": "system"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Renamed",
+          "Description": null
+        },
+        "correlationId": "<generated>"
+      },
+      "maskGenerated": [
+        "/messageId",
+        "/correlationId"
+      ]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": {},
+      "echoRequestFields": [
+        "correlationId",
+        "messageId"
+      ]
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.update-tenant"
+      },
+      {
+        "path": "/status",
+        "operator": "equals",
+        "value": "accepted"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/aggregateId",
+        "operator": "equals",
+        "value": "vector-update"
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-update"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-update",
+          "queryType": "get-tenant",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-update"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "tenantId": "vector-update",
+            "name": "Vector Update Renamed",
+            "description": null,
+            "status": "Active",
+            "members": [],
+            "configuration": {},
+            "createdAt": "2026-10-19T08:00:00+00:00"
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/name",
+          "operator": "equals",
+          "value": "Vector Update Renamed"
+        },
+        {
+          "path": "/document/description",
+          "operator": "equals",
+          "value": null
+        },
+        {
+          "path": "/document/status",
+          "operator": "equals",
+          "value": "Active"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-live-fixture-restore.stdout.txt",
+      "stderr": "eventstore-live-fixture-restore.stderr.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-live-fixture-build.stdout.txt",
+      "stderr": "eventstore-live-fixture-build.stderr.txt"
+    }
+  ]
+}

@@ -96,7 +96,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/mcpcli-enrolled-venv"
           source "$RUNNER_TEMP/mcpcli-enrolled-venv/bin/activate"
           python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt
-          python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
+          python3 -m unittest discover -v -s tools/conformance-vectors/v1 -p 'test_*.py'
           python3 tools/conformance-vectors/v1/check_enrolled.py --output "$RUNNER_TEMP/enrolled-evidence"
       - name: Retain enrolled-module receipts, inputs and diagnostics
         if: ${{ always() }}

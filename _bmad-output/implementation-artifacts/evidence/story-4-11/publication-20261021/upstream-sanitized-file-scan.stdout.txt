@@ -1,0 +1,6 @@
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log","violations":[]}
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml","violations":[]}
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml","violations":[]}
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/replacement-receipt.json","violations":[]}
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/packet-sha256.sanitized.json","violations":[]}
+{"file":"/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/packet-sha256.sanitized.json","violations":[]}

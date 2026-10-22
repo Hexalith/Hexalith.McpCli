@@ -1,0 +1,15 @@
+diff --git a/.github/workflows/p1r-qualification.yml b/.github/workflows/p1r-qualification.yml
+index 65b7f8f70..f594c85c6 100644
+--- a/.github/workflows/p1r-qualification.yml
++++ b/.github/workflows/p1r-qualification.yml
+@@ -12,7 +12,9 @@ permissions:
+ jobs:
+   preparation-controls:
+     runs-on: ubuntu-latest
+-    timeout-minutes: 15
++    # Passing preparation suites consumed 13 minutes in run 39663430445 before
++    # real registration and isolation checks. Keep every control within a bounded job.
++    timeout-minutes: 30
+     steps:
+       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+         with:

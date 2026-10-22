@@ -1,0 +1,15 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+    "-c",
+    "Release",
+    "-p:UseHexalithProjectReferences=false",
+    "-m:1",
+    "-warnaserror"
+  ],
+  "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+  "exitCode": 0,
+  "seconds": 13.51792953700351
+}

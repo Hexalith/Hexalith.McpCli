@@ -1,0 +1,20 @@
+{
+  "checkedAtUtc": "2026-10-22T01:07:40.150911+00:00",
+  "command": [
+    "dnx",
+    "dotnet-inspect",
+    "-y",
+    "--",
+    "find",
+    "*NativeSourceProof*",
+    "--package",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.contracts.3.126.1.nupkg",
+    "-n",
+    "12"
+  ],
+  "exitCode": 0,
+  "actualArchiveSha256": "9de3a0646f638b155b93043dc18f9c0cbe6f4051c254366ef2ba91416a0058de",
+  "matchedType": "Hexalith.EventStore.Contracts.Streams.NativeSourceProof",
+  "stdout": "# Find: *NativeSourceProof*\n\n## Results\n\n| Type | Namespace | Kind | Library | Source |\n| ---- | --------- | ---- | ------- | ------ |\n| NativeSourceProof | Hexalith.EventStore.Contracts.Streams | class | Hexalith.EventStore.Contracts | hexalith.eventstore.contracts@3.126.1 |\n",
+  "stderr": ""
+}

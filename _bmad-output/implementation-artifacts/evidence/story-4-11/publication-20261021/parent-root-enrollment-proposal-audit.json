@@ -1,0 +1,91 @@
+{
+  "capturedAtUtc": "2026-10-22T03:58:27.777628+00:00",
+  "scope": "Precommit independent source-hunk read snapshot and exact proposal approval-input comparison. Final baseline diff, prerequisite release, exact restore, all required checks and Ubuntu acceptance remain pending.",
+  "alreadyReadSourceFiles": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "15e5c2b2b8e0f4269aa32b31fa5e184e1d66f31c2281b1a4544404a240727833"
+    },
+    {
+      "path": "src/Hexalith.McpCli/Hexalith.McpCli.csproj",
+      "sha256": "181b26acedfec3526eb22579bfff1329287515511a9302623c48485f2af386fb"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+      "sha256": "7242623f053e38f9bf213352e7cac336d4619b172807177b92e9525d6cde4782"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.ConformanceHost/Program.cs",
+      "sha256": "cd6e892de219adf93dc5dfc6b0e0ca895ca0fc6238206c805124a8250f981377"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.ConformanceHost/VectorCompatibilityValidator.cs",
+      "sha256": "fe35bd3159d02631d6905ea2a51c7ed183568b56a9c2a4f30d3e8de11a21fefd"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.ConformanceHost/VectorGatewayCapture.cs",
+      "sha256": "dd16517cc596ab889fa770895bcf202b2d355161100024ce8ca0fda19544e640"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs",
+      "sha256": "c528b2c5e0c9d540a1e211e68c9d783ecedef88702f71ce21be86fd30456661a"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "sha256": "fb656b89807e6b0d625f82e013105906d162b17fa28af321f85e4d5a29696353"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/check_enrolled.py",
+      "sha256": "b4168e3b82f805766a54a513401eecbc0a2d118e4b6450b93af26520f75efd0a"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/run-sample-loopback.sh",
+      "sha256": "e367c75885cecc638a28f55a0478152fafafd00ce2a1082a83647522a527e526"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/run_loopback.py",
+      "sha256": "66829c6b43be302bd8732135d32adeb10e4eabf58a95ca6c0129642e09e3a119"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/run_packaged_process_fixture.py",
+      "sha256": "29a1705b321372b50d5b5b3e983365e5951d8812e415c164e6428b3c641f323f"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_enrolled.py",
+      "sha256": "11461b80f0cf535d2ff4bc17a971b6e23afe9e70db0bcc0873daa6ab8f1400d9"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "sha256": "09adecf57029d47808b1d9f40329b346745469eb5b2cfadd1016298754398f94"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_process_fixture.py",
+      "sha256": "65d3905098e91409d384902a58d4930f8975a54a8a29f670fc6fb49f7e172ea2"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_validate.py",
+      "sha256": "f7ba910bb534dd1431b8e3270e6b9c5cd953e592b0497fcc5e8f8b3ad359005c"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/v1-scope.json",
+      "sha256": "425f1e60083d5301dada43e38ed774469f6d1596ade8967c5bc46bee3ba72795"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/validate.py",
+      "sha256": "015f4b45c190fb18eff3884e3b44edf6d9910adc63fbf82cbc2bae2ee122c459"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/verify_artifact.py",
+      "sha256": "ede052c505288bfe84a596c9eac385bdabf1ba6ef9fb046d42d08fcabd8bdc09"
+    },
+    {
+      "path": "tools/dependency-policy.json",
+      "sha256": "0b25a1a1a05e7da8832ec2f66ada8a0fa172b562a9ac46c7fc3e42f0adb1a398"
+    }
+  ],
+  "actual14VectorHashesEqualOriginalApprovalWithoutVersionRebinding": true,
+  "approvedInventoryBytesExactlyEqual": true,
+  "receiptStatus": "proposed-pending-repaired-full-release",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

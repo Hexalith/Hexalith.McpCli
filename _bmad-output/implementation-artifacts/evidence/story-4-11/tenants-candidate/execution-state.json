@@ -1,0 +1,18 @@
+{
+  "source": "/home/administrator/projects/hexalith/tenants",
+  "snapshot": "/tmp/mcpcli-story411-tenants-l_6r95hf",
+  "evidence": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate",
+  "revision": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+  "tree": "18393b0d0a3293af0a13a4b9580cffcbaea72b8d",
+  "buildsRevision": "17d0c6ffec5fb3c8d8058e67cb85644460cb5256",
+  "mcpcliRevision": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+  "candidateVersion": "5.10.0",
+  "eventstore": {
+    "source": "/home/administrator/projects/hexalith/eventstore",
+    "revision": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+    "snapshot": "/tmp/mcpcli-story411-eventstore-4emmx2ji",
+    "candidateVersion": "3.126.1",
+    "buildsRevision": "2744d549270298cfe73679f76b477a7368429006"
+  },
+  "combinedSnapshot": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk"
+}

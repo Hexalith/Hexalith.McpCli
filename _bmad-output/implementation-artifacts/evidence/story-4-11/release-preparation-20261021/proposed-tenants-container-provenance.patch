@@ -1,0 +1,15 @@
+--- a/Directory.Build.targets
++++ b/Directory.Build.targets
+@@ -31,4 +31,12 @@
+     </ItemGroup>
+   </Target>
+ 
++  <!-- Reuse the shared SDK provenance repair from the centrally pinned Builds checkout. -->
++  <PropertyGroup>
++    <HexalithContainerProvenanceTargets>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++  </PropertyGroup>
++  <Import Project="$(HexalithContainerProvenanceTargets)" />
++
+ </Project>

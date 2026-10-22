@@ -1,0 +1,28 @@
+{
+  "preparedAtUtc": "2026-10-21T23:23:26.655206+00:00",
+  "scratch": "/tmp/mcpcli-story411-codeql-compare-3jub6auv",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "sourceSnapshotPolicy": "Separate task worktree/snapshot; completed runtime-proof checkout remains unchanged. Full tracked C# input set and build-mode none retained.",
+  "versions": [
+    {
+      "version": "2.27.2",
+      "releaseId": 400915892,
+      "publishedAt": "2026-10-07T11:21:00Z",
+      "assetId": 603149970,
+      "name": "codeql-linux64.zip",
+      "sizeBytes": 416457825,
+      "digest": "sha256:ac0a4ea06843577ed3a1f5af145756c3085ebfd42e59a5aff1b66489f29d16dc",
+      "url": "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.2/codeql-linux64.zip"
+    },
+    {
+      "version": "2.27.3",
+      "releaseId": 415285593,
+      "publishedAt": "2026-10-20T18:50:18Z",
+      "assetId": 648295585,
+      "name": "codeql-linux64.zip",
+      "sizeBytes": 418194884,
+      "digest": "sha256:845075a2fa2fdf72629adc6cbde6264691b698d1f294bd27f10c6b579cd750a4",
+      "url": "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.3/codeql-linux64.zip"
+    }
+  ]
+}

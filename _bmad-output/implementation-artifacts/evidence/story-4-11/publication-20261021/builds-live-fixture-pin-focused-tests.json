@@ -1,0 +1,380 @@
+{
+  "startedAtUtc": "2026-10-22T02:12:08.174520+00:00",
+  "source": "85290197d2a4324b50560630e8992d71c3318784 plus bound working repair",
+  "commands": [
+    {
+      "label": "reproduce-fixed",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--filter-class",
+        "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/reproduce-fixed-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "reproduce-fixed.trx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 17.363930182997137,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/reproduce-fixed.stdout.txt",
+          "bytes": 581,
+          "sha256": "ddaf6cb81c9ebfb70466222e9276e3ad9d45589b31328cefab5684115b101fad"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/reproduce-fixed.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "counters": {
+        "total": "17",
+        "executed": "17",
+        "passed": "17",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/reproduce-fixed-results/reproduce-fixed.trx",
+        "bytes": 25234,
+        "sha256": "c40961a87a5a02696e8ceed0df6550b5eca59d5a4c08443d6b7e2aa20b35fe4e"
+      },
+      "tests": [
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"run\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"test\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.CancellationRegistrationPropagatesAndUnregistersAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.HumanDiagnosticRenderingIncludesMetadataAndEscapesControlsAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MissingRequiredOptionWritesStableJsonUsageDiagnosticAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithMissingManifestReturnsUsageExitCodeAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.CancelledDownWritesCancelledEvidenceAsync",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.BlankManifestValueWritesStableJsonUsageDiagnosticAsync",
+          "outcome": "Passed"
+        }
+      ]
+    },
+    {
+      "label": "schema-current-and-old-pin",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--filter-class",
+        "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/schema-current-and-old-pin-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "schema-current-and-old-pin.trx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 5.351989996997872,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/schema-current-and-old-pin.stdout.txt",
+          "bytes": 597,
+          "sha256": "824ef43a20809323da2f5efca4b7a65c097fe76b12a0b7dc8bc98d933d629873"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/schema-current-and-old-pin.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "counters": {
+        "total": "47",
+        "executed": "47",
+        "passed": "47",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/schema-current-and-old-pin-results/schema-current-and-old-pin.trx",
+        "bytes": 72388,
+        "sha256": "f8beb61b158a699c92ef3d6f6dfe15d94e8c315a2bee36a18ad90b9a7ed3dd6e"
+      },
+      "tests": [
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithNestedDuplicateJsonKeyReturnsStableRule(original: \"\\\"fixture\\\": \\\"fixtures/full.json\\\"\", replacement: \"\\\"fixture\\\": \\\"fixtures/full.json\\\", \\\"fixture\\\": \\\"fixtu\"\u00b7\u00b7\u00b7)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithNestedDuplicateJsonKeyReturnsStableRule(original: \"\\\"domain\\\": \\\"module-a\\\"\", replacement: \"\\\"domain\\\": \\\"module-a\\\", \\\"domain\\\": \\\"module-a\\\"\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"ghp_abcdefghijklmnopqrstuvwxyz012345\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"AKIAIOSFODNN7EXAMPLE\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.s\"\u00b7\u00b7\u00b7)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"-----BEGIN PRIVATE KEY-----\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"Authorization=Basic dXNlcjpwYXNz\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"AccountKey=abcdef0123456789\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"aws_access_key_id=AKIAIOSFODNN7EXAMPLE\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"bearer abcdefghijklmnop\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionRejectsCredentialShapes(value: \"fixtures/data.json?sig=abcdef0123456789\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithInvalidDependencyGraphReturnsStableRule(original: \"\\\"dependencies\\\": [\\\"module-a\\\"]\", replacement: \"\\\"dependencies\\\": [\\\"module-a\\\", \\\"module-a\\\"]\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithInvalidDependencyGraphReturnsStableRule(original: \"\\\"dependencies\\\": []\", replacement: \"\\\"dependencies\\\": [\\\"module-b\\\"]\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithInvalidDependencyGraphReturnsStableRule(original: \"\\\"dependencies\\\": []\", replacement: \"\\\"dependencies\\\": [\\\"module-a\\\"]\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionAllowsOrdinaryMetadata(value: \"honeyjar\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionAllowsOrdinaryMetadata(value: \"api-key-management\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretDetectionAllowsOrdinaryMetadata(value: \"assemblies/monkeyjungle.dll\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SecretBearingIdentifierIsNotRetainedInDiagnostics",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlaceholderDetectionUsesPreciseSupportedForms(value: \"fixtures/$PROFILE/data.json\", expected: True)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlaceholderDetectionUsesPreciseSupportedForms(value: \"fixtures/{{PROFILE}}/data.json\", expected: True)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlaceholderDetectionUsesPreciseSupportedForms(value: \"coverage-100%.json\", expected: False)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlaceholderDetectionUsesPreciseSupportedForms(value: \"fixtures/${PROFILE}/data.json\", expected: True)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlaceholderDetectionUsesPreciseSupportedForms(value: \"fixtures/%PROFILE%/data.json\", expected: True)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadOversizedManifestReturnsStableLimitRule",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.SupportedProfileClassesAreImmutable",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.RepositoryPathSchemaAndRuntimeValidationRemainInParity",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithUnreadableDescriptorReturnsStableRule",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithDuplicateJsonKeyReturnsStableRule",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"eventStoreVersion\", version: \"3.120.0\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"frontComposerVersion\", version: \"4.6.0\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"eventStoreVersion\", version: \"3.126.0\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"eventStoreVersion\", version: \"3.125.1\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"\\\"domain\\\": \\\"module-a\\\"\", replacement: \"\\\"domain\\\": \\\"bearer SUPERSECRET_8472\\\"\", ruleId: \"HXM007\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"assemblies/module-a.dll\", replacement: \"assemblies/missing.dll\", ruleId: \"HXM005\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"\\\"hexalith.module-manifest.v1\\\"\", replacement: \"\\\"hexalith.module-manifest.v2\\\"\", ruleId: \"HXM001\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"assemblies/module-a.dll\", replacement: \"assemblies/bearer token=SUPERSECRET_8472.dll\", ruleId: \"HXM007\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"\\\"id\\\": \\\"p0-two-module\\\"\", replacement: \"\\\"id\\\": \\\"p0-two-module\\\", \\\"unknown\\\": true\", ruleId: \"HXM002\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"assemblies/module-a.dll\", replacement: \"../module-a.dll\", ruleId: \"HXM004\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"\\\"id\\\": \\\"module-b\\\"\", replacement: \"\\\"id\\\": \\\"module-a\\\"\", ruleId: \"HXM003\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"module-a\", replacement: \"${MODULE_ID}\", ruleId: \"HXM006\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadInvalidManifestReturnsStableRule(original: \"\\\"domain\\\": \\\"module-a\\\"\", replacement: \"\\\"domain\\\": \\\"module-a\\\", \\\"token\\\": \\\"SUPERSECRET_8472\\\"\", ruleId: \"HXM002\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithEscapingDescriptorSymlinkFailsClosed",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity",
+          "outcome": "Passed"
+        }
+      ]
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed",
+  "completedAtUtc": "2026-10-22T02:12:30.891795+00:00"
+}

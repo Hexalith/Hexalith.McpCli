@@ -1,0 +1,13 @@
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll
+  Hexalith.EventStore.SignalR -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.SignalR/bin/Release/net10.0/Hexalith.EventStore.SignalR.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.EventStore.Client -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Client/bin/Release/net10.0/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.Admin.UI -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Admin.UI/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.dll
+  Hexalith.EventStore.Admin.UI.E2E -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.98

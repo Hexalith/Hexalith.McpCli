@@ -1,0 +1,182 @@
+{
+  "checkedAtUtc": "2026-10-22T04:38:10.494145+00:00",
+  "result": "passed",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "source": "205cbc5019343d344643b530fb03aee82af2840d",
+  "version": "5.10.1",
+  "releaseRun": 39721533752,
+  "index": {
+    "url": "https://registry.hexalith.com/v2/tenants/manifests/5.10.1",
+    "httpStatus": 200,
+    "file": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/actual-oci/index.raw",
+    "bytes": 493,
+    "sha256": "a5942091942493abee2bb9c86cafac33e7b69f5e594eae4161062ee0cdf139f3",
+    "dockerContentDigest": "sha256:a5942091942493abee2bb9c86cafac33e7b69f5e594eae4161062ee0cdf139f3",
+    "matchesOfficialRawBytes": true
+  },
+  "children": [
+    {
+      "platform": "linux/amd64",
+      "manifest": {
+        "url": "https://registry.hexalith.com/v2/tenants/manifests/sha256:4787ab49b7245bdaa0e26d66a3428fb18bef5bff3455527a5d3968a2bcd58138",
+        "httpStatus": 200,
+        "file": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/actual-oci/child-linux-amd64.manifest.raw",
+        "bytes": 1399,
+        "sha256": "4787ab49b7245bdaa0e26d66a3428fb18bef5bff3455527a5d3968a2bcd58138",
+        "dockerContentDigest": "sha256:4787ab49b7245bdaa0e26d66a3428fb18bef5bff3455527a5d3968a2bcd58138",
+        "matchesOfficialRawBytes": true
+      },
+      "config": {
+        "url": "https://registry.hexalith.com/v2/tenants/blobs/sha256:5d788f0c404fcb8f19fb6522da856100d25275d539d884a321d2238a67cfe157",
+        "httpStatus": 200,
+        "file": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/actual-oci/child-linux-amd64.config.raw",
+        "bytes": 4189,
+        "sha256": "5d788f0c404fcb8f19fb6522da856100d25275d539d884a321d2238a67cfe157",
+        "dockerContentDigest": "sha256:5d788f0c404fcb8f19fb6522da856100d25275d539d884a321d2238a67cfe157",
+        "matchesOfficialRawBytes": true
+      },
+      "provenanceLabels": {
+        "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.Tenants",
+        "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.1",
+        "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.Tenants/blob/205cbc5019343d344643b530fb03aee82af2840d/README.md",
+        "org.opencontainers.image.revision": "205cbc5019343d344643b530fb03aee82af2840d",
+        "org.opencontainers.image.version": "5.10.1"
+      },
+      "createdLabels": {
+        "org.opencontainers.image.created": "2026-10-22T04:25:07Z",
+        "org.opencontainers.artifact.created": "2026-10-22T04:25:07Z"
+      },
+      "configCreated": "2026-10-22T04:25:17.7314525Z",
+      "sdkVersion": "mcr.microsoft.com/dotnet/aspnet",
+      "allIdentityAndCompleteUtcTimestampChecksPassed": true
+    },
+    {
+      "platform": "linux/arm64",
+      "manifest": {
+        "url": "https://registry.hexalith.com/v2/tenants/manifests/sha256:ca946cf2b4af6362f8d13109545eeb2af3ca1199552ab953b0a3f956f06f3426",
+        "httpStatus": 200,
+        "file": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/actual-oci/child-linux-arm64.manifest.raw",
+        "bytes": 1399,
+        "sha256": "ca946cf2b4af6362f8d13109545eeb2af3ca1199552ab953b0a3f956f06f3426",
+        "dockerContentDigest": "sha256:ca946cf2b4af6362f8d13109545eeb2af3ca1199552ab953b0a3f956f06f3426",
+        "matchesOfficialRawBytes": true
+      },
+      "config": {
+        "url": "https://registry.hexalith.com/v2/tenants/blobs/sha256:aa283832b649799511e1e067aed152143b4cb4a7c2d2d987539f68c2c3ceb0c1",
+        "httpStatus": 200,
+        "file": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/actual-oci/child-linux-arm64.config.raw",
+        "bytes": 4190,
+        "sha256": "aa283832b649799511e1e067aed152143b4cb4a7c2d2d987539f68c2c3ceb0c1",
+        "dockerContentDigest": "sha256:aa283832b649799511e1e067aed152143b4cb4a7c2d2d987539f68c2c3ceb0c1",
+        "matchesOfficialRawBytes": true
+      },
+      "provenanceLabels": {
+        "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.Tenants",
+        "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.1",
+        "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.Tenants/blob/205cbc5019343d344643b530fb03aee82af2840d/README.md",
+        "org.opencontainers.image.revision": "205cbc5019343d344643b530fb03aee82af2840d",
+        "org.opencontainers.image.version": "5.10.1"
+      },
+      "createdLabels": {
+        "org.opencontainers.image.created": "2026-10-22T04:25:07Z",
+        "org.opencontainers.artifact.created": "2026-10-22T04:25:07Z"
+      },
+      "configCreated": "2026-10-22T04:25:17.6913182Z",
+      "sdkVersion": "mcr.microsoft.com/dotnet/aspnet",
+      "allIdentityAndCompleteUtcTimestampChecksPassed": true
+    }
+  ],
+  "normalPublicationPreflightPhases": [
+    {
+      "phase": "verify",
+      "checkedAt": "2026-10-22T04:23:47.040313Z",
+      "result": "pass",
+      "identitySha256": "174b1d2a16ce547eec083a8197933ed49448b3b6cdaa98cf200cafe81eed717b"
+    },
+    {
+      "phase": "publish",
+      "checkedAt": "2026-10-22T04:25:04.909887Z",
+      "result": "pass",
+      "identitySha256": "174b1d2a16ce547eec083a8197933ed49448b3b6cdaa98cf200cafe81eed717b"
+    },
+    {
+      "phase": "container",
+      "checkedAt": "2026-10-22T04:25:09.252194Z",
+      "result": "pass",
+      "identitySha256": "174b1d2a16ce547eec083a8197933ed49448b3b6cdaa98cf200cafe81eed717b"
+    }
+  ],
+  "pinnedPublisherHelpers": [
+    {
+      "path": "Github/publish-containers/oci_registry_validator.py",
+      "sha256": "0fff2281ecb9d8a46c48d65d1b0de58b724f2439138da43395004232e5942045",
+      "exactPinnedGitBytesMatch": true
+    },
+    {
+      "path": "Github/publish-containers/publication_preflight.py",
+      "sha256": "f87b48e649092cc68de8f07977bae48c65f0570007f60de42887201988ee0062",
+      "exactPinnedGitBytesMatch": true
+    },
+    {
+      "path": "Github/publish-containers/publish-containers.sh",
+      "sha256": "7e64bb1f744b9e3cb793df5c47813d15db00aaa8bc76e1875088f259574e9622",
+      "exactPinnedGitBytesMatch": true
+    },
+    {
+      "path": "Github/publish-containers/smoke-container-platforms.sh",
+      "sha256": "f11865658a24ecea906da087d8446c7f631dc5a9328e294676534d590ef0e89e",
+      "exactPinnedGitBytesMatch": true
+    },
+    {
+      "path": "Github/publish-containers/smoke_container_platforms.py",
+      "sha256": "7f1161d6f477c77ddf6a1e2f381df03451168565dd8cabc28010ab23db443491",
+      "exactPinnedGitBytesMatch": true
+    }
+  ],
+  "smoke": {
+    "endpoint": "/alive",
+    "environment": "Development",
+    "image_repository": "registry.hexalith.com/tenants",
+    "platforms": [
+      {
+        "cleanup": "pass",
+        "digest": "sha256:4787ab49b7245bdaa0e26d66a3428fb18bef5bff3455527a5d3968a2bcd58138",
+        "outcome": "pass",
+        "platform": "linux/amd64"
+      },
+      {
+        "cleanup": "pass",
+        "digest": "sha256:ca946cf2b4af6362f8d13109545eeb2af3ca1199552ab953b0a3f956f06f3426",
+        "outcome": "pass",
+        "platform": "linux/arm64"
+      }
+    ],
+    "result": "pass",
+    "timeout_seconds": 180.0
+  },
+  "smokeFiles": [
+    {
+      "path": "smoke-linux-amd64.log",
+      "bytes": 218,
+      "sha256": "5fe53290dd2a348be582a1978be8bf623f9b56b8fbf67b7cb328b2d1eff418e4"
+    },
+    {
+      "path": "smoke-linux-arm64.log",
+      "bytes": 1207,
+      "sha256": "c82e9490135df678d546ef5493ec2956ee18050a497da9a4f914feb7b2d38940"
+    },
+    {
+      "path": "smoke-preflight.log",
+      "bytes": 158,
+      "sha256": "ef50eee4a9ca4d5635e13c71220687e44b003733b761ac1c15c335be9bef6e35"
+    },
+    {
+      "path": "smoke-results.json",
+      "bytes": 555,
+      "sha256": "9363c529d0447dfafa5f3bc7b6a17bcfcc9ddeb20b9d7a322d3b9a39d18c7ee9"
+    }
+  ],
+  "scope": "Authenticated read-only registry index, both platform child manifests and configs match official successful release raw bytes and digests. Both platforms have the exact reviewed source/version URLs and complete UTC created timestamps within the release window. Official digest-bound Development /alive smoke and cleanup passed for both. No live authorization, persistence or effect visibility claimed.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

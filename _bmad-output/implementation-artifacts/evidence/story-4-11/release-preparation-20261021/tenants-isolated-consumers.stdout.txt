@@ -1,0 +1,3 @@
+  Determining projects to restore...
+/tmp/mcpcli-story411-full-tenants-fa7b01k8/release-package-consumers/contracts-client-consumer/ContractsClientConsumer.csproj : error NU1008: The following PackageReference items cannot define a value for Version: Hexalith.Tenants.Contracts, Hexalith.Tenants.Client. Projects using Central Package Management must define a Version value on a PackageVersion item. For more information, visit https://aka.ms/nuget/cpm/gettingstarted
+  Failed to restore /tmp/mcpcli-story411-full-tenants-fa7b01k8/release-package-consumers/contracts-client-consumer/ContractsClientConsumer.csproj (in 36 ms).

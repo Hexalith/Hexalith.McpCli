@@ -1,0 +1,89 @@
+{
+  "checkedAtUtc": "2026-10-22T01:19:18.527507+00:00",
+  "serverSidecarRead": {
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.admin.cli/3.126.1/hexalith.eventstore.admin.cli.3.126.1.nupkg.sha512",
+    "status": 404
+  },
+  "signatureVerificationContentHashBlocks": [
+    {
+      "packageId": "Hexalith.EventStore.Admin.Abstractions",
+      "nugetVerifiedContentHash": "sha512-EWrFprs9t1Mho8udbjcWRomjed7XP3oSmXtUS1D7CLSxtYt9FzjFcLCa+0g2C9yqWYHv78QHgjp157Sca89cuQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Admin.Cli",
+      "nugetVerifiedContentHash": "sha512-+BV/0YdW0/vsUNaTK8XbAqn22rBcY7wYxafRe8mzveQ4ydD4foiwlo2JKUBXPfTGnRqaBLSIdCGgzCzN1miphQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Admin.Server",
+      "nugetVerifiedContentHash": "sha512-JBIn+kanTbUKMU7m0fbu+Jd9qEAkHBGdXLcVbNSkBqiR//qjaHL1QnIeD0nArCKHv/96ZqBgt9tVkWgtNcFPaQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Aspire",
+      "nugetVerifiedContentHash": "sha512-4lNP1OnLJWFlx3PxGu+Sj+7PSBVzkqSmqGoYTYnkw6PLTGLj1QtFd+Cp3xUivsJjax+t2Hp9QVKjVKoenpWx/A=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Client",
+      "nugetVerifiedContentHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Contracts",
+      "nugetVerifiedContentHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.DomainService",
+      "nugetVerifiedContentHash": "sha512-1YzRmuvTOJ0YaGU2aOrPn99EGGBNe9KNV3zx19TMOKRwaGrOme3XyfR9QPySyni1nXTYAGj2BWycdiKKPc+jBQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Gateway",
+      "nugetVerifiedContentHash": "sha512-evPOmUMg3rq+oNyCopQ3oQ82ZPXE7e2drWPp2vNT7ZEsJca5tDxIFa8xrpx3xFnQKhnEBvikWGXLRevdXybDqw=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.RestApi.Generators",
+      "nugetVerifiedContentHash": "sha512-jcyInrLXwcCbgAd/fhHd2/Si1tfJ3gvs9sM3e/TXh/GU6NCzsEeqpTk3D2q0L+xC1FC3ll7xqvkSUGDGRkLk+g=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Server",
+      "nugetVerifiedContentHash": "sha512-fCbDUrmaCnw8SyaXJ+FZAS+P5szJ4bNnqaitqF7CFDCr6NJe8ZMwHRqLv7Ocb07RYZ+tf5zspPRriTpiU29lFQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.ServiceDefaults",
+      "nugetVerifiedContentHash": "sha512-/hg3Yn7DU7a4VDvaK+sGiuSQG/1w2fl6Y/H8G7vrId7iWn+9gU//aukYh2cYvSw2B9xmtYU++PD4As5+/SfnJw=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.SignalR",
+      "nugetVerifiedContentHash": "sha512-Lp9PRqVJlZVdLoRCx2yOjGQqTK6xv1GIz72Eknx2Y2iHhrKufWMiFKMALJeBEf0FIRe5f0JBORlJ/uVGiLbfMQ=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Testing",
+      "nugetVerifiedContentHash": "sha512-2FsO4h4XLpJNYXmld5ug2W000AoSL7FaufnE70gfOeHaHRqaC0p8FQ6ALVDeWvN+RUS6sGFIq0CzNpKMASldDw=="
+    },
+    {
+      "packageId": "Hexalith.EventStore.Testing.Integration",
+      "nugetVerifiedContentHash": "sha512-J2QvCs9IIqJ+eHRkzygAFnq6VA5lUkn2vafJ79wDc9IA0L7KFQB4KTLOF3l+wKB8+gGW+EABGCxpGnZiqjD2ww=="
+    },
+    {
+      "packageId": "Hexalith.Tenants.Aspire",
+      "nugetVerifiedContentHash": "sha512-Bs/+MQ4Q+d7YRvpFdzcYX0vWBZ2pzRhatw5qjShn54e4ESyUPgCIGX4mrqJdad+WrOnSMwEw+qYEVY5wcQuh0w=="
+    },
+    {
+      "packageId": "Hexalith.Tenants.Client",
+      "nugetVerifiedContentHash": "sha512-CWRAxP0XzDs5AbIcIdWIGladDWMSa5vgI0Ldlu7I65fYlM47sImrOwhXIrCHaXPnSTr40kptcPPjADNIEYJBkg=="
+    },
+    {
+      "packageId": "Hexalith.Tenants.Contracts",
+      "nugetVerifiedContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA=="
+    },
+    {
+      "packageId": "Hexalith.Tenants.Server",
+      "nugetVerifiedContentHash": "sha512-vndFnKteVx9isAVDvvxTgZnuFneoQWZH07KBtnz6HH18v0kOGO96/Nfa1BvokilHSiepwrwaNr6kvGMJ6xULDw=="
+    },
+    {
+      "packageId": "Hexalith.Tenants.Testing",
+      "nugetVerifiedContentHash": "sha512-p5VPQSL/k5K9LiAG9njEZx87l3C2OxWBlq20TaqF31KVlRppHmGK2/ZZxHKcclR/VDiDaI4pRrZlcP2ntpSFhw=="
+    }
+  ],
+  "scope": "Observe native NuGet logical content hash versus raw archive and independent sidecar; no cache rewrite or manufactured assets identity.",
+  "toolMetadataMatchesNativeVerifierContentHash": true,
+  "rawSignedArchiveHashRemainsDistinct": true,
+  "sidecarThirdValueRemainsObservedNotRewritten": true
+}

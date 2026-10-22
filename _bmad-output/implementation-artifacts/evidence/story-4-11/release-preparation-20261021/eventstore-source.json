@@ -1,0 +1,9 @@
+{
+  "owner": "/home/administrator/projects/hexalith/eventstore",
+  "sourceCommit": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+  "sourceTree": "8aa548b82499bf5adf5c9daad6c62ed004db5863",
+  "previousCandidateSource": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+  "snapshot": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7",
+  "buildsCommit": "2744d549270298cfe73679f76b477a7368429006",
+  "archiveExcludes": "Reference contents and historical _bmad-output, except one source-owned test resource. Focused tests retain any missing-fixture blockers separately."
+}

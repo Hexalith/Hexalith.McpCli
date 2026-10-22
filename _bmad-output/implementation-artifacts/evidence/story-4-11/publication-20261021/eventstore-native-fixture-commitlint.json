@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "candidateFile": "/tmp/mcpcli-story411-eventstore-native-fixture-commit.txt",
+  "exactFullCandidate": "test(projections): isolate synthetic retry source bindings\n\nConstruct unrelated same-shard terminal work as a fresh record instead\nof inheriting the original stream native proof, recovery bindings and\nlease metadata. Preserve the production scheduler validation guard.\n\nAssert the persisted real work retains its valid native proof. Protect\nthe fixture against the old cross-identity clone behavior and verify the\naffected live convergence, health and shard scenario on isolated Dapr.\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\ntest(projections): isolate synthetic retry source bindings\n\nConstruct unrelated same-shard terminal work as a fresh record instead\nof inheriting the original stream native proof, recovery bindings and\nlease metadata. Preserve the production scheduler validation guard.\n\nAssert the persisted real work retains its valid native proof. Protect\nthe fixture against the old cross-identity clone behavior and verify the\naffected live convergence, health and shard scenario on isolated Dapr.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

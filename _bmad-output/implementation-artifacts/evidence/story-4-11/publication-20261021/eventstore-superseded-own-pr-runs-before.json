@@ -1,0 +1,2547 @@
+{
+  "observedAtUtc": "2026-10-21T20:40:06.697406+00:00",
+  "runs": [
+    {
+      "id": 39666432643,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1068,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 305921075,
+      "check_suite_id": 107501608597,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5helQ",
+      "created_at": "2026-10-21T19:59:46Z",
+      "updated_at": "2026-10-21T20:01:59Z",
+      "run_started_at": "2026-10-21T19:59:46Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666432643",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666432643",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "triggering_actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39666418856,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1067,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921075,
+      "check_suite_id": 107501569385,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5fFaQ",
+      "created_at": "2026-10-21T19:59:40Z",
+      "updated_at": "2026-10-21T19:59:47Z",
+      "run_started_at": "2026-10-21T19:59:40Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666418856",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666418856",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "triggering_actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39666360900,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1066,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921075,
+      "check_suite_id": 107501399768,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5Uu2A",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:00:48Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360900",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360900",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39666360471,
+      "name": "Payload Protection",
+      "path": ".github/workflows/payload-protection.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 385,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 359890992,
+      "check_suite_id": 107501398290,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5UpEg",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:01:41Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360471",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360471",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39666360289,
+      "name": "Corrective Work Authorization",
+      "path": ".github/workflows/corrective-work-authorization.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 59,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 388229764,
+      "check_suite_id": 107501397714,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5Um0g",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:02:57Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360289",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360289",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39666360782,
+      "name": "Dependency Review",
+      "path": ".github/workflows/dependency-review.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 124,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 305921076,
+      "check_suite_id": 107501399228,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5UsvA",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:00:09Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360782",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360782",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/dependency-review.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39666360288,
+      "name": "Advisory Tests",
+      "path": ".github/workflows/advisory-tests.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1006,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 310020568,
+      "check_suite_id": 107501397725,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5Um3Q",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:05:59Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360288",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360288",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39666360293,
+      "name": "P1R Qualification Preparation",
+      "path": ".github/workflows/p1r-qualification.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 216,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 376400190,
+      "check_suite_id": 107501397713,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5Um0Q",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:18:01Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360293",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360293",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39666360358,
+      "name": "Integration Tests",
+      "path": ".github/workflows/integration.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1152,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 300068044,
+      "check_suite_id": 107501397955,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5Unww",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:24:37Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360358",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360358",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39666360786,
+      "name": "CodeQL",
+      "path": ".github/workflows/codeql.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 1111,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921074,
+      "check_suite_id": 107501399307,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5UtCw",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:29:36Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360786",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360786",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/codeql.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39666360856,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+      "run_number": 2124,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 238596342,
+      "check_suite_id": 107501399620,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZB5UuRA",
+      "created_at": "2026-10-21T19:59:14Z",
+      "updated_at": "2026-10-21T20:30:04Z",
+      "run_started_at": "2026-10-21T19:59:14Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39666360856",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39666360856",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "6789d43e59d882c6374ad10df168ba2ab14c0c9b",
+        "tree_id": "94aab9e826f68a2d086062096e84348a9cc75161",
+        "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.",
+        "timestamp": "2026-10-21T19:59:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670844409,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1074,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 305921075,
+      "check_suite_id": 107513966994,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCFTxkg",
+      "created_at": "2026-10-21T20:30:09Z",
+      "updated_at": "2026-10-21T20:31:31Z",
+      "run_started_at": "2026-10-21T20:30:09Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670844409",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670844409",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "triggering_actor": {
+        "id": 206951365,
+        "login": "cursor[bot]",
+        "type": "Bot",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/apps/cursor"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670725928,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1072,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921075,
+      "check_suite_id": 107513639912,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE_z6A",
+      "created_at": "2026-10-21T20:29:20Z",
+      "updated_at": "2026-10-21T20:30:10Z",
+      "run_started_at": "2026-10-21T20:29:20Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670725928",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670725928",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670694251,
+      "name": "Dependency Review",
+      "path": ".github/workflows/dependency-review.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 125,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 305921076,
+      "check_suite_id": 107513549563,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6S-w",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:30:31Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670694251",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670694251",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/dependency-review.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670693777,
+      "name": "P1R Qualification Preparation",
+      "path": ".github/workflows/p1r-qualification.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 219,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 376400190,
+      "check_suite_id": 107513548212,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6NtA",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:29:26Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670693777",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670693777",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39670694176,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1071,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921075,
+      "check_suite_id": 107513549498,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6Sug",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:29:28Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670694176",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670694176",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670693746,
+      "name": "Payload Protection",
+      "path": ".github/workflows/payload-protection.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 388,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 359890992,
+      "check_suite_id": 107513548132,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6NZA",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:33:22Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670693746",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670693746",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39670693821,
+      "name": "Corrective Work Authorization",
+      "path": ".github/workflows/corrective-work-authorization.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 62,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 388229764,
+      "check_suite_id": 107513548328,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6OKA",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:33:22Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670693821",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670693821",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39670693829,
+      "name": "Integration Tests",
+      "path": ".github/workflows/integration.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1155,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 300068044,
+      "check_suite_id": 107513548369,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6OUQ",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:36:03Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670693829",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670693829",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39670694239,
+      "name": "CodeQL",
+      "path": ".github/workflows/codeql.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1114,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 305921074,
+      "check_suite_id": 107513549492,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6StA",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:36:41Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670694239",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670694239",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/codeql.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670694457,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 2127,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 238596342,
+      "check_suite_id": 107513550246,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6Vpg",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:36:54Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670694457",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670694457",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+          "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39670693750,
+      "name": "Advisory Tests",
+      "path": ".github/workflows/advisory-tests.yml",
+      "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+      "run_number": 1009,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "workflow_id": 310020568,
+      "check_suite_id": 107513548133,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCE6NZQ",
+      "created_at": "2026-10-21T20:29:06Z",
+      "updated_at": "2026-10-21T20:36:10Z",
+      "run_started_at": "2026-10-21T20:29:06Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39670693750",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39670693750",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+        "tree_id": "195041871fd89c8130dcd6e0e3c12ba23ef71f53",
+        "message": "build(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.",
+        "timestamp": "2026-10-21T20:29:00Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    }
+  ],
+  "privateOriginal": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-own-pr-runs-before.json",
+    "bytes": 359416,
+    "sha256": "9d80344dbf85e4cfe0b215066e726550fee406394afdae87fd5611bbb7dc821c"
+  },
+  "retention": "Complete original private. Compact projection retains source/actor/outcome/cancellation/limit facts; removed fields are repeated GitHub API/profile/repository/app boilerplate."
+}

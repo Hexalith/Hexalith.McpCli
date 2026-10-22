@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "Github/publish-containers/tests/test_container_provenance_targets.py",
+    "-v"
+  ],
+  "cwd": "/tmp/mcpcli-story411-provenance-builds-v09n73fb",
+  "exitCode": 0,
+  "durationSeconds": 6.495083522000641
+}

@@ -1,0 +1,14 @@
+{
+  "checkedAtUtc": "2026-10-21T23:27:37.928866+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+  "fullMessage": "ci(codeql): allow complete source extraction\n\nIncrease the bounded job allowance from sixty to one hundred twenty\nminutes after complete extraction exhausted the previous limit.\n\nRetain every source input, build mode, query setting and security gate.\nRequire all normal source qualification again on the resulting commit.\n",
+  "messageSha256": "1e32470466a56d224cbbf4106214f3a24b4aceacdb124d3d4b98ced5ec6a4270",
+  "exitCode": 0
+}

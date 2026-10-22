@@ -1,0 +1,96 @@
+{
+  "scope": "Read-only observations; no affinity, cgroup, host or task resource limits modified. Local environment differs from GitHub runner; no absolute wall-time extrapolation.",
+  "observations": [
+    {
+      "observedAtUtc": "2026-10-21T23:43:29.761427+00:00",
+      "version": "2.27.2",
+      "processGroup": 91808,
+      "processes": [
+        {
+          "pid": 91808,
+          "name": "codeql",
+          "affinity": [
+            "Threads:\t1",
+            "Cpus_allowed_list:\t0-13",
+            "Mems_allowed_list:\t0"
+          ],
+          "cgroup": [
+            "0::/init.scope"
+          ]
+        },
+        {
+          "pid": 91862,
+          "name": "Semmle.Autobuil",
+          "affinity": [
+            "Threads:\t20",
+            "Cpus_allowed_list:\t0-13",
+            "Mems_allowed_list:\t0"
+          ],
+          "cgroup": [
+            "0::/init.scope"
+          ]
+        }
+      ],
+      "rootCgroupControls": {
+        "cpu.max": null,
+        "cpu.stat": "usage_usec 382225248000\nuser_usec 250613108000\nsystem_usec 131612140000\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "cpuset.cpus.effective": "0-13",
+        "cpuset.mems.effective": "0",
+        "memory.max": null,
+        "memory.high": null,
+        "memory.current": null
+      },
+      "note": "Root unified cgroup readings are host controls, not a newly created task cgroup. Four-thread CLI hints do not constrain all managed/Roslyn work.",
+      "actualCgroupControls": {
+        "cpu.max": "max 100000",
+        "cpu.stat": "usage_usec 340638593078\nuser_usec 248660547317\nsystem_usec 91978045761\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "cpuset.cpus.effective": "0-13",
+        "cpuset.mems.effective": "0",
+        "memory.max": "max",
+        "memory.high": "max",
+        "memory.current": "87988035584"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:05:34.190816+00:00",
+      "version": "2.27.3",
+      "processGroup": 39248,
+      "processes": [
+        {
+          "pid": 39248,
+          "name": "codeql",
+          "affinity": [
+            "Threads:\t1",
+            "Cpus_allowed_list:\t0-13",
+            "Mems_allowed_list:\t0"
+          ],
+          "cgroup": [
+            "0::/init.scope"
+          ]
+        },
+        {
+          "pid": 39386,
+          "name": "Semmle.Autobuil",
+          "affinity": [
+            "Threads:\t8",
+            "Cpus_allowed_list:\t0-13",
+            "Mems_allowed_list:\t0"
+          ],
+          "cgroup": [
+            "0::/init.scope"
+          ]
+        }
+      ],
+      "actualCgroupControls": {
+        "cpu.max": "max 100000",
+        "cpu.stat": "usage_usec 346042020610\nuser_usec 253266533481\nsystem_usec 92775487128\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "cpuset.cpus.effective": "0-13",
+        "cpuset.mems.effective": "0",
+        "memory.max": "max",
+        "memory.high": "max",
+        "memory.current": "84844560384"
+      },
+      "note": "Read-only observation under the same unchanged host controls. No task cgroup or affinity mutation."
+    }
+  ]
+}

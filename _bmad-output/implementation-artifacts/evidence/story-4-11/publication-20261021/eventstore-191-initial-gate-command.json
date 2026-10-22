@@ -1,0 +1,17 @@
+{
+  "checkedAtUtc": "2026-10-21T21:51:57.363311+00:00",
+  "command": [
+    "python3",
+    "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/check-pr-merge-readiness.py",
+    "Hexalith/Hexalith.EventStore",
+    "372",
+    "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+    "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/eventstore-191-current-pr-gate-initial.json",
+    "--required-workflow",
+    ".github/workflows/p1r-qualification.yml"
+  ],
+  "exitCode": 1,
+  "stdout": "{\"result\": \"pending\", \"findings\": [\"Required context/app not successful: advisory\", \"Required context/app not successful: ci / build-and-test\", \"Required context/app not successful: ci / tenants-source-mode\", \"Required context/app not successful: codeql / analyze\", \"Required context/app not successful: commitlint / commitlint\", \"Required context/app not successful: live-sidecar\", \"Ordinary exact-head PR qualification not successful: .github/workflows/ci.yml\", \"Ordinary exact-head PR qualification not successful: .github/workflows/p1r-qualification.yml\", \"Unsettled or nonpassing latest PR check: commitlint / commitlint\", \"Unsettled or nonpassing latest PR check: ci / build-and-test\", \"Unsettled or nonpassing latest PR check: ci / contracts\", \"Unsettled or nonpassing latest PR check: ci / folded-snapshot-compatibility\", \"Unsettled or nonpassing latest PR check: ci / tenants-source-mode\", \"Unsettled or nonpassing latest PR check: ci / checkpointed process packages\", \"Unsettled or nonpassing latest PR check: codeql / analyze\", \"Unsettled or nonpassing latest PR check: live-sidecar\", \"Unsettled or nonpassing latest PR check: preparation-controls\", \"Unsettled or nonpassing latest PR check: advisory\", \"Unsettled or nonpassing latest PR check: Cursor Security Agent: Security Reviewer\", \"GitHub does not report a clean merge state\"], \"liveMain\": \"1748b16b11fb63b885dfa2fd4a9c7a420ea103a9\"}\n",
+  "stderr": "",
+  "priorReadAttempt": "Initial helper GET returned gh exit1 without underlying stderr; immediate identical direct GET succeeded, and core rate limit had4953/5000 remaining. No source or gate mutation."
+}

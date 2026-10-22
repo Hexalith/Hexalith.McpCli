@@ -1,0 +1,101 @@
+{
+  "evidenceKind": "parent-read-only-official-source-comparison",
+  "actionCommit": "24c54180a607b1449ed407dd24f251e4e9147c8d",
+  "successfulRun": {
+    "source": "ae917d3e4dbab20b8982c5222a13611c3e3faf35",
+    "runId": 39555023055,
+    "jobId": 119072683476,
+    "cliVersion": "2.27.2",
+    "extractingAtUtc": "2026-10-21T06:31:38Z",
+    "finalizingAtUtc": "2026-10-21T06:37:20Z",
+    "queriesStartedAtUtc": "2026-10-21T06:38:03Z"
+  },
+  "timedOutRun": {
+    "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+    "runId": 39685339156,
+    "jobId": 119518384455,
+    "cliVersion": "2.27.3",
+    "extractingAtUtc": "2026-10-21T22:25:36Z",
+    "cancelledAtUtc": "2026-10-21T23:18:26Z",
+    "queriesStarted": false
+  },
+  "matchingReportedConfiguration": {
+    "runnerImage": "ubuntu-24.04",
+    "runnerImageVersion": "20261018.339.1",
+    "codeqlRamMiB": 14570,
+    "codeqlThreads": 4,
+    "resolvedReferences": 592,
+    "unresolvedReferences": 0,
+    "resolvedAssemblyConflicts": 1665
+  },
+  "officialSourceVersions": [
+    {
+      "version": "2.27.2",
+      "tag": "codeql-cli/v2.27.2",
+      "commit": "a7057b836bf29767461026718b14d20790b9085f",
+      "extractorTree": "57c686971cda9d24f7df5c2bfa29b3ade7a67bfa"
+    },
+    {
+      "version": "2.27.3",
+      "tag": "codeql-cli/v2.27.3",
+      "commit": "a1575b98a8cc19bcfa7bb6cb41be688cb3dae65c",
+      "extractorTree": "bd4346ef554f921a1b45be70db5ed931ca1a11db"
+    }
+  ],
+  "extractorTreeEntries": {
+    "old": 399,
+    "new": 399,
+    "truncated": false
+  },
+  "changedExtractorFiles": [
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/DotNetCliInvoker.cs",
+      "oldBlob": "384404fbc6ce712ae28a9b7c563e717d27d226d1",
+      "newBlob": "467a90ac72887bd58de1686428fb4e0cbdba8244"
+    },
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/FeedManager.cs",
+      "oldBlob": "8cf85869be88fc4903f409b22960d45eca164f52",
+      "newBlob": "a0b8977ed87a5ac77f46edd5c3d0d4221a80dd89"
+    },
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/IRegistryProxy.cs",
+      "oldBlob": "2537ac0b4054116495e132cdce7cf10a3130e024",
+      "newBlob": "a7f7c1567152302b4c2deb1c35e470785ad1ca71"
+    },
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/NugetPackageRestorer.cs",
+      "oldBlob": "fee72034781f5f3b555d06c645261d149fe200b6",
+      "newBlob": "9257edfe2c193710abdf0ef5c5e35962a601ab39"
+    },
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/PackagesConfigRestorer.cs",
+      "oldBlob": "861622ca4c02f575321ed7d962dc1c27f74ab6f8",
+      "newBlob": "29276d72a82c569de55d6ced0bf71e39b788bfd1"
+    },
+    {
+      "path": "Semmle.Extraction.CSharp.DependencyFetching/RegistryProxy.cs",
+      "oldBlob": "e16ea66725c7e6aabbb4ac44a6ef68a6b3d282e2",
+      "newBlob": "d49d08510a222199a539f64f2e8433e63f4f58e6"
+    },
+    {
+      "path": "Semmle.Extraction.Tests/FeedManager.cs",
+      "oldBlob": "d812f008c43b9b7f38da5f20fb7b93bfd5b61b3c",
+      "newBlob": "ae97d2e7e346517208a5e1edbb260ae2f546d516"
+    },
+    {
+      "path": "Semmle.Extraction.Tests/RegistryProxy.cs",
+      "oldBlob": "5705077c0219bb04647a3f58c4b6772d135f02d2",
+      "newBlob": "f978736416fdf7aa4a97ec0dd7fcdcb6ac6c0870"
+    }
+  ],
+  "interpretation": "The public extractor changes are confined to dependency fetching and its tests. This narrows the comparison but does not rule out a tool regression or differences in bundled components. Input duplication is also independently measured; causality remains unproven.",
+  "toolsOverrideSupport": {
+    "actionInput": "tools",
+    "supportedValues": "Local bundle path, GitHub release-asset bundle URL, linked or nightly; no override is applied.",
+    "pinnedSourceUrl": "https://github.com/github/codeql-action/blob/24c54180a607b1449ed407dd24f251e4e9147c8d/init/action.yml",
+    "owningBuildsReusableCurrentlyExposesTools": false
+  },
+  "releaseMetadataUrl": "https://github.com/github/codeql-cli-binaries/releases/tag/v2.27.3",
+  "noWorkflowOrSourceMutation": true
+}

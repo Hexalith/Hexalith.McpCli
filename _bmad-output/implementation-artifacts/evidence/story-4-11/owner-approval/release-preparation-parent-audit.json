@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "checkedAtUtc": "2026-10-21T19:05:33.412252+00:00",
+  "releasePreparationSealSha256": "5891c7efc4707e50781a5fb19cd45e9b323e81be0b7d45495d636b999e444f24",
+  "readinessSha256": "f4cdeb1ce8c276d1f32485ef3fda2bea022052971c1516f5db1a62424a5ac684",
+  "sealedFilesVerified": 254,
+  "externalInputsVerified": 29,
+  "packageIdentitiesAndRawHashesVerified": 19,
+  "packagePayloadHashesVerified": 144,
+  "approvedVectorInventoryDecisionPreserved": true,
+  "reviewedFinalSharedTargetAndTenantsPublisherPatch": true,
+  "frozenIntentUnchanged": true,
+  "storyStatus": "in-progress",
+  "publicationAuthorized": false,
+  "fullV1Accepted": false
+}

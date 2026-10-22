@@ -1,0 +1,24 @@
+{
+  "status": "pending-approval",
+  "localCandidateVerification": "passed",
+  "fullV1Accepted": false,
+  "productionAccepted": false,
+  "sourceUnmodified": true,
+  "referenceContentsModified": false,
+  "publicationPerformed": false,
+  "independentTenantsOperations": 14,
+  "combinedCandidateOperations": 21,
+  "dependencyPolicyTestsPassed": 98,
+  "isolatedStringTestsPassed": 1,
+  "firstCatalogConstructionMilliseconds": 148.0593,
+  "blockedUnmodifiedTenantsBuild": {
+    "package": "Hexalith.EventStore.Contracts",
+    "version": "3.126.0",
+    "missingType": "NativeSourceProof",
+    "result": "CS0246"
+  },
+  "requiredPrerequisite": "Approved EventStore release containing NativeSourceProof, followed by owning Builds pin/gitlinks, refreshed full Tenants release, release-bound vector/inventory approval and actual production enrollment.",
+  "approvalPacketSha256": "609fa7d2b4620afa82efc3d51e643d50b076c8b57af12ec4474471f301a1b8ff",
+  "updatedAtUtc": "2026-10-21T17:30:11.230355+00:00",
+  "descriptionReview": "pass-with-notes; no blocking findings"
+}

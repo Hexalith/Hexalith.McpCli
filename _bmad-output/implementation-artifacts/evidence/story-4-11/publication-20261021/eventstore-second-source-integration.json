@@ -1,0 +1,31 @@
+[
+  {
+    "label": "commitlint",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-second-integration-message.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nbuild(release): preserve current owning source repairs\n\nIntegrate the later diagnostic masking and closure setup allowance without\noverwriting either owning change. Retain prior source-bound receipts and\nrecord separate bindings for the current diagnostic bytes.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "label": "merge",
+    "command": [
+      "git",
+      "merge",
+      "--no-ff",
+      "origin/main",
+      "-F",
+      "/tmp/mcpcli-story411-eventstore-second-integration-message.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "Merge made by the 'ort' strategy.\n .../diagnostics/bounded-aspire-resources.log       | 54 +++++++++++-----------\n .../run-20261021T125151Z/tests-Server.xml          |  6 +--\n .../run-20261021T152119Z/tests-Server.xml          |  6 +--\n .../Packaging/Oq8PlatformClosureTests.cs           |  2 +-\n 4 files changed, 34 insertions(+), 34 deletions(-)\n",
+    "stderr": ""
+  }
+]

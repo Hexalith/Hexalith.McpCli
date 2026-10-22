@@ -1,0 +1,156 @@
+{
+  "observedAtUtc": "2026-10-21 23:45:40 UTC",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "workflow": ".github/workflows/p1r-qualification.yml",
+  "run": {
+    "id": 39693567713,
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "runStartedAt": "2026-10-21T23:27:46Z",
+    "updatedAt": "2026-10-21T23:44:50Z",
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693567713"
+  },
+  "jobs": {
+    "jobs": [
+      {
+        "id": 119545388848,
+        "name": "preparation-controls",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 39693567713,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Initialize root-declared submodules",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Verify bounded external evidence storage and Git admission",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Verify external evidence refusals under optimized Python",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Verify bounded P1R preparation and process controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Verify P1R published qualification harness contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Verify P1R published executor regressions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Verify P1R bounded verifier corrections",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Initialize .NET for actual fixture registration checks",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Verify real Host and Domain snapshot registration",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Verify P1R private isolation controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Verify P1R complete isolation lifecycle controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Verify P1R isolation refusals under optimized Python",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Checkout exact approved publication engine for regression controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify one-use publication authority and same-run source controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Checkout exact approved publication engine for regression controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30
+          },
+          {
+            "name": "Post Initialize .NET for actual fixture registration checks",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31
+          },
+          {
+            "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 32
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 33
+          }
+        ]
+      }
+    ]
+  },
+  "acceptance": {
+    "exactHeadPrP1RPassed": true,
+    "codeqlAndFullCiAndLiveStillRequired": true,
+    "mergedMainPushQualificationStillRequired": true,
+    "releaseDispatched": false,
+    "fullV1Accepted": false
+  }
+}
+

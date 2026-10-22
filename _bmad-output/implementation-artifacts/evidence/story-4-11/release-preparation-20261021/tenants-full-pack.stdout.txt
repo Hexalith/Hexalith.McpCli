@@ -1,0 +1,5 @@
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg'.
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages/Hexalith.Tenants.Client.5.10.0.nupkg'.
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages/Hexalith.Tenants.Server.5.10.0.nupkg'.
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages/Hexalith.Tenants.Testing.5.10.0.nupkg'.
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages/Hexalith.Tenants.Aspire.5.10.0.nupkg'.

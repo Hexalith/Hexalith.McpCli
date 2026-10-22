@@ -1,0 +1,3 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.csproj (in 348 ms).
+  6 of 7 projects are up-to-date for restore.

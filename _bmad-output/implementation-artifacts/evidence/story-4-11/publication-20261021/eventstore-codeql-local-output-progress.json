@@ -1,0 +1,149 @@
+{
+  "scope": "Read-only task database/output inventories, diagnostic only. Counts and mtimes do not by themselves establish eventual completion or version causality.",
+  "observations": [
+    {
+      "observedAtUtc": "2026-10-22T00:04:12.449650+00:00",
+      "version": "2.27.2",
+      "reportedTraceElapsedSeconds": 1705.927973768994,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 23377229,
+          "newestMtimeUtc": "2026-10-22T00:04:11.604598+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-21T23:38:55.610306+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3310004594,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.2-20261022T000412449650Z.json",
+        "bytes": 2725080,
+        "sha256": "444de349d2c30f32bdc1a2a565f4a13600e6b43cb32540efa3b4edd9136941e3"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:06:32.508861+00:00",
+      "version": "2.27.2",
+      "reportedTraceElapsedSeconds": 1800.8083571960015,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 23397480,
+          "newestMtimeUtc": "2026-10-22T00:05:32.003114+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-21T23:38:55.610306+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3310024845,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.2-20261022T000632508861Z.json",
+        "bytes": 2725080,
+        "sha256": "7113251ba9c98ee2c330e8ac186734d1014dc1c6926bdc4929a8d8813ff54fc6"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:09:18.080143+00:00",
+      "version": "2.27.3",
+      "reportedTraceElapsedSeconds": 209.07991439799662,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 22623947,
+          "newestMtimeUtc": "2026-10-22T00:09:16.629307+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-22T00:08:48.388734+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3309251312,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.3-20261022T000918080143Z.json",
+        "bytes": 2725079,
+        "sha256": "0b16472c2a15d75b5bfeca00b1ea750096510e9b843c30d14763c2420059ca84"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:19:39.688099+00:00",
+      "version": "2.27.3",
+      "reportedTraceElapsedSeconds": 837.832832080996,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 22777718,
+          "newestMtimeUtc": "2026-10-22T00:19:39.135538+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-22T00:08:48.388734+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3309405083,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.3-20261022T001939688099Z.json",
+        "bytes": 2725080,
+        "sha256": "9ccff6970877c7edfbca5945fd3aff056dabbda71a0ec470e39dab008588235d"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:26:50.339759+00:00",
+      "version": "2.27.3",
+      "reportedTraceElapsedSeconds": 1271.9709240879893,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 22885614,
+          "newestMtimeUtc": "2026-10-22T00:26:49.234912+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-22T00:08:48.388734+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3309512979,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.3-20261022T002650339759Z.json",
+        "bytes": 2725080,
+        "sha256": "d857a667d7c92c5995181b4c2fab262fdd586b8c4cb012bf8939ff1aeb83471d"
+      }
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:37:57.474792+00:00",
+      "version": "2.27.3",
+      "reportedTraceElapsedSeconds": 1801.024985868993,
+      "groups": {
+        "other": {
+          "fileCount": 12,
+          "bytes": 23015904,
+          "newestMtimeUtc": "2026-10-22T00:35:33.835904+00:00"
+        },
+        "working": {
+          "fileCount": 15498,
+          "bytes": 3286627365,
+          "newestMtimeUtc": "2026-10-22T00:08:48.388734+00:00"
+        }
+      },
+      "totalFileCount": 15510,
+      "totalBytes": 3309643269,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/progress-inventories/2.27.3-20261022T003757474792Z.json",
+        "bytes": 2725080,
+        "sha256": "418fca3e9d9566a30cdaf698f2fce2e5d5fbc9b7b80410f420ce61ff02382fa3"
+      }
+    }
+  ]
+}

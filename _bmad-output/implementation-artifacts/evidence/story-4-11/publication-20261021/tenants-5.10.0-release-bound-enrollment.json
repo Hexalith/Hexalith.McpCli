@@ -1,0 +1,140 @@
+{
+  "recordedAtUtc": "2026-10-22T04:40:03.050849+00:00",
+  "status": "approved-for-production-enrollment-pending-ubuntu-acceptance",
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "5.10.0",
+  "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+  "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "registryArchiveSha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234",
+  "restoreContentHashPreviouslyObserved": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+  "approvalAuthority": "Existing requesting-user scope/inventory approval and explicit full publication/enrollment authorization; this new record binds actual published bytes rather than transferring the scratch artifact hash.",
+  "approvalInputs": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json",
+      "bytes": 4929,
+      "sha256": "62aceb962205d4e44b1e961be1f14fd4434e7b7300b22b2406c728ebd9744037"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/publication-authorization.json",
+      "bytes": 3510,
+      "sha256": "5f89a73820bc104035ac9b24924ace1645488092d95d698a794f4f6acd44f39d"
+    }
+  ],
+  "originalCandidateArtifact": {
+    "path": "candidate-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0",
+    "sha512": "sha512-OWY5HUWkLNlna5Nxgd2ZafCkbHKEHYOjkQ+sXxUGnFRvRbhI3jVebPfEoG3iA2i4L+grlSFycAr8pBuhuMODcQ==",
+    "sha256": "e7a1e3baa26f4eaf266a57db633761ab74dc998ee8f601addb2a87cd6aaefe26",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants",
+      "commit": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4"
+    },
+    "dependencies": [
+      {
+        "id": "Hexalith.EventStore.Contracts",
+        "version": "3.126.1",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Hexalith.McpCli.Abstractions",
+        "version": "1.0.0",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "ByteAether.Ulid",
+        "version": "1.4.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Hexalith.Commons.UniqueIds",
+        "version": "2.30.3",
+        "exclude": "Build,Analyzers"
+      }
+    ],
+    "filesSha256": {
+      "Hexalith.Tenants.Contracts.nuspec": "e2529e40e79573b1128922973938d8ce82c981cf5836da406556bf2300f4dd72",
+      "README.md": "0251095cbbd3359bbc394201e615cf120f66fc05958a8f77aec27d4555341204",
+      "[Content_Types].xml": "1a6670ec6cb20a6520f5d6b9be859fcd7416bef2ba0e8e40bfbf0aaab5409e4f",
+      "_rels/.rels": "bc5f183aa426d337523b85bcc12da404e33566c7e1b62305465f1ee298b5033f",
+      "lib/net10.0/Hexalith.Tenants.Contracts.dll": "5819ccb5286aeda0962c606507d3404e39235a36718730568f07b862e2a20ba8",
+      "package/services/metadata/core-properties/nuget.psmdcp": "c71c7f11dca5fbad32b49e139c822c9ee29d43ae81da861c4bc20ed52606a791"
+    }
+  },
+  "actualPublishedArtifactBinding": "owner-published-mcpcli-contracts-binding.json",
+  "actualPublishedArtifactVerification": "owner-published-tenants-artifact-verification/verification.json",
+  "freshRootRestoreBinding": {
+    "status": "passed",
+    "path": "root-enrollment-restore-binding.json",
+    "sha256": "5ae6cdc846f34b5dc3d1e4c9b35a3ec45d4c7de36175a482fe777d9308461719"
+  },
+  "selectedVersionRationale": "exact-enrollment-version-selection.md",
+  "all14OriginalVectorBytesUnchanged": true,
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+    "change-user-role.vector.json": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+    "create-tenant.vector.json": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+    "disable-tenant.vector.json": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+    "enable-tenant.vector.json": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+    "get-tenant-audit.vector.json": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+    "get-tenant-users.vector.json": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+    "get-tenant.vector.json": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+    "get-user-tenants.vector.json": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+    "list-tenants.vector.json": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+    "remove-tenant-configuration.vector.json": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+    "remove-user-from-tenant.vector.json": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+    "set-tenant-configuration.vector.json": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+    "update-tenant.vector.json": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+  },
+  "all20ApprovedScopeDecisionsUnchanged": true,
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "acceptedLintSha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+  "mandatoryRepairedFullRelease": {
+    "status": "qualified",
+    "source": "205cbc5019343d344643b530fb03aee82af2840d",
+    "mainCiRun": 39718957132,
+    "version": "5.10.1",
+    "releaseRun": 39721533752,
+    "releaseUrl": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.1",
+    "scope": "All five normal packages and both container architectures, exact identity/complete UTC created labels, digest-bound smokes and unchanged normal protected controls.",
+    "qualification": {
+      "path": "parent-tenants-5.10.1-full-repair-qualified.json",
+      "bytes": 1822,
+      "sha256": "82e0ea1369c757051acae009fa29a6363880fbe5c0dd7c788523f30d25225a4a"
+    },
+    "bindingReports": [
+      {
+        "path": "parent-tenants-5.10.1-published-run-binding.json",
+        "bytes": 5938,
+        "sha256": "a72f0392ffb6b7b1b2e4a24287d4f649377451d940826c695789e39b87c557c3"
+      },
+      {
+        "path": "parent-tenants-5.10.1-actual-nuget-binding.json",
+        "bytes": 35105,
+        "sha256": "570761092a18a0c22f267e391f060beeb25416c3fda6d3b0b1032d1b56a9527c"
+      },
+      {
+        "path": "parent-tenants-5.10.1-actual-oci-binding.json",
+        "bytes": 8220,
+        "sha256": "5861132bc6e7551ed8d196f9fe0091bdf4ce6aac6294cd24d688d1b5a157b220"
+      }
+    ]
+  },
+  "historical5100ContainerProvenanceRemainsFailed": true,
+  "followupVersionIsNotTheEnrolledContractsVersion": true,
+  "descriptionReview": {
+    "review": "../tenants-candidate/description-review.md",
+    "reviewedAndActualCatalogSha256": "9e221451edcc055f8ff18ab8c06638767fccac19255b5de1389fc3d477b8e2d0",
+    "publicDiscoveryUnchanged": true,
+    "owningChangeRecordPath": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json",
+    "reviewLinkedFromOwningChangeRecord": true,
+    "publicationLinkPolicy": "This owning release-bound change record links the exact public discovery review. The normal root PR description additionally links that review at the actual committed source revision once known; no future revision URL is invented."
+  },
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "finalUbuntuAcceptance": {
+    "status": "pending",
+    "required": "Exact actual ubuntu-latest strict21-operation combined production replay and fresh Catalog with exactlyone Ulid<=500ms plus isolatedString/full ordinaryCI; parent final acceptance review."
+  }
+}

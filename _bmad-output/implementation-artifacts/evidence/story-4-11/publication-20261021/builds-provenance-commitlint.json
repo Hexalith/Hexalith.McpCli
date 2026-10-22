@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story411-builds-provenance-commit.txt"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/builds",
+  "exitCode": 0,
+  "message": "fix(container): preserve publisher provenance across RIDs\n\nShare the SDK label repair for consumers with complete publisher metadata.\nPreserve ordinary and partial-metadata SDK behavior and protect both paths.\n"
+}

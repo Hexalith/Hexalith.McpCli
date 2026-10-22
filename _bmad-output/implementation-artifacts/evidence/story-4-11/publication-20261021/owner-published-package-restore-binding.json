@@ -1,0 +1,206 @@
+{
+  "checkedAtUtc": "2026-10-22T01:13:45.332741+00:00",
+  "status": "all19-registry-and-installed-archives-bound;18normal-assets-bindings;tool-metadata-distinction-retained",
+  "scope": "Isolated restore-only18-package graph plus normal tool installation; no McpCli production enrollment. Exact raw signed archives verified against registry; actual assets/content/sidecar hashes remain distinct.",
+  "assetsPath": "/tmp/mcpcli-story411-owner-published-87zjp9rw/restore-audit/obj/project.assets.json",
+  "assetsSha256": "47082d9983e3885c15d1a74444bb3c18a647ba05d863543f1dc5cb3ca1b87dbc",
+  "packages": [
+    {
+      "id": "Hexalith.EventStore.Admin.Abstractions",
+      "version": "3.126.1",
+      "artifactHash": "sha512-GVw3dTe09wz2W7lHEGGobATfBsoS00A0v+6hq45Bt2Hh382ukxUmPqnxLj/b17zib28S15t22HB4h9F8xIeahA==",
+      "assetsHash": "sha512-EWrFprs9t1Mho8udbjcWRomjed7XP3oSmXtUS1D7CLSxtYt9FzjFcLCa+0g2C9yqWYHv78QHgjp157Sca89cuQ==",
+      "cacheContentHash": "sha512-EWrFprs9t1Mho8udbjcWRomjed7XP3oSmXtUS1D7CLSxtYt9FzjFcLCa+0g2C9yqWYHv78QHgjp157Sca89cuQ==",
+      "archiveSha256": "efeba8486a9c8e3761b91dd827ed33d4930be007b051653d8ee87c43c224653a",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Cli",
+      "version": "3.126.1",
+      "artifactHash": "sha512-2ymhtKd2Tug/KwaViCUxtwn3WKHBjz1A3DyXkgpxtG+80MiY6cnw93X/T6xJjwBtMCpwOrop1vFDpEou5qiRdg==",
+      "archiveSha256": "fde37367be68edfd6028b1852e7a30484ccc7f7b1c121cc661086367996babf7",
+      "registryArchiveExactlyMatched": true,
+      "assetsHash": null,
+      "cacheContentHash": "sha512-+BV/0YdW0/vsUNaTK8XbAqn22rBcY7wYxafRe8mzveQ4ydD4foiwlo2JKUBXPfTGnRqaBLSIdCGgzCzN1miphQ==",
+      "cacheSidecarHash": "sha512-wSS8H8A8RK4JaottoJPGYblLHSAnDhi9RhobMfRjd6JwqWMdTouizJ1rREHNgPAS/UrONdm/P0lxfaJrBhuCjA==",
+      "bindingKind": "Normal installed DotnetTool archive independently matches registry. SDK emits empty-libraries assets; observed sidecar/metadata hashes differ from raw and each other and are not asserted to bind actual archive.",
+      "limitation": "This tool is outside McpCli production Contracts/client dependency graph; no assets identity is manufactured and no cache file is rewritten.",
+      "nugetVerifierContentHash": "sha512-+BV/0YdW0/vsUNaTK8XbAqn22rBcY7wYxafRe8mzveQ4ydD4foiwlo2JKUBXPfTGnRqaBLSIdCGgzCzN1miphQ==",
+      "cacheContentHashIndependentlyMatchesNativeSignatureVerifier": true,
+      "hashDistinction": "Raw repository-signed archive SHA512 is independently bound to registry. The metadata logical package-content hash independently equals native NuGet signature-verification Content hash. The tool-store sidecar has a third observed value; the optional registry sidecar endpoint returns404. No raw/content/sidecar equality or assets hash is manufactured."
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Server",
+      "version": "3.126.1",
+      "artifactHash": "sha512-5idodoHcryJhEm5Na69FOD8e7a+olhhJ6/RJx5skTvoRaSN2nCak7UZa7dYYkP0Hth+pnAkP4SPWvgzfKKHPuw==",
+      "assetsHash": "sha512-JBIn+kanTbUKMU7m0fbu+Jd9qEAkHBGdXLcVbNSkBqiR//qjaHL1QnIeD0nArCKHv/96ZqBgt9tVkWgtNcFPaQ==",
+      "cacheContentHash": "sha512-JBIn+kanTbUKMU7m0fbu+Jd9qEAkHBGdXLcVbNSkBqiR//qjaHL1QnIeD0nArCKHv/96ZqBgt9tVkWgtNcFPaQ==",
+      "archiveSha256": "554671874eeb0ad4c6adc43f94009a0c9feeb13d59cbb1da95be0f32a9dada61",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Aspire",
+      "version": "3.126.1",
+      "artifactHash": "sha512-LuViP21OWDbGKOgUp3uRal0IS3W9jnLeDh3FiG2jQFS3qH9nvbLRr2f8q8ZPmSmfCwqlpxVuNVYX3WJ/hRchAw==",
+      "assetsHash": "sha512-4lNP1OnLJWFlx3PxGu+Sj+7PSBVzkqSmqGoYTYnkw6PLTGLj1QtFd+Cp3xUivsJjax+t2Hp9QVKjVKoenpWx/A==",
+      "cacheContentHash": "sha512-4lNP1OnLJWFlx3PxGu+Sj+7PSBVzkqSmqGoYTYnkw6PLTGLj1QtFd+Cp3xUivsJjax+t2Hp9QVKjVKoenpWx/A==",
+      "archiveSha256": "02215adfc6198d58003b457f8d68075d03438f01b09cbfd2650cef5ee7fd3bc6",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "artifactHash": "sha512-vnZhAt055+sS//VCTZ7Fa5fONeOc+I9gyA54/x++52z0vdvCObGoD3JYjMJuDMcWQ3PWtt6ClJsUkwOg0XUDjA==",
+      "assetsHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "cacheContentHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "archiveSha256": "53fd5f378a997557725fa03e8627074f940b016fd9f5a34aed981e04053b698b",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "artifactHash": "sha512-yvA2kbvDl34vfzoYIZXohfAasqqcds7k7dGefu5ocNSlZO0Z6PwwJ9O7SvHMxpN4qu35+lma4ZVpUcFhOPpEjw==",
+      "assetsHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "cacheContentHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "archiveSha256": "9de3a0646f638b155b93043dc18f9c0cbe6f4051c254366ef2ba91416a0058de",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.DomainService",
+      "version": "3.126.1",
+      "artifactHash": "sha512-H0r6ccHrkxzFaYZpeLCGp3KByB0Xm4+Sunrr9sE3x79NqdqyACINfaDe5MQ6x4dQcyp1chnyCIPmGCJTC0YmZA==",
+      "assetsHash": "sha512-1YzRmuvTOJ0YaGU2aOrPn99EGGBNe9KNV3zx19TMOKRwaGrOme3XyfR9QPySyni1nXTYAGj2BWycdiKKPc+jBQ==",
+      "cacheContentHash": "sha512-1YzRmuvTOJ0YaGU2aOrPn99EGGBNe9KNV3zx19TMOKRwaGrOme3XyfR9QPySyni1nXTYAGj2BWycdiKKPc+jBQ==",
+      "archiveSha256": "4876cf275201edfc74a929dad6ce050d1fe45f0aa07c96644807c6dcb1dbbefd",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Gateway",
+      "version": "3.126.1",
+      "artifactHash": "sha512-sn3ok59Y6yvQSbFOe5hCTbNdCN7Ez3miqcyWDDxxjYXMNYdwOQ21L5TZ4H0Oq/qX/Emgk/cDa2zYEzZLSk9Q0w==",
+      "assetsHash": "sha512-evPOmUMg3rq+oNyCopQ3oQ82ZPXE7e2drWPp2vNT7ZEsJca5tDxIFa8xrpx3xFnQKhnEBvikWGXLRevdXybDqw==",
+      "cacheContentHash": "sha512-evPOmUMg3rq+oNyCopQ3oQ82ZPXE7e2drWPp2vNT7ZEsJca5tDxIFa8xrpx3xFnQKhnEBvikWGXLRevdXybDqw==",
+      "archiveSha256": "25f6a9f70a294868a863bdcfa5c1c7424855d79531030eb8825cbf0985bdc66d",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.RestApi.Generators",
+      "version": "3.126.1",
+      "artifactHash": "sha512-Tixr8gdUEO4gMfjVThJoH0ko4H0N7gA8abkMn24AUMsyP4XL8FIWK6Y0A3XWdj8LqPsPdNQUlGHDUGRd/C74pA==",
+      "assetsHash": "sha512-jcyInrLXwcCbgAd/fhHd2/Si1tfJ3gvs9sM3e/TXh/GU6NCzsEeqpTk3D2q0L+xC1FC3ll7xqvkSUGDGRkLk+g==",
+      "cacheContentHash": "sha512-jcyInrLXwcCbgAd/fhHd2/Si1tfJ3gvs9sM3e/TXh/GU6NCzsEeqpTk3D2q0L+xC1FC3ll7xqvkSUGDGRkLk+g==",
+      "archiveSha256": "5d93a7270b97a782fe0dfe8eb3e12284fa1d5fec0bcc3831b6774c9d88ba43c4",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Server",
+      "version": "3.126.1",
+      "artifactHash": "sha512-k7OIXe2G9z7BPOiZu9j45BSv+UqNvISIQji+MJ6WLaiOjPjxiw12xtB06BG6lWIh0+of6/4d4uoromqiMtbwnA==",
+      "assetsHash": "sha512-fCbDUrmaCnw8SyaXJ+FZAS+P5szJ4bNnqaitqF7CFDCr6NJe8ZMwHRqLv7Ocb07RYZ+tf5zspPRriTpiU29lFQ==",
+      "cacheContentHash": "sha512-fCbDUrmaCnw8SyaXJ+FZAS+P5szJ4bNnqaitqF7CFDCr6NJe8ZMwHRqLv7Ocb07RYZ+tf5zspPRriTpiU29lFQ==",
+      "archiveSha256": "3bd194228eb9e81c9892f349392695cd02746c35b244865d04890156f4a59ec0",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.ServiceDefaults",
+      "version": "3.126.1",
+      "artifactHash": "sha512-bz3e6u3ShJRCYf90FOgWk9GHROYItcbWL14Fh/LU0AZOIqtAoY0tcJJerLfSjytODTYXMTDs8b+lfyz5bJddxA==",
+      "assetsHash": "sha512-/hg3Yn7DU7a4VDvaK+sGiuSQG/1w2fl6Y/H8G7vrId7iWn+9gU//aukYh2cYvSw2B9xmtYU++PD4As5+/SfnJw==",
+      "cacheContentHash": "sha512-/hg3Yn7DU7a4VDvaK+sGiuSQG/1w2fl6Y/H8G7vrId7iWn+9gU//aukYh2cYvSw2B9xmtYU++PD4As5+/SfnJw==",
+      "archiveSha256": "f5fa781a9afb05b6fc7096a60e0c0906b754f8f508ec68b4af07ab172b3e107e",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.SignalR",
+      "version": "3.126.1",
+      "artifactHash": "sha512-c3lS2Dw5hpVWFD+5TbFWncWJL7Mvfy+GMRrXrzG0sshLG7w1MJgfmbHOHndqRe7RwpmG96IBST6uLclGqdZdXg==",
+      "assetsHash": "sha512-Lp9PRqVJlZVdLoRCx2yOjGQqTK6xv1GIz72Eknx2Y2iHhrKufWMiFKMALJeBEf0FIRe5f0JBORlJ/uVGiLbfMQ==",
+      "cacheContentHash": "sha512-Lp9PRqVJlZVdLoRCx2yOjGQqTK6xv1GIz72Eknx2Y2iHhrKufWMiFKMALJeBEf0FIRe5f0JBORlJ/uVGiLbfMQ==",
+      "archiveSha256": "558ffc2367252128fef07a47c4f39464ff394ec363d17df3d21b8079eac4823c",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing",
+      "version": "3.126.1",
+      "artifactHash": "sha512-CJ88bNkzRbO43b+jeabVAdhePLAmBTNpvKHcOeD7BWak1nLnRIe9fZ1KlzKWsOsr2FkAD020oof1nYtPXAwCLQ==",
+      "assetsHash": "sha512-2FsO4h4XLpJNYXmld5ug2W000AoSL7FaufnE70gfOeHaHRqaC0p8FQ6ALVDeWvN+RUS6sGFIq0CzNpKMASldDw==",
+      "cacheContentHash": "sha512-2FsO4h4XLpJNYXmld5ug2W000AoSL7FaufnE70gfOeHaHRqaC0p8FQ6ALVDeWvN+RUS6sGFIq0CzNpKMASldDw==",
+      "archiveSha256": "4db6a4678647f45b2f2d3d718ad24d52155d526f85ddeb1ce735a5e6d2a58e28",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing.Integration",
+      "version": "3.126.1",
+      "artifactHash": "sha512-FFZo5V7jx5efAPWT0C0ocRXCiZONcHrG6GcfMMqp6Zkz4Vtm8rja/UGlJUWCTmYU8zpj6jtIzrv6ZCm7u+6fxA==",
+      "assetsHash": "sha512-J2QvCs9IIqJ+eHRkzygAFnq6VA5lUkn2vafJ79wDc9IA0L7KFQB4KTLOF3l+wKB8+gGW+EABGCxpGnZiqjD2ww==",
+      "cacheContentHash": "sha512-J2QvCs9IIqJ+eHRkzygAFnq6VA5lUkn2vafJ79wDc9IA0L7KFQB4KTLOF3l+wKB8+gGW+EABGCxpGnZiqjD2ww==",
+      "archiveSha256": "4ccacea403e2296e84675ff79aaee6fac71e29e3adaf5011c0ef8850eddbdb91",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "5.10.0",
+      "artifactHash": "sha512-dzW9FI5tm/toZhBuoil9eO4v8/1SG95q755YAfgfKjbC+6v7PrdcXjfXGaAegpmckDVDQB2Dq5tr9CltjXuT4A==",
+      "assetsHash": "sha512-Bs/+MQ4Q+d7YRvpFdzcYX0vWBZ2pzRhatw5qjShn54e4ESyUPgCIGX4mrqJdad+WrOnSMwEw+qYEVY5wcQuh0w==",
+      "cacheContentHash": "sha512-Bs/+MQ4Q+d7YRvpFdzcYX0vWBZ2pzRhatw5qjShn54e4ESyUPgCIGX4mrqJdad+WrOnSMwEw+qYEVY5wcQuh0w==",
+      "archiveSha256": "aa532942fcd39d61935ec7e27a598bef8642772e0923af8d97d0a5b4e1aebba3",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "5.10.0",
+      "artifactHash": "sha512-1V2DYdKpLXmpTwOkiGDnf2VStb6Ri203FepiIZkYch8nhgZ75CNBSPKSh8qEAA8AREAKKiZ7ueTXyyUAdxSIZA==",
+      "assetsHash": "sha512-CWRAxP0XzDs5AbIcIdWIGladDWMSa5vgI0Ldlu7I65fYlM47sImrOwhXIrCHaXPnSTr40kptcPPjADNIEYJBkg==",
+      "cacheContentHash": "sha512-CWRAxP0XzDs5AbIcIdWIGladDWMSa5vgI0Ldlu7I65fYlM47sImrOwhXIrCHaXPnSTr40kptcPPjADNIEYJBkg==",
+      "archiveSha256": "c8f5cb373282eb8113ee6f79f2af34090cad3e6e0d2bb4af6083c8ae3f058bba",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "assetsHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "cacheContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "archiveSha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "5.10.0",
+      "artifactHash": "sha512-v/QXnMuS6VDvxKRhOZucJanLgBrkeBa+LTJRwKe+F1PcqIjSQ+Y3K05OKKxzPPWEzwWAjQm9gODBLtr3UHcOmw==",
+      "assetsHash": "sha512-vndFnKteVx9isAVDvvxTgZnuFneoQWZH07KBtnz6HH18v0kOGO96/Nfa1BvokilHSiepwrwaNr6kvGMJ6xULDw==",
+      "cacheContentHash": "sha512-vndFnKteVx9isAVDvvxTgZnuFneoQWZH07KBtnz6HH18v0kOGO96/Nfa1BvokilHSiepwrwaNr6kvGMJ6xULDw==",
+      "archiveSha256": "e556244caea940823cdb0bf602bb2c5a3dea8cb4ccb50eca45ee87ae532a1207",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "5.10.0",
+      "artifactHash": "sha512-QLY0lZbyzFgMYzxmc5Hr4+hBf/VNgCmFx6AeisuUYL8iV00bXaz//6FqUXqXdEQ3FjS3ljAECBrCtBEglHXpfw==",
+      "assetsHash": "sha512-p5VPQSL/k5K9LiAG9njEZx87l3C2OxWBlq20TaqF31KVlRppHmGK2/ZZxHKcclR/VDiDaI4pRrZlcP2ntpSFhw==",
+      "cacheContentHash": "sha512-p5VPQSL/k5K9LiAG9njEZx87l3C2OxWBlq20TaqF31KVlRppHmGK2/ZZxHKcclR/VDiDaI4pRrZlcP2ntpSFhw==",
+      "archiveSha256": "fa3372ed1612721e5454d3b691d620b507b8c3ee42fb3f563759364886f7fb63",
+      "registryArchiveExactlyMatched": true,
+      "bindingKind": "NuGet assets +metadata +raw-archive sidecar"
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

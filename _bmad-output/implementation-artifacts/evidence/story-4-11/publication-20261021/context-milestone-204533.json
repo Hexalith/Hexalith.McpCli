@@ -1,0 +1,50 @@
+{
+  "observedAtUtc": "2026-10-21T20:45:33.391995+00:00",
+  "records": [
+    {
+      "repository": "Hexalith/Hexalith.Builds",
+      "head": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+      "success": [
+        "CodeQL",
+        "Codacy Static Code Analysis",
+        "SonarCloud Code Analysis",
+        "Dependency review / dependency-review",
+        "CodeQL / analyze",
+        "Python contract tests",
+        "commitlint / commitlint",
+        "Cursor Approval Agent: Pull Request Router",
+        "Cursor Security Agent: Security Reviewer"
+      ],
+      "pending": [
+        "Build and test"
+      ],
+      "failures": []
+    },
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "success": [
+        "commitlint / commitlint",
+        "ci / tenants-source-mode",
+        "ci / checkpointed process packages",
+        "ci / folded-snapshot-compatibility",
+        "ci / semantic-release-governance",
+        "advisory",
+        "Cursor Bugbot",
+        "dependency-review / dependency-review",
+        "payload-protection",
+        "Corrective authorization fixture controls",
+        "Cursor Approval Agent: Pull Request Router",
+        "Cursor Security Agent: Security Reviewer"
+      ],
+      "pending": [
+        "ci / build-and-test",
+        "ci / contracts",
+        "codeql / analyze",
+        "live-sidecar",
+        "preparation-controls"
+      ],
+      "failures": []
+    }
+  ]
+}

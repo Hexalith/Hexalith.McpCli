@@ -1,0 +1,98 @@
+{
+  "startedAtUtc": "2026-10-22T01:19:17.179931+00:00",
+  "sourceBase": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "sourceWorktree": "/tmp/mcpcli-story411-tenants-followup",
+  "appliedReviewedPatch": "5b39c93f2f9cf0711fec844a245c9650a9341ac5 (no commit; exact three-file patch)",
+  "temporaryBuildsCheckout": "3fcb8f38919bb0961b06a19b57aa45623b35a33e inherited from owner; final qualified audit/main gitlink still pending",
+  "nugetPackages": "/tmp/mcpcli-story411-owner-published-87zjp9rw/nuget-cache",
+  "commands": [
+    {
+      "label": "restore-authentic",
+      "command": [
+        "dotnet",
+        "restore",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "-p:Configuration=Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--force-evaluate",
+        "--no-cache"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-restore-authentic.stdout.txt",
+          "bytes": 551,
+          "sha256": "2d62aa903acd172a1f1b6ec62e80366cbd915427e1b9021b4ca1938e26823a62"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-restore-authentic.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-build.stdout.txt",
+          "bytes": 689,
+          "sha256": "93ad93de0d8c3e012e8d70ebebc556cb71a34cb35bd25414f68f4acee5a1193c"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-build.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "governance-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--filter-class",
+        "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-governance-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "governance.trx",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-governance-tests.stdout.txt",
+          "bytes": 580,
+          "sha256": "312d4d2694f8bdd3a49f5b2dc81711b8603d40c1f643b7a264362c062ca8821d"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-governance-tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "scope": "Focused local repair validation with authentic published EventStore packages. Not final-source CI/release acceptance.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "completedAtUtc": "2026-10-22T01:19:36.852192+00:00"
+}

@@ -1,0 +1,221 @@
+{
+  "checkedAtUtc": "2026-10-22T04:16:53.816738+00:00",
+  "result": "passed",
+  "scope": "Final normal root restore and Release output after both existing Sample gates. Fresh task cache initially absent; default cache and prior scratch/candidate archives were untouched. All four selected gateway/enrolled Contracts identities match approved authentic signed archive hashes; all runtime DLL bytes match those archives. Raw signed SHA512 remains distinct from NuGet logical assets/cache/deps content hash.",
+  "assets": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/obj/project.assets.json",
+    "bytes": 157954,
+    "sha256": "a315b3d8354ea0b0be6a03be5139824fa51725d3c4da0a41066537a8db988116"
+  },
+  "deps": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.deps.json",
+    "bytes": 48802,
+    "sha256": "da7eafd5b966948001e51a087b8ea400f9e645b54955f0c63dabecbd632c3e1c"
+  },
+  "cliAssembly": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+    "bytes": 78848,
+    "sha256": "b2cb0a68b0e5bbdb23cbe59ccdab14da25e3c4f9314cd307baa917d96e06097a"
+  },
+  "actualPackageFolders": {
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages": {}
+  },
+  "packages": [
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "artifactHash": "sha512-vnZhAt055+sS//VCTZ7Fa5fONeOc+I9gyA54/x++52z0vdvCObGoD3JYjMJuDMcWQ3PWtt6ClJsUkwOg0XUDjA==",
+      "assetsHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "cacheContentHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "actualAssetsLibrary": "Hexalith.EventStore.Client/3.126.1",
+      "cacheArchive": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.client/3.126.1/hexalith.eventstore.client.3.126.1.nupkg",
+        "bytes": 488688,
+        "sha256": "53fd5f378a997557725fa03e8627074f940b016fd9f5a34aed981e04053b698b"
+      },
+      "actualRegistrySource": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "rawArchiveMatchesExistingApprovedPublishedHash": true,
+      "registryArchiveComparedByteForByte": "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.client.3.126.1.nupkg",
+      "metadata": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.client/3.126.1/.nupkg.metadata",
+        "bytes": 178,
+        "sha256": "a804b3d899b7ae7baef6a025ac6a08353f800ecf0ccbdad34745035f06dd0b3f"
+      },
+      "rawArchiveSha512Sidecar": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.client/3.126.1/hexalith.eventstore.client.3.126.1.nupkg.sha512",
+        "bytes": 88,
+        "sha256": "1ff48c1126e4dae278ba9228b9d4dda9d593533dc88ee3d09dd11748f52d5f52"
+      },
+      "runtimeAsset": {
+        "archiveMember": "lib/net10.0/Hexalith.EventStore.Client.dll",
+        "bytes": 1103360,
+        "sha256": "8953cbd016361780a21420236814f9574f2defa426d9122a676ceead84385e96",
+        "cachedFile": {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.client/3.126.1/lib/net10.0/Hexalith.EventStore.Client.dll",
+          "bytes": 1103360,
+          "sha256": "8953cbd016361780a21420236814f9574f2defa426d9122a676ceead84385e96"
+        },
+        "shippedFile": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.EventStore.Client.dll",
+          "bytes": 1103360,
+          "sha256": "8953cbd016361780a21420236814f9574f2defa426d9122a676ceead84385e96"
+        },
+        "assetsRuntimeTargets": [
+          {
+            "target": "net10.0",
+            "runtimeAsset": "lib/net10.0/Hexalith.EventStore.Client.dll"
+          }
+        ]
+      },
+      "depsLogicalHashMatchesAssetsAndCacheMetadata": true
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "artifactHash": "sha512-yvA2kbvDl34vfzoYIZXohfAasqqcds7k7dGefu5ocNSlZO0Z6PwwJ9O7SvHMxpN4qu35+lma4ZVpUcFhOPpEjw==",
+      "assetsHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "cacheContentHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "actualAssetsLibrary": "Hexalith.EventStore.Contracts/3.126.1",
+      "cacheArchive": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.contracts/3.126.1/hexalith.eventstore.contracts.3.126.1.nupkg",
+        "bytes": 354181,
+        "sha256": "9de3a0646f638b155b93043dc18f9c0cbe6f4051c254366ef2ba91416a0058de"
+      },
+      "actualRegistrySource": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "rawArchiveMatchesExistingApprovedPublishedHash": true,
+      "registryArchiveComparedByteForByte": "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.contracts.3.126.1.nupkg",
+      "metadata": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.contracts/3.126.1/.nupkg.metadata",
+        "bytes": 178,
+        "sha256": "d468d661d9f1f0681d45c75d30c3883bf751d6137c5a60c2df1577644d3d2e6d"
+      },
+      "rawArchiveSha512Sidecar": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.contracts/3.126.1/hexalith.eventstore.contracts.3.126.1.nupkg.sha512",
+        "bytes": 88,
+        "sha256": "47a654bd73926e4ac9e881247d073fa7bbbb268fca8c243e0070e42b76c3b63d"
+      },
+      "runtimeAsset": {
+        "archiveMember": "lib/net10.0/Hexalith.EventStore.Contracts.dll",
+        "bytes": 705024,
+        "sha256": "6a94476a4e7cd59f2f3aaf02d7f508249bbdf33a012e72eb5149759aa8d8d1ab",
+        "cachedFile": {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.eventstore.contracts/3.126.1/lib/net10.0/Hexalith.EventStore.Contracts.dll",
+          "bytes": 705024,
+          "sha256": "6a94476a4e7cd59f2f3aaf02d7f508249bbdf33a012e72eb5149759aa8d8d1ab"
+        },
+        "shippedFile": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll",
+          "bytes": 705024,
+          "sha256": "6a94476a4e7cd59f2f3aaf02d7f508249bbdf33a012e72eb5149759aa8d8d1ab"
+        },
+        "assetsRuntimeTargets": [
+          {
+            "target": "net10.0",
+            "runtimeAsset": "lib/net10.0/Hexalith.EventStore.Contracts.dll"
+          }
+        ]
+      },
+      "depsLogicalHashMatchesAssetsAndCacheMetadata": true
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "assetsHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "cacheContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "actualAssetsLibrary": "Hexalith.Tenants.Contracts/5.10.0",
+      "cacheArchive": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.tenants.contracts/5.10.0/hexalith.tenants.contracts.5.10.0.nupkg",
+        "bytes": 52508,
+        "sha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234"
+      },
+      "actualRegistrySource": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "rawArchiveMatchesExistingApprovedPublishedHash": true,
+      "registryArchiveComparedByteForByte": "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.contracts.5.10.0.nupkg",
+      "metadata": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.tenants.contracts/5.10.0/.nupkg.metadata",
+        "bytes": 178,
+        "sha256": "68182667c424e0813f55489368fd43b9d74c9fe47a417c1dc646561051c81c4f"
+      },
+      "rawArchiveSha512Sidecar": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.tenants.contracts/5.10.0/hexalith.tenants.contracts.5.10.0.nupkg.sha512",
+        "bytes": 88,
+        "sha256": "ab615773a2a2cfb42e370f06857cfe1ae089f027734f930076388704c93804e1"
+      },
+      "runtimeAsset": {
+        "archiveMember": "lib/net10.0/Hexalith.Tenants.Contracts.dll",
+        "bytes": 97280,
+        "sha256": "df80eac648c8eff1a81e2d3bd35c47bee69225b501d31630583607e7332bee89",
+        "cachedFile": {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.tenants.contracts/5.10.0/lib/net10.0/Hexalith.Tenants.Contracts.dll",
+          "bytes": 97280,
+          "sha256": "df80eac648c8eff1a81e2d3bd35c47bee69225b501d31630583607e7332bee89"
+        },
+        "shippedFile": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll",
+          "bytes": 97280,
+          "sha256": "df80eac648c8eff1a81e2d3bd35c47bee69225b501d31630583607e7332bee89"
+        },
+        "assetsRuntimeTargets": [
+          {
+            "target": "net10.0",
+            "runtimeAsset": "lib/net10.0/Hexalith.Tenants.Contracts.dll"
+          }
+        ]
+      },
+      "depsLogicalHashMatchesAssetsAndCacheMetadata": true
+    },
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "assetsHash": "sha512-0OJgZQp/ZNP0qusp9uuMNmrnXFmUU6iM3YP6XmPppOLgJZikDue+JctyT+Hxux5lQ6AW+1tpXtRAVskvsW5vaQ==",
+      "cacheContentHash": "sha512-0OJgZQp/ZNP0qusp9uuMNmrnXFmUU6iM3YP6XmPppOLgJZikDue+JctyT+Hxux5lQ6AW+1tpXtRAVskvsW5vaQ==",
+      "actualAssetsLibrary": "Hexalith.Parties.Contracts/1.5.1",
+      "cacheArchive": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.parties.contracts/1.5.1/hexalith.parties.contracts.1.5.1.nupkg",
+        "bytes": 129134,
+        "sha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c"
+      },
+      "actualRegistrySource": null,
+      "rawArchiveMatchesExistingApprovedPublishedHash": true,
+      "registryArchiveComparedByteForByte": null,
+      "metadata": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.parties.contracts/1.5.1/.nupkg.metadata",
+        "bytes": 178,
+        "sha256": "02a8b053c8871743431159df034cf27103f89fdf2ce42dd947379a88a3d7f1b4"
+      },
+      "rawArchiveSha512Sidecar": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.parties.contracts/1.5.1/hexalith.parties.contracts.1.5.1.nupkg.sha512",
+        "bytes": 88,
+        "sha256": "ceda1d17bce268da43266957af5204d01782f314e14d08bf42f26f6b8aff5fe9"
+      },
+      "runtimeAsset": {
+        "archiveMember": "lib/net10.0/Hexalith.Parties.Contracts.dll",
+        "bytes": 287232,
+        "sha256": "d443e1a66c19ee4cdddf896c1b5b2e490426274a925d64f8e1672a34253c375e",
+        "cachedFile": {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages/hexalith.parties.contracts/1.5.1/lib/net10.0/Hexalith.Parties.Contracts.dll",
+          "bytes": 287232,
+          "sha256": "d443e1a66c19ee4cdddf896c1b5b2e490426274a925d64f8e1672a34253c375e"
+        },
+        "shippedFile": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.Parties.Contracts.dll",
+          "bytes": 287232,
+          "sha256": "d443e1a66c19ee4cdddf896c1b5b2e490426274a925d64f8e1672a34253c375e"
+        },
+        "assetsRuntimeTargets": [
+          {
+            "target": "net10.0",
+            "runtimeAsset": "lib/net10.0/Hexalith.Parties.Contracts.dll"
+          }
+        ]
+      },
+      "depsLogicalHashMatchesAssetsAndCacheMetadata": true
+    }
+  ],
+  "normalRestoreAndBuildEvidence": "root-enrollment-python-sample-checks.json",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "remainingGates": "Mandatory repaired full Tenants follow-up publication and authentic Ubuntu strict21-operation replay/fresh cold Catalog500ms/exactlyone Ulid remain pending."
+}

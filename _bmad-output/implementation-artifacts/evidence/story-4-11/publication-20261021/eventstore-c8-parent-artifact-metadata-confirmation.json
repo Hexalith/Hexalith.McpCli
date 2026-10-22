@@ -1,0 +1,17 @@
+{
+  "receivedAtUtc": "2026-10-22T00:32:36.196730+00:00",
+  "kind": "Parent-agent independent read-only metadata confirmation; no approval or production acceptance inferred.",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "parentReport": "eventstore-c8-parent-artifact-audit.json",
+  "parentReportSha256": "6d29a50b8c9f8fabec7c78e299acaddd07f585135711245de5fa703dbec6e41d",
+  "statement": "Parent independently fetched both current c8 artifact indexes through the GitHub connector. All five official digest, size, head and run fields exactly match retained ZIP bindings and the independent byte/TRX audit; all artifacts were unexpired.",
+  "indexFiles": [
+    "eventstore-c8-ci-artifact-index.json",
+    "eventstore-c8-live-artifact-index.json"
+  ],
+  "artifactCount": 5,
+  "parsedTrxCount": 23,
+  "selectedRegressionsCompared": 8,
+  "fullV1Accepted": false,
+  "productionAccepted": false
+}

@@ -1,0 +1,164 @@
+{
+  "compactedAtUtc": "2026-10-22T00:48:35.632179+00:00",
+  "scope": "Unsealed historical/current observation reports only. Complete original bytes remain private; all findings, rules, required-context identities, check/run outcomes, exact source identities and comparison conclusions remain here. Repeated GitHub repository/user/API-link metadata is omitted. No source, workflow, approval or sealed candidate/release-preparation byte is changed.",
+  "files": [
+    {
+      "path": "builds-reapply-pr-gate-1.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/builds-reapply-pr-gate-1.json",
+        "bytes": 189919,
+        "sha256": "bc933893a5e41a81f66789ea50ecd28258a7ca3afb90a65a88c8c31bf504e40d"
+      },
+      "compactBytes": 45814,
+      "compactSha256": "76cc79fb80974975699abf3ee6252d1ec2641e66d2f294c1bf59a65684bb9077",
+      "checkCount": 12,
+      "workflowCount": 4,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "builds-reapply-pr-gate-final.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/builds-reapply-pr-gate-final.json",
+        "bytes": 249811,
+        "sha256": "d6958eff0f2b9364250dccce7862296968fa64f368aec39215ec3db27096d8cf"
+      },
+      "compactBytes": 104636,
+      "compactSha256": "521ca457bf46bd26e4250380ecb19f03208543eed28c097de7d65503a2ee5961",
+      "checkCount": 13,
+      "workflowCount": 4,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "builds-revert-pr-gate-1.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/builds-revert-pr-gate-1.json",
+        "bytes": 192264,
+        "sha256": "59545d9e5524c1b55dc705591fe463de0db0033d26cd836571b306631ae1effa"
+      },
+      "compactBytes": 46056,
+      "compactSha256": "79a8e67ae8533d7a3df9c6b9049cbf0651b43cc629a3697cac9458b921041614",
+      "checkCount": 13,
+      "workflowCount": 4,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "builds-revert-pr-gate-final.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/builds-revert-pr-gate-final.json",
+        "bytes": 192092,
+        "sha256": "cc9042a3f9a0e0c1733e552eea31fcf5c233d27fb8bf6ce53cb8dd6bf529779b"
+      },
+      "compactBytes": 45888,
+      "compactSha256": "302ba192d2660bcee503bf0ff0bdc9c4c4f2dc583ed532958ba9d45123b98699",
+      "checkCount": 13,
+      "workflowCount": 4,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-191-current-pr-gate-initial.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-191-current-pr-gate-initial.json",
+        "bytes": 465909,
+        "sha256": "8aa3d774f7128ff44e787b7d2f0bb4efbf48a9b782ba24fafc87763e09aeb45f"
+      },
+      "compactBytes": 173480,
+      "compactSha256": "7c761ed57faa0368f87f31b3247569828760b1b55d4e98f1b87cad3f55311785",
+      "checkCount": 20,
+      "workflowCount": 11,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-c8-pr-gate-initial.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-c8-pr-gate-initial.json",
+        "bytes": 459306,
+        "sha256": "0b5ab2db217412c4498e6b5ca9387eb2c6992f933b8638ea4d7b659a916b4856"
+      },
+      "compactBytes": 171845,
+      "compactSha256": "a6e0488650d4844d3dcabce9ad73e2cb29496a9111dc26983448548cf0f3810c",
+      "checkCount": 19,
+      "workflowCount": 11,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-c8-pr-gate-pre-codeql.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-c8-pr-gate-pre-codeql.json",
+        "bytes": 480883,
+        "sha256": "d94b71796cb7f4ac338a98d6d5254c5d91be47358e62fb60678620d1cbbe81ce"
+      },
+      "compactBytes": 184459,
+      "compactSha256": "e917fc88ce117efb775341b9273397d43418b49bbb3ae3bc16862f9befb5bce2",
+      "checkCount": 21,
+      "workflowCount": 11,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-current-261e-pr-gate-1.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-261e-pr-gate-1.json",
+        "bytes": 418126,
+        "sha256": "b1568775e9b5a8ec25f817b837d7fad66f89b54e4485c0af33bc27cb7a700dc3"
+      },
+      "compactBytes": 168504,
+      "compactSha256": "4d979899f8c1375d386c5af8acd188d3b266d09e9543e256d9ae4625c600e764",
+      "checkCount": 18,
+      "workflowCount": 9,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-current-261e-pr-gate-2.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-261e-pr-gate-2.json",
+        "bytes": 418191,
+        "sha256": "fba4b0243cc9d0cd9f8da5de2e1ab5cf6dd102887a62954909fb67e149194b86"
+      },
+      "compactBytes": 168569,
+      "compactSha256": "07a6b488891d26442f551bc7893aeb8cfa015b21eba5ecf1983ce291c338ab3d",
+      "checkCount": 18,
+      "workflowCount": 9,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-current-pr-gate-1.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-pr-gate-1.json",
+        "bytes": 290942,
+        "sha256": "df7c1279cbf35e1c0da9b094fade7598d9f0b8b4fcabd887ff75362ccceded0b"
+      },
+      "compactBytes": 53306,
+      "compactSha256": "32046d77f4c5172fee2bfced974e30a30858f9d2b3ae2755c67b38c2bad46a76",
+      "checkCount": 12,
+      "workflowCount": 10,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-current-pr-gate-2.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-pr-gate-2.json",
+        "bytes": 458407,
+        "sha256": "464a2bc98fba231d039285c67d4b05f597c455e652b04fb9aaed004c1719a68f"
+      },
+      "compactBytes": 171887,
+      "compactSha256": "d03f2dc5a6aefeb17321c1bce6ec76ebb286e3776e90272624f188141ad16666",
+      "checkCount": 19,
+      "workflowCount": 11,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    },
+    {
+      "path": "eventstore-current-pr-gate-final.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-pr-gate-final.json",
+        "bytes": 516653,
+        "sha256": "635a65e1c00cd75f2325b4be1be2ddb04cedbc8bedeee9c63fdb773e70cd701a"
+      },
+      "compactBytes": 186181,
+      "compactSha256": "84e69fe6db6e8a48d3713be93fc9478170f94dd818bfc1081c3d61f876bef0f2",
+      "checkCount": 21,
+      "workflowCount": 13,
+      "allRulesFindingsConclusionsSourceBindingsPreserved": true
+    }
+  ],
+  "originalTotalBytes": 4332503,
+  "compactTotalBytes": 1520625
+}

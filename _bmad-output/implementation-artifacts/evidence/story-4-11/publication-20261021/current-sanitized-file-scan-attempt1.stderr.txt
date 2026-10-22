@@ -1,0 +1,1 @@
+Unhandled exception: An error occurred trying to start process '/tmp/mcpcli-story411-private-scan-mgbij36k/bin/Debug/net10.0/scan' with working directory '/tmp/mcpcli-story411-eventstore-p1r-de1ragfp'. No such file or directory

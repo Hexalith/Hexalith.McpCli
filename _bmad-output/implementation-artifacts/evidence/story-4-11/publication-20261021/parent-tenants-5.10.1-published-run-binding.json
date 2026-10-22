@@ -1,0 +1,152 @@
+{
+  "capturedAtUtc": "2026-10-22T04:30:38.031563+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "run": 39721533752,
+  "source": "205cbc5019343d344643b530fb03aee82af2840d",
+  "version": "5.10.1",
+  "conclusion": "success",
+  "publishedAtUtc": "2026-10-22T04:27:22Z",
+  "releaseUrl": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.1",
+  "jobs": [
+    {
+      "id": 119635869111,
+      "name": "Verify exact green main source",
+      "conclusion": "success"
+    },
+    {
+      "id": 119635906479,
+      "name": "Publish Tenants packages and container",
+      "conclusion": "success"
+    },
+    {
+      "id": 119639060983,
+      "name": "Verify exact source was published",
+      "conclusion": "success"
+    }
+  ],
+  "officialArtifact": {
+    "id": 12401995929,
+    "name": "release-evidence-39721533752-1",
+    "bytes": 13674,
+    "sha256": "b846702459dbb1353e9ce4909a98ce4a1672d6427c3c9deff4728f7d83af9567",
+    "privateArchive": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/official-release-evidence.zip",
+    "members": [
+      {
+        "path": "5.10.1/preflight/publication-identity.json",
+        "bytes": 2330,
+        "sha256": "174b1d2a16ce547eec083a8197933ed49448b3b6cdaa98cf200cafe81eed717b"
+      },
+      {
+        "path": "5.10.1/preflight/publication-preflight.publish.json",
+        "bytes": 5625,
+        "sha256": "360af9664fe5eb008ad25b5cea70364b292cc25639659484412db8cc148cf7c2"
+      },
+      {
+        "path": "5.10.1/preflight/publication-preflight.container.json",
+        "bytes": 2954,
+        "sha256": "4d93e3a7e2dc728e314f9c6d6247990f906da1ec07f7f0326bb373caa6a6ae2e"
+      },
+      {
+        "path": "5.10.1/preflight/publication-preflight.verify.json",
+        "bytes": 5312,
+        "sha256": "4f9f49c31704edac75c3d0aab1665791f32434c1f52841e9117334da6c0d10a4"
+      },
+      {
+        "path": "5.10.1/tenants/child-linux-amd64.config.raw",
+        "bytes": 4189,
+        "sha256": "5d788f0c404fcb8f19fb6522da856100d25275d539d884a321d2238a67cfe157"
+      },
+      {
+        "path": "5.10.1/tenants/child-linux-amd64.manifest.raw",
+        "bytes": 1399,
+        "sha256": "4787ab49b7245bdaa0e26d66a3428fb18bef5bff3455527a5d3968a2bcd58138"
+      },
+      {
+        "path": "5.10.1/tenants/child-linux-arm64.config.raw",
+        "bytes": 4190,
+        "sha256": "aa283832b649799511e1e067aed152143b4cb4a7c2d2d987539f68c2c3ceb0c1"
+      },
+      {
+        "path": "5.10.1/tenants/child-linux-arm64.manifest.raw",
+        "bytes": 1399,
+        "sha256": "ca946cf2b4af6362f8d13109545eeb2af3ca1199552ab953b0a3f956f06f3426"
+      },
+      {
+        "path": "5.10.1/tenants/index.raw",
+        "bytes": 493,
+        "sha256": "a5942091942493abee2bb9c86cafac33e7b69f5e594eae4161062ee0cdf139f3"
+      },
+      {
+        "path": "5.10.1/tenants/oci-validation.json",
+        "bytes": 2973,
+        "sha256": "144a0dd7fcc85b1dcc7568484cb73374d055632c3cef891fc63799636dd801ba"
+      },
+      {
+        "path": "5.10.1/tenants/smoke-linux-amd64.log",
+        "bytes": 218,
+        "sha256": "5fe53290dd2a348be582a1978be8bf623f9b56b8fbf67b7cb328b2d1eff418e4"
+      },
+      {
+        "path": "5.10.1/tenants/smoke-linux-arm64.log",
+        "bytes": 1207,
+        "sha256": "c82e9490135df678d546ef5493ec2956ee18050a497da9a4f914feb7b2d38940"
+      },
+      {
+        "path": "5.10.1/tenants/smoke-preflight.log",
+        "bytes": 158,
+        "sha256": "ef50eee4a9ca4d5635e13c71220687e44b003733b761ac1c15c335be9bef6e35"
+      },
+      {
+        "path": "5.10.1/tenants/smoke-results.json",
+        "bytes": 555,
+        "sha256": "9363c529d0447dfafa5f3bc7b6a17bcfcc9ddeb20b9d7a322d3b9a39d18c7ee9"
+      },
+      {
+        "path": "5.10.1/tenants/smoke-sha256.txt",
+        "bytes": 347,
+        "sha256": "306f533915162b8ffb046216bd38703ebb0793f69e3c907773927c4af7e03663"
+      }
+    ]
+  },
+  "normalApprovalHistory": [
+    {
+      "user": {
+        "login": "jpiquot",
+        "id": 6775094,
+        "node_id": "MDQ6VXNlcjY3NzUwOTQ=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jpiquot",
+        "html_url": "https://github.com/jpiquot",
+        "followers_url": "https://api.github.com/users/jpiquot/followers",
+        "following_url": "https://api.github.com/users/jpiquot/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jpiquot/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jpiquot/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jpiquot/subscriptions",
+        "organizations_url": "https://api.github.com/users/jpiquot/orgs",
+        "repos_url": "https://api.github.com/users/jpiquot/repos",
+        "events_url": "https://api.github.com/users/jpiquot/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jpiquot/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "state": "approved",
+      "comment": "Approved under the requesting owner\u2019s Story 4.11 authorization for the normal full five-package and two-architecture Tenants container release from exact source 205cbc5019343d344643b530fb03aee82af2840d after successful exact-source push CI and normal preflight. No bypass or control change.",
+      "environments": [
+        {
+          "id": 18745236815,
+          "node_id": "EN_kwDORf3mrc8AAAAEXU2dTw",
+          "name": "production",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/environments/production",
+          "html_url": "https://github.com/Hexalith/Hexalith.Tenants/deployments/activity_log?environments_filter=production",
+          "created_at": "2026-07-25T18:15:54Z",
+          "updated_at": "2026-07-25T18:15:54Z",
+          "can_admins_bypass": false
+        }
+      ]
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

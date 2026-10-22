@@ -1,0 +1,19 @@
+{
+  "result": "passed",
+  "scope": "unpublished-candidate-only",
+  "fullV1Accepted": false,
+  "productionAccepted": false,
+  "operationCount": 21,
+  "modules": [
+    "parties",
+    "tenants"
+  ],
+  "packageModules": {
+    "Hexalith.Parties.Contracts": [
+      "parties"
+    ],
+    "Hexalith.Tenants.Contracts": [
+      "tenants"
+    ]
+  }
+}

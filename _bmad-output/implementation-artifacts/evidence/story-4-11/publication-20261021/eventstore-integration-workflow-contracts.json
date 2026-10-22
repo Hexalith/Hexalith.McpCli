@@ -1,0 +1,41 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Contracts.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.Tests.dll",
+    "-class",
+    "Hexalith.EventStore.Contracts.Tests.Packaging.ReleasePackageManifestTests",
+    "-class",
+    "Hexalith.EventStore.Contracts.Tests.Packaging.PostgreSqlImageGovernanceTests",
+    "-class",
+    "Hexalith.EventStore.Contracts.Tests.Packaging.Oq8V5CandidateTests",
+    "-xml",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/eventstore-integration-workflow-contracts.xml",
+    "-noColor"
+  ],
+  "environment": {
+    "HEXALITH_BUILDS_SOURCE": "/home/administrator/projects/hexalith/builds"
+  },
+  "exitCode": 0,
+  "assemblies": [
+    {
+      "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+      "id": "e83c3126-0994-42a4-8d58-5afd3d868381",
+      "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Contracts.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.Tests.dll",
+      "run-date": "2026-10-21",
+      "run-time": "22:14:55",
+      "start-rtf": "2026-10-21T22:14:55.0347021+00:00",
+      "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+      "target-framework": ".NETCoreApp,Version=v10.0",
+      "errors": "0",
+      "failed": "0",
+      "finish-rtf": "2026-10-21T22:15:14.9192446+00:00",
+      "not-run": "0",
+      "passed": "149",
+      "skipped": "0",
+      "time": "19.886",
+      "time-rtf": "00:00:19.8860000",
+      "total": "149"
+    }
+  ],
+  "failures": []
+}

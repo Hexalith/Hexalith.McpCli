@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "git",
+      "commit",
+      "-F",
+      "/tmp/mcpcli-story411-builds-test-hardening-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/container-provenance-protected-reapply 1e65f56] test(container): avoid XML parsing in provenance fixtures\n 1 file changed, 27 insertions(+), 21 deletions(-)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:refs/heads/fix/container-provenance-protected-reapply"
+    ],
+    "head": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "To https://github.com/Hexalith/Hexalith.Builds.git\n   1e606d4..1e65f56  HEAD -> fix/container-provenance-protected-reapply\n"
+  }
+]

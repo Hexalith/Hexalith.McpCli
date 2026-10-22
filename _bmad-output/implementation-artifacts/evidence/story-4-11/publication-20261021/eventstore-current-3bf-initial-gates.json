@@ -1,0 +1,794 @@
+{
+  "source": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+  "note": "Initial exact-head observation; not release acceptance. Superseded and cancelled history is retained elsewhere.",
+  "runs": [
+    {
+      "id": 39679453712,
+      "jobs": [
+        {
+          "id": 119497802806,
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Prove checkpointed process Release packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 119497803092,
+          "name": "ci / contracts",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run generated API smoke preflight regression",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Install pinned OQ8 validator dependency",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Restore Contracts tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Build Contracts tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run Contracts tests",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 9
+            },
+            {
+              "name": "Upload Contracts test results",
+              "status": "pending",
+              "conclusion": null,
+              "number": 10
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "pending",
+              "conclusion": null,
+              "number": 19
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "pending",
+              "conclusion": null,
+              "number": 20
+            }
+          ]
+        },
+        {
+          "id": 119497803151,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Set up supported Node",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Install locked npm dependencies",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Verify semantic-release GitHub success lifecycle",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Set up supported Node",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 119497803202,
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Restore source-mode AppHost tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build source-mode AppHost tests",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Verify Tenants source-mode topology guardrails",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Upload Tenants source-mode test results",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            }
+          ]
+        },
+        {
+          "id": 119497803371,
+          "name": "ci / build-and-test",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Validate governed CI contract",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 3
+            },
+            {
+              "name": "Checkout approved Builds actions",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 4
+            },
+            {
+              "name": "Evaluate governed workflow provenance",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 5
+            },
+            {
+              "name": "Initialize root-declared submodules (governed)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 6
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Cache NuGet packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Validate test platform input",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 10
+            },
+            {
+              "name": "Restore",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Validate package consumer references",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Unit tests (Tier 1, VSTest)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 14
+            },
+            {
+              "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 15
+            },
+            {
+              "name": "Install and initialize Dapr (governed)",
+              "status": "pending",
+              "conclusion": null,
+              "number": 16
+            },
+            {
+              "name": "Install and initialize Dapr",
+              "status": "pending",
+              "conclusion": null,
+              "number": 17
+            },
+            {
+              "name": "Integration tests (Tier 2, VSTest)",
+              "status": "pending",
+              "conclusion": null,
+              "number": 18
+            },
+            {
+              "name": "Integration tests (Tier 2, Microsoft.Testing.Platform)",
+              "status": "pending",
+              "conclusion": null,
+              "number": 19
+            },
+            {
+              "name": "Validate coverage gates",
+              "status": "pending",
+              "conclusion": null,
+              "number": 20
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "status": "pending",
+              "conclusion": null,
+              "number": 21
+            },
+            {
+              "name": "Upload test and coverage evidence",
+              "status": "pending",
+              "conclusion": null,
+              "number": 22
+            },
+            {
+              "name": "Post Cache NuGet packages",
+              "status": "pending",
+              "conclusion": null,
+              "number": 42
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "pending",
+              "conclusion": null,
+              "number": 43
+            },
+            {
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "pending",
+              "conclusion": null,
+              "number": 44
+            }
+          ]
+        },
+        {
+          "id": 119497803403,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 39679453712,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Verify published and current folded snapshot compatibility",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39679453148,
+      "jobs": [
+        {
+          "id": 119497800828,
+          "name": "preparation-controls",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 39679453148,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize root-declared submodules",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Verify bounded external evidence storage and Git admission",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Verify external evidence refusals under optimized Python",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Verify bounded P1R preparation and process controls",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Verify P1R published qualification harness contracts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Verify P1R published executor regressions",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 8
+            },
+            {
+              "name": "Verify P1R bounded verifier corrections",
+              "status": "pending",
+              "conclusion": null,
+              "number": 9
+            },
+            {
+              "name": "Initialize .NET for actual fixture registration checks",
+              "status": "pending",
+              "conclusion": null,
+              "number": 10
+            },
+            {
+              "name": "Verify real Host and Domain snapshot registration",
+              "status": "pending",
+              "conclusion": null,
+              "number": 11
+            },
+            {
+              "name": "Verify P1R private isolation controls",
+              "status": "pending",
+              "conclusion": null,
+              "number": 12
+            },
+            {
+              "name": "Verify P1R complete isolation lifecycle controls",
+              "status": "pending",
+              "conclusion": null,
+              "number": 13
+            },
+            {
+              "name": "Verify P1R isolation refusals under optimized Python",
+              "status": "pending",
+              "conclusion": null,
+              "number": 14
+            },
+            {
+              "name": "Checkout exact approved publication engine for regression controls",
+              "status": "pending",
+              "conclusion": null,
+              "number": 15
+            },
+            {
+              "name": "Verify one-use publication authority and same-run source controls",
+              "status": "pending",
+              "conclusion": null,
+              "number": 16
+            },
+            {
+              "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+              "status": "pending",
+              "conclusion": null,
+              "number": 32
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39679453767,
+      "jobs": [
+        {
+          "id": 119497804927,
+          "name": "codeql / analyze",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 39679453767,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v7.0.1",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize CodeQL",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Perform CodeQL Analysis",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 4
+            },
+            {
+              "name": "Post Perform CodeQL Analysis",
+              "status": "pending",
+              "conclusion": null,
+              "number": 6
+            },
+            {
+              "name": "Post Initialize CodeQL",
+              "status": "pending",
+              "conclusion": null,
+              "number": 7
+            },
+            {
+              "name": "Post Run actions/checkout@v7.0.1",
+              "status": "pending",
+              "conclusion": null,
+              "number": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39679453212,
+      "jobs": [
+        {
+          "id": 119497801481,
+          "name": "live-sidecar",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 39679453212,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Checkout repository",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Initialize Hexalith.Builds submodule",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Initialize .NET",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Install pinned OQ8 validator dependency",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Cache NuGet packages",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Restore",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Initialize Dapr",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Pull PostgreSQL container image",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run Live-Sidecar Integration Tests",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 10
+            },
+            {
+              "name": "Verify IntegrationTests serialized execution metadata",
+              "status": "pending",
+              "conclusion": null,
+              "number": 11
+            },
+            {
+              "name": "Capture and validate OQ8 production evidence",
+              "status": "pending",
+              "conclusion": null,
+              "number": 12
+            },
+            {
+              "name": "Upload fresh validated OQ8 capture",
+              "status": "pending",
+              "conclusion": null,
+              "number": 13
+            },
+            {
+              "name": "Upload live-sidecar test results",
+              "status": "pending",
+              "conclusion": null,
+              "number": 14
+            },
+            {
+              "name": "Post Cache NuGet packages",
+              "status": "pending",
+              "conclusion": null,
+              "number": 26
+            },
+            {
+              "name": "Post Initialize .NET",
+              "status": "pending",
+              "conclusion": null,
+              "number": 27
+            },
+            {
+              "name": "Post Checkout repository",
+              "status": "pending",
+              "conclusion": null,
+              "number": 28
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

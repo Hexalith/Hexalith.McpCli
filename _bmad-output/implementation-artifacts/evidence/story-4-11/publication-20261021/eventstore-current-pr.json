@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/pull/372",
+    "number": 372,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": false,
+    "body": "The complete preparation-controls sequence exhausted the former 15-minute job budget after its completed suites passed. Increase the bounded allowance to 30 minutes while retaining every existing qualification, registration, isolation, and authority check. The first PR head completed full P1R under that allowance; each integrated head must earn its own CI/P1R success.\n\nPreserve current owning main 1b5ec217a74cdfdd84605e093114071b56c9f700, including its native-proof shape guard, final diagnostic masking, and longer Git identity setup allowance. Original packet manifests remain intact. Separate source-bound receipts and derived manifests describe successive 03b and 9e34 diagnostics; the README marks the earlier bindings historical. All 204 current derived entries verify. Against original b828, the current owner bytes mask 17 OTLP header lines and two credential URI display names per XML, retaining inert placeholder displays and every other XML node, attribute, text, outcome, count, identity, and timing. No new qualification credit is assigned.\n\nValidation: integrated 703e Server.Tests Release build passed with zero warnings/errors and all 995 focused replay-context plus unchanged secrets-scanner tests passed. Current 9e34 diagnostic/metadata files separately pass that unchanged scanner, and current source-bound entries all rehash. Four workflow release/source contract tests passed. Fresh exact-current-head CI and P1R remain required. No scanner exception, skipped guard, or production behavior change is introduced.",
+    "title": "ci(p1r): complete qualification and bind sanitized evidence",
+    "base": "main",
+    "base_sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+    "head": "fix/p1r-qualification-time-budget",
+    "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+    "head_repo_id": 1155154671,
+    "head_repo_full_name": "Hexalith/Hexalith.EventStore",
+    "merge_commit_sha": "344579289961f610dc629cc6e10512de28a1fe78",
+    "user": {
+      "login": "jpiquot",
+      "name": "jpiquot",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+      "id": 6775094
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-21T19:59:10Z",
+    "updated_at": "2026-10-21T20:35:58Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 5,
+    "changed_files": 8,
+    "additions": 874,
+    "deletions": 1,
+    "display_url": "https://github.com/Hexalith/Hexalith.EventStore/pull/372",
+    "display_title": "ci(p1r): complete qualification and bind sanitized evidence"
+  },
+  "isError": false
+}

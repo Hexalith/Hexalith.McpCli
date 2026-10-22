@@ -1,0 +1,33 @@
+{
+  "checkedAtUtc": "2026-10-22T01:26:26.287004+00:00",
+  "head": "85290197d2a4324b50560630e8992d71c3318784",
+  "postCommitValidator": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "Tools/validate-package-version-audit.ps1"
+    ],
+    "exitCode": 0,
+    "stdout": "Package version audit validation passed for 307 packages, 148 families, and 1 source(s).\n",
+    "stderr": ""
+  },
+  "pullTitleValidation": {
+    "candidate": "build(deps): refresh published family audit",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nbuild(deps): refresh published family audit\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  "branchPush": {
+    "command": [
+      "git",
+      "push",
+      "--set-upstream",
+      "origin",
+      "HEAD:refs/heads/fix/published-family-audit"
+    ],
+    "exitCode": 0,
+    "stdout": "branch 'fix/published-family-audit' set up to track 'origin/fix/published-family-audit'.\n",
+    "stderr": "remote: \nremote: Create a pull request for 'fix/published-family-audit' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Builds/pull/new/fix/published-family-audit        \nremote: \nTo https://github.com/Hexalith/Hexalith.Builds.git\n * [new branch]      HEAD -> fix/published-family-audit\n"
+  }
+}

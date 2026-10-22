@@ -1,0 +1,377 @@
+{
+  "startedAtUtc": "2026-10-21T23:35:30.786117+00:00",
+  "status": "local-diagnostic-only",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Local extraction diagnostic only; no security qualification, workflow pin, source exclusion or production acceptance.",
+  "allSourceInputsIdenticalAcrossVersions": true,
+  "host": {
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "logicalCpuCount": 14,
+    "memTotal": "MemTotal:       94747284 kB"
+  },
+  "environmentDifferences": "Host physical memory, cgroup limits, OS and CPU scheduling differ from GitHub. Requested resource hints do not reproduce a sixteen-GiB runner or impose an equivalent managed-Roslyn heap. Measure actual per-process RSS/CPU; do not infer exact runner parity.",
+  "resourceHints": {
+    "CODEQL_RAM": "14570",
+    "CODEQL_THREADS": "4",
+    "traceRamMiB": 14570,
+    "traceThreads": 4
+  },
+  "localBound": {
+    "secondsPerVersion": 1800,
+    "aggregateRssCeilingMiB": 16384,
+    "meaning": "Task-local safety stop, not a GitHub-equivalent cgroup or an acceptance gate."
+  },
+  "versions": [
+    {
+      "version": "2.27.2",
+      "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "startedAtUtc": "2026-10-21T23:35:30.981060+00:00",
+      "initCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.2/codeql/codeql",
+        "database",
+        "init",
+        "--force-overwrite",
+        "--db-cluster",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2-attempt2/database",
+        "--source-root=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+        "--no-calculate-baseline",
+        "--extractor-include-aliases",
+        "--language=csharp",
+        "--build-mode=none"
+      ],
+      "cliArchiveSha256": "sha256:ac0a4ea06843577ed3a1f5af145756c3085ebfd42e59a5aff1b66489f29d16dc",
+      "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2-attempt2",
+      "status": "diagnostic-stopped",
+      "initExitCode": 0,
+      "traceCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.2/codeql/codeql",
+        "database",
+        "trace-command",
+        "--use-build-mode",
+        "--threads=4",
+        "--ram=14570",
+        "--extractor-option=csharp.logging.verbosity=progress+",
+        "--working-dir=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2-attempt2/database/csharp"
+      ],
+      "peakAggregateRssMiB": 2964.08203125,
+      "ownedProcessGroup": 91808,
+      "stopReason": "local-thirty-minute-bound",
+      "elapsedSeconds": 1800.8083571960015,
+      "traceExitCode": 143,
+      "ownedGroupRemainingAfterCleanup": [],
+      "completedAtUtc": "2026-10-22T00:05:32.408645+00:00",
+      "changedInputPaths": [],
+      "totalObservedProcessCpuSeconds": 6830.41,
+      "privateLogHashes": {
+        "init.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "trace.stdout.txt": "ada5f83b06ee78a10194f72b44ec990559e0ea250df29503a5f3386472b78629",
+        "init.stderr.txt": "388f5db12097d660b9d602c02e49407b7636cbada09eb088b231f27d998b438f",
+        "trace.stderr.txt": "d913be279fe1b9d3fba467e5a43a35b8c6304c63464d1399029ab43d86ffebd8"
+      },
+      "resourceSamplesSha256": "97f96223e2003fafc03720cf95f7dd89247963abf27526de18d7216784427013",
+      "observedProcessSummary": {
+        "sampledProcessIdentities": 335,
+        "csharpProcesses": [
+          {
+            "pid": 91861,
+            "name": "autobuild.sh",
+            "csharpExtractor": true,
+            "peakRssMiB": 1.875,
+            "firstObservedRssMiB": 1.875,
+            "maximumObservedCpuSeconds": 0.0
+          },
+          {
+            "pid": 91862,
+            "name": "Semmle.Autobuil",
+            "csharpExtractor": true,
+            "peakRssMiB": 2789.38671875,
+            "firstObservedRssMiB": 114.5390625,
+            "maximumObservedCpuSeconds": 6733.76
+          }
+        ],
+        "highestObservedCpuProcesses": [
+          {
+            "pid": 91862,
+            "name": "Semmle.Autobuil",
+            "csharpExtractor": true,
+            "peakRssMiB": 2789.38671875,
+            "firstObservedRssMiB": 114.5390625,
+            "maximumObservedCpuSeconds": 6733.76
+          },
+          {
+            "pid": 91815,
+            "name": "java",
+            "csharpExtractor": false,
+            "peakRssMiB": 170.9453125,
+            "firstObservedRssMiB": 108.4453125,
+            "maximumObservedCpuSeconds": 4.19
+          },
+          {
+            "pid": 67809,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 201.89453125,
+            "firstObservedRssMiB": 178.19140625,
+            "maximumObservedCpuSeconds": 3.88
+          },
+          {
+            "pid": 47834,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 0,
+            "firstObservedRssMiB": 0.0,
+            "maximumObservedCpuSeconds": 1.73
+          },
+          {
+            "pid": 23236,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 196.24609375,
+            "firstObservedRssMiB": 196.24609375,
+            "maximumObservedCpuSeconds": 1.58
+          }
+        ]
+      },
+      "actualManagedCsharpProcesses": [
+        {
+          "pid": 91862,
+          "name": "Semmle.Autobuil",
+          "csharpExtractor": true,
+          "peakRssMiB": 2789.38671875,
+          "firstObservedRssMiB": 114.5390625,
+          "maximumObservedCpuSeconds": 6733.76
+        }
+      ],
+      "peakManagedCsharpProcessRssMiB": 2789.38671875,
+      "peakCsharpToolGroupRssMiB": 2791.26171875,
+      "csharpToolClassification": "Original sampler matches C# tool paths, including shell/diagnostic helpers. Actual managed Semmle process peaks and minute curves are retained separately.",
+      "stageTiming": {
+        "firstLoggedTraceAtUtc": "2026-10-21T23:35:32+00:00",
+        "extractingLoggedAtUtc": "2026-10-21T23:38:55+00:00",
+        "approximateExtractionOffsetSeconds": 203.0,
+        "meaning": "Stage offset uses whole-second CLI log timestamps; resource elapsed values are measured from Popen and may differ slightly."
+      },
+      "selectedStageCounters": [
+        "[001]  15180 source files found on the filesystem",
+        "[001]     75 source files have been generated",
+        "[001]    592 resolved references",
+        "[001]      0 unresolved references",
+        "[001]   1665 resolved assembly conflicts",
+        "[001] Build analysis completed in 00:03:23.2355934",
+        "[001] Extracting..."
+      ],
+      "minuteResourceCurve": {
+        "file": "eventstore-codeql-local-resource-curves.jsonl",
+        "rowCount": 31,
+        "meaning": "Minute buckets with exact private two-second samples retained; managed process fields exclude shell/diagnostic helpers."
+      },
+      "privateResourceSamples": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2-attempt2/resources.jsonl",
+        "bytes": 482057,
+        "samples": 896,
+        "sha256": "97f96223e2003fafc03720cf95f7dd89247963abf27526de18d7216784427013"
+      },
+      "privateDatabaseLogHashes": {
+        "database/csharp/log/csharp.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "database/csharp/log/database-trace-command-20261022.013532.163.log": "a825ad0475b8db29e1bbf6dd50c5844be6568e2749828fd737e97bc00d80797b"
+      }
+    },
+    {
+      "version": "2.27.3",
+      "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "startedAtUtc": "2026-10-22T00:05:32.607305+00:00",
+      "initCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/codeql",
+        "database",
+        "init",
+        "--force-overwrite",
+        "--db-cluster",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3-attempt2/database",
+        "--source-root=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+        "--no-calculate-baseline",
+        "--extractor-include-aliases",
+        "--language=csharp",
+        "--build-mode=none"
+      ],
+      "cliArchiveSha256": "sha256:845075a2fa2fdf72629adc6cbde6264691b698d1f294bd27f10c6b579cd750a4",
+      "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3-attempt2",
+      "status": "diagnostic-stopped",
+      "initExitCode": 0,
+      "traceCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/codeql",
+        "database",
+        "trace-command",
+        "--use-build-mode",
+        "--threads=4",
+        "--ram=14570",
+        "--extractor-option=csharp.logging.verbosity=progress+",
+        "--working-dir=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3-attempt2/database/csharp"
+      ],
+      "peakAggregateRssMiB": 2955.22265625,
+      "ownedProcessGroup": 39248,
+      "stopReason": "local-thirty-minute-bound",
+      "elapsedSeconds": 1801.024985868993,
+      "traceExitCode": 143,
+      "ownedGroupRemainingAfterCleanup": [],
+      "completedAtUtc": "2026-10-22T00:35:34.246255+00:00",
+      "changedInputPaths": [],
+      "totalObservedProcessCpuSeconds": 6849.5,
+      "privateLogHashes": {
+        "init.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "trace.stdout.txt": "281486a83cb9bfca1384c677c88f51ad77c2c58b5cba2b2acb62c9636f4d3b77",
+        "init.stderr.txt": "892ebc8bf6938d0baaac70ee7f8ba04f77dce9a92f53461509e23b694cf753c8",
+        "trace.stderr.txt": "a351d17b34e161fae72d03711ac4a64db40b7183e684f145942bbda90bbcbf5a"
+      },
+      "resourceSamplesSha256": "e627b7a7606a381057f48ce27efcc45261f300d54ce7b6a247576f4c2d7ca68e",
+      "observedProcessSummary": {
+        "sampledProcessIdentities": 306,
+        "csharpProcesses": [
+          {
+            "pid": 39385,
+            "name": "autobuild.sh",
+            "csharpExtractor": true,
+            "peakRssMiB": 1.875,
+            "firstObservedRssMiB": 1.875,
+            "maximumObservedCpuSeconds": 0.0
+          },
+          {
+            "pid": 39386,
+            "name": "Semmle.Autobuil",
+            "csharpExtractor": true,
+            "peakRssMiB": 2782.953125,
+            "firstObservedRssMiB": 114.28515625,
+            "maximumObservedCpuSeconds": 6763.39
+          }
+        ],
+        "highestObservedCpuProcesses": [
+          {
+            "pid": 39386,
+            "name": "Semmle.Autobuil",
+            "csharpExtractor": true,
+            "peakRssMiB": 2782.953125,
+            "firstObservedRssMiB": 114.28515625,
+            "maximumObservedCpuSeconds": 6763.39
+          },
+          {
+            "pid": 13413,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 249.125,
+            "firstObservedRssMiB": 249.125,
+            "maximumObservedCpuSeconds": 4.37
+          },
+          {
+            "pid": 39255,
+            "name": "java",
+            "csharpExtractor": false,
+            "peakRssMiB": 168.39453125,
+            "firstObservedRssMiB": 109.64453125,
+            "maximumObservedCpuSeconds": 3.86
+          },
+          {
+            "pid": 13660,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 177.5703125,
+            "firstObservedRssMiB": 177.5703125,
+            "maximumObservedCpuSeconds": 1.53
+          },
+          {
+            "pid": 58820,
+            "name": "dotnet",
+            "csharpExtractor": false,
+            "peakRssMiB": 200.90625,
+            "firstObservedRssMiB": 200.90625,
+            "maximumObservedCpuSeconds": 1.48
+          }
+        ]
+      },
+      "actualManagedCsharpProcesses": [
+        {
+          "pid": 39386,
+          "name": "Semmle.Autobuil",
+          "csharpExtractor": true,
+          "peakRssMiB": 2782.953125,
+          "firstObservedRssMiB": 114.28515625,
+          "maximumObservedCpuSeconds": 6763.39
+        }
+      ],
+      "peakManagedCsharpProcessRssMiB": 2782.953125,
+      "peakCsharpToolGroupRssMiB": 2784.828125,
+      "csharpToolClassification": "Original sampler matches C# tool paths, including shell/diagnostic helpers. Actual managed Semmle process peaks and minute curves are retained separately.",
+      "stageTiming": {
+        "firstLoggedTraceAtUtc": "2026-10-22T00:05:33+00:00",
+        "extractingLoggedAtUtc": "2026-10-22T00:08:48+00:00",
+        "approximateExtractionOffsetSeconds": 195.0,
+        "meaning": "Stage offset uses whole-second CLI log timestamps; resource elapsed values are measured from Popen and may differ slightly."
+      },
+      "selectedStageCounters": [
+        "[001]  15180 source files found on the filesystem",
+        "[001]     75 source files have been generated",
+        "[001]    592 resolved references",
+        "[001]      0 unresolved references",
+        "[001]   1665 resolved assembly conflicts",
+        "[001] Build analysis completed in 00:03:14.4177741",
+        "[001] Extracting..."
+      ],
+      "minuteResourceCurve": {
+        "file": "eventstore-codeql-local-resource-curves.jsonl",
+        "rowCount": 31,
+        "meaning": "Minute buckets with exact private two-second samples retained; managed process fields exclude shell/diagnostic helpers."
+      },
+      "privateResourceSamples": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3-attempt2/resources.jsonl",
+        "bytes": 476596,
+        "samples": 896,
+        "sha256": "e627b7a7606a381057f48ce27efcc45261f300d54ce7b6a247576f4c2d7ca68e"
+      },
+      "privateDatabaseLogHashes": {
+        "database/csharp/log/csharp.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "database/csharp/log/database-trace-command-20261022.020533.765.log": "0164595a6fa8e761eaa0856e538618ce508aba452cafe77b5fdb9bedb84bd444"
+      }
+    }
+  ],
+  "completedAtUtc": "2026-10-22T00:35:34.253797+00:00",
+  "privateFullReport": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/comparison-full-attempt2.json",
+    "bytes": 143956,
+    "sha256": "fd1b6b2e5551106e93909308ab8a4cd9f8b5664ea5e3abac8753ef4ff989d6a1"
+  },
+  "retention": "Exact full report, process samples, logs, databases and source snapshots remain private. This compact report retains commands, input bindings, outcomes and stage-relative resource curves; no security or production acceptance is claimed.",
+  "comparisonLimits": [
+    "Versions run sequentially in the stated order, sharing ordinary user package/SDK caches; caches are not cleared.",
+    "Physical memory, CPU affinity and cgroup controls differ from GitHub. Four-thread CLI hints do not constrain all managed/Roslyn CPU use.",
+    "A thirty-minute task-local stop is shorter than the previous GitHub extraction silence and cannot prove inability to finish.",
+    "Sampled CPU counters are observations rather than an exhaustive accounting of short-lived child processes."
+  ],
+  "managedStackDiagnostics": [
+    {
+      "file": "eventstore-codeql-local-managed-stack-diagnostic.json",
+      "sha256": "3a7d5862b184ea0b5017d1abacbf27c5c2435331e588215718d279d42dd66dc3",
+      "meaning": "Only CLI 2.27.3 has brief stack captures; recorded collection/analysis overhead prevents treating wall-time differences as pure version effects."
+    },
+    {
+      "file": "eventstore-codeql-local-managed-stack-late-diagnostic.json",
+      "sha256": "8a0b3915e6fc058a4d86070852cab42ac87aae8ed84d02d5eac7421bfce768aa",
+      "meaning": "Only CLI 2.27.3 has brief stack captures; recorded collection/analysis overhead prevents treating wall-time differences as pure version effects."
+    }
+  ],
+  "resourceCurvesBinding": {
+    "file": "eventstore-codeql-local-resource-curves.jsonl",
+    "bytes": 19567,
+    "sha256": "ed83fb60868145c57e4ecc68c1495ad73ad2ae3eec6f7434f8fb87cc9e5d109d",
+    "rows": 62
+  },
+  "compactedAtUtc": "2026-10-22T00:37:58.157587+00:00",
+  "compactorScript": {
+    "path": "/tmp/mcpcli-story411-compact-codeql-comparison.py",
+    "sha256": "eb1fedc8e0d5b702900e56e01c0dbe97844fe61cc18266060caca62d47956cfd"
+  },
+  "inputEqualityScope": "The exact 16,248-file predicate and 29,088 omitted tracked entries are defined in eventstore-codeql-local-source-snapshots.json. Equality was not checked for every tracked blob in these original two runs.",
+  "retrospectiveAllTrackedReconciliation": "eventstore-codeql-native-lock-reconciliation.json",
+  "retrospectiveAllTrackedFinding": "The two original full-scope checkouts have identical post-run bytes across all 45,327 tracked blobs; compared with the later same-af clean baseline, exactly362 native-generated packages.lock.json changes match the dedup run byte-for-byte. This retrospective evidence does not expand the original prospective 16,248-file preservation check."
+}

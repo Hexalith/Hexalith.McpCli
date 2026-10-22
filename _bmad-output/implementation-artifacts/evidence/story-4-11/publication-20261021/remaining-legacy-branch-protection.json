@@ -1,0 +1,25 @@
+{
+  "checkedAtUtc": "2026-10-21T20:01:19.026264+00:00",
+  "records": [
+    {
+      "endpoint": "repos/Hexalith/Hexalith.Tenants/branches/main/protection",
+      "exitCode": 1,
+      "response": {
+        "message": "Branch not protected",
+        "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+        "status": "404"
+      },
+      "stderr": "gh: Branch not protected (HTTP 404)\n"
+    },
+    {
+      "endpoint": "repos/Hexalith/Hexalith.McpCli/branches/main/protection",
+      "exitCode": 1,
+      "response": {
+        "message": "Branch not protected",
+        "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+        "status": "404"
+      },
+      "stderr": "gh: Branch not protected (HTTP 404)\n"
+    }
+  ]
+}

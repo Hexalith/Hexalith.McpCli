@@ -1,0 +1,150 @@
+{
+  "atUtc": "2026-10-21T19:43:35.604909+00:00",
+  "repositories": [
+    {
+      "repository": "/home/administrator/projects/hexalith/builds",
+      "inspection": {
+        "status": {
+          "command": [
+            "git",
+            "status",
+            "--short",
+            "--branch"
+          ],
+          "exitCode": 0,
+          "stdout": "## main...origin/main\n",
+          "stderr": ""
+        },
+        "head": {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "359fee24aeca4d9eabed4b425d4cfa2520b2adda\n",
+          "stderr": ""
+        },
+        "remotes": {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Builds.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Builds.git (push)\n",
+          "stderr": ""
+        },
+        "history": {
+          "command": [
+            "git",
+            "log",
+            "--oneline",
+            "--decorate",
+            "--max-count=8"
+          ],
+          "exitCode": 0,
+          "stdout": "359fee2 (HEAD -> main, origin/main, origin/HEAD) build: merge fix/domain-enrollment-pass-4 into main via /pushall\n750b1a0 fix(tool): handle remaining enrollment syntax forms\n26317ab fix(tool): close remaining enrollment audit gaps\n1ae50de build: integrate approved enrollment fixes\naf4bf9f fix(tool): correct domain enrollment audits\n2744d54 build(deps): integrate parties 1.5.1 pin\n5c250c6 build(deps): refresh parties 1.5.1 audit\n4878668 build(deps): pin parties 1.5.1\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "repository": "/home/administrator/projects/hexalith/tenants",
+      "inspection": {
+        "status": {
+          "command": [
+            "git",
+            "status",
+            "--short",
+            "--branch"
+          ],
+          "exitCode": 0,
+          "stdout": "## main...origin/main\n M references/Hexalith.EventStore\n",
+          "stderr": ""
+        },
+        "head": {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "b02452a16869f265c21b1ae6c15f2f299677f139\n",
+          "stderr": ""
+        },
+        "remotes": {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Tenants.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Tenants.git (push)\n",
+          "stderr": ""
+        },
+        "history": {
+          "command": [
+            "git",
+            "log",
+            "--oneline",
+            "--decorate",
+            "--max-count=8"
+          ],
+          "exitCode": 0,
+          "stdout": "b02452a1 (HEAD -> main, origin/main, origin/HEAD) docs: reconcile five deferred verification and planning records\n0c10ef63 build: advance root submodule pointers to current main\ndc936d9e docs: repair five historical dependency provenance records\nffe9522b fix(ci): enforce source and package provenance checks\n2cd3cc27 docs: reconcile five deferred evidence and guidance records\n092bcd0e refactor(ui): complete five deferred composition cleanup items\nc92cd4b1 refactor: complete five deferred source maintenance records\n6cd7521f fix(ui): complete five administrator feedback follow-ups\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "repository": "/home/administrator/projects/hexalith/eventstore",
+      "inspection": {
+        "status": {
+          "command": [
+            "git",
+            "status",
+            "--short",
+            "--branch"
+          ],
+          "exitCode": 0,
+          "stdout": "## main...origin/main\n M _bmad-output/implementation-artifacts/deferred-work.md\n M _bmad-output/implementation-artifacts/spec-3-22-bounded-qualification-evidence-production-and-admission.md\n",
+          "stderr": ""
+        },
+        "head": {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "b8280d66dcf1c551e58390e71adab60c39ab5c07\n",
+          "stderr": ""
+        },
+        "remotes": {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.EventStore.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.EventStore.git (push)\n",
+          "stderr": ""
+        },
+        "history": {
+          "command": [
+            "git",
+            "log",
+            "--oneline",
+            "--decorate",
+            "--max-count=8"
+          ],
+          "exitCode": 0,
+          "stdout": "b8280d66d (HEAD -> main, origin/main, origin/HEAD) test: allow slow CI source binding before the SIGINT control\n19b673af1 test: accept compacted read on released store shape\n09db4d11e fix: retry identical artifact reads during concurrent publication\nc91f52027 fix: re-include only the selected evidence package packet\n2fe185c29 build: sync local changes via /pushall\nb5244d245 fix: keep manifest fingerprints stable for non-canonical bytes\n2cee11ab5 build: merge origin/main into main via /pushall\nf6da64b76 build: merge origin/main into main via /pushall\n",
+          "stderr": ""
+        }
+      }
+    }
+  ],
+  "authorization": "../owner-approval/publication-authorization.json"
+}

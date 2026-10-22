@@ -1,0 +1,216 @@
+{
+  "capturedAtUtc": "2026-10-22T02:54:06.948184+00:00",
+  "label": "interim6dd",
+  "scope": "Every regular tracked checkout file and symlink target in the five initialized source/model-path checkouts; gitlinks recorded separately, never followed recursively. Capture is post-interim/pre-final-pin, not a retrospective claim of before-test byte hashing. Generated ignored outputs, NuGet package cache and SDK/Git metadata are outside this source-input equality proof; actual final revision-dependent build metadata and restored dependencies require normal exact-source CI/release evidence.",
+  "repositories": [
+    {
+      "name": "tenants",
+      "root": "/tmp/mcpcli-story411-tenants-followup",
+      "head": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "indexTree": "ea34d460bf3a4d4bc0e4e2c8552cf99a97e7d65b",
+      "gitStatus": "M  .github/workflows/release.yml\nM  Directory.Build.targets\nM  references/Hexalith.Builds\nM  tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs",
+      "regularAndSymlinkTrackedCount": 3792,
+      "trackedBytes": 126861701,
+      "orderedCheckoutFileRowsSha256": "9fd7d8125cc35c54907f27d3ecbbb91b186dbc2acae401d8b38d31fc8f9e6db0",
+      "gitlinks": [
+        {
+          "path": "references/Hexalith.AI.Tools",
+          "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+        },
+        {
+          "path": "references/Hexalith.Builds",
+          "commit": "6dd10644de86dd0656df0653a8a1f143f07352cf"
+        },
+        {
+          "path": "references/Hexalith.Commons",
+          "commit": "5c23c818f639c5bb3175f964c5549440bd5b876d"
+        },
+        {
+          "path": "references/Hexalith.EventStore",
+          "commit": "5ce5f1d84b88c808cc8a526b9decf149de977e55"
+        },
+        {
+          "path": "references/Hexalith.FrontComposer",
+          "commit": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7"
+        },
+        {
+          "path": "references/Hexalith.McpCli",
+          "commit": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65"
+        },
+        {
+          "path": "references/Hexalith.Memories",
+          "commit": "921fee32fb1d03da1e1770a9747ecaeacc8abd7c"
+        },
+        {
+          "path": "references/Hexalith.Platform",
+          "commit": "c65d87a6f8f4a05fa3bea4e24ac778bf23f12cd6"
+        },
+        {
+          "path": "references/Hexalith.PolymorphicSerializations",
+          "commit": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0"
+        }
+      ]
+    },
+    {
+      "name": "builds",
+      "root": "/tmp/mcpcli-story411-tenants-followup/references/Hexalith.Builds",
+      "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+      "indexTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+      "gitStatus": "",
+      "regularAndSymlinkTrackedCount": 1981,
+      "trackedBytes": 148326046,
+      "orderedCheckoutFileRowsSha256": "9a8b725bd6a5deea0f4cc8864e943810422a8009f0d5c45c2e60d190d51dfdfd",
+      "gitlinks": [
+        {
+          "path": "references/Hexalith.AI.Tools",
+          "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+        }
+      ]
+    },
+    {
+      "name": "frontcomposer",
+      "root": "/tmp/mcpcli-story411-tenants-followup/references/Hexalith.FrontComposer",
+      "head": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7",
+      "indexTree": "811e7eafb67eb6e8170a3089cba9e6ef81aae0dd",
+      "gitStatus": "",
+      "regularAndSymlinkTrackedCount": 30934,
+      "trackedBytes": 5381540926,
+      "orderedCheckoutFileRowsSha256": "903aeda2007c3f3eb78a97c3a0fa3e8579a9c7b4e8a8c9a07974b09f7991d9c4",
+      "gitlinks": [
+        {
+          "path": "references/Hexalith.AI.Tools",
+          "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+        },
+        {
+          "path": "references/Hexalith.Builds",
+          "commit": "f8599224457dda99e7c0ae4870147dd51b464feb"
+        },
+        {
+          "path": "references/Hexalith.Commons",
+          "commit": "5c23c818f639c5bb3175f964c5549440bd5b876d"
+        },
+        {
+          "path": "references/Hexalith.EventStore",
+          "commit": "ae917d3e4dbab20b8982c5222a13611c3e3faf35"
+        },
+        {
+          "path": "references/Hexalith.Memories",
+          "commit": "08c9a5c64379519ec594a7007118edc364fe8a99"
+        },
+        {
+          "path": "references/Hexalith.Parties",
+          "commit": "1aabca216888b8584b96a9e9b44770f9bed786c0"
+        },
+        {
+          "path": "references/Hexalith.PolymorphicSerializations",
+          "commit": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0"
+        },
+        {
+          "path": "references/Hexalith.Tenants",
+          "commit": "ce6a8c24196ac5e65871dc940e7a6e38b4da08e2"
+        }
+      ]
+    },
+    {
+      "name": "eventstore-model-paths",
+      "root": "/tmp/mcpcli-story411-tenants-followup/references/Hexalith.EventStore",
+      "head": "5ce5f1d84b88c808cc8a526b9decf149de977e55",
+      "indexTree": "09f627fcc5d71874d9268dd9efcd729f91b88632",
+      "gitStatus": "",
+      "regularAndSymlinkTrackedCount": 44720,
+      "trackedBytes": 6138946118,
+      "orderedCheckoutFileRowsSha256": "4edf0bfe5cdc93d6600b5005156e98e8dda9ca29c6154b1f882fe749ded5a6ff",
+      "gitlinks": [
+        {
+          "path": "references/Hexalith.AI.Tools",
+          "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+        },
+        {
+          "path": "references/Hexalith.Builds",
+          "commit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda"
+        },
+        {
+          "path": "references/Hexalith.Commons",
+          "commit": "5c23c818f639c5bb3175f964c5549440bd5b876d"
+        },
+        {
+          "path": "references/Hexalith.FrontComposer",
+          "commit": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7"
+        },
+        {
+          "path": "references/Hexalith.McpCli",
+          "commit": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65"
+        },
+        {
+          "path": "references/Hexalith.Memories",
+          "commit": "921fee32fb1d03da1e1770a9747ecaeacc8abd7c"
+        },
+        {
+          "path": "references/Hexalith.Platform",
+          "commit": "1c0910fe47737fcd0b2b6c989f29fb4234cc775e"
+        },
+        {
+          "path": "references/Hexalith.PolymorphicSerializations",
+          "commit": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0"
+        },
+        {
+          "path": "references/Hexalith.Tenants",
+          "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+        }
+      ]
+    },
+    {
+      "name": "memories-model-paths",
+      "root": "/tmp/mcpcli-story411-tenants-followup/references/Hexalith.Memories",
+      "head": "921fee32fb1d03da1e1770a9747ecaeacc8abd7c",
+      "indexTree": "61dd9568b2765d92392f041bcb788199f307a50d",
+      "gitStatus": "",
+      "regularAndSymlinkTrackedCount": 6247,
+      "trackedBytes": 83691150,
+      "orderedCheckoutFileRowsSha256": "6d695282cf7940913e947bad55e7b93d3723ffae0cdbc7b69fca00fffcfd5bfc",
+      "gitlinks": [
+        {
+          "path": "references/Hexalith.AI.Tools",
+          "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+        },
+        {
+          "path": "references/Hexalith.Builds",
+          "commit": "17d0c6ffec5fb3c8d8058e67cb85644460cb5256"
+        },
+        {
+          "path": "references/Hexalith.Commons",
+          "commit": "5c23c818f639c5bb3175f964c5549440bd5b876d"
+        },
+        {
+          "path": "references/Hexalith.EventStore",
+          "commit": "ae917d3e4dbab20b8982c5222a13611c3e3faf35"
+        },
+        {
+          "path": "references/Hexalith.FrontComposer",
+          "commit": "247410b8b35050abf3f06ec72d6bcf3f1552b150"
+        },
+        {
+          "path": "references/Hexalith.McpCli",
+          "commit": "39f75e8c8e2bec0824e8f0b93f72bd94c9a73789"
+        },
+        {
+          "path": "references/Hexalith.Platform",
+          "commit": "7b5548f0d308d27af9d5fda5b68c6b959c053185"
+        },
+        {
+          "path": "references/Hexalith.PolymorphicSerializations",
+          "commit": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0"
+        },
+        {
+          "path": "references/Hexalith.Tenants",
+          "commit": "ec10b2575c836d650a68ffcbe14a16ccc9257528"
+        }
+      ]
+    }
+  ],
+  "privateOriginal": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-source-inputs.full.json",
+    "bytes": 29302105,
+    "sha256": "bf251b9e947028830bec00a19901ef6c65c910321325364fe626806441fc3688"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "status": "authorized",
+  "recordedAtUtc": "2026-10-21T19:42:02.277677+00:00",
+  "approver": "The requesting user in this conversation.",
+  "userReply": "yes",
+  "approvalQuestion": "Authorize the protected release chain\u2014EventStore\u2019s 14 packages plus container, then Tenants\u2019 five packages plus container\u2014after those gates pass?",
+  "approvedPlan": "_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/approval-plan.md",
+  "readinessSha256": "f4cdeb1ce8c276d1f32485ef3fda2bea022052971c1516f5db1a62424a5ac684",
+  "sealSha256": "5891c7efc4707e50781a5fb19cd45e9b323e81be0b7d45495d636b999e444f24",
+  "proposalsSha256": {
+    "proposed-builds-container-provenance-scoped.patch": "10848269920971f66776308a5e76ca326b0349642921637fd2229e5799aea6a8",
+    "proposed-tenants-container-provenance-and-publisher.patch": "f9da6a3bf1e968fa91dd2e8b9a2394f8d4a6693952e3c210a5fbaef117588aaf",
+    "proposed-builds-eventstore-prerequisite-pin.patch": "bcf2100abc591a3bb92d9905414462603b0fbdf981bd9588fa69421a1977c6be"
+  },
+  "publicationScopes": {
+    "eventstore": {
+      "packages": 14,
+      "containers": [
+        "eventstore"
+      ],
+      "publisherExecutionPin": "22a578b576a515d2af214fe81859447fffc97981"
+    },
+    "tenants": {
+      "packages": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "containers": [
+        "tenants"
+      ],
+      "publisherExecutionPinCurrent": "53d53ae42abf7c87d385a078ab260531480bbf8a",
+      "publisherExecutionPinProposed": "22a578b576a515d2af214fe81859447fffc97981"
+    }
+  },
+  "preparedVersions": {
+    "eventstore": "3.126.1",
+    "tenants": "5.10.0"
+  },
+  "authorizedContinuation": [
+    "Finalize and qualify the actual current upstream source without including or overwriting unrelated uncommitted work.",
+    "Apply the reviewed shared Builds target, tests, Tenants import and publisher execution-pin updates in their owning repositories; validate and commit with pinned commitlint and use normal push/PR/CI procedures.",
+    "After successful exact-source CI and normal protected controls, dispatch and complete the normal EventStore fourteen-package/container release, followed by the normal Tenants five-package/container release.",
+    "Update owning Builds package pins and root gitlinks as necessary for the released dependencies, preserving exact dependency-policy closure.",
+    "Retain final immutable published bytes and source/hash bindings, compare and verify them against approved scope/vectors before production enrollment.",
+    "Enroll Tenants and run the unchanged production replay, fresh-process benchmark and remaining Story 4.11 verification/review gates."
+  ],
+  "requiredGatesRemainBinding": true,
+  "existingVectorInventoryApproval": "owner-approval/approval.json",
+  "publicationPermissionMustNotBeReaskedForThisChain": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "limits": [
+    "No bypass of exact-source CI, protected environments, package/OCI validation, Trusted Publishing or other normal release controls.",
+    "Authorization permits the documented release continuation; it does not assert that CI is green or final bytes have already been verified.",
+    "Vector and inventory scope remains the approved fourteen included operations and six exclusions; live semantics and retirement gates remain separate."
+  ]
+}

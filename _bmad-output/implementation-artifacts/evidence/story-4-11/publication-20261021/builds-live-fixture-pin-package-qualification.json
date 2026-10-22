@@ -1,0 +1,32 @@
+{
+  "recordedAtUtc": "2026-10-22T02:29:54.738846+00:00",
+  "source": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/test-g4-tool-package-contracts.ps1",
+    "-Version",
+    "0.0.0-story411.1",
+    "-RequireControls",
+    "-SkipSourceValidation",
+    "-RetainPackageDirectory",
+    "-PackageDirectory",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/g4-local-packages"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 164.09825482900487,
+  "scope": "Exact ordinary-CI package qualification flags RequireControls+SkipSourceValidation, with unique local version/output and retention. Three source .NET projects were validated separately; this diagnostic does not publish or qualify a Builds tool release.",
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/g4-local-qualification.stdout.txt",
+      "bytes": 23950,
+      "sha256": "1ae68607d1fd45d2313948e9edd319d84947aa655296dd10d9912bee5231f80a"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/g4-local-qualification.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

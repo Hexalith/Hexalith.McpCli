@@ -1,0 +1,15 @@
+{
+  "command": [
+    "dotnet",
+    "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll",
+    "--inventory",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approved-inventory.json"
+  ],
+  "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+  "exitCode": 0,
+  "durationSeconds": 0.22607891400548397,
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "approvalSha256": "62aceb962205d4e44b1e961be1f14fd4434e7b7300b22b2406c728ebd9744037",
+  "result": "passed",
+  "fullV1Accepted": false
+}

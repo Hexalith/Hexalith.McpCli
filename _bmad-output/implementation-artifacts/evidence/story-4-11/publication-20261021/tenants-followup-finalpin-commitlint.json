@@ -1,0 +1,50 @@
+{
+  "checkedAtUtc": "2026-10-22T03:19:42.309563+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "pinnedCliVersion": "^21.2.3",
+  "base": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "finalBuildsPin": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "checks": [
+    {
+      "label": "full-commit",
+      "messagePath": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-commit-message.txt",
+      "messageSha256": "a5d659fffc2e99ad4ca0133575917be46ec14ec9357ff97393cfd2c709a42e15",
+      "exitCode": 0,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-finalpin-full-commit-commitlint.stdout.txt",
+          "bytes": 454,
+          "sha256": "1844391d5aaec81d9b857a41e7466a85ddd335f9e71abf60841186a7e5fce47d"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-finalpin-full-commit-commitlint.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "pr-title",
+      "messagePath": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-pr-title.txt",
+      "messageSha256": "84dfb1fb288f9b145ddf6af6b8c23c45d215b9c1d8467a292a494e27a3a99a23",
+      "exitCode": 0,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-finalpin-pr-title-commitlint.stdout.txt",
+          "bytes": 107,
+          "sha256": "ac277fdda5852e254ead6045d89744e6b23c32d60935ddad8fb5cd55a69ae4ed"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-finalpin-pr-title-commitlint.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "prBody": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-pr-body.txt",
+    "bytes": 2144,
+    "sha256": "03e0e1042bf6d50ce92e0371cc5b660de3aa7ad80278102b276d1a9a9c1460b1"
+  }
+}

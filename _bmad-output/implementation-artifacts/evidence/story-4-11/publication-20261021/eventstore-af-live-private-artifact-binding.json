@@ -1,0 +1,105 @@
+{
+  "checkedAtUtc": "2026-10-21T23:12:41.440785+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runId": 39685338657,
+  "privateDirectory": "/tmp/mcpcli-story411-af-integration-artifacts-d21xlg8k",
+  "artifacts": [
+    {
+      "id": 12388931315,
+      "name": "oq8-story-4-14-fresh-validated-capture",
+      "privateArchive": "/tmp/mcpcli-story411-af-integration-artifacts-d21xlg8k/12388931315.zip",
+      "sizeBytes": 5367,
+      "sha256": "sha256:11b03df8e37a761ce00276530bb119f0d95b3ed439fde4de59808730bb2aad23",
+      "githubDigest": "sha256:11b03df8e37a761ce00276530bb119f0d95b3ed439fde4de59808730bb2aad23",
+      "digestMatches": true,
+      "files": [
+        {
+          "name": "capture-validation.json",
+          "sizeBytes": 334
+        },
+        {
+          "name": "deterministic-support.json",
+          "sizeBytes": 14274
+        },
+        {
+          "name": "observations.json",
+          "sizeBytes": 8055
+        },
+        {
+          "name": "test-results.json",
+          "sizeBytes": 904
+        }
+      ],
+      "testSummaries": []
+    },
+    {
+      "id": 12387918688,
+      "name": "live-sidecar-test-results",
+      "privateArchive": "/tmp/mcpcli-story411-af-integration-artifacts-d21xlg8k/12387918688.zip",
+      "sizeBytes": 1008125,
+      "sha256": "sha256:6225aa973e789f9f138b5e07b40b8eb8dd18c6f8f132fa10d821b5737019a738",
+      "githubDigest": "sha256:6225aa973e789f9f138b5e07b40b8eb8dd18c6f8f132fa10d821b5737019a738",
+      "digestMatches": true,
+      "files": [
+        {
+          "name": "live-sidecar/coverage.cobertura.xml",
+          "sizeBytes": 20618496
+        },
+        {
+          "name": "integration-parallelization/integration-parallelization-results.trx",
+          "sizeBytes": 2438
+        },
+        {
+          "name": "live-sidecar/live-sidecar-results.trx",
+          "sizeBytes": 853734
+        }
+      ],
+      "testSummaries": [
+        {
+          "file": "integration-parallelization/integration-parallelization-results.trx",
+          "counters": {
+            "total": "1",
+            "executed": "1",
+            "passed": "1",
+            "failed": "0",
+            "error": "0",
+            "timeout": "0",
+            "aborted": "0",
+            "inconclusive": "0",
+            "passedButRunAborted": "0",
+            "notRunnable": "0",
+            "notExecuted": "0",
+            "disconnected": "0",
+            "warning": "0",
+            "completed": "0",
+            "inProgress": "0",
+            "pending": "0"
+          }
+        },
+        {
+          "file": "live-sidecar/live-sidecar-results.trx",
+          "counters": {
+            "total": "265",
+            "executed": "261",
+            "passed": "261",
+            "failed": "0",
+            "error": "0",
+            "timeout": "0",
+            "aborted": "0",
+            "inconclusive": "0",
+            "passedButRunAborted": "0",
+            "notRunnable": "0",
+            "notExecuted": "4",
+            "disconnected": "0",
+            "warning": "0",
+            "completed": "0",
+            "inProgress": "0",
+            "pending": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "rawArchivesCopiedIntoGitEvidence": false,
+  "configurationLabelNote": "Bounded-identity worker source has an unused hardcoded Debug/true receipt label; actual integration.yml restores and tests Release/false. Do not treat that label as actual configuration."
+}

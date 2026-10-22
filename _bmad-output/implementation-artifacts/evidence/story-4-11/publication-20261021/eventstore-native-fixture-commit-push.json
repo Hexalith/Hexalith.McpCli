@@ -1,0 +1,140 @@
+{
+  "checkedAtUtc": "2026-10-21T22:02:00.871019+00:00",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": " M tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs\n?? tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "origin",
+        "main",
+        "fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.EventStore\n * branch                main       -> FETCH_HEAD\n * branch                fix/p1r-qualification-time-budget -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "HEAD",
+        "--",
+        "src"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/mcpcli-story411-eventstore-native-fixture-commit.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "[fix/p1r-qualification-time-budget 83e5f2d25] test(projections): isolate synthetic retry source bindings\n 2 files changed, 64 insertions(+), 16 deletions(-)\n create mode 100644 tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "83e5f2d257d91f98f827443f960832322a63da94\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "-1",
+        "--format=%B"
+      ],
+      "exitCode": 0,
+      "stdout": "test(projections): isolate synthetic retry source bindings\n\nConstruct unrelated same-shard terminal work as a fresh record instead\nof inheriting the original stream native proof, recovery bindings and\nlease metadata. Preserve the production scheduler validation guard.\n\nAssert the persisted real work retains its valid native proof. Protect\nthe fixture against the old cross-identity clone behavior and verify the\naffected live convergence, health and shard scenario on isolated Dapr.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   191afdfc9..83e5f2d25  HEAD -> fix/p1r-qualification-time-budget\n"
+    }
+  ],
+  "unchangedProductionSchedulerSha256": "6a9ed08a8da0575d8c8cd064781f93609a43402105b3fe2276a4544063943cb1",
+  "patchSha256": "1e903f8dc14eca69ee9e7c9482cd7b26b18f0e296f8093f0a55050e6040a91dc",
+  "head": "83e5f2d257d91f98f827443f960832322a63da94",
+  "mainPushedDirectly": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

@@ -1,0 +1,11 @@
+{
+  "recordedAtUtc": "2026-10-21T22:29:01.201843+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "caseExecution": "neither case began; collection fixture initialization refused",
+  "exactSafeFailure": "Dapr HotReload failed to create watcher / add private component target: no space left on device",
+  "immutableInputsUnchanged": true,
+  "ownedContainersRemaining": [],
+  "existingOwningInput": "EVENTSTORE_TEST_DAPR_HOT_RELOAD=false",
+  "owningImplementation": "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Fixtures/DaprTestRuntimeConfiguration.cs",
+  "scope": "Process-local optional diagnostic only. No shared Dapr configuration/global kernel setting/source/CI input is changed. All semantic/source/provenance/20-minute phase guards remain. Remote full-suite/default qualification is required."
+}

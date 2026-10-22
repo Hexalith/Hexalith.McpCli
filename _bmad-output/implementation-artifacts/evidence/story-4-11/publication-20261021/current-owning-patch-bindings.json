@@ -1,0 +1,26 @@
+[
+  {
+    "owner": "builds",
+    "base": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+    "head": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+    "patch": "builds-current-owning-change.patch",
+    "sha256": "959633c733592cec8d8c879a0e9415fb025e1af1fc9e4ba4e66dbbf3d230215e",
+    "normalMergeOrPublicationGrantedByPatch": false
+  },
+  {
+    "owner": "eventstore",
+    "base": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+    "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+    "patch": "eventstore-current-owning-change.patch",
+    "sha256": "08c99a8eb000274a502823a03f016f8fd00cd93b8ef1c7ca0d09272e6fc8ac70",
+    "normalMergeOrPublicationGrantedByPatch": false
+  },
+  {
+    "owner": "tenants",
+    "base": "b02452a16869f265c21b1ae6c15f2f299677f139",
+    "head": "5b39c93f2f9cf0711fec844a245c9650a9341ac5",
+    "patch": "tenants-current-owning-change.patch",
+    "sha256": "7c41e1c6088dffbc6871d0eca954bb5e3fe47be8a3940467ed8c6aaf1a3d44c1",
+    "normalMergeOrPublicationGrantedByPatch": false
+  }
+]

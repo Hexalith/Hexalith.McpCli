@@ -1,0 +1,66 @@
+{
+  "api-comparison/approved/Hexalith.EventStore.Client/Hexalith.EventStore.Contracts.dll": {
+    "source": "api-comparison/approved/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll",
+    "sha256": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab"
+  },
+  "api-comparison/approved/Hexalith.Tenants.Contracts/Hexalith.EventStore.Contracts.dll": {
+    "source": "api-comparison/approved/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll",
+    "sha256": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab"
+  },
+  "api-comparison/approved/Hexalith.EventStore.Client/Hexalith.McpCli.Abstractions.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.mcpcli.abstractions/1.0.0/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+    "sha256": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a"
+  },
+  "api-comparison/approved/Hexalith.Tenants.Contracts/Hexalith.McpCli.Abstractions.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.mcpcli.abstractions/1.0.0/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+    "sha256": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a"
+  },
+  "api-comparison/approved/Hexalith.EventStore.Client/Hexalith.Commons.UniqueIds.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.commons.uniqueids/2.30.3/lib/net10.0/Hexalith.Commons.UniqueIds.dll",
+    "sha256": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e"
+  },
+  "api-comparison/approved/Hexalith.Tenants.Contracts/Hexalith.Commons.UniqueIds.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.commons.uniqueids/2.30.3/lib/net10.0/Hexalith.Commons.UniqueIds.dll",
+    "sha256": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e"
+  },
+  "api-comparison/approved/Hexalith.EventStore.Client/ByteAether.Ulid.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/byteaether.ulid/1.4.2/lib/net10.0/ByteAether.Ulid.dll",
+    "sha256": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590"
+  },
+  "api-comparison/approved/Hexalith.Tenants.Contracts/ByteAether.Ulid.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/byteaether.ulid/1.4.2/lib/net10.0/ByteAether.Ulid.dll",
+    "sha256": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590"
+  },
+  "api-comparison/refreshed/Hexalith.EventStore.Client/Hexalith.EventStore.Contracts.dll": {
+    "source": "api-comparison/refreshed/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll",
+    "sha256": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774"
+  },
+  "api-comparison/refreshed/Hexalith.Tenants.Contracts/Hexalith.EventStore.Contracts.dll": {
+    "source": "api-comparison/refreshed/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll",
+    "sha256": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774"
+  },
+  "api-comparison/refreshed/Hexalith.EventStore.Client/Hexalith.McpCli.Abstractions.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.mcpcli.abstractions/1.0.0/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+    "sha256": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a"
+  },
+  "api-comparison/refreshed/Hexalith.Tenants.Contracts/Hexalith.McpCli.Abstractions.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.mcpcli.abstractions/1.0.0/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+    "sha256": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a"
+  },
+  "api-comparison/refreshed/Hexalith.EventStore.Client/Hexalith.Commons.UniqueIds.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.commons.uniqueids/2.30.3/lib/net10.0/Hexalith.Commons.UniqueIds.dll",
+    "sha256": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e"
+  },
+  "api-comparison/refreshed/Hexalith.Tenants.Contracts/Hexalith.Commons.UniqueIds.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/hexalith.commons.uniqueids/2.30.3/lib/net10.0/Hexalith.Commons.UniqueIds.dll",
+    "sha256": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e"
+  },
+  "api-comparison/refreshed/Hexalith.EventStore.Client/ByteAether.Ulid.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/byteaether.ulid/1.4.2/lib/net10.0/ByteAether.Ulid.dll",
+    "sha256": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590"
+  },
+  "api-comparison/refreshed/Hexalith.Tenants.Contracts/ByteAether.Ulid.dll": {
+    "source": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages/byteaether.ulid/1.4.2/lib/net10.0/ByteAether.Ulid.dll",
+    "sha256": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590"
+  }
+}

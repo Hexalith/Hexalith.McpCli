@@ -1,0 +1,82 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/disable-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5FQS5AN14MGDSAAQFV15AMM",
+      "correlationId": "01M5FQS5AN14MGDSAAQFV15AMM",
+      "tenant": "system",
+      "aggregateId": "vector-disable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "messageId": "01M5FQS5YCV2H8ZF3PPPF4FB3S",
+      "correlationId": "01M5FQS5YCV2H8ZF3PPPF4FB3S",
+      "tenant": "system",
+      "aggregateId": "vector-disable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "system",
+      "document": {
+        "tenantId": "vector-disable",
+        "name": "Vector Disable",
+        "description": null,
+        "status": "Disabled",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQS5AN14MGDSAAQFV15AMM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Disable",
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5FQS5AN14MGDSAAQFV15AMM"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQS5YCV2H8ZF3PPPF4FB3S",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5FQS5YCV2H8ZF3PPPF4FB3S"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    }
+  ]
+}

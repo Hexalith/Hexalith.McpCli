@@ -1,0 +1,7 @@
+{
+  "status": "superseded-local-proposal",
+  "reason": "Owning upstream03b529 independently repaired all four overlapping files; local duplicate edits removed.",
+  "receiptCopy": "superseded-local-redaction-receipt.json",
+  "receiptCopySha256": "228abfa28c15e47e1ed3788d7cf314cb900aa496dfddcf199759427f1a41448d",
+  "productionAccepted": false
+}

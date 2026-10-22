@@ -1,0 +1,264 @@
+{
+  "capturedAtUtc": "2026-10-22T03:33:45.680097+00:00",
+  "run": 39716321803,
+  "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "artifactId": 12398988187,
+  "name": "blocking-test-results",
+  "officialSizeAndDigestMatch": true,
+  "privateArchive": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-ci-artifacts/blocking-test-results.zip",
+    "bytes": 2185968,
+    "sha256": "ad89ac717242fa11b3f06e10b4877b9a5f5400fb03fda26fdb24f8f217da486d"
+  },
+  "members": [
+    {
+      "name": "Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.trx",
+      "bytes": 14803,
+      "sha256": "beba11837548a753ec63d15df123305781fe5edd453e4df79239250fad934c84"
+    },
+    {
+      "name": "Hexalith.Tenants.AppHost.Tests/coverage.cobertura.xml",
+      "bytes": 34995,
+      "sha256": "1bbec53f982f08c54b3576acca2879fd1bf31e4c256fbc0e4205d5668a1f3d57"
+    },
+    {
+      "name": "Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.trx",
+      "bytes": 74455,
+      "sha256": "9bf43de7dad7de94627f6438f42464e9a90d8fdb5147cc369a7ffe59f8292bba"
+    },
+    {
+      "name": "Hexalith.Tenants.Client.Tests/coverage.cobertura.xml",
+      "bytes": 110901,
+      "sha256": "b83cb29588479b28e1ad651fe332f89adc878ce47e3f5b554b3c7ba35eabf425"
+    },
+    {
+      "name": "Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.trx",
+      "bytes": 1023673,
+      "sha256": "a4346694b3244f80647c7db193791b5d7bf861e63edd2bb7dc78b8110f82db1b"
+    },
+    {
+      "name": "Hexalith.Tenants.Contracts.Tests/coverage.cobertura.xml",
+      "bytes": 71418,
+      "sha256": "82c3b3749f0a620b05f71eb88bf8ad29a4adf13a6f86cc553688d0ec8c485128"
+    },
+    {
+      "name": "Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.trx",
+      "bytes": 60238,
+      "sha256": "c8b01016cf97dc3757d87a6bc042307dee1b035fa9b4825e931921e586437c4e"
+    },
+    {
+      "name": "Hexalith.Tenants.Sample.Tests/coverage.cobertura.xml",
+      "bytes": 143680,
+      "sha256": "6b8c6a1aa97de3f739426efd0679c6cb123f6ba0ad0d6ddf4a40495fcb786480"
+    },
+    {
+      "name": "Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.trx",
+      "bytes": 2267461,
+      "sha256": "0e0c7d21d4bd7efdf45229ec191579027d66eafc562e7cf6de6a423ced93d562"
+    },
+    {
+      "name": "Hexalith.Tenants.Server.Tests/coverage.cobertura.xml",
+      "bytes": 784246,
+      "sha256": "dded6e6ec3a7b2f5bdd1aa3c202f6680a0ea37e6e647ac6ae49baf94da7328bc"
+    },
+    {
+      "name": "Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.trx",
+      "bytes": 271962,
+      "sha256": "1c3bf650cee4bba8b296312bc08eb964cff2b061ae8a29c413af7014f5081cf4"
+    },
+    {
+      "name": "Hexalith.Tenants.Testing.Tests/coverage.cobertura.xml",
+      "bytes": 311441,
+      "sha256": "16432d7200f543cddf0f7ad9b591917323a83d96dc14ed25df751d9cb89c97c3"
+    },
+    {
+      "name": "Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.trx",
+      "bytes": 11237683,
+      "sha256": "073a6cb1ed03c18a2b302f181dd35aeb3fc7e1986400f3df6b3add81fd50b3d1"
+    },
+    {
+      "name": "Hexalith.Tenants.UI.Tests/coverage.cobertura.xml",
+      "bytes": 15510279,
+      "sha256": "97c755f3ba750cdd7ad76b71e087b2ec79463abc310d17cb815aa487ac163676"
+    }
+  ],
+  "testResults": [
+    {
+      "member": "Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.trx",
+      "counters": {
+        "total": "9",
+        "executed": "9",
+        "passed": "9",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 9
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.trx",
+      "counters": {
+        "total": "50",
+        "executed": "50",
+        "passed": "50",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 50
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.trx",
+      "counters": {
+        "total": "654",
+        "executed": "654",
+        "passed": "654",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 654
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.trx",
+      "counters": {
+        "total": "40",
+        "executed": "40",
+        "passed": "40",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 40
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.trx",
+      "counters": {
+        "total": "1440",
+        "executed": "1440",
+        "passed": "1440",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 1440
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.trx",
+      "counters": {
+        "total": "182",
+        "executed": "182",
+        "passed": "182",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 182
+      }
+    },
+    {
+      "member": "Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.trx",
+      "counters": {
+        "total": "7117",
+        "executed": "7117",
+        "passed": "7117",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 7117
+      }
+    }
+  ],
+  "scope": "Actual exact-head blocking CI evidence only. Aspire/source/main/release and full-v1 gates remain separate; no production acceptance.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "totals": {
+    "total": 9492,
+    "passed": 9492,
+    "failed": 0,
+    "notExecuted": 0
+  }
+}

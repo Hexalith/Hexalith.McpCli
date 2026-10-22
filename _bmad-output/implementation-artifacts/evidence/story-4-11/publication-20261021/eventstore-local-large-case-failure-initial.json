@@ -1,0 +1,52 @@
+{
+  "source": "83e5f2d257d91f98f827443f960832322a63da94",
+  "taskScratch": "/tmp/mcpcli-story411-native-broader-mlkm8xm0",
+  "safeSignals": [
+    {
+      "line": 53,
+      "test": [
+        "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses"
+      ],
+      "caseNumbers": [
+        "count: 32769",
+        "bufferedOwner: False"
+      ]
+    },
+    {
+      "line": 55,
+      "assertion": "should be"
+    },
+    {
+      "line": 56,
+      "assertion": "73"
+    },
+    {
+      "line": 57,
+      "assertion": "but was"
+    },
+    {
+      "line": 58,
+      "assertion": "1"
+    },
+    {
+      "line": 65,
+      "test": [
+        "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityProcessWorkerTests.RunBoundedOwnerWorkerAsync"
+      ],
+      "caseNumbers": []
+    },
+    {
+      "file": "streamed-32769-stage.log",
+      "bytes": 6395,
+      "sha256": "5bcc7fcc4acee077bc7e75843901e3942336a2e0ad7dfac967ceba3bb838512b"
+    },
+    {
+      "workerExceptionTypes": [
+        "System.InvalidOperationException"
+      ],
+      "workerFailedTests": [],
+      "workerNumericSummaries": []
+    }
+  ],
+  "status": "diagnosis in progress; full qualification withheld"
+}

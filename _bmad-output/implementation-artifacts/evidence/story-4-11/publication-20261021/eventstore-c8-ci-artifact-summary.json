@@ -1,0 +1,362 @@
+{
+  "checkedAtUtc": "2026-10-22T00:01:30.570262+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "runId": 39693568192,
+  "kind": "Counts parsed directly from exact-digest private CI archives; no individual test names or outputs retained.",
+  "files": [
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.Cli.Tests/Hexalith.EventStore.Admin.Cli.Tests.trx",
+      "sha256": "083cec0c129115c92b436e502ad34c84fd993697a73cdbf86b5f204eaa9c6846",
+      "counters": {
+        "total": 384,
+        "executed": 384,
+        "passed": 384,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.Abstractions.Tests/Hexalith.EventStore.Admin.Abstractions.Tests.trx",
+      "sha256": "231dfbfb49da8bf97a12c04401f39562af9ae244073180ccc696b466b8e12031",
+      "counters": {
+        "total": 510,
+        "executed": 510,
+        "passed": 510,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.Mcp.Tests/Hexalith.EventStore.Admin.Mcp.Tests.trx",
+      "sha256": "c778b51ccb5b8f47f36e6acbe56aad2e213eb258afa777753110b1627a4b64ff",
+      "counters": {
+        "total": 437,
+        "executed": 429,
+        "passed": 429,
+        "failed": 0,
+        "notExecuted": 8,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.Server.Host.Tests/Hexalith.EventStore.Admin.Server.Host.Tests.trx",
+      "sha256": "1ee1ab352e38f79b62fe0842b68d033b851b7158d563be1e3791a83b82fc1fc5",
+      "counters": {
+        "total": 62,
+        "executed": 62,
+        "passed": 62,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.Server.Tests/Hexalith.EventStore.Admin.Server.Tests.trx",
+      "sha256": "f586037840674b1f1b09b5b7aefe2383a2c40a4fd1e48ae59c414c1499f30e1e",
+      "counters": {
+        "total": 781,
+        "executed": 763,
+        "passed": 763,
+        "failed": 0,
+        "notExecuted": 18,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Admin.UI.Tests/Hexalith.EventStore.Admin.UI.Tests.trx",
+      "sha256": "d549dc14e034a1faaabf848f4223c5d9fafde885e17a521ff698eccb614ff968",
+      "counters": {
+        "total": 1111,
+        "executed": 1111,
+        "passed": 1111,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.AppHost.Tests/Hexalith.EventStore.AppHost.Tests.trx",
+      "sha256": "5ae9fcb1fd70e53f2d78db58481e95d004b4812c617b6045956c7da08015512b",
+      "counters": {
+        "total": 175,
+        "executed": 175,
+        "passed": 175,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Client.Tests/Hexalith.EventStore.Client.Tests.trx",
+      "sha256": "ec2ce3183e52461f88721256db7743858b5e3315de93645a22b366e39b54d6a8",
+      "counters": {
+        "total": 2054,
+        "executed": 2052,
+        "passed": 2052,
+        "failed": 0,
+        "notExecuted": 2,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.DomainService.Tests/Hexalith.EventStore.DomainService.Tests.trx",
+      "sha256": "fd61089b0338b7c688d638d36652f1f378f0510e40d65baf7bd52fe8ed53aa91",
+      "counters": {
+        "total": 1160,
+        "executed": 1160,
+        "passed": 1160,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.LoadTests.Tests/Hexalith.EventStore.LoadTests.Tests.trx",
+      "sha256": "17e2351eb87f50a07064fc208312c3f3aea45578c8f902bf4ece41025851aad0",
+      "counters": {
+        "total": 9,
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Operations.Tests/Hexalith.EventStore.Operations.Tests.trx",
+      "sha256": "e0ab2c1f89f2ee40e5104788ac2ee624c8262ec7697495896c15e70d0f16f6fe",
+      "counters": {
+        "total": 76,
+        "executed": 76,
+        "passed": 76,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.ProviderVerification.Tests/Hexalith.EventStore.ProviderVerification.Tests.trx",
+      "sha256": "f21798c97415e8dd0248c593d850087dea195121fd145aa2a68fcfcad5889011",
+      "counters": {
+        "total": 83,
+        "executed": 83,
+        "passed": 83,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.QueryRouting.Tests/Hexalith.EventStore.QueryRouting.Tests.trx",
+      "sha256": "c309535f32731fd59a78fcf6064cdb5089776bc2b53a58c5edfd49d1f536b522",
+      "counters": {
+        "total": 14,
+        "executed": 14,
+        "passed": 14,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.RestApi.Generators.Tests/Hexalith.EventStore.RestApi.Generators.Tests.trx",
+      "sha256": "1d6d5ae77f1e7da0f12f121902d724d84ae70c41cb12f064418d956d6103e921",
+      "counters": {
+        "total": 124,
+        "executed": 124,
+        "passed": 124,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Sample.Tests/Hexalith.EventStore.Sample.Tests.trx",
+      "sha256": "5806c67de18b36c064a3c8f83584b91768f78aec845b36fca866bb5ffa948503",
+      "counters": {
+        "total": 187,
+        "executed": 187,
+        "passed": 187,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.trx",
+      "sha256": "6ab84a6ffedc6ba68a5e65566d77a8aa6954e08470c9925543b5fcbdc635a567",
+      "counters": {
+        "total": 6362,
+        "executed": 6337,
+        "passed": 6337,
+        "failed": 0,
+        "notExecuted": 25,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.SignalR.Tests/Hexalith.EventStore.SignalR.Tests.trx",
+      "sha256": "b55d4e1359fc674286e84b5329201b2c002dfffd8d08f7ffe8abe83a20381b12",
+      "counters": {
+        "total": 44,
+        "executed": 44,
+        "passed": 44,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Testing.Integration.Tests/Hexalith.EventStore.Testing.Integration.Tests.trx",
+      "sha256": "36f4982a07cebdd9e3ab2b35950cf2a46ffae3f80b6bd652fb76e1f56cb4f984",
+      "counters": {
+        "total": 48,
+        "executed": 48,
+        "passed": 48,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390409157,
+      "artifactName": "blocking-test-results",
+      "file": "Hexalith.EventStore.Testing.Tests/Hexalith.EventStore.Testing.Tests.trx",
+      "sha256": "491a81b4b271821424a5ecaa4a1396b6d31e9bb3fbe19ec9f63a823a13f43ff2",
+      "counters": {
+        "total": 154,
+        "executed": 154,
+        "passed": 154,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390239187,
+      "artifactName": "contracts-test-results",
+      "file": "Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.trx",
+      "sha256": "80180bc26e6cf4903f94bc172549a22e84ac9865b01c5802e3f22bf3e5a4d5be",
+      "counters": {
+        "total": 2423,
+        "executed": 2421,
+        "passed": 2421,
+        "failed": 0,
+        "notExecuted": 2,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    },
+    {
+      "artifactId": 12390106250,
+      "artifactName": "tenants-source-mode-test-results",
+      "file": "Hexalith.EventStore.AppHost.Tests.trx",
+      "sha256": "7cfd3f2f9c11f4b1dd576ce551427f59c4b558694b2d8004997607ae428d9d35",
+      "counters": {
+        "total": 10,
+        "executed": 10,
+        "passed": 10,
+        "failed": 0,
+        "notExecuted": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0
+      }
+    }
+  ],
+  "blockingProjectCount": 19,
+  "blockingTotals": {
+    "total": 13775,
+    "executed": 13722,
+    "passed": 13722,
+    "failed": 0,
+    "notExecuted": 53,
+    "error": 0,
+    "timeout": 0,
+    "aborted": 0
+  },
+  "otherGatesStillRequired": [
+    "CodeQL",
+    "live integration",
+    "merged-main push qualification before publication"
+  ],
+  "fullV1Accepted": false,
+  "productionAccepted": false
+}

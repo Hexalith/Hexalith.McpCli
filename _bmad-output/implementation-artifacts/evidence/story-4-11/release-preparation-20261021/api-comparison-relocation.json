@@ -1,0 +1,29 @@
+{
+  "original": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/api-comparison",
+  "scratch": "/tmp/mcpcli-story411-api-comparison-hiqvevwn/assemblies",
+  "sha256": {
+    "approved/Hexalith.Tenants.Contracts/Hexalith.Commons.UniqueIds.dll": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e",
+    "approved/Hexalith.Tenants.Contracts/Hexalith.McpCli.Abstractions.dll": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a",
+    "approved/Hexalith.Tenants.Contracts/Hexalith.EventStore.Contracts.dll": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab",
+    "approved/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.dll": "5819ccb5286aeda0962c606507d3404e39235a36718730568f07b862e2a20ba8",
+    "approved/Hexalith.Tenants.Contracts/ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+    "approved/Hexalith.EventStore.Client/Hexalith.Commons.UniqueIds.dll": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e",
+    "approved/Hexalith.EventStore.Client/Hexalith.McpCli.Abstractions.dll": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a",
+    "approved/Hexalith.EventStore.Client/Hexalith.EventStore.Client.dll": "87c130aa0e87f9442dd8e5cfb2bf97a679c28c99064898ca9a513ef7cb8cc6db",
+    "approved/Hexalith.EventStore.Client/Hexalith.EventStore.Contracts.dll": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab",
+    "approved/Hexalith.EventStore.Client/ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+    "approved/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab",
+    "refreshed/Hexalith.Tenants.Contracts/Hexalith.Commons.UniqueIds.dll": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e",
+    "refreshed/Hexalith.Tenants.Contracts/Hexalith.McpCli.Abstractions.dll": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a",
+    "refreshed/Hexalith.Tenants.Contracts/Hexalith.EventStore.Contracts.dll": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774",
+    "refreshed/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.dll": "30f4ebeabf122369ea6ea1ae5174a9476add0c161b99b1adb64da9eed071f6c8",
+    "refreshed/Hexalith.Tenants.Contracts/ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+    "refreshed/Hexalith.EventStore.Client/Hexalith.Commons.UniqueIds.dll": "73db021277a5c3cc2af66a0ac117d108ec2b9f1708199984880772a575018b8e",
+    "refreshed/Hexalith.EventStore.Client/Hexalith.McpCli.Abstractions.dll": "89265d038c8055cda277c70d079250a03638065a510cafffadd966e87650068a",
+    "refreshed/Hexalith.EventStore.Client/Hexalith.EventStore.Client.dll": "d12c5465ee04765a16d5f766608dd045769c7fc568be08065fdb1750e074f79c",
+    "refreshed/Hexalith.EventStore.Client/Hexalith.EventStore.Contracts.dll": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774",
+    "refreshed/Hexalith.EventStore.Client/ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+    "refreshed/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774"
+  },
+  "reason": "Do not add extracted third-party DLLs to repository evidence; original package archives remain locally retained."
+}

@@ -1,0 +1,159 @@
+{
+  "checkedAtUtc": "2026-10-21 19:01:07 UTC",
+  "repo": "Hexalith/Hexalith.EventStore",
+  "source": "2fe185c2948f9ca703bd3d9206fa9c04d469fa0a",
+  "url": "https://github.com/Hexalith/Hexalith.EventStore/commit/2fe185c2948f9ca703bd3d9206fa9c04d469fa0a",
+  "runs": [
+    {
+      "id": 39657316396,
+      "name": "CodeQL",
+      "path": ".github/workflows/codeql.yml",
+      "status": "pending",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657316396"
+    },
+    {
+      "id": 39657316314,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657316314"
+    },
+    {
+      "id": 39657315790,
+      "name": "Corrective Work Authorization",
+      "path": ".github/workflows/corrective-work-authorization.yml",
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657315790"
+    },
+    {
+      "id": 39657315785,
+      "name": "Payload Protection",
+      "path": ".github/workflows/payload-protection.yml",
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657315785"
+    },
+    {
+      "id": 39657316289,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657316289"
+    },
+    {
+      "id": 39657315730,
+      "name": "Advisory Tests",
+      "path": ".github/workflows/advisory-tests.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657315730"
+    },
+    {
+      "id": 39657315775,
+      "name": "P1R Qualification Preparation",
+      "path": ".github/workflows/p1r-qualification.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657315775"
+    },
+    {
+      "id": 39657315729,
+      "name": "Integration Tests",
+      "path": ".github/workflows/integration.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39657315729"
+    }
+  ],
+  "priorSourceJobs": [
+    {
+      "run": 39655197519,
+      "jobs": [
+        {
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413493667",
+          "currentSteps": []
+        },
+        {
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413493727",
+          "currentSteps": []
+        },
+        {
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413493736",
+          "currentSteps": []
+        },
+        {
+          "name": "ci / contracts",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413493887",
+          "currentSteps": [
+            {
+              "name": "Upload Contracts test results",
+              "status": "completed",
+              "conclusion": "failure"
+            }
+          ]
+        },
+        {
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413494023",
+          "currentSteps": []
+        },
+        {
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119413494037",
+          "currentSteps": [
+            {
+              "name": "Fail on blocking test failures",
+              "status": "completed",
+              "conclusion": "failure"
+            }
+          ]
+        },
+        {
+          "name": "ci / performance-tests",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119417983417",
+          "currentSteps": []
+        },
+        {
+          "name": "ci / aspire-tests",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197519/job/119417983956",
+          "currentSteps": []
+        }
+      ]
+    },
+    {
+      "run": 39655197196,
+      "jobs": [
+        {
+          "name": "preparation-controls",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39655197196/job/119413490709",
+          "currentSteps": []
+        }
+      ]
+    }
+  ]
+}

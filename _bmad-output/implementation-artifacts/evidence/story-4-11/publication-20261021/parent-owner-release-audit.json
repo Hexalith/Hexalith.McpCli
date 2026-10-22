@@ -1,0 +1,262 @@
+{
+  "observedAtUtc": "2026-10-22T01:10:34.578677+00:00",
+  "kind": "Independent parent normal release/source/environment and raw OCI graph audit",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "releases": [
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "runId": 39678436659,
+      "sourceGates": [
+        {
+          "id": 39672821997,
+          "path": ".github/workflows/ci.yml",
+          "event": "push",
+          "head_sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+          "head_branch": "main",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "created_at": "2026-10-21T20:43:52Z",
+          "updated_at": "2026-10-21T21:11:34Z",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39672821997"
+        },
+        {
+          "id": 39672821081,
+          "path": ".github/workflows/p1r-qualification.yml",
+          "event": "push",
+          "head_sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+          "head_branch": "main",
+          "conclusion": "success",
+          "run_attempt": 2,
+          "created_at": "2026-10-21T20:43:51Z",
+          "updated_at": "2026-10-21T21:23:23Z",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39672821081"
+        },
+        {
+          "id": 39672822013,
+          "path": ".github/workflows/commitlint.yml",
+          "event": "push",
+          "head_sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+          "head_branch": "main",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "created_at": "2026-10-21T20:43:52Z",
+          "updated_at": "2026-10-21T20:45:37Z",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39672822013"
+        }
+      ],
+      "protectedApproval": {
+        "user": "jpiquot",
+        "state": "approved",
+        "environment": "production",
+        "canAdminsBypass": false
+      },
+      "releaseJobsAllPassed": true,
+      "artifact": {
+        "path": "/tmp/mcpcli-story411-owner-release-artifacts-t_hym0r3/12384440237.zip",
+        "id": 12384440237,
+        "bytes": 14816,
+        "sha256": "6751936449963b985359a1dd63dac9438b34b7b4aac3e7472f85fa07eef4654e",
+        "officialDigestMatched": true
+      },
+      "publisherExecutionSha": "22a578b576a515d2af214fe81859447fffc97981",
+      "preflightSchema": "hexalith.release-publication-preflight.v4",
+      "declaredPackages": [
+        "Hexalith.EventStore.Contracts",
+        "Hexalith.EventStore.Client",
+        "Hexalith.EventStore.Server",
+        "Hexalith.EventStore.SignalR",
+        "Hexalith.EventStore.Testing",
+        "Hexalith.EventStore.Testing.Integration",
+        "Hexalith.EventStore.Aspire",
+        "Hexalith.EventStore.ServiceDefaults",
+        "Hexalith.EventStore.DomainService",
+        "Hexalith.EventStore.RestApi.Generators",
+        "Hexalith.EventStore.Gateway",
+        "Hexalith.EventStore.Admin.Abstractions",
+        "Hexalith.EventStore.Admin.Cli",
+        "Hexalith.EventStore.Admin.Server"
+      ],
+      "preflightPhases": [
+        {
+          "phase": "verify",
+          "result": "pass",
+          "identitySha256": "2f2af9008933eb7b5c12216326de3cd047b327c1225ee2991bc5dcfe64add980"
+        },
+        {
+          "phase": "publish",
+          "result": "pass",
+          "identitySha256": "2f2af9008933eb7b5c12216326de3cd047b327c1225ee2991bc5dcfe64add980"
+        },
+        {
+          "phase": "container",
+          "result": "pass",
+          "identitySha256": "2f2af9008933eb7b5c12216326de3cd047b327c1225ee2991bc5dcfe64add980"
+        }
+      ],
+      "oci": {
+        "indexDigest": "sha256:82489dc1c452969313acece74d404e4ed3de2d4b1833a1d8eaf42734c54f1465",
+        "children": [
+          {
+            "platform": "linux/amd64",
+            "manifestDigest": "sha256:0360c5f012153e776459698f2b347b4662c01de92097ebee984183fa93173032",
+            "configDigest": "sha256:1295621205a08a5effab2e4d68475056bcc4ce09584de7e9670664fff67a9dde",
+            "rawGraphDigestAndSizeMatched": true,
+            "fiveIdentityLabelsMatched": true
+          },
+          {
+            "platform": "linux/arm64",
+            "manifestDigest": "sha256:4f16b8be79e5ca0edc542bf4c9257d77280d5e30fca776b912b5cd5e8878e004",
+            "configDigest": "sha256:12b283ec1621821114a4729895f2e101f4794388b156a23f5b2301a13e43aff7",
+            "rawGraphDigestAndSizeMatched": true,
+            "fiveIdentityLabelsMatched": true
+          }
+        ],
+        "structuralValidation": "pass",
+        "fiveLabelProvenance": "pass",
+        "provenanceFailures": [],
+        "bothDigestBoundPlatformSmokes": "pass",
+        "smokeEnvironment": "Development; startup/liveness only, no production authorization proof"
+      },
+      "approvedRepairedChainContainerAccepted": true,
+      "interpretation": "Normal publisher gate/source/environment and raw OCI graph validated. Tenants older structural validator did not enforce the reviewed five-label repair; signed packages are separately verifiable."
+    },
+    {
+      "repository": "Hexalith/Hexalith.Tenants",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "runId": 39685705636,
+      "sourceGates": [
+        {
+          "id": 39682722064,
+          "path": ".github/workflows/ci.yml",
+          "event": "push",
+          "head_sha": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+          "head_branch": "main",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "created_at": "2026-10-21T21:56:16Z",
+          "updated_at": "2026-10-21T22:16:57Z",
+          "html_url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39682722064"
+        }
+      ],
+      "protectedApproval": {
+        "user": "jpiquot",
+        "state": "approved",
+        "environment": "production",
+        "canAdminsBypass": false
+      },
+      "releaseJobsAllPassed": true,
+      "artifact": {
+        "path": "/tmp/mcpcli-story411-owner-release-artifacts-t_hym0r3/12386478489.zip",
+        "id": 12386478489,
+        "bytes": 12445,
+        "sha256": "702f4cbbb395a2bf5e7e3a559035016a1969857a4ae593792e334d20f74f253a",
+        "officialDigestMatched": true
+      },
+      "publisherExecutionSha": "53d53ae42abf7c87d385a078ab260531480bbf8a",
+      "preflightSchema": "hexalith.release-publication-preflight.v2",
+      "declaredPackages": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "preflightPhases": [
+        {
+          "phase": "verify",
+          "result": "pass",
+          "identitySha256": "143979654f95dc1c31e7ea48e157984e7d62bc21c612c5d944eaf5fec267a1dc"
+        },
+        {
+          "phase": "publish",
+          "result": "pass",
+          "identitySha256": "143979654f95dc1c31e7ea48e157984e7d62bc21c612c5d944eaf5fec267a1dc"
+        },
+        {
+          "phase": "container",
+          "result": "pass",
+          "identitySha256": "143979654f95dc1c31e7ea48e157984e7d62bc21c612c5d944eaf5fec267a1dc"
+        }
+      ],
+      "oci": {
+        "indexDigest": "sha256:2bc415a61466693bfa7e6c0df1c9aab319b0ef2e82c620897aa9faa1b58f75a5",
+        "children": [
+          {
+            "platform": "linux/amd64",
+            "manifestDigest": "sha256:f63e3862c7b7dd5d4884c8ef2f238eeafc284d7a8e00bcc4b5ff8e641ded5e25",
+            "configDigest": "sha256:eda4a65e1104c437593fc626f8aae6c036c3a77311052ecc12f278f0100a30b0",
+            "rawGraphDigestAndSizeMatched": true,
+            "fiveIdentityLabelsMatched": false
+          },
+          {
+            "platform": "linux/arm64",
+            "manifestDigest": "sha256:a2972d50146ddb927935cd629d447898140df1fdba31f2e0d90373b48a17d0dc",
+            "configDigest": "sha256:d976d3f85a7ef598bed36bca13c30f80fe4f0b431f5db03fbc72c5aac0412f10",
+            "rawGraphDigestAndSizeMatched": true,
+            "fiveIdentityLabelsMatched": false
+          }
+        ],
+        "structuralValidation": "pass",
+        "fiveLabelProvenance": "fail",
+        "provenanceFailures": [
+          {
+            "platform": "linux/amd64",
+            "label": "org.opencontainers.image.source",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants",
+            "actual": "https"
+          },
+          {
+            "platform": "linux/amd64",
+            "label": "org.opencontainers.image.revision",
+            "expected": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+            "actual": null
+          },
+          {
+            "platform": "linux/amd64",
+            "label": "org.opencontainers.image.url",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.0",
+            "actual": "https"
+          },
+          {
+            "platform": "linux/amd64",
+            "label": "org.opencontainers.image.documentation",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants/blob/82c2e9ad51f4d9ceeae9dcde33d7e0273524a105/README.md",
+            "actual": "https"
+          },
+          {
+            "platform": "linux/arm64",
+            "label": "org.opencontainers.image.source",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants",
+            "actual": "https"
+          },
+          {
+            "platform": "linux/arm64",
+            "label": "org.opencontainers.image.revision",
+            "expected": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+            "actual": null
+          },
+          {
+            "platform": "linux/arm64",
+            "label": "org.opencontainers.image.url",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.0",
+            "actual": "https"
+          },
+          {
+            "platform": "linux/arm64",
+            "label": "org.opencontainers.image.documentation",
+            "expected": "https://github.com/Hexalith/Hexalith.Tenants/blob/82c2e9ad51f4d9ceeae9dcde33d7e0273524a105/README.md",
+            "actual": "https"
+          }
+        ],
+        "bothDigestBoundPlatformSmokes": "pass",
+        "smokeEnvironment": "Development; startup/liveness only, no production authorization proof"
+      },
+      "approvedRepairedChainContainerAccepted": false,
+      "interpretation": "Normal publisher gate/source/environment and raw OCI graph validated. Tenants older structural validator did not enforce the reviewed five-label repair; signed packages are separately verifiable."
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "source": "261e2c9b58e5313fc21f9d68031c48468b997943",
+  "runId": 39674215405,
+  "jobId": 119480162779,
+  "classification": "Job timeout at 25 minutes with an earlier functional test failure; do not infer a pure allowance problem.",
+  "functionalFailure": "NamedProjectionDispatchLiveSidecarTests.NormalDelivery_PersistsIndependentDetailIndexCheckpointsAndConvergedRetryLedger: Invalid original native source binding, scheduler ValidateWorkItem:544; test ScheduleAsync:161.",
+  "selectedLogLines": [
+    "2026-10-21T21:07:37.7760114Z Running tests from /home/runner/work/Hexalith.EventStore/Hexalith.EventStore/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll (net10.0|x64)",
+    "2026-10-21T21:07:38.5461999Z skipped Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionRetiredInstallerProcessWorkerTests.InstallOrRecoverExactRetiredParticipant",
+    "2026-10-21T21:07:38.5464673Z   Launched only by the real-provider retired-installer controller.",
+    "2026-10-21T21:07:38.6366493Z skipped Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityProcessWorkerTests.RunBoundedOwnerWorkerAsync",
+    "2026-10-21T21:07:38.6368531Z   Launched only by the bounded identity process qualification.",
+    "2026-10-21T21:07:38.6462917Z skipped Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionWatermarkProcessWorkerTests.ApplyPersistedHistoryAsync",
+    "2026-10-21T21:07:38.6464932Z   Worker is launched by ProjectionWatermarkProcessRestartTests only.",
+    "2026-10-21T21:16:52.7313963Z failed Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.NamedProjectionDispatchLiveSidecarTests.NormalDelivery_PersistsIndependentDetailIndexCheckpointsAndConvergedRetryLedger (315ms)",
+    "2026-10-21T21:16:52.7327200Z   Xunit.MicrosoftTestingPlatform.XunitException: System.ArgumentException : Invalid original native source binding. (Parameter 'workItem')",
+    "2026-10-21T21:29:01.1211525Z ##[error]The operation was canceled.",
+    "2026-10-21T21:29:01.4653139Z ##[error]No files were found with the provided path: TestResults/**/*.trx"
+  ],
+  "jobMetadata": {
+    "id": 119480162779,
+    "run_id": 39674215405,
+    "workflow_name": "Integration Tests",
+    "head_branch": "fix/p1r-qualification-time-budget",
+    "run_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39674215405",
+    "run_attempt": 1,
+    "node_id": "CR_kwDORNpC788AAAAb0ZKZ2w",
+    "head_sha": "261e2c9b58e5313fc21f9d68031c48468b997943",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/jobs/119480162779",
+    "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39674215405/job/119480162779",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "created_at": "2026-10-21T20:54:32Z",
+    "started_at": "2026-10-21T21:03:44Z",
+    "completed_at": "2026-10-21T21:29:05Z",
+    "name": "live-sidecar",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1,
+        "started_at": "2026-10-21T21:03:45Z",
+        "completed_at": "2026-10-21T21:03:46Z"
+      },
+      {
+        "name": "Checkout repository",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-21T21:03:46Z",
+        "completed_at": "2026-10-21T21:04:26Z"
+      },
+      {
+        "name": "Initialize Hexalith.Builds submodule",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3,
+        "started_at": "2026-10-21T21:04:26Z",
+        "completed_at": "2026-10-21T21:04:30Z"
+      },
+      {
+        "name": "Initialize .NET",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4,
+        "started_at": "2026-10-21T21:04:30Z",
+        "completed_at": "2026-10-21T21:04:31Z"
+      },
+      {
+        "name": "Install pinned OQ8 validator dependency",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5,
+        "started_at": "2026-10-21T21:04:31Z",
+        "completed_at": "2026-10-21T21:04:36Z"
+      },
+      {
+        "name": "Cache NuGet packages",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6,
+        "started_at": "2026-10-21T21:04:36Z",
+        "completed_at": "2026-10-21T21:05:47Z"
+      },
+      {
+        "name": "Restore",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7,
+        "started_at": "2026-10-21T21:05:47Z",
+        "completed_at": "2026-10-21T21:06:01Z"
+      },
+      {
+        "name": "Initialize Dapr",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8,
+        "started_at": "2026-10-21T21:06:01Z",
+        "completed_at": "2026-10-21T21:06:16Z"
+      },
+      {
+        "name": "Pull PostgreSQL container image",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 9,
+        "started_at": "2026-10-21T21:06:16Z",
+        "completed_at": "2026-10-21T21:06:23Z"
+      },
+      {
+        "name": "Run Live-Sidecar Integration Tests",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "number": 10,
+        "started_at": "2026-10-21T21:06:23Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Verify IntegrationTests serialized execution metadata",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 11,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Capture and validate OQ8 production evidence",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 12,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Upload fresh validated OQ8 capture",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 13,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Upload live-sidecar test results",
+        "status": "completed",
+        "conclusion": "failure",
+        "number": 14,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Post Cache NuGet packages",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 26,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Post Initialize .NET",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 27,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:01Z"
+      },
+      {
+        "name": "Post Checkout repository",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 28,
+        "started_at": "2026-10-21T21:29:01Z",
+        "completed_at": "2026-10-21T21:29:02Z"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 29,
+        "started_at": "2026-10-21T21:29:02Z",
+        "completed_at": "2026-10-21T21:29:02Z"
+      }
+    ],
+    "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119480162779",
+    "labels": [
+      "ubuntu-latest"
+    ],
+    "runner_id": 1000051204,
+    "runner_name": "GitHub Actions 1000051204",
+    "runner_group_id": 0,
+    "runner_group_name": "GitHub Actions"
+  },
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/261e2c9b58e5313fc21f9d68031c48468b997943/.github",
+      "start_line": 1,
+      "start_column": null,
+      "end_line": 1,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The job has exceeded the maximum execution time of 25m0s",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/261e2c9b58e5313fc21f9d68031c48468b997943/.github",
+      "start_line": 7,
+      "start_column": null,
+      "end_line": 7,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: dapr/setup-dapr@8d980918fd43a2765c143ce7f687665b2d46a6b9. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/261e2c9b58e5313fc21f9d68031c48468b997943/.github",
+      "start_line": 19,
+      "start_column": null,
+      "end_line": 19,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "No files were found with the provided path: TestResults/**/*.trx\nTestResults/**/coverage.cobertura.xml. No artifacts will be uploaded.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/261e2c9b58e5313fc21f9d68031c48468b997943/.github",
+      "start_line": 37,
+      "start_column": null,
+      "end_line": 37,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The operation was canceled.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/261e2c9b58e5313fc21f9d68031c48468b997943/.github",
+      "start_line": 1,
+      "start_column": null,
+      "end_line": 1,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "",
+      "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\"",
+      "raw_details": ""
+    }
+  ]
+}

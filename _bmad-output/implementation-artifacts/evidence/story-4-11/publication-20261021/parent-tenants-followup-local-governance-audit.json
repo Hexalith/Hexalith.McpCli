@@ -1,0 +1,38 @@
+{
+  "result": "passed",
+  "scope": "Independent inspection of unchanged local Tenants follow-up PackageGovernance TRX, before final qualified Builds gitlink. Does not grant remote source/release/full-v1 acceptance.",
+  "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-governance-results/governance.trx",
+  "bytes": 369683,
+  "sha256": "7531756be57054d767d08dcf2ec71d51d4bd41c0297d9ebba5118c15d287659b",
+  "counters": {
+    "total": "242",
+    "executed": "242",
+    "passed": "242",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "unitTestResults": 242,
+  "allOutcomesPassed": true,
+  "releasePublisherTestsPassed": 188,
+  "changedGuardTest": {
+    "testName": "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests.Release_workflow_packs_validates_and_publishes_only_expected_packages",
+    "outcome": "Passed",
+    "duration": "00:00:00.0030000"
+  },
+  "privateExpandedAudit": {
+    "path": "/tmp/mcpcli-story411-parent-tenants-governance-chqkw81k/audit.json",
+    "bytes": 49105,
+    "sha256": "5695003a71dbafda1ef4e1efab4429348365de1fb13af7fe8f90f7ed45e74c06"
+  }
+}

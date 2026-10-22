@@ -1,0 +1,130 @@
+{
+  "checkedAtUtc": "2026-10-21T22:51:58.512583+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runId": 39685339168,
+  "privateDirectory": "/tmp/mcpcli-story411-af-ci-artifacts-ekr4v14g",
+  "artifacts": [
+    {
+      "id": 12387650835,
+      "name": "blocking-test-results",
+      "privateArchive": "/tmp/mcpcli-story411-af-ci-artifacts-ekr4v14g/12387650835.zip",
+      "sizeBytes": 2074539,
+      "sha256": "sha256:ecd3baae5efcc1e9d2444a60a1d29b7cf089fdf6d3cb6ea84601c402a2119c09",
+      "githubDigest": "sha256:ecd3baae5efcc1e9d2444a60a1d29b7cf089fdf6d3cb6ea84601c402a2119c09",
+      "digestMatches": true,
+      "files": [
+        {
+          "name": "Hexalith.EventStore.Admin.Abstractions.Tests/Hexalith.EventStore.Admin.Abstractions.Tests.trx",
+          "sizeBytes": 814587
+        },
+        {
+          "name": "Hexalith.EventStore.Admin.Cli.Tests/Hexalith.EventStore.Admin.Cli.Tests.trx",
+          "sizeBytes": 578547
+        },
+        {
+          "name": "Hexalith.EventStore.Admin.Mcp.Tests/Hexalith.EventStore.Admin.Mcp.Tests.trx",
+          "sizeBytes": 659266
+        },
+        {
+          "name": "Hexalith.EventStore.Admin.Server.Host.Tests/Hexalith.EventStore.Admin.Server.Host.Tests.trx",
+          "sizeBytes": 97155
+        },
+        {
+          "name": "Hexalith.EventStore.Admin.Server.Tests/Hexalith.EventStore.Admin.Server.Tests.trx",
+          "sizeBytes": 1224292
+        },
+        {
+          "name": "Hexalith.EventStore.Admin.UI.Tests/Hexalith.EventStore.Admin.UI.Tests.trx",
+          "sizeBytes": 1694449
+        },
+        {
+          "name": "Hexalith.EventStore.AppHost.Tests/Hexalith.EventStore.AppHost.Tests.trx",
+          "sizeBytes": 282003
+        },
+        {
+          "name": "Hexalith.EventStore.Client.Tests/Hexalith.EventStore.Client.Tests.trx",
+          "sizeBytes": 3194929
+        },
+        {
+          "name": "Hexalith.EventStore.DomainService.Tests/Hexalith.EventStore.DomainService.Tests.trx",
+          "sizeBytes": 1842200
+        },
+        {
+          "name": "Hexalith.EventStore.LoadTests.Tests/Hexalith.EventStore.LoadTests.Tests.trx",
+          "sizeBytes": 14473
+        },
+        {
+          "name": "Hexalith.EventStore.Operations.Tests/Hexalith.EventStore.Operations.Tests.trx",
+          "sizeBytes": 119095
+        },
+        {
+          "name": "Hexalith.EventStore.ProviderVerification.Tests/Hexalith.EventStore.ProviderVerification.Tests.trx",
+          "sizeBytes": 134212
+        },
+        {
+          "name": "Hexalith.EventStore.QueryRouting.Tests/Hexalith.EventStore.QueryRouting.Tests.trx",
+          "sizeBytes": 23317
+        },
+        {
+          "name": "Hexalith.EventStore.RestApi.Generators.Tests/Hexalith.EventStore.RestApi.Generators.Tests.trx",
+          "sizeBytes": 205247
+        },
+        {
+          "name": "Hexalith.EventStore.Sample.Tests/Hexalith.EventStore.Sample.Tests.trx",
+          "sizeBytes": 290981
+        },
+        {
+          "name": "Hexalith.EventStore.SignalR.Tests/Hexalith.EventStore.SignalR.Tests.trx",
+          "sizeBytes": 66099
+        },
+        {
+          "name": "Hexalith.EventStore.Testing.Integration.Tests/Hexalith.EventStore.Testing.Integration.Tests.trx",
+          "sizeBytes": 81259
+        },
+        {
+          "name": "Hexalith.EventStore.Testing.Tests/Hexalith.EventStore.Testing.Tests.trx",
+          "sizeBytes": 231358
+        },
+        {
+          "name": "Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.trx",
+          "sizeBytes": 10170011
+        }
+      ]
+    },
+    {
+      "id": 12386186719,
+      "name": "tenants-source-mode-test-results",
+      "privateArchive": "/tmp/mcpcli-story411-af-ci-artifacts-ekr4v14g/12386186719.zip",
+      "sizeBytes": 2118,
+      "sha256": "sha256:54f427f4c4e2045867bcffaa64f023f23a40f208991d423f2103d2dfbb34ad94",
+      "githubDigest": "sha256:54f427f4c4e2045867bcffaa64f023f23a40f208991d423f2103d2dfbb34ad94",
+      "digestMatches": true,
+      "files": [
+        {
+          "name": "Hexalith.EventStore.AppHost.Tests.trx",
+          "sizeBytes": 16706
+        }
+      ]
+    },
+    {
+      "id": 12385849002,
+      "name": "contracts-test-results",
+      "privateArchive": "/tmp/mcpcli-story411-af-ci-artifacts-ekr4v14g/12385849002.zip",
+      "sizeBytes": 407024,
+      "sha256": "sha256:e80f48d61b5ef463ed8687cf3ca477880a90bc15c9c37f43d45e48c27f21b28a",
+      "githubDigest": "sha256:e80f48d61b5ef463ed8687cf3ca477880a90bc15c9c37f43d45e48c27f21b28a",
+      "digestMatches": true,
+      "files": [
+        {
+          "name": "Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.trx",
+          "sizeBytes": 3835600
+        },
+        {
+          "name": "Hexalith.EventStore.Contracts.Tests/coverage.cobertura.xml",
+          "sizeBytes": 982006
+        }
+      ]
+    }
+  ],
+  "rawArchivesCopiedIntoGitEvidence": false
+}

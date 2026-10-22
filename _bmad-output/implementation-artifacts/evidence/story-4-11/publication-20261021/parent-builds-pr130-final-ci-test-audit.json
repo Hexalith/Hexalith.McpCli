@@ -1,0 +1,155 @@
+{
+  "capturedAtUtc": "2026-10-22T03:25:05.760923+00:00",
+  "parentAudit": true,
+  "run": 39711839320,
+  "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "conclusion": "success",
+  "all4FullRawLogsHashVerified": true,
+  "jobs": [
+    {
+      "id": 119604732766,
+      "name": "Python contract tests",
+      "conclusion": "success",
+      "actualTestSummary": [
+        {
+          "step": "Test container publisher helpers",
+          "summary": "Ran 142 tests in 6.547s"
+        },
+        {
+          "step": "Test container publisher helpers",
+          "summary": "OK"
+        },
+        {
+          "step": "Test governed workflow provenance evaluator",
+          "summary": "Ran 38 tests in 0.135s"
+        },
+        {
+          "step": "Test governed workflow provenance evaluator",
+          "summary": "OK"
+        },
+        {
+          "step": "Test commitlint helpers",
+          "summary": "Ran 6 tests in 2.311s"
+        },
+        {
+          "step": "Test commitlint helpers",
+          "summary": "OK"
+        }
+      ]
+    },
+    {
+      "id": 119604732939,
+      "name": "Build and test",
+      "conclusion": "success",
+      "actualTestSummary": [
+        {
+          "step": "Test caller-owned domain release preparation",
+          "summary": "Ran 9 tests in 0.725s"
+        },
+        {
+          "step": "Test caller-owned domain release preparation",
+          "summary": "OK"
+        },
+        {
+          "step": "Test commitlint workflow contracts",
+          "summary": "Ran 6 tests in 2.960s"
+        },
+        {
+          "step": "Test commitlint workflow contracts",
+          "summary": "OK"
+        },
+        {
+          "step": "Test Hexalith.Builds.Module.Tests",
+          "summary": "Test run summary: Passed!"
+        },
+        {
+          "step": "Test Hexalith.Builds.Module.Tests",
+          "summary": "total: 1516"
+        },
+        {
+          "step": "Test Hexalith.Builds.Module.Tests",
+          "summary": "failed: 0"
+        },
+        {
+          "step": "Test Hexalith.Builds.Module.Tests",
+          "summary": "succeeded: 1513"
+        },
+        {
+          "step": "Test Hexalith.Builds.Module.Tests",
+          "summary": "skipped: 3"
+        },
+        {
+          "step": "Test Hexalith.Builds.Evidence.Tests",
+          "summary": "Test run summary: Passed!"
+        },
+        {
+          "step": "Test Hexalith.Builds.Evidence.Tests",
+          "summary": "total: 107"
+        },
+        {
+          "step": "Test Hexalith.Builds.Evidence.Tests",
+          "summary": "failed: 0"
+        },
+        {
+          "step": "Test Hexalith.Builds.Evidence.Tests",
+          "summary": "succeeded: 107"
+        },
+        {
+          "step": "Test Hexalith.Builds.Evidence.Tests",
+          "summary": "skipped: 0"
+        },
+        {
+          "step": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "summary": "Test run summary: Passed!"
+        },
+        {
+          "step": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "summary": "total: 13"
+        },
+        {
+          "step": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "summary": "failed: 0"
+        },
+        {
+          "step": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "summary": "succeeded: 1"
+        },
+        {
+          "step": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "summary": "skipped: 12"
+        },
+        {
+          "step": "Test multi-platform container publisher contracts",
+          "summary": "Ran 142 tests in 7.390s"
+        },
+        {
+          "step": "Test multi-platform container publisher contracts",
+          "summary": "OK"
+        },
+        {
+          "step": "Test governed workflow provenance",
+          "summary": "Ran 38 tests in 0.191s"
+        },
+        {
+          "step": "Test governed workflow provenance",
+          "summary": "OK"
+        }
+      ]
+    },
+    {
+      "id": 119604733013,
+      "name": "Dependency review / dependency-review",
+      "conclusion": "success",
+      "actualTestSummary": []
+    },
+    {
+      "id": 119604733152,
+      "name": "CodeQL / analyze",
+      "conclusion": "success",
+      "actualTestSummary": []
+    }
+  ],
+  "testScope": "Observed actual native test summaries from final exact-head normal CI logs; success is not inferred from zero test executions.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

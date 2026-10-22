@@ -1,0 +1,7 @@
+⧗   --- input ---
+ci(codeql): allow the complete source analysis to finish
+
+Use the shared workflow's supported sixty-minute allowance after the
+current full-source scan exceeded its thirty-minute job cap. Retain every
+analysis scope, mode, query and required check.
+✔   found 0 problems, 0 warnings

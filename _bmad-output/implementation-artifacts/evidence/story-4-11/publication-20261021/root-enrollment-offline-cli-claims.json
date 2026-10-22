@@ -1,0 +1,201 @@
+{
+  "checkedAtUtc": "2026-10-22T04:17:22.505056+00:00",
+  "scope": "Built production CLI documentation claims, using no gateway URL or EVENTSTORE/MCPCLI per-process variables. HOME and the existing profile store are untouched. This is local offline discovery proof, not strict production replay/cold benchmark or upstream full-release acceptance.",
+  "cli": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+    "bytes": 78848,
+    "sha256": "b2cb0a68b0e5bbdb23cbe59ccdab14da25e3c4f9314cd307baa917d96e06097a"
+  },
+  "restoreBinding": "root-enrollment-restore-binding.json",
+  "commands": [
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "modules",
+        "--strict",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5619585439999355,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/0.stdout.json",
+        "bytes": 675,
+        "sha256": "9bc10f3ac31a3340537f686d2aa35c8027dc9dc87acf60cc0f2aa3cdf83b79da"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/0.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "modules": [
+        {
+          "name": "parties",
+          "count": 7
+        },
+        {
+          "name": "tenants",
+          "count": 14
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "modules",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5371200039953692,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/1.stdout.json",
+        "bytes": 675,
+        "sha256": "9bc10f3ac31a3340537f686d2aa35c8027dc9dc87acf60cc0f2aa3cdf83b79da"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/1.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "modules": [
+        {
+          "name": "parties",
+          "count": 7
+        },
+        {
+          "name": "tenants",
+          "count": 14
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "operations",
+        "parties",
+        "--strict",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.540029356998275,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/2.stdout.json",
+        "bytes": 3524,
+        "sha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/2.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exactApprovedOperationNames": [
+        "parties.create-party",
+        "parties.deactivate-party",
+        "parties.get-party",
+        "parties.list-parties",
+        "parties.reactivate-party",
+        "parties.search-parties",
+        "parties.update-party"
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "operations",
+        "tenants",
+        "--strict",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5512970029958524,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/3.stdout.json",
+        "bytes": 7106,
+        "sha256": "3dbb9c2518ccb6c717c8ad81a2dbe377270cef65981ab9a0255131cbb37f96b9"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/3.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exactApprovedOperationNames": [
+        "tenants.add-user-to-tenant",
+        "tenants.change-user-role",
+        "tenants.create-tenant",
+        "tenants.disable-tenant",
+        "tenants.enable-tenant",
+        "tenants.get-tenant",
+        "tenants.get-tenant-audit",
+        "tenants.get-tenant-users",
+        "tenants.get-user-tenants",
+        "tenants.list-tenants",
+        "tenants.remove-tenant-configuration",
+        "tenants.remove-user-from-tenant",
+        "tenants.set-tenant-configuration",
+        "tenants.update-tenant"
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.search-parties",
+        "--lint",
+        "--strict",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5362564680108335,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/4.stdout.json",
+        "bytes": 1953,
+        "sha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/4.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "operation": "parties.search-parties",
+      "lintFindingCount": 0
+    },
+    {
+      "command": [
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "tenants.get-tenant",
+        "--lint",
+        "--strict",
+        "--format",
+        "json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5451107810076792,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/5.stdout.json",
+        "bytes": 1201,
+        "sha256": "36223181c0961b4bc15e475270b3f34435917ca26c35c097a791a94881b95b22"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/offline-claims/5.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "operation": "tenants.get-tenant",
+      "lintFindingCount": 0
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed"
+}

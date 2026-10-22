@@ -1,0 +1,53 @@
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 0d437a62..82199593 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -306,13 +306,15 @@ jobs:
+       issues: write
+       pull-requests: write
+     env:
+-      HEXALITH_BUILDS_EXECUTION_SHA: 53d53ae42abf7c87d385a078ab260531480bbf8a
++      HEXALITH_BUILDS_EXECUTION_SHA: 22a578b576a515d2af214fe81859447fffc97981
+       HEXALITH_RELEASE_ENVIRONMENT: production
+       HEXALITH_RELEASE_SOURCE_BRANCH: main
+       HEXALITH_RELEASE_SOURCE_CI_WORKFLOW: ci.yml
+       HEXALITH_RELEASE_PACKAGE_MANIFEST: tools/release-packages.json
+       # Declared rather than counted from the manifest so an inventory change fails closed.
+       HEXALITH_RELEASE_EXPECTED_PACKAGE_COUNT: '5'
++      # Normal protected release; no corrective reservation or one-use authority inputs.
++      HEXALITH_RELEASE_REQUIRE_AUTHORITY: 'false'
+       HEXALITH_CONTAINER_PROJECTS: |
+         src/Hexalith.Tenants/Hexalith.Tenants.csproj|tenants
+     # CI (the verify-source gate above) already tested this exact head, so the release path
+diff --git a/Directory.Build.targets b/Directory.Build.targets
+index 27080432..6d0fffc3 100644
+--- a/Directory.Build.targets
++++ b/Directory.Build.targets
+@@ -31,4 +31,12 @@
+     </ItemGroup>
+   </Target>
+ 
++  <!-- Reuse the shared SDK provenance repair from the centrally pinned Builds checkout. -->
++  <PropertyGroup>
++    <HexalithContainerProvenanceTargets>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++  </PropertyGroup>
++  <Import Project="$(HexalithContainerProvenanceTargets)" />
++
+ </Project>
+diff --git a/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs b/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
+index d6daa896..0e2a1f38 100644
+--- a/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
++++ b/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
+@@ -997,6 +997,10 @@ public class PackageGovernanceTests {
+         releaseJob.ShouldContain("HEXALITH_RELEASE_PACKAGE_MANIFEST: tools/release-packages.json");
+         releaseJob.ShouldContain("HEXALITH_RELEASE_SOURCE_BRANCH: main");
+         releaseJob.ShouldContain("HEXALITH_RELEASE_SOURCE_CI_WORKFLOW: ci.yml");
++        releaseJob.ShouldContain("HEXALITH_RELEASE_REQUIRE_AUTHORITY: 'false'");
++        releaseJob.ShouldNotContain("HEXALITH_RELEASE_RESERVED_VERSION:");
++        releaseJob.ShouldNotContain("HEXALITH_RELEASE_AUTHORITY_ISSUE_URL:");
++        releaseJob.ShouldNotContain("HEXALITH_RELEASE_AUTHORITY_OWNER:");
+         workflow.ShouldContain("cancel-in-progress: false");
+         releaseJob.ShouldContain("dotnet build Hexalith.Tenants.slnx --no-restore --configuration Release -warnaserror");
+ 

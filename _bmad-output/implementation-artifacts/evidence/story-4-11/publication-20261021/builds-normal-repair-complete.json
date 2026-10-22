@@ -1,0 +1,23 @@
+{
+  "status": "normal protected revert and reapply complete",
+  "revertPr": 127,
+  "revertMerge": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+  "reapplyPr": 128,
+  "reapplyMerge": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+  "checkedPrHead": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+  "identicalCheckedAndMergedTree": "3f7f45556fa460a6300ebf68a3c38657228bc74e",
+  "productionTargetSha256": "ffe4a85d7211b9897b036b083b25bec56b69699f4c0a46c8ec596cf1221f9568",
+  "actualSquashMessageMatchesExactValidatedCandidate": true,
+  "actualSquashMessage": "fix(container): preserve publisher provenance across RIDs\n\nRebind SDK container labels at image creation when consumers provide the\ncomplete publisher provenance inputs. Preserve ordinary local SDK behavior\nwhen metadata is absent or partial.\n\nExercise actual MSBuild behavior and target removal using escaped fixture\nXML without XML parsing. Retain scoped no-shell subprocess justifications.\n\nReapply through the normal checked PR path after the bounded revert\nrestored the preincident tree.",
+  "normalGate": "builds-reapply-pr-gate-final.json",
+  "initialIncidentRetained": "builds-provenance-push.json",
+  "historyRewritten": false,
+  "releasesDispatched": false,
+  "independentParentApiMergeTreeAudit": {
+    "status": "pass",
+    "mergeCommit": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+    "checkedPrHead": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+    "bothTrees": "3f7f45556fa460a6300ebf68a3c38657228bc74e",
+    "foreignDelta": false
+  }
+}

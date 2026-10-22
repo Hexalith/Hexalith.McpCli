@@ -1,0 +1,40 @@
+{
+  "source": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+  "runId": 39679453175,
+  "checkId": 119497801399,
+  "requiredCheckConclusion": "failure",
+  "outerWorkflowConclusion": "success (job is continue-on-error; does not satisfy required advisory context)",
+  "failure": [
+    "2026-10-21T21:36:50.1963918Z failed Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle (291ms)",
+    "2026-10-21T21:36:50.1965136Z   from /home/runner/work/Hexalith.EventStore/Hexalith.EventStore/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll (net10.0|x64)",
+    "2026-10-21T21:36:50.1966087Z   Shouldly.ShouldAssertException : await page.TitleAsync();",
+    "2026-10-21T21:36:50.1966480Z               title",
+    "2026-10-21T21:36:50.1966796Z       should contain (case insensitive comparison)",
+    "2026-10-21T21:36:50.1967683Z   \"Hexalith EventStore Admin\"",
+    "2026-10-21T21:36:50.1967966Z       but was actually",
+    "2026-10-21T21:36:50.1968190Z   \"\"",
+    "2026-10-21T21:36:50.1969362Z     at Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle() in /home/runner/work/Hexalith.EventStore/Hexalith.EventStore/tests/Hexalith.EventStore.Admin.UI.E2E/BrowserSmokeTests.cs:27",
+    "2026-10-21T21:36:50.1970584Z     at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()",
+    "2026-10-21T21:36:50.1972932Z     at Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle() in /home/runner/work/Hexalith.EventStore/Hexalith.EventStore/tests/Hexalith.EventStore.Admin.UI.E2E/BrowserSmokeTests.cs:28",
+    "2026-10-21T21:36:50.1974586Z     at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()",
+    "2026-10-21T21:36:50.1975567Z     at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)",
+    "2026-10-21T21:36:50.1976955Z     at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)",
+    "2026-10-21T21:36:50.1978115Z     --- End of stack trace from previous location ---"
+  ],
+  "summaries": [
+    "2026-10-21T21:37:24.3727725Z   total: 41",
+    "2026-10-21T21:37:24.3728066Z   failed: 1",
+    "2026-10-21T21:37:24.3728450Z   succeeded: 38",
+    "2026-10-21T21:37:24.3728772Z   skipped: 2",
+    "2026-10-21T21:37:24.6293057Z   total: 19",
+    "2026-10-21T21:37:24.6293378Z   failed: 0",
+    "2026-10-21T21:37:24.6293672Z   succeeded: 0",
+    "2026-10-21T21:37:24.6294077Z   skipped: 19",
+    "2026-10-21T21:37:27.2715924Z   total: 54",
+    "2026-10-21T21:37:27.2716303Z   failed: 0",
+    "2026-10-21T21:37:27.2716644Z   succeeded: 0",
+    "2026-10-21T21:37:27.2717083Z   skipped: 54"
+  ],
+  "diagnosis": "The main landmark can be available before Blazor asynchronously applies PageTitle. The test sampled TitleAsync once and observed an empty title after 291 ms. No title or shell expectation is being removed.",
+  "rawLogPolicy": "Retain concise exact failure evidence; enormous repeated connection-refused diagnostic output is not duplicated into repository evidence."
+}

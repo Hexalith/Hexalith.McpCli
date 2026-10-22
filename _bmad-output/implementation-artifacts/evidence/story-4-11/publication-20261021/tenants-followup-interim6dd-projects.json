@@ -1,0 +1,478 @@
+{
+  "startedAtUtc": "2026-10-22T02:43:36.472721+00:00",
+  "owningBase": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "sourceIndexTreeBefore": "ea34d460bf3a4d4bc0e4e2c8552cf99a97e7d65b",
+  "unstagedDiffSha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "buildsCommit": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "buildsTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "frontComposerCommit": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7",
+  "projectReferenceMode": "UseHexalithProjectReferences=false; existing UI FrontComposer source exception remains default and explicit in evaluated project configuration",
+  "nugetPackages": "/tmp/mcpcli-story411-owner-published-87zjp9rw/nuget-cache",
+  "commands": [
+    {
+      "project": "tests/Hexalith.Tenants.Contracts.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Contracts.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Contracts.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:43:36.522901+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 17.16170483600581,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Contracts.Tests.stdout.txt",
+          "bytes": 636,
+          "sha256": "ba2c27e43049ca101c6fe31b97d1f9fcfcf26712e370bc354f8ac79c20dc4cbd"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Contracts.Tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.trx",
+        "bytes": 1010615,
+        "sha256": "c4064e1b1f98ffe914d15d9f45ae5989438b1559759bbb43b93716191362cc00"
+      },
+      "counters": {
+        "total": "654",
+        "executed": "654",
+        "passed": "654",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 654
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Client.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Client.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Client.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:43:53.691996+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.7478625110088615,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Client.Tests.stdout.txt",
+          "bytes": 608,
+          "sha256": "d01c803642ab64b31cd0aa5eec433a81f7c514271521a15b9bc4e94bed35ade8"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Client.Tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.trx",
+        "bytes": 73477,
+        "sha256": "2bece1c2a3abe9156b8c9391bc5e6d80f51684ea2b5fad2c8b1e6bd3e9a1fd82"
+      },
+      "counters": {
+        "total": "50",
+        "executed": "50",
+        "passed": "50",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 50
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Testing.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Testing.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Testing.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:43:56.441783+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.70719814900076,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Testing.Tests.stdout.txt",
+          "bytes": 616,
+          "sha256": "80dc0e2b68321cb119824bdf4e9927af9f3768c249760525eda53b6cfec7d9f7"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Testing.Tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.trx",
+        "bytes": 268344,
+        "sha256": "d824483821d8239a1667a743ce3a26ed7ba370cc7fe8f0addf75867fbeffacc9"
+      },
+      "counters": {
+        "total": "182",
+        "executed": "182",
+        "passed": "182",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 182
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.AppHost.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.AppHost.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:43:59.151697+00:00",
+      "exitCode": 2,
+      "elapsedSeconds": 7.952030458996887,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests.stdout.txt",
+          "bytes": 71687,
+          "sha256": "282b4398098d8b431144a66e768f7d6ecca2e5d592d42e9167d03899a20d6b33"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.trx",
+        "bytes": 82776,
+        "sha256": "534c4f8bfaed1c3ca3acd4629a8301dcf62f4922c45e166bc093ff8474d1dae2"
+      },
+      "counters": {
+        "total": "9",
+        "executed": "9",
+        "passed": "0",
+        "failed": "9",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Failed": 9
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.AppHost.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests-root-checkouts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.AppHost.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:47:07.080372+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 8.339938074001111,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests-root-checkouts.stdout.txt",
+          "bytes": 633,
+          "sha256": "70775b88fed8aacaa852a41b6905d60c5b4743ca73e032d4910ff16f2a2c4062"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests-root-checkouts.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.AppHost.Tests-root-checkouts/Hexalith.Tenants.AppHost.Tests.trx",
+        "bytes": 14631,
+        "sha256": "87ac43b5bf95a81c3a76da7983be4f694fe4348822b941c5eed93cc0869a8f80"
+      },
+      "counters": {
+        "total": "9",
+        "executed": "9",
+        "passed": "9",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 9
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Server.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Server.Tests-root-checkouts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Server.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:47:15.421675+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 9.51273946899164,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Server.Tests-root-checkouts.stdout.txt",
+          "bytes": 633,
+          "sha256": "c572e35a457e9b45d85bf5ac024b52e97d84883466510ebeb9bc0e4916d9dc89"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Server.Tests-root-checkouts.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Server.Tests-root-checkouts/Hexalith.Tenants.Server.Tests.trx",
+        "bytes": 2238683,
+        "sha256": "4256d60c06a73379d45b1284c9d17599878f527074733c62613f4032b1a30a06"
+      },
+      "counters": {
+        "total": "1440",
+        "executed": "1440",
+        "passed": "1440",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 1440
+      }
+    },
+    {
+      "project": "tests/Hexalith.Tenants.UI.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.UI.Tests-root-checkouts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.UI.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:47:24.951459+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 108.31774223700631,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.UI.Tests-root-checkouts.stdout.txt",
+          "bytes": 617,
+          "sha256": "13ebe0878857c1440d07b61c58d3f1cc5afe42fb4f7f45433a1f23ecad7e8008"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.UI.Tests-root-checkouts.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.UI.Tests-root-checkouts/Hexalith.Tenants.UI.Tests.trx",
+        "bytes": 11095365,
+        "sha256": "9f86bcbb59e6dfa64d667be1dc375c1780da58bf027e11ab30801e46ada4ed75"
+      },
+      "counters": {
+        "total": "7117",
+        "executed": "7117",
+        "passed": "7117",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 7117
+      }
+    },
+    {
+      "project": "samples/Hexalith.Tenants.Sample.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "samples/Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Sample.Tests-root-checkouts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Sample.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:49:13.347622+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.89308130700374,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Sample.Tests-root-checkouts.stdout.txt",
+          "bytes": 630,
+          "sha256": "90e3cd1ed9f5d641e60e143502c826272f837079af6765a4c24f90f20367effb"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Sample.Tests-root-checkouts.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-projects/Hexalith.Tenants.Sample.Tests-root-checkouts/Hexalith.Tenants.Sample.Tests.trx",
+        "bytes": 59460,
+        "sha256": "bf4f6b1d7555ef2bde8636a66ffccd2998a699f1ee89dd07ca4b684a284b78e4"
+      },
+      "counters": {
+        "total": "40",
+        "executed": "40",
+        "passed": "40",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 40
+      }
+    }
+  ],
+  "scope": "Interim reviewed6dd Builds candidate: owning CONTRIBUTING seven projects, run individually in isolated source worktree. Actual merged Builds gitlink and final input/source-governance binding remain pending; remote exact-source CI/release and McpCli full-v1 acceptance remain separate mandatory gates.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed",
+  "setupRepair": "Initialize only owning root-declared EventStore5ce5f1d84b88c808cc8a526b9decf149de977e55 and Memories921fee32fb1d03da1e1770a9747ecaeacc8abd7c at unchanged82c gitlinks. Missing direct project paths caused initial AppHost9 failures. Package mode remains false for cross-repo project references; no nested submodules initialized.",
+  "completedAtUtc": "2026-10-22T02:49:16.247667+00:00",
+  "sourceIndexTreeAfter": "ea34d460bf3a4d4bc0e4e2c8552cf99a97e7d65b",
+  "finalWorkingStatus": "M  .github/workflows/release.yml\nM  Directory.Build.targets\nM  references/Hexalith.Builds\nM  tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs",
+  "unstagedDiffSha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

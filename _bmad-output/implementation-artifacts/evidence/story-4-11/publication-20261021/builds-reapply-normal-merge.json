@@ -1,0 +1,25 @@
+{
+  "expectedHead": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+  "readyGate": "builds-reapply-pr-gate-final.json",
+  "commitlint": "builds-final-squash-commitlint.json",
+  "explicitCandidate": {
+    "message": "fix(container): preserve publisher provenance across RIDs\n\nRebind SDK container labels at image creation when consumers provide the\ncomplete publisher provenance inputs. Preserve ordinary local SDK behavior\nwhen metadata is absent or partial.\n\nExercise actual MSBuild behavior and target removal using escaped fixture\nXML without XML parsing. Retain scoped no-shell subprocess justifications.\n\nReapply through the normal checked PR path after the bounded revert\nrestored the preincident tree.\n",
+    "title": "fix(container): preserve publisher provenance across RIDs",
+    "body": "Rebind SDK container labels at image creation when consumers provide the\ncomplete publisher provenance inputs. Preserve ordinary local SDK behavior\nwhen metadata is absent or partial.\n\nExercise actual MSBuild behavior and target removal using escaped fixture\nXML without XML parsing. Retain scoped no-shell subprocess justifications.\n\nReapply through the normal checked PR path after the bounded revert\nrestored the preincident tree.\n"
+  },
+  "merge": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "sha": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+      "merged": true,
+      "message": "Pull Request successfully merged"
+    },
+    "isError": false
+  },
+  "adminOrBypassFlagsUsed": false
+}

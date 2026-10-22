@@ -1,0 +1,144 @@
+{
+  "checkedAtUtc": "2026-10-22T01:32:40.036553+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "run": 39693568159,
+  "job": {
+    "id": 119545391477,
+    "run_id": 39693568159,
+    "workflow_name": "CodeQL",
+    "head_branch": "fix/p1r-qualification-time-budget",
+    "run_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39693568159",
+    "run_attempt": 1,
+    "node_id": "CR_kwDORNpC788AAAAb1XXpdQ",
+    "head_sha": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/jobs/119545391477",
+    "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693568159/job/119545391477",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "created_at": "2026-10-21T23:27:47Z",
+    "started_at": "2026-10-21T23:27:50Z",
+    "completed_at": "2026-10-22T01:28:05Z",
+    "name": "codeql / analyze",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1,
+        "started_at": "2026-10-21T23:27:50Z",
+        "completed_at": "2026-10-21T23:27:51Z"
+      },
+      {
+        "name": "Run actions/checkout@v7.0.1",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-21T23:27:51Z",
+        "completed_at": "2026-10-21T23:28:31Z"
+      },
+      {
+        "name": "Initialize CodeQL",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3,
+        "started_at": "2026-10-21T23:28:31Z",
+        "completed_at": "2026-10-21T23:28:42Z"
+      },
+      {
+        "name": "Perform CodeQL Analysis",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "number": 4,
+        "started_at": "2026-10-21T23:28:42Z",
+        "completed_at": "2026-10-22T01:28:00Z"
+      },
+      {
+        "name": "Post Perform CodeQL Analysis",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6,
+        "started_at": "2026-10-22T01:28:00Z",
+        "completed_at": "2026-10-22T01:28:01Z"
+      },
+      {
+        "name": "Post Initialize CodeQL",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7,
+        "started_at": "2026-10-22T01:28:01Z",
+        "completed_at": "2026-10-22T01:28:02Z"
+      },
+      {
+        "name": "Post Run actions/checkout@v7.0.1",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8,
+        "started_at": "2026-10-22T01:28:02Z",
+        "completed_at": "2026-10-22T01:28:02Z"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 9,
+        "started_at": "2026-10-22T01:28:02Z",
+        "completed_at": "2026-10-22T01:28:03Z"
+      }
+    ],
+    "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119545391477",
+    "labels": [
+      "ubuntu-latest"
+    ],
+    "runner_id": 1000051419,
+    "runner_name": "GitHub Actions 1000051419",
+    "runner_group_id": 0,
+    "runner_group_name": "GitHub Actions"
+  },
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/c8a0e9af8014a588f9ac9b855b7f2f093fd51a86/.github",
+      "start_line": 1,
+      "start_column": null,
+      "end_line": 1,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The job has exceeded the maximum execution time of 2h0m0s",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/c8a0e9af8014a588f9ac9b855b7f2f093fd51a86/.github",
+      "start_line": 3730,
+      "start_column": null,
+      "end_line": 3730,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The operation was canceled.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Hexalith/Hexalith.EventStore/blob/c8a0e9af8014a588f9ac9b855b7f2f093fd51a86/.github",
+      "start_line": 1,
+      "start_column": null,
+      "end_line": 1,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "",
+      "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\"",
+      "raw_details": ""
+    }
+  ],
+  "privateRawLog": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/eventstore-c8-codeql-job119545391477.log",
+    "bytes": 1881796,
+    "sha256": "17f4bec1a3d87956bb3d3ba8f239313f03042ae73a0256003231649f4d868b33"
+  },
+  "queryStartMarkerCount": 0,
+  "scope": "Historical unmerged PR diagnostic only; actual published1748 normal owner release/source gates remain the authority. No workflow scope/mode/tool change or further allowance applied.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

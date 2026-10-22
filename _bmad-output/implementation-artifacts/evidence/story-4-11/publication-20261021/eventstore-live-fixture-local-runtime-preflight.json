@@ -1,0 +1,21 @@
+{
+  "checkedAtUtc": "2026-10-21T21:58:27.460434+00:00",
+  "dockerEndpoint": "unix:///var/run/docker.sock",
+  "daprImage": {
+    "Id": "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+    "RepoDigests": [
+      "daprio/dapr@sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59"
+    ],
+    "Architecture": "amd64",
+    "Os": "linux"
+  },
+  "redisImage": {
+    "Id": "sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8",
+    "RepoDigests": [
+      "ghcr.io/dapr/3rdparty/redis@sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8"
+    ],
+    "Architecture": "amd64",
+    "Os": "linux"
+  },
+  "taskOnly": "Prepare task-owned isolated container controls; no change to existing infrastructure."
+}

@@ -1,0 +1,922 @@
+{
+  "observedAtUtc": "2026-10-22T00:18:18.848832+00:00",
+  "kind": "Read-only contingency assessment; no source, workflow, mode, query, filter or gate mutation.",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "tree": "00550dd1d4f8b0218ddcec6cfe38e4b60fc324a5",
+  "currentCodeqlRun": 39693568159,
+  "currentTimeoutMinutes": 120,
+  "currentBuildMode": "none",
+  "currentRunRemainsBinding": true,
+  "modeChangeAuthorized": false,
+  "counts": {
+    "trackedCsharpFiles": 15180,
+    "trackedCsharpByRoot": {
+      "_bmad-output": 11408,
+      "docs": 55,
+      "perf": 6,
+      "samples": 33,
+      "src": 2001,
+      "tests": 1646,
+      "tools": 31
+    },
+    "allTrackedProjects": 566,
+    "capturedProjectFiles": 506,
+    "nonCaptureProjects": 60,
+    "directSolutionProjects": 51,
+    "staticLiteralReferenceClosureProjects": 54
+  },
+  "allNonCaptureProjects": [
+    {
+      "path": "perf/Hexalith.EventStore.LoadTests/Hexalith.EventStore.LoadTests.csproj",
+      "sha256": "65b723ffeab8be76b1d82539d61b53e87fba413319fbf33fcce1a6157bc223c5",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "samples/Hexalith.EventStore.Sample.Api/Hexalith.EventStore.Sample.Api.csproj",
+      "sha256": "9a5042d07cf5aacf44d1de45829f4b7c49060c6cee18b05ee4ae8b25fc20aee8",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "samples/Hexalith.EventStore.Sample.BlazorUI/Hexalith.EventStore.Sample.BlazorUI.csproj",
+      "sha256": "d8ba1a9e2fe37453c4194c1fd3cc9b18438a96f63bf9d73271f5f64f7952d4b7",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "samples/Hexalith.EventStore.Sample.Contracts/Hexalith.EventStore.Sample.Contracts.csproj",
+      "sha256": "ffc9e6cb8b3b239ff330ceca94ef0b54a6bdc9d976a582faa7b2670bcb05d1df",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "samples/Hexalith.EventStore.Sample.Tests/Hexalith.EventStore.Sample.Tests.csproj",
+      "sha256": "43fa811e949c8326c9e79e7d8c32ad6ce4bdcf7eb7e0c3a8cdcad19a90b44a03",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "samples/Hexalith.EventStore.Sample/Hexalith.EventStore.Sample.csproj",
+      "sha256": "7197111075a3d70c4d8fdd86e640797080a19985a9e74c3ef3382f883cfd2efb",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj",
+      "sha256": "a156c9c004dee5dbf72016dcd70629f81426a1d03f9dd6de2f0426eb0a5c9ba9",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+      "sha256": "c6e668e65e53905a23e8b2c84d88775415ff556a6498e415361dc9143e2458d0",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+      "sha256": "8364d0561e8cb9b1a890b2cfe87aa1dd36a541cf3ad4cb60d9737db5f1bb58c2",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.Server.Host/Hexalith.EventStore.Admin.Server.Host.csproj",
+      "sha256": "432c267f326a5c9489c74b9cda807025df45c4ee6b3e4891f27de255629d0aa7",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.Server/Hexalith.EventStore.Admin.Server.csproj",
+      "sha256": "db73d2c0a4678deb11f28d49c247677ae94dd8a9e9b9fb9450819878dd0fce81",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Admin.UI/Hexalith.EventStore.Admin.UI.csproj",
+      "sha256": "63a5a4d5c2ae3879137b85fcaf05387c42029b6254ad0980c285c1cd2c134830",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.AppHost/Hexalith.EventStore.AppHost.csproj",
+      "sha256": "d77e20113b68d21260a6bbf8a9648b769fe4b5e6b1b54681900a202bcef5b1f6",
+      "sdk": "Aspire.AppHost.Sdk/13.6.1",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj",
+      "sha256": "a05fa59392fd33324d0a37a502a91fc3f707d64be1e0accb860ae574c8060656",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+      "sha256": "a1dce85420fd2a7e7f4154a32e7276d519639ff25fe368de33876aa4c75445e4",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "sha256": "6ae249d8b25d97f6b1620f965730f317e1e67537ce478fa791725a94cb0b859a",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj",
+      "sha256": "a33f6eff943d309ae17d4278d0b2e7dafd2fab2c14c1134c01821ac622cd99db",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj",
+      "sha256": "4b10fc3d5fb1fb79e73eba7e580f755f64fab8bde7cd84c180af379c8ccdaee5",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Operations/Hexalith.EventStore.Operations.csproj",
+      "sha256": "66fff04ca05e0260aaf14749bef469411ecb62d55a22073ad1ee812be035c3e2",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.PayloadProtection/Hexalith.EventStore.PayloadProtection.csproj",
+      "sha256": "5aa4df00b152a6e3c010cdf99e47d456826e806350da8d423fd5edd98b5a2a39",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    },
+    {
+      "path": "src/Hexalith.EventStore.RestApi.Generators/Hexalith.EventStore.RestApi.Generators.csproj",
+      "sha256": "f7603c5ddf434520fb42a953c1c342c22733830f80a409357baaa8657c897ab9",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj",
+      "sha256": "d8f73dbcde5ff87051a418a3e2335bcbd7393f6c145bacf934f93a9841915373",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj",
+      "sha256": "9016f62711665a16f65946bec0a96876951cf2be3006bd9bbf0c30dd0adbf415",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.SignalR/Hexalith.EventStore.SignalR.csproj",
+      "sha256": "5fe1c944145ef28c5e8c66d4d5f6b57e10320124d3127aa8d134635c088d70dc",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Testing.Integration/Hexalith.EventStore.Testing.Integration.csproj",
+      "sha256": "46adaa29abe50684e964e7f66fbf054f27ff8bf45f81088e35d8bcd87cd59667",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj",
+      "sha256": "619765d5c34f28c416f6c7c77ac92ab366c219e5827fadcb1ee9fec991be606d",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "sha256": "030bbe6c572626071a59a849c55ab8c574441efbbbc2209af1a8b9ec76eb48d2",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.Abstractions.Tests/Hexalith.EventStore.Admin.Abstractions.Tests.csproj",
+      "sha256": "b2124fdce8273891b445c41c4c79a802dcbee063b1dbae5cd89d57f19c5146e9",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.Cli.Tests/Hexalith.EventStore.Admin.Cli.Tests.csproj",
+      "sha256": "51c927daee0185d2aa1059dbf3a8828a7216f37233d80df3bb918b7e5c6dc1ea",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.Mcp.Tests/Hexalith.EventStore.Admin.Mcp.Tests.csproj",
+      "sha256": "e7ac0bef171e00654fdd6dfc2695fe32f34b02d0ce8231f31861e0459ef19860",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.Server.Host.Tests/Hexalith.EventStore.Admin.Server.Host.Tests.csproj",
+      "sha256": "e3f23d3371358b2480001c9d53e6e1a895f65748b28c35b8fcca6c6c0c4d0f0e",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.Server.Tests/Hexalith.EventStore.Admin.Server.Tests.csproj",
+      "sha256": "dd721e126c95e0b06da62ba90697fc8a5cd12b540f626bc3c77d01c275bceba0",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+      "sha256": "27fd7653f1ddaa96a0b61f0e9a30b2a6a545b6488d8e9b3025d9b5a30f20717f",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Admin.UI.Tests/Hexalith.EventStore.Admin.UI.Tests.csproj",
+      "sha256": "1cc131849e25896d137bea5d2c22f4f98f0e55540306556d0c2561b0eaa2c8b9",
+      "sdk": "Microsoft.NET.Sdk.Razor",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.AppHost.Tests/Hexalith.EventStore.AppHost.Tests.csproj",
+      "sha256": "0f244b08aec52149a9982c7223a60699fd74768ffb21ed9a4e40eeeea9f44501",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Client.TestContracts/Hexalith.EventStore.Client.TestContracts.csproj",
+      "sha256": "83630860682ef4b9239e3cdbcef7f631da30a59c886cb85482b122413d4520c0",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Client.Tests/Hexalith.EventStore.Client.Tests.csproj",
+      "sha256": "589148d2320325c644ce7a9ece65aafeba5d7164e16dd94378e3bae540917529",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.csproj",
+      "sha256": "1f996cc51b85147d641e0faedfd867bf379965b6d751643d95a1035eed474067",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.DeferredWorkGovernance.Tests/Hexalith.EventStore.DeferredWorkGovernance.Tests.csproj",
+      "sha256": "f101d230b9ee9fe44eb1e1060197abc9481d0118d372917f877600948c94cf53",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.DomainService.Tests/Hexalith.EventStore.DomainService.Tests.csproj",
+      "sha256": "09f577ac497c3203a756154a5420225061cc6fc33b535a35615b80675a77d731",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.IntegrationTests/Hexalith.EventStore.IntegrationTests.csproj",
+      "sha256": "243f68d36ac0875f3d149ee45bd73e7dfaffe14b22ab30e29ecfcbdbca01961f",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.LoadTests.Tests/Hexalith.EventStore.LoadTests.Tests.csproj",
+      "sha256": "65ed6a22c4acf5b69fb056772bff764607e43d3acc6574b2d09bd7884c0351db",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.OperationalEvidence.Validator.Tests/Hexalith.EventStore.OperationalEvidence.Validator.Tests.csproj",
+      "sha256": "9de124bc834f5b8c56b1a4e96b7492736fdfc1005fba4558f126c1576f2a2ffc",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Operations.Tests/Hexalith.EventStore.Operations.Tests.csproj",
+      "sha256": "223beb4b83542e651f456a963713a6d69785c80b65ec6f0555a043bdd507dae7",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.PayloadProtection.Tests/Hexalith.EventStore.PayloadProtection.Tests.csproj",
+      "sha256": "935ed590706519f025b256748aeec9939dd0ce4782d72585ccd0dc2f44970105",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    },
+    {
+      "path": "tests/Hexalith.EventStore.ProviderVerification.Tests/Hexalith.EventStore.ProviderVerification.Tests.csproj",
+      "sha256": "c951746ff1efbb7ba5fb894b20973bd46097b356c47d9a73c4e5c7e99c150ba0",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.ProviderVerification/Hexalith.EventStore.ProviderVerification.csproj",
+      "sha256": "0ac5d114b9b4b55dc9d29c1de251b541b26fe7b864633ec8cef4104594533e20",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.QueryRouting.Tests/Hexalith.EventStore.QueryRouting.Tests.csproj",
+      "sha256": "d23ebaebf72e2a7da3bcab1be1f39434be1c99b150f94e7db26cf39a13273d1b",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.RestApi.Generators.Tests/Hexalith.EventStore.RestApi.Generators.Tests.csproj",
+      "sha256": "c2156a84962870c14f59c26937e68b3231547cd944eb9d4376c3fe9cea1952e7",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Sample.Tests/Hexalith.EventStore.Sample.Tests.csproj",
+      "sha256": "04807d3a0bb30c87214db912c1f56ec1d604f155833b5954684adcafe5c3d830",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+      "sha256": "441f06dc7c6f3f3580f4b30ed6b3a1e5db9faab1dbe68cebb68a94ca5e7a19f3",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+      "sha256": "91b7032c08b9bd99c1078fcfaa7c9c6608d874e18c733eed01ae2538ce9d6190",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.SignalR.Tests/Hexalith.EventStore.SignalR.Tests.csproj",
+      "sha256": "bf06368f7f0477f76bf90a35cfcd8904cc8be2a4f6a404a524e9ffa46d2c936a",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.TestSubscriber/Hexalith.EventStore.TestSubscriber.csproj",
+      "sha256": "cef3891f52886c50dd36c725f35f5efd1e8aa51cae1e436ffec8cb054b8db709",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Testing.Integration.Tests/Hexalith.EventStore.Testing.Integration.Tests.csproj",
+      "sha256": "e555a2cbe2d29badeb56fa76e9ec86b5006f98c78f0a24bb4e575d7cb999b58e",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tests/Hexalith.EventStore.Testing.Tests/Hexalith.EventStore.Testing.Tests.csproj",
+      "sha256": "bb120d72f8f7cfbc45f8938e65e1fb50ecfa16a1fee65c1de70a1637336a7eb4",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": true,
+      "inStaticLiteralReferenceClosure": true
+    },
+    {
+      "path": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "sha256": "73e786489328d39c79934d6ad0cd893dc079e02bf1a8c3bfe3774d3d41e2cdd7",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    },
+    {
+      "path": "tools/p1r-published-consumers/host/Host.csproj",
+      "sha256": "446244faee291ac2466341a78461a1cdde56219de2218aab54d278b585810867",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    },
+    {
+      "path": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "sha256": "1a20f9509e2b4ac00e979694815ebe7057d6a963c788d84a252abe855cf6b2b6",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    },
+    {
+      "path": "tools/p1r-published-consumers/registration-probe/RegistrationProbe.csproj",
+      "sha256": "70572a81d192e8b2ff41d042f5f98f36b597b33ed6c226e6b506b3ab6a4d8e82",
+      "sdk": "Microsoft.NET.Sdk",
+      "inSolution": false,
+      "inStaticLiteralReferenceClosure": false
+    }
+  ],
+  "transitiveProjectsBeyondSolution": [
+    "src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj",
+    "tests/Hexalith.EventStore.Client.TestContracts/Hexalith.EventStore.Client.TestContracts.csproj",
+    "tests/Hexalith.EventStore.TestSubscriber/Hexalith.EventStore.TestSubscriber.csproj"
+  ],
+  "nonCaptureProjectsOutsideLiteralClosure": [
+    "src/Hexalith.EventStore.PayloadProtection/Hexalith.EventStore.PayloadProtection.csproj",
+    "tests/Hexalith.EventStore.PayloadProtection.Tests/Hexalith.EventStore.PayloadProtection.Tests.csproj",
+    "tools/p1r-published-consumers/domain/Domain.csproj",
+    "tools/p1r-published-consumers/host/Host.csproj",
+    "tools/p1r-published-consumers/probe/Probe.csproj",
+    "tools/p1r-published-consumers/registration-probe/RegistrationProbe.csproj"
+  ],
+  "compileItemOverrides": [
+    {
+      "project": "src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj",
+      "attributes": {
+        "Include": "..\\Hexalith.EventStore\\**\\*.cs",
+        "Exclude": "..\\Hexalith.EventStore\\Program.cs;..\\Hexalith.EventStore\\bin\\**;..\\Hexalith.EventStore\\obj\\**",
+        "Link": "%(RecursiveDir)%(Filename)%(Extension)"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj",
+      "attributes": {
+        "Include": "..\\Hexalith.EventStore.PayloadProtection\\*.cs",
+        "Link": "Security\\PayloadProtection\\%(Filename)%(Extension)"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Authentication\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Authorization\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Commands\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Configuration\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Controllers\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "ErrorHandling\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Extensions\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Filters\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "HealthChecks\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Indexes\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Middleware\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Models\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "OpenApi\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Pipeline\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Queries\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Services\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "SignalRHub\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Telemetry\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "attributes": {
+        "Remove": "Validation\\**\\*.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tests/Hexalith.EventStore.DomainService.Tests/Hexalith.EventStore.DomainService.Tests.csproj",
+      "attributes": {
+        "Include": "../Hexalith.EventStore.Client.Tests/Projections/RecordingDaprClient.cs",
+        "Link": "Fixtures/RecordingDaprClient.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+      "attributes": {
+        "Include": "../Hexalith.EventStore.Client.Tests/Projections/RecordingDaprClient.cs",
+        "Link": "Projections/RecordingDaprClient.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+      "attributes": {
+        "Include": "../Hexalith.EventStore.PayloadProtection.Tests/InteractionOccurrenceProtectorFixture.cs",
+        "Link": "Security/InteractionOccurrenceProtectorFixture.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+      "attributes": {
+        "Include": "../Hexalith.EventStore.PayloadProtection.Tests/InteractionOccurrenceTestKeys.cs",
+        "Link": "Security/InteractionOccurrenceTestKeys.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "attributes": {
+        "Remove": "FixtureEvolutionManifest.cs"
+      },
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' != 'true' and '$(EventStoreVersion)' != '3.119.0' and '$(EventStoreVersion)' != '3.121.0' and '$(EventStoreVersion)' != '3.122.1' and '$(EventStoreVersion)' != '3.125.0' and '$(EventStoreVersion)' != '3.125.1' and '$(EventStoreVersion)' != '3.126.0'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "attributes": {
+        "Include": "../FixtureSnapshotQualification.cs",
+        "Link": "FixtureSnapshotQualification.cs"
+      },
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true' or '$(EventStoreVersion)' == '3.121.0' or '$(EventStoreVersion)' == '3.122.1' or '$(EventStoreVersion)' == '3.125.0' or '$(EventStoreVersion)' == '3.125.1' or '$(EventStoreVersion)' == '3.126.0'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "attributes": {
+        "Remove": "CounterSnapshotParity.cs"
+      },
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' != 'true' and '$(EventStoreVersion)' != '3.121.0' and '$(EventStoreVersion)' != '3.122.1' and '$(EventStoreVersion)' != '3.125.0' and '$(EventStoreVersion)' != '3.125.1' and '$(EventStoreVersion)' != '3.126.0'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "attributes": {
+        "Include": "../PublishedIdentity.cs",
+        "Link": "PublishedIdentity.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "attributes": {
+        "Include": "../PublishedIdentity.cs",
+        "Link": "PublishedIdentity.cs"
+      },
+      "effectiveConditions": []
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "attributes": {
+        "Include": "../domain/FixtureEvolutionManifest.cs",
+        "Link": "FixtureEvolutionManifest.cs"
+      },
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true' or '$(EventStoreVersion)' == '3.119.0' or '$(EventStoreVersion)' == '3.121.0' or '$(EventStoreVersion)' == '3.122.1' or '$(EventStoreVersion)' == '3.125.0' or '$(EventStoreVersion)' == '3.125.1' or '$(EventStoreVersion)' == '3.126.0'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "attributes": {
+        "Include": "../FixtureSnapshotQualification.cs",
+        "Link": "FixtureSnapshotQualification.cs"
+      },
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true' or '$(EventStoreVersion)' == '3.121.0' or '$(EventStoreVersion)' == '3.122.1' or '$(EventStoreVersion)' == '3.125.0' or '$(EventStoreVersion)' == '3.125.1' or '$(EventStoreVersion)' == '3.126.0'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "attributes": {
+        "Include": "../PublishedIdentity.cs",
+        "Link": "PublishedIdentity.cs"
+      },
+      "effectiveConditions": []
+    }
+  ],
+  "conditionalOrDynamicProjectReferences": [
+    {
+      "project": "src/Hexalith.EventStore.Admin.Server/Hexalith.EventStore.Admin.Server.csproj",
+      "include": "$(HexalithTenantsBasePath)/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(HexalithTenantsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "src/Hexalith.EventStore.AppHost/Hexalith.EventStore.AppHost.csproj",
+      "include": "$(HexalithTenantsBasePath)\\Hexalith.Tenants\\Hexalith.Tenants.csproj",
+      "effectiveConditions": [
+        "'$(HexalithTenantsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "src/Hexalith.EventStore.AppHost/Hexalith.EventStore.AppHost.csproj",
+      "include": "$(HexalithTenantsBasePath)\\Hexalith.Tenants.Api\\Hexalith.Tenants.Api.csproj",
+      "effectiveConditions": [
+        "'$(HexalithTenantsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "include": "$(HexalithCommonsRoot)\\src\\libraries\\Hexalith.Commons.UniqueIds\\Hexalith.Commons.UniqueIds.csproj",
+      "effectiveConditions": [
+        "'$(HexalithCommonsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+      "include": "$(HexalithTenantsBasePath)/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(HexalithTenantsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tests/Hexalith.EventStore.Server.Tests/Hexalith.EventStore.Server.Tests.csproj",
+      "include": "$(HexalithTenantsBasePath)/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(HexalithTenantsFromSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/domain/Domain.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/host/Host.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    },
+    {
+      "project": "tools/p1r-published-consumers/probe/Probe.csproj",
+      "include": "$(EventStoreSourceRoot)/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj",
+      "effectiveConditions": [
+        "'$(UseCurrentSource)' == 'true'"
+      ]
+    }
+  ],
+  "coverageLimits": [
+    "Static literal reference closure is not an evaluated Release graph or proof of extraction.",
+    "11,408 captured C# files and 55 docs C# files are currently inputs to none mode; they are not automatically compiled by the real solution.",
+    "Compile Remove/Include, conditional code and linked fixture files must be reconciled with actual compiler invocations, not directory membership.",
+    "Razor, REST API, JSON/regex and other source-generator outputs require explicit cold traced-build and extracted-source accounting.",
+    "Changing mode can change scanned source coverage. No current-equivalent coverage is claimed."
+  ],
+  "prerequisites": [
+    "Initialize the exact root-declared Builds gitlink (359fee24aeca4d9eabed4b425d4cfa2520b2adda) only; the current reusable checkout does not initialize it.",
+    "Provision global.json SDK 10.0.402; explicitly preserve Configuration=Release and UseHexalithProjectReferences=false package-reference graph.",
+    "For manual mode, add an actual traced cold rebuild between CodeQL init and analyze. The current reusable job has no build-step seam.",
+    "Autobuild discovery supports .slnx in the inspected CLI source, but its dotnet build command does not explicitly select Release; neither actual root selection nor Release coverage is validated here.",
+    "Account for PayloadProtection and its tests outside the solution, and all four P1R consumer projects with their owning source-mode/package-version prerequisites.",
+    "Preserve the existing security action/query/upload controls, then run fresh full qualification on any later approved source change."
+  ],
+  "requiredBeforeAnyProposalAcceptance": [
+    "Cold isolated build of every intended production/test/consumer graph and generated source, with exact commands and input hashes.",
+    "CodeQL database source reconciliation against every current source category, explaining every omission/addition and conditional branch.",
+    "Explicit owner decision on the coverage semantics for captured source, docs and uncompiled fixture data; no silent exclusions.",
+    "Actual current 120-minute run outcome and late managed-stack/output-progress observations retained."
+  ],
+  "owningFileSha256": {
+    "Hexalith.EventStore.slnx": "dd9c0a74a6ca81d50e05ddcfd336f4f92882d77afa313287d69cf2bc87e7fc74",
+    "global.json": "4d68d33fed8fe6c461c285b1e8c6db3c58c7cd951a61c0c8e26f60fc0da507c7",
+    "Directory.Build.props": "66b2d5f9b4b60ef17fff045881badc565fcca6e4dfb51919aee760feebb6f477",
+    "Directory.Build.targets": "c20dc10cd6c9ff0e76e5145a21be2fc64feddc1128aca1db97e1390b1c424fa8",
+    "Directory.Packages.props": "db5d5fe58b48b384b9bd311e22cc29cccc4fdb41fe5bcb29ac39d5439f98a58e",
+    ".github/workflows/ci.yml": "1388d7b2f4cf96d01da3f078c09c975768c89ac79e14ef649635b7c2f79a0ae7",
+    ".github/workflows/codeql.yml": "2ae1603ef653d8b0fab4bf549ff8bc02727a28f7a3db49843b40867443d1253f",
+    "tools/p1r-published-consumers/Directory.Build.props": "a9675de8a4f4c87e5439909af823388abd8a9c53dee9d74b1205dac563615be4",
+    "tools/p1r-published-consumers/Directory.Packages.props": "9402d8e36d276d3934f544050200c4d38120a089f6749eec53b795fda32d3042"
+  },
+  "officialReferences": [
+    {
+      "url": "https://docs.github.com/en/code-security/reference/code-scanning/codeql/build-options-for-compiled-languages",
+      "supports": "C# all-source none mode, dependency/collision limitations, autodetection and generated compiler flags."
+    },
+    {
+      "url": "https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/manage-your-configuration/codeql-for-compiled-languages",
+      "supports": "Manual mode analyzes source built by explicit traced build steps."
+    },
+    {
+      "url": "https://github.com/github/codeql/blob/a1575b98a8cc19bcfa7bb6cb41be688cb3dae65c/csharp/autobuilder/Semmle.Autobuild.Shared/Autobuilder.cs#L172",
+      "supports": "Solution discovery including language-specific solution extensions."
+    },
+    {
+      "url": "https://github.com/github/codeql/blob/a1575b98a8cc19bcfa7bb6cb41be688cb3dae65c/csharp/autobuilder/Semmle.Autobuild.CSharp/DotNetRule.cs#L133",
+      "supports": "Actual CLI dotnet build command with no-incremental but no explicit Release configuration."
+    },
+    {
+      "url": "https://github.com/github/codeql/blob/a1575b98a8cc19bcfa7bb6cb41be688cb3dae65c/csharp/extractor/Semmle.Util/Language.cs#L6",
+      "supports": "CSharp language explicitly declares .slnx solution extension."
+    }
+  ]
+}

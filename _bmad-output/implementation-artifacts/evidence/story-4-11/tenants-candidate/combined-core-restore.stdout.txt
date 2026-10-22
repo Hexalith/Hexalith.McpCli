@@ -1,0 +1,12 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj (in 71 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj (in 167 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj (in 174 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj (in 150 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj (in 167 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.Lint.Contracts/Catalog.Lint.Contracts.csproj (in 285 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 281 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj (in 282 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Catalog.Routing.Contracts/Catalog.Routing.Contracts.csproj (in 274 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj (in 1.15 sec).
+  5 of 15 projects are up-to-date for restore.

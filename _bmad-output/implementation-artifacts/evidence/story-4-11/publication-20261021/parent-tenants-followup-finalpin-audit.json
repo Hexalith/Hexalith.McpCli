@@ -1,0 +1,182 @@
+{
+  "capturedAtUtc": "2026-10-22T03:24:34.801107+00:00",
+  "parentAudit": true,
+  "finalTenantsHead": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "finalTenantsTree": "2720e9e26859c12470438d3056f6a2502660596e",
+  "sourceManifests": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-source-inputs.full.json",
+      "bytes": 29302105,
+      "sha256": "bf251b9e947028830bec00a19901ef6c65c910321325364fe626806441fc3688"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-source-inputs.full.json",
+      "bytes": 29302103,
+      "sha256": "8590bc2498bb9c8793cd9ffb78fbe9942c11ea1dbd2042518c4b6d0dac4cb154"
+    }
+  ],
+  "exactManifestRowsCompared": 87674,
+  "repositories": [
+    {
+      "name": "tenants",
+      "equalRows": 3792,
+      "equalBytes": 126861701,
+      "originalHead": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "finalHead": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "originalIndexTree": "ea34d460bf3a4d4bc0e4e2c8552cf99a97e7d65b",
+      "finalIndexTree": "2720e9e26859c12470438d3056f6a2502660596e",
+      "gitlinksChanged": true
+    },
+    {
+      "name": "builds",
+      "equalRows": 1981,
+      "equalBytes": 148326046,
+      "originalHead": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+      "finalHead": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+      "originalIndexTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+      "finalIndexTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+      "gitlinksChanged": false
+    },
+    {
+      "name": "frontcomposer",
+      "equalRows": 30934,
+      "equalBytes": 5381540926,
+      "originalHead": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7",
+      "finalHead": "7fcfb019bf94fa858410726fe9a1506f3a2e36a7",
+      "originalIndexTree": "811e7eafb67eb6e8170a3089cba9e6ef81aae0dd",
+      "finalIndexTree": "811e7eafb67eb6e8170a3089cba9e6ef81aae0dd",
+      "gitlinksChanged": false
+    },
+    {
+      "name": "eventstore-model-paths",
+      "equalRows": 44720,
+      "equalBytes": 6138946118,
+      "originalHead": "5ce5f1d84b88c808cc8a526b9decf149de977e55",
+      "finalHead": "5ce5f1d84b88c808cc8a526b9decf149de977e55",
+      "originalIndexTree": "09f627fcc5d71874d9268dd9efcd729f91b88632",
+      "finalIndexTree": "09f627fcc5d71874d9268dd9efcd729f91b88632",
+      "gitlinksChanged": false
+    },
+    {
+      "name": "memories-model-paths",
+      "equalRows": 6247,
+      "equalBytes": 83691150,
+      "originalHead": "921fee32fb1d03da1e1770a9747ecaeacc8abd7c",
+      "finalHead": "921fee32fb1d03da1e1770a9747ecaeacc8abd7c",
+      "originalIndexTree": "61dd9568b2765d92392f041bcb788199f307a50d",
+      "finalIndexTree": "61dd9568b2765d92392f041bcb788199f307a50d",
+      "gitlinksChanged": false
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exitCode": 0,
+      "pythonSummary": null
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_validate_changed_story_gitlinks.py"
+      ],
+      "exitCode": 0,
+      "pythonSummary": [
+        "Ran 49 tests in 5.675s",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_validate_story_gitlinks.py"
+      ],
+      "exitCode": 0,
+      "pythonSummary": [
+        "Ran 77 tests in 7.633s",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_pushall_detached_head.py"
+      ],
+      "exitCode": 0,
+      "pythonSummary": [
+        "Ran 13 tests in 2.565s",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_pushall_default_branch.py"
+      ],
+      "exitCode": 0,
+      "pythonSummary": [
+        "Ran 31 tests in 11.596s",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/contracts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Contracts.Tests.trx"
+      ],
+      "exitCode": 0,
+      "pythonSummary": null
+    }
+  ],
+  "trx": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/contracts/Hexalith.Tenants.Contracts.Tests.trx",
+    "bytes": 1010615,
+    "sha256": "79e1ef65e7c98c58ab107ddecb0f8feaeb14641d3205692fa624c0fc64c1ceda"
+  },
+  "trxResults": 654,
+  "all654ActualResultsPassed": true,
+  "changedObjects": [
+    {
+      "path": ".github/workflows/release.yml",
+      "object": "82199593f0c1b6bcf5848151c165d63a10fc74d1"
+    },
+    {
+      "path": "Directory.Build.targets",
+      "object": "6d0fffc37c616766a38e9d9c338fe0eadab72c62"
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "object": "c0cbbbd4366d512cc1731397f14dd53a7a01580d"
+    },
+    {
+      "path": "tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs",
+      "object": "0e2a1f380ad359d90988048b999fe736ff502a87"
+    }
+  ],
+  "approvedProductionSourceTreesUnchanged": [
+    {
+      "path": "src/Hexalith.Tenants.Contracts",
+      "tree": "2f53281b5630845de789ca73e13635ed9f3b44a2"
+    },
+    {
+      "path": "src/Hexalith.Tenants.Client",
+      "tree": "b84bb4d896dbf2bff5923540cd7dbbb107838776"
+    }
+  ],
+  "scope": "Read-only independent comparison of full manifest rows and byte/hash bindings; no fresh full-checkout byte scan. Remote exact-source PR/main CI and normal release gates still mandatory.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

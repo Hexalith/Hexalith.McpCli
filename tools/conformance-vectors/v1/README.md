@@ -107,10 +107,14 @@ inventory, coverage or approval fail; the dependency gate remains independent.
 Inventory bytes must match the approved digest before verification, and the
 verifier checks that digest again when freezing its input. Package IDs and their
 approval directory names compare case-insensitively; versions remain exact.
-`Hexalith.Parties.Contracts` 1.5.1 is enrolled with all seven vectors and its
-exact signed-archive receipt under `modules/Hexalith.Parties.Contracts/`.
-The receipt links the actual candidate approval and the published-artifact
-binding; only `/package/version` changes when copying the approved vectors.
+`Hexalith.Parties.Contracts` 1.5.1 has all seven vectors and its exact signed-archive
+receipt under `modules/Hexalith.Parties.Contracts/`. Tenants 5.10.0 has fourteen byte-identical approved vectors and its actual signed-archive
+receipt under `modules/Hexalith.Tenants.Contracts/`. Receipts link the owner approval
+and published-artifact bindings. Parties vectors changed only `/package/version`
+from their approved candidate; the selected Tenants version preserves every
+original approved vector byte. The mandatory repaired normal Tenants 5.10.1
+five-package/container release has qualified separately from these exact enrolled
+NuGet identities.
 
 Passing replay establishes transport envelopes and result/error parity against
 a scripted Gateway. It supplies no live authorization, domain-effect or retirement
@@ -201,11 +205,13 @@ warm-up builds or retries. Evidence records the assembly/module/operation popula
 identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
 The existing isolated String-kind Catalog test remains part of Core.Tests.
 
-Tenants currently has no approved published decorated artifact, enrollment,
-release inventory or release-bound vector set. The Story 4.8 `0.0.0-story48`
-candidate approval cannot authorize release bytes; the pinned 5.9.0 package predates
-decoration. Story 4.11 stays open until the exact Tenants candidate receives the
-required publication approval, is published/enrolled, and both production modules
-pass replay and the strict benchmark. Scripted replay establishes transport parity;
-live authorization, privacy sanitization, persisted effects and legacy retirement
-retain their Story 4.13 and retirement gates.
+The authentic signed Tenants 5.10.0 Contracts artifact passes all fourteen original
+vectors and the approved twenty inventory decisions. The selected enrollment keeps
+that exact version and the qualified Builds pin. The separate normal 5.10.1 five-package
+and container release qualifies the approved provenance repair; its version
+is not claimed as the enrolled Contracts version. The original 5.10.0 container's
+malformed labels remain historical failures. Story 4.11 stays open while the
+final strict Ubuntu 21-operation replay and cold 500 ms benchmark remain pending. The earlier Story 4.8 scratch package and 5.9.0
+pin are historical and do not authorize the published bytes. Scripted replay
+establishes transport parity; live authorization, privacy sanitization, persisted
+effects and legacy retirement retain their Story 4.13 and retirement gates.

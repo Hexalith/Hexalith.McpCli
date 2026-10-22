@@ -1,0 +1,120 @@
+{
+  "checkedAtUtc": "2026-10-21T23:09:25.431Z",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runId": 39685338657,
+  "scope": "Run is still in progress; all capture/serialization validations and final job conclusion remain required.",
+  "jobs": [
+    {
+      "id": 119518035231,
+      "name": "live-sidecar",
+      "status": "in_progress",
+      "conclusion": null,
+      "run_id": 39685338657,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Initialize Hexalith.Builds submodule",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Initialize .NET",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Install pinned OQ8 validator dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Cache NuGet packages",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Restore",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Initialize Dapr",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Pull PostgreSQL container image",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run Live-Sidecar Integration Tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Verify IntegrationTests serialized execution metadata",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 11
+        },
+        {
+          "name": "Capture and validate OQ8 production evidence",
+          "status": "pending",
+          "conclusion": null,
+          "number": 12
+        },
+        {
+          "name": "Upload fresh validated OQ8 capture",
+          "status": "pending",
+          "conclusion": null,
+          "number": 13
+        },
+        {
+          "name": "Upload live-sidecar test results",
+          "status": "pending",
+          "conclusion": null,
+          "number": 14
+        },
+        {
+          "name": "Post Cache NuGet packages",
+          "status": "pending",
+          "conclusion": null,
+          "number": 26
+        },
+        {
+          "name": "Post Initialize .NET",
+          "status": "pending",
+          "conclusion": null,
+          "number": 27
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "pending",
+          "conclusion": null,
+          "number": 28
+        }
+      ]
+    }
+  ]
+}

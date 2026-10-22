@@ -1,0 +1,42 @@
+[
+  {
+    "label": "stage",
+    "command": [
+      "git",
+      "add",
+      "--",
+      "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/packet-sha256.sanitized-9e34d17b.json",
+      "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/packet-sha256.sanitized-9e34d17b.json",
+      "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/replacement-receipt-9e34d17b.json",
+      "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/README.md"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "commit",
+    "command": [
+      "git",
+      "commit",
+      "-F",
+      "/tmp/mcpcli-story411-eventstore-current-evidence-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/p1r-qualification-time-budget a616dec6a] build(evidence): preserve successive diagnostic bindings\n 4 files changed, 412 insertions(+), 1 deletion(-)\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/packet-sha256.sanitized-9e34d17b.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/packet-sha256.sanitized-9e34d17b.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/replacement-receipt-9e34d17b.json\n",
+    "stderr": ""
+  },
+  {
+    "label": "push",
+    "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   703e14e69..a616dec6a  HEAD -> fix/p1r-qualification-time-budget\n"
+  }
+]

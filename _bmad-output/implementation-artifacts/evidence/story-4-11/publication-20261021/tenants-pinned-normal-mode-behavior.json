@@ -1,0 +1,57 @@
+{
+  "publisherExecutionPin": "22a578b576a515d2af214fe81859447fffc97981",
+  "publisherSha256": "7e64bb1f744b9e3cb793df5c47813d15db00aaa8bc76e1875088f259574e9622",
+  "workflowSha256": "e824a878bccce8ed10f8dcdc8553c91926143f245252a01ead1b5a2a91c3211d",
+  "fixture": "/tmp/mcpcli-story411-tenants-publisher-mode-3lp3gywi/Github/publish-containers/tests/test_publish_script_contract.py",
+  "fixtureSha256": "7658901f53ec0d580f97e857ab9bca00449dfc2f8b06577d871a150306477df7",
+  "registryWrites": false,
+  "fixtureToolsOnly": true,
+  "scope": "Only the declared normal-authority mode and failure when the setting is removed. Shared fixture uses fake publisher tools and preflight; it supplies no full registry/source qualification credit.",
+  "checks": [
+    {
+      "case": "normal-workflow",
+      "declared": "false",
+      "exitCode": 0,
+      "stdout": "[publish-containers] Publishing registry.example.test/eventstore:5.10.0 from /tmp/tmp77pgfj_h/EventStore.csproj\n",
+      "stderr": "",
+      "fakePreflightArgv": [
+        "--repository",
+        "Hexalith/Hexalith.EventStore",
+        "--version",
+        "5.10.0",
+        "--source-sha",
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "--source-branch",
+        "main",
+        "--source-ci-workflow",
+        "ci.yml",
+        "--builds-execution-sha",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "--environment-name",
+        "production",
+        "--package-manifest",
+        "/tmp/tmp77pgfj_h/release-packages.json",
+        "--expected-package-count",
+        "14",
+        "--contract-directory",
+        "/tmp/mcpcli-story411-tenants-publisher-mode-3lp3gywi/Github/publish-containers",
+        "--evidence-directory",
+        "/tmp/tmp77pgfj_h/evidence/preflight",
+        "--phase",
+        "container",
+        "--container-repository",
+        "registry.example.test/eventstore"
+      ],
+      "scratch": "/tmp/tmp77pgfj_h"
+    },
+    {
+      "case": "setting-removed",
+      "declared": null,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "[publish-containers] HEXALITH_RELEASE_RESERVED_VERSION must be a stable semantic version.\n",
+      "fakePreflightArgv": [],
+      "scratch": "/tmp/tmpr14z5lcw"
+    }
+  ]
+}

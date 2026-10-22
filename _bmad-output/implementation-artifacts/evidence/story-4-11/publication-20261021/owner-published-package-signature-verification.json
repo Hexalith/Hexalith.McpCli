@@ -1,0 +1,46 @@
+{
+  "checkedAtUtc": "2026-10-22T01:05:42.682066+00:00",
+  "command": [
+    "dotnet",
+    "nuget",
+    "verify",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.admin.abstractions.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.admin.cli.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.admin.server.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.aspire.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.client.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.contracts.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.domainservice.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.gateway.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.restapi.generators.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.server.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.servicedefaults.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.signalr.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.testing.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.eventstore.testing.integration.3.126.1.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.aspire.5.10.0.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.client.5.10.0.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.contracts.5.10.0.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.server.5.10.0.nupkg",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages/hexalith.tenants.testing.5.10.0.nupkg",
+    "--all",
+    "--verbosity",
+    "normal"
+  ],
+  "exitCode": 0,
+  "packages": 19,
+  "privateLogs": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/signature-verification.stdout.txt",
+      "bytes": 34015,
+      "sha256": "ed1f6cb70768ba46c57994c434e468fede1f1094b9cae973e4cc4eb693d558d6"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/signature-verification.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

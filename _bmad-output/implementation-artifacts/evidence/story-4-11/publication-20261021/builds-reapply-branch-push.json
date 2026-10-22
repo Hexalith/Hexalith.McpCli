@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "push",
+    "--set-upstream",
+    "origin",
+    "HEAD:refs/heads/fix/container-provenance-protected-reapply"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/builds",
+  "exitCode": 0,
+  "stdout": "branch 'fix/container-provenance-protected-reapply' set up to track 'origin/fix/container-provenance-protected-reapply'.\n",
+  "stderr": "remote: \nremote: Create a pull request for 'fix/container-provenance-protected-reapply' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Builds/pull/new/fix/container-provenance-protected-reapply        \nremote: \nTo https://github.com/Hexalith/Hexalith.Builds.git\n * [new branch]      HEAD -> fix/container-provenance-protected-reapply\n"
+}

@@ -1,0 +1,56 @@
+{
+  "recordedAtUtc": "2026-10-21T22:12:35.404269+00:00",
+  "source": "83e5f2d257d91f98f827443f960832322a63da94",
+  "scope": "Measured sizing for workflow budget only; full exact-source remote acceptance remains pending.",
+  "measured": {
+    "complete10001StreamedCasePassed": true,
+    "caseSecondsConservativeAdjacentReceiptInterval": 300.3657534122467,
+    "basis": "Interval from previous successful buffered129 resume receipt to successful streamed10001 resume receipt; includes intervening controller/process overhead. Actual runner emitted PASS for complete10001 case.",
+    "receipts": [
+      {
+        "name": "buffered-129-resume.json",
+        "sha256": "6da6ac3a2c60f8294bb14e7b2128842f5299b2599f3057a6b49d053513b1b269",
+        "bytes": 473062,
+        "mtimeUtc": "2026-10-21T22:05:27.148668+00:00"
+      },
+      {
+        "name": "streamed-10001-stage.json",
+        "sha256": "d52a845c3a013057b2d49861105dfe731a244bc4f4b0ea5ec1c89db9fbcc47b5",
+        "bytes": 473183,
+        "mtimeUtc": "2026-10-21T22:07:50.345178+00:00"
+      },
+      {
+        "name": "streamed-10001-promote.json",
+        "sha256": "01cdffab8a7ba67b87f6ae6860237e61efcbf287b882996f24194985edd31a88",
+        "bytes": 473242,
+        "mtimeUtc": "2026-10-21T22:07:53.041286+00:00"
+      },
+      {
+        "name": "streamed-10001-resume.json",
+        "sha256": "78c042a5314c1f82af4071c9ce09735937b1784bec08d8648cd60ea4e29c3a78",
+        "bytes": 473068,
+        "mtimeUtc": "2026-10-21T22:10:27.514421+00:00"
+      }
+    ]
+  },
+  "historical": {
+    "normalBaseSuiteMinutesApproximately": 20.5,
+    "reference": "Successful b6d1807 normal integration run39626968579, approximately15:34 to15:55; prior25m limit failure is retained in eventstore-261e-integration-failure-summary.json."
+  },
+  "inferred": {
+    "assumption": "Linear owner-count sizing at measured10001-case rate; buffered and streamed large modes provisioned equally. This is not a measured full suite duration.",
+    "largeCaseCounts": [
+      10001,
+      32769,
+      10001,
+      32769
+    ],
+    "largeCasesMinutes": 42.81786245856012,
+    "plusHistoricalBaseMinutes": 63.31786245856012
+  },
+  "chosenBoundMinutes": 90,
+  "unchangedPhaseBoundMinutes": 20,
+  "allTestCasesAndCaptureStepsRemain": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

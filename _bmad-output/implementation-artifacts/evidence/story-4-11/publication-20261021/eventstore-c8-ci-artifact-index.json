@@ -1,0 +1,73 @@
+{
+  "observedAtUtc": "2026-10-22 00:00:44 UTC",
+  "head": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "run": {
+    "id": 39693568192,
+    "status": "completed",
+    "conclusion": "success",
+    "event": "pull_request",
+    "path": ".github/workflows/ci.yml",
+    "updatedAt": "2026-10-21T23:59:40Z",
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693568192"
+  },
+  "artifacts": [
+    {
+      "id": 12390409157,
+      "name": "blocking-test-results",
+      "size_in_bytes": 2074930,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390409157",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390409157/zip",
+      "expired": false,
+      "created_at": "2026-10-21T23:59:36Z",
+      "expires_at": "2026-10-28T23:59:35Z",
+      "updated_at": "2026-10-21T23:59:36Z",
+      "digest": "sha256:a12e7d851574994ffa1f48f8ce8e5dd74f95d0b658bce474658cd494c0181bfc",
+      "workflow_run": {
+        "id": 39693568192,
+        "repository_id": 1155154671,
+        "head_repository_id": 1155154671,
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86"
+      }
+    },
+    {
+      "id": 12390239187,
+      "name": "contracts-test-results",
+      "size_in_bytes": 406934,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390239187",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390239187/zip",
+      "expired": false,
+      "created_at": "2026-10-21T23:46:05Z",
+      "expires_at": "2026-10-28T23:46:04Z",
+      "updated_at": "2026-10-21T23:46:05Z",
+      "digest": "sha256:cfb24d2c70d235f9fdd75e66927ef0a995a350291d3432a5c3ae3f35b5d7f0c9",
+      "workflow_run": {
+        "id": 39693568192,
+        "repository_id": 1155154671,
+        "head_repository_id": 1155154671,
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86"
+      }
+    },
+    {
+      "id": 12390106250,
+      "name": "tenants-source-mode-test-results",
+      "size_in_bytes": 2131,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390106250",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12390106250/zip",
+      "expired": false,
+      "created_at": "2026-10-21T23:31:28Z",
+      "expires_at": "2026-10-28T23:31:27Z",
+      "updated_at": "2026-10-21T23:31:28Z",
+      "digest": "sha256:6aa75036ffa940e354f8f58646cb26472bf442345d9a00e52bb8cf2216acf8c6",
+      "workflow_run": {
+        "id": 39693568192,
+        "repository_id": 1155154671,
+        "head_repository_id": 1155154671,
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86"
+      }
+    }
+  ]
+}
+

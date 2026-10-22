@@ -1,0 +1,434 @@
+{
+  "startedAtUtc": "2026-10-22T03:59:24.298271+00:00",
+  "scope": "Uncommitted configuration-only enrollment proposal. Existing six ordinary projects run once individually with named native TRX; fresh normal NuGet cache. Full repaired upstream release remains pending. These local checks and default non-strict cold test do not grant production/full-v1 acceptance; final strict replay/benchmark are withheld until prerequisite qualification.",
+  "rootHead": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+  "builds": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "cache": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages",
+  "cacheInitiallyAbsent": true,
+  "inputsBefore": {
+    "sha256": "9ba3e695935d90e63b22877ba773679413364931c9e2cea89bd854a48d24e889",
+    "count": 364,
+    "privateManifest": {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-inputs-before.json",
+      "bytes": 70367,
+      "sha256": "5fa41093ee61b3f669618305ba03cf6d451d73d26607417343c80f6aef76c4b2"
+    }
+  },
+  "inputPredicate": "Tracked src/, tests/, tools/ files plus README, global.json, root Directory.* and .slnx, editor/gitattributes, CI workflow, and every proposed shipped enrollment input. External owner/evidence records are excluded; no source file changes during this run are allowed.",
+  "commands": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "project": null,
+      "startedAtUtc": "2026-10-22T03:59:24.300222+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.6849929640011396,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/0.stdout.txt",
+          "bytes": 3106,
+          "sha256": "ec9c7444414e8525d61d538b082546eba2257bd910a0224ac28ca2034c7a494f"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/0.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "project": null,
+      "startedAtUtc": "2026-10-22T03:59:26.985771+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 5.703770013002213,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/1.stdout.txt",
+          "bytes": 3684,
+          "sha256": "0ae7380b8ed21c76b76fd0aaf978c5931b9955b83a05bdbdf0e480cda33da0d8"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/1.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Abstractions.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Abstractions.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Abstractions.Tests",
+      "startedAtUtc": "2026-10-22T03:59:32.688262+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.1257318700081669,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/2.stdout.txt",
+          "bytes": 644,
+          "sha256": "369a2e6da84861058b84acc101fd99a5e9b8afed8bd06d492b71fbca7117e75e"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/2.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+        "bytes": 30162,
+        "sha256": "5226da320d9948bd49928ac8e89833bc6ea3e24f63b1e4abc9e19498625a89f3"
+      },
+      "counters": {
+        "total": "20",
+        "executed": "20",
+        "passed": "20",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 20
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Analyzers.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Analyzers.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Analyzers.Tests",
+      "startedAtUtc": "2026-10-22T03:59:33.814879+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.1460390430002008,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/3.stdout.txt",
+          "bytes": 632,
+          "sha256": "b6b85ea0563dd25fe926bfa1f67a654918794d34a150195b90f8a0b2447bc038"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/3.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+        "bytes": 29886,
+        "sha256": "b618667f353134484fef0c479beecad357c0649ae5d8509bdd0ab250839e9683"
+      },
+      "counters": {
+        "total": "19",
+        "executed": "19",
+        "passed": "19",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 19
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Core.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Core.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Core.Tests",
+      "startedAtUtc": "2026-10-22T03:59:36.961774+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.016537064992008,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/4.stdout.txt",
+          "bytes": 1197,
+          "sha256": "bf903fffcd4d6264f7b0ffe67f2a128285e8104b5dac29db27939008cc7de3da"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/4.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+        "bytes": 985409,
+        "sha256": "41b74c5be6bb492680cdcb1ae8e5eecea85267c0a139018ce4a192cf7fb04249"
+      },
+      "counters": {
+        "total": "678",
+        "executed": "676",
+        "passed": "676",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "2",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 676,
+        "NotExecuted": 2
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Manifest.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Manifest.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Manifest.Tests",
+      "startedAtUtc": "2026-10-22T03:59:38.985734+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 23.062370757004828,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/5.stdout.txt",
+          "bytes": 630,
+          "sha256": "d34a05c403f20674138b99210591e91747be1060fd8ea5328ab57c97e9a8e722"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/5.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+        "bytes": 153921,
+        "sha256": "963c13267433a2905e032b2c0acccbbfeea9014bf7348394a9d84b7f4f31ce71"
+      },
+      "counters": {
+        "total": "104",
+        "executed": "104",
+        "passed": "104",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 104
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Cli.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Cli.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Cli.Tests",
+      "startedAtUtc": "2026-10-22T04:00:02.049969+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 152.95106645800115,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/6.stdout.txt",
+          "bytes": 1239,
+          "sha256": "16da46177d368e6fbe41a29eedf909388be53f2d593556c728a11b6320df348c"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/6.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+        "bytes": 717306,
+        "sha256": "e19667d44e2b823eea07f3cf33ada389840801590379c64c7dceded20b7f3fd3"
+      },
+      "counters": {
+        "total": "481",
+        "executed": "479",
+        "passed": "479",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "2",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 479,
+        "NotExecuted": 2
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Mcp.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Mcp.Tests.trx"
+      ],
+      "project": "Hexalith.McpCli.Mcp.Tests",
+      "startedAtUtc": "2026-10-22T04:02:35.000799+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.00673634299892,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/7.stdout.txt",
+          "bytes": 596,
+          "sha256": "e1488046bfa0c528b450c3d924e975f355930d524e06e0304efa108bdcd199a5"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/7.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-local/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+        "bytes": 85569,
+        "sha256": "f91d43100a2309cb2bac5b2f46ef999061c85c09900e4a3d9530931fb70db638"
+      },
+      "counters": {
+        "total": "58",
+        "executed": "58",
+        "passed": "58",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "outcomes": {
+        "Passed": 58
+      }
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed",
+  "completedAtUtc": "2026-10-22T04:02:37.018332+00:00",
+  "inputsAfter": {
+    "sha256": "9ba3e695935d90e63b22877ba773679413364931c9e2cea89bd854a48d24e889",
+    "count": 364,
+    "privateManifest": {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/dotnet-inputs-after.json",
+      "bytes": 70367,
+      "sha256": "5fa41093ee61b3f669618305ba03cf6d451d73d26607417343c80f6aef76c4b2"
+    }
+  },
+  "sourceAndShippedInputsUnchanged": true,
+  "totals": {
+    "total": 1360,
+    "passed": 1356,
+    "failed": 0,
+    "notExecuted": 4
+  }
+}

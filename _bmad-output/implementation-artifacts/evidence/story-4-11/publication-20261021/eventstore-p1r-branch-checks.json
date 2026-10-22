@@ -1,0 +1,72 @@
+[
+  {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-p1r-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": "",
+    "message": "ci(p1r): allow bounded qualification suites to finish\n\nRaise the preparation job budget from 15 to 30 minutes. Passing suites\nconsumed about 13 minutes in run 39663430445 before registration and\nisolation controls, so the previous limit cancelled required coverage.\nRetain every test and all exact-source release gates.\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "add",
+      "--",
+      ".github/workflows/p1r-qualification.yml"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "exitCode": 0,
+    "stdout": ".github/workflows/p1r-qualification.yml\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "commit",
+      "--file",
+      "/tmp/mcpcli-story411-eventstore-p1r-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/p1r-qualification-time-budget 6789d43e] ci(p1r): allow bounded qualification suites to finish\n 1 file changed, 3 insertions(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "push",
+      "--set-upstream",
+      "origin",
+      "fix/p1r-qualification-time-budget"
+    ],
+    "exitCode": 0,
+    "stdout": "branch 'fix/p1r-qualification-time-budget' set up to track 'origin/fix/p1r-qualification-time-budget'.\n",
+    "stderr": "remote: \nremote: Create a pull request for 'fix/p1r-qualification-time-budget' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/pull/new/fix/p1r-qualification-time-budget        \nremote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n * [new branch]          fix/p1r-qualification-time-budget -> fix/p1r-qualification-time-budget\n"
+  }
+]

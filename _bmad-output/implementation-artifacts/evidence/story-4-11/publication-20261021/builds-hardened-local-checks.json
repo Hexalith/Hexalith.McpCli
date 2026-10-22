@@ -1,0 +1,28 @@
+[
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "Github/publish-containers/tests",
+      "-v"
+    ],
+    "exitCode": 0,
+    "seconds": 6.663657136996335
+  },
+  {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-builds-test-hardening-commit.txt"
+    ],
+    "exitCode": 0,
+    "seconds": 0.36349021299974993
+  }
+]

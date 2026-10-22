@@ -1,0 +1,82 @@
+{
+  "observedAtUtc": "2026-10-22T03:49:03.401913+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "run": 39716321803,
+  "job": 119621694153,
+  "jobConclusion": "failure",
+  "wholeCiConclusion": "success",
+  "existingPolicy": "Resolved Builds c0 domain-ci.yml input aspire-continue-on-error defaults true; caller supplies no override; job consumes that input. This is an existing advisory tier, not a waived blocking requirement.",
+  "normalGateIndependentAudit": "parent-tenants-pr54-normal-ci-gate-audit.json",
+  "totals": {
+    "total": 316,
+    "passed": 313,
+    "failed": 3,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "name": "Hexalith.Tenants.IntegrationTests.TenantsApiStructuralTests.TenantsSources_DelegateDaprRoutingHeaderOwnershipToThePlatformHandlerOnly",
+      "exceptionPrefix": "Shouldly.ShouldAssertException : string[] setterViolations = TenantsSourceFiles()",
+      "duration": "00:00:00.0530000"
+    },
+    {
+      "name": "Hexalith.Tenants.IntegrationTests.AspireTopologyTests.Generated_tenants_api_get_tenant_reads_verified_redis_state_with_projection_authority",
+      "exceptionPrefix": "System.TimeoutException : tenants-api /alive did not return HTTP 200 within 00:04:00. Last status: n/a, Last error: The SSL connection could not be established, see inner exception..",
+      "duration": "00:04:00.0140000"
+    },
+    {
+      "name": "Hexalith.Tenants.IntegrationTests.AspireTopologyTests.Aha_moment_demo_revokes_sample_access_from_tenant_events",
+      "exceptionPrefix": "System.TimeoutException : Redis key 'tenants||projection:tenants:aha-f61e62a59f864687859ba8ef09f88b06' did not contain the expected tenant read model within 00:01:00. Last payload present: True. Expected projection versi",
+      "duration": "00:01:02.0250000"
+    }
+  ],
+  "classification": {
+    "routingHeaderOwnership": "Existing AD18 violation already tracked at _bmad-output/implementation-artifacts/deferred-work.md:525; no duplicate ledger entry or guard change.",
+    "httpsAndRedis": "Observed /alive TLS and projection-version convergence timeouts; not classified as established new code defects. Retain exact observations under separate live/Story4.13 limits."
+  },
+  "failedSteps": [
+    {
+      "name": "Aspire contract tests (Tier 3, non-Performance, Microsoft.Testing.Platform)",
+      "conclusion": "failure",
+      "started_at": "2026-10-22T03:35:55Z",
+      "completed_at": "2026-10-22T03:42:46Z"
+    }
+  ],
+  "privateEvidence": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/job.log",
+      "bytes": 3587841,
+      "sha256": "6410f06ca58c268ab0460b88f8b9439551609674c9563faca64635850a371a22"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/job.json",
+      "bytes": 4502,
+      "sha256": "6d99662f4ac6ca5be76d47812018b066305aef9ed1d3550d4cdd103b7d7d21d8"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/artifacts.json",
+      "bytes": 1826,
+      "sha256": "1a5298ce74bc6c713bf46b38885172faa6f20213e45d7c1640bb9d5a10c229a6"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/aspire-test-results.zip",
+      "bytes": 50359,
+      "sha256": "227fb3817f460cdb8cc198b2f9ebbd71a764db8bf7da5416cd6932fd70ed9edd"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/aspire-results.trx",
+      "bytes": 516132,
+      "sha256": "ba0ddf1262be5e355ca19e932f61b132cb6fe80a76152187bd7eeb29499dcfc5"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pr54-aspire-failure/parsed-summary.json",
+      "bytes": 1792,
+      "sha256": "a55c9c418b0dea1355f26742487c2cabea2f184e705f627589a89dc5b9e4bf17"
+    }
+  ],
+  "noRuntimeOrControlChange": true,
+  "noRerunPerformed": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

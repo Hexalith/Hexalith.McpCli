@@ -1,0 +1,124 @@
+{
+  "checkedAtUtc": "2026-10-22T01:17:15.797851+00:00",
+  "actualPublishedVersion": "5.10.0",
+  "actualPackageDependencies": [
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "artifactHash": "sha512-vnZhAt055+sS//VCTZ7Fa5fONeOc+I9gyA54/x++52z0vdvCObGoD3JYjMJuDMcWQ3PWtt6ClJsUkwOg0XUDjA==",
+      "assetsHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "cacheContentHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "registryArchiveSha256": "53fd5f378a997557725fa03e8627074f940b016fd9f5a34aed981e04053b698b",
+      "registryRepositoryCommit": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "archiveExactlyMatchesRegistry": true
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "artifactHash": "sha512-yvA2kbvDl34vfzoYIZXohfAasqqcds7k7dGefu5ocNSlZO0Z6PwwJ9O7SvHMxpN4qu35+lma4ZVpUcFhOPpEjw==",
+      "assetsHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "cacheContentHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "registryArchiveSha256": "9de3a0646f638b155b93043dc18f9c0cbe6f4051c254366ef2ba91416a0058de",
+      "registryRepositoryCommit": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "archiveExactlyMatchesRegistry": true
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "assetsHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "cacheContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "registryArchiveSha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234",
+      "registryRepositoryCommit": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "archiveExactlyMatchesRegistry": true
+    }
+  ],
+  "approvedCatalogAndPublishedCatalogExactlyEqual": true,
+  "candidateCatalog": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/artifact-verification/catalog.stdout.txt",
+    "sha256": "9e221451edcc055f8ff18ab8c06638767fccac19255b5de1389fc3d477b8e2d0"
+  },
+  "publishedCatalog": {
+    "path": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/owner-published-tenants-artifact-verification/catalog.stdout.txt",
+    "sha256": "9e221451edcc055f8ff18ab8c06638767fccac19255b5de1389fc3d477b8e2d0"
+  },
+  "originalVectorCount": 14,
+  "originalVectorBindings": [
+    {
+      "path": "vectors/add-user-to-tenant.vector.json",
+      "sha256": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/change-user-role.vector.json",
+      "sha256": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/create-tenant.vector.json",
+      "sha256": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/disable-tenant.vector.json",
+      "sha256": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/enable-tenant.vector.json",
+      "sha256": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/get-tenant-audit.vector.json",
+      "sha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/get-tenant-users.vector.json",
+      "sha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/get-tenant.vector.json",
+      "sha256": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/get-user-tenants.vector.json",
+      "sha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/list-tenants.vector.json",
+      "sha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/remove-tenant-configuration.vector.json",
+      "sha256": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/remove-user-from-tenant.vector.json",
+      "sha256": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/set-tenant-configuration.vector.json",
+      "sha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+      "unchanged": true
+    },
+    {
+      "path": "vectors/update-tenant.vector.json",
+      "sha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a",
+      "unchanged": true
+    }
+  ],
+  "exactApprovedInventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "all20ApprovedScopeDecisionsPreserved": true,
+  "artifactVerificationResult": "passed",
+  "scope": "Authentic signed5.10.0 artifact with exact approved inputs and actual EventStore3.126.1 client/contracts cache bytes. Isolated dependency alignment, not shipped production enrollment. Original approval and historical candidate archive/source identity remain separate; old5.10.0 container provenance still fails the authorized repaired-chain condition.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

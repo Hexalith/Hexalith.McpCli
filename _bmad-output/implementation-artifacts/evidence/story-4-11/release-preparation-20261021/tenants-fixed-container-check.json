@@ -1,0 +1,34 @@
+{
+  "command": [
+    "dotnet",
+    "publish",
+    "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+    "-c",
+    "Release",
+    "/t:PublishContainer",
+    "-p:RuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+    "-p:ContainerRuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+    "-p:ContainerImageFormat=OCI",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:ContainerRegistry=localhost:1",
+    "-p:ContainerRepository=tenants",
+    "-p:ContainerImageTag=5.10.0",
+    "-p:Version=5.10.0",
+    "-p:ContainerArchiveOutputPath=/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-provenance-fixed-musl.oci.tar",
+    "-p:ContainerProvenanceSourceSha=ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "-p:ContainerProvenanceReleaseVersion=5.10.0",
+    "-p:ContainerProvenanceCreated=2026-10-21T18:51:12Z"
+  ],
+  "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+  "exitCode": 1,
+  "durationSeconds": 13.422401714000443,
+  "archive": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-provenance-fixed-musl.oci.tar",
+  "baseSource": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+  "uncommittedProposedPatches": {
+    "proposed-builds-container-provenance.patch": "d4d5644673a8da9e9dc3eae4406a283a6c8751699d9a505de47c966207a56f6c",
+    "proposed-tenants-container-provenance.patch": "4ec944f9b080c486f9947abdb04aca83ecc355274a624c0b4fd7e6cd3aa834b8"
+  },
+  "registryPush": false,
+  "publicationAuthorized": false,
+  "evidenceLimit": "Base commit plus explicitly bound proposed configuration patches, not a committed or publication-approved source identity."
+}

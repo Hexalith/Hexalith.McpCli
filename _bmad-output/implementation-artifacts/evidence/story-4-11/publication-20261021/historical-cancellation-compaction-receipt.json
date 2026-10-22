@@ -1,0 +1,110 @@
+{
+  "compactedAtUtc": "2026-10-22T01:37:09.741149+00:00",
+  "scope": "Unsealed superseded-run/cancellation history only. Exact complete originals private and hash-bound. Preserve all actual statuses, heads/base identities, reasons, cancellation commands/results, actor identities, annotations, workflow/job limits and observational conclusions. Remove repeated GitHub link/profile/repository/app boilerplate. Sealed candidate/release-preparation/approval bytes untouched.",
+  "files": [
+    {
+      "path": "eventstore-superseded-own-pr-runs-before.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-own-pr-runs-before.json",
+        "bytes": 359416,
+        "sha256": "9d80344dbf85e4cfe0b215066e726550fee406394afdae87fd5611bbb7dc821c"
+      },
+      "compactBytes": 96113,
+      "compactSha256": "0d1b364e92aaa0480397c867ceb8b5f3359f49bb85f1a624b4ccc710f72ace52",
+      "projectedObjectCounts": {
+        "workflowRun": 22,
+        "profileMetadata": 88,
+        "repositoryMetadata": 44
+      },
+      "retainedLeafValuesExactlyEqual": 1775,
+      "criticalLeafValuesUnchangedAtExactPaths": 366
+    },
+    {
+      "path": "eventstore-superseded-83-cancellations.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-83-cancellations.json",
+        "bytes": 334814,
+        "sha256": "5c0d8b80281de23f504a181a7dc7f9dc989371aa8aed36ecd42227c55ba569f5"
+      },
+      "compactBytes": 93571,
+      "compactSha256": "30d07091ca28e0c5f22ace463542efdfd0d74b3261dc8a5a566ed8e624d55a75",
+      "projectedObjectCounts": {
+        "workflowRun": 20,
+        "profileMetadata": 80,
+        "repositoryMetadata": 40
+      },
+      "retainedLeafValuesExactlyEqual": 1630,
+      "criticalLeafValuesUnchangedAtExactPaths": 340
+    },
+    {
+      "path": "eventstore-superseded-191-cancellations.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-191-cancellations.json",
+        "bytes": 318235,
+        "sha256": "142c0b3c4ac4cf6be64369e9617d88a7a8fa8d2ca54e573acb909e682aaf38bb"
+      },
+      "compactBytes": 88962,
+      "compactSha256": "1aaaed9c8d366765fe9a356d63add391bec05c19cfc8e248df2a08a69f58d83a",
+      "projectedObjectCounts": {
+        "workflowRun": 19,
+        "profileMetadata": 76,
+        "repositoryMetadata": 38
+      },
+      "retainedLeafValuesExactlyEqual": 1548,
+      "criticalLeafValuesUnchangedAtExactPaths": 322
+    },
+    {
+      "path": "eventstore-superseded-3bf-cancellations.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-3bf-cancellations.json",
+        "bytes": 299629,
+        "sha256": "8200b3a942ba3429fea21cca66efe344a26da2601567a27a7bafa97b035e7742"
+      },
+      "compactBytes": 82475,
+      "compactSha256": "8112b4e77dccd91b173438fc0423f40993925fcae3b2ef357d2e113284562b8a",
+      "projectedObjectCounts": {
+        "workflowRun": 18,
+        "profileMetadata": 72,
+        "repositoryMetadata": 36
+      },
+      "retainedLeafValuesExactlyEqual": 1470,
+      "criticalLeafValuesUnchangedAtExactPaths": 306
+    },
+    {
+      "path": "eventstore-p1r-cancellation-inspection.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-p1r-cancellation-inspection.json",
+        "bytes": 271738,
+        "sha256": "83ce9f23231e9cba3a7a7090bbae718506ee38dfdf3ee442348876275151b10c"
+      },
+      "compactBytes": 68185,
+      "compactSha256": "6530249c19732ea55b51b6e08e1fe494944634d99869f4f17d0e2ed8b764a266",
+      "projectedObjectCounts": {
+        "workflowRun": 16,
+        "profileMetadata": 64,
+        "repositoryMetadata": 32
+      },
+      "retainedLeafValuesExactlyEqual": 1213,
+      "criticalLeafValuesUnchangedAtExactPaths": 268
+    },
+    {
+      "path": "eventstore-superseded-a616-cancellations.json",
+      "original": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-a616-cancellations.json",
+        "bytes": 197854,
+        "sha256": "01223c76a383c1573a04f52e9c8674509b89f3c1727fb8b4a940a9bcd4f1eada"
+      },
+      "compactBytes": 53875,
+      "compactSha256": "a07fdda2102eea22f3de2bfd6118e14651bac7c06f1761497ed7364f7dac965e",
+      "projectedObjectCounts": {
+        "workflowRun": 12,
+        "profileMetadata": 48,
+        "repositoryMetadata": 24
+      },
+      "retainedLeafValuesExactlyEqual": 996,
+      "criticalLeafValuesUnchangedAtExactPaths": 206
+    }
+  ],
+  "originalTotalBytes": 1781686,
+  "compactTotalBytes": 483181
+}

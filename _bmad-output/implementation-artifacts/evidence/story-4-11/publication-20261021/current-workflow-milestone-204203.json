@@ -1,0 +1,124 @@
+{
+  "observedAtUtc": "2026-10-21T20:42:03.486370+00:00",
+  "records": [
+    {
+      "repo": "Hexalith/Hexalith.Builds",
+      "head": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+      "run": 39671676519,
+      "path": ".github/workflows/ci.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "jobs": [
+        {
+          "id": 119471137249,
+          "name": "Build and test",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Test package version audit validator"
+          ]
+        },
+        {
+          "id": 119471137353,
+          "name": "Python contract tests",
+          "status": "completed",
+          "conclusion": "success",
+          "activeSteps": []
+        },
+        {
+          "id": 119471137382,
+          "name": "CodeQL / analyze",
+          "status": "completed",
+          "conclusion": "success",
+          "activeSteps": []
+        },
+        {
+          "id": 119471137540,
+          "name": "Dependency review / dependency-review",
+          "status": "completed",
+          "conclusion": "success",
+          "activeSteps": []
+        }
+      ]
+    },
+    {
+      "repo": "Hexalith/Hexalith.EventStore",
+      "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "run": 39671648792,
+      "path": ".github/workflows/p1r-qualification.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "jobs": [
+        {
+          "id": 119470782066,
+          "name": "preparation-controls",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Verify P1R published qualification harness contracts"
+          ]
+        }
+      ]
+    },
+    {
+      "repo": "Hexalith/Hexalith.EventStore",
+      "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "run": 39671649103,
+      "path": ".github/workflows/ci.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "jobs": [
+        {
+          "id": 119471392670,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "activeSteps": []
+        },
+        {
+          "id": 119471392699,
+          "name": "ci / contracts",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Run Contracts tests"
+          ]
+        },
+        {
+          "id": 119471392922,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "activeSteps": []
+        },
+        {
+          "id": 119471393165,
+          "name": "ci / checkpointed process packages",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Prove checkpointed process Release packages"
+          ]
+        },
+        {
+          "id": 119471393171,
+          "name": "ci / tenants-source-mode",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Build source-mode AppHost tests"
+          ]
+        },
+        {
+          "id": 119471393551,
+          "name": "ci / build-and-test",
+          "status": "in_progress",
+          "conclusion": null,
+          "activeSteps": [
+            "Build"
+          ]
+        }
+      ]
+    }
+  ]
+}

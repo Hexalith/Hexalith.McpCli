@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj (in 187 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj (in 187 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/samples/Hexalith.EventStore.Sample.Contracts/Hexalith.EventStore.Sample.Contracts.csproj (in 188 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj (in 255 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore/Hexalith.EventStore.csproj (in 253 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj (in 251 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj (in 256 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/samples/Hexalith.EventStore.Sample/Hexalith.EventStore.Sample.csproj (in 260 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj (in 265 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj (in 263 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Testing.Integration/Hexalith.EventStore.Testing.Integration.csproj (in 271 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj (in 265 ms).
+  Restored /tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj (in 272 ms).

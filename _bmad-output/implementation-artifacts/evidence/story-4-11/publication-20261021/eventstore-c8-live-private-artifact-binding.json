@@ -1,0 +1,29 @@
+{
+  "checkedAtUtc": "2026-10-22T00:21:18.591393+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "runId": 39693567688,
+  "retention": "Exact raw ZIPs retained privately with official digest verification. No signed download URLs or raw test data copied to Git.",
+  "archives": [
+    {
+      "id": 12392480111,
+      "name": "oq8-story-4-14-fresh-validated-capture",
+      "path": "/tmp/mcpcli-story411-c8-live-artifacts-vk4es988/12392480111-oq8-story-4-14-fresh-validated-capture.zip",
+      "bytes": 5360,
+      "sha256": "sha256:71fb8eef83d961448cd40ef6469c438520e231fbbd83019a8ca70b745afb63e2",
+      "officialDigestMatched": true,
+      "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+      "runId": 39693567688
+    },
+    {
+      "id": 12391892004,
+      "name": "live-sidecar-test-results",
+      "path": "/tmp/mcpcli-story411-c8-live-artifacts-vk4es988/12391892004-live-sidecar-test-results.zip",
+      "bytes": 1008040,
+      "sha256": "sha256:02df857aae5dd81d2ad23463b7951e5a895eed12b4fbc85d76beac6a90a34258",
+      "officialDigestMatched": true,
+      "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+      "runId": 39693567688
+    }
+  ],
+  "downloadScriptSha256": "e888843fcf0547b192587b8eab33ebf4de6e7560bdea1863819e16849842dfa4"
+}

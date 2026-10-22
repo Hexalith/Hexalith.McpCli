@@ -1,0 +1,173 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProjectsCandidateFailsOfflineWithDependencyPaths [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(42,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProjectsCandidateFailsOfflineWithDependencyPaths()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RepositoryTestProjectsUseOnlyApprovedDependencies [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(33,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RepositoryTestProjectsUseOnlyApprovedDependencies()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(reference: "<PackageReference Include=\"Unexpected.Package\" />", expected: "Test project tests/Topology.Tests/Topology.Tests.c"···) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(844,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(String reference, String expected)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(reference: "<PackageReference Include=\"Hexalith.Parties.Aspire"···, expected: "Test project tests/Topology.Tests/Topology.Tests.c"···) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(844,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(String reference, String expected)
+           at InvokeStub_DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(reference: "<ProjectReference Include=\"../../references/Extern"···, expected: "Test project tests/Topology.Tests/Topology.Tests.c"···) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(844,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(String reference, String expected)
+           at InvokeStub_DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(reference: "<ProjectReference Include=\"../../references/Hexali"···, expected: "Test project tests/Topology.Tests/Topology.Tests.c"···) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(844,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(String reference, String expected)
+           at InvokeStub_DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(reference: "<ProjectReference Include=\"$(ExternalProject)\" />", expected: "Test project tests/Topology.Tests/Topology.Tests.c"···) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(844,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(String reference, String expected)
+           at InvokeStub_DependencyPolicyTests.TestProjectBoundaryRejectsUnapprovedItems(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(module: "Tenants", version: "5.8.0") [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(107,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(String module, String version)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(module: "Parties", version: "1.4.0") [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(107,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(String module, String version)
+           at InvokeStub_DependencyPolicyTests.CandidateInjectionKeepsExistingNodesAndVersions(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.NamedTestRootsAndSampleAreAllowedOnlyInTests [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(730,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.NamedTestRootsAndSampleAreAllowedOnlyInTests()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.WideningBaselineCannotAdmitProjects [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(62,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.WideningBaselineCannotAdmitProjects()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ConditionedTestItemsCannotBypassTheBoundary [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(913,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project, String configuration)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(905,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.<>c__DisplayClass59_0.<EvaluateReferences>b__2(String configuration)
+           at System.Linq.Enumerable.SelectManySingleSelectorIterator`2.MoveNext()
+           at System.Linq.Enumerable.ConcatIterator`1.MoveNext()
+           at System.Linq.Enumerable.DistinctByIterator[TSource,TKey](IEnumerable`1 source, Func`2 keySelector, IEqualityComparer`1 comparer)+MoveNext()
+           at System.Xml.Linq.XContainer.AddContentSkipNotify(Object content)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(908,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project)
+           at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(893,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CheckTestProjectDirectory(DependencyPolicy policy, String directory, String root)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(822,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ConditionedTestItemsCannotBypassTheBoundary()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Tenants", version: "5.8.0", packagedDecoration: False) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(92,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Tenants", version: "5.8.0", packagedDecoration: True) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(92,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration)
+           at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Parties", version: "1.4.0", packagedDecoration: False) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(92,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration)
+           at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Parties", version: "1.4.0", packagedDecoration: True) [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(981,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.RealCandidate(String module, String version)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(92,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration)
+           at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(18,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ImportedTestPropsCannotBypassTheBoundary(configuration: "Debug") [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(913,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project, String configuration)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(905,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.<>c__DisplayClass59_0.<EvaluateReferences>b__2(String configuration)
+           at System.Linq.Enumerable.SelectManySingleSelectorIterator`2.MoveNext()
+           at System.Linq.Enumerable.ConcatIterator`1.MoveNext()
+           at System.Linq.Enumerable.DistinctByIterator[TSource,TKey](IEnumerable`1 source, Func`2 keySelector, IEqualityComparer`1 comparer)+MoveNext()
+           at System.Xml.Linq.XContainer.AddContentSkipNotify(Object content)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(908,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project)
+           at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(893,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CheckTestProjectDirectory(DependencyPolicy policy, String directory, String root)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(788,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ImportedTestPropsCannotBypassTheBoundary(String configuration)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+    Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ImportedTestPropsCannotBypassTheBoundary(configuration: "Release") [FAIL]
+      System.InvalidOperationException : McpCli repository root was not found.
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(1015,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.FindRepositoryRoot()
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(913,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project, String configuration)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(905,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.<>c__DisplayClass59_0.<EvaluateReferences>b__2(String configuration)
+           at System.Linq.Enumerable.SelectManySingleSelectorIterator`2.MoveNext()
+           at System.Linq.Enumerable.ConcatIterator`1.MoveNext()
+           at System.Linq.Enumerable.DistinctByIterator[TSource,TKey](IEnumerable`1 source, Func`2 keySelector, IEqualityComparer`1 comparer)+MoveNext()
+           at System.Xml.Linq.XContainer.AddContentSkipNotify(Object content)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(908,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.EvaluateReferences(String project)
+           at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(893,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.CheckTestProjectDirectory(DependencyPolicy policy, String directory, String root)
+        tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs(788,0): at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ImportedTestPropsCannotBypassTheBoundary(String configuration)
+           at InvokeStub_DependencyPolicyTests.ImportedTestPropsCannotBypassTheBoundary(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = 'c7a60a0ed831469ad929b2d5a13a99cbb945d5f1ee1d2a260610c6c6540132c2')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 98, Errors: 0, Failed: 19, Skipped: 0, Not Run: 0, Time: 0.203s

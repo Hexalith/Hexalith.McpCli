@@ -1,0 +1,76 @@
+{
+  "startedAtUtc": "2026-10-21T23:34:41.165120+00:00",
+  "status": "initialization-refused",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Local extraction diagnostic only; no security qualification, workflow pin, source exclusion or production acceptance.",
+  "allSourceInputsIdenticalAcrossVersions": true,
+  "host": {
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "logicalCpuCount": 14,
+    "memTotal": "MemTotal:       94747284 kB"
+  },
+  "environmentDifferences": "Host physical memory, cgroup limits, OS and CPU scheduling differ from GitHub. Requested resource hints do not reproduce a sixteen-GiB runner or impose an equivalent managed-Roslyn heap. Measure actual per-process RSS/CPU; do not infer exact runner parity.",
+  "resourceHints": {
+    "CODEQL_RAM": "14570",
+    "CODEQL_THREADS": "4",
+    "traceRamMiB": 14570,
+    "traceThreads": 4
+  },
+  "localBound": {
+    "secondsPerVersion": 1800,
+    "aggregateRssCeilingMiB": 16384,
+    "meaning": "Task-local safety stop, not a GitHub-equivalent cgroup or an acceptance gate."
+  },
+  "versions": [
+    {
+      "version": "2.27.2",
+      "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "startedAtUtc": "2026-10-21T23:34:41.386625+00:00",
+      "initCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.2/codeql/codeql",
+        "database",
+        "init",
+        "--force-overwrite",
+        "--db-cluster",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2/database",
+        "--source-root=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+        "--no-calculate-baseline",
+        "--extractor-include-aliases",
+        "--language=csharp",
+        "--build-mode=none",
+        "--extractor-option=csharp.logging.verbosity=progress+"
+      ],
+      "cliArchiveSha256": "sha256:ac0a4ea06843577ed3a1f5af145756c3085ebfd42e59a5aff1b66489f29d16dc",
+      "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2",
+      "status": "initialization-failed",
+      "initExitCode": 2
+    },
+    {
+      "version": "2.27.3",
+      "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "startedAtUtc": "2026-10-21T23:34:41.964573+00:00",
+      "initCommand": [
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/codeql",
+        "database",
+        "init",
+        "--force-overwrite",
+        "--db-cluster",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3/database",
+        "--source-root=/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+        "--no-calculate-baseline",
+        "--extractor-include-aliases",
+        "--language=csharp",
+        "--build-mode=none",
+        "--extractor-option=csharp.logging.verbosity=progress+"
+      ],
+      "cliArchiveSha256": "sha256:845075a2fa2fdf72629adc6cbde6264691b698d1f294bd27f10c6b579cd750a4",
+      "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3",
+      "status": "initialization-failed",
+      "initExitCode": 2
+    }
+  ],
+  "completedAtUtc": "2026-10-21T23:34:42.333303+00:00",
+  "setupBlocker": "Diagnostic extractor logging option belongs to trace-command, not database init without indirect tracing. Both versions refused before extraction; no version comparison conclusion."
+}

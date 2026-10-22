@@ -1,0 +1,15 @@
+{
+  "status": "verified",
+  "preincidentCommit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+  "normalRevertMergeCommit": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+  "preincidentAndRestoredTree": "00ae9bb244830170291aec0d85c8d407a271326a",
+  "reviewedImplementationCommit": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+  "normalReapplyPrHead": "1e606d458f92cb6562c21d2e2777d070cfb02a39",
+  "reviewedAndReappliedTree": "485570dd78ec463280aee68c0e82e93367c8c10d",
+  "independentParentApiTreeAudit": "pass",
+  "implementationFiles": [
+    "Props/ContainerProvenance.targets",
+    "Github/publish-containers/tests/test_container_provenance_targets.py"
+  ],
+  "reapplyMergePending": true
+}

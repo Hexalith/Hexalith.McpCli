@@ -1,0 +1,67 @@
+{
+  "observedAtUtc": "2026-10-21T23:18:51.639Z",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runId": 39685339156,
+  "jobId": 119518384455,
+  "jobs": [
+    {
+      "id": 119518384455,
+      "name": "codeql / analyze",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "run_id": 39685339156,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Initialize CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Perform CodeQL Analysis",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "number": 4
+        },
+        {
+          "name": "Post Perform CodeQL Analysis",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Post Initialize CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    }
+  ],
+  "scope": "Cancelled current required CodeQL result; no success, merge or publication credit. Inspect annotations and query/resource diagnostics before repair."
+}

@@ -1,0 +1,192 @@
+{
+  "outcome": "unavailable",
+  "kind": 2,
+  "before": {
+    "identity": {
+      "name": "Hexalith.EventStore.Client",
+      "version": "3.126.1.0",
+      "culture": null,
+      "publicKeyToken": null
+    },
+    "scope": 0,
+    "isComplete": false,
+    "issues": [
+      {
+        "issue": "inspectionFailures",
+        "count": 4,
+        "details": [
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 33554447,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Events.IEventPayload\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100663874,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Queries.IQueryContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100665833,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Events.IEventContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100666141,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Commands.ICommandContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "identity": {
+      "name": "Hexalith.EventStore.Client",
+      "version": "3.126.1.0",
+      "culture": null,
+      "publicKeyToken": null
+    },
+    "scope": 0,
+    "isComplete": false,
+    "issues": [
+      {
+        "issue": "inspectionFailures",
+        "count": 4,
+        "details": [
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 33554447,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Events.IEventPayload\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100663874,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Queries.IQueryContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100665833,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Events.IEventContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          },
+          {
+            "operation": "resolve generic parameter constraints",
+            "subjectToken": 100666141,
+            "mechanism": 0,
+            "kind": "MalformedMetadata",
+            "detail": "Generic-constraint dependency \u0027Hexalith.EventStore.Contracts.Commands.ICommandContract\u0027 could not be bound to an acquired assembly. Dependency assembly: \u0027Hexalith.EventStore.Contracts\u0027.",
+            "subjectAssembly": {
+              "name": "Hexalith.EventStore.Client",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            },
+            "dependencyAssembly": {
+              "name": "Hexalith.EventStore.Contracts",
+              "version": "3.126.1.0",
+              "culture": null,
+              "publicKeyToken": null
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.disable-tenant",
+  "kind": "command",
+  "prerequisites": [
+    {
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-disable",
+        "Name": "Vector Disable",
+        "Description": null
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-disable",
+          "commandType": "create-tenant",
+          "payload": {
+            "TenantId": "vector-disable",
+            "Name": "Vector Disable",
+            "Description": null
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.create-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-disable"
+        }
+      ]
+    }
+  ],
+  "invocation": {
+    "operation": "tenants.disable-tenant",
+    "kind": "command",
+    "payload": {
+      "TenantId": "vector-disable"
+    },
+    "envelope": {
+      "tenant": "system"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "<generated>"
+      },
+      "maskGenerated": [
+        "/messageId",
+        "/correlationId"
+      ]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": {},
+      "echoRequestFields": [
+        "correlationId",
+        "messageId"
+      ]
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.disable-tenant"
+      },
+      {
+        "path": "/status",
+        "operator": "equals",
+        "value": "accepted"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/aggregateId",
+        "operator": "equals",
+        "value": "vector-disable"
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-disable"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-disable",
+          "queryType": "get-tenant",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-disable"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "tenantId": "vector-disable",
+            "name": "Vector Disable",
+            "description": null,
+            "status": "Disabled",
+            "members": [],
+            "configuration": {},
+            "createdAt": "2026-10-19T08:00:00+00:00"
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/status",
+          "operator": "equals",
+          "value": "Disabled"
+        }
+      ]
+    }
+  ]
+}

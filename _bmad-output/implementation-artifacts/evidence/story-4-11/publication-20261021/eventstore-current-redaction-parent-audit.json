@@ -1,0 +1,39 @@
+{
+  "checkedAtUtc": "2026-10-21T20:35:59.958249+00:00",
+  "receiptSha256": "d720738af3733478d868e914cfe3773ccf2dfea0c2b7149affaef2c1fd8af847",
+  "originalSource": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+  "replacementSource": "9e34d17b8475fe3427623e5df34879bfd01e2628",
+  "owningSource": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+  "checks": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "sourceHashBindingsPassed": true,
+      "candidateEqualsCurrentOwningBytes": true,
+      "changedResourceLines": 17
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "sourceHashBindingsPassed": true,
+      "candidateEqualsCurrentOwningBytes": true,
+      "xmlNodesCompared": 6947,
+      "changedDisplayNames": 2,
+      "allOtherXmlDataIdentical": true,
+      "originalManifestUnchanged": true,
+      "derivedFilesRehashed": 96,
+      "derivedOnlyChangesXmlDigest": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "sourceHashBindingsPassed": true,
+      "candidateEqualsCurrentOwningBytes": true,
+      "xmlNodesCompared": 6949,
+      "changedDisplayNames": 2,
+      "allOtherXmlDataIdentical": true,
+      "originalManifestUnchanged": true,
+      "derivedFilesRehashed": 108,
+      "derivedOnlyChangesXmlDigest": true
+    }
+  ],
+  "preceding703eReceiptAndManifestsUnchanged": true,
+  "passed": true
+}

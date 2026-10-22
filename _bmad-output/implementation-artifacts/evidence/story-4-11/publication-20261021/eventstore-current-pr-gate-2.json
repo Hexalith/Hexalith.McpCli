@@ -1,0 +1,4584 @@
+{
+  "checkedAtUtc": "2026-10-21T20:37:44.081853+00:00",
+  "result": "pending",
+  "findings": [
+    "Required context/app not successful: advisory",
+    "Required context/app not successful: ci / build-and-test",
+    "Required context/app not successful: ci / tenants-source-mode",
+    "Required context/app not successful: codeql / analyze",
+    "Required context/app not successful: commitlint / commitlint",
+    "Required context/app not successful: live-sidecar",
+    "Ordinary exact-head PR qualification not successful: .github/workflows/ci.yml",
+    "Ordinary exact-head PR qualification not successful: .github/workflows/p1r-qualification.yml",
+    "Unsettled or nonpassing latest PR check: ci / build-and-test",
+    "Unsettled or nonpassing latest PR check: ci / tenants-source-mode",
+    "Unsettled or nonpassing latest PR check: ci / checkpointed process packages",
+    "Unsettled or nonpassing latest PR check: ci / folded-snapshot-compatibility",
+    "Unsettled or nonpassing latest PR check: ci / contracts",
+    "Unsettled or nonpassing latest PR check: ci / semantic-release-governance",
+    "Unsettled or nonpassing latest PR check: codeql / analyze",
+    "Unsettled or nonpassing latest PR check: advisory",
+    "Unsettled or nonpassing latest PR check: live-sidecar",
+    "Unsettled or nonpassing latest PR check: commitlint / commitlint",
+    "Unsettled or nonpassing latest PR check: Cursor Bugbot",
+    "Unsettled or nonpassing latest PR check: preparation-controls",
+    "Unsettled or nonpassing latest PR check: payload-protection",
+    "Unsettled or nonpassing latest PR check: Corrective authorization fixture controls",
+    "Unsettled or nonpassing latest PR check: Cursor Approval Agent: Pull Request Router",
+    "Unsettled or nonpassing latest PR check: Cursor Security Agent: Security Reviewer",
+    "GitHub does not report a clean merge state"
+  ],
+  "readOnly": true,
+  "repository": "Hexalith/Hexalith.EventStore",
+  "number": 372,
+  "expectedHead": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+  "liveMain": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+  "pull": {
+    "number": 372,
+    "state": "open",
+    "title": "ci(p1r): complete qualification and bind sanitized evidence",
+    "draft": false,
+    "mergeable": true,
+    "mergeable_state": "blocked",
+    "rebaseable": false,
+    "merged": false,
+    "merge_commit_sha": "344579289961f610dc629cc6e10512de28a1fe78",
+    "merged_at": null,
+    "closed_at": null,
+    "updated_at": "2026-10-21T20:36:44Z",
+    "commits": 5,
+    "changed_files": 8,
+    "additions": 874,
+    "deletions": 1,
+    "maintainer_can_modify": false,
+    "html_url": "https://github.com/Hexalith/Hexalith.EventStore/pull/372",
+    "head": {
+      "label": "Hexalith:fix/p1r-qualification-time-budget",
+      "ref": "fix/p1r-qualification-time-budget",
+      "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "repository": {
+        "id": 1155154671,
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "default_branch": "main"
+      }
+    },
+    "base": {
+      "label": "Hexalith:main",
+      "ref": "main",
+      "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+      "repository": {
+        "id": 1155154671,
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "default_branch": "main"
+      }
+    }
+  },
+  "effectiveRules": [
+    {
+      "type": "deletion",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Hexalith/Hexalith.EventStore",
+      "ruleset_id": 14479516
+    },
+    {
+      "type": "non_fast_forward",
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Hexalith/Hexalith.EventStore",
+      "ruleset_id": 14479516
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "required_reviewers": [],
+        "require_code_owner_review": false,
+        "dismissal_restriction": {
+          "enabled": false,
+          "allowed_actors": []
+        },
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": false,
+        "require_extra_approval_for_unattributed_changes": true,
+        "allowed_merge_methods": [
+          "squash"
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Hexalith/Hexalith.EventStore",
+      "ruleset_id": 14479516
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "advisory",
+            "integration_id": 15368
+          },
+          {
+            "context": "ci / build-and-test",
+            "integration_id": 15368
+          },
+          {
+            "context": "ci / tenants-source-mode",
+            "integration_id": 15368
+          },
+          {
+            "context": "codeql / analyze",
+            "integration_id": 15368
+          },
+          {
+            "context": "commitlint / commitlint",
+            "integration_id": 15368
+          },
+          {
+            "context": "dependency-review / dependency-review",
+            "integration_id": 15368
+          },
+          {
+            "context": "live-sidecar",
+            "integration_id": 15368
+          }
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Hexalith/Hexalith.EventStore",
+      "ruleset_id": 14479516
+    }
+  ],
+  "legacyProtectionResponse": {
+    "message": "Branch not protected",
+    "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+    "status": "404"
+  },
+  "requiredContexts": [
+    {
+      "context": "advisory",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119471025231,
+        "name": "advisory",
+        "node_id": "CR_kwDORNpC788AAAAb0QcsTw",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "46ac7caa-7c69-53f4-9d56-b81cb6f8c5f7",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471025231",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:46Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471025231/annotations"
+        },
+        "check_suite": {
+          "id": 107516220299
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "ci / build-and-test",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119471393551,
+        "name": "ci / build-and-test",
+        "node_id": "CR_kwDORNpC788AAAAb0QzLDw",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "5fb21d16-b027-5d3a-bd91-7c8a779c1bd3",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393551",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:37:16Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393551/annotations"
+        },
+        "check_suite": {
+          "id": 107516222095
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "ci / tenants-source-mode",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119471393171,
+        "name": "ci / tenants-source-mode",
+        "node_id": "CR_kwDORNpC788AAAAb0QzJkw",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "deefa31d-a049-51d2-9ef0-a3e369520e60",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393171",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393171/annotations"
+        },
+        "check_suite": {
+          "id": 107516222095
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "codeql / analyze",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119471289984,
+        "name": "codeql / analyze",
+        "node_id": "CR_kwDORNpC788AAAAb0Qs2gA",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "e5191144-8a50-5405-a155-11bc98bd13a3",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471289984",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:37:19Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471289984/annotations"
+        },
+        "check_suite": {
+          "id": 107516221756
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "commitlint / commitlint",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119470973565,
+        "name": "commitlint / commitlint",
+        "node_id": "CR_kwDORNpC788AAAAb0QZifQ",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "044a4b84-7531-5904-bc43-f9a3db001feb",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470973565",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:43Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470973565/annotations"
+        },
+        "check_suite": {
+          "id": 107516371902
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "dependency-review / dependency-review",
+      "integration_id": 15368,
+      "passed": true,
+      "check": {
+        "id": 119470783328,
+        "name": "dependency-review / dependency-review",
+        "node_id": "CR_kwDORNpC788AAAAb0QN7YA",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "9bb0056f-1ae6-5293-8372-c61dc6e4f3f6",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783328",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-21T20:36:24Z",
+        "completed_at": "2026-10-21T20:37:17Z",
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 1,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783328/annotations"
+        },
+        "check_suite": {
+          "id": 107516221805
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "context": "live-sidecar",
+      "integration_id": 15368,
+      "passed": false,
+      "check": {
+        "id": 119470975614,
+        "name": "live-sidecar",
+        "node_id": "CR_kwDORNpC788AAAAb0QZqfg",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "external_id": "daa89595-3f44-58b1-865c-d70bd65d3201",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470975614",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:11Z",
+        "completed_at": null,
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470975614/annotations"
+        },
+        "check_suite": {
+          "id": 107516220894
+        },
+        "app": {
+          "id": 15368,
+          "client_id": "Iv1.05c79e9ad1f6bdfa",
+          "slug": "github-actions",
+          "node_id": "MDM6QXBwMTUzNjg=",
+          "owner": {
+            "login": "github",
+            "id": 9919,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github",
+            "html_url": "https://github.com/github",
+            "followers_url": "https://api.github.com/users/github/followers",
+            "following_url": "https://api.github.com/users/github/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+            "organizations_url": "https://api.github.com/users/github/orgs",
+            "repos_url": "https://api.github.com/users/github/repos",
+            "events_url": "https://api.github.com/users/github/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "name": "GitHub Actions",
+          "description": "Automate your workflow from idea to production",
+          "external_url": "https://help.github.com/en/actions",
+          "html_url": "https://github.com/apps/github-actions",
+          "created_at": "2018-07-30T09:30:17Z",
+          "updated_at": "2026-06-18T16:17:48Z",
+          "permissions": {
+            "actions": "write",
+            "administration": "read",
+            "artifact_metadata": "write",
+            "attestations": "write",
+            "checks": "write",
+            "code_quality": "write",
+            "contents": "write",
+            "copilot_requests": "write",
+            "deployments": "write",
+            "discussions": "write",
+            "drives": "write",
+            "issues": "write",
+            "merge_queues": "write",
+            "metadata": "read",
+            "models": "read",
+            "packages": "write",
+            "pages": "write",
+            "pull_requests": "write",
+            "repository_hooks": "write",
+            "repository_projects": "write",
+            "security_events": "write",
+            "statuses": "write",
+            "vulnerability_alerts": "read"
+          },
+          "events": [
+            "branch_protection_rule",
+            "check_run",
+            "check_suite",
+            "create",
+            "delete",
+            "deployment",
+            "deployment_status",
+            "discussion",
+            "discussion_comment",
+            "fork",
+            "gollum",
+            "issues",
+            "issue_comment",
+            "label",
+            "merge_group",
+            "milestone",
+            "page_build",
+            "public",
+            "pull_request",
+            "pull_request_review",
+            "pull_request_review_comment",
+            "push",
+            "registry_package",
+            "release",
+            "repository",
+            "repository_dispatch",
+            "status",
+            "watch",
+            "workflow_dispatch",
+            "workflow_run"
+          ]
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "checkRuns": {
+    "total_count": 19,
+    "check_runs": [
+      {
+        "id": 119471393551,
+        "name": "ci / build-and-test",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:37:16Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+        "external_id": "5fb21d16-b027-5d3a-bd91-7c8a779c1bd3",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393551/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471393171,
+        "name": "ci / tenants-source-mode",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+        "external_id": "deefa31d-a049-51d2-9ef0-a3e369520e60",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393171/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471393165,
+        "name": "ci / checkpointed process packages",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393165",
+        "external_id": "135b6b93-edd8-5b09-95e1-d64a1a9db603",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393165/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471392922,
+        "name": "ci / folded-snapshot-compatibility",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392922",
+        "external_id": "1152721d-5b69-5b05-b462-49966f3c2bab",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392922/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471392699,
+        "name": "ci / contracts",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392699",
+        "external_id": "1ba47a9f-9552-5aaf-893f-4d24f0730f5c",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392699/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471392670,
+        "name": "ci / semantic-release-governance",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:54Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392670",
+        "external_id": "5ae4cbec-b76b-5c02-af72-261a1f4368e0",
+        "check_suite": {
+          "id": 107516222095
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392670/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471289984,
+        "name": "codeql / analyze",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:37:19Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+        "external_id": "e5191144-8a50-5405-a155-11bc98bd13a3",
+        "check_suite": {
+          "id": 107516221756
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471289984/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119471025231,
+        "name": "advisory",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:46Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+        "external_id": "46ac7caa-7c69-53f4-9d56-b81cb6f8c5f7",
+        "check_suite": {
+          "id": 107516220299
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471025231/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470975614,
+        "name": "live-sidecar",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:11Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+        "external_id": "daa89595-3f44-58b1-865c-d70bd65d3201",
+        "check_suite": {
+          "id": 107516220894
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470975614/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470973565,
+        "name": "commitlint / commitlint",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:43Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+        "external_id": "044a4b84-7531-5904-bc43-f9a3db001feb",
+        "check_suite": {
+          "id": 107516371902
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470973565/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470941544,
+        "name": "Cursor Bugbot",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:35:59Z",
+        "completed_at": null,
+        "details_url": "https://cursor.com/docs/bugbot",
+        "external_id": "",
+        "check_suite": {
+          "id": 107516195456
+        },
+        "output": {
+          "title": "Bugbot Review",
+          "summary": "Bugbot Analysis Progress (21s elapsed)\n\n\u2705 Gathered PR context (18s)\n\nRequest ID: 26039e42-eda5-49e0-995d-daab74e64501",
+          "text": "Reviewing code changes for potential bugs...",
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470941544/annotations"
+        },
+        "app": {
+          "id": 1210556,
+          "slug": "cursor",
+          "name": "Cursor"
+        }
+      },
+      {
+        "id": 119470783328,
+        "name": "dependency-review / dependency-review",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-21T20:36:24Z",
+        "completed_at": "2026-10-21T20:37:17Z",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+        "external_id": "9bb0056f-1ae6-5293-8372-c61dc6e4f3f6",
+        "check_suite": {
+          "id": 107516221805
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 1,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783328/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470783295,
+        "name": "Publish current live authorization verdicts",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "completed",
+        "conclusion": "skipped",
+        "started_at": "2026-10-21T20:35:40Z",
+        "completed_at": "2026-10-21T20:35:39Z",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470783295",
+        "external_id": "9f05b17a-96e4-5c1a-bbb4-2c76a206435d",
+        "check_suite": {
+          "id": 107516220765
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783295/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470782066,
+        "name": "preparation-controls",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:36:05Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648792/job/119470782066",
+        "external_id": "0d2a32b3-1416-5709-9154-c739168a4f9a",
+        "check_suite": {
+          "id": 107516221166
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470782066/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470781808,
+        "name": "commitlint / commitlint",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "started_at": "2026-10-21T20:35:40Z",
+        "completed_at": "2026-10-21T20:36:02Z",
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648888/job/119470781808",
+        "external_id": "56662398-9e28-5e7a-89c7-30e59195d34e",
+        "check_suite": {
+          "id": 107516221524
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 1,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470781808/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470780435,
+        "name": "payload-protection",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:35:42Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648479/job/119470780435",
+        "external_id": "fdec272e-62c2-5910-bdc4-6042d09b6f14",
+        "check_suite": {
+          "id": 107516220207
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780435/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470780420,
+        "name": "Corrective authorization fixture controls",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:35:52Z",
+        "completed_at": null,
+        "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470780420",
+        "external_id": "9ec34466-9256-599e-bb10-a66b5351d51c",
+        "check_suite": {
+          "id": 107516220765
+        },
+        "output": {
+          "title": null,
+          "summary": null,
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780420/annotations"
+        },
+        "app": {
+          "id": 15368,
+          "slug": "github-actions",
+          "name": "GitHub Actions"
+        }
+      },
+      {
+        "id": 119470772512,
+        "name": "Cursor Approval Agent: Pull Request Router",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:35:38Z",
+        "completed_at": null,
+        "details_url": "https://cursor.com/agents/bc-631027ab-5c29-4a67-aa54-bfed0a1db9bf",
+        "external_id": "",
+        "check_suite": {
+          "id": 107516195456
+        },
+        "output": {
+          "title": "Cursor Approval Agent: Pull Request Router",
+          "summary": "Approval Agent is running...\n\n[View agent](https://cursor.com/agents/bc-631027ab-5c29-4a67-aa54-bfed0a1db9bf)",
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470772512/annotations"
+        },
+        "app": {
+          "id": 1210556,
+          "slug": "cursor",
+          "name": "Cursor"
+        }
+      },
+      {
+        "id": 119470762284,
+        "name": "Cursor Security Agent: Security Reviewer",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T20:35:37Z",
+        "completed_at": null,
+        "details_url": "https://cursor.com/agents/bc-9ad19bae-3206-4d4b-97f1-9ae3e0c30764",
+        "external_id": "",
+        "check_suite": {
+          "id": 107516195456
+        },
+        "output": {
+          "title": "Cursor Security Agent: Security Reviewer",
+          "summary": "Security Reviewer is running...\n\n[View agent](https://cursor.com/agents/bc-9ad19bae-3206-4d4b-97f1-9ae3e0c30764)",
+          "text": null,
+          "annotations_count": 0,
+          "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470762284/annotations"
+        },
+        "app": {
+          "id": 1210556,
+          "slug": "cursor",
+          "name": "Cursor"
+        }
+      }
+    ]
+  },
+  "commitStatuses": {
+    "state": "pending",
+    "statuses": [],
+    "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+    "total_count": 0
+  },
+  "workflowRuns": {
+    "total_count": 11,
+    "workflow_runs": [
+      {
+        "id": 39671812236,
+        "name": "Commitlint",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/commitlint.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1077,
+        "run_attempt": 1,
+        "status": "pending",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:36:48Z",
+        "updated_at": "2026-10-21T20:36:49Z",
+        "run_started_at": "2026-10-21T20:36:48Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671812236",
+        "workflow_id": 305921075,
+        "check_suite_id": 107516677703,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671703355,
+        "name": "Commitlint",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/commitlint.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1076,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:36:02Z",
+        "updated_at": "2026-10-21T20:36:44Z",
+        "run_started_at": "2026-10-21T20:36:02Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355",
+        "workflow_id": 305921075,
+        "check_suite_id": 107516371902,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648479,
+        "name": "Payload Protection",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/payload-protection.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 390,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:35:43Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648479",
+        "workflow_id": 359890992,
+        "check_suite_id": 107516220207,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648714,
+        "name": "Integration Tests",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/integration.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1157,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:36:12Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714",
+        "workflow_id": 300068044,
+        "check_suite_id": 107516220894,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648665,
+        "name": "Corrective Work Authorization",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/corrective-work-authorization.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 64,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:35:53Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665",
+        "workflow_id": 388229764,
+        "check_suite_id": 107516220765,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648888,
+        "name": "Commitlint",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/commitlint.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1075,
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "cancelled",
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:36:04Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648888",
+        "workflow_id": 305921075,
+        "check_suite_id": 107516221524,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648792,
+        "name": "P1R Qualification Preparation",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/p1r-qualification.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 221,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:36:06Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648792",
+        "workflow_id": 376400190,
+        "check_suite_id": 107516221166,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671649103,
+        "name": "CI",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/ci.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 2129,
+        "run_attempt": 1,
+        "status": "queued",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:36:54Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103",
+        "workflow_id": 238596342,
+        "check_suite_id": 107516222095,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671649016,
+        "name": "CodeQL",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/codeql.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1116,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:37:20Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016",
+        "workflow_id": 305921074,
+        "check_suite_id": 107516221756,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648984,
+        "name": "Dependency Review",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/dependency-review.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 126,
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:37:17Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984",
+        "workflow_id": 305921076,
+        "check_suite_id": 107516221805,
+        "previous_attempt_url": null
+      },
+      {
+        "id": 39671648513,
+        "name": "Advisory Tests",
+        "display_title": "ci(p1r): complete qualification and bind sanitized evidence",
+        "path": ".github/workflows/advisory-tests.yml",
+        "event": "pull_request",
+        "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "run_number": 1011,
+        "run_attempt": 1,
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-10-21T20:35:39Z",
+        "updated_at": "2026-10-21T20:36:47Z",
+        "run_started_at": "2026-10-21T20:35:39Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513",
+        "workflow_id": 310020568,
+        "check_suite_id": 107516220299,
+        "previous_attempt_url": null
+      }
+    ]
+  },
+  "rollup": {
+    "mergeStateStatus": "BLOCKED",
+    "reviewDecision": "",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T20:36:02Z",
+        "conclusion": "CANCELLED",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648888/job/119470781808",
+        "name": "commitlint / commitlint",
+        "startedAt": "2026-10-21T20:35:40Z",
+        "status": "COMPLETED",
+        "workflowName": "Commitlint"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392922",
+        "name": "ci / folded-snapshot-compatibility",
+        "startedAt": "2026-10-21T20:36:54Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+        "name": "advisory",
+        "startedAt": "2026-10-21T20:36:46Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "Advisory Tests"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+        "name": "codeql / analyze",
+        "startedAt": "2026-10-21T20:37:19Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "CodeQL"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+        "name": "commitlint / commitlint",
+        "startedAt": "2026-10-21T20:36:43Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "Commitlint"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470780420",
+        "name": "Corrective authorization fixture controls",
+        "startedAt": "2026-10-21T20:35:52Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "Corrective Work Authorization"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+        "name": "live-sidecar",
+        "startedAt": "2026-10-21T20:36:11Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "Integration Tests"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648792/job/119470782066",
+        "name": "preparation-controls",
+        "startedAt": "2026-10-21T20:36:05Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "P1R Qualification Preparation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648479/job/119470780435",
+        "name": "payload-protection",
+        "startedAt": "2026-10-21T20:35:42Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "Payload Protection"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T20:37:17Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+        "name": "dependency-review / dependency-review",
+        "startedAt": "2026-10-21T20:36:24Z",
+        "status": "COMPLETED",
+        "workflowName": "Dependency Review"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393165",
+        "name": "ci / checkpointed process packages",
+        "startedAt": "2026-10-21T20:36:54Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T20:35:39Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470783295",
+        "name": "Publish current live authorization verdicts",
+        "startedAt": "2026-10-21T20:35:40Z",
+        "status": "COMPLETED",
+        "workflowName": "Corrective Work Authorization"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+        "name": "ci / build-and-test",
+        "startedAt": "2026-10-21T20:37:16Z",
+        "status": "IN_PROGRESS",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392699",
+        "name": "ci / contracts",
+        "startedAt": "2026-10-21T20:36:54Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392670",
+        "name": "ci / semantic-release-governance",
+        "startedAt": "2026-10-21T20:36:54Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+        "name": "ci / tenants-source-mode",
+        "startedAt": "2026-10-21T20:36:54Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/agents/bc-631027ab-5c29-4a67-aa54-bfed0a1db9bf",
+        "name": "Cursor Approval Agent: Pull Request Router",
+        "startedAt": "2026-10-21T20:35:38Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/docs/bugbot",
+        "name": "Cursor Bugbot",
+        "startedAt": "2026-10-21T20:35:59Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://cursor.com/agents/bc-9ad19bae-3206-4d4b-97f1-9ae3e0c30764",
+        "name": "Cursor Security Agent: Security Reviewer",
+        "startedAt": "2026-10-21T20:35:37Z",
+        "status": "IN_PROGRESS",
+        "workflowName": ""
+      }
+    ]
+  },
+  "latestChecksByExactContextAndApp": [
+    {
+      "id": 119471393551,
+      "name": "ci / build-and-test",
+      "node_id": "CR_kwDORNpC788AAAAb0QzLDw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "5fb21d16-b027-5d3a-bd91-7c8a779c1bd3",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393551",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393551",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:37:16Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393551/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471393171,
+      "name": "ci / tenants-source-mode",
+      "node_id": "CR_kwDORNpC788AAAAb0QzJkw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "deefa31d-a049-51d2-9ef0-a3e369520e60",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393171",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393171",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:54Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393171/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471393165,
+      "name": "ci / checkpointed process packages",
+      "node_id": "CR_kwDORNpC788AAAAb0QzJjQ",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "135b6b93-edd8-5b09-95e1-d64a1a9db603",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393165",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393165",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471393165",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:54Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471393165/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471392922,
+      "name": "ci / folded-snapshot-compatibility",
+      "node_id": "CR_kwDORNpC788AAAAb0QzImg",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "1152721d-5b69-5b05-b462-49966f3c2bab",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392922",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392922",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392922",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:54Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392922/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471392699,
+      "name": "ci / contracts",
+      "node_id": "CR_kwDORNpC788AAAAb0QzHuw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "1ba47a9f-9552-5aaf-893f-4d24f0730f5c",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392699",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392699",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392699",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:54Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392699/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471392670,
+      "name": "ci / semantic-release-governance",
+      "node_id": "CR_kwDORNpC788AAAAb0QzHng",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "5ae4cbec-b76b-5c02-af72-261a1f4368e0",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392670",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392670",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649103/job/119471392670",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:54Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471392670/annotations"
+      },
+      "check_suite": {
+        "id": 107516222095
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471289984,
+      "name": "codeql / analyze",
+      "node_id": "CR_kwDORNpC788AAAAb0Qs2gA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "e5191144-8a50-5405-a155-11bc98bd13a3",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471289984",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671649016/job/119471289984",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:37:19Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471289984/annotations"
+      },
+      "check_suite": {
+        "id": 107516221756
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119471025231,
+      "name": "advisory",
+      "node_id": "CR_kwDORNpC788AAAAb0QcsTw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "46ac7caa-7c69-53f4-9d56-b81cb6f8c5f7",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471025231",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648513/job/119471025231",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:46Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119471025231/annotations"
+      },
+      "check_suite": {
+        "id": 107516220299
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470975614,
+      "name": "live-sidecar",
+      "node_id": "CR_kwDORNpC788AAAAb0QZqfg",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "daa89595-3f44-58b1-865c-d70bd65d3201",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470975614",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648714/job/119470975614",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:11Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470975614/annotations"
+      },
+      "check_suite": {
+        "id": 107516220894
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470973565,
+      "name": "commitlint / commitlint",
+      "node_id": "CR_kwDORNpC788AAAAb0QZifQ",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "044a4b84-7531-5904-bc43-f9a3db001feb",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470973565",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671703355/job/119470973565",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:43Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470973565/annotations"
+      },
+      "check_suite": {
+        "id": 107516371902
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470941544,
+      "name": "Cursor Bugbot",
+      "node_id": "CR_kwDORNpC788AAAAb0QXlaA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470941544",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/runs/119470941544",
+      "details_url": "https://cursor.com/docs/bugbot",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:35:59Z",
+      "completed_at": null,
+      "output": {
+        "title": "Bugbot Review",
+        "summary": "Bugbot Analysis Progress (21s elapsed)\n\n\u2705 Gathered PR context (18s)\n\nRequest ID: 26039e42-eda5-49e0-995d-daab74e64501",
+        "text": "Reviewing code changes for potential bugs...",
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470941544/annotations"
+      },
+      "check_suite": {
+        "id": 107516195456
+      },
+      "app": {
+        "id": 1210556,
+        "client_id": "Iv23liGzp2hacMWjAyXc",
+        "slug": "cursor",
+        "node_id": "A_kwHOB44z8s4AEni8",
+        "owner": {
+          "login": "cursor",
+          "id": 126759922,
+          "node_id": "O_kgDOB44z8g",
+          "avatar_url": "https://avatars.githubusercontent.com/u/126759922?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cursor",
+          "html_url": "https://github.com/cursor",
+          "followers_url": "https://api.github.com/users/cursor/followers",
+          "following_url": "https://api.github.com/users/cursor/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cursor/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cursor/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cursor/subscriptions",
+          "organizations_url": "https://api.github.com/users/cursor/orgs",
+          "repos_url": "https://api.github.com/users/cursor/repos",
+          "events_url": "https://api.github.com/users/cursor/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cursor/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Cursor",
+        "description": "Connect Cursor to GitHub to allow agents to do work for you in the background.",
+        "external_url": "https://cursor.com",
+        "html_url": "https://github.com/apps/cursor",
+        "created_at": "2025-04-09T22:42:17Z",
+        "updated_at": "2026-10-13T17:36:43Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "checks": "write",
+          "contents": "write",
+          "deployments": "read",
+          "discussions": "write",
+          "emails": "read",
+          "issues": "write",
+          "members": "read",
+          "merge_queues": "write",
+          "metadata": "read",
+          "organization_custom_org_roles": "read",
+          "organization_custom_properties": "read",
+          "organization_custom_roles": "read",
+          "packages": "read",
+          "pages": "read",
+          "pull_requests": "write",
+          "statuses": "read",
+          "workflows": "write"
+        },
+        "events": [
+          "branch_protection_configuration",
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "commit_comment",
+          "deployment",
+          "deployment_status",
+          "issues",
+          "issue_comment",
+          "label",
+          "member",
+          "membership",
+          "merge_queue_entry",
+          "organization",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "pull_request_review_thread",
+          "push",
+          "repository",
+          "repository_ruleset",
+          "status",
+          "team",
+          "team_add",
+          "workflow_job",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470783328,
+      "name": "dependency-review / dependency-review",
+      "node_id": "CR_kwDORNpC788AAAAb0QN7YA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "9bb0056f-1ae6-5293-8372-c61dc6e4f3f6",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783328",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648984/job/119470783328",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-21T20:36:24Z",
+      "completed_at": "2026-10-21T20:37:17Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 1,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783328/annotations"
+      },
+      "check_suite": {
+        "id": 107516221805
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470783295,
+      "name": "Publish current live authorization verdicts",
+      "node_id": "CR_kwDORNpC788AAAAb0QN7Pw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "9f05b17a-96e4-5c1a-bbb4-2c76a206435d",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783295",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470783295",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470783295",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-21T20:35:40Z",
+      "completed_at": "2026-10-21T20:35:39Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470783295/annotations"
+      },
+      "check_suite": {
+        "id": 107516220765
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470782066,
+      "name": "preparation-controls",
+      "node_id": "CR_kwDORNpC788AAAAb0QN2cg",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "0d2a32b3-1416-5709-9154-c739168a4f9a",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470782066",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648792/job/119470782066",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648792/job/119470782066",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:36:05Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470782066/annotations"
+      },
+      "check_suite": {
+        "id": 107516221166
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470780435,
+      "name": "payload-protection",
+      "node_id": "CR_kwDORNpC788AAAAb0QNwEw",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "fdec272e-62c2-5910-bdc4-6042d09b6f14",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780435",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648479/job/119470780435",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648479/job/119470780435",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:35:42Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780435/annotations"
+      },
+      "check_suite": {
+        "id": 107516220207
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470780420,
+      "name": "Corrective authorization fixture controls",
+      "node_id": "CR_kwDORNpC788AAAAb0QNwBA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "9ec34466-9256-599e-bb10-a66b5351d51c",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780420",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470780420",
+      "details_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39671648665/job/119470780420",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:35:52Z",
+      "completed_at": null,
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470780420/annotations"
+      },
+      "check_suite": {
+        "id": 107516220765
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470772512,
+      "name": "Cursor Approval Agent: Pull Request Router",
+      "node_id": "CR_kwDORNpC788AAAAb0QNRIA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470772512",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/runs/119470772512",
+      "details_url": "https://cursor.com/agents/bc-631027ab-5c29-4a67-aa54-bfed0a1db9bf",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:35:38Z",
+      "completed_at": null,
+      "output": {
+        "title": "Cursor Approval Agent: Pull Request Router",
+        "summary": "Approval Agent is running...\n\n[View agent](https://cursor.com/agents/bc-631027ab-5c29-4a67-aa54-bfed0a1db9bf)",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470772512/annotations"
+      },
+      "check_suite": {
+        "id": 107516195456
+      },
+      "app": {
+        "id": 1210556,
+        "client_id": "Iv23liGzp2hacMWjAyXc",
+        "slug": "cursor",
+        "node_id": "A_kwHOB44z8s4AEni8",
+        "owner": {
+          "login": "cursor",
+          "id": 126759922,
+          "node_id": "O_kgDOB44z8g",
+          "avatar_url": "https://avatars.githubusercontent.com/u/126759922?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cursor",
+          "html_url": "https://github.com/cursor",
+          "followers_url": "https://api.github.com/users/cursor/followers",
+          "following_url": "https://api.github.com/users/cursor/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cursor/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cursor/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cursor/subscriptions",
+          "organizations_url": "https://api.github.com/users/cursor/orgs",
+          "repos_url": "https://api.github.com/users/cursor/repos",
+          "events_url": "https://api.github.com/users/cursor/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cursor/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Cursor",
+        "description": "Connect Cursor to GitHub to allow agents to do work for you in the background.",
+        "external_url": "https://cursor.com",
+        "html_url": "https://github.com/apps/cursor",
+        "created_at": "2025-04-09T22:42:17Z",
+        "updated_at": "2026-10-13T17:36:43Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "checks": "write",
+          "contents": "write",
+          "deployments": "read",
+          "discussions": "write",
+          "emails": "read",
+          "issues": "write",
+          "members": "read",
+          "merge_queues": "write",
+          "metadata": "read",
+          "organization_custom_org_roles": "read",
+          "organization_custom_properties": "read",
+          "organization_custom_roles": "read",
+          "packages": "read",
+          "pages": "read",
+          "pull_requests": "write",
+          "statuses": "read",
+          "workflows": "write"
+        },
+        "events": [
+          "branch_protection_configuration",
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "commit_comment",
+          "deployment",
+          "deployment_status",
+          "issues",
+          "issue_comment",
+          "label",
+          "member",
+          "membership",
+          "merge_queue_entry",
+          "organization",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "pull_request_review_thread",
+          "push",
+          "repository",
+          "repository_ruleset",
+          "status",
+          "team",
+          "team_add",
+          "workflow_job",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 119470762284,
+      "name": "Cursor Security Agent: Security Reviewer",
+      "node_id": "CR_kwDORNpC788AAAAb0QMpLA",
+      "head_sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+      "external_id": "",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470762284",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/runs/119470762284",
+      "details_url": "https://cursor.com/agents/bc-9ad19bae-3206-4d4b-97f1-9ae3e0c30764",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-21T20:35:37Z",
+      "completed_at": null,
+      "output": {
+        "title": "Cursor Security Agent: Security Reviewer",
+        "summary": "Security Reviewer is running...\n\n[View agent](https://cursor.com/agents/bc-9ad19bae-3206-4d4b-97f1-9ae3e0c30764)",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/check-runs/119470762284/annotations"
+      },
+      "check_suite": {
+        "id": 107516195456
+      },
+      "app": {
+        "id": 1210556,
+        "client_id": "Iv23liGzp2hacMWjAyXc",
+        "slug": "cursor",
+        "node_id": "A_kwHOB44z8s4AEni8",
+        "owner": {
+          "login": "cursor",
+          "id": 126759922,
+          "node_id": "O_kgDOB44z8g",
+          "avatar_url": "https://avatars.githubusercontent.com/u/126759922?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cursor",
+          "html_url": "https://github.com/cursor",
+          "followers_url": "https://api.github.com/users/cursor/followers",
+          "following_url": "https://api.github.com/users/cursor/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cursor/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cursor/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cursor/subscriptions",
+          "organizations_url": "https://api.github.com/users/cursor/orgs",
+          "repos_url": "https://api.github.com/users/cursor/repos",
+          "events_url": "https://api.github.com/users/cursor/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cursor/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Cursor",
+        "description": "Connect Cursor to GitHub to allow agents to do work for you in the background.",
+        "external_url": "https://cursor.com",
+        "html_url": "https://github.com/apps/cursor",
+        "created_at": "2025-04-09T22:42:17Z",
+        "updated_at": "2026-10-13T17:36:43Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "checks": "write",
+          "contents": "write",
+          "deployments": "read",
+          "discussions": "write",
+          "emails": "read",
+          "issues": "write",
+          "members": "read",
+          "merge_queues": "write",
+          "metadata": "read",
+          "organization_custom_org_roles": "read",
+          "organization_custom_properties": "read",
+          "organization_custom_roles": "read",
+          "packages": "read",
+          "pages": "read",
+          "pull_requests": "write",
+          "statuses": "read",
+          "workflows": "write"
+        },
+        "events": [
+          "branch_protection_configuration",
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "commit_comment",
+          "deployment",
+          "deployment_status",
+          "issues",
+          "issue_comment",
+          "label",
+          "member",
+          "membership",
+          "merge_queue_entry",
+          "organization",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "pull_request_review_thread",
+          "push",
+          "repository",
+          "repository_ruleset",
+          "status",
+          "team",
+          "team_add",
+          "workflow_job",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "status": "ahead",
+    "ahead_by": 5,
+    "behind_by": 0
+  },
+  "privateOriginal": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/historical-readiness-originals/eventstore-current-pr-gate-2.json",
+    "bytes": 458407,
+    "sha256": "464a2bc98fba231d039285c67d4b05f597c455e652b04fb9aaed004c1719a68f"
+  },
+  "retention": "Complete original private; compact projection removes repeated GitHub repository/user/boilerplate links. Findings, effective rules, required contexts, latest exact context/app decisions, all check outputs and all workflow identities/outcomes remain unchanged."
+}

@@ -1,0 +1,55 @@
+test_absent_or_invalid_expected_package_count_blocks_publication (test_publish_script_contract.PublishScriptContractTests.test_absent_or_invalid_expected_package_count_blocks_publication) ... ok
+test_action_byte_mismatch_fails_behaviorally (test_publish_script_contract.PublishScriptContractTests.test_action_byte_mismatch_fails_behaviorally) ... ok
+test_action_installs_immutable_registry_validator (test_publish_script_contract.PublishScriptContractTests.test_action_installs_immutable_registry_validator) ... ok
+test_action_installs_platform_smoke_helper (test_publish_script_contract.PublishScriptContractTests.test_action_installs_platform_smoke_helper) ... ok
+test_action_installs_preflight_and_binds_approved_builds_bytes (test_publish_script_contract.PublishScriptContractTests.test_action_installs_preflight_and_binds_approved_builds_bytes) ... ok
+test_action_installs_publication_preflight (test_publish_script_contract.PublishScriptContractTests.test_action_installs_publication_preflight) ... ok
+test_authority_declaration_must_be_exactly_true_or_false (test_publish_script_contract.PublishScriptContractTests.test_authority_declaration_must_be_exactly_true_or_false)
+Anything other than the two declared postures fails closed. ... ok
+test_builds_release_is_manual_protected_and_does_not_push_git (test_publish_script_contract.PublishScriptContractTests.test_builds_release_is_manual_protected_and_does_not_push_git) ... ERROR
+test_builds_release_runs_publisher_contract_suite_before_release (test_publish_script_contract.PublishScriptContractTests.test_builds_release_runs_publisher_contract_suite_before_release) ... ok
+test_disabled_authority_gate_publishes_without_reservation_or_authority (test_publish_script_contract.PublishScriptContractTests.test_disabled_authority_gate_publishes_without_reservation_or_authority)
+The opted-out posture publishes with no reserved version and no authority argument. ... ok
+test_disabled_authority_gate_rejects_every_silently_ignored_input (test_publish_script_contract.PublishScriptContractTests.test_disabled_authority_gate_rejects_every_silently_ignored_input)
+A value that the disabled posture would ignore fails closed instead. ... ok
+test_domain_release_late_source_guard_accepts_matching_source (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_accepts_matching_source) ... ok
+test_domain_release_late_source_guard_fails_closed_on_api_error (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_fails_closed_on_api_error) ... ok
+test_domain_release_late_source_guard_rejects_checkout_mismatch (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_checkout_mismatch) ... ok
+test_domain_release_late_source_guard_rejects_malformed_source_proofs (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_malformed_source_proofs) ... ok
+test_domain_release_late_source_guard_rejects_stale_source_before_semantic_release (test_publish_script_contract.PublishScriptContractTests.test_domain_release_late_source_guard_rejects_stale_source_before_semantic_release) ... ok
+test_domain_release_requires_one_exact_builds_identity_for_workflow_and_action (test_publish_script_contract.PublishScriptContractTests.test_domain_release_requires_one_exact_builds_identity_for_workflow_and_action) ... ok
+test_domain_release_sha_pins_arm64_emulation_setup_before_publisher (test_publish_script_contract.PublishScriptContractTests.test_domain_release_sha_pins_arm64_emulation_setup_before_publisher) ... ok
+test_enabled_authority_gate_still_forwards_reservation_and_authority (test_publish_script_contract.PublishScriptContractTests.test_enabled_authority_gate_still_forwards_reservation_and_authority)
+The guarded posture is unchanged and still reaches the preflight. ... ok
+test_invalid_later_mapping_blocks_preflight_and_every_mutation (test_publish_script_contract.PublishScriptContractTests.test_invalid_later_mapping_blocks_preflight_and_every_mutation) ... ok
+test_multi_platform_publish_is_exact_and_validation_gated (test_publish_script_contract.PublishScriptContractTests.test_multi_platform_publish_is_exact_and_validation_gated) ... ok
+test_rejected_preflight_blocks_sdk_container_mutation (test_publish_script_contract.PublishScriptContractTests.test_rejected_preflight_blocks_sdk_container_mutation) ... ok
+test_repository_path_escape_is_rejected_before_evidence_or_publication (test_publish_script_contract.PublishScriptContractTests.test_repository_path_escape_is_rejected_before_evidence_or_publication) ... ok
+test_reserved_version_mismatch_blocks_preflight_login_and_dotnet_publication (test_publish_script_contract.PublishScriptContractTests.test_reserved_version_mismatch_blocks_preflight_login_and_dotnet_publication) ... ok
+test_reusable_workflow_declares_and_forwards_the_authority_posture (test_publish_script_contract.PublishScriptContractTests.test_reusable_workflow_declares_and_forwards_the_authority_posture)
+The caller-facing input exists and reaches both release jobs. ... ok
+test_three_container_collision_blocks_login_and_every_container_write (test_publish_script_contract.PublishScriptContractTests.test_three_container_collision_blocks_login_and_every_container_write) ... ok
+test_three_container_set_is_preflighted_once_before_any_write (test_publish_script_contract.PublishScriptContractTests.test_three_container_set_is_preflighted_once_before_any_write) ... ok
+test_unset_authority_declaration_keeps_the_gate_required (test_publish_script_contract.PublishScriptContractTests.test_unset_authority_declaration_keeps_the_gate_required)
+Absence of the declaration must not be readable as opting out. ... ok
+test_workflow_sha_mismatch_fails_behaviorally (test_publish_script_contract.PublishScriptContractTests.test_workflow_sha_mismatch_fails_behaviorally) ... ok
+
+======================================================================
+ERROR: test_builds_release_is_manual_protected_and_does_not_push_git (test_publish_script_contract.PublishScriptContractTests.test_builds_release_is_manual_protected_and_does_not_push_git)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-story411-publisher-pin-vzzujpcu/Github/publish-containers/tests/test_publish_script_contract.py", line 480, in test_builds_release_is_manual_protected_and_does_not_push_git
+    package = json.loads((SCRIPT_DIRECTORY.parents[1] / "package.json").read_text(encoding="utf-8"))
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 788, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 772, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/mcpcli-story411-publisher-pin-vzzujpcu/package.json'
+
+----------------------------------------------------------------------
+Ran 29 tests in 1.512s
+
+FAILED (errors=1)

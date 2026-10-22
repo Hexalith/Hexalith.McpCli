@@ -1,0 +1,258 @@
+{
+  "startedAtUtc": "2026-10-22T02:13:16.663100+00:00",
+  "source": "85290197d2a4324b50560630e8992d71c3318784 plus bound working repair",
+  "workingDiffSha256Before": "c29f77f926d657edd0206af5439907c5a1fd5381b3dd3b61ecba707e68b99114",
+  "commands": [
+    {
+      "project": "Hexalith.Builds.Module.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Module.Tests/Hexalith.Builds.Module.Tests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Builds.Module.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:13:16.677223+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 290.4175449309987,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests.stdout.txt",
+          "bytes": 1668,
+          "sha256": "af8547f3a62887a4ce749a565e004f6d5e7568013bcb94c9fd2f4282d5412d85"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests-results/Hexalith.Builds.Module.Tests.trx",
+        "bytes": 2282600,
+        "sha256": "aec0d1a39099e1f261aa25a6f83c1b317ca943c737848768a5b23262e13f177d"
+      },
+      "counters": {
+        "total": "1516",
+        "executed": "1513",
+        "passed": "1513",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "3",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "project": "Hexalith.Builds.Evidence.Tests",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Builds.Evidence.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:18:07.101098+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.43007132499769796,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests.stderr.txt",
+          "bytes": 260,
+          "sha256": "6e03bcdd4a3ffa4b5aedbb90ceb5624599c56787e205b306d6c33d96bcc69975"
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Builds.Evidence.Tests",
+      "kind": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj",
+        "-p:Configuration=Release"
+      ],
+      "startedAtUtc": "2026-10-22T02:19:21.209300+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.1770541919977404,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-restore.stdout.txt",
+          "bytes": 364,
+          "sha256": "6afc4026ff47d8c35d2b5f8d5a26e9592f6b4791835cd3577b3912b0aea20978"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-restore.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Builds.Evidence.Tests",
+      "kind": "test",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Builds.Evidence.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:19:22.387500+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 8.306110617995728,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-test.stdout.txt",
+          "bytes": 624,
+          "sha256": "4815c6d3b8749ad0ce8312c2345d446a22c24357589c2e40983a7e62f296543a"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-test.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Evidence.Tests-restored-results/Hexalith.Builds.Evidence.Tests.trx",
+        "bytes": 163330,
+        "sha256": "90ca5055253c6b475fc9f6630643407ce881d5a3edf4c84edcd50beba3d13184"
+      },
+      "counters": {
+        "total": "107",
+        "executed": "107",
+        "passed": "107",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "project": "Hexalith.Builds.Tooling.IntegrationTests",
+      "kind": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj",
+        "-p:Configuration=Release"
+      ],
+      "startedAtUtc": "2026-10-22T02:19:30.695309+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.3368640179978684,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-restore.stdout.txt",
+          "bytes": 243,
+          "sha256": "73b5554f3ef82a080b93419b09777c7dfd5fdedd3e0b44bfba79bf08b2c319c4"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-restore.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "project": "Hexalith.Builds.Tooling.IntegrationTests",
+      "kind": "test",
+      "command": [
+        "dotnet",
+        "test",
+        "test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-results",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Builds.Tooling.IntegrationTests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T02:19:32.033267+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 7.118204698010231,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-test.stdout.txt",
+          "bytes": 7413,
+          "sha256": "488384afbea5a42ecfd9b0ae456343b2bba5e163f884299c26a2cef4bb2818e4"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-test.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "trx": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Tooling.IntegrationTests-restored-results/Hexalith.Builds.Tooling.IntegrationTests.trx",
+        "bytes": 24411,
+        "sha256": "f49f13f5c8dc6a6f4d172ca4e8a52dcbae2b8b240d1e3975c21787e065befb7b"
+      },
+      "counters": {
+        "total": "13",
+        "executed": "1",
+        "passed": "1",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "12",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed",
+  "localSetupFailure": "Fresh Evidence project without assets was detected as VSTest under the MTP global.json. No tests executed in that attempt; explicitly restore both remaining projects before individual test runs.",
+  "completedAtUtc": "2026-10-22T02:19:39.152602+00:00",
+  "workingDiffSha256After": "c29f77f926d657edd0206af5439907c5a1fd5381b3dd3b61ecba707e68b99114"
+}

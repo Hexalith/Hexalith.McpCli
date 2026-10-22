@@ -1,0 +1,50 @@
+{
+  "recordedAtUtc": "2026-10-21T22:44:18.904Z",
+  "status": "in-progress",
+  "publicationDispatched": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "eventstore": {
+    "repository": "Hexalith/Hexalith.EventStore",
+    "pullRequest": 372,
+    "head": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+    "publishedMain": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+    "preservedUnpublishedOwnerHead": "2444752e174785135bc3b15aa74b9035ecc46567",
+    "candidateVersion": "3.126.1",
+    "runs": {
+      "ci": 39685339168,
+      "p1r": 39685338623,
+      "codeql": 39685339156,
+      "integration": 39685338657,
+      "advisory": 39685338596,
+      "latestCommitlint": 39685452534
+    },
+    "completed": "P1R, advisory, Contracts, checkpointed packages, folded snapshot, governance, tenants-source, dependency review and latest commitlint successful at last observed milestone.",
+    "pending": "Build-and-test Tier1, CodeQL analysis and full live integration remain active; fresh full exact-head readiness audit required before any normal squash."
+  },
+  "builds": {
+    "main": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+    "protectedRepair": "complete",
+    "temporaryMergePolicy": "proposed only; owner question unanswered; do not apply",
+    "pinAuditConstraint": "Declaration ancestry requires normal merge for two future checked pin PRs; existing squash-only policy cannot preserve it."
+  },
+  "diagnostic": {
+    "scope": "Optional isolated two32769 tests only, no full-suite acceptance.",
+    "worktree": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+    "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+    "scratch": "/tmp/mcpcli-story411-immutable-large-yh627j8k",
+    "receipt": "eventstore-immutable-large-native-diagnostic.json",
+    "override": "Existing process-local EVENTSTORE_TEST_DAPR_HOT_RELOAD=false for local watcher allocation refusal; shared configuration and CI defaults unchanged.",
+    "state": "First streamed32769 staging and promotion complete; resume active. All55 generated-source/DLL/PDB hashes unchanged at22:41:59UTC; no further build/edit/restore permitted while children run."
+  },
+  "approvedInputs": {
+    "vectors": 14,
+    "inventoryDecisions": 20,
+    "included": 14,
+    "excluded": 6,
+    "discoveredTenantsOperationsInHistoricalCandidate": 14,
+    "expectedCombinedOperations": 21,
+    "actualPublishedCatalogNotYetMeasured": true
+  },
+  "next": "All current PR gates green, fresh remote base check, pinned exact squash validation, normal merge; exact merged-main push CI/P1R/commitlint and fresh package/tag checks before protected publication. Then owning Builds pins/audit, Tenants checked release path, authentic final-byte verification, production enrollment and Ubuntu strict replay/cold benchmark. Pending Builds policy decision remains separate."
+}

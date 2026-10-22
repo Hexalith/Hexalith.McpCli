@@ -1,0 +1,75 @@
+{
+  "module": "tenants",
+  "operations": [
+    {
+      "name": "tenants.add-user-to-tenant",
+      "kind": "write",
+      "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member\u0027s role."
+    },
+    {
+      "name": "tenants.change-user-role",
+      "kind": "write",
+      "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant\u0027s members, roles and configuration."
+    },
+    {
+      "name": "tenants.create-tenant",
+      "kind": "write",
+      "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+    },
+    {
+      "name": "tenants.disable-tenant",
+      "kind": "write",
+      "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+    },
+    {
+      "name": "tenants.enable-tenant",
+      "kind": "write",
+      "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+    },
+    {
+      "name": "tenants.get-tenant",
+      "kind": "read",
+      "description": "Read one tenant\u0027s full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+    },
+    {
+      "name": "tenants.get-tenant-audit",
+      "kind": "read",
+      "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+    },
+    {
+      "name": "tenants.get-tenant-users",
+      "kind": "read",
+      "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+    },
+    {
+      "name": "tenants.get-user-tenants",
+      "kind": "read",
+      "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant\u0027s name, status and the user\u0027s role. Callers always see their own memberships, a global administrator sees any user\u0027s, and a TenantOwner sees another user\u0027s memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+    },
+    {
+      "name": "tenants.list-tenants",
+      "kind": "read",
+      "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+    },
+    {
+      "name": "tenants.remove-tenant-configuration",
+      "kind": "write",
+      "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+    },
+    {
+      "name": "tenants.remove-user-from-tenant",
+      "kind": "write",
+      "description": "Remove a user\u0027s membership from an active tenant, revoking the user\u0027s role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant\u0027s members, roles and configuration."
+    },
+    {
+      "name": "tenants.set-tenant-configuration",
+      "kind": "write",
+      "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+    },
+    {
+      "name": "tenants.update-tenant",
+      "kind": "write",
+      "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+    }
+  ]
+}

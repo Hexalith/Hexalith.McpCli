@@ -1,0 +1,378 @@
+{
+  "status": "locally-qualified-source-ci-and-publication-pending",
+  "preparedAtUtc": "2026-10-21T19:04:12.058133+00:00",
+  "publicationAuthorized": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "storyStatus": "in-progress",
+  "strictProductionGatesUnchanged": true,
+  "originalCheckoutsModifiedByThisTask": false,
+  "registryPushes": false,
+  "commitsOrGitlinksCreated": false,
+  "packagePayloadsRehashed": true,
+  "packages": [
+    {
+      "packageId": "Hexalith.EventStore.Admin.Abstractions",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Admin.Abstractions.3.126.1.nupkg",
+      "sha256": "a1c5f60469b551f07c4579e6447a570dc0f1cfb1e4474756d87abe48c7182b68",
+      "sha512": "sha512-zi0dI+EWEK+8LDlCzpzan8wlV2ZfL6j+y7nFp6KKPbdVfHoQrD8yt9aD0BMY62iPtjztuDpAfqt9KHmmSlOeaw==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Admin.Cli",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Admin.Cli.3.126.1.nupkg",
+      "sha256": "f3464aaff8c23e3b85acf48c65e318bc4451e2c56c27a534df4b28ffbd98b901",
+      "sha512": "sha512-1c05PX5F+qb1uyKgH6dKR/quJRommUocYQE8c08uKsh1QkguGxrj1zo42fJRGmg6pzyGmbJHJjeOv5H1pUWuIg==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Admin.Server",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Admin.Server.3.126.1.nupkg",
+      "sha256": "3a147c04974bb6f48df0c1e7756f2da4f2b73b12fe053f4e3c9d8027a2dcf032",
+      "sha512": "sha512-eGMktJRtIIpQL+aejC1/2acrAceP6zaqJtxxPUuBdJc7SEw2ehOrkOwk1EZuVN5jQpMPTuNtb3ky9EJtX9psvw==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Aspire",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Aspire.3.126.1.nupkg",
+      "sha256": "4e207be3a3c54766779d8b7497791c7aef8bd79ad17d1fb81d00031e57435ea2",
+      "sha512": "sha512-ZlTGs1upSkN33WJXOuAG5y5TBjZB6N/bljpC5ffTf9INU+3tYQmifiX8u/ewTPoFLBeHKvSioCr0CaC8ZZl7gQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Client.3.126.1.nupkg",
+      "sha256": "79448cc9a71c707a204b7fc1cf08dd4c42b9466aa468168e952dfcdad47fac00",
+      "sha512": "sha512-Ivi4lqndq+PnQwNqokZ8cmQWQzXR0xWn7Rqr6dH5n9IRMVewXIW+kISyYElwXBVQb5dDK8DybndUKrPWRASKKQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Contracts.3.126.1.nupkg",
+      "sha256": "ff2fdf510a79a8a8f10b27b00472648de9cb6e3a7bef00f5a7a0aa2839bc7e92",
+      "sha512": "sha512-aP4Ky+qRPlHyRqOYzzYRVidDTBSrpAjYs+UkhyPbTakaI2sc6wn+bpqPcQfqPIuERGev5MSq8AW+/X4IM7dwYQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.DomainService",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.DomainService.3.126.1.nupkg",
+      "sha256": "8c1c9dce80b2dc23b855ef076267967194c5d2abf8d0537ec8067de5019dbc89",
+      "sha512": "sha512-VZnnNbU4cZUNRrhV2ZXpr4ee1x0xNG0Hz4Jk5z1rjGJ+ngYK/J66TixjIP4fgirKO3VfIp6JfkCNpLI0P1CuiA==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Gateway",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Gateway.3.126.1.nupkg",
+      "sha256": "b67e0872e06bb03191f84910bae415863caf1ee5ee469a457e5a7b26826336e5",
+      "sha512": "sha512-RlS/V4VDd8AnJ+nlaI81N259CrVzzhS07ypB/Mu9XlrTF3aNZ/OCO0n45PjpD/mrGi6x5yyHDgPtUzY46a4uHg==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.RestApi.Generators",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.RestApi.Generators.3.126.1.nupkg",
+      "sha256": "07ca6799b82df895557e40a9ad8435154716b3da030a7c2d6393a22a29bbffd8",
+      "sha512": "sha512-QeqC1saJg8jDzzzVr/REigpQN/VjQOTdokLbdQiP4Fb60W3RsvjYe8YRH0DsShDgoBIWnUcLob5neke5e/huKg==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Server",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Server.3.126.1.nupkg",
+      "sha256": "a9d342a1f9cd1aaf3cfe7c2f50c29e82cb72af33b72ee27b31fa5bb3fc1cc568",
+      "sha512": "sha512-NGg3fdDFnPv9iWuwR4WOk+rw5hlkIrjq5BrcwG7Z5EkIQnGnHfq6IB2MgwDbVzW47GxNeiSPLGl8aScAseLS7A==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.ServiceDefaults",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.ServiceDefaults.3.126.1.nupkg",
+      "sha256": "e4c7ed81b62fe870bd58e1ba4b01fdf900c1cd12879e17a9489860f54710f100",
+      "sha512": "sha512-2DqobkextYZkFGJcoB4EzrnpKqF5cbht/aFOWo8IA/2X93eMSBSGcTPRskMcr2QuFrDJqD5pQUE54GweyIMp5w==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.SignalR",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.SignalR.3.126.1.nupkg",
+      "sha256": "623bd67921c9d748a8c602cb7ff10c33989f654b74423730b2fa213318bb2659",
+      "sha512": "sha512-DH9XJckRkEOnR10foO5oF9Cggmkhq4eeB8UJFJeTK028Qvq5FNR5pRMhehb/8Q5vHUkw96cW8pUET8Too9fDCQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Testing",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Testing.3.126.1.nupkg",
+      "sha256": "8b3e85b2541ba616f753c5d3fe63b69ca528d7231900922d8a9ccb9fc29e6f05",
+      "sha512": "sha512-GBNsFTTvE7+lJZacgCh70rmgEc021ti4oemYl8o2+Dt2ZIysFK8gHepkjHWxrQLOVoOFXpbC4b0q+bT8bqTmfw==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.EventStore.Testing.Integration",
+      "version": "3.126.1",
+      "path": "eventstore-packages/Hexalith.EventStore.Testing.Integration.3.126.1.nupkg",
+      "sha256": "d2dec0653c7d19b5cbfe539b8ab9c7050277240f7d68261af7d9f2c3b6afca90",
+      "sha512": "sha512-6jPvp6LmdQYJxxhhTLJc9q1kdiIUKHeUYIxJx5c5a8FlKWhocCzj3YUAxivHkzjmYOi2+/ET+22WwTjHn0mXYA==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "commit": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+      }
+    },
+    {
+      "packageId": "Hexalith.Tenants.Aspire",
+      "version": "5.10.0",
+      "path": "tenants-packages/Hexalith.Tenants.Aspire.5.10.0.nupkg",
+      "sha256": "a8279ac0a8512256970bc6840be30ab09ec98c12950920ce9026fdd55d99f24f",
+      "sha512": "sha512-wflSN/1VDxSc4X103PvfDaLNmuXH7tTsMc8OAzQFgipRW3+iiqJ/4jrXnAVvmx23nUuVKAX6K9DcQbwx8zbeDQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+      }
+    },
+    {
+      "packageId": "Hexalith.Tenants.Client",
+      "version": "5.10.0",
+      "path": "tenants-packages/Hexalith.Tenants.Client.5.10.0.nupkg",
+      "sha256": "a4f18179d4567afd895ec1d89a9125e1ea2c1ee6101208f4fc1a4f1157766a5d",
+      "sha512": "sha512-DhEjpf9xJKb2KJ9zz55NulPhIQJv45Mcipy5o/J89/Osk19zPiRZOjbGmZPBSy5ClS3wv6RctFhIy4ntPjsQVw==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+      }
+    },
+    {
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "path": "tenants-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+      "sha256": "948aab26a08e3d66ddbcbe41b51d2c472d9b8cdad133180f00e77f528a068e2d",
+      "sha512": "sha512-LF7fQGYWJTDQsdoRQwyKmI4o7g9IWWGAyj1Jbkc8nb/Wfz5ccpYervP2VlUuu4CZ+u+gQyDR8h0i9qKkGZyMLA==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+      }
+    },
+    {
+      "packageId": "Hexalith.Tenants.Server",
+      "version": "5.10.0",
+      "path": "tenants-packages/Hexalith.Tenants.Server.5.10.0.nupkg",
+      "sha256": "625f4987057c954327882c736e1b023708e15abb9f131bd245b96eec0b71eede",
+      "sha512": "sha512-Z39Y7EYZCbxMn4Q2mE54R9gfydie7vhFDmnU5gd4SpQLqFzzpa/BmQymU7tSBhUeY3UXHBN8w9qCxsLHrxHbNQ==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+      }
+    },
+    {
+      "packageId": "Hexalith.Tenants.Testing",
+      "version": "5.10.0",
+      "path": "tenants-packages/Hexalith.Tenants.Testing.5.10.0.nupkg",
+      "sha256": "eba026e18a6679348e25366c1f30940a623f2da1c3ab7fc59caca5db4a894a53",
+      "sha512": "sha512-YYKrxZ9SQVHWmyIUWfGCA9SlLsbdJpG3uB1GEiOp9B1cvboRXlKHfOJVoFbYz6T5C2/SzKEbwGHFNQbmvzsQ/w==",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+      }
+    }
+  ],
+  "sourceInputs": {
+    "eventstore": {
+      "owner": "/home/administrator/projects/hexalith/eventstore",
+      "sourceCommit": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+      "sourceTree": "8aa548b82499bf5adf5c9daad6c62ed004db5863",
+      "previousCandidateSource": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+      "snapshot": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7",
+      "buildsCommit": "2744d549270298cfe73679f76b477a7368429006",
+      "archiveExcludes": "Reference contents and historical _bmad-output, except one source-owned test resource. Focused tests retain any missing-fixture blockers separately.",
+      "candidateVersion": "3.126.1"
+    },
+    "tenants": {
+      "owner": "/home/administrator/projects/hexalith/tenants",
+      "sourceCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "sourceTree": "f0497a77bb1cef47325576c42c4b4fb53859ef41",
+      "previousCandidateSource": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+      "snapshot": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+      "buildsCommit": "17d0c6ffec5fb3c8d8058e67cb85644460cb5256",
+      "archiveExcludes": "Reference contents and historical _bmad-output, except one source-owned test resource. Focused tests retain any missing-fixture blockers separately.",
+      "candidateVersion": "5.10.0"
+    }
+  },
+  "proposedRepair": {
+    "buildsSnapshot": "/tmp/mcpcli-story411-provenance-builds-v09n73fb",
+    "buildsBaseCommit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+    "tenantsBaseCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "sharedTarget": "Props/ContainerProvenance.targets",
+    "originalCheckoutsModified": false,
+    "sourceCommitPending": true,
+    "rationale": "Share the EventStore SDK label repair through the technical Builds repository; do not duplicate it as module runtime code.",
+    "finalBuildsPatch": "proposed-builds-container-provenance-scoped.patch",
+    "historicalPrototypePatch": "proposed-builds-container-provenance.patch",
+    "scope": "Changes labels/generation only with EnableContainer true and all three publisher-owned source SHA, version and creation fields supplied. Ordinary and partial-metadata SDK behavior is preserved.",
+    "finalTenantsPatch": "proposed-tenants-container-provenance-and-publisher.patch",
+    "publisherExecutionPin": {
+      "previous": "53d53ae42abf7c87d385a078ab260531480bbf8a",
+      "proposed": "22a578b576a515d2af214fe81859447fffc97981",
+      "reason": "The previous publisher supplies no provenance fields and has no provenance-label validation; the established EventStore publisher supplies and verifies the five release-identity labels."
+    }
+  },
+  "finalProposalSha256": {
+    "proposed-builds-container-provenance-scoped.patch": "10848269920971f66776308a5e76ca326b0349642921637fd2229e5799aea6a8",
+    "proposed-tenants-container-provenance-and-publisher.patch": "f9da6a3bf1e968fa91dd2e8b9a2394f8d4a6693952e3c210a5fbaef117588aaf",
+    "proposed-builds-eventstore-prerequisite-pin.patch": "bcf2100abc591a3bb92d9905414462603b0fbdf981bd9588fa69421a1977c6be"
+  },
+  "existingScopeVectorApproval": "../owner-approval/approval.json",
+  "scopeVectorApprovalReasked": false,
+  "artifactApprovalTransferred": false,
+  "finalReleaseSourceCommit": null,
+  "finalReleaseArtifacts": null,
+  "currentEventStoreRemoteMain": "2fe185c2948f9ca703bd3d9206fa9c04d469fa0a",
+  "currentEventStoreEvidence": "../owner-approval/eventstore-ci-current-main.json",
+  "currentEventStoreEvidenceIsQualification": false,
+  "completedGates": {
+    "eventstorePackages": 14,
+    "tenantsPackages": 5,
+    "focusedTests": 681,
+    "consumerTests": 1,
+    "refreshedTenantsReplayedOperations": 14,
+    "existingCombinedCandidateOperations": 21,
+    "publicDiscoveryIdentical": true,
+    "finalSharedMsbuildTests": 7,
+    "finalTenantsGovernanceTests": 242,
+    "pinnedPublisherContractTests": 29,
+    "pinnedOciValidatorTests": 8,
+    "normalMuslRidArchivesBuiltWithoutPush": true,
+    "proposedPinnedValidatorRejectsOriginalTenants": true,
+    "proposedPinnedValidatorAcceptsRepairedTenants": true
+  },
+  "publicationScope": {
+    "eventstore": {
+      "packages": 14,
+      "containers": [
+        "eventstore"
+      ],
+      "publisherExecutionPin": "22a578b576a515d2af214fe81859447fffc97981"
+    },
+    "tenants": {
+      "packages": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "containers": [
+        "tenants"
+      ],
+      "publisherExecutionPinCurrent": "53d53ae42abf7c87d385a078ab260531480bbf8a",
+      "publisherExecutionPinProposed": "22a578b576a515d2af214fe81859447fffc97981"
+    }
+  },
+  "pendingGates": [
+    "Owner finalizes exact EventStore source; current live main differs from tested snapshot.",
+    "Commit reviewed Builds shared target, release-dependent EventStore pin and Tenants import/publisher proposal upstream; use real resulting root gitlink identities.",
+    "Requalify exact final source; require normal successful exact-source CI and protected production approval.",
+    "Approve each complete module-wide publication scope and exact source/artifacts; no release dispatch authorized.",
+    "Run registry/tag/version/source preflight, normal full package/OCI/platform smoke/Trusted Publishing gates.",
+    "Bind and verify final published bytes, compare with candidate, obtain release-bound owner receipt.",
+    "Enroll actual published Tenants with dependency policy/approval/inventory; run McpCli checks.",
+    "Pass unchanged strict enrolled-module check and full-v1 cold catalog benchmark on ubuntu-latest."
+  ],
+  "externalEvidenceSha256": {
+    "owner-approval/approval.json": "62aceb962205d4e44b1e961be1f14fd4434e7b7300b22b2406c728ebd9744037",
+    "owner-approval/approved-inventory.json": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "owner-approval/inventory-verification.json": "18b499f928edc86ccca70b5e1333fcd1ec0f1264b4c06d0ff6de9a6dbf0a68f4",
+    "owner-approval/registry-preflight.json": "8c67a23f5b9c0948c26a4df46e213231b18df8abc241ac531d7c3d4a41d097ef",
+    "owner-approval/live-source-preflight.json": "b0520ae1f6b159d918abd168268cf8848a60f4b58be46db49c59f72132a15629",
+    "owner-approval/eventstore-ci-current-main.json": "ae9c842666e203dd6f791d1187d38cc6cf4b001ec155bee295a9bb625aa28084",
+    "owner-approval/tenants-ci-errors.txt": "4f671bc55fe099bf303084a7bd1646b763b5c476f9a378903703e384bc6b0b55",
+    "owner-approval/tenants-story-guard-errors.txt": "133d7aab5dc6ab94091fdf9bc77449abf463c88f179c2122aefd132ea02be355",
+    "tenants-candidate/pending-approval.json": "609fa7d2b4620afa82efc3d51e643d50b076c8b57af12ec4474471f301a1b8ff",
+    "tenants-candidate/candidate-replay.json": "47d0d22b649dd66ac909c13613b617834889bda6dcbba67844b144b627977148",
+    "tenants-candidate/candidate-benchmark.json": "c47918267ffa9ad3bab9216e704717a99d84826cd2bd7ee175a644b7d8f0c865",
+    "tenants-candidate/description-review.md": "6b4e3ada654a6fc3b5b8ee5b4e863f0e18eb22e4dd7b73628f11a6e93645a5c1",
+    "tenants-candidate/description-review-input.json": "00851e9ca514c8d56570ceb30f09ef0cbf3dd8c11311ba04fbed85a1b8340a5d",
+    "tenants-candidate/vector-rebinding.json": "a6564da61fd566d7f74161adb10a972e0372f15277f20c0c8680f22baccf11b5",
+    "tenants-candidate/accepted-lint.json": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+    "tenants-candidate/vectors/add-user-to-tenant.vector.json": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+    "tenants-candidate/vectors/change-user-role.vector.json": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+    "tenants-candidate/vectors/create-tenant.vector.json": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+    "tenants-candidate/vectors/disable-tenant.vector.json": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+    "tenants-candidate/vectors/enable-tenant.vector.json": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+    "tenants-candidate/vectors/get-tenant-audit.vector.json": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+    "tenants-candidate/vectors/get-tenant-users.vector.json": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+    "tenants-candidate/vectors/get-tenant.vector.json": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+    "tenants-candidate/vectors/get-user-tenants.vector.json": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+    "tenants-candidate/vectors/list-tenants.vector.json": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+    "tenants-candidate/vectors/remove-tenant-configuration.vector.json": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+    "tenants-candidate/vectors/remove-user-from-tenant.vector.json": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+    "tenants-candidate/vectors/set-tenant-configuration.vector.json": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+    "tenants-candidate/vectors/update-tenant.vector.json": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+  },
+  "readinessDocument": "approval-plan.md",
+  "archivedPrototypeLimit": "Corrected archive uses bound initial helper complete-input path. Final scope condition leaves that path unchanged; final actual-project MSBuild evaluation and seven tests cover final helper. No equivalent archive rebuild was needed."
+}

@@ -1,0 +1,2117 @@
+{
+  "checkedAtUtc": "2026-10-21T21:49:36.469656+00:00",
+  "currentHead": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+  "currentRunsBeforeCancellation": [
+    {
+      "id": 39681786666,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 1084,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "pending",
+      "conclusion": null,
+      "workflow_id": 305921075,
+      "check_suite_id": 107544264646,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiM_xg",
+      "created_at": "2026-10-21T21:48:59Z",
+      "updated_at": "2026-10-21T21:49:00Z",
+      "run_started_at": "2026-10-21T21:48:59Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681786666",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681786666",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39681766848,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 1083,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 305921075,
+      "check_suite_id": 107544212588,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJ0bA",
+      "created_at": "2026-10-21T21:48:50Z",
+      "updated_at": "2026-10-21T21:48:54Z",
+      "run_started_at": "2026-10-21T21:48:50Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681766848",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681766848",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@main",
+          "sha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39681765758,
+      "name": "P1R Qualification Preparation",
+      "path": ".github/workflows/p1r-qualification.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 225,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 376400190,
+      "check_suite_id": 107544209848,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJpuA",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:53Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681765758",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681765758",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39681765561,
+      "name": "Advisory Tests",
+      "path": ".github/workflows/advisory-tests.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 1015,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 310020568,
+      "check_suite_id": 107544209357,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJnzQ",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:53Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681765561",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681765561",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39681765724,
+      "name": "Corrective Work Authorization",
+      "path": ".github/workflows/corrective-work-authorization.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 68,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 388229764,
+      "check_suite_id": 107544209732,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJpRA",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:53Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681765724",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681765724",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39681765544,
+      "name": "Payload Protection",
+      "path": ".github/workflows/payload-protection.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 394,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 359890992,
+      "check_suite_id": 107544209335,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJntw",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:53Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681765544",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681765544",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    },
+    {
+      "id": 39681766320,
+      "name": "Dependency Review",
+      "path": ".github/workflows/dependency-review.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 129,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 305921076,
+      "check_suite_id": 107544211141,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJuxQ",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:53Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681766320",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681766320",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/dependency-review.yml@main",
+          "sha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39681766093,
+      "name": "CodeQL",
+      "path": ".github/workflows/codeql.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 1120,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "pending",
+      "conclusion": null,
+      "workflow_id": 305921074,
+      "check_suite_id": 107544210482,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJsMg",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:51Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681766093",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681766093",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/codeql.yml@main",
+          "sha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39681766374,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 2133,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "pending",
+      "conclusion": null,
+      "workflow_id": 238596342,
+      "check_suite_id": 107544211290,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJvWg",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:48:51Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681766374",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681766374",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": [
+        {
+          "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+          "sha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+          "ref": "refs/heads/main"
+        }
+      ]
+    },
+    {
+      "id": 39681765521,
+      "name": "Integration Tests",
+      "path": ".github/workflows/integration.yml",
+      "display_title": "ci: allow full qualification and bind sanitized evidence",
+      "head_branch": "fix/p1r-qualification-time-budget",
+      "head_sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+      "run_number": 1161,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "in_progress",
+      "conclusion": null,
+      "workflow_id": 300068044,
+      "check_suite_id": 107544209301,
+      "check_suite_node_id": "CS_kwDORNpC788AAAAZCiJnlQ",
+      "created_at": "2026-10-21T21:48:49Z",
+      "updated_at": "2026-10-21T21:49:11Z",
+      "run_started_at": "2026-10-21T21:48:49Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39681765521",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39681765521",
+      "previous_attempt_url": null,
+      "actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "triggering_actor": {
+        "id": 6775094,
+        "login": "jpiquot",
+        "type": "User",
+        "site_admin": false,
+        "user_view_type": "public",
+        "html_url": "https://github.com/jpiquot"
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+          "id": 4957559571,
+          "number": 372,
+          "head": {
+            "ref": "fix/p1r-qualification-time-budget",
+            "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+            "repo": {
+              "id": 1155154671,
+              "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+              "name": "Hexalith.EventStore"
+            }
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+        "tree_id": "ecaf0ebca1c6cc710ab8588e5ab54c69fc1326bd",
+        "message": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.",
+        "timestamp": "2026-10-21T21:48:43Z",
+        "author": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        },
+        "committer": {
+          "name": "J\u00e9r\u00f4me Piquot",
+          "email": "jpiquot@itaneo.com"
+        }
+      },
+      "repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "head_repository": {
+        "id": 1155154671,
+        "name": "Hexalith.EventStore",
+        "full_name": "Hexalith/Hexalith.EventStore",
+        "private": false,
+        "fork": false,
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+        "owner": {
+          "id": 80614290,
+          "login": "Hexalith",
+          "type": "Organization",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/Hexalith"
+        }
+      },
+      "referenced_workflows": []
+    }
+  ],
+  "supersededHead": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+  "runs": [
+    {
+      "id": 39679453712,
+      "before": {
+        "id": 39679453712,
+        "name": "CI",
+        "path": ".github/workflows/ci.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 2132,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 238596342,
+        "check_suite_id": 107537923050,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ76g",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:31:23Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453712",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453712",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": [
+          {
+            "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+            "sha": "abcb1f39e1ae740de896792fd75f5b344d3890b2",
+            "ref": "refs/heads/main"
+          }
+        ]
+      },
+      "reason": "This task own PR372 run superseded by current 191afdfc, which repairs the required advisory failure; current CI/P1R already exist. Never cancel current or foreign runs.",
+      "cancelRequest": {
+        "exitCode": 0,
+        "stdout": "{}",
+        "stderr": ""
+      },
+      "after": {
+        "id": 39679453712,
+        "name": "CI",
+        "path": ".github/workflows/ci.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 2132,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 238596342,
+        "check_suite_id": 107537923050,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ76g",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:49:31Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453712",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453712",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": [
+          {
+            "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+            "sha": "abcb1f39e1ae740de896792fd75f5b344d3890b2",
+            "ref": "refs/heads/main"
+          }
+        ]
+      }
+    },
+    {
+      "id": 39679453148,
+      "before": {
+        "id": 39679453148,
+        "name": "P1R Qualification Preparation",
+        "path": ".github/workflows/p1r-qualification.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 224,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 376400190,
+        "check_suite_id": 107537921611,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ2Sw",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:31:19Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453148",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453148",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": []
+      },
+      "reason": "This task own PR372 run superseded by current 191afdfc, which repairs the required advisory failure; current CI/P1R already exist. Never cancel current or foreign runs.",
+      "cancelRequest": {
+        "exitCode": 0,
+        "stdout": "{}",
+        "stderr": ""
+      },
+      "after": {
+        "id": 39679453148,
+        "name": "P1R Qualification Preparation",
+        "path": ".github/workflows/p1r-qualification.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 224,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 376400190,
+        "check_suite_id": 107537921611,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ2Sw",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:49:32Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453148",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453148",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": []
+      }
+    },
+    {
+      "id": 39679453767,
+      "before": {
+        "id": 39679453767,
+        "name": "CodeQL",
+        "path": ".github/workflows/codeql.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 1119,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 305921074,
+        "check_suite_id": 107537923305,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ86Q",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:31:19Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453767",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453767",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": [
+          {
+            "path": "Hexalith/Hexalith.Builds/.github/workflows/codeql.yml@main",
+            "sha": "abcb1f39e1ae740de896792fd75f5b344d3890b2",
+            "ref": "refs/heads/main"
+          }
+        ]
+      },
+      "reason": "This task own PR372 run superseded by current 191afdfc, which repairs the required advisory failure; current CI/P1R already exist. Never cancel current or foreign runs.",
+      "cancelRequest": {
+        "exitCode": 0,
+        "stdout": "{}",
+        "stderr": ""
+      },
+      "after": {
+        "id": 39679453767,
+        "name": "CodeQL",
+        "path": ".github/workflows/codeql.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 1119,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "in_progress",
+        "conclusion": null,
+        "workflow_id": 305921074,
+        "check_suite_id": 107537923305,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ86Q",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:49:34Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453767",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453767",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": [
+          {
+            "path": "Hexalith/Hexalith.Builds/.github/workflows/codeql.yml@main",
+            "sha": "abcb1f39e1ae740de896792fd75f5b344d3890b2",
+            "ref": "refs/heads/main"
+          }
+        ]
+      }
+    },
+    {
+      "id": 39679453212,
+      "before": {
+        "id": 39679453212,
+        "name": "Integration Tests",
+        "path": ".github/workflows/integration.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 1160,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "workflow_id": 300068044,
+        "check_suite_id": 107537921820,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ3HA",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:49:07Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453212",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453212",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": []
+      },
+      "reason": "This task own PR372 run superseded by current 191afdfc, which repairs the required advisory failure; current CI/P1R already exist. Never cancel current or foreign runs.",
+      "cancelRequest": "not sent; run already completed",
+      "after": {
+        "id": 39679453212,
+        "name": "Integration Tests",
+        "path": ".github/workflows/integration.yml",
+        "display_title": "ci: allow full qualification and bind sanitized evidence",
+        "head_branch": "fix/p1r-qualification-time-budget",
+        "head_sha": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+        "run_number": 1160,
+        "run_attempt": 1,
+        "event": "pull_request",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "workflow_id": 300068044,
+        "check_suite_id": 107537921820,
+        "check_suite_node_id": "CS_kwDORNpC788AAAAZCcJ3HA",
+        "created_at": "2026-10-21T21:31:14Z",
+        "updated_at": "2026-10-21T21:49:07Z",
+        "run_started_at": "2026-10-21T21:31:14Z",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39679453212",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/39679453212",
+        "previous_attempt_url": null,
+        "actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "triggering_actor": {
+          "id": 6775094,
+          "login": "jpiquot",
+          "type": "User",
+          "site_admin": false,
+          "user_view_type": "public",
+          "html_url": "https://github.com/jpiquot"
+        },
+        "pull_requests": [
+          {
+            "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/pulls/372",
+            "id": 4957559571,
+            "number": 372,
+            "head": {
+              "ref": "fix/p1r-qualification-time-budget",
+              "sha": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            },
+            "base": {
+              "ref": "main",
+              "sha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+              "repo": {
+                "id": 1155154671,
+                "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+                "name": "Hexalith.EventStore"
+              }
+            }
+          }
+        ],
+        "head_commit": {
+          "id": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+          "tree_id": "31af73817a4fa48d93ea408f50e4afe7d65a62f2",
+          "message": "ci(codeql): allow the complete source analysis to finish\n\nUse the shared workflow's supported sixty-minute allowance after the\ncurrent full-source scan exceeded its thirty-minute job cap. Retain every\nanalysis scope, mode, query and required check.",
+          "timestamp": "2026-10-21T21:31:07Z",
+          "author": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          },
+          "committer": {
+            "name": "J\u00e9r\u00f4me Piquot",
+            "email": "jpiquot@itaneo.com"
+          }
+        },
+        "repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "head_repository": {
+          "id": 1155154671,
+          "name": "Hexalith.EventStore",
+          "full_name": "Hexalith/Hexalith.EventStore",
+          "private": false,
+          "fork": false,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore",
+          "owner": {
+            "id": 80614290,
+            "login": "Hexalith",
+            "type": "Organization",
+            "site_admin": false,
+            "user_view_type": "public",
+            "html_url": "https://github.com/Hexalith"
+          }
+        },
+        "referenced_workflows": []
+      }
+    }
+  ],
+  "privateOriginal": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/historical-cancellation-originals/eventstore-superseded-3bf-cancellations.json",
+    "bytes": 299629,
+    "sha256": "8200b3a942ba3429fea21cca66efe344a26da2601567a27a7bafa97b035e7742"
+  },
+  "retention": "Complete original private. Compact projection retains source/actor/outcome/cancellation/limit facts; removed fields are repeated GitHub API/profile/repository/app boilerplate."
+}

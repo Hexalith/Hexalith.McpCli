@@ -1,0 +1,12 @@
+{
+  "recordedAtUtc": "2026-10-21T22:20:46.706204+00:00",
+  "status": "local diagnostic invalidated by concurrent generated-source rebuild; no production repair indicated",
+  "cause": "The task ran a Contracts build in the same worktree while the long native diagnostic was active, regenerating Client.AssemblyInfo.cs after the worker DLL/PDB was loaded. Strict RuntimeProof correctly refused the changed source.",
+  "safeInnerException": "Runtime PDB source differs: src/Hexalith.EventStore.Client/obj/Release/net10.0/Hexalith.EventStore.Client.AssemblyInfo.cs",
+  "workerLogSha256": "5bcc7fcc4acee077bc7e75843901e3942336a2e0ad7dfac967ceba3bb838512b",
+  "currentGeneratedSourceSha256": "a4b9f8f11c0a6c08ad98b1b45f5e692de249ee742791c5f32e865f598b15125b",
+  "ownedProcessGroup": 39518,
+  "ownershipVerifiedBy": "Exact live test command plus process group leader equality, recorded in task-owned isolated diagnostic receipt",
+  "action": "SIGTERM only to the verified task-owned process group; runner finally removes only its exact labelled containers",
+  "scope": "This failure is retained; it does not establish a production bug or grant qualification. Current remote full CI remains required."
+}

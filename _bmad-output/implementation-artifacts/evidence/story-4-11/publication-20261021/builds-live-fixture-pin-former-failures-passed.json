@@ -1,0 +1,599 @@
+{
+  "recordedAtUtc": "2026-10-22T02:20:07.984462+00:00",
+  "priorFailedHead": "85290197d2a4324b50560630e8992d71c3318784",
+  "priorFailedCases": 112,
+  "priorFailedMethods": 60,
+  "actualTrx": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests-results/Hexalith.Builds.Module.Tests.trx",
+    "bytes": 2282600,
+    "sha256": "aec0d1a39099e1f261aa25a6f83c1b317ca943c737848768a5b23262e13f177d"
+  },
+  "allPriorCasesPassed": true,
+  "cases": [
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync (45ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync (34ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync (9ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"test\", expectedRule: \"HXC002\") (855ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"test\", expectedRule: \"HXC002\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync (255ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync (211ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync (197ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"run\") (20ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"run\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"test\") (32ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"test\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync (18ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"run\", expectedRule: \"HXR015\") (1s 117ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"run\", expectedRule: \"HXR015\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync (258ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync (238ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async (1s 375ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Source) (2s 912ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Source)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"human\") (1s 432ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"json\") (1s 313ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-no-pid\") (3s 092ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-no-pid\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Package) (3s 122ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Package)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-partial-pid\") (2s 926ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-partial-pid\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"source\") (4s 179ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"source\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"package\") (3s 055ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"package\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: null) (3s 185ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: null)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync (2s 564ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"source\") (3s 470ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"source\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"package\") (3s 467ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"package\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: null) (3s 598ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: null)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync (2s 824ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full\") (6s 071ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites (2s 592ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full\") (6s 376ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full-mtp\") (5s 257ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full-mtp\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync(kind: \"v1\") (3s 220ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync(kind: \"v1\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full-mtp\") (7s 149ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full-mtp\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync (734ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: True) (2s 646ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: True)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: False) (2s 835ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: False)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync (9ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync (1s 031ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"human\") (810ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"json\") (923ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"json\") (5s 689ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"human\") (7s 150ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: True) (1s 214ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: True)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: False) (1s 078ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: False)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"run\") (890ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"run\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"test\") (765ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"test\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync (3s 652ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync (579ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"json\") (1s 036ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"human\") (1s 247ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync (795ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync (2s 956ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: False) (3s 451ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: False)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: True) (3s 444ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: True)",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"ui\") (692ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"ui\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"module\") (612ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"module\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"source\") (3s 263ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"source\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"package\") (3s 514ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"package\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest (215ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unknown-schema.json\") (4ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unknown-schema.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"duplicate-id.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"duplicate-id.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-descriptor.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-descriptor.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unsupported-profile-class.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unsupported-profile-class.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-required-value.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-required-value.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"secret-bearing.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"secret-bearing.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"malformed-dependency.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"malformed-dependency.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"placeholder.json\") (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"placeholder.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"superseded-frontcomposer-pin.json\") (4ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"superseded-frontcomposer-pin.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"path-escape.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"path-escape.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"invalid-profile.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"invalid-profile.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"absolute-path.json\") (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"absolute-path.json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation (5ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand (1ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"run\", kind: \"v1\") (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"run\", kind: \"v1\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"debug\", kind: \"v1\") (10ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"debug\", kind: \"v1\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync (1s 687ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync (5ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async (1s 525ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"test\") (9ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"test\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"run\") (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"run\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync (1s 532ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"cause\", expectedRuleId: \"HXR027\") (1s 531ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"cause\", expectedRuleId: \"HXR027\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"exit\", expectedRuleId: \"HXR020\") (1s 516ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"exit\", expectedRuleId: \"HXR020\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-name\", expectedRuleId: \"HXR022\") (1s 510ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-name\", expectedRuleId: \"HXR022\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"foreign\", expectedRuleId: \"HXR022\") (1s 536ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"foreign\", expectedRuleId: \"HXR022\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-task\", expectedRuleId: \"HXR022\") (1s 504ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-task\", expectedRuleId: \"HXR022\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"diagnostics-io\", expectedRuleId: \"HXR027\") (1s 530ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"diagnostics-io\", expectedRuleId: \"HXR027\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-detail\", expectedRuleId: \"HXR022\") (1s 546ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-detail\", expectedRuleId: \"HXR022\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"never\", expectedRuleId: \"HXR021\") (1s 516ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"never\", expectedRuleId: \"HXR021\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync (4ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"json\") (9ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"human\") (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"human\") (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"human\") (9ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"human\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"json\") (7ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"json\") (8ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"json\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"timeout\") (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"timeout\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"different\") (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"different\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"malformed\") (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"malformed\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"missing\") (3ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"missing\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"failed\") (2ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"failed\")",
+      "outcome": "Passed"
+    },
+    {
+      "priorFailure": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"empty\") (5ms)",
+      "actualTestName": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"empty\")",
+      "outcome": "Passed"
+    }
+  ],
+  "newImmediatePreviousPinNegative": [
+    {
+      "name": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"eventStoreVersion\", version: \"3.126.0\")",
+      "outcome": "Passed"
+    }
+  ],
+  "counters": {
+    "total": "1516",
+    "executed": "1513",
+    "passed": "1513",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "3",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "scope": "Local immutable112-file repair snapshot. Later publisher-only default/test follow-up and final exact-head remoteCI remain separate required evidence."
+}

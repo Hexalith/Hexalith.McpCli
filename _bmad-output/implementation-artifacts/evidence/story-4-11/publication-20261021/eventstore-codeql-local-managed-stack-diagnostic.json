@@ -1,0 +1,167 @@
+{
+  "startedAtUtc": "2026-10-22T00:07:30.192468+00:00",
+  "status": "diagnostic-only-complete",
+  "scope": "Two short task-owned triage/managed-stack observations of local CLI 2.27.3 only. Raw dumps and stacks remain private. No security qualification, source exclusion, tools pin or version-causality claim.",
+  "tool": "9.0.661903+d7b455b46332b31fd9ba3a3f3e020387984c511a",
+  "privateDirectory": "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld",
+  "observations": [
+    {
+      "observedAtUtc": "2026-10-22T00:08:48.647189+00:00",
+      "targetPid": 39386,
+      "targetExecutable": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp",
+      "processGroup": 39248,
+      "beforeProcStatSha256": "d6093f28733a48367fe5f3b833d860c77c5335853b96de7945df756abe72a03d",
+      "collection": {
+        "command": [
+          "dotnet-dump",
+          "collect",
+          "--type",
+          "Triage",
+          "--process-id",
+          "39386",
+          "--output",
+          "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-1.triage.dmp"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.3632728640077403
+      },
+      "dump": {
+        "path": "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-1.triage.dmp",
+        "bytes": 45522944,
+        "sha256": "b4954feb4ee2d35f0553a2acc8d027fc53201869bbd1c49a1263785053d96066"
+      },
+      "analysis": {
+        "command": [
+          "dotnet-dump",
+          "analyze",
+          "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-1.triage.dmp",
+          "-c",
+          "help clrstack",
+          "-c",
+          "clrstack -all",
+          "-c",
+          "exit"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 12.661704750003992
+      },
+      "selectedManagedMethodOccurrences": {
+        "System.Threading.Thread.StartCallback": 9,
+        "Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText": 6,
+        "System.Threading.PortableThreadPool+WorkerThread.WorkerThreadStart": 6,
+        "System.Threading.LowLevelLifoSemaphore.WaitForSignal": 5,
+        "System.Threading.LowLevelLifoSemaphore.Wait": 5,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParsePrimaryExpression": 3,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseSubExpressionCore": 3,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseSubExpression": 3,
+        "System.Threading.Tasks.TaskReplicator+Replica.Execute": 2,
+        "System.Threading.Tasks.Task.ExecuteWithThreadLocal": 2,
+        "Semmle.Util.BuildScript+BindBuildScript.Run": 2,
+        "System.Threading.WaitHandle.WaitOneNoCheck": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseArgumentList": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseParenthesizedArgumentList": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseExpressionCore": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseMemberDeclarationCore": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseMemberDeclaration": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseNamespaceBodyWorker": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser.ParseNamespaceBody": 2,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.Lexer.QuickScanSyntaxToken": 1,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.Lexer.Lex": 1,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.SyntaxParser.PreLex": 1,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.SyntaxParser..ctor": 1,
+        "Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.LanguageParser..ctor": 1,
+        "System.Threading.ExecutionContext.RunInternal": 1
+      },
+      "meaning": "Method occurrences across stack snapshots are not a sampled CPU profile and cannot establish a hot loop or eventual completion."
+    },
+    {
+      "observedAtUtc": "2026-10-22T00:09:11.756354+00:00",
+      "targetPid": 39386,
+      "targetExecutable": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/tools-2.27.3/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp",
+      "processGroup": 39248,
+      "beforeProcStatSha256": "4116e7b497d4d295dd36aadac8e166e50e647c242165635010c0355b81d3a631",
+      "collection": {
+        "command": [
+          "dotnet-dump",
+          "collect",
+          "--type",
+          "Triage",
+          "--process-id",
+          "39386",
+          "--output",
+          "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-2.triage.dmp"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.6439274290023604
+      },
+      "dump": {
+        "path": "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-2.triage.dmp",
+        "bytes": 125837312,
+        "sha256": "6784bfed5b3a00af5b7ad3d7f392a7e85fe6c5fcf13cd67d7b3ff34426b24cfd"
+      },
+      "analysis": {
+        "command": [
+          "dotnet-dump",
+          "analyze",
+          "/tmp/mcpcli-story411-codeql-managed-stacks-moqgr2ld/csharp-2.triage.dmp",
+          "-c",
+          "help clrstack",
+          "-c",
+          "clrstack -all",
+          "-c",
+          "exit"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.9887513900030171
+      },
+      "selectedManagedMethodOccurrences": {
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindStatement": 49,
+        "System.Threading.Thread.StartCallback": 37,
+        "System.Threading.PortableThreadPool+WorkerThread.WorkerThreadStart": 34,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindInvocationExpression": 31,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindMethodBody": 27,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindBlockParts": 25,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindBlock": 25,
+        "System.Threading.LowLevelLifoSemaphore.WaitForSignal": 20,
+        "System.Threading.LowLevelLifoSemaphore.Wait": 20,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindValue": 16,
+        "Microsoft.CodeAnalysis.CSharp.Binder.ResolveMethodGroup": 14,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindMethodGroupInvocation": 14,
+        "Microsoft.CodeAnalysis.CSharp.MethodCompiler.BindMethodBody": 14,
+        "Microsoft.CodeAnalysis.CSharp.MethodCompiler.CompileMethod": 14,
+        "Microsoft.CodeAnalysis.CSharp.MethodCompiler.CompileNamedType": 14,
+        "System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop": 14,
+        "System.Threading.Tasks.Task.ExecuteWithThreadLocal": 14,
+        "System.Threading.ThreadPoolWorkQueue.Dispatch": 14,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindExpressionStatement": 14,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindRValueWithoutTargetType": 12,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindPossibleEmbeddedStatement": 11,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindIfStatement": 9,
+        "Microsoft.CodeAnalysis.CSharp.Binder.BindVariableDeclaration": 6,
+        "Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbolExtensions.NormalizeTaskTypesInType": 4,
+        "Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbolExtensions.NormalizeTaskTypes": 4
+      },
+      "meaning": "Method occurrences across stack snapshots are not a sampled CPU profile and cannot establish a hot loop or eventual completion."
+    }
+  ],
+  "comparisonCaveat": "Only the second version is profiled. Collection/analysis overhead is recorded; exact runtime pause is not measured. Original thirty-minute trace and memory bounds are unchanged.",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "version": "2.27.3",
+  "processGroup": 39248,
+  "completedAtUtc": "2026-10-22T00:09:13.529944+00:00",
+  "privateLogHashes": {
+    "collect-2.stdout.txt": "ce83cb274a262cadc5b4421798fc4b801e0c657a00818955426893aec613967f",
+    "analyze-2.stdout.txt": "c0e451cefa2e02c5b5c275254263bee54bd2b191da80b695aa55f49e8b3ef4c5",
+    "analyze-2.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analyze-1.stdout.txt": "96ee4415c04a0b92c15c44d8ca0f9419e74a49fb3df4c6cc0a9279084069eec7",
+    "analyze-1.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "collect-2.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "collect-1.stdout.txt": "1a122200b76e3345a155afb55df0d2e4853a102c45ac5a87b5ab1e926fd94055",
+    "collect-1.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scriptSha256": "81290ceacf3cfea5e3e4233d097f65dd8baea859713780914c29875012f45b3d"
+}

@@ -1,0 +1,23 @@
+{
+  "status": "source comparison only; final published bytes and complete replay remain required",
+  "approvedCandidateSource": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+  "integratedTenantsSource": "8c12ff17f48c08a1b9baf619cd3de3ceadfdab9a",
+  "rows": [
+    {
+      "path": "src/Hexalith.Tenants.Contracts",
+      "approvedSourceTree": "2f53281b5630845de789ca73e13635ed9f3b44a2",
+      "currentIntegratedTree": "2f53281b5630845de789ca73e13635ed9f3b44a2",
+      "sameTree": true,
+      "changedPaths": []
+    },
+    {
+      "path": "src/Hexalith.Tenants.Client",
+      "approvedSourceTree": "b84bb4d896dbf2bff5923540cd7dbbb107838776",
+      "currentIntegratedTree": "b84bb4d896dbf2bff5923540cd7dbbb107838776",
+      "sameTree": true,
+      "changedPaths": []
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

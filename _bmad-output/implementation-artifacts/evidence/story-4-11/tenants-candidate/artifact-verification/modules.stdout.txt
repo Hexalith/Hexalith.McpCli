@@ -1,0 +1,9 @@
+{
+  "modules": [
+    {
+      "name": "tenants",
+      "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant \u0027system\u0027; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+      "operationCount": 14
+    }
+  ]
+}

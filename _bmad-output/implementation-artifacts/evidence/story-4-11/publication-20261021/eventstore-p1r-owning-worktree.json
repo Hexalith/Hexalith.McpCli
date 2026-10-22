@@ -1,0 +1,11 @@
+{
+  "owner": "/home/administrator/projects/hexalith/eventstore",
+  "worktree": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+  "branch": "fix/p1r-qualification-time-budget",
+  "baseCommit": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+  "cause": "Exact-source push P1R39663430445 exhausted the 15-minute job limit after preceding passing suites consumed ~13 minutes; registration was cancelled and later controls never ran.",
+  "timeoutMinutesBefore": 15,
+  "timeoutMinutesAfter": 30,
+  "testsRemovedOrSkipped": 0,
+  "unrelatedOriginalChangesPreserved": true
+}

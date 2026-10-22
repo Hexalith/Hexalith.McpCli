@@ -1,0 +1,74 @@
+{
+  "capturedAtUtc": "2026-10-22T03:34:51.152292+00:00",
+  "parentAudit": true,
+  "sourceHead": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "run": 39716321803,
+  "artifactId": 12398988187,
+  "officialDigest": "sha256:ad89ac717242fa11b3f06e10b4877b9a5f5400fb03fda26fdb24f8f217da486d",
+  "officialBytes": 2185968,
+  "all14ZipMemberHashesVerified": true,
+  "actualTrx": [
+    {
+      "path": "Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.trx",
+      "total": 9,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "beba11837548a753ec63d15df123305781fe5edd453e4df79239250fad934c84"
+    },
+    {
+      "path": "Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.trx",
+      "total": 50,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "9bf43de7dad7de94627f6438f42464e9a90d8fdb5147cc369a7ffe59f8292bba"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.trx",
+      "total": 654,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "a4346694b3244f80647c7db193791b5d7bf861e63edd2bb7dc78b8110f82db1b"
+    },
+    {
+      "path": "Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.trx",
+      "total": 40,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "c8b01016cf97dc3757d87a6bc042307dee1b035fa9b4825e931921e586437c4e"
+    },
+    {
+      "path": "Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.trx",
+      "total": 1440,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "0e0c7d21d4bd7efdf45229ec191579027d66eafc562e7cf6de6a423ced93d562"
+    },
+    {
+      "path": "Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.trx",
+      "total": 182,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "1c3bf650cee4bba8b296312bc08eb964cff2b061ae8a29c413af7014f5081cf4"
+    },
+    {
+      "path": "Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.trx",
+      "total": 7117,
+      "outcome": "Passed",
+      "allActualResultsPassed": true,
+      "uniqueExecutionIds": true,
+      "sha256": "073a6cb1ed03c18a2b302f181dd35aeb3fc7e1986400f3df6b3add81fd50b3d1"
+    }
+  ],
+  "actualResultsPassed": 9492,
+  "actualResultsFailed": 0,
+  "actualResultsSkipped": 0,
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "scope": "Independent ZIP/TRX and live official immutable artifact metadata check. Full Aspire run and exact-main CI/release gates remain mandatory."
+}

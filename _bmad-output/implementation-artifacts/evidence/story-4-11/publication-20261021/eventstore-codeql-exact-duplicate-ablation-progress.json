@@ -1,0 +1,80 @@
+{
+  "scope": "Aggregate output movement for the private exact-byte duplicate ablation only. Logs and database metadata growth alone are not extraction progress or qualification.",
+  "samples": [
+    {
+      "atUtc": "2026-10-22T00:49:14.812756+00:00",
+      "groups": {
+        "codeql-database.yml": {
+          "files": 1,
+          "bytes": 1746,
+          "newestMtimeNs": 1792630027663631802
+        },
+        "working": {
+          "files": 7374,
+          "bytes": 938919477,
+          "newestMtimeNs": 1792630115559397840
+        },
+        "log": {
+          "files": 1,
+          "bytes": 4473068,
+          "newestMtimeNs": 1792630154804249995
+        },
+        "diagnostic": {
+          "files": 2,
+          "bytes": 571,
+          "newestMtimeNs": 1792630028355657398
+        }
+      },
+      "trapFiles": 0,
+      "trapBytes": 0,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/output-inventory-20261022T004914Z.json",
+        "bytes": 1328487,
+        "sha256": "ee6fa2ed9f42e0976cd2db83d898df53da950628231afe310ae85604ed4ac8d6"
+      }
+    },
+    {
+      "atUtc": "2026-10-22T00:56:56.791929+00:00",
+      "terminal": true,
+      "groups": {
+        "codeql-database.yml": {
+          "files": 1,
+          "bytes": 1746,
+          "newestMtimeNs": 1792630027663631802
+        },
+        "working": {
+          "files": 76,
+          "bytes": 4608382,
+          "newestMtimeNs": 1792630228227278396
+        },
+        "log": {
+          "files": 2,
+          "bytes": 48985745,
+          "newestMtimeNs": 1792630310035464134
+        },
+        "src": {
+          "files": 4040,
+          "bytes": 39590782,
+          "newestMtimeNs": 1792630308715391840
+        },
+        "trap": {
+          "files": 4559,
+          "bytes": 277456109,
+          "newestMtimeNs": 1792630308739393153
+        },
+        "diagnostic": {
+          "files": 2,
+          "bytes": 959,
+          "newestMtimeNs": 1792630309667443979
+        }
+      },
+      "trapFiles": 4559,
+      "trapBytes": 277456109,
+      "privateInventory": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/output-inventory-20261022T005656Z.json",
+        "bytes": 2119085,
+        "sha256": "866e1fe62a83248b8c5cc6190612d78a0aba5a0b71e93ab059140d3c83d8602b"
+      }
+    }
+  ]
+}

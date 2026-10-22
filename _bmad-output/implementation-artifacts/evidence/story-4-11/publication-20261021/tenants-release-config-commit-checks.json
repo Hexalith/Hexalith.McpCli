@@ -1,0 +1,62 @@
+[
+  {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-tenants-release-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nfix(release): preserve verified container provenance\n\nImport the shared SDK label repair and use the established immutable\nprovenance-aware publisher. Declare its normal protected-release posture\nwithout corrective-only inputs and protect that configuration.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": "",
+    "message": "fix(release): preserve verified container provenance\n\nImport the shared SDK label repair and use the established immutable\nprovenance-aware publisher. Declare its normal protected-release posture\nwithout corrective-only inputs and protect that configuration.\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "add",
+      "--",
+      "Directory.Build.targets",
+      ".github/workflows/release.yml",
+      "tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "exitCode": 0,
+    "stdout": ".github/workflows/release.yml\nDirectory.Build.targets\ntests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "commit",
+      "--file",
+      "/tmp/mcpcli-story411-tenants-release-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/container-provenance-release 5b39c93f] fix(release): preserve verified container provenance\n 3 files changed, 15 insertions(+), 1 deletion(-)\n",
+    "stderr": ""
+  }
+]
