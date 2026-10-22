@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -514,3 +514,66 @@ their logged rejection. The original R17/R18 deferrals remain unchanged. Approve
 vectors, inventory, receipts, package pins and frozen intent are unchanged. The
 spec is done and the sprint entry is review. These are complete local results;
 no new Ubuntu CI result, push, root merge or publication is claimed.
+
+### Review Findings (code review pass 4, 2026-10-22)
+
+Code review 2026-10-22 of the complete committed story range `fce41d0..4b3e7ff` (`7f4a08c`, `f20a4e0`, `bf9c49a`, `c887634`, `2a2d88b`, `e924551` and their merges).
+
+- **Code-only scope:** excludes `_bmad-output/` and every `references/` gitlink move; includes the fourteen approved Tenants vectors and `tenants-approved.json`.
+- **Size and mode:** 39 files, +6,836/−79, 7,622 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 54 normalized findings (BH 25, EC 16, VG 4, AA 9). 14 survive as 9 patch and 2 already-tracked defer entries; 40 are rejected. No decision is needed.
+
+Parent checks during triage:
+- Fresh `dotnet restore Hexalith.McpCli.slnx` and the warnings-as-errors Release build passed (0 warnings).
+- `gh run view 39787913115`: the `main` push run on `4b3e7ff` succeeded in all four required jobs, `enrolled-module-conformance` included.
+- `QueryExecutionTests.cs:63` covers the fixed tenant winning over session state. `VectorError` subclasses `ValueError` (`validate.py:31`), so `check_enrolled.main` catches replay failures.
+- `run_packaged_process_fixture.py:274-286` replays the real production packages plus the sample inside the `conformance-vector-loopback` job, as the spec's combined-manifest task requires.
+
+- [ ] [Review][Patch] P1 — medium. No test covers the runtime-DLL selection guard. `_verify_artifact_in_host` rejects a host whose `deps.json` selects no runtime `.dll` for the package, or one the assets file lacks. Without that guard, the byte comparison at `:723-728` loops over nothing and passes, so the approved-bytes binding silently checks nothing. VG replaced the guard with `if False:` and all 45 `test_loopback` tests passed; AA reproduced it. Fix: in `test_host_signed_archive_matches_restore_content_hash_independently` (`test_loopback.py:146`), add subtests that empty the `deps.json` runtime map, rename `runtimeTarget` and list a DLL the assets lack. Each must raise `selected package runtime DLL assets differ` (VG, AA). [tools/conformance-vectors/v1/run_loopback.py:721]
+- [ ] [Review][Patch] P2 — low. No test asserts `fullV1Accepted: true` on a passing strict run. Every assertion on the flag in `test_enrolled.py` is `assertFalse` (`:403`, `:535`, `:547`, `:557`, `:847`), and the process fixture checks only `result`. VG hard-coded the flag to `False` and all 48 tests still passed. Fix: on the strict success path of `EnrolledPreflightTests.invoke`, assert `report['fullV1Accepted'] is True` and `report['missingRequiredModules'] == []` (VG). [tools/conformance-vectors/v1/check_enrolled.py:198]
+- [ ] [Review][Patch] P3 — low. No test protects keeping a measured failure. The child writes its measured `failed` evidence and then throws (`:97`); the early return in `RetainFailure` keeps that document. `FailureEvidenceWrapperInvalidatesPriorSuccessAndRetainsTheException` reaches `RetainFailure` only with `pending`. Without the return, an over-budget or missing-Tenants run uploads `elapsedMilliseconds: null` and keeps the population only inside exception text. Fix: add a `[Fact]` whose `measure` writes a measured `failed` document and then throws, and assert that its fields survive `RunWithFailureEvidence` (VG). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:233]
+- [ ] [Review][Patch] P4 — low. No test protects the `--strict` flags this story added. They are on `modules`, `operations` and `describe` (`:772`, `:778`, `:812`) and on the MCP host command (`:281`). AA removed each in a scratch copy, and every Python test stayed green. The manifest-to-Catalog comparison, the benchmark's diagnostics check and `EnrolledModuleCoverageTests` backstop it. Fix: assert the `--strict` arguments on the mocked `head.cli` calls in `ProductionReplayOrderingTests`, and on the command `HeadProcess.mcp` builds (AA). [tools/conformance-vectors/v1/run_loopback.py:772]
+- [ ] [Review][Patch] P5 — low. No test protects the exact malformed-Payload document check. Replacing it with `if False:` leaves every Python test green. Cross-head parity and the `validation_failed` code check stay, so if both heads changed the path or message, nothing would fail. Fix: have mocked heads return an identical `validation_failed` document with a different message, and assert `required malformed-Payload error document differs` (AA). [tools/conformance-vectors/v1/run_loopback.py:863]
+- [ ] [Review][Patch] P6 — low. No test protects the empty-manifest refusal. Without it, `--local` on a manifest with no flagged packages exits 0 with `result: local-only`. Fix: call `EnrolledPreflightTests.invoke` with non-flag metadata so `packages` is empty, and assert exit 1, `result: failed` and the `Production manifest has no enrolled Contracts packages.` error (AA). [tools/conformance-vectors/v1/check_enrolled.py:188]
+- [ ] [Review][Patch] P7 — low. "complete production Catalog contains uncovered operations" does not say which operations are uncovered. Every owned operation is already proven to be in the Catalog, so the uncovered set is `sorted(set(catalog) - set(owned))`. Add it to the message; the regex at `test_loopback.py:371` still matches (BH). [tools/conformance-vectors/v1/run_loopback.py:804]
+- [ ] [Review][Patch] P8 — low. The benchmark evidence mixes property casing. `new { module.Name, … }` writes `"Name"` next to camelCase `identifierKind`, and `diagnostics = catalog.Diagnostics` is written in PascalCase, because the options set no naming policy. No code reads these fields. Fix: serialize with `JsonSerializerDefaults.Web` plus `WriteIndented` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:90]
+- [ ] [Review][Patch] P9 — low. The 500 ms limit appears three times: in the evidence field (`:86`), the parent completion check (`:188`) and `LimitViolation` (`:205`). If the budget changed in one place only, the parent's check would disagree with the child's verdict. Use one `const double` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:188]
+- [x] [Review][Defer] D1 — `maybe-false`; medium if true. The 500 ms limit also runs in the parallel unit tier and could flake under CI load (BH, EC, VG other finding). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:16] — deferred: already tracked (`deferred-work.md:575`).
+- [x] [Review][Defer] D2 — low. The agent instructions omit the enrolled gate and the `ConformanceProduction` switch (BH). [AGENTS.md:83] — deferred: already tracked (`deferred-work.md:561`, `deferred-work.md:578`). The benchmark-command part is `false`: ordinary Core.Tests runs, which the instructions already prescribe, include the benchmark.
+
+#### Rejected (code review pass 4)
+
+Carried from earlier logged rulings, with the same location and bad outcome:
+- `low` — No timeout or kill for the benchmark child or the `check_enrolled` restore/build (BH ×2, EC ×2). Carried from BH9/EC4 and pass 3.
+- `low` — `RetainFailure` throws on truncated or non-JSON output (BH, EC). Carried from pass 3 and REC2.
+- `false` — The validator's catch filter misses `KeyNotFoundException`; each file has one `try`; non-`command` kinds count as queries (BH, EC). Carried from pass 3: `run_catalog` runs schema validation first, and the schema requires these members and restricts `kind`.
+- `low` — The benchmark accepts an empty `requiredModules` (EC). Carried from pass 3: `required_scope` rejects it in the same CI job.
+- `false` — The evidence lacks a SHA and runner OS; the READMEs hard-code 194.5002 ms (BH). Carried from pass 3: the run carries its commit and runner, and the past-tense figure is bound to its linked audit.
+- `low` — The approved Tenants inventory says "require fresh owning-maintainer approval" (BH). Carried from pass 3: the wording cannot change without re-approval.
+- `false` — The README promises partial observations that are never written (EC). Carried from pass 3.
+
+New rulings:
+- `false` — The parent should require the child's PID (BH). `InvalidateOutput` writes `pending` to a fresh or configured path before the child starts, and only the child can write `passed`.
+- `false` — The parent does not check `fullV1Accepted`, diagnostics or missing modules (BH). `ConstructionOutcome` (`:196-201`) makes `result: passed` imply all three, and strict mode requires `passed`.
+- `false` — `RetainFailure` overwrites a measurement after a mode mismatch (BH). The child inherits the parent's `MCPCLI_BENCHMARK_REQUIRE_V1`, so no mismatch is reachable. A measured failure exits nonzero and keeps its `failed` document.
+- `low` — The benchmark lists package IDs without versions (BH). The run's commit fixes the central pins, and `enrolled.json` records the restored versions.
+- `false` — Replay never proves the fixed-tenant rule (BH). Core covers it (`QueryExecutionTests.cs:63`), and the spec limits replay to transport parity.
+- `false` — No test covers preflight on bad envelope arguments (BH). Envelope failures take the same `outcome.Error` branch (`VectorCompatibilityValidator.cs:52-56`) that the fixture's payload mutations protect, and the vector schema runs first.
+- `false` — Nothing ties the Python SDK model to the SDK version (BH). The model is independent of both heads, so any divergence fails replay loudly. The real-SDK `sdk_response_cases` run against the pinned SDK in `conformance-vector-loopback`.
+- `low` — The sample loopback job depends on production enrollment (BH). The spec's process task requires the combined case. The coupling only duplicates a red signal, and decoupling needs a new fixture package.
+- `false` — The Tenants receipt adds an unchecked `status` field (BH). No gate or reader consumes it; the hashes and `approvalReference` bind the approval.
+- `false` — "Either required module" assumes two modules; the evidence path names Story 4.11 (BH). `v1-scope.json` declares exactly those two, and the path is only an example.
+- `false` — The READMEs cite a benchmark from before the pass 3 corrections (AA). The sentence is past tense, bound to the linked c887634 audit, and HEAD's green run passes the same gate.
+- `low` — The CI validation step still runs after a failed build (BH). The build step stays the first failed step, and a correct guard needs step IDs and conditions.
+- `false` — The retained artifact is never re-hashed before production replay (BH). `_verify_artifact_in_host` hashes it against the host restore (`run_loopback.py:711-713`) and compares its DLL entries (`:723-728`).
+- `low` — Variants such as `TRUE` or `1` for `MCPCLI_BENCHMARK_REQUIRE_V1` fall back to local mode (EC). CI sets `'true'`, the resulting evidence says `local-only`, and a fix would add a guard.
+- `low` — An empty `MCPCLI_BENCHMARK_OUTPUT` throws before evidence is written (EC). The test fails loudly, there is no path to write to, and a fix would add a branch.
+- `false` — `TypeError`/`AttributeError` leave `enrolled.json` at `pending` (EC). No reachable trigger was shown. Production progress still records `failed`, and the process exits nonzero.
+- `low` — A command scripted with 304 and a body diverges, because .NET discards 304 content (EC). No vector scripts a command 304, the divergence fails closed, and a fix would add a branch.
+- `low` — Python `strip()` and .NET whitespace differ for U+001C–U+001F (EC). Unlikely, fails closed, and a fix would add a helper.
+- `low` — Python 3.10's `fromisoformat` grammar (EC). CI uses ubuntu-latest Python 3, the failure is loud, and a fix would add a version guard.
+- `false` — A head omitting `correlationId` raises `KeyError` (EC). Core always sets correlation, and the failure is loud.
+- `low` — A failed coverage test skips the benchmark step (EC, AA). The run is already red with the cause, and running the benchmark after a failed build needs separate step conditions.
+- `false` — The README implies that local benchmark mode only records (EC). Neither README says the limit is skipped.
+- `low` — Three more guards have no removal tests: the retained-vector map (`check_enrolled.py:117`), duplicate adapter steps (`run_loopback.py:675`) and duplicate Catalog operations (`run_loopback.py:782`) (AA). Each guarded state needs a bug in already-tested code, a later check backstops each one, and mocking those states adds test machinery.
