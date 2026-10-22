@@ -1,0 +1,243 @@
+[
+  {
+    "label": "python",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/conformance-vectors/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {},
+    "started": "2026-10-22T15:59:40.472787+00:00",
+    "completed": "2026-10-22T16:00:16.561612+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:16.561906+00:00",
+    "completed": "2026-10-22T16:00:19.085173+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:19.085674+00:00",
+    "completed": "2026-10-22T16:00:24.571125+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:24.571456+00:00",
+    "completed": "2026-10-22T16:00:25.968038+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:25.968487+00:00",
+    "completed": "2026-10-22T16:00:33.404911+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:33.407882+00:00",
+    "completed": "2026-10-22T16:00:38.383246+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:00:38.386383+00:00",
+    "completed": "2026-10-22T16:01:35.882433+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-cli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:01:35.882817+00:00",
+    "completed": "2026-10-22T16:02:05.476131+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "tests-mcp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:02:05.476627+00:00",
+    "completed": "2026-10-22T16:02:08.903800+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "sample-validation",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:02:08.904393+00:00",
+    "completed": "2026-10-22T16:02:51.606390+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "sample-loopback",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:02:51.606735+00:00",
+    "completed": "2026-10-22T16:20:32.170008+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "restore-after-loopback",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:20:32.173493+00:00",
+    "completed": "2026-10-22T16:20:35.271337+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "build-after-loopback",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:20:35.271658+00:00",
+    "completed": "2026-10-22T16:20:40.577337+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "production-replay",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/enrolled"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:20:40.583887+00:00",
+    "completed": "2026-10-22T16:31:46.663431+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "strict-benchmark",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+    ],
+    "environment": {
+      "MCPCLI_BENCHMARK_REQUIRE_V1": "true",
+      "MCPCLI_BENCHMARK_OUTPUT": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/catalog-benchmark.json"
+    },
+    "started": "2026-10-22T16:31:46.664542+00:00",
+    "completed": "2026-10-22T16:31:48.291687+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "isolated-string",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:31:48.294887+00:00",
+    "completed": "2026-10-22T16:31:49.101720+00:00",
+    "exitCode": 0
+  },
+  {
+    "label": "whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {},
+    "started": "2026-10-22T16:31:49.102150+00:00",
+    "completed": "2026-10-22T16:31:49.490218+00:00",
+    "exitCode": 0
+  }
+]

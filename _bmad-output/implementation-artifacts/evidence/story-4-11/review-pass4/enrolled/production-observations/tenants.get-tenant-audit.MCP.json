@@ -1,0 +1,212 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/enrolled/Hexalith.Tenants.Contracts/inputs-y535ryep/vectors/5/get-tenant-audit.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5J743G6Q5EKTTWX525F4ZNW",
+      "correlationId": "01M5J743G6Q5EKTTWX525F4ZNW",
+      "tenant": "system",
+      "aggregateId": "vector-audit",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "messageId": "01M5J744CYKA133R7B58YJ1HQ4",
+      "correlationId": "01M5J744CYKA133R7B58YJ1HQ4",
+      "tenant": "system",
+      "aggregateId": "vector-audit",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "messageId": "01M5J7459MAW9AFZ39QHKD441D",
+      "correlationId": "01M5J7459MAW9AFZ39QHKD441D",
+      "tenant": "system",
+      "aggregateId": "vector-audit",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "messageId": "01M5J7466VBXSD5GK49G2JW89F",
+      "correlationId": "01M5J7466VBXSD5GK49G2JW89F",
+      "tenant": "system",
+      "aggregateId": "vector-audit",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "tenant": "system",
+      "document": {
+        "items": [
+          {
+            "eventId": "01JAT0V8M4XQ4K3W5Z6Y7B8CA0",
+            "eventType": "UserAddedToTenant",
+            "category": "Access",
+            "actorId": "vector-admin@example.com",
+            "timestamp": "2026-10-19T08:00:01+00:00",
+            "tenantId": "vector-audit",
+            "narrativePayload": {
+              "userId": "vector-audited@example.com",
+              "role": "TenantReader"
+            },
+            "commandCorrelationId": null,
+            "aggregateSequence": null,
+            "target": "vector-audited@example.com",
+            "scope": "vector-audit",
+            "outcome": "UserAddedToTenant"
+          }
+        ],
+        "cursor": "scripted-tenant-audit-cursor-1",
+        "hasMore": true
+      },
+      "paging": {
+        "pageSize": 1,
+        "nextCursor": "scripted-tenant-audit-cursor-1",
+        "hasMore": true
+      }
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "tenant": "system",
+      "document": {
+        "items": [
+          {
+            "eventId": "01JAT0V8M4XQ4K3W5Z6Y7B8CA2",
+            "eventType": "UserRoleChanged",
+            "category": "Access",
+            "actorId": "vector-admin@example.com",
+            "timestamp": "2026-10-19T08:00:03+00:00",
+            "tenantId": "vector-audit",
+            "narrativePayload": {
+              "userId": "vector-audited@example.com",
+              "oldRole": "TenantReader",
+              "newRole": "TenantContributor"
+            },
+            "commandCorrelationId": null,
+            "aggregateSequence": null,
+            "target": "vector-audited@example.com",
+            "scope": "vector-audit",
+            "outcome": "UserRoleChanged"
+          }
+        ],
+        "cursor": null,
+        "hasMore": false
+      },
+      "paging": {
+        "pageSize": 1,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J743G6Q5EKTTWX525F4ZNW",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Audit",
+          "TenantId": "vector-audit"
+        },
+        "correlationId": "01M5J743G6Q5EKTTWX525F4ZNW"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J744CYKA133R7B58YJ1HQ4",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "Role": "TenantReader",
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com"
+        },
+        "correlationId": "01M5J744CYKA133R7B58YJ1HQ4"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J7459MAW9AFZ39QHKD441D",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "Key": "audit.marker",
+          "TenantId": "vector-audit",
+          "Value": "administrative"
+        },
+        "correlationId": "01M5J7459MAW9AFZ39QHKD441D"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J7466VBXSD5GK49G2JW89F",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "change-user-role",
+        "payload": {
+          "NewRole": "TenantContributor",
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com"
+        },
+        "correlationId": "01M5J7466VBXSD5GK49G2JW89F"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "queryType": "get-tenant-audit",
+        "projectionType": "tenants",
+        "payload": {
+          "Category": "Access",
+          "From": "2026-01-01T00:00:00Z",
+          "TenantId": "vector-audit",
+          "To": "2099-12-31T23:59:59Z"
+        },
+        "paging": {
+          "pageSize": 1
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "queryType": "get-tenant-audit",
+        "projectionType": "tenants",
+        "payload": {
+          "Category": "Access",
+          "From": "2026-01-01T00:00:00Z",
+          "TenantId": "vector-audit",
+          "To": "2099-12-31T23:59:59Z"
+        },
+        "paging": {
+          "pageSize": 1,
+          "cursor": "scripted-tenant-audit-cursor-1"
+        }
+      }
+    }
+  ]
+}

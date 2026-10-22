@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "baselineCommit": "fce41d05e25b8c2076cc02266608460ec86ed635",
+  "resumedHead": "b84285f9d45e98c5cc762a646cd68db6fa5b5183",
+  "fullDiff": {
+    "path": "/tmp/mcpcli-411-review-1dr_i28p.diff",
+    "bytes": 14499477,
+    "sha256": "a15f072942693a17508de5369c0cc91cae5ccb95c2ab9fc7b240a5f48bb47fad",
+    "sections": 2224
+  },
+  "sourceInputsVerified": 3740,
+  "protectedFilesVerified": 32,
+  "frozenIntentUnchanged": true,
+  "matrixRows": 7,
+  "namedCoreCases": 10,
+  "operations": 21,
+  "preflightCalls": 78,
+  "documents": 198,
+  "requests": 198,
+  "benchmarkMilliseconds": 157.3627,
+  "note": "Parent rechecked raw evidence, source/protected hashes, named coverage and retained documents/requests; no additional broad test run."
+}

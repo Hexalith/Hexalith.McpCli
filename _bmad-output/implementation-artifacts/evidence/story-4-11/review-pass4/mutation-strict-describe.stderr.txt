@@ -1,0 +1,24 @@
+test_identical_malformed_payload_errors_cannot_change_the_required_message (test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message) ... FAIL
+
+======================================================================
+FAIL: test_identical_malformed_payload_errors_cannot_change_the_required_message (test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_loopback.py", line 444, in test_identical_malformed_payload_errors_cannot_change_the_required_message
+    self.assertEqual(['describe', step['operation'], '--strict'], head.cli.call_args_list[2].args[0])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['describe', 'sample.get-item', '--strict'] != ['describe', 'sample.get-item']
+
+First list contains 1 additional elements.
+First extra element 2:
+'--strict'
+
+- ['describe', 'sample.get-item', '--strict']
+?                               ------------
+
++ ['describe', 'sample.get-item']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)

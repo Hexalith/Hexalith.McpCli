@@ -1,0 +1,29 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/enrolled/Hexalith.Tenants.Contracts/inputs-y535ryep/vectors/3/disable-tenant.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J73BQSB5VWREPXW26E0537",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5J73BQSB5VWREPXW26E0537"
+      }
+    }
+  ]
+}

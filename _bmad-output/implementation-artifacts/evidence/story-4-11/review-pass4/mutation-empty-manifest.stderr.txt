@@ -1,0 +1,15 @@
+test_empty_production_manifest_fails_even_in_local_mode (test_enrolled.EnrolledPreflightTests.test_empty_production_manifest_fails_even_in_local_mode) ... FAIL
+
+======================================================================
+FAIL: test_empty_production_manifest_fails_even_in_local_mode (test_enrolled.EnrolledPreflightTests.test_empty_production_manifest_fails_even_in_local_mode)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/test_enrolled.py", line 402, in test_empty_production_manifest_fails_even_in_local_mode
+    self.assertEqual(1, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=1)

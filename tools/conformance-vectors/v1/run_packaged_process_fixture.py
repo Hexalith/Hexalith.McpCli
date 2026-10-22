@@ -61,6 +61,7 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
              {'pageSize': 7, 'offset': 2, 'totalCount': 3, 'hasMore': False}),
         ('signed-paging', dict(base, metadata={'paging': {'pageSize': '+007', 'offset': '+2', 'totalCount': '+3'}}),
              {'pageSize': 7, 'offset': 2, 'totalCount': 3}),
+        ('long-leading-zero-paging', dict(base, metadata={'paging': {'pageSize': '0' * 5000 + '7'}}), {'pageSize': 7}),
         ('explicit-null-payload', dict(base, payload=None), None),
         ('unicode-lookalike-is-unknown', dict(base, **{'ſuccess': False}), None),
         ('valid-later-case-variant', dict(base, success=False, Success=True), None),
@@ -75,6 +76,7 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
     ]
     for timestamp in ['2026-10-22', '2026-10-22T12:34', '2026-10-22T12:34Z',
                       '2026-10-22T12:34:56Z', '2026-10-22T12:34:56.1234567890123456+02:00',
+                      '2026-10-22T12:34:56.Z', '2026-10-22T12:34:56.+02:00',
                       '2026-10-22T12:34:56', '2026-10-22T12:34:56+14:00']:
         cases.append(('valid-timestamp', dict(base, metadata={'servedAt': timestamp}), None))
     for timestamp in ['2026-W43-4T12:34:56Z', '2026-10-22 12:34:56Z', '2026-10-22T12:34:56,5Z',

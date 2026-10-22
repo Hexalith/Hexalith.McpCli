@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 225 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 428 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 425 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 465 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 462 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj (in 485 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj (in 480 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 499 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj (in 391 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj (in 496 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 513 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj (in 492 ms).
+  10 of 22 projects are up-to-date for restore.

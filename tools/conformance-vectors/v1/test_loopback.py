@@ -187,6 +187,24 @@ class LoopbackRulesTests(unittest.TestCase):
                     with self.assertRaises(VectorError):
                         _verify_artifact_in_host(host, artifact, ("Sample.Contracts", "1.0.0"))
                 changed.write_bytes(original)
+            deps = host.with_suffix('.deps.json')
+            original = deps.read_bytes()
+            for mutation in ['empty-runtime', 'unknown-runtime-target', 'unrestored-dll']:
+                with self.subTest(runtime_selection=mutation):
+                    doc = json.loads(original)
+                    if mutation == 'empty-runtime':
+                        doc['targets']['net10.0']['Sample.Contracts/1.0.0']['runtime'] = {}
+                    elif mutation == 'unknown-runtime-target':
+                        doc['runtimeTarget']['name'] = 'unrestored-target'
+                    else:
+                        doc['targets']['net10.0']['Sample.Contracts/1.0.0']['runtime'] = {
+                            'lib/net10.0/Unrestored.Contracts.dll': {}}
+                    try:
+                        deps.write_text(json.dumps(doc))
+                        with self.assertRaisesRegex(VectorError, 'selected package runtime DLL assets differ'):
+                            _verify_artifact_in_host(host, artifact, ('Sample.Contracts', '1.0.0'))
+                    finally:
+                        deps.write_bytes(original)
             dll = host.parent / 'Fixture.Contracts.dll'
             dll.write_bytes(b'changed output DLL; archive, deps and assets unchanged')
             with self.assertRaisesRegex(VectorError, 'host runtime DLL bytes differ from immutable artifact entry'):
@@ -368,10 +386,62 @@ class ProductionReplayOrderingTests(unittest.TestCase):
                 patch('run_loopback._preflight_vectors', side_effect=AssertionError('Core preflight must not run')) as preflight, \
                 patch('run_loopback.ReplayGateway') as gateway, \
                 patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
-            with self.assertRaisesRegex(VectorError, 'complete production Catalog contains uncovered operations'):
+            with self.assertRaisesRegex(VectorError, r"complete production Catalog contains uncovered operations: \['sample.unselected'\]"):
                 run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [HERE / 'sample-query.json'])])
+        self.assertEqual([(['modules', '--strict'],), (['operations', 'sample', '--strict'],)],
+                         [call.args for call in head.cli.call_args_list])
         preflight.assert_not_called()
         gateway.assert_not_called()
+
+    def test_mcp_process_starts_with_strict_catalog_validation(self):
+        from unittest.mock import Mock
+        from run_loopback import HeadProcess
+        document = {'modules': []}
+        client = Mock()
+        client.request.return_value = {'result': {'structuredContent': document,
+                                                 'content': [{'text': json.dumps(document)}]}}
+        with tempfile.TemporaryDirectory() as directory, \
+                patch('run_loopback.subprocess.Popen') as process, \
+                patch('run_loopback._JsonRpcClient', return_value=client):
+            head = HeadProcess(Path('Host.dll'), directory, 15)
+            self.assertEqual((False, document), head.mcp('list_modules', {}))
+        self.assertEqual(['dotnet', 'Host.dll', 'mcp', '--transport', 'stdio', '--strict'],
+                         process.call_args.args[0])
+
+    def test_identical_malformed_payload_errors_cannot_change_the_required_message(self):
+        import subprocess
+        from unittest.mock import Mock, MagicMock
+        from run_loopback import run_catalog
+        source = HERE / 'sample-query.json'
+        step = json.loads(source.read_text())['invocation']
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': step['operation'], 'kind': 'read'}]}
+        success = {'operation': step['operation'], 'tenant': 'sample-tenant',
+                   'document': {'title': 'Conformance item'}}
+        malformed = {'error': {'code': 'validation_failed', 'operation': step['operation'],
+                               'violations': [{'path': '/', 'message': 'Changed validation message'}]}}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect = [(0, modules), (0, listed), (0, {'name': step['operation']}), (2, malformed)]
+        head.mcp.side_effect = [(False, modules), (False, listed), (False, {'name': step['operation']}), (True, malformed)]
+        gateway = MagicMock()
+        gateway.__enter__.return_value = gateway
+        gateway.assert_consumed = Mock()
+        gateway.captured = [{key: copy.deepcopy(step['expectedGateway'][key])
+                             for key in ['method', 'path', 'body']}]
+
+        def run_step(*args, evidence, **kwargs):
+            evidence.append(copy.deepcopy(success))
+            return success, False
+
+        with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                patch('run_loopback._manifest_operations', return_value={step['operation']: 'query'}), \
+                patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
+                patch('run_loopback._run_step', side_effect=run_step), \
+                patch('run_loopback.ReplayGateway', return_value=gateway), \
+                patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+            with self.assertRaisesRegex(VectorError, 'required malformed-Payload error document differs'):
+                run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
+        self.assertEqual(['describe', step['operation'], '--strict'], head.cli.call_args_list[2].args[0])
 
     def test_incompatible_last_vector_stops_every_gateway_before_replay(self):
         import subprocess
@@ -704,7 +774,7 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
         import subprocess
         from unittest.mock import Mock
         from run_loopback import run_catalog
-        for supplied in [False, True]:
+        for supplied, reuse_503 in [(False, False), (True, False), (False, True), (True, True)]:
             vector = json.loads((HERE / 'sample-rename.json').read_text())
             vector['prerequisites'], vector['postconditions'] = [], []
             step = vector['invocation']
@@ -717,7 +787,7 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                                    'value': 'Command response body could not be parsed.'}]
             modules = {'modules': [{'name': 'sample'}]}
             listed = {'operations': [{'name': step['operation'], 'kind': 'write'}]}
-            state = {'gateway': None, 'counter': 0}
+            state = {'gateway': None, 'counter': 0, 'normal_message': None}
 
             class Gateway:
                 url = 'http://unused.invalid/'
@@ -740,10 +810,14 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                 script = gateway.steps[len(gateway.captured)]
                 state['counter'] += 1
                 message = f"{state['counter']:026d}"
+                status = script['scriptedResponse']['statusCode']
+                if status == 503 and reuse_503:
+                    message = state['normal_message']
+                elif state['normal_message'] is None:
+                    state['normal_message'] = message
                 body = copy.deepcopy(step['expectedGateway']['body'])
                 body.update(messageId=message, correlationId=step['envelope'].get('correlationId', message))
                 gateway.captured.append({'method': 'POST', 'path': '/api/v1/commands', 'body': body})
-                status = script['scriptedResponse']['statusCode']
                 return 2, {'error': {'code': 'gateway_error', 'status': status, 'detail':
                                     'Command response body could not be parsed.' if status == 204 else 'scripted Gateway failure'}}
 
@@ -765,14 +839,18 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as directory:
                 source = Path(directory) / 'command-204.vector.json'
                 source.write_text(json.dumps(vector))
-                with self.subTest(supplied=supplied), patch('run_loopback._verify_artifact_in_host'), \
+                with self.subTest(supplied=supplied, reuse_503=reuse_503), patch('run_loopback._verify_artifact_in_host'), \
                         patch('run_loopback.validate_vectors', return_value=[]), \
                         patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
                         patch('run_loopback.HeadProcess', return_value=head), \
                         patch('run_loopback._preflight_vectors'), patch('run_loopback.ReplayGateway', Gateway), \
                         patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
-                    self.assertEqual(['sample'], run_catalog(Path('Host.dll'), [
-                        (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])['modules'])
+                    if reuse_503:
+                        with self.assertRaisesRegex(VectorError, 'gateway-error/messageId:.*reused across distinct calls'):
+                            run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
+                    else:
+                        self.assertEqual(['sample'], run_catalog(Path('Host.dll'), [
+                            (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])['modules'])
 
     def test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation(self):
         from run_loopback import _assert_result_contract, _assert_result_request_binding
@@ -807,10 +885,22 @@ class SdkTypedResponseTests(unittest.TestCase):
     def test_quoted_integer_signs_and_leading_zeroes_follow_the_sdk(self):
         from run_loopback import _sdk_response
         step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
-        for value, expected in [('+7', 7), ('007', 7), ('-0', 0), ('+0007', 7), ('-7', -7)]:
+        for value, expected in [('+7', 7), ('007', 7), ('-0', 0), ('+0007', 7), ('-7', -7),
+                                ('0' * 5000 + '7', 7), ('+' + '0' * 5000 + '7', 7),
+                                ('-' + '0' * 5000 + '7', -7), ('-' + '0' * 5000, 0)]:
             step['scriptedResponse']['body']['metadata'] = {'paging': {'pageSize': value, 'offset': value, 'totalCount': value}}
             with self.subTest(value=value):
                 self.assertEqual({'pageSize': expected, 'offset': expected, 'totalCount': expected}, _sdk_response(step)['paging'])
+        for field, bits in [('pageSize', 32), ('offset', 32), ('totalCount', 64)]:
+            for boundary in [-(2 ** (bits - 1)) - 1, -(2 ** (bits - 1)), 2 ** (bits - 1) - 1, 2 ** (bits - 1)]:
+                value = ('-' if boundary < 0 else '+') + '0' * 5000 + str(abs(boundary))
+                step['scriptedResponse']['body']['metadata'] = {'paging': {field: value}}
+                with self.subTest(field=field, boundary=boundary):
+                    response = _sdk_response(step)
+                    if -(2 ** (bits - 1)) <= boundary < 2 ** (bits - 1):
+                        self.assertEqual(boundary, response['paging'][field])
+                    else:
+                        self.assertIsNone(response)
         for value in [' 7', '7 ', '7.0', '7e0', '+', '--7']:
             step['scriptedResponse']['body']['metadata'] = {'paging': {'pageSize': value}}
             with self.subTest(value=value):
@@ -821,6 +911,7 @@ class SdkTypedResponseTests(unittest.TestCase):
         step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
         valid = ['2026-10-22', '2026-10-22T12:34', '2026-10-22T12:34Z',
                  '2026-10-22T12:34:56Z', '2026-10-22T12:34:56.1234567890123456+02:00',
+                 '2026-10-22T12:34:56.Z', '2026-10-22T12:34:56.+02:00',
                  '2026-10-22T12:34:56', '2026-10-22T12:34:56+14:00']
         invalid = ['2026-W43-4T12:34:56Z', '2026-10-22 12:34:56Z', '2026-10-22T12:34:56,5Z',
                    '2026-10-22t12:34:56z', '2026-10-22T12:34:56.12345678901234567Z',

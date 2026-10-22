@@ -1,0 +1,31 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/enrolled/Hexalith.Tenants.Contracts/inputs-y535ryep/vectors/13/update-tenant.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5J78KC1BHQTDNRXAXBJ633X",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Update Renamed",
+          "TenantId": "vector-update"
+        },
+        "correlationId": "01M5J78KC1BHQTDNRXAXBJ633X"
+      }
+    }
+  ]
+}

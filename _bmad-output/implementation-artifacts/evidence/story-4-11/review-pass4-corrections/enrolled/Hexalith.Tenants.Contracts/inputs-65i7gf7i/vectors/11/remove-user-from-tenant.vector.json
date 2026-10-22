@@ -1,0 +1,260 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.remove-user-from-tenant",
+  "kind": "command",
+  "prerequisites": [
+    {
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-removal",
+        "Name": "Vector Removal",
+        "Description": null
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-removal",
+          "commandType": "create-tenant",
+          "payload": {
+            "TenantId": "vector-removal",
+            "Name": "Vector Removal",
+            "Description": null
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.create-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-removal"
+        }
+      ]
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-removal",
+        "UserId": "vector-user-3@example.com",
+        "Role": "TenantReader"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-removal",
+          "commandType": "add-user-to-tenant",
+          "payload": {
+            "TenantId": "vector-removal",
+            "UserId": "vector-user-3@example.com",
+            "Role": "TenantReader"
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.add-user-to-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-removal"
+        }
+      ]
+    }
+  ],
+  "invocation": {
+    "operation": "tenants.remove-user-from-tenant",
+    "kind": "command",
+    "payload": {
+      "TenantId": "vector-removal",
+      "UserId": "vector-user-3@example.com"
+    },
+    "envelope": {
+      "tenant": "system"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "remove-user-from-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "correlationId": "<generated>"
+      },
+      "maskGenerated": [
+        "/messageId",
+        "/correlationId"
+      ]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": {},
+      "echoRequestFields": [
+        "correlationId",
+        "messageId"
+      ]
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.remove-user-from-tenant"
+      },
+      {
+        "path": "/status",
+        "operator": "equals",
+        "value": "accepted"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/aggregateId",
+        "operator": "equals",
+        "value": "vector-removal"
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-removal"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-removal",
+          "queryType": "get-tenant-users",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-removal"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "items": [],
+            "cursor": null,
+            "hasMore": false
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant-users"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/items",
+          "operator": "arrayLength",
+          "value": 0
+        },
+        {
+          "path": "/document/hasMore",
+          "operator": "equals",
+          "value": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "loopbackUnitTests": 47,
+  "fixtureUnitTests": 2,
+  "mutation": {
+    "removed": "_assert_fresh_message(gateway.captured[0], failure, seen_messages, f\"{source}:{label}/gateway-error\")",
+    "test": "test_loopback.GeneratedErrorCorrelationTests.test_valid_command_204_completes_runner_without_inventing_error_correlation",
+    "expectedFailureSubcases": 2,
+    "detected": true
+  },
+  "sourceHashes": {
+    "tools/conformance-vectors/v1/run_loopback.py": "a10bdb8f5dd579580ec0dee0212b22333202188a52258635b6f8b34e40fde785",
+    "tools/conformance-vectors/v1/test_loopback.py": "3f6da1b464068cda5a2807a8d78baf6f65bd5b8bcf4e74e710718978186831e4",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "bc3d3b039d21cb6d0cb6cedf16822be13643d006fb0e65e347096d18e6818f80"
+  }
+}

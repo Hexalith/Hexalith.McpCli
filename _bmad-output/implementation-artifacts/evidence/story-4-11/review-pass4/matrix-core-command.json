@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+    "-method",
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence",
+    "-method",
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds",
+    "-method",
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics",
+    "-method",
+    "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+    "-reporter",
+    "verbose",
+    "-noColor",
+    "-result-xml",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass4/matrix-core.xml"
+  ],
+  "exitCode": 0
+}

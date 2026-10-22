@@ -1,0 +1,83 @@
+[
+  {
+    "label": "runtime-selection",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "if not runtime_dlls or not set(runtime_dlls) <= restored_runtime:",
+    "after": "if False:",
+    "test": "test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "accepted-flag",
+    "source": "tools/conformance-vectors/v1/check_enrolled.py",
+    "before": "fullV1Accepted=not missing and not args.local",
+    "after": "fullV1Accepted=False",
+    "test": "test_enrolled.EnrolledPreflightTests.test_strict_success_records_full_v1_acceptance_without_missing_modules",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "strict-modules",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "head.cli([\"modules\", \"--strict\"])",
+    "after": "head.cli([\"modules\"])",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_unselected_exposed_operation_fails_before_core_preflight_or_gateway",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "strict-operations",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "head.cli([\"operations\", name, \"--strict\"])",
+    "after": "head.cli([\"operations\", name])",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_unselected_exposed_operation_fails_before_core_preflight_or_gateway",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "strict-describe",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "head.cli([\"describe\", operation, \"--strict\"])",
+    "after": "head.cli([\"describe\", operation])",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "strict-mcp",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "[\"mcp\", \"--transport\", \"stdio\", \"--strict\"]",
+    "after": "[\"mcp\", \"--transport\", \"stdio\"]",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_mcp_process_starts_with_strict_catalog_validation",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "malformed-error",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "if not _json_equal(document, expected_validation):",
+    "after": "if False:",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "empty-manifest",
+    "source": "tools/conformance-vectors/v1/check_enrolled.py",
+    "before": "if not packages:",
+    "after": "if False:",
+    "test": "test_enrolled.EnrolledPreflightTests.test_empty_production_manifest_fails_even_in_local_mode",
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "label": "uncovered-operation-diagnostic",
+    "source": "tools/conformance-vectors/v1/run_loopback.py",
+    "before": "_fail(f\"complete production Catalog contains uncovered operations: {sorted(set(catalog) - set(owned))}\")",
+    "after": "_fail(\"complete production Catalog contains uncovered operations\")",
+    "test": "test_loopback.ProductionReplayOrderingTests.test_unselected_exposed_operation_fails_before_core_preflight_or_gateway",
+    "exitCode": 1,
+    "detected": true
+  }
+]

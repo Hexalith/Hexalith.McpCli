@@ -1,0 +1,148 @@
+{
+  "Missing/duplicate/stale vector or wrong step kind/schema": {
+    "python": [
+      {
+        "test": "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected",
+        "result": "passed",
+        "output": "test_duplicate_and_missing_operation_vectors_are_rejected (test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected) ... ok"
+      },
+      {
+        "test": "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt",
+        "result": "passed",
+        "output": "test_changed_vector_cannot_reuse_approved_artifact_receipt (test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt) ... ok"
+      },
+      {
+        "test": "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight",
+        "result": "passed",
+        "output": "test_every_step_kind_is_checked_before_core_preflight (test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight) ... ok"
+      },
+      {
+        "test": "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay",
+        "result": "passed",
+        "output": "test_incompatible_last_vector_stops_every_gateway_before_replay (test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay) ... ok"
+      }
+    ]
+  },
+  "Payload depth 64/65": {
+    "python": [
+      {
+        "test": "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing",
+        "result": "passed",
+        "output": "test_payload_limit_is_counted_independently_from_vector_framing (test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing) ... ok"
+      },
+      {
+        "test": "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator",
+        "result": "passed",
+        "output": "test_five_hundred_level_payload_returns_a_located_finding_through_the_validator (test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator) ... ok"
+      },
+      {
+        "test": "test_loopback.Story411CompatibilityTests.test_core_failure_blocks_replay_with_source_and_step_location",
+        "result": "passed",
+        "output": "test_core_failure_blocks_replay_with_source_and_step_location (test_loopback.Story411CompatibilityTests.test_core_failure_blocks_replay_with_source_and_step_location) ... ok"
+      }
+    ],
+    "processEvidence": "sample-loopback.stdout.txt (offline Core process preflight negatives at all positions)"
+  },
+  "Supplied/omitted correlation and idempotency key": {
+    "python": [
+      {
+        "test": "test_loopback.LoopbackRulesTests.test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact",
+        "result": "passed",
+        "output": "test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact (test_loopback.LoopbackRulesTests.test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact) ... ok"
+      },
+      {
+        "test": "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality",
+        "result": "passed",
+        "output": "test_supplied_ids_and_key_omission_are_independent_of_head_equality (test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality) ... ok"
+      },
+      {
+        "test": "test_loopback.GeneratedMessageReuseExecutionTests.test_matching_heads_cannot_return_an_identifier_different_from_the_captured_request",
+        "result": "passed",
+        "output": "test_matching_heads_cannot_return_an_identifier_different_from_the_captured_request (test_loopback.GeneratedMessageReuseExecutionTests.test_matching_heads_cannot_return_an_identifier_different_from_the_captured_request) ... ok"
+      }
+    ]
+  },
+  "Extra request field, wrong paging, equal missing result fields": {
+    "python": [
+      {
+        "test": "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps",
+        "result": "passed",
+        "output": "test_preflight_compares_complete_request_and_rejects_missing_steps (test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps) ... ok"
+      },
+      {
+        "test": "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions",
+        "result": "passed",
+        "output": "test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions (test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions) ... ok"
+      },
+      {
+        "test": "test_validate.VectorContractTests.test_expected_paging_matches_integer_types_at_every_call_position",
+        "result": "passed",
+        "output": "test_expected_paging_matches_integer_types_at_every_call_position (test_validate.VectorContractTests.test_expected_paging_matches_integer_types_at_every_call_position) ... ok"
+      },
+      {
+        "test": "test_loopback.LoopbackRulesTests.test_gateway_expectations_use_recursive_json_equality",
+        "result": "passed",
+        "output": "test_gateway_expectations_use_recursive_json_equality (test_loopback.LoopbackRulesTests.test_gateway_expectations_use_recursive_json_equality) ... ok"
+      }
+    ]
+  },
+  "Validation failure or scripted Gateway failure": {
+    "python": [
+      {
+        "test": "test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message",
+        "result": "passed",
+        "output": "test_identical_malformed_payload_errors_cannot_change_the_required_message (test_loopback.ProductionReplayOrderingTests.test_identical_malformed_payload_errors_cannot_change_the_required_message) ... ok"
+      },
+      {
+        "test": "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads",
+        "result": "passed",
+        "output": "test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads (test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads) ... ok"
+      },
+      {
+        "test": "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request",
+        "result": "passed",
+        "output": "test_failing_head_retains_full_document_and_captured_request (test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request) ... ok"
+      },
+      {
+        "test": "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata",
+        "result": "passed",
+        "output": "test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata (test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata) ... ok"
+      }
+    ]
+  },
+  "Valid extensions": {
+    "python": [
+      {
+        "test": "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact",
+        "result": "passed",
+        "output": "test_extension_allowlist_is_isolated_and_exact (test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact) ... ok"
+      },
+      {
+        "test": "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position",
+        "result": "passed",
+        "output": "test_supplied_extensions_must_match_expected_request_at_every_call_position (test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position) ... ok"
+      }
+    ],
+    "processEvidence": "sample-loopback.stdout.txt (isolated profile extension process coverage)"
+  },
+  "Missing v1 Module or construction over 500 ms": {
+    "python": [
+      {
+        "test": "test_enrolled.EnrolledPreflightTests.test_missing_required_module_fails_full_gate_after_available_replay",
+        "result": "passed",
+        "output": "test_missing_required_module_fails_full_gate_after_available_replay (test_enrolled.EnrolledPreflightTests.test_missing_required_module_fails_full_gate_after_available_replay) ... ok"
+      },
+      {
+        "test": "test_enrolled.EnrolledPreflightTests.test_strict_success_records_full_v1_acceptance_without_missing_modules",
+        "result": "passed",
+        "output": "test_strict_success_records_full_v1_acceptance_without_missing_modules (test_enrolled.EnrolledPreflightTests.test_strict_success_records_full_v1_acceptance_without_missing_modules) ... ok"
+      }
+    ],
+    "dotnet": [
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FailureEvidenceWrapperPreservesMeasuredFailureEvidence",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionOutcomeRequiresBudgetScopeAndNoDiagnostics"
+    ],
+    "dotnetEvidence": "matrix-core.xml"
+  }
+}

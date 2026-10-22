@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -246,6 +246,31 @@ necessary release prerequisite in the owning repository without weakening gates.
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Resumed pass 4 independent review — 2026-10-22
+
+All three context-free layers completed before triage. The parent reproduced
+all eight SDK/oracle outcomes in
+[response probes](evidence/story-4-11/review-pass4/parent-response-probes.json)
+and inspected the original baseline for inherited helper/receipt behavior.
+Each filed finding has an individual verdict below; shared carried rulings
+retain their original route.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| PBH1: timestamp empty fraction before a timezone | Low. The real SDK accepts `.Z` and `.+02:00`; the regex refuses both. Python's existing datetime check accepts both, so changing the existing fractional digit bound directly repairs the false refusal. | Patch; grammar and real-SDK regressions |
+| PBH2: U+001C–U+001F whitespace | Low; carried from pass 4's logged whitespace ruling at `run_loopback.py:412`. Parent probes reconfirm the same fail-closed discrepancy; the required whitespace helper remains disproportionate for these unusual controls. | Keep carried rejection |
+| PBH3: lone-surrogate response values | Low. Parent reproduced typed-string parse errors and opaque-payload serialization errors while the oracle predicts success. These invalid Unicode strings are unlikely in maintained vectors; handling multiple parsing/serialization boundaries adds branches and policy beyond a direct correction. | Reject low, nontrivial boundary handling |
+| PBH4: quoted integers with 5,000 leading zeroes | Low. Parent reproduced SDK pageSize 7 while Python's integer digit cap predicts parse failure. Removing redundant leading zeroes in the existing conversion directly fixes it without changing ranges or accepted signs. | Patch; conversion and real-SDK regressions |
+| PBH5: binary floating-point result comparison | Medium, pre-existing. Parent confirmed distinct decimal tokens collapse under the unchanged JSON loader before equality. The representation/precision limitation is already tracked. | Already tracked (`deferred-work.md:138`); no duplicate entry |
+| PBH6: duplicate output JSON members | Low, pre-existing. `HeadProcess` uses ordinary `json.loads`, which retains the last occurrence. The shipped serializers emit unique members; reaching this needs an invalid head response, and strict parsing adds new refusal behavior to three protocol boundaries. | Reject low, nontrivial parser guards |
+| PBH7: MCP stderr pipe saturation | Low, pre-existing. The unchanged helper does not drain its pipe during the request; sufficiently large diagnostics can block a writer. Unlike the already-tracked lost-stderr claim, this is a separate blocking outcome. No normal per-call host flooding was shown; a concurrent drain adds lifecycle machinery. | Reject low, nontrivial process machinery |
+| PBH8: malformed MCP content/isError envelope | Low, pre-existing. The helper reads the text member without checking content type and coerces isError. The pinned SDK emits the specified types; the demonstrated fake responder is invalid and the fix adds new protocol guards. | Reject low, nontrivial protocol guards |
+| PBH9: later package failure omits completed packages from root results | Low, pre-existing in the original baseline loop. Root status receives results only after all packages finish. Individual child receipts retain the evidence, but root-level diagnosis loses completed-package progress. | Defer inherited receipt aggregation |
+| PBH10: standalone artifact replay lacks observation files | Low, pre-existing. The standalone invocation retains channel logs but passes no observation directory; the new combined phase retains the complete documents/requests required for production acceptance. Extending the standalone CLI and multiple signatures adds machinery for duplicated successful-run evidence. | Reject low, nontrivial observation plumbing |
+| PEC1: U+001C–U+001F detail | Low; carried from pass 4's logged whitespace ruling. Same `_nonblank` location and fail-closed outcome as PBH2. | Keep carried rejection |
+| PEC2: truncated benchmark evidence | Low; carried from REC2 and pass 4's `RetainFailure` ruling. Normal writers produce complete JSON; recovering interrupted partial writes requires another failure branch. | Keep carried rejection |
+| PVG1: synthetic 503 message-ID freshness call lacks a regression | Medium, pre-verified. The reviewer removed only the error-loop freshness invocation; all 157 tests stayed green. A runner fixture reusing a normal request ID only for 503 calls fails with the guard and passes without it. | Patch; complete-run negative regression |
 
 ### Local implementation review, 2026-10-21
 
@@ -530,15 +555,15 @@ Parent checks during triage:
 - `QueryExecutionTests.cs:63` covers the fixed tenant winning over session state. `VectorError` subclasses `ValueError` (`validate.py:31`), so `check_enrolled.main` catches replay failures.
 - `run_packaged_process_fixture.py:274-286` replays the real production packages plus the sample inside the `conformance-vector-loopback` job, as the spec's combined-manifest task requires.
 
-- [ ] [Review][Patch] P1 — medium. No test covers the runtime-DLL selection guard. `_verify_artifact_in_host` rejects a host whose `deps.json` selects no runtime `.dll` for the package, or one the assets file lacks. Without that guard, the byte comparison at `:723-728` loops over nothing and passes, so the approved-bytes binding silently checks nothing. VG replaced the guard with `if False:` and all 45 `test_loopback` tests passed; AA reproduced it. Fix: in `test_host_signed_archive_matches_restore_content_hash_independently` (`test_loopback.py:146`), add subtests that empty the `deps.json` runtime map, rename `runtimeTarget` and list a DLL the assets lack. Each must raise `selected package runtime DLL assets differ` (VG, AA). [tools/conformance-vectors/v1/run_loopback.py:721]
-- [ ] [Review][Patch] P2 — low. No test asserts `fullV1Accepted: true` on a passing strict run. Every assertion on the flag in `test_enrolled.py` is `assertFalse` (`:403`, `:535`, `:547`, `:557`, `:847`), and the process fixture checks only `result`. VG hard-coded the flag to `False` and all 48 tests still passed. Fix: on the strict success path of `EnrolledPreflightTests.invoke`, assert `report['fullV1Accepted'] is True` and `report['missingRequiredModules'] == []` (VG). [tools/conformance-vectors/v1/check_enrolled.py:198]
-- [ ] [Review][Patch] P3 — low. No test protects keeping a measured failure. The child writes its measured `failed` evidence and then throws (`:97`); the early return in `RetainFailure` keeps that document. `FailureEvidenceWrapperInvalidatesPriorSuccessAndRetainsTheException` reaches `RetainFailure` only with `pending`. Without the return, an over-budget or missing-Tenants run uploads `elapsedMilliseconds: null` and keeps the population only inside exception text. Fix: add a `[Fact]` whose `measure` writes a measured `failed` document and then throws, and assert that its fields survive `RunWithFailureEvidence` (VG). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:233]
-- [ ] [Review][Patch] P4 — low. No test protects the `--strict` flags this story added. They are on `modules`, `operations` and `describe` (`:772`, `:778`, `:812`) and on the MCP host command (`:281`). AA removed each in a scratch copy, and every Python test stayed green. The manifest-to-Catalog comparison, the benchmark's diagnostics check and `EnrolledModuleCoverageTests` backstop it. Fix: assert the `--strict` arguments on the mocked `head.cli` calls in `ProductionReplayOrderingTests`, and on the command `HeadProcess.mcp` builds (AA). [tools/conformance-vectors/v1/run_loopback.py:772]
-- [ ] [Review][Patch] P5 — low. No test protects the exact malformed-Payload document check. Replacing it with `if False:` leaves every Python test green. Cross-head parity and the `validation_failed` code check stay, so if both heads changed the path or message, nothing would fail. Fix: have mocked heads return an identical `validation_failed` document with a different message, and assert `required malformed-Payload error document differs` (AA). [tools/conformance-vectors/v1/run_loopback.py:863]
-- [ ] [Review][Patch] P6 — low. No test protects the empty-manifest refusal. Without it, `--local` on a manifest with no flagged packages exits 0 with `result: local-only`. Fix: call `EnrolledPreflightTests.invoke` with non-flag metadata so `packages` is empty, and assert exit 1, `result: failed` and the `Production manifest has no enrolled Contracts packages.` error (AA). [tools/conformance-vectors/v1/check_enrolled.py:188]
-- [ ] [Review][Patch] P7 — low. "complete production Catalog contains uncovered operations" does not say which operations are uncovered. Every owned operation is already proven to be in the Catalog, so the uncovered set is `sorted(set(catalog) - set(owned))`. Add it to the message; the regex at `test_loopback.py:371` still matches (BH). [tools/conformance-vectors/v1/run_loopback.py:804]
-- [ ] [Review][Patch] P8 — low. The benchmark evidence mixes property casing. `new { module.Name, … }` writes `"Name"` next to camelCase `identifierKind`, and `diagnostics = catalog.Diagnostics` is written in PascalCase, because the options set no naming policy. No code reads these fields. Fix: serialize with `JsonSerializerDefaults.Web` plus `WriteIndented` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:90]
-- [ ] [Review][Patch] P9 — low. The 500 ms limit appears three times: in the evidence field (`:86`), the parent completion check (`:188`) and `LimitViolation` (`:205`). If the budget changed in one place only, the parent's check would disagree with the child's verdict. Use one `const double` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:188]
+- [x] [Review][Patch] P1 — medium. No test covers the runtime-DLL selection guard. `_verify_artifact_in_host` rejects a host whose `deps.json` selects no runtime `.dll` for the package, or one the assets file lacks. Without that guard, the byte comparison at `:723-728` loops over nothing and passes, so the approved-bytes binding silently checks nothing. VG replaced the guard with `if False:` and all 45 `test_loopback` tests passed; AA reproduced it. Fix: in `test_host_signed_archive_matches_restore_content_hash_independently` (`test_loopback.py:146`), add subtests that empty the `deps.json` runtime map, rename `runtimeTarget` and list a DLL the assets lack. Each must raise `selected package runtime DLL assets differ` (VG, AA). [tools/conformance-vectors/v1/run_loopback.py:721]
+- [x] [Review][Patch] P2 — low. No test asserts `fullV1Accepted: true` on a passing strict run. Every assertion on the flag in `test_enrolled.py` is `assertFalse` (`:403`, `:535`, `:547`, `:557`, `:847`), and the process fixture checks only `result`. VG hard-coded the flag to `False` and all 48 tests still passed. Fix: on the strict success path of `EnrolledPreflightTests.invoke`, assert `report['fullV1Accepted'] is True` and `report['missingRequiredModules'] == []` (VG). [tools/conformance-vectors/v1/check_enrolled.py:198]
+- [x] [Review][Patch] P3 — low. No test protects keeping a measured failure. The child writes its measured `failed` evidence and then throws (`:97`); the early return in `RetainFailure` keeps that document. `FailureEvidenceWrapperInvalidatesPriorSuccessAndRetainsTheException` reaches `RetainFailure` only with `pending`. Without the return, an over-budget or missing-Tenants run uploads `elapsedMilliseconds: null` and keeps the population only inside exception text. Fix: add a `[Fact]` whose `measure` writes a measured `failed` document and then throws, and assert that its fields survive `RunWithFailureEvidence` (VG). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:233]
+- [x] [Review][Patch] P4 — low. No test protects the `--strict` flags this story added. They are on `modules`, `operations` and `describe` (`:772`, `:778`, `:812`) and on the MCP host command (`:281`). AA removed each in a scratch copy, and every Python test stayed green. The manifest-to-Catalog comparison, the benchmark's diagnostics check and `EnrolledModuleCoverageTests` backstop it. Fix: assert the `--strict` arguments on the mocked `head.cli` calls in `ProductionReplayOrderingTests`, and on the command `HeadProcess.mcp` builds (AA). [tools/conformance-vectors/v1/run_loopback.py:772]
+- [x] [Review][Patch] P5 — low. No test protects the exact malformed-Payload document check. Replacing it with `if False:` leaves every Python test green. Cross-head parity and the `validation_failed` code check stay, so if both heads changed the path or message, nothing would fail. Fix: have mocked heads return an identical `validation_failed` document with a different message, and assert `required malformed-Payload error document differs` (AA). [tools/conformance-vectors/v1/run_loopback.py:863]
+- [x] [Review][Patch] P6 — low. No test protects the empty-manifest refusal. Without it, `--local` on a manifest with no flagged packages exits 0 with `result: local-only`. Fix: call `EnrolledPreflightTests.invoke` with non-flag metadata so `packages` is empty, and assert exit 1, `result: failed` and the `Production manifest has no enrolled Contracts packages.` error (AA). [tools/conformance-vectors/v1/check_enrolled.py:188]
+- [x] [Review][Patch] P7 — low. "complete production Catalog contains uncovered operations" does not say which operations are uncovered. Every owned operation is already proven to be in the Catalog, so the uncovered set is `sorted(set(catalog) - set(owned))`. Add it to the message; the regex at `test_loopback.py:371` still matches (BH). [tools/conformance-vectors/v1/run_loopback.py:804]
+- [x] [Review][Patch] P8 — low. The benchmark evidence mixes property casing. `new { module.Name, … }` writes `"Name"` next to camelCase `identifierKind`, and `diagnostics = catalog.Diagnostics` is written in PascalCase, because the options set no naming policy. No code reads these fields. Fix: serialize with `JsonSerializerDefaults.Web` plus `WriteIndented` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:90]
+- [x] [Review][Patch] P9 — low. The 500 ms limit appears three times: in the evidence field (`:86`), the parent completion check (`:188`) and `LimitViolation` (`:205`). If the budget changed in one place only, the parent's check would disagree with the child's verdict. Use one `const double` (BH). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:188]
 - [x] [Review][Defer] D1 — `maybe-false`; medium if true. The 500 ms limit also runs in the parallel unit tier and could flake under CI load (BH, EC, VG other finding). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:16] — deferred: already tracked (`deferred-work.md:575`).
 - [x] [Review][Defer] D2 — low. The agent instructions omit the enrolled gate and the `ConformanceProduction` switch (BH). [AGENTS.md:83] — deferred: already tracked (`deferred-work.md:561`, `deferred-work.md:578`). The benchmark-command part is `false`: ordinary Core.Tests runs, which the instructions already prescribe, include the benchmark.
 
@@ -577,3 +602,54 @@ New rulings:
 - `low` — A failed coverage test skips the benchmark step (EC, AA). The run is already red with the cause, and running the benchmark after a failed build needs separate step conditions.
 - `false` — The README implies that local benchmark mode only records (EC). Neither README says the limit is skipped.
 - `low` — Three more guards have no removal tests: the retained-vector map (`check_enrolled.py:117`), duplicate adapter steps (`run_loopback.py:675`) and duplicate Catalog operations (`run_loopback.py:782`) (AA). Each guarded state needs a bug in already-tested code, a later check backstops each one, and mocking those states adds test machinery.
+
+### Review pass 4 implementation and local verification — 2026-10-22
+
+All nine accepted patch rows P1–P9 are implemented and locally verified. The
+[verification record](evidence/story-4-11/review-pass4/verification.md) links exact
+commands and channels, source/evidence hashes, named frozen-matrix coverage and
+ten detected guard/diagnostic removal probes. Frozen intent, both original owner
+approvals, approved vector and inventory bytes, required scope and package pins
+remain unchanged.
+
+Fresh restore and warnings-as-errors Release builds passed. All six ordinary
+projects passed with 1,368 successes and five expected skips; all 157 named Python
+cases, both complete Sample gates and ten named Core matrix cases passed. Strict
+production replay passed both modules, 21 operations, 78 preflight calls, 198
+documents and 198 complete captured requests. First Catalog construction with
+exactly one Ulid sample measured 193.1315 ms against the 500 ms limit; benchmark
+module fields use camelCase. All 3,740 tracked source inputs remained identical
+before and after the gates, and no default benchmark file leaked.
+
+D1/D2 remain already tracked, with no new ledger entry. The spec remains
+`in-progress` for the parent workflow's independent review and completion. These
+are local results; no new Ubuntu CI result, commit, push, merge, release or
+publication is claimed.
+
+### Final pass 4 completion — 2026-10-22
+
+All P1–P9 corrections and the three bounded independent-review patches are
+complete. The [final corrected-source verification](evidence/story-4-11/review-pass4-corrections/verification.md)
+and [parent acceptance audit](evidence/story-4-11/review-pass4-corrections/parent-acceptance-audit.json)
+bind all 17 sequential successful checks, 1,368 .NET successes with five expected
+skips, 157 named Python cases, both complete Sample gates, both approved
+production Modules and all seven frozen matrix rows. Strict replay verified
+21 operations, 78 preflight calls, 198 documents and 198 complete requests.
+The fresh first Catalog construction with exactly one Ulid sample measured
+157.3627 ms. All 3,740 source inputs stayed unchanged during final verification.
+
+All thirteen independent-review claims have individual verdicts above: three
+patches, two deferrals and eight rejections. Both deferrals describe inherited
+behavior; decimal precision was already tracked, while incomplete root receipt
+progress on a later package failure is newly recorded. D1/D2 retain their
+existing dispositions. Approved vectors/inventories, owner approvals, frozen
+intent, package pins and reference contents are unchanged.
+
+- [x] [Review][Defer] PBH5 — decimal comparison precision: already tracked (`deferred-work.md:138`).
+- [x] [Review][Defer] PBH9 — inherited root-receipt progress omission: recorded under this spec's resumed pass 4 review heading in `deferred-work.md`.
+
+The spec is done and the sprint entry is review. These are complete local
+results; no new normal Ubuntu CI result, push, merge or publication is claimed.
+The required local workflow completion commit records this corrected source
+and evidence. Live authorization, privacy, persisted effects and retirement
+retain their later gates.

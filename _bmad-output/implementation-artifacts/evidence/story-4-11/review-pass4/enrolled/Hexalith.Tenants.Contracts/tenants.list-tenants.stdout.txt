@@ -1,0 +1,54 @@
+{
+  "name": "tenants.list-tenants",
+  "kind": "read",
+  "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+  "schema": {
+    "type": [
+      "object",
+      "null"
+    ],
+    "properties": {
+      "Cursor": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      },
+      "PageSize": {
+        "type": "integer",
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      }
+    },
+    "additionalProperties": false
+  },
+  "example": {},
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "entityId",
+      "pageSize",
+      "offset",
+      "cursor"
+    ]
+  },
+  "lintFindings": [
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member Cursor to the query envelope argument.",
+      "property": "/properties/Cursor"
+    },
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member PageSize to the query envelope argument.",
+      "property": "/properties/PageSize"
+    }
+  ],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

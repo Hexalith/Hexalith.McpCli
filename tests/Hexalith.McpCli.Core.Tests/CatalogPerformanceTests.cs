@@ -11,6 +11,8 @@ namespace Hexalith.McpCli.Core.Tests;
 /// <summary>Measures the first production Catalog build plus exactly one ULID sample in a fresh process.</summary>
 public sealed class CatalogPerformanceTests
 {
+    private const double ConstructionLimitMilliseconds = 500;
+
     /// <summary>Runs the measurement in its own process so other tests cannot warm Catalog caches.</summary>
     [Fact]
     public async Task FirstConstructionStaysWithinFiveHundredMilliseconds()
@@ -83,7 +85,7 @@ public sealed class CatalogPerformanceTests
                 result = outcome.Result,
                 fullV1Accepted = outcome.FullV1Accepted,
                 elapsedMilliseconds = clock.Elapsed.TotalMilliseconds,
-                limitMilliseconds = 500,
+                limitMilliseconds = ConstructionLimitMilliseconds,
                 processId = Environment.ProcessId,
                 assemblies = assemblies.Select(assembly => assembly.GetName().Name),
                 productionPackages = entries.Select(entry => entry.PackageId),
@@ -91,7 +93,7 @@ public sealed class CatalogPerformanceTests
                 missingRequiredModules = outcome.Missing,
                 diagnostics = catalog.Diagnostics,
                 failures = outcome.Failures,
-            }, new JsonSerializerOptions { WriteIndented = true });
+            }, new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true });
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
             File.WriteAllText(output, evidence + Environment.NewLine);
             outcome.Failures.ShouldBeEmpty(evidence);
@@ -127,6 +129,39 @@ public sealed class CatalogPerformanceTests
             failed.RootElement.GetProperty("fullV1Accepted").GetBoolean().ShouldBeFalse();
             failed.RootElement.GetProperty("failures")[0].GetString().ShouldBe("Failed before measurement");
             failed.RootElement.GetProperty("error").GetString()!.ShouldContain(nameof(InvalidOperationException));
+        }
+        finally
+        {
+            File.Delete(output);
+        }
+    }
+
+    /// <summary>A measured failure keeps its complete population, duration and diagnostics when the wrapper catches it.</summary>
+    [Fact]
+    public void FailureEvidenceWrapperPreservesMeasuredFailureEvidence()
+    {
+        string output = Path.Combine(Path.GetTempPath(), "mcpcli-measured-failure-" + Path.GetRandomFileName() + ".json");
+        string measured = JsonSerializer.Serialize(new
+        {
+            result = "failed",
+            fullV1Accepted = false,
+            elapsedMilliseconds = 501.25,
+            limitMilliseconds = ConstructionLimitMilliseconds,
+            processId = Environment.ProcessId,
+            assemblies = new[] { "Production.Contracts", "Sample.Contracts" },
+            modules = new[] { new { name = "production", identifierKind = "String", operationCount = 2 } },
+            missingRequiredModules = new[] { "tenants" },
+            diagnostics = new[] { new { code = "invalid_contract", message = "Invalid contract" } },
+            failures = new[] { "First Catalog construction exceeded 500 ms.", "Missing tenants" },
+        }, new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true }) + Environment.NewLine;
+        try
+        {
+            Should.Throw<InvalidOperationException>(() => RunWithFailureEvidence(output, () =>
+            {
+                File.WriteAllText(output, measured);
+                throw new InvalidOperationException("Measured construction failed");
+            })).Message.ShouldBe("Measured construction failed");
+            File.ReadAllText(output).ShouldBe(measured);
         }
         finally
         {
@@ -185,7 +220,7 @@ public sealed class CatalogPerformanceTests
         JsonElement root = document.RootElement;
         root.GetProperty("result").GetString().ShouldBe(requireV1 ? "passed" : "local-only", evidence);
         (root.TryGetProperty("elapsedMilliseconds", out JsonElement elapsed) && elapsed.ValueKind == JsonValueKind.Number
-            && elapsed.TryGetDouble(out double milliseconds) && double.IsFinite(milliseconds) && milliseconds >= 0 && milliseconds <= 500).ShouldBeTrue(evidence);
+            && elapsed.TryGetDouble(out double milliseconds) && double.IsFinite(milliseconds) && milliseconds >= 0 && milliseconds <= ConstructionLimitMilliseconds).ShouldBeTrue(evidence);
         root.GetProperty("processId").GetInt32().ShouldNotBe(parentProcessId, evidence);
     }
 
@@ -202,7 +237,7 @@ public sealed class CatalogPerformanceTests
     }
 
     private static string? LimitViolation(double elapsed)
-        => elapsed > 500 ? "First Catalog construction exceeded 500 ms." : null;
+        => elapsed > ConstructionLimitMilliseconds ? $"First Catalog construction exceeded {ConstructionLimitMilliseconds} ms." : null;
 
     private static void InvalidateOutput(string output)
     {
