@@ -1,0 +1,156 @@
+{
+  "result": "focused-review-fixes-passed",
+  "changedSourceFiles": [
+    {
+      "path": "tools/conformance-vectors/v1/run_loopback.py",
+      "bytes": 48866,
+      "sha256": "9aded7af28ea01d2633c0a0ebda350bc508091c8f2010ed912dd11b92bafd2ae"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "bytes": 52276,
+      "sha256": "37ae097880e1a67328a495b3c5ce9b5a51e2e8b7deec6a75eebcbfdc5aa1decc"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/run_packaged_process_fixture.py",
+      "bytes": 20232,
+      "sha256": "411fa5e59b58ca364e693cb6f17d16be768fcbcfcacb695c7e29832785c1f6ff"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/check_enrolled.py",
+      "bytes": 12266,
+      "sha256": "29b6dfcdffa8e23b41c8efde8843aa6be156a81493e7b61e2b2ac8fab42b96c3"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/test_enrolled.py",
+      "bytes": 50992,
+      "sha256": "05380ed00437fafd7132a10598c1fe7308c4a77399fdd0916145cdc5002b289f"
+    }
+  ],
+  "focusedVerification": {
+    "test_loopback.py": 40,
+    "test_enrolled.py": 46,
+    "test_process_fixture.py": 2,
+    "newProductionProgressCases": 3,
+    "newRealSdkBatch": "Complete three-operation sample runner with seven query variants, typed command result and supplied/generated HTTP204 command parse errors; final-code batch passed35.594s.",
+    "removedCompleteCatalogGuard": "New uncovered-operation regression fails1/1 before forbiddenCorepreflight; no Gateway.",
+    "removedRuntimeDllGuard": "Changed-output/unchanged-metadata regression fails1/1."
+  },
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/build-host.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/build-host.stdout.txt",
+      "bytes": 1033,
+      "sha256": "d81b79e43abaf278dae77d36ef36373f012b5f21820060b67bba67175e3ae68d"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/final-sdk-process.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/final-sdk-process.stdout.txt",
+      "bytes": 153,
+      "sha256": "08d013b0a528b5c69e5739c9288afbf49013c168df1490ac6daf84f883ae7c43"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/pack-abstractions.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/pack-abstractions.stdout.txt",
+      "bytes": 451,
+      "sha256": "32d7bdd742b652dd2ca61d66b1043419fb21464616792e268ea993550f6bec46"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/pack-sample.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/pack-sample.stdout.txt",
+      "bytes": 811,
+      "sha256": "46eddc3aac53c30a734818be529f4df13af08029f0ff53423768a22668760df6"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/production-progress.stderr.txt",
+      "bytes": 310,
+      "sha256": "2d120b874a9379841ce19a99d8e116d29f54d821070f23b48d631762de1bd864"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/production-progress.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/restore-host.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/restore-host.stdout.txt",
+      "bytes": 864,
+      "sha256": "781087e9e832cfc2c93b9dd1d5ac70cdba2153c8f015806e17070923dde3a550"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/runtime-dll-guard-removal.txt",
+      "bytes": 1087,
+      "sha256": "4796fe344b5a8dc5bff5f66d99787ae31f6949ef9a9211816f28c5c6a7e5f2fa"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/sdk-process-cases.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/sdk-process-cases.stdout.txt",
+      "bytes": 153,
+      "sha256": "08d013b0a528b5c69e5739c9288afbf49013c168df1490ac6daf84f883ae7c43"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/test_loopback.py.stderr.txt",
+      "bytes": 7164,
+      "sha256": "1aade6985bdaffcb2a63ba56fe9695a62a4f0ee347189a711cda2614f9bb4954"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/test_loopback.py.stdout.txt",
+      "bytes": 228,
+      "sha256": "ac2238894c3033fd8cb69a0cbfcb19570c5e671b09424eb94f22cd234aa9699f"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/test_process_fixture.py.stderr.txt",
+      "bytes": 508,
+      "sha256": "7b496ce9e874dd33a0970ae61e781bb267f67fba24e8c71819d1f3fb9cf1ae2b"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/test_process_fixture.py.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/uncovered-guard-removal.txt",
+      "bytes": 1723,
+      "sha256": "994bd609430a1fce40cdaf1fcd58c294b261a475a4a26ce11e22fa20dfbb7fcd"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-review-fixes-20261022/final-sdk-cases/sdk-response-cases/replay.stdout.txt",
+      "bytes": 339,
+      "sha256": "c6a0153a81a3e9b7af80f8890c62e68d1e6b88860033db19259914465b771a66"
+    }
+  ],
+  "scope": "Only the edited Python modules, their protecting unit tests and new targeted real-SDK process batch. Parent owns full verification and all docs/evidence/status updates. No child staging/commits/pushes.",
+  "parentVerifiedAtUtc": "2026-10-22T05:45:23.783947+00:00",
+  "parentVerifiedAllRecordedSourceAndLogHashes": true,
+  "fullMandatoryParentVerification": "running; actual corrected-source Ubuntu still required",
+  "parentRewrittenCompleteBaselineDiff": {
+    "path": "/tmp/mcpcli-story411-reviewed-fix-diff-pcyurlwd/baseline.patch",
+    "bytes": 9631979,
+    "sha256": "b6770c2df37b70376b74c6aaa0d5ce65d300b12fb4b6ab39cc2cd33ef76c97f5",
+    "realIndexUntouchedByDiffRewrite": true
+  }
+}

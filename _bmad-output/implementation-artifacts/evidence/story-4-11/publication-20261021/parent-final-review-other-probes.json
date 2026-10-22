@@ -1,0 +1,22 @@
+{
+  "completeCatalogGuardRemoval": {
+    "tests": 34,
+    "suiteStillPasses": true,
+    "output": "----------------------------------------------------------------------\nRan 34 tests in 0.025s\n\nOK\n"
+  },
+  "runtimeDllBinding": {
+    "guardAcceptedChangedOutputDll": true,
+    "approvedRuntimeDllSha256": "df80eac648c8eff1a81e2d3bd35c47bee69225b501d31630583607e7332bee89",
+    "actualChangedRuntimeDllSha256": "172ac13050a16a2c7730492dc933d00a6e43a359a3f40290ea1b5449b73a36c6",
+    "archiveDepsAndAssetsUnchanged": true
+  },
+  "productionFailureProgress": {
+    "exception": "production-restore failed with exit 19; see /tmp/mcpcli-story411-parent-progress-probe-4jo8s26s: restore error",
+    "receipt": {
+      "result": "pending",
+      "results": []
+    },
+    "stdoutRetained": "restore diagnostic",
+    "stderrRetained": "restore error"
+  }
+}

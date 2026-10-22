@@ -210,8 +210,10 @@ vectors and the approved twenty inventory decisions. The selected enrollment kee
 that exact version and the qualified Builds pin. The separate normal 5.10.1 five-package
 and container release qualifies the approved provenance repair; its version
 is not claimed as the enrolled Contracts version. The original 5.10.0 container's
-malformed labels remain historical failures. Story 4.11 stays open while the
-final strict Ubuntu 21-operation replay and cold 500 ms benchmark remain pending. The earlier Story 4.8 scratch package and 5.9.0
+malformed labels remain historical failures. The actual Ubuntu strict gate passed all 21 operations and measured first Catalog
+construction plus exactly one Ulid sample at 242.6181 ms against the 500 ms limit.
+The [artifact and matrix audit](../../../_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/parent-root-ubuntu-acceptance-audit.json)
+binds the exact source, artifacts and named passing regressions. The earlier Story 4.8 scratch package and 5.9.0
 pin are historical and do not authorize the published bytes. Scripted replay
 establishes transport parity; live authorization, privacy sanitization, persisted
 effects and legacy retirement retain their Story 4.13 and retirement gates.

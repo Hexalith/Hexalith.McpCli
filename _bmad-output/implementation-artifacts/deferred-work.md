@@ -562,3 +562,9 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-10-add-parties-queries-and-pin-complete-coverage.md`
   summary: The A1 Parties inventory's eligibility rule contradicts the Story 4.10 enrollment.
   evidence: Low. `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:31-33` says `include` values "become eligible for enrollment only after the missing Contracts, authorization and behavior evidence proves readiness". `src/Hexalith.McpCli/Hexalith.McpCli.csproj:24` now enrolls `Hexalith.Parties.Contracts`, while the frozen 4.10 intent keeps C06–C08 and Stories 4.11/4.13 as downstream gates (`spec-4-10-add-parties-queries-and-pin-complete-coverage.md:51`). Agents reading the inventory as context for 4.11/4.13 meet a contradictory rule. The inventory is owner-approved A1 evidence, so the owner should reword or annotate the eligibility sentence; no code change is needed.
+
+## Deferred from: final implementation review of spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md (2026-10-22)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
+  summary: The established replay helper discards successful-process stderr instead of retaining it with operation observations.
+  evidence: Low; pre-existing in baseline `fce41d05e25b8c2076cc02266608460ec86ed635`. `tools/conformance-vectors/v1/run_loopback.py:277` returns parsed CLI stdout without retaining stderr, and `:322` closes the normal MCP stderr pipe. Existing product channel-contract tests remain in place, and no current incorrect product output was demonstrated; replay receipts themselves cannot supply those channel diagnostics. A future harness improvement should retain both channels and define expected MCP startup logging separately from CLI diagnostics. Parent searched the ledger before appending and found no equivalent open entry.

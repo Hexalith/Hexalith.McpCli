@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
+from datetime import datetime
 import hashlib
 import json
 import os
@@ -16,6 +17,7 @@ import sys
 import tempfile
 import threading
 import time
+import zipfile
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -104,15 +106,18 @@ def _assert_fresh_message(request: dict, step: dict, seen: set[str], location: s
 def _mask_result(document: dict[str, Any], step: dict[str, Any], location: str) -> dict[str, Any]:
     normalized = copy.deepcopy(document)
     if step["kind"] == "command" and "error" in normalized:
-        if "correlationId" not in step["envelope"] and "correlationId" in step["scriptedResponse"]["echoRequestFields"]:
+        expected = _expected_gateway_error(step, document)
+        if expected is not None and "correlationId" in expected \
+                and "correlationId" not in step["envelope"] \
+                and "correlationId" in step["scriptedResponse"]["echoRequestFields"]:
             value = normalized["error"].get("correlationId")
             if not isinstance(value, str) or ULID.fullmatch(value) is None:
                 _fail(f"{location}/error/correlationId: generated identifier is not a ULID: {value!r}")
             normalized["error"]["correlationId"] = "<generated>"
     if step["kind"] == "command" and "error" not in normalized:
         for field in ("messageId", "correlationId"):
-            response = step["scriptedResponse"]
-            generated = (not response["body"].get("messageId") or "messageId" in response["echoRequestFields"]) \
+            response = _sdk_response(step)
+            generated = (response["messageId"] is None or "messageId" in step["scriptedResponse"]["echoRequestFields"]) \
                 if field == "messageId" else "correlationId" not in step["envelope"]
             if generated:
                 value = normalized.get(field)
@@ -408,32 +413,106 @@ def _nonblank(*values: Any) -> str | None:
     return next((value for value in values if isinstance(value, str) and value.strip()), None)
 
 
+def _response_body(step: dict) -> dict:
+    body = copy.deepcopy(step["scriptedResponse"]["body"])
+    for field in step["scriptedResponse"]["echoRequestFields"]:
+        body[field] = step["envelope"].get(field, "01J9MZHXT3RKM0VWXRXGSJDATN")
+    return body
+
+
+def _response_depth(value: Any) -> int:
+    children = value.values() if isinstance(value, dict) else value if isinstance(value, list) else None
+    return 0 if children is None else 1 + max((_response_depth(child) for child in children), default=0)
+
+
+def _sdk_response(step: dict) -> dict | None:
+    """Read the pinned SDK's typed envelope, leaving JsonElement payloads opaque.
+
+    Web JSON names are case-insensitive; unknown members are skipped, but still
+    count toward the serializer's depth limit. Invalid typed values fail the
+    entire response before correlation or semantic-success handling.
+    """
+    body = _response_body(step)
+    if _response_depth(body) > 64:
+        return None
+
+    def properties(value):
+        if not isinstance(value, dict):
+            raise ValueError("typed object required")
+        return {key.casefold(): item for key, item in value.items()}
+
+    def string(value):
+        if value is not None and not isinstance(value, str):
+            raise ValueError("typed string required")
+        return value
+
+    def boolean(value, nullable=True):
+        if not (nullable and value is None) and type(value) is not bool:
+            raise ValueError("typed boolean required")
+        return value
+
+    def integer(value, bits, nullable=True):
+        if nullable and value is None:
+            return None
+        # JsonSerializerDefaults.Web permits quoted numbers, not bools/floats.
+        if isinstance(value, str) and re.fullmatch(r"-?[0-9]+", value):
+            value = int(value)
+        if type(value) is not int or not -(2 ** (bits - 1)) <= value < 2 ** (bits - 1):
+            raise ValueError("typed integer required")
+        return value
+
+    try:
+        typed = properties(body)
+        response = {"correlationId": string(typed.get("correlationid"))}
+        if step["kind"] == "command":
+            response.update(messageId=string(typed.get("messageid")), resultPayload=typed.get("resultpayload"))
+            return response
+        response.update(payload=typed.get("payload"), success=boolean(typed.get("success", True), False),
+                        errorMessage=string(typed.get("errormessage")), paging=None)
+        if typed.get("metadata") is not None:
+            metadata = properties(typed["metadata"])
+            for key in ("etag", "projectionversion"):
+                string(metadata.get(key))
+            for key in ("isnotmodified", "isstale", "isdegraded"):
+                boolean(metadata.get(key))
+            if metadata.get("servedat") is not None:
+                datetime.fromisoformat(string(metadata["servedat"]).replace("Z", "+00:00"))
+            warnings = metadata.get("warningcodes")
+            if warnings is not None:
+                if not isinstance(warnings, list):
+                    raise ValueError("typed warning list required")
+                for warning in warnings:
+                    string(warning)
+            if metadata.get("paging") is not None:
+                paging = properties(metadata["paging"])
+                response["paging"] = {
+                    "pageSize": integer(paging.get("pagesize", 0), 32, False),
+                    "offset": integer(paging.get("offset"), 32),
+                    "nextCursor": string(paging.get("nextcursor")),
+                    "totalCount": integer(paging.get("totalcount"), 64),
+                    "hasMore": boolean(paging.get("hasmore")),
+                }
+                response["paging"] = {key: value for key, value in response["paging"].items() if value is not None}
+        return response
+    except (ValueError, TypeError):
+        return None
+
+
 def _expected_gateway_error(step: dict, document: dict) -> dict | None:
     """Model the pinned SDK error mapping, including its typed Query response outcomes."""
     script = step["scriptedResponse"]
-    status, body = script["statusCode"], copy.deepcopy(script["body"])
-    for field in script["echoRequestFields"]:
-        if field == "correlationId":
-            # A generated echo must exist now and is bound to the captured request separately.
-            actual_error = document.get("error")
-            generated_echo = actual_error.get(field) if isinstance(actual_error, dict) else None
-            echoed = step["envelope"].get(field, generated_echo)
-            if echoed is None and 200 <= status < 300:
-                body[field] = "<generated>"
-                continue
-            if not isinstance(echoed, str) or ULID.fullmatch(echoed) is None:
-                _fail("required echoed Gateway correlationId is missing or invalid")
-            body[field] = echoed
+    status, body = script["statusCode"], _response_body(step)
     special_detail = None
     problem = not 200 <= status < 300
     if step["kind"] == "query" and status == 304:
         status, special_detail = 502, "Not-modified query response requires projection-backed provenance and a strong ETag."
-    elif status == 204:
+    elif not problem and (status == 204 or _sdk_response(step) is None):
         special_detail = ("Query" if step["kind"] == "query" else "Command") + " response body could not be parsed."
-    elif not problem and not _nonblank(body.get("correlationId")):
+    elif not problem and not _nonblank(_sdk_response(step)["correlationId"]):
         special_detail = ("Query" if step["kind"] == "query" else "Command") + " response did not contain a valid correlationId."
-    elif not problem and step["kind"] == "query" and not body.get("success", False):
-        status, special_detail = 200, _nonblank(body.get("errorMessage"), "Query semantic failure")
+    elif not problem and step["kind"] == "query" and not _sdk_response(step)["success"]:
+        body = _sdk_response(step)
+        status, special_detail = 200, _nonblank(body["errorMessage"], "Query semantic failure")
         error = {"code": "gateway_error", "status": status, "detail": special_detail}
         correlation = body.get("correlationId")
         if isinstance(correlation, str) and ULID.fullmatch(correlation) is not None:
@@ -443,6 +522,8 @@ def _expected_gateway_error(step: dict, document: dict) -> dict | None:
         return None
     if special_detail is not None:
         return {"code": "gateway_error", "status": status, "detail": special_detail}
+    if _response_depth(body) > 64:
+        body = {}  # Problem JSON parse errors fall back to HTTP metadata.
     try:
         title = HTTPStatus(status).phrase
     except ValueError:
@@ -465,6 +546,11 @@ def _expected_gateway_error(step: dict, document: dict) -> dict | None:
         error["retryable"] = body["retryable"]
     correlation = body.get("correlationId")
     if isinstance(correlation, str) and ULID.fullmatch(correlation) is not None:
+        if "correlationId" in script["echoRequestFields"] and "correlationId" not in step["envelope"]:
+            actual = document.get("error", {}).get("correlationId")
+            if not isinstance(actual, str) or ULID.fullmatch(actual) is None:
+                _fail("required echoed Gateway correlationId is missing or invalid")
+            correlation = actual
         error["correlationId"] = correlation
     return error
 
@@ -490,14 +576,14 @@ def _assert_result_contract(document: Any, step: dict[str, Any], location: str) 
             expected["idempotencyKey"] = envelope["idempotencyKey"]
         elif "idempotencyKey" in document:
             _fail(f"{location}/idempotencyKey: unsupplied key must remain absent")
-        response = step["scriptedResponse"]["body"]
+        response = _sdk_response(step)
         if response.get("resultPayload") is not None:
             expected["result"] = response["resultPayload"]
     else:
-        expected["document"] = step["scriptedResponse"]["body"].get("payload")
-        metadata = step["scriptedResponse"]["body"].get("metadata", {})
-        if metadata and metadata.get("paging") is not None:
-            expected["paging"] = {key: value for key, value in metadata["paging"].items() if value is not None}
+        response = _sdk_response(step)
+        expected["document"] = response["payload"]
+        if response["paging"] is not None:
+            expected["paging"] = response["paging"]
     for field, value in expected.items():
         if field not in document or not _json_equal(document[field], value):
             _fail(f"{location}/{field}: required result must equal {_canonical(value)}")
@@ -507,15 +593,17 @@ def _assert_result_contract(document: Any, step: dict[str, Any], location: str) 
 
 def _assert_result_request_binding(document: dict, request: dict, step: dict, location: str) -> None:
     if "error" in document:
-        if "correlationId" in step["scriptedResponse"]["echoRequestFields"] \
+        expected = _expected_gateway_error(step, document)
+        if expected is not None and "correlationId" in expected \
+                and "correlationId" in step["scriptedResponse"]["echoRequestFields"] \
                 and document["error"].get("correlationId") != request.get("correlationId"):
             _fail(f"{location}/error/correlationId: result does not preserve the submitted identifier")
         return
     if step["kind"] != "command":
         return
-    response = step["scriptedResponse"]
-    expected_message = request["messageId"] if "messageId" in response["echoRequestFields"] \
-        else response["body"].get("messageId") or request["messageId"]
+    response = _sdk_response(step)
+    expected_message = request["messageId"] if "messageId" in step["scriptedResponse"]["echoRequestFields"] \
+        else response["messageId"] if response["messageId"] is not None else request["messageId"]
     for field, expected in (("messageId", expected_message), ("correlationId", request["correlationId"])):
         if document.get(field) != expected:
             _fail(f"{location}/{field}: result does not preserve the submitted/returned identifier")
@@ -593,6 +681,19 @@ def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str
         _fail(f"{deps}: restored package hash differs from immutable artifact {artifact}")
     if matches[0][1].get("sha512") != restored["assetsHash"]:
         _fail(f"{deps}: package restore content hash differs from {assets_path}")
+    target = data.get("targets", {}).get(data.get("runtimeTarget", {}).get("name"), {})
+    runtime = target.get(identity, {}).get("runtime", {})
+    runtime_dlls = [name for name in runtime if name.endswith(".dll")]
+    restored_runtime = {name for target in assets.get("targets", {}).values()
+                        for name in target.get(identity, {}).get("runtime", {})}
+    if not runtime_dlls or not set(runtime_dlls) <= restored_runtime:
+        _fail(f"{deps}: selected package runtime DLL assets differ from {assets_path}")
+    with zipfile.ZipFile(artifact) as archive:
+        for asset in runtime_dlls:
+            output = host.parent / Path(asset).name
+            if asset not in archive.namelist() or not output.is_file() \
+                    or output.read_bytes() != archive.read(asset):
+                _fail(f"{output}: host runtime DLL bytes differ from immutable artifact entry {asset}")
 
 
 def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:

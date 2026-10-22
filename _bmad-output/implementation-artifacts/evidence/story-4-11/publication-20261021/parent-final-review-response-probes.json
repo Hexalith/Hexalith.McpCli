@@ -1,0 +1,113 @@
+[
+  {
+    "case": "omitted-success",
+    "vectorFindings": [],
+    "cliExit": 0,
+    "document": {
+      "operation": "sample.get-item",
+      "tenant": "sample-tenant",
+      "document": {
+        "title": "Conformance item"
+      }
+    },
+    "oracleRejection": "VectorError: omitted-success: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"correlationId\":\"01J9MZHXT3RKM0VWXRXGSJDATK\",\"detail\":\"Query semantic failure\",\"status\":200}}; got {\"document\":{\"title\":\"Conformance item\"},\"operation\":\"sample.get-item\",\"tenant\":\"sample-tenant\"}"
+  },
+  {
+    "case": "case-success",
+    "vectorFindings": [],
+    "cliExit": 0,
+    "document": {
+      "operation": "sample.get-item",
+      "tenant": "sample-tenant",
+      "document": {
+        "title": "Conformance item"
+      }
+    },
+    "oracleRejection": "VectorError: case-success: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"correlationId\":\"01J9MZHXT3RKM0VWXRXGSJDATK\",\"detail\":\"Query semantic failure\",\"status\":200}}; got {\"document\":{\"title\":\"Conformance item\"},\"operation\":\"sample.get-item\",\"tenant\":\"sample-tenant\"}"
+  },
+  {
+    "case": "paging-default",
+    "vectorFindings": [],
+    "cliExit": 0,
+    "document": {
+      "operation": "sample.get-item",
+      "tenant": "sample-tenant",
+      "document": {
+        "title": "Conformance item"
+      },
+      "paging": {
+        "pageSize": 0,
+        "offset": 2
+      }
+    },
+    "oracleRejection": "VectorError: paging-default/paging: required result must equal {\"offset\":2}"
+  },
+  {
+    "case": "paging-extra",
+    "vectorFindings": [],
+    "cliExit": 0,
+    "document": {
+      "operation": "sample.get-item",
+      "tenant": "sample-tenant",
+      "document": {
+        "title": "Conformance item"
+      },
+      "paging": {
+        "pageSize": 5
+      }
+    },
+    "oracleRejection": "VectorError: paging-extra/paging: required result must equal {\"extra\":\"ignored\",\"pageSize\":5}"
+  },
+  {
+    "case": "response-depth65",
+    "vectorFindings": [],
+    "cliExit": 2,
+    "document": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleRejection": "VectorError: response-depth65/operation: required result must equal \"sample.get-item\""
+  },
+  {
+    "case": "paging-array",
+    "vectorFindings": [],
+    "cliExit": 2,
+    "document": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleRejection": "AttributeError: 'list' object has no attribute 'items'"
+  },
+  {
+    "case": "typed-success-string",
+    "vectorFindings": [],
+    "cliExit": 2,
+    "document": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleRejection": "VectorError: typed-success-string/operation: required result must equal \"sample.get-item\""
+  },
+  {
+    "case": "command204",
+    "vectorFindings": [],
+    "cliExit": 2,
+    "document": {
+      "error": {
+        "code": "gateway_error",
+        "status": 204,
+        "detail": "Command response body could not be parsed."
+      }
+    },
+    "oracleRejection": "VectorError: command204/error/correlationId: result does not preserve the submitted identifier"
+  }
+]

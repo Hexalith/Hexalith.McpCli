@@ -1,6 +1,6 @@
 {
-  "recordedAtUtc": "2026-10-22T04:40:03.050849+00:00",
-  "status": "approved-for-production-enrollment-pending-ubuntu-acceptance",
+  "recordedAtUtc": "2026-10-22T05:05:17.797463+00:00",
+  "status": "in-review-corrections-before-final-acceptance",
   "packageId": "Hexalith.Tenants.Contracts",
   "version": "5.10.0",
   "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
@@ -134,7 +134,14 @@
   "productionAccepted": false,
   "fullV1Accepted": false,
   "finalUbuntuAcceptance": {
-    "status": "pending",
-    "required": "Exact actual ubuntu-latest strict21-operation combined production replay and fresh Catalog with exactlyone Ulid<=500ms plus isolatedString/full ordinaryCI; parent final acceptance review."
-  }
+    "status": "passed",
+    "source": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+    "run": 39724191822,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39724191822",
+    "audit": "parent-root-ubuntu-acceptance-audit.json",
+    "operationCount": 21,
+    "coldCatalogMilliseconds": 242.6181
+  },
+  "finalIndependentReviewPending": true,
+  "currentTreeReverificationPending": true
 }

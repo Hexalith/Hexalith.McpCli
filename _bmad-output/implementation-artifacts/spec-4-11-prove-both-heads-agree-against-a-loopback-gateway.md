@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'in-progress'
+status: 'in-review'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -277,6 +277,30 @@ The parent also replayed all four captured real client error outcomes through
 the corrected contract checker and audited the retained inputs against approval.
 The two rejected low-impact proposals remain rejected; no deferral was added.
 
+### Final enrollment review — 2026-10-22
+
+All three context-free review layers completed before parent triage. The parent independently reproduced all response/default/paging/parser cases against the built real SDK host, the command-204 binding refusal, the complete-Catalog guard-removal gap, changed-runtime-DLL preflight acceptance and missing structured failure progress. Exact observations are retained in [response probes](evidence/story-4-11/publication-20261021/parent-final-review-response-probes.json) and [other probes](evidence/story-4-11/publication-20261021/parent-final-review-other-probes.json). The successful Ubuntu head recorded in the continuation remains valid historical evidence; current completion awaits these bounded corrections and final verification.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| BH11: response property casing | Medium. A schema-valid `Success:true` query succeeds in the pinned real SDK but the raw case-sensitive oracle requires semantic failure. Parent reproduced it. | Patch; typed response normalization |
+| BH12: paging defaults and unknown members | Medium. Actual SDK projects offset-only paging to include pageSize 0 and drops an unknown member; both valid query documents fail the raw-response oracle. Parent reproduced both. | Patch; same normalization root cause |
+| BH13: typed/deep response parse failures | Medium. Schema-valid depth-65 payload and string-valued success produce correct SDK parse errors at HTTP 200, which the oracle mistakes for success. Parent reproduced both. | Patch; same normalization root cause |
+| BH14: malformed open metadata crashes receipt orchestration | Medium. Schema-valid paging `[]` produces an SDK parse error but raises AttributeError in the oracle; the outer enrollment handler does not catch it, leaving its prior pending receipt. Parent reproduced the shape failure. | Patch; same normalization root cause |
+| BH15: uncovered complete-Catalog guard has no negative test | Medium. Parent removed only the uncovered-operation refusal in memory; all 34 loopback tests still passed. No existing test supplies an exposed unselected operation. | Patch; direct negative regression |
+| BH16: separate MCP processes cannot detect per-session cached IDs | Low. This is a real limitation of the pre-existing per-call process lifecycle, rather than an observed product reuse defect. The actual repeated-same-executor distinct-ID test passed. A persistent-session runner adds orchestration for an unobserved cache state, beyond a direct correction. | Reject low, nontrivial session machinery |
+| BH17: successful replay calls do not retain stderr | Low. The unchanged baseline helper parses successful CLI stdout then drops stderr; normal MCP shutdown closes its stderr pipe. Existing channel tests still protect product guards, but replay observations do not retain those diagnostics. | Defer pre-existing helper limitation |
+| BH18: a successful no-op benchmark probe could leave pending evidence | False. The parent launches the exact measured Fact with MCPCLI_BENCHMARK_PROBE=1; that selected path must write measured evidence or fail. The ordinary non-probe Fact return is not the child path. No reachable zero-exit/no-op state was shown, and the actual CI measurement is present. | Reject on refutation |
+| BH19: output Contracts DLL is not bound to the approved archive | Medium. Parent isolated the actual production deps/assets and approved signed archive, changed only the copied output DLL bytes, and the host-artifact preflight still passed. This exposes an exact-runtime-byte gap in the new combined lane. | Patch; compare selected runtime asset bytes with archive entries |
+| BH20: structured production failure progress is lost | Low. Parent forced restore exit 19: full channel logs remain, but the locally accumulated command/exit list never reaches enrolled.json when production_replay raises. The failed combined phase therefore lacks the structured progress the independent phase retains. | Patch; direct progress retention |
+| EC3: omitted optional query success is treated as false | Medium. Parent reproduced an actual successful query with omitted success rejected as semantic failure; the pinned SDK defaults it to true. | Patch; same normalization root cause as BH11–BH14 |
+| EC4: parent cancellation can leave a late-writing benchmark child | Low. Source permits a child to finish after cancellation directed only at the parent; the reviewer did not reproduce a runner trigger. This has a short measurement window, and required job/source binding prevents a cancelled job from granting full acceptance. It needs added process-lifecycle machinery rather than a direct correction. | Reject low, nontrivial cleanup machinery |
+| VG3: command 204 errors incorrectly require echoed correlation | Medium. Parent validated the complete modified vector and reproduced the correct SDK parse error without correlation, then the binding helper rejected it. Masking independently makes the same error. Correlation must be required/bound only when the expected SDK error actually contains it. | Patch; error correlation binding and masking |
+
+The five correction groups are typed SDK outcome normalization (BH11–BH14/EC3), command parse-error correlation (VG3), complete-Catalog negative coverage (BH15), selected runtime byte binding (BH19), and structured production progress (BH20). No frozen intent or public product surface changes are required. Each filed claim has its own verdict above; the earlier local triage was checked and no claim here has the same location and bad outcome as a carried row.
+
+The same implementation agent applied all five correction groups. The parent verified every focused source/log hash, the real SDK batch, and both guard-removal failures; the deepest response reachable through the Core vector-file parser also returns the expected SDK parse classification. Full mandatory verification is running, and a new normal Ubuntu run on the corrected source is still required. The one pre-existing stderr-retention limitation is tracked in `deferred-work.md:568`.
+
 ## Original design context — 2026-10-21
 
 The following paragraph records the initial local-phase design context.
@@ -332,3 +356,15 @@ Tenants PR54 merged normally at `205cbc5019343d344643b530fb03aee82af2840d`, with
 Root enrollment uses the authentic Contracts 5.10.0 artifact at `82c2e9ad51f4d9ceeae9dcde33d7e0273524a105` with all fourteen original approved vector bytes, twenty inventory decisions and exact lint exceptions unchanged. The [new release-bound enrollment record](evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json) links both existing user approvals, authentic signed archive and restore-content identities, the qualified full follow-up release and the unchanged public-description review. The qualified Builds gitlink remains `c0cbbbd4366d512cc1731397f14dd53a7a01580d`; no new version pin or repository-policy mutation was needed.
 
 All six local root projects passed with 1,356 tests and four existing Windows-only skips; all 139 named Python tests, both Sample gates and six documented offline CLI commands passed. The final fresh task cache, assets, dependency document and shipped gateway/Contracts DLLs match the authentic approved archives. These local observations retain `productionAccepted: false` and `fullV1Accepted: false`. The story and sprint remain in progress pending actual Ubuntu strict 21-operation CLI/MCP replay, the first Catalog construction with exactly one Ulid sample at most 500 ms, isolated String coverage and the final independent acceptance review.
+
+### 05:02 UTC: actual Ubuntu acceptance verified; final review pending
+
+The [parent artifact and matrix audit](evidence/story-4-11/publication-20261021/parent-root-ubuntu-acceptance-audit.json) independently verifies actual normal CI [39724191822](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39724191822) on `bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd`. The actual PR checkout `a71233072b4f7e822f325af61b3d647c9fcf3e60` has the same full tree `ee3372fe9d9da62211b540a9e433c57306912623`. All four required jobs passed; all six ordinary projects produced 1,356 passed tests and four existing Windows-only skips, all 139 named Python tests passed, and both Sample gates passed.
+
+| Acceptance criterion | Actual verification |
+| --- | --- |
+| Both approved production releases cover every operation through both heads | Authentic Parties 1.5.1 and Tenants 5.10.0 archives, original vectors and approved inventory/lint bytes match. Strict combined production replay passed all 21 operations and 78 preflight calls; parent rechecked 198 retained success/error documents and complete captured requests. |
+| Incompatible vector steps fail before replay with located deterministic diagnostics | All-position kind/schema/identifier/depth process negatives and the complete named 139-test suite passed; every frozen matrix row has actual named passing coverage. |
+| First Catalog construction with exactly one sample is at most 500 ms; alternate kind remains covered | Actual fresh-process Ubuntu measurement was 242.6181 ms, with exactly Parties, Tenants and one Ulid sample, no failures/missing modules/diagnostics. The isolated String test and 500/500.0001 ms boundary and failure-evidence cases actually passed in the ordinary native TRX. |
+
+The unchanged strict gates now report `fullV1Accepted: true`. All execution tasks and acceptance criteria are verified. Story and sprint remain in progress for the next sequential BMAD independent review and completion record. No live authorization, sanitization, persisted effects or retirement acceptance is claimed.

@@ -1,0 +1,179 @@
+{
+  "checkedAtUtc": "2026-10-22T05:04:44.017497+00:00",
+  "result": "passed",
+  "repository": "Hexalith/Hexalith.McpCli",
+  "pullRequest": 1,
+  "head": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+  "actualCheckoutMerge": "a71233072b4f7e822f325af61b3d647c9fcf3e60",
+  "actualCheckoutTreeEqualsReviewedHead": "ee3372fe9d9da62211b540a9e433c57306912623",
+  "ciRun": 39724191822,
+  "ciUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39724191822",
+  "wholeCiConclusion": "success",
+  "resolvedSharedWorkflow": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "requiredJobs": {
+    "ordinarySixProjectTests": 119644519762,
+    "sampleContract": 119644519635,
+    "sampleLoopback": 119644519495,
+    "strictProductionReplayAndColdCatalog": 119644519743
+  },
+  "ordinaryTests": {
+    "Passed": 1356,
+    "NotExecuted": 4
+  },
+  "namedPythonPassed": 139,
+  "productionPackages": [
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "vectorCount": 7,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 14
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "vectorCount": 14,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 21
+    }
+  ],
+  "operationCount": 21,
+  "preflightCallCount": 78,
+  "capturedDocumentsAndRequestsRechecked": 198,
+  "coldBenchmark": {
+    "elapsedMilliseconds": 242.6181,
+    "limitMilliseconds": 500,
+    "exactProductionModules": [
+      "parties",
+      "tenants"
+    ],
+    "exactlyOneSample": "Hexalith.McpCli.Sample.Contracts",
+    "sampleIdentifierKind": "Ulid",
+    "isolatedStringTestActuallyPassed": true
+  },
+  "matrix": [
+    {
+      "row": "Missing/duplicate/stale vector or wrong step kind/schema",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected",
+        "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt",
+        "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight",
+        "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay"
+      ]
+    },
+    {
+      "row": "Payload depth64/65",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing",
+        "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator"
+      ]
+    },
+    {
+      "row": "Supplied/omitted correlation and idempotency key",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality",
+        "test_loopback.GeneratedErrorCorrelationTests.test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation",
+        "test_loopback.ProductionReplayOrderingTests.test_generated_correlation_is_bound_to_its_message_before_masking",
+        "test_loopback.GeneratedMessageReuseExecutionTests.test_two_real_runner_calls_cannot_reuse_a_generated_request_message"
+      ]
+    },
+    {
+      "row": "Extra request field, wrong paging, equal missing result fields",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.LoopbackRulesTests.test_expected_gateway_payload_and_paging_are_exact",
+        "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps",
+        "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions"
+      ]
+    },
+    {
+      "row": "Validation failure or scripted Gateway failure",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads",
+        "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata",
+        "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request"
+      ]
+    },
+    {
+      "row": "Valid extensions",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact",
+        "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position"
+      ]
+    },
+    {
+      "row": "Missing v1 Module or construction over500ms",
+      "allActuallyPassed": true,
+      "actualUbuntuNamedTestsPassed": [
+        "test_enrolled.FullV1ScopeTests.test_required_modules_cannot_be_replaced_by_local_green",
+        "test_enrolled.EnrolledPreflightTests.test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels"
+      ]
+    }
+  ],
+  "actualNamedTrxGuards": [
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"loading\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"construction\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False)",
+      "outcome": "Passed"
+    }
+  ],
+  "sampleLogs": [
+    {
+      "job": 119644519635,
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/ubuntu-bf9/logs/conformance-vector-contract.log",
+      "bytes": 25387,
+      "sha256": "5510986475af058103d700aff0616ee42e3fc20fc54aca9953083b5523511cb9",
+      "allRequiredOutcomesActuallyPassed": true
+    },
+    {
+      "job": 119644519495,
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/ubuntu-bf9/logs/conformance-vector-loopback.log",
+      "bytes": 29951,
+      "sha256": "3955eb69daa276efb7c8698adaa6478dbf3716342fc4193a7352152df22f3e5f",
+      "allRequiredOutcomesActuallyPassed": true
+    }
+  ],
+  "artifactAudits": [
+    "parent-root-ubuntu-six-trx-audit.json",
+    "parent-root-ubuntu-enrolled-artifact-audit.json"
+  ],
+  "source": {
+    "allTwentyPreviouslyReadCodeConfigurationTestFilesUnchanged": true,
+    "frozenIntentUnchanged": true,
+    "original14TenantsVectorBytesAnd20InventoryDecisionsUnchanged": true
+  },
+  "allThreeAcceptanceCriteriaSatisfied": true,
+  "scope": "Exact approved published production artifacts, actual Ubuntu strict combined transport parity, all matrix regressions, first cold Catalog<=500ms with exactlyone Ulid sample and isolated String,139namedPython,6ordinarytestprojects and both existing Sample gates passed. Final sequential BMAD independent review still required. This supplies no live authorization/privacy/persisted-effect/retirement acceptance.",
+  "fullV1Accepted": true,
+  "fullStoryAccepted": false
+}

@@ -80,44 +80,63 @@ def required_scope(path: Path, modules: set[str]) -> list[str]:
     return sorted(set(required) - modules)
 
 
-def production_replay(repo: Path, output: Path, results: list[dict]) -> dict:
+def production_replay(repo: Path, output: Path, results: list[dict], record_progress=None) -> dict:
     """Exercise the real combined manifest; independent artifact hosts remain a separate gate."""
     project = repo / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj'
-    checks = []
-    for command, label in [
-        (['dotnet', 'restore', str(project), '-p:ConformanceProduction=true'], 'production-restore'),
-        (['dotnet', 'build', str(project), '--no-restore', '-c', 'Release', '-m:1', '-warnaserror',
-          '-p:ConformanceProduction=true'], 'production-build')]:
-        result = subprocess.run(command, cwd=repo, capture_output=True, text=True)
-        (output / (label + '.stdout.txt')).write_text(result.stdout)
-        (output / (label + '.stderr.txt')).write_text(result.stderr)
-        checks.append({'command': command, 'exitCode': result.returncode})
-        if result.returncode != 0:
-            raise RuntimeError(f'{label} failed with exit {result.returncode}; see {output}: {result.stderr[-4000:]}')
-    host = project.parent / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
-    selections = []
-    for receipt in results:
-        root = output / receipt['packageId']
-        inputs = receipt['retainedInputs']
-        selections.append((root / inputs['artifact'], (receipt['packageId'], receipt['version']),
-                           [root / path for path in inputs['vectors'].values()]))
-        if set(inputs['vectors']) != set(receipt['vectors']):
-            raise RuntimeError(f"{receipt['packageId']}: retained vector map differs from recorded verification hashes.")
-        for source, path in inputs['vectors'].items():
-            if hashlib.sha256((root / path).read_bytes()).hexdigest() != receipt['vectors'][source]:
-                raise RuntimeError(f"{root / path}: retained vector bytes differ from recorded verification hash.")
-    with (output / 'production-replay.stdout.txt').open('w') as stdout, \
-            (output / 'production-replay.stderr.txt').open('w') as stderr:
-        try:
-            with redirect_stdout(stdout), redirect_stderr(stderr):
-                discovered = run_catalog(host, selections, assets_path=project.parent / 'obj/project.assets.json',
-                            evidence_dir=output / 'production-observations',
-                            expected_modules={receipt['packageId']: receipt['approvedModule'] for receipt in results})
-        except Exception as error:
-            stderr.write(str(error) + '\n')
-            raise
-    return {'result': 'passed', 'checks': checks, 'packageCount': len(selections),
-            'operationCount': sum(len(result['operations']) for result in results), **discovered}
+    progress = {'result': 'pending', 'checks': []}
+
+    def save():
+        if record_progress is not None:
+            record_progress(progress)
+
+    try:
+        for command, label in [
+            (['dotnet', 'restore', str(project), '-p:ConformanceProduction=true'], 'production-restore'),
+            (['dotnet', 'build', str(project), '--no-restore', '-c', 'Release', '-m:1', '-warnaserror',
+              '-p:ConformanceProduction=true'], 'production-build')]:
+            progress['phase'] = label
+            check = {'command': command, 'result': 'running'}
+            progress['checks'].append(check)
+            save()
+            result = subprocess.run(command, cwd=repo, capture_output=True, text=True)
+            (output / (label + '.stdout.txt')).write_text(result.stdout)
+            (output / (label + '.stderr.txt')).write_text(result.stderr)
+            check.update(exitCode=result.returncode, result='passed' if result.returncode == 0 else 'failed')
+            save()
+            if result.returncode != 0:
+                raise RuntimeError(f'{label} failed with exit {result.returncode}; see {output}: {result.stderr[-4000:]}')
+        progress['phase'] = 'production-replay'
+        save()
+        host = project.parent / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        selections = []
+        for receipt in results:
+            root = output / receipt['packageId']
+            inputs = receipt['retainedInputs']
+            selections.append((root / inputs['artifact'], (receipt['packageId'], receipt['version']),
+                               [root / path for path in inputs['vectors'].values()]))
+            if set(inputs['vectors']) != set(receipt['vectors']):
+                raise RuntimeError(f"{receipt['packageId']}: retained vector map differs from recorded verification hashes.")
+            for source, path in inputs['vectors'].items():
+                if hashlib.sha256((root / path).read_bytes()).hexdigest() != receipt['vectors'][source]:
+                    raise RuntimeError(f"{root / path}: retained vector bytes differ from recorded verification hash.")
+        with (output / 'production-replay.stdout.txt').open('w') as stdout, \
+                (output / 'production-replay.stderr.txt').open('w') as stderr:
+            try:
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    discovered = run_catalog(host, selections, assets_path=project.parent / 'obj/project.assets.json',
+                                evidence_dir=output / 'production-observations',
+                                expected_modules={receipt['packageId']: receipt['approvedModule'] for receipt in results})
+            except Exception as error:
+                stderr.write(str(error) + '\n')
+                raise
+        progress.update(result='passed', packageCount=len(selections),
+                        operationCount=sum(len(result['operations']) for result in results), **discovered)
+        save()
+        return progress
+    except Exception as error:
+        progress.update(result='failed', error=str(error))
+        save()
+        raise
 
 
 def main():
@@ -167,7 +186,11 @@ def main():
             raise RuntimeError('Production manifest has no enrolled Contracts packages.')
         status.update(results=results)
         report.write_text(json.dumps(status, indent=2) + '\n')
-        status['productionReplay'] = production_replay(repo, args.output.resolve(), results)
+        def record_production(progress):
+            status['productionReplay'] = progress
+            report.write_text(json.dumps(status, indent=2) + '\n')
+
+        status['productionReplay'] = production_replay(repo, args.output.resolve(), results, record_production)
         missing = required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set(status['productionReplay']['modules']))
         status.update(missingRequiredModules=missing, fullV1Accepted=not missing and not args.local)
         if missing and not args.local:

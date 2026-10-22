@@ -1,6 +1,6 @@
 {
-  "observedAtUtc": "2026-10-22T04:43:39.191521+00:00",
-  "status": "in-progress",
+  "observedAtUtc": "2026-10-22T05:47:46.924369+00:00",
+  "status": "in-review-corrections",
   "eventStore": {
     "pr": 372,
     "head": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
@@ -160,12 +160,9 @@
     "sourceManifestScope": "Exact 16,248-file predicate documented in source-snapshots report; 29,088 other tracked entries were outside those original before/after equality checks."
   },
   "remainingSequence": [
-    "TenantsPR54 merged normally at205cbc with exact checked tree2720; successful exact-main pushCI still required before normal full follow-up release.",
-    "Complete the already-authorized normal fullfive-package/container follow-up, derive actual version from semantic-release and retain all final signed bytes plus both RID identity/created-label provenance and smokes.",
-    "After repaired full follow-up qualifies, record release-bound receipt for authentic Contracts5.10.0 source82c using actual signed raw/restore hashes, both existing user approvals and exact original14vectors/20decisions; keep follow-up release provenance separate.",
-    "Use current qualified Builds c0 exact ES3.126.1/Tenants5.10.0 declarations for configuration-only root enrollment and dependency-policy closure; no new central version or unanswered policy mutation.",
-    "Complete local final named Python139/.NET6project/sample checks and built-CLI documentation verification; pause before first root commit/PR for parent baseline full-diff read.",
-    "Then obtain authentic ubuntu-latest strict21-operation combined replay, exactlyone-Ulid freshcold500ms and isolatedString coverage; finish parent AC/matrix/finalreview before fullacceptance."
+    "Finish complete local verification of the five final-review corrections and retain named outcomes.",
+    "Obtain and independently audit the normal Ubuntu CI run for the corrected source, including strict 21-operation replay and cold Catalog gate.",
+    "Record completed Story 4.11 acceptance and synchronize sprint status through workflow Step05."
   ],
   "productionAccepted": false,
   "fullV1Accepted": false,
@@ -204,7 +201,7 @@
     "independentAudit": "historical-readiness-parent-compaction-audit.json",
     "allSealedApprovalAndCandidateBytesUnchanged": true
   },
-  "activePath": "Consume authentic owner EventStore3.126.1; repair already-authorized Tenants container provenance against current owning source, then publish normal semantic follow-up. Existing ES PR/CodeQL is diagnostic only and not an enrollment or normal publisher prerequisite.",
+  "activePath": "Five bounded final-review corrections applied; complete local verification running and a fresh normal Ubuntu run on the corrected source remains required. Prior bf9 Ubuntu acceptance is historical.",
   "tenants": {
     "currentOwnerMain": "205cbc5019343d344643b530fb03aee82af2840d",
     "publishedVersion": "5.10.0",
@@ -436,17 +433,32 @@
   },
   "finalRootDocumentationAndVerification": {
     "readmeClaimsToUpdate": [],
-    "verification": "Verify each claimed built CLI verb; authentic ubuntu-latest21-operation strict replay and cold Catalog with exactlyone Ulid sample remain mandatory.",
+    "verification": "ActualUbuntu strict21operation replay and fresh Catalog242.6181ms/exactlyoneUlid sample passed; all6ordinaryprojects/139namedPython/bothSamplegates and isolatedString passed.",
     "history": "Historical measurements, candidate hashes and prior design notes remain dated/historical, not rewritten as final release proof.",
-    "namedTestEvidence": "Run the final same139 Python tests with unittest discover -v and retain stdout/stderr; retain final local/remote .NET TRX or test-name inventory so protecting String-kind, cold/500ms and failure-evidence cases bind to actual PASS. All six ordinary root test projects and both sample gates remain required.",
+    "namedTestEvidence": "Actual named139PythonPASS and all6nativeTRX/7selectedguards independently audited in parent-root-ubuntu-acceptance-audit.json and associated2artifactaudits.",
     "freshTaskCache": "Use a fresh task NUGET_PACKAGES for final normal restore; bind actual final assets/library/cache raw signed5.10.0 archive plus restore-content hashes. Preserve default/scratch cache entries; restore same task cache after sample loopback.",
     "sameRunNamedDotnetEvidence": "All6 ordinary final projects retain native --report-xunit-trx named outcomes; parent matrix audit needs isolatedString,500/500.0001boundary and early-failure cases actualPassed/unskipped without extra suite runs.",
     "localDotnet": "Completed local six-project nativeTRX:1356passed/4existingWindows skips/0failed;364 source/shipped-input bytes unchanged. Parent independently verified named boundary, String and failure-evidence guards; no broad rerun absent meaningful input change.",
     "localPythonSample": "Completed:139named Python tests and both Sample gates passed; final normal restore/build passed after703.78s loopback. All logs/hash bindings in root-enrollment-python-sample-checks.json.",
     "freshRootPackageRuntimeBinding": "Passed root-enrollment-restore-binding.json: actual final fresh-task cache signed4archives, assets/logicalhashes, deps hashes and shippedruntimeDLLs bound to authentic approvedpublished bytes; default cache untouched.",
     "offlineClaimVerification": "All6 built CLI commands passed; strict/plainmodules parties7+tenants14, exact strictoperations forboth, bothREADMEdescribe/lint examples. root-enrollment-offline-cli-claims.json.",
-    "currentDocs": "README and conformance README describe authentic exact5.10.0 enrollment and separately qualified5.10.1 full repair; actualUbuntu acceptance still pending. Original Design Notes now dated initial context; three canonical revision IDs expanded."
+    "currentDocs": "README and conformance README link exact Ubuntu artifact/matrix audit; authentic5.10.0 enrollment and separate qualified5.10.1 fullrepair remain explicit."
   },
-  "rootCommitAdmission": "Parent must independently write/read full baseline unified diff since fce including untracked before first root commit/PR. Send enrollment-ready changed-path/evidence summary and pause at that point; owner normal PR/release chain continues independently.",
-  "rootPrecommitReview": "Refreshed only agreed receipt/docs/status after independent fullrepair qualification. Parent must re-read exact delta and full staged baseline before first root commit/PR; no root commit/PR yet."
+  "rootCommitAdmission": "Satisfied: parent read the complete baseline diff before normalPR1. Headbf9 and actualUbuntu merge checkout have equal trees; no rootmerge orrelease.",
+  "rootPrecommitReview": "Parent complete baseline/source/data review passed before normalPR1; actualUbuntu gates nowpassed. Final independent BMADreview pending.",
+  "rootActualUbuntuAcceptance": {
+    "status": "passed",
+    "source": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+    "run": 39724191822,
+    "audit": "parent-root-ubuntu-acceptance-audit.json",
+    "remaining": "Final sequential BMAD independent review and completion record; no root merge/release."
+  },
+  "finalReviewCorrections": {
+    "status": "applied-verification-running",
+    "groups": 5,
+    "priorCheckedSource": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+    "priorSuccessfulUbuntuRun": 39724191822,
+    "scope": "Bounded conformance oracle, runtime-byte, negative-test and failure-progress corrections; original14vectors/20decisions and normal release gates unchanged.",
+    "focusedEvidence": "parent-final-review-focused-verification.json"
+  }
 }
