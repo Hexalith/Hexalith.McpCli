@@ -1,0 +1,50 @@
+{
+  "capturedAtUtc": "2026-10-22 04:12:52 UTC",
+  "parentAudit": true,
+  "repository": "Hexalith/Hexalith.Tenants",
+  "liveMain": "205cbc5019343d344643b530fb03aee82af2840d",
+  "exactMainPushCi": {
+    "id": 39718957132,
+    "head": "205cbc5019343d344643b530fb03aee82af2840d",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "referencedWorkflows": [
+      {
+        "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+        "sha": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+        "ref": "refs/heads/main"
+      }
+    ]
+  },
+  "otherExactSourceRuns": [
+    {
+      "name": "codeql",
+      "id": 39718957112,
+      "head": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "source",
+      "id": 39718956608,
+      "head": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "guards",
+      "id": 39718956833,
+      "head": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "advisoryAspire": "Existing continue-on-error default remains unchanged. Aspire failure is retained separately; successful overall CI is the actual normal release prerequisite.",
+  "scope": "Point-in-time live source/run eligibility observation only. Normal workflow source/collision preflight, protected environment, full publication and actual immutable-artifact qualification remain mandatory.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

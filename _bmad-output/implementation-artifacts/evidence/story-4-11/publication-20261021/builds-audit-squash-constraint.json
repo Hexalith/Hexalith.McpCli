@@ -1,0 +1,56 @@
+{
+  "status": "verified graph constraint; prerequisite representation under investigation",
+  "normalSquashPr": 128,
+  "normalSquashCommit": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+  "actualGraphChecks": [
+    {
+      "command": [
+        "git",
+        "--no-replace-objects",
+        "merge-base",
+        "--is-ancestor",
+        "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+        "b693d4abee10a7974f4696d2190ac18e9eba64cc"
+      ],
+      "exitCode": 0,
+      "source": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+      "isAncestor": true
+    },
+    {
+      "command": [
+        "git",
+        "--no-replace-objects",
+        "merge-base",
+        "--is-ancestor",
+        "1e606d458f92cb6562c21d2e2777d070cfb02a39",
+        "b693d4abee10a7974f4696d2190ac18e9eba64cc"
+      ],
+      "exitCode": 1,
+      "source": "1e606d458f92cb6562c21d2e2777d070cfb02a39",
+      "isAncestor": false
+    },
+    {
+      "command": [
+        "git",
+        "--no-replace-objects",
+        "merge-base",
+        "--is-ancestor",
+        "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+        "b693d4abee10a7974f4696d2190ac18e9eba64cc"
+      ],
+      "exitCode": 1,
+      "source": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+      "isAncestor": false
+    }
+  ],
+  "checkedAndMergedTreeEquality": {
+    "b693d4abee10a7974f4696d2190ac18e9eba64cc": "3f7f45556fa460a6300ebf68a3c38657228bc74e",
+    "1e65f56fe5643f659f547f7fb15b6cde518777c9": "3f7f45556fa460a6300ebf68a3c38657228bc74e"
+  },
+  "validator": "Tools/validate-package-version-audit.ps1:1286",
+  "requiredDeclarationBeforeAudit": "Tools/README.md:227",
+  "squashOnlyEffectiveRule": "builds-reapply-pr-gate-final.json",
+  "implication": "A generatedFromRevision bound to a declaration commit inside a newly squashed pin PR will not satisfy the owning ancestor check after merge.",
+  "owningSourceMutatedForThisProbe": false,
+  "publicationDispatched": false
+}

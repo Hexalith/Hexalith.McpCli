@@ -1,0 +1,117 @@
+diff --git a/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs b/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs
+index d835157b4..916df74c1 100644
+--- a/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs
++++ b/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionDispatchLiveSidecarTests.cs
+@@ -6,6 +6,7 @@ using Dapr.Actors.Client;
+ using Dapr.Client;
+ using Hexalith.Commons.UniqueIds;
+ using Hexalith.EventStore.Client.Projections;
++using Hexalith.EventStore.Client.Streams;
+ using Hexalith.EventStore.Contracts.Commands;
+ using Hexalith.EventStore.Contracts.Identity;
+ using Hexalith.EventStore.Contracts.Projections;
+@@ -155,6 +156,8 @@ public sealed partial class NamedProjectionDispatchLiveSidecarTests(DaprTestCont
+         persistedWork.HeadMessageId.ShouldBe(head.MessageId);
+         persistedWork.DispatchId.ShouldBe(head.MessageId);
+         persistedWork.PendingRoutes.ShouldBe(["counter-index"]);
++        NativeSourceProofCodec.IsValid(
++            persistedWork.NativeSourceProof.ShouldNotBeNull(), identity, head.SequenceNumber, 1).ShouldBeTrue();
+         var unresolvedHealthCheck = new ProjectionDeliveryUnresolvedHealthCheck(recreatedScheduler);
+         (await unresolvedHealthCheck.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(true))
+             .Status.ShouldBe(HealthStatus.Healthy);
+@@ -771,7 +774,7 @@ public sealed partial class NamedProjectionDispatchLiveSidecarTests(DaprTestCont
+         }
+     }
+ 
+-    private static ProjectionDeliveryRetryWorkItem CreateUnrelatedSameShardWorkItem(
++    internal static ProjectionDeliveryRetryWorkItem CreateUnrelatedSameShardWorkItem(
+         ProjectionDeliveryRetryWorkItem persistedWork) {
+         int targetShard = SHA256.HashData(Encoding.UTF8.GetBytes(persistedWork.WorkId))[0] % RetryLedgerShardCount;
+         string workId;
+@@ -781,20 +784,23 @@ public sealed partial class NamedProjectionDispatchLiveSidecarTests(DaprTestCont
+         while (SHA256.HashData(Encoding.UTF8.GetBytes(workId))[0] % RetryLedgerShardCount != targetShard);
+ 
+         string messageId = Guid.NewGuid().ToString("N", System.Globalization.CultureInfo.InvariantCulture);
+-        return persistedWork with {
+-            WorkId = workId,
+-            AggregateId = $"unrelated-{Guid.NewGuid():N}",
+-            HeadMessageId = messageId,
+-            PendingRoutes = [],
+-            TerminalRoutes = ["counter-detail"],
+-            DispatchId = messageId,
+-            Attempt = 1,
+-            NextDueUtc = DateTimeOffset.UtcNow,
+-            LastReasonCode = ProjectionDispatchReasonCodes.HandlerFailure,
+-            Revision = 0,
+-            LeaseOwner = null,
+-            LeaseExpiresUtc = null,
+-            ReservationFencingTokens = new Dictionary<string, long>(StringComparer.Ordinal),
+-        };
++        // This synthetic terminal item has no source history. Do not borrow the
++        // original stream's frozen native proof, recovery bindings or lease.
++        return new ProjectionDeliveryRetryWorkItem(
++            workId,
++            persistedWork.TenantId,
++            persistedWork.Domain,
++            $"unrelated-{Guid.NewGuid():N}",
++            persistedWork.AppId,
++            persistedWork.ServiceVersion,
++            persistedWork.HeadSequence,
++            messageId,
++            [],
++            ["counter-detail"],
++            messageId,
++            persistedWork.CatalogFingerprint,
++            1,
++            DateTimeOffset.UtcNow,
++            ProjectionDispatchReasonCodes.HandlerFailure);
+     }
+ }
+diff --git a/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs b/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs
+new file mode 100644
+index 000000000..99340b4c7
+--- /dev/null
++++ b/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Integration/NamedProjectionRetryFixtureTests.cs
+@@ -0,0 +1,42 @@
++using System.Security.Cryptography;
++using System.Text;
++
++using Hexalith.EventStore.Client.Streams;
++using Hexalith.EventStore.Contracts.Identity;
++using Hexalith.EventStore.Server.Projections;
++
++using Shouldly;
++
++namespace Hexalith.EventStore.Server.LiveSidecar.Tests.Integration;
++
++public sealed class NamedProjectionRetryFixtureTests
++{
++    [Fact]
++    public void UnrelatedTerminalItemDoesNotBorrowOriginalStreamBindings()
++    {
++        var identity = new AggregateIdentity("tenant-a", "counter", "original-aggregate");
++        var proof = NativeSourceProofCodec.ExtendDigest(
++            NativeSourceProofCodec.CreateSeed(identity, "01ARZ3NDEKTSV4RRFFQ69G5FAV"),
++            identity, 1, "original-message", new('a', 64));
++        var original = new ProjectionDeliveryRetryWorkItem(
++            "original-work", identity.TenantId, identity.Domain, identity.AggregateId,
++            "fixture-app", "v1", 1, "original-message", ["counter-index"], [],
++            "original-message", new('b', 64), 0, DateTimeOffset.UtcNow, null)
++        {
++            NativeSourceProof = proof,
++            ReplayRecoveryBindings = new Dictionary<string, string> { ["counter-index"] = new('c', 64) },
++        };
++
++        ProjectionDeliveryRetryWorkItem unrelated =
++            NamedProjectionDispatchLiveSidecarTests.CreateUnrelatedSameShardWorkItem(original);
++
++        unrelated.AggregateId.ShouldNotBe(original.AggregateId);
++        unrelated.HeadMessageId.ShouldNotBe(original.HeadMessageId);
++        unrelated.NativeSourceProof.ShouldBeNull();
++        unrelated.ReplayRecoveryBindings.ShouldBeNull();
++        original.NativeSourceProof.ShouldBe(proof);
++        original.ReplayRecoveryBindings["counter-index"].ShouldBe(new string('c', 64));
++        (SHA256.HashData(Encoding.UTF8.GetBytes(unrelated.WorkId))[0] % 64)
++            .ShouldBe(SHA256.HashData(Encoding.UTF8.GetBytes(original.WorkId))[0] % 64);
++    }
++}

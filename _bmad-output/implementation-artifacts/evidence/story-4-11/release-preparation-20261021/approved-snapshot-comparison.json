@@ -1,0 +1,60 @@
+{
+  "sourceDiffs": {
+    "eventstore": "eventstore-changes-all.patch",
+    "tenants": "tenants-changes-all.patch"
+  },
+  "packages": [
+    {
+      "packageId": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "oldArchiveSha256": "7f72ff1ff3a9277719cffee78b6909ec43f5da19a8e38a0be28764fae8283d9e",
+      "newArchiveSha256": "79448cc9a71c707a204b7fc1cf08dd4c42b9466aa468168e952dfcdad47fac00",
+      "changedFiles": {
+        "Hexalith.EventStore.Client.nuspec": {
+          "approvedSnapshot": "0be725c60eef0d8a9a6796fbf021cc0d2d438a85d1c6a1bb52b99247f1dbdca4",
+          "refreshed": "57ee0475a4965c94b039292c95420b6ca0a9856a3a4fc036f4e2b9021f6ea090"
+        },
+        "lib/net10.0/Hexalith.EventStore.Client.dll": {
+          "approvedSnapshot": "87c130aa0e87f9442dd8e5cfb2bf97a679c28c99064898ca9a513ef7cb8cc6db",
+          "refreshed": "d12c5465ee04765a16d5f766608dd045769c7fc568be08065fdb1750e074f79c"
+        }
+      },
+      "sameSourceProductionFiles": true
+    },
+    {
+      "packageId": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "oldArchiveSha256": "9a909165b3bd1de3e8f3b94f4a561a0bc1e27031dd31dcf390129a870bdebc69",
+      "newArchiveSha256": "ff2fdf510a79a8a8f10b27b00472648de9cb6e3a7bef00f5a7a0aa2839bc7e92",
+      "changedFiles": {
+        "Hexalith.EventStore.Contracts.nuspec": {
+          "approvedSnapshot": "8e6b1a7059f000d32beae7404039850df7e5e27911378625ce27080c0898b9e7",
+          "refreshed": "3e24444a8a287bb7d7c6bf59cb0834d2250eedf1a2865ae8803f8718ce7688cc"
+        },
+        "lib/net10.0/Hexalith.EventStore.Contracts.dll": {
+          "approvedSnapshot": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab",
+          "refreshed": "f48b098b2f445d441f020e5589084d4b6ffc7c4738c4a68defcf2d60fd361774"
+        }
+      },
+      "sameSourceProductionFiles": true
+    },
+    {
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "oldArchiveSha256": "e7a1e3baa26f4eaf266a57db633761ab74dc998ee8f601addb2a87cd6aaefe26",
+      "newArchiveSha256": "948aab26a08e3d66ddbcbe41b51d2c472d9b8cdad133180f00e77f528a068e2d",
+      "changedFiles": {
+        "Hexalith.Tenants.Contracts.nuspec": {
+          "approvedSnapshot": "e2529e40e79573b1128922973938d8ce82c981cf5836da406556bf2300f4dd72",
+          "refreshed": "c02da8a6f5f7b9a819a4f3569d8e22ae39dd1954c21fa392bb34ac38601eaa32"
+        },
+        "lib/net10.0/Hexalith.Tenants.Contracts.dll": {
+          "approvedSnapshot": "5819ccb5286aeda0962c606507d3404e39235a36718730568f07b862e2a20ba8",
+          "refreshed": "30f4ebeabf122369ea6ea1ae5174a9476add0c161b99b1adb64da9eed071f6c8"
+        }
+      },
+      "sameSourceProductionFiles": true
+    }
+  ],
+  "approvalTransfer": false
+}

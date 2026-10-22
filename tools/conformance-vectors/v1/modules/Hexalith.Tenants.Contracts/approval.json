@@ -1,0 +1,27 @@
+{
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "5.10.0",
+  "module": "tenants",
+  "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "approvalReference": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json",
+  "publishedArtifactBinding": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/owner-published-mcpcli-contracts-binding.json",
+  "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.0",
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+    "change-user-role.vector.json": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+    "create-tenant.vector.json": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+    "disable-tenant.vector.json": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+    "enable-tenant.vector.json": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+    "get-tenant-audit.vector.json": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+    "get-tenant-users.vector.json": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+    "get-tenant.vector.json": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+    "get-user-tenants.vector.json": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+    "list-tenants.vector.json": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+    "remove-tenant-configuration.vector.json": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+    "remove-user-from-tenant.vector.json": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+    "set-tenant-configuration.vector.json": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+    "update-tenant.vector.json": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+  },
+  "status": "approved-published-artifact"
+}

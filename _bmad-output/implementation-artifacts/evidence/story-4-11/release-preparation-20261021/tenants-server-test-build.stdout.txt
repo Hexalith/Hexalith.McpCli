@@ -1,0 +1,18 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/Hexalith.Tenants.csproj (in 813 ms).
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/samples/Hexalith.Tenants.Sample/Hexalith.Tenants.Sample.csproj (in 911 ms).
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj (in 940 ms).
+  4 of 7 projects are up-to-date for restore.
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll
+  Hexalith.Tenants.Testing -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Testing/bin/Release/net10.0/Hexalith.Tenants.Testing.dll
+  Hexalith.Tenants.Client -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Client/bin/Release/net10.0/Hexalith.Tenants.Client.dll
+  Hexalith.Tenants.Sample -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/samples/Hexalith.Tenants.Sample/bin/Release/net10.0/Hexalith.Tenants.Sample.dll
+  Hexalith.Tenants.Server.Tests -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:09.48

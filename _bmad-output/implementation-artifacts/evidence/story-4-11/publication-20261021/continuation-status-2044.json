@@ -1,0 +1,42 @@
+{
+  "recordedAtUtc": "2026-10-21T20:42:36.629138+00:00",
+  "status": "in-progress; publication and production acceptance pending",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "protectedRepair": {
+    "ordinaryPushBypassIncident": "builds-provenance-push.json",
+    "revertedViaPr": 127,
+    "normalRevertMerge": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+    "reapplyPr": 128,
+    "currentReapplyHead": "1e65f56fe5643f659f547f7fb15b6cde518777c9",
+    "productionTargetSha256": "ffe4a85d7211b9897b036b083b25bec56b69699f4c0a46c8ec596cf1221f9568",
+    "currentCodacy": "success",
+    "currentSonar": "success",
+    "all142LocalPublisherTests": "passed",
+    "normalReapplyMerge": "pending exact-head full CI and live required-context audit"
+  },
+  "eventStoreQualification": {
+    "pr": 372,
+    "head": "a616dec6a4f628af6faf8c8499f62b4a8420659e",
+    "integratedOwningMain": "1b5ec217a74cdfdd84605e093114071b56c9f700",
+    "p1rRun": 39671648792,
+    "ciRun": 39671649103,
+    "state": "pending current exact-head checks; earlier runs retained historical",
+    "currentDiagnosticReceiptSha256": "d720738af3733478d868e914cfe3773ccf2dfea0c2b7149affaef2c1fd8af847",
+    "currentParentAudit": "eventstore-current-redaction-parent-audit.json"
+  },
+  "nextRequiredActions": [
+    "Complete normal checked Builds reapply PR128 and EventStore PR372 squash merges with exact validated full messages.",
+    "Require successful EventStore live-main push CI/P1R/commitlint, then refreshed source/tag/registry preflight and normal protected fourteen-package/container publication.",
+    "Commit owning Builds EventStore pin declaration, refresh its live family audit from committed source, separately commit audit, and complete its normal checked PR.",
+    "Complete Tenants real Builds gitlink and source qualification, then normal protected five-package/container publication.",
+    "Bind actual immutable packages and final source metadata, verify approved vectors/inventory and discovery, then complete owning Builds Tenants pin/audit and McpCli enrollment.",
+    "Run unchanged strict two-module replay and cold Catalog benchmark on ubuntu-latest and remaining required McpCli verification."
+  ],
+  "tenantsUiScope": {
+    "normalPackages": 5,
+    "uiProject": "IsPackable=false",
+    "existingCatalogRow": "aligned declared family version; truthful unresolved retained audit under existing owning validator",
+    "extraUiPublicationAuthorizedOrClaimed": false
+  }
+}

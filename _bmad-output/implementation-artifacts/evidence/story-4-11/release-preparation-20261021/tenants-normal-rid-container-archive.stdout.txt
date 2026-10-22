@@ -1,0 +1,20 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj (in 795 ms).
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj (in 823 ms).
+  Restored /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/Hexalith.Tenants.csproj (in 827 ms).
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/publish/
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/linux-musl-arm64/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/linux-musl-x64/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Server/bin/Release/net10.0/linux-musl-arm64/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants.Server/bin/Release/net10.0/linux-musl-x64/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/linux-musl-x64/Hexalith.Tenants.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/linux-musl-arm64/Hexalith.Tenants.dll
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/linux-musl-arm64/publish/
+  Hexalith.Tenants -> /tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/bin/Release/net10.0/linux-musl-x64/publish/
+  Building image 'tenants' for runtime identifier 'linux-musl-arm64' on top of base image 'mcr.microsoft.com/dotnet/aspnet:10.0-alpine'.
+  Building image 'tenants' for runtime identifier 'linux-musl-x64' on top of base image 'mcr.microsoft.com/dotnet/aspnet:10.0-alpine'.
+/home/administrator/.dotnet/sdk/10.0.402/Containers/build/Microsoft.NET.Build.Containers.targets(357,5): message : [Microsoft.NET.Build.Containers.Tasks.CreateImageIndex] Building image index 'tenants:5.10.0' on top of manifests sha256:ff90890e4c507bad62639d02d34764a483807a4497f505925611c647940e26a9, sha256:9f9ee659cbe37dfd9d434f2939620cfb948aabd650c5108323477762a9317874. [/tmp/mcpcli-story411-full-tenants-fa7b01k8/src/Hexalith.Tenants/Hexalith.Tenants.csproj]
+  Pushed image 'tenants:5.10.0' to local archive at '/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-candidate-musl.oci.tar'.

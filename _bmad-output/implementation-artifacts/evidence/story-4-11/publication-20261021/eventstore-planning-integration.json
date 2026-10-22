@@ -1,0 +1,44 @@
+[
+  {
+    "label": "commitlint",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-planning-integration.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nbuild(release): preserve owning qualification planning\n\nIntegrate the owner's later planning and status updates without changing\nthe existing production, diagnostic or qualification test bytes. Require\nfresh source qualification for the combined branch.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "label": "merge",
+    "command": [
+      "git",
+      "merge",
+      "--no-ff",
+      "origin/main",
+      "-F",
+      "/tmp/mcpcli-story411-eventstore-planning-integration.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "Merge made by the 'ort' strategy.\n .../implementation-artifacts/deferred-work.md      |  6 +++\n ...lification-evidence-production-and-admission.md | 51 +++++++++++++++++++++-\n .../implementation-artifacts/sprint-status.yaml    |  4 +-\n 3 files changed, 58 insertions(+), 3 deletions(-)\n",
+    "stderr": ""
+  },
+  {
+    "label": "push",
+    "head": "261e2c9b58e5313fc21f9d68031c48468b997943",
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   a616dec6a..261e2c9b5  HEAD -> fix/p1r-qualification-time-budget\n"
+  }
+]

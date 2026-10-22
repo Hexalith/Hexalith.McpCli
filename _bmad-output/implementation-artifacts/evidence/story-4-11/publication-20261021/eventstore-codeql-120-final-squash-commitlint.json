@@ -1,0 +1,14 @@
+{
+  "checkedAtUtc": "2026-10-21T23:28:37.844855+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "fullMessage": "ci: allow full qualification and bind sanitized evidence\n\nAllow complete P1R within thirty minutes, CodeQL within one hundred\ntwenty and live integration within ninety. Retain all tests, source\nanalysis, registration, isolation, authority and OQ8 capture without\nnarrowing scope.\n\nWait for the asynchronous Blazor dashboard title with a bounded native\nassertion while retaining the shell and expected title conditions.\n\nConstruct unrelated synthetic retry work independently of the original\nstream bindings, retaining the real native proof and scheduler guards.\n\nPreserve current owning source repairs and record separate source-bound\nmanifests for successive sanitized historical diagnostics. Keep original\npacket manifests and outcomes intact without new qualification credit.\n",
+  "messageSha256": "a26e68256ff92069fcdce6e8c49962687891254af36bdfbbca067e7cb3414069",
+  "exitCode": 0
+}

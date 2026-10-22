@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj (in 694 ms).
+  Restored /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj (in 1.37 sec).
+  Restored /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj (in 1.37 sec).
+  Restored /tmp/mcpcli-story411-tenants-owner-poopx2nu/tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj (in 1.46 sec).
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants.Testing -> /tmp/mcpcli-story411-tenants-owner-poopx2nu/src/Hexalith.Tenants.Testing/bin/Release/net10.0/Hexalith.Tenants.Testing.dll
+  Hexalith.Tenants.Contracts.Tests -> /tmp/mcpcli-story411-tenants-owner-poopx2nu/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.28

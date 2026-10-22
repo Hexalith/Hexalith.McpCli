@@ -1,0 +1,40 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj (in 1.55 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj (in 1.55 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj (in 1.58 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj (in 1.58 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj (in 1.58 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj (in 1.59 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/Hexalith.EventStore.csproj (in 1.59 sec).
+  Restored /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj (in 1.59 sec).
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll
+  Hexalith.EventStore.Client -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Client/bin/Release/net10.0/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.EventStore.DomainService -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.DomainService/bin/Release/net10.0/Hexalith.EventStore.DomainService.dll
+  Hexalith.EventStore.Server -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Server/bin/Release/net10.0/Hexalith.EventStore.Server.dll
+  Hexalith.EventStore.Gateway -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Gateway/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/publish/
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/linux-x64/Hexalith.EventStore.Contracts.dll
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.Contracts.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/linux-x64/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/linux-x64/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.EventStore.Client -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Client/bin/Release/net10.0/linux-x64/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.EventStore.Client -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Client/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.DomainService -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.DomainService/bin/Release/net10.0/linux-x64/Hexalith.EventStore.DomainService.dll
+  Hexalith.EventStore.DomainService -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.DomainService/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.DomainService.dll
+  Hexalith.EventStore.Server -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Server/bin/Release/net10.0/linux-x64/Hexalith.EventStore.Server.dll
+  Hexalith.EventStore.Server -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Server/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.Server.dll
+  Hexalith.EventStore.Gateway -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Gateway/bin/Release/net10.0/linux-x64/Hexalith.EventStore.Gateway.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/linux-x64/Hexalith.EventStore.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/linux-x64/publish/
+  Building image 'eventstore' for runtime identifier 'linux-x64' on top of base image 'mcr.microsoft.com/dotnet/aspnet:10.0-alpine'.
+  Hexalith.EventStore.Gateway -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore.Gateway/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.Gateway.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/linux-arm64/Hexalith.EventStore.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/bin/Release/net10.0/linux-arm64/publish/
+  Building image 'eventstore' for runtime identifier 'linux-arm64' on top of base image 'mcr.microsoft.com/dotnet/aspnet:10.0-alpine'.
+/home/administrator/.dotnet/sdk/10.0.402/Containers/build/Microsoft.NET.Build.Containers.targets(357,5): message : [Microsoft.NET.Build.Containers.Tasks.CreateImageIndex] Building image index 'eventstore:3.126.1' on top of manifests sha256:8119fb3699548eeb6259ec34bc48521f8c7d877f2e294eb773820a36184d5d8b, sha256:91252152eedf827bd1eba7ce74ba2cf8f9454a91fb1b6b27e0b164845a4496e2. [/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/src/Hexalith.EventStore/Hexalith.EventStore.csproj]
+  Pushed image 'eventstore:3.126.1' to local archive at '/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/eventstore-candidate.oci.tar'.

@@ -1,0 +1,36 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+    "-class",
+    "Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests",
+    "-xml",
+    "/tmp/mcpcli-story411-title-browser-pyf3upi7/smoke.xml",
+    "-noColor"
+  ],
+  "exitCode": 0,
+  "assemblies": [
+    {
+      "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+      "id": "e90193e1-e76d-46e1-a683-0b5f658fc6a4",
+      "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+      "run-date": "2026-10-21",
+      "run-time": "21:46:18",
+      "start-rtf": "2026-10-21T21:46:18.8238732+00:00",
+      "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+      "target-framework": ".NETCoreApp,Version=v10.0",
+      "errors": "0",
+      "failed": "0",
+      "finish-rtf": "2026-10-21T21:46:21.9435765+00:00",
+      "not-run": "0",
+      "passed": "5",
+      "skipped": "0",
+      "time": "3.120",
+      "time-rtf": "00:00:03.1200000",
+      "total": "5"
+    }
+  ],
+  "rawTaskScratch": "/tmp/mcpcli-story411-title-browser-pyf3upi7",
+  "stdoutSha256": "f0420618afcfa7d8e5ec1fba077dc7107833cf51fa850cbdcd7b24bf842ad819",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

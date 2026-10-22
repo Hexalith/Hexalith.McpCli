@@ -1,0 +1,24 @@
+{
+  "checkedAtUtc": "2026-10-22T01:06:14.794929+00:00",
+  "approvedCandidateSource": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+  "actualPublishedSource": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "sourceTrees": [
+    {
+      "path": "src/Hexalith.Tenants.Contracts",
+      "approvedSourceTree": "2f53281b5630845de789ca73e13635ed9f3b44a2",
+      "releasedSourceTree": "2f53281b5630845de789ca73e13635ed9f3b44a2",
+      "exactTreeEqual": true,
+      "sourceDiff": ""
+    },
+    {
+      "path": "src/Hexalith.Tenants.Client",
+      "approvedSourceTree": "b84bb4d896dbf2bff5923540cd7dbbb107838776",
+      "releasedSourceTree": "b84bb4d896dbf2bff5923540cd7dbbb107838776",
+      "exactTreeEqual": true,
+      "sourceDiff": ""
+    }
+  ],
+  "scope": "Source tree equality only; final signed archive identity, compiled catalog/replay and exact approval continuation are separately bound. No transfer of historical candidate archive approval by equal version.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

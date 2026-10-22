@@ -1,0 +1,20 @@
+{
+  "scope": "unpublished-candidate-only",
+  "currentProductionSource": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+  "packageChanges": {
+    "Hexalith.EventStore.Client": {
+      "current": "3.126.0",
+      "candidate": "3.126.1"
+    },
+    "Hexalith.EventStore.Contracts": {
+      "current": "3.126.0",
+      "candidate": "3.126.1"
+    },
+    "Hexalith.Tenants.Contracts": {
+      "current": null,
+      "candidate": "5.10.0"
+    }
+  },
+  "currentPackageCount": 53,
+  "candidatePackageCount": 54
+}

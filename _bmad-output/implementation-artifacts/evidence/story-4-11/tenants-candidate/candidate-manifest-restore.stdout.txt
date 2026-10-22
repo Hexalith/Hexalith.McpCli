@@ -1,0 +1,3 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 166 ms).
+  5 of 6 projects are up-to-date for restore.

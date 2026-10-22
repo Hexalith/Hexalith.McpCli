@@ -1,0 +1,132 @@
+[
+  {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-builds-revert-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nrevert(container): restore the protected change path\n\nRemove the two provenance additions landed by an ordinary push that the\nserver accepted using bypass privileges. Reapply through a checked PR\nafter this bounded repair merges.\n\nThis reverts commit aea707d6e8ef2c765531f7c7bcee0441fa5f076e.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": "",
+    "message": "revert(container): restore the protected change path\n\nRemove the two provenance additions landed by an ordinary push that the\nserver accepted using bypass privileges. Reapply through a checked PR\nafter this bounded repair merges.\n\nThis reverts commit aea707d6e8ef2c765531f7c7bcee0441fa5f076e.\n"
+  },
+  {
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Builds\n * branch            main       -> FETCH_HEAD\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "HEAD",
+      "origin/main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "switch",
+      "-c",
+      "fix/container-provenance-protection-repair"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "Switched to a new branch 'fix/container-provenance-protection-repair'\n"
+  },
+  {
+    "command": [
+      "git",
+      "apply",
+      "--reverse",
+      "--check",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/proposed-builds-container-provenance-scoped.patch"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "apply",
+      "--reverse",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/proposed-builds-container-provenance-scoped.patch"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "add",
+      "--",
+      "Props/ContainerProvenance.targets",
+      "Github/publish-containers/tests/test_container_provenance_targets.py"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "commit",
+      "--file",
+      "/tmp/mcpcli-story411-builds-revert-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/container-provenance-protection-repair fdc72ae] revert(container): restore the protected change path\n 2 files changed, 152 deletions(-)\n delete mode 100644 Github/publish-containers/tests/test_container_provenance_targets.py\n delete mode 100644 Props/ContainerProvenance.targets\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "push",
+      "--set-upstream",
+      "origin",
+      "fix/container-provenance-protection-repair"
+    ],
+    "exitCode": 0,
+    "stdout": "branch 'fix/container-provenance-protection-repair' set up to track 'origin/fix/container-provenance-protection-repair'.\n",
+    "stderr": "remote: \nremote: Create a pull request for 'fix/container-provenance-protection-repair' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Builds/pull/new/fix/container-provenance-protection-repair        \nremote: \nTo https://github.com/Hexalith/Hexalith.Builds.git\n * [new branch]      fix/container-provenance-protection-repair -> fix/container-provenance-protection-repair\n"
+  }
+]

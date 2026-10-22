@@ -1,0 +1,91 @@
+{
+  "fromVersion": "0.0.0-story48",
+  "toVersion": "5.10.0",
+  "change": "Only the exact package.version token changes; all calls, scripts and assertions are unchanged.",
+  "vectors": [
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/add-user-to-tenant.json",
+      "sourceSha256": "7392e0d13e3de21bfd2b4740e64ce50e0dcc7bdd0207a35452629d0778d60960",
+      "candidate": "vectors/add-user-to-tenant.vector.json",
+      "candidateSha256": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/change-user-role.json",
+      "sourceSha256": "2b2965cd08da75d0890d913653d95a445f41649167f8d46eb5e44d3b52e25c27",
+      "candidate": "vectors/change-user-role.vector.json",
+      "candidateSha256": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/create-tenant.json",
+      "sourceSha256": "649d2293ee88623c5f851d1324c59c817fb14a439d4460ad40cc9a5c1a7d4ee6",
+      "candidate": "vectors/create-tenant.vector.json",
+      "candidateSha256": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/disable-tenant.json",
+      "sourceSha256": "3a5e4b39135dbf550391ece72e46e952e8710d3fe85e7a62d53b0c323077fed1",
+      "candidate": "vectors/disable-tenant.vector.json",
+      "candidateSha256": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/enable-tenant.json",
+      "sourceSha256": "0fcfe0ba6b792f3c2df2ec6ac6c8fbb70ff6b69d91563a1e8c9b116b8c74e439",
+      "candidate": "vectors/enable-tenant.vector.json",
+      "candidateSha256": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/get-tenant-audit.json",
+      "sourceSha256": "7ce68cee6a694327f4d94d54bf3d6a57d306c820adfe0e0e3bda12ac387cdc5e",
+      "candidate": "vectors/get-tenant-audit.vector.json",
+      "candidateSha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/get-tenant-users.json",
+      "sourceSha256": "bbbf6a042d7285ba0ea493bcf63d3e3e9ac8370a93a660618f284b21622ad6f9",
+      "candidate": "vectors/get-tenant-users.vector.json",
+      "candidateSha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/get-tenant.json",
+      "sourceSha256": "d5748435fce79dbba3ad911b3442864440c7025b46cd5e596d6c40107c545eb1",
+      "candidate": "vectors/get-tenant.vector.json",
+      "candidateSha256": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/get-user-tenants.json",
+      "sourceSha256": "c595d49335d3ab78f6f5715f0c816e81b8a4b87f53617d422f2fc55f1c029a05",
+      "candidate": "vectors/get-user-tenants.vector.json",
+      "candidateSha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/list-tenants.json",
+      "sourceSha256": "caa115c964ba73de56ade07e87d3ced3710e3256a84d4970c734e05d1acc51fb",
+      "candidate": "vectors/list-tenants.vector.json",
+      "candidateSha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/remove-tenant-configuration.json",
+      "sourceSha256": "69ff3b98d25ffe1b9836374faef397f2af5cbe981fab7bc145c3da28fbbf1bb2",
+      "candidate": "vectors/remove-tenant-configuration.vector.json",
+      "candidateSha256": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/remove-user-from-tenant.json",
+      "sourceSha256": "db6ea542efa18dc9cab6ad71c331024b9ec99377f8b4186591b24c11577ec319",
+      "candidate": "vectors/remove-user-from-tenant.vector.json",
+      "candidateSha256": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/set-tenant-configuration.json",
+      "sourceSha256": "9ea559ed116ca19933c135db0426d3e7cc0f7d42d7a5be2d41015416f0175164",
+      "candidate": "vectors/set-tenant-configuration.vector.json",
+      "candidateSha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55"
+    },
+    {
+      "source": "tests/conformance-vectors/mcpcli-v1/update-tenant.json",
+      "sourceSha256": "a7aff53b4171db9eca6f316020751a3a345b69d5c11be5250fa06e0d8f78fa38",
+      "candidate": "vectors/update-tenant.vector.json",
+      "candidateSha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+    }
+  ]
+}

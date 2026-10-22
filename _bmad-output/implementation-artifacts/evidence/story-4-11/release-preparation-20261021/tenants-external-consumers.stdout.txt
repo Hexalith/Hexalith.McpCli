@@ -1,0 +1,29 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-consumers-t1nvrwjq/consumers/contracts-client-consumer/ContractsClientConsumer.csproj (in 757 ms).
+  ContractsClientConsumer -> /tmp/mcpcli-story411-consumers-t1nvrwjq/consumers/contracts-client-consumer/bin/Release/net10.0/ContractsClientConsumer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.61
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-consumers-t1nvrwjq/consumers/testing-consumer/TestingConsumer.csproj (in 673 ms).
+  TestingConsumer -> /tmp/mcpcli-story411-consumers-t1nvrwjq/consumers/testing-consumer/bin/Release/net10.0/TestingConsumer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.93
+The '-parallel' switch has been deprecated in favor of '-parallelMode' and will be removed in the next major version
+
+  Discovering: TestingConsumer
+  Discovered:  TestingConsumer
+  Starting:    TestingConsumer
+  Finished:    TestingConsumer (ID = '9a6e8ab0f0c4c988420fd0d7a52cccecd49d32659c72e21b589a6b2798b0b51b')
+=== TEST EXECUTION SUMMARY ===
+   TestingConsumer  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.195s
+Validated package-only consumer restore/build experience at 5.10.0:
+- Contracts + Client consumer build
+- Testing consumer infrastructure-free unit test

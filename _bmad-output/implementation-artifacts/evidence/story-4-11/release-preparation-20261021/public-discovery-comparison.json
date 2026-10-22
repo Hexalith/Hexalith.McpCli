@@ -1,0 +1,9 @@
+{
+  "samePublicDiscovery": true,
+  "previousSnapshot": "../tenants-candidate/description-review-input.json",
+  "previousSha256": "00851e9ca514c8d56570ceb30f09ef0cbf3dd8c11311ba04fbed85a1b8340a5d",
+  "refreshedSha256": "00851e9ca514c8d56570ceb30f09ef0cbf3dd8c11311ba04fbed85a1b8340a5d",
+  "operationCount": 14,
+  "vectorScopeDecisionsReasked": false,
+  "artifactApprovalTransferred": false
+}

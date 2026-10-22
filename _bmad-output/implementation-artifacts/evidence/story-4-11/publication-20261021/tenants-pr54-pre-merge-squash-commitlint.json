@@ -1,0 +1,28 @@
+{
+  "checkedAtUtc": "2026-10-22T03:49:03.798864+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "pinnedCliVersion": "21.2.3",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "message": "fix(build): preserve published container provenance\n\nImport the shared publisher metadata target and execute the approved\nBuilds publisher so both container architectures retain the exact source,\nversion and creation metadata. Declare the documented normal release\nmode explicitly and keep corrective authority inputs absent.\n\nUse the qualified Builds audit snapshot without changing package scope.\n",
+  "messageSha256": "a5d659fffc2e99ad4ca0133575917be46ec14ec9357ff97393cfd2c709a42e15",
+  "exitCode": 0,
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pre-merge-squash-commitlint.stdout.txt",
+      "bytes": 454,
+      "sha256": "1844391d5aaec81d9b857a41e7466a85ddd335f9e71abf60841186a7e5fce47d"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-pre-merge-squash-commitlint.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

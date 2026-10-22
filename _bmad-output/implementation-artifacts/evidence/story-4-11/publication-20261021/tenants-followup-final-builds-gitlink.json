@@ -1,0 +1,17 @@
+{
+  "updatedAtUtc": "2026-10-22T03:17:10.364994+00:00",
+  "owningBase": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "oldInterimBuilds": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "finalQualifiedBuilds": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "equalCompleteBuildsTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "rootIndexTree": "2720e9e26859c12470438d3056f6a2502660596e",
+  "changedPaths": [
+    ".github/workflows/release.yml",
+    "Directory.Build.targets",
+    "references/Hexalith.Builds",
+    "tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs"
+  ],
+  "originalOwningCheckoutsUntouched": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

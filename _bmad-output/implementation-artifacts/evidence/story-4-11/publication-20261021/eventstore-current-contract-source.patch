@@ -1,0 +1,1504 @@
+diff --git a/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.Compacted.cs b/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.Compacted.cs
+new file mode 100644
+index 000000000..1890af964
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.Compacted.cs
+@@ -0,0 +1,20 @@
++using System.Text.Json;
++
++namespace Hexalith.EventStore.Client.Projections;
++
++public sealed partial class DaprReadModelStore
++{
++    /// <inheritdoc/>
++    public async Task<ReadModelEntry<TValue>> GetCompactedAsync<TValue>(string storeName, string key,
++        CancellationToken cancellationToken = default) where TValue : class
++    {
++        ArgumentException.ThrowIfNullOrWhiteSpace(storeName);
++        ArgumentException.ThrowIfNullOrWhiteSpace(key);
++        var accessor = new DaprReadModelBatchStateAccessor(_daprClient, storeName);
++        RawStateEntry entry = await ReadModelBatchProtocol.ReadCompactedAsync(accessor, key,
++            cancellationToken, _options.TimeProvider).ConfigureAwait(false);
++        return entry.Exists
++            ? new(JsonSerializer.Deserialize<TValue>(entry.Value.Span, _daprClient.JsonSerializerOptions), entry.ETag) { ExpiresAtUtc = entry.ExpiresAtUtc }
++            : new(null, null) { ExpiresAtUtc = entry.ExpiresAtUtc };
++    }
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.OwnerProof.cs b/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.OwnerProof.cs
+index f3668be0c..890b5ce84 100644
+--- a/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.OwnerProof.cs
++++ b/src/Hexalith.EventStore.Client/Projections/DaprReadModelStore.OwnerProof.cs
+@@ -36,14 +36,22 @@ public sealed partial class DaprReadModelStore : IReadModelOwnerProofStore
+             if (selection is null || selection.TenantId != identity.TenantId || selection.Domain != identity.Domain
+                 || selection.AggregateId != identity.AggregateId || selection.ProjectionName != request.ProjectionName)
+                 return new(null, "delivery_reconciliation_required", reads, bytes);
++            bool completionOnly = selection.ReceiptProjectionName == ReadModelRebuildCompletion.ReceiptProjectionName;
++            if (selection.ReceiptProjectionName is not null && !ReadModelOwnerSelectionMetadata.IsRebuildReceipt(selection.ReceiptProjectionName))
++                return new(null, "delivery_reconciliation_required", reads, bytes);
+             var scope = new ReadModelBatchScope(binding.StoreName, identity.TenantId, identity.Domain,
+-                identity.AggregateId, selection.ReceiptProjectionName ?? request.ProjectionName, selection.BatchId);
++                identity.AggregateId, completionOnly ? "rebuild" : selection.ReceiptProjectionName ?? request.ProjectionName, selection.BatchId);
+             reads++;
+-            RawStateEntry receiptRow = await accessor.ReadAsync(scope.ComputeMarkerKey(), cancellationToken).ConfigureAwait(false);
++            // The completion discriminator never falls back to the potentially rich marker, even when
++            // evidence is absent or corrupt. Old readers hash the discriminator as a different scope.
++            RawStateEntry receiptRow = await accessor.ReadAsync(completionOnly
++                ? ReadModelBatchKeys.CompletionKey(scope.ComputeScopeHash()) : scope.ComputeMarkerKey(), cancellationToken).ConfigureAwait(false);
+             bytes += receiptRow.Value.Length;
+             if (!receiptRow.Exists)
+                 return new(null, "delivery_reconciliation_required", reads, bytes);
+-            ReadModelBatchMarker? receipt = ReadModelBatchMarker.ReadBoundedProof(receiptRow.Value);
++            ReadModelBatchMarker? receipt = completionOnly
++                ? ReadModelBatchCompletionProof.Read(receiptRow.Value)?.ToReceipt()
++                : ReadModelBatchMarker.ReadBoundedProof(receiptRow.Value);
+             if (receipt is null || receipt.Version != 1 || receipt.Status != ReadModelBatchMarkerStatus.Completed
+                 || receipt.ScopeHash != scope.ComputeScopeHash() || receipt.BatchId != selection.BatchId
+                 || !ReadModelOwnerSelectionMetadata.ReceiptContains(receipt, selection) || receipt.Operations is not null
+diff --git a/src/Hexalith.EventStore.Client/Projections/IReadModelStore.cs b/src/Hexalith.EventStore.Client/Projections/IReadModelStore.cs
+index 5a2097366..97d2765ff 100644
+--- a/src/Hexalith.EventStore.Client/Projections/IReadModelStore.cs
++++ b/src/Hexalith.EventStore.Client/Projections/IReadModelStore.cs
+@@ -35,6 +35,21 @@ public interface IReadModelStore {
+         CancellationToken cancellationToken = default)
+         where TValue : class;
+ 
++    /// <summary>Reads only a physically compacted value, without reading any batch marker or manifest.</summary>
++    /// <typeparam name="TValue">The isolated content-free read-model type.</typeparam>
++    /// <param name="storeName">The DAPR state-store component.</param>
++    /// <param name="key">The isolated read-model key.</param>
++    /// <param name="cancellationToken">The caller cancellation token.</param>
++    /// <returns>The compacted value or an absent entry.</returns>
++    /// <exception cref="InvalidOperationException">The key contains an incomplete envelope.</exception>
++    /// <exception cref="NotSupportedException">The store has not implemented this strict read capability.</exception>
++    Task<ReadModelEntry<TValue>> GetCompactedAsync<TValue>(string storeName, string key,
++        CancellationToken cancellationToken = default) where TValue : class
++    {
++        cancellationToken.ThrowIfCancellationRequested();
++        throw new NotSupportedException("Content-free compacted reads require explicit store support.");
++    }
++
+     /// <summary>
+     /// Saves a read-model value unconditionally (last-write-wins).
+     /// </summary>
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchCompletionProof.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchCompletionProof.cs
+new file mode 100644
+index 000000000..8b2436c5c
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchCompletionProof.cs
+@@ -0,0 +1,62 @@
++using System.Security.Cryptography;
++using System.Text.Json;
++using System.Text.Json.Serialization;
++
++using Hexalith.EventStore.Contracts.Projections;
++
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>SDK-only immutable content-free completion evidence; never carries recovery operations or manifests.</summary>
++/// <param name="Version">The completion proof protocol.</param>
++/// <param name="ScopeHash">The original coordinated batch scope.</param>
++/// <param name="BatchId">The original batch identity.</param>
++/// <param name="Fingerprint">The original immutable manifest fingerprint.</param>
++/// <param name="TerminalTimeUtc">The original durable receipt time.</param>
++/// <param name="Owners">The exact coordinated selections.</param>
++/// <param name="Digest">The canonical content integrity digest.</param>
++[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
++internal sealed record ReadModelBatchCompletionProof(
++    [property: JsonRequired] int Version,
++    [property: JsonRequired] string ScopeHash,
++    [property: JsonRequired] string BatchId,
++    [property: JsonRequired] string Fingerprint,
++    [property: JsonRequired] string TerminalTimeUtc,
++    [property: JsonRequired] IReadOnlyList<ProjectionOwnerSelection> Owners,
++    [property: JsonRequired] string Digest)
++{
++    private static readonly JsonSerializerOptions s_strictJson = new(JsonSerializerDefaults.Web)
++    {
++        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
++    };
++
++    /// <summary>Copies only terminal metadata from the actual SDK receipt.</summary>
++    internal static ReadModelBatchCompletionProof From(ReadModelBatchMarker receipt)
++    {
++        var proof = new ReadModelBatchCompletionProof(1, receipt.ScopeHash, receipt.BatchId,
++            receipt.Fingerprint, receipt.TerminalTimeUtc!, receipt.OwnerSelections!, string.Empty);
++        return proof with { Digest = proof.ComputeDigest() };
++    }
++
++    /// <summary>Parses only the bounded exact completion format and detects altered fields.</summary>
++    internal static ReadModelBatchCompletionProof? Read(ReadOnlyMemory<byte> bytes)
++    {
++        if (bytes.Length > ReadModelBatchMarker.MaxControlBytes) return null;
++        using JsonDocument document = JsonDocument.Parse(bytes);
++        if (document.RootElement.ValueKind != JsonValueKind.Object
++            || ReadModelBatchMarker.HasDuplicateProperties(document.RootElement)) return null;
++        ReadModelBatchCompletionProof? proof = document.RootElement.Deserialize<ReadModelBatchCompletionProof>(s_strictJson);
++        return proof is { Version: 1, Owners.Count: > 0 } && ReadModelBatchFingerprint.IsCanonical(proof.Fingerprint)
++            && ReadModelBatchMarker.IsUtcTerminalTime(proof.TerminalTimeUtc)
++            && proof.Digest == proof.ComputeDigest() ? proof : null;
++    }
++
++    /// <summary>Adapts the isolated proof to the existing exact owner/receipt validation.</summary>
++    internal ReadModelBatchMarker ToReceipt() => new()
++    {
++        ScopeHash = ScopeHash, BatchId = BatchId, Fingerprint = Fingerprint,
++        Status = ReadModelBatchMarkerStatus.Completed, TerminalTimeUtc = TerminalTimeUtc, OwnerSelections = Owners,
++    };
++
++    private string ComputeDigest() => Convert.ToHexStringLower(SHA256.HashData(
++        ReadModelBatchCanonicalJson.Canonicalize(JsonSerializer.SerializeToUtf8Bytes(this with { Digest = string.Empty }, JsonSerializerOptions.Web))));
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchFingerprint.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchFingerprint.cs
+index 29722706d..4c632bf45 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchFingerprint.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchFingerprint.cs
+@@ -89,13 +89,41 @@ internal static class ReadModelBatchFingerprint {
+     /// <summary>Computes the versioned fingerprint string from already-built canonical manifest bytes.</summary>
+     /// <param name="manifest">The canonical manifest bytes.</param>
+     /// <returns>A manifest-version-prefixed base64url SHA-256 digest.</returns>
+-    public static string ComputeFromManifest(ReadOnlySpan<byte> manifest) {
++    /// <remarks>
++    /// A leading <c>v</c> of 1 or 2 selects the prefix. Bytes that are not a canonical object keep the
++    /// historical <c>v1:</c> prefix so retained corrupt manifests still have a stable digest. An explicit
++    /// version other than 1 or 2 is rejected.
++    /// </remarks>
++    public static string ComputeFromManifest(ReadOnlySpan<byte> manifest)
++    {
+         byte[] digest = SHA256.HashData(manifest);
+-        var reader = new Utf8JsonReader(manifest);
+-        if (!reader.Read() || reader.TokenType != JsonTokenType.StartObject || !reader.Read()
+-            || !reader.ValueTextEquals("v") || !reader.Read() || !reader.TryGetInt32(out int version)
+-            || version is not (1 or 2)) throw new ArgumentException("Unsupported canonical manifest.", nameof(manifest));
+-        return "v" + version + ":" + Base64Url(digest);
++        return "v" + ResolveManifestVersion(manifest) + ":" + Base64Url(digest);
++    }
++
++    private static int ResolveManifestVersion(ReadOnlySpan<byte> manifest)
++    {
++        try
++        {
++            var reader = new Utf8JsonReader(manifest);
++            if (!reader.Read() || reader.TokenType != JsonTokenType.StartObject
++                || !reader.Read() || reader.TokenType != JsonTokenType.PropertyName
++                || !reader.ValueTextEquals("v"u8) || !reader.Read()
++                || !reader.TryGetInt32(out int version))
++            {
++                return Version;
++            }
++
++            if (version is not (1 or 2))
++            {
++                throw new ArgumentException("Unsupported canonical manifest.", nameof(manifest));
++            }
++
++            return version;
++        }
++        catch (JsonException)
++        {
++            return Version;
++        }
+     }
+ 
+     private static string Base64Url(byte[] bytes) =>
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchKeys.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchKeys.cs
+index 21faa2e23..95cfbea89 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchKeys.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchKeys.cs
+@@ -13,6 +13,9 @@ internal static class ReadModelBatchKeys {
+     /// <returns>The marker key.</returns>
+     public static string MarkerKey(string scopeHash) => MarkerPrefix + scopeHash;
+ 
++    /// <summary>Builds the isolated namespace that can contain terminal metadata only.</summary>
++    internal static string CompletionKey(string scopeHash) => "hxrmb:v1:completion:" + scopeHash;
++
+     /// <summary>Builds the private immutable legacy compensation evidence key in the owning batch namespace.</summary>
+     internal static string ScratchCompensationKey(string scopeHash) => MarkerKey(scopeHash) + ":scratch-compensation";
+ 
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchMarker.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchMarker.cs
+index d0d2b546b..0a4dbc79d 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchMarker.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchMarker.cs
+@@ -59,7 +59,7 @@ internal sealed class ReadModelBatchMarker {
+             || IsUtcTerminalTime(marker.TerminalTimeUtc)) ? marker : null;
+     }
+ 
+-    private static bool IsUtcTerminalTime(string? value)
++    internal static bool IsUtcTerminalTime(string? value)
+         => value is not null && (value.EndsWith('Z') || value.EndsWith("+00:00", StringComparison.Ordinal))
+             && DateTimeOffset.TryParseExact(value,
+                 ["yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd'T'HH:mm:ss.FFFFFFF'Z'",
+@@ -67,7 +67,7 @@ internal sealed class ReadModelBatchMarker {
+                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTimeOffset timestamp)
+             && timestamp.Offset == TimeSpan.Zero;
+ 
+-    private static bool HasDuplicateProperties(JsonElement value)
++    internal static bool HasDuplicateProperties(JsonElement value)
+     {
+         if (value.ValueKind == JsonValueKind.Object)
+         {
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchPhase.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchPhase.cs
+index 97f473b1f..f4bb545c1 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchPhase.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchPhase.cs
+@@ -42,4 +42,8 @@ public enum ReadModelBatchPhase {
+     RecoveryManifestReclaimed,
+     /// <summary>After the final opted-in envelope is compacted/restored.</summary>
+     RecoveryAnchorCompacted,
++    /// <summary>After verified compaction and manifest reclamation, before isolated completion publication.</summary>
++    BeforeCompletionProof,
++    /// <summary>After isolated completion publication and exact read-back.</summary>
++    AfterCompletionProof,
+ }
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.Completion.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.Completion.cs
+new file mode 100644
+index 000000000..0a83dd43b
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.Completion.cs
+@@ -0,0 +1,63 @@
++using System.Globalization;
++using System.Text.Json;
++
++namespace Hexalith.EventStore.Client.Projections;
++
++internal sealed partial class ReadModelBatchProtocol
++{
++    /// <summary>Reads a physically compacted value only, refusing every old/new envelope before marker access.</summary>
++    internal static async Task<RawStateEntry> ReadCompactedAsync(IReadModelBatchStateAccessor accessor,
++        string key, CancellationToken cancellationToken, TimeProvider? timeProvider = null)
++    {
++        RawStateEntry entry = await accessor.ReadAsync(key, cancellationToken).ConfigureAwait(false);
++        if (entry.Exists && ReadModelBatchEnvelope.IsEnvelope(entry.Value.Span))
++            throw new InvalidOperationException("The read-model generation is not physically complete.");
++        return ReadModelBatchExpiringValue.Resolve(entry, timeProvider ?? TimeProvider.System);
++    }
++
++    private void ValidateCompletionProofBudget()
++    {
++        if (_ownerSelections is null || !_ownerSelections.Any(static owner =>
++            owner.ReceiptProjectionName == ReadModelRebuildCompletion.ReceiptProjectionName)) return;
++        // The existing UTC round-trip receipt format has a fixed encoded width, including its offset.
++        // Budget its complete private representation before any state access; never reserve a different
++        // generation, fingerprint or terminal time. Actual publication still copies the durable receipt.
++        var receipt = new ReadModelBatchMarker
++        {
++            ScopeHash = _scopeHash, BatchId = _batch.Scope.BatchId, Fingerprint = _fingerprint,
++            Status = ReadModelBatchMarkerStatus.Completed, OwnerSelections = _ownerSelections,
++            TerminalTimeUtc = DateTimeOffset.MaxValue.ToString("O", CultureInfo.InvariantCulture),
++        };
++        if (JsonSerializer.SerializeToUtf8Bytes(ReadModelBatchCompletionProof.From(receipt), JsonSerializerOptions.Web).Length
++            > ReadModelBatchMarker.MaxControlBytes)
++            throw new ArgumentException("Guarded read-model completion evidence exceeds its 16384-byte limit.");
++    }
++
++    private async Task<bool> PublishCompletionProofAsync(CancellationToken cancellationToken)
++    {
++        // Enrollment is immutable manifest material. Old/direct rebuilds are never certified on retry.
++        if (_ownerSelections is null || !_ownerSelections.Any(static owner =>
++            owner.ReceiptProjectionName == ReadModelRebuildCompletion.ReceiptProjectionName)) return true;
++        (ReadModelBatchMarker? receipt, _, _) = await ReadMarkerAsync(cancellationToken).ConfigureAwait(false);
++        if (receipt is not { Status: ReadModelBatchMarkerStatus.Completed, Operations: null,
++                OriginalManifest: null, OriginalManifestKey: null, RecoveryAnchor: null }
++            || receipt.ScopeHash != _scopeHash || receipt.BatchId != _batch.Scope.BatchId
++            || receipt.Fingerprint != _fingerprint || receipt.OwnerSelection is not null
++            || receipt.OwnerSelections is null || !receipt.OwnerSelections.SequenceEqual(_ownerSelections)
++            || !ReadModelBatchMarker.IsUtcTerminalTime(receipt.TerminalTimeUtc)) return false;
++        var proof = ReadModelBatchCompletionProof.From(receipt);
++        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(proof, JsonSerializerOptions.Web);
++        if (bytes.Length > ReadModelBatchMarker.MaxControlBytes) return false;
++        string key = ReadModelBatchKeys.CompletionKey(_scopeHash);
++        RawStateEntry prior = await _accessor.ReadAsync(key, cancellationToken).ConfigureAwait(false);
++        if (prior.Exists) return prior.Value.Span.SequenceEqual(bytes);
++        // Publication follows the full physical end-state check for both store profiles. In particular,
++        // a transaction receipt from a mis-qualified partial transaction cannot grant this proof.
++        if (!await VerifyOperationKeysAsync(cancellationToken).ConfigureAwait(false)) return false;
++        if (_injector is not null) await _injector.InjectAsync(ReadModelBatchPhase.BeforeCompletionProof, -1, cancellationToken).ConfigureAwait(false);
++        _ = await _accessor.TryWriteAsync(key, bytes, string.Empty, cancellationToken).ConfigureAwait(false);
++        RawStateEntry stored = await _accessor.ReadAsync(key, cancellationToken).ConfigureAwait(false);
++        if (_injector is not null) await _injector.InjectAsync(ReadModelBatchPhase.AfterCompletionProof, -1, cancellationToken).ConfigureAwait(false);
++        return stored.Exists && stored.Value.Span.SequenceEqual(bytes);
++    }
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.cs
+index b14327e9d..1c2a9712a 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelBatchProtocol.cs
+@@ -231,6 +231,7 @@ internal sealed partial class ReadModelBatchProtocol {
+         _fingerprint = ReadModelBatchFingerprint.ComputeFromManifest(manifest);
+         _scopeHash = batch.Scope.ComputeScopeHash();
+         _markerKey = ReadModelBatchKeys.MarkerKey(_scopeHash);
++        ValidateCompletionProofBudget();
+         ReadModelBatchStoreProfile profile = _options.GetProfile(batch.Scope.StoreName);
+         _profileName = profile.ToString();
+         return profile;
+@@ -1326,8 +1327,9 @@ internal sealed partial class ReadModelBatchProtocol {
+             if (marker?.RecoveryAnchor is not null)
+                 return await FinishRecoveryAnchorAsync(_accessor, marker, _batch.Scope, _injector, cancellationToken, _options.TimeProvider).ConfigureAwait(false);
+         }
+-        return _ownerSelection is null && _ownerSelections is null && !_batch.RetainManifestForRecovery
++        bool reclaimed = _ownerSelection is null && _ownerSelections is null && !_batch.RetainManifestForRecovery
+             || await ReclaimOriginalManifestAsync(_accessor, _scopeHash, _fingerprint, cancellationToken).ConfigureAwait(false);
++        return reclaimed && await PublishCompletionProofAsync(cancellationToken).ConfigureAwait(false);
+     }
+ 
+     /// <summary>Reclaims only the same terminal receipt's original immutable manifest; uncertainty retains owned retry work.</summary>
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelOwnerSelectionMetadata.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelOwnerSelectionMetadata.cs
+index 540abb83e..7f6ce214d 100644
+--- a/src/Hexalith.EventStore.Client/Projections/ReadModelOwnerSelectionMetadata.cs
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelOwnerSelectionMetadata.cs
+@@ -75,7 +75,7 @@ internal static class ReadModelOwnerSelectionMetadata
+             if (candidate is null) continue;
+             if (candidate.TenantId != batch.Scope.TenantId || candidate.Domain != batch.Scope.Domain
+                 || candidate.AggregateId != batch.Scope.AggregateId || candidate.BatchId != batch.Scope.BatchId
+-                || candidate.ReceiptProjectionName != batch.Scope.ProjectionType
++                || !IsRebuildReceipt(candidate.ReceiptProjectionName)
+                 || selected.TryGetValue(candidate.ProjectionName, out ProjectionOwnerSelection? prior) && prior != candidate)
+                 throw new ArgumentException("Selected owner does not match the immutable coordinated batch scope.");
+             selected[candidate.ProjectionName] = candidate;
+@@ -87,15 +87,19 @@ internal static class ReadModelOwnerSelectionMetadata
+         return result;
+     }
+ 
++    /// <summary>Accepts only the existing rebuild receipt or the explicit content-free protocol.</summary>
++    internal static bool IsRebuildReceipt(string? name)
++        => name is "rebuild" or ReadModelRebuildCompletion.ReceiptProjectionName;
++
+     /// <summary>Finds one exact selection in either existing receipt representation, rejecting ambiguous bindings.</summary>
+     internal static bool ReceiptContains(ReadModelBatchMarker receipt, ProjectionOwnerSelection selected)
+         => selected.ReceiptProjectionName is null
+             ? receipt.OwnerSelection == selected && receipt.OwnerSelections is null
+-            : selected.ReceiptProjectionName == "rebuild" && receipt.OwnerSelection is null
++            : IsRebuildReceipt(selected.ReceiptProjectionName) && receipt.OwnerSelection is null
+                 && receipt.OwnerSelections is { Count: > 0 } owners
+                 && owners.Select(static item => item.ProjectionName).Distinct(StringComparer.Ordinal).Count() == owners.Count
+                 && owners.All(item => item.TenantId == selected.TenantId && item.Domain == selected.Domain
+                     && item.AggregateId == selected.AggregateId && item.BatchId == selected.BatchId
+-                    && item.ReceiptProjectionName == selected.ReceiptProjectionName)
++                    && IsRebuildReceipt(item.ReceiptProjectionName))
+                 && owners.Count(item => item == selected) == 1;
+ }
+diff --git a/src/Hexalith.EventStore.Client/Projections/ReadModelRebuildCompletion.cs b/src/Hexalith.EventStore.Client/Projections/ReadModelRebuildCompletion.cs
+new file mode 100644
+index 000000000..cd0ce87df
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/ReadModelRebuildCompletion.cs
+@@ -0,0 +1,12 @@
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>Identifies newly prepared coordinated selections that require isolated SDK completion evidence.</summary>
++public static class ReadModelRebuildCompletion
++{
++    /// <summary>
++    /// The versioned content-free receipt discriminator. It is deliberately different from the rich
++    /// rebuild scope: older readers derive a different marker key and cannot hydrate the rebuild marker.
++    /// This discriminator must be present in the original fingerprint-bound model operations.
++    /// </summary>
++    public const string ReceiptProjectionName = "rebuild-completion-v1";
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityInventory.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityInventory.cs
+new file mode 100644
+index 000000000..83994b4dc
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityInventory.cs
+@@ -0,0 +1,7 @@
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>Durable identity retirement inventory, independent of disposable rebuild scratch.</summary>
++/// <param name="Reference">The reserved or sealed owner identity reference.</param>
++/// <param name="Retired">An irreversible installer fence retained after abort cleanup.</param>
++internal sealed record SharedProjectionCapturedIdentityInventory(
++    SharedProjectionCapturedIdentityReference Reference, bool Retired = false);
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityPage.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityPage.cs
+new file mode 100644
+index 000000000..01c163669
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityPage.cs
+@@ -0,0 +1,15 @@
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>One bounded immutable leaf or index node of a captured owner identity tree.</summary>
++/// <param name="Level">Zero for a leaf; otherwise one greater than its children's level.</param>
++/// <param name="FirstSequence">The first original owner sequence covered by this node.</param>
++/// <param name="Count">The exact number of original events covered by this node.</param>
++/// <param name="LastPosition">The final original source position covered by this node.</param>
++/// <param name="Positions">Original positions for a leaf.</param>
++/// <param name="Digests">Canonical SHA-256 event identities for a leaf.</param>
++/// <param name="MessageHashes">SHA-256 message identities, or empty strings for absent identities.</param>
++/// <param name="Children">Content-addressed child digests for an index.</param>
++/// <param name="ChildCounts">The exact event count covered by each child.</param>
++public sealed record SharedProjectionCapturedIdentityPage(
++    int Level, long FirstSequence, long Count, long LastPosition,
++    long[] Positions, byte[] Digests, string[] MessageHashes, string[] Children, long[] ChildCounts);
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityReference.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityReference.cs
+new file mode 100644
+index 000000000..7ef01915c
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityReference.cs
+@@ -0,0 +1,16 @@
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>Authenticated, constant-size reference to a complete captured owner identity tree.</summary>
++/// <param name="Version">The additive storage schema version.</param>
++/// <param name="NamespaceHash">The scope, source, operation and epoch binding.</param>
++/// <param name="ScopeHash">The selected projection scope hash.</param>
++/// <param name="SourceHash">The original source stream hash.</param>
++/// <param name="OperationHash">The original rebuild operation hash.</param>
++/// <param name="Epoch">The owning rebuild epoch.</param>
++/// <param name="Count">The complete captured event count.</param>
++/// <param name="RootDigest">The content-addressed root digest; empty until sealed.</param>
++/// <param name="Height">The root level, with zero denoting a leaf.</param>
++/// <param name="LastPosition">The last original source position.</param>
++public sealed record SharedProjectionCapturedIdentityReference(
++    int Version, string NamespaceHash, string ScopeHash, string SourceHash, string OperationHash,
++    long Epoch, long Count, string RootDigest, int Height, long LastPosition);
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityStore.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityStore.cs
+new file mode 100644
+index 000000000..57bf4b1cb
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedIdentityStore.cs
+@@ -0,0 +1,471 @@
++using System.Security.Cryptography;
++using System.Text;
++using System.Text.Json;
++
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>Seals bounded, durable identity evidence independently of rebuild scratch.</summary>
++public sealed class SharedProjectionCapturedIdentityStore
++{
++    /// <summary>Maximum events in a leaf; leaves and their message index fit one bounded batch.</summary>
++    public const int EntriesPerPage = 64;
++    /// <summary>Maximum authenticated child references in an index node.</summary>
++    public const int ChildrenPerPage = 128;
++    private readonly IReadModelStore _store;
++    private readonly SharedProjectionEpochCoordinator _coordinator;
++
++    /// <summary>Creates a bounded identity store over the production read-model transport.</summary>
++    public SharedProjectionCapturedIdentityStore(IReadModelStore store, IReadModelBatchStore batches)
++        : this(store, new SharedProjectionEpochCoordinator(store, batches)) { }
++
++    /// <summary>Uses the exact owning coordinator and its epoch-fenced recovery graph.</summary>
++    internal SharedProjectionCapturedIdentityStore(IReadModelStore store, SharedProjectionEpochCoordinator coordinator)
++    {
++        _store = store ?? throw new ArgumentNullException(nameof(store));
++        _coordinator = coordinator;
++    }
++
++    /// <summary>Reserves an exact owner history before any identity pages are installed.</summary>
++    public async Task<SharedProjectionCapturedIdentityReference> BeginAsync(SharedProjectionScope scope,
++        string operationId, string sourceStream, long count, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
++        SharedProjectionEpochStatus status = await _coordinator.GetStatusAsync(scope, cancellationToken).ConfigureAwait(false);
++        if (!status.IsBuilding || status.OperationId != operationId)
++            throw new InvalidOperationException("Captured identity reservation requires the current building epoch.");
++        var reference = Describe(scope, operationId, sourceStream, count, status.Epoch);
++        string key = InventoryKey(reference);
++        for (int attempt = 0; attempt < 64; attempt++)
++        {
++            var prior = await _store.GetAsync<SharedProjectionCapturedIdentityInventory>(scope.StoreName, key, cancellationToken).ConfigureAwait(false);
++            if (prior.Value is { } existing)
++            {
++                if (existing.Retired || !SameReservation(existing.Reference, reference))
++                    throw new InvalidOperationException("Captured identity inventory is retired or conflicts with its owner.");
++                return reference;
++            }
++            if (await _coordinator.TryWriteCapturedIdentityRecordsAsync(scope, operationId, reference.Epoch,
++                "identity-begin:" + reference.NamespaceHash,
++                [ReadModelBatchOperation.Write(key, new SharedProjectionCapturedIdentityInventory(reference), ReadModelBatchConcurrency.CreateOnly)],
++                cancellationToken).ConfigureAwait(false)) return reference;
++        }
++        throw new InvalidOperationException("Captured identity reservation exhausted its CAS retries.");
++    }
++
++    /// <summary>Describes a reserved history so its recovery identity can be retained before installation.</summary>
++    public static SharedProjectionCapturedIdentityReference Describe(SharedProjectionScope scope,
++        string operationId, string sourceStream, long count, long epoch)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        scope.Validate();
++        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);
++        ArgumentException.ThrowIfNullOrWhiteSpace(sourceStream);
++        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
++        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(epoch);
++        return new SharedProjectionCapturedIdentityReference(1,
++            Hash(JsonSerializer.SerializeToUtf8Bytes(new[] { scope.ComputeHash(), sourceStream, operationId,
++                epoch.ToString(System.Globalization.CultureInfo.InvariantCulture) })),
++            scope.ComputeHash(), Hash(Encoding.UTF8.GetBytes(sourceStream)), Hash(Encoding.UTF8.GetBytes(operationId)),
++            epoch, count, string.Empty, 0, 0);
++    }
++
++    /// <summary>Writes a leaf together with its operation-scoped durable message uniqueness index.</summary>
++    public async Task AppendAsync(SharedProjectionScope scope, string operationId,
++        SharedProjectionCapturedIdentityReference reference, long firstSequence, long[] positions,
++        byte[] digests, string[] messageHashes, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        ArgumentNullException.ThrowIfNull(positions);
++        ArgumentNullException.ThrowIfNull(digests);
++        ArgumentNullException.ThrowIfNull(messageHashes);
++        ValidateBinding(scope, reference);
++        var page = new SharedProjectionCapturedIdentityPage(0, firstSequence, positions.LongLength,
++            positions.Length == 0 ? 0 : positions[^1], positions.ToArray(), digests.ToArray(), messageHashes.ToArray(), [], []);
++        ValidatePage(page);
++        if ((firstSequence - 1) % EntriesPerPage != 0 || firstSequence + page.Count - 1 > reference.Count
++            || page.Count < EntriesPerPage && firstSequence + page.Count - 1 != reference.Count)
++            throw new InvalidOperationException("Captured identity leaf does not cover its exact reserved sequence range.");
++        await WriteNodeAsync(scope, operationId, reference, page,
++            (firstSequence - 1) / EntriesPerPage, cancellationToken).ConfigureAwait(false);
++    }
++
++    /// <summary>Authenticates every leaf and seals its bounded index tree before publishing a reference.</summary>
++    public async Task<SharedProjectionCapturedIdentityReference> SealAsync(SharedProjectionScope scope,
++        string operationId, SharedProjectionCapturedIdentityReference reference, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        ValidateBinding(scope, reference);
++        long nodeCount = DivideUp(reference.Count, EntriesPerPage);
++        int level = 0;
++        long preceding = 0;
++        for (long ordinal = 0; ordinal < nodeCount; ordinal++)
++        {
++            SharedProjectionCapturedIdentityPage page = await ReadInventoryPageAsync(scope, reference, 0, ordinal, cancellationToken).ConfigureAwait(false);
++            if (page.FirstSequence != ordinal * EntriesPerPage + 1 || page.Positions[0] <= preceding
++                || page.Count != Math.Min(EntriesPerPage, reference.Count - ordinal * EntriesPerPage))
++                throw new InvalidOperationException("Captured identity leaves have a gap or conflicting source position.");
++            for (int index = 0; index < page.MessageHashes.Length; index++)
++            {
++                string message = page.MessageHashes[index];
++                if (message.Length == 0) continue;
++                var known = await _store.GetAsync<SharedProjectionCapturedMessageIdentity>(scope.StoreName, MessageKey(reference, message), cancellationToken).ConfigureAwait(false);
++                if (known.Value?.Sequence != page.FirstSequence + index)
++                    throw new InvalidOperationException("Captured identity message index is missing or contradictory.");
++            }
++            preceding = page.LastPosition;
++        }
++        while (nodeCount > 1)
++        {
++            long parents = DivideUp(nodeCount, ChildrenPerPage);
++            for (long ordinal = 0; ordinal < parents; ordinal++)
++            {
++                var children = new List<string>(ChildrenPerPage);
++                var counts = new List<long>(ChildrenPerPage);
++                long first = 0, last = 0, count = 0;
++                for (long child = ordinal * ChildrenPerPage; child < Math.Min(nodeCount, (ordinal + 1) * ChildrenPerPage); child++)
++                {
++                    SharedProjectionCapturedIdentityPage page = await ReadInventoryPageAsync(scope, reference, level, child, cancellationToken).ConfigureAwait(false);
++                    if (first == 0) first = page.FirstSequence;
++                    if (page.FirstSequence != first + count)
++                        throw new InvalidOperationException("Captured identity index has a sequence gap.");
++                    children.Add(Digest(page)); counts.Add(page.Count); count += page.Count; last = page.LastPosition;
++                }
++                await WriteNodeAsync(scope, operationId, reference,
++                    new SharedProjectionCapturedIdentityPage(level + 1, first, count, last, [], [], [], [.. children], [.. counts]),
++                    ordinal, cancellationToken).ConfigureAwait(false);
++            }
++            level++; nodeCount = parents;
++        }
++        SharedProjectionCapturedIdentityPage root = await ReadInventoryPageAsync(scope, reference, level, 0, cancellationToken).ConfigureAwait(false);
++        if (root.FirstSequence != 1 || root.Count != reference.Count)
++            throw new InvalidOperationException("Captured identity root is incomplete.");
++        var sealedReference = reference with { RootDigest = Digest(root), Height = level, LastPosition = root.LastPosition };
++        string key = InventoryKey(reference);
++        for (int attempt = 0; attempt < 64; attempt++)
++        {
++            var entry = await RequireInventoryAsync(scope, reference, cancellationToken).ConfigureAwait(false);
++            if (entry.Value!.Reference.RootDigest.Length != 0)
++            {
++                if (entry.Value.Reference != sealedReference)
++                    throw new InvalidOperationException("Captured identity sealed root conflicts with its retained evidence.");
++                return sealedReference;
++            }
++            if (await _coordinator.TryWriteCapturedIdentityRecordsAsync(scope, operationId, reference.Epoch,
++                "identity-seal:" + reference.NamespaceHash,
++                [ReadModelBatchOperation.Write(key, new SharedProjectionCapturedIdentityInventory(sealedReference),
++                    ReadModelBatchConcurrency.Match(entry.ETag!))], cancellationToken).ConfigureAwait(false)) return sealedReference;
++        }
++        throw new InvalidOperationException("Captured identity sealing exhausted its CAS retries.");
++    }
++
++    /// <summary>Reads one authenticated leaf by original owner sequence without loading the owner history.</summary>
++    public async Task<SharedProjectionCapturedIdentityPage> ReadPageAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference reference, long sequence, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        ValidateBinding(scope, reference);
++        if (!IsHash(reference.RootDigest) || reference.Height is < 0 or > 16 || sequence < 1 || sequence > reference.Count)
++            throw new InvalidOperationException("Captured identity reference is malformed or the requested sequence is absent.");
++        var inventory = await RequireInventoryAsync(scope, reference, cancellationToken).ConfigureAwait(false);
++        if (inventory.Value!.Reference != reference)
++            throw new InvalidOperationException("Captured identity reference has not been sealed.");
++        string digest = reference.RootDigest;
++        long first = 1, count = reference.Count;
++        for (int level = reference.Height; level >= 0; level--)
++        {
++            SharedProjectionCapturedIdentityPage page = await ReadNodeAsync(scope, reference, digest, cancellationToken).ConfigureAwait(false);
++            if (page.Level != level || page.FirstSequence != first || page.Count != count
++                || level == reference.Height && page.LastPosition != reference.LastPosition)
++                throw new InvalidOperationException("Captured identity node does not match its authenticated parent.");
++            if (level == 0) return page;
++            bool found = false;
++            for (int child = 0; child < page.Children.Length; child++)
++            {
++                count = page.ChildCounts[child];
++                if (sequence < first + count) { digest = page.Children[child]; found = true; break; }
++                first += count;
++            }
++            if (!found) throw new InvalidOperationException("Captured identity index is incomplete.");
++        }
++        throw new InvalidOperationException("Captured identity tree is incomplete.");
++    }
++
++    /// <summary>Authenticates every original leaf before promotion or checkpoint handoff.</summary>
++    public async Task ValidateCompleteAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference reference, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        ValidateBinding(scope, reference);
++        long preceding = 0;
++        for (long sequence = 1; sequence <= reference.Count;)
++        {
++            var page = await ReadPageAsync(scope, reference, sequence, cancellationToken).ConfigureAwait(false);
++            if (page.FirstSequence != sequence || page.Positions[0] <= preceding
++                || page.Count != Math.Min(EntriesPerPage, reference.Count - sequence + 1))
++                throw new InvalidOperationException("Captured identity tree has an incomplete or discontinuous prefix.");
++            preceding = page.LastPosition;
++            sequence += page.Count;
++        }
++        if (preceding != reference.LastPosition) throw new InvalidOperationException("Captured identity root has a conflicting final position.");
++    }
++
++    /// <summary>Compares every retained prefix identity, including a partially filled final leaf.</summary>
++    public async Task<bool> MatchesPrefixAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference candidate, SharedProjectionCheckpoint existing,
++        CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(candidate);
++        ArgumentNullException.ThrowIfNull(existing);
++        ValidateCheckpoint(existing);
++        long retained = existing.CapturedIdentityReference?.Count ?? (existing.CapturedEventDigests?.LongLength / 32 ?? 0);
++        if (retained > candidate.Count) return false;
++        for (long sequence = 1; sequence <= retained;)
++        {
++            SharedProjectionCapturedIdentityPage page = await ReadPageAsync(scope, candidate, sequence, cancellationToken).ConfigureAwait(false);
++            if (existing.CapturedIdentityReference is { } prior)
++            {
++                if (candidate.SourceHash != prior.SourceHash) return false;
++                SharedProjectionCapturedIdentityPage prefix = await ReadPageAsync(scope, prior, sequence, cancellationToken).ConfigureAwait(false);
++                int offset = checked((int)(sequence - page.FirstSequence));
++                int priorOffset = checked((int)(sequence - prefix.FirstSequence));
++                int take = (int)Math.Min(retained - sequence + 1, Math.Min(page.Count - offset, prefix.Count - priorOffset));
++                if (!page.Positions.AsSpan(offset, take).SequenceEqual(prefix.Positions.AsSpan(priorOffset, take))
++                    || !page.Digests.AsSpan(offset * 32, take * 32).SequenceEqual(prefix.Digests.AsSpan(priorOffset * 32, take * 32))) return false;
++                sequence += take;
++            }
++            else
++            {
++                int take = (int)Math.Min(page.Count, retained - sequence + 1);
++                if (!page.Digests.AsSpan(0, take * 32).SequenceEqual(existing.CapturedEventDigests!.AsSpan(checked((int)(sequence - 1) * 32), take * 32))) return false;
++                sequence += take;
++            }
++        }
++        return true;
++    }
++
++    /// <summary>Checks one canonical delivery against paged evidence or a legacy inline prefix.</summary>
++    internal async Task<byte[]?> ReadDigestAsync(SharedProjectionScope scope, string sourceStream,
++        SharedProjectionCheckpoint checkpoint, long sequence, CancellationToken token)
++    {
++        ValidateCheckpoint(checkpoint);
++        if (checkpoint.CapturedIdentityReference is { } reference)
++        {
++            ValidateBinding(scope, reference, sourceStream);
++            if (sequence < 1 || sequence > reference.Count) return null;
++            var page = await ReadPageAsync(scope, reference, sequence, token).ConfigureAwait(false);
++            return page.Digests.AsSpan(checked((int)(sequence - page.FirstSequence) * 32), 32).ToArray();
++        }
++        long offset = (sequence - 1) * 32;
++        return checkpoint.CapturedEventDigests is { } inline && sequence > 0 && offset <= inline.LongLength - 32
++            ? inline.AsSpan(checked((int)offset), 32).ToArray() : null;
++    }
++
++    /// <summary>Irreversibly fences installers and reclaims unselected identity evidence after abort.</summary>
++    /// <remarks>Start retirement after abort and before starting another epoch. Retried retirement
++    /// remains safe once its reservation is fenced; selected or inherited proof cannot be retired.</remarks>
++    public async Task RetireAsync(SharedProjectionScope scope, SharedProjectionCapturedIdentityReference reference,
++        CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        ValidateBinding(scope, reference);
++        string key = InventoryKey(reference);
++        for (int attempt = 0; ; attempt++)
++        {
++            if (attempt >= 64) throw new InvalidOperationException("Captured identity retirement exhausted its CAS retries.");
++            await _coordinator.ReconcileScratchBatchAsync(scope, "identity-begin:" + reference.NamespaceHash, cancellationToken).ConfigureAwait(false);
++            await _coordinator.ReconcileScratchBatchAsync(scope, "identity-seal:" + reference.NamespaceHash, cancellationToken).ConfigureAwait(false);
++            await _coordinator.ReconcileCapturedIdentityKeyAsync(scope, key, cancellationToken).ConfigureAwait(false);
++            var entry = await _store.GetAsync<SharedProjectionCapturedIdentityInventory>(scope.StoreName, key, cancellationToken).ConfigureAwait(false);
++            if (entry.Value is null) return;
++            if (!SameReservation(entry.Value.Reference, reference)) throw new InvalidOperationException("Captured identity retirement inventory conflicts.");
++            if (entry.Value.Retired) break;
++            SharedProjectionEpochStatus status = await _coordinator.GetStatusAsync(scope, cancellationToken).ConfigureAwait(false);
++            if (status.IsBuilding || status.ActiveGeneration == reference.Epoch || status.Epoch != reference.Epoch)
++                throw new InvalidOperationException("Selected captured identity evidence cannot be retired.");
++            if (await _store.TrySaveAsync(scope.StoreName, key, entry.Value with { Retired = true }, entry.ETag!, cancellationToken).ConfigureAwait(false)) break;
++        }
++        long count = DivideUp(reference.Count, EntriesPerPage);
++        for (int level = 0; ; level++)
++        {
++            for (long ordinal = 0; ordinal < count; ordinal++)
++            {
++                // The original fixed identity also discovers MarkerPrepared batches with no participants.
++                await _coordinator.ReconcileScratchBatchAsync(scope, NodeBatchId(reference, level, ordinal), cancellationToken).ConfigureAwait(false);
++                var pageEntry = await _store.GetAsync<SharedProjectionCapturedIdentityPage>(scope.StoreName,
++                    PageInventoryKey(reference, level, ordinal), cancellationToken).ConfigureAwait(false);
++                if (pageEntry.Value is not { } page) continue;
++                ValidatePage(page);
++                await _coordinator.ReconcileScratchBatchAsync(scope, NodeBatchId(reference, page.Level, ordinal), cancellationToken).ConfigureAwait(false);
++                await EraseAsync(scope, NodeKey(reference, Digest(page)), cancellationToken).ConfigureAwait(false);
++                if (level == 0)
++                    foreach (string message in page.MessageHashes.Where(static item => item.Length != 0))
++                        await EraseAsync(scope, MessageKey(reference, message), cancellationToken).ConfigureAwait(false);
++                await EraseAsync(scope, PageInventoryKey(reference, level, ordinal), cancellationToken).ConfigureAwait(false);
++            }
++            if (count <= 1) break;
++            count = DivideUp(count, ChildrenPerPage);
++        }
++    }
++
++    /// <summary>Rejects malformed inline or paged prefixes without acknowledging a delivery.</summary>
++    internal static void ValidateCheckpoint(SharedProjectionCheckpoint checkpoint)
++    {
++        if (checkpoint.CapturedIdentityReference is { } reference
++            && (checkpoint.CapturedEventDigests is not null || reference.Count < 1 || reference.Count > checkpoint.OwnerSequenceNumber
++                || reference.LastPosition > checkpoint.Position))
++            throw new InvalidOperationException("The owner checkpoint has malformed captured identity references.");
++        if (checkpoint.CapturedEventDigests is { } inline
++            && (inline.Length == 0 || inline.Length % 32 != 0 || inline.LongLength / 32 > checkpoint.OwnerSequenceNumber))
++            throw new InvalidOperationException("The owner checkpoint has malformed captured event identities.");
++    }
++
++    /// <summary>Checks scope, original source and optional exact operation/epoch ownership.</summary>
++    internal static void ValidateBinding(SharedProjectionScope scope, SharedProjectionCapturedIdentityReference reference,
++        string? sourceStream = null, string? operationId = null, long? epoch = null)
++    {
++        if (reference.Version != 1 || reference.Count < 1 || reference.Epoch < 1
++            || reference.ScopeHash != scope.ComputeHash() || !IsHash(reference.NamespaceHash)
++            || !IsHash(reference.SourceHash) || !IsHash(reference.OperationHash)
++            || sourceStream is not null && reference.SourceHash != Hash(Encoding.UTF8.GetBytes(sourceStream))
++            || operationId is not null && reference.OperationHash != Hash(Encoding.UTF8.GetBytes(operationId))
++            || epoch is not null && reference.Epoch != epoch)
++            throw new InvalidOperationException("Captured identity evidence belongs to another scope, source or rebuild epoch.");
++    }
++
++    private async Task WriteNodeAsync(SharedProjectionScope scope, string operationId,
++        SharedProjectionCapturedIdentityReference reference, SharedProjectionCapturedIdentityPage page,
++        long ordinal, CancellationToken token)
++    {
++        ValidatePage(page);
++        string digest = Digest(page), nodeKey = NodeKey(reference, digest), slot = PageInventoryKey(reference, page.Level, ordinal);
++        for (int attempt = 0; attempt < 64; attempt++)
++        {
++            var inventory = await RequireInventoryAsync(scope, reference, token).ConfigureAwait(false);
++            var prior = await _store.GetAsync<SharedProjectionCapturedIdentityPage>(scope.StoreName, slot, token).ConfigureAwait(false);
++            if (prior.Value is { } known)
++            {
++                if (Digest(known) != digest) throw new InvalidOperationException("Captured identity page conflicts with its retained ordinal.");
++                _ = await ReadNodeAsync(scope, reference, digest, token).ConfigureAwait(false);
++                return;
++            }
++            if (inventory.Value!.Reference.RootDigest.Length != 0)
++                throw new InvalidOperationException("Sealed captured identity evidence cannot be extended.");
++            var operations = new List<ReadModelBatchOperation>
++            {
++                ReadModelBatchOperation.Write(nodeKey, page, ReadModelBatchConcurrency.CreateOnly),
++                ReadModelBatchOperation.Write(slot, page, ReadModelBatchConcurrency.CreateOnly),
++                ReadModelBatchOperation.Write(InventoryKey(reference), inventory.Value, ReadModelBatchConcurrency.Match(inventory.ETag!))
++            };
++            if (page.Level == 0)
++            {
++                var messages = new HashSet<string>(StringComparer.Ordinal);
++                for (int index = 0; index < page.MessageHashes.Length; index++)
++                {
++                    string message = page.MessageHashes[index];
++                    if (message.Length == 0) continue;
++                    if (!messages.Add(message)) throw new InvalidOperationException("Captured owner history repeats a message identity.");
++                    var knownMessage = await _store.GetAsync<SharedProjectionCapturedMessageIdentity>(scope.StoreName, MessageKey(reference, message), token).ConfigureAwait(false);
++                    if (knownMessage.Value is not null && knownMessage.Value.Sequence != page.FirstSequence + index)
++                        throw new InvalidOperationException("Captured owner history repeats a distant message identity.");
++                    operations.Add(ReadModelBatchOperation.Write(MessageKey(reference, message), new SharedProjectionCapturedMessageIdentity(page.FirstSequence + index),
++                        knownMessage.Value is null ? ReadModelBatchConcurrency.CreateOnly : ReadModelBatchConcurrency.Match(knownMessage.ETag!)));
++                }
++            }
++            if (await _coordinator.TryWriteCapturedIdentityRecordsAsync(scope, operationId, reference.Epoch,
++                NodeBatchId(reference, page.Level, ordinal), operations, token).ConfigureAwait(false)) return;
++        }
++        throw new InvalidOperationException("Captured identity page exhausted its CAS retries.");
++    }
++
++    private async Task<ReadModelEntry<SharedProjectionCapturedIdentityInventory>> RequireInventoryAsync(
++        SharedProjectionScope scope, SharedProjectionCapturedIdentityReference reference, CancellationToken token)
++    {
++        var entry = await _store.GetAsync<SharedProjectionCapturedIdentityInventory>(scope.StoreName, InventoryKey(reference), token).ConfigureAwait(false);
++        if (entry.Value is null || entry.Value.Retired || !SameReservation(entry.Value.Reference, reference))
++            throw new InvalidOperationException("Captured identity inventory is missing, retired or conflicts with its reference.");
++        return entry;
++    }
++
++    private async Task<SharedProjectionCapturedIdentityPage> ReadInventoryPageAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference reference, int level, long ordinal, CancellationToken token)
++    {
++        var page = (await _store.GetAsync<SharedProjectionCapturedIdentityPage>(scope.StoreName,
++            PageInventoryKey(reference, level, ordinal), token).ConfigureAwait(false)).Value
++            ?? throw new InvalidOperationException("Captured identity inventory has a missing page.");
++        ValidatePage(page);
++        _ = await ReadNodeAsync(scope, reference, Digest(page), token).ConfigureAwait(false);
++        return page;
++    }
++
++    private async Task<SharedProjectionCapturedIdentityPage> ReadNodeAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference reference, string digest, CancellationToken token)
++    {
++        if (!IsHash(digest)) throw new InvalidOperationException("Captured identity child digest is malformed.");
++        var page = (await _store.GetAsync<SharedProjectionCapturedIdentityPage>(scope.StoreName,
++            NodeKey(reference, digest), token).ConfigureAwait(false)).Value
++            ?? throw new InvalidOperationException("Captured identity evidence has a missing node.");
++        ValidatePage(page);
++        if (Digest(page) != digest) throw new InvalidOperationException("Captured identity node failed content authentication.");
++        return page;
++    }
++
++    private async Task EraseAsync(SharedProjectionScope scope, string key, CancellationToken token)
++    {
++        for (int attempt = 0; attempt < 64; attempt++)
++        {
++            await _coordinator.ReconcileCapturedIdentityKeyAsync(scope, key, token).ConfigureAwait(false);
++            var value = await _store.GetAsync<JsonDocument>(scope.StoreName, key, token).ConfigureAwait(false);
++            if (value.ETag is null) return;
++            if (_store is not IReadModelConditionalEraser eraser)
++                throw new InvalidOperationException("Captured identity retirement requires conditional erasure support.");
++            if (await eraser.TryEraseAsync(scope.StoreName, key, value.ETag, token).ConfigureAwait(false)) return;
++        }
++        throw new InvalidOperationException("Captured identity evidence cleanup exhausted its CAS retries.");
++    }
++
++    private static void ValidatePage(SharedProjectionCapturedIdentityPage page)
++    {
++        if (page.Level is < 0 or > 16 || page.FirstSequence < 1 || page.Count < 1 || page.LastPosition < 1
++            || page.Positions is null || page.Digests is null || page.MessageHashes is null || page.Children is null || page.ChildCounts is null)
++            throw new InvalidOperationException("Captured identity node is malformed.");
++        if (page.Level == 0)
++        {
++            if (page.Count > EntriesPerPage || page.Positions.LongLength != page.Count || page.Digests.LongLength != page.Count * 32
++                || page.MessageHashes.LongLength != page.Count || page.Children.Length != 0 || page.ChildCounts.Length != 0
++                || page.Positions[^1] != page.LastPosition || page.MessageHashes.Any(static item => item is null || item.Length != 0 && !IsHash(item)))
++                throw new InvalidOperationException("Captured identity leaf is malformed.");
++            long prior = 0;
++            foreach (long position in page.Positions)
++            {
++                if (position <= prior) throw new InvalidOperationException("Captured identity positions are not strictly increasing.");
++                prior = position;
++            }
++        }
++        else if (page.Children.Length is < 1 or > ChildrenPerPage || page.ChildCounts.Length != page.Children.Length
++            || page.ChildCounts.Any(static count => count < 1) || page.ChildCounts.Sum() != page.Count
++            || page.Children.Any(static child => !IsHash(child)) || page.Positions.Length != 0 || page.Digests.Length != 0 || page.MessageHashes.Length != 0)
++            throw new InvalidOperationException("Captured identity index is malformed.");
++    }
++
++    private static bool SameReservation(SharedProjectionCapturedIdentityReference left, SharedProjectionCapturedIdentityReference right)
++        => left with { RootDigest = string.Empty, Height = 0, LastPosition = 0 } == right with { RootDigest = string.Empty, Height = 0, LastPosition = 0 };
++    private static long DivideUp(long count, int size) => (count - 1) / size + 1;
++    private static string Hash(byte[] bytes) => Convert.ToHexString(SHA256.HashData(bytes));
++    private static bool IsHash(string? hash) => hash is { Length: 64 } && hash.All(static item => item is >= '0' and <= '9' or >= 'A' and <= 'F');
++    private static string Digest(SharedProjectionCapturedIdentityPage page) => Hash(JsonSerializer.SerializeToUtf8Bytes(page));
++    /// <summary>Returns the independently retained retirement inventory key.</summary>
++    internal static string InventoryKey(SharedProjectionCapturedIdentityReference reference) => "shared-identity-v1:" + reference.NamespaceHash;
++    /// <summary>Returns the immutable content-addressed node key within one owner namespace.</summary>
++    internal static string NodeKey(SharedProjectionCapturedIdentityReference reference, string digest) => InventoryKey(reference) + ":node:" + digest;
++    private static string PageInventoryKey(SharedProjectionCapturedIdentityReference reference, int level, long ordinal) => InventoryKey(reference) + ":inventory:" + level + ":" + ordinal;
++    private static string MessageKey(SharedProjectionCapturedIdentityReference reference, string hash) => InventoryKey(reference) + ":message:" + hash;
++    private static string NodeBatchId(SharedProjectionCapturedIdentityReference reference, int level, long ordinal)
++        => "identity-node:" + Hash(Encoding.UTF8.GetBytes(reference.NamespaceHash + ":" + level + ":" + ordinal));
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedMessageIdentity.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedMessageIdentity.cs
+new file mode 100644
+index 000000000..316398baf
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCapturedMessageIdentity.cs
+@@ -0,0 +1,5 @@
++namespace Hexalith.EventStore.Client.Projections;
++
++/// <summary>Durable operation-scoped message identity index entry.</summary>
++/// <param name="Sequence">The one original owner sequence allowed for this message.</param>
++internal sealed record SharedProjectionCapturedMessageIdentity(long Sequence);
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCheckpoint.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCheckpoint.cs
+index c3a9091a8..b729cdc9f 100644
+--- a/src/Hexalith.EventStore.Client/Projections/SharedProjectionCheckpoint.cs
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionCheckpoint.cs
+@@ -6,4 +6,8 @@ namespace Hexalith.EventStore.Client.Projections;
+ /// <param name="OwnerSequenceNumber">The accepted aggregate event sequence, or zero for a legacy checkpoint.</param>
+ /// <param name="CapturedEventDigests">SHA-256 identities of rebuilt owner events in ordinal order, when captured.</param>
+ public sealed record SharedProjectionCheckpoint(long Position, byte[] Token, long OwnerSequenceNumber = 0,
+-    byte[]? CapturedEventDigests = null);
++    byte[]? CapturedEventDigests = null)
++{
++    /// <summary>Gets the sealed bounded identity evidence for the rebuilt owner prefix.</summary>
++    public SharedProjectionCapturedIdentityReference? CapturedIdentityReference { get; init; }
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.CapturedIdentity.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.CapturedIdentity.cs
+new file mode 100644
+index 000000000..a3ce73cdd
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.CapturedIdentity.cs
+@@ -0,0 +1,194 @@
++using System.Security.Cryptography;
++using System.Text;
++using System.Text.Json;
++
++namespace Hexalith.EventStore.Client.Projections;
++
++public sealed partial class SharedProjectionEpochCoordinator
++{
++    /// <summary>Gets the bounded identity transport over this coordinator's exact store and recovery graph.</summary>
++    public SharedProjectionCapturedIdentityStore CapturedIdentities => new(_store, this);
++
++    /// <summary>Checks the final position of an incrementally validated original owner history.</summary>
++    public Task<bool> MatchesCapturedOwnerLastPositionAsync(SharedProjectionScope scope, string operationId,
++        string sourceStream, long lastPosition, CancellationToken cancellationToken = default)
++        => MatchesCapturedOwnerPositionAsync(scope, operationId, sourceStream, new[] { lastPosition }, cancellationToken);
++
++    /// <summary>Checks every retained owner prefix identity before promotion.</summary>
++    public async Task<bool> CanPromoteCapturedOwnerIdentityAsync(SharedProjectionScope scope, string operationId,
++        string sourceStream, long lastSequenceNumber, SharedProjectionCapturedIdentityReference reference,
++        CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        if (!await CanPromoteCapturedOwnerAsync(scope, operationId, sourceStream, lastSequenceNumber, cancellationToken).ConfigureAwait(false)) return false;
++        SharedProjectionEpochState state = await RequireStateAsync(scope, cancellationToken).ConfigureAwait(false);
++        SharedProjectionCapturedIdentityStore.ValidateBinding(scope, reference, sourceStream, operationId, state.Epoch);
++        if (reference.Count != lastSequenceNumber || reference.LastPosition != await GetCapturedPositionAsync(scope, state, sourceStream, cancellationToken).ConfigureAwait(false)) return false;
++        await CapturedIdentities.ValidateCompleteAsync(scope, reference, cancellationToken).ConfigureAwait(false);
++        SharedProjectionCheckpoint? checkpoint = await ReadOwnerCheckpointAsync(scope, state, sourceStream, cancellationToken).ConfigureAwait(false);
++        return checkpoint is null || await CapturedIdentities.MatchesPrefixAsync(scope, reference, checkpoint, cancellationToken).ConfigureAwait(false)
++            && await MatchesCheckpointPositionAsync(scope, reference, checkpoint, cancellationToken).ConfigureAwait(false);
++    }
++
++    /// <summary>Proves pending original deliveries against bounded captured evidence.</summary>
++    public async Task<bool> CanPromoteCapturedJournalOwnerIdentityAsync(SharedProjectionScope scope, string operationId,
++        string sourceStream, long lastSequenceNumber, SharedProjectionCapturedIdentityReference reference,
++        CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        ArgumentNullException.ThrowIfNull(reference);
++        SharedProjectionEpochState state = await RequireStateAsync(scope, cancellationToken).ConfigureAwait(false);
++        ValidateBoundary(state, scope);
++        if (state.Phase != SharedProjectionEpochPhase.Building || state.OperationId != operationId) return false;
++        SharedProjectionCapturedIdentityStore.ValidateBinding(scope, reference, sourceStream, operationId, state.Epoch);
++        if (reference.Count != lastSequenceNumber) return false;
++        foreach (var pending in state.Journal.Where(item => item.SourceStream == sourceStream))
++        {
++            if (pending.Parked || pending.Failure is not null || !pending.PayloadReady || pending.OwnerSequenceNumber < 1) return false;
++            var delivery = await RestoreDeliveryAsync(scope, pending, cancellationToken).ConfigureAwait(false);
++            byte[]? digest = await CapturedIdentities.ReadDigestAsync(scope, sourceStream,
++                new SharedProjectionCheckpoint(reference.LastPosition, [], reference.Count) { CapturedIdentityReference = reference },
++                pending.OwnerSequenceNumber, cancellationToken).ConfigureAwait(false);
++            if (digest is null || !digest.AsSpan().SequenceEqual(SharedProjectionCapturedEventIdentity.Compute(sourceStream,
++                pending.EnvelopePosition, pending.OwnerSequenceNumber, delivery.CanonicalPayload))) return false;
++        }
++        return true;
++    }
++
++    /// <summary>Seeds sealed paged evidence using recoverable checkpoint and epoch CAS fences.</summary>
++    public Task SeedCapturedOwnerIdentityAsync(SharedProjectionScope scope, string operationId,
++        string sourceStream, long lastSequenceNumber, SharedProjectionCapturedIdentityReference reference,
++        CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(reference);
++        return SeedCapturedOwnerSequenceCoreAsync(scope, operationId, sourceStream, lastSequenceNumber, null, reference, cancellationToken);
++    }
++
++    private async Task SeedCapturedOwnerSequenceCoreAsync(SharedProjectionScope scope, string operationId,
++        string sourceStream, long lastSequenceNumber, byte[]? inline,
++        SharedProjectionCapturedIdentityReference? reference, CancellationToken token)
++    {
++        ArgumentNullException.ThrowIfNull(scope);
++        scope.Validate();
++        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);
++        ArgumentException.ThrowIfNullOrWhiteSpace(sourceStream);
++        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(lastSequenceNumber);
++        if (inline is not null && inline.LongLength != checked(lastSequenceNumber * 32))
++            throw new ArgumentException("Captured event identities must cover the complete owner history.", nameof(inline));
++        string key = scope.CheckpointKey(sourceStream);
++        for (int attempt = 0; attempt < MaxRetries; attempt++)
++        {
++            // Recovery can change both original participants; always reread after it settles.
++            if (await ReconcilePendingScratchAsync(scope, key, token).ConfigureAwait(false)
++                || await ReconcilePendingScratchAsync(scope, scope.StateKey, token).ConfigureAwait(false)) continue;
++            var epoch = await ReadStateAsync(scope, token).ConfigureAwait(false);
++            SharedProjectionEpochState state = epoch.Value ?? throw new InvalidOperationException("The shared projection has no selected rebuild.");
++            ValidateState(state); ValidateBoundary(state, scope);
++            if (state.ActiveGeneration != state.Epoch || state.OperationId != operationId
++                || state.Phase is not (SharedProjectionEpochPhase.CatchingUp or SharedProjectionEpochPhase.Open))
++                throw new InvalidOperationException("The requested rebuild has not been promoted.");
++            long captured = await GetCapturedPositionAsync(scope, state, sourceStream, token).ConfigureAwait(false)
++                ?? throw new InvalidOperationException("The owner is absent from the rebuild capture.");
++            if (reference is not null)
++            {
++                SharedProjectionCapturedIdentityStore.ValidateBinding(scope, reference, sourceStream, operationId, state.Epoch);
++                if (reference.Count != lastSequenceNumber || reference.LastPosition != captured)
++                    throw new InvalidOperationException("Captured identity reference does not cover the complete captured owner.");
++                await CapturedIdentities.ValidateCompleteAsync(scope, reference, token).ConfigureAwait(false);
++            }
++            var entry = await _store.GetAsync<SharedProjectionCheckpoint>(scope.StoreName, key, token).ConfigureAwait(false);
++            var existing = await ReadOwnerCheckpointAsync(scope, state, sourceStream, token).ConfigureAwait(false);
++            if (existing is not null)
++            {
++                SharedProjectionCapturedIdentityStore.ValidateCheckpoint(existing);
++                if (existing.Position > captured || existing.OwnerSequenceNumber > lastSequenceNumber
++                    || existing.OwnerSequenceNumber == lastSequenceNumber && existing.Position != captured)
++                    throw new InvalidOperationException("The owner checkpoint exceeds or conflicts with its rebuild capture.");
++                if (reference is not null)
++                {
++                    if (!await CapturedIdentities.MatchesPrefixAsync(scope, reference, existing, token).ConfigureAwait(false)
++                        || !await MatchesCheckpointPositionAsync(scope, reference, existing, token).ConfigureAwait(false))
++                        throw new InvalidOperationException("Captured identity evidence conflicts with the retained owner prefix.");
++                }
++                else if (existing.CapturedIdentityReference is { } retainedReference)
++                {
++                    await CapturedIdentities.ValidateCompleteAsync(scope, retainedReference, token).ConfigureAwait(false);
++                    if (lastSequenceNumber != retainedReference.Count || lastSequenceNumber != existing.OwnerSequenceNumber)
++                        throw new InvalidOperationException("Paged owner evidence can only be extended through bounded identity seeding.");
++                    for (long sequence = 1; inline is not null && sequence <= retainedReference.Count; sequence++)
++                    {
++                        byte[]? digest = await CapturedIdentities.ReadDigestAsync(scope, sourceStream, existing, sequence, token).ConfigureAwait(false);
++                        if (digest is null || !digest.AsSpan().SequenceEqual(inline.AsSpan(checked((int)(sequence - 1) * 32), 32)))
++                            throw new InvalidOperationException("Captured owner event identities conflict with the checkpoint.");
++                    }
++                    // A legacy retry may acknowledge the already-validated prefix, but must
++                    // retain its paged proof rather than replace it with an inline vector.
++                    return;
++                }
++                else if (existing.CapturedEventDigests is { } known && (inline is null
++                    ? existing.OwnerSequenceNumber < lastSequenceNumber
++                    : known.Length > inline.Length || !known.AsSpan().SequenceEqual(inline.AsSpan(0, known.Length))))
++                    throw new InvalidOperationException("Captured owner event identities conflict with the checkpoint.");
++                if (existing.OwnerSequenceNumber == lastSequenceNumber
++                    && (reference is not null ? existing.CapturedIdentityReference == reference
++                        : inline is null || existing.CapturedEventDigests?.Length == inline.Length)) return;
++            }
++            if (reference is not null && !state.OwnerSequenceHandoffPending && existing?.OwnerSequenceNumber != lastSequenceNumber)
++                throw new InvalidOperationException("The selected generation is not holding its checkpoint handoff fence.");
++            var checkpoint = new SharedProjectionCheckpoint(captured, JsonSerializer.SerializeToUtf8Bytes(captured),
++                lastSequenceNumber, inline?.ToArray()) { CapturedIdentityReference = reference };
++            string identity = "identity-seed:" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
++                scope.ComputeHash() + ":" + operationId + ":" + sourceStream + ":" + epoch.ETag + ":" + entry.ETag + ":"
++                + (reference?.RootDigest ?? (inline is null ? "legacy" : Convert.ToHexString(SHA256.HashData(inline)))))));
++            if (await TryWriteCapturedIdentityRecordsAsync(scope, operationId, state.Epoch, identity,
++                [ReadModelBatchOperation.Write(key, checkpoint, entry.ETag is null ? ReadModelBatchConcurrency.CreateOnly : ReadModelBatchConcurrency.Match(entry.ETag))],
++                token, promoted: true, expectedEpochETag: epoch.ETag).ConfigureAwait(false)) return;
++        }
++        throw RetryExhausted();
++    }
++
++    private async Task<bool> MatchesCheckpointPositionAsync(SharedProjectionScope scope,
++        SharedProjectionCapturedIdentityReference reference, SharedProjectionCheckpoint checkpoint, CancellationToken token)
++    {
++        if (checkpoint.OwnerSequenceNumber == 0) return true;
++        if (checkpoint.OwnerSequenceNumber > reference.Count) return false;
++        var page = await CapturedIdentities.ReadPageAsync(scope, reference, checkpoint.OwnerSequenceNumber, token).ConfigureAwait(false);
++        return page.Positions[checked((int)(checkpoint.OwnerSequenceNumber - page.FirstSequence))] == checkpoint.Position;
++    }
++
++    /// <summary>Reconciles original identity participants before reloading their exact ETags.</summary>
++    internal Task<bool> ReconcileCapturedIdentityKeyAsync(SharedProjectionScope scope, string key, CancellationToken token)
++        => ReconcilePendingScratchAsync(scope, key, token);
++
++    /// <summary>Installs bounded identity records against the current epoch and supplied participant fences.</summary>
++    internal async Task<bool> TryWriteCapturedIdentityRecordsAsync(SharedProjectionScope scope,
++        string operationId, long epoch, string batchId, IReadOnlyList<ReadModelBatchOperation> operations,
++        CancellationToken token, bool promoted = false, string? expectedEpochETag = null)
++    {
++        if (await ReconcileScratchBatchAsync(scope, batchId, token).ConfigureAwait(false)) return false;
++        foreach (var operation in operations)
++            if (await ReconcilePendingScratchAsync(scope, operation.Key, token).ConfigureAwait(false)) return false;
++        if (await ReconcilePendingScratchAsync(scope, scope.StateKey, token).ConfigureAwait(false)) return false;
++        string retainedId = await ScratchBatchIdentityAsync(scope, batchId, token).ConfigureAwait(false);
++        var entry = await ReadStateAsync(scope, token).ConfigureAwait(false);
++        SharedProjectionEpochState state = entry.Value ?? throw new InvalidOperationException("The captured identity epoch is missing.");
++        ValidateState(state); ValidateBoundary(state, scope);
++        if (expectedEpochETag is not null && entry.ETag != expectedEpochETag) return false;
++        if (state.Epoch != epoch || state.OperationId != operationId || entry.ETag is null
++            || (promoted ? state.ActiveGeneration != state.Epoch
++                || state.Phase is not (SharedProjectionEpochPhase.Open or SharedProjectionEpochPhase.CatchingUp)
++                : state.Phase != SharedProjectionEpochPhase.Building))
++            throw new InvalidOperationException("The captured identity installer lost its epoch fence.");
++        var batch = new ReadModelBatch(new ReadModelBatchScope(scope.StoreName, scope.TenantId, scope.Domain,
++            scope.Family, scope.Family, retainedId),
++            // Install the epoch participant first: a plan first prepared after abort/retirement
++            // must fail before it can recreate any identity node or message-index evidence.
++            [ReadModelBatchOperation.Write(scope.StateKey, state, ReadModelBatchConcurrency.Match(entry.ETag)), .. operations])
++            { RetainManifestForRecovery = true };
++        var result = await _batches.ExecuteAsync(batch, token).ConfigureAwait(false);
++        if (result.IsSuccess) return true;
++        if (result.Status == ReadModelBatchStatus.Conflict) return false;
++        throw new SharedProjectionWriteUnavailableException(new InvalidOperationException("Captured identity handoff requires durable batch reconciliation."));
++    }
++}
+diff --git a/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.cs b/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.cs
+index bc3b46a60..9542230e9 100644
+--- a/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.cs
++++ b/src/Hexalith.EventStore.Client/Projections/SharedProjectionEpochCoordinator.cs
+@@ -401,98 +401,8 @@ public sealed partial class SharedProjectionEpochCoordinator
+         CancellationToken cancellationToken = default,
+         byte[]? capturedEventDigests = null)
+     {
+-        ArgumentNullException.ThrowIfNull(scope);
+-        scope.Validate();
+-        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);
+-        ArgumentException.ThrowIfNullOrWhiteSpace(sourceStream);
+-        if (lastSequenceNumber <= 0)
+-        {
+-            throw new ArgumentOutOfRangeException(nameof(lastSequenceNumber));
+-        }
+-        if (capturedEventDigests is not null
+-            && (lastSequenceNumber > 10_000 || capturedEventDigests.Length != checked(lastSequenceNumber * 32)))
+-        {
+-            throw new ArgumentException("Captured event identities must cover the complete owner history.", nameof(capturedEventDigests));
+-        }
+-
+-        for (int attempt = 0; attempt < MaxRetries; attempt++)
+-        {
+-            SharedProjectionEpochState state = (await ReadStateAsync(scope, cancellationToken).ConfigureAwait(false)).Value
+-                ?? throw new InvalidOperationException("The shared projection has no selected rebuild.");
+-            ValidateState(state);
+-            ValidateBoundary(state, scope);
+-            if (state.ActiveGeneration != state.Epoch
+-                || !string.Equals(state.OperationId, operationId, StringComparison.Ordinal))
+-            {
+-                throw new InvalidOperationException("The requested rebuild has not been promoted.");
+-            }
+-
+-            long capturedPosition = await GetCapturedPositionAsync(scope, state, sourceStream, cancellationToken)
+-                .ConfigureAwait(false)
+-                ?? throw new InvalidOperationException("The owner is absent from the rebuild capture.");
+-            string key = scope.CheckpointKey(sourceStream);
+-            ReadModelEntry<SharedProjectionCheckpoint> entry = await _store
+-                .GetAsync<SharedProjectionCheckpoint>(scope.StoreName, key, cancellationToken).ConfigureAwait(false);
+-            if (await ReadOwnerCheckpointAsync(scope, state, sourceStream, cancellationToken)
+-                .ConfigureAwait(false) is { } existing)
+-            {
+-                if (existing.Position > capturedPosition)
+-                {
+-                    throw new InvalidOperationException("The owner checkpoint is ahead of its rebuild capture without sequence continuity.");
+-                }
+-
+-                if (existing.OwnerSequenceNumber > lastSequenceNumber)
+-                {
+-                    throw new InvalidOperationException("The owner checkpoint sequence exceeds its rebuild history.");
+-                }
+-
+-                if (existing.CapturedEventDigests is { } knownIdentities)
+-                {
+-                    if (knownIdentities.Length == 0 || knownIdentities.Length % 32 != 0
+-                        || knownIdentities.Length / 32 > existing.OwnerSequenceNumber)
+-                    {
+-                        throw new InvalidOperationException("The owner checkpoint has malformed captured event identities.");
+-                    }
+-
+-                    if (capturedEventDigests is null && existing.OwnerSequenceNumber < lastSequenceNumber
+-                        || capturedEventDigests is not null && (knownIdentities.Length > capturedEventDigests.Length
+-                            || !knownIdentities.AsSpan().SequenceEqual(capturedEventDigests.AsSpan(0, knownIdentities.Length))))
+-                    {
+-                        throw new InvalidOperationException("The captured owner event identities conflict with the checkpoint.");
+-                    }
+-                }
+-
+-                if (existing.OwnerSequenceNumber == lastSequenceNumber)
+-                {
+-                    if (existing.Position != capturedPosition)
+-                    {
+-                        throw new InvalidOperationException("The owner checkpoint does not match its rebuild capture.");
+-                    }
+-
+-                    if (capturedEventDigests is null
+-                        || existing.CapturedEventDigests?.Length == capturedEventDigests.Length)
+-                    {
+-                        return;
+-                    }
+-
+-                    // Ordinary delivery advances the checkpoint while retaining the last rebuilt
+-                    // identity prefix. Extend a verified prefix through the same conditional save.
+-                }
+-            }
+-
+-            var checkpoint = new SharedProjectionCheckpoint(
+-                capturedPosition,
+-                JsonSerializer.SerializeToUtf8Bytes(capturedPosition),
+-                lastSequenceNumber,
+-                capturedEventDigests?.ToArray());
+-            if (await _store.TrySaveAsync(scope.StoreName, key, checkpoint, entry.ETag ?? string.Empty,
+-                cancellationToken).ConfigureAwait(false))
+-            {
+-                return;
+-            }
+-        }
+-
+-        throw RetryExhausted();
++        await SeedCapturedOwnerSequenceCoreAsync(scope, operationId, sourceStream, lastSequenceNumber,
++            capturedEventDigests, null, cancellationToken).ConfigureAwait(false);
+     }
+ 
+     /// <summary>Lists owners with deliveries that must be proved by the sealed rebuild history.</summary>
+@@ -544,7 +454,7 @@ public sealed partial class SharedProjectionEpochCoordinator
+             string.Equals(item.SourceStream, sourceStream, StringComparison.Ordinal)))
+         {
+             if (pending.Parked || pending.Failure is not null || !pending.PayloadReady
+-                || lastSequenceNumber is < 1 or > 10_000
++                || lastSequenceNumber < 1
+                 || pending.OwnerSequenceNumber <= 0 || pending.OwnerSequenceNumber > lastSequenceNumber
+                 || capturedEventDigests is null || capturedEventDigests.Length != lastSequenceNumber * 32)
+             {
+@@ -842,7 +752,8 @@ public sealed partial class SharedProjectionEpochCoordinator
+                     {
+                         SharedProjectionCheckpoint? capturedOwner = await ReadOwnerCheckpointAsync(
+                             scope, state, delivery.SourceStream, cancellationToken).ConfigureAwait(false);
+-                        byte[]? identities = capturedOwner?.CapturedEventDigests;
++                        byte[]? identities = capturedOwner is null ? null : await CapturedIdentities.ReadDigestAsync(
++                            scope, delivery.SourceStream, capturedOwner, delivery.OwnerSequenceNumber, cancellationToken).ConfigureAwait(false);
+                         if (identities is null)
+                         {
+                             // The older nonpartitioned rebuild contract did not seed event identities.
+@@ -864,11 +775,11 @@ public sealed partial class SharedProjectionEpochCoordinator
+                                 digest, cancellationToken).ConfigureAwait(false)) return SharedProjectionJournalResult.IdentityConflict;
+                             continue;
+                         }
+-                        if (delivery.OwnerSequenceNumber > identities.Length / 32)
++                        if (capturedOwner is null || delivery.OwnerSequenceNumber > capturedOwner.OwnerSequenceNumber)
+                         {
+                             return SharedProjectionJournalResult.RebuildRequired;
+                         }
+-                        int offset = checked((int)(delivery.OwnerSequenceNumber - 1) * 32);
++                        int offset = 0;
+                         if (!SharedProjectionCapturedEventIdentity.Compute(
+                                 delivery.SourceStream, delivery.EnvelopePosition,
+                                 delivery.OwnerSequenceNumber, delivery.CanonicalPayload).AsSpan()
+@@ -1914,8 +1825,10 @@ public sealed partial class SharedProjectionEpochCoordinator
+                     scope, state, head.SourceStream, cancellationToken).ConfigureAwait(false);
+                 SharedProjectionDelivery covered = await RestoreDeliveryAsync(scope, head, cancellationToken)
+                     .ConfigureAwait(false);
+-                if (capturedOwner?.CapturedEventDigests is not { } identities
+-                    || !CapturedIdentityMatches(head, covered.CanonicalPayload, identities))
++                byte[]? capturedDigest = capturedOwner is null ? null : await CapturedIdentities.ReadDigestAsync(
++                    scope, head.SourceStream, capturedOwner, head.OwnerSequenceNumber, cancellationToken).ConfigureAwait(false);
++                if (capturedDigest is null || !capturedDigest.AsSpan().SequenceEqual(SharedProjectionCapturedEventIdentity.Compute(
++                    head.SourceStream, head.EnvelopePosition, head.OwnerSequenceNumber, covered.CanonicalPayload)))
+                 {
+                     throw new InvalidOperationException("The journaled delivery conflicts with captured owner history.");
+                 }
+@@ -2553,7 +2466,7 @@ public sealed partial class SharedProjectionEpochCoordinator
+         }
+ 
+         return new SharedProjectionCheckpoint(checkpoint.Position, checkpoint.Token.ToArray(), checkpoint.OwnerSequenceNumber,
+-            checkpoint.CapturedEventDigests?.ToArray());
++            checkpoint.CapturedEventDigests?.ToArray()) { CapturedIdentityReference = checkpoint.CapturedIdentityReference };
+     }
+ 
+     private async Task<SharedProjectionCheckpoint?> ReadOwnerCheckpointAsync(
+@@ -2566,11 +2479,18 @@ public sealed partial class SharedProjectionEpochCoordinator
+             .GetAsync<SharedProjectionCheckpoint>(scope.StoreName, scope.CheckpointKey(sourceStream), cancellationToken)
+             .ConfigureAwait(false);
+         state.ConsumerCheckpoints.TryGetValue(sourceStream, out SharedProjectionCheckpoint? legacy);
+-        return indexed.Value is { } current
++        SharedProjectionCheckpoint? checkpoint = indexed.Value is { } current
+             && (legacy is null || current.Position > legacy.Position
+                 || current.Position == legacy.Position && current.OwnerSequenceNumber >= legacy.OwnerSequenceNumber)
+             ? current
+             : legacy;
++        if (checkpoint is not null)
++        {
++            SharedProjectionCapturedIdentityStore.ValidateCheckpoint(checkpoint);
++            if (checkpoint.CapturedIdentityReference is { } reference)
++                SharedProjectionCapturedIdentityStore.ValidateBinding(scope, reference, sourceStream);
++        }
++        return checkpoint;
+     }
+ 
+     /// <summary>Reads durable stage, promotion, and pending-delivery evidence.</summary>
+@@ -3210,7 +3130,10 @@ public sealed partial class SharedProjectionEpochCoordinator
+         {
+             ReadModelEntry<SharedProjectionCheckpoint> entry = await _store
+                 .GetAsync<SharedProjectionCheckpoint>(scope.StoreName, key, cancellationToken).ConfigureAwait(false);
+-            if (entry.Value is { } existing)
++            SharedProjectionEpochState state = await RequireStateAsync(scope, cancellationToken).ConfigureAwait(false);
++            SharedProjectionCheckpoint? retained = await ReadOwnerCheckpointAsync(
++                scope, state, delivery.SourceStream, cancellationToken).ConfigureAwait(false);
++            if (retained is { } existing)
+             {
+                 if (existing.Position > delivery.EnvelopePosition)
+                 {
+@@ -3238,7 +3161,7 @@ public sealed partial class SharedProjectionEpochCoordinator
+                 delivery.EnvelopePosition,
+                 delivery.Checkpoint.ToArray(),
+                 delivery.OwnerSequenceNumber,
+-                entry.Value?.CapturedEventDigests?.ToArray());
++                retained?.CapturedEventDigests?.ToArray()) { CapturedIdentityReference = retained?.CapturedIdentityReference };
+             if (await _store.TrySaveAsync(scope.StoreName, key, checkpoint, entry.ETag ?? string.Empty, cancellationToken)
+                 .ConfigureAwait(false))
+             {
+diff --git a/src/Hexalith.EventStore.Client/Streams/AuthoritativeEventStreamReader.cs b/src/Hexalith.EventStore.Client/Streams/AuthoritativeEventStreamReader.cs
+index 8fe470c62..b07b777ad 100644
+--- a/src/Hexalith.EventStore.Client/Streams/AuthoritativeEventStreamReader.cs
++++ b/src/Hexalith.EventStore.Client/Streams/AuthoritativeEventStreamReader.cs
+@@ -55,7 +55,7 @@ public sealed class AuthoritativeEventStreamReader(IEventStoreGatewayClient gate
+                 {
+                     result = await ReadCoreAsync(identity, deadline).ConfigureAwait(false);
+                 }
+-                catch (Exception exception) when (exception is HttpRequestException or InvalidOperationException or ArgumentException or System.Text.Json.JsonException)
++                catch (Exception exception) when (exception is EventStoreGatewayException or HttpRequestException or InvalidOperationException or ArgumentException or System.Text.Json.JsonException)
+                 {
+                     result = new(null, "source-unavailable");
+                 }
+diff --git a/src/Hexalith.EventStore.Client/Streams/GatewayNativeSourceMetadataReader.cs b/src/Hexalith.EventStore.Client/Streams/GatewayNativeSourceMetadataReader.cs
+new file mode 100644
+index 000000000..cda5a1098
+--- /dev/null
++++ b/src/Hexalith.EventStore.Client/Streams/GatewayNativeSourceMetadataReader.cs
+@@ -0,0 +1,46 @@
++using Hexalith.EventStore.Client.Gateway;
++using Hexalith.EventStore.Contracts.Identity;
++using Hexalith.EventStore.Contracts.Streams;
++
++namespace Hexalith.EventStore.Client.Streams;
++
++/// <summary>Reads content-free native source evidence through the existing authenticated workload stream transport.</summary>
++/// <remarks>The gateway must use its enrolled workload transport. Resource authorization and projection provenance
++/// remain separate requirements; cold actor activation can still run existing recovery.</remarks>
++/// <param name="gateway">The existing EventStore gateway client.</param>
++/// <param name="clock">The observation clock and monotonic interactive deadline source.</param>
++public sealed class GatewayNativeSourceMetadataReader(IEventStoreGatewayClient gateway, TimeProvider clock)
++    : INativeSourceMetadataReader
++{
++    /// <inheritdoc/>
++    public async Task<NativeSourceObservation?> ReadAsync(AggregateIdentity identity, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(identity);
++        cancellationToken.ThrowIfCancellationRequested();
++        using var deadline = new AuthoritativeStreamReadDeadline(TimeSpan.FromSeconds(2), clock,
++            cancellationToken, clock.GetTimestamp());
++        try
++        {
++            var request = new StreamReadRequest(identity.TenantId, identity.Domain, identity.AggregateId,
++                FromSequence: 0, ToSequence: 0, PageSize: 1) { RequireNativeProof = true };
++            return await deadline.ReadWithAdmissionAsync(async token =>
++            {
++                StreamReadPage page = await gateway.ReadStreamAsync(request, token).ConfigureAwait(false);
++                if (page is not { Events.Count: 0, Metadata: { FromSequence: 0, ToSequence: 0,
++                    LastSequenceReturned: null, EventCount: 0, IsTruncated: false, NextContinuationToken: null,
++                    NativeProof: { Erased: false } proof } metadata }
++                || page.Tenant != identity.TenantId || page.Domain != identity.Domain || page.AggregateId != identity.AggregateId
++                || !NativeSourceProofCodec.IsValid(proof, identity, metadata.LatestSequence, proof.RetainedFloor)
++                || proof.HeadMessageId is { } message && (message.Length > 256 || message != message.Trim() || message.Any(char.IsControl)))
++                    return null;
++
++                return new NativeSourceObservation(proof, clock.GetUtcNow());
++            }).ConfigureAwait(false);
++        }
++        catch (Exception)
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            return null;
++        }
++    }
++}
+diff --git a/src/Hexalith.EventStore.Contracts/Projections/ProjectionRequest.cs b/src/Hexalith.EventStore.Contracts/Projections/ProjectionRequest.cs
+index f1a3b6a72..dcfc63574 100644
+--- a/src/Hexalith.EventStore.Contracts/Projections/ProjectionRequest.cs
++++ b/src/Hexalith.EventStore.Contracts/Projections/ProjectionRequest.cs
+@@ -2,6 +2,7 @@
+ using System.Text.Json.Serialization;
+ 
+ using Hexalith.EventStore.Contracts.Events;
++using Hexalith.EventStore.Contracts.Streams;
+ 
+ namespace Hexalith.EventStore.Contracts.Projections;
+ 
+@@ -18,6 +19,61 @@ public record ProjectionRequest(
+     string Domain,
+     string AggregateId,
+     ProjectionEventDto[] Events) {
++    private NativeSourceProof? _verifiedNativeSourceProof;
++    private byte[]? _verifiedNativeRequestDigest;
++
++    /// <summary>Gets the producer's original native prefix hint; transport binding alone supplies no authority.</summary>
++    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
++    public NativeSourceProof? NativeSourceProof { get; init; }
++
++    /// <summary>Gets native evidence only while this exact request still matches SDK verification before evolution.</summary>
++    [JsonIgnore]
++    public NativeSourceProof? VerifiedNativeSourceProof => _verifiedNativeRequestDigest is not null
++        && System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(_verifiedNativeRequestDigest, NativeRequestDigest())
++            ? _verifiedNativeSourceProof : null;
++
++    /// <summary>Binds verified evidence to this exact immutable input snapshot.</summary>
++    internal void AdmitNativeSourceProof(NativeSourceProof proof)
++    {
++        _verifiedNativeSourceProof = proof;
++        _verifiedNativeRequestDigest = NativeRequestDigest();
++    }
++
++    /// <summary>Removes all inherited private admission before a new verification attempt.</summary>
++    internal void ClearNativeSourceAdmission()
++    {
++        _verifiedNativeSourceProof = null;
++        _verifiedNativeRequestDigest = null;
++    }
++
++    private byte[] NativeRequestDigest()
++    {
++        // Hash bounded metadata and raw payload segments separately. Encoding the whole request
++        // as JSON would allocate another complete base64 prefix on every mutation check.
++        using var hash = System.Security.Cryptography.IncrementalHash.CreateHash(System.Security.Cryptography.HashAlgorithmName.SHA256);
++        void Append(byte[]? bytes)
++        {
++            Span<byte> length = stackalloc byte[4];
++            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(length, bytes?.Length ?? -1);
++            hash.AppendData(length);
++            if (bytes is not null) hash.AppendData(bytes);
++        }
++        Append(System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(this with
++        { Events = [], EventEvolutionProof = null, VerifiedEffectiveEvents = null }, System.Text.Json.JsonSerializerOptions.Web));
++        Append(EventEvolutionProof);
++        // Evolution hints cannot acquire native admission; mutation still changes the digest.
++        if (VerifiedEffectiveEvents is not null) Append([1]);
++        foreach (ProjectionEventDto item in Events)
++        {
++            Append(System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(item with
++            { Payload = [], EffectivePayload = null, StoredDigest = null }, System.Text.Json.JsonSerializerOptions.Web));
++            Append(item.Payload);
++            Append(item.EffectivePayload);
++            Append(item.StoredDigest);
++        }
++        return hash.GetHashAndReset();
++    }
++
+     /// <summary>Gets untrusted effective-view transport hints that require verification before handler dispatch.</summary>
+     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+     public VerifiedEffectiveEventView[]? VerifiedEffectiveEvents { get; init; }
+diff --git a/src/Hexalith.EventStore.Contracts/Streams/NativeSourceProof.cs b/src/Hexalith.EventStore.Contracts/Streams/NativeSourceProof.cs
+index 3ec0c2a5a..4a5442ec2 100644
+--- a/src/Hexalith.EventStore.Contracts/Streams/NativeSourceProof.cs
++++ b/src/Hexalith.EventStore.Contracts/Streams/NativeSourceProof.cs
+@@ -13,4 +13,4 @@ namespace Hexalith.EventStore.Contracts.Streams;
+ /// <param name="Erased">Whether the native source is erased.</param>
+ public sealed record NativeSourceProof(int CodecVersion, string TenantId, string Domain, string AggregateId,
+     string SourceIncarnation, long HeadSequence, string? HeadMessageId, string CumulativeDigest,
+-    long RetainedFloor, bool Erased);
++    long RetainedFloor, [property: System.Text.Json.Serialization.JsonRequired] bool Erased);

@@ -1,0 +1,13 @@
+test_cli_inputs_reject_path_escape_and_option_shaped_image (test_oci_registry_validator.OciRegistryValidatorTests.test_cli_inputs_reject_path_escape_and_option_shaped_image) ... ok
+test_cross_origin_redirect_does_not_forward_registry_authorization (test_oci_registry_validator.OciRegistryValidatorTests.test_cross_origin_redirect_does_not_forward_registry_authorization) ... ok
+test_exact_provenance_labels_are_required_in_both_raw_child_configs (test_oci_registry_validator.OciRegistryValidatorTests.test_exact_provenance_labels_are_required_in_both_raw_child_configs) ... ok
+test_fixture_matrix (test_oci_registry_validator.OciRegistryValidatorTests.test_fixture_matrix) ... ok
+test_historical_evidence_is_exact_and_non_authorizing (test_oci_registry_validator.OciRegistryValidatorTests.test_historical_evidence_is_exact_and_non_authorizing) ... ok
+test_historical_single_manifest_is_rejected (test_oci_registry_validator.OciRegistryValidatorTests.test_historical_single_manifest_is_rejected) ... ok
+test_pass_evidence_preserves_exact_index_bytes (test_oci_registry_validator.OciRegistryValidatorTests.test_pass_evidence_preserves_exact_index_bytes) ... ok
+test_registry_http_adapter_preserves_bytes_headers_and_immutable_references (test_oci_registry_validator.OciRegistryValidatorTests.test_registry_http_adapter_preserves_bytes_headers_and_immutable_references) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.050s
+
+OK

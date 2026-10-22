@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "tests/Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.csproj",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-integration-budget-restore.stdout.txt",
+      "stderr": "eventstore-integration-budget-restore.stderr.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Contracts.Tests/Hexalith.EventStore.Contracts.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-integration-budget-build.stdout.txt",
+      "stderr": "eventstore-integration-budget-build.stderr.txt"
+    }
+  ]
+}

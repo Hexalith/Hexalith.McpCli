@@ -1,0 +1,50 @@
+--- a/references/Hexalith.Builds/Props/Directory.Packages.props
++++ b/references/Hexalith.Builds/Props/Directory.Packages.props
+@@ -6,12 +6,12 @@
+     <HexalithCommonsVersion Condition="'$(HexalithCommonsVersion)' == ''">2.30.3</HexalithCommonsVersion>
+     <HexalithConversationsVersion Condition="'$(HexalithConversationsVersion)' == ''">1.2.0</HexalithConversationsVersion>
+     <HexalithPolymorphicSerializationsVersion Condition="'$(HexalithPolymorphicSerializationsVersion)' == ''">1.19.5</HexalithPolymorphicSerializationsVersion>
+-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">3.126.0</HexalithEventStoreVersion>
++    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">3.126.1</HexalithEventStoreVersion>
+     <HexalithFrontComposerVersion Condition="'$(HexalithFrontComposerVersion)' == ''">4.7.0</HexalithFrontComposerVersion>
+     <HexalithFoldersVersion Condition="'$(HexalithFoldersVersion)' == ''">1.3.0</HexalithFoldersVersion>
+     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">1.0.0</HexalithMcpCliVersion>
+     <HexalithMemoriesVersion Condition="'$(HexalithMemoriesVersion)' == ''">2.27.1</HexalithMemoriesVersion>
+-    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">5.9.0</HexalithTenantsVersion>
++    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">5.10.0</HexalithTenantsVersion>
+     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.1</HexalithPartiesVersion>
+     <HexalithProjectsVersion Condition="'$(HexalithProjectsVersion)' == ''">1.0.0</HexalithProjectsVersion>
+     <!-- Folders.Aspire is a stable public package; all other consumers retain the preview integration. -->
+--- a/src/Hexalith.McpCli/Hexalith.McpCli.csproj
++++ b/src/Hexalith.McpCli/Hexalith.McpCli.csproj
+@@ -22,6 +22,7 @@
+     <PackageReference Include="Microsoft.Extensions.Hosting" />
+     <PackageReference Include="Microsoft.Extensions.Http" />
+     <PackageReference Include="Hexalith.Parties.Contracts" HexalithContracts="true" />
++    <PackageReference Include="Hexalith.Tenants.Contracts" HexalithContracts="true" />
+     <PackageReference Include="System.CommandLine" />
+   </ItemGroup>
+   <!-- Enroll each production *.Contracts package with a direct, versionless
+--- a/tools/dependency-policy.json
++++ b/tools/dependency-policy.json
+@@ -24,8 +24,8 @@
+     "Grpc.Net.Common": "2.80.0",
+     "Grpc.Reflection": "2.80.0",
+     "Hexalith.Commons.UniqueIds": "2.30.3",
+-    "Hexalith.EventStore.Client": "3.126.0",
+-    "Hexalith.EventStore.Contracts": "3.126.0",
++    "Hexalith.EventStore.Client": "3.126.1",
++    "Hexalith.EventStore.Contracts": "3.126.1",
+     "Humanizer.Core": "3.0.10",
+     "Json.More.Net": "3.0.1",
+     "JsonPointer.Net": "7.0.3",
+@@ -71,7 +71,8 @@
+     "version": "1.0.0"
+   },
+   "modules": {
+-    "Hexalith.Parties.Contracts": "1.5.1"
++    "Hexalith.Parties.Contracts": "1.5.1",
++    "Hexalith.Tenants.Contracts": "5.10.0"
+   },
+   "testPackages": [
+     "Microsoft.NET.Test.Sdk",

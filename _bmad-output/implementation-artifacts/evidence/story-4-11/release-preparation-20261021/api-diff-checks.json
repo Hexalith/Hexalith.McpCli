@@ -1,0 +1,32 @@
+[
+  {
+    "packageId": "Hexalith.EventStore.Contracts",
+    "command": [
+      "dnx",
+      "dotnet-inspect",
+      "-y",
+      "--",
+      "diff",
+      "--library",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/api-comparison/approved/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll../home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/api-comparison/refreshed/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.dll",
+      "--json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.9503070400023717
+  },
+  {
+    "packageId": "Hexalith.EventStore.Client",
+    "command": [
+      "dnx",
+      "dotnet-inspect",
+      "-y",
+      "--",
+      "diff",
+      "--library",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/api-comparison/approved/Hexalith.EventStore.Client/Hexalith.EventStore.Client.dll../home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/api-comparison/refreshed/Hexalith.EventStore.Client/Hexalith.EventStore.Client.dll",
+      "--json"
+    ],
+    "exitCode": 1,
+    "durationSeconds": 0.698919766000472
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/Hexalith/Hexalith.Builds/pull/127",
+    "number": 127,
+    "state": "open",
+    "merged": false,
+    "mergeable": false,
+    "draft": false,
+    "body": "Remove only the two provenance files introduced by aea707d6e8ef2c765531f7c7bcee0441fa5f076e so the reviewed change can be reapplied through the required pull-request and status-check path. The ordinary direct push was unexpectedly accepted using the credential’s server-side bypass privilege; this repair preserves history and changes no protection settings.\n\nValidation: the resulting source tree exactly matches 359fee24aeca4d9eabed4b425d4cfa2520b2adda; the full commit/PR subject passed the pinned commitlint CLI. Publication remains held until the checked reapplication merges.",
+    "title": "revert(container): restore the protected change path",
+    "base": "main",
+    "base_sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+    "head": "fix/container-provenance-protection-repair",
+    "head_sha": "fdc72aef43e6169480a94fd845b26e1f1d41bb2d",
+    "head_repo_id": 952945989,
+    "head_repo_full_name": "Hexalith/Hexalith.Builds",
+    "merge_commit_sha": null,
+    "user": {
+      "login": "jpiquot",
+      "name": "jpiquot",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+      "id": 6775094
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-21T19:46:18Z",
+    "updated_at": "2026-10-21T19:46:18Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 1,
+    "changed_files": 2,
+    "additions": 0,
+    "deletions": 152,
+    "display_url": "https://github.com/Hexalith/Hexalith.Builds/pull/127",
+    "display_title": "revert(container): restore the protected change path"
+  },
+  "isError": false
+}

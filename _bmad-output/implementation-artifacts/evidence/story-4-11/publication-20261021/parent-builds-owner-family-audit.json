@@ -1,0 +1,111 @@
+{
+  "observedAtUtc": "2026-10-22T01:27:14.707619+00:00",
+  "base": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "head": "85290197d2a4324b50560630e8992d71c3318784",
+  "onlyChangedPath": "Tools/package-version-audit.json",
+  "baseIsExactParentAndGeneratedFromRevision": true,
+  "catalogRawSha256BoundToExactBaseBlob": "f10372ba382108f8c35b3ee922c76fe8608dbec336c399278709345ae255078d",
+  "beforeAuditSha256": "6ef9f57a405b5c0192ab3498fea18974d6504f74f6ee916919202f7ca5999d28",
+  "afterAuditSha256": "1d4f2757dc359483dee9144413cd10c84fba8a55c5bbf72bf5aee3bb10602dce",
+  "unselectedPackageRowsWhollyUnchanged": 288,
+  "unselectedFamilyDecisionsWhollyUnchanged": 146,
+  "selectedRows": [
+    {
+      "id": "Hexalith.EventStore.Admin.Abstractions",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Server",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Aspire",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.DomainService",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Gateway",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.RestApi.Generators",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Server",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.ServiceDefaults",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.SignalR",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing.Integration",
+      "version": "3.126.1",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "5.10.0",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "5.10.0",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "5.10.0",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "5.10.0",
+      "listingState": "listed"
+    },
+    {
+      "id": "Hexalith.Tenants.UI",
+      "version": "5.10.0",
+      "listingState": "unresolved"
+    }
+  ],
+  "scope": "Parent independent Git-object/ancestry/catalog-byte and complete preserved-family equality audit. NormalremoteCI/checkedmerge still required. AdminCli is a tool outside the CPM rows; Tenants.UI remains an unresolved nonpackable CPM row.",
+  "result": "passed"
+}

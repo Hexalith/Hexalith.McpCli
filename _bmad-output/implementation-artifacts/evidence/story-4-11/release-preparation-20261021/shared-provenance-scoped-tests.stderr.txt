@@ -1,0 +1,12 @@
+test_container_without_publisher_metadata_preserves_sdk_behavior (__main__.ContainerProvenanceTargetsTests.test_container_without_publisher_metadata_preserves_sdk_behavior) ... ok
+test_leaves_noncontainer_projects_unchanged (__main__.ContainerProvenanceTargetsTests.test_leaves_noncontainer_projects_unchanged) ... ok
+test_partial_publisher_metadata_preserves_sdk_behavior (__main__.ContainerProvenanceTargetsTests.test_partial_publisher_metadata_preserves_sdk_behavior) ... ok
+test_preserves_explicit_publisher_urls (__main__.ContainerProvenanceTargetsTests.test_preserves_explicit_publisher_urls) ... ok
+test_rebinds_truncated_sdk_values_and_preserves_unrelated_labels (__main__.ContainerProvenanceTargetsTests.test_rebinds_truncated_sdk_values_and_preserves_unrelated_labels) ... ok
+test_removing_the_rebinding_target_is_detected (__main__.ContainerProvenanceTargetsTests.test_removing_the_rebinding_target_is_detected) ... ok
+test_supplies_complete_single_rid_provenance_without_previous_labels (__main__.ContainerProvenanceTargetsTests.test_supplies_complete_single_rid_provenance_without_previous_labels) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 5.717s
+
+OK

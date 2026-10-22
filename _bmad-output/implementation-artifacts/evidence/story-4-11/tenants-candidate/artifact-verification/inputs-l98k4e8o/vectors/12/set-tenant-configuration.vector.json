@@ -1,0 +1,200 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.set-tenant-configuration",
+  "kind": "command",
+  "prerequisites": [
+    {
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-config",
+        "Name": "Vector Configuration",
+        "Description": null
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-config",
+          "commandType": "create-tenant",
+          "payload": {
+            "TenantId": "vector-config",
+            "Name": "Vector Configuration",
+            "Description": null
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.create-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-config"
+        }
+      ]
+    }
+  ],
+  "invocation": {
+    "operation": "tenants.set-tenant-configuration",
+    "kind": "command",
+    "payload": {
+      "TenantId": "vector-config",
+      "Key": "billing.plan",
+      "Value": "enterprise"
+    },
+    "envelope": {
+      "tenant": "system"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "<generated>",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-config",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "correlationId": "<generated>"
+      },
+      "maskGenerated": [
+        "/messageId",
+        "/correlationId"
+      ]
+    },
+    "scriptedResponse": {
+      "statusCode": 202,
+      "body": {},
+      "echoRequestFields": [
+        "correlationId",
+        "messageId"
+      ]
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.set-tenant-configuration"
+      },
+      {
+        "path": "/status",
+        "operator": "equals",
+        "value": "accepted"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/aggregateId",
+        "operator": "equals",
+        "value": "vector-config"
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-config"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-config",
+          "queryType": "get-tenant",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-config"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "tenantId": "vector-config",
+            "name": "Vector Configuration",
+            "description": null,
+            "status": "Active",
+            "members": [],
+            "configuration": {
+              "billing.plan": "enterprise"
+            },
+            "createdAt": "2026-10-19T08:00:00+00:00"
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/configuration/billing.plan",
+          "operator": "equals",
+          "value": "enterprise"
+        }
+      ]
+    }
+  ]
+}

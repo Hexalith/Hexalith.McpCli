@@ -1,0 +1,157 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/list-tenants.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5FQVP6WEQMVB5YS4CNV21P4",
+      "correlationId": "01M5FQVP6WEQMVB5YS4CNV21P4",
+      "tenant": "system",
+      "aggregateId": "vector-list-a",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5FQVQ0FS5GXKPHGAK5XJF1V",
+      "correlationId": "01M5FQVQ0FS5GXKPHGAK5XJF1V",
+      "tenant": "system",
+      "aggregateId": "vector-list-b",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5FQVQV5WQ7RFGT7YKH0R9D8",
+      "correlationId": "01M5FQVQV5WQ7RFGT7YKH0R9D8",
+      "tenant": "system",
+      "aggregateId": "vector-list-c",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "tenant": "system",
+      "document": {
+        "items": [
+          {
+            "tenantId": "vector-list-a",
+            "name": "Vector List A",
+            "status": "Active"
+          },
+          {
+            "tenantId": "vector-list-b",
+            "name": "Vector List B",
+            "status": "Active"
+          }
+        ],
+        "cursor": "scripted-list-tenants-cursor-1",
+        "hasMore": true
+      },
+      "paging": {
+        "pageSize": 2,
+        "nextCursor": "scripted-list-tenants-cursor-1",
+        "hasMore": true
+      }
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "tenant": "system",
+      "document": {
+        "items": [
+          {
+            "tenantId": "vector-list-c",
+            "name": "Vector List C",
+            "status": "Active"
+          }
+        ],
+        "cursor": null,
+        "hasMore": false
+      },
+      "paging": {
+        "pageSize": 2,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQVP6WEQMVB5YS4CNV21P4",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-a",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector List A",
+          "TenantId": "vector-list-a"
+        },
+        "correlationId": "01M5FQVP6WEQMVB5YS4CNV21P4"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQVQ0FS5GXKPHGAK5XJF1V",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-b",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector List B",
+          "TenantId": "vector-list-b"
+        },
+        "correlationId": "01M5FQVQ0FS5GXKPHGAK5XJF1V"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQVQV5WQ7RFGT7YKH0R9D8",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-c",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector List C",
+          "TenantId": "vector-list-c"
+        },
+        "correlationId": "01M5FQVQV5WQ7RFGT7YKH0R9D8"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "list-tenants",
+        "projectionType": "tenant-index",
+        "payload": {},
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "list-tenants",
+        "projectionType": "tenant-index",
+        "payload": {},
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-list-tenants-cursor-1"
+        }
+      }
+    }
+  ]
+}

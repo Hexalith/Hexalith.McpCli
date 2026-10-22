@@ -1,0 +1,177 @@
+[
+  {
+    "label": "tenants-build-contracts",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "-c",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:UseHexalithProjectReferences=false",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 1.4488814490032382
+  },
+  {
+    "label": "tenants-build-client",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+      "-c",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:UseHexalithProjectReferences=false",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 1.404610101999424
+  },
+  {
+    "label": "tenants-build-server",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+      "-c",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:UseHexalithProjectReferences=false",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 1.9540975470008561
+  },
+  {
+    "label": "tenants-build-testing",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj",
+      "-c",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:UseHexalithProjectReferences=false",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 1.9229893430019729
+  },
+  {
+    "label": "tenants-build-aspire",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj",
+      "-c",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:UseHexalithProjectReferences=false",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 1.8320922729981248
+  },
+  {
+    "label": "tenants-full-pack",
+    "command": [
+      "python3",
+      "scripts/pack-release-packages.py",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages",
+      "5.10.0"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 4.3344411959988065
+  },
+  {
+    "label": "tenants-package-validation",
+    "command": [
+      "python3",
+      "scripts/validate-nuget-packages.py",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 0.04443066899693804
+  },
+  {
+    "label": "tenants-package-consumers",
+    "command": [
+      "python3",
+      "scripts/validate-consumer-package-references.py",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/packages",
+      "RepositoryCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "SourceRevisionId": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "HexalithEventStoreVersion": "3.126.1",
+      "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 6.321954289996938
+  }
+]

@@ -1,0 +1,136 @@
+{
+  "atUtc": "2026-10-21T19:45:38.510369+00:00",
+  "records": [
+    {
+      "endpoint": "repos/Hexalith/Hexalith.Builds/rules/branches/main",
+      "exitCode": 0,
+      "response": [
+        {
+          "type": "deletion",
+          "ruleset_source_type": "Repository",
+          "ruleset_source": "Hexalith/Hexalith.Builds",
+          "ruleset_id": 19196298
+        },
+        {
+          "type": "non_fast_forward",
+          "ruleset_source_type": "Repository",
+          "ruleset_source": "Hexalith/Hexalith.Builds",
+          "ruleset_id": 19196298
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "dismissal_restriction": {
+              "enabled": false,
+              "allowed_actors": []
+            },
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "squash"
+            ]
+          },
+          "ruleset_source_type": "Repository",
+          "ruleset_source": "Hexalith/Hexalith.Builds",
+          "ruleset_id": 19196298
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "Codacy Static Code Analysis",
+                "integration_id": 56611
+              },
+              {
+                "context": "SonarCloud Code Analysis",
+                "integration_id": 12526
+              },
+              {
+                "context": "commitlint / commitlint",
+                "integration_id": 15368
+              }
+            ]
+          },
+          "ruleset_source_type": "Repository",
+          "ruleset_source": "Hexalith/Hexalith.Builds",
+          "ruleset_id": 19196298
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "endpoint": "repos/Hexalith/Hexalith.Builds/branches/main/protection",
+      "exitCode": 1,
+      "response": {
+        "message": "Branch protection has been disabled on this repository.",
+        "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+        "status": "404"
+      },
+      "stderr": "gh: Branch protection has been disabled on this repository. (HTTP 404)\n"
+    },
+    {
+      "endpoint": "repos/Hexalith/Hexalith.Builds/git/ref/heads/main",
+      "exitCode": 0,
+      "response": {
+        "ref": "refs/heads/main",
+        "node_id": "REF_kwDOOMzNRa9yZWZzL2hlYWRzL21haW4",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds/git/refs/heads/main",
+        "object": {
+          "sha": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+          "type": "commit",
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.Builds/git/commits/aea707d6e8ef2c765531f7c7bcee0441fa5f076e"
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "endpoint": "user",
+      "exitCode": 0,
+      "response": {
+        "login": "jpiquot",
+        "id": 6775094,
+        "node_id": "MDQ6VXNlcjY3NzUwOTQ=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jpiquot",
+        "html_url": "https://github.com/jpiquot",
+        "followers_url": "https://api.github.com/users/jpiquot/followers",
+        "following_url": "https://api.github.com/users/jpiquot/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jpiquot/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jpiquot/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jpiquot/subscriptions",
+        "organizations_url": "https://api.github.com/users/jpiquot/orgs",
+        "repos_url": "https://api.github.com/users/jpiquot/repos",
+        "events_url": "https://api.github.com/users/jpiquot/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jpiquot/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false,
+        "name": "J\u00e9r\u00f4me Piquot",
+        "company": "Itaneo",
+        "blog": "https://www.itaneo.com",
+        "location": "France",
+        "email": "jpiquot@itaneo.com",
+        "hireable": null,
+        "bio": null,
+        "twitter_username": null,
+        "notification_email": "jpiquot@itaneo.com",
+        "public_repos": 10,
+        "public_gists": 5,
+        "followers": 7,
+        "following": 2,
+        "created_at": "2014-02-24T19:45:31Z",
+        "updated_at": "2026-09-20T20:39:25Z"
+      },
+      "stderr": ""
+    }
+  ]
+}

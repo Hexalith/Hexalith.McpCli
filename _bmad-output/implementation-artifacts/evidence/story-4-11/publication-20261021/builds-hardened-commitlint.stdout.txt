@@ -1,0 +1,7 @@
+⧗   --- input ---
+test(container): avoid XML parsing in provenance fixtures
+
+Generate escaped fixture XML and remove the exact known target span for
+the mutation check. Retain real no-shell MSBuild execution with the scoped
+repository-fixture subprocess justifications used by sibling tests.
+✔   found 0 problems, 0 warnings

@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/Hexalith/Hexalith.EventStore/pull/372",
+    "number": 372,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": false,
+    "body": "The complete preparation-controls sequence exhausted the former 15-minute job budget after its completed suites passed. Increase the bounded allowance to 30 minutes while retaining every existing qualification, registration, isolation, and authority check. The first PR head completed the full P1R job successfully under that allowance; the integrated head must earn its own CI/P1R success.\n\nIntegrate main 03b529489aa559267a9c3de946d01c2aadf28858, preserving its exact native-proof shape guard and sanitized diagnostic bytes. Keep both original historical packet manifests intact and add separate sanitized manifests plus a source-bound replacement receipt. All 204 derived entries verify; the two XML reports retain all outcomes, counts, identities, and content except four display-name attributes each. The replacement receipt assigns no new qualification credit.\n\nValidation: integrated Server.Tests Release build passed with zero warnings/errors; all 995 focused replay-context and unchanged secrets-scanner tests passed; four workflow release/source contract tests passed; independent safe receipt audit passed. No scanner exception, skipped acceptance guard, or production behavior change is introduced. Merge remains subject to the exact integrated source's required contexts, ordinary CI, and full P1R qualification.",
+    "title": "ci(p1r): complete qualification and bind sanitized evidence",
+    "base": "main",
+    "base_sha": "03b529489aa559267a9c3de946d01c2aadf28858",
+    "head": "fix/p1r-qualification-time-budget",
+    "head_sha": "703e14e69517fa3591f9e1dc962d3dc0bdd51f99",
+    "head_repo_id": 1155154671,
+    "head_repo_full_name": "Hexalith/Hexalith.EventStore",
+    "merge_commit_sha": "4b7292ab777a48186109d3758cf37d0cff42d4c3",
+    "user": {
+      "login": "jpiquot",
+      "name": "jpiquot",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+      "id": 6775094
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-21T19:59:10Z",
+    "updated_at": "2026-10-21T20:29:16Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 3,
+    "changed_files": 5,
+    "additions": 463,
+    "deletions": 1,
+    "display_url": "https://github.com/Hexalith/Hexalith.EventStore/pull/372",
+    "display_title": "ci(p1r): complete qualification and bind sanitized evidence"
+  },
+  "isError": false
+}

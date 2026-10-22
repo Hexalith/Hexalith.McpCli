@@ -1,0 +1,19 @@
+{
+  "committedAtUtc": "2026-10-22T01:25:33.557206+00:00",
+  "command": [
+    "git",
+    "commit",
+    "--file",
+    "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-family-audit-commit-message.txt"
+  ],
+  "exitCode": 0,
+  "stdout": "[fix/published-family-audit 8529019] build(deps): refresh published family audit\n 1 file changed, 865 insertions(+), 109 deletions(-)\n",
+  "stderr": "",
+  "validatedFullMessageSha256": "cd032170b2f23f20e47e0d2d2aeb56059e4a5e0d13fddc6828a8b2394fd54122",
+  "head": "85290197d2a4324b50560630e8992d71c3318784",
+  "tree": "260975011cac4ff3a5f8c56614b6155ed9ddbb3f",
+  "parent": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "changedFiles": [
+    "Tools/package-version-audit.json"
+  ]
+}

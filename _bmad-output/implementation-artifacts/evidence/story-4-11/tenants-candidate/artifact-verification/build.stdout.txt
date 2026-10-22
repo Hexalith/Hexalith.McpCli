@@ -1,0 +1,12 @@
+  Hexalith.McpCli.Analyzers -> /tmp/mcpcli-artifact-hynzxb_5/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/mcpcli-artifact-hynzxb_5/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Core -> /tmp/mcpcli-artifact-hynzxb_5/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /tmp/mcpcli-artifact-hynzxb_5/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /tmp/mcpcli-artifact-hynzxb_5/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  ArtifactHost -> /tmp/mcpcli-artifact-hynzxb_5/host/bin/Release/net10.0/ArtifactHost.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.95

@@ -1,0 +1,69 @@
+{
+  "recordedAtUtc": "2026-10-22T04:43:39.191521+00:00",
+  "scope": "Agreed post-qualification docs/receipt/status refresh only; no compiled code, project, policy, Builds gitlink, inventory, accepted lint or vector bytes changed. Parent re-read required before root commit. Existing local source/TRX proof remains bound to unchanged test/runtime inputs; final actualUbuntu gates remain mandatory.",
+  "repairedFullReleaseQualification": {
+    "path": "parent-tenants-5.10.1-full-repair-qualified.json",
+    "sha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
+  },
+  "changes": [
+    {
+      "path": "README.md",
+      "beforeBytes": 40964,
+      "beforeSha256": "eb16641f0b2e36d9b97ee32baea87db416ebfa2848f99f4e37d978a74f156b32",
+      "afterBytes": 41034,
+      "afterSha256": "e3f1e19111ba18e81789e02c79e70663af80230cd97b0e64fadfa264e3c010a0"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/README.md",
+      "beforeBytes": 21631,
+      "beforeSha256": "d27db5517274fdbbec85decede74f512ea15fe87a665d55efbb7c3e25bdd0e7d",
+      "afterBytes": 21615,
+      "afterSha256": "1a25d46502d1a79fd76ed630e9b13c578433e510e44830b929e8a3384079ef9d"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md",
+      "beforeBytes": 26739,
+      "beforeSha256": "4df50f6e6d9979ceaf452b937fb53381824898ed0c453cf301b1e9cfff94a5c9",
+      "afterBytes": 29247,
+      "afterSha256": "fa841d932add4ffb4a4cbb481e799cdb07aefff81712946a5f4542fd1134d36e"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/approval.json",
+      "beforeBytes": 2240,
+      "beforeSha256": "9caed574ef28e5bc16117db9a725441dc1c02ec292956ff25413c0df964bd076",
+      "afterBytes": 2229,
+      "afterSha256": "13467ec9437a5928e12e9cd09b28310a449b673eb697bd9099664c2c7cd93d24"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json",
+      "beforeBytes": 6066,
+      "beforeSha256": "64c098914fd987a33739340c039380e2036811e40ea31040b0cc3d6ee0538b70",
+      "afterBytes": 7711,
+      "afterSha256": "344b7465467afb797f498fcc64df310d882ef23b7c5f7d86135beb028fc320bb"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/continuation-status-current.json",
+      "beforeBytes": 27276,
+      "beforeSha256": "16a9f43cdfd11b2c0191ed22c9348e62628ad82b11a1fe7a3e050debbad6788d",
+      "afterBytes": 27718,
+      "afterSha256": "82cc7bf10326634586f6b558ff09a975cc4c6e5a9bc36f9898113d0c29caf5fa"
+    }
+  ],
+  "approvedVectors": {
+    "count": 14,
+    "unchanged": true
+  },
+  "approvedScopeDecisions": {
+    "count": 20,
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "unchanged": true
+  },
+  "enrolledPackageIdentityAndRawArchiveHashUnchanged": true,
+  "rootCommitOrPrPerformed": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "metadataCorrection": "Correct SDK/base-image metadata naming in parent OCI report; exact root source, package/vector/inventory and all acceptance requirements unchanged.",
+  "rootCommitOrPrPerformedAtOriginalRefresh": false,
+  "currentRootCommit": "f20a4e0d279615def05a454b73599d1cf583c338",
+  "normalRootPullRequest": "https://github.com/Hexalith/Hexalith.McpCli/pull/1"
+}

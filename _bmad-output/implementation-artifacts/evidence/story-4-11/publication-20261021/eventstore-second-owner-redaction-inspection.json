@@ -1,0 +1,215 @@
+{
+  "status": "preserve owning upstream source changes",
+  "records": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "previousSource": "03b529489aa559267a9c3de946d01c2aadf28858",
+      "replacementSource": "9e34d17b8475fe3427623e5df34879bfd01e2628",
+      "previousSha256": "1a23e9036a5dfa01d50bd752b0fb1a505ae3af8c4eb6e40e0cac58529757f3e4",
+      "replacementSha256": "33edf34e4cd3bc7ed6a9d2eb8dc13bf2b46934b69ba5cac5a4e37613cd13a44f",
+      "changedLogicalLines": [
+        {
+          "line": 95,
+          "field": "grpc"
+        },
+        {
+          "line": 190,
+          "field": "https"
+        },
+        {
+          "line": 208,
+          "field": "https"
+        },
+        {
+          "line": 328,
+          "field": "grpc"
+        },
+        {
+          "line": 443,
+          "field": "https"
+        },
+        {
+          "line": 449,
+          "field": "https"
+        },
+        {
+          "line": 462,
+          "field": "https"
+        },
+        {
+          "line": 664,
+          "field": "grpc"
+        },
+        {
+          "line": 758,
+          "field": "https"
+        },
+        {
+          "line": 782,
+          "field": "https"
+        },
+        {
+          "line": 1452,
+          "field": "grpc"
+        },
+        {
+          "line": 1545,
+          "field": "https"
+        },
+        {
+          "line": 1563,
+          "field": "https"
+        },
+        {
+          "line": 1752,
+          "field": "grpc"
+        },
+        {
+          "line": 1866,
+          "field": "https"
+        },
+        {
+          "line": 1872,
+          "field": "https"
+        },
+        {
+          "line": 1886,
+          "field": "https"
+        },
+        {
+          "line": 2021,
+          "field": "grpc"
+        },
+        {
+          "line": 2119,
+          "field": "https"
+        },
+        {
+          "line": 2139,
+          "field": "https"
+        },
+        {
+          "line": 2377,
+          "field": "http"
+        },
+        {
+          "line": 2480,
+          "field": "https"
+        },
+        {
+          "line": 2491,
+          "field": "https"
+        },
+        {
+          "line": 2611,
+          "field": "grpc"
+        },
+        {
+          "line": 2794,
+          "field": "https"
+        },
+        {
+          "line": 2817,
+          "field": "https"
+        },
+        {
+          "line": 2957,
+          "field": "grpc"
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "previousSource": "03b529489aa559267a9c3de946d01c2aadf28858",
+      "replacementSource": "9e34d17b8475fe3427623e5df34879bfd01e2628",
+      "previousSha256": "a2b415167b3dadcd234fe8fb0eb06b8d072075cd1de5cf3fada3ac43ae92b770",
+      "replacementSha256": "59449aa4e1f3ae309a0fbffb690daf47cdbdf6a881d240cc4bc3a11ac602d40d",
+      "nodeCount": 6947,
+      "onlyNameAttributesChanged": true,
+      "changedNames": [
+        {
+          "id": "0db08cdd-439e-4279-bb9b-ceba99cd00bb",
+          "type": "Hexalith.EventStore.Server.Tests.Streams.NativeSourceMetadataReaderTests",
+          "method": "MalformedOrUnsupportedSidecarEndpointFailsClosed",
+          "result": "Pass",
+          "previousDisplaySha256": "b0584aa9d6064a5231ca076adb9495c955db695b4cddce863808af4edf1042f9",
+          "replacementDisplaySha256": "632bc8025b51691a96981bf3cda7ba33c5b8a379719d6ab31fb6f7307496aff7"
+        },
+        {
+          "id": "45e4a9e8-8f5d-4d66-9308-8cf99fefcb5d",
+          "type": "Hexalith.EventStore.Server.Tests.Security.SecretsProtectionTests",
+          "method": "ExplicitInertPlaceholders_AreAllowed",
+          "result": "Pass",
+          "previousDisplaySha256": "e718531ccfe5f5b36e42b05e82112f0f634fec31fff06342fc0237f8104d589d",
+          "replacementDisplaySha256": "0b1965e724d3eddc57e6f15cc9062242e04a9526114d1f615c1a84acdf308910"
+        },
+        {
+          "id": "a4f1869d-9e60-4fef-89b7-7fa631ad7b32",
+          "type": "Hexalith.EventStore.Server.Tests.Security.SecretsProtectionTests",
+          "method": "ExplicitInertPlaceholders_AreAllowed",
+          "result": "Pass",
+          "previousDisplaySha256": "e3945afb336c2ea5986c79703bb6f591f9430af7b54510c370dcad1040a50ce0",
+          "replacementDisplaySha256": "813304737f438daf3b3770576e046cc7adad49d64e5259d43781bad8d059b6f8"
+        },
+        {
+          "id": "e28a2ca8-22d4-4058-97c0-8bfa98a80477",
+          "type": "Hexalith.EventStore.Server.Tests.Authentication.EventStoreAuthenticationOptionsTests",
+          "method": "Validate_InvalidAuthority_FailsWithoutEchoingValue",
+          "result": "Pass",
+          "previousDisplaySha256": "7aab2476800869e81fb8df3f355ec7362213409689658cb60abb045e48cb5ac0",
+          "replacementDisplaySha256": "60e5b06592bec96ab4bcd8634ff2e73ef075ff57d3120f7e08896c5241c8c377"
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "previousSource": "03b529489aa559267a9c3de946d01c2aadf28858",
+      "replacementSource": "9e34d17b8475fe3427623e5df34879bfd01e2628",
+      "previousSha256": "9a6210cbf09c7d3af0be447ec06a6811a878256b139a579f655e53d2d953aebf",
+      "replacementSha256": "cfffe0b948ccb39f71a25b230e4705b456ede6ffdb7db0753364bc5c96881fa3",
+      "nodeCount": 6949,
+      "onlyNameAttributesChanged": true,
+      "changedNames": [
+        {
+          "id": "bec394c1-9ff5-4c20-8555-2e25ab77322c",
+          "type": "Hexalith.EventStore.Server.Tests.Streams.NativeSourceMetadataReaderTests",
+          "method": "MalformedOrUnsupportedSidecarEndpointFailsClosed",
+          "result": "Pass",
+          "previousDisplaySha256": "b0584aa9d6064a5231ca076adb9495c955db695b4cddce863808af4edf1042f9",
+          "replacementDisplaySha256": "632bc8025b51691a96981bf3cda7ba33c5b8a379719d6ab31fb6f7307496aff7"
+        },
+        {
+          "id": "c9b01e77-bcb0-4d93-bbbe-0ebe3ba41746",
+          "type": "Hexalith.EventStore.Server.Tests.Security.SecretsProtectionTests",
+          "method": "ExplicitInertPlaceholders_AreAllowed",
+          "result": "Pass",
+          "previousDisplaySha256": "e718531ccfe5f5b36e42b05e82112f0f634fec31fff06342fc0237f8104d589d",
+          "replacementDisplaySha256": "0b1965e724d3eddc57e6f15cc9062242e04a9526114d1f615c1a84acdf308910"
+        },
+        {
+          "id": "f3e6456d-00f5-4ea1-a0f2-765b1de1b731",
+          "type": "Hexalith.EventStore.Server.Tests.Security.SecretsProtectionTests",
+          "method": "ExplicitInertPlaceholders_AreAllowed",
+          "result": "Pass",
+          "previousDisplaySha256": "e3945afb336c2ea5986c79703bb6f591f9430af7b54510c370dcad1040a50ce0",
+          "replacementDisplaySha256": "813304737f438daf3b3770576e046cc7adad49d64e5259d43781bad8d059b6f8"
+        },
+        {
+          "id": "66b89cce-debe-464d-b95e-6c45a723aa0d",
+          "type": "Hexalith.EventStore.Server.Tests.Authentication.EventStoreAuthenticationOptionsTests",
+          "method": "Validate_InvalidAuthority_FailsWithoutEchoingValue",
+          "result": "Pass",
+          "previousDisplaySha256": "7aab2476800869e81fb8df3f355ec7362213409689658cb60abb045e48cb5ac0",
+          "replacementDisplaySha256": "60e5b06592bec96ab4bcd8634ff2e73ef075ff57d3120f7e08896c5241c8c377"
+        }
+      ]
+    }
+  ],
+  "allChangedPaths": [
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+    "tests/Hexalith.EventStore.Contracts.Tests/Packaging/Oq8PlatformClosureTests.cs"
+  ],
+  "valuesIncluded": false
+}

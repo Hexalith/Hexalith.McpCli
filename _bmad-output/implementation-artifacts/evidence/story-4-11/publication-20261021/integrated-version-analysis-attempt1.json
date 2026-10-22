@@ -1,0 +1,6 @@
+{
+  "status": "tool input failure before analysis",
+  "exitCode": 1,
+  "reason": "Node synchronous stdin read returned EAGAIN; retry uses a regular task scratch input file.",
+  "sourceQualificationClaimed": false
+}

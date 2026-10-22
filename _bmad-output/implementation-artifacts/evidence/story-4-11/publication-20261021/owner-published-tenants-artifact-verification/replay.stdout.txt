@@ -1,0 +1,14 @@
+PASS tenants.add-user-to-tenant: discovery, 3 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.change-user-role: discovery, 4 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.create-tenant: discovery, 2 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.disable-tenant: discovery, 3 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.enable-tenant: discovery, 4 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.get-tenant-audit: discovery, 6 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.get-tenant-users: discovery, 6 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.get-tenant: discovery, 4 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.get-user-tenants: discovery, 8 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.list-tenants: discovery, 5 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.remove-tenant-configuration: discovery, 4 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.remove-user-from-tenant: discovery, 4 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.set-tenant-configuration: discovery, 3 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS tenants.update-tenant: discovery, 3 reset Gateway step(s), documents, requests, validation/Gateway error parity

@@ -1,0 +1,4 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-eventstore-4emmx2ji/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj (in 276 ms).
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-eventstore-4emmx2ji/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/prerequisite-packages/Hexalith.EventStore.Contracts.3.126.1.nupkg'.

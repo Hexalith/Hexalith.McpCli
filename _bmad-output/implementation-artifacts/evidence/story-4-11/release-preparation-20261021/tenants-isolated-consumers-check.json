@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "scripts/validate-consumer-package-references.py",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/tenants-packages",
+    "--work-directory",
+    "/tmp/mcpcli-story411-full-tenants-fa7b01k8/release-package-consumers",
+    "--nuget-source",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+  ],
+  "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+  "exitCode": 1,
+  "durationSeconds": 0.7784074279989,
+  "note": "Explicit task-owned scratch directory and prerequisite feed; initial owning-validator default-directory result remains retained separately."
+}

@@ -1,0 +1,73 @@
+{
+  "checkedAtUtc": "2026-10-21T22:51:28.988Z",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runs": [
+    {
+      "runId": 39685339168,
+      "artifacts": [
+        {
+          "id": 12387650835,
+          "name": "blocking-test-results",
+          "size_in_bytes": 2074539,
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12387650835",
+          "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12387650835/zip",
+          "expired": false,
+          "created_at": "2026-10-21T22:47:08Z",
+          "expires_at": "2026-10-28T22:47:07Z",
+          "updated_at": "2026-10-21T22:47:08Z",
+          "digest": "sha256:ecd3baae5efcc1e9d2444a60a1d29b7cf089fdf6d3cb6ea84601c402a2119c09",
+          "workflow_run": {
+            "id": 39685339168,
+            "repository_id": 1155154671,
+            "head_repository_id": 1155154671,
+            "head_branch": "fix/p1r-qualification-time-budget",
+            "head_sha": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+          }
+        },
+        {
+          "id": 12386186719,
+          "name": "tenants-source-mode-test-results",
+          "size_in_bytes": 2118,
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12386186719",
+          "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12386186719/zip",
+          "expired": false,
+          "created_at": "2026-10-21T22:20:46Z",
+          "expires_at": "2026-10-28T22:20:45Z",
+          "updated_at": "2026-10-21T22:20:46Z",
+          "digest": "sha256:54f427f4c4e2045867bcffaa64f023f23a40f208991d423f2103d2dfbb34ad94",
+          "workflow_run": {
+            "id": 39685339168,
+            "repository_id": 1155154671,
+            "head_repository_id": 1155154671,
+            "head_branch": "fix/p1r-qualification-time-budget",
+            "head_sha": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+          }
+        },
+        {
+          "id": 12385849002,
+          "name": "contracts-test-results",
+          "size_in_bytes": 407024,
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12385849002",
+          "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/artifacts/12385849002/zip",
+          "expired": false,
+          "created_at": "2026-10-21T22:35:25Z",
+          "expires_at": "2026-10-28T22:35:24Z",
+          "updated_at": "2026-10-21T22:35:25Z",
+          "digest": "sha256:e80f48d61b5ef463ed8687cf3ca477880a90bc15c9c37f43d45e48c27f21b28a",
+          "workflow_run": {
+            "id": 39685339168,
+            "repository_id": 1155154671,
+            "head_repository_id": 1155154671,
+            "head_branch": "fix/p1r-qualification-time-budget",
+            "head_sha": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+          }
+        }
+      ]
+    },
+    {
+      "runId": 39685338623,
+      "artifacts": []
+    }
+  ],
+  "scope": "Completed exact-source PR CI artifact inventory; no raw test credentials copied into Git evidence."
+}

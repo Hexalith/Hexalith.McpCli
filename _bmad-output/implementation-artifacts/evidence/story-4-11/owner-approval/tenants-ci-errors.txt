@@ -1,0 +1,8 @@
+2026-10-21T17:42:38.9245871Z ##[group]Run dotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror
+2026-10-21T17:42:38.9246524Z [36;1mdotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror[0m
+2026-10-21T17:44:12.2175448Z ##[error]/home/runner/work/Hexalith.Tenants/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/Queries/TenantReadAuthorityResult.cs(12,5): error CS0246: The type or namespace name 'NativeSourceProof' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Hexalith.Tenants/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj]
+2026-10-21T17:44:22.0185250Z Build FAILED.
+2026-10-21T17:44:22.0191580Z ##[error]/home/runner/work/Hexalith.Tenants/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/Queries/TenantReadAuthorityResult.cs(12,5): error CS0246: The type or namespace name 'NativeSourceProof' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Hexalith.Tenants/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj]
+2026-10-21T17:44:22.0617376Z ##[error]Process completed with exit code 1.
+2026-10-21T17:44:22.0881653Z ##[error]Tier 1 Microsoft.Testing.Platform did not report a failure count.
+2026-10-21T17:44:22.0883250Z ##[error]Process completed with exit code 1.

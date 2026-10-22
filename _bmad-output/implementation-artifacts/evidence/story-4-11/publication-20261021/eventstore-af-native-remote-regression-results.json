@@ -1,0 +1,70 @@
+{
+  "checkedAtUtc": "2026-10-21T23:13:08.365594+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "runId": 39685338657,
+  "jobConclusion": "success",
+  "artifactId": 12387918688,
+  "artifactSha256": "sha256:6225aa973e789f9f138b5e07b40b8eb8dd18c6f8f132fa10d821b5737019a738",
+  "tests": [
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.NamedProjectionDispatchLiveSidecarTests.NormalDelivery_PersistsIndependentDetailIndexCheckpointsAndConvergedRetryLedger",
+      "outcome": "Passed",
+      "duration": "00:00:01.7660000",
+      "startTime": "2026-10-21T22:30:39.5530954+00:00",
+      "endTime": "2026-10-21T22:30:41.3192451+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 10001, bufferedOwner: True)",
+      "outcome": "Passed",
+      "duration": "00:03:50.2780000",
+      "startTime": "2026-10-21T22:36:47.5149754+00:00",
+      "endTime": "2026-10-21T22:40:37.7934278+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 10001, bufferedOwner: False)",
+      "outcome": "Passed",
+      "duration": "00:03:41.4570000",
+      "startTime": "2026-10-21T22:40:37.7935660+00:00",
+      "endTime": "2026-10-21T22:44:19.2515999+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: True)",
+      "outcome": "Passed",
+      "duration": "00:12:06.2510000",
+      "startTime": "2026-10-21T22:44:19.2517177+00:00",
+      "endTime": "2026-10-21T22:56:25.5033521+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: False)",
+      "outcome": "Passed",
+      "duration": "00:11:29.5220000",
+      "startTime": "2026-10-21T22:56:25.5034847+00:00",
+      "endTime": "2026-10-21T23:07:55.0260190+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.FocusedProcessReplacementExercisesPartialStageAndOwnerHandoff(bufferedOwner: True)",
+      "outcome": "Passed",
+      "duration": "00:00:14.9990000",
+      "startTime": "2026-10-21T23:07:55.0269613+00:00",
+      "endTime": "2026-10-21T23:08:10.0266083+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.FocusedProcessReplacementExercisesPartialStageAndOwnerHandoff(bufferedOwner: False)",
+      "outcome": "Passed",
+      "duration": "00:00:15.0740000",
+      "startTime": "2026-10-21T23:08:10.0267405+00:00",
+      "endTime": "2026-10-21T23:08:25.1015110+00:00"
+    },
+    {
+      "testName": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.NamedProjectionRetryFixtureTests.UnrelatedTerminalItemDoesNotBorrowOriginalStreamBindings",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000000",
+      "startTime": "2026-10-21T23:08:32.8584446+00:00",
+      "endTime": "2026-10-21T23:08:32.8592136+00:00"
+    }
+  ],
+  "allSelectedPassed": true,
+  "selectedCount": 8,
+  "scope": "Targeted assertions observed in authentic complete remote integration; full security CodeQL check remains required.",
+  "receiptLabelCaveat": "Bounded-identity worker source has an unused hardcoded Debug/true receipt label; actual integration.yml restores and tests Release/false. Do not treat that label as actual configuration."
+}

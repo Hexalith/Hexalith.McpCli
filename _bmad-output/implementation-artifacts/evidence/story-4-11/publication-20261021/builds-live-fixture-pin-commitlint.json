@@ -1,0 +1,52 @@
+{
+  "recordedAtUtc": "2026-10-22T02:14:22.761969+00:00",
+  "owningRepository": "Hexalith/Hexalith.Builds",
+  "pinnedCommitlintVersion": "21.2.4",
+  "messages": [
+    {
+      "label": "commit-message",
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/commit-message.txt",
+      "sha256": "b4523aa13984c1b7e06795ac00ec4dbc43509632aa2546d28dfb4378421b3130",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\nfix(tooling): align EventStore fixture pins\n\nUse the current catalog selection in generated valid test manifests and\nqualification evidence. Align the v1 schema and active synthetic corpus\nwith EventStore 3.126.1, rebinding dependent fixture digests.\n\nKeep historical release evidence and intentional negative controls\nunchanged. Reject the previous 3.126.0 pin explicitly.\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "label": "squash-message",
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/squash-message.txt",
+      "sha256": "30cef6373b5fb945a80ec691ca2ea0560702c00ca8f68eea8559f55ce3e0122e",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\nfix(tooling): align published family audit and EventStore fixtures\n\nBind EventStore 3.126.1 and Tenants 5.10.0 registry observations to the\nalready committed declarations at 25ba30d6, preserving other families.\n\nAlign the v1 schema and active synthetic fixtures with the selected\nEventStore 3.126.1 pin and rebind dependent synthetic digests. Generated\nvalid manifests read the current catalog. Historical release evidence,\nproduction equality guards and intentional negative controls remain\nintact; the previous 3.126.0 pin is explicitly rejected.\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "label": "pr-title",
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/pr-title.txt",
+      "sha256": "faf1959130a4e7938ac6dfe9a31cf58e7430e2d58c5c62081a2acc1ae5af1ed0",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\nfix(tooling): align published family audit and EventStore fixtures\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "observedAtUtc": "2026-10-22T06:08:37.386962+00:00",
+  "status": "complete",
+  "eventStore": {
+    "pr": 372,
+    "head": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+    "remoteMainLastChecked": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+    "unpublishedOwnerMainPreserved": "2444752e174785135bc3b15aa74b9035ecc46567",
+    "p1r": {
+      "run": 39693567713,
+      "conclusion": "success",
+      "completedAt": "2026-10-21T23:44:50Z"
+    },
+    "ci": {
+      "run": 39693568192,
+      "conclusion": "success",
+      "successfulJobs": 6,
+      "totalOrdinaryJobs": 6,
+      "completedAt": "2026-10-21T23:59:40Z",
+      "blockingTestsPassed": 13722,
+      "blockingTestsSkipped": 53,
+      "blockingTestsFailed": 0,
+      "contractsTestsPassed": 2421,
+      "contractsTestsSkipped": 2,
+      "tenantsSourceTestsPassed": 10,
+      "artifactBinding": "eventstore-c8-ci-private-artifact-binding.json"
+    },
+    "codeql": {
+      "run": 39693568159,
+      "job": 119545391477,
+      "status": "completed",
+      "conclusion": "cancelled",
+      "completedAt": "2026-10-22T01:28:05Z",
+      "evidence": "eventstore-c8-codeql-terminal.json",
+      "role": "Historical unmergedPR diagnostic; not published1748 normal source-gate authority.",
+      "cancellationCause": "Authoritative annotation: maximum execution time2h0m0s; zero query-start markers. Raw log privately retained and hash-bound; no further CodeQL work is prerequisite of this story release-consumption path."
+    },
+    "integration": {
+      "run": 39693567688,
+      "job": 119545388956,
+      "conclusion": "success",
+      "completedAt": "2026-10-22T00:19:54Z",
+      "artifactBinding": "eventstore-c8-live-private-artifact-binding.json",
+      "selectedRegressionsPassed": 8
+    },
+    "mergeStatus": "ExistingPR372 remains unmerged; its current c8 CodeQL result is diagnostic, not a prerequisite of the already completed normal owner release.",
+    "readinessAudit": "eventstore-c8-pr-gate-pre-codeql.json",
+    "release": {
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "releaseRun": 39678436659,
+      "normalPublisherSourceGates": "qualified; exact successful pushCI39672821997, P1R39672821081 attempt2, commitlint39672822013",
+      "packages": "all14 authentic registry archive identities/hashes/signatures bound",
+      "oci": "Both RIDs and5source/version labels qualified in parent-owner-release-audit.json",
+      "newReleaseNeeded": false
+    }
+  },
+  "builds": {
+    "main": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+    "normalProtectedRepair": "complete; exact checked/merged tree proof retained",
+    "futurePinMergePolicy": "Original temporary merge-method question remains unanswered and unapplied. Selected enrollment uses existing qualified c0 declarations (ES3.126.1/Tenants5.10.0) after repaired full follow-up release qualifies; no new Builds version pin or policy mutation is necessary for this story.",
+    "activeWorktree": "/tmp/mcpcli-story411-builds-owner-audit",
+    "activeBranch": "fix/published-family-audit",
+    "activeAction": "Normal PR130 completed, exact checked/merged tree98b at c0cbbb, protection unchanged. Existing central EventStore3.126.1/Tenants5.10.0 declarations satisfy selected enrollment; no further central pin or merge-method change is required.",
+    "localChecks": {
+      "directValidator": "passed",
+      "generatorFixtures": "passed",
+      "validatorFixtures": "passed",
+      "commitMessage": "Exact full message and PR title passed pinned commitlint; committed-result validator passed; branch push/normal PR creation complete.",
+      "evidence": "builds-owner-family-audit-validation.json",
+      "validatorFixtureProgress": "Parent independently observed fresh child process activity at01:24UTC; no hang inferred or check altered."
+    },
+    "auditOnlyBinding": "builds-owner-family-audit-binding.json",
+    "auditOnlyDiff": "Tools/package-version-audit.json only;865 insertions/109 deletions; both refreshed families and146 preserved; all unrefreshed package/family structures exact.",
+    "auditOnlyCommit": "85290197d2a4324b50560630e8992d71c3318784",
+    "auditOnlyTree": "260975011cac4ff3a5f8c56614b6155ed9ddbb3f",
+    "auditOnlyPr": {
+      "number": 130,
+      "url": "https://github.com/Hexalith/Hexalith.Builds/pull/130",
+      "head": "85290197d2a4324b50560630e8992d71c3318784",
+      "ciRun": 39705799551,
+      "ciStatus": "completed",
+      "latestCommitlintRun": 39705837449,
+      "latestCommitlintConclusion": "success",
+      "requiredAndOrdinaryGatesStillPending": true,
+      "requiredContextsAt0130": "Codacy56611, Sonar12526 and latest commitlint15368 all success; ordinaryCI still active, no merge.",
+      "ordinaryCiProgress": "Module.Tests failed112cases/60methods because current catalog selects3.126.1 while valid fixture baselines/schema still3.126.0; no timeout/flake inferred. Other3ordinary jobs passed. First one-file head/audit remain historical.",
+      "ciConclusion": "failure"
+    },
+    "liveFixtureRepair": {
+      "binding": "builds-live-fixture-pin-repair-binding.json",
+      "parentAudit": "parent-builds-live-fixture-pin-repair-audit.json",
+      "focusedTests": "builds-live-fixture-pin-focused-tests.json",
+      "focusedPassingCases": 64,
+      "fullThreeProjectLocalTests": "passed: Module1513pass/3skip, Evidence107pass, Tooling Integration1pass/12declared skips; setup/zero-test failures retained with no credit",
+      "publisherContractFailure": "Initial stale exact default failure repaired separately; builds-publisher-pin-followup-binding.json binds expected3.126.1 and jointly rehashed prior3.126.0negative",
+      "newCommitAndAllRemoteGatesPending": false,
+      "committedRepair": "builds-live-fixture-pin-commit.json",
+      "push": "builds-live-fixture-pin-push.json",
+      "affectedPublisherContracts": "all three PS suites passed",
+      "realG4OrdinaryCiPackageQualification": "passed with RequireControls+SkipSourceValidation on clean committed6dd source; no Builds tool release performed",
+      "allRemoteGatesPending": false
+    },
+    "activeHead": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+    "activeTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+    "activePr": {
+      "number": 130,
+      "url": "https://github.com/Hexalith/Hexalith.Builds/pull/130",
+      "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+      "base": "25ba30d666284a32b3361272dd0f5c59a7964679",
+      "title": "fix(tooling): align published family audit and EventStore fixtures",
+      "changedFiles": 114,
+      "freshRemoteChecksPending": false,
+      "merged": true,
+      "ciRun": 39711839320,
+      "ciStatus": "completed",
+      "requiredContexts": "All3 exact required context/App identities and all4 ordinaryCI jobs SUCCESS; canonical readiness ready/no findings before normal squash.",
+      "ordinaryOtherJobs": "All4 ordinaryCI jobs SUCCESS; full private masked logs and exact .NET summaries bound in builds-pr130-final-ci-binding.json",
+      "ordinaryCiProgress": "Historical intermediate progress superseded by completed all4 ordinary CI success and exact merged-tree proof.",
+      "mergeCommit": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+      "ciConclusion": "success",
+      "mergeTreeProof": "builds-pr130-normal-merge-tree-proof.json",
+      "finalCiBinding": "builds-pr130-final-ci-binding.json",
+      "parentMergeAudit": "parent-builds-pr130-normal-merge-audit.json"
+    }
+  },
+  "localCodeqlComparison": {
+    "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+    "status": "complete: both versions stopped at the original local thirty-minute bound; neither reached completed extraction",
+    "report": "eventstore-codeql-local-version-comparison.json",
+    "purpose": "diagnostic only; identical source inputs, full scope, no CLI pin/exclusions",
+    "bounds": "30 minutes per version; task-owned process group only; 16 GiB aggregate RSS ceiling",
+    "limitations": "Actual affinity/cgroup/resources differ from GitHub; four-thread hints do not bound managed/Roslyn CPU; no CI wall-time extrapolation",
+    "versions": [
+      {
+        "version": "2.27.2",
+        "status": "diagnostic-stopped",
+        "traceExitCode": 143,
+        "elapsedSeconds": 1800.8083571960015,
+        "stopReason": "local-thirty-minute-bound",
+        "changedInputPaths": [],
+        "ownedGroupRemainingAfterCleanup": []
+      },
+      {
+        "version": "2.27.3",
+        "status": "diagnostic-stopped",
+        "traceExitCode": 143,
+        "elapsedSeconds": 1801.024985868993,
+        "stopReason": "local-thirty-minute-bound",
+        "changedInputPaths": [],
+        "ownedGroupRemainingAfterCleanup": []
+      }
+    ],
+    "managedStackReports": [
+      "eventstore-codeql-local-managed-stack-diagnostic.json",
+      "eventstore-codeql-local-managed-stack-late-diagnostic.json"
+    ],
+    "outputProgress": "eventstore-codeql-local-output-progress.json",
+    "summary": "eventstore-codeql-local-comparison-summary.md",
+    "sourceManifestScope": "Exact 16,248-file predicate documented in source-snapshots report; 29,088 other tracked entries were outside those original before/after equality checks."
+  },
+  "remainingSequence": [],
+  "productionAccepted": false,
+  "fullV1Accepted": true,
+  "storyAndSprint": "spec done; sprint review",
+  "codeqlContingency": {
+    "readOnly": true,
+    "modeChangeAuthorized": false,
+    "report": "eventstore-codeql-build-mode-contingency.md",
+    "completeProjectInventory": "eventstore-codeql-build-mode-contingency.json",
+    "nonCaptureProjects": 60,
+    "coverageEquivalent": false
+  },
+  "exactDuplicateAblation": {
+    "status": "native-extraction-completed-with-generated-lock-side-effects",
+    "report": "eventstore-codeql-exact-duplicate-ablation.json",
+    "nativeLockReconciliation": "eventstore-codeql-native-lock-reconciliation.json",
+    "cliReportedExtractionSeconds": 80.5246874,
+    "cliReportedTotalSeconds": 280.4007734,
+    "traceExitCode": null,
+    "controllerExitCode": 1,
+    "generatedLockRewrites": 362,
+    "allThreeNativeRunsLockReplacementBytesEqual": true,
+    "postCleanupReconciliation": {
+      "retainedTrackedBlobsRehashed": 34038,
+      "removedExactDuplicateOccurrences": 11289,
+      "onlyExpectedDuplicatePathsRemainDeleted": true,
+      "allInitialNonCsharpTrackedCheckoutBytesRestored": true,
+      "allDistinctCsharpByteSequencesRetained": true,
+      "gitlinksRemainUninitialized": true
+    },
+    "optionalReadonlyRetryStarted": false,
+    "scope": "Diagnostic only. Under-five-minute extraction supports duplicate/path contribution, without workflow exclusion/mode/version change or any security, production or full-v1 qualification."
+  },
+  "evidenceCompaction": {
+    "receipt": "historical-readiness-compaction-receipt.json",
+    "independentAudit": "historical-readiness-parent-compaction-audit.json",
+    "allSealedApprovalAndCandidateBytesUnchanged": true
+  },
+  "activePath": "Story4.11 transport-parity work is complete; root PR1 is ready for review. Live authorization, privacy, persisted effects and retirement retain their later gates.",
+  "tenants": {
+    "currentOwnerMain": "205cbc5019343d344643b530fb03aee82af2840d",
+    "publishedVersion": "5.10.0",
+    "releaseRun": 39685705636,
+    "actualNugetProof": "All5 registry archives/signatures bound; Contracts14 original vectors and approved inventory passed. Contracts/Client source trees match approved2cd snapshot.",
+    "nugetEvidence": [
+      "owner-published-package-registry-binding.json",
+      "owner-published-package-signature-verification.json",
+      "owner-published-tenants-source-comparison.json",
+      "owner-published-tenants-artifact-verification/verification.json"
+    ],
+    "ociBlocker": "Published with old53d/v2publisher; source,url,documentation labels truncated and revision absent on bothRIDs (eight source-label mismatches; version correct). Does not satisfy specifically authorized repaired full-chain condition.",
+    "authorizedContinuation": "Apply reviewed shared-target import and publisher22a normal-mode repair on actual82c, use qualified currentBuilds gitlink, exact-source normalCI/source/approval controls, derive follow-up version from normal semantic-release; no redundant EventStore release or permission reask.",
+    "repairWorktree": "/tmp/mcpcli-story411-tenants-followup",
+    "repairBranch": "fix/container-provenance-followup",
+    "repairLocalValidation": {
+      "exactReviewedSourceBlobMatches": 3,
+      "releaseBuildWarningsAsErrors": "passed",
+      "packageGovernanceTests": {
+        "passed": 242,
+        "failed": 0,
+        "skipped": 0,
+        "trxSha256": "7531756be57054d767d08dcf2ec71d51d4bd41c0297d9ebba5118c15d287659b"
+      },
+      "actualRegistryDependencies": true,
+      "currentTemporaryBuildsGitlink": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+      "finalQualifiedBuildsGitlinkPending": false,
+      "remoteSourceQualificationPending": true,
+      "evidence": "tenants-followup-local-patch-proof.json",
+      "currentStagedBuildsCandidate": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+      "sevenProjectInterim": {
+        "report": "tenants-followup-interim6dd-projects.json",
+        "sourceBase": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+        "buildsCandidate": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+        "passingProjectsSoFar": {
+          "Contracts": 654,
+          "Client": 50,
+          "Testing": 182,
+          "AppHost": 9,
+          "Server": 1440,
+          "UI": 7117,
+          "Sample": 40
+        },
+        "pendingProjects": [],
+        "setupHistory": "Initial AppHost9failed solely missing direct EventStore project paths; initialize existing pinned root EventStore5ce5 and Memories921fee, no nested init or source/pin update; retry9passed.",
+        "finalQualifiedBuildsGitlinkStillPending": true,
+        "productionAccepted": false,
+        "fullV1Accepted": false,
+        "latestSuccessfulTotals": {
+          "passed": 9492,
+          "failed": 0,
+          "skipped": 0
+        },
+        "parentAudit": "parent-tenants-interim6dd-trx-audit.json",
+        "sourceIndexAndUnstagedDiffUnchanged": true
+      },
+      "sourceInputBaseline": {
+        "report": "tenants-followup-interim6dd-source-input-binding.json",
+        "scope": "Every tracked regular file and symlink target across five initialized source/model-path checkouts; captured post-interim/pre-final-pin, not a retrospective before-test claim. Complete29.3MB original privately retained. Compare exact file rows/aggregates after qualified normal Builds merge."
+      },
+      "finalQualifiedBuildsGitlink": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+      "finalPinValidation": "tenants-followup-finalpin-validation.json",
+      "finalPinParentAudit": "parent-tenants-followup-finalpin-audit.json",
+      "finalPinPassingGovernanceCases": {
+        "changedStoryGitlinks": 49,
+        "storyGitlinks": 77,
+        "pushallDetachedHead": 13,
+        "pushallDefaultBranch": 31,
+        "contracts": 654
+      }
+    },
+    "semanticPreview": {
+      "report": "tenants-followup-semantic-preview.json",
+      "type": "patch",
+      "provisionalVersion": "5.10.1",
+      "actualMergedSourceAndRegistryPreflightPending": false,
+      "actualPublishedVersion": "5.10.1"
+    },
+    "commitMessageValidation": {
+      "report": "tenants-followup-commitlint.json",
+      "exactFullMessagePassedPinnedCommitlint": true,
+      "version": "21.2.3"
+    },
+    "reviewAuthority": "Existing sealed owner approval covers the exact reviewed three-blob repair plus necessary qualified Builds gitlink. Inspect actual normal PR records/effective rules; do not invent a repeated permission checkpoint. Final source and ordinary CI gates remain binding.",
+    "localRequiredProjectRuns": "Explicitly interim six-dd candidate run while Builds remoteCI completes; actual merged gitlink/tree/input binding and necessary final-source governance checks remain required before Tenants PR. No duplicate broad reruns unless binding/input changes/failures justify them.",
+    "followupOciAudit": "Qualified by parent-tenants-5.10.1-full-repair-qualified.json: all5 signed packages, both OCI RIDs/index/child/config digests, source/version labels, completeUTC created and both digest-boundsmokes; old5.10.0 failures remain historical.",
+    "activePr": {
+      "number": 54,
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/pull/54",
+      "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+      "base": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "title": "fix(build): preserve published container provenance",
+      "changedFiles": 4,
+      "remoteQualificationPending": false,
+      "merged": true,
+      "ciRun": 39716321803,
+      "codeqlRun": 39716321705,
+      "sourceReferenceRun": 39716321344,
+      "initialLatestStoryGuardsRun": 39716349561,
+      "initialLatestCommitlintRun": 39716349906,
+      "qualificationProgress": {
+        "ordinaryBuildAndBlockingTiers": "success",
+        "actualBlockingTests": {
+          "passed": 9492,
+          "failed": 0,
+          "skipped": 0,
+          "binding": "tenants-pr54-blocking-artifact-binding.json",
+          "independentAudit": "parent-tenants-pr54-blocking-trx-audit.json"
+        },
+        "aspireJob": 119621694153,
+        "aspireStatus": "completed advisory failure:313passed/3failed under unchanged shared default continue-on-error:true",
+        "sourceReference": "success",
+        "codeql": "success",
+        "storyGuards": "success",
+        "latestCommitlint": "success",
+        "dependencyReview": "success",
+        "allCursorChecks": "success",
+        "canonicalGate": "tenants-followup-pr54-gate-20261022T034750Z.json",
+        "fullCiStillRequired": false,
+        "normalGateAudit": "parent-tenants-pr54-normal-ci-gate-audit.json"
+      },
+      "mergeCommit": "205cbc5019343d344643b530fb03aee82af2840d",
+      "wholeCiConclusion": "success",
+      "mergeTreeProof": "tenants-pr54-normal-merge-tree-proof.json",
+      "advisoryFailureEvidence": "tenants-pr54-aspire-advisory-failure.json"
+    },
+    "selectedEnrollment": {
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "builds": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+      "rationale": "exact-enrollment-version-selection.md",
+      "original14VectorBytesUnchanged": true,
+      "fullRepairedFollowupReleaseStillMandatory": true,
+      "followupVersionNotClaimedAsEnrollmentVersion": true,
+      "productionManifestNotYetChanged": false,
+      "newReleaseBoundReceiptPending": false,
+      "productionManifestStatus": "Reviewed pure-configuration enrollment of authentic5.10.0/source82c; exact original14vectors/20scope decisions preserved. Separate repaired5.10.1 full release qualified; final actualUbuntu21op/cold and final review remain pending.",
+      "newReleaseBoundReceipt": "tenants-5.10.0-release-bound-enrollment.json"
+    },
+    "mainPushRuns": [
+      {
+        "id": 39718957112,
+        "name": "CodeQL",
+        "path": ".github/workflows/codeql.yml",
+        "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-22T03:49:29Z",
+        "run_attempt": 1,
+        "source": "Parent fresh independent API observations04:09\u201304:12UTC; actual205 normal push source/security/whole CI qualified."
+      },
+      {
+        "id": 39718957132,
+        "name": "CI",
+        "path": ".github/workflows/ci.yml",
+        "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-22T03:49:29Z",
+        "run_attempt": 1,
+        "source": "Parent fresh independent API observations04:09\u201304:12UTC; actual205 normal push source/security/whole CI qualified."
+      },
+      {
+        "id": 39718957146,
+        "name": "Commitlint",
+        "path": ".github/workflows/commitlint.yml",
+        "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-22T03:49:29Z",
+        "run_attempt": 1,
+        "source": "Parent fresh independent API observations04:09\u201304:12UTC; actual205 normal push source/security/whole CI qualified."
+      },
+      {
+        "id": 39718956608,
+        "name": "Source-reference integration",
+        "path": ".github/workflows/source-reference.yml",
+        "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-22T03:49:28Z",
+        "run_attempt": 1,
+        "source": "Parent fresh independent API observations04:09\u201304:12UTC; actual205 normal push source/security/whole CI qualified."
+      },
+      {
+        "id": 39718956833,
+        "name": "Story Guards",
+        "path": ".github/workflows/story-guards.yml",
+        "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-22T03:49:28Z",
+        "run_attempt": 1,
+        "source": "Parent fresh independent API observations04:09\u201304:12UTC; actual205 normal push source/security/whole CI qualified."
+      }
+    ],
+    "normalReleaseStillPending": false,
+    "mainCiAdvisoryAspire": "WholeCI39718957132 success04:08:26UTC; Aspire119630154507 advisory failure retained separately, no additional all-Aspire-green gate.",
+    "releaseBoundaryOwner": "Parent /root explicitly owns normal205 release dispatch, protected approval and final5package/OCI qualification as of04:14UTC. Subagent must not duplicate dispatch or approval.",
+    "preDispatchReadOnlyRefusal": "Initial child repo-variable lookup returned404 before mutation. Parent exactworkflow/publisher audit established HEXALITH_RELEASE_PUBLISH_ENABLED is not a Tenants control at all; no variable/control change was necessary. Normal protected production approval is deliberate opt-in authority.",
+    "normalRelease": {
+      "status": "completed",
+      "run": 39721533752,
+      "source": "205cbc5019343d344643b530fb03aee82af2840d",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39721533752",
+      "dispatchedBy": "Parent /root exclusively owns normal release boundary and protected approval as of04:17:17UTC; child must not duplicate dispatch/approval.",
+      "semanticVersion": "5.10.1",
+      "scope": "All5 normal packages and both OCI RIDs, normal source/collision/tagfloor/protected controls unchanged.",
+      "conclusion": "success",
+      "allFiveSignedPackagesAndBothOciArchitecturesQualified": true,
+      "qualification": "parent-tenants-5.10.1-full-repair-qualified.json",
+      "qualificationSha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
+    }
+  },
+  "releaseDispatchedByThisTask": true,
+  "ownerReleasesObserved": true,
+  "corePublishedConsumerBytes": {
+    "report": "owner-published-mcpcli-contracts-binding.json",
+    "actualClientAndContractsRegistryArchivesMatch": true,
+    "fullCatalogExactlyMatchesApprovedCandidate": true,
+    "all14OriginalVectorBytesAnd20ScopeDecisionsUnchanged": true,
+    "productionEnrollmentAccepted": false
+  },
+  "finalRootDocumentationAndVerification": {
+    "readmeClaimsToUpdate": [],
+    "verification": "Corrected-source actualUbuntu:21operations,194.5002ms firstCatalog/exactlyoneUlid;1356nativepasses/4WindowsSkips,146namedPython and bothSamplegates passed.",
+    "history": "Historical measurements, candidate hashes and prior design notes remain dated/historical, not rewritten as final release proof.",
+    "namedTestEvidence": "All146namedPython and nativeTRX/7selectedguards independently audited in parent-root-review-fixed-ubuntu-acceptance-audit.json.",
+    "freshTaskCache": "Use a fresh task NUGET_PACKAGES for final normal restore; bind actual final assets/library/cache raw signed5.10.0 archive plus restore-content hashes. Preserve default/scratch cache entries; restore same task cache after sample loopback.",
+    "sameRunNamedDotnetEvidence": "All6 ordinary final projects retain native --report-xunit-trx named outcomes; parent matrix audit needs isolatedString,500/500.0001boundary and early-failure cases actualPassed/unskipped without extra suite runs.",
+    "localDotnet": "Complete parent re-verification passed all6projects:1356passed/4existingWindows skips/0failed; all source/shipped-input bytes stayed unchanged.",
+    "localPythonSample": "Complete parent re-verification passed146namedPython, bothSamplegates, strict two-module production replay and fresh cold Catalog; parent-final-review-local-verification.json.",
+    "freshRootPackageRuntimeBinding": "Passed root-enrollment-restore-binding.json: actual final fresh-task cache signed4archives, assets/logicalhashes, deps hashes and shippedruntimeDLLs bound to authentic approvedpublished bytes; default cache untouched.",
+    "offlineClaimVerification": "All6 built CLI commands passed; strict/plainmodules parties7+tenants14, exact strictoperations forboth, bothREADMEdescribe/lint examples. root-enrollment-offline-cli-claims.json.",
+    "currentDocs": "Root README and conformance guide link corrected-source Ubuntu audit; exact5.10.0 enrollment remains separate from qualified5.10.1 fullrepair."
+  },
+  "rootCommitAdmission": "Satisfied: parent read the complete baseline diff before normalPR1. Headbf9 and actualUbuntu merge checkout have equal trees; no rootmerge orrelease.",
+  "rootPrecommitReview": "Parent complete baseline review and all final corrections passed; exact-source actual Ubuntu and complete local checks independently audited.",
+  "rootActualUbuntuAcceptance": {
+    "status": "passed",
+    "source": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+    "run": 39730145591,
+    "audit": "parent-root-review-fixed-ubuntu-acceptance-audit.json",
+    "operationCount": 21,
+    "coldCatalogMilliseconds": 194.5002,
+    "remaining": "Root PR1 review; no root merge or release performed."
+  },
+  "finalReviewCorrections": {
+    "status": "verified",
+    "groups": 5,
+    "priorCheckedSource": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+    "priorSuccessfulUbuntuRun": 39724191822,
+    "scope": "Bounded conformance oracle, runtime-byte, negative-test and failure-progress corrections; original14vectors/20decisions and normal release gates unchanged.",
+    "focusedEvidence": "parent-final-review-focused-verification.json",
+    "finalFiledClaims": 13,
+    "patchedClaims": 9,
+    "rejectedClaims": 3,
+    "deferredClaims": 1,
+    "deferral": "_bmad-output/implementation-artifacts/deferred-work.md:568",
+    "verifiedSource": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+    "verifiedUbuntuRun": 39730145591,
+    "reviewLoopIteration": 0,
+    "frozenIntentUnchanged": true
+  }
+}

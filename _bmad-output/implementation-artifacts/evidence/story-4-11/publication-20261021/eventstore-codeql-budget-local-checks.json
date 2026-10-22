@@ -1,0 +1,63 @@
+[
+  {
+    "label": "workflow structure and supported input",
+    "result": "passed",
+    "onlySemanticChange": "CodeQL caller timeout-minutes=60",
+    "sharedDefault": 30,
+    "scopeModeQueriesAndAllOtherInputs": "unchanged"
+  },
+  {
+    "label": "release-source-contracts",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/tests",
+      "-p",
+      "test_release_publication_authority.py",
+      "-v"
+    ],
+    "exitCode": 0,
+    "seconds": 0.35045199999876786
+  },
+  {
+    "label": "commitlint",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-codeql-budget-commit.txt"
+    ],
+    "exitCode": 0,
+    "seconds": 0.3494772730045952
+  },
+  {
+    "label": "pr-title-commitlint",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-qualified-pr-title.txt"
+    ],
+    "exitCode": 0,
+    "seconds": 0.35214459800045006
+  },
+  {
+    "label": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "seconds": 0.030772543002967723
+  }
+]

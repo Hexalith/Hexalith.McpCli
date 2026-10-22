@@ -1,0 +1,166 @@
+{
+  "observedAtUtc": "2026-10-22T00:55:27.588290+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Post-run retrospective reconciliation only. The complete clean-checkout baseline was captured for the later ablation, not prospectively for the earlier two version runs. Identical source Git tree and checkout attributes support comparison; original earlier input-preservation credit remains limited to its recorded 16,248-file predicate. No original snapshot byte is changed.",
+  "baseline": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/all-tracked-before.json",
+    "bytes": 22812318,
+    "sha256": "a2fded92a56eab81ca4aef1634bf641633ac263680c18f60c6609a62db1f0a42"
+  },
+  "runs": [
+    {
+      "version": "2.27.2",
+      "root": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "trackedBlobsCompared": 45327,
+      "changedTrackedBlobs": 362,
+      "changedSuffixCounts": {
+        "packages.lock.json": 362
+      },
+      "changedPathsExactlyEqualAblationLockRewriteSet": true,
+      "exactReplacementByteMatches": 362,
+      "normalizedReplacementJsonMatches": 362,
+      "privateRetrospectiveDelta": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/original-2.27.2-all-tracked-retrospective-delta.json",
+        "bytes": 186158,
+        "sha256": "567ff2ad7ec2b167a4a6d3a5faaff43a79a5a24870cfd70a09be5b28d4e088df"
+      }
+    },
+    {
+      "version": "2.27.3",
+      "root": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "trackedBlobsCompared": 45327,
+      "changedTrackedBlobs": 362,
+      "changedSuffixCounts": {
+        "packages.lock.json": 362
+      },
+      "changedPathsExactlyEqualAblationLockRewriteSet": true,
+      "exactReplacementByteMatches": 362,
+      "normalizedReplacementJsonMatches": 362,
+      "privateRetrospectiveDelta": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/original-2.27.3-all-tracked-retrospective-delta.json",
+        "bytes": 186158,
+        "sha256": "567ff2ad7ec2b167a4a6d3a5faaff43a79a5a24870cfd70a09be5b28d4e088df"
+      }
+    }
+  ],
+  "ablationGeneratedTrackedLockEffects": {
+    "changedLockFiles": 362,
+    "privateNormalizedDeltaBinding": {
+      "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/normalized-lock-json-field-deltas.json",
+      "bytes": 280278,
+      "sha256": "66a737ea71612cfb1bfe7c32f79fa137a1f89de23ef41ffc64595069a3c2b692"
+    },
+    "allOriginalAblationCheckoutBytesRestored": true
+  },
+  "logCounters": [
+    {
+      "label": "full-2.27.2",
+      "traceLog": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.2-attempt2/trace.stdout.txt",
+        "bytes": 11442946,
+        "sha256": "ada5f83b06ee78a10194f72b44ec990559e0ea250df29503a5f3386472b78629"
+      },
+      "counts": {
+        "sourceFiles": [
+          1,
+          11,
+          62,
+          75,
+          15180
+        ],
+        "projectFiles": [
+          566
+        ],
+        "resolvedReferences": [
+          592
+        ],
+        "unresolvedReferences": [
+          0
+        ],
+        "assemblyReferences": [],
+        "assemblies": [
+          592,
+          3403,
+          3988
+        ],
+        "conflicts": [],
+        "generatedSources": []
+      },
+      "extractingMarker": true,
+      "extractionCompletedMarker": false
+    },
+    {
+      "label": "full-2.27.3",
+      "traceLog": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/run-2.27.3-attempt2/trace.stdout.txt",
+        "bytes": 11254797,
+        "sha256": "281486a83cb9bfca1384c677c88f51ad77c2c58b5cba2b2acb62c9636f4d3b77"
+      },
+      "counts": {
+        "sourceFiles": [
+          1,
+          11,
+          62,
+          75,
+          15180
+        ],
+        "projectFiles": [
+          566
+        ],
+        "resolvedReferences": [
+          592
+        ],
+        "unresolvedReferences": [
+          0
+        ],
+        "assemblyReferences": [],
+        "assemblies": [
+          592,
+          3403,
+          3988
+        ],
+        "conflicts": [],
+        "generatedSources": []
+      },
+      "extractingMarker": true,
+      "extractionCompletedMarker": false
+    },
+    {
+      "label": "dedup-2.27.3",
+      "traceLog": {
+        "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation-attempt2/trace.stdout.txt",
+        "bytes": 13752881,
+        "sha256": "119b2ec865f8535df06011399653750cb51ddd68858f5a0fe75d79b0f18f2b09"
+      },
+      "counts": {
+        "sourceFiles": [
+          1,
+          11,
+          62,
+          75,
+          3891
+        ],
+        "projectFiles": [
+          566
+        ],
+        "resolvedReferences": [
+          592
+        ],
+        "unresolvedReferences": [
+          0
+        ],
+        "assemblyReferences": [],
+        "assemblies": [
+          592,
+          3403,
+          3988
+        ],
+        "conflicts": [],
+        "generatedSources": []
+      },
+      "extractingMarker": true,
+      "extractionCompletedMarker": true
+    }
+  ],
+  "interpretation": "Native lock rewrites are reported as generated source-tree side effects rather than hidden or prevented. Compare exact changed sets and replacement hashes above before attributing timing differences to duplicate collapse. No workflow source scope, tool version or mode was changed; no security/production qualification credit is claimed."
+}

@@ -1,0 +1,672 @@
+{
+  "capturedAtUtc": "2026-10-22T03:17:36.022887+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "run": 39711839320,
+  "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "runAttempt": 1,
+  "conclusion": "success",
+  "privateMetadata": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/run.json",
+      "bytes": 14753,
+      "sha256": "2934067d755cdfd8d8e9c744b6cf9d402d324ae65c82909e8810f3595ee65c6a"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/jobs.json",
+      "bytes": 22092,
+      "sha256": "4ee5b9570c385abaa54df08254626b52614a5f5517cc4754d0253c57a8fa87a2"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 119604732766,
+      "name": "Python contract tests",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T02:31:25Z",
+      "completed_at": "2026-10-22T02:34:08Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:26Z",
+          "completed_at": "2026-10-22T02:31:27Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:27Z",
+          "completed_at": "2026-10-22T02:31:30Z"
+        },
+        {
+          "number": 3,
+          "name": "Initialize .NET SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:30Z",
+          "completed_at": "2026-10-22T02:31:42Z"
+        },
+        {
+          "number": 4,
+          "name": "Test G-6 runtime/toolchain evidence validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:42Z",
+          "completed_at": "2026-10-22T02:33:51Z"
+        },
+        {
+          "number": 5,
+          "name": "Test container publisher helpers",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:33:51Z",
+          "completed_at": "2026-10-22T02:33:57Z"
+        },
+        {
+          "number": 6,
+          "name": "Test governed workflow provenance evaluator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:33:57Z",
+          "completed_at": "2026-10-22T02:33:58Z"
+        },
+        {
+          "number": 7,
+          "name": "Setup Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:33:58Z",
+          "completed_at": "2026-10-22T02:33:58Z"
+        },
+        {
+          "number": 8,
+          "name": "Install Node.js dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:33:58Z",
+          "completed_at": "2026-10-22T02:34:03Z"
+        },
+        {
+          "number": 9,
+          "name": "Test commitlint helpers",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:03Z",
+          "completed_at": "2026-10-22T02:34:05Z"
+        },
+        {
+          "number": 16,
+          "name": "Post Setup Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:05Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Initialize .NET SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:06Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:06Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:06Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        }
+      ],
+      "privateCompleteMaskedLog": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604732766.log",
+        "bytes": 93696,
+        "sha256": "38df3c5e81b7af9b7f301d61dc4132d13803de7651d2d8d21991eeb5163be2b2"
+      }
+    },
+    {
+      "id": 119604732939,
+      "name": "Build and test",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T02:31:25Z",
+      "completed_at": "2026-10-22T03:15:12Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:26Z",
+          "completed_at": "2026-10-22T02:31:27Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:27Z",
+          "completed_at": "2026-10-22T02:31:30Z"
+        },
+        {
+          "number": 3,
+          "name": "Initialize .NET",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:30Z",
+          "completed_at": "2026-10-22T02:31:38Z"
+        },
+        {
+          "number": 4,
+          "name": "Validate central package versions",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:38Z",
+          "completed_at": "2026-10-22T02:31:41Z"
+        },
+        {
+          "number": 5,
+          "name": "Test authoritative package catalog",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:41Z",
+          "completed_at": "2026-10-22T02:31:45Z"
+        },
+        {
+          "number": 6,
+          "name": "Test central package version validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:45Z",
+          "completed_at": "2026-10-22T02:32:01Z"
+        },
+        {
+          "number": 7,
+          "name": "Validate package version audit",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:32:01Z",
+          "completed_at": "2026-10-22T02:32:43Z"
+        },
+        {
+          "number": 8,
+          "name": "Test package version audit generator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:32:43Z",
+          "completed_at": "2026-10-22T02:33:17Z"
+        },
+        {
+          "number": 9,
+          "name": "Test package version audit validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:33:17Z",
+          "completed_at": "2026-10-22T02:43:38Z"
+        },
+        {
+          "number": 10,
+          "name": "Validate Builds consumer package authority",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:43:38Z",
+          "completed_at": "2026-10-22T02:44:05Z"
+        },
+        {
+          "number": 11,
+          "name": "Test consumer package authority validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:44:05Z",
+          "completed_at": "2026-10-22T02:44:35Z"
+        },
+        {
+          "number": 12,
+          "name": "Validate package version exception inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:44:35Z",
+          "completed_at": "2026-10-22T02:44:36Z"
+        },
+        {
+          "number": 13,
+          "name": "Test package version exception validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:44:36Z",
+          "completed_at": "2026-10-22T02:45:47Z"
+        },
+        {
+          "number": 14,
+          "name": "Validate Platform version catalog and hosting compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:45:47Z",
+          "completed_at": "2026-10-22T02:45:50Z"
+        },
+        {
+          "number": 15,
+          "name": "Test Platform version catalog contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:45:50Z",
+          "completed_at": "2026-10-22T02:49:05Z"
+        },
+        {
+          "number": 16,
+          "name": "Validate Dapr package versions",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:05Z",
+          "completed_at": "2026-10-22T02:49:06Z"
+        },
+        {
+          "number": 17,
+          "name": "Test Dapr package validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:06Z",
+          "completed_at": "2026-10-22T02:49:38Z"
+        },
+        {
+          "number": 18,
+          "name": "Test domain workflow test-platform contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:38Z",
+          "completed_at": "2026-10-22T02:49:39Z"
+        },
+        {
+          "number": 19,
+          "name": "Test caller-owned domain release preparation",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:39Z",
+          "completed_at": "2026-10-22T02:49:40Z"
+        },
+        {
+          "number": 20,
+          "name": "Setup Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:40Z",
+          "completed_at": "2026-10-22T02:49:41Z"
+        },
+        {
+          "number": 21,
+          "name": "Install Node.js dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:49:41Z",
+          "completed_at": "2026-10-22T02:54:43Z"
+        },
+        {
+          "number": 22,
+          "name": "Verify npm dependency provenance and signatures",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:54:43Z",
+          "completed_at": "2026-10-22T02:54:50Z"
+        },
+        {
+          "number": 23,
+          "name": "Test commitlint workflow contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:54:50Z",
+          "completed_at": "2026-10-22T02:54:53Z"
+        },
+        {
+          "number": 24,
+          "name": "Test legacy package publisher contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:54:53Z",
+          "completed_at": "2026-10-22T02:54:54Z"
+        },
+        {
+          "number": 25,
+          "name": "Test G-4 tool package publisher contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:54:54Z",
+          "completed_at": "2026-10-22T03:00:55Z"
+        },
+        {
+          "number": 26,
+          "name": "Test G-4 release lifecycle contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:00:55Z",
+          "completed_at": "2026-10-22T03:00:55Z"
+        },
+        {
+          "number": 27,
+          "name": "Test G-4 release source guard",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:00:55Z",
+          "completed_at": "2026-10-22T03:00:55Z"
+        },
+        {
+          "number": 28,
+          "name": "Test G-4 tool package qualification gate",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:00:55Z",
+          "completed_at": "2026-10-22T03:02:13Z"
+        },
+        {
+          "number": 29,
+          "name": "Test G-4 tool package artifact validator",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:02:13Z",
+          "completed_at": "2026-10-22T03:02:14Z"
+        },
+        {
+          "number": 30,
+          "name": "Restore",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:02:14Z",
+          "completed_at": "2026-10-22T03:02:24Z"
+        },
+        {
+          "number": 31,
+          "name": "Build",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:02:24Z",
+          "completed_at": "2026-10-22T03:03:24Z"
+        },
+        {
+          "number": 32,
+          "name": "Test Hexalith.Builds.Module.Tests",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:03:24Z",
+          "completed_at": "2026-10-22T03:11:42Z"
+        },
+        {
+          "number": 33,
+          "name": "Test Hexalith.Builds.Evidence.Tests",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:11:42Z",
+          "completed_at": "2026-10-22T03:11:48Z"
+        },
+        {
+          "number": 34,
+          "name": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:11:48Z",
+          "completed_at": "2026-10-22T03:11:53Z"
+        },
+        {
+          "number": 35,
+          "name": "Qualify G-4 tool source and Release packages",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:11:53Z",
+          "completed_at": "2026-10-22T03:15:01Z"
+        },
+        {
+          "number": 36,
+          "name": "Test multi-platform container publisher contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:01Z",
+          "completed_at": "2026-10-22T03:15:09Z"
+        },
+        {
+          "number": 37,
+          "name": "Test governed workflow provenance",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:09Z",
+          "completed_at": "2026-10-22T03:15:10Z"
+        },
+        {
+          "number": 72,
+          "name": "Post Setup Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:10Z",
+          "completed_at": "2026-10-22T03:15:10Z"
+        },
+        {
+          "number": 73,
+          "name": "Post Initialize .NET",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:10Z",
+          "completed_at": "2026-10-22T03:15:11Z"
+        },
+        {
+          "number": 74,
+          "name": "Post Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:11Z",
+          "completed_at": "2026-10-22T03:15:11Z"
+        },
+        {
+          "number": 75,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T03:15:11Z",
+          "completed_at": "2026-10-22T03:15:11Z"
+        }
+      ],
+      "privateCompleteMaskedLog": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604732939.log",
+        "bytes": 240859,
+        "sha256": "b599c95153a709f93508a621ed5570d677f892579f33b381ca4ae6dff41fbb4e"
+      }
+    },
+    {
+      "id": 119604733013,
+      "name": "Dependency review / dependency-review",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T02:31:26Z",
+      "completed_at": "2026-10-22T02:31:35Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:27Z",
+          "completed_at": "2026-10-22T02:31:28Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:28Z",
+          "completed_at": "2026-10-22T02:31:31Z"
+        },
+        {
+          "number": 3,
+          "name": "Dependency review",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:31Z",
+          "completed_at": "2026-10-22T02:31:32Z"
+        },
+        {
+          "number": 6,
+          "name": "Post Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:32Z",
+          "completed_at": "2026-10-22T02:31:32Z"
+        },
+        {
+          "number": 7,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:32Z",
+          "completed_at": "2026-10-22T02:31:32Z"
+        }
+      ],
+      "ghRunViewJobLogObservation": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733013.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "limitation": "gh run view --job exits0 with an empty body for this reusable-workflow job; not claimed as complete logs."
+      },
+      "directApiLogAttempt": {
+        "exitCode": 0,
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733013.api.log",
+        "bytes": 15899,
+        "sha256": "6dc1e87dc9ba6fcea4320810121eb622bf7a8721cc0d70d9cac5911c3bc02746"
+      },
+      "privateCompleteMaskedLog": {
+        "exitCode": 0,
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733013.api.log",
+        "bytes": 15899,
+        "sha256": "6dc1e87dc9ba6fcea4320810121eb622bf7a8721cc0d70d9cac5911c3bc02746"
+      }
+    },
+    {
+      "id": 119604733152,
+      "name": "CodeQL / analyze",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T02:31:25Z",
+      "completed_at": "2026-10-22T02:34:09Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:26Z",
+          "completed_at": "2026-10-22T02:31:28Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:28Z",
+          "completed_at": "2026-10-22T02:31:31Z"
+        },
+        {
+          "number": 3,
+          "name": "Initialize CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:31Z",
+          "completed_at": "2026-10-22T02:31:47Z"
+        },
+        {
+          "number": 4,
+          "name": "Perform CodeQL Analysis",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:31:47Z",
+          "completed_at": "2026-10-22T02:34:05Z"
+        },
+        {
+          "number": 6,
+          "name": "Post Perform CodeQL Analysis",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:05Z",
+          "completed_at": "2026-10-22T02:34:05Z"
+        },
+        {
+          "number": 7,
+          "name": "Post Initialize CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:05Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        },
+        {
+          "number": 8,
+          "name": "Post Run actions/checkout@v7.0.1",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:06Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        },
+        {
+          "number": 9,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-22T02:34:06Z",
+          "completed_at": "2026-10-22T02:34:06Z"
+        }
+      ],
+      "ghRunViewJobLogObservation": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733152.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "limitation": "gh run view --job exits0 with an empty body for this reusable-workflow job; not claimed as complete logs."
+      },
+      "directApiLogAttempt": {
+        "exitCode": 0,
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733152.api.log",
+        "bytes": 164180,
+        "sha256": "818e22fd8c3508e037493ff19449111c016c2b9ed2fa2daba81c3816f45eeffb"
+      },
+      "privateCompleteMaskedLog": {
+        "exitCode": 0,
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-final-ci/119604733152.api.log",
+        "bytes": 164180,
+        "sha256": "818e22fd8c3508e037493ff19449111c016c2b9ed2fa2daba81c3816f45eeffb"
+      }
+    }
+  ],
+  "testSummaryLines": [
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7798982Z Test run summary: Passed!",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7804823Z   total: 1516",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7806492Z   failed: 0",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7807127Z   succeeded: 1513",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7807613Z   skipped: 3",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T03:11:42.7808029Z   duration: 8m 11s 672ms",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t\ufeff2026-10-22T03:11:42.8026630Z ##[group]Run dotnet test test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj --no-restore --configuration Release",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:42.8028546Z dotnet test test/Hexalith.Builds.Evidence.Tests/Hexalith.Builds.Evidence.Tests.csproj --no-restore --configuration Release",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1009688Z Test run summary: Passed!",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1016475Z   total: 107",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1017057Z   failed: 0",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1017840Z   succeeded: 107",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1018377Z   skipped: 0",
+    "Build and test\tTest Hexalith.Builds.Evidence.Tests\t2026-10-22T03:11:48.1018832Z   duration: 1s 585ms",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t\ufeff2026-10-22T03:11:48.1278991Z ##[group]Run dotnet test test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj --no-restore --configuration Release",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:48.1280471Z dotnet test test/Hexalith.Builds.Tooling.IntegrationTests/Hexalith.Builds.Tooling.IntegrationTests.csproj --no-restore --configuration Release",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9011932Z Test run summary: Passed!",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9017343Z   total: 13",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9017758Z   failed: 0",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9018288Z   succeeded: 1",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9018819Z   skipped: 12",
+    "Build and test\tTest Hexalith.Builds.Tooling.IntegrationTests\t2026-10-22T03:11:53.9019283Z   duration: 941ms",
+    "Build and test\tQualify G-4 tool source and Release packages\t\ufeff2026-10-22T03:11:53.9275973Z ##[group]Run pwsh -NoProfile -File ./Tools/test-g4-tool-package-contracts.ps1 -Version \"0.0.0-ci.$env:GITHUB_RUN_NUMBER\" -RequireControls -SkipSourceValidation",
+    "Build and test\tQualify G-4 tool source and Release packages\t2026-10-22T03:11:53.9277118Z pwsh -NoProfile -File ./Tools/test-g4-tool-package-contracts.ps1 -Version \"0.0.0-ci.$env:GITHUB_RUN_NUMBER\" -RequireControls -SkipSourceValidation"
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

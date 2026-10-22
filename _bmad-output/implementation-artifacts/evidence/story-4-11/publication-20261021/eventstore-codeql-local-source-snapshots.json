@@ -1,0 +1,262 @@
+{
+  "preparedAtUtc": "2026-10-21T23:31:40.826820+00:00",
+  "sameInputManifestAcrossVersions": true,
+  "sources": [
+    {
+      "version": "2.27.2",
+      "root": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "commit": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+      "gitTree": "2b4f209969737367807973757cadc535bd66ed06",
+      "inputFileCount": 16248,
+      "csharpFileCount": 15180,
+      "inputManifest": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2-inputs.json",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "trackedInputsReadOnly": true,
+      "nestedOrRootSubmodulesInitialized": false,
+      "inputManifestBytes": 4372296,
+      "manifestCountVerified": 16248,
+      "inputManifestSelection": {
+        "predicate": "Git-tracked regular-file paths ending in case-sensitive .cs, .csproj, .props, .targets or .slnx; additionally the exact root paths .gitattributes, .gitmodules, global.json and nuget.config.",
+        "selectedFiles": 16248,
+        "selectedCsharpFiles": 15180,
+        "selectedOtherFiles": 1068,
+        "allGitTrackedEntries": 45336,
+        "outsideSelectedManifestEntries": 29088,
+        "scope": "Before/after content equality was checked for this selected input manifest only. The immutable Git tree identifies the complete initial checkout; the original comparison did not hash every other tracked evidence, binary, configuration or documentation file before and after.",
+        "predicateReconciledWithExactGitTree": true,
+        "trackedModeCounts": {
+          "100644": 45236,
+          "100755": 90,
+          "120000": 1,
+          "160000": 9
+        },
+        "outsideSelectedBlobEntries": 29079,
+        "outsideSelectedGitlinkEntries": 9
+      }
+    },
+    {
+      "version": "2.27.3",
+      "root": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "commit": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+      "gitTree": "2b4f209969737367807973757cadc535bd66ed06",
+      "inputFileCount": 16248,
+      "csharpFileCount": 15180,
+      "inputManifest": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3-inputs.json",
+      "inputManifestSha256": "2ed35a4f8c2adabc9d5dbb8208e45f46db677ea38ef5793220fbb476694c044b",
+      "trackedInputsReadOnly": true,
+      "nestedOrRootSubmodulesInitialized": false,
+      "inputManifestBytes": 4372296,
+      "manifestCountVerified": 16248,
+      "inputManifestSelection": {
+        "predicate": "Git-tracked regular-file paths ending in case-sensitive .cs, .csproj, .props, .targets or .slnx; additionally the exact root paths .gitattributes, .gitmodules, global.json and nuget.config.",
+        "selectedFiles": 16248,
+        "selectedCsharpFiles": 15180,
+        "selectedOtherFiles": 1068,
+        "allGitTrackedEntries": 45336,
+        "outsideSelectedManifestEntries": 29088,
+        "scope": "Before/after content equality was checked for this selected input manifest only. The immutable Git tree identifies the complete initial checkout; the original comparison did not hash every other tracked evidence, binary, configuration or documentation file before and after.",
+        "predicateReconciledWithExactGitTree": true,
+        "trackedModeCounts": {
+          "100644": 45236,
+          "100755": 90,
+          "120000": 1,
+          "160000": 9
+        },
+        "outsideSelectedBlobEntries": 29079,
+        "outsideSelectedGitlinkEntries": 9
+      }
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "remote",
+        "-v"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "origin\thttps://github.com/Hexalith/Hexalith.EventStore.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.EventStore.git (push)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "-3",
+        "--oneline"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "c8a0e9af8 ci(codeql): allow complete source extraction\naf6299d49 ci(integration): budget the complete serial live suite\n83e5f2d25 test(projections): isolate synthetic retry source bindings\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "worktree",
+        "add",
+        "--detach",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+        "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "HEAD is now at af6299d49 ci(integration): budget the complete serial live suite\n",
+      "stderrBinding": {
+        "utf8Bytes": 3472,
+        "sha256": "26f999b06fca96b09e4057b8f8968abc12922970a83fe1b0ea040172f29b6605",
+        "retainedInPrivateOriginal": true
+      }
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutBinding": {
+        "utf8Bytes": 7302372,
+        "sha256": "07ee8f80dc16462f6f28de469aad6fb4e58183983ace324ac65c88d704d7ebf7",
+        "retainedInPrivateOriginal": true
+      },
+      "trackedEntryCount": 45336
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.2",
+      "exitCode": 0,
+      "stdout": "2b4f209969737367807973757cadc535bd66ed06\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "worktree",
+        "add",
+        "--detach",
+        "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+        "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "HEAD is now at af6299d49 ci(integration): budget the complete serial live suite\n",
+      "stderrBinding": {
+        "utf8Bytes": 3541,
+        "sha256": "d708c900a9be50026ee2631d525baa6359d46b60078953376009e067dd9398f9",
+        "retainedInPrivateOriginal": true
+      }
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutBinding": {
+        "utf8Bytes": 7302372,
+        "sha256": "07ee8f80dc16462f6f28de469aad6fb4e58183983ace324ac65c88d704d7ebf7",
+        "retainedInPrivateOriginal": true
+      },
+      "trackedEntryCount": 45336
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "cwd": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-2.27.3",
+      "exitCode": 0,
+      "stdout": "2b4f209969737367807973757cadc535bd66ed06\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Task-owned detached af snapshots; both initial complete checkouts have the recorded Git tree. Before/after byte equality applies only to the stated 16,248-file input predicate, not all 45,336 tracked entries. No checkout of unpublished owner2444752; completed runtime proof worktree and protected branches untouched.",
+  "privateOriginal": {
+    "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-snapshots-full.json",
+    "bytes": 15070927,
+    "sha256": "0605ee952f4d70b086eca5fa71caf80f0f05cbc6de7e3c090cf845d1a0a72de5"
+  },
+  "retention": "Exact complete original, including full NUL-separated Git path inventories, remains private. Compact command/output hashes, immutable input manifest bindings and source equality are retained here.",
+  "compactedAtUtc": "2026-10-22T00:39:39.857249+00:00",
+  "wordingClarifiedAtUtc": "2026-10-22T00:46:08.145666+00:00",
+  "retrospectiveAllTrackedReconciliation": "eventstore-codeql-native-lock-reconciliation.json",
+  "retrospectiveAllTrackedFinding": "The two original full-scope checkouts have identical post-run bytes across all 45,327 tracked blobs; compared with the later same-af clean baseline, exactly362 native-generated packages.lock.json changes match the dedup run byte-for-byte. This retrospective evidence does not expand the original prospective 16,248-file preservation check."
+}

@@ -1,0 +1,25 @@
+{
+  "startedAtUtc": "2026-10-22T00:46:08.225706+00:00",
+  "status": "initial-preparation-refused",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Private causal ablation only. Collapse exact-byte duplicate tracked C# occurrences; preserve every distinct tracked C# blob and all non-C# tracked blob bytes. Not a source exclusion proposal, workflow mode change, security qualification or production/full-v1 acceptance.",
+  "sourceRoot": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/source-dedup-ablation",
+  "privateDirectory": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/dedup-ablation",
+  "resourceHints": {
+    "CODEQL_RAM": "14570",
+    "CODEQL_THREADS": "4",
+    "traceRamMiB": 14570,
+    "traceThreads": 4
+  },
+  "localBound": {
+    "traceSeconds": 900,
+    "aggregateRssCeilingMiB": 16384,
+    "samplingSeconds": 2
+  },
+  "environmentCaveat": "Same task host and CLI hints as the earlier local runs; not GitHub runner parity. Physical memory, affinity and cgroup constraints differ. Cache state, paths and duplicate-path contexts also differ. No CI duration extrapolation or coverage-equivalence claim.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "reason": "Byte-level Git object assertion encountered repository checkout newline normalization before any duplicate removal; retry will bind canonical Git identities and actual clean checkout bytes separately.",
+  "safeFailurePath": "_bmad-output/implementation-artifacts/evidence/6-1-p1r-31251-published-run/canonical-resume-20261018T210839Z-b3f330/frozen-verifier-tooling/global.json",
+  "noDuplicateRemoved": true
+}

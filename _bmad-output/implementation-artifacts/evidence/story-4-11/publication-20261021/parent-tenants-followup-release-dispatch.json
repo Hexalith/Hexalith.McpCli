@@ -1,0 +1,34 @@
+{
+  "startedAtUtc": "2026-10-22T04:17:16.965571+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "source": "205cbc5019343d344643b530fb03aee82af2840d",
+  "normalExactSourcePushCi": 39718957132,
+  "buildsInput": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "publisherExecution": "22a578b576a515d2af214fe81859447fffc97981",
+  "fullScope": {
+    "packages": 5,
+    "container": "tenants",
+    "rids": [
+      "linux-musl-x64",
+      "linux-musl-arm64"
+    ]
+  },
+  "productionEnvironment": 18745236815,
+  "existingApproval": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/publication-authorization.json",
+  "dispatchCommand": [
+    "gh",
+    "workflow",
+    "run",
+    "release.yml",
+    "--repo",
+    "Hexalith/Hexalith.Tenants",
+    "--ref",
+    "main"
+  ],
+  "dispatchExitCode": 0,
+  "privateEvidenceDirectory": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy",
+  "normalControlsUnchanged": true,
+  "publishEnableVariable": "Not used by Tenants workflow/wrappers/pinned shared preflight; no variable created or modified. Normal protected environment approval is the publication authority.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

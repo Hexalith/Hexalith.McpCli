@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-title-restore.stdout.txt",
+      "stderr": "eventstore-title-restore.stderr.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "exitCode": 0,
+      "stdout": "eventstore-title-build.stdout.txt",
+      "stderr": "eventstore-title-build.stderr.txt"
+    }
+  ]
+}

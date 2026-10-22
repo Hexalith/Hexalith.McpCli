@@ -1,0 +1,39 @@
+{
+  "checkedAtUtc": "2026-10-21T22:46:21.122040+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Optional isolated streamed32769 case only; buffered case/full remote integration not yet complete.",
+  "result": "streamed-case-passed",
+  "phases": [
+    {
+      "phase": "stage",
+      "count": 32769,
+      "bufferedOwner": false,
+      "pid": 36726,
+      "sha256": "09c168289964ccbe1c429cd34704f477688800bc18639c585ebe7abd646be1bf",
+      "completedFileAtUtc": "2026-10-21T22:36:34.028525+00:00",
+      "privatePath": "/tmp/mcpcli-story411-immutable-large-yh627j8k/bounded-identity/streamed-32769-stage.json"
+    },
+    {
+      "phase": "promote",
+      "count": 32769,
+      "bufferedOwner": false,
+      "pid": 46486,
+      "sha256": "b4f99c4d697141ef9ed9aa91d6eb060a3a6938e645f19fe9712e19da608b36c2",
+      "completedFileAtUtc": "2026-10-21T22:36:40.164751+00:00",
+      "privatePath": "/tmp/mcpcli-story411-immutable-large-yh627j8k/bounded-identity/streamed-32769-promote.json"
+    },
+    {
+      "phase": "resume",
+      "count": 32769,
+      "bufferedOwner": false,
+      "pid": 48143,
+      "sha256": "5a3e2a0158fe26b75842711c077beda875dc94a0c9de20c17f339e89aef5dd47",
+      "completedFileAtUtc": "2026-10-21T22:45:05.085757+00:00",
+      "privatePath": "/tmp/mcpcli-story411-immutable-large-yh627j8k/bounded-identity/streamed-32769-resume.json"
+    }
+  ],
+  "conservativeRunStartToResumeCompletionSeconds": 963.832214,
+  "timingIncludes": "Container/fixture setup and full three-phase case; exact individual xUnit timing deferred until final XML.",
+  "productionQualification": false,
+  "fullV1Accepted": false
+}

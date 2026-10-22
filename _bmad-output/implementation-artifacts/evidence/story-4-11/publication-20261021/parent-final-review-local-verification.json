@@ -1,0 +1,543 @@
+{
+  "checkedAtUtc": "2026-10-22T06:08:37.386962+00:00",
+  "result": "passed",
+  "sourceInputsMatchReviewedSource": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+  "scope": "Full parent local checks after five final-review corrections; source and shipped-input bytes stayed unchanged during all commands. The Git commit changed during the run, while every recorded input byte stayed equal. Actual Ubuntu proof remains independently bound to c887634.",
+  "privateFullReport": {
+    "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/checks.json",
+    "bytes": 116371,
+    "sha256": "fcb37a2a4dcc5a4661c417bc3442a5cef88810d32fb7b1c184e22f0ec58dfabb"
+  },
+  "unchangedInputCount": 360,
+  "unchangedInputManifestSha256": "4937092d06bcd1142a79fc829679ead01a1e505a0dff7962011bace4b056739b",
+  "commands": [
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:26.710267+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.1134983990050387,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/restore.stdout.txt",
+        "bytes": 80,
+        "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/restore.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "release-build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:27.824176+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 5.40823860099772,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/release-build.stdout.txt",
+        "bytes": 3684,
+        "sha256": "907e1a56242b869ea34c44460ea69b1333a038e7c3dff05de945ff4daadfa0d7"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/release-build.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "abstractions-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Abstractions.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Abstractions.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:33.232046+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7713631049991818,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/abstractions-tests.stdout.txt",
+        "bytes": 647,
+        "sha256": "f38f94bb7cb053d4dbeae62c15a51fad9b634a3f59298773b16bfb5f72931e86"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/abstractions-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "analyzers-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Analyzers.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Analyzers.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:34.004267+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.5617026379914023,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/analyzers-tests.stdout.txt",
+        "bytes": 635,
+        "sha256": "0cf2be30eb56ad2195cf07b62b7938a20d33d911cef97aff5737e6b4bfa85382"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/analyzers-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "core-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Core.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Core.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:36.566682+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.6253106959920842,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/core-tests.stdout.txt",
+        "bytes": 1200,
+        "sha256": "e6db300a3a8888f76bd2d9afc54041088b81191dd155b590712f40f35d2f58a8"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/core-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "manifest-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Manifest.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Manifest.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:38.192766+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 19.094134932005545,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/manifest-tests.stdout.txt",
+        "bytes": 633,
+        "sha256": "a96f8d772a713b8452312601acabe7d4bdbf3571f1a7814fdd024745be0e0e33"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/manifest-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "cli-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Cli.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Cli.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:44:57.287588+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 151.33300253200287,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/cli-tests.stdout.txt",
+        "bytes": 1242,
+        "sha256": "27e6f2b52ca36adfa4c5c4dbfd84b818986d5f2a3407742c61fcb53874f3c988"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/cli-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "mcp-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj",
+        "--no-build",
+        "--configuration",
+        "Release",
+        "--results-directory",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Mcp.Tests",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.McpCli.Mcp.Tests.trx"
+      ],
+      "startedAtUtc": "2026-10-22T05:47:28.616266+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.5429999710031552,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/mcp-tests.stdout.txt",
+        "bytes": 599,
+        "sha256": "db06c32954b2fc0e8060487c933e06256ba0020fa227f308e2ad724f87a2ab0b"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/mcp-tests.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "python",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "startedAtUtc": "2026-10-22T05:47:30.159410+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 18.85941020298924,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/python.stdout.txt",
+        "bytes": 228,
+        "sha256": "ac2238894c3033fd8cb69a0cbfcb19570c5e671b09424eb94f22cd234aa9699f"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/python.stderr.txt",
+        "bytes": 24877,
+        "sha256": "dbb2ea5b4a9f0dee2d3dbf7336e6bffad98cc9f18bd96d30ec5a495c5fa4fa25"
+      }
+    },
+    {
+      "label": "sample-validation",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "startedAtUtc": "2026-10-22T05:47:49.019372+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 20.564714264008217,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/sample-validation.stdout.txt",
+        "bytes": 1647,
+        "sha256": "f0384d237ac941251c612f4235b4bc3413834946dacf7ed2ec0330be2556caf7"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/sample-validation.stderr.txt",
+        "bytes": 247,
+        "sha256": "15c28d0b89c6149146acaaa0aab5252ad6ea5e824a72bcab00b883d4c022907b"
+      }
+    },
+    {
+      "label": "sample-loopback",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "startedAtUtc": "2026-10-22T05:48:09.583688+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 723.0997645839961,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/sample-loopback.stdout.txt",
+        "bytes": 4604,
+        "sha256": "1d5b84fb1a5f8e31ddb6e2996ab7034dc2ddc7edf0e16d9581ab9ef3b9579e63"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/sample-loopback.stderr.txt",
+        "bytes": 247,
+        "sha256": "1e460011205396214bae8a310ae567937579c5abc17950ea356e76b385ae122d"
+      }
+    },
+    {
+      "label": "restore-after-loopback",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "startedAtUtc": "2026-10-22T06:00:12.659338+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.3647750669915695,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/restore-after-loopback.stdout.txt",
+        "bytes": 708,
+        "sha256": "cbdeff74b4a86c35561c0d1a42b231b137485e4f84ffb99d13715bde79b33270"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/restore-after-loopback.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "build-after-loopback",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "startedAtUtc": "2026-10-22T06:00:14.024671+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.0927742040075827,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/build-after-loopback.stdout.txt",
+        "bytes": 3684,
+        "sha256": "de2c6232b9a15eabdc6e3cbdf9fcbcbb8db991afac843c61b6d807a18003cc3a"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/build-after-loopback.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "strict-production",
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/production"
+      ],
+      "startedAtUtc": "2026-10-22T06:00:17.117980+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 489.17962414400245,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/strict-production.stdout.txt",
+        "bytes": 248,
+        "sha256": "c38e3b3bae7cea6101037af575fef65f079d6906becad9eefb994c3a6bb8bf39"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/strict-production.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "cold-strict",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "startedAtUtc": "2026-10-22T06:08:26.281783+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7379859079956077,
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/cold-strict.stdout.txt",
+        "bytes": 444,
+        "sha256": "9babe400d2711f2d4b5ef2db43fa749867cd1a4fb03a5faeda1771e1b4dd38d2"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/cold-strict.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "totals": {
+    "Passed": 1356,
+    "NotExecuted": 4
+  },
+  "nativeTrx": [
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+        "bytes": 85569,
+        "sha256": "95835f51f6f86be7ff4adf22094d6e5550cea23da04aaddca70135c60fd9b1fb"
+      },
+      "results": {
+        "Passed": 58
+      }
+    },
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+        "bytes": 153921,
+        "sha256": "343202697a55597308726f5830803705068e5637f047534ce7d8b50970b6a0cc"
+      },
+      "results": {
+        "Passed": 104
+      }
+    },
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+        "bytes": 717306,
+        "sha256": "c17fff6c148407bfc6f2b1cb13458f2ae4873b072e416242ed3c80bc5935a0b1"
+      },
+      "results": {
+        "Passed": 479,
+        "NotExecuted": 2
+      }
+    },
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+        "bytes": 29886,
+        "sha256": "174ac6065e6acf3f3f94f86496c1d5be65b788b3d2a2ab70d66d74fa7c4561c1"
+      },
+      "results": {
+        "Passed": 19
+      }
+    },
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+        "bytes": 30162,
+        "sha256": "580e4225a6417da229941577e61bddf5b8f4a1053dae74d0ddb22f8f9ebd42a6"
+      },
+      "results": {
+        "Passed": 20
+      }
+    },
+    {
+      "file": {
+        "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/root-review-verification/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+        "bytes": 985409,
+        "sha256": "ee79adfe262953c1cbdacd8b0a39f2c58b3b38af140d642fe6d13d7f16d2a5d5"
+      },
+      "results": {
+        "Passed": 676,
+        "NotExecuted": 2
+      }
+    }
+  ],
+  "productionReplay": {
+    "result": "passed",
+    "checks": [
+      {
+        "command": [
+          "dotnet",
+          "restore",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "dotnet",
+          "build",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "--no-restore",
+          "-c",
+          "Release",
+          "-m:1",
+          "-warnaserror",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      }
+    ],
+    "phase": "production-replay",
+    "packageCount": 2,
+    "operationCount": 21,
+    "modules": [
+      "parties",
+      "tenants"
+    ],
+    "packageModules": {
+      "Hexalith.Parties.Contracts": [
+        "parties"
+      ],
+      "Hexalith.Tenants.Contracts": [
+        "tenants"
+      ]
+    }
+  },
+  "coldBenchmark": {
+    "result": "passed",
+    "fullV1Accepted": true,
+    "elapsedMilliseconds": 112.7602,
+    "limitMilliseconds": 500,
+    "processId": 84489,
+    "assemblies": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts",
+      "Hexalith.McpCli.Sample.Contracts"
+    ],
+    "productionPackages": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts"
+    ],
+    "modules": [
+      {
+        "Name": "parties",
+        "identifierKind": "String",
+        "operationCount": 7
+      },
+      {
+        "Name": "sample",
+        "identifierKind": "Ulid",
+        "operationCount": 3
+      },
+      {
+        "Name": "tenants",
+        "identifierKind": "String",
+        "operationCount": 14
+      }
+    ],
+    "missingRequiredModules": [],
+    "diagnostics": [],
+    "failures": []
+  },
+  "evidenceLimit": "Scripted local transport parity and construction measurement; no live authorization, privacy, persisted-effect or retirement acceptance."
+}

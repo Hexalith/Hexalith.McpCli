@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-10-22T02:02:36.281635+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "pullRequest": 130,
+  "head": "85290197d2a4324b50560630e8992d71c3318784",
+  "run": 39705799551,
+  "job": 119585427412,
+  "conclusion": "failure",
+  "privateLog": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-ci-job119585427412.log",
+    "bytes": 459050,
+    "sha256": "f39ec6a077434c3274894182cfc8c87e8f992fc111fba466edb563c5816f5eba"
+  },
+  "safeFailureSummary": [
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T02:01:01.7046437Z \u001b[31mTest run summary: Failed!",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T02:01:01.7323617Z ##[error]Process completed with exit code 2."
+  ]
+}

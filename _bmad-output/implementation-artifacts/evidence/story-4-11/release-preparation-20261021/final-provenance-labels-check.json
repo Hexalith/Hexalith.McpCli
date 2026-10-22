@@ -1,0 +1,32 @@
+{
+  "command": [
+    "dotnet",
+    "msbuild",
+    "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+    "-nologo",
+    "-t:RebindContainerProvenanceLabels",
+    "-p:Configuration=Release",
+    "-p:ContainerProvenanceSourceSha=ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "-p:ContainerProvenanceReleaseVersion=5.10.0",
+    "-p:ContainerProvenanceCreated=2026-10-21T18:51:12Z",
+    "-getItem:ContainerLabel"
+  ],
+  "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+  "exitCode": 0,
+  "durationSeconds": 0.7555601929998375,
+  "result": "passed",
+  "labels": {
+    "org.opencontainers.image.licenses": "MIT",
+    "org.opencontainers.image.vendor": "Hexalith",
+    "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.Tenants",
+    "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v5.10.0",
+    "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.Tenants/blob/ffe9522b10f37f56cd9339c3387cbb4b7d16d897/README.md",
+    "org.opencontainers.image.revision": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "org.opencontainers.image.version": "5.10.0",
+    "org.opencontainers.image.created": "2026-10-21T18:51:12Z",
+    "org.opencontainers.artifact.created": "2026-10-21T18:51:12Z"
+  },
+  "finalTargetSha256": "ffe4a85d7211b9897b036b083b25bec56b69699f4c0a46c8ec596cf1221f9568",
+  "archiveCompleteInputPathUnchanged": true,
+  "note": "Final complete-input condition executes the same label path as the successful corrected archive. Missing/partial metadata behavior is separately covered by MSBuild tests."
+}

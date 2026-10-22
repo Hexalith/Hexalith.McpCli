@@ -1,0 +1,33 @@
+{
+  "note": "Only the root-declared Builds checkout in a new isolated worktree; temporary input for local validation. Final checked reapplication gitlink is still pending. No nested submodules initialized.",
+  "checks": [
+    {
+      "command": [
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        "--reference",
+        "/home/administrator/projects/hexalith/builds",
+        "--",
+        "references/Hexalith.Builds"
+      ],
+      "exitCode": 0,
+      "stdout": "Submodule path 'references/Hexalith.Builds': checked out '359fee24aeca4d9eabed4b425d4cfa2520b2adda'\n",
+      "stderr": "Cloning into '/tmp/mcpcli-story411-tenants-owner-poopx2nu/references/Hexalith.Builds'...\n"
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "references/Hexalith.Builds",
+        "checkout",
+        "--detach",
+        "aea707d6e8ef2c765531f7c7bcee0441fa5f076e"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was 359fee2 build: merge fix/domain-enrollment-pass-4 into main via /pushall\nHEAD is now at aea707d fix(container): preserve publisher provenance across RIDs\n"
+    }
+  ]
+}

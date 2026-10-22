@@ -1,0 +1,26 @@
+--- a/Directory.Build.targets
++++ b/Directory.Build.targets
+@@ -31,4 +31,12 @@
+     </ItemGroup>
+   </Target>
+ 
++  <!-- Reuse the shared SDK provenance repair from the centrally pinned Builds checkout. -->
++  <PropertyGroup>
++    <HexalithContainerProvenanceTargets>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++    <HexalithContainerProvenanceTargets Condition="!Exists('$(HexalithContainerProvenanceTargets)') and Exists('$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets')">$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/ContainerProvenance.targets</HexalithContainerProvenanceTargets>
++  </PropertyGroup>
++  <Import Project="$(HexalithContainerProvenanceTargets)" />
++
+ </Project>
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -306,7 +306,7 @@
+       issues: write
+       pull-requests: write
+     env:
+-      HEXALITH_BUILDS_EXECUTION_SHA: 53d53ae42abf7c87d385a078ab260531480bbf8a
++      HEXALITH_BUILDS_EXECUTION_SHA: 22a578b576a515d2af214fe81859447fffc97981
+       HEXALITH_RELEASE_ENVIRONMENT: production
+       HEXALITH_RELEASE_SOURCE_BRANCH: main
+       HEXALITH_RELEASE_SOURCE_CI_WORKFLOW: ci.yml

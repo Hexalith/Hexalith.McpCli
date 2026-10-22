@@ -1,0 +1,113 @@
+{
+  "preparedAtUtc": "2026-10-22T03:54:41.314000+00:00",
+  "status": "proposed-pending-repaired-full-release",
+  "rootHead": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+  "buildsBefore": "2744d549270298cfe73679f76b477a7368429006",
+  "buildsAfter": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "enrollmentPackage": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0",
+    "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA=="
+  },
+  "changes": [
+    {
+      "path": "src/Hexalith.McpCli/Hexalith.McpCli.csproj",
+      "bytes": 1706,
+      "sha256": "181b26acedfec3526eb22579bfff1329287515511a9302623c48485f2af386fb"
+    },
+    {
+      "path": "tools/dependency-policy.json",
+      "bytes": 3652,
+      "sha256": "0b25a1a1a05e7da8832ec2f66ada8a0fa172b562a9ac46c7fc3e42f0adb1a398"
+    },
+    {
+      "path": "tools/inventory-coverage/v1/tenants-approved.json",
+      "bytes": 15563,
+      "sha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/approval.json",
+      "bytes": 2240,
+      "sha256": "9caed574ef28e5bc16117db9a725441dc1c02ec292956ff25413c0df964bd076"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "bytes": 4923,
+      "sha256": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "bytes": 6324,
+      "sha256": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "bytes": 3942,
+      "sha256": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "bytes": 4544,
+      "sha256": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "bytes": 5916,
+      "sha256": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "bytes": 12929,
+      "sha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "bytes": 11118,
+      "sha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "bytes": 6987,
+      "sha256": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "bytes": 14612,
+      "sha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "bytes": 9174,
+      "sha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "bytes": 6506,
+      "sha256": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "bytes": 6203,
+      "sha256": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "bytes": 4790,
+      "sha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55"
+    },
+    {
+      "path": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "bytes": 5001,
+      "sha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+    }
+  ],
+  "unchangedAcceptedLint": {
+    "path": "tools/inventory-coverage/v1/tenants-accepted-lint.json",
+    "bytes": 1947,
+    "sha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352"
+  },
+  "scope": "Configuration-only proposal and exact original approved input copies. Mandatory repaired full release and final strict Ubuntu acceptance remain pending; source tests may run, but no strict full-v1 gate is run before release qualification.",
+  "firstRootCommitHeldForParentFullDiffAudit": true,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

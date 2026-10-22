@@ -1,0 +1,91 @@
+{
+  "result": "passed",
+  "scope": "Independent interim reviewed6dd Tenants local source-tree/TRX/log audit; actual merged Builds gitlink, final source governance, remoteCI and release remain pending.",
+  "reportSha256": "3cccd8c9ecf19020ba730dac96bf0b3de65aece9ca9f423b85e61f21fc6b7650",
+  "sourceIndexTree": "ea34d460bf3a4d4bc0e4e2c8552cf99a97e7d65b",
+  "sameBeforeAfterSourceIndexAndEmptyUnstagedDiff": true,
+  "sourceDeltaExactlyReviewedThreeBlobsPlusBuildsGitlink": true,
+  "approvedContractsAndClientTreesUnchanged": true,
+  "all24BoundPrivateFilesRehashed": true,
+  "projectAttempts": [
+    {
+      "project": "tests/Hexalith.Tenants.Contracts.Tests",
+      "exitCode": 0,
+      "testResults": 654,
+      "outcomes": {
+        "Passed": 654
+      },
+      "trxSha256": "c4064e1b1f98ffe914d15d9f45ae5989438b1559759bbb43b93716191362cc00"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Client.Tests",
+      "exitCode": 0,
+      "testResults": 50,
+      "outcomes": {
+        "Passed": 50
+      },
+      "trxSha256": "2bece1c2a3abe9156b8c9391bc5e6d80f51684ea2b5fad2c8b1e6bd3e9a1fd82"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Testing.Tests",
+      "exitCode": 0,
+      "testResults": 182,
+      "outcomes": {
+        "Passed": 182
+      },
+      "trxSha256": "d824483821d8239a1667a743ce3a26ed7ba370cc7fe8f0addf75867fbeffacc9"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.AppHost.Tests",
+      "exitCode": 2,
+      "testResults": 9,
+      "outcomes": {
+        "Failed": 9
+      },
+      "trxSha256": "534c4f8bfaed1c3ca3acd4629a8301dcf62f4922c45e166bc093ff8474d1dae2"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.AppHost.Tests",
+      "exitCode": 0,
+      "testResults": 9,
+      "outcomes": {
+        "Passed": 9
+      },
+      "trxSha256": "87ac43b5bf95a81c3a76da7983be4f694fe4348822b941c5eed93cc0869a8f80"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.Server.Tests",
+      "exitCode": 0,
+      "testResults": 1440,
+      "outcomes": {
+        "Passed": 1440
+      },
+      "trxSha256": "4256d60c06a73379d45b1284c9d17599878f527074733c62613f4032b1a30a06"
+    },
+    {
+      "project": "tests/Hexalith.Tenants.UI.Tests",
+      "exitCode": 0,
+      "testResults": 7117,
+      "outcomes": {
+        "Passed": 7117
+      },
+      "trxSha256": "9f86bcbb59e6dfa64d667be1dc375c1780da58bf027e11ab30801e46ada4ed75"
+    },
+    {
+      "project": "samples/Hexalith.Tenants.Sample.Tests",
+      "exitCode": 0,
+      "testResults": 40,
+      "outcomes": {
+        "Passed": 40
+      },
+      "trxSha256": "bf4f6b1d7555ef2bde8636a66ffccd2998a699f1ee89dd07ca4b684a284b78e4"
+    }
+  ],
+  "latestSuccessfulProjects": 7,
+  "latestPassedTests": 9492,
+  "latestSkippedOrFailedTests": 0,
+  "initialMissingCheckoutFailureRetainedAndNotCredited": true,
+  "projectReferenceMode": "UseHexalithProjectReferences=false; existing UI FrontComposer source exception remains default and explicit in evaluated project configuration",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

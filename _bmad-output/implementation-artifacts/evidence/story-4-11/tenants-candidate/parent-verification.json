@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "checkedAtUtc": "2026-10-21T17:30:11.230889+00:00",
+  "approvalPacketSha256": "609fa7d2b4620afa82efc3d51e643d50b076c8b57af12ec4474471f301a1b8ff",
+  "checks": [
+    "Every approval packet input hash matches retained bytes.",
+    "All three local archives match recorded raw SHA-256 and NuGet SHA-512 hashes.",
+    "All fourteen vectors match committed Tenants source with only the package version token changed.",
+    "Combined replay passed 21 operations and withholds production/full-v1 acceptance.",
+    "Fresh-process benchmark uses both candidate modules and exactly one Ulid sample, is below 500 ms and withholds full-v1 acceptance.",
+    "Fresh-context description check completed without blocking findings."
+  ],
+  "originalSourceTrees": "No parent changes made; concurrent unrelated Tenants/EventStore work is preserved.",
+  "publicationApproved": false,
+  "fullV1Accepted": false
+}

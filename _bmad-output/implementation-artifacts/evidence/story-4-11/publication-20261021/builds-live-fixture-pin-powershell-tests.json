@@ -1,0 +1,101 @@
+{
+  "startedAtUtc": "2026-10-22T02:13:32.545922+00:00",
+  "commands": [
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-publish-g4-tool-packages.ps1"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 14.781855709996307,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-publish-g4-tool-packages.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-publish-g4-tool-packages.stderr.txt",
+          "bytes": 565,
+          "sha256": "e7ec705a3d72e7c3cdd2d5eb549b8511ae5227f44dc091f97dabb1730f645b67"
+        }
+      ],
+      "scope": "Initial pre-followup failure: shared exact expected-pin default still3.126.0. Retained; no passing credit."
+    },
+    {
+      "attempt": "publisher-default-followup",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-publish-g4-tool-packages.ps1"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 207.6223416970024,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-publish-g4-tool-packages-followup.stdout.txt",
+          "bytes": 9279,
+          "sha256": "701337d2ba315298866e79ac9b5a96c4d4fbb4327a4e209c0fd7c1d042815412"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-publish-g4-tool-packages-followup.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "attempt": "publisher-default-followup",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-g4-tool-package-contract-gate.ps1"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 40.05343288599397,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-g4-tool-package-contract-gate-followup.stdout.txt",
+          "bytes": 777,
+          "sha256": "9e7817accea795ee75e6f04a58b0abe91568fc99e3d7247855b9dad99e66972b"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-g4-tool-package-contract-gate-followup.stderr.txt",
+          "bytes": 120,
+          "sha256": "47e0f44510dbaf52331b398afaa9d3c1480be005aa6b527b702fd8649e24917a"
+        }
+      ]
+    },
+    {
+      "attempt": "publisher-default-followup",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "Tools/test-g4-tool-package-artifact-validator.ps1"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 3.161644977008109,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-g4-tool-package-artifact-validator-followup.stdout.txt",
+          "bytes": 64,
+          "sha256": "a42f016d012dde817e223f104fbc8a761dbae626d7dffc1755eb703dff2b68d6"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/test-g4-tool-package-artifact-validator-followup.stderr.txt",
+          "bytes": 120,
+          "sha256": "47e0f44510dbaf52331b398afaa9d3c1480be005aa6b527b702fd8649e24917a"
+        }
+      ]
+    }
+  ],
+  "scope": "Affected publisher and qualification gate contracts; no remote publication.",
+  "followupApplied": "builds-publisher-pin-followup-binding.json",
+  "result": "passed-after-publisher-default-followup",
+  "completedAtUtc": "2026-10-22T02:25:27.168225+00:00"
+}

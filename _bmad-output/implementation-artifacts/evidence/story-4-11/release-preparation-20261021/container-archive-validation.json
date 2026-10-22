@@ -1,0 +1,289 @@
+[
+  {
+    "name": "eventstore",
+    "archive": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/eventstore-candidate-musl.oci.tar",
+    "sha256": "3e7f78b9bbf564e6621ff76bc05ae5b6fca8c78cc4f6f1b9e002e55eaece06d3",
+    "archiveBytes": 127737344,
+    "result": "archive-structure-and-digests-passed",
+    "registryPush": false,
+    "images": [
+      {
+        "manifest": "sha256:93e31717130f4cb19ce762d28c9e8d6ccbe774cc78ea9638ea41c05f5eff47ef",
+        "platform": {
+          "architecture": "amd64",
+          "os": "linux"
+        },
+        "architecture": "amd64",
+        "os": "linux",
+        "config": {
+          "ExposedPorts": {
+            "8080/tcp": {}
+          },
+          "Labels": {
+            "org.opencontainers.image.licenses": "MIT",
+            "org.opencontainers.image.vendor": "Hexalith",
+            "org.opencontainers.artifact.description": "DAPR-native event sourcing server for .NET",
+            "org.opencontainers.image.description": "DAPR-native event sourcing server for .NET",
+            "org.opencontainers.image.authors": "Hexalith Contributors",
+            "org.opencontainers.image.base.name": "mcr.microsoft.com/dotnet/aspnet",
+            "net.dot.runtime.majorminor": "10.0",
+            "net.dot.sdk.version": "10.0.402",
+            "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.EventStore",
+            "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.EventStore/releases/tag/v3.126.1",
+            "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.EventStore/blob/30260abc7c6703e9e545dd1596ca258b925b1ed7/README.md",
+            "org.opencontainers.image.revision": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+            "org.opencontainers.image.version": "3.126.1",
+            "org.opencontainers.image.created": "2026-10-21T18:44:42Z",
+            "org.opencontainers.artifact.created": "2026-10-21T18:44:42Z",
+            "org.opencontainers.image.base.digest": "sha256:eca1355b1fefb0a93617b7d01749dc8ac821e0eadcedbcf7d64e4b59cad60104"
+          },
+          "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "APP_UID=1654",
+            "ASPNETCORE_HTTP_PORTS=8080",
+            "DOTNET_RUNNING_IN_CONTAINER=true",
+            "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true",
+            "DOTNET_VERSION=10.0.13",
+            "ASPNET_VERSION=10.0.13"
+          ],
+          "WorkingDir": "/app/",
+          "Entrypoint": [
+            "dotnet",
+            "/app/Hexalith.EventStore.dll"
+          ],
+          "User": "app"
+        },
+        "created": "2026-10-21T18:45:03.2864353Z"
+      },
+      {
+        "manifest": "sha256:23763326e330029438bf86a2d0728f8900381b1b1cd9546c5850f1e3edf12b8a",
+        "platform": {
+          "architecture": "arm64",
+          "os": "linux"
+        },
+        "architecture": "arm64",
+        "os": "linux",
+        "config": {
+          "ExposedPorts": {
+            "8080/tcp": {}
+          },
+          "Labels": {
+            "org.opencontainers.image.licenses": "MIT",
+            "org.opencontainers.image.vendor": "Hexalith",
+            "org.opencontainers.artifact.description": "DAPR-native event sourcing server for .NET",
+            "org.opencontainers.image.description": "DAPR-native event sourcing server for .NET",
+            "org.opencontainers.image.authors": "Hexalith Contributors",
+            "org.opencontainers.image.base.name": "mcr.microsoft.com/dotnet/aspnet",
+            "net.dot.runtime.majorminor": "10.0",
+            "net.dot.sdk.version": "10.0.402",
+            "org.opencontainers.image.source": "https://github.com/Hexalith/Hexalith.EventStore",
+            "org.opencontainers.image.url": "https://github.com/Hexalith/Hexalith.EventStore/releases/tag/v3.126.1",
+            "org.opencontainers.image.documentation": "https://github.com/Hexalith/Hexalith.EventStore/blob/30260abc7c6703e9e545dd1596ca258b925b1ed7/README.md",
+            "org.opencontainers.image.revision": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+            "org.opencontainers.image.version": "3.126.1",
+            "org.opencontainers.image.created": "2026-10-21T18:44:42Z",
+            "org.opencontainers.artifact.created": "2026-10-21T18:44:42Z",
+            "org.opencontainers.image.base.digest": "sha256:8526f20a1c9cef27170346f890a39eafc597865c8e47eaa005600d2f2ef9d1aa"
+          },
+          "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "APP_UID=1654",
+            "ASPNETCORE_HTTP_PORTS=8080",
+            "DOTNET_RUNNING_IN_CONTAINER=true",
+            "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true",
+            "DOTNET_VERSION=10.0.13",
+            "ASPNET_VERSION=10.0.13"
+          ],
+          "WorkingDir": "/app/",
+          "Entrypoint": [
+            "dotnet",
+            "/app/Hexalith.EventStore.dll"
+          ],
+          "User": "app"
+        },
+        "created": "2026-10-21T18:45:02.1773294Z"
+      }
+    ],
+    "provenanceResult": "passed",
+    "provenanceFindings": []
+  },
+  {
+    "name": "tenants",
+    "archive": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-candidate-musl.oci.tar",
+    "sha256": "b72b9f64ed4435e81b03f831824b6f9bbd09a381695a5f0299684f44246364f4",
+    "archiveBytes": 126215168,
+    "result": "archive-structure-and-digests-passed",
+    "registryPush": false,
+    "images": [
+      {
+        "manifest": "sha256:ff90890e4c507bad62639d02d34764a483807a4497f505925611c647940e26a9",
+        "platform": {
+          "architecture": "amd64",
+          "os": "linux"
+        },
+        "architecture": "amd64",
+        "os": "linux",
+        "config": {
+          "ExposedPorts": {
+            "8080/tcp": {}
+          },
+          "Labels": {
+            "org.opencontainers.image.source": "https",
+            "org.opencontainers.image.licenses": "MIT",
+            "org.opencontainers.image.vendor": "Hexalith",
+            "org.opencontainers.image.created": "2026-10-21T18",
+            "org.opencontainers.artifact.created": "2026-10-21T18",
+            "org.opencontainers.artifact.description": "Multi-tenant management service for .NET built on Hexalith.EventStore",
+            "org.opencontainers.image.description": "Multi-tenant management service for .NET built on Hexalith.EventStore",
+            "org.opencontainers.image.authors": "Hexalith Contributors",
+            "org.opencontainers.image.url": "https",
+            "org.opencontainers.image.documentation": "https",
+            "org.opencontainers.image.version": "5.10.0",
+            "org.opencontainers.image.base.name": "mcr.microsoft.com/dotnet/aspnet",
+            "net.dot.runtime.majorminor": "10.0",
+            "net.dot.sdk.version": "10.0.402",
+            "org.opencontainers.image.base.digest": "sha256:eca1355b1fefb0a93617b7d01749dc8ac821e0eadcedbcf7d64e4b59cad60104"
+          },
+          "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "APP_UID=1654",
+            "ASPNETCORE_HTTP_PORTS=8080",
+            "DOTNET_RUNNING_IN_CONTAINER=true",
+            "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true",
+            "DOTNET_VERSION=10.0.13",
+            "ASPNET_VERSION=10.0.13"
+          ],
+          "WorkingDir": "/app/",
+          "Entrypoint": [
+            "dotnet",
+            "/app/Hexalith.Tenants.dll"
+          ],
+          "User": "app"
+        },
+        "created": "2026-10-21T18:45:10.1853631Z"
+      },
+      {
+        "manifest": "sha256:9f9ee659cbe37dfd9d434f2939620cfb948aabd650c5108323477762a9317874",
+        "platform": {
+          "architecture": "arm64",
+          "os": "linux"
+        },
+        "architecture": "arm64",
+        "os": "linux",
+        "config": {
+          "ExposedPorts": {
+            "8080/tcp": {}
+          },
+          "Labels": {
+            "org.opencontainers.image.source": "https",
+            "org.opencontainers.image.licenses": "MIT",
+            "org.opencontainers.image.vendor": "Hexalith",
+            "org.opencontainers.image.created": "2026-10-21T18",
+            "org.opencontainers.artifact.created": "2026-10-21T18",
+            "org.opencontainers.artifact.description": "Multi-tenant management service for .NET built on Hexalith.EventStore",
+            "org.opencontainers.image.description": "Multi-tenant management service for .NET built on Hexalith.EventStore",
+            "org.opencontainers.image.authors": "Hexalith Contributors",
+            "org.opencontainers.image.url": "https",
+            "org.opencontainers.image.documentation": "https",
+            "org.opencontainers.image.version": "5.10.0",
+            "org.opencontainers.image.base.name": "mcr.microsoft.com/dotnet/aspnet",
+            "net.dot.runtime.majorminor": "10.0",
+            "net.dot.sdk.version": "10.0.402",
+            "org.opencontainers.image.base.digest": "sha256:8526f20a1c9cef27170346f890a39eafc597865c8e47eaa005600d2f2ef9d1aa"
+          },
+          "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "APP_UID=1654",
+            "ASPNETCORE_HTTP_PORTS=8080",
+            "DOTNET_RUNNING_IN_CONTAINER=true",
+            "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true",
+            "DOTNET_VERSION=10.0.13",
+            "ASPNET_VERSION=10.0.13"
+          ],
+          "WorkingDir": "/app/",
+          "Entrypoint": [
+            "dotnet",
+            "/app/Hexalith.Tenants.dll"
+          ],
+          "User": "app"
+        },
+        "created": "2026-10-21T18:45:10.0454124Z"
+      }
+    ],
+    "provenanceResult": "failed",
+    "provenanceFindings": [
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.image.source",
+        "expected": "https://github.com/Hexalith/Hexalith.Tenants",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.image.revision",
+        "expected": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+        "actual": null
+      },
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.image.url",
+        "expected": "full HTTPS URL",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.image.documentation",
+        "expected": "full HTTPS URL",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.image.created",
+        "expected": "full RFC 3339 UTC second",
+        "actual": "2026-10-21T18"
+      },
+      {
+        "platform": "linux/amd64",
+        "label": "org.opencontainers.artifact.created",
+        "expected": "full RFC 3339 UTC second",
+        "actual": "2026-10-21T18"
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.image.source",
+        "expected": "https://github.com/Hexalith/Hexalith.Tenants",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.image.revision",
+        "expected": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+        "actual": null
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.image.url",
+        "expected": "full HTTPS URL",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.image.documentation",
+        "expected": "full HTTPS URL",
+        "actual": "https"
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.image.created",
+        "expected": "full RFC 3339 UTC second",
+        "actual": "2026-10-21T18"
+      },
+      {
+        "platform": "linux/arm64",
+        "label": "org.opencontainers.artifact.created",
+        "expected": "full RFC 3339 UTC second",
+        "actual": "2026-10-21T18"
+      }
+    ]
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-eventstore-source-merge.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nbuild(release): integrate current qualification repairs\n\nPreserve the owning main redaction and native-proof shape corrections\nwhile retaining the bounded P1R workflow allowance. No upstream source\nor original historical packet identity is replaced by this integration.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": "",
+    "message": "build(release): integrate current qualification repairs\n\nPreserve the owning main redaction and native-proof shape corrections\nwhile retaining the bounded P1R workflow allowance. No upstream source\nor original historical packet identity is replaced by this integration.\n"
+  },
+  {
+    "command": [
+      "git",
+      "merge",
+      "--no-ff",
+      "origin/main",
+      "--file",
+      "/tmp/mcpcli-story411-eventstore-source-merge.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "Merge made by the 'ort' strategy.\n .../diagnostics/bounded-aspire-resources.log       | 54 +++++++++++-----------\n .../run-20261021T125151Z/tests-Server.xml          |  6 +--\n .../run-20261021T152119Z/tests-Server.xml          |  6 +--\n .../ProjectionReplayTransportContextTests.cs       |  5 +-\n 4 files changed, 36 insertions(+), 35 deletions(-)\n",
+    "stderr": ""
+  }
+]

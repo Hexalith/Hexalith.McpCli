@@ -1,0 +1,152 @@
+{
+  "formatVersion": 1,
+  "sourceCommit": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "repository": "Hexalith/Hexalith.EventStore",
+  "workflowRunId": 39685339168,
+  "jobId": 119518062856,
+  "jobName": "ci / build-and-test",
+  "sourceUrl": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39685339168/job/119518062856",
+  "evidenceKind": "parent-independent-decoded-job-log-summary",
+  "interpretation": "Counts are parsed from the nineteen Microsoft.Testing.Platform project summaries. Skipped tests remain excluded from passing counts; this does not replace the other source, CI, live-sidecar or publication gates.",
+  "projectCount": 19,
+  "total": 13775,
+  "passed": 13722,
+  "failed": 0,
+  "skipped": 53,
+  "projects": [
+    {
+      "project": "Hexalith.EventStore.Client.Tests.dll",
+      "total": 2054,
+      "failed": 0,
+      "succeeded": 2052,
+      "skipped": 2
+    },
+    {
+      "project": "Hexalith.EventStore.Testing.Tests.dll",
+      "total": 154,
+      "failed": 0,
+      "succeeded": 154,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.SignalR.Tests.dll",
+      "total": 44,
+      "failed": 0,
+      "succeeded": 44,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.Abstractions.Tests.dll",
+      "total": 510,
+      "failed": 0,
+      "succeeded": 510,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.Cli.Tests.dll",
+      "total": 384,
+      "failed": 0,
+      "succeeded": 384,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.Mcp.Tests.dll",
+      "total": 437,
+      "failed": 0,
+      "succeeded": 429,
+      "skipped": 8
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.Server.Tests.dll",
+      "total": 781,
+      "failed": 0,
+      "succeeded": 763,
+      "skipped": 18
+    },
+    {
+      "project": "Hexalith.EventStore.Operations.Tests.dll",
+      "total": 76,
+      "failed": 0,
+      "succeeded": 76,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.Server.Host.Tests.dll",
+      "total": 62,
+      "failed": 0,
+      "succeeded": 62,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Admin.UI.Tests.dll",
+      "total": 1111,
+      "failed": 0,
+      "succeeded": 1111,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.AppHost.Tests.dll",
+      "total": 175,
+      "failed": 0,
+      "succeeded": 175,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.DomainService.Tests.dll",
+      "total": 1160,
+      "failed": 0,
+      "succeeded": 1160,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.QueryRouting.Tests.dll",
+      "total": 14,
+      "failed": 0,
+      "succeeded": 14,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.RestApi.Generators.Tests.dll",
+      "total": 124,
+      "failed": 0,
+      "succeeded": 124,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.LoadTests.Tests.dll",
+      "total": 9,
+      "failed": 0,
+      "succeeded": 9,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Sample.Tests.dll",
+      "total": 187,
+      "failed": 0,
+      "succeeded": 187,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Testing.Integration.Tests.dll",
+      "total": 48,
+      "failed": 0,
+      "succeeded": 48,
+      "skipped": 0
+    },
+    {
+      "project": "Hexalith.EventStore.Server.Tests.dll",
+      "total": 6362,
+      "failed": 0,
+      "succeeded": 6337,
+      "skipped": 25
+    },
+    {
+      "project": "Hexalith.EventStore.ProviderVerification.Tests.dll",
+      "total": 83,
+      "failed": 0,
+      "succeeded": 83,
+      "skipped": 0
+    }
+  ],
+  "rawLogsRetainedHere": false
+}

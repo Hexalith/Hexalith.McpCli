@@ -1,0 +1,18 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.Tenants.Contracts.Tests
+  Discovered:  Hexalith.Tenants.Contracts.Tests
+  Starting:    Hexalith.Tenants.Contracts.Tests
+    Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests.Release_workflow_packs_validates_and_publishes_only_expected_packages [FAIL]
+      Shouldly.ShouldAssertException : releaseJob
+          should contain (case insensitive comparison)
+      "HEXALITH_RELEASE_REQUIRE_AUTHORITY: 'false'"
+          but was actually
+      "  release:
+          # NuGet.org publishes through Trusted Publishing: the job exchanges its GitHub OIDC t..."
+      Stack Trace:
+        tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs(1000,0): at Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests.Release_workflow_packs_validates_and_publishes_only_expected_packages()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Finished:    Hexalith.Tenants.Contracts.Tests (ID = '06e5fe3fa3fc51eefc21d4a95296d94b568f12300c13ac8f5d174f3414151363')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Tenants.Contracts.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.123s

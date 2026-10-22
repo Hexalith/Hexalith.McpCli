@@ -1,0 +1,7 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 85 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 819 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 827 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 828 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 830 ms).
+  Restored /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 834 ms).

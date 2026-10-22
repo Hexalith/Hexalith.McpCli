@@ -1,0 +1,298 @@
+{
+  "startedAtUtc": "2026-10-21T22:00:15.049766+00:00",
+  "taskScratch": "/tmp/mcpcli-story411-native-live-6r1z108c",
+  "ownerLabel": {
+    "hexalith.story411.owner": "7e070875e5984825bfc0ab414e5435be"
+  },
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "context",
+        "inspect"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Name\": \"default\",\n        \"Metadata\": {},\n        \"Endpoints\": {\n            \"docker\": {\n                \"Host\": \"unix:///var/run/docker.sock\",\n                \"SkipTLSVerify\": false\n            }\n        },\n        \"TLSMaterial\": {},\n        \"Storage\": {\n            \"MetadataPath\": \"\\u003cIN MEMORY\\u003e\",\n            \"TLSPath\": \"\\u003cIN MEMORY\\u003e\"\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-7e070875e598-placement",
+        "--label",
+        "hexalith.story411.owner=7e070875e5984825bfc0ab414e5435be",
+        "-p",
+        "127.0.0.1::50005",
+        "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+        "./placement",
+        "--port",
+        "50005"
+      ],
+      "exitCode": 0,
+      "stdout": "487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4\",\n        \"Created\": \"2026-10-21T22:00:15.114671629Z\",\n        \"Path\": \"./placement\",\n        \"Args\": [\n            \"--port\",\n            \"50005\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 70254,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:00:15.270794983Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-7e070875e598-placement\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"50005/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [],\n        \"Config\": {\n            \"Hostname\": \"487760fe8b05\",\n            \"Domainname\": \"\",\n            \"User\": \"65532:65532\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"50005/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\"\n            ],\n            \"Cmd\": [\n                \"./placement\",\n                \"--port\",\n                \"50005\"\n            ],\n            \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"/\",\n            \"Entrypoint\": null,\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"7e070875e5984825bfc0ab414e5435be\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"6efb059e1daa29d311f024717ed2b8055a1f8ba7cc197b587356b51c0459f98a\",\n            \"SandboxKey\": \"/var/run/docker/netns/6efb059e1daa\",\n            \"Ports\": {\n                \"50005/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"59592\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"d034b96910138da13a019005c5d05d3cd37c4236c92de49a53684ee508928273\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.7\",\n                    \"MacAddress\": \"ea:f9:e3:7f:66:7f\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n            \"digest\": \"sha256:1146cf75f6a900f098489f995bcb2145bf9b040f87ab70eb0de2db21000d01bb\",\n            \"size\": 3234,\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-7e070875e598-scheduler",
+        "--label",
+        "hexalith.story411.owner=7e070875e5984825bfc0ab414e5435be",
+        "-p",
+        "127.0.0.1:41977:50006",
+        "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+        "./scheduler",
+        "--port",
+        "50006",
+        "--override-broadcast-host-port",
+        "127.0.0.1:41977",
+        "--etcd-data-dir",
+        "/tmp/story411-etcd",
+        "--etcd-client-listen-address",
+        "0.0.0.0"
+      ],
+      "exitCode": 0,
+      "stdout": "8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee\",\n        \"Created\": \"2026-10-21T22:00:15.561516392Z\",\n        \"Path\": \"./scheduler\",\n        \"Args\": [\n            \"--port\",\n            \"50006\",\n            \"--override-broadcast-host-port\",\n            \"127.0.0.1:41977\",\n            \"--etcd-data-dir\",\n            \"/tmp/story411-etcd\",\n            \"--etcd-client-listen-address\",\n            \"0.0.0.0\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 70321,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:00:15.780635377Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-7e070875e598-scheduler\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"50006/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"41977\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [],\n        \"Config\": {\n            \"Hostname\": \"8126add37265\",\n            \"Domainname\": \"\",\n            \"User\": \"65532:65532\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"50006/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\"\n            ],\n            \"Cmd\": [\n                \"./scheduler\",\n                \"--port\",\n                \"50006\",\n                \"--override-broadcast-host-port\",\n                \"127.0.0.1:41977\",\n                \"--etcd-data-dir\",\n                \"/tmp/story411-etcd\",\n                \"--etcd-client-listen-address\",\n                \"0.0.0.0\"\n            ],\n            \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"/\",\n            \"Entrypoint\": null,\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"7e070875e5984825bfc0ab414e5435be\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"75724c7419453fa6f13789b6d19135439567773ef682888d804ecad6c76b0724\",\n            \"SandboxKey\": \"/var/run/docker/netns/75724c741945\",\n            \"Ports\": {\n                \"50006/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"41977\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"c1b9c06b3490eb925912c55aea0b0191cd23d6439ce13fd08eee1e1de3b7f8ba\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.8\",\n                    \"MacAddress\": \"7e:4a:85:33:18:78\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n            \"digest\": \"sha256:1146cf75f6a900f098489f995bcb2145bf9b040f87ab70eb0de2db21000d01bb\",\n            \"size\": 3234,\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-7e070875e598-redis",
+        "--label",
+        "hexalith.story411.owner=7e070875e5984825bfc0ab414e5435be",
+        "-p",
+        "127.0.0.1::6379",
+        "sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8"
+      ],
+      "exitCode": 0,
+      "stdout": "be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c\",\n        \"Created\": \"2026-10-21T22:00:16.108119798Z\",\n        \"Path\": \"docker-entrypoint.sh\",\n        \"Args\": [\n            \"redis-server\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 70392,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:00:16.271313393Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-7e070875e598-redis\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"6379/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [\n            {\n                \"Type\": \"volume\",\n                \"Name\": \"e880282390dfbcd333d6738089aa4621fa0325ca3ba0770ef610433305fa1701\",\n                \"Source\": \"/var/lib/docker/volumes/e880282390dfbcd333d6738089aa4621fa0325ca3ba0770ef610433305fa1701/_data\",\n                \"Destination\": \"/data\",\n                \"Driver\": \"local\",\n                \"Mode\": \"\",\n                \"RW\": true,\n                \"Propagation\": \"\"\n            }\n        ],\n        \"Config\": {\n            \"Hostname\": \"be30e77e8c71\",\n            \"Domainname\": \"\",\n            \"User\": \"\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"6379/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"REDIS_VERSION=6.2.24\"\n            ],\n            \"Cmd\": [\n                \"redis-server\"\n            ],\n            \"Image\": \"sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8\",\n            \"Volumes\": {\n                \"/data\": {}\n            },\n            \"WorkingDir\": \"/data\",\n            \"Entrypoint\": [\n                \"docker-entrypoint.sh\"\n            ],\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"7e070875e5984825bfc0ab414e5435be\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"2a410429d8a9ad5e1897da25288e4f7ce08b56328f9538cba08a766cc485bb39\",\n            \"SandboxKey\": \"/var/run/docker/netns/2a410429d8a9\",\n            \"Ports\": {\n                \"6379/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"50606\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"1d7e52ef714f0b18e4fbe6461a962ba97f06b97ce58d71daf6b6d087ef84e72f\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.9\",\n                    \"MacAddress\": \"22:cd:1b:c7:81:39\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.oci.image.manifest.v1+json\",\n            \"digest\": \"sha256:aff3b153843c610a804a18e66fee1cfb1b961c3cb447416df05bc54a3e66c234\",\n            \"size\": 2288,\n            \"annotations\": {\n                \"com.docker.official-images.bashbrew.arch\": \"amd64\",\n                \"org.opencontainers.image.base.digest\": \"sha256:5ae3c39ebd15e229dcedd5cee596b2497182493d41ff162e824ba13fc1b2b867\",\n                \"org.opencontainers.image.base.name\": \"debian:bookworm-slim\",\n                \"org.opencontainers.image.created\": \"2026-08-25T00:43:14Z\",\n                \"org.opencontainers.image.revision\": \"d452a755b3fa51c0a8d26e254f29a25bf2272e3c\",\n                \"org.opencontainers.image.source\": \"https://github.com/redis/docker-library-redis.git#d452a755b3fa51c0a8d26e254f29a25bf2272e3c:debian\",\n                \"org.opencontainers.image.url\": \"https://hub.docker.com/_/redis\",\n                \"org.opencontainers.image.version\": \"6.2.24\"\n            },\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "cp",
+        "mcpcli-411-7e070875e598-placement:/daprd",
+        "/tmp/mcpcli-story411-native-live-6r1z108c/daprd"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-story411-native-live-6r1z108c/daprd",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "1.18.2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-7e070875e598-redis"
+      ],
+      "exitCode": 0,
+      "stdout": "7e070875e5984825bfc0ab414e5435be\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-7e070875e598-redis"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-7e070875e598-redis\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-7e070875e598-scheduler"
+      ],
+      "exitCode": 0,
+      "stdout": "7e070875e5984825bfc0ab414e5435be\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-7e070875e598-scheduler"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-7e070875e598-scheduler\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-7e070875e598-placement"
+      ],
+      "exitCode": 0,
+      "stdout": "7e070875e5984825bfc0ab414e5435be\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-7e070875e598-placement"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-7e070875e598-placement\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "ps",
+        "-aq",
+        "--filter",
+        "label=hexalith.story411.owner=7e070875e5984825bfc0ab414e5435be"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "containers": [
+    {
+      "id": "487760fe8b052da472dc9fb7ea2a168427d349b0477910ce3ade9dd7f45ff0c4",
+      "name": "mcpcli-411-7e070875e598-placement",
+      "image": "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+      "port": 59592,
+      "internalPort": 50005
+    },
+    {
+      "id": "8126add37265874b9858a92983b0df5da97084a412d40aad4bfdcf6d660bd4ee",
+      "name": "mcpcli-411-7e070875e598-scheduler",
+      "image": "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+      "port": 41977,
+      "internalPort": 50006
+    },
+    {
+      "id": "be30e77e8c71c2039188c0234667fc57a89c571586ca7159c1125506744db59c",
+      "name": "mcpcli-411-7e070875e598-redis",
+      "image": "sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8",
+      "port": 50606,
+      "internalPort": 6379
+    }
+  ],
+  "productionQualification": false,
+  "daprdSha256": "e730688f06b9b7cea0d616a7dde8fc0124cb6cc8d6dae149192422c7ea67f4e6",
+  "testCommand": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll",
+    "-method",
+    "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.NamedProjectionDispatchLiveSidecarTests.NormalDelivery_PersistsIndependentDetailIndexCheckpointsAndConvergedRetryLedger",
+    "-xml",
+    "/tmp/mcpcli-story411-native-live-6r1z108c/results.xml",
+    "-noColor"
+  ],
+  "fixtureEnvironment": {
+    "EVENTSTORE_TEST_REDIS_PORT": "50606",
+    "EVENTSTORE_TEST_PLACEMENT_PORT": "59592",
+    "EVENTSTORE_TEST_SCHEDULER_PORT": "41977",
+    "EVENTSTORE_TEST_DAPRD_PATH": "/tmp/mcpcli-story411-native-live-6r1z108c/daprd"
+  },
+  "ownedTestProcessGroup": 43343,
+  "testExitCode": 0,
+  "testSeconds": 6.280702967997058,
+  "rawLogHashes": {
+    "test.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test.stdout.txt": "10fe4eb880a25b489f553d99cd97feb4baf174e7e0b272d7d2b1e66cb35841ac"
+  },
+  "assemblies": [
+    {
+      "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, non-parallel]",
+      "id": "70b135e9-58fa-42ca-87b2-0080055ee433",
+      "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll",
+      "run-date": "2026-10-21",
+      "run-time": "22:00:17",
+      "start-rtf": "2026-10-21T22:00:17.9564081+00:00",
+      "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+      "target-framework": ".NETCoreApp,Version=v10.0",
+      "errors": "0",
+      "failed": "0",
+      "finish-rtf": "2026-10-21T22:00:23.9593887+00:00",
+      "not-run": "0",
+      "passed": "1",
+      "skipped": "0",
+      "time": "6.003",
+      "time-rtf": "00:00:06.0030000",
+      "total": "1"
+    }
+  ],
+  "safeFailures": [],
+  "cleanup": [
+    {
+      "name": "mcpcli-411-7e070875e598-redis",
+      "exitCode": 0
+    },
+    {
+      "name": "mcpcli-411-7e070875e598-scheduler",
+      "exitCode": 0
+    },
+    {
+      "name": "mcpcli-411-7e070875e598-placement",
+      "exitCode": 0
+    }
+  ],
+  "ownedContainersRemaining": [],
+  "completedAtUtc": "2026-10-21T22:00:25.634535+00:00"
+}

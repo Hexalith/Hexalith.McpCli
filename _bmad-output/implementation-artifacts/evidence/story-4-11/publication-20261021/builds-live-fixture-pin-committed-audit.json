@@ -1,0 +1,24 @@
+{
+  "recordedAtUtc": "2026-10-22T02:27:32.845785+00:00",
+  "source": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/validate-package-version-audit.ps1"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 22.197474993998185,
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/committed-audit-validator.stdout.txt",
+      "bytes": 89,
+      "sha256": "3c1bb6fe826018940d0d08e32e5059e952755e7799f863f6833664aec90b212d"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/committed-audit-validator.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

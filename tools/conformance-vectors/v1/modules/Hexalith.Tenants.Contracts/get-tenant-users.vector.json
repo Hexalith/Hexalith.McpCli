@@ -1,0 +1,457 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0"
+  },
+  "operation": "tenants.get-tenant-users",
+  "kind": "query",
+  "prerequisites": [
+    {
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-users",
+        "Name": "Vector Users",
+        "Description": null
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-users",
+          "commandType": "create-tenant",
+          "payload": {
+            "TenantId": "vector-users",
+            "Name": "Vector Users",
+            "Description": null
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.create-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-users"
+        }
+      ]
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-users",
+        "UserId": "vector-user-a@example.com",
+        "Role": "TenantOwner"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-users",
+          "commandType": "add-user-to-tenant",
+          "payload": {
+            "TenantId": "vector-users",
+            "UserId": "vector-user-a@example.com",
+            "Role": "TenantOwner"
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.add-user-to-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-users"
+        }
+      ]
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-users",
+        "UserId": "vector-user-b@example.com",
+        "Role": "TenantContributor"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-users",
+          "commandType": "add-user-to-tenant",
+          "payload": {
+            "TenantId": "vector-users",
+            "UserId": "vector-user-b@example.com",
+            "Role": "TenantContributor"
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.add-user-to-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-users"
+        }
+      ]
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "payload": {
+        "TenantId": "vector-users",
+        "UserId": "vector-user-c@example.com",
+        "Role": "TenantReader"
+      },
+      "envelope": {
+        "tenant": "system"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/commands",
+        "body": {
+          "messageId": "<generated>",
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-users",
+          "commandType": "add-user-to-tenant",
+          "payload": {
+            "TenantId": "vector-users",
+            "UserId": "vector-user-c@example.com",
+            "Role": "TenantReader"
+          },
+          "correlationId": "<generated>"
+        },
+        "maskGenerated": [
+          "/messageId",
+          "/correlationId"
+        ]
+      },
+      "scriptedResponse": {
+        "statusCode": 202,
+        "body": {},
+        "echoRequestFields": [
+          "correlationId",
+          "messageId"
+        ]
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.add-user-to-tenant"
+        },
+        {
+          "path": "/status",
+          "operator": "equals",
+          "value": "accepted"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/aggregateId",
+          "operator": "equals",
+          "value": "vector-users"
+        }
+      ]
+    }
+  ],
+  "invocation": {
+    "operation": "tenants.get-tenant-users",
+    "kind": "query",
+    "payload": {
+      "TenantId": "vector-users"
+    },
+    "envelope": {
+      "tenant": "system",
+      "pageSize": 2
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      },
+      "maskGenerated": []
+    },
+    "scriptedResponse": {
+      "statusCode": 200,
+      "body": {
+        "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+        "success": true,
+        "payload": {
+          "items": [
+            {
+              "userId": "vector-user-a@example.com",
+              "role": "TenantOwner"
+            },
+            {
+              "userId": "vector-user-b@example.com",
+              "role": "TenantContributor"
+            }
+          ],
+          "cursor": "scripted-tenant-users-cursor-1",
+          "hasMore": true
+        },
+        "metadata": {
+          "paging": {
+            "pageSize": 2,
+            "nextCursor": "scripted-tenant-users-cursor-1",
+            "hasMore": true
+          }
+        }
+      },
+      "echoRequestFields": []
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "tenants.get-tenant-users"
+      },
+      {
+        "path": "/tenant",
+        "operator": "equals",
+        "value": "system"
+      },
+      {
+        "path": "/document/items",
+        "operator": "arrayLength",
+        "value": 2
+      },
+      {
+        "path": "/document/items/0/userId",
+        "operator": "equals",
+        "value": "vector-user-a@example.com"
+      },
+      {
+        "path": "/document/items/1/userId",
+        "operator": "equals",
+        "value": "vector-user-b@example.com"
+      },
+      {
+        "path": "/paging/pageSize",
+        "operator": "equals",
+        "value": 2
+      },
+      {
+        "path": "/paging/nextCursor",
+        "operator": "equals",
+        "value": "scripted-tenant-users-cursor-1"
+      },
+      {
+        "path": "/paging/hasMore",
+        "operator": "equals",
+        "value": true
+      }
+    ]
+  },
+  "postconditions": [
+    {
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "payload": {
+        "TenantId": "vector-users"
+      },
+      "envelope": {
+        "tenant": "system",
+        "pageSize": 2,
+        "cursor": "scripted-tenant-users-cursor-1"
+      },
+      "expectedGateway": {
+        "method": "POST",
+        "path": "/api/v1/queries",
+        "body": {
+          "tenant": "system",
+          "domain": "tenants",
+          "aggregateId": "vector-users",
+          "queryType": "get-tenant-users",
+          "projectionType": "tenants",
+          "payload": {
+            "TenantId": "vector-users"
+          },
+          "paging": {
+            "pageSize": 2,
+            "cursor": "scripted-tenant-users-cursor-1"
+          }
+        },
+        "maskGenerated": []
+      },
+      "scriptedResponse": {
+        "statusCode": 200,
+        "body": {
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9D",
+          "success": true,
+          "payload": {
+            "items": [
+              {
+                "userId": "vector-user-c@example.com",
+                "role": "TenantReader"
+              }
+            ],
+            "cursor": null,
+            "hasMore": false
+          },
+          "metadata": {
+            "paging": {
+              "pageSize": 2,
+              "hasMore": false
+            }
+          }
+        },
+        "echoRequestFields": []
+      },
+      "assertions": [
+        {
+          "path": "/operation",
+          "operator": "equals",
+          "value": "tenants.get-tenant-users"
+        },
+        {
+          "path": "/tenant",
+          "operator": "equals",
+          "value": "system"
+        },
+        {
+          "path": "/document/items",
+          "operator": "arrayLength",
+          "value": 1
+        },
+        {
+          "path": "/document/items/0/userId",
+          "operator": "equals",
+          "value": "vector-user-c@example.com"
+        },
+        {
+          "path": "/paging/pageSize",
+          "operator": "equals",
+          "value": 2
+        },
+        {
+          "path": "/paging/hasMore",
+          "operator": "equals",
+          "value": false
+        },
+        {
+          "path": "/paging/nextCursor",
+          "operator": "exists",
+          "value": false
+        }
+      ]
+    }
+  ]
+}

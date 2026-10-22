@@ -1,0 +1,9 @@
+⧗   --- input ---
+ci(codeql): allow complete source extraction
+
+Increase the bounded job allowance from sixty to one hundred twenty
+minutes after complete extraction exhausted the previous limit.
+
+Retain every source input, build mode, query setting and security gate.
+Require all normal source qualification again on the resulting commit.
+✔   found 0 problems, 0 warnings

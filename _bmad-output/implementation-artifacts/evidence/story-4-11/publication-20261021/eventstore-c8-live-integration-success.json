@@ -1,0 +1,169 @@
+{
+  "checkedAtUtc": "2026-10-22T00:22:20.376996+00:00",
+  "source": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+  "runId": 39693567688,
+  "job": {
+    "id": 119545388956,
+    "run_id": 39693567688,
+    "name": "live-sidecar",
+    "head_sha": "c8a0e9af8014a588f9ac9b855b7f2f093fd51a86",
+    "status": "completed",
+    "conclusion": "success",
+    "started_at": "2026-10-21T23:27:49Z",
+    "completed_at": "2026-10-22T00:19:54Z",
+    "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/39693567688/job/119545388956",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1,
+        "started_at": "2026-10-21T23:27:50Z",
+        "completed_at": "2026-10-21T23:27:51Z"
+      },
+      {
+        "name": "Checkout repository",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-21T23:27:51Z",
+        "completed_at": "2026-10-21T23:28:32Z"
+      },
+      {
+        "name": "Initialize Hexalith.Builds submodule",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3,
+        "started_at": "2026-10-21T23:28:32Z",
+        "completed_at": "2026-10-21T23:28:35Z"
+      },
+      {
+        "name": "Initialize .NET",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4,
+        "started_at": "2026-10-21T23:28:35Z",
+        "completed_at": "2026-10-21T23:28:36Z"
+      },
+      {
+        "name": "Install pinned OQ8 validator dependency",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5,
+        "started_at": "2026-10-21T23:28:36Z",
+        "completed_at": "2026-10-21T23:28:41Z"
+      },
+      {
+        "name": "Cache NuGet packages",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6,
+        "started_at": "2026-10-21T23:28:41Z",
+        "completed_at": "2026-10-21T23:29:21Z"
+      },
+      {
+        "name": "Restore",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7,
+        "started_at": "2026-10-21T23:29:21Z",
+        "completed_at": "2026-10-21T23:29:30Z"
+      },
+      {
+        "name": "Initialize Dapr",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8,
+        "started_at": "2026-10-21T23:29:30Z",
+        "completed_at": "2026-10-21T23:29:41Z"
+      },
+      {
+        "name": "Pull PostgreSQL container image",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 9,
+        "started_at": "2026-10-21T23:29:41Z",
+        "completed_at": "2026-10-21T23:29:48Z"
+      },
+      {
+        "name": "Run Live-Sidecar Integration Tests",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 10,
+        "started_at": "2026-10-21T23:29:48Z",
+        "completed_at": "2026-10-22T00:18:08Z"
+      },
+      {
+        "name": "Verify IntegrationTests serialized execution metadata",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 11,
+        "started_at": "2026-10-22T00:18:08Z",
+        "completed_at": "2026-10-22T00:18:46Z"
+      },
+      {
+        "name": "Capture and validate OQ8 production evidence",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 12,
+        "started_at": "2026-10-22T00:18:46Z",
+        "completed_at": "2026-10-22T00:19:42Z"
+      },
+      {
+        "name": "Upload fresh validated OQ8 capture",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 13,
+        "started_at": "2026-10-22T00:19:42Z",
+        "completed_at": "2026-10-22T00:19:43Z"
+      },
+      {
+        "name": "Upload live-sidecar test results",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 14,
+        "started_at": "2026-10-22T00:19:43Z",
+        "completed_at": "2026-10-22T00:19:44Z"
+      },
+      {
+        "name": "Post Cache NuGet packages",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 26,
+        "started_at": "2026-10-22T00:19:44Z",
+        "completed_at": "2026-10-22T00:19:52Z"
+      },
+      {
+        "name": "Post Initialize .NET",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 27,
+        "started_at": "2026-10-22T00:19:52Z",
+        "completed_at": "2026-10-22T00:19:52Z"
+      },
+      {
+        "name": "Post Checkout repository",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 28,
+        "started_at": "2026-10-22T00:19:52Z",
+        "completed_at": "2026-10-22T00:19:53Z"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 29,
+        "started_at": "2026-10-22T00:19:53Z",
+        "completed_at": "2026-10-22T00:19:53Z"
+      }
+    ]
+  },
+  "artifactBinding": "eventstore-c8-live-private-artifact-binding.json",
+  "artifactResults": "eventstore-c8-native-remote-regression-results.json",
+  "metadataFallback": "The connector rejects the direct job-detail endpoint and its list wrapper omits timings; read-only gh api supplied normal public job timings.",
+  "remainingRequiredContext": "codeql / analyze",
+  "releaseDispatched": false,
+  "fullV1Accepted": false,
+  "productionAccepted": false
+}

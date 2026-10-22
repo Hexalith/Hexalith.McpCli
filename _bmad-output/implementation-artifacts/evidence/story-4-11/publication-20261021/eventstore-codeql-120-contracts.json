@@ -1,0 +1,35 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Contracts.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.Tests.dll",
+    "-method",
+    "Hexalith.EventStore.Contracts.Tests.Packaging.ReleasePackageManifestTests.Security_gate_workflows_remain_shared_callers",
+    "-xml",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/eventstore-codeql-120-contracts.xml",
+    "-noColor"
+  ],
+  "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+  "exitCode": 0,
+  "assemblies": [
+    {
+      "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+      "id": "21daa639-fc73-4567-b919-44dfc61f004a",
+      "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Contracts.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.Tests.dll",
+      "run-date": "2026-10-21",
+      "run-time": "23:26:44",
+      "start-rtf": "2026-10-21T23:26:44.5741206+00:00",
+      "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+      "target-framework": ".NETCoreApp,Version=v10.0",
+      "errors": "0",
+      "failed": "0",
+      "finish-rtf": "2026-10-21T23:26:44.6671056+00:00",
+      "not-run": "0",
+      "passed": "1",
+      "skipped": "0",
+      "time": "0.093",
+      "time-rtf": "00:00:00.0930000",
+      "total": "1"
+    }
+  ],
+  "xmlSha256": "01189287719853343e7f0892aaa96b75fa9c619d01dbc92b65da0c0695491f38"
+}

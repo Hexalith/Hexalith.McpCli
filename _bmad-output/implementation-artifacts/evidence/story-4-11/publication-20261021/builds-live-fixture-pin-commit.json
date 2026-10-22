@@ -1,0 +1,21 @@
+{
+  "recordedAtUtc": "2026-10-22T02:26:39.046876+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "branch": "fix/published-family-audit",
+  "parent": "85290197d2a4324b50560630e8992d71c3318784",
+  "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "tree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "base": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "repairPathCount": 113,
+  "completePrPathCount": 114,
+  "commitExitCode": 0,
+  "commitMessageSha256": "b4523aa13984c1b7e06795ac00ec4dbc43509632aa2546d28dfb4378421b3130",
+  "commitlint": {
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\nfix(tooling): align EventStore fixture pins\n\nUse the current catalog selection in generated valid test manifests and\nqualification evidence. Align the v1 schema and active synthetic corpus\nwith EventStore 3.126.1, rebinding dependent fixture digests.\n\nKeep historical release evidence and intentional negative controls\nunchanged. Reject the previous 3.126.0 pin explicitly.\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  "workingStatus": "",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

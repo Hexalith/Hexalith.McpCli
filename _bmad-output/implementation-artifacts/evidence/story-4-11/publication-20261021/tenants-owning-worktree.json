@@ -1,0 +1,8 @@
+{
+  "owner": "/home/administrator/projects/hexalith/tenants",
+  "worktree": "/tmp/mcpcli-story411-tenants-owner-poopx2nu",
+  "branch": "fix/container-provenance-release",
+  "baseCommit": "b02452a16869f265c21b1ae6c15f2f299677f139",
+  "unrelatedOriginalChangesPreserved": true,
+  "rootBuildsGitlinkPendingFinalReapplication": true
+}

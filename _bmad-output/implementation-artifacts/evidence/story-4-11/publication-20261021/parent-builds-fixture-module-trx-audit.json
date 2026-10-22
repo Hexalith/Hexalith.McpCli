@@ -1,0 +1,341 @@
+{
+  "result": "passed",
+  "scope": "Independent TRX audit of unchanged112-file repair snapshot. Later PowerShell default follow-up is outside this run.",
+  "trx": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/Hexalith.Builds.Module.Tests-results/Hexalith.Builds.Module.Tests.trx",
+    "bytes": 2282600,
+    "sha256": "aec0d1a39099e1f261aa25a6f83c1b317ca943c737848768a5b23262e13f177d"
+  },
+  "counters": {
+    "total": "1516",
+    "executed": "1513",
+    "passed": "1513",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "3",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "uniqueExecutionIds": 1516,
+  "duplicateDisplayNameGroups": 8,
+  "duplicateDisplayNameHandling": "Exact-name multiset counts and all rows in each group must pass; the initial overly strict display-name uniqueness assumption was corrected without granting it credit.",
+  "exactFormerFailedCasesPassed": 112,
+  "formerFailedMethods": 60,
+  "allCurrentCasesOfFormerFailedMethodsPassed": 119,
+  "changedGuardCase": {
+    "testName": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithHistoricalPackagePinFailsBeforeComposition(field: \"eventStoreVersion\", version: \"3.126.0\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0010000"
+  },
+  "perMethod": [
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "previouslyFailedCases": 6,
+      "allCurrentCasesPassed": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "previouslyFailedCases": 8,
+      "allCurrentCasesPassed": 8
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "previouslyFailedCases": 6,
+      "allCurrentCasesPassed": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "previouslyFailedCases": 12,
+      "allCurrentCasesPassed": 16
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 4
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "previouslyFailedCases": 6,
+      "allCurrentCasesPassed": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "previouslyFailedCases": 4,
+      "allCurrentCasesPassed": 4
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync",
+      "previouslyFailedCases": 1,
+      "allCurrentCasesPassed": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync",
+      "previouslyFailedCases": 2,
+      "allCurrentCasesPassed": 2
+    }
+  ],
+  "limits": "Local regression evidence; final complete-source remoteCI remains required."
+}

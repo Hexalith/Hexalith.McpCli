@@ -1,0 +1,30 @@
+[
+  {
+    "label": "builds-reapply-publisher-suite",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "Github/publish-containers/tests",
+      "-v"
+    ],
+    "exitCode": 0,
+    "seconds": 7.294639229003224
+  },
+  {
+    "label": "builds-reapply-commitlint",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose",
+      "--edit",
+      "/tmp/mcpcli-story411-builds-reapply-commit.txt"
+    ],
+    "exitCode": 0,
+    "seconds": 0.4159806780007784
+  }
+]

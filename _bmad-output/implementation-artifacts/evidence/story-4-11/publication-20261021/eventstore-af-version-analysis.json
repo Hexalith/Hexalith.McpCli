@@ -1,0 +1,14 @@
+{
+  "checkedAtUtc": "2026-10-21T22:34:59.389839+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "baseTag": "v3.126.0",
+  "releaseType": "patch",
+  "candidateVersion": "3.126.1",
+  "pinnedTool": "@semantic-release/commit-analyzer from owning npm ci",
+  "inputCommitCount": 69,
+  "exitCode": 0,
+  "stdoutFile": "eventstore-af-version-analysis.stdout.json",
+  "stdoutSha256": "9f2cf6da1385118108c26d41d11a8a431b5b54216d8de8975913d702dec7ba4f",
+  "scope": "Read-only candidate history analysis; actual merged main must be rechecked before dispatch.",
+  "input": "/tmp/mcpcli-story411-af-versions-ooulb4sm/input.json"
+}

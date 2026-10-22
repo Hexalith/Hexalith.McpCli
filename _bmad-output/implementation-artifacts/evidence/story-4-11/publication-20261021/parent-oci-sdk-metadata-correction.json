@@ -1,0 +1,35 @@
+{
+  "checkedAtUtc": "2026-10-22T04:43:39.191521+00:00",
+  "result": "passed",
+  "scope": "Bounded metadata correction: OCI sdkVersion now reads net.dot.sdk.version=10.0.402 and baseImage separately reads org.opencontainers.image.base.name. Re-read both actual registry manifests/configs; digests and source/version/UTC/smoke assertions unchanged and pass. Updated dependent evidence hashes only; no runtime/config/test/vector/inventory changes. Prior actual commit preserved without amend.",
+  "previousRootHead": "f20a4e0d279615def05a454b73599d1cf583c338",
+  "changes": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/parent-tenants-5.10.1-actual-oci-binding.json",
+      "beforeSha256": "5861132bc6e7551ed8d196f9fe0091bdf4ce6aac6294cd24d688d1b5a157b220",
+      "afterSha256": "2c1bcddab9832c593e24b580479fc97738a40129fa1b3ebe37638f47fd857476"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/parent-tenants-5.10.1-full-repair-qualified.json",
+      "beforeSha256": "82e0ea1369c757051acae009fa29a6363880fbe5c0dd7c788523f30d25225a4a",
+      "afterSha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json",
+      "beforeSha256": "d2b497c08ef9df20bf132b0947bd3bf78a300f949c466a249e141daddcc322a2",
+      "afterSha256": "344b7465467afb797f498fcc64df310d882ef23b7c5f7d86135beb028fc320bb"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/continuation-status-current.json",
+      "beforeSha256": "ba7034cde702e3bfaaad88b7729e3a0cfc1f597e480fc7f014e9cf427123f210",
+      "afterSha256": "82cc7bf10326634586f6b558ff09a975cc4c6e5a9bc36f9898113d0c29caf5fa"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/root-enrollment-qualified-receipt-docs-refresh.json",
+      "beforeSha256": "1c729b481d007da1b1b470e285f26a865e29428ad17f31a8eb147a1a51b6a71d",
+      "afterSha256": "3047def4ce6ac3e6dfe42bcc846b7cff060d6877d831b63e36df6fe5c2f0a74e"
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

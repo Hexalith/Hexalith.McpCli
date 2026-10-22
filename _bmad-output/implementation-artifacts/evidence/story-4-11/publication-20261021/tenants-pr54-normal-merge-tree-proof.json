@@ -1,0 +1,78 @@
+{
+  "checkedAtUtc": "2026-10-22T03:49:57.877136+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "pr": 54,
+  "mergeMethod": "normal squash",
+  "base": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "checkedHead": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "mergeCommit": "205cbc5019343d344643b530fb03aee82af2840d",
+  "liveMain": "205cbc5019343d344643b530fb03aee82af2840d",
+  "checkedAndMergedTree": "2720e9e26859c12470438d3056f6a2502660596e",
+  "entireTreeEqual": true,
+  "exactValidatedMessageEqual": true,
+  "onlyExpectedBaseParent": true,
+  "admission": "tenants-followup-pr54-gate-20261022T034750Z.json",
+  "advisoryPolicyAudit": "parent-tenants-pr54-normal-ci-gate-audit.json",
+  "advisoryFailuresPreserved": "tenants-pr54-aspire-advisory-failure.json",
+  "mergedAt": "2026-10-22T03:49:26Z",
+  "mergedBy": "jpiquot",
+  "mainPushRuns": [
+    {
+      "id": 39718957112,
+      "name": "CodeQL",
+      "path": ".github/workflows/codeql.yml",
+      "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-22T03:49:29Z",
+      "run_attempt": 1
+    },
+    {
+      "id": 39718957132,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-22T03:49:29Z",
+      "run_attempt": 1
+    },
+    {
+      "id": 39718957146,
+      "name": "Commitlint",
+      "path": ".github/workflows/commitlint.yml",
+      "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-22T03:49:29Z",
+      "run_attempt": 1
+    },
+    {
+      "id": 39718956608,
+      "name": "Source-reference integration",
+      "path": ".github/workflows/source-reference.yml",
+      "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-22T03:49:28Z",
+      "run_attempt": 1
+    },
+    {
+      "id": 39718956833,
+      "name": "Story Guards",
+      "path": ".github/workflows/story-guards.yml",
+      "head_sha": "205cbc5019343d344643b530fb03aee82af2840d",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-22T03:49:28Z",
+      "run_attempt": 1
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

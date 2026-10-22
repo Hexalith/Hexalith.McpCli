@@ -1,0 +1,108 @@
+{
+  "source": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json",
+  "documents": [
+    {
+      "operation": "parties.create-party",
+      "messageId": "01M5FQQP5117J736XASJWTVEAE",
+      "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+      "tenant": "tenant-a",
+      "aggregateId": "party-story49",
+      "status": "accepted"
+    },
+    {
+      "operation": "parties.search-parties",
+      "tenant": "tenant-a",
+      "document": {
+        "items": [
+          {
+            "party": {
+              "id": "party-story49",
+              "displayName": "Ada Lovelace",
+              "type": "Person",
+              "isActive": true,
+              "isErased": false
+            },
+            "relevanceScore": 1,
+            "matches": [
+              {
+                "matchedField": "displayName",
+                "matchType": "prefix"
+              }
+            ]
+          }
+        ],
+        "totalCount": 1,
+        "page": 1,
+        "pageSize": 2,
+        "totalPages": 1
+      },
+      "paging": {
+        "pageSize": 2,
+        "offset": 0,
+        "totalCount": 1,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5FQQP5117J736XASJWTVEAE",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "ContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "IsPreferred": true,
+              "PartyId": "party-story49",
+              "Type": "Email",
+              "Value": "ada@example.test"
+            }
+          ],
+          "Identifiers": [
+            {
+              "IdentifierId": "external-story49",
+              "PartyId": "party-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ],
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "Type": "Person"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "parties",
+        "queryType": "PartySearch",
+        "projectionType": "party-index",
+        "payload": {
+          "Active": true,
+          "Query": " Ada ",
+          "Type": "Person"
+        },
+        "entityId": "parties",
+        "projectionActorType": "PartyIndexProjectionQueryActor",
+        "paging": {
+          "pageSize": 2,
+          "offset": 0
+        }
+      }
+    }
+  ]
+}

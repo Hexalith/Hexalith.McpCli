@@ -1,0 +1,224 @@
+{
+  "startedAtUtc": "2026-10-22T03:17:42.207124+00:00",
+  "owningBase": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "finalBuildsCommit": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "reviewedBuildsCommit": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "equalBuildsTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "sourceIndexTreeBefore": "2720e9e26859c12470438d3056f6a2502660596e",
+  "workingStatusBefore": "M  .github/workflows/release.yml\nM  Directory.Build.targets\nM  references/Hexalith.Builds\nM  tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs",
+  "reviewedRepairBlobsEqual": true,
+  "contractsAndClientSourcesUnchanged": true,
+  "allFiveCheckoutTrackedRegularAndSymlinkBytesEqual": true,
+  "inputComparison": [
+    {
+      "name": "tenants",
+      "regularAndSymlinkTrackedCount": 3792,
+      "trackedBytes": 126861701,
+      "orderedCheckoutFileRowsSha256": "9fd7d8125cc35c54907f27d3ecbbb91b186dbc2acae401d8b38d31fc8f9e6db0"
+    },
+    {
+      "name": "builds",
+      "regularAndSymlinkTrackedCount": 1981,
+      "trackedBytes": 148326046,
+      "orderedCheckoutFileRowsSha256": "9a8b725bd6a5deea0f4cc8864e943810422a8009f0d5c45c2e60d190d51dfdfd"
+    },
+    {
+      "name": "frontcomposer",
+      "regularAndSymlinkTrackedCount": 30934,
+      "trackedBytes": 5381540926,
+      "orderedCheckoutFileRowsSha256": "903aeda2007c3f3eb78a97c3a0fa3e8579a9c7b4e8a8c9a07974b09f7991d9c4"
+    },
+    {
+      "name": "eventstore-model-paths",
+      "regularAndSymlinkTrackedCount": 44720,
+      "trackedBytes": 6138946118,
+      "orderedCheckoutFileRowsSha256": "4edf0bfe5cdc93d6600b5005156e98e8dda9ca29c6154b1f882fe749ded5a6ff"
+    },
+    {
+      "name": "memories-model-paths",
+      "regularAndSymlinkTrackedCount": 6247,
+      "trackedBytes": 83691150,
+      "orderedCheckoutFileRowsSha256": "6d695282cf7940913e947bad55e7b93d3723ffae0cdbc7b69fca00fffcfd5bfc"
+    }
+  ],
+  "originalInputManifest": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-interim6dd-source-inputs.full.json",
+    "bytes": 29302105,
+    "sha256": "bf251b9e947028830bec00a19901ef6c65c910321325364fe626806441fc3688"
+  },
+  "finalInputManifest": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-source-inputs.full.json",
+    "bytes": 29302103,
+    "sha256": "8590bc2498bb9c8793cd9ffb78fbe9942c11ea1dbd2042518c4b6d0dac4cb154"
+  },
+  "interimTestEvidence": "tenants-followup-interim6dd-projects.json",
+  "interimTests": {
+    "projects": 7,
+    "passed": 9492,
+    "failed": 0,
+    "skipped": 0
+  },
+  "scope": "All tracked regular-file bytes and symlink targets equal the post-interim/pre-final-pin baseline in the five initialized checkouts. Gitlink commit identity and Builds HEAD differ because the normal squash merge preserves the checked tree. Ignored outputs, caches and revision-dependent generated metadata are outside this equality proof. Final-pin Contracts and existing source-governance regressions run below; all exact-source remote PR/main CI and normal release gates remain required. No full-v1 acceptance credit.",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.0038218169938772917,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/0.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/0.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_validate_changed_story_gitlinks.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 5.718775742003345,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/1.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/1.stderr.txt",
+          "bytes": 148,
+          "sha256": "fe415b373b6004da6d2e0810e28f8836512d513ff529a5a4e73d138dcec7784b"
+        }
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_validate_story_gitlinks.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 7.693583532993216,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/2.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/2.stderr.txt",
+          "bytes": 176,
+          "sha256": "11034c89a0f4d49101b0f3ab86eb075b1701b2abbe57767f10fce4996a86858e"
+        }
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_pushall_detached_head.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.6008934279961977,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/3.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/3.stderr.txt",
+          "bytes": 2122,
+          "sha256": "c18c53f339037df9f2e4f86c3336785120f10815cad6994b2a4a0d0b9fc4dfb9"
+        }
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "tests/scripts/test_pushall_default_branch.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 11.633750964989304,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/4.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/4.stderr.txt",
+          "bytes": 4720,
+          "sha256": "80be3a909ebca5f4282753f8c46655bcd98529f5bbb3363ffff206cb653e30e9"
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "--configuration",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "--results-directory",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/contracts",
+        "--report-xunit-trx",
+        "--report-xunit-trx-filename",
+        "Hexalith.Tenants.Contracts.Tests.trx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 17.047844713990344,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/5.stdout.txt",
+          "bytes": 613,
+          "sha256": "e0978b67adb3d35bc24ce4b7a998560338be8b4f0c52eabe4d37eb2f55c03116"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/5.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "trx": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/tenants-followup-finalpin-validation/contracts/Hexalith.Tenants.Contracts.Tests.trx",
+    "bytes": 1010615,
+    "sha256": "79e1ef65e7c98c58ab107ddecb0f8feaeb14641d3205692fa624c0fc64c1ceda"
+  },
+  "counters": {
+    "total": "654",
+    "executed": "654",
+    "passed": "654",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "sourceIndexTreeAfter": "2720e9e26859c12470438d3056f6a2502660596e",
+  "workingStatusAfter": "M  .github/workflows/release.yml\nM  Directory.Build.targets\nM  references/Hexalith.Builds\nM  tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs",
+  "completedAtUtc": "2026-10-22T03:18:27.712087+00:00",
+  "result": "passed"
+}

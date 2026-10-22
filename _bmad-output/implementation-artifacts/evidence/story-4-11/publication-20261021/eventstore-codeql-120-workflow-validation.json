@@ -1,0 +1,24 @@
+{
+  "checkedAtUtc": "2026-10-21T23:26:43.947765+00:00",
+  "base": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "semanticChange": "Only timeout-minutes60\u2192120; comments explain retained full input/build-mode/analysis settings.",
+  "fullSettingsOtherwiseIdentical": true,
+  "results": [
+    {
+      "command": [
+        "actionlint",
+        ".github/workflows/codeql.yml"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "workflowSha256": "2ae1603ef653d8b0fab4bf549ff8bc02727a28f7a3db49843b40867443d1253f"
+}

@@ -1,0 +1,718 @@
+{
+  "result": "independently-inspected-failure",
+  "repository": "Hexalith/Hexalith.Builds",
+  "pr": 130,
+  "head": "85290197d2a4324b50560630e8992d71c3318784",
+  "run": 39705799551,
+  "job": 119585427412,
+  "log": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-pr130-ci-job119585427412.log",
+    "bytes": 459050,
+    "sha256": "f39ec6a077434c3274894182cfc8c87e8f992fc111fba466edb563c5816f5eba"
+  },
+  "summary": {
+    "total": 1515,
+    "passed": 1400,
+    "failed": 112,
+    "skipped": 3,
+    "uniqueFailedMethods": 60
+  },
+  "failedMethods": [
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "failedCases": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "failedCases": 8
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "failedCases": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "failedCases": 12
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "failedCases": 6
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "failedCases": 4
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync",
+      "failedCases": 1
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync",
+      "failedCases": 2
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync",
+      "failedCases": 2
+    }
+  ],
+  "failedCases": [
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableRunReportsMissingDaprWithoutCreatingStateAsync (45ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PublicCompositionCommandTests.ExecutableDownRemovesMatchingRunAndLeavesForeignRunAsync (34ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.TestWithUnknownProfileReturnsUsageExitCodeAsync (9ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"test\", expectedRule: \"HXC002\") (855ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithDescriptorAbiUnavailableAndInvalidEvidenceRetainsPrerequisiteExitCodeAsync (255ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.SecretBearingProfileIsRedactedFromEvidenceAsync (211ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithEscapingEvidenceSymlinkReturnsEvidenceFailureAsync (197ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"run\") (20ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.AspireMismatchPrecedesPublicDescriptorDiscoveryAsync(command: \"test\") (32ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithInvalidExecutableDescriptorFailsBeforeRuntimeAsync (18ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.RootManifestEarlyFailureDoesNotInitializeReferenceAsync(command: \"run\", expectedRule: \"HXR015\") (1s 117ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithInvalidEvidenceReturnsEvidenceExitCodeAsync (258ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.RunWithApprovedG6ManifestRetainsDescriptorAbiBlockerAsync (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.MultipleManifestErrorsExposeTheFirstDeterministicRuleAsync (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleCommandApplicationTests.DownWithValidManifestReturnsSuccessAsync (238ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceProfileErrorPrecedesHxr003Async (1s 375ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Source) (2s 912ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"human\") (1s 432ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnFailureAsync(format: \"json\") (1s 313ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-no-pid\") (3s 092ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceRunPlanTests.EngineWritesResolvedMappingIntoPlanAndWorkspaceAsync(mode: Package) (3s 122ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DebugNamesProjectsWithoutLauncherIdsAsync(mode: \"ready-partial-pid\") (2s 926ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"source\") (4s 179ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"package\") (3s 055ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: null) (3s 185ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DescriptorLoadingUsesRemainingDeadlineAsync (2s 564ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"test\", mode: \"source\") (3s 470ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: \"package\") (3s 467ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCommandWritesResolvedMappingIntoEnginePlanAsync(command: \"run\", mode: null) (3s 598ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.TimeoutListsEveryUnreadyResourceAndPreservesDiagnosticsAsync (2s 824ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full\") (6s 071ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ExecutableDescriptorLoaderTests.PublicRunWithApprovedDescriptorChecksLivePrerequisites (2s 592ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full\") (6s 376ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"source\", profile: \"full-mtp\") (5s 257ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.PublicDebugReachesReadyAndDownClearsStateAsync(kind: \"v1\") (3s 220ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestCarriesResolvedHashIntoNativeProcessAsync(mode: \"package\", profile: \"full-mtp\") (7s 149ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicRunPreservesInitializedDirectManifestOnGitlinkMismatchAsync (734ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: True) (2s 646ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.ReadyRunRecordsDeadlineAndDebugProcessIdsAsync(debugAttach: False) (2s 835ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupReadinessTests.DeadlineStartsBeforePrerequisitesAsync (9ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceExecutableManifestProbesAspireAfterCheckoutAsync (1s 031ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"human\") (810ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicCatalogFailureRetainsHxw009BeforeDescriptorsAsync(format: \"json\") (923ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"json\") (5s 689ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicSourceWarningAppearsOnSuccessAsync(format: \"human\") (7s 150ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: True) (1s 214ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DirectReferenceNonexecutableManifestReportsHxr003Async(aspireAvailable: False) (1s 078ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"run\") (890ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageModeSkipsMissingDirectSourceAsync(command: \"test\") (765ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.ReturnedUiMarkerUnderPackageOriginFailsMappingGuardAsync (3s 652ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.InvalidDirectDeclarationUsesTopologyExitCodeAsync (579ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"json\") (1s 036ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicPackageRefusalReportsSeveralIdentityConditionsAsync(format: \"human\") (1s 247ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.NonexecutableManifestReportsHxr003BeforeAspireProbeAsync (795ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.DescriptorModuleProjectOutsideMappingStopsEngineAsync (2s 956ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: False) (3s 451ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicTestReportsPrimaryNativePathBeforeCompositionAsync(outsideMapping: True) (3s 444ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"ui\") (692ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PackageOriginDescriptorFailsBeforeChildAsync(kind: \"module\") (612ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"source\") (3s 263ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.Workspace.WorkspaceCommandModeTests.PublicNoGitRunWritesActiveOnlyPlanAsync(mode: \"package\") (3s 514ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.PlatformPinSchemaAndRuntimeValidationRemainInParity (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadLongAcyclicDependencyChainReturnsValidManifest (215ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadManifestWithMultipleErrorsReturnsDeterministicDiagnosticOrder (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.IdentifierSchemaAndRuntimeValidationRemainInParity (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ManifestValidationTests.LoadValidTwoModuleManifestReturnsManifest (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unknown-schema.json\") (4ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"duplicate-id.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-descriptor.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"unsupported-profile-class.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"missing-required-value.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"secret-bearing.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"malformed-dependency.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"placeholder.json\") (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"superseded-frontcomposer-pin.json\") (4ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"path-escape.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"invalid-profile.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadManifestNegativeControlReturnsStableRule(fileName: \"absolute-path.json\") (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract",
+      "case": "Hexalith.Builds.ModuleTool.Tests.PersistedFixtureAssetTests.LoadP0TwoModuleManifestReturnsValidContract (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateEvidenceRejectsFixtureSymlinkRetargetedAfterValidation (5ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand",
+      "case": "Hexalith.Builds.ModuleTool.Tests.ModuleRunEvidenceSerializationTests.CreateTestEvidenceMatchesReadinessCanonicalBindingCommand (1ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"run\", kind: \"v1\") (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.MappingConsumesOriginalDefaultDeadlineAsync(command: \"debug\", kind: \"v1\") (10ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.StartupCoordinationTests.DeadlineAtFinalReadyCommitRefusesSuccessAsync (1s 687ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAppHostIsUnavailableBeforeAnyResourceAsync (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingAspireOrchestrationIsUnavailableBeforeAnyResourceAsync (5ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UncleanTeardownAfterReadinessFailureReportsAndPersistsHxr023Async (1s 525ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PreRunTimeoutSurvivesDiagnosticsIoFailureAsync (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"test\") (9ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.PublicCommandChecksLivePrerequisitesForExecutableFixtureAsync(command: \"run\") (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AppHostReceivesLocalAspireOrchestrationAndRunPrivateDirectoriesAsync (1s 532ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"cause\", expectedRuleId: \"HXR027\") (1s 531ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"exit\", expectedRuleId: \"HXR020\") (1s 516ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-name\", expectedRuleId: \"HXR022\") (1s 510ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"foreign\", expectedRuleId: \"HXR022\") (1s 536ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-task\", expectedRuleId: \"HXR022\") (1s 504ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"diagnostics-io\", expectedRuleId: \"HXR027\") (1s 530ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"unsafe-detail\", expectedRuleId: \"HXR022\") (1s 546ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.ReadinessFailuresTearDownAndRetainFailedStateAsync(mode: \"never\", expectedRuleId: \"HXR021\") (1s 516ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.MissingPrerequisitesStopBeforeAnyResourceAsync (4ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"json\") (9ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"run\", format: \"human\") (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"human\") (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"human\") (9ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"debug\", format: \"json\") (7ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.AspireMismatchStopsPublicStartupAsync(command: \"test\", format: \"json\") (8ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"timeout\") (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"different\") (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"malformed\") (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"missing\") (3ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"failed\") (2ms)"
+    },
+    {
+      "method": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync",
+      "case": "Hexalith.Builds.ModuleTool.Tests.CompositionEngineTests.UnavailableAspireCreatesNoRunArtifactsAsync(mode: \"empty\") (5ms)"
+    }
+  ],
+  "locatedVersionRefusalExamples": [
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T01:53:34.1287170Z   HXM016 Manifest Manifest field=platform.eventStoreVersion: The manifest plat...\"",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T01:53:38.1811257Z   HXM016 Manifest Manifest field=platform.eventStoreVersion: The manifest platform pins are not supported by this runner. (Use the supported package and runtime pins for this runner release.)",
+    "Build and test\tTest Hexalith.Builds.Module.Tests\t2026-10-22T01:53:39.4733094Z       {\"status\":\"failed\",\"outcome\":{\"exitCode\":\"UsageOrManifest\",\"phase\":\"Manifest\",\"category\":\"Manifest\",\"ruleId\":\"HXM016\"},\"diagnostics\":[{\"ruleId\":\"HXM016\",\"phase\":\"Manifest\",\"category\":\"Manifest\",\"message\":\"The manifest platform pins are not supported by this runner.\",\"field\":\"platform.eventStoreVersion\",\"hint\":\"Use the supported package and runtime pins for this runner release.\",\"source\":null,\"location\":null,\"row\":null}]}"
+  ],
+  "limits": "Raw log proves broad early Manifest/UsageOrManifest failures and failed method inventory. Local reproduction and exact source repair qualification remain required; no transient failure or timeout inference."
+}

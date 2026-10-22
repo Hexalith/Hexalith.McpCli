@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/Hexalith/Hexalith.Builds/pull/128",
+    "number": 128,
+    "state": "open",
+    "merged": false,
+    "mergeable": false,
+    "draft": false,
+    "body": "SDK multi-RID container publishing truncates colon-bearing label values before each child publish. The shared target rebinds the publisher-owned source, revision, version, and created labels for consumers that provide all three provenance inputs.\n\nThe overrides and rebinding require complete publisher metadata, preserving ordinary local SDK generation and partial-metadata behavior. Seven MSBuild tests cover the complete, partial, absent, disabled, single-RID, and multi-RID paths; the full publisher suite passes 142 tests.\n\nThis reapplies exactly the two reviewed files from aea707d after PR #127 restored the preincident tree. The source tree is byte-identical to the reviewed implementation; merge remains subject to every effective required context and ordinary CI. No release is authorized by this PR alone.",
+    "title": "fix(container): preserve publisher provenance across RIDs",
+    "base": "main",
+    "base_sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+    "head": "fix/container-provenance-protected-reapply",
+    "head_sha": "1e606d458f92cb6562c21d2e2777d070cfb02a39",
+    "head_repo_id": 952945989,
+    "head_repo_full_name": "Hexalith/Hexalith.Builds",
+    "merge_commit_sha": null,
+    "user": {
+      "login": "jpiquot",
+      "name": "jpiquot",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/6775094?v=4",
+      "id": 6775094
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-21T20:28:11Z",
+    "updated_at": "2026-10-21T20:28:11Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 1,
+    "changed_files": 2,
+    "additions": 152,
+    "deletions": 0,
+    "display_url": "https://github.com/Hexalith/Hexalith.Builds/pull/128",
+    "display_title": "fix(container): preserve publisher provenance across RIDs"
+  },
+  "isError": false
+}

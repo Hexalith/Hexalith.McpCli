@@ -1,0 +1,4 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-story411-tenants-l_6r95hf/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj (in 621 ms).
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-story411-tenants-l_6r95hf/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Successfully created package '/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg'.

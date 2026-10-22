@@ -1,0 +1,114 @@
+{
+  "createdAtUtc": "2026-10-21T22:21:51.864759+00:00",
+  "root": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "purpose": "Detached immutable diagnostic worktree; build before execution and perform no concurrent edits/builds while source-bound worker diagnostics run.",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "worktree",
+        "add",
+        "--detach",
+        "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+        "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp",
+      "exitCode": 0,
+      "stdout": "HEAD is now at af6299d49 ci(integration): budget the complete serial live suite\n",
+      "stderr": "Preparing worktree (detached HEAD af6299d49)\nUpdating files:  13% (6233/45336)\nUpdating files:  14% (6348/45336)\nUpdating files:  15% (6801/45336)\nUpdating files:  16% (7254/45336)\nUpdating files:  17% (7708/45336)\nUpdating files:  17% (8015/45336)\nUpdating files:  18% (8161/45336)\nUpdating files:  19% (8614/45336)\nUpdating files:  20% (9068/45336)\nUpdating files:  21% (9521/45336)\nUpdating files:  22% (9974/45336)\nUpdating files:  22% (10149/45336)\nUpdating files:  23% (10428/45336)\nUpdating files:  24% (10881/45336)\nUpdating files:  25% (11334/45336)\nUpdating files:  25% (11462/45336)\nUpdating files:  26% (11788/45336)\nUpdating files:  27% (12241/45336)\nUpdating files:  28% (12695/45336)\nUpdating files:  29% (13148/45336)\nUpdating files:  30% (13601/45336)\nUpdating files:  31% (14055/45336)\nUpdating files:  31% (14200/45336)\nUpdating files:  32% (14508/45336)\nUpdating files:  33% (14961/45336)\nUpdating files:  33% (15206/45336)\nUpdating files:  34% (15415/45336)\nUpdating files:  35% (15868/45336)\nUpdating files:  36% (16321/45336)\nUpdating files:  36% (16674/45336)\nUpdating files:  37% (16775/45336)\nUpdating files:  38% (17228/45336)\nUpdating files:  39% (17682/45336)\nUpdating files:  40% (18135/45336)\nUpdating files:  40% (18481/45336)\nUpdating files:  41% (18588/45336)\nUpdating files:  42% (19042/45336)\nUpdating files:  43% (19495/45336)\nUpdating files:  44% (19948/45336)\nUpdating files:  45% (20402/45336)\nUpdating files:  46% (20855/45336)\nUpdating files:  47% (21308/45336)\nUpdating files:  48% (21762/45336)\nUpdating files:  49% (22215/45336)\nUpdating files:  49% (22345/45336)\nUpdating files:  50% (22668/45336)\nUpdating files:  51% (23122/45336)\nUpdating files:  52% (23575/45336)\nUpdating files:  53% (24029/45336)\nUpdating files:  54% (24482/45336)\nUpdating files:  55% (24935/45336)\nUpdating files:  56% (25389/45336)\nUpdating files:  57% (25842/45336)\nUpdating files:  58% (26295/45336)\nUpdating files:  59% (26749/45336)\nUpdating files:  60% (27202/45336)\nUpdating files:  61% (27655/45336)\nUpdating files:  62% (28109/45336)\nUpdating files:  62% (28298/45336)\nUpdating files:  63% (28562/45336)\nUpdating files:  64% (29016/45336)\nUpdating files:  65% (29469/45336)\nUpdating files:  66% (29922/45336)\nUpdating files:  67% (30376/45336)\nUpdating files:  68% (30829/45336)\nUpdating files:  69% (31282/45336)\nUpdating files:  70% (31736/45336)\nUpdating files:  71% (32189/45336)\nUpdating files:  72% (32642/45336)\nUpdating files:  73% (33096/45336)\nUpdating files:  74% (33549/45336)\nUpdating files:  75% (34002/45336)\nUpdating files:  75% (34192/45336)\nUpdating files:  76% (34456/45336)\nUpdating files:  77% (34909/45336)\nUpdating files:  78% (35363/45336)\nUpdating files:  79% (35816/45336)\nUpdating files:  80% (36269/45336)\nUpdating files:  81% (36723/45336)\nUpdating files:  82% (37176/45336)\nUpdating files:  83% (37629/45336)\nUpdating files:  84% (38083/45336)\nUpdating files:  85% (38536/45336)\nUpdating files:  86% (38989/45336)\nUpdating files:  86% (38993/45336)\nUpdating files:  87% (39443/45336)\nUpdating files:  88% (39896/45336)\nUpdating files:  88% (40170/45336)\nUpdating files:  89% (40350/45336)\nUpdating files:  90% (40803/45336)\nUpdating files:  91% (41256/45336)\nUpdating files:  92% (41710/45336)\nUpdating files:  93% (42163/45336)\nUpdating files:  94% (42616/45336)\nUpdating files:  95% (43070/45336)\nUpdating files:  96% (43523/45336)\nUpdating files:  97% (43976/45336)\nUpdating files:  98% (44430/45336)\nUpdating files:  99% (44883/45336)\nUpdating files: 100% (45336/45336)\nUpdating files: 100% (45336/45336), done.\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "--git-common-dir"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "/home/administrator/projects/hexalith/eventstore/.git\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "submodule.recurse=false",
+        "submodule",
+        "update",
+        "--init",
+        "--",
+        "references/Hexalith.Builds"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "Submodule path 'references/Hexalith.Builds': checked out '359fee24aeca4d9eabed4b425d4cfa2520b2adda'\n",
+      "stderr": "Cloning into '/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/references/Hexalith.Builds'...\n"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "eventstore-immutable-native-restore.stdout.txt",
+      "stderr": "eventstore-immutable-native-restore.stderr.txt"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/Hexalith.EventStore.Server.LiveSidecar.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "eventstore-immutable-native-build.stdout.txt",
+      "stderr": "eventstore-immutable-native-build.stderr.txt"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "owningWorkspaceGuidance": {
+    "hexalith-llm-instructions.md": {
+      "path": "/home/administrator/projects/hexalith/eventstore/references/Hexalith.AI.Tools/hexalith-llm-instructions.md",
+      "sha256": "675be8cb518837a84aa53d67eef76863de2040c952eeed6214a9724d5d835582"
+    },
+    "hexalith-git-instructions.md": {
+      "path": "/home/administrator/projects/hexalith/eventstore/references/Hexalith.AI.Tools/hexalith-git-instructions.md",
+      "sha256": "515854cc73feb97baeee02f6cf308efb248f728b0dc921485c72f8e3e5bcc333"
+    }
+  },
+  "baselineLoaded": true,
+  "baselineScope": "Previously loaded same owning repository baseline from its existing root-declared AI.Tools checkout; no reference dependency initialized for baseline discovery.",
+  "initialPreparationAttempt": "Created detached worktree successfully; initial script incorrectly expected a root baseline file and stopped before dependency initialization/build. Resumed using the already-authoritative owning workspace baseline.",
+  "readyForImmutableExecution": true,
+  "frozenAtUtc": "2026-10-21T22:24:15.812190+00:00"
+}

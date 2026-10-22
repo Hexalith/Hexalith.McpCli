@@ -1,0 +1,39 @@
+[
+  {
+    "label": "stage",
+    "command": [
+      "git",
+      "add",
+      "--",
+      ".github/workflows/codeql.yml"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "commit",
+    "command": [
+      "git",
+      "commit",
+      "-F",
+      "/tmp/mcpcli-story411-eventstore-codeql-budget-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/p1r-qualification-time-budget 3bf0f412] ci(codeql): allow the complete source analysis to finish\n 1 file changed, 3 insertions(+)\n",
+    "stderr": ""
+  },
+  {
+    "label": "push",
+    "head": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   261e2c9b5..3bf0f412c  HEAD -> fix/p1r-qualification-time-budget\n"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "recordedAtUtc": "2026-10-21T23:38:03.303532+00:00",
+  "privateCliLogTimeZone": [
+    "CET",
+    "CEST"
+  ],
+  "currentUtcOffsetSeconds": 7200,
+  "note": "CLI timestamps use local Europe/Paris clock; wrapper and report timestamps use UTC. Compare stage-relative elapsed times, not raw hour labels. Local resource hints and RSS ceiling do not reproduce GitHub physical/cgroup limits.",
+  "sharedCheckoutObservation": {
+    "owningSource": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+    "file": ".github/workflows/codeql.yml",
+    "fileSha256": "2ab606b41d4d24d1b432c13faaf1a2c3273bda35a10f3897121b5f55d610064d",
+    "submodules": false,
+    "buildMode": "none",
+    "meaning": "Local diagnostic snapshots intentionally have no initialized submodules, matching the reusable CodeQL checkout seam; no nested submodules initialized."
+  }
+}

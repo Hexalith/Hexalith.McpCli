@@ -1,0 +1,30 @@
+{
+  "approvedAtUtc": "2026-10-22T04:18:14.059122+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "run": 39721533752,
+  "source": "205cbc5019343d344643b530fb03aee82af2840d",
+  "environment": {
+    "id": 18745236815,
+    "name": "production"
+  },
+  "approvalState": "approved",
+  "approvingAccount": "jpiquot",
+  "normalPreflight": {
+    "job": 119635869111,
+    "conclusion": "success",
+    "releaseTagFloor": "v5.10.0",
+    "currentMainAndExactSourcePushCiVerified": true
+  },
+  "existingHumanAuthorization": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/publication-authorization.json",
+  "approvalExitCode": 0,
+  "bypassUsed": false,
+  "controlsChanged": false,
+  "privateEvidenceDirectory": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy",
+  "preflightLog": {
+    "path": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/verify-source-complete-masked.log",
+    "bytes": 23807,
+    "sha256": "55e207370249828b3232b3b280e77c7db73dbf2b4b37c12a1fa2fa894ac4842e"
+  },
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

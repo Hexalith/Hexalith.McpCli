@@ -39,6 +39,72 @@ def enroll_fixture(project: ET.Element, package_id: str, preserve_existing: bool
                   Include=package_id, HexalithContracts='true')
 
 
+def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: dict) -> None:
+    """Use the real pinned SDK and complete runner for typed/default/parser outcomes."""
+    sources = root / 'sdk-response-cases'
+    sources.mkdir()
+    documents = [json.loads((repo / 'tools/conformance-vectors/v1' / name).read_text())
+                 for name in ['sample-command.json', 'sample-query.json', 'sample-rename.json']]
+    command, query, rename = documents
+    opaque = {'MixedCase': [True, 1], 'payload': {'SUCCESS': 'true'}}
+    correlation = '01J9MZHXT3RKM0VWXRXGSJDATK'
+    base = {'correlationId': correlation, 'payload': opaque}
+    nested = 0
+    for _ in range(63):
+        nested = {'nested': nested}
+    cases = [
+        ('omitted-success', base, None),
+        ('typed-property-casing', {'CORRELATIONID': correlation, 'PAYLOAD': opaque, 'SUCCESS': True,
+                                  'METADATA': {'PAGING': {'OFFSET': None, 'unknown': 7}}}, {'pageSize': 0}),
+        ('typed-paging', dict(base, metadata={'paging': {'pageSize': '7', 'offset': '2',
+             'totalCount': '3', 'hasMore': False, 'nextCursor': None, 'unknown': True}}),
+             {'pageSize': 7, 'offset': 2, 'totalCount': 3, 'hasMore': False}),
+        ('depth64', dict(base, ignored=nested), None),
+        ('paging-array-parse-error', dict(base, metadata={'paging': []}), 'parse-error'),
+        ('success-string-parse-error', dict(base, success='true'), 'parse-error'),
+        ('depth65-parse-error', dict(base, ignored={'nested': nested}), 'parse-error'),
+    ]
+    query['prerequisites'] = []
+    for _, body, paging in cases:
+        step = copy.deepcopy(query['invocation'])
+        step['scriptedResponse']['body'] = body
+        if paging == 'parse-error':
+            step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': {
+                'code': 'gateway_error', 'status': 200, 'detail': 'Query response body could not be parsed.'}}]
+        else:
+            step['assertions'] = [{'path': '/document', 'operator': 'equals', 'value': opaque},
+                                  {'path': '/paging', 'operator': 'exists', 'value': paging is not None}]
+            if paging is not None:
+                step['assertions'].append({'path': '/paging', 'operator': 'equals', 'value': paging})
+        query['prerequisites'].append(step)
+    message = '01J9MZHXT3RKM0VWXRXGSJDATN'
+    command['invocation']['scriptedResponse'] = {'statusCode': 202,
+        'body': {'MESSAGEID': message, 'RESULTPAYLOAD': opaque}, 'echoRequestFields': ['correlationId']}
+    command['invocation']['assertions'] = [
+        {'path': '/result', 'operator': 'equals', 'value': opaque},
+        {'path': '/messageId', 'operator': 'equals', 'value': message}]
+    # Exercise both supplied and generated request correlations through the full
+    # binding/masking path: the SDK's 204 parse error contains neither echo.
+    supplied = copy.deepcopy(command['invocation'])
+    supplied['scriptedResponse']['statusCode'] = 204
+    expected_error = {'code': 'gateway_error', 'status': 204, 'detail': 'Command response body could not be parsed.'}
+    supplied['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': expected_error}]
+    rename['prerequisites'] = [supplied]
+    rename['invocation']['scriptedResponse']['statusCode'] = 204
+    rename['invocation']['assertions'] = copy.deepcopy(supplied['assertions'])
+    vectors = []
+    for document in documents:
+        path = sources / (document['operation'] + '.vector.json')
+        path.write_text(json.dumps(document))
+        vectors.append(path)
+    result = run([sys.executable, repo / 'tools/conformance-vectors/v1/run_loopback.py', '--host', host,
+                  '--artifact', artifact, '--expected-package-id', 'Hexalith.McpCli.Sample.Contracts',
+                  '--expected-package-version', '1.0.0', *vectors], root, env)
+    (sources / 'replay.stdout.txt').write_text(result.stdout)
+    (sources / 'replay.stderr.txt').write_text(result.stderr)
+    print('PASS real SDK response defaults, typed casing/paging, opaque payloads, depth64/65, typed parse errors and supplied/generated command204 complete replay.', flush=True)
+
+
 def fixture(repo: Path, artifact: Path):
     artifact = artifact.resolve(strict=True)
     package_id, version = 'Hexalith.McpCli.Sample.Contracts', '1.0.0'
@@ -119,6 +185,7 @@ def fixture(repo: Path, artifact: Path):
 
         # The real Core adapter must reject every incompatible step before any Gateway exists.
         host_dll = host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        sdk_response_cases(repo, root, host_dll, artifact, env)
         for group in ['prerequisites', 'invocation', 'postconditions']:
             for mutation in ['unknown-property', 'wrong-kind', 'invalid-id', 'depth64-schema', 'excess-depth']:
                 document = json.loads((repo / 'tools/conformance-vectors/v1/sample-command.json').read_text())

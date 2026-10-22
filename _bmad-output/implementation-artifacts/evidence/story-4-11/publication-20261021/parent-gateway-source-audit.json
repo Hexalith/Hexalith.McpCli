@@ -1,0 +1,33 @@
+{
+  "recordedAtUtc": "2026-10-21T21:40:30.019677+00:00",
+  "repository": "Hexalith/Hexalith.EventStore",
+  "publishedVersion": "3.126.0",
+  "publishedTagCommit": "fcf78d6cafb6c0c9f52dc350a9a09aff54ded288",
+  "currentMainCommit": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+  "scope": "Only the gateway request DTOs and gateway client methods directly used by McpCli OperationExecutor; separate projection/stream APIs do change.",
+  "files": [
+    {
+      "path": "src/Hexalith.EventStore.Contracts/Commands/SubmitCommandRequest.cs",
+      "publishedVersionSourceBlob": "def09a89fe9e0a2488cbdcc95452dbe980a2a1ab",
+      "currentMainSourceBlob": "def09a89fe9e0a2488cbdcc95452dbe980a2a1ab",
+      "identical": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Contracts/Queries/SubmitQueryRequest.cs",
+      "publishedVersionSourceBlob": "ab88bbda87331c4b0a26e4a8a30307b987a1b723",
+      "currentMainSourceBlob": "ab88bbda87331c4b0a26e4a8a30307b987a1b723",
+      "identical": true
+    },
+    {
+      "path": "src/Hexalith.EventStore.Client/Gateway/EventStoreGatewayClient.cs",
+      "publishedVersionSourceBlob": "553b5cba4dedc2dfd0e3a1408c7a1669e2947321",
+      "currentMainSourceBlob": "553b5cba4dedc2dfd0e3a1408c7a1669e2947321",
+      "identical": true
+    }
+  ],
+  "allIdentical": true,
+  "limits": [
+    "Source comparison only; final published package bytes and complete production replay remain required.",
+    "Does not assert unchanged complete EventStore API, live authorization, or persistence."
+  ]
+}

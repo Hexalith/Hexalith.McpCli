@@ -1,0 +1,15 @@
+{
+  "capturedAtUtc": "2026-10-22 03:50:28 UTC",
+  "parentAudit": true,
+  "repository": "Hexalith/Hexalith.Tenants",
+  "pullRequest": 54,
+  "checkedHead": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "mergedSource": "205cbc5019343d344643b530fb03aee82af2840d",
+  "main": "205cbc5019343d344643b530fb03aee82af2840d",
+  "checkedAndMergedWholeTree": "2720e9e26859c12470438d3056f6a2502660596e",
+  "soleParent": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "normalSquashTreeEquality": true,
+  "scope": "Live GitHub Git objects independently bind normal merged main to exactly the checked PR tree. Exact-main push CI and normal protected full release remain mandatory.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

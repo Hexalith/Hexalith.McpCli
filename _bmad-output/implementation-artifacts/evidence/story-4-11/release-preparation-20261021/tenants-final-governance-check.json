@@ -1,0 +1,12 @@
+{
+  "command": [
+    "dotnet",
+    "/tmp/mcpcli-story411-full-tenants-fa7b01k8/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+    "-class",
+    "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests"
+  ],
+  "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+  "exitCode": 0,
+  "durationSeconds": 24.83644176300004,
+  "scope": "Existing governance checks against the final proposed import and publisher execution-pin configuration."
+}

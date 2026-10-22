@@ -1,0 +1,23 @@
+{
+  "receiptPath": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/replacement-receipt.json",
+  "receiptSha256": "3802cf01298fb52522df5ffdbfd96c9611a76c9b336d2b7567a1f174de04dead",
+  "owningSourceCommit": "03b529489aa559267a9c3de946d01c2aadf28858",
+  "originalManifestsPreserved": true,
+  "records": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "originalSha256": "42e65675b473ccf57e9e909c5e5bce13e7b80b70a123021adbe1d2059479caca",
+      "sanitizedSha256": "1a23e9036a5dfa01d50bd752b0fb1a505ae3af8c4eb6e40e0cac58529757f3e4"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "originalSha256": "c870ebe7d95a59cb791856406b388eebedeb1e5949d1f24daa0695b46dc3caa9",
+      "sanitizedSha256": "a2b415167b3dadcd234fe8fb0eb06b8d072075cd1de5cf3fada3ac43ae92b770"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "originalSha256": "aab07148b78e07f50f6da6cd8f19ffc71626bf2c60b3b3181af8d63554b07407",
+      "sanitizedSha256": "9a6210cbf09c7d3af0be447ec06a6811a878256b139a579f655e53d2d953aebf"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "git",
+    "commit",
+    "-F",
+    "/tmp/mcpcli-story411-eventstore-evidence-commit.txt"
+  ],
+  "exitCode": 0,
+  "stdout": "[fix/p1r-qualification-time-budget 703e14e69] build(evidence): bind sanitized historical diagnostics\n 4 files changed, 460 insertions(+)\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/packet-sha256.sanitized.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/packet-sha256.sanitized.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/README.md\n create mode 100644 _bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/sanitization-20261021/replacement-receipt.json\n",
+  "stderr": ""
+}

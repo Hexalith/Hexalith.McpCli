@@ -1,0 +1,63 @@
+{
+  "pin": "22a578b576a515d2af214fe81859447fffc97981",
+  "originalCheckoutsModified": false,
+  "registryMutations": false,
+  "execution": "Existing publisher tests use fake tools; no real publisher invocation.",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "Github/publish-containers/tests",
+        "-p",
+        "test_oci_registry_validator.py",
+        "-v"
+      ],
+      "cwd": "/tmp/mcpcli-story411-publisher-pin-vzzujpcu",
+      "exitCode": 0,
+      "elapsedSeconds": 0.21765932499693008,
+      "stdout": "pinned-test_oci_registry_validator.stdout.txt",
+      "stderr": "pinned-test_oci_registry_validator.stderr.txt"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "Github/publish-containers/tests",
+        "-p",
+        "test_publish_script_contract.py",
+        "-v"
+      ],
+      "cwd": "/tmp/mcpcli-story411-publisher-pin-vzzujpcu",
+      "exitCode": 1,
+      "elapsedSeconds": 1.609797687997343,
+      "stdout": "pinned-test_publish_script_contract.stdout.txt",
+      "stderr": "pinned-test_publish_script_contract.stderr.txt"
+    }
+  ],
+  "sourceSha256": {
+    "Github/publish-containers/action.yml": "d4b128f5b9668638c8e9aeb3fde53c5e5f81e0fbb5c8d42a24f87283a5e69c02",
+    "Github/publish-containers/oci_registry_validator.py": "0fff2281ecb9d8a46c48d65d1b0de58b724f2439138da43395004232e5942045",
+    "Github/publish-containers/publish-containers.sh": "7e64bb1f744b9e3cb793df5c47813d15db00aaa8bc76e1875088f259574e9622",
+    "Github/publish-containers/publication_preflight.py": "f87b48e649092cc68de8f07977bae48c65f0570007f60de42887201988ee0062",
+    "Github/publish-containers/smoke_container_platforms.py": "7f1161d6f477c77ddf6a1e2f381df03451168565dd8cabc28010ab23db443491",
+    "Github/publish-containers/README.md": "1d87171ccba844a248ce8ce554813eb777a639aa18bc4ec20262cb9b83d27f2d",
+    "Github/publish-containers/smoke-container-platforms.sh": "f11865658a24ecea906da087d8446c7f631dc5a9328e294676534d590ef0e89e",
+    "Github/publish-containers/tests/test_publish_script_contract.py": "7658901f53ec0d580f97e857ab9bca00449dfc2f8b06577d871a150306477df7",
+    "Github/publish-containers/tests/test_oci_registry_validator.py": "d55debbafb03b4df993e2653d03abaf45d92fe385c661a0391672a44e6d07c6d",
+    "Github/publish-containers/tests/test_smoke_container_platforms.py": "8fff8bb2b9deade62171abc50fef477a05bfb7836f6c28bb1513b1dfbe310fdb",
+    "Github/publish-containers/tests/test_publication_preflight.py": "4ad0beba03a616dc7527703a942ddc02c7d25e28abdf075ba5d0644cd3d96437",
+    "Github/publish-containers/tests/test_governed_release_workflow.py": "3a2179cbb50003dc3d87c1fd94ee9bbd05489c77c6f032d7490a4065c82bc4d3",
+    ".github/workflows/build-release.yml": "da2d859b874de3cd827183d45c1c437e69f0548455a4a334fc483ade75d4649c",
+    ".github/workflows/domain-release.yml": "18feb281ec363a930c1a26ba67bf89f25acddd544e84f2c0f78f296a03722127",
+    "test/fixtures/publish-containers/v3.75.0-single-manifest.json": "4839b0e9a98ced22634755e5e124a6f5e0ebea6fe52e7932243c093ce838c045",
+    "test/fixtures/publish-containers/validation-cases.json": "f42b28a2dd45fe71307a97702d3ac34f01cc9c88415817dd370c9e74e6f932d4",
+    "test/fixtures/publish-containers/v3.75.0-evidence.json": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+  }
+}

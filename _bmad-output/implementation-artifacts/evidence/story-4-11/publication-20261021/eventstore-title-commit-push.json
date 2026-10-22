@@ -1,0 +1,126 @@
+{
+  "checkedAtUtc": "2026-10-21T21:48:42.331609+00:00",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": " M tests/Hexalith.EventStore.Admin.UI.E2E/BrowserSmokeTests.cs\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "origin",
+        "main",
+        "fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.EventStore\n * branch                main       -> FETCH_HEAD\n * branch                fix/p1r-qualification-time-budget -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/BrowserSmokeTests.cs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/mcpcli-story411-eventstore-title-commit.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "[fix/p1r-qualification-time-budget 191afdfc9] test(admin): await the dashboard title after hydration\n 1 file changed, 7 insertions(+), 2 deletions(-)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "-1",
+        "--format=%B"
+      ],
+      "exitCode": 0,
+      "stdout": "test(admin): await the dashboard title after hydration\n\nKeep the shell landmark and expected case-insensitive title assertions.\nAllow the asynchronous Blazor PageTitle update up to five bounded seconds\ninstead of sampling the title immediately after the shell appears.\n\nVerify actual browser smoke coverage, delayed-title behavior, removal of\nthe wait and wrong-title refusal without changing any test selection.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/fix/p1r-qualification-time-budget"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "remote: \nremote: GitHub found 48 vulnerabilities on Hexalith/Hexalith.EventStore's default branch (2 critical, 18 high, 21 moderate, 7 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.EventStore/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.EventStore.git\n   3bf0f412c..191afdfc9  HEAD -> fix/p1r-qualification-time-budget\n"
+    }
+  ],
+  "patchSha256": "aafc7140f5c2eb8dd154fc533b298a0ada4dc587d2623bf446879daece1f9fc0",
+  "head": "191afdfc9cc0f71f9b477681e8ab7de7002c9c53",
+  "mainPushedDirectly": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

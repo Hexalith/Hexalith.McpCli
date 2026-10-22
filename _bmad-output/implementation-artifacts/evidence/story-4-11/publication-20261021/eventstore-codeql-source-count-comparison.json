@@ -1,0 +1,75 @@
+{
+  "checkedAtUtc": "2026-10-21T23:12:03.059131+00:00",
+  "readOnly": true,
+  "scope": "Tracked root source trees only; no nested-submodule traversal, no analysis exclusion or setting change. File counts do not prove a cause for slow CodeQL.",
+  "trees": [
+    {
+      "source": "ae917d3e4dbab20b8982c5222a13611c3e3faf35",
+      "trackedPaths": 33171,
+      "csharpFiles": 7565,
+      "projects": 566,
+      "csharpByTopDirectory": {
+        "_bmad-output": 3839,
+        "docs": 55,
+        "perf": 6,
+        "samples": 33,
+        "src": 1986,
+        "tests": 1615,
+        "tools": 31
+      },
+      "projectsByTopDirectory": {
+        "_bmad-output": 506,
+        "perf": 1,
+        "samples": 5,
+        "src": 21,
+        "tests": 29,
+        "tools": 4
+      }
+    },
+    {
+      "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+      "trackedPaths": 45336,
+      "csharpFiles": 15180,
+      "projects": 566,
+      "csharpByTopDirectory": {
+        "_bmad-output": 11408,
+        "docs": 55,
+        "perf": 6,
+        "samples": 33,
+        "src": 2001,
+        "tests": 1646,
+        "tools": 31
+      },
+      "projectsByTopDirectory": {
+        "_bmad-output": 506,
+        "perf": 1,
+        "samples": 5,
+        "src": 21,
+        "tests": 29,
+        "tools": 4
+      }
+    }
+  ],
+  "changedTrackedPathCount": 12280,
+  "changedCsharpOrProjectPathCount": 7690,
+  "completePathDelta": {
+    "privateFile": "/tmp/mcpcli-story411-codeql-csharp-path-delta.json",
+    "sha256": "dc3a94dfbae6266b17082f85e018357f86c463a65487bac502a74893d34f60af",
+    "sizeBytes": 1821413
+  },
+  "changedCsharpByEvidenceRoot": {
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T120109Z": 27,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T121338Z": 29,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T122316Z": 50,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T123423Z": 50,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125043Z": 31,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z": 50,
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z": 50,
+    "_bmad-output/implementation-artifacts/evidence/story-2-13/runs-2026-10-21-blackhole": 1311,
+    "_bmad-output/implementation-artifacts/evidence/story-2-13/runs-2026-10-21-concurrency-retirement": 995,
+    "_bmad-output/implementation-artifacts/evidence/story-2-13/runs-2026-10-21-concurrency-safety": 684,
+    "_bmad-output/implementation-artifacts/evidence/story-2-13/runs-2026-10-21-restart-trace": 2537,
+    "_bmad-output/implementation-artifacts/evidence/story-2-13/runs-2026-10-21-runtime-recovery": 1755
+  },
+  "changedApplicationOrTestPathCount": 121
+}

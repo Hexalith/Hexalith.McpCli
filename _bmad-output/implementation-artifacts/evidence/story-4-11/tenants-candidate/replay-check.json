@@ -1,0 +1,10 @@
+{
+  "label": "candidate-combined-replay",
+  "command": [
+    "python3",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/run-combined-candidate.py"
+  ],
+  "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+  "exitCode": 0,
+  "durationSeconds": 229.26517366900225
+}

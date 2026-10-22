@@ -1,0 +1,38 @@
+{
+  "checkedAtUtc": "2026-10-21T20:23:05.024816+00:00",
+  "originalSource": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+  "sanitizedSource": "03b529489aa559267a9c3de946d01c2aadf28858",
+  "candidateIntegrationHead": "0451ff146cfbe3418188e7c9f28766d72145df5c",
+  "receiptSha256": "3802cf01298fb52522df5ffdbfd96c9611a76c9b336d2b7567a1f174de04dead",
+  "checks": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "originalAndSanitizedHashesMatch": true,
+      "candidatePreservesOwningSanitizedBytes": true,
+      "changedResourceLines": 27
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "originalAndSanitizedHashesMatch": true,
+      "candidatePreservesOwningSanitizedBytes": true,
+      "xmlNodesCompared": 6947,
+      "changedDisplayNames": 4,
+      "otherXmlDataIdentical": true,
+      "originalManifestUnchanged": true,
+      "derivedManifestOnlyChangesXmlDigest": true,
+      "derivedFilesRehashed": 96
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "originalAndSanitizedHashesMatch": true,
+      "candidatePreservesOwningSanitizedBytes": true,
+      "xmlNodesCompared": 6949,
+      "changedDisplayNames": 4,
+      "otherXmlDataIdentical": true,
+      "originalManifestUnchanged": true,
+      "derivedManifestOnlyChangesXmlDigest": true,
+      "derivedFilesRehashed": 108
+    }
+  ],
+  "passed": true
+}

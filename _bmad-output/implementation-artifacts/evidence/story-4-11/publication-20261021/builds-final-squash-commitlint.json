@@ -1,0 +1,16 @@
+{
+  "checkedAtUtc": "2026-10-21T21:15:39.358412+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story411-builds-final-squash.txt"
+  ],
+  "message": "fix(container): preserve publisher provenance across RIDs\n\nRebind SDK container labels at image creation when consumers provide the\ncomplete publisher provenance inputs. Preserve ordinary local SDK behavior\nwhen metadata is absent or partial.\n\nExercise actual MSBuild behavior and target removal using escaped fixture\nXML without XML parsing. Retain scoped no-shell subprocess justifications.\n\nReapply through the normal checked PR path after the bounded revert\nrestored the preincident tree.\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nfix(container): preserve publisher provenance across RIDs\n\nRebind SDK container labels at image creation when consumers provide the\ncomplete publisher provenance inputs. Preserve ordinary local SDK behavior\nwhen metadata is absent or partial.\n\nExercise actual MSBuild behavior and target removal using escaped fixture\nXML without XML parsing. Retain scoped no-shell subprocess justifications.\n\nReapply through the normal checked PR path after the bounded revert\nrestored the preincident tree.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

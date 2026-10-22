@@ -737,3 +737,76 @@ class CombinedConsumptionHashTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, 'retained vector bytes differ from recorded verification hash'):
                     check_enrolled.production_replay(root, output, [receipt])
             replay.assert_not_called()
+
+
+class ProductionProgressTests(unittest.TestCase):
+    def test_restore_build_and_replay_failures_retain_structured_progress_in_enrolled_json(self):
+        for failed_phase in ['production-restore', 'production-build', 'production-replay']:
+            with self.subTest(phase=failed_phase), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                output = root / 'evidence'
+                package = output / 'Module.Contracts'
+                package.mkdir(parents=True)
+                vector = package / 'read.vector.json'
+                vector.write_text('{"operation":"module.read"}')
+                receipt = {'result': 'passed', 'packageId': 'Module.Contracts', 'version': '1.0.0',
+                           'operations': ['module.read'], 'retainedInputs': {
+                               'artifact': 'module.nupkg', 'vectors': {'original.json': vector.name}},
+                           'vectors': {'original.json': hashlib.sha256(vector.read_bytes()).hexdigest()}}
+                source = root / 'src/Hexalith.McpCli/obj/project.assets.json'
+                source.parent.mkdir(parents=True)
+                source.write_text('{}')
+                report_path = output / 'enrolled.json'
+                observed = []
+
+                def execute(command, **kwargs):
+                    if command[1] == 'msbuild':
+                        return subprocess.CompletedProcess(command, 0, json.dumps({'Items': {'PackageReference': [
+                            {'Identity': 'Module.Contracts', 'HexalithContracts': 'true'}]}}), '')
+                    phase = 'production-' + command[1]
+                    current = json.loads(report_path.read_text())['productionReplay']
+                    observed.append(copy.deepcopy(current))
+                    self.assertEqual(phase, current['phase'])
+                    self.assertEqual('running', current['checks'][-1]['result'])
+                    return subprocess.CompletedProcess(command, 9 if phase == failed_phase else 0,
+                                                       phase + ' output', phase + ' diagnostic')
+
+                def replay(*args, **kwargs):
+                    current = json.loads(report_path.read_text())['productionReplay']
+                    observed.append(copy.deepcopy(current))
+                    self.assertEqual('production-replay', current['phase'])
+                    raise RuntimeError('specific replay failure')
+
+                with patch.object(check_enrolled, '__file__', str(root / 'tools/conformance-vectors/v1/check_enrolled.py')), \
+                        patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(output)]), \
+                        patch('check_enrolled.required_scope', return_value=[]), \
+                        patch('check_enrolled.approval_directory', return_value=root), \
+                        patch('check_enrolled._load_json', return_value={
+                            'module': 'module', 'artifactHash': 'approved', 'vectorFilesSha256': {}}), \
+                        patch('check_enrolled.artifact_for', return_value=root / 'module.nupkg'), \
+                        patch('check_enrolled.approved_vectors', return_value=[]), \
+                        patch('check_enrolled.approved_inventory', return_value='0' * 64), \
+                        patch('check_enrolled.verify', return_value=receipt), \
+                        patch('check_enrolled.subprocess.run', side_effect=execute), \
+                        patch('check_enrolled.run_catalog', side_effect=replay) as catalog, \
+                        redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    self.assertEqual(1, check_enrolled.main())
+                result = json.loads(report_path.read_text())
+                progress = result['productionReplay']
+                self.assertEqual('failed', result['result'])
+                self.assertFalse(result['fullV1Accepted'])
+                self.assertEqual('failed', progress['result'])
+                self.assertEqual(failed_phase, progress['phase'])
+                expected_codes = [9] if failed_phase == 'production-restore' else [0, 9] if failed_phase == 'production-build' else [0, 0]
+                self.assertEqual(expected_codes, [row['exitCode'] for row in progress['checks']])
+                for check in progress['checks']:
+                    self.assertEqual('dotnet', check['command'][0])
+                    self.assertEqual('failed' if check['exitCode'] else 'passed', check['result'])
+                self.assertIn('specific replay failure' if failed_phase == 'production-replay' else failed_phase + ' failed with exit 9', progress['error'])
+                self.assertEqual(len(expected_codes) + (failed_phase == 'production-replay'), len(observed))
+                if failed_phase == 'production-replay':
+                    self.assertIn('specific replay failure', (output / 'production-replay.stderr.txt').read_text())
+                else:
+                    catalog.assert_not_called()
+                    self.assertEqual(failed_phase + ' output', (output / (failed_phase + '.stdout.txt')).read_text())
+                    self.assertEqual(failed_phase + ' diagnostic', (output / (failed_phase + '.stderr.txt')).read_text())

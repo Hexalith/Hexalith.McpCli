@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story411-eventstore-final-squash.txt"
+  ],
+  "message": "ci: allow full qualification and bind sanitized evidence\n\nAllow complete P1R and CodeQL sequences thirty and sixty bounded minutes.\nRetain every preparation, registration, isolation, authority and analysis\nguard without narrowing the scanned source or changing queries and modes.\n\nPreserve current owning source repairs and record separate source-bound\nmanifests for successive sanitized historical diagnostics. Keep original\npacket manifests and outcomes intact without new qualification credit.\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nci: allow full qualification and bind sanitized evidence\n\nAllow complete P1R and CodeQL sequences thirty and sixty bounded minutes.\nRetain every preparation, registration, isolation, authority and analysis\nguard without narrowing the scanned source or changing queries and modes.\n\nPreserve current owning source repairs and record separate source-bound\nmanifests for successive sanitized historical diagnostics. Keep original\npacket manifests and outcomes intact without new qualification credit.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

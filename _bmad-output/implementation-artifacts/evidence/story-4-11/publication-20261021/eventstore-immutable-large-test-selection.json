@@ -1,0 +1,21 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll",
+    "-class",
+    "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests",
+    "-displayName",
+    "*count: 32769*",
+    "-preEnumerateTheories",
+    "-list",
+    "tests",
+    "-noLogo"
+  ],
+  "exitCode": 0,
+  "selectedTests": [
+    "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: False)",
+    "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: True)"
+  ],
+  "scope": "Only two32769 diagnostic cases; remote full suite remains required.",
+  "initialSelectionAttempt": "Without pre-enumerating theories the parameter-specific display-name filter selected zero tests; no execution occurred and no acceptance was recorded."
+}

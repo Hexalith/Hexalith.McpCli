@@ -1,0 +1,109 @@
+{
+  "formatVersion": 1,
+  "recordedAtUtc": "2026-10-21T20:15:14.479309+00:00",
+  "sourceCommitContainingOriginalFiles": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+  "reason": "Required exact-source CI reported 21 credential-bearing locations in historical diagnostic copies.",
+  "scope": "Sanitized diagnostic replacements preserving test outcome/counts and historical failure identities. Replacement packet digests identify derived bytes; they do not claim unchanged native originals.",
+  "qualificationCredit": "None. Historical results stay historical; current release qualification requires fresh exact-source CI.",
+  "valuesIncluded": false,
+  "scannerPolicyChanged": false,
+  "records": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "beforeSha256": "42e65675b473ccf57e9e909c5e5bce13e7b80b70a123021adbe1d2059479caca",
+      "afterSha256": "626c104d549fd9195425699b91f8c808cc123a69c1488d2683a1056cc6c62486",
+      "lines": [
+        95,
+        208,
+        328,
+        462,
+        664,
+        782,
+        1452,
+        1563,
+        1752,
+        1886,
+        2021,
+        2139,
+        2377,
+        2491,
+        2611,
+        2817,
+        2957
+      ],
+      "field": "x-otlp-api-key value",
+      "replacements": 17,
+      "otherBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "beforeSha256": "c870ebe7d95a59cb791856406b388eebedeb1e5949d1f24daa0695b46dc3caa9",
+      "afterSha256": "9e01d3e2a3b17eef8ab732256aa04efa90a3845f56ca9813adaea8717bea67e9",
+      "field": "negative-fixture display-name arguments only",
+      "replacements": 2,
+      "xmlOutcomeTimeIdMethodTypeAndAllOtherDataPreserved": true,
+      "cases": [
+        {
+          "line": 4,
+          "id": "0db08cdd-439e-4279-bb9b-ceba99cd00bb",
+          "type": "Hexalith.EventStore.Server.Tests.Streams.NativeSourceMetadataReaderTests",
+          "method": "MalformedOrUnsupportedSidecarEndpointFailsClosed",
+          "result": "Pass",
+          "originalDisplaySha256": "dd3e3e9b2ae9361a85a0e81efcd3ecd87e3dc5f1e548e453a548b0219eb02d88",
+          "newDisplaySha256": "0dbcffac8d543f5a6e5f81004ff1a644f1547d64cb86110e9ee3953d16414337"
+        },
+        {
+          "line": 75,
+          "id": "e28a2ca8-22d4-4058-97c0-8bfa98a80477",
+          "type": "Hexalith.EventStore.Server.Tests.Authentication.EventStoreAuthenticationOptionsTests",
+          "method": "Validate_InvalidAuthority_FailsWithoutEchoingValue",
+          "result": "Pass",
+          "originalDisplaySha256": "c690461a4b9cb4f165b19aaec40909e5f689384ce79ca8fb5acc066846c9c8dc",
+          "newDisplaySha256": "2f2549e492256a93a53a90ea341e2912896cc8a79ddb2726487dbbf22465a112"
+        }
+      ],
+      "replacementPacket": {
+        "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/packet-sha256.json",
+        "beforeSha256": "fe824819e529f351ccbdcb916eaf135cbdc99ab0c904aeaeb26bfd12d17392ec",
+        "afterSha256": "0ae39b3c1acd289870b606e728b84b386d02230b9a2038dd51da30a971728e28",
+        "onlyChangedEntry": "tests-Server.xml",
+        "originalDigestPreservedHere": "C870EBE7D95A59CB791856406B388EEBEDEB1E5949D1F24DAA0695B46DC3CAA9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "beforeSha256": "aab07148b78e07f50f6da6cd8f19ffc71626bf2c60b3b3181af8d63554b07407",
+      "afterSha256": "d0851a9d4e8f63008531f6e3a0526da647659f4122a24eca6378d61df844c68a",
+      "field": "negative-fixture display-name arguments only",
+      "replacements": 2,
+      "xmlOutcomeTimeIdMethodTypeAndAllOtherDataPreserved": true,
+      "cases": [
+        {
+          "line": 4,
+          "id": "bec394c1-9ff5-4c20-8555-2e25ab77322c",
+          "type": "Hexalith.EventStore.Server.Tests.Streams.NativeSourceMetadataReaderTests",
+          "method": "MalformedOrUnsupportedSidecarEndpointFailsClosed",
+          "result": "Pass",
+          "originalDisplaySha256": "dd3e3e9b2ae9361a85a0e81efcd3ecd87e3dc5f1e548e453a548b0219eb02d88",
+          "newDisplaySha256": "0dbcffac8d543f5a6e5f81004ff1a644f1547d64cb86110e9ee3953d16414337"
+        },
+        {
+          "line": 75,
+          "id": "66b89cce-debe-464d-b95e-6c45a723aa0d",
+          "type": "Hexalith.EventStore.Server.Tests.Authentication.EventStoreAuthenticationOptionsTests",
+          "method": "Validate_InvalidAuthority_FailsWithoutEchoingValue",
+          "result": "Pass",
+          "originalDisplaySha256": "c690461a4b9cb4f165b19aaec40909e5f689384ce79ca8fb5acc066846c9c8dc",
+          "newDisplaySha256": "2f2549e492256a93a53a90ea341e2912896cc8a79ddb2726487dbbf22465a112"
+        }
+      ],
+      "replacementPacket": {
+        "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/packet-sha256.json",
+        "beforeSha256": "3d2ad44d264eadc6735877981df66dadcb36893d235c3d24c82b77890430c23a",
+        "afterSha256": "718246c3e02aa5c9f16fcb14aa43beb69424214e6b8b757bf6d32361eafa48e0",
+        "onlyChangedEntry": "tests-Server.xml",
+        "originalDigestPreservedHere": "AAB07148B78E07F50F6DA6CD8F19FFC71626BF2C60B3B3181AF8D63554B07407"
+      }
+    }
+  ]
+}

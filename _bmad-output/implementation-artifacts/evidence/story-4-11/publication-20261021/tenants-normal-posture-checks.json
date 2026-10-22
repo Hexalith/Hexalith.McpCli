@@ -1,0 +1,62 @@
+{
+  "environmentOverrideForLocalProofOnly": {
+    "NUGET_PACKAGES": "/tmp/mcpcli-story411-tenants-owner-poopx2nu/packages",
+    "HexalithEventStoreVersion": "3.126.1",
+    "RestoreAdditionalProjectSources": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages"
+  },
+  "finalDependencyGitlinkRepairStillPending": true,
+  "checks": [
+    {
+      "label": "tenants-prerequisite-governance-build",
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+        "-c",
+        "Release",
+        "-p:UseHexalithProjectReferences=false",
+        "-m:1",
+        "-warnaserror"
+      ],
+      "cwd": "/tmp/mcpcli-story411-tenants-owner-poopx2nu",
+      "exitCode": 0,
+      "seconds": 3.521418750999146
+    },
+    {
+      "label": "tenants-normal-posture-positive",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-story411-tenants-owner-poopx2nu/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "-method",
+        "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests.Release_workflow_packs_validates_and_publishes_only_expected_packages"
+      ],
+      "cwd": "/tmp/mcpcli-story411-tenants-owner-poopx2nu",
+      "exitCode": 0,
+      "seconds": 0.2916345369958435
+    },
+    {
+      "label": "tenants-normal-posture-removal",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-story411-tenants-owner-poopx2nu/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "-method",
+        "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests.Release_workflow_packs_validates_and_publishes_only_expected_packages"
+      ],
+      "cwd": "/tmp/mcpcli-story411-tenants-owner-poopx2nu",
+      "exitCode": 1,
+      "seconds": 0.3046336710031028
+    },
+    {
+      "label": "tenants-normal-posture-governance",
+      "command": [
+        "dotnet",
+        "/tmp/mcpcli-story411-tenants-owner-poopx2nu/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "-class",
+        "Hexalith.Tenants.Contracts.Tests.PackageGovernanceTests"
+      ],
+      "cwd": "/tmp/mcpcli-story411-tenants-owner-poopx2nu",
+      "exitCode": 0,
+      "seconds": 15.130976711996482
+    }
+  ]
+}

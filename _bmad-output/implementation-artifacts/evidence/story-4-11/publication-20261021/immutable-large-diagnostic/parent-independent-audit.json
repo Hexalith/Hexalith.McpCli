@@ -1,0 +1,39 @@
+{
+  "bindingSha256": "1174669433758f73d6ee6954528a37fa5b12c200ed42f2f775e03e37c92fb399",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "receiptCount": 6,
+  "receipts": [
+    {
+      "file": "streamed-32769-stage.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    },
+    {
+      "file": "streamed-32769-promote.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    },
+    {
+      "file": "streamed-32769-resume.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    },
+    {
+      "file": "buffered-32769-stage.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    },
+    {
+      "file": "buffered-32769-promote.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    },
+    {
+      "file": "buffered-32769-resume.json",
+      "hashSizeAndProjectedFieldsMatch": true
+    }
+  ],
+  "allRuntimeArraysExactlyEqual": true,
+  "runtimeAssemblyCount": 4,
+  "all55CurrentInputHashesEqualBeforeAndAfter": true,
+  "inputCount": 55,
+  "threeDistinctPhaseProcessIdsPerCase": true,
+  "productionQualification": false,
+  "fullV1Accepted": false,
+  "errors": []
+}

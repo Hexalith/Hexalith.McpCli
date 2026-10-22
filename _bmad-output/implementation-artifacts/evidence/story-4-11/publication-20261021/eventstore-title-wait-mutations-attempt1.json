@@ -1,0 +1,156 @@
+{
+  "taskScratch": "/tmp/mcpcli-story411-title-mutations-8oull2eh",
+  "finalSourceSha256": "e26504ba23bf756001d7d633d0e1ff73c22c1051c5ce3e8d960f2d7fe9a4bbed",
+  "checks": [
+    {
+      "label": "delayed-title-bounded-positive",
+      "sourceSha256": "7218189f40d635cf835f2a2cd0332fb8ec3a5a712a173e8590f521840acfc930",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "testCommand": [
+        "dotnet",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+        "-method",
+        "Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle",
+        "-xml",
+        "/tmp/mcpcli-story411-title-mutations-8oull2eh/delayed-title-bounded-positive.xml",
+        "-noColor"
+      ],
+      "expectedExitCode": 0,
+      "buildExitCode": 0,
+      "testExitCode": 0,
+      "assemblies": [
+        {
+          "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+          "id": "08c3d3e5-77aa-46e8-9b1b-226a1e5f4a32",
+          "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+          "run-date": "2026-10-21",
+          "run-time": "21:47:00",
+          "start-rtf": "2026-10-21T21:47:00.3207666+00:00",
+          "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+          "target-framework": ".NETCoreApp,Version=v10.0",
+          "errors": "0",
+          "failed": "0",
+          "finish-rtf": "2026-10-21T21:47:01.8178282+00:00",
+          "not-run": "0",
+          "passed": "1",
+          "skipped": "0",
+          "time": "1.497",
+          "time-rtf": "00:00:01.4970000",
+          "total": "1"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "removed-wait-one-shot-negative",
+      "sourceSha256": "e53a9279c6404cc7db0dd2fcef45834a015b8644e70910e2b47688591c57a4fb",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "testCommand": [
+        "dotnet",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+        "-method",
+        "Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle",
+        "-xml",
+        "/tmp/mcpcli-story411-title-mutations-8oull2eh/removed-wait-one-shot-negative.xml",
+        "-noColor"
+      ],
+      "expectedExitCode": 1,
+      "buildExitCode": 0,
+      "testExitCode": 1,
+      "assemblies": [
+        {
+          "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+          "id": "318e1fa6-7a48-4bdb-8fa8-c0af7e1e6bce",
+          "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+          "run-date": "2026-10-21",
+          "run-time": "21:47:03",
+          "start-rtf": "2026-10-21T21:47:03.5816507+00:00",
+          "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+          "target-framework": ".NETCoreApp,Version=v10.0",
+          "errors": "0",
+          "failed": "1",
+          "finish-rtf": "2026-10-21T21:47:05.0066955+00:00",
+          "not-run": "0",
+          "passed": "0",
+          "skipped": "0",
+          "time": "1.425",
+          "time-rtf": "00:00:01.4250000",
+          "total": "1"
+        }
+      ],
+      "failures": [
+        {
+          "name": "Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle",
+          "message": "Shouldly.ShouldAssertException : await page.TitleAsync();\n            title\n    should contain (case insensitive comparison)\n\\\"Hexalith EventStore Admin\\\"\n    but was actually\n\\\"\\\""
+        }
+      ]
+    },
+    {
+      "label": "wrong-title-negative",
+      "sourceSha256": "c3e60e114304ffa729867a70e28742d356c05b6f76d9755c5067437c39bdccd4",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/Hexalith.EventStore.Admin.UI.E2E.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-p:UseHexalithProjectReferences=false"
+      ],
+      "testCommand": [
+        "dotnet",
+        "tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+        "-method",
+        "Hexalith.EventStore.Admin.UI.E2E.BrowserSmokeTests.Dashboard_RendersShellAndTitle",
+        "-xml",
+        "/tmp/mcpcli-story411-title-mutations-8oull2eh/wrong-title-negative.xml",
+        "-noColor"
+      ],
+      "expectedExitCode": 1,
+      "buildExitCode": 0,
+      "testExitCode": 0,
+      "assemblies": [
+        {
+          "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, parallel (collections, 14 threads)]",
+          "id": "eb4183d4-0030-40c5-9a51-1a9c604a9793",
+          "name": "/tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Admin.UI.E2E/bin/Release/net10.0/Hexalith.EventStore.Admin.UI.E2E.dll",
+          "run-date": "2026-10-21",
+          "run-time": "21:47:06",
+          "start-rtf": "2026-10-21T21:47:06.7213493+00:00",
+          "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+          "target-framework": ".NETCoreApp,Version=v10.0",
+          "errors": "0",
+          "failed": "0",
+          "finish-rtf": "2026-10-21T21:47:08.2553607+00:00",
+          "not-run": "0",
+          "passed": "1",
+          "skipped": "0",
+          "time": "1.534",
+          "time-rtf": "00:00:01.5340000",
+          "total": "1"
+        }
+      ],
+      "failures": []
+    }
+  ],
+  "note": "First wrong-title fixture was not isolated from Blazor: the application correctly replaced its temporary wrong title. Retained as an inconclusive negative fixture; follow-up navigates to an isolated blank document before assigning the title."
+}

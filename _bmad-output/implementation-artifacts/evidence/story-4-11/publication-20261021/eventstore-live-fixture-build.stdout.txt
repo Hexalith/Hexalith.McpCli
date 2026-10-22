@@ -1,0 +1,19 @@
+  Hexalith.EventStore.Contracts -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll
+  Hexalith.EventStore.Sample.Contracts -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/samples/Hexalith.EventStore.Sample.Contracts/bin/Release/net10.0/Hexalith.EventStore.Sample.Contracts.dll
+  Hexalith.EventStore.Admin.Abstractions -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Admin.Abstractions/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll
+  Hexalith.EventStore.ServiceDefaults -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.ServiceDefaults/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll
+  Hexalith.EventStore.Client -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Client/bin/Release/net10.0/Hexalith.EventStore.Client.dll
+  Hexalith.EventStore.DomainService -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.DomainService/bin/Release/net10.0/Hexalith.EventStore.DomainService.dll
+  Hexalith.EventStore.Sample -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/samples/Hexalith.EventStore.Sample/bin/Release/net10.0/Hexalith.EventStore.Sample.dll
+  Hexalith.EventStore.Server -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Server/bin/Release/net10.0/Hexalith.EventStore.Server.dll
+  Hexalith.EventStore.Testing -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Testing/bin/Release/net10.0/Hexalith.EventStore.Testing.dll
+  Hexalith.EventStore.Testing.Integration -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Testing.Integration/bin/Release/net10.0/Hexalith.EventStore.Testing.Integration.dll
+  Hexalith.EventStore.Gateway -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore.Gateway/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll
+  Hexalith.EventStore -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.dll
+  Hexalith.EventStore.Server.LiveSidecar.Tests -> /tmp/mcpcli-story411-eventstore-p1r-de1ragfp/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.50

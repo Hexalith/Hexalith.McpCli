@@ -1,0 +1,133 @@
+{
+  "startedAtUtc": "2026-10-22T04:04:21.365501+00:00",
+  "scope": "Uncommitted exact5.10.0 enrollment proposal. Same139 Python contract tests with verbose named results and both existing Sample gates. Final normal restore/build resets assets after loopback. No strict production21-operation replay or full-v1 benchmark is run while repaired upstream release is pending.",
+  "jsonschemaVersion": "4.26.0",
+  "nugetPackages": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/packages",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "startedAtUtc": "2026-10-22T04:04:21.365961+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 18.770732429999043,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/0.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/0.stderr.txt",
+          "bytes": 23432,
+          "sha256": "609df2fab0c493aff559438be2c8b9fac12e5fcc72f2450f5a92fc7a09ccc80d"
+        }
+      ],
+      "testsRun": 139,
+      "namedPassingTests": 139
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "startedAtUtc": "2026-10-22T04:04:40.136755+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 22.03725592599949,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/1.stdout.txt",
+          "bytes": 1419,
+          "sha256": "eae07a253f94ffcb27a4c62b4ee28709878dc5f8154d15352dcb1169e00821b9"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/1.stderr.txt",
+          "bytes": 240,
+          "sha256": "2f9ce8b2e5f20b31d2d3d27bb83cfe844d757657a8b4d92ecf8d75fb4b6cdb27"
+        }
+      ]
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "startedAtUtc": "2026-10-22T04:05:02.173682+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 703.7757739390072,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/2.stdout.txt",
+          "bytes": 4223,
+          "sha256": "bdc3178335f6dfb44e614c375f069e506428520bfe196e4ed7bf62763b6b4b7f"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/2.stderr.txt",
+          "bytes": 240,
+          "sha256": "e5377029fa977a465e6c3beef2bcf5d8f1674159c1f4ac8c7d594e6b826fe6c1"
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "startedAtUtc": "2026-10-22T04:16:45.926582+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.3570564740075497,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/3.stdout.txt",
+          "bytes": 708,
+          "sha256": "38f956549b4bca2f6a1b41e54dea092d49bb58a086d393f9c3240ea8ee3f5599"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/3.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "startedAtUtc": "2026-10-22T04:16:47.284393+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.817646909999894,
+      "logs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/4.stdout.txt",
+          "bytes": 3684,
+          "sha256": "10311f6fa06c38bde21f482766e442a78730f981b649cded73c9491b8da9e6b9"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/python-sample-local/4.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "result": "passed",
+  "completedAtUtc": "2026-10-22T04:16:50.102779+00:00"
+}

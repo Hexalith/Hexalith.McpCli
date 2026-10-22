@@ -1,0 +1,27 @@
+{
+  "recordedAtUtc": "2026-10-22T02:20:38.012926+00:00",
+  "prior112FileSnapshot": "builds-live-fixture-pin-repair-binding.json",
+  "prior112FileParentAudit": "parent-builds-live-fixture-pin-repair-audit.json",
+  "priorImmutableDotnetTests": "builds-live-fixture-pin-full-tests.json",
+  "changes": [
+    {
+      "path": "Tools/G4PackageQualification.functions.ps1",
+      "beforeBytes": 27311,
+      "beforeSha256": "bb8adeed382937e6bf22f44a6c048b0a679ce62c80d5429bf457270dde4b627c",
+      "afterBytes": 27311,
+      "afterSha256": "0c6ec8154c258cceb458f5dafe704fbbea356765db8bbb0b3ad7de9702b2fbbe"
+    },
+    {
+      "path": "Tools/test-publish-g4-tool-packages.ps1",
+      "beforeBytes": 46729,
+      "beforeSha256": "f4e8b17e2c7c022592d11e54cf7925cb1f4a73672f5327c4d12c0ac149cb0d77",
+      "afterBytes": 47563,
+      "afterSha256": "831edf303f8fbe6f5758ea19aa7686ca9cb6a492a17823862c9bfa49969c3d58"
+    }
+  ],
+  "defaultSelectionChange": "3.126.0 ->3.126.1; exact comparison and every other typed/invocation/source/hash binding unchanged",
+  "regression": "Previous3.126.0 evidence with jointly refreshed inventory digest must fail before any package push. Existing positive publisher cases use current authoritative selection.",
+  "originalBytes": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/publisher-default-followup-originals",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

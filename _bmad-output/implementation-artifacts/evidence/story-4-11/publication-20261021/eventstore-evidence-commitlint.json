@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story411-eventstore-evidence-commit.txt"
+  ],
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nbuild(evidence): bind sanitized historical diagnostics\n\nPreserve the original packet manifests and record derived bindings for the\nowner-sanitized diagnostic bytes. Retain outcome counts and source hashes\nwithout assigning new qualification credit to historical test reports.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

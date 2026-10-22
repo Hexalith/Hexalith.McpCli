@@ -1,0 +1,32 @@
+[
+  {
+    "repository": "eventstore",
+    "source": "261e2c9b58e5313fc21f9d68031c48468b997943",
+    "baseTag": "v3.126.0",
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import fs from 'node:fs'; import {analyzeCommits} from '@semantic-release/commit-analyzer'; import semver from 'semver'; const input=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); const releaseType=await analyzeCommits({}, {commits:input.commits,logger:{log(){}}}); process.stdout.write(JSON.stringify({...input,releaseType,candidateVersion:releaseType?semver.inc(input.baseTag.slice(1),releaseType):null})+'\\n');",
+      "/tmp/mcpcli-story411-integrated-versions-_qx3uwkw/eventstore.json"
+    ],
+    "exitCode": 0,
+    "releaseType": "patch",
+    "candidateVersion": "3.126.1"
+  },
+  {
+    "repository": "tenants",
+    "source": "8c12ff17f48c08a1b9baf619cd3de3ceadfdab9a",
+    "baseTag": "v5.9.0",
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import fs from 'node:fs'; import {analyzeCommits} from '@semantic-release/commit-analyzer'; import semver from 'semver'; const input=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); const releaseType=await analyzeCommits({}, {commits:input.commits,logger:{log(){}}}); process.stdout.write(JSON.stringify({...input,releaseType,candidateVersion:releaseType?semver.inc(input.baseTag.slice(1),releaseType):null})+'\\n');",
+      "/tmp/mcpcli-story411-integrated-versions-_qx3uwkw/tenants.json"
+    ],
+    "exitCode": 0,
+    "releaseType": "minor",
+    "candidateVersion": "5.10.0"
+  }
+]

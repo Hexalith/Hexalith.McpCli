@@ -1,0 +1,18 @@
+[
+  {
+    "repository": "eventstore",
+    "source": "b8280d66dcf1c551e58390e71adab60c39ab5c07",
+    "baseTag": "v3.126.0",
+    "analysisExitCode": 0,
+    "candidateVersion": "3.126.1",
+    "sourceComparisonBase": "b6d1807035fba2e485c8587ac3581d669d1036e5"
+  },
+  {
+    "repository": "tenants",
+    "source": "b02452a16869f265c21b1ae6c15f2f299677f139",
+    "baseTag": "v5.9.0",
+    "analysisExitCode": 0,
+    "candidateVersion": "5.10.0",
+    "sourceComparisonBase": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4"
+  }
+]

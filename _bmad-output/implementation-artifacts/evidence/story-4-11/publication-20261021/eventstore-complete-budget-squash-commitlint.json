@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "candidateFile": "/tmp/mcpcli-story411-eventstore-final-squash.txt",
+  "exactFullCandidate": "ci: allow full qualification and bind sanitized evidence\n\nAllow complete P1R, CodeQL and live integration within thirty, sixty and\nninety bounded minutes respectively. Retain all tests, source analysis,\nregistration, isolation, authority and OQ8 capture without narrowing scope.\n\nWait for the asynchronous Blazor dashboard title with a bounded native\nassertion while retaining the shell and expected title conditions.\n\nConstruct unrelated synthetic retry work independently of the original\nstream bindings, retaining the real native proof and scheduler guards.\n\nPreserve current owning source repairs and record separate source-bound\nmanifests for successive sanitized historical diagnostics. Keep original\npacket manifests and outcomes intact without new qualification credit.\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\nci: allow full qualification and bind sanitized evidence\n\nAllow complete P1R, CodeQL and live integration within thirty, sixty and\nninety bounded minutes respectively. Retain all tests, source analysis,\nregistration, isolation, authority and OQ8 capture without narrowing scope.\n\nWait for the asynchronous Blazor dashboard title with a bounded native\nassertion while retaining the shell and expected title conditions.\n\nConstruct unrelated synthetic retry work independently of the original\nstream bindings, retaining the real native proof and scheduler guards.\n\nPreserve current owning source repairs and record separate source-bound\nmanifests for successive sanitized historical diagnostics. Keep original\npacket manifests and outcomes intact without new qualification credit.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": ""
+}

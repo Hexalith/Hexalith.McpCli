@@ -1,0 +1,454 @@
+{
+  "startedAtUtc": "2026-10-21T22:26:11.282935+00:00",
+  "taskScratch": "/tmp/mcpcli-story411-immutable-large-1n56jvw3",
+  "ownerLabel": {
+    "hexalith.story411.owner": "cb8c19bf1a4a49a38e641b6a9b3ca056"
+  },
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "context",
+        "inspect"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Name\": \"default\",\n        \"Metadata\": {},\n        \"Endpoints\": {\n            \"docker\": {\n                \"Host\": \"unix:///var/run/docker.sock\",\n                \"SkipTLSVerify\": false\n            }\n        },\n        \"TLSMaterial\": {},\n        \"Storage\": {\n            \"MetadataPath\": \"\\u003cIN MEMORY\\u003e\",\n            \"TLSPath\": \"\\u003cIN MEMORY\\u003e\"\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-cb8c19bf1a4a-placement",
+        "--label",
+        "hexalith.story411.owner=cb8c19bf1a4a49a38e641b6a9b3ca056",
+        "-p",
+        "127.0.0.1::50005",
+        "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+        "./placement",
+        "--port",
+        "50005"
+      ],
+      "exitCode": 0,
+      "stdout": "edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745\",\n        \"Created\": \"2026-10-21T22:26:11.350350477Z\",\n        \"Path\": \"./placement\",\n        \"Args\": [\n            \"--port\",\n            \"50005\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 82380,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:26:11.417717855Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-cb8c19bf1a4a-placement\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"50005/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [],\n        \"Config\": {\n            \"Hostname\": \"edbf824681ff\",\n            \"Domainname\": \"\",\n            \"User\": \"65532:65532\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"50005/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\"\n            ],\n            \"Cmd\": [\n                \"./placement\",\n                \"--port\",\n                \"50005\"\n            ],\n            \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"/\",\n            \"Entrypoint\": null,\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"cb8c19bf1a4a49a38e641b6a9b3ca056\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"a1b8e67c8878b960e40ff25e8c34bca5efc9899ff5cd5067b75d31aef0775cac\",\n            \"SandboxKey\": \"/var/run/docker/netns/a1b8e67c8878\",\n            \"Ports\": {\n                \"50005/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"50063\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"5652531e43175d8c99abf8451e65f7183932091a4bbdbf15a897d6abebbfeddb\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.6\",\n                    \"MacAddress\": \"22:74:65:4e:9c:df\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n            \"digest\": \"sha256:1146cf75f6a900f098489f995bcb2145bf9b040f87ab70eb0de2db21000d01bb\",\n            \"size\": 3234,\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-cb8c19bf1a4a-scheduler",
+        "--label",
+        "hexalith.story411.owner=cb8c19bf1a4a49a38e641b6a9b3ca056",
+        "-p",
+        "127.0.0.1:34479:50006",
+        "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+        "./scheduler",
+        "--port",
+        "50006",
+        "--override-broadcast-host-port",
+        "127.0.0.1:34479",
+        "--etcd-data-dir",
+        "/tmp/story411-etcd",
+        "--etcd-client-listen-address",
+        "0.0.0.0"
+      ],
+      "exitCode": 0,
+      "stdout": "1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f\",\n        \"Created\": \"2026-10-21T22:26:11.685461592Z\",\n        \"Path\": \"./scheduler\",\n        \"Args\": [\n            \"--port\",\n            \"50006\",\n            \"--override-broadcast-host-port\",\n            \"127.0.0.1:34479\",\n            \"--etcd-data-dir\",\n            \"/tmp/story411-etcd\",\n            \"--etcd-client-listen-address\",\n            \"0.0.0.0\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 82447,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:26:11.796385677Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-cb8c19bf1a4a-scheduler\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"50006/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"34479\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [],\n        \"Config\": {\n            \"Hostname\": \"1a363817f164\",\n            \"Domainname\": \"\",\n            \"User\": \"65532:65532\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"50006/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\"\n            ],\n            \"Cmd\": [\n                \"./scheduler\",\n                \"--port\",\n                \"50006\",\n                \"--override-broadcast-host-port\",\n                \"127.0.0.1:34479\",\n                \"--etcd-data-dir\",\n                \"/tmp/story411-etcd\",\n                \"--etcd-client-listen-address\",\n                \"0.0.0.0\"\n            ],\n            \"Image\": \"sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"/\",\n            \"Entrypoint\": null,\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"cb8c19bf1a4a49a38e641b6a9b3ca056\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"16e205332f831878c59adb55c02e484d8d7d975173e3101f8e0a5acc58e659c0\",\n            \"SandboxKey\": \"/var/run/docker/netns/16e205332f83\",\n            \"Ports\": {\n                \"50006/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"34479\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"a5e571d97cafa01fbcc1a0b2fda4e441a86d830b075b3c2bf083aa967acda15d\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.7\",\n                    \"MacAddress\": \"ce:bd:8b:e1:81:3c\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n            \"digest\": \"sha256:1146cf75f6a900f098489f995bcb2145bf9b040f87ab70eb0de2db21000d01bb\",\n            \"size\": 3234,\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "mcpcli-411-cb8c19bf1a4a-redis",
+        "--label",
+        "hexalith.story411.owner=cb8c19bf1a4a49a38e641b6a9b3ca056",
+        "-p",
+        "127.0.0.1::6379",
+        "sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8"
+      ],
+      "exitCode": 0,
+      "stdout": "2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017\",\n        \"Created\": \"2026-10-21T22:26:12.072326286Z\",\n        \"Path\": \"docker-entrypoint.sh\",\n        \"Args\": [\n            \"redis-server\"\n        ],\n        \"State\": {\n            \"Status\": \"running\",\n            \"Running\": true,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 82519,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-21T22:26:12.154986583Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/mcpcli-411-cb8c19bf1a4a-redis\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"bridge\",\n            \"PortBindings\": {\n                \"6379/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"\"\n                    }\n                ]\n            },\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": null,\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": false,\n            \"SecurityOpt\": null,\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [\n            {\n                \"Type\": \"volume\",\n                \"Name\": \"f12dd91f2f88e44758f91640875d7e8b69b62b71f3c7546205ea6999e3df6ff2\",\n                \"Source\": \"/var/lib/docker/volumes/f12dd91f2f88e44758f91640875d7e8b69b62b71f3c7546205ea6999e3df6ff2/_data\",\n                \"Destination\": \"/data\",\n                \"Driver\": \"local\",\n                \"Mode\": \"\",\n                \"RW\": true,\n                \"Propagation\": \"\"\n            }\n        ],\n        \"Config\": {\n            \"Hostname\": \"2fa680802118\",\n            \"Domainname\": \"\",\n            \"User\": \"\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": false,\n            \"AttachStderr\": false,\n            \"ExposedPorts\": {\n                \"6379/tcp\": {}\n            },\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"REDIS_VERSION=6.2.24\"\n            ],\n            \"Cmd\": [\n                \"redis-server\"\n            ],\n            \"Image\": \"sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8\",\n            \"Volumes\": {\n                \"/data\": {}\n            },\n            \"WorkingDir\": \"/data\",\n            \"Entrypoint\": [\n                \"docker-entrypoint.sh\"\n            ],\n            \"Labels\": {\n                \"desktop.docker.io/wsl-distro\": \"Ubuntu-26.04\",\n                \"hexalith.story411.owner\": \"cb8c19bf1a4a49a38e641b6a9b3ca056\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"d25e47b52ef2fad695a8e89afa8c873b4a67c5c21c77fee79195ba821c82216d\",\n            \"SandboxKey\": \"/var/run/docker/netns/d25e47b52ef2\",\n            \"Ports\": {\n                \"6379/tcp\": [\n                    {\n                        \"HostIp\": \"127.0.0.1\",\n                        \"HostPort\": \"50065\"\n                    }\n                ]\n            },\n            \"Networks\": {\n                \"bridge\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"87046c04e8257b834d3574646fc0c5ebf1927a756fbb6317f05adf1dc0fbcf8a\",\n                    \"EndpointID\": \"2dc990054919f83de107c8c5542adc4e3bd1c6bece720f9d8fd7141338fc288b\",\n                    \"Gateway\": \"172.17.0.1\",\n                    \"IPAddress\": \"172.17.0.8\",\n                    \"MacAddress\": \"9e:c3:b3:53:f9:c6\",\n                    \"IPPrefixLen\": 16,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.oci.image.manifest.v1+json\",\n            \"digest\": \"sha256:aff3b153843c610a804a18e66fee1cfb1b961c3cb447416df05bc54a3e66c234\",\n            \"size\": 2288,\n            \"annotations\": {\n                \"com.docker.official-images.bashbrew.arch\": \"amd64\",\n                \"org.opencontainers.image.base.digest\": \"sha256:5ae3c39ebd15e229dcedd5cee596b2497182493d41ff162e824ba13fc1b2b867\",\n                \"org.opencontainers.image.base.name\": \"debian:bookworm-slim\",\n                \"org.opencontainers.image.created\": \"2026-08-25T00:43:14Z\",\n                \"org.opencontainers.image.revision\": \"d452a755b3fa51c0a8d26e254f29a25bf2272e3c\",\n                \"org.opencontainers.image.source\": \"https://github.com/redis/docker-library-redis.git#d452a755b3fa51c0a8d26e254f29a25bf2272e3c:debian\",\n                \"org.opencontainers.image.url\": \"https://hub.docker.com/_/redis\",\n                \"org.opencontainers.image.version\": \"6.2.24\"\n            },\n            \"platform\": {\n                \"architecture\": \"amd64\",\n                \"os\": \"linux\"\n            }\n        }\n    }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "cp",
+        "mcpcli-411-cb8c19bf1a4a-placement:/daprd",
+        "/tmp/mcpcli-story411-immutable-large-1n56jvw3/daprd"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-story411-immutable-large-1n56jvw3/daprd",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "1.18.2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-cb8c19bf1a4a-redis"
+      ],
+      "exitCode": 0,
+      "stdout": "cb8c19bf1a4a49a38e641b6a9b3ca056\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-cb8c19bf1a4a-redis"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-cb8c19bf1a4a-redis\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-cb8c19bf1a4a-scheduler"
+      ],
+      "exitCode": 0,
+      "stdout": "cb8c19bf1a4a49a38e641b6a9b3ca056\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-cb8c19bf1a4a-scheduler"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-cb8c19bf1a4a-scheduler\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"hexalith.story411.owner\"}}",
+        "mcpcli-411-cb8c19bf1a4a-placement"
+      ],
+      "exitCode": 0,
+      "stdout": "cb8c19bf1a4a49a38e641b6a9b3ca056\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "mcpcli-411-cb8c19bf1a4a-placement"
+      ],
+      "exitCode": 0,
+      "stdout": "mcpcli-411-cb8c19bf1a4a-placement\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "ps",
+        "-aq",
+        "--filter",
+        "label=hexalith.story411.owner=cb8c19bf1a4a49a38e641b6a9b3ca056"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "containers": [
+    {
+      "id": "edbf824681fff8c4cbd9dbe4137f4fb5826f3760e09f11aa450143da18ce4745",
+      "name": "mcpcli-411-cb8c19bf1a4a-placement",
+      "image": "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+      "port": 50063,
+      "internalPort": 50005
+    },
+    {
+      "id": "1a363817f164c2a7313dac0703d9bf54445bbc92d59870609502c70e62d3822f",
+      "name": "mcpcli-411-cb8c19bf1a4a-scheduler",
+      "image": "sha256:9ec89d30076155d2376c06f98028b6920f31fac5df0eb40e0b8b94cc88dd5b59",
+      "port": 34479,
+      "internalPort": 50006
+    },
+    {
+      "id": "2fa68080211862b6b03f1781eb79d7d2a30c5ae09fd1d704d17e978877a7f017",
+      "name": "mcpcli-411-cb8c19bf1a4a-redis",
+      "image": "sha256:143f7bfc2358911d6b36138eabfbfffea46273c5d4b5696d90e5cbf23d633cf8",
+      "port": 50065,
+      "internalPort": 6379
+    }
+  ],
+  "productionQualification": false,
+  "daprdSha256": "e730688f06b9b7cea0d616a7dde8fc0124cb6cc8d6dae149192422c7ea67f4e6",
+  "testCommand": [
+    "dotnet",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll",
+    "-class",
+    "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests",
+    "-displayName",
+    "*count: 32769*",
+    "-preEnumerateTheories",
+    "-diagnostics",
+    "-longRunning",
+    "60",
+    "-xml",
+    "/tmp/mcpcli-story411-immutable-large-1n56jvw3/results.xml",
+    "-noColor"
+  ],
+  "sourceHead": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Two32769-case isolated diagnostic only; no full-suite or production acceptance.",
+  "scriptSha256": "88227b74f0b94f4eecf484aed691b41dedb2d201c10d30e9226f17f7d51a46c7",
+  "immutableInputsBefore": {
+    "src/Hexalith.EventStore/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.AssemblyInfo.cs": "cc4c972ff11a14e9647daca85f263009ecfda768bec6b1a3491a44bc33044bbf",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.GlobalUsings.g.cs": "721da95e2f6f734b11a672ce509c68d617b641c6a979751ec6539e0a4c75a8cd",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.MvcApplicationPartsAssemblyInfo.cs": "66ac1fc2600971165a6338603a658da35168d51cd2f0d9b7ada1c5de0b7bb6b0",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.AssemblyInfo.cs": "ca0880c044dc08a2aacc4cc52f1a2e02bd0f0adcb96cb45da97f03c91a718c0d",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/Hexalith.EventStore.Client.AssemblyInfo.cs": "43ca3fb6d8ac2f25ca1b111cdeb6cdd420100b14112b5c49c021535691d3b679",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/Hexalith.EventStore.Client.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/Hexalith.EventStore.Contracts.AssemblyInfo.cs": "37dde4a5d5aa97a43f6442e5b39efc556bcbd00877d9b008817745eb5f34f82d",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/Hexalith.EventStore.Contracts.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/Hexalith.EventStore.DomainService.AssemblyInfo.cs": "ee161e643a717ba58665ed65f1cf1a806b35e3a7bf917a40f58ba8d9ab1b40a3",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/Hexalith.EventStore.DomainService.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/Hexalith.EventStore.Gateway.AssemblyInfo.cs": "767acb23d880f052a1c5762f64ce9110991199ac83417649cd453c98a7259c34",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/Hexalith.EventStore.Gateway.GlobalUsings.g.cs": "721da95e2f6f734b11a672ce509c68d617b641c6a979751ec6539e0a4c75a8cd",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/Hexalith.EventStore.Server.AssemblyInfo.cs": "3bcc3bc458196cb4694c515befd9f99ff1cd4ae8569ca5ce80c1647a92eb7702",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/Hexalith.EventStore.Server.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/Hexalith.EventStore.ServiceDefaults.AssemblyInfo.cs": "ca3917dab17e0c9c4c8bac06d70528ccb310a1b2da28dd9ceb68924eac8a413c",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/Hexalith.EventStore.ServiceDefaults.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/Hexalith.EventStore.Testing.AssemblyInfo.cs": "b614e8dcfa41230d913f339f70dc3b65815c64a384a7a4eb40eea77c80f6769b",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/Hexalith.EventStore.Testing.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/Hexalith.EventStore.Testing.Integration.AssemblyInfo.cs": "f25d845491839bcce6203584231083c26f3b902709a68454af80f0b98e95e904",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/Hexalith.EventStore.Testing.Integration.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll": "7489fe5d41f16d935e0b5c7beb34d8b2dc51867dac12309980720ef25e5a14e1",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.pdb": "ac3af389835618ab3d586ce7e4f0065687413467de649ed33582fa9a02e564e2",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Client.dll": "eb0f1451bcf2c7f41f63ce027bde55c53b2e2e4ec79651030a24554da3ddda75",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Client.pdb": "901aa3c7e33b4550e5153456f16a90b784a021438e512e8564b331a18afd4ce2",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll": "5e47213896922a049a14dd54a251ca40a2c5005bd23082fb66d396d4242ed173",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.pdb": "52edea9abd98a02f8372d871b830661c5e3293984a684f89dd60fd71dbdf7d09",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.DomainService.dll": "af0b61929cbcbcc6dcdb96d64b468ec706b5d969cc9855ffbc2c4a994065345d",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.DomainService.pdb": "54a2fdf7ae499a1723dee574b81f960d04580f88ec5447164ae7c4742e55ed66",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll": "a2d519dd81e2bc968ca14435cf2f2f33ddf8a5c2948f1561e1e87a383c0321da",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Gateway.pdb": "3765fe56bf3bd56f111748f80102866a47e7dce383f9e177a3e426d973a1ce90",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.Contracts.dll": "ace0621a1bfb8e96a66f0650e3e390e65f124f0af6498eac915d0e991bc767d8",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.Contracts.pdb": "170372e77bb83ac7e58b8044720f47954f467c9b7798d495d9050cc27dcbb174",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.dll": "af8a84ca50cbd18c70889cfef76903d11b97dd8cd59109d51e8ed3d0ff764ee8",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.pdb": "d0a1d6229ade11c36eea6208a4b581061848260e00adec2a9a83a7e267b93086",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll": "ae180433dd4c70066d66b6d9097e8a63f382561abd537bab8da4fabc2e7869eb",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.pdb": "2912c90cbaa2fd9961417eda609cacc4454284e6895522beb2a50fbe7222b543",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.dll": "f414769abcdc733026cafc4b70d4bbc2f14028fa080bbf3f5fb2f199ceaece29",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.pdb": "94e5a0e8d6b7cd4e0e69ff123570ceb65d0a74567f3b6c6e50ebd921a9d242d6",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll": "dcd134287b9d09c259cf382e0e402246b421c1d5d7aaaf3d7d9a7db1eb895ac4",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.pdb": "3acdb1f05abcf269a14b758494cb554dd0b5e95550de576a4fa1760a22c3e5c7",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.Integration.dll": "fa9df140ba7c23932aea1a7216e633777d24d8dc60537899a933bca6bfdb9e9a",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.Integration.pdb": "0cf4e7a60479236da30f0fac7d9934992ba1412584bc09a98efdea001544d467",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.dll": "e1db27cdf878a5c8e813b69920ae11ef67a2f0a4570eda3f30d669e86eb961ca",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.pdb": "fa8a7df6e7d6e0b94d97251a43342e9b3569beb2990907776096b41be8c9b2e6"
+  },
+  "fixtureEnvironment": {
+    "EVENTSTORE_TEST_REDIS_PORT": "50065",
+    "EVENTSTORE_TEST_PLACEMENT_PORT": "50063",
+    "EVENTSTORE_TEST_SCHEDULER_PORT": "34479",
+    "EVENTSTORE_TEST_DAPRD_PATH": "/tmp/mcpcli-story411-immutable-large-1n56jvw3/daprd"
+  },
+  "ownedTestProcessGroup": 91394,
+  "testExitCode": 1,
+  "immutableInputsAfter": {
+    "src/Hexalith.EventStore/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.AssemblyInfo.cs": "cc4c972ff11a14e9647daca85f263009ecfda768bec6b1a3491a44bc33044bbf",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.GlobalUsings.g.cs": "721da95e2f6f734b11a672ce509c68d617b641c6a979751ec6539e0a4c75a8cd",
+    "src/Hexalith.EventStore/obj/Release/net10.0/Hexalith.EventStore.MvcApplicationPartsAssemblyInfo.cs": "66ac1fc2600971165a6338603a658da35168d51cd2f0d9b7ada1c5de0b7bb6b0",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.AssemblyInfo.cs": "ca0880c044dc08a2aacc4cc52f1a2e02bd0f0adcb96cb45da97f03c91a718c0d",
+    "src/Hexalith.EventStore.Admin.Abstractions/obj/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/Hexalith.EventStore.Client.AssemblyInfo.cs": "43ca3fb6d8ac2f25ca1b111cdeb6cdd420100b14112b5c49c021535691d3b679",
+    "src/Hexalith.EventStore.Client/obj/Release/net10.0/Hexalith.EventStore.Client.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/Hexalith.EventStore.Contracts.AssemblyInfo.cs": "37dde4a5d5aa97a43f6442e5b39efc556bcbd00877d9b008817745eb5f34f82d",
+    "src/Hexalith.EventStore.Contracts/obj/Release/net10.0/Hexalith.EventStore.Contracts.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/Hexalith.EventStore.DomainService.AssemblyInfo.cs": "ee161e643a717ba58665ed65f1cf1a806b35e3a7bf917a40f58ba8d9ab1b40a3",
+    "src/Hexalith.EventStore.DomainService/obj/Release/net10.0/Hexalith.EventStore.DomainService.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/Hexalith.EventStore.Gateway.AssemblyInfo.cs": "767acb23d880f052a1c5762f64ce9110991199ac83417649cd453c98a7259c34",
+    "src/Hexalith.EventStore.Gateway/obj/Release/net10.0/Hexalith.EventStore.Gateway.GlobalUsings.g.cs": "721da95e2f6f734b11a672ce509c68d617b641c6a979751ec6539e0a4c75a8cd",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/Hexalith.EventStore.Server.AssemblyInfo.cs": "3bcc3bc458196cb4694c515befd9f99ff1cd4ae8569ca5ce80c1647a92eb7702",
+    "src/Hexalith.EventStore.Server/obj/Release/net10.0/Hexalith.EventStore.Server.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/Hexalith.EventStore.ServiceDefaults.AssemblyInfo.cs": "ca3917dab17e0c9c4c8bac06d70528ccb310a1b2da28dd9ceb68924eac8a413c",
+    "src/Hexalith.EventStore.ServiceDefaults/obj/Release/net10.0/Hexalith.EventStore.ServiceDefaults.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/Hexalith.EventStore.Testing.AssemblyInfo.cs": "b614e8dcfa41230d913f339f70dc3b65815c64a384a7a4eb40eea77c80f6769b",
+    "src/Hexalith.EventStore.Testing/obj/Release/net10.0/Hexalith.EventStore.Testing.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "f79c1ad9a9fc76110b3655f5bfb5ff4e3168e9addceff05b937c0796f0ec34eb",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/Hexalith.EventStore.Testing.Integration.AssemblyInfo.cs": "f25d845491839bcce6203584231083c26f3b902709a68454af80f0b98e95e904",
+    "src/Hexalith.EventStore.Testing.Integration/obj/Release/net10.0/Hexalith.EventStore.Testing.Integration.GlobalUsings.g.cs": "8f86a2cbf00ff3eee0bda2bc0eb5e1fc19c8544d5dc650c53d0132325956b592",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.dll": "7489fe5d41f16d935e0b5c7beb34d8b2dc51867dac12309980720ef25e5a14e1",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Admin.Abstractions.pdb": "ac3af389835618ab3d586ce7e4f0065687413467de649ed33582fa9a02e564e2",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Client.dll": "eb0f1451bcf2c7f41f63ce027bde55c53b2e2e4ec79651030a24554da3ddda75",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Client.pdb": "901aa3c7e33b4550e5153456f16a90b784a021438e512e8564b331a18afd4ce2",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll": "5e47213896922a049a14dd54a251ca40a2c5005bd23082fb66d396d4242ed173",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Contracts.pdb": "52edea9abd98a02f8372d871b830661c5e3293984a684f89dd60fd71dbdf7d09",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.DomainService.dll": "af0b61929cbcbcc6dcdb96d64b468ec706b5d969cc9855ffbc2c4a994065345d",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.DomainService.pdb": "54a2fdf7ae499a1723dee574b81f960d04580f88ec5447164ae7c4742e55ed66",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll": "a2d519dd81e2bc968ca14435cf2f2f33ddf8a5c2948f1561e1e87a383c0321da",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Gateway.pdb": "3765fe56bf3bd56f111748f80102866a47e7dce383f9e177a3e426d973a1ce90",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.Contracts.dll": "ace0621a1bfb8e96a66f0650e3e390e65f124f0af6498eac915d0e991bc767d8",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.Contracts.pdb": "170372e77bb83ac7e58b8044720f47954f467c9b7798d495d9050cc27dcbb174",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.dll": "af8a84ca50cbd18c70889cfef76903d11b97dd8cd59109d51e8ed3d0ff764ee8",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Sample.pdb": "d0a1d6229ade11c36eea6208a4b581061848260e00adec2a9a83a7e267b93086",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll": "ae180433dd4c70066d66b6d9097e8a63f382561abd537bab8da4fabc2e7869eb",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.pdb": "2912c90cbaa2fd9961417eda609cacc4454284e6895522beb2a50fbe7222b543",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.dll": "f414769abcdc733026cafc4b70d4bbc2f14028fa080bbf3f5fb2f199ceaece29",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.pdb": "94e5a0e8d6b7cd4e0e69ff123570ceb65d0a74567f3b6c6e50ebd921a9d242d6",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.dll": "dcd134287b9d09c259cf382e0e402246b421c1d5d7aaaf3d7d9a7db1eb895ac4",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.ServiceDefaults.pdb": "3acdb1f05abcf269a14b758494cb554dd0b5e95550de576a4fa1760a22c3e5c7",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.Integration.dll": "fa9df140ba7c23932aea1a7216e633777d24d8dc60537899a933bca6bfdb9e9a",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.Integration.pdb": "0cf4e7a60479236da30f0fac7d9934992ba1412584bc09a98efdea001544d467",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.dll": "e1db27cdf878a5c8e813b69920ae11ef67a2f0a4570eda3f30d669e86eb961ca",
+    "tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Testing.pdb": "fa8a7df6e7d6e0b94d97251a43342e9b3569beb2990907776096b41be8c9b2e6"
+  },
+  "immutableInputsUnchanged": true,
+  "testSeconds": 1.983107177002239,
+  "rawLogHashes": {
+    "test.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test.stdout.txt": "934ea8c18a41e2d6a72e1c993a0cdb1aa20ba8509a031f5aa5c6c6623526f4cb"
+  },
+  "assemblies": [
+    {
+      "environment": "64-bit (x64) .NET 10.0.13 [collection-per-class, non-parallel]",
+      "id": "40f4d6e1-3196-4a7b-9a07-04411acc3893",
+      "name": "/tmp/mcpcli-story411-eventstore-runtime-9_5h_hhg/tests/Hexalith.EventStore.Server.LiveSidecar.Tests/bin/Release/net10.0/Hexalith.EventStore.Server.LiveSidecar.Tests.dll",
+      "run-date": "2026-10-21",
+      "run-time": "22:26:14",
+      "start-rtf": "2026-10-21T22:26:14.1027619+00:00",
+      "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+      "target-framework": ".NETCoreApp,Version=v10.0",
+      "errors": "0",
+      "failed": "2",
+      "finish-rtf": "2026-10-21T22:26:15.7959116+00:00",
+      "not-run": "0",
+      "passed": "0",
+      "skipped": "0",
+      "time": "1.693",
+      "time-rtf": "00:00:01.6930000",
+      "total": "2"
+    }
+  ],
+  "safeFailures": [
+    {
+      "name": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: False)",
+      "type": "Xunit.Sdk.TestPipelineException",
+      "firstMessageLine": "Collection fixture type 'Hexalith.EventStore.Server.LiveSidecar.Tests.Fixtures.DaprTestContainerFixture' threw in InitializeAsync"
+    },
+    {
+      "name": "Hexalith.EventStore.Server.LiveSidecar.Tests.Integration.ProjectionBoundedIdentityLiveTests.ProductionDispatcherResumesStagingAndPromotedHandoffAcrossDistinctProcesses(count: 32769, bufferedOwner: True)",
+      "type": "Xunit.Sdk.TestPipelineException",
+      "firstMessageLine": "Collection fixture type 'Hexalith.EventStore.Server.LiveSidecar.Tests.Fixtures.DaprTestContainerFixture' threw in InitializeAsync"
+    }
+  ],
+  "cleanup": [
+    {
+      "name": "mcpcli-411-cb8c19bf1a4a-redis",
+      "exitCode": 0
+    },
+    {
+      "name": "mcpcli-411-cb8c19bf1a4a-scheduler",
+      "exitCode": 0
+    },
+    {
+      "name": "mcpcli-411-cb8c19bf1a4a-placement",
+      "exitCode": 0
+    }
+  ],
+  "ownedContainersRemaining": [],
+  "completedAtUtc": "2026-10-21T22:26:17.185417+00:00",
+  "status": "fixture initialization failed before either case executed; immutable generated sources/binaries unchanged"
+}

@@ -1,0 +1,26 @@
+{
+  "upstreamSource": "03b529489aa559267a9c3de946d01c2aadf28858",
+  "upstreamChangedPaths": [
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+    "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+    "tests/Hexalith.EventStore.Server.Tests/Projections/ProjectionReplayTransportContextTests.cs"
+  ],
+  "sanitizedComparison": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/diagnostics/bounded-aspire-resources.log",
+      "upstreamSha256": "1a23e9036a5dfa01d50bd752b0fb1a505ae3af8c4eb6e40e0cac58529757f3e4",
+      "matchesLocalRedaction": false
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T125151Z/tests-Server.xml",
+      "upstreamSha256": "a2b415167b3dadcd234fe8fb0eb06b8d072075cd1de5cf3fada3ac43ae92b770",
+      "matchesLocalRedaction": false
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/folders-12-2-bounded-owner-identity/run-20261021T152119Z/tests-Server.xml",
+      "upstreamSha256": "9a6210cbf09c7d3af0be447ec06a6811a878256b139a579f655e53d2d953aebf",
+      "matchesLocalRedaction": false
+    }
+  ]
+}

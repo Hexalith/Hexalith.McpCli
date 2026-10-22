@@ -1,0 +1,24 @@
+{
+  "exactHead": "fdc72aef43e6169480a94fd845b26e1f1d41bb2d",
+  "commitlint": {
+    "command": "npx --no -- commitlint --verbose < /tmp/mcpcli-story411-builds-revert-commit.txt",
+    "exitCode": 0,
+    "problems": 0,
+    "warnings": 0
+  },
+  "gate": "builds-revert-pr-gate-final.json",
+  "merge": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "sha": "0c0847b1a0a6bcfc73d60e1dce4c639e0e36fb6b",
+      "merged": true,
+      "message": "Pull Request successfully merged"
+    },
+    "isError": false
+  }
+}

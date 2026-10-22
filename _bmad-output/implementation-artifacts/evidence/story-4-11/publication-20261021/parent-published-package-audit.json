@@ -1,0 +1,201 @@
+{
+  "observedAtUtc": "2026-10-22T01:12:58.992873+00:00",
+  "scope": "Parent independent archive/member/nuspec/source/signature-member byte checks and fresh public NuGet immutable catalog hash/size/identity queries; actual cryptographic signature validation remains separately recorded dotnet nuget verify evidence. Tenants5.10.0 is valid package proof only, not acceptance of its malformed container provenance.",
+  "packages": [
+    {
+      "id": "Hexalith.EventStore.Admin.Abstractions",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 131558,
+      "sha256": "efeba8486a9c8e3761b91dd827ed33d4930be007b051653d8ee87c43c224653a",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 8,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Cli",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 905026,
+      "sha256": "fde37367be68edfd6028b1852e7a30484ccc7f7b1c121cc661086367996babf7",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 33,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Server",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 194567,
+      "sha256": "554671874eeb0ad4c6adc43f94009a0c9feeb13d59cbb1da95be0f32a9dada61",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 8,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Aspire",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 47272,
+      "sha256": "02215adfc6198d58003b457f8d68075d03438f01b09cbfd2650cef5ee7fd3bc6",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 488688,
+      "sha256": "53fd5f378a997557725fa03e8627074f940b016fd9f5a34aed981e04053b698b",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 8,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 354181,
+      "sha256": "9de3a0646f638b155b93043dc18f9c0cbe6f4051c254366ef2ba91416a0058de",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 8,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.DomainService",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 373861,
+      "sha256": "4876cf275201edfc74a929dad6ce050d1fe45f0aa07c96644807c6dcb1dbbefd",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Gateway",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 276386,
+      "sha256": "25f6a9f70a294868a863bdcfa5c1c7424855d79531030eb8825cbf0985bdc66d",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.RestApi.Generators",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 51279,
+      "sha256": "5d93a7270b97a782fe0dfe8eb3e12284fa1d5fec0bcc3831b6774c9d88ba43c4",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Server",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 1002652,
+      "sha256": "3bd194228eb9e81c9892f349392695cd02746c35b244865d04890156f4a59ec0",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.ServiceDefaults",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 84778,
+      "sha256": "f5fa781a9afb05b6fc7096a60e0c0906b754f8f508ec68b4af07ab172b3e107e",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.SignalR",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 35444,
+      "sha256": "558ffc2367252128fef07a47c4f39464ff394ec363d17df3d21b8079eac4823c",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Testing",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 75555,
+      "sha256": "4db6a4678647f45b2f2d3d718ad24d52155d526f85ddeb1ce735a5e6d2a58e28",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.EventStore.Testing.Integration",
+      "version": "3.126.1",
+      "source": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+      "bytes": 78542,
+      "sha256": "4ccacea403e2296e84675ff79aaee6fac71e29e3adaf5011c0ef8850eddbdb91",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "bytes": 21546,
+      "sha256": "aa532942fcd39d61935ec7e27a598bef8642772e0923af8d97d0a5b4e1aebba3",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "bytes": 27987,
+      "sha256": "c8f5cb373282eb8113ee6f79f2af34090cad3e6e0d2bb4af6083c8ae3f058bba",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "bytes": 52508,
+      "sha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "bytes": 37648,
+      "sha256": "e556244caea940823cdb0bf602bb2c5a3dea8cb4ccb50eca45ee87ae532a1207",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "5.10.0",
+      "source": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+      "bytes": 27624,
+      "sha256": "fa3372ed1612721e5454d3b691d620b507b8c3ee42fb3f563759364886f7fb63",
+      "rawSha512MatchesFreshNugetCatalog": true,
+      "allMemberHashesMatched": 7,
+      "signatureMemberMatched": true
+    }
+  ],
+  "packageCount": 19,
+  "bytes": 4267102,
+  "result": "passed",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

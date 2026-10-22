@@ -1,0 +1,22 @@
+{
+  "checkedAtUtc": "2026-10-22T03:16:43.257812+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "pr": 130,
+  "mergeMethod": "normal squash",
+  "protectedRulesUnchanged": true,
+  "preMergeGate": "builds-owner-audit-pr130-gate-20261022T031543Z.json",
+  "exactFullMessageValidation": "builds-pr130-pre-merge-squash-commitlint.json",
+  "base": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "checkedHead": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "mergeCommit": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "currentMain": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "checkedAndMergedTree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "entireTreeEqual": true,
+  "exactMessageEqual": true,
+  "mergeHasOnlyExpectedBaseParent": true,
+  "prUrl": "https://github.com/Hexalith/Hexalith.Builds/pull/130",
+  "mergedAt": "2026-10-22T03:16:12Z",
+  "mergedBy": "jpiquot",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

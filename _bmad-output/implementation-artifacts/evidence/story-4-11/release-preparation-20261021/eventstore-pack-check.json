@@ -1,0 +1,17 @@
+{
+  "label": "eventstore-full-pack",
+  "command": [
+    "python3",
+    "tools/pack-release-packages.py",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/eventstore-packages",
+    "3.126.1"
+  ],
+  "cwd": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7",
+  "environment": {
+    "NUGET_PACKAGES": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/packages",
+    "RepositoryCommit": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+    "SourceRevisionId": "30260abc7c6703e9e545dd1596ca258b925b1ed7"
+  },
+  "exitCode": 0,
+  "durationSeconds": 45.25179227300396
+}

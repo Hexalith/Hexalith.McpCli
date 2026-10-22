@@ -1,0 +1,30 @@
+{
+  "semanticChangeOnly": "jobs.live-sidecar.timeout-minutes25to90; comments only otherwise",
+  "oldSha256": "e50df54fb058ca5c52e0282836ebf6f04cb6fce915a1a1178bf19fad4411da21",
+  "newSha256": "260e590c994a49cfea8e7e742796dc93d905b570f75b896139f2ecf2e856e142",
+  "yamlVersion": "6.0.3",
+  "phaseSourceUnchangedSha256": "c739c152fddd567ce113d0ea0f23fd4fbbdc285a4b3a3b8f49619df91078dab9",
+  "allCommandsStepsActionsScopeAndConditionsUnchanged": true,
+  "checks": [
+    {
+      "command": [
+        "actionlint",
+        ".github/workflows/ci.yml",
+        ".github/workflows/integration.yml"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

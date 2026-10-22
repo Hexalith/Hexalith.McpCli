@@ -1,0 +1,7 @@
+{
+  "unchangedProductionTarget": true,
+  "sha256": "ffe4a85d7211b9897b036b083b25bec56b69699f4c0a46c8ec596cf1221f9568",
+  "matchesReviewedSource": "aea707d6e8ef2c765531f7c7bcee0441fa5f076e",
+  "xmlParsingRemoved": true,
+  "realMsbuildAndRemovedTargetProofRetained": true
+}

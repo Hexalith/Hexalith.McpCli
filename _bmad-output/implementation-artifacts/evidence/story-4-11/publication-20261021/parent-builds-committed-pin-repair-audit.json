@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "commit": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "tree": "98b029b49eb67a85dca1b28632c893b925317d65",
+  "parent": "85290197d2a4324b50560630e8992d71c3318784",
+  "owningBase": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "repairPaths": 113,
+  "completePrPaths": 114,
+  "allCurrentRawHashesMatchOriginal112PlusTwoFileFollowup": true,
+  "allRawFilesMatchCanonicalCommittedGitBlobs": true,
+  "originalAuditRefreshBlobUnchanged": true,
+  "actualOwnerCatalogDeclarationBlobUnchanged": true,
+  "reviewedContainerProvenanceTargetSha256": "ffe4a85d7211b9897b036b083b25bec56b69699f4c0a46c8ec596cf1221f9568",
+  "productionCsharpRuntimeAndHistoricalPathsUnchanged": true,
+  "separatePowerShellProductionChange": "ExpectedEventStoreVersion default3.126.0 to3.126.1; exact comparison and all other bindings unchanged, separately reviewed with jointly rebound old-pin negative.",
+  "limits": "Committed-source qualification and remote exact-source ordinaryCI remain required. Earlier local three-project tests bind112-file snapshot; later PS suites bind minimal followup."
+}

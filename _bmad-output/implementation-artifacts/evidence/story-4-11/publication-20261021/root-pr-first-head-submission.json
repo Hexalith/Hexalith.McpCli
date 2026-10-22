@@ -1,0 +1,84 @@
+{
+  "recordedAtUtc": "2026-10-22T04:45:07.829371+00:00",
+  "scope": "Historical first normal root PR/head submission before the bounded SDK metadata correction; final head must obtain its own actualUbuntu gates. No root merge/release.",
+  "repository": "Hexalith/Hexalith.McpCli",
+  "pr": {
+    "number": 1,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/pull/1",
+    "title": "feat(conformance): enroll approved Tenants contracts for v1 parity",
+    "baseSha": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+    "initialHead": "f20a4e0d279615def05a454b73599d1cf583c338",
+    "createdAt": "2026-10-22T04:42:41Z",
+    "bodySha256": "eb8dd1ce3d26f9824b3d100fd9ae920a062cf478de5c9ed1698677b87352e749"
+  },
+  "initialCommit": {
+    "head": "f20a4e0d279615def05a454b73599d1cf583c338",
+    "tree": "85782668a54a8ad433b46bfd3fe451a6b07ec675",
+    "soleParent": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+    "exactValidatedCommitMessagePreserved": true
+  },
+  "pinnedCommitlintVersion": "21.2.2",
+  "exactFullCommitMessage": "feat(conformance): enroll approved Tenants contracts for v1 parity\n\nEnroll authentic Tenants.Contracts 5.10.0 beside Parties 1.5.1 using the\nqualified Builds catalog and published EventStore 3.126.1 dependencies.\nPreserve the fourteen approved vectors and twenty inventory decisions.\n\nBind the separately qualified Tenants 5.10.1 full release repair and\nretain exact archive, restore, runtime and local verification evidence.\nKeep strict combined replay and cold Catalog acceptance in Ubuntu CI.\n",
+  "validationChecks": [
+    {
+      "name": "full-commit",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "inputSha256": "0c78526627f1041e5eb0f8188377d99f7b5c5f5572c7b739156a8df8ce0c507e",
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/pr-metadata/full-commit.stdout.txt",
+        "bytes": 551,
+        "sha256": "24fd34a4dc884b80474570411f23ae52609cfb3a6276ea587c183180ad74150b"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/pr-metadata/full-commit.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "pr-title",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "inputSha256": "d1c332039cafebd7b348371f7624abaece7ce3ad4a9a153a6514f6f88126d6c5",
+      "stdout": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/pr-metadata/pr-title.stdout.txt",
+        "bytes": 122,
+        "sha256": "20dcb6f2a125a898332e68070325eb43ec1c725ab1ef698084c22edb917f38ee"
+      },
+      "stderr": {
+        "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/pr-metadata/pr-title.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "normalBranchPush": "root-push.json privately retains exact branch-only command and both channel hashes; protected main untouched.",
+  "freshControls": {
+    "main": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+    "effectiveRules": [],
+    "legacyProtection": "404 Branch not protected",
+    "noControlMutation": true
+  },
+  "initialRuns": {
+    "ci": 39723892679,
+    "commitlint": 39723892735,
+    "agentInstructions": 39723892449,
+    "bootstrapValidation": 39723892451
+  },
+  "nfr8ReviewUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/f20a4e0d279615def05a454b73599d1cf583c338/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/description-review.md",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

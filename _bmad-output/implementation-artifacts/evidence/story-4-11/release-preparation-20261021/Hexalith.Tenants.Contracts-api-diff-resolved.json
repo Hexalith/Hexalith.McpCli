@@ -1,0 +1,44 @@
+{
+  "outcome": "available",
+  "document": {
+    "before": {
+      "identity": {
+        "name": "Hexalith.Tenants.Contracts",
+        "version": "5.10.0.0",
+        "culture": null,
+        "publicKeyToken": null
+      },
+      "scope": 0,
+      "isComplete": true,
+      "issues": []
+    },
+    "after": {
+      "identity": {
+        "name": "Hexalith.Tenants.Contracts",
+        "version": "5.10.0.0",
+        "culture": null,
+        "publicKeyToken": null
+      },
+      "scope": 0,
+      "isComplete": true,
+      "issues": []
+    },
+    "summary": {
+      "changedTypeCount": 0,
+      "addedTypeCount": 0,
+      "removedTypeCount": 0,
+      "changedMemberCount": 0,
+      "breakingCount": 0,
+      "additiveCount": 0,
+      "potentiallyBreakingCount": 0
+    },
+    "comparison": {
+      "schema_version": 1,
+      "subject_coordinate_basis": "root-relative",
+      "identifier": "library-api.v1|26:HEXALITH.TENANTS.CONTRACTS|0:|0:",
+      "display": "Hexalith.Tenants.Contracts",
+      "subjects": [],
+      "change_descriptions": []
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "capturedAtUtc": "2026-10-22T03:46:33.041038+00:00",
+  "parentAudit": true,
+  "run": 39716321803,
+  "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "runConclusion": "success",
+  "sourceReferencedWorkflows": [
+    {
+      "path": "Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main",
+      "sha": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+      "ref": "refs/heads/main"
+    }
+  ],
+  "actualJobs": [
+    {
+      "id": 119619181997,
+      "name": "ci / build-and-test",
+      "conclusion": "success"
+    },
+    {
+      "id": 119621694153,
+      "name": "ci / aspire-tests",
+      "conclusion": "failure"
+    },
+    {
+      "id": 119621695822,
+      "name": "ci / performance-tests",
+      "conclusion": "skipped"
+    }
+  ],
+  "existingAspireNonblockingDefault": true,
+  "tenantsCallerOverridesDefault": false,
+  "releaseRequiresExactMainPushCiRunConclusion": "success",
+  "releaseAddsAspireJobSuccessRequirement": false,
+  "actualNonblockingAspireSummary": {
+    "total": 316,
+    "passed": 313,
+    "failed": 3,
+    "skipped": 0,
+    "failures": [
+      "2026-10-22T03:36:09.6661207Z failed Hexalith.Tenants.IntegrationTests.TenantsApiStructuralTests.TenantsSources_DelegateDaprRoutingHeaderOwnershipToThePlatformHandlerOnly (53ms)",
+      "2026-10-22T03:40:44.2174980Z failed Hexalith.Tenants.IntegrationTests.AspireTopologyTests.Generated_tenants_api_get_tenant_reads_verified_redis_state_with_projection_authority (4m 00s 014ms)",
+      "2026-10-22T03:41:46.2496173Z failed Hexalith.Tenants.IntegrationTests.AspireTopologyTests.Aha_moment_demo_revokes_sample_access_from_tenant_events (1m 02s 025ms)"
+    ]
+  },
+  "sourceBuilds": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "privateEvidence": [
+    {
+      "path": "/tmp/mcpcli-story411-parent-tenants-pr54-full-ci-sh86_hcf/run.json",
+      "bytes": 15174,
+      "sha256": "a0b3ac2f9ba9355ea562ef2a7d474fdb96302313a1e514cabea0607c565f3750"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-parent-tenants-pr54-full-ci-sh86_hcf/aspire-complete-masked.log",
+      "bytes": 3587841,
+      "sha256": "6410f06ca58c268ab0460b88f8b9439551609674c9563faca64635850a371a22"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-parent-tenants-pr54-full-ci-sh86_hcf/jobs.json",
+      "bytes": 14227,
+      "sha256": "309ff59c653f6da587a13711ac7155579097a0c23509ed6758d00a343c535743"
+    }
+  ],
+  "correction": "Parent initially assumed the Aspire tier was blocking. Exact existing workflow and run evidence shows it is explicitly nonblocking. No gate or source change was made. Retain failures and proceed under all actual normal PR/main/release prerequisites.",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

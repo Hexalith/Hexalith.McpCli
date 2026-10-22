@@ -1,0 +1,37 @@
+[
+  {
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Builds\n * branch            main       -> FETCH_HEAD\n"
+  },
+  {
+    "command": [
+      "git",
+      "merge-base",
+      "--is-ancestor",
+      "origin/main",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "remote: Bypassed rule violations for refs/heads/main:        \nremote: \nremote: - Changes must be made through a pull request.        \nremote: \nremote: - 3 of 3 required status checks are expected.        \nremote: \nTo https://github.com/Hexalith/Hexalith.Builds.git\n   359fee2..aea707d  HEAD -> main\n"
+  }
+]

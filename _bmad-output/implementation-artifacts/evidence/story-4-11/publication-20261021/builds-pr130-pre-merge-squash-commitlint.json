@@ -1,0 +1,31 @@
+{
+  "checkedAtUtc": "2026-10-22T03:16:03.592453+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "pinnedCliVersion": "21.2.4",
+  "message": {
+    "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/squash-message.txt",
+    "sha256": "30cef6373b5fb945a80ec691ca2ea0560702c00ca8f68eea8559f55ce3e0122e",
+    "text": "fix(tooling): align published family audit and EventStore fixtures\n\nBind EventStore 3.126.1 and Tenants 5.10.0 registry observations to the\nalready committed declarations at 25ba30d6, preserving other families.\n\nAlign the v1 schema and active synthetic fixtures with the selected\nEventStore 3.126.1 pin and rebind dependent synthetic digests. Generated\nvalid manifests read the current catalog. Historical release evidence,\nproduction equality guards and intentional negative controls remain\nintact; the previous 3.126.0 pin is explicitly rejected.\n"
+  },
+  "exitCode": 0,
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/pre-merge-squash-commitlint.stdout.txt",
+      "bytes": 604,
+      "sha256": "4232f1fd6cf206b7a5fc6560a3d6d5b30eb9e0271e8d9405e2fb9a05ad2b4bb3"
+    },
+    {
+      "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/builds-fixture-pin-repair/pre-merge-squash-commitlint.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

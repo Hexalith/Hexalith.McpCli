@@ -1,0 +1,28 @@
+[
+  {
+    "label": "builds-publisher-suite",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "Github/publish-containers/tests",
+      "-v"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/builds",
+    "exitCode": 0,
+    "seconds": 6.912574531001155
+  },
+  {
+    "label": "builds-commitlint-toolchain",
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/builds",
+    "exitCode": 0,
+    "seconds": 7.198820190002152
+  }
+]

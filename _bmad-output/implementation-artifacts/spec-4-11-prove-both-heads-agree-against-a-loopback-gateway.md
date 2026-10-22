@@ -2,7 +2,7 @@
 title: '4.11 Prove both heads agree against a loopback gateway'
 type: 'feature'
 created: '2026-10-21'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'fce41d05e25b8c2076cc02266608460ec86ed635'
@@ -108,6 +108,13 @@ substitute for that evidence. Do not weaken the required-module gate.
 
 ## Implementation Notes
 
+Current release/enrollment preparation is recorded in
+[the continuation status](evidence/story-4-11/publication-20261021/continuation-status-current.json).
+The dated local-phase results below remain historical; they do not describe the
+current two-module enrollment or grant full-v1 acceptance.
+
+### Local-phase history — 2026-10-21
+
 The requesting user approved this spec and continued implementation on
 2026-10-21. Execute the local harness phase first; the approved sequencing keeps
 full-v1 acceptance open until the Tenants prerequisite is completed.
@@ -130,6 +137,111 @@ phase must prepare the exact decorated Tenants candidate for approval, then
 publish/enroll it with release-bound vectors, receipt and inventory before
 rerunning the strict two-module gates. Earlier evidence outside `final/`
 records the initial implementation and is retained as history.
+
+### Tenants prerequisite candidate prepared, 2026-10-21
+
+The continuation began from the already-committed local harness at
+`7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65`. The
+[pending candidate and prerequisite plan](evidence/story-4-11/tenants-candidate/approval-plan.md)
+binds current Tenants source `2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4`,
+mechanically version-rebound 5.10.0 vectors, a pending release inventory, exact
+local package bytes and the proposed dependency/enrollment delta.
+
+The current unmodified Tenants package build fails with CS0246 because published
+EventStore.Contracts 3.126.0 lacks `NativeSourceProof`. Isolated committed-source
+EventStore.Contracts/Client 3.126.1 packages from
+`b6d1807035fba2e485c8587ac3581d669d1036e5` repair that package proof without
+changing original source or reference trees. They are unpublished prerequisites,
+not a qualified fourteen-package/container EventStore release. The resulting
+Tenants candidate passes all fourteen independent vector replays and the complete
+21-operation Parties/Tenants candidate replay. The proposed dependency policy
+passes 98 tests; isolated String coverage passes; the cold Catalog plus exactly
+one Ulid sample measured 148.0593 ms. Every candidate summary explicitly retains
+`fullV1Accepted: false` and `productionAccepted: false`.
+
+An independent reviewer given only this candidate's public discovery documents
+completed the [fresh-context description check](evidence/story-4-11/tenants-candidate/description-review.md):
+pass with one low-severity wording advisory and no blocking findings. The parent
+independently verified all three package hashes, all fourteen mechanical vector
+rebindings and the retained evidence hashes.
+
+At candidate preparation, the 20 proposed inventory decisions were pending and
+the real inventory checker rejected them. Publication needs owner-approved upstream source, the
+existing full EventStore and Tenants release gates, committed owning Builds
+pins/gitlinks, refreshed exact-release verification and genuine release-bound
+approvals before production enrollment. Neither publication nor enrollment was
+performed. Both strict production gates and this spec/sprint's `in-progress`
+status remain intact; see the linked plan for exact scope and commands.
+
+### Candidate scope and vector approval recorded, 2026-10-21
+
+The requesting user answered **"I approve"** to the explicit question approving
+the candidate's fourteen vectors and twenty inventory decisions (fourteen
+included operations and six exclusions). The
+[owner approval](evidence/story-4-11/owner-approval/approval.json) binds the exact
+sealed candidate packet, artifact, source commit and vector hashes. The pending
+candidate packet remains unchanged as historical evidence. The new
+[approved inventory](evidence/story-4-11/owner-approval/approved-inventory.json)
+changes only each row's approval status/reference; the actual combined-host
+inventory checker now exits 0 with `[]` on stdout and empty stderr. Its exact
+command and result are retained in
+[inventory verification](evidence/story-4-11/owner-approval/inventory-verification.json).
+
+This approval resolves the candidate vectors and inventory decisions, including
+the `ResolveTenantReadAuthority` exclusion. Do not ask for those decisions again.
+It does not authorize the broader EventStore fourteen-package/container and
+Tenants five-package/container publication workflows, transfer approval to new
+artifact/source identities, or grant production/full-v1 acceptance.
+
+Continue the reversible prerequisite preparation described in the candidate
+plan. Inspect current committed upstream source and preserve existing changes;
+both owning repositories have advanced since the approved package snapshots.
+Use isolated source snapshots outside `references/` for complete local release
+package qualification and relevant tests. Retain the original approved source
+and bytes separately from any refreshed candidate, with exact source/package
+differences and commands. Prepare the full required release scope and identify
+the remaining exact-source CI/protected-publication gates before requesting a
+publication decision. Do not publish or push unrelated upstream work. Keep the
+strict production gates and this story/sprint `in-progress` until the original
+acceptance conditions are met.
+
+### Protected release chain authorized, 2026-10-21
+
+The requesting user answered **"yes"** to the explicit question authorizing the
+protected EventStore fourteen-package/container release followed by the Tenants
+five-package/container release after their required gates pass. The
+[publication authorization](evidence/story-4-11/owner-approval/publication-authorization.json)
+binds the [sealed release preparation](evidence/story-4-11/release-preparation-20261021/approval-plan.md),
+its exact reviewed Builds/Tenants proposals and the full publication scopes.
+The earlier vector/inventory approval remains valid. Do not request either
+approval again for this chain.
+
+This is the explicitly authorized publication/enrollment continuation outside
+the completed local harness phase. The user's later authorization permits the
+necessary owning-repository changes, commits, pushes, normal PR/CI operations,
+protected workflow dispatch and permitted protected-environment approvals. It
+supersedes the local implementation workflow's no-push/no-remote restriction
+for this continuation, while all normal source, CI, protected publication,
+commitlint, package/OCI validation and final-byte binding gates remain binding.
+Do not bypass protections or overwrite unrelated work.
+
+Execute the remaining chain through completion: inspect current sources and
+normal workflow controls; apply and verify the shared Builds target/tests and
+Tenants import/publisher pin in their owning repositories; commit/push through
+normal validated procedures; qualify actual final EventStore source, publish its
+normal full scope only when exact-source gates pass, update the owning Builds
+dependency pin and root gitlinks, then qualify/publish Tenants' normal full scope.
+Capture actual final versions and canonical source commits from tooling, compare
+and verify final immutable artifacts and public discovery against approved
+vectors/inventory, and enroll only authentic published Contracts. Then run all
+required McpCli checks and the unchanged strict two-module replay and cold Catalog
+benchmark on ubuntu-latest. Keep the story/sprint open until acceptance is met.
+
+The approved package snapshots are retained historical evidence, not a substitute
+for final-source qualification. Current upstreams have continued advancing; use
+fresh exact-source CI and registry/source preflight before each release. Preserve
+any unrelated uncommitted upstream edits. If CI fails, investigate and fix the
+necessary release prerequisite in the owning repository without weakening gates.
 
 ## Spec Change Log
 
@@ -165,7 +277,33 @@ The parent also replayed all four captured real client error outcomes through
 the corrected contract checker and audited the retained inputs against approval.
 The two rejected low-impact proposals remain rejected; no deferral was added.
 
-## Design Notes
+### Final enrollment review — 2026-10-22
+
+All three context-free review layers completed before parent triage. The parent independently reproduced all response/default/paging/parser cases against the built real SDK host, the command-204 binding refusal, the complete-Catalog guard-removal gap, changed-runtime-DLL preflight acceptance and missing structured failure progress. Exact observations are retained in [response probes](evidence/story-4-11/publication-20261021/parent-final-review-response-probes.json) and [other probes](evidence/story-4-11/publication-20261021/parent-final-review-other-probes.json). The successful Ubuntu head recorded in the continuation remains valid historical evidence; current completion awaits these bounded corrections and final verification.
+
+| Finding | Verdict and evidence | Route |
+| --- | --- | --- |
+| BH11: response property casing | Medium. A schema-valid `Success:true` query succeeds in the pinned real SDK but the raw case-sensitive oracle requires semantic failure. Parent reproduced it. | Patch; typed response normalization |
+| BH12: paging defaults and unknown members | Medium. Actual SDK projects offset-only paging to include pageSize 0 and drops an unknown member; both valid query documents fail the raw-response oracle. Parent reproduced both. | Patch; same normalization root cause |
+| BH13: typed/deep response parse failures | Medium. Schema-valid depth-65 payload and string-valued success produce correct SDK parse errors at HTTP 200, which the oracle mistakes for success. Parent reproduced both. | Patch; same normalization root cause |
+| BH14: malformed open metadata crashes receipt orchestration | Medium. Schema-valid paging `[]` produces an SDK parse error but raises AttributeError in the oracle; the outer enrollment handler does not catch it, leaving its prior pending receipt. Parent reproduced the shape failure. | Patch; same normalization root cause |
+| BH15: uncovered complete-Catalog guard has no negative test | Medium. Parent removed only the uncovered-operation refusal in memory; all 34 loopback tests still passed. No existing test supplies an exposed unselected operation. | Patch; direct negative regression |
+| BH16: separate MCP processes cannot detect per-session cached IDs | Low. This is a real limitation of the pre-existing per-call process lifecycle, rather than an observed product reuse defect. The actual repeated-same-executor distinct-ID test passed. A persistent-session runner adds orchestration for an unobserved cache state, beyond a direct correction. | Reject low, nontrivial session machinery |
+| BH17: successful replay calls do not retain stderr | Low. The unchanged baseline helper parses successful CLI stdout then drops stderr; normal MCP shutdown closes its stderr pipe. Existing channel tests still protect product guards, but replay observations do not retain those diagnostics. | Defer pre-existing helper limitation |
+| BH18: a successful no-op benchmark probe could leave pending evidence | False. The parent launches the exact measured Fact with MCPCLI_BENCHMARK_PROBE=1; that selected path must write measured evidence or fail. The ordinary non-probe Fact return is not the child path. No reachable zero-exit/no-op state was shown, and the actual CI measurement is present. | Reject on refutation |
+| BH19: output Contracts DLL is not bound to the approved archive | Medium. Parent isolated the actual production deps/assets and approved signed archive, changed only the copied output DLL bytes, and the host-artifact preflight still passed. This exposes an exact-runtime-byte gap in the new combined lane. | Patch; compare selected runtime asset bytes with archive entries |
+| BH20: structured production failure progress is lost | Low. Parent forced restore exit 19: full channel logs remain, but the locally accumulated command/exit list never reaches enrolled.json when production_replay raises. The failed combined phase therefore lacks the structured progress the independent phase retains. | Patch; direct progress retention |
+| EC3: omitted optional query success is treated as false | Medium. Parent reproduced an actual successful query with omitted success rejected as semantic failure; the pinned SDK defaults it to true. | Patch; same normalization root cause as BH11–BH14 |
+| EC4: parent cancellation can leave a late-writing benchmark child | Low. Source permits a child to finish after cancellation directed only at the parent; the reviewer did not reproduce a runner trigger. This has a short measurement window, and required job/source binding prevents a cancelled job from granting full acceptance. It needs added process-lifecycle machinery rather than a direct correction. | Reject low, nontrivial cleanup machinery |
+| VG3: command 204 errors incorrectly require echoed correlation | Medium. Parent validated the complete modified vector and reproduced the correct SDK parse error without correlation, then the binding helper rejected it. Masking independently makes the same error. Correlation must be required/bound only when the expected SDK error actually contains it. | Patch; error correlation binding and masking |
+
+The five correction groups are typed SDK outcome normalization (BH11–BH14/EC3), command parse-error correlation (VG3), complete-Catalog negative coverage (BH15), selected runtime byte binding (BH19), and structured production progress (BH20). No frozen intent or public product surface changes are required. Each filed claim has its own verdict above; the earlier local triage was checked and no claim here has the same location and bad outcome as a carried row.
+
+The same implementation agent applied all five correction groups. The parent verified every focused source/log hash, the real SDK batch, and both guard-removal failures; the deepest response reachable through the Core vector-file parser also returns the expected SDK parse classification. Full mandatory verification is running, and a new normal Ubuntu run on the corrected source is still required. The one pre-existing stderr-retention limitation is tracked in `deferred-work.md:568`.
+
+## Original design context — 2026-10-21
+
+The following paragraph records the initial local-phase design context.
 
 Tenants is absent from the production manifest, approval directories and release
 inventories. Pinned 5.9.0 predates decoration; Story 4.8 approves only
@@ -183,3 +321,58 @@ The integral-floating paging deferral is already resolved by strict token typing
 - Run both sample conformance scripts, restore the solution afterwards, then
   run `check_enrolled.py --output /tmp/mcpcli-story411-evidence` and the new CI
   benchmark invocation. Full acceptance requires both v1 Modules.
+
+## 2026-10-22 continuation: authentic owner releases (in progress)
+
+Owner releases now exist: EventStore 3.126.1 at `1748b16b11fb63b885dfa2fd4a9c7a420ea103a9` and Tenants 5.10.0 at `82c2e9ad51f4d9ceeae9dcde33d7e0273524a105`. All nineteen actual NuGet archives match immutable registry hashes and pass signature verification. The signed Tenants Contracts artifact passes the original fourteen vector bytes, approved twenty inventory decisions and exact lint approvals; its Contracts and Client source trees equal the approved snapshot. These are new observations; historical candidate hashes and results remain unchanged. Evidence is under `evidence/story-4-11/publication-20261021/owner-published-*`.
+
+The normal EventStore release/source and OCI provenance qualify. Tenants 5.10.0 used the old publisher and retains eight incorrect or missing source-label values across the two container RIDs. It does not satisfy the specifically authorized repaired full release chain. Continue the approved shared-target import/publisher repair from current Tenants source, exact-source CI and normal semantic follow-up; no redundant EventStore release is required. The earlier unmerged EventStore qualification PR is diagnostic rather than a prerequisite of the completed normal owner release.
+
+Builds main `25ba30d666284a32b3361272dd0f5c59a7964679` already contains both published declarations. Refresh their deterministic audit in a normal audit-only squash PR bound to that real ancestor, preserving every other family and the truthful unresolved nonpackable UI row. The unanswered merge-policy proposal remains unapplied. Story and sprint remain in progress; both strict production gates and the authentic Ubuntu combined replay/cold-Catalog acceptance requirements remain binding.
+
+
+### 02:31 UTC: current Builds fixture prerequisite
+
+The first audit-only PR head `85290197d2a4324b50560630e8992d71c3318784` failed its ordinary module suite: 112 cases reached the exact-pin refusal because valid fixtures and the shipped v1 schema still selected EventStore 3.126.0 while the authoritative catalog selected 3.126.1. That failure and the original one-file audit proof remain historical evidence.
+
+PR [Hexalith.Builds #130](https://github.com/Hexalith/Hexalith.Builds/pull/130) now includes the bounded schema/live-fixture alignment at `6dd10644de86dd0656df0653a8a1f143f07352cf`, preserving the original catalog declarations, other audit families, runtime C# source, historical qualification records and exact equality guards. Active synthetic corpus digests are explicitly rebound; previous 3.126.0 is an added refusal control, including jointly rehashed publisher evidence. Local focused checks, all three Builds test projects, affected publisher contracts and real ordinary-CI package qualification pass. Fresh exact-head remote CI remains required before normal merge and the final Tenants Builds pin. No repository protection or publication action was applied by this prerequisite repair; production/full-v1 acceptance remains pending. Current bindings and retained failures are in `evidence/story-4-11/publication-20261021/continuation-status-current.json` and the associated `builds-live-fixture-pin-*` receipts.
+
+### 03:23 UTC: Builds prerequisite cleared; Tenants repair in normal PR qualification
+
+Builds PR130 subsequently passed all four ordinary CI jobs and every required context/App identity. Its normal squash merge `c0cbbbd4366d512cc1731397f14dd53a7a01580d` has the exact checked `6dd10644de86dd0656df0653a8a1f143f07352cf` tree, the expected sole parent `25ba30d666284a32b3361272dd0f5c59a7964679`, and the explicitly supplied, pinned-commitlint-validated full message. Independent parent audit confirms the tree and unchanged squash-only protection. The temporary merge-policy proposal remains unanswered and unapplied.
+
+Tenants [PR54](https://github.com/Hexalith/Hexalith.Tenants/pull/54), head `b021e6964c330c849276512b0650a3a2353b7a0b`, contains exactly the reviewed three repair blobs plus that qualified Builds gitlink. All seven local project runs on the checked Builds tree passed (9,492 tests); after binding the actual merge pin, every tracked regular-file/symlink byte in the five initialized checkouts remained equal, Contracts passed all 654 tests, and the four existing source-governance regression suites passed. Exact-source normal PR/main CI and the protected full five-package/container follow-up still remain required. These results do not grant production or full-v1 acceptance. The current release-consumption path and source/test bindings are retained in `evidence/story-4-11/publication-20261021/continuation-status-current.json` and `tenants-followup-*` receipts.
+
+### 03:36 UTC: exact enrollment artifact selected; repaired full release remains required
+
+The [version-selection assessment](evidence/story-4-11/publication-20261021/exact-enrollment-version-selection.md) records the chosen authentic Contracts 5.10.0 artifact at source `82c2e9ad51f4d9ceeae9dcde33d7e0273524a105` for enrollment after the repaired normal full follow-up release qualifies. This preserves all fourteen original vector bytes and the current qualified Builds `c0cbbbd4366d512cc1731397f14dd53a7a01580d` declarations. The spec and unchanged verifier require exact approved restored identities/bytes; neither requires the latest NuGet version or equality with the container version. The independent parent assessment agrees.
+
+The repaired full five-package/container release remains mandatory and has its own exact source, semantic version, signed archives and OCI provenance. Its success cannot change the historical malformed 5.10.0 container. The enrollment receipt will instead bind the actual signed 5.10.0 Contracts archive/restore hashes and source, both existing user approvals, approved inventory and final verification. Production enrollment, full-v1 acceptance and the final Ubuntu gates remain pending. The original temporary Builds policy question remains unanswered and unapplied; this exact-version selection makes a new central pin or policy edit unnecessary for Story 4.11.
+
+### 04:38 UTC: repaired full release qualified; final Ubuntu acceptance pending
+
+Tenants PR54 merged normally at `205cbc5019343d344643b530fb03aee82af2840d`, with the exact checked four-path tree. Its normal exact-main CI succeeded under the existing advisory Aspire policy; the three advisory observations remain retained and were not converted into new release requirements or bypassed. The normal protected release [39721533752](https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39721533752) published version 5.10.1. The [independent full-repair qualification](evidence/story-4-11/publication-20261021/parent-tenants-5.10.1-full-repair-qualified.json) binds all five public signed NuGet archives, normal source/protected controls, both OCI architecture/config digests, exact source/version labels, complete UTC creation timestamps and both digest-bound health smokes. This clears the separately mandatory repaired full-release prerequisite; it does not repair the historical 5.10.0 container.
+
+Root enrollment uses the authentic Contracts 5.10.0 artifact at `82c2e9ad51f4d9ceeae9dcde33d7e0273524a105` with all fourteen original approved vector bytes, twenty inventory decisions and exact lint exceptions unchanged. The [new release-bound enrollment record](evidence/story-4-11/publication-20261021/tenants-5.10.0-release-bound-enrollment.json) links both existing user approvals, authentic signed archive and restore-content identities, the qualified full follow-up release and the unchanged public-description review. The qualified Builds gitlink remains `c0cbbbd4366d512cc1731397f14dd53a7a01580d`; no new version pin or repository-policy mutation was needed.
+
+All six local root projects passed with 1,356 tests and four existing Windows-only skips; all 139 named Python tests, both Sample gates and six documented offline CLI commands passed. The final fresh task cache, assets, dependency document and shipped gateway/Contracts DLLs match the authentic approved archives. These local observations retain `productionAccepted: false` and `fullV1Accepted: false`. The story and sprint remain in progress pending actual Ubuntu strict 21-operation CLI/MCP replay, the first Catalog construction with exactly one Ulid sample at most 500 ms, isolated String coverage and the final independent acceptance review.
+
+### 05:02 UTC: actual Ubuntu acceptance verified; final review pending
+
+The [parent artifact and matrix audit](evidence/story-4-11/publication-20261021/parent-root-ubuntu-acceptance-audit.json) independently verifies actual normal CI [39724191822](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39724191822) on `bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd`. The actual PR checkout `a71233072b4f7e822f325af61b3d647c9fcf3e60` has the same full tree `ee3372fe9d9da62211b540a9e433c57306912623`. All four required jobs passed; all six ordinary projects produced 1,356 passed tests and four existing Windows-only skips, all 139 named Python tests passed, and both Sample gates passed.
+
+| Acceptance criterion | Actual verification |
+| --- | --- |
+| Both approved production releases cover every operation through both heads | Authentic Parties 1.5.1 and Tenants 5.10.0 archives, original vectors and approved inventory/lint bytes match. Strict combined production replay passed all 21 operations and 78 preflight calls; parent rechecked 198 retained success/error documents and complete captured requests. |
+| Incompatible vector steps fail before replay with located deterministic diagnostics | All-position kind/schema/identifier/depth process negatives and the complete named 139-test suite passed; every frozen matrix row has actual named passing coverage. |
+| First Catalog construction with exactly one sample is at most 500 ms; alternate kind remains covered | Actual fresh-process Ubuntu measurement was 242.6181 ms, with exactly Parties, Tenants and one Ulid sample, no failures/missing modules/diagnostics. The isolated String test and 500/500.0001 ms boundary and failure-evidence cases actually passed in the ordinary native TRX. |
+
+The unchanged strict gates now report `fullV1Accepted: true`. All execution tasks and acceptance criteria are verified. Story and sprint remain in progress for the next sequential BMAD independent review and completion record. No live authorization, sanitization, persisted effects or retirement acceptance is claimed.
+
+## Completion — 2026-10-22
+
+The five final-review correction groups are resolved. The [corrected-source Ubuntu acceptance audit](evidence/story-4-11/publication-20261021/parent-root-review-fixed-ubuntu-acceptance-audit.json) binds normal CI [39730145591](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/39730145591), reviewed source `c887634d4dad1f536bc888c7294d3e3ffa0da8f4`, its equal-tree actual PR checkout, all four required jobs and every acceptance/matrix row. It rechecks all 21 production operations, 78 preflight calls and 198 documents/requests; first Catalog construction with exactly one Ulid sample is 194.5002 ms. All 1,356 ordinary tests, 146 named Python cases, both Sample gates and the isolated String/budget/failure-evidence cases passed.
+
+The [complete parent local re-verification](evidence/story-4-11/publication-20261021/parent-final-review-local-verification.json) also passed after the corrections. Both original approval records, fourteen Tenants vector bytes, twenty inventory decisions, exact lint exceptions and frozen intent remain unchanged. The separate normal Tenants 5.10.1 full release remains qualified; enrollment stays on authentic Contracts 5.10.0. The nine final patched claims are verified, three are rejected on their logged evidence, and the one pre-existing low stderr-retention limitation is tracked at `deferred-work.md:568`.
+
+The spec is done and Story 4.11 is in sprint review under BMAD completion rules. Root [PR1](https://github.com/Hexalith/Hexalith.McpCli/pull/1) contains the implementation; no root merge or release is performed. This proves scripted transport parity and Catalog construction, while live authorization, privacy, persisted effects and retirement keep their later gates.

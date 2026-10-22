@@ -1,0 +1,88 @@
+[
+  {
+    "label": "combined-host-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+      "-p:ConformanceProduction=true",
+      "-p:RestoreAdditionalProjectSources=/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages"
+    ],
+    "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 2.034913987998152
+  },
+  {
+    "label": "combined-host-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+      "--no-restore",
+      "-c",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:ConformanceProduction=true"
+    ],
+    "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 3.1483336789970053
+  },
+  {
+    "label": "combined-core-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "-p:RestoreAdditionalProjectSources=/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages"
+    ],
+    "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 2.9427406070026336
+  },
+  {
+    "label": "combined-core-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "-c",
+      "Release",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 4.343359500002407
+  },
+  {
+    "label": "candidate-benchmark",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds"
+    ],
+    "cwd": "/tmp/mcpcli-story411-combined-candidate-12k8l_jk",
+    "environment": {
+      "MCPCLI_BENCHMARK_REQUIRE_V1": "false",
+      "MCPCLI_BENCHMARK_OUTPUT": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-benchmark.json"
+    },
+    "exitCode": 0,
+    "durationSeconds": 0.7733745040022768
+  }
+]

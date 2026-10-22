@@ -1,0 +1,60 @@
+[
+  {
+    "label": "eventstore-normal-rid-container-archive",
+    "command": [
+      "dotnet",
+      "publish",
+      "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "-c",
+      "Release",
+      "/t:PublishContainer",
+      "-p:RuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+      "-p:ContainerRuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+      "-p:ContainerImageFormat=OCI",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:ContainerRegistry=localhost:1",
+      "-p:ContainerRepository=eventstore",
+      "-p:ContainerImageTag=3.126.1",
+      "-p:Version=3.126.1",
+      "-p:ContainerArchiveOutputPath=/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/eventstore-candidate-musl.oci.tar",
+      "-p:ContainerProvenanceSourceSha=30260abc7c6703e9e545dd1596ca258b925b1ed7",
+      "-p:ContainerProvenanceReleaseVersion=3.126.1",
+      "-p:ContainerProvenanceCreated=2026-10-21T18:44:42Z"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7",
+    "exitCode": 0,
+    "durationSeconds": 21.54930958800105,
+    "archive": "/tmp/mcpcli-story411-full-eventstore-5bsu_t_7/eventstore-candidate-musl.oci.tar",
+    "registryPush": false,
+    "evidenceLimit": "Uses the normal publisher linux-musl-x64/linux-musl-arm64 RIDs, but writes a local OCI archive with ContainerArchiveOutputPath. No guarded remote publisher was run."
+  },
+  {
+    "label": "tenants-normal-rid-container-archive",
+    "command": [
+      "dotnet",
+      "publish",
+      "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "-c",
+      "Release",
+      "/t:PublishContainer",
+      "-p:RuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+      "-p:ContainerRuntimeIdentifiers=\"linux-musl-x64;linux-musl-arm64\"",
+      "-p:ContainerImageFormat=OCI",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:ContainerRegistry=localhost:1",
+      "-p:ContainerRepository=tenants",
+      "-p:ContainerImageTag=5.10.0",
+      "-p:Version=5.10.0",
+      "-p:ContainerArchiveOutputPath=/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-candidate-musl.oci.tar",
+      "-p:ContainerProvenanceSourceSha=ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "-p:ContainerProvenanceReleaseVersion=5.10.0",
+      "-p:ContainerProvenanceCreated=2026-10-21T18:45:03Z"
+    ],
+    "cwd": "/tmp/mcpcli-story411-full-tenants-fa7b01k8",
+    "exitCode": 0,
+    "durationSeconds": 6.872720737999771,
+    "archive": "/tmp/mcpcli-story411-full-tenants-fa7b01k8/tenants-candidate-musl.oci.tar",
+    "registryPush": false,
+    "evidenceLimit": "Uses the normal publisher linux-musl-x64/linux-musl-arm64 RIDs, but writes a local OCI archive with ContainerArchiveOutputPath. No guarded remote publisher was run."
+  }
+]

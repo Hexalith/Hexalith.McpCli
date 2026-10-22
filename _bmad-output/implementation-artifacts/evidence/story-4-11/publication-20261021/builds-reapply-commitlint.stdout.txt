@@ -1,0 +1,9 @@
+⧗   --- input ---
+fix(container): preserve publisher provenance across RIDs
+
+Share the SDK label repair for consumers with complete publisher metadata.
+Preserve ordinary and partial-metadata SDK behavior and protect both paths.
+
+Reapply the exact reviewed additions after the normal PR revert restored
+the prior tree. This change follows the required protected PR checks.
+✔   found 0 problems, 0 warnings

@@ -1,0 +1,9 @@
+test_missing_ci_proof_and_stale_main_refuse (test_release_publication_authority.ReleasePublicationAuthorityTests.test_missing_ci_proof_and_stale_main_refuse) ... ok
+test_semantic_release_version_publishes_without_a_typed_reservation (test_release_publication_authority.ReleasePublicationAuthorityTests.test_semantic_release_version_publishes_without_a_typed_reservation) ... ok
+test_typed_reservation_and_enabled_authority_refuse (test_release_publication_authority.ReleasePublicationAuthorityTests.test_typed_reservation_and_enabled_authority_refuse) ... ok
+test_workflow_has_no_dispatch_inputs_and_requires_three_push_proofs (test_release_publication_authority.ReleasePublicationAuthorityTests.test_workflow_has_no_dispatch_inputs_and_requires_three_push_proofs) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.310s
+
+OK

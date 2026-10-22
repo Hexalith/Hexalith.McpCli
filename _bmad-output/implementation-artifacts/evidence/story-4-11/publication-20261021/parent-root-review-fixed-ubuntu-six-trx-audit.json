@@ -1,0 +1,225 @@
+{
+  "checkedAtUtc": "2026-10-22T05:55:27.327919+00:00",
+  "result": "passed",
+  "artifact": {
+    "id": 12404666873,
+    "bytes": 194198,
+    "sha256": "e3f1bb01a28eeeda5e4d3e4759e713f5decc070a4d1fb3004d02ffd3301e0a26",
+    "privateZip": "/tmp/mcpcli-story411-parent-tenants-release-d2xr_yvy/ubuntu-review-fixed/artifacts/blocking-test-results.zip"
+  },
+  "run": 39730145591,
+  "source": "c887634d4dad1f536bc888c7294d3e3ffa0da8f4",
+  "projects": [
+    {
+      "member": "Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+      "bytes": 30180,
+      "sha256": "c536273cb51aea007064c4c415cb380e568358ac544813f55a79fdf23393d9e8",
+      "results": {
+        "Passed": 20
+      },
+      "counters": {
+        "total": "20",
+        "executed": "20",
+        "passed": "20",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "member": "Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+      "bytes": 718246,
+      "sha256": "e5394aaf8a9a4e9d1bd46b4ba7417f006d92230250b4d8e0c98ae3796f9e77b3",
+      "results": {
+        "Passed": 479,
+        "NotExecuted": 2
+      },
+      "counters": {
+        "total": "481",
+        "executed": "479",
+        "passed": "479",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "2",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "member": "Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+      "bytes": 29902,
+      "sha256": "4fe9fbfc6bc4a5edc5761938288c84203b744b2b036ec7a61206bc2a47afb39a",
+      "results": {
+        "Passed": 19
+      },
+      "counters": {
+        "total": "19",
+        "executed": "19",
+        "passed": "19",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "member": "Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+      "bytes": 986743,
+      "sha256": "c89eb4bc2c9e6051b6664a77fe0d8c5cc9d7118bcd2b24df0330211a7d083959",
+      "results": {
+        "Passed": 676,
+        "NotExecuted": 2
+      },
+      "counters": {
+        "total": "678",
+        "executed": "676",
+        "passed": "676",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "2",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "member": "Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+      "bytes": 154107,
+      "sha256": "8662483f5461fadd1b4307660fe141aff53df7e92ab63f485eb01cf60368b7ca",
+      "results": {
+        "Passed": 104
+      },
+      "counters": {
+        "total": "104",
+        "executed": "104",
+        "passed": "104",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "member": "Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+      "bytes": 85663,
+      "sha256": "bc562974f584e9c34a562e5475b89478c99c833f59ceaf061680d6eb70b8d182",
+      "results": {
+        "Passed": 58
+      },
+      "counters": {
+        "total": "58",
+        "executed": "58",
+        "passed": "58",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "actualTotals": {
+    "Passed": 1356,
+    "NotExecuted": 4
+  },
+  "matrixCasesActuallyPassed": [
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"loading\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.EarlyFailureInvalidatesPriorSuccessfulEvidence(phase: \"construction\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500, accepted: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.ConstructionLimitIncludesOnlyAtMostFiveHundredMilliseconds(elapsed: 500.00009999999997, accepted: False)",
+      "outcome": "Passed"
+    }
+  ],
+  "skips": [
+    {
+      "name": "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync",
+      "outcome": "NotExecuted"
+    },
+    {
+      "name": "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync",
+      "outcome": "NotExecuted"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten",
+      "outcome": "NotExecuted"
+    },
+    {
+      "name": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls",
+      "outcome": "NotExecuted"
+    }
+  ],
+  "uniqueExecutionIds": 1360
+}

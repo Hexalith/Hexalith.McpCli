@@ -1,0 +1,12 @@
+  Hexalith.McpCli.Analyzers -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+  Manifest.MarkedEmpty.Contracts -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+  Manifest.Unmarked.Contracts -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+  Hexalith.McpCli.Manifest.Tests -> /tmp/mcpcli-story411-combined-candidate-12k8l_jk/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.08

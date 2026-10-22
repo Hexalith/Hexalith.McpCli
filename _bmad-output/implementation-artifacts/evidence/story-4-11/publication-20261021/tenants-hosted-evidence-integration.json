@@ -1,0 +1,74 @@
+{
+  "head": "8c12ff17f48c08a1b9baf619cd3de3ceadfdab9a",
+  "owningMain": "66def172379f37d12e746fe6eb9195801929c572",
+  "checks": [
+    {
+      "label": "commitlint",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose",
+        "--edit",
+        "/tmp/mcpcli-story411-tenants-owner-integration.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\nbuild(release): preserve owning hosted evidence updates\n\nIntegrate the owner's later documentation and hosted evidence unchanged.\nRetain the container publisher repair while the published dependency pin\nand final source qualification remain pending.\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "label": "merge",
+      "command": [
+        "git",
+        "merge",
+        "--no-ff",
+        "origin/main",
+        "-F",
+        "/tmp/mcpcli-story411-tenants-owner-integration.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "Merge made by the 'ort' strategy.\n .../implementation-artifacts/deferred-work.md      |  97 ++-\n .../dw-464-496-505-555-585-hosted-evidence.json    | 744 +++++++++++++++++++++\n .../dw-464-496-505-555-585-raw-hosted-evidence.zip | Bin 0 -> 37450 bytes\n .../dw-464-496-505-555-585-validation-evidence.md  | 174 +++++\n .../dw-464-496-505-555-585-verify.py               | 217 ++++++\n .../spec-dw-464-496-505-555-585-ci-evidence.md     |  49 ++\n docs/maintenance-backlog.md                        |  13 +-\n 7 files changed, 1257 insertions(+), 37 deletions(-)\n create mode 100644 _bmad-output/implementation-artifacts/dw-464-496-505-555-585-hosted-evidence.json\n create mode 100644 _bmad-output/implementation-artifacts/dw-464-496-505-555-585-raw-hosted-evidence.zip\n create mode 100644 _bmad-output/implementation-artifacts/dw-464-496-505-555-585-validation-evidence.md\n create mode 100644 _bmad-output/implementation-artifacts/dw-464-496-505-555-585-verify.py\n create mode 100644 _bmad-output/implementation-artifacts/spec-dw-464-496-505-555-585-ci-evidence.md\n",
+      "stderr": ""
+    }
+  ],
+  "owningFileBindings": [
+    {
+      "path": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "sha256": "948d5b49141f302f6f2d10cbf2bbe8ce9ed667e2dda01cb338c10773b6b8e67f",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/dw-464-496-505-555-585-hosted-evidence.json",
+      "sha256": "6176c456898be439c80edd8fad3ab1314f6e8a500039152783e4203f9a58b5c3",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/dw-464-496-505-555-585-raw-hosted-evidence.zip",
+      "sha256": "9ed2e54109cc224fcc51fd12c0812630812606336853df4e8c6ea0b8fdf2ff29",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/dw-464-496-505-555-585-validation-evidence.md",
+      "sha256": "a2fa804f750d4fc27ad3a4a4d09203568c737a50eabb8aad8b4beed7c15b5262",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/dw-464-496-505-555-585-verify.py",
+      "sha256": "19bf5e4d16247d95c638c98f197afa5b0cfe8d29e7e078e8501c2780551466ad",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-dw-464-496-505-555-585-ci-evidence.md",
+      "sha256": "45f3f438026165bad67fe316f6731cc094c862c4fb504cdc4ffb0cb6fbb3524d",
+      "owningBytesPreserved": true
+    },
+    {
+      "path": "docs/maintenance-backlog.md",
+      "sha256": "3097c1dbbc9762ffb1ea63ff6f236b3cfb63535c0abd0c4fd998ecf52f9276ae",
+      "owningBytesPreserved": true
+    }
+  ],
+  "temporaryBuildsGitlinkCommitted": false,
+  "publicationQualified": false
+}

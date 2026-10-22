@@ -1,0 +1,1333 @@
+{
+  "checkedAtUtc": "2026-10-22T04:59:51.073738+00:00",
+  "result": "passed",
+  "source": "bf9c49afc7b81e30459b4c9c26074ac5a08d2ecd",
+  "run": 39724191822,
+  "job": 119644519743,
+  "officialArtifact": {
+    "id": 12402249436,
+    "bytes": 357153,
+    "sha256": "c4193f21fa4d24cebb0b9a3ef8f4519a6a0055e38d190d0b5223dd2f7dce49a8",
+    "privateZip": "/tmp/mcpcli-story411-owner-published-87zjp9rw/root-enrollment/ubuntu-bf9/artifacts/enrolled-module-evidence.zip",
+    "safeUniqueMembers": 193
+  },
+  "packages": [
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "vectorCount": 7,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 14
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "vectorCount": 14,
+      "approvedInventoryAndLintBytesMatch": true,
+      "independentArtifactChecks": 21
+    }
+  ],
+  "coldBenchmark": {
+    "result": "passed",
+    "fullV1Accepted": true,
+    "elapsedMilliseconds": 242.6181,
+    "limitMilliseconds": 500,
+    "processId": 3089,
+    "assemblies": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts",
+      "Hexalith.McpCli.Sample.Contracts"
+    ],
+    "productionPackages": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts"
+    ],
+    "modules": [
+      {
+        "Name": "parties",
+        "identifierKind": "String",
+        "operationCount": 7
+      },
+      {
+        "Name": "sample",
+        "identifierKind": "Ulid",
+        "operationCount": 3
+      },
+      {
+        "Name": "tenants",
+        "identifierKind": "String",
+        "operationCount": 14
+      }
+    ],
+    "missingRequiredModules": [],
+    "diagnostics": [],
+    "failures": []
+  },
+  "productionReplay": {
+    "result": "passed",
+    "checks": [
+      {
+        "command": [
+          "dotnet",
+          "restore",
+          "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "-p:ConformanceProduction=true"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "dotnet",
+          "build",
+          "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "--no-restore",
+          "-c",
+          "Release",
+          "-m:1",
+          "-warnaserror",
+          "-p:ConformanceProduction=true"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "packageCount": 2,
+    "operationCount": 21,
+    "modules": [
+      "parties",
+      "tenants"
+    ],
+    "packageModules": {
+      "Hexalith.Parties.Contracts": [
+        "parties"
+      ],
+      "Hexalith.Tenants.Contracts": [
+        "tenants"
+      ]
+    }
+  },
+  "all21ActualVectorBytesAndApprovedInventoriesAndLintMatch": true,
+  "preflightCalls": 78,
+  "actualDocumentsVerified": 198,
+  "actualCapturedRequestsVerified": 198,
+  "uniqueGeneratedCommandMessageIds": 132,
+  "operations": [
+    {
+      "operation": "parties.create-party",
+      "scriptStepsPerHead": 2,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.get-party",
+      "scriptStepsPerHead": 2,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.list-parties",
+      "scriptStepsPerHead": 2,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.search-parties",
+      "scriptStepsPerHead": 2,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "parties.update-party",
+      "scriptStepsPerHead": 3,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "scriptStepsPerHead": 3,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "scriptStepsPerHead": 2,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "scriptStepsPerHead": 3,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "scriptStepsPerHead": 6,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "scriptStepsPerHead": 6,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "scriptStepsPerHead": 8,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "scriptStepsPerHead": 5,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "scriptStepsPerHead": 4,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "scriptStepsPerHead": 3,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "scriptStepsPerHead": 3,
+      "bothSuccessAndGatewayErrorDocumentsAndCompleteRequestsVerified": true
+    }
+  ],
+  "namedPythonTestsActuallyPassed": [
+    "test_enrolled.AcceptedLintTests.test_exact_accepted_lint_preserves_existing_contract_approval",
+    "test_enrolled.AcceptedLintTests.test_missing_and_stale_lint_approvals_fail",
+    "test_enrolled.ApprovedVectorSetTests.test_added_vector_cannot_hide_from_coverage",
+    "test_enrolled.ApprovedVectorSetTests.test_changed_vector_cannot_reuse_approved_artifact_receipt",
+    "test_enrolled.ApprovedVectorSetTests.test_matches_all_approved_relative_names_and_bytes",
+    "test_enrolled.ApprovedVectorSetTests.test_missing_filename_hash_map_fails_closed",
+    "test_enrolled.ApprovedVectorSetTests.test_removed_or_renamed_vector_requires_fresh_approval",
+    "test_enrolled.CandidateHostPreparationTests.test_candidate_dependency_overrides_apply_only_when_alignment_is_enabled",
+    "test_enrolled.CandidateHostPreparationTests.test_candidate_host_removes_inherited_contracts_but_preserves_stack_references",
+    "test_enrolled.CandidateHostPreparationTests.test_candidate_pin_replaces_existing_versions_and_adds_unlisted_packages",
+    "test_enrolled.CombinedConsumptionHashTests.test_retained_vector_mutation_during_production_build_blocks_replay",
+    "test_enrolled.EnrolledArtifactTests.test_assets_cannot_authorize_changed_bytes_without_approval",
+    "test_enrolled.EnrolledArtifactTests.test_matches_both_restored_and_approved_bytes",
+    "test_enrolled.EnrolledArtifactTests.test_missing_enrolled_package_fails",
+    "test_enrolled.EnrolledArtifactTests.test_missing_restored_package_fails",
+    "test_enrolled.EnrolledArtifactTests.test_other_versions_and_missing_approval_do_not_pass",
+    "test_enrolled.EnrolledArtifactTests.test_package_identity_is_case_insensitive",
+    "test_enrolled.EnrolledArtifactTests.test_replacing_restored_package_bytes_fails",
+    "test_enrolled.EnrolledPreflightTests.test_ambiguous_case_variant_directories_fail",
+    "test_enrolled.EnrolledPreflightTests.test_enrollment_metadata_name_is_case_insensitive",
+    "test_enrolled.EnrolledPreflightTests.test_evaluation_failure_invalidates_old_child_success_before_preflight",
+    "test_enrolled.EnrolledPreflightTests.test_existing_approval_directory_and_package_id_ignore_case",
+    "test_enrolled.EnrolledPreflightTests.test_full_scope_comes_from_combined_discovery_instead_of_receipt_labels",
+    "test_enrolled.EnrolledPreflightTests.test_inventory_mutation_between_preflight_and_capture_cannot_pass",
+    "test_enrolled.EnrolledPreflightTests.test_inventory_requires_the_exact_approved_digest_before_verification",
+    "test_enrolled.EnrolledPreflightTests.test_local_evidence_cannot_grant_full_acceptance_even_when_scope_is_present",
+    "test_enrolled.EnrolledPreflightTests.test_malformed_receipt_roots_fail_deterministically",
+    "test_enrolled.EnrolledPreflightTests.test_missing_approval_directory_fails_before_verification",
+    "test_enrolled.EnrolledPreflightTests.test_missing_or_invalid_module_names_fail_before_verification",
+    "test_enrolled.EnrolledPreflightTests.test_missing_required_module_fails_full_gate_after_available_replay",
+    "test_enrolled.EnrolledPreflightTests.test_vector_mutation_between_preflight_and_capture_cannot_pass",
+    "test_enrolled.FrozenArtifactInputTests.test_mutating_original_inputs_during_restore_cannot_change_verified_bytes",
+    "test_enrolled.FrozenArtifactInputTests.test_unapproved_lint_blocks_replay_and_exact_acceptance_allows_completion",
+    "test_enrolled.FullV1ScopeTests.test_required_modules_cannot_be_replaced_by_local_green",
+    "test_enrolled.MalformedAcceptedLintTests.test_accepted_lint_requires_exact_fields_and_unique_exceptions",
+    "test_enrolled.MalformedAcceptedLintTests.test_only_an_array_of_objects_is_accepted",
+    "test_enrolled.ResolvedPackageEvidenceTests.test_changed_resolved_support_bytes_fail",
+    "test_enrolled.ResolvedPackageEvidenceTests.test_records_actual_restored_version_and_both_hashes",
+    "test_enrolled.SignedPackageHashTests.test_matching_content_metadata_without_archive_sidecar_cannot_authorize_signed_bytes",
+    "test_enrolled.SignedPackageHashTests.test_restore_content_hash_and_exact_archive_hash_can_differ",
+    "test_enrolled.VerifierFailureTests.test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture",
+    "test_enrolled.VerifierFailureTests.test_missing_artifact_invalidates_previous_success_before_preflight",
+    "test_enrolled.VerifierFailureTests.test_path_bearing_package_identity_cannot_escape_the_frozen_feed",
+    "test_enrolled.VerifierFailureTests.test_subprocess_failure_retains_and_prints_diagnostics_and_freezes_approval_inputs",
+    "test_enrolled.VerifierFailureTests.test_wrong_artifact_hash_retains_failed_identity",
+    "test_loopback.GeneratedErrorCorrelationTests.test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation",
+    "test_loopback.GeneratedMessageReuseExecutionTests.test_two_real_runner_calls_cannot_reuse_a_generated_request_message",
+    "test_loopback.LoopbackRulesTests.test_all_cross_head_parity_layers_use_json_semantics",
+    "test_loopback.LoopbackRulesTests.test_command_result_masks_only_generated_identifiers",
+    "test_loopback.LoopbackRulesTests.test_equals_and_contains_assertions_use_recursive_json_equality",
+    "test_loopback.LoopbackRulesTests.test_expected_gateway_payload_and_paging_are_exact",
+    "test_loopback.LoopbackRulesTests.test_gateway_expectations_use_recursive_json_equality",
+    "test_loopback.LoopbackRulesTests.test_gateway_mismatch_locations_escape_json_pointer_tokens",
+    "test_loopback.LoopbackRulesTests.test_generated_id_must_be_a_ulid",
+    "test_loopback.LoopbackRulesTests.test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact",
+    "test_loopback.LoopbackRulesTests.test_host_reports_unavailable_restore_assets",
+    "test_loopback.LoopbackRulesTests.test_host_requires_explicit_assets_when_project_path_cannot_be_inferred",
+    "test_loopback.LoopbackRulesTests.test_host_requires_matching_package_library_in_restore_assets",
+    "test_loopback.LoopbackRulesTests.test_host_restored_artifact_hash_must_match",
+    "test_loopback.LoopbackRulesTests.test_host_signed_archive_matches_restore_content_hash_independently",
+    "test_loopback.LoopbackRulesTests.test_json_equality_preserves_types_recursively_but_unifies_number_encodings",
+    "test_loopback.LoopbackRulesTests.test_semantic_assertion_vocabulary",
+    "test_loopback.OptionalResultContractTests.test_null_optional_paging_fields_are_omitted_and_extra_results_are_rejected",
+    "test_loopback.ProductionReplayOrderingTests.test_fixed_response_message_id_stays_unmasked_and_binds_to_result",
+    "test_loopback.ProductionReplayOrderingTests.test_generated_correlation_is_bound_to_its_message_before_masking",
+    "test_loopback.ProductionReplayOrderingTests.test_incompatible_last_vector_stops_every_gateway_before_replay",
+    "test_loopback.ReceiptModuleBindingTests.test_a_receipt_label_cannot_replace_the_package_discovered_module",
+    "test_loopback.RequiredErrorExecutionTests.test_scripted_gateway_errors_require_status_code_and_preserved_detail_on_both_heads",
+    "test_loopback.RequiredResultExecutionTests.test_both_heads_missing_the_same_required_field_fail_before_semantic_assertions",
+    "test_loopback.RetainedFailureEvidenceTests.test_failing_head_retains_full_document_and_captured_request",
+    "test_loopback.RetainedFailureEvidenceTests.test_reused_generated_request_ids_fail_before_masking_can_hide_them",
+    "test_loopback.SdkErrorOutcomeTests.test_problem_metadata_precedence_and_blank_or_invalid_values_are_omitted",
+    "test_loopback.SdkErrorOutcomeTests.test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata",
+    "test_loopback.Story411CompatibilityTests.test_core_failure_blocks_replay_with_source_and_step_location",
+    "test_loopback.Story411CompatibilityTests.test_equal_documents_cannot_hide_required_result_fields",
+    "test_loopback.Story411CompatibilityTests.test_every_step_kind_is_checked_before_core_preflight",
+    "test_loopback.Story411CompatibilityTests.test_extension_allowlist_is_isolated_and_exact",
+    "test_loopback.Story411CompatibilityTests.test_preflight_compares_complete_request_and_rejects_missing_steps",
+    "test_loopback.Story411CompatibilityTests.test_supplied_ids_and_key_omission_are_independent_of_head_equality",
+    "test_process_fixture.ProcessFixtureEnrollmentTests.test_combined_population_preserves_all_existing_enrollments_without_duplicates",
+    "test_process_fixture.ProcessFixtureEnrollmentTests.test_replaces_existing_enrollments_and_preserves_stack_references",
+    "test_validate.PayloadDepthCompatibilityTests.test_five_hundred_level_payload_returns_a_located_finding_through_the_validator",
+    "test_validate.PayloadDepthCompatibilityTests.test_payload_limit_is_counted_independently_from_vector_framing",
+    "test_validate.VectorContractTests.test_absent_optional_inputs_cannot_have_expected_request_values",
+    "test_validate.VectorContractTests.test_artifact_package_identity_and_restored_version_are_checked",
+    "test_validate.VectorContractTests.test_assertion_operators_paths_and_values_at_every_call_position",
+    "test_validate.VectorContractTests.test_caller_correlation_id_cannot_be_masked",
+    "test_validate.VectorContractTests.test_cli_accepts_all_three_samples",
+    "test_validate.VectorContractTests.test_cli_and_reusable_entry_point_return_identical_located_rejections",
+    "test_validate.VectorContractTests.test_command_rejects_non_object_json_roots_at_every_call_position",
+    "test_validate.VectorContractTests.test_contract_integer_fields_reject_floats_and_booleans_at_every_call_position",
+    "test_validate.VectorContractTests.test_contract_owned_objects_are_closed_at_every_call_position",
+    "test_validate.VectorContractTests.test_digit_leading_and_single_character_operation_parts_are_valid",
+    "test_validate.VectorContractTests.test_duplicate_and_missing_operation_vectors_are_rejected",
+    "test_validate.VectorContractTests.test_duplicate_json_fields_are_rejected",
+    "test_validate.VectorContractTests.test_existing_script_consistency_rules_apply_at_every_call_position",
+    "test_validate.VectorContractTests.test_expected_paging_matches_integer_types_at_every_call_position",
+    "test_validate.VectorContractTests.test_gateway_domains_use_runtime_slug_grammar_at_every_call_position",
+    "test_validate.VectorContractTests.test_gateway_identifiers_use_runtime_grammar_at_every_call_position",
+    "test_validate.VectorContractTests.test_gateway_request_bodies_reject_unknown_and_mistyped_fields_at_every_call_position",
+    "test_validate.VectorContractTests.test_gateway_request_bodies_require_every_emitted_field_at_every_call_position",
+    "test_validate.VectorContractTests.test_gateway_wire_types_use_kind_specific_runtime_grammar_at_every_call_position",
+    "test_validate.VectorContractTests.test_invalid_assertion_is_rejected",
+    "test_validate.VectorContractTests.test_invalid_input_and_gateway_route_are_located",
+    "test_validate.VectorContractTests.test_json_syntax_and_parser_limits_return_identical_cli_and_api_findings",
+    "test_validate.VectorContractTests.test_module_owned_json_remains_open_and_preserves_finite_values",
+    "test_validate.VectorContractTests.test_multiple_unknown_gateway_fields_are_each_reported_at_escaped_locations",
+    "test_validate.VectorContractTests.test_non_object_query_payload_must_match_wire_payload_at_every_call_position",
+    "test_validate.VectorContractTests.test_non_object_query_payload_treats_integer_and_float_encodings_as_numbers",
+    "test_validate.VectorContractTests.test_nonblank_envelope_strings_at_every_call_position",
+    "test_validate.VectorContractTests.test_nonblank_gateway_routing_at_every_call_position",
+    "test_validate.VectorContractTests.test_nonfinite_json_is_rejected_with_escaped_locations_in_all_data_areas",
+    "test_validate.VectorContractTests.test_operation_names_reject_malformed_parts_at_every_call_position",
+    "test_validate.VectorContractTests.test_package_id_and_exact_version_mismatches_are_rejected",
+    "test_validate.VectorContractTests.test_package_ids_are_case_insensitive_for_vectors_artifacts_and_runners",
+    "test_validate.VectorContractTests.test_package_patterns_require_complete_strings",
+    "test_validate.VectorContractTests.test_paging_outside_bounds_is_rejected",
+    "test_validate.VectorContractTests.test_query_accepts_every_finite_json_root_at_every_call_position",
+    "test_validate.VectorContractTests.test_query_cannot_mix_cursor_and_offset",
+    "test_validate.VectorContractTests.test_query_payload_wire_presence_matches_nullness_at_every_call_position",
+    "test_validate.VectorContractTests.test_query_projection_type_uses_runtime_slug_grammar_at_every_call_position",
+    "test_validate.VectorContractTests.test_query_response_cannot_echo_request_identifiers_at_every_call_position",
+    "test_validate.VectorContractTests.test_submitted_payload_may_include_envelope_owned_values",
+    "test_validate.VectorContractTests.test_supplied_entity_id_is_valid_at_every_call_position",
+    "test_validate.VectorContractTests.test_supplied_extensions_cannot_be_empty_at_every_call_position",
+    "test_validate.VectorContractTests.test_supplied_extensions_must_match_expected_request_at_every_call_position",
+    "test_validate.VectorContractTests.test_synthetic_command_and_query_are_compatible_with_release_and_catalog",
+    "test_validate.VectorContractTests.test_tenant_runtime_slug_grammar_and_agreement_apply_at_every_call_position",
+    "test_validate.VectorContractTests.test_ulid_and_paging_boundaries_are_valid",
+    "test_validate.VectorContractTests.test_ulids_reject_invalid_alphabet_overflow_and_trailing_newlines",
+    "test_validate.VectorContractTests.test_unknown_nested_field_is_located",
+    "test_validate.VectorContractTests.test_unreadable_or_invalid_artifact_is_reported_without_loading_assemblies",
+    "test_validate.VectorContractTests.test_unsent_known_request_fields_at_every_call_position",
+    "test_validate.VectorContractTests.test_unsupported_format_values_and_missing_version_are_rejected",
+    "test_validate.VectorContractTests.test_unsupported_format_version_is_located",
+    "test_validate.VectorContractTests.test_valid_assertion_boundaries",
+    "test_validate.VectorContractTests.test_vector_header_must_match_invocation",
+    "test_validate.VectorContractTests.test_wrong_kind_expected_request_fields_at_every_call_position",
+    "test_validate.VectorContractTests.test_wrong_kind_inputs_at_every_call_position"
+  ],
+  "parentRecheckedExistingPureComparisonAndSemanticGuardsAgainstRetainedObservations": true,
+  "archiveMembers": [
+    {
+      "path": "Hexalith.Parties.Contracts/artifact.sha512",
+      "bytes": 136,
+      "sha256": "1a9e27aeec3dd34af9e5e9803e3d6fc7be42f93925c2e2964b9f3e739fbc933b"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/build.stdout.txt",
+      "bytes": 824,
+      "sha256": "dd80e8b6ef931e453386a7eabbbb5d9e5e99d1013d271f9a5a7a2ad3ee744ec4"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/catalog.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/catalog.stdout.txt",
+      "bytes": 37056,
+      "sha256": "6a34fa3e1c04b03c111dc8a1d7b15149e58dc8e0d5eb01f69768ceec5cc1c78e"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+      "bytes": 129134,
+      "sha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/0/create-party.vector.json",
+      "bytes": 5285,
+      "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/1/deactivate-party.vector.json",
+      "bytes": 6680,
+      "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/2/get-party.vector.json",
+      "bytes": 5128,
+      "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/3/list-parties.vector.json",
+      "bytes": 5399,
+      "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/4/reactivate-party.vector.json",
+      "bytes": 6678,
+      "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/6/update-party.vector.json",
+      "bytes": 6889,
+      "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inventory.input.json",
+      "bytes": 4362,
+      "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inputs-4cn0i9fw/vectors/5/search-parties.vector.json",
+      "bytes": 5639,
+      "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inventory.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/inventory.stdout.txt",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/modules.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/modules.stdout.txt",
+      "bytes": 198,
+      "sha256": "a9935d3f23fb378ed34e57b06c1788fae2bed2139ba59a84091f6ae6526ea036"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/operations-parties.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/operations-parties.stdout.txt",
+      "bytes": 3524,
+      "sha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.create-party.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.create-party.stdout.txt",
+      "bytes": 9246,
+      "sha256": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.deactivate-party.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.deactivate-party.stdout.txt",
+      "bytes": 1236,
+      "sha256": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.get-party.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.get-party.stdout.txt",
+      "bytes": 1150,
+      "sha256": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.list-parties.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.list-parties.stdout.txt",
+      "bytes": 2775,
+      "sha256": "4b1879c5f3e0b9f8a9f080456d30a3effd9ffdf7edcc60935c3525101fced6ac"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.reactivate-party.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.reactivate-party.stdout.txt",
+      "bytes": 1203,
+      "sha256": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.search-parties.stdout.txt",
+      "bytes": 1953,
+      "sha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.search-parties.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.update-party.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/parties.update-party.stdout.txt",
+      "bytes": 13137,
+      "sha256": "4fa014790069345c9c918e771726edb662ccdf6dc8c189c725032056b6b44bb6"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/replay.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/replay.stdout.txt",
+      "bytes": 819,
+      "sha256": "edb38b0789b483ea8d6caefce6d272e909bf6bd56ecb55bc0648f39f5925ec7b"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/restore.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/restore.stdout.txt",
+      "bytes": 672,
+      "sha256": "5f82c14cfe5a79125b5b23c1f3cd110156e3a5013620fbdafbc633a8ff1fe83f"
+    },
+    {
+      "path": "Hexalith.Parties.Contracts/verification.json",
+      "bytes": 33622,
+      "sha256": "27a993086c272d4cf452e73ad53d5b66c8d32541ddb43cc07e2c8dafeafe75d6"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/acceptedLint.input.json",
+      "bytes": 1947,
+      "sha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/artifact.sha512",
+      "bytes": 137,
+      "sha256": "3c0be1cd52c22d8f5cceb6f61b735256b15a3b990cf3cc1fae9cb7dd551917cb"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/build.stdout.txt",
+      "bytes": 824,
+      "sha256": "cb981ba5f2464088ed2a44efc367b0ea1b55728e2e195e888721c5a02f9bdb82"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/catalog.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/catalog.stdout.txt",
+      "bytes": 29129,
+      "sha256": "9e221451edcc055f8ff18ab8c06638767fccac19255b5de1389fc3d477b8e2d0"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/artifacts/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+      "bytes": 52508,
+      "sha256": "6e054f5a126361b60e81ba2042c6b1a9ef303f8a416ee61c208354cfaa398234"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/0/add-user-to-tenant.vector.json",
+      "bytes": 4923,
+      "sha256": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/1/change-user-role.vector.json",
+      "bytes": 6324,
+      "sha256": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/10/remove-tenant-configuration.vector.json",
+      "bytes": 6506,
+      "sha256": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/11/remove-user-from-tenant.vector.json",
+      "bytes": 6203,
+      "sha256": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/12/set-tenant-configuration.vector.json",
+      "bytes": 4790,
+      "sha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/13/update-tenant.vector.json",
+      "bytes": 5001,
+      "sha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/2/create-tenant.vector.json",
+      "bytes": 3942,
+      "sha256": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/3/disable-tenant.vector.json",
+      "bytes": 4544,
+      "sha256": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/4/enable-tenant.vector.json",
+      "bytes": 5916,
+      "sha256": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/5/get-tenant-audit.vector.json",
+      "bytes": 12929,
+      "sha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/6/get-tenant-users.vector.json",
+      "bytes": 11118,
+      "sha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/7/get-tenant.vector.json",
+      "bytes": 6987,
+      "sha256": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/8/get-user-tenants.vector.json",
+      "bytes": 14612,
+      "sha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inputs-4845x90i/vectors/9/list-tenants.vector.json",
+      "bytes": 9174,
+      "sha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inventory.input.json",
+      "bytes": 15563,
+      "sha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inventory.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/inventory.stdout.txt",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/modules.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/modules.stdout.txt",
+      "bytes": 499,
+      "sha256": "3ed5c6e273fe7ae6ea7f1dd389095db1c14b198eac3be97293c81110ff92fbba"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/operations-tenants.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/operations-tenants.stdout.txt",
+      "bytes": 7106,
+      "sha256": "3dbb9c2518ccb6c717c8ad81a2dbe377270cef65981ab9a0255131cbb37f96b9"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/replay.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/replay.stdout.txt",
+      "bytes": 1687,
+      "sha256": "3288d92bacce919f053e1199f073620f42b6fd150b7e1d73def0f5ca714cc7ed"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/restore.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/restore.stdout.txt",
+      "bytes": 673,
+      "sha256": "bec05bd8fef25cf1d3849a5938cf09457b93676ccf341589703a2ae330add98b"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.change-user-role.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stdout.txt",
+      "bytes": 1758,
+      "sha256": "2677601e816410e799f06142d6492987981bf5d37247686324ce0d2c0d678624"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.change-user-role.stdout.txt",
+      "bytes": 1839,
+      "sha256": "0ef931a46b04eccc356d29802f423ea886a724343a9b6a70c37f6e15434bf58c"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.create-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.create-tenant.stdout.txt",
+      "bytes": 1544,
+      "sha256": "f6bbc404ef1af912361b0a1ccbc0728c886cfc56eb0f610024de4bb949f3fc69"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.disable-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.disable-tenant.stdout.txt",
+      "bytes": 970,
+      "sha256": "aed0a8002ca2c5c4a559bc4eeda33092cadfc23ef5763cc93cfe395ee1409a41"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.enable-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.enable-tenant.stdout.txt",
+      "bytes": 917,
+      "sha256": "18399cb84583224520f275e5a38fcde19ac5929e1152c9a8f3cbe224b126bf70"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stdout.txt",
+      "bytes": 3332,
+      "sha256": "dad30b9e38cb15f2ce933c2b9dc182446d94e8559ae715b8c1062d41ed3ce5e1"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant-users.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant-users.stdout.txt",
+      "bytes": 2029,
+      "sha256": "e8da26bc59772caa83a584abe5e2c29decd56da9634257e330a7710d6248fbec"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-tenant.stdout.txt",
+      "bytes": 1201,
+      "sha256": "36223181c0961b4bc15e475270b3f34435917ca26c35c097a791a94881b95b22"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-user-tenants.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.get-user-tenants.stdout.txt",
+      "bytes": 2506,
+      "sha256": "961e0af26486b19a256f7a7805899111120d271084a6e040b5d2328aed20241c"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.list-tenants.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.list-tenants.stdout.txt",
+      "bytes": 1822,
+      "sha256": "aa07a22e1231e723c30711a3e6c9cbfa64f09792ef187c203350e8eab2d4d381"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stdout.txt",
+      "bytes": 1066,
+      "sha256": "de8e8aa389c238cfaaccda0c2bd11f1b364b006bfcec26d803d753098e4ebb57"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stdout.txt",
+      "bytes": 1332,
+      "sha256": "538fe66a8abfbb722f250b4062b8161f9176719bb66f5c75f76ce53ec94a3393"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stdout.txt",
+      "bytes": 1519,
+      "sha256": "242263056647184488d014f478d89c54f3655438e11fc8dc42101b98a6a0d23d"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.update-tenant.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/tenants.update-tenant.stdout.txt",
+      "bytes": 1436,
+      "sha256": "438bb698dedfdbd7edb43755ca227beee5395f9b9ae0737984479b7e8b4f3f1d"
+    },
+    {
+      "path": "Hexalith.Tenants.Contracts/verification.json",
+      "bytes": 40444,
+      "sha256": "f04ab646380041afb1a9a06adf276097b0d38d7a6a7af98c83832a8a8231a0c8"
+    },
+    {
+      "path": "catalog-benchmark.json",
+      "bytes": 745,
+      "sha256": "5686ad59cf19e2c9d821d32c29726365a9b224e5c05d1fd13993b9fbf03a1d0e"
+    },
+    {
+      "path": "enrolled.json",
+      "bytes": 80641,
+      "sha256": "db19b926c8c921c7e10b436c105bb99a960c657c9ef362093742ed0cca883421"
+    },
+    {
+      "path": "production-build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "production-build.stdout.txt",
+      "bytes": 1015,
+      "sha256": "68cefeeea862fa7ba60f198271dd7acd6821a1e44848b942f421be984b441ca7"
+    },
+    {
+      "path": "production-observations/parties.create-party.CLI.gateway-error.json",
+      "bytes": 1405,
+      "sha256": "09dbf4d3abd7f95c4a8c58cee85246fc76c235bbe1683c39fbf8805b96595f6f"
+    },
+    {
+      "path": "production-observations/parties.create-party.CLI.json",
+      "bytes": 2576,
+      "sha256": "fd4ba69addb63951c33b9bf166e6b5d16b689eab237a58d9cc08b01db2da8811"
+    },
+    {
+      "path": "production-observations/parties.create-party.MCP.gateway-error.json",
+      "bytes": 1405,
+      "sha256": "b11047ff90863991964c4faa3ebd281b0e2fffa92ad09a7d88c73c3528410aeb"
+    },
+    {
+      "path": "production-observations/parties.create-party.MCP.json",
+      "bytes": 2576,
+      "sha256": "f400ac9115bd212c55fb1b55e2416c45c21d36e664d02d4977e284d72dfd53b7"
+    },
+    {
+      "path": "production-observations/parties.deactivate-party.CLI.gateway-error.json",
+      "bytes": 766,
+      "sha256": "0b696a804d4a695a0d0e4a07d0a02b2d5b7b38c66f2ce0b5ca5da87dd5f04412"
+    },
+    {
+      "path": "production-observations/parties.deactivate-party.CLI.json",
+      "bytes": 3616,
+      "sha256": "ba3d05159ff5a403d7593671a618f421389d9301711769171936aea54764e3ad"
+    },
+    {
+      "path": "production-observations/parties.deactivate-party.MCP.gateway-error.json",
+      "bytes": 766,
+      "sha256": "a8f912f96679135604125d958c13cb18aa9b6b6f5ec78324ad58a3073f85a1c9"
+    },
+    {
+      "path": "production-observations/parties.deactivate-party.MCP.json",
+      "bytes": 3616,
+      "sha256": "964329cb801e2321b6249b14a4b35e120392eb411c12bb3080d410fccae54bb5"
+    },
+    {
+      "path": "production-observations/parties.get-party.CLI.gateway-error.json",
+      "bytes": 755,
+      "sha256": "480cd36329b09b37cde03a75dedf7d504e39459419ccc770deede78357558ac2"
+    },
+    {
+      "path": "production-observations/parties.get-party.CLI.json",
+      "bytes": 2610,
+      "sha256": "bbcd5ee560212b7b07975eab0f1049b58f632a39a739e1fae63b22afe47e719e"
+    },
+    {
+      "path": "production-observations/parties.get-party.MCP.gateway-error.json",
+      "bytes": 755,
+      "sha256": "480cd36329b09b37cde03a75dedf7d504e39459419ccc770deede78357558ac2"
+    },
+    {
+      "path": "production-observations/parties.get-party.MCP.json",
+      "bytes": 2610,
+      "sha256": "603175a032af79b8d493ecf2e57c92374ae8f171be992ba0752eef32a9984a9a"
+    },
+    {
+      "path": "production-observations/parties.list-parties.CLI.gateway-error.json",
+      "bytes": 887,
+      "sha256": "fd62a7546fda0b8257ac62086f8e46fa3c99b12ca10222d04bf202756f7e7582"
+    },
+    {
+      "path": "production-observations/parties.list-parties.CLI.json",
+      "bytes": 2632,
+      "sha256": "5ada2485bc0026b2b267c0847474ab40face7bb2a3d62cc011528720120b897d"
+    },
+    {
+      "path": "production-observations/parties.list-parties.MCP.gateway-error.json",
+      "bytes": 887,
+      "sha256": "fd62a7546fda0b8257ac62086f8e46fa3c99b12ca10222d04bf202756f7e7582"
+    },
+    {
+      "path": "production-observations/parties.list-parties.MCP.json",
+      "bytes": 2632,
+      "sha256": "39b5a7adb4c90b63aac82e68efe183785b55f367a7b83970e8601a76fa2e2c19"
+    },
+    {
+      "path": "production-observations/parties.reactivate-party.CLI.gateway-error.json",
+      "bytes": 766,
+      "sha256": "b15005dc59ecf4dd6f1112a4c1b952f6d0b6daf1eb84e6d5e046ed39f47fc4e5"
+    },
+    {
+      "path": "production-observations/parties.reactivate-party.CLI.json",
+      "bytes": 3615,
+      "sha256": "6c2d704ffb8a4cda7c21edc2ccc76e4dc900eb67bb5d1ccf820ab34df24f917c"
+    },
+    {
+      "path": "production-observations/parties.reactivate-party.MCP.gateway-error.json",
+      "bytes": 766,
+      "sha256": "8379b07c74a9a4bc346e1d210a2fbf147ae6f19f1e261a4fbd5acb978e62529a"
+    },
+    {
+      "path": "production-observations/parties.reactivate-party.MCP.json",
+      "bytes": 3615,
+      "sha256": "bd9e7dafbb3bf65921ca4760ed834f7d16e7b13a70906c190ebcfdbd2269555f"
+    },
+    {
+      "path": "production-observations/parties.search-parties.CLI.gateway-error.json",
+      "bytes": 868,
+      "sha256": "7af4f3fe0e46788f6df62c1f3ab60f7189f2be7d6164af7b7c1afb5795dc2dfc"
+    },
+    {
+      "path": "production-observations/parties.search-parties.CLI.json",
+      "bytes": 2852,
+      "sha256": "1a29c8a17cee53425b3336029c472d9096562c8430ea3ac80c4b3f057d9eb53f"
+    },
+    {
+      "path": "production-observations/parties.search-parties.MCP.gateway-error.json",
+      "bytes": 868,
+      "sha256": "7af4f3fe0e46788f6df62c1f3ab60f7189f2be7d6164af7b7c1afb5795dc2dfc"
+    },
+    {
+      "path": "production-observations/parties.search-parties.MCP.json",
+      "bytes": 2852,
+      "sha256": "37f38cd75c7ee912a20877f8e801a2b68b93542bc41298d65201c316085ccfe9"
+    },
+    {
+      "path": "production-observations/parties.update-party.CLI.gateway-error.json",
+      "bytes": 1180,
+      "sha256": "73fa274bbe0dbd3061bcb4bea74a04d3a36153f44b22302a84d12e5eec6dd456"
+    },
+    {
+      "path": "production-observations/parties.update-party.CLI.json",
+      "bytes": 3566,
+      "sha256": "2cdb36799009f1f4b48c27fda0a28c2be8fc4ffa2e3a057a72eaded658eb5c4e"
+    },
+    {
+      "path": "production-observations/parties.update-party.MCP.gateway-error.json",
+      "bytes": 1180,
+      "sha256": "f716262653413f3a9d4a5e0e318ef13340a0116d5d97ad6e61283bb36f7a535d"
+    },
+    {
+      "path": "production-observations/parties.update-party.MCP.json",
+      "bytes": 3566,
+      "sha256": "b4c7542a89d9bf675b8ff88e7bdb6d0b59fc0eb91d8047c462672bb04bec3b51"
+    },
+    {
+      "path": "production-observations/preflight.json",
+      "bytes": 49507,
+      "sha256": "d114f22f9fa24068a2416f882eab06ff581f1e05012ace621b8769364e61bb52"
+    },
+    {
+      "path": "production-observations/tenants.add-user-to-tenant.CLI.gateway-error.json",
+      "bytes": 826,
+      "sha256": "01319fa8ced1efe9c580767eaddfcf8031364c46f0230aa0abeccbae394a9102"
+    },
+    {
+      "path": "production-observations/tenants.add-user-to-tenant.CLI.json",
+      "bytes": 2318,
+      "sha256": "7849ad2f703a9fa5a51afbdc7aabaacb1df8970c3d08002f0fc36ecd62d6fba0"
+    },
+    {
+      "path": "production-observations/tenants.add-user-to-tenant.MCP.gateway-error.json",
+      "bytes": 826,
+      "sha256": "b0d49b401050a337d1962910c70af3bc75d8d8ea2f538f1e2f7308d83ad6c674"
+    },
+    {
+      "path": "production-observations/tenants.add-user-to-tenant.MCP.json",
+      "bytes": 2318,
+      "sha256": "72647c290c7ae379503362010d4c97fb3f614e76d3209999802d2814a04652b4"
+    },
+    {
+      "path": "production-observations/tenants.change-user-role.CLI.gateway-error.json",
+      "bytes": 815,
+      "sha256": "94e3459cccc52605874a9cf69e1e2be491a6027b657bb043e369190abc41c94a"
+    },
+    {
+      "path": "production-observations/tenants.change-user-role.CLI.json",
+      "bytes": 3032,
+      "sha256": "e6ff920a1a2357c43af97968595d19b079123594fd8eaff8dc5b8bf7a2c3bdc4"
+    },
+    {
+      "path": "production-observations/tenants.change-user-role.MCP.gateway-error.json",
+      "bytes": 815,
+      "sha256": "7f778f9e98783496c520c6cf954044fd135245645b938741734e1ef7ce5e260b"
+    },
+    {
+      "path": "production-observations/tenants.change-user-role.MCP.json",
+      "bytes": 3032,
+      "sha256": "3d0cc2a453af8e94df1e529946519e01f111ba2d8763ad2a55ae2be3782898a8"
+    },
+    {
+      "path": "production-observations/tenants.create-tenant.CLI.gateway-error.json",
+      "bytes": 833,
+      "sha256": "97fd47a468a451123a4b202d7e1b9412885adb840aa35eeab4ef915faa8738a5"
+    },
+    {
+      "path": "production-observations/tenants.create-tenant.CLI.json",
+      "bytes": 1653,
+      "sha256": "f95936eb2b4c72e13aaf7fef71407623cf53a25621390f414086c0af8d17c170"
+    },
+    {
+      "path": "production-observations/tenants.create-tenant.MCP.gateway-error.json",
+      "bytes": 833,
+      "sha256": "2f393f4dabd85df62a02a164cdfb61b5cc6f15489d79322b7e9e5da44c34290a"
+    },
+    {
+      "path": "production-observations/tenants.create-tenant.MCP.json",
+      "bytes": 1653,
+      "sha256": "db3185704d2fc1a9b4421155ba38751078c95c1d88be3d4f3a3c0e49af7a500f"
+    },
+    {
+      "path": "production-observations/tenants.disable-tenant.CLI.gateway-error.json",
+      "bytes": 730,
+      "sha256": "f2ef01be65a6eebb72c1e961c47fa944e897f72a7f83462ea239b917cc4e48d5"
+    },
+    {
+      "path": "production-observations/tenants.disable-tenant.CLI.json",
+      "bytes": 2244,
+      "sha256": "bd8eae2755b85cec04f80c3faabfb6bc2cd6ef145a76fe5c953980238ff4e07d"
+    },
+    {
+      "path": "production-observations/tenants.disable-tenant.MCP.gateway-error.json",
+      "bytes": 730,
+      "sha256": "db767cb897e2082e8980450048a30096161808a5dfa798cc04f2b04381312b5a"
+    },
+    {
+      "path": "production-observations/tenants.disable-tenant.MCP.json",
+      "bytes": 2244,
+      "sha256": "f322a2963f85052c0ec7635c936ef3e65cf8c834abfc834fd88776e0a13802da"
+    },
+    {
+      "path": "production-observations/tenants.enable-tenant.CLI.gateway-error.json",
+      "bytes": 726,
+      "sha256": "6c9163f1db0eed375a1092707cd3de7b14830ec563af65b24125a3e34ffa39e9"
+    },
+    {
+      "path": "production-observations/tenants.enable-tenant.CLI.json",
+      "bytes": 2887,
+      "sha256": "7907ade2f83f7bee8922716d0fddc0908c092e4985e5b6c44f50ad109306cd0c"
+    },
+    {
+      "path": "production-observations/tenants.enable-tenant.MCP.gateway-error.json",
+      "bytes": 726,
+      "sha256": "037c4da9e4ebb2822152c3523265d2bbd36112ab915a2ca8376b509a557461e2"
+    },
+    {
+      "path": "production-observations/tenants.enable-tenant.MCP.json",
+      "bytes": 2887,
+      "sha256": "2524aa94f39fd3a639c2266ac03c1996964d1e2344cf2b3d44fe800cd0040f27"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-audit.CLI.gateway-error.json",
+      "bytes": 827,
+      "sha256": "f78ca0de89b47d77d69d641f63ac0b6693f65acb96f41af720f4392ff0e3d819"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-audit.CLI.json",
+      "bytes": 6185,
+      "sha256": "ca531d619d204fe73f66161d7bd108a0382bef112112985fe6241e432d0beff4"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-audit.MCP.gateway-error.json",
+      "bytes": 827,
+      "sha256": "f78ca0de89b47d77d69d641f63ac0b6693f65acb96f41af720f4392ff0e3d819"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-audit.MCP.json",
+      "bytes": 6185,
+      "sha256": "423d554153f9699635c4ed1b9fb51de4766ec3899fb27efa1d0b55ad8bfc6cad"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-users.CLI.gateway-error.json",
+      "bytes": 713,
+      "sha256": "e748dfdd10746a56cccbe60afc80a0a17a9899da3959a0c673e3d445ff2b2d7b"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-users.CLI.json",
+      "bytes": 4936,
+      "sha256": "553fa5d92ec0f3092a6bf599003dd279d907dc40b44b56c8b3c1b823ffe07074"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-users.MCP.gateway-error.json",
+      "bytes": 713,
+      "sha256": "e748dfdd10746a56cccbe60afc80a0a17a9899da3959a0c673e3d445ff2b2d7b"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant-users.MCP.json",
+      "bytes": 4936,
+      "sha256": "c3d4acbf95741c04878cd44689e4d8eda45ae577f332e0a37dc6718fc7409cb3"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant.CLI.gateway-error.json",
+      "bytes": 644,
+      "sha256": "543a5073523270b24a4c108c911894a0c74177c0e8cb312ddb27295e19a464a7"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant.CLI.json",
+      "bytes": 3232,
+      "sha256": "d0f6954c2ff5d9935ad35ec58d41568ab60b07cc0abdb871784c5d4b1e6d25ac"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant.MCP.gateway-error.json",
+      "bytes": 644,
+      "sha256": "543a5073523270b24a4c108c911894a0c74177c0e8cb312ddb27295e19a464a7"
+    },
+    {
+      "path": "production-observations/tenants.get-tenant.MCP.json",
+      "bytes": 3232,
+      "sha256": "2dd705df06f9fb203185f736adf27a72ad8092f6cda6c9c88ed47a9ce10d1c30"
+    },
+    {
+      "path": "production-observations/tenants.get-user-tenants.CLI.gateway-error.json",
+      "bytes": 722,
+      "sha256": "d434202efc35ecc2697b1bf1888e9d511c76a6d2904f0241931a73b7ea5b2016"
+    },
+    {
+      "path": "production-observations/tenants.get-user-tenants.CLI.json",
+      "bytes": 6744,
+      "sha256": "633e93c2da431c7b0e8a17ae6bcfb657eb2ef8f9bac30aad2cb6f18a4ecc4e3b"
+    },
+    {
+      "path": "production-observations/tenants.get-user-tenants.MCP.gateway-error.json",
+      "bytes": 722,
+      "sha256": "d434202efc35ecc2697b1bf1888e9d511c76a6d2904f0241931a73b7ea5b2016"
+    },
+    {
+      "path": "production-observations/tenants.get-user-tenants.MCP.json",
+      "bytes": 6744,
+      "sha256": "3f7c1b57ea09a8850a82a59077bff9563ae760e7502955f984dac665af6563f6"
+    },
+    {
+      "path": "production-observations/tenants.list-tenants.CLI.gateway-error.json",
+      "bytes": 657,
+      "sha256": "0209154b704e6148b5a89de01700b2670e6b2d7ef55283a4a726ffa5339fe321"
+    },
+    {
+      "path": "production-observations/tenants.list-tenants.CLI.json",
+      "bytes": 4090,
+      "sha256": "1b9205945263fb6c963dd4fa7d8d1f181e4b7f156735122acfab05928a571e8d"
+    },
+    {
+      "path": "production-observations/tenants.list-tenants.MCP.gateway-error.json",
+      "bytes": 657,
+      "sha256": "0209154b704e6148b5a89de01700b2670e6b2d7ef55283a4a726ffa5339fe321"
+    },
+    {
+      "path": "production-observations/tenants.remove-tenant-configuration.CLI.gateway-error.json",
+      "bytes": 804,
+      "sha256": "1d3ebd01ab2a001b3959c4fc67ca1b15a2d69c236389297f1b2bc2545ca437dc"
+    },
+    {
+      "path": "production-observations/tenants.list-tenants.MCP.json",
+      "bytes": 4090,
+      "sha256": "e68ba856caf5c1ff043ac8254edf148d087883bdb0bfd870b149aceec14b2a2d"
+    },
+    {
+      "path": "production-observations/tenants.remove-tenant-configuration.CLI.json",
+      "bytes": 3175,
+      "sha256": "d65b64661f6a1d0c4b66816f8fc64d4e2ffc872ee949af1b001d062b0040cff5"
+    },
+    {
+      "path": "production-observations/tenants.remove-tenant-configuration.MCP.gateway-error.json",
+      "bytes": 804,
+      "sha256": "4008e0423d2ff9086618557878b623eb75c5a3fbedafeb2ff380c0086694efee"
+    },
+    {
+      "path": "production-observations/tenants.remove-tenant-configuration.MCP.json",
+      "bytes": 3175,
+      "sha256": "c610135a6539346d462c15db9f8bd246fca7dbb6a5e9d1929dfcad8fa3c7c603"
+    },
+    {
+      "path": "production-observations/tenants.remove-user-from-tenant.CLI.gateway-error.json",
+      "bytes": 798,
+      "sha256": "cad3d9270a961d517894ee8422fb1311c601d844cb3576344545088b00ea5ab4"
+    },
+    {
+      "path": "production-observations/tenants.remove-user-from-tenant.MCP.gateway-error.json",
+      "bytes": 798,
+      "sha256": "4e0b75ed94eb217c5ade97a31464501d3eeec41d61ad2cc57030f0d9d9ea5b4a"
+    },
+    {
+      "path": "production-observations/tenants.remove-user-from-tenant.CLI.json",
+      "bytes": 2924,
+      "sha256": "7462706a03ba33b6ad109f054a2b2c753ab6f33b319909149ba2d541d25d28c3"
+    },
+    {
+      "path": "production-observations/tenants.remove-user-from-tenant.MCP.json",
+      "bytes": 2924,
+      "sha256": "abc2f128b417e9cd2120babeff2e41822c38c99c9b8b273d80dd76fea82aae5e"
+    },
+    {
+      "path": "production-observations/tenants.set-tenant-configuration.CLI.gateway-error.json",
+      "bytes": 815,
+      "sha256": "d31b8ab01d9a675f0fe816dbc21d4d9ea62f8d31704c44486a33a11805c9ea12"
+    },
+    {
+      "path": "production-observations/tenants.set-tenant-configuration.CLI.json",
+      "bytes": 2390,
+      "sha256": "fb728f321deae508c4ed3ac22567236f12e58a03f4891ab02de20064ac710fa7"
+    },
+    {
+      "path": "production-observations/tenants.set-tenant-configuration.MCP.gateway-error.json",
+      "bytes": 815,
+      "sha256": "1413e651f6a06008041321a7b747331f5060276f96404856e9305bd409de566d"
+    },
+    {
+      "path": "production-observations/tenants.set-tenant-configuration.MCP.json",
+      "bytes": 2390,
+      "sha256": "ca797020fb8b18139262666f450ad8944b36e76e6ed9fe9fee88cf525726ca86"
+    },
+    {
+      "path": "production-observations/tenants.update-tenant.CLI.gateway-error.json",
+      "bytes": 801,
+      "sha256": "2e67d43163c9487e121410c4d3cd283d936ca5aa91fe77395670cffb5c615d2e"
+    },
+    {
+      "path": "production-observations/tenants.update-tenant.CLI.json",
+      "bytes": 2351,
+      "sha256": "2482a75ac9cecadb86eda55f38f73b3778a5ecdf8ca72baec0b9e85acac0f3ed"
+    },
+    {
+      "path": "production-observations/tenants.update-tenant.MCP.gateway-error.json",
+      "bytes": 801,
+      "sha256": "56fe9e90793533a582b571b35e58c7c8b5d043f953da146f57771209cec22d84"
+    },
+    {
+      "path": "production-observations/tenants.update-tenant.MCP.json",
+      "bytes": 2351,
+      "sha256": "65d40c11f7f3e3e368542fe26f521368dc97e8aeb5dfbbcaae82c91825812698"
+    },
+    {
+      "path": "production-replay.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "production-replay.stdout.txt",
+      "bytes": 2506,
+      "sha256": "2ff57a5ab4c21479933c49ad154e99bda7ab91e68861aa7b2f4d6a99413b3ce5"
+    },
+    {
+      "path": "production-restore.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "production-restore.stdout.txt",
+      "bytes": 234,
+      "sha256": "55e2bb09a14495bec5ff047863f15c7efe82d62388fa90cb7eefe126d8dc84c7"
+    }
+  ],
+  "evidenceLimit": "Actual strict Ubuntu transport parity and cold Catalog gates passed. Sample full fixture and final BMAD review remain pending; no live authorization/privacy/persisted effects/retirement claim.",
+  "fullStoryAccepted": false
+}

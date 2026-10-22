@@ -1,0 +1,27 @@
+{
+  "status": "prepared; owner policy decision required; not applied",
+  "recordedAtUtc": "2026-10-21T21:28:17.537524+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "rulesetId": 19196298,
+  "sha256": {
+    "snapshot.json": "749511048e2322568522c33de960d942fd5a9231bbb9a2e140f04766ae81a422",
+    "update-body.json": "57904394d38932a8ccaa4e485416c62c611f412c4734b0af0c0a6bf5b4c52f39",
+    "rollback-body.json": "ad8dbdbdfebbe36fe4d00b1cf4a291e0e490392517eca5ac324991c3095644b9"
+  },
+  "onlyWritableDifference": "pull_request.parameters.allowed_merge_methods: [squash] -> [squash, merge]",
+  "allOtherWritableFieldsPreserved": true,
+  "rollbackBodyMatchesOriginalWritableSnapshot": true,
+  "existingRepositoryMergeCommitsAllowed": true,
+  "existingRequiredPrStrictChecksAppsReviewsAndBypassActors": "unchanged",
+  "permittedOperationalUse": [
+    "One normally checked EventStore dependency declaration/audit PR",
+    "One normally checked Tenants dependency declaration/audit PR"
+  ],
+  "serverScopeDisclosure": "The allowed method applies to the main ruleset during the temporary window; GitHub does not constrain this field to selected PR numbers. Operational use is limited to the two identified pin PRs.",
+  "applicationPrecondition": "Explicit owner approval and fresh exact writable-settings equality to this snapshot; stop rather than overwrite any foreign policy change.",
+  "restoreRequirement": "Restore the exact original squash-only writable snapshot immediately after each designated normal merge; verify all other settings unchanged. Recheck snapshot equality before both temporary enablements and both restorations.",
+  "endpoint": "repos/Hexalith/Hexalith.Builds/rulesets/19196298",
+  "method": "PUT",
+  "noApiMutationPerformed": true,
+  "preferredTemporaryWindows": "Enable merge only immediately before each of the two designated fully checked pin PR merges; restore original squash-only immediately after each."
+}

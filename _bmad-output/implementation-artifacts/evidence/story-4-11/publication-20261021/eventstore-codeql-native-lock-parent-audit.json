@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-22T00:57:33.039982+00:00",
+  "source": "af6299d49f72d3aed38b3ed7c6a97ff0f53fe6fa",
+  "scope": "Independent parent retrospective audit against later clean-checkout baseline, including all regular/symlink tracked blob bytes; original prospective preservation scope remains16248selected files.",
+  "baselineSha256": "a2fded92a56eab81ca4aef1634bf641633ac263680c18f60c6609a62db1f0a42",
+  "generatedRewriteReceiptSha256": "41a5937b03f36b91db54cd159c0f5c126eae88b054465de3ca8544646d70614e",
+  "ablationPrivateReplacementCopiesRehashed": 362,
+  "runs": [
+    {
+      "version": "2.27.2",
+      "trackedBlobsRehashed": 45327,
+      "exactExpectedGeneratedLockRewrites": 362,
+      "otherDifferences": 0
+    },
+    {
+      "version": "2.27.3",
+      "trackedBlobsRehashed": 45327,
+      "exactExpectedGeneratedLockRewrites": 362,
+      "otherDifferences": 0
+    }
+  ],
+  "result": "passed",
+  "securityQualification": false,
+  "productionAccepted": false
+}

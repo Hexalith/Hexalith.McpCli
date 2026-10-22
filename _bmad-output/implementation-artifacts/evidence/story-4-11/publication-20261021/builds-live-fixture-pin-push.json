@@ -1,0 +1,23 @@
+{
+  "recordedAtUtc": "2026-10-22T02:31:17.990300+00:00",
+  "repository": "Hexalith/Hexalith.Builds",
+  "pullRequest": 130,
+  "head": "6dd10644de86dd0656df0653a8a1f143f07352cf",
+  "base": "25ba30d666284a32b3361272dd0f5c59a7964679",
+  "pushCommand": [
+    "git",
+    "push",
+    "origin",
+    "HEAD:refs/heads/fix/published-family-audit"
+  ],
+  "pushExitCode": 0,
+  "priorRemoteBranch": "85290197d2a4324b50560630e8992d71c3318784",
+  "titleLintExitCode": 0,
+  "bodySha256": "57988673dc2f88694d140257c1fae0668566fd83b1b8a336b2bf5de393511d65",
+  "workingStatus": "",
+  "fullQualification": "builds-live-fixture-pin-package-qualification.json",
+  "remoteGatesPending": true,
+  "merged": false,
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

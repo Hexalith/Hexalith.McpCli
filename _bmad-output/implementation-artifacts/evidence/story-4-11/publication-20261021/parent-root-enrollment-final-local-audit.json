@@ -1,0 +1,136 @@
+{
+  "checkedAtUtc": "2026-10-22T04:39:20.721627+00:00",
+  "result": "passed",
+  "scope": "Parent independently read actual final assets/deps/cache metadata/raw signed packages/shipped DLLs, all six built offline CLI stdout/stderr documents and all five existing Python/sample/final-restore-build command logs. No tests rerun and no root strict production or Ubuntu acceptance inferred.",
+  "packages": [
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "3.126.1",
+      "rawSignedArchiveSha512": "sha512-vnZhAt055+sS//VCTZ7Fa5fONeOc+I9gyA54/x++52z0vdvCObGoD3JYjMJuDMcWQ3PWtt6ClJsUkwOg0XUDjA==",
+      "logicalNuGetContentHash": "sha512-x7xWMGJfAAVh6ILX5sicFhb77DnYC2Y3K1bnyrBRJSGGt2TcxPSBJaxkogKAlsEPaL39Yzz51TwoishLBNtuPg==",
+      "rawArchiveAndShippedDllMatch": true
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "3.126.1",
+      "rawSignedArchiveSha512": "sha512-yvA2kbvDl34vfzoYIZXohfAasqqcds7k7dGefu5ocNSlZO0Z6PwwJ9O7SvHMxpN4qu35+lma4ZVpUcFhOPpEjw==",
+      "logicalNuGetContentHash": "sha512-ZMdL54lY8nZmFMU4FnxpZudbumAbWnhnXwPzyMnD7SVVGUb1AGG+Cac3oERVBvH0OHAjWkDeLSTazffmy9k+oQ==",
+      "rawArchiveAndShippedDllMatch": true
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "rawSignedArchiveSha512": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "logicalNuGetContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+      "rawArchiveAndShippedDllMatch": true
+    },
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "rawSignedArchiveSha512": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "logicalNuGetContentHash": "sha512-0OJgZQp/ZNP0qusp9uuMNmrnXFmUU6iM3YP6XmPppOLgJZikDue+JctyT+Hxux5lQ6AW+1tpXtRAVskvsW5vaQ==",
+      "rawArchiveAndShippedDllMatch": true
+    }
+  ],
+  "offlineCliClaims": [
+    {
+      "verb": "modules",
+      "exitCode": 0,
+      "stdoutSha256": "9bc10f3ac31a3340537f686d2aa35c8027dc9dc87acf60cc0f2aa3cdf83b79da",
+      "stderrEmpty": true
+    },
+    {
+      "verb": "modules",
+      "exitCode": 0,
+      "stdoutSha256": "9bc10f3ac31a3340537f686d2aa35c8027dc9dc87acf60cc0f2aa3cdf83b79da",
+      "stderrEmpty": true
+    },
+    {
+      "verb": "operations",
+      "exitCode": 0,
+      "stdoutSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+      "stderrEmpty": true
+    },
+    {
+      "verb": "operations",
+      "exitCode": 0,
+      "stdoutSha256": "3dbb9c2518ccb6c717c8ad81a2dbe377270cef65981ab9a0255131cbb37f96b9",
+      "stderrEmpty": true
+    },
+    {
+      "verb": "describe",
+      "exitCode": 0,
+      "stdoutSha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269",
+      "stderrEmpty": true
+    },
+    {
+      "verb": "describe",
+      "exitCode": 0,
+      "stdoutSha256": "36223181c0961b4bc15e475270b3f34435917ca26c35c097a791a94881b95b22",
+      "stderrEmpty": true
+    }
+  ],
+  "pythonSampleAndFinalRestoreBuild": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 18.770732429999043,
+      "logHashesVerified": true
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 22.03725592599949,
+      "logHashesVerified": true
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 703.7757739390072,
+      "logHashesVerified": true
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.3570564740075497,
+      "logHashesVerified": true
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.817646909999894,
+      "logHashesVerified": true
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

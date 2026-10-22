@@ -1,0 +1,311 @@
+{
+  "status": "pending",
+  "purpose": "Review the exact unpublished Tenants declaration/vector candidate and the required upstream package/source continuation; this receipt grants no approval or publication authority.",
+  "createdAtUtc": "2026-10-21T17:24:12.671435+00:00",
+  "fullV1Accepted": false,
+  "productionAccepted": false,
+  "published": false,
+  "enrolled": false,
+  "tenants": {
+    "sourceCommit": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+    "sourceTree": "18393b0d0a3293af0a13a4b9580cffcbaea72b8d",
+    "buildsRevision": "17d0c6ffec5fb3c8d8058e67cb85644460cb5256",
+    "packageVersion": "5.10.0",
+    "effectiveDependencyOverride": "HexalithEventStoreVersion=3.126.1 in isolated package proof only; no committed Builds or gitlink change exists",
+    "artifact": {
+      "path": "candidate-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "sha512": "sha512-OWY5HUWkLNlna5Nxgd2ZafCkbHKEHYOjkQ+sXxUGnFRvRbhI3jVebPfEoG3iA2i4L+grlSFycAr8pBuhuMODcQ==",
+      "sha256": "e7a1e3baa26f4eaf266a57db633761ab74dc998ee8f601addb2a87cd6aaefe26",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Tenants",
+        "commit": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4"
+      },
+      "dependencies": [
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "3.126.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.McpCli.Abstractions",
+          "version": "1.0.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "filesSha256": {
+        "Hexalith.Tenants.Contracts.nuspec": "e2529e40e79573b1128922973938d8ce82c981cf5836da406556bf2300f4dd72",
+        "README.md": "0251095cbbd3359bbc394201e615cf120f66fc05958a8f77aec27d4555341204",
+        "[Content_Types].xml": "1a6670ec6cb20a6520f5d6b9be859fcd7416bef2ba0e8e40bfbf0aaab5409e4f",
+        "_rels/.rels": "bc5f183aa426d337523b85bcc12da404e33566c7e1b62305465f1ee298b5033f",
+        "lib/net10.0/Hexalith.Tenants.Contracts.dll": "5819ccb5286aeda0962c606507d3404e39235a36718730568f07b862e2a20ba8",
+        "package/services/metadata/core-properties/nuget.psmdcp": "c71c7f11dca5fbad32b49e139c822c9ee29d43ae81da861c4bc20ed52606a791"
+      }
+    }
+  },
+  "eventstorePrerequisite": {
+    "sourceCommit": "b6d1807035fba2e485c8587ac3581d669d1036e5",
+    "buildsRevision": "2744d549270298cfe73679f76b477a7368429006",
+    "packageVersion": "3.126.1",
+    "firstNativeSourceProofCommit": "a07265f00994a3ad093184cec0f329d11184c3e9",
+    "publishedApiPackage": "Hexalith.EventStore.Contracts@3.126.0",
+    "publishedApiHasNativeSourceProof": false,
+    "proofPackages": [
+      {
+        "path": "candidate-packages/Hexalith.EventStore.Client.3.126.1.nupkg",
+        "packageId": "Hexalith.EventStore.Client",
+        "version": "3.126.1",
+        "sha512": "sha512-yjXQNOkqI1yFH7/17tXFwLK8xhgKeF+P6NMOrOPFc6glImKZQKSl1MWz8rsLUwONsS+1BGAUl6l9MFdr2T+Dxg==",
+        "sha256": "7f72ff1ff3a9277719cffee78b6909ec43f5da19a8e38a0be28764fae8283d9e",
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "b6d1807035fba2e485c8587ac3581d669d1036e5"
+        },
+        "dependencies": [
+          {
+            "id": "Hexalith.EventStore.Contracts",
+            "version": "3.126.1",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Dapr.Client",
+            "version": "1.18.10",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.AspNetCore.DataProtection.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Configuration.Binder",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Hosting.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Http",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "ByteAether.Ulid",
+            "version": "1.4.2",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Hexalith.Commons.UniqueIds",
+            "version": "2.30.3",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Configuration",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Configuration.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.DependencyInjection",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Logging.Abstractions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Options",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+            "version": "10.0.13",
+            "exclude": "Build,Analyzers"
+          }
+        ],
+        "filesSha256": {
+          "Hexalith.EventStore.Client.nuspec": "0be725c60eef0d8a9a6796fbf021cc0d2d438a85d1c6a1bb52b99247f1dbdca4",
+          "README.md": "14ac28b1831d810641cda96889a50251188147199aaed90b30445e9f4d0bcb70",
+          "[Content_Types].xml": "70b483c5066b0f062f2102cd8f0c4b2fde9e919b5a9204689dd67e64b0cc518e",
+          "_rels/.rels": "9dd13fd44aefaac60aa28298c6029cde32ef819fa99246a418bc1edab8a169cd",
+          "lib/net10.0/Hexalith.EventStore.Client.dll": "87c130aa0e87f9442dd8e5cfb2bf97a679c28c99064898ca9a513ef7cb8cc6db",
+          "lib/net10.0/Hexalith.EventStore.Client.xml": "d324708732b323f362f1458a0ae4a3084c30452082f1584984abb666cb27ffd0",
+          "package/services/metadata/core-properties/nuget.psmdcp": "e4eed49f45eeab19a015fe8eff25ef3462d3be0ebe602b5dab36fdca9948c7d2"
+        }
+      },
+      {
+        "path": "candidate-packages/Hexalith.EventStore.Contracts.3.126.1.nupkg",
+        "packageId": "Hexalith.EventStore.Contracts",
+        "version": "3.126.1",
+        "sha512": "sha512-+FD1yOdOtzkFSeelhNEo6znaiHcyFC4i0ryNwr5xeYpIcg/vulrPYb0sgLDO+bWx7wzsfUK+UCt/dtS/pxWjPw==",
+        "sha256": "9a909165b3bd1de3e8f3b94f4a561a0bc1e27031dd31dcf390129a870bdebc69",
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "b6d1807035fba2e485c8587ac3581d669d1036e5"
+        },
+        "dependencies": [
+          {
+            "id": "Hexalith.Commons.UniqueIds",
+            "version": "2.30.3",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "ByteAether.Ulid",
+            "version": "1.4.2",
+            "exclude": "Build,Analyzers"
+          }
+        ],
+        "filesSha256": {
+          "Hexalith.EventStore.Contracts.nuspec": "8e6b1a7059f000d32beae7404039850df7e5e27911378625ce27080c0898b9e7",
+          "README.md": "14ac28b1831d810641cda96889a50251188147199aaed90b30445e9f4d0bcb70",
+          "[Content_Types].xml": "70b483c5066b0f062f2102cd8f0c4b2fde9e919b5a9204689dd67e64b0cc518e",
+          "_rels/.rels": "ff09ede05b132f352960a39e3bf4fafa3d7487a7ffdd26fe4eb7e3e9a04ad0db",
+          "lib/net10.0/Hexalith.EventStore.Contracts.dll": "9581679c2a91a3c9a08d91a1d9db33fd35b8e4f70c95e1c6f7b3cbd3a89749ab",
+          "lib/net10.0/Hexalith.EventStore.Contracts.xml": "15ac2cf3d78f955f5fc7c651fe76df780b1322e1e531d33c01bc3b3637f56318",
+          "package/services/metadata/core-properties/nuget.psmdcp": "ff3fabb48b7cfb51b05a58adf55ce572df7547f384864d07f6475ef404b6757b"
+        }
+      }
+    ],
+    "workingTree": "Contains unrelated uncommitted Story 3.22/test/tool edits. Proof uses committed source only; those edits are preserved and no full upstream release is certified."
+  },
+  "candidateVectorCount": 14,
+  "proposedInventory": {
+    "path": "inventory-candidate.json",
+    "included": 14,
+    "excluded": 6,
+    "decisions": "All 20 pending. ResolveTenantReadAuthority is a new proposed internal-authorization exclusion beyond the five Story 4.8 exclusions."
+  },
+  "inputsSha256": {
+    "source.json": "81272f9bd53eee32ea393df55ac1df62bdb591a35dffec453736c0ba39aa3a17",
+    "source-files.sha256.json": "757ba5c752b731c24a52a30f7b1724e154d995a56893c07b4b936412dcd2e0a9",
+    "eventstore-source.json": "279062e94ecb45b2b18235b382e9807c9c6f694bff7890d3e36dc723200435c2",
+    "eventstore-source-files.sha256.json": "c160dc3b7916d5e5ca0a1dcaf6fa03d4e350cf77cab0a38e2526f29bdca01071",
+    "package-candidates.json": "ec26f71bafdbb039a74dbe35bf7c4a2344c02de01fd91393559171e72a333b80",
+    "tenants-version-analysis.json": "652a06c5fc4437cf6278397279b40352373739fdf3869afa1c986e8c20ae2c57",
+    "eventstore-version-analysis.json": "078d0969ef8a66c0aeb991721dcb8b84bacaaa1eab14ac772c54fd22cef2681c",
+    "vector-rebinding.json": "a6564da61fd566d7f74161adb10a972e0372f15277f20c0c8680f22baccf11b5",
+    "inventory-candidate.json": "c4cfb4008d781e87d742854f0c4e6bc0acb6ac71e8acbc705326a3680d012431",
+    "accepted-lint.json": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+    "description-review-input.json": "00851e9ca514c8d56570ceb30f09ef0cbf3dd8c11311ba04fbed85a1b8340a5d",
+    "proposed-prerequisites-and-enrollment.patch": "b5db4fb043fcd3efb36ca92e76f001780c3a270c47457dd8d88acaacdbd7ef85",
+    "dependency-delta.json": "f44b3375e1259909873c7087ec90eabd7071b8c71e1ab6e7f25e482558007916",
+    "artifact-verification/verification.json": "22c9d2ccb8554b44562b5c4e2fd5b3f08fce0962131f64157d19baf874006c44",
+    "candidate-benchmark.json": "c47918267ffa9ad3bab9216e704717a99d84826cd2bd7ee175a644b7d8f0c865",
+    "candidate-replay.json": "47d0d22b649dd66ac909c13613b617834889bda6dcbba67844b144b627977148",
+    "replay-check.json": "713209193bec85f2ee9996c8265453f51aa3246680c36b77e66c231c08c71da2",
+    "combined-checks.json": "28fada48728f08cce6c107d1de9473be3d40f549198a437715cc1d78cfd4adbd",
+    "additional-checks.json": "78c1fd7bb2c40c4934a9d32d88a4005dad79223370c8f25cbe88ca87df678f39",
+    "checks.json": "5fcd09c7ea0e5df175fddbd2312f495513db0b668846d4477aa79d058128ab6c",
+    "approval-plan.md": "df0cad05c8549102d976bf5421bbd73bbd0441b7a0ed223bc2c1ee070a591672",
+    "execution-state.json": "3018da39e4033bfd01b999a2b728b4b5ebfd1a33bb25caf297d527969529a102",
+    "description-review.md": "6b4e3ada654a6fc3b5b8ee5b4e863f0e18eb22e4dd7b73628f11a6e93645a5c1"
+  },
+  "requiredActions": [
+    "Review the current EventStore committed-source proof and independently finish/review any intended upstream changes; do not publish a dirty workspace or substitute this Contracts/Client proof for the full release gates.",
+    "If separately authorized, publish the exact approved EventStore main source through its existing fourteen-package/container workflow after exact-source ci.yml, p1r-qualification.yml, commitlint.yml and production approval. Recompute the version and refresh this packet if source/history changes.",
+    "Commit the approved EventStore version in the owning Builds repository and update Tenants/McpCli root Builds gitlinks. The isolated proposed-prerequisites-and-enrollment.patch is a review draft, not a completed upstream dependency fix.",
+    "Rebuild all five Tenants release packages and its container from the resulting exact source, run normal source CI, record the description review in the owner change record, obtain exact-candidate/source publication approval, and use the protected Tenants workflow. No Contracts-only publisher is proposed.",
+    "Download immutable final published Contracts archives, record exact identity/source/raw sha512 and restore content hashes, mechanically rebind only package.version in the vectors, rerun artifact verification and obtain release-bound owner approval before enrollment. A different package hash/source/version is not implicitly approved by this pending packet.",
+    "After authentic vector and inventory approval, add the release-bound receipt, approved release inventory, versionless flagged Tenants PackageReference and exact dependency policy pins. Restore and run all required McpCli build/test/conformance gates.",
+    "Run unchanged strict check_enrolled.py and MCPCLI_BENCHMARK_REQUIRE_V1=true against both actually published/enrolled production modules on ubuntu-latest. Only that evidence can complete Story 4.11."
+  ],
+  "publicationScopes": {
+    "EventStore": {
+      "nugetPackages": [
+        "Hexalith.EventStore.Contracts",
+        "Hexalith.EventStore.Client",
+        "Hexalith.EventStore.Server",
+        "Hexalith.EventStore.SignalR",
+        "Hexalith.EventStore.Testing",
+        "Hexalith.EventStore.Testing.Integration",
+        "Hexalith.EventStore.Aspire",
+        "Hexalith.EventStore.ServiceDefaults",
+        "Hexalith.EventStore.DomainService",
+        "Hexalith.EventStore.RestApi.Generators",
+        "Hexalith.EventStore.Gateway",
+        "Hexalith.EventStore.Admin.Abstractions",
+        "Hexalith.EventStore.Admin.Cli",
+        "Hexalith.EventStore.Admin.Server"
+      ],
+      "container": "src/Hexalith.EventStore/Hexalith.EventStore.csproj -> eventstore (existing two-platform workflow)",
+      "localProofScope": "Only Contracts and Client packed; no upstream tests/full release/OCI readiness claim"
+    },
+    "Tenants": {
+      "nugetPackages": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "container": "src/Hexalith.Tenants/Hexalith.Tenants.csproj -> tenants",
+      "localProofScope": "Only Contracts packed with an unpublished dependency override; no upstream full release/OCI readiness claim"
+    }
+  },
+  "limits": [
+    "Unpublished source snapshots and local package bytes only. No production references or enrollment changed.",
+    "Loopback establishes transport parity, not live authorization, privacy sanitization, persisted effects, or retirement permission.",
+    "The strict production gates and Story 4.11 in-progress status remain unchanged.",
+    "No owner approval, upstream green CI, publication, source merge, gitlink update, or release inventory approval is inferred."
+  ],
+  "candidateVerification": {
+    "independentTenantsOperations": 14,
+    "combinedCandidateOperations": 21,
+    "candidateDependencyTestsPassed": 98,
+    "isolatedStringTestPassed": true,
+    "firstCatalogConstructionMilliseconds": 148.0593,
+    "fullV1Accepted": false,
+    "productionAccepted": false,
+    "descriptionReview": {
+      "status": "pending",
+      "input": "description-review-input.json"
+    }
+  },
+  "executedCombinedReplayInput": {
+    "statePath": "/tmp/mcpcli-story411-tenants-state.json",
+    "retainedState": "execution-state.json",
+    "sha256": "3018da39e4033bfd01b999a2b728b4b5ebfd1a33bb25caf297d527969529a102"
+  },
+  "descriptionReview": {
+    "result": "pass-with-notes",
+    "blockingFindings": 0,
+    "advisoryFindings": 1,
+    "report": "description-review.md",
+    "input": "description-review-input.json",
+    "scope": "Public discovery text only; linkage from the owning release/change record remains required."
+  }
+}

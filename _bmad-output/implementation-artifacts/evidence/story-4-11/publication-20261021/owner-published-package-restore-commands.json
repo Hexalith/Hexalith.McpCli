@@ -1,0 +1,64 @@
+{
+  "startedAtUtc": "2026-10-22T01:07:33.439614+00:00",
+  "scope": "Restore-only archive/content-hash audit for authentic owner packages; isolated18-package project and normal tool installation for the DotnetTool package, outside McpCli production graph.",
+  "privateRoot": "/tmp/mcpcli-story411-owner-published-87zjp9rw",
+  "nugetPackages": "/tmp/mcpcli-story411-owner-published-87zjp9rw/nuget-cache",
+  "commands": [
+    {
+      "label": "packages-restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/restore-audit/OwnerPackages.csproj",
+        "--configfile",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/restore-audit/nuget.config",
+        "--force-evaluate",
+        "--no-cache"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages-restore.stdout.txt",
+          "bytes": 144,
+          "sha256": "175fcfe09b07a8dd89e461722069f994dbe0703e4c2df4d85ca3cc5f5f8e5860"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/packages-restore.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "admin-tool-restore",
+      "command": [
+        "dotnet",
+        "tool",
+        "install",
+        "Hexalith.EventStore.Admin.Cli",
+        "--version",
+        "3.126.1",
+        "--tool-path",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/admin-tool",
+        "--configfile",
+        "/tmp/mcpcli-story411-owner-published-87zjp9rw/restore-audit/nuget.config"
+      ],
+      "exitCode": 0,
+      "privateLogs": [
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/admin-tool-restore.stdout.txt",
+          "bytes": 155,
+          "sha256": "4374d73f5247b7d36947fd4c27ddc45f12c95bbf415256fd7159e2d6f63cdbbb"
+        },
+        {
+          "path": "/tmp/mcpcli-story411-owner-published-87zjp9rw/admin-tool-restore.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "completedAtUtc": "2026-10-22T01:07:39.149952+00:00"
+}

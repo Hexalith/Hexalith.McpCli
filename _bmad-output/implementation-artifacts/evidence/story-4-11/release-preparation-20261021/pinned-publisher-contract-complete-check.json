@@ -1,0 +1,26 @@
+{
+  "pin": "22a578b576a515d2af214fe81859447fffc97981",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "Github/publish-containers/tests",
+    "-p",
+    "test_publish_script_contract.py",
+    "-v"
+  ],
+  "cwd": "/tmp/mcpcli-story411-publisher-pin-vzzujpcu",
+  "exitCode": 0,
+  "elapsedSeconds": 1.6929442350010504,
+  "stdout": "pinned-publisher-contract-complete.stdout.txt",
+  "stderr": "pinned-publisher-contract-complete.stderr.txt",
+  "addedFixture": {
+    "path": "package.json",
+    "sha256": "d2c1c8d0a972d0eefa837df5bb9e2df6c4cce1b3bfcf1074f31bc990e0268086"
+  },
+  "initialAttempt": "pinned-publisher-contract-checks.json (missing pinned package.json fixture; retained)",
+  "registryMutations": false,
+  "originalCheckoutsModified": false
+}

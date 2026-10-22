@@ -1,0 +1,51 @@
+[
+  {
+    "repository": "/home/administrator/projects/hexalith/builds",
+    "baseCommit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+    "patch": "proposed-builds-container-provenance-scoped.patch",
+    "patchSha256": "10848269920971f66776308a5e76ca326b0349642921637fd2229e5799aea6a8",
+    "command": [
+      "git",
+      "apply",
+      "--check",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/proposed-builds-container-provenance-scoped.patch"
+    ],
+    "cwd": "/tmp/mcpcli-story411-patch-check-lhvmcnx0",
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/tenants",
+    "baseCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "patch": "proposed-tenants-container-provenance-and-publisher.patch",
+    "patchSha256": "f9da6a3bf1e968fa91dd2e8b9a2394f8d4a6693952e3c210a5fbaef117588aaf",
+    "command": [
+      "git",
+      "apply",
+      "--check",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/proposed-tenants-container-provenance-and-publisher.patch"
+    ],
+    "cwd": "/tmp/mcpcli-story411-patch-check-0wvjw6th",
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/builds",
+    "baseCommit": "359fee24aeca4d9eabed4b425d4cfa2520b2adda",
+    "patch": "proposed-builds-eventstore-prerequisite-pin.patch",
+    "condition": "Apply only after the approved EventStore version is actually published; update the root gitlink separately.",
+    "patchSha256": "bcf2100abc591a3bb92d9905414462603b0fbdf981bd9588fa69421a1977c6be",
+    "command": [
+      "git",
+      "apply",
+      "--check",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/release-preparation-20261021/proposed-builds-eventstore-prerequisite-pin.patch"
+    ],
+    "cwd": "/tmp/mcpcli-story411-pin-check-dffrxhm0",
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

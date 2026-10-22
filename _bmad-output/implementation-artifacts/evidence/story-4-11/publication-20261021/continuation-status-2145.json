@@ -1,0 +1,45 @@
+{
+  "observedAtUtc": "2026-10-21T21:43:21.159745+00:00",
+  "productionAccepted": false,
+  "fullV1Accepted": false,
+  "publicationDispatched": false,
+  "buildsProtectedRepair": {
+    "status": "complete",
+    "mergedSource": "b693d4abee10a7974f4696d2190ac18e9eba64cc",
+    "receipt": "builds-normal-repair-complete.json"
+  },
+  "eventstore": {
+    "pr": 372,
+    "head": "3bf0f412cdb0c40c1540d088a5b7accbea0d9932",
+    "base": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+    "freshGates": "in progress; no qualification transferred from previous source",
+    "runs": {
+      "ci": 39679453712,
+      "p1r": 39679453148,
+      "codeql": 39679453767,
+      "integration": 39679453212,
+      "latestCommitlintSuccess": 39679597654
+    }
+  },
+  "tenants": {
+    "localIntegratedSource": "8c12ff17f48c08a1b9baf619cd3de3ceadfdab9a",
+    "owningMain": "66def172379f37d12e746fe6eb9195801929c572",
+    "contractsAndClientSourceSameAsApproved": true,
+    "pr": null,
+    "publishedEventStoreDependencyPin": "pending; temporary local proof is not a production fix"
+  },
+  "buildsPinMergePolicy": {
+    "status": "pending explicit owner decision; not applied",
+    "packet": "builds-temporary-merge-policy/manifest.json",
+    "reason": "revision-bound audit requires committed declaration ancestry, while current main protection permits only squash",
+    "preferredWindows": "one temporary merge-method window per fully checked pin PR, restore squash-only immediately after each merge"
+  },
+  "remaining": [
+    "Qualify and normal squash merge exact EventStore PR source, then qualify actual main push source.",
+    "Dispatch authorized normal EventStore fourteen-package/container publication only after exact-source gates.",
+    "Prepare separately committed owning Builds declaration and audit; merge only with approved ancestry-preserving policy window.",
+    "Qualify and publish actual Tenants five-package/container release, preserving approved scope.",
+    "Bind actual nineteen package archives/source and final restored bytes; enroll Tenants using approved vectors/inventory.",
+    "Run unchanged strict combined replay and fresh-process benchmark on ubuntu-latest, plus required root verification and independent review."
+  ]
+}

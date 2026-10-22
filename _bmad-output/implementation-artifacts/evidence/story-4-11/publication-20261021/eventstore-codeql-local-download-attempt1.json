@@ -1,0 +1,21 @@
+{
+  "observedAtUtc": "2026-10-21T23:31:46.763728+00:00",
+  "result": "downloaded; extraction prerequisite unavailable",
+  "blocker": "unzip executable is absent; use standard-library extraction preserving archive modes/symlinks, no global installation.",
+  "archives": [
+    {
+      "version": "2.27.2",
+      "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/codeql-2.27.2-linux64.zip",
+      "bytes": 416457825,
+      "sha256": "sha256:ac0a4ea06843577ed3a1f5af145756c3085ebfd42e59a5aff1b66489f29d16dc",
+      "officialDigestMatches": true
+    },
+    {
+      "version": "2.27.3",
+      "path": "/tmp/mcpcli-story411-codeql-compare-3jub6auv/codeql-2.27.3-linux64.zip",
+      "bytes": 418194884,
+      "sha256": "sha256:845075a2fa2fdf72629adc6cbde6264691b698d1f294bd27f10c6b579cd750a4",
+      "officialDigestMatches": true
+    }
+  ]
+}

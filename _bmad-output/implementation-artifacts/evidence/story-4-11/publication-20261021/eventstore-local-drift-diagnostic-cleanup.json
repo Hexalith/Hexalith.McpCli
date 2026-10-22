@@ -1,0 +1,6 @@
+{
+  "processGroupLeaderAbsent": true,
+  "ownedContainersRemaining": [],
+  "diagnosticExitCode": 1,
+  "note": "Stop-induced host failures are retained in diagnostic receipt and are not classified as production bugs."
+}

@@ -1,0 +1,23 @@
+{
+  "checkedAtUtc": "2026-10-22T03:20:11.032271+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "head": "b021e6964c330c849276512b0650a3a2353b7a0b",
+  "tree": "2720e9e26859c12470438d3056f6a2502660596e",
+  "base": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "liveMainBeforePush": "82c2e9ad51f4d9ceeae9dcde33d7e0273524a105",
+  "branch": "fix/container-provenance-followup",
+  "remoteBranchAbsentBeforePush": true,
+  "changedPaths": [
+    ".github/workflows/release.yml",
+    "Directory.Build.targets",
+    "references/Hexalith.Builds",
+    "tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs"
+  ],
+  "reviewedThreeBlobsEqual": true,
+  "qualifiedBuildsPin": "c0cbbbd4366d512cc1731397f14dd53a7a01580d",
+  "localValidation": "tenants-followup-finalpin-validation.json",
+  "exactMessageValidation": "tenants-followup-finalpin-commitlint.json",
+  "existingApproval": "../owner-approval/publication-authorization.json",
+  "productionAccepted": false,
+  "fullV1Accepted": false
+}

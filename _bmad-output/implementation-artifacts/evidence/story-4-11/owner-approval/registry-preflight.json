@@ -1,0 +1,32 @@
+{
+  "checkedAtUtc": "2026-10-21T18:42:02.440072+00:00",
+  "scope": "Read-only public NuGet version metadata; no publication or Git remote mutation.",
+  "packages": [
+    {
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.contracts/index.json",
+      "packageId": "hexalith.eventstore.contracts",
+      "candidateVersion": "3.126.1",
+      "candidateVersionExists": false,
+      "recentVersions": [
+        "3.123.0",
+        "3.124.0",
+        "3.125.0",
+        "3.125.1",
+        "3.126.0"
+      ]
+    },
+    {
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/index.json",
+      "packageId": "hexalith.tenants.contracts",
+      "candidateVersion": "5.10.0",
+      "candidateVersionExists": false,
+      "recentVersions": [
+        "5.5.0",
+        "5.6.0",
+        "5.7.0",
+        "5.8.0",
+        "5.9.0"
+      ]
+    }
+  ]
+}

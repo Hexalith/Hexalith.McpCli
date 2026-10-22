@@ -1,0 +1,96 @@
+[
+  {
+    "repository": "Hexalith/Hexalith.EventStore",
+    "sourceCommit": "30260abc7c6703e9e545dd1596ca258b925b1ed7",
+    "observedAtUtc": "2026-10-21T18:43:24Z",
+    "publicationAuthorized": false,
+    "main": {
+      "command": [
+        "gh",
+        "api",
+        "repos/Hexalith/Hexalith.EventStore/git/ref/heads/main"
+      ],
+      "exitCode": 0,
+      "liveMain": "7442485b72bc016cd486f6a2aab527069854987e"
+    },
+    "ci": {
+      "command": [
+        "gh",
+        "api",
+        "repos/Hexalith/Hexalith.EventStore/actions/runs?head_sha=30260abc7c6703e9e545dd1596ca258b925b1ed7&per_page=100"
+      ],
+      "exitCode": 0,
+      "workflowRuns": []
+    }
+  },
+  {
+    "repository": "Hexalith/Hexalith.Tenants",
+    "sourceCommit": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+    "observedAtUtc": "2026-10-21T18:43:25Z",
+    "publicationAuthorized": false,
+    "main": {
+      "command": [
+        "gh",
+        "api",
+        "repos/Hexalith/Hexalith.Tenants/git/ref/heads/main"
+      ],
+      "exitCode": 0,
+      "liveMain": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897"
+    },
+    "ci": {
+      "command": [
+        "gh",
+        "api",
+        "repos/Hexalith/Hexalith.Tenants/actions/runs?head_sha=ffe9522b10f37f56cd9339c3387cbb4b7d16d897&per_page=100"
+      ],
+      "exitCode": 0,
+      "workflowRuns": [
+        {
+          "name": "Commitlint",
+          "event": "push",
+          "headBranch": "main",
+          "headSha": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39645640801"
+        },
+        {
+          "name": "CI",
+          "event": "push",
+          "headBranch": "main",
+          "headSha": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39645640841"
+        },
+        {
+          "name": "Source-reference integration",
+          "event": "push",
+          "headBranch": "main",
+          "headSha": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39645640169"
+        },
+        {
+          "name": "CodeQL",
+          "event": "push",
+          "headBranch": "main",
+          "headSha": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39645640859"
+        },
+        {
+          "name": "Story Guards",
+          "event": "push",
+          "headBranch": "main",
+          "headSha": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/39645640236"
+        }
+      ]
+    }
+  }
+]

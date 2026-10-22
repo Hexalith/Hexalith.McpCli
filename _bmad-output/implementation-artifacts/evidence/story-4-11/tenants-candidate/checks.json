@@ -1,0 +1,134 @@
+[
+  {
+    "label": "pack-contracts",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:RepositoryCommit=2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+      "-p:UseHexalithProjectReferences=false",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-tenants-l_6r95hf",
+    "exitCode": 1,
+    "durationSeconds": 1.0290460649994202
+  },
+  {
+    "label": "eventstore-pack-contracts",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-p:Version=3.126.1",
+      "-p:RepositoryCommit=b6d1807035fba2e485c8587ac3581d669d1036e5",
+      "-p:UseHexalithProjectReferences=false",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/prerequisite-packages",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-eventstore-4emmx2ji",
+    "exitCode": 0,
+    "durationSeconds": 1.9612362269981531
+  },
+  {
+    "label": "eventstore-pack-client",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+      "--configuration",
+      "Release",
+      "-p:Version=3.126.1",
+      "-p:RepositoryCommit=b6d1807035fba2e485c8587ac3581d669d1036e5",
+      "-p:UseHexalithProjectReferences=false",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/prerequisite-packages",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-eventstore-4emmx2ji",
+    "exitCode": 0,
+    "durationSeconds": 2.8674277440004516
+  },
+  {
+    "label": "published-api",
+    "command": [
+      "dnx",
+      "dotnet-inspect",
+      "-y",
+      "--",
+      "find",
+      "*NativeSourceProof*",
+      "--package",
+      "Hexalith.EventStore.Contracts@3.126.0",
+      "-n",
+      "12"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.5795205300019006
+  },
+  {
+    "label": "pack-contracts-with-prerequisite",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-p:Version=5.10.0",
+      "-p:RepositoryCommit=2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:HexalithEventStoreVersion=3.126.1",
+      "-p:RestoreAdditionalProjectSources=/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-story411-tenants-l_6r95hf",
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-story411-tenants-l_6r95hf/packages"
+    },
+    "exitCode": 0,
+    "durationSeconds": 2.4714030629984336
+  },
+  {
+    "label": "verify-artifact",
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/verify_artifact.py",
+      "--artifact",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/candidate-packages/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/artifact-verification",
+      "--accepted-lint",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/accepted-lint.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/add-user-to-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/change-user-role.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/create-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/disable-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/enable-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant-audit.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant-users.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/get-user-tenants.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/list-tenants.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/remove-tenant-configuration.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/remove-user-from-tenant.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/set-tenant-configuration.vector.json",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/tenants-candidate/vectors/update-tenant.vector.json"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "durationSeconds": 215.05019750299834
+  }
+]

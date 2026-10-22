@@ -1,0 +1,202 @@
+{
+  "sourceCommit": "b02452a16869f265c21b1ae6c15f2f299677f139",
+  "baseTag": "v5.9.0",
+  "commits": [
+    {
+      "hash": "b02452a16869f265c21b1ae6c15f2f299677f139",
+      "message": "docs: reconcile five deferred verification and planning records\n\nQualify historical validation, restore cited Epic 5 constraints, and bind the\nStory 5.6 reverification to its final historical dependency inventory.\n\nClose DW-297, DW-462, DW-533, DW-549, and DW-558 while preserving separate\nhistory blockers, original evidence, and unrelated deferred work.\n"
+    },
+    {
+      "hash": "0c10ef637171f9ac2639d4b5ac42f513ea9ef133",
+      "message": "build: advance root submodule pointers to current main\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "dc936d9ea042d139e69bffdbcad1bc92ff8e9927",
+      "message": "docs: repair five historical dependency provenance records\n"
+    },
+    {
+      "hash": "ffe9522b10f37f56cd9339c3387cbb4b7d16d897",
+      "message": "fix(ci): enforce source and package provenance checks\n"
+    },
+    {
+      "hash": "2cd3cc270e88d3cdbb47a1a938fd6a0951b6f0d4",
+      "message": "docs: reconcile five deferred evidence and guidance records\n"
+    },
+    {
+      "hash": "092bcd0eafffb9e85b6c3506ee532f1340d6e87f",
+      "message": "refactor(ui): complete five deferred composition cleanup items\n"
+    },
+    {
+      "hash": "c92cd4b15a80c3edb295093d3a1f426aa5a5636f",
+      "message": "refactor: complete five deferred source maintenance records\n"
+    },
+    {
+      "hash": "6cd7521fc0732823490c2c2f18da0120f77991b5",
+      "message": "fix(ui): complete five administrator feedback follow-ups\n"
+    },
+    {
+      "hash": "406114bb131792e8411e16b9aac6885b3132444e",
+      "message": "fix(ui): complete deferred command feedback and recovery\n"
+    },
+    {
+      "hash": "ab450987de52d3cb305e74da3039c9b0d2cc335b",
+      "message": "fix(ui): harden audit validation and recovery evidence\n"
+    },
+    {
+      "hash": "be14af75cbabe05c9500475c7163f55606dd618d",
+      "message": "fix(ui): finish French audit and administrator copy\n"
+    },
+    {
+      "hash": "bf5d790749215cc8cd6f1271b0dd309a268fd0d7",
+      "message": "fix(ui): clarify command availability and recovery explanations\n"
+    },
+    {
+      "hash": "73e4cbee3c3d429ee90a81562ceb9060f8a82ce5",
+      "message": "fix(ui): replay membership nudges after child attachment\n"
+    },
+    {
+      "hash": "6389595745e5c3a7fec705f47f759a963109a87e",
+      "message": "fix(ui): invalidate unsent editors on lifecycle changes\n"
+    },
+    {
+      "hash": "7b33d851d5637dfaf6f310f5cfc2f57479317d9b",
+      "message": "fix: sweep\n"
+    },
+    {
+      "hash": "ce6a8c24196ac5e65871dc940e7a6e38b4da08e2",
+      "message": "fix(ui): distinguish projection lifecycle availability reasons\n"
+    },
+    {
+      "hash": "2ac783647336594787b1dc5cdde94dc4cd1b302c",
+      "message": "test(ui): qualify detail cancellation lifetime\n"
+    },
+    {
+      "hash": "ec10b2575c836d650a68ffcbe14a16ccc9257528",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "8ca1db8d5662d94272811951803974b8ed1c3e0d",
+      "message": "test(ui): qualify same-tenant authorization refresh\n"
+    },
+    {
+      "hash": "3deb003d24a303c751f21dfe7326a0751d44ea69",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "a83021d9efa259c1afa014078d2c5fcf61c4d42c",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "54bfac8da66b60aa8aa19a77d23676a7662113b4",
+      "message": "fix(ui): retain tenant rows during soft refresh\n"
+    },
+    {
+      "hash": "75627d267296d26a9f4fee05fa0495deb110fc11",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "3ae9db014dfe52bdee4f6731465cc2a7b65701b7",
+      "message": "refactor(ui): replace obsolete query gateway test transport\n"
+    },
+    {
+      "hash": "84f2e8c7da6f2d7ae05412c478a94d21f83ab5c5",
+      "message": "test(ui): name subscription wait timeout failures\n"
+    },
+    {
+      "hash": "9a94131a26d0c5d80d5540706e267ee123d54b68",
+      "message": "build: merge origin/main into main via /pushall\n"
+    },
+    {
+      "hash": "18e73d5b43abd687199db3313467b5a60c0d2691",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "b8470b6aa0568270576811b13674cea91a6c086b",
+      "message": "refactor(ui): qualify member paging through rendered controls\n"
+    },
+    {
+      "hash": "630b072c3b48b1907705a7ed5b3c2360e2d94882",
+      "message": "fix(ui): fall back to localized tenant list state messages\n"
+    },
+    {
+      "hash": "6c5e3e10204c82fd22226755e5c13e33fede1953",
+      "message": "fix(ui): correct French audit receipt accents and apostrophes\n"
+    },
+    {
+      "hash": "1f0f4edb6be91dd07028c0303a3f308841c3b414",
+      "message": "build: merge refs/heads/fix/dw-437-changed-story-gitlink-gate into main via /pushall\n"
+    },
+    {
+      "hash": "a8c51bda1929571c133fa2dfab7da73c419964d4",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "c2587b2654c7227d5fd6b6f3e33f341e9bc9ea14",
+      "message": "ci(tooling): enforce gitlink checks for changed stories\n"
+    },
+    {
+      "hash": "fc2d4821e002ea56eaed79b2acae4cc0bfc8ef10",
+      "message": "docs(tooling): bind Story 5.2 gitlink audit to its historical closure\n"
+    },
+    {
+      "hash": "569e80e7364b57c92ffdd80519e58fc47bc8b096",
+      "message": "fix(tooling): honor the remote default branch during pushall\n"
+    },
+    {
+      "hash": "fd155028bddd61f6b20a2750c797199ec9778246",
+      "message": "build: sync local changes via /pushall\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "ce88a70b6af777c059b5fb4335d429b9272911bd",
+      "message": "fix(tooling): skip dirty detached repositories during pushall\n"
+    },
+    {
+      "hash": "243d0c4a3f845e3f582a32c08e373651d978ff0e",
+      "message": "fix: sweep\n"
+    },
+    {
+      "hash": "14d699983248aea2a1811ab4104febaa34b9658e",
+      "message": "fix(ui): bind audit read-only recovery to the rendered grid\n"
+    },
+    {
+      "hash": "8224b5baf9c7d9ce51d53e90eea61d85291afa46",
+      "message": "fix(tooling): reject legacy mid-story gitlink baselines\n"
+    },
+    {
+      "hash": "7f1e449dbe411853e065c938ca75d29e5688e15a",
+      "message": "fix: dw 420\n"
+    },
+    {
+      "hash": "5f18497fa034d7cd9a45422a507eb0bbc9fc6ab6",
+      "message": "docs: reconcile recorded gitlink deferred work\n\nClose DW-526 and DW-531 after qualifying the existing DW-643 fixes\nwith the maintained regression lane and isolated mutation controls.\nPreserve original records and document review and validation evidence.\n"
+    },
+    {
+      "hash": "9e08a75eef4bd16994c9b7835be19849fa34fd99",
+      "message": "fix(mcpcli): align tenant contracts and gateway query paging\n\nClarify operation descriptions and add schema conformance vectors.\nHonor envelope pagination, CLR audit filters, and payload user targets\nwhile preserving REST pagination and authorization behavior.\n"
+    },
+    {
+      "hash": "6b62b6b307b10d5acaa86e5a722223bb34dd1b58",
+      "message": "feat(contracts): add McpCli operation metadata\n"
+    },
+    {
+      "hash": "948141b48aa29af67caa8531d821be205096c46d",
+      "message": "fix(tooling): resolve gitlink claims without initialized checkouts\n"
+    },
+    {
+      "hash": "43786ea8c4a3cdd69562f7eec1109c1b891f6492",
+      "message": "fix: dw 520\n"
+    },
+    {
+      "hash": "c4c781791b0b50eabeb0b58505d943be40538e7f",
+      "message": "test(apphost): land the effective tenant read endpoint check\n\nThe local DW-622 branch was never merged. Keep the later DW-643 closure and count both records closed.\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n"
+    },
+    {
+      "hash": "316a6880b5e94b4847416137e4b06011c4218c55",
+      "message": "fix: dw 643\n"
+    },
+    {
+      "hash": "dd8d515d7e4ad698d4a045c664bae87e08fde164",
+      "message": "test(apphost): verify effective tenant read endpoint\n"
+    }
+  ]
+}

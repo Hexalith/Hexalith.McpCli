@@ -1,0 +1,50 @@
+{
+  "name": "tenants.create-tenant",
+  "kind": "write",
+  "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the new tenant: 1 to 256 ASCII letters, digits, \u0027.\u0027, \u0027_\u0027 or \u0027-\u0027, starting and ending with a letter or digit. It is case-sensitive and cannot be changed later."
+      },
+      "Name": {
+        "type": "string",
+        "description": "Display name of the tenant."
+      },
+      "Description": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Free-text description of the tenant. The key is required; send null for no description."
+      }
+    },
+    "required": [
+      "TenantId",
+      "Name",
+      "Description"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme",
+    "Name": "Acme Corporation",
+    "Description": "Production workspace for Acme"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

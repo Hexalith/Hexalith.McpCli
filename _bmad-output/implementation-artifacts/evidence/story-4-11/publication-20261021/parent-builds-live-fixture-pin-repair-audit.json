@@ -1,0 +1,21 @@
+{
+  "result": "passed",
+  "scope": "Independent direct final-digest substitution over all218 active synthetic fixtures; source patches separately read. This is not a release or full-v1 acceptance.",
+  "bindingSha256": "c2060eb8e7914ebd3f092fb0156d52d513943c0013a9c2e6d52c63647ba08920",
+  "baseline": "85290197d2a4324b50560630e8992d71c3318784",
+  "activeFixturesInspected": 218,
+  "exactBaselinePinReplacements": 81,
+  "directFinalDigestReferencesRebound": 218,
+  "distinctOriginalFixtureContentGroups": 170,
+  "originalEqualContentGroupsRemainEqual": true,
+  "distinctContentGroupsDoNotCollapse": true,
+  "allOtherFixtureBytesUnchanged": true,
+  "reportedChangedFilesExactHashesVerified": 112,
+  "changedBackupsMatchCanonicalGitBlobs": 112,
+  "gitDiffPathSetExactlyMatchesReported112": true,
+  "productionRuntimeAndHistoricalDirectoriesUntouched": true,
+  "limitations": [
+    "Direct reference count is distinct from generator iterative replacement count240; convergence rounds can rewrite a reference more than once.",
+    "Synthetic fixture semantics and guard reachability still require focused/full local and remote tests."
+  ]
+}
