@@ -219,7 +219,7 @@ public sealed class SchemaTests
         schema.Bindings.ShouldBeEmpty();
     }
 
-    /// <summary>Rejects unsupported converter-backed fields, and rejects an envelope role that names one as an invalid binding.</summary>
+    /// <summary>Rejects ordinary converter-backed fields while allowing a string-backed value object for an envelope role.</summary>
     [Fact]
     public void OrdinaryOpaqueMemberIsRejected()
     {
@@ -227,11 +227,10 @@ public sealed class SchemaTests
             () => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true));
         opaque.Category.ShouldBe("invalid_schema");
         opaque.Message.ShouldContain("Opaque serialized member Value");
-        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.String, true,
-            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(OrdinaryOpaqueCommand.Value) }))
-            .ShouldSatisfyAllConditions(
-                exception => exception.Category.ShouldBe("invalid_property_reference"),
-                exception => exception.Message.ShouldContain("cannot bind member"));
+        DerivedSchema envelope = SchemaDeriver.Derive(typeof(OrdinaryOpaqueCommand), TestOptions(), IdentifierKind.Ulid, true,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(OrdinaryOpaqueCommand.Value) });
+        envelope.Node["properties"]!["Value"]!["type"]!.GetValue<string>().ShouldBe("string");
+        envelope.Node["properties"]!["Value"]!["pattern"].ShouldBeNull();
     }
 
     /// <summary>Accepts only string tenant and actor roles, and string or ULID correlation and idempotency roles.</summary>
@@ -265,6 +264,82 @@ public sealed class SchemaTests
         DerivedSchema schema = SchemaDeriver.Derive(typeof(EnvelopeTypedCommand), TestOptions(), IdentifierKind.String, true, roles);
         schema.Node["properties"]![member]!["readOnly"]!.GetValue<bool>().ShouldBeTrue();
         schema.Node["required"]!.ToJsonString().ShouldNotContain(member);
+    }
+
+    /// <summary>String-backed envelope values retain role-specific schemas.</summary>
+    [Fact]
+    public void ValueObjectEnvelopeRolesHaveStringSchemas()
+    {
+        var roles = new Dictionary<PropertyRole, string?>
+        {
+            [PropertyRole.Tenant] = "Tenant",
+            [PropertyRole.Actor] = "Actor",
+            [PropertyRole.Correlation] = "Correlation",
+            [PropertyRole.IdempotencyKey] = "Idempotency",
+        };
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(global::Catalog.Routing.Contracts.ComputedEnvelopeCommand),
+            TestOptions(), IdentifierKind.Ulid, true, roles);
+        foreach ((PropertyRole role, string? member) in roles)
+        {
+            JsonNode property = schema.Node["properties"]![member!]!;
+            property["type"]!.ToJsonString().ShouldContain("string");
+            property["readOnly"]!.GetValue<bool>().ShouldBeTrue();
+            if (role is PropertyRole.Correlation or PropertyRole.IdempotencyKey)
+            {
+                property["pattern"]!.GetValue<string>().ShouldBe(SchemaDeriver.UlidPattern);
+            }
+            else
+            {
+                property["pattern"].ShouldBeNull();
+            }
+        }
+
+        PayloadValidator.Validate(schema, "{\"ItemId\":\"item\",\"Tenant\":\"acme\",\"Actor\":\"operator-1\",\"Correlation\":\"bad\"}", true)
+            .Violations.Select(violation => violation.Path).ShouldContain("/Correlation");
+    }
+
+    /// <summary>Envelope bindings accept property converters only when they preserve JSON string values.</summary>
+    /// <param name="role">The declared envelope role.</param>
+    [Theory]
+    [InlineData(PropertyRole.Tenant)]
+    [InlineData(PropertyRole.Actor)]
+    [InlineData(PropertyRole.Correlation)]
+    [InlineData(PropertyRole.IdempotencyKey)]
+    public void ValueObjectEnvelopeConvertersMustPreserveStrings(PropertyRole role)
+    {
+        DerivedSchema valid = SchemaDeriver.Derive(typeof(PropertyConverterNullableCommand), TestOptions(), IdentifierKind.String, true,
+            new Dictionary<PropertyRole, string?> { [role] = nameof(PropertyConverterNullableCommand.Value) });
+        valid.Node["properties"]!["Value"]!["type"]!.ToJsonString().ShouldContain("string");
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(AlteredEnvelopeCommand), TestOptions(), IdentifierKind.String, true,
+            new Dictionary<PropertyRole, string?> { [role] = nameof(AlteredEnvelopeCommand.Value) }))
+            .Category.ShouldBe("invalid_property_reference");
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(typeof(PropertyConvertedNumericIdentifierCommand), TestOptions(), IdentifierKind.String, true,
+            new Dictionary<PropertyRole, string?> { [role] = nameof(PropertyConvertedNumericIdentifierCommand.ItemId) }))
+            .Category.ShouldBe("invalid_property_reference");
+    }
+
+    /// <summary>A shared converter-backed CLR type keeps payload identifier constraints separate from its envelope tenant.</summary>
+    [Fact]
+    public void SharedEnvelopeTypeDoesNotWeakenPayloadIdentifier()
+    {
+        DerivedSchema schema = SchemaDeriver.Derive(typeof(SharedEnvelopeIdentifierCommand), TestOptions(), IdentifierKind.Ulid, true,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = nameof(SharedEnvelopeIdentifierCommand.Tenant) });
+        PayloadValidator.Validate(schema, "{\"ItemId\":\"not-a-ulid\"}", true).IsValid.ShouldBeFalse();
+        PayloadValidator.Validate(schema, "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true).IsValid.ShouldBeTrue();
+    }
+
+    /// <summary>A converter admitted for an envelope role never makes an ordinary payload member representable.</summary>
+    /// <param name="payloadType">The direct, nested, collection, or dictionary use of the shared type.</param>
+    [Theory]
+    [InlineData(typeof(SharedEnvelopePayloadCommand<global::Catalog.Routing.Contracts.EnvelopeValue>))]
+    [InlineData(typeof(SharedEnvelopePayloadCommand<global::Catalog.Routing.Contracts.EnvelopeValue[]>))]
+    [InlineData(typeof(SharedEnvelopePayloadCommand<Dictionary<string, global::Catalog.Routing.Contracts.EnvelopeValue>>))]
+    [InlineData(typeof(SharedEnvelopePayloadCommand<SharedEnvelopeIdentifierCommand>))]
+    public void SharedEnvelopeTypeDoesNotAdmitOpaquePayload(Type payloadType)
+    {
+        Should.Throw<ContractDeclarationException>(() => SchemaDeriver.Derive(payloadType, TestOptions(), IdentifierKind.Ulid, true,
+            new Dictionary<PropertyRole, string?> { [PropertyRole.Tenant] = "Tenant" }))
+            .Category.ShouldBe("invalid_schema");
     }
 
     /// <summary>Strips envelope requirements and read-only marks only at the payload root.</summary>

@@ -60,7 +60,7 @@ public static class SchemaDeriver
                 $"Command payload type {payloadType} must have an object serialization contract, not {typeInfo.Kind}.");
         }
 
-        IReadOnlyDictionary<PropertyRole, PropertyBinding> bindings = ResolveBindings(payloadType, typeInfo, roleNames);
+        IReadOnlyDictionary<PropertyRole, PropertyBinding> bindings = ResolveBindings(payloadType, typeInfo, options, roleNames);
         var exporterOptions = new JsonSchemaExporterOptions
         {
             TransformSchemaNode = (context, schema) => Transform(context, schema, options, identifierKind, bindings),
@@ -73,6 +73,17 @@ public static class SchemaDeriver
         catch (Exception exception) when (exception is InvalidOperationException or NotSupportedException)
         {
             throw InvalidContract(payloadType, exception);
+        }
+
+        // STJ reuses a $ref for repeated value-object types and does not transform those references.
+        // Each envelope role has its own constraints even when several roles share one CLR type.
+        if (schemaNode is JsonObject exported && exported["properties"] is JsonObject properties)
+        {
+            foreach (PropertyBinding binding in bindings.Values.Where(binding => binding.Role != PropertyRole.AggregateId
+                && EnvelopeMemberWritesString(binding.Metadata, options, binding.Role)))
+            {
+                properties[binding.SerializedName] = EnvelopeValueSchema(binding.Metadata, binding.Role);
+            }
         }
 
         if (isCommand)
@@ -92,6 +103,7 @@ public static class SchemaDeriver
     private static IReadOnlyDictionary<PropertyRole, PropertyBinding> ResolveBindings(
         Type payloadType,
         JsonTypeInfo typeInfo,
+        JsonSerializerOptions options,
         IReadOnlyDictionary<PropertyRole, string?>? roleNames)
     {
         var bindings = new Dictionary<PropertyRole, PropertyBinding>();
@@ -169,12 +181,13 @@ public static class SchemaDeriver
                 throw InvalidReference($"Property role {role} must name a deserializable payload property: {clrName}.");
             }
 
-            if (!IsSupportedRoleType(role, metadata.PropertyType))
+            if (!IsSupportedRoleType(role, metadata, options))
             {
                 throw InvalidReference($"Property role {role} cannot bind member {clrName} of type {metadata.PropertyType}.");
             }
 
-            if (role != PropertyRole.AggregateId && HasExternalPropertyConverter(clrProperty))
+            if (role != PropertyRole.AggregateId && HasExternalPropertyConverter(clrProperty)
+                && !EnvelopeMemberWritesString(metadata, options, role))
             {
                 throw InvalidReference($"Property role {role} names {clrName}, whose custom JsonConverter makes the serialized member converter-opaque.");
             }
@@ -190,13 +203,18 @@ public static class SchemaDeriver
         return bindings;
     }
 
-    private static bool IsSupportedRoleType(PropertyRole role, Type propertyType) => role switch
+    private static bool IsSupportedRoleType(PropertyRole role, JsonPropertyInfo metadata, JsonSerializerOptions options)
     {
-        PropertyRole.Tenant or PropertyRole.Actor => propertyType == typeof(string),
-        PropertyRole.Correlation or PropertyRole.IdempotencyKey => propertyType == typeof(string)
-            || (Nullable.GetUnderlyingType(propertyType) ?? propertyType) == typeof(Ulid),
-        _ => true,
-    };
+        Type propertyType = metadata.PropertyType;
+        bool builtIn = role switch
+        {
+            PropertyRole.Tenant or PropertyRole.Actor => propertyType == typeof(string),
+            PropertyRole.Correlation or PropertyRole.IdempotencyKey => propertyType == typeof(string)
+                || (Nullable.GetUnderlyingType(propertyType) ?? propertyType) == typeof(Ulid),
+            _ => true,
+        };
+        return builtIn || EnvelopeMemberWritesString(metadata, options, role);
+    }
 
     private static JsonNode Transform(
         JsonSchemaExporterContext context,
@@ -230,6 +248,9 @@ public static class SchemaDeriver
 
         PropertyInfo? clrProperty = metadata?.AttributeProvider as PropertyInfo;
         bool rootProperty = IsRootProperty(context);
+        PropertyBinding? envelopeBinding = rootProperty ? bindings.Values.FirstOrDefault(binding
+            => binding.Role != PropertyRole.AggregateId && ReferenceEquals(binding.Metadata, metadata)) : null;
+        bool convertedEnvelope = envelopeBinding is not null && EnvelopeMemberWritesString(metadata!, options, envelopeBinding.Role);
         bool declaredIdentifier = clrProperty is not null
             && (Attribute.IsDefined(clrProperty, typeof(HexalithIdentifierAttribute), true)
                 || rootProperty
@@ -248,7 +269,7 @@ public static class SchemaDeriver
                 $"Opaque payload root {context.TypeInfo.Type} at {Location(context)} cannot be represented by a closed schema.");
         }
 
-        if (opaqueConverter && metadata is not null && !(declaredIdentifier || clrUlid))
+        if (opaqueConverter && metadata is not null && !(declaredIdentifier || clrUlid || convertedEnvelope))
         {
             throw new ContractDeclarationException("invalid_schema",
                 $"Opaque serialized member {metadata.Name} of type {metadata.PropertyType} has a custom converter and cannot be represented by a closed schema.");
@@ -264,12 +285,12 @@ public static class SchemaDeriver
             }
         }
 
-        if (schema is not JsonObject && !(opaqueConverter && (declaredIdentifier || clrUlid)))
+        if (schema is not JsonObject && !(opaqueConverter && (declaredIdentifier || clrUlid || convertedEnvelope)))
         {
             return schema;
         }
 
-        JsonObject node = opaqueConverter ? new JsonObject() : (JsonObject)schema;
+        JsonObject node = opaqueConverter || convertedEnvelope ? new JsonObject() : (JsonObject)schema;
         if (metadata?.AttributeProvider is FieldInfo field
             && field.GetCustomAttribute<DescriptionAttribute>()?.Description is { } fieldDescription)
         {
@@ -308,6 +329,11 @@ public static class SchemaDeriver
                 {
                     node.Remove("pattern");
                 }
+            }
+
+            if (convertedEnvelope)
+            {
+                node = EnvelopeValueSchema(metadata!, envelopeBinding!.Role);
             }
 
             if (rootProperty && bindings.Values.Any(binding => binding.Role != PropertyRole.AggregateId
@@ -423,7 +449,64 @@ public static class SchemaDeriver
         return sawString;
     }
 
-    private static bool? ProbeStringSample(JsonPropertyInfo metadata, JsonSerializerOptions options, string sample)
+    private static bool EnvelopeMemberWritesString(JsonPropertyInfo metadata, JsonSerializerOptions options, PropertyRole role)
+    {
+        Type effectiveType = Nullable.GetUnderlyingType(metadata.PropertyType) ?? metadata.PropertyType;
+        if (effectiveType == typeof(string) || effectiveType == typeof(Ulid) || IsFreeForm(effectiveType)
+            || !(metadata.CustomConverter is not null
+                || options.Converters.Any(converter => converter.CanConvert(metadata.PropertyType) || converter.CanConvert(effectiveType))
+                || effectiveType.IsDefined(typeof(JsonConverterAttribute), true)))
+        {
+            return false;
+        }
+
+        string[] samples = role switch
+        {
+            PropertyRole.Tenant => ["tenant", "tenant-1"],
+            PropertyRole.Actor => ["operator-1", "01ARZ3NDEKTSV4RRFFQ69G5FAV"],
+            _ => ["01ARZ3NDEKTSV4RRFFQ69G5FAV"],
+        };
+        bool sawString = false;
+        foreach (string sample in samples)
+        {
+            bool? writesString = ProbeStringSample(metadata, options, sample, preserveValue: true);
+            if (writesString == false)
+            {
+                return false;
+            }
+
+            sawString |= writesString == true;
+        }
+
+        return sawString;
+    }
+
+    private static JsonObject EnvelopeValueSchema(JsonPropertyInfo metadata, PropertyRole role)
+    {
+        var node = new JsonObject
+        {
+            ["type"] = metadata.IsGetNullable ? new JsonArray("string", "null") : JsonValue.Create("string"),
+            ["readOnly"] = true,
+        };
+        string? description = (metadata.AttributeProvider as PropertyInfo)?.GetCustomAttribute<DescriptionAttribute>()?.Description
+            ?? metadata.AssociatedParameter?.AttributeProvider?.GetCustomAttributes(typeof(DescriptionAttribute), true)
+                .OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
+        if (description is not null)
+        {
+            node["description"] = description;
+        }
+
+        if (role is PropertyRole.Correlation or PropertyRole.IdempotencyKey)
+        {
+            node["pattern"] = UlidPattern;
+            node["minLength"] = 26;
+            node["maxLength"] = 26;
+        }
+
+        return node;
+    }
+
+    private static bool? ProbeStringSample(JsonPropertyInfo metadata, JsonSerializerOptions options, string sample, bool preserveValue = false)
     {
         try
         {
@@ -434,7 +517,7 @@ public static class SchemaDeriver
                     : Nullable.GetUnderlyingType(metadata.PropertyType) ?? metadata.PropertyType;
                 MethodInfo method = typeof(SchemaDeriver).GetMethod(nameof(ProbeCustomConverter), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(probeType);
-                return (bool?)method.Invoke(null, [customConverter, options, sample]);
+                return (bool?)method.Invoke(null, [customConverter, options, sample, preserveValue]);
             }
 
             object? value = JsonSerializer.Deserialize(JsonSerializer.Serialize(sample), metadata.PropertyType, options);
@@ -444,7 +527,8 @@ public static class SchemaDeriver
             }
 
             using JsonDocument output = JsonDocument.Parse(JsonSerializer.Serialize(value, metadata.PropertyType, options));
-            return output.RootElement.ValueKind == JsonValueKind.String;
+            return output.RootElement.ValueKind == JsonValueKind.String
+                && (!preserveValue || string.Equals(output.RootElement.GetString(), sample, StringComparison.Ordinal));
         }
         catch (Exception exception) when (exception is JsonException or FormatException or ArgumentException or InvalidOperationException or NotSupportedException or TargetInvocationException)
         {
@@ -452,7 +536,7 @@ public static class SchemaDeriver
         }
     }
 
-    private static bool? ProbeCustomConverter<T>(JsonConverter converter, JsonSerializerOptions options, string sample)
+    private static bool? ProbeCustomConverter<T>(JsonConverter converter, JsonSerializerOptions options, string sample, bool preserveValue)
     {
         if (converter is JsonConverterFactory factory)
         {
@@ -485,7 +569,8 @@ public static class SchemaDeriver
         }
 
         using JsonDocument output = JsonDocument.Parse(stream.ToArray());
-        return output.RootElement.ValueKind == JsonValueKind.String;
+        return output.RootElement.ValueKind == JsonValueKind.String
+            && (!preserveValue || string.Equals(output.RootElement.GetString(), sample, StringComparison.Ordinal));
     }
 
     private static bool SerializesAsString(JsonObject node)

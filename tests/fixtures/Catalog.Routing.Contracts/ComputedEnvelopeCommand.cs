@@ -16,10 +16,10 @@ namespace Catalog.Routing.Contracts;
     IdempotencyKeyProperty = nameof(Idempotency))]
 public sealed record ComputedEnvelopeCommand(
     string ItemId,
-    [property: JsonRequired] string? Tenant = null,
-    [property: JsonRequired] string? Actor = null,
-    [property: JsonRequired] string? Correlation = null,
-    string? Idempotency = null,
+    [property: JsonRequired] EnvelopeValue? Tenant = null,
+    [property: JsonRequired] EnvelopeValue? Actor = null,
+    [property: JsonRequired] EnvelopeValue? Correlation = null,
+    EnvelopeValue? Idempotency = null,
     ComputedEnvelopeDetails? Details = null) : ICommandContract
 {
     /// <summary>Gets the gateway command type.</summary>

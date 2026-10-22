@@ -35,6 +35,8 @@ public sealed record GetItemQuery(
 
 The module's identifier kind applies to `[HexalithIdentifier]` properties and aggregate identifier properties. Descriptions are required constructor arguments; routing values can instead come from the EventStore contract interfaces.
 
+Envelope-owned tenant, actor, correlation, and idempotency members can use string-backed value objects with a Contracts-provided JSON converter. Catalog construction checks that the converter reads and writes the same JSON string; numeric, object-valued, and string-changing converters are rejected. These members remain filled from the envelope. Tenant and actor schemas use strings independently of the module's identifier kind; correlation and idempotency schemas require canonical uppercase ULIDs.
+
 The `Hexalith.McpCli.Abstractions` package includes a build analyzer. Diagnostic `MCPCLI001` warns on a command or query type whose `[HexalithCommand]` or `[HexalithQuery]` description is empty, whitespace, or null. Supply a nonblank description to resolve it. The analyzer requires .NET SDK 10.0.4xx or later; an older SDK may report `CS9057` because its compiler cannot load the analyzer's Roslyn version. Contracts projects need only the Abstractions package reference.
 
 ## Bootstrap package release
