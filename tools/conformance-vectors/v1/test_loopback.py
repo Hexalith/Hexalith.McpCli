@@ -393,6 +393,29 @@ class ProductionReplayOrderingTests(unittest.TestCase):
         preflight.assert_not_called()
         gateway.assert_not_called()
 
+    def test_duplicate_listed_operation_fails_before_core_preflight_or_gateway(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+        modules = {'modules': [{'name': 'sample'}]}
+        listed = {'operations': [{'name': 'sample.get-item', 'kind': 'read'},
+                                 {'name': 'sample.get-item', 'kind': 'read'}]}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect = [(0, modules), (0, listed)]
+        head.mcp.side_effect = [(False, modules), (False, listed)]
+        with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
+                patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query'}), \
+                patch('run_loopback.HeadProcess', return_value=head), \
+                patch('run_loopback._preflight_vectors', side_effect=AssertionError('Core preflight must not run')) as preflight, \
+                patch('run_loopback.ReplayGateway') as gateway, \
+                patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
+            with self.assertRaisesRegex(VectorError, r"\Aduplicate operation in complete Catalog: sample\.get-item\Z"):
+                run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [HERE / 'sample-query.json'])])
+        self.assertEqual([(['modules', '--strict'],), (['operations', 'sample', '--strict'],)],
+                         [call.args for call in head.cli.call_args_list])
+        preflight.assert_not_called()
+        gateway.assert_not_called()
+
     def test_mcp_process_starts_with_strict_catalog_validation(self):
         from unittest.mock import Mock
         from run_loopback import HeadProcess
