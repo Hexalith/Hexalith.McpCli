@@ -1,0 +1,86 @@
+{
+  "scope": "Only test_loopback, test_process_fixture and the maintained sdk_response_cases test",
+  "checks": [
+    {
+      "label": "focused-unit-tests",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_loopback",
+        "test_process_fixture"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "pack-abstractions",
+      "command": [
+        "dotnet",
+        "pack",
+        "/tmp/mcpcli-response-corrections-adj8isgk/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+        "--configuration",
+        "Release",
+        "-p:Version=1.0.0",
+        "--output",
+        "/tmp/mcpcli-response-corrections-adj8isgk/feed",
+        "-m:1"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "pack-sample",
+      "command": [
+        "dotnet",
+        "pack",
+        "/tmp/mcpcli-response-corrections-adj8isgk/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj",
+        "--configuration",
+        "Release",
+        "-p:IsPackable=true",
+        "-p:Version=1.0.0",
+        "--output",
+        "/tmp/mcpcli-response-corrections-adj8isgk/feed",
+        "-m:1"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "restore-sdk-host",
+      "command": [
+        "dotnet",
+        "restore",
+        "/tmp/mcpcli-response-corrections-adj8isgk/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+        "-p:ConformanceProduction=false",
+        "-p:RestoreAdditionalProjectSources=/tmp/mcpcli-response-corrections-adj8isgk/feed"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "build-sdk-host",
+      "command": [
+        "dotnet",
+        "build",
+        "/tmp/mcpcli-response-corrections-adj8isgk/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-p:ConformanceProduction=false",
+        "-m:1"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    }
+  ],
+  "maintainedSdkFixture": "passed",
+  "sourceFilesSha256": {
+    "tools/conformance-vectors/v1/run_loopback.py": "fc3898819c80270c82473beade386629fbbd9dc7279ad1c35f2e710c0ff5a6d8",
+    "tools/conformance-vectors/v1/test_loopback.py": "ea666150059b55bac6042fc9380ec959e9f3ad760bd75529a612d5a18cca60c9",
+    "tools/conformance-vectors/v1/run_packaged_process_fixture.py": "984b943b98c5c0e97b6eebf2e235a0e350b2b5fcbb546dc67a216b7124309f06"
+  },
+  "result": "passed",
+  "finishedUtc": "2026-10-22T10:52:07.054760+00:00"
+}

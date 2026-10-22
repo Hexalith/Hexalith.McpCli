@@ -1,0 +1,86 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3/production/Hexalith.Tenants.Contracts/inputs-zm6x6ydk/vectors/12/set-tenant-configuration.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5HJJP3DG64GDWDKMQP45VKG",
+      "correlationId": "01M5HJJP3DG64GDWDKMQP45VKG",
+      "tenant": "system",
+      "aggregateId": "vector-config",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "messageId": "01M5HJJPZ6KD8T0E8EZTHAF67K",
+      "correlationId": "01M5HJJPZ6KD8T0E8EZTHAF67K",
+      "tenant": "system",
+      "aggregateId": "vector-config",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "system",
+      "document": {
+        "tenantId": "vector-config",
+        "name": "Vector Configuration",
+        "description": null,
+        "status": "Active",
+        "members": [],
+        "configuration": {
+          "billing.plan": "enterprise"
+        },
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HJJP3DG64GDWDKMQP45VKG",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Configuration",
+          "TenantId": "vector-config"
+        },
+        "correlationId": "01M5HJJP3DG64GDWDKMQP45VKG"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HJJPZ6KD8T0E8EZTHAF67K",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "Key": "billing.plan",
+          "TenantId": "vector-config",
+          "Value": "enterprise"
+        },
+        "correlationId": "01M5HJJPZ6KD8T0E8EZTHAF67K"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-config"
+        }
+      }
+    }
+  ]
+}

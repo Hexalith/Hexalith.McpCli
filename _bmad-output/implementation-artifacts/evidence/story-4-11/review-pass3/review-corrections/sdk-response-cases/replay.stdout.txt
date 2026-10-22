@@ -1,0 +1,3 @@
+PASS sample.create-item: discovery, 2 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.get-item: discovery, 36 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.rename-item: discovery, 2 reset Gateway step(s), documents, requests, validation/Gateway error parity

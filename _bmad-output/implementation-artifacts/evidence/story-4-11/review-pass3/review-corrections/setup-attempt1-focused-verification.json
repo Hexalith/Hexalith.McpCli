@@ -1,0 +1,37 @@
+{
+  "scope": "Only test_loopback, test_process_fixture and the maintained sdk_response_cases test",
+  "checks": [
+    {
+      "label": "focused-unit-tests",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_loopback",
+        "test_process_fixture"
+      ],
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "pack-abstractions",
+      "command": [
+        "dotnet",
+        "pack",
+        "/tmp/mcpcli-response-corrections-f42ecack/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+        "--configuration",
+        "Release",
+        "-p:Version=1.0.0",
+        "--output",
+        "/tmp/mcpcli-response-corrections-f42ecack/feed",
+        "-m:1"
+      ],
+      "result": "failed",
+      "exitCode": 1
+    }
+  ],
+  "result": "failed",
+  "error": "pack-abstractions",
+  "finishedUtc": "2026-10-22T10:49:29.709898+00:00"
+}

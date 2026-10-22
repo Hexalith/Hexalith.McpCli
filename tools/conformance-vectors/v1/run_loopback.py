@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -402,7 +402,7 @@ def _run_step(head: HeadProcess, step: dict[str, Any], url: str, label: str,
             evidence.append(document)
         if is_error != ("error" in document):
             _fail(f"{label} {step['operation']}: inconsistent isError and result {document!r}")
-    _assert_result_contract(document, step, f"{label} {step['operation']}")
+    _assert_result_contract(document, step, f"{label} {step['operation']}", head=label)
     if verify_assertions:
         for index, assertion in enumerate(step["assertions"]):
             _assert_result(document, assertion, f"{label} {step['operation']}/assertions/{index}")
@@ -436,10 +436,17 @@ def _sdk_response(step: dict) -> dict | None:
     if _response_depth(body) > 64:
         return None
 
-    def properties(value):
+    def properties(value, converters, defaults=None):
         if not isinstance(value, dict):
             raise ValueError("typed object required")
-        return {key.casefold(): item for key, item in value.items()}
+        result = dict(defaults or {})
+        # SDK property matching does not fold non-ASCII lookalikes into its ASCII names.
+        # Validate each occurrence before a later case variant can overwrite it.
+        for key, item in value.items():
+            name = key.lower() if key.isascii() else key
+            if name in converters:
+                result[name] = converters[name](item)
+        return result
 
     def string(value):
         if value is not None and not isinstance(value, str):
@@ -455,50 +462,71 @@ def _sdk_response(step: dict) -> dict | None:
         if nullable and value is None:
             return None
         # JsonSerializerDefaults.Web permits quoted numbers, not bools/floats.
-        if isinstance(value, str) and re.fullmatch(r"-?[0-9]+", value):
+        if isinstance(value, str) and re.fullmatch(r"[+-]?[0-9]+", value):
             value = int(value)
         if type(value) is not int or not -(2 ** (bits - 1)) <= value < 2 ** (bits - 1):
             raise ValueError("typed integer required")
         return value
 
+    def timestamp(value):
+        if value is None:
+            return None
+        value = string(value)
+        # System.Text.Json's extended ISO profile requires calendar dates, T,
+        # decimal-point fractions (up to 16 digits), and colon-delimited offsets.
+        if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}(?:T[0-9]{2}:[0-9]{2}"
+                        r"(?::[0-9]{2}(?:\.[0-9]{1,16})?)?(?:Z|[+-][0-9]{2}:[0-9]{2})?)?", value) is None:
+            raise ValueError("typed timestamp required")
+        offset = re.search(r"([+-])([0-9]{2}):([0-9]{2})\Z", value)
+        if offset is not None and (int(offset[3]) > 59 or int(offset[2]) > 14
+                                   or int(offset[2]) == 14 and int(offset[3]) != 0):
+            raise ValueError("typed timestamp offset required")
+        datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(timezone.utc)
+        return value
+
+    def warnings(value):
+        if value is not None:
+            if not isinstance(value, list):
+                raise ValueError("typed warning list required")
+            for warning in value:
+                string(warning)
+        return value
+
+    def paging(value):
+        if value is None:
+            return None
+        fields = properties(value, {
+            "pagesize": lambda item: integer(item, 32, False),
+            "offset": lambda item: integer(item, 32),
+            "nextcursor": string, "totalcount": lambda item: integer(item, 64), "hasmore": boolean,
+        }, {"pagesize": 0})
+        return {target: fields[source] for source, target in {
+            "pagesize": "pageSize", "offset": "offset", "nextcursor": "nextCursor",
+            "totalcount": "totalCount", "hasmore": "hasMore",
+        }.items() if fields.get(source) is not None}
+
+    def metadata(value):
+        return None if value is None else properties(value, {
+            "etag": string, "projectionversion": string, "servedat": timestamp,
+            "isnotmodified": boolean, "isstale": boolean, "isdegraded": boolean,
+            "warningcodes": warnings, "paging": paging,
+        })
+
     try:
-        typed = properties(body)
-        response = {"correlationId": string(typed.get("correlationid"))}
         if step["kind"] == "command":
-            response.update(messageId=string(typed.get("messageid")), resultPayload=typed.get("resultpayload"))
-            return response
-        response.update(payload=typed.get("payload"), success=boolean(typed.get("success", True), False),
-                        errorMessage=string(typed.get("errormessage")), paging=None)
-        if typed.get("metadata") is not None:
-            metadata = properties(typed["metadata"])
-            for key in ("etag", "projectionversion"):
-                string(metadata.get(key))
-            for key in ("isnotmodified", "isstale", "isdegraded"):
-                boolean(metadata.get(key))
-            if metadata.get("servedat") is not None:
-                datetime.fromisoformat(string(metadata["servedat"]).replace("Z", "+00:00"))
-            warnings = metadata.get("warningcodes")
-            if warnings is not None:
-                if not isinstance(warnings, list):
-                    raise ValueError("typed warning list required")
-                for warning in warnings:
-                    string(warning)
-            if metadata.get("paging") is not None:
-                paging = properties(metadata["paging"])
-                response["paging"] = {
-                    "pageSize": integer(paging.get("pagesize", 0), 32, False),
-                    "offset": integer(paging.get("offset"), 32),
-                    "nextCursor": string(paging.get("nextcursor")),
-                    "totalCount": integer(paging.get("totalcount"), 64),
-                    "hasMore": boolean(paging.get("hasmore")),
-                }
-                response["paging"] = {key: value for key, value in response["paging"].items() if value is not None}
-        return response
-    except (ValueError, TypeError):
+            typed = properties(body, {"correlationid": string, "messageid": string, "resultpayload": lambda item: item})
+            return {"correlationId": typed.get("correlationid"), "messageId": typed.get("messageid"),
+                    "resultPayload": typed.get("resultpayload")}
+        typed = properties(body, {"correlationid": string, "payload": lambda item: item,
+            "success": lambda item: boolean(item, False), "errormessage": string, "metadata": metadata}, {"success": True})
+        return {"correlationId": typed.get("correlationid"), "payload": typed.get("payload"),
+                "payloadPresent": "payload" in typed, "success": typed["success"],
+                "errorMessage": typed.get("errormessage"), "paging": (typed.get("metadata") or {}).get("paging")}
+    except (ValueError, TypeError, OverflowError):
         return None
 
 
-def _expected_gateway_error(step: dict, document: dict) -> dict | None:
+def _expected_gateway_error(step: dict, document: dict, head: str = "CLI") -> dict | None:
     """Model the pinned SDK error mapping, including its typed Query response outcomes."""
     script = step["scriptedResponse"]
     status, body = script["statusCode"], _response_body(step)
@@ -518,6 +546,8 @@ def _expected_gateway_error(step: dict, document: dict) -> dict | None:
         if isinstance(correlation, str) and ULID.fullmatch(correlation) is not None:
             error["correlationId"] = correlation
         return error
+    elif not problem and step["kind"] == "query" and not _sdk_response(step)["payloadPresent"]:
+        return {"code": "internal_error", "message": "The CLI action failed." if head == "CLI" else "MCP tool invocation failed."}
     elif not problem:
         return None
     if special_detail is not None:
@@ -529,6 +559,8 @@ def _expected_gateway_error(step: dict, document: dict) -> dict | None:
     except ValueError:
         title = None
     declared_status = body.get("status")
+    if "status" in body and type(declared_status) not in (int, float):
+        return {"code": "internal_error", "message": "Operation execution failed."}
     if type(declared_status) is int and -(2 ** 31) <= declared_status < 2 ** 31:
         status = declared_status
     # The SDK uses HTTP reason only when title is null, then Core drops blank values.
@@ -555,10 +587,10 @@ def _expected_gateway_error(step: dict, document: dict) -> dict | None:
     return error
 
 
-def _assert_result_contract(document: Any, step: dict[str, Any], location: str) -> None:
+def _assert_result_contract(document: Any, step: dict[str, Any], location: str, head: str = "CLI") -> None:
     if not isinstance(document, dict):
         _fail(f"{location}: result must be an object")
-    expected_error = _expected_gateway_error(step, document)
+    expected_error = _expected_gateway_error(step, document, head)
     if expected_error is not None:
         if not _json_equal(document, {"error": expected_error}):
             _fail(f"{location}: required Gateway error document differs: expected {_canonical({'error': expected_error})}; got {_canonical(document)}")

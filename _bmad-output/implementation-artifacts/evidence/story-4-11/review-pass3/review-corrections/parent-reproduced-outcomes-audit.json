@@ -1,0 +1,45 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "case": "quoted-plus",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "space-time",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "week-time",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "comma-time",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "duplicate-case-invalid",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "unicode-case",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "missing-payload",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "quoted-status",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "null-status",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    },
+    {
+      "case": "bool-status",
+      "correctedOracleAcceptsPreviouslyObservedActualCliDocument": true
+    }
+  ]
+}

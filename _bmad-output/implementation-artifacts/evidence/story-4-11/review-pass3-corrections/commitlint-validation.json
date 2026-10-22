@@ -1,0 +1,17 @@
+{
+  "checkedAtUtc": "2026-10-22T11:17:45.635525+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "pinnedCliVersion": "21.2.2",
+  "installedCliVersion": "21.2.2",
+  "message": "fix(conformance): complete story 4.11 review corrections\n",
+  "messageSha256": "f458110cd66b9e0a94b0cc13211c608b04fd01641365518d45bcb43ec3f3f8a5",
+  "messageFile": "/tmp/mcpcli-story411-commit-er8l82cy.txt",
+  "exitCode": 0,
+  "result": "passed"
+}

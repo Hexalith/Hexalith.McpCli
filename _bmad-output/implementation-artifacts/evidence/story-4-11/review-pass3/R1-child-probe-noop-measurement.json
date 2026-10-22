@@ -1,0 +1,9 @@
+{
+  "result": "failed",
+  "fullV1Accepted": false,
+  "elapsedMilliseconds": null,
+  "failures": [
+    "root.GetProperty(\u0022result\u0022).GetString()\r\n    should be\r\n\u0022passed\u0022\r\n    but was\r\n\u0022pending\u0022\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\u0022result\u0022:\u0022pending\u0022,\u0022fullV1Accepted\u0022:false}\n"
+  ],
+  "error": "Shouldly.ShouldAssertException: root.GetProperty(\u0022result\u0022).GetString()\r\n    should be\r\n\u0022passed\u0022\r\n    but was\r\n\u0022pending\u0022\r\n    difference\r\nDifference     |       |    |    |    |    |    |   \n               |      \\|/  \\|/  \\|/  \\|/  \\|/  \\|/  \nIndex          | 0    1    2    3    4    5    6    \nExpected Value | p    a    s    s    e    d         \nActual Value   | p    e    n    d    i    n    g    \nExpected Code  | 112  97   115  115  101  100       \nActual Code    | 112  101  110  100  105  110  103  \r\n\r\nAdditional Info:\r\n    {\u0022result\u0022:\u0022pending\u0022,\u0022fullV1Accepted\u0022:false}\n\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.AssertCompletedEvidence(String evidence, Boolean requireV1, Int32 parentProcessId) in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 186\n   at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds() in /tmp/mcpcli-pass3-guard-removal-_9tn6irg/tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:line 40"
+}

@@ -1,0 +1,85 @@
+{
+  "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3-corrections-corrections/production/Hexalith.Tenants.Contracts/inputs-tmyojaxk/vectors/0/add-user-to-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M5HMZ025WVS7Q2PTVA9N2M33",
+      "correlationId": "01M5HMZ025WVS7Q2PTVA9N2M33",
+      "tenant": "system",
+      "aggregateId": "vector-members",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "messageId": "01M5HMZ0XVH93NZ8JAVAGX0YG7",
+      "correlationId": "01M5HMZ0XVH93NZ8JAVAGX0YG7",
+      "tenant": "system",
+      "aggregateId": "vector-members",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "tenant": "system",
+      "document": {
+        "items": [
+          {
+            "userId": "vector-user-1@example.com",
+            "role": "TenantContributor"
+          }
+        ],
+        "cursor": null,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HMZ025WVS7Q2PTVA9N2M33",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Members",
+          "TenantId": "vector-members"
+        },
+        "correlationId": "01M5HMZ025WVS7Q2PTVA9N2M33"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M5HMZ0XVH93NZ8JAVAGX0YG7",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "Role": "TenantContributor",
+          "TenantId": "vector-members",
+          "UserId": "vector-user-1@example.com"
+        },
+        "correlationId": "01M5HMZ0XVH93NZ8JAVAGX0YG7"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-members"
+        }
+      }
+    }
+  ]
+}

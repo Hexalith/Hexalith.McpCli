@@ -1,0 +1,131 @@
+[
+  {
+    "case": "quoted-plus",
+    "exitCode": 0,
+    "actualDocument": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "matched": true
+      },
+      "paging": {
+        "pageSize": 7
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "quoted-plus: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"detail\":\"Query response body could not be parsed.\",\"status\":200}}; got {\"document\":{\"matched\":true},\"operation\":\"parties.get-party\",\"paging\":{\"pageSize\":7},\"tenant\":\"tenant-a\"}"
+  },
+  {
+    "case": "space-time",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "space-time/operation: required result must equal \"parties.get-party\""
+  },
+  {
+    "case": "week-time",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "week-time/operation: required result must equal \"parties.get-party\""
+  },
+  {
+    "case": "comma-time",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "comma-time/operation: required result must equal \"parties.get-party\""
+  },
+  {
+    "case": "duplicate-case-invalid",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "gateway_error",
+        "status": 200,
+        "detail": "Query response body could not be parsed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "duplicate-case-invalid/operation: required result must equal \"parties.get-party\""
+  },
+  {
+    "case": "unicode-case",
+    "exitCode": 0,
+    "actualDocument": {
+      "operation": "parties.get-party",
+      "tenant": "tenant-a",
+      "document": {
+        "matched": true
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "unicode-case: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"correlationId\":\"01J9MZHXT3RKM0VWXRXGSJDATK\",\"detail\":\"Query semantic failure\",\"status\":200}}; got {\"document\":{\"matched\":true},\"operation\":\"parties.get-party\",\"tenant\":\"tenant-a\"}"
+  },
+  {
+    "case": "missing-payload",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "internal_error",
+        "message": "The CLI action failed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "missing-payload/operation: required result must equal \"parties.get-party\""
+  },
+  {
+    "case": "quoted-status",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "internal_error",
+        "message": "Operation execution failed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "quoted-status: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"detail\":\"bad status\",\"status\":503}}; got {\"error\":{\"code\":\"internal_error\",\"message\":\"Operation execution failed.\"}}"
+  },
+  {
+    "case": "null-status",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "internal_error",
+        "message": "Operation execution failed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "null-status: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"detail\":\"bad status\",\"status\":503}}; got {\"error\":{\"code\":\"internal_error\",\"message\":\"Operation execution failed.\"}}"
+  },
+  {
+    "case": "bool-status",
+    "exitCode": 2,
+    "actualDocument": {
+      "error": {
+        "code": "internal_error",
+        "message": "Operation execution failed."
+      }
+    },
+    "oracleAcceptedActualDocument": false,
+    "oracleDiagnostic": "bool-status: required Gateway error document differs: expected {\"error\":{\"code\":\"gateway_error\",\"detail\":\"bad status\",\"status\":503}}; got {\"error\":{\"code\":\"internal_error\",\"message\":\"Operation execution failed.\"}}"
+  }
+]

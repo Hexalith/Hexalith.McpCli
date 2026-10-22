@@ -1,0 +1,369 @@
+{
+  "scope": "Story 4.11 code review pass 3 R1-R16",
+  "runner": "local Linux",
+  "checks": [
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:08.769109+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 1.599,
+      "stdout": "restore.stdout.txt",
+      "stderr": "restore.stderr.txt"
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:10.368637+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 4.011,
+      "stdout": "build.stdout.txt",
+      "stderr": "build.stderr.txt"
+    },
+    {
+      "label": "test-abstractions",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:14.380034+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 1.297,
+      "stdout": "test-abstractions.stdout.txt",
+      "stderr": "test-abstractions.stderr.txt"
+    },
+    {
+      "label": "test-analyzers",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:15.677101+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 7.378,
+      "stdout": "test-analyzers.stdout.txt",
+      "stderr": "test-analyzers.stderr.txt"
+    },
+    {
+      "label": "test-core",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:23.055661+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 2.197,
+      "stdout": "test-core.stdout.txt",
+      "stderr": "test-core.stderr.txt"
+    },
+    {
+      "label": "test-manifest",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:09:25.253688+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 45.848,
+      "stdout": "test-manifest.stdout.txt",
+      "stderr": "test-manifest.stderr.txt"
+    },
+    {
+      "label": "test-cli",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:10:11.101187+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 18.057,
+      "stdout": "test-cli.stdout.txt",
+      "stderr": "test-cli.stderr.txt"
+    },
+    {
+      "label": "test-mcp",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:10:29.159902+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 2.081,
+      "stdout": "test-mcp.stdout.txt",
+      "stderr": "test-mcp.stderr.txt"
+    },
+    {
+      "label": "python-tests",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:10:31.240331+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 20.846,
+      "stdout": "python-tests.stdout.txt",
+      "stderr": "python-tests.stderr.txt"
+    },
+    {
+      "label": "sample-validation",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:10:52.089980+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 22.799,
+      "stdout": "sample-validation.stdout.txt",
+      "stderr": "sample-validation.stderr.txt"
+    },
+    {
+      "label": "sample-loopback",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:11:14.888705+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 602.009,
+      "stdout": "sample-loopback.stdout.txt",
+      "stderr": "sample-loopback.stderr.txt"
+    },
+    {
+      "label": "restore-after-loopback",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:21:16.870628+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 1.465,
+      "stdout": "restore-after-loopback.stdout.txt",
+      "stderr": "restore-after-loopback.stderr.txt"
+    },
+    {
+      "label": "strict-production-replay",
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3/production"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:21:18.336024+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 556.068,
+      "stdout": "strict-production-replay.stdout.txt",
+      "stderr": "strict-production-replay.stderr.txt"
+    },
+    {
+      "label": "strict-benchmark",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "environmentOverrides": {
+        "MCPCLI_BENCHMARK_REQUIRE_V1": "true",
+        "MCPCLI_BENCHMARK_OUTPUT": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-11/review-pass3/production/catalog-benchmark.json"
+      },
+      "startedUtc": "2026-10-22T10:30:34.381998+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.877,
+      "stdout": "strict-benchmark.stdout.txt",
+      "stderr": "strict-benchmark.stderr.txt"
+    },
+    {
+      "label": "isolated-string",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogTests.StringIdentifierKindDoesNotApplyUlidPattern"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:35.259166+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.405,
+      "stdout": "isolated-string.stdout.txt",
+      "stderr": "isolated-string.stderr.txt"
+    },
+    {
+      "label": "default-benchmark-cleanup",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:35.689683+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.811,
+      "stdout": "default-benchmark-cleanup.stdout.txt",
+      "stderr": "default-benchmark-cleanup.stderr.txt"
+    },
+    {
+      "label": "offline-modules",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "modules",
+        "--strict"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:36.522285+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.693,
+      "stdout": "offline-modules.stdout.txt",
+      "stderr": "offline-modules.stderr.txt"
+    },
+    {
+      "label": "offline-operations-parties",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "operations",
+        "parties",
+        "--strict"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:37.215547+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.628,
+      "stdout": "offline-operations-parties.stdout.txt",
+      "stderr": "offline-operations-parties.stderr.txt"
+    },
+    {
+      "label": "offline-operations-tenants",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "operations",
+        "tenants",
+        "--strict"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:37.844752+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.61,
+      "stdout": "offline-operations-tenants.stdout.txt",
+      "stderr": "offline-operations-tenants.stderr.txt"
+    },
+    {
+      "label": "offline-describe-parties",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.search-parties",
+        "--lint",
+        "--strict"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:38.455837+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.62,
+      "stdout": "offline-describe-parties.stdout.txt",
+      "stderr": "offline-describe-parties.stderr.txt"
+    },
+    {
+      "label": "offline-describe-tenants",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+        "describe",
+        "tenants.get-tenant",
+        "--lint",
+        "--strict"
+      ],
+      "environmentOverrides": {},
+      "startedUtc": "2026-10-22T10:30:39.076996+00:00",
+      "result": "passed",
+      "exitCode": 0,
+      "elapsedSeconds": 0.657,
+      "stdout": "offline-describe-tenants.stdout.txt",
+      "stderr": "offline-describe-tenants.stderr.txt"
+    }
+  ],
+  "defaultBenchmarkLeakedFiles": [],
+  "result": "passed",
+  "finishedUtc": "2026-10-22T10:30:39.735576+00:00"
+}
