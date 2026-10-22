@@ -653,3 +653,73 @@ results; no new normal Ubuntu CI result, push, merge or publication is claimed.
 The required local workflow completion commit records this corrected source
 and evidence. Live authorization, privacy, persisted effects and retirement
 retain their later gates.
+
+### Review Findings (code review pass 5, 2026-10-22)
+
+Code review 2026-10-22 of the complete committed story range `fce41d0..2ee9a88` (`7f4a08c`, `f20a4e0`, `bf9c49a`, `c887634`, `2a2d88b`, `e924551`, `2ee9a88` and their merges).
+
+- **Code-only scope:** excludes `_bmad-output/` and the `references/Hexalith.Builds` gitlink move; includes the fourteen approved Tenants vectors and `tenants-approved.json`.
+- **Size and mode:** 39 files, +6,984/−79, 7,770 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 38 normalized findings (BH 20, EC 15, VG 1, AA 2). 6 survive as 3 patch and 1 already-tracked defer entries; 32 are rejected. No decision is needed.
+
+Parent checks during triage:
+- The only Core.Tests theory sources (`QueryValidationTests.cs:113`, `QueryPagingTests.cs:16`) yield strings and numbers, so xUnit discovery builds no Catalog before the child's measured `Build`.
+- `CatalogBuilder.Build` serializes with default options (`SchemaDeriver.cs:523`, `:557`), the same serializer path `InvalidateOutput` warms before timing.
+- Local Python 3.14.4 accepts `2026-10-22T24:00:00Z` in `datetime.fromisoformat`.
+- `gh run list`: the newest runs are the `main` push of `736db59`, all successful. `2ee9a88` has no CI run.
+
+- [x] [Review][Patch] P1 — low. The benchmark child warms System.Text.Json before the timed `Build`. `MeasureFirstConstruction` calls `RunWithFailureEvidence` (`:65`), whose `InvalidateOutput` (`:250`) serializes the pending marker with `JsonSerializer.Serialize` and default options (`:245`) before `Stopwatch.StartNew()` (`:74`). `Build` uses the same default-options serializer (`SchemaDeriver.cs:523`, `:557`), so part of its first-use cost falls outside the measurement. This is the pass 3 R8 defect in a new place; the parent already invalidates the file before starting the child (`:23`). Fix: write the pending marker as a literal JSON string. `FailureEvidenceWrapperInvalidatesPriorSuccessAndRetainsTheException` still covers it (AA). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:245]
+- [x] [Review][Patch] P2 — low. No test protects the duplicate-operation refusal in `run_catalog`. Discovery parity compares two heads that share Core, and the coverage check compares sets, so neither sees a repeated listing. Deleting `:783-784` leaves every test green. Pass 4 rejected a test for this guard because "a later check backstops each one", but no later check does here. Fix: copy `test_unselected_exposed_operation_fails_before_core_preflight_or_gateway` (`test_loopback.py:373`) with one operation listed twice by both heads. Assert `duplicate operation in complete Catalog: <name>`, and assert that `_preflight_vectors` and `ReplayGateway` are not called (VG). [tools/conformance-vectors/v1/run_loopback.py:783]
+- [x] [Review][Patch] P3 — low. The root README's production gate commands omit their prerequisites. `check_enrolled.py` reads `src/Hexalith.McpCli/obj/project.assets.json` (`:168`) and imports `jsonschema` through `validate`. `README.md:124` gives the command with no restore or `requirements.txt` step: without the restore the run records `failed`, and without `jsonschema` it crashes before `enrolled.json` exists. The complete block is in `tools/conformance-vectors/v1/README.md:170-178`, and this second copy has drifted from it. Fix: say the commands run after `dotnet restore Hexalith.McpCli.slnx`, the Release build and installing `tools/conformance-vectors/v1/requirements.txt`, and link that block. The paragraph's process wording came from pass 3 R12/R13 and stays (AA, BH). [README.md:124]
+- [x] [Review][Defer] D1 — `maybe-false`; medium if true. The 500 ms limit also runs in the ordinary parallel unit tier and could flake under CI load (BH, EC). [tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:18] — deferred: already tracked (`deferred-work.md:575`).
+
+#### Rejected (code review pass 5)
+
+Carried from earlier logged rulings, with the same location and bad outcome:
+- `false` — The READMEs cite the `c887634` audit and 194.5002 ms although later commits changed the gates (BH). Carried from passes 3 and 4.
+- `low` — No timeout or kill for the benchmark child, cancellation, or the `check_enrolled` restore, build and msbuild calls (BH, EC). Carried from BH9/EC4 and passes 3–4. The new sub-claims add nothing reachable: the child runs the PATH `dotnet` that CI and both READMEs use to launch the parent, and the single 15 s `--validate-vectors` call has passed in every CI run.
+- `low` — `RetainFailure` throws on truncated or non-JSON evidence (BH, EC). Carried from REC2 and passes 3–4.
+- `false` — The parent accepts thin child evidence (BH). Carried from pass 4: `ConstructionOutcome` makes `passed` imply the flag, no diagnostics and no missing modules. The new "exactly one Ulid sample" part is also false: `:72` requires exactly one assembly beyond the manifest and `:77` requires it to be Ulid-kind; the constraint does not restrict production kinds.
+- `false` — `VectorGatewayCapture` uses different JSON options from the SDK (BH). Carried from pass 3.
+- `false` — The validator's catch filter, one `try` per file, and reliance on the executor swallowing the capture exception (BH). Carried from passes 3–4. An executor that stopped swallowing it would fail every step loudly, never pass one.
+- `false` — Offline Core rejection is proven only for payloads (BH). Carried from pass 4.
+- `low` — The private `Entries` reflection is duplicated (BH). Carried from pass 3 and Story 4.10 pass 3.
+- `false` — The evidence files lack a commit SHA (BH). Carried from passes 3–4.
+- `false` — The combined replay's `operationCount` comes from receipts, and discovery and describe documents are not retained (BH). Carried from pass 3.
+- `low` — The approved Tenants inventory wording contradicts `approved` (BH). Carried from passes 3–4.
+- `false` — The Tenants receipt's `status` field is unchecked (BH). Carried from pass 4.
+- `low` — Variants such as `TRUE` or `1` for `MCPCLI_BENCHMARK_REQUIRE_V1` (EC). Carried from pass 4.
+- `low` — The benchmark accepts an empty `requiredModules` (EC). Carried from passes 3–4.
+- `low` — Adapter JSON without `findings` raises `KeyError` (EC). Carried from pass 3.
+- `false` — A captured request without `correlationId` raises `KeyError` (EC). Carried from pass 4.
+- `low` — A command scripted with 304 and a body (EC). Carried from pass 4.
+- `false` — `--validate-vectors` with no paths exits 0 (EC). Carried from pass 3.
+
+New rulings:
+- `false` — "Fresh first construction" holds only by comment, and xUnit discovery could warm Catalog caches (BH). Discovery builds no Catalog (parent check above), and runner startup is the process startup the spec excludes. The one real pre-timing warm-up is P1.
+- `false` — The ConformanceHost is outside the solution, so CI never compiles its new code (BH). Both `#if` branches compile in required jobs: the sample loopback builds `ConformanceProduction=false` (`run-sample-loopback.sh:18-20`) and `check_enrolled.py:94-96` builds `true`. The `.slnx` exclusion predates the story.
+- `low` — The README's operation table is untested (BH). VG checked it against the built CLI, and inventory coverage pins the operation set. A README-parsing test adds machinery for an unlikely drift.
+- `low` — The Tenants postconditions are uneven (BH). `change-user-role` has no `arrayLength`; `remove-user-from-tenant` reads `hasMore` from the unpaged document, where that response carries it. The bytes are owner-approved and hash-bound, so any change needs a Tenants re-approval cycle.
+- `low` — Production and sample host builds share `obj/` and `bin/` (BH). Only a manual build without a restore inherits stale state. `check_enrolled.py` always restores first, and the agent instructions already require a restore after the loopback. Mode-specific output paths add build configuration.
+- `false` — `test_loopback.py` re-imports modules locally, and one class name embeds a story number (BH). Behavior-neutral; no harm is named.
+- `low` — An exported `MCPCLI_BENCHMARK_PROBE=1` runs the measurement in the warm parent (EC). This needs a developer to export an internal variable, and without `MCPCLI_BENCHMARK_OUTPUT` the parent run fails at `Path.GetFullPath(null)`. A guard adds a branch.
+- `low` — A `PackageReference` whose casing differs from the nuspec ID breaks production replay (EC). `verify` records the nuspec ID (`verify_artifact.py:114-119`), the output directory uses the reference identity (`check_enrolled.py:182`), and `production_replay` (`:113`) then looks in the wrong directory on Linux. It fails closed, both current references match their nuspec IDs, and the fix adds plumbing.
+- `low` — Newer Python `fromisoformat` accepts hour 24, which the SDK refuses (EC). Parent confirmed it on Python 3.14.4. The mismatch fails closed, and it is the same class as pass 4's Python-version grammar ruling.
+- `low` — A scripted non-ULID response `messageId` fails replay (EC). It fails closed, no maintained vector does it, and the fix adds a schema rule.
+- `low` — The echoed-correlation failure names no vector, step or head (EC). Confirmed at `run_loopback.py:585`. Only a head regression reaches it, and the fix threads a location through three callers.
+- `false` — The measured lambda's JIT loads Core and Abstractions before timing (EC). The spec excludes assembly loading. The README's included "dependencies loaded on demand inside `Build`" are Build's own dependencies, which still load inside the timed region.
+
+### Review pass 5 implementation and local verification — 2026-10-22
+
+P1–P3 are implemented and verified locally:
+- **P1:** `InvalidateOutput` writes the pending marker as a literal JSON string, so the child's timed `Build` is now the first System.Text.Json use (`CatalogPerformanceTests.cs:246`).
+- **P2:** `test_duplicate_listed_operation_fails_before_core_preflight_or_gateway` (`test_loopback.py:396`) lists `sample.get-item` twice on both heads. It asserts the exact `duplicate operation in complete Catalog: sample.get-item` error, the two CLI discovery calls, and that neither `_preflight_vectors` nor `ReplayGateway` runs. A scratch copy with `run_loopback.py:783-784` removed fails it with `AssertionError: Core preflight must not run`.
+- **P3:** `README.md:124` names the `requirements.txt` install, `dotnet restore Hexalith.McpCli.slnx` and the warnings-as-errors Release build, and links the complete block in `tools/conformance-vectors/v1/README.md`.
+
+Checks:
+- `dotnet build tests/Hexalith.McpCli.Core.Tests --no-restore --configuration Release -warnaserror` passed.
+- The strict `CatalogPerformanceTests` class passed (20 total, 1 intentional non-probe skip). The child recorded `passed`, `fullV1Accepted: true` and 142.7116 ms.
+- `python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'` ran 158 tests, all passing.
+
+The working tree also held another session's uncommitted envelope value-object changes to `SchemaDeriver.cs` and Core.Tests, so the local Release build included them. D1 remains already tracked. These local results do not claim a CI run; no commit or push was performed.

@@ -242,7 +242,8 @@ public sealed class CatalogPerformanceTests
     private static void InvalidateOutput(string output)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
-        File.WriteAllText(output, JsonSerializer.Serialize(new { result = "pending", fullV1Accepted = false }) + Environment.NewLine);
+        // A literal keeps System.Text.Json cold until the child's measured Build.
+        File.WriteAllText(output, "{\"result\":\"pending\",\"fullV1Accepted\":false}" + Environment.NewLine);
     }
 
     private static void RunWithFailureEvidence(string output, Action measure)
