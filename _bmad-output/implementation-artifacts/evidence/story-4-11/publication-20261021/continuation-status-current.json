@@ -1,5 +1,5 @@
 {
-  "observedAtUtc": "2026-10-22T04:40:03.051208+00:00",
+  "observedAtUtc": "2026-10-22T04:43:39.191521+00:00",
   "status": "in-progress",
   "eventStore": {
     "pr": 372,
@@ -422,7 +422,7 @@
       "conclusion": "success",
       "allFiveSignedPackagesAndBothOciArchitecturesQualified": true,
       "qualification": "parent-tenants-5.10.1-full-repair-qualified.json",
-      "qualificationSha256": "82e0ea1369c757051acae009fa29a6363880fbe5c0dd7c788523f30d25225a4a"
+      "qualificationSha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
     }
   },
   "releaseDispatchedByThisTask": true,

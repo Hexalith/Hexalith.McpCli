@@ -1,0 +1,17 @@
+{
+  "atUtc": "2026-10-22T04:45:08.148704+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "pinnedVersion": "21.2.2",
+  "exactFullMessage": "docs(evidence): correct container SDK metadata binding\n\nRead the SDK version from its exact OCI label and record the base image\nseparately. Rebind the qualified release, enrollment receipt and current\nstatus hashes while preserving all source, runtime and approved inputs.\n\nRetain the initial normal PR head and pinned commitlint evidence.\n",
+  "inputSha256": "808663a28896c366c16e88cd98aa472a7438dae6f254b6abb984bcfe6aa22c19",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\ndocs(evidence): correct container SDK metadata binding\n\nRead the SDK version from its exact OCI label and record the base image\nseparately. Rebind the qualified release, enrollment receipt and current\nstatus hashes while preserving all source, runtime and approved inputs.\n\nRetain the initial normal PR head and pinned commitlint evidence.\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": "",
+  "scope": "Bounded metadata-only follow-up candidate; commit/push through the existing normal PR, no amend or rebase."
+}

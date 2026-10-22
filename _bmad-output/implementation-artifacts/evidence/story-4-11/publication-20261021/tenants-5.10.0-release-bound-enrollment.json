@@ -100,8 +100,8 @@
     "scope": "All five normal packages and both container architectures, exact identity/complete UTC created labels, digest-bound smokes and unchanged normal protected controls.",
     "qualification": {
       "path": "parent-tenants-5.10.1-full-repair-qualified.json",
-      "bytes": 1822,
-      "sha256": "82e0ea1369c757051acae009fa29a6363880fbe5c0dd7c788523f30d25225a4a"
+      "bytes": 2092,
+      "sha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
     },
     "bindingReports": [
       {
@@ -116,8 +116,8 @@
       },
       {
         "path": "parent-tenants-5.10.1-actual-oci-binding.json",
-        "bytes": 8220,
-        "sha256": "5861132bc6e7551ed8d196f9fe0091bdf4ce6aac6294cd24d688d1b5a157b220"
+        "bytes": 8282,
+        "sha256": "2c1bcddab9832c593e24b580479fc97738a40129fa1b3ebe37638f47fd857476"
       }
     ]
   },

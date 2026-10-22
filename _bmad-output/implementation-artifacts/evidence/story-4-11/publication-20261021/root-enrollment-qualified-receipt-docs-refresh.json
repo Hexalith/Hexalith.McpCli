@@ -1,9 +1,9 @@
 {
-  "recordedAtUtc": "2026-10-22T04:40:03.051895+00:00",
+  "recordedAtUtc": "2026-10-22T04:43:39.191521+00:00",
   "scope": "Agreed post-qualification docs/receipt/status refresh only; no compiled code, project, policy, Builds gitlink, inventory, accepted lint or vector bytes changed. Parent re-read required before root commit. Existing local source/TRX proof remains bound to unchanged test/runtime inputs; final actualUbuntu gates remain mandatory.",
   "repairedFullReleaseQualification": {
     "path": "parent-tenants-5.10.1-full-repair-qualified.json",
-    "sha256": "82e0ea1369c757051acae009fa29a6363880fbe5c0dd7c788523f30d25225a4a"
+    "sha256": "3c9a94f0160138126691e29f189ed77151f4cca2da7814e52bd8e9e885f8e419"
   },
   "changes": [
     {
@@ -39,14 +39,14 @@
       "beforeBytes": 6066,
       "beforeSha256": "64c098914fd987a33739340c039380e2036811e40ea31040b0cc3d6ee0538b70",
       "afterBytes": 7711,
-      "afterSha256": "d2b497c08ef9df20bf132b0947bd3bf78a300f949c466a249e141daddcc322a2"
+      "afterSha256": "344b7465467afb797f498fcc64df310d882ef23b7c5f7d86135beb028fc320bb"
     },
     {
       "path": "_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/continuation-status-current.json",
       "beforeBytes": 27276,
       "beforeSha256": "16a9f43cdfd11b2c0191ed22c9348e62628ad82b11a1fe7a3e050debbad6788d",
       "afterBytes": 27718,
-      "afterSha256": "ba7034cde702e3bfaaad88b7729e3a0cfc1f597e480fc7f014e9cf427123f210"
+      "afterSha256": "82cc7bf10326634586f6b558ff09a975cc4c6e5a9bc36f9898113d0c29caf5fa"
     }
   ],
   "approvedVectors": {
@@ -59,7 +59,11 @@
     "unchanged": true
   },
   "enrolledPackageIdentityAndRawArchiveHashUnchanged": true,
-  "rootCommitOrPrPerformed": false,
+  "rootCommitOrPrPerformed": true,
   "productionAccepted": false,
-  "fullV1Accepted": false
+  "fullV1Accepted": false,
+  "metadataCorrection": "Correct SDK/base-image metadata naming in parent OCI report; exact root source, package/vector/inventory and all acceptance requirements unchanged.",
+  "rootCommitOrPrPerformedAtOriginalRefresh": false,
+  "currentRootCommit": "f20a4e0d279615def05a454b73599d1cf583c338",
+  "normalRootPullRequest": "https://github.com/Hexalith/Hexalith.McpCli/pull/1"
 }

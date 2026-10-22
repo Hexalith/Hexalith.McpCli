@@ -1,5 +1,5 @@
 {
-  "checkedAtUtc": "2026-10-22T04:38:10.494145+00:00",
+  "checkedAtUtc": "2026-10-22T04:43:17.088777+00:00",
   "result": "passed",
   "repository": "Hexalith/Hexalith.Tenants",
   "source": "205cbc5019343d344643b530fb03aee82af2840d",
@@ -47,7 +47,8 @@
         "org.opencontainers.artifact.created": "2026-10-22T04:25:07Z"
       },
       "configCreated": "2026-10-22T04:25:17.7314525Z",
-      "sdkVersion": "mcr.microsoft.com/dotnet/aspnet",
+      "sdkVersion": "10.0.402",
+      "baseImage": "mcr.microsoft.com/dotnet/aspnet",
       "allIdentityAndCompleteUtcTimestampChecksPassed": true
     },
     {
@@ -82,7 +83,8 @@
         "org.opencontainers.artifact.created": "2026-10-22T04:25:07Z"
       },
       "configCreated": "2026-10-22T04:25:17.6913182Z",
-      "sdkVersion": "mcr.microsoft.com/dotnet/aspnet",
+      "sdkVersion": "10.0.402",
+      "baseImage": "mcr.microsoft.com/dotnet/aspnet",
       "allIdentityAndCompleteUtcTimestampChecksPassed": true
     }
   ],
