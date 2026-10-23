@@ -1,0 +1,75 @@
+{
+  "baseCommit": "6646412879cf5c38e915acab579d0880e69c5cbb",
+  "scope": "Spec P15\u2013P24; parent acceptance and review pending",
+  "checks": [
+    {
+      "command": "dotnet restore Hexalith.McpCli.slnx",
+      "exitCode": 0,
+      "receipt": "restore.stdout.txt"
+    },
+    {
+      "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "exitCode": 0,
+      "warnings": 0,
+      "errors": 0,
+      "receipt": "build-final.stdout.txt"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+      "exitCode": 0,
+      "passed": 201,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "manifest.stdout.txt"
+    },
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "exitCode": 0,
+      "passed": 12,
+      "receipt": "runtime-tests.stdout.txt"
+    },
+    {
+      "command": "dotnet tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll -method '*ComposedResourcesKeepTokensAclAndGatewayContentRoot'",
+      "exitCode": 0,
+      "passed": 1,
+      "receipt": "composition.stdout.txt"
+    },
+    {
+      "command": "dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests",
+      "exitCode": 0,
+      "discovered": 1,
+      "receipt": "smoke-discovery.stdout.txt"
+    },
+    {
+      "command": "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-412-maintained-bootstrap-s_20faao/runtime timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "testSeconds": 17.941,
+      "receipt": "live-result.json"
+    }
+  ],
+  "initialFailure": {
+    "receipt": "manifest-initial-failure.txt",
+    "passed": 200,
+    "failed": 1,
+    "cause": "New endpoint assertion found no launchSettings in synthetic sources; fixed-port launch settings now make both clearing assertions meaningful."
+  },
+  "sourceIndependentPrerequisites": {
+    "receipt": "no-root-sources.json",
+    "passed": 12,
+    "rootReferencesExist": false
+  },
+  "missingPrerequisiteWithFailSkips": {
+    "receipt": "skip-fails.json",
+    "exitCode": 1,
+    "failSkipReported": true
+  },
+  "limitations": [
+    "Live-semantic vector coverage remains story 4.13.",
+    "Blocking source-build CI remains story 4.14.",
+    "Existing platform file-lock deferral remains tracked at deferred-work.md:589.",
+    "Agent-context update D1 remains deferred under the existing story 4.12 ledger heading."
+  ]
+}

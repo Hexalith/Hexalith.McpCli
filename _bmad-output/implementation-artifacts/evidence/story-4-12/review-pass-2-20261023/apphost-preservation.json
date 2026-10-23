@@ -1,0 +1,27 @@
+{
+  "before": [
+    {
+      "appHostPath": "/home/administrator/.local/state/hexalith/memories/access-telemetry/repair-spec14-allocated-console-20261023-beps5_uj/local-share/hexalith-builds/g4-workspaces/a03c93f5d7838c56b377422c5edd05fc/apphost/Hexalith.Builds.Module.AppHost.csproj",
+      "appHostPid": 880924,
+      "status": "running"
+    },
+    {
+      "appHostPath": "/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+      "appHostPid": 3246396,
+      "status": "running"
+    }
+  ],
+  "after": [
+    {
+      "appHostPath": "/home/administrator/.local/state/hexalith/memories/access-telemetry/repair-spec14-allocated-console-20261023-beps5_uj/local-share/hexalith-builds/g4-workspaces/a03c93f5d7838c56b377422c5edd05fc/apphost/Hexalith.Builds.Module.AppHost.csproj",
+      "appHostPid": 880924,
+      "status": "running"
+    },
+    {
+      "appHostPath": "/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+      "appHostPid": 3246396,
+      "status": "running"
+    }
+  ],
+  "unchanged": true
+}

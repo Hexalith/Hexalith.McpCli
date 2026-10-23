@@ -109,8 +109,68 @@ class RuntimeTests(unittest.TestCase):
             child = json.loads((run_dir / 'command.stdout.txt').read_text())
             self.assertEqual('6379', child['redisPort'])
             self.assertEqual('1', child['isolated'])
+            self.assertEqual('private-test-credential', child['credential'])
             receipt = json.loads((run_dir / 'result.json').read_text())
             self.assertEqual('6379', receipt['environmentOverrides']['HEXALITH_EVENTSTORE_TEST_REDIS_PORT'])
+            self.assertFalse((run_dir / 'sentry-certificates/issuer.key').exists())
+            for file in run_dir.rglob('*'):
+                if file.is_file() and file != run_dir / 'command.stdout.txt':
+                    self.assertNotIn('private-test-credential', file.read_text(), str(file))
+
+    def test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files(self):
+        for value in (None, '', '   '):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                environment = os.environ.copy()
+                if value is None:
+                    environment.pop('MCPCLI_ISOLATED_RUNTIME_DIR', None)
+                else:
+                    environment['MCPCLI_ISOLATED_RUNTIME_DIR'] = value
+                result = subprocess.run([sys.executable, str(Path(__file__).with_name('run-isolated.py').resolve())],
+                                        cwd=directory, env=environment, text=True, capture_output=True, timeout=5)
+                self.assertEqual(1, result.returncode)
+                self.assertEqual('', result.stdout)
+                self.assertEqual('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime directory.\n', result.stderr)
+                self.assertEqual([], list(Path(directory).iterdir()))
+
+    def test_wrapper_stops_a_real_hung_child_and_records_its_deadline(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = Path(directory)
+            result = self.wrapper_process(run_dir, 'hung-child')
+            self.assertEqual(124, result.returncode, result.stdout + result.stderr)
+            receipt = json.loads((run_dir / 'result.json').read_text())
+            self.assertEqual(124, receipt['commandExitCode'])
+            self.assertTrue((run_dir / 'child-started').exists())
+            self.assertTrue((run_dir / 'child-stopped').exists())
+
+    def test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = Path(directory)
+            result = self.wrapper_process(run_dir, 'interrupted-shutdown')
+            self.assertEqual(143, result.returncode, result.stdout + result.stderr)
+            self.assertEqual([], json.loads((run_dir / 'keys-at-shutdown.json').read_text()))
+            self.assertFalse((run_dir / 'sentry-certificates/issuer.key').exists())
+
+    def test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = Path(directory)
+            result = self.wrapper_process(run_dir, 'ignores-term')
+            self.assertEqual(124, result.returncode, result.stdout + result.stderr)
+            self.assertEqual(124, json.loads((run_dir / 'result.json').read_text())['commandExitCode'])
+            child = json.loads((run_dir / 'child-exit.json').read_text())
+            self.assertEqual(-signal.SIGKILL, child['returncode'])
+            with self.assertRaises(ProcessLookupError):
+                os.kill(child['pid'], 0)
+
+    def test_wrapper_records_bounded_stderr_before_parsing_a_failed_dapr_probe(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = Path(directory)
+            result = self.wrapper_process(run_dir, 'dapr-exit')
+            self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+            receipt = json.loads((run_dir / 'result.json').read_text())
+            detail = 'probe failure: ' + 'x' * (512 - len('probe failure: ')) + '...'
+            self.assertEqual({'exitCode': 7, 'stderr': detail}, receipt['daprBeforeCommand'])
+            self.assertEqual('RuntimeError', receipt['error']['type'])
+            self.assertEqual('Private Dapr registration probe exited 7. stderr: ' + detail, receipt['error']['message'])
 
     def test_wrapper_propagates_a_real_failing_child_exit_and_records_it(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -218,30 +278,66 @@ def wrapper_fixture(run_dir, mode):
 
     def start(arguments, **kwargs):
         if arguments[0] == sys.executable:
-            return real_popen(arguments, **kwargs)
+            process = real_popen(arguments, **kwargs)
+            if mode == 'ignores-term':
+                deadline = time.monotonic() + 2
+                while not (run_dir / 'child-started').exists():
+                    if process.poll() is not None or time.monotonic() >= deadline:
+                        if process.poll() is None:
+                            process.kill()
+                        process.wait(timeout=5)
+                        raise RuntimeError('The SIGTERM-ignoring test child did not become ready.')
+                    time.sleep(0.01)
+            return process
         name = Path(arguments[0]).name
         if name == 'sentry':
             certificates = run_dir / 'sentry-certificates'
             for filename in ('ca.crt', 'issuer.crt', 'issuer.key'):
-                (certificates / filename).write_text('private-test-credential')
+                (certificates / filename).write_text('private-test-credential' if filename.endswith('.key') else 'public-test-certificate')
         return Daemon(name)
 
     def run(arguments, **_):
         return subprocess.CompletedProcess(arguments, 7 if mode == 'dapr-exit' else 0,
-                                           '[{"appId":"existing"}]' if mode == 'dapr-apps' else '[]', '')
+                                           '' if mode == 'dapr-exit' else '[{"appId":"existing"}]' if mode == 'dapr-apps' else '[]',
+                                           'probe failure: ' + 'x' * 600 if mode == 'dapr-exit' else '')
 
     def stop(process):
+        if isinstance(process, real_popen):
+            try:
+                return real_stop(process)
+            finally:
+                # A broken forced-stop guard must fail without leaving the test child alive.
+                if process.poll() is None:
+                    process.kill()
+                    process.wait(timeout=5)
+                (run_dir / 'child-exit.json').write_text(json.dumps({'pid': process.pid, 'returncode': process.returncode}))
+        if mode == 'interrupted-shutdown':
+            (run_dir / 'keys-at-shutdown.json').write_text(json.dumps(
+                [file.name for file in (run_dir / 'sentry-certificates').glob('*.key')]))
+            raise SystemExit(143)
         if process.poll() is None:
             process.returncode = 0
 
+    real_stop = wrapper.stop_owned
     child = [sys.executable, '-c',
-             "import json,os,pathlib,sys; print(json.dumps({'redisPort':os.environ.get('HEXALITH_EVENTSTORE_TEST_REDIS_PORT'),'isolated':os.environ.get('MCPCLI_ISOLATED_TOPOLOGY')})); "
+             "import json,os,pathlib,sys; print(json.dumps({'redisPort':os.environ.get('HEXALITH_EVENTSTORE_TEST_REDIS_PORT'),'isolated':os.environ.get('MCPCLI_ISOLATED_TOPOLOGY'),'credential':os.environ.get('DAPR_CERT_KEY')})); "
              "pathlib.Path('child-succeeded').touch(); sys.exit(" + ('23' if mode == 'failing-child' else '0') + ")"]
+    if mode == 'hung-child':
+        child = [sys.executable, '-c',
+                 "import pathlib,signal,sys,time; "
+                 "signal.signal(signal.SIGTERM, lambda *_: (pathlib.Path('child-stopped').touch(), sys.exit(143))); "
+                 "pathlib.Path('child-started').touch(); time.sleep(60)"]
+    if mode == 'ignores-term':
+        child = [sys.executable, '-c',
+                 "import pathlib,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); "
+                 "pathlib.Path('child-started').touch(); time.sleep(60)"]
     with patch.object(wrapper, 'namespaces', return_value=current), \
             patch.object(wrapper.os, 'getpid', return_value=2 if mode == 'pid' else 1), \
             patch.object(wrapper.subprocess, 'run', side_effect=run), \
             patch.object(wrapper.subprocess, 'Popen', side_effect=start), \
             patch.object(wrapper.socket, 'create_connection', return_value=Connection()), \
+            patch.object(wrapper, 'COMMAND_TIMEOUT_SECONDS', 0.5 if mode in ('hung-child', 'ignores-term') else wrapper.COMMAND_TIMEOUT_SECONDS), \
+            patch.object(wrapper, 'STOP_GRACE_SECONDS', 0.2 if mode == 'ignores-term' else wrapper.STOP_GRACE_SECONDS), \
             patch.object(wrapper, 'stop_owned', side_effect=stop):
         return wrapper.inside(run_dir, child)
 

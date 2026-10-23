@@ -1,0 +1,16 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Manifest.Tests.TopologyLaunchTests.ComposedResourcesKeepTokensAclAndGatewayContentRoot (475ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.NotEmpty() Failure: Collection was empty
+    at Hexalith.McpCli.Manifest.Tests.TopologyLaunchTests.ComposedResourcesKeepTokensAclAndGatewayContentRoot() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs:296
+    --- End of stack trace from previous location ---
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) failed with 1 error(s) (31s 090ms)
+Exit code: 2
+
+Test run summary: Failed!
+  total: 201
+  failed: 1
+  succeeded: 200
+  skipped: 0
+  duration: 31s 267ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

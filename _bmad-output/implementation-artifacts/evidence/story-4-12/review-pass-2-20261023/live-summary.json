@@ -1,0 +1,20 @@
+{
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    }
+  ],
+  "wrongKeySignatureValidationLogged": true,
+  "successfulQueryDocumentAsserted": true,
+  "testSummary": "=== TEST EXECUTION SUMMARY ===\n   Hexalith.McpCli.Integration.Tests  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 17.941s",
+  "rawLogs": "/tmp/mcpcli-412-maintained-bootstrap-s_20faao/runtime/runs/20261023T194642Z-dacea243",
+  "stderrBytes": 0,
+  "privateKeysRemaining": 0
+}

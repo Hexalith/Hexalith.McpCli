@@ -1,6 +1,12 @@
+if (args.Contains("rev-parse") && int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_GIT_DELAY_MS"), out int gitDelay))
+{
+    Thread.Sleep(gitDelay);
+    return 0;
+}
+
+if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_DELAY_MS"), out int delay)) Thread.Sleep(delay);
 if (args.SequenceEqual(new[] { "--version" }))
 {
-    if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_DELAY_MS"), out int delay)) Thread.Sleep(delay);
     Console.WriteLine("CLI version: test-fixture");
     return 0;
 }

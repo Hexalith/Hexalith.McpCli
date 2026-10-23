@@ -1,0 +1,62 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 1.157
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 3.32
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 2.549
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 16.825
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 2.24
+  }
+]

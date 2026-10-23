@@ -1,0 +1,7 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '07f23f5cb8eb5c11290dc9841ca34c44bc134e66beb3501c19243bc9472de4af')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 12, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 13.338s

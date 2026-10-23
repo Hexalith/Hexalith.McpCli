@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -107,6 +107,18 @@ Full vector semantics and blocking CI source-build wiring remain 4.13 and 4.14.
   recorded result distinguishes skipped, failed and genuinely passed live proof.
 
 ## Implementation Notes
+
+- Code review pass 2 patches P15–P24 are implemented. Fresh restore and the
+  final Release warnings-as-errors solution build passed; all 201 Manifest cases
+  and 12 maintained runtime-tool cases passed. The prerequisite class also
+  passed all 12 cases from relocated built outputs with no root `references/`
+  directory. The documented `-failSkips` isolated live smoke passed one test
+  without skips in 17.941 seconds; the explicit missing-CLI check exited 1 with
+  `FAIL_SKIP`. All four private daemons exited 0, no private keys remained, and
+  both pre-existing user AppHosts kept their identities and running state.
+  Sanitized exact-command receipts and patch mapping are in
+  `evidence/story-4-12/review-pass-2-20261023/`. Parent acceptance audit and review
+  remain pending. The initial endpoint-fixture failure is retained separately.
 
 - Final parent verification after the follow-up review passed: 1,479 non-live
   tests, zero failed, five existing skips; all 199 Manifest cases executed.
@@ -412,15 +424,15 @@ Parent checks during triage:
 - The extracted `redis-server` links host `libssl.so.3`, `libcrypto.so.3`, `libz.so.1` and `libzstd.so.1`.
 - `tools/live-topology/runs/` is not git-ignored. An empty `MCPCLI_ISOLATED_RUNTIME_DIR` resolves to the working directory.
 
-- [ ] [Review][Patch] P15 — medium. A skipped smoke inside the wrapper exits 0, like a pass. [README.md:248]
+- [x] [Review][Patch] P15 — medium. A skipped smoke inside the wrapper exits 0, like a pass. [README.md:248]
   - xUnit v3 exits 0 for a skip. With Docker stopped, the base fixture skips inside the wrapper, which then records `commandExitCode: 0` and prints `Command completed: exit 0`.
   - AC4 requires the recorded result to distinguish skipped, failed and passed proof; only a manual read of stdout does so today.
   - Fix: add `-failSkips` to both documented live commands (`README.md:248`, `tools/live-topology/README.md:31`). A skip then exits 1 and stays identifiable as `FAIL_SKIP` with the standard diagnostic (AA).
-- [ ] [Review][Patch] P16 — medium. `DaprPrerequisiteTests` depends on the real root source checkouts. [tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs:79]
+- [x] [Review][Patch] P16 — medium. `DaprPrerequisiteTests` depends on the real root source checkouts. [tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs:79]
   - It runs the repository's Integration.Tests output with the isolation sentinel set. The fixture now calls `ValidateWorkspace` before any prerequisite probe (`AspireTopologyFixture.cs:37`).
   - On a checkout with only `references/Hexalith.Builds` initialized, which is the documented minimum for restore, all ten cases and `ExistingSentryListenerDoesNotFailPrerequisiteRun` fail with "Required root source project … is missing" instead of skipping. CI passes only because the reusable job initializes every root submodule.
   - Fix: run the child against a temporary root with declared, git-initialized stand-in checkouts, prepared once per test process. This follows the `TopologyFixtureLaunchTests` and `TopologyLaunchTests.PrepareSources` pattern (EC).
-- [ ] [Review][Patch] P17 — medium. Composition inspection omits settings that the live run depends on. [tests/Hexalith.McpCli.AppHost/Program.cs:134]
+- [x] [Review][Patch] P17 — medium. Composition inspection omits settings that the live run depends on. [tests/Hexalith.McpCli.AppHost/Program.cs:134]
   - Omitted settings:
     - each sidecar's placement and scheduler addresses (the wrapper's private 6050/6060);
     - `ASPNETCORE_ENVIRONMENT` and `DOTNET_ENVIRONMENT`;
@@ -429,29 +441,29 @@ Parent checks during triage:
     - the cleared endpoint ports.
   - Dropping any of them keeps `ComposedResourcesKeepTokensAclAndGatewayContentRoot` green; only a manual live run fails. Without the placement and scheduler arguments, sidecars fall back to default addresses where nothing listens inside the namespace.
   - Fix: add these non-secret values to the snapshot. Pass `--Dapr:PlacementHostAddress` and `--Dapr:SchedulerHostAddress` in that test, and assert every value for all three resources (VG, BH).
-- [ ] [Review][Patch] P18 — medium. The wrapper's child deadline path is untested. [tools/live-topology/run-isolated.py:166]
+- [x] [Review][Patch] P18 — medium. The wrapper's child deadline path is untested. [tools/live-topology/run-isolated.py:166]
   - The 900 s literal cannot be injected. No test covers the path from timeout through `stop_owned(child)` to `commandExitCode` 124.
   - This deadline is the guard for the tracked indefinite platform lock wait (`deferred-work.md:589`). Changing 124 to 0 would let a hung run pass, and all nine runtime tests would stay green.
   - Fix: move the deadline into a module constant, patch it in `wrapper_fixture`, and add a hung-child mode. It asserts exit 124, the recorded receipt, and that the real child was stopped (BH).
-- [ ] [Review][Patch] P19 — medium. The 10 s bounds on `dapr list` and `git rev-parse` are untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:134]
+- [x] [Review][Patch] P19 — medium. The 10 s bounds on `dapr list` and `git rev-parse` are untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:134]
   - Replacing `WaitForExit(10000)` with `WaitForExit()` (`:67`, `:134`), or removing `TimeoutException` from the `Program.cs:54` filter, keeps every test green. The Dapr stub delays only `--version`.
   - Fix: make the stub honor a delay for `list` and add a slow `git` shim. For both, assert exit 2, empty stdout and the exact "exceeded 10 seconds" stderr (VG, AA).
-- [ ] [Review][Patch] P20 — medium. Private-key cleanup and result withholding are untested. [tools/live-topology/run-isolated.py:190]
+- [x] [Review][Patch] P20 — medium. Private-key cleanup and result withholding are untested. [tools/live-topology/run-isolated.py:190]
   - VG showed that deleting the `*.key` unlink loop, or copying `DAPR_CERT_KEY` into `result.json`, leaves all nine runtime tests green. `result.json` is the receipt copied into story evidence.
   - Fix: in the `success` fixture run, assert that `issuer.key` is gone and that `private-test-credential` appears in no run file except the child's own output (VG).
-- [ ] [Review][Patch] P21 — low. The runtime directory can resolve inside the checkout. [tools/live-topology/run-isolated.py:17]
+- [x] [Review][Patch] P21 — low. The runtime directory can resolve inside the checkout. [tools/live-topology/run-isolated.py:17]
   - When `MCPCLI_ISOLATED_RUNTIME_DIR` is unset, it falls back to the script directory. When it is empty, it resolves to the working directory; the root README command produces this when `$private_runtime` is unset in a new shell.
   - Runs then land in `tools/live-topology/runs/` or `runs/`, neither of which is git-ignored. They contain `outside.json`, `result.json`, certificates, logs, and Redis and scheduler data.
   - Fix: in `__main__`, refuse an unset or empty value with a clear message before creating anything, and add a test (BH, EC).
-- [ ] [Review][Patch] P22 — low. The private Dapr probe parses stdout before checking the exit code. [tools/live-topology/run-isolated.py:153]
+- [x] [Review][Patch] P22 — low. The private Dapr probe parses stdout before checking the exit code. [tools/live-topology/run-isolated.py:153]
   - A failing `dapr list` with empty stdout records `JSONDecodeError` instead of `Private Dapr registration probe exited N.`, and its stderr is never recorded. The `dapr-exit` fixture returns valid `[]`, which hides this.
   - Fix: check the exit code first, record a bounded stderr excerpt, and make the fixture return empty stdout (VG, BH, EC).
-- [ ] [Review][Patch] P23 — low. The README's live-smoke text contradicts the wrapper. [README.md:253]
+- [x] [Review][Patch] P23 — low. The README's live-smoke text contradicts the wrapper. [README.md:253]
   - It says the wrapper supplies the `DAPR_*` variables "with your local CA and issuer credentials". The wrapper actually reads fresh credentials from its private Sentry.
   - "On other platforms use an equivalent process deadline" (`:251`) implies portability. The wrapper is Linux-only (`unshare`, `/proc/self/ns`), and the fixture refuses to run without it.
   - It names Sentry at `localhost:50001`, but the configuration and wrapper pin `127.0.0.1:50001`.
   - Fix: correct these three statements (AA, BH).
-- [ ] [Review][Patch] P24 — low. The runtime requirements omit the host libraries that `redis-server` needs. [tools/live-topology/README.md:10]
+- [x] [Review][Patch] P24 — low. The runtime requirements omit the host libraries that `redis-server` needs. [tools/live-topology/README.md:10]
   - The hash-pinned `redis-server` links host `libssl.so.3`, `libcrypto.so.3`, `libz.so.1` and `libzstd.so.1`, but the requirements say only "OpenSSL". A host without them fails with "redis exited before prerequisites were ready".
   - Fix: name the OpenSSL 3, zlib and zstd shared libraries in the requirements (BH).
 - [x] [Review][Defer] D1 — low. The agent instructions do not describe the live-topology project and tools. [AGENTS.md:100] — deferred: agent-context edit, tracked under the Story 4.12 ledger heading.
@@ -493,3 +505,72 @@ Parent checks during triage:
 - `false` — A registry port in an image reference breaks the tag split (EC). `binaries.json` contains only `daprio/dapr` and `redis`, so no such reference is reachable.
 - `low` — A timed-out `docker create` can orphan a container (EC). Already rejected in the follow-up review (R-BH3).
 - `low` — A failed `docker cp` can leave a partial file (EC). The bootstrap exits non-zero and refuses to reuse the directory, and a partial executable fails loudly at start.
+
+### Parent acceptance audit for review pass 2 (2026-10-23)
+
+The parent inspected the combined story source diff from the preserved baseline
+and checked the current evidence against all six frozen matrix rows. All tasks
+and P15–P24 are complete. Current six-project verification passed 1,481 non-live
+tests with zero failures and five existing unrelated skips; all 201 Manifest
+cases ran. Twelve Python runtime tests and the fresh live smoke passed; the
+live smoke had zero skips. Exact parent commands and counts are in
+`evidence/story-4-12/review-pass-2-20261023/parent-verification/`.
+
+| Matrix row | Executed covering checks |
+| --- | --- |
+| Qualified helpers and live services | `GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument`: one pass in 17.941 seconds; two real 401 rejections and a successful authenticated document; all four private daemons exited 0. |
+| Missing or forbidden helper | `AspireHelperDependencyTests` and actual helper/fixture closure checks passed in the 201-case Manifest run; package identities and dependency paths are asserted. |
+| Missing or undeclared root checkout | Configuration and executable AppHost/fixture refusal tests passed; exact required paths are retained. |
+| Missing Dapr prerequisites | The outer prerequisite tests passed with stand-in root checkouts; relocated output-only verification also passed. The separate `-failSkips` child exited 1 with the standard diagnostic and `FAIL_SKIP`. |
+| Alive but unusable Gateway | Both real HTTP 403 and alive-but-stalled Gateway tests passed, including the shipped 30-second query deadline and exact diagnostic. |
+| Conflicting user topology | Real occupied-port and Dapr-identity AppHost refusal checks passed; existing user AppHost identities stayed unchanged across the isolated live run. |
+
+The frozen intent is byte-identical to the resumed HEAD. Historical publication
+and upstream qualification packets remain intact. Workflow review follows this
+audit; no new publication or dependency update was required.
+
+### Workflow review of pass 2 implementation (2026-10-23)
+
+All three context-free review layers returned before triage. Each of the thirteen
+findings is classified separately below. The blind layer's arithmetic line is
+not a finding. The packet conversion was independently reproduced with
+`git -c core.autocrlf=true cat-file --filters`: its README hash changed from the
+qualified bytes, although all 59 current worktree packet hashes still matched.
+
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| F-BH1 | low | reject | A deliberately substituted Git/Dapr shim can exit while a background descendant retains its pipes; the parent accepts the reproduced overrun. The installed `git rev-parse` and Dapr probe have no demonstrated such descendant, and the supported live process retains its outer deadline. Combining stream/process cancellation and descendant cleanup adds guards for an uncommon replacement-tool state. |
+| F-BH2 | low | reject | Python's negative child return code becomes a different nonzero shell status, while the receipt preserves the actual negative return code. No failure becomes a success or skip. Signal normalization adds a branch for a child externally signaled inside the private namespace; the supported outer timeout already reports its own nonzero result. |
+| F-BH3 | low | patch | Private-key deletion occurs after four potentially ten-second daemon shutdowns and can be preempted by the documented twenty-second outer kill allowance. Move deletion ahead of the slow shutdown loop and assert its ordering; services already loaded their credentials. |
+| F-BH4 | low | patch | Current uncommitted validation has a canonical base revision but no source fingerprint. Add a current SHA-256 file map and reference it from the current verification record, leaving earlier checkpoints intact. |
+| F-BH5 | low | patch | The root evidence README still presents the unpublished checkpoint as current. Prefix a current status/index and label the existing text historical without deleting it. |
+| F-BH6 | medium | patch | Independent checkout filtering under `core.autocrlf=true` changes the frozen qualification README's byte hash. Mark the complete qualified packet byte-preserved, then verify all 59 hashes through checkout filters. No qualified file contents may change. |
+| F-BH7 | low | reject | A legitimate listener on port 1024 makes the positive lower-bound test fail. This is uncommon on the supported Linux test environment; occupied-port rejection is already explicitly covered. Adding a skip/availability branch complicates the boundary test for that rare environment. |
+| F-BH8 | low | reject | The two older synthetic-workspace Git initializers wait without a bound, unlike the new prerequisite fixture. An installed local `git init --quiet` stalling on task-owned temporary directories was not demonstrated; adding deadline and cleanup branches protects an unlikely test-environment condition. |
+| F-BH9 | low | reject | Failed `unshare` startup leaves `outside.json` and its actual nonzero exit/console error without an inner result receipt. It creates no child topology and cannot establish live acceptance. New outer receipt handling adds lifecycle branches for a failure already diagnosed before launch. |
+| F-BH10 | low | patch | Bootstrap deliberately refuses the incomplete directory left after a pull/extraction failure. Add an explicit instruction to select a fresh task-owned directory before retrying; preserve refusal to overwrite existing directories. |
+| F-EC1 | low | reject | The same reproduced inherited-pipe issue affects the three-second CLI prerequisite check. The actual installed CLI was not shown to abandon pipe-owning children; the isolated run still has an outer deadline. New stream/descendant lifecycle handling addresses an uncommon substituted-tool state. |
+| F-EC2 | low | reject | carried: R-BH3 already records Docker creating a stopped extraction container before its ID is returned. Termination during that same ambiguous-create interval has the same orphan outcome. Preserve the recorded rejection: new naming/recovery state is disproportionate for this rare extraction failure and no running user container is affected. |
+| F-VG1 | low | patch | Trusted pre-verified removal control: deleting SIGKILL leaves all twelve runtime tests green because the current hung child handles SIGTERM. Add a real SIGTERM-ignoring child regression that requires forced termination and receipt/status 124. The existing fallback can use an internal grace-period constant to keep this regression short. |
+
+Survivors have six separate root causes and all route to direct patches. No
+intent gap, spec loopback, new deferral, dependency update or publication is
+needed. Existing deferred items remain unchanged.
+
+### Final review patch verification (2026-10-23)
+
+All six surviving workflow-review patch groups are resolved. The two new runtime
+regressions reject their corresponding SIGKILL-removal and cleanup-order
+mutations. All fourteen Python checks pass. The parent's final maintained-wrapper
+smoke passed one test without skips in 20.529 seconds; all four private daemons
+exited 0, stderr was empty, and no private keys remained. All 43 current source
+hashes match the verification map. Git checkout filtering under
+`core.autocrlf=true` preserves all 59 qualified packet files and the packet index.
+
+The Release build and all six non-live .NET suites passed against the same
+unchanged .NET sources: 1,481 passed, zero failed, five existing unrelated skips.
+No frozen intent, qualified packet contents, production dependency, gitlink,
+inventory or vector changed in this resumed run. Final source-bound commands,
+counts and sanitized runtime receipts are in
+`evidence/story-4-12/review-pass-2-20261023/verification.json` and
+`evidence/story-4-12/review-pass-2-20261023/parent-verification/`.

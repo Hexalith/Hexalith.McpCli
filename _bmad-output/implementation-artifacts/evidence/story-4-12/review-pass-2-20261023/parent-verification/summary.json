@@ -1,0 +1,62 @@
+{
+  "headAtVerification": "6646412879cf5c38e915acab579d0880e69c5cbb",
+  "projects": [
+    {
+      "project": "Abstractions",
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    {
+      "project": "Analyzers",
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    {
+      "project": "Core",
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    {
+      "project": "Cli",
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    {
+      "project": "Mcp",
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    {
+      "project": "Manifest",
+      "total": 201,
+      "failed": 0,
+      "succeeded": 201,
+      "skipped": 0
+    }
+  ],
+  "passed": 1481,
+  "failed": 0,
+  "skipped": 5,
+  "pythonPassed": 14,
+  "livePassed": 1,
+  "liveSkipped": 0,
+  "frozenIntentPreserved": true,
+  "liveSeconds": 20.529,
+  "sourceMap": "../implementation-file-map.json",
+  "sourceMapCanonicalSha256": "ce16643b482bf57c40ce4f8b195fdae6cfc5e87118f32175a8cf6c29aff5df22",
+  "reviewLayers": 3,
+  "reviewFindings": 13,
+  "reviewPatchesResolved": 6,
+  "reviewRejected": 7,
+  "newDeferrals": 0
+}

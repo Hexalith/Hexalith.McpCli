@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/home/administrator/.dotnet/dotnet",
+    "/tmp/mcpcli-no-root-sources-metl7a0b/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests"
+  ],
+  "rootReferencesExist": false,
+  "exitCode": 0,
+  "stderrBytes": 0
+}

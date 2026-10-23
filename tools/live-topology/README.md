@@ -7,7 +7,8 @@ four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
 The integration fixture and live AppHost refuse execution without that sentinel;
 non-launching AppHost preflight and composition inspection remain available.
 
-Requirements: Linux amd64, Python 3, GNU `timeout`, `unshare`, `ip`, OpenSSL,
+Requirements: Linux amd64, Python 3, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
+zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Dapr CLI 1.18.2 and runtime 1.18.7 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. Install Dapr independently without initializing or changing a user
@@ -20,6 +21,11 @@ SHA-256 in `binaries.json`, refuses existing destination directories, and remove
 only its own never-started extraction containers by exact ID. Docker pulls have
 a 300-second bound; create, copy and removal commands have separate bounds.
 
+If bootstrap fails, choose a fresh task-owned directory before retrying, for
+example by rerunning `private_runtime="$(mktemp -d)/runtime"`. A failed destination
+is deliberately non-reusable; bootstrap continues to refuse existing directories
+and never overwrites their contents.
+
 ```sh
 private_runtime="$(mktemp -d)/runtime"
 timeout --signal=TERM --kill-after=20s 900 \
@@ -28,8 +34,12 @@ MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" \
 timeout --signal=TERM --kill-after=20s 960 \
   python3 tools/live-topology/run-isolated.py -- \
   dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll \
-  -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests
+  -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips
 ```
+
+`MCPCLI_ISOLATED_RUNTIME_DIR` must explicitly name the prepared directory; an
+unset or empty value is refused before creating files. `-failSkips` makes a
+skipped smoke fail with `FAIL_SKIP`, preserving the prerequisite diagnostic.
 
 The wrapper records the command, both output channels, service diagnostics,
 namespace identities and exit codes under `$private_runtime/runs/`. It enforces

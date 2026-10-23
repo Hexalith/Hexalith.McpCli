@@ -241,6 +241,23 @@ public sealed class TopologyLaunchTests : IDisposable
         Assert.Equal($"Topology conflict check 'dapr list --output json' exited 7. stderr: {(detail ?? new string('x', 512) + "...")}" + Environment.NewLine, result.Stderr);
     }
 
+    /// <summary>Both external probes enforce their ten-second limit through the executable boundary.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SlowExternalProbeStopsLaunchWithBoundedDiagnostic(bool slowGit)
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", slowGit: slowGit, daprDelay: slowGit ? null : "60000");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        string expected = slowGit
+            ? $"Root checkout verification exceeded 10 seconds for '{Path.Combine(_root, "references", "Hexalith.EventStore")}'."
+            : "Topology conflict check 'dapr list --output json' exceeded 10 seconds.";
+        Assert.Equal(expected + Environment.NewLine, result.Stderr);
+    }
+
     /// <summary>Checks actual composed app/sidecar environments and shared configuration before startup.</summary>
     [Fact]
     public async Task ComposedResourcesKeepTokensAclAndGatewayContentRoot()
@@ -252,7 +269,8 @@ public sealed class TopologyLaunchTests : IDisposable
         available.Start();
         string gatewayPort = ((IPEndPoint)available.LocalEndpoint).Port.ToString(System.Globalization.CultureInfo.InvariantCulture);
         available.Stop();
-        var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true);
+        var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true,
+            extraArguments: ["--Dapr:PlacementHostAddress=127.0.0.1:6050", "--Dapr:SchedulerHostAddress=127.0.0.1:6060"]);
         Assert.Equal(0, result.ExitCode);
         Assert.Equal(string.Empty, result.Stderr);
         Assert.DoesNotContain(signingKey, result.Stdout);
@@ -267,6 +285,21 @@ public sealed class TopologyLaunchTests : IDisposable
             Assert.Equal(64, resource.GetProperty("sidecarTokenLength").GetInt32());
             Assert.True(resource.GetProperty("tokensMatch").GetBoolean());
             Assert.Equal(Path.Combine(host, "DaprComponents", "accesscontrol.yaml"), resource.GetProperty("configuration").GetString());
+            Assert.Equal("127.0.0.1:6050", resource.GetProperty("placementHostAddress").GetString());
+            Assert.Equal("127.0.0.1:6060", resource.GetProperty("schedulerHostAddress").GetString());
+            Assert.Equal("Development", resource.GetProperty("aspnetcoreEnvironment").GetString());
+            Assert.Equal("Development", resource.GetProperty("dotnetEnvironment").GetString());
+            JsonElement components = resource.GetProperty("components");
+            Assert.Equal(2, components.EnumerateObject().Count());
+            Assert.Equal(Path.Combine(host, "DaprComponents", "statestore.yaml"), components.GetProperty("statestore").GetString());
+            Assert.Equal(Path.Combine(host, "DaprComponents", "pubsub.yaml"), components.GetProperty("pubsub").GetString());
+            JsonElement[] endpoints = resource.GetProperty("endpoints").EnumerateArray().ToArray();
+            Assert.NotEmpty(endpoints);
+            foreach (JsonElement endpoint in endpoints)
+            {
+                Assert.Equal(JsonValueKind.Null, endpoint.GetProperty("port").ValueKind);
+                Assert.Equal(JsonValueKind.Null, endpoint.GetProperty("targetPort").ValueKind);
+            }
             string module = resource.GetProperty("name").GetString() switch
             {
                 "eventstore" => "Hexalith.EventStore",
@@ -276,6 +309,7 @@ public sealed class TopologyLaunchTests : IDisposable
             };
             Assert.Equal(Path.Combine(_root, "references", module, "src", module, module + ".csproj"), resource.GetProperty("projectPath").GetString());
             JsonElement authentication = resource.GetProperty("authentication");
+            Assert.Equal(string.Empty, authentication.GetProperty("authority").GetString());
             Assert.Equal("mcpcli-live-tests", authentication.GetProperty("issuer").GetString());
             Assert.Equal("hexalith-eventstore", authentication.GetProperty("audience").GetString());
             Assert.Equal("hexalith-eventstore", authentication.GetProperty("validAudience").GetString());
@@ -335,6 +369,9 @@ public sealed class TopologyLaunchTests : IDisposable
             Directory.CreateDirectory(directory);
             File.WriteAllText(Path.Combine(directory, module + ".csproj"), "<Project />");
             File.WriteAllText(Path.Combine(directory, "Program.cs"), "");
+            Directory.CreateDirectory(Path.Combine(directory, "Properties"));
+            File.WriteAllText(Path.Combine(directory, "Properties", "launchSettings.json"),
+                """{"profiles":{"test":{"commandName":"Project","applicationUrl":"http://localhost:6123;https://localhost:7123"}}}""");
             var start = new ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
             foreach (string argument in new[] { "init", "--quiet", checkout }) start.ArgumentList.Add(argument);
             using Process git = Process.Start(start)!;
@@ -343,7 +380,7 @@ public sealed class TopologyLaunchTests : IDisposable
         }
     }
 
-    private async Task<(int ExitCode, string Stdout, string Stderr)> InvokeAsync(string assembly, string key, string snapshot, string? requestedPort = null, string? daprExit = null, string? daprError = null, bool inspect = false, bool missingDapr = false, string? extraArgument = null, string? isolationSentinel = null)
+    private async Task<(int ExitCode, string Stdout, string Stderr)> InvokeAsync(string assembly, string key, string snapshot, string? requestedPort = null, string? daprExit = null, string? daprError = null, bool inspect = false, bool missingDapr = false, string? extraArgument = null, string? isolationSentinel = null, bool slowGit = false, string? daprDelay = null, string[]? extraArguments = null)
     {
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
@@ -361,6 +398,7 @@ public sealed class TopologyLaunchTests : IDisposable
         foreach (string argument in new[] { assembly, inspect ? "--Topology:InspectComposition=true" : "--Topology:PreflightOnly=true", $"--Authentication:JwtBearer:SigningKey={key}", $"--Dapr:GatewayHttpPort={requestedPort ?? port.ToString(System.Globalization.CultureInfo.InvariantCulture)}" })
             start.ArgumentList.Add(argument);
         if (extraArgument is not null) start.ArgumentList.Add(extraArgument);
+        foreach (string argument in extraArguments ?? []) start.ArgumentList.Add(argument);
         if (missingDapr)
         {
             string onlyGit = Path.Combine(_root, "git-only");
@@ -372,10 +410,21 @@ public sealed class TopologyLaunchTests : IDisposable
             start.Environment["PATH"] = onlyGit;
         }
         else start.Environment["PATH"] = stub + Path.PathSeparator + start.Environment["PATH"];
+        if (slowGit)
+        {
+            string shim = Path.Combine(_root, "slow-git");
+            Directory.CreateDirectory(shim);
+            foreach (string file in Directory.EnumerateFiles(stub)) File.Copy(file, Path.Combine(shim, Path.GetFileName(file)));
+            string executableSuffix = OperatingSystem.IsWindows() ? ".exe" : string.Empty;
+            File.Move(Path.Combine(shim, "dapr" + executableSuffix), Path.Combine(shim, "git" + executableSuffix));
+            start.Environment["PATH"] = shim + Path.PathSeparator + start.Environment["PATH"];
+            start.Environment["MCPCLI_TEST_GIT_DELAY_MS"] = "60000";
+        }
         start.Environment["MCPCLI_ISOLATED_TOPOLOGY"] = isolationSentinel;
         start.Environment["MCPCLI_TEST_DAPR_SNAPSHOT"] = snapshot;
         start.Environment["MCPCLI_TEST_DAPR_EXIT"] = daprExit;
         start.Environment["MCPCLI_TEST_DAPR_ERROR"] = daprError;
+        start.Environment["MCPCLI_TEST_DAPR_DELAY_MS"] = daprDelay;
         using Process process = Process.Start(start)!;
         Task<string> output = process.StandardOutput.ReadToEndAsync();
         Task<string> error = process.StandardError.ReadToEndAsync();

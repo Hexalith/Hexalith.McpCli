@@ -1,0 +1,18 @@
+[
+  {
+    "mutation": "keys-after-shutdown",
+    "test": "test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "",
+    "stderr": "test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown (test_runtime.RuntimeTests.test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown) ... FAIL\n\n======================================================================\nFAIL: test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown (test_runtime.RuntimeTests.test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/mcpcli-review-control-g8_luqop/test_runtime.py\", line 150, in test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown\n    self.assertEqual([], json.loads((run_dir / 'keys-at-shutdown.json').read_text()))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [] != ['issuer.key']\n\nSecond list contains 1 additional elements.\nFirst extra element 0:\n'issuer.key'\n\n- []\n+ ['issuer.key']\n\n----------------------------------------------------------------------\nRan 1 test in 0.085s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "missing-sigkill",
+    "test": "test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "",
+    "stderr": "test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline (test_runtime.RuntimeTests.test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline) ... FAIL\n\n======================================================================\nFAIL: test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline (test_runtime.RuntimeTests.test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/mcpcli-review-control-a2abfq4r/test_runtime.py\", line 157, in test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline\n    self.assertEqual(124, result.returncode, result.stdout + result.stderr)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 124 != 1 : Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.\nPrivate environment failed: TimeoutExpired: Command '['/usr/bin/python3', '-c', \"import pathlib,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); pathlib.Path('child-started').touch(); time.sleep(60)\"]' timed out after 5 seconds\n\n\n----------------------------------------------------------------------\nRan 1 test in 5.795s\n\nFAILED (failures=1)\n"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/home/administrator/.dotnet/dotnet",
+    "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+    "-failSkips"
+  ],
+  "environment": {
+    "PATH": "temporary git-only directory",
+    "MCPCLI_ISOLATED_TOPOLOGY": "1"
+  },
+  "exitCode": 1,
+  "failSkipReported": true,
+  "specificDiagnostic": true,
+  "stderrBytes": 0
+}

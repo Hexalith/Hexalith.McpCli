@@ -1,3 +1,22 @@
+# Story 4.12 current evidence index
+
+The normal upstream release and downstream helper enrollment are complete.
+Review pass 2 implementation and its follow-up corrections passed the parent
+acceptance audit, all three review layers, and the final isolated live smoke.
+Earlier publication and validation receipts remain retained with their original
+identities and outcomes.
+
+- [Completed publication and provenance](publication-20261023/expanded-publication/README.md): actual signed Parties Aspire 1.6.0, normal release gates, Builds catalog integration and published-artifact checks.
+- [Current verification](review-pass-2-20261023/verification.json): focused follow-up checks and a link to the SHA-256 map of the current uncommitted implementation and configuration.
+- [Review pass 2 patch mapping](review-pass-2-20261023/README.md): earlier full validation and live-smoke receipts, with follow-up checks identified separately.
+- [Prior completed review verification](review-patches-20261023/final-verification/): retained earlier runtime and non-skipped live results.
+
+## Historical unpublished checkpoint — preserved verbatim
+
+The remainder records the earlier unpublished candidate and continuation state.
+Its pending/incomplete statements describe that historical checkpoint; current
+status is given by the index above.
+
 # Story 4.12 upstream prerequisite candidate
 
 **Status: release authorized; unpublished; normal CI continuation in progress. Story 4.12 is incomplete.**

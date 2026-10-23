@@ -111,6 +111,7 @@ if (inspectComposition)
     foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
     {
         DaprSidecarAnnotation sidecar = resource.Resource.Annotations.OfType<DaprSidecarAnnotation>().Single();
+        DaprSidecarOptions options = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options;
         Dictionary<string, object> appEnvironment = await EnvironmentAsync(resource.Resource);
         Dictionary<string, object> sidecarEnvironment = await EnvironmentAsync(sidecar.Sidecar);
         string? appToken = await ValueAsync(appEnvironment.GetValueOrDefault("APP_API_TOKEN"));
@@ -119,11 +120,16 @@ if (inspectComposition)
         {
             name = resource.Resource.Name,
             projectPath = resource.Resource.Annotations.OfType<IProjectMetadata>().Single().ProjectPath,
+            aspnetcoreEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_ENVIRONMENT")),
+            dotnetEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("DOTNET_ENVIRONMENT")),
+            endpoints = resource.Resource.Annotations.OfType<EndpointAnnotation>()
+                .Select(endpoint => new { name = endpoint.Name, port = endpoint.Port, targetPort = endpoint.TargetPort }),
             gatewaySettings = appEnvironment.Keys.Where(name => name.StartsWith("EventStore__DomainServices__Registrations__", StringComparison.Ordinal)
                 || name.StartsWith("EventStore__Publisher__TopicOverrides__", StringComparison.Ordinal))
                 .ToDictionary(name => name, name => appEnvironment[name].ToString()),
             authentication = new
             {
+                authority = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__Authority")),
                 issuer = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__Issuer")),
                 audience = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__Audience")),
                 validAudience = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__ValidAudiences__0")),
@@ -131,12 +137,16 @@ if (inspectComposition)
                 requireHttpsMetadata = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__RequireHttpsMetadata")),
                 signingKeyHash = Hash(await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__SigningKey"))),
             },
-            daprHttpPort = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options.DaprHttpPort,
+            daprHttpPort = options.DaprHttpPort,
+            placementHostAddress = options.PlacementHostAddress,
+            schedulerHostAddress = options.SchedulerHostAddress,
+            components = sidecar.Sidecar.Annotations.OfType<DaprComponentReferenceAnnotation>()
+                .ToDictionary(component => component.Component.Name, component => component.Component.Options?.LocalPath),
             appTokenLength = appToken?.Length ?? 0,
             sidecarTokenLength = sidecarToken?.Length ?? 0,
             tokensMatch = !string.IsNullOrEmpty(appToken) && appToken == sidecarToken,
             tokenHash = Hash(appToken),
-            configuration = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options.Config,
+            configuration = options.Config,
             contentRoot = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_CONTENTROOT")),
         });
     }

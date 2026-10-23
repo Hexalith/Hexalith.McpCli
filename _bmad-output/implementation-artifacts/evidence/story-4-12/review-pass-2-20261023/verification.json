@@ -1,0 +1,56 @@
+{
+  "baseCommit": "6646412879cf5c38e915acab579d0880e69c5cbb",
+  "storyBaselineCommit": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+  "scope": "Parent acceptance and three review layers complete; six direct review patches resolved.",
+  "sourceBinding": {
+    "file": "implementation-file-map.json",
+    "canonicalSha256": "ce16643b482bf57c40ce4f8b195fdae6cfc5e87118f32175a8cf6c29aff5df22",
+    "canonicalRepresentation": "UTF-8 JSON with sorted keys, compact separators and unescaped Unicode, without a final newline",
+    "implementationFiles": 43,
+    "repositoryRevision": "6646412879cf5c38e915acab579d0880e69c5cbb",
+    "includesUncommittedChanges": true
+  },
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "exitCode": 0,
+      "passed": 14,
+      "failed": 0,
+      "receipt": "review-fixes/runtime-tests.stdout.txt"
+    },
+    {
+      "command": "python3 _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-2-20261023/review-fixes/verify-qualification-checkout.py",
+      "exitCode": 0,
+      "indexedHashesMatched": 59,
+      "coreAutocrlf": true,
+      "packetIndexAlsoPreserved": true,
+      "receipt": "review-fixes/qualification-checkout-filters.json"
+    },
+    {
+      "scope": "Each new regression in a temporary tool copy with its guard removed/reordered",
+      "expectedRejections": 2,
+      "actualRejections": 2,
+      "receipt": "review-fixes/mutation-controls.json"
+    }
+  ],
+  "historicalVerification": "verification-before-review-fixes.json",
+  "historicalParentVerification": "parent-verification/summary.json",
+  "historicalReceiptPolicy": "Original broad-build, .NET, live, and runtime receipts are preserved unchanged; they predate the follow-up wrapper corrections and are not presented as current reruns.",
+  "limitations": [
+    "Live-semantic vector coverage remains story 4.13.",
+    "Blocking source-build CI remains story 4.14.",
+    "Existing platform file-lock and agent-context deferrals remain unchanged."
+  ],
+  "parentVerification": {
+    "summary": "parent-verification/summary.json",
+    "finalCommands": "parent-verification/final-commands.json",
+    "liveResult": "parent-verification/live-final-result.json",
+    "nonLivePassed": 1481,
+    "nonLiveFailed": 0,
+    "existingNonLiveSkipped": 5,
+    "pythonPassed": 14,
+    "livePassed": 1,
+    "liveSkipped": 0,
+    "liveSeconds": 20.529
+  }
+}

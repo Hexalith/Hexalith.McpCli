@@ -9,3 +9,5 @@ _bmad-output/implementation-artifacts/evidence/story-4-12/parties-helper.patch -
 # Preserve hash-bound raw workflow output and the upstream CRLF ledger verbatim.
 _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/builds-catalog-ci-attempt-1-build.stdout.txt -text whitespace=-blank-at-eol
 _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/prior-ledger.tsv -text whitespace=-blank-at-eol,cr-at-eol
+# Preserve every byte of the frozen qualification packet, including its file-hash index.
+_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-source-candidate/** -text

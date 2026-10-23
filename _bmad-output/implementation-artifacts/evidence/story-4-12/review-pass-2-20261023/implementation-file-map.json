@@ -1,0 +1,201 @@
+{
+  "repositoryRevision": "6646412879cf5c38e915acab579d0880e69c5cbb",
+  "storyBaselineRevision": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+  "workspaceState": "uncommitted implementation/configuration snapshot",
+  "selection": "All current non-evidence/non-reference files changed since the story baseline, including untracked implementation files, plus root build/test/dependency configuration.",
+  "contentHashRepresentation": "SHA-256 of each file’s exact working-tree bytes",
+  "rootGitlinks": {
+    "references/Hexalith.AI.Tools": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+    "references/Hexalith.Agents": "dd1639439c6822337a747e254fcd626151b27000",
+    "references/Hexalith.Builds": "ca1262562b8da711043fd698b0aea1e7b34e5c40",
+    "references/Hexalith.ChatBot": "6b92c2970d8fd7fb6bc2d3ad26f864e80313e111",
+    "references/Hexalith.Commons": "1663028fb6d9f46a0bf17919edeb21bb99be1587",
+    "references/Hexalith.Conversations": "60f18214d7a4565d28096628af95d867ddd5e874",
+    "references/Hexalith.EventStore": "2361e7b6760a7d0065c67661c2e95c2af94bdb4d",
+    "references/Hexalith.Folders": "28513763ec5c0405ab942b1e5266a483573f451d",
+    "references/Hexalith.FrontComposer": "31988721c7169c2f5eaaa8bf01cc4050a67440bb",
+    "references/Hexalith.Memories": "779db8694087c4459174429287ee07c1caff1a84",
+    "references/Hexalith.Parties": "3ace477aa61f6cd936bd9c06d99fd8fe59a205a8",
+    "references/Hexalith.Platform": "04045b679ff329b54a2a2131a32bc4707944087e",
+    "references/Hexalith.PolymorphicSerializations": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+    "references/Hexalith.Projects": "0247ccb999d788a6d92984362e5717955d58caa8",
+    "references/Hexalith.Tenants": "4354b0e0687766c0995383f630ec54f9b2a29730",
+    "references/Hexalith.Timesheets": "61ccd95e7ad3b0fdab9bdc9abae98b1847bdeb34",
+    "references/Hexalith.Works": "8a10f1da505e207c1f417363d712b62aa3c98422"
+  },
+  "fileCount": 43,
+  "files": {
+    ".editorconfig": {
+      "sha256": "792434f98c2fa39b66e53edb3faf54757d30feba46413f8303309ad2c9ec52ef",
+      "bytes": 215
+    },
+    ".gitattributes": {
+      "sha256": "e009ba56b5849c5e48831be9e63b520a43f0ec869e0ab3737ab616914cc13a9a",
+      "bytes": 1147
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "5036c4dd4624d1192805f3efb8c97fdfdf4738aa26f679321580f1a118c9480a",
+      "bytes": 6356
+    },
+    ".gitignore": {
+      "sha256": "15087775f7bb49a197850fca21c89595f89e2ac91b6881b7e77199db5bc38e20",
+      "bytes": 7535
+    },
+    ".gitmodules": {
+      "sha256": "a086e1f3da912053ddf10434de6308d0e50a77012c4761eb3cc8a25154f76d16",
+      "bytes": 2386
+    },
+    "Directory.Build.props": {
+      "sha256": "8d97b449ae3aef52116707d723ee36e9832b9e2d6dc59d3e480272c55a191e2e",
+      "bytes": 1994
+    },
+    "Directory.Packages.props": {
+      "sha256": "168d3c552300017ddbba0ecb7ef30f7d77c66e2e1b3369b8111cdb11a2f1f0b0",
+      "bytes": 1124
+    },
+    "Hexalith.McpCli.slnx": {
+      "sha256": "32ed10ba6f1a13e0d9624ff67504662d3bc2114fad3c9e9bdc5752912a2063d7",
+      "bytes": 2406
+    },
+    "README.md": {
+      "sha256": "c289b29f30c5696a3a5a5c8fc958c9caf0037c5d835abbd4dff76e525fff94b7",
+      "bytes": 50289
+    },
+    "global.json": {
+      "sha256": "4ec97d7c7e6bee864d2da2c965f18b94b0bd84e71058427f1f6fa69ee6824652",
+      "bytes": 139
+    },
+    "tests/Directory.Build.props": {
+      "sha256": "847af220385a410294dfee16f4bba17b76d22f29373a1e343ce7667636a51555",
+      "bytes": 704
+    },
+    "tests/Hexalith.McpCli.AppHost/DaprComponents/accesscontrol.yaml": {
+      "sha256": "a7ef0ad27388200dfe9d415c6efc32ea1cdc76ef4c8346d1c2b5ff9f0dab8c5f",
+      "bytes": 1814
+    },
+    "tests/Hexalith.McpCli.AppHost/DaprComponents/pubsub.yaml": {
+      "sha256": "1759801d99ba77ed5239a4d334b8af88cc92e92b7279aa7ee9c5e631a68aeebe",
+      "bytes": 254
+    },
+    "tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml": {
+      "sha256": "22672b5484b5ad048c9bf00ab1c326bbaa004e836265b8e79aba17d347b81e69",
+      "bytes": 345
+    },
+    "tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj": {
+      "sha256": "85004eefe8c40d6d5b475fb1988d5b94f44580929ae6b3799ca4480014ef7175",
+      "bytes": 545
+    },
+    "tests/Hexalith.McpCli.AppHost/Program.cs": {
+      "sha256": "a55672fcb3bc43b43401554b283fe9310a353bb41973c838b643e59edcaba780",
+      "bytes": 10390
+    },
+    "tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs": {
+      "sha256": "566cf3918e1822ea6ec1e2811c413d124f682b8ae94c9e516379f6c650bb4a0c",
+      "bytes": 8384
+    },
+    "tests/Hexalith.McpCli.AppHost/appsettings.json": {
+      "sha256": "121cc17d7ca11fabb3ecd5a9b244cf32445930ee838f320895be22a91e3ef781",
+      "bytes": 574
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyCollection.cs": {
+      "sha256": "3a8c0bbd7f6e7f16a32bdea39fa26b36406db128b4256e1ef157c6e38e38f9a9",
+      "bytes": 304
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs": {
+      "sha256": "b5deaf16d58cbd93be0704a80c949fab6d399d0219c263fe919db6e3a54e5f6c",
+      "bytes": 4351
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs": {
+      "sha256": "589e009042cb478561bf503c4e9e5abd54ae216162e07246c582a32011595941",
+      "bytes": 1739
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs": {
+      "sha256": "477fb6c4eee2e8dbf0b92e6de04831f4b78c197fed35cbcc6f33ebd498784d4c",
+      "bytes": 3076
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj": {
+      "sha256": "b3660e872630bd0223c8cf9f8e5517e6e21c119bda2d74171926ca60a0a06685",
+      "bytes": 534
+    },
+    "tests/Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs": {
+      "sha256": "6dca30171f0b130ad9c8ee046490318d479bd0ee38b12b9bd349599f62319783",
+      "bytes": 3408
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/AspireHelperDependencyTests.cs": {
+      "sha256": "a98c35dda1f2887eabb7e34bc9a482dab7bdbead5560b0ec69b7fd14f3bef29f",
+      "bytes": 8456
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs": {
+      "sha256": "5fa7f49c3095d81269265511e5f04d87b31fe616740a16604b919a6d84cf9436",
+      "bytes": 10458
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteWorkspace.cs": {
+      "sha256": "7238836c408df1156bfe5683158db8ae45cffe5fa39485f4d271643fad7d1895",
+      "bytes": 3319
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs": {
+      "sha256": "0704b295a3a76a66d6f34f572f8cd536e077804b3ee94a36f81844f34a7c1cda",
+      "bytes": 19823
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs": {
+      "sha256": "db8b848ccce5a92bd51ca503f600f71c4cd200e3221b500039ef290da872734c",
+      "bytes": 66911
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/GatewaySmokeBoundaryTests.cs": {
+      "sha256": "3c448b002d4cc90c9e2aa802830087e83b21fc089a8ab650485d4d22790e7971",
+      "bytes": 6418
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj": {
+      "sha256": "1e926b3f625834ba847037a04332cea8b017a4bfadab774081f25a7ad07f555c",
+      "bytes": 1239
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/TopologyAccessControlTests.cs": {
+      "sha256": "77a07caf453c3528f40897ac43df29eddc379e8956003ba31ed1e644cad34bb9",
+      "bytes": 3361
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs": {
+      "sha256": "500964dd050dd57eafbae96cc90b26f9bdd9a0879ee40fc3f3cebd6d0def9f86",
+      "bytes": 8762
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/TopologyFixtureLaunchTests.cs": {
+      "sha256": "61184875fbf14f566633240fcfd1393fde7781605c66fcae254a42bfa2fae010",
+      "bytes": 4099
+    },
+    "tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs": {
+      "sha256": "4b686f44f4d68493502337a4c549ee10ac9331ea5f9143e8a117b596a028e516",
+      "bytes": 25584
+    },
+    "tests/fixtures/Topology.DaprStub/Program.cs": {
+      "sha256": "e7e86c73f1b516510e58cbf611855abc582d20b99c4dc73c506eee67db44cad5",
+      "bytes": 952
+    },
+    "tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj": {
+      "sha256": "e623452e403dc346c41691b1d06c402074a76d8f11ebc6f58b78d7b4b7f792ac",
+      "bytes": 153
+    },
+    "tools/dependency-policy.json": {
+      "sha256": "a01b15ff5bb5cbea6accd39a93c71fbdb0313996961d37fb1b8cec6f737fe5ca",
+      "bytes": 3684
+    },
+    "tools/live-topology/README.md": {
+      "sha256": "2ecf2ad84ea3bc899f641fb8f3359138c98b8b3006da6aa8a0b85761b3bd10ae",
+      "bytes": 3255
+    },
+    "tools/live-topology/binaries.json": {
+      "sha256": "00cec44c8b4ffed1e969f71031c5f8f54f8654fafab3aafc06797c964b98ca05",
+      "bytes": 978
+    },
+    "tools/live-topology/bootstrap-runtime.py": {
+      "sha256": "b2a457611512b1f6afee498ce8956f22f4b04aafdafd1ca71ab2096bd5edff9f",
+      "bytes": 2250
+    },
+    "tools/live-topology/run-isolated.py": {
+      "sha256": "9db5dc0a216d6a90690e186956e11b33887552e769c84097b8377f62b41c3fff",
+      "bytes": 11966
+    },
+    "tools/live-topology/test_runtime.py": {
+      "sha256": "8c1f6c3a285737ea4c05a9f6448a6620d7f92c605816541214debd1f0ecae521",
+      "bytes": 18973
+    }
+  }
+}

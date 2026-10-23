@@ -15,6 +15,8 @@ import uuid
 
 
 RUNTIME_DIR = Path(os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', Path(__file__).resolve().parent)).resolve()
+COMMAND_TIMEOUT_SECONDS = 900
+STOP_GRACE_SECONDS = 10
 
 
 def namespaces() -> dict[str, str]:
@@ -29,7 +31,7 @@ def stop_owned(process: subprocess.Popen) -> None:
             process.wait(timeout=5)
             return
         try:
-            process.wait(timeout=10)
+            process.wait(timeout=STOP_GRACE_SECONDS)
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL)
             process.wait(timeout=5)
@@ -150,9 +152,13 @@ def inside(run_dir: Path, command: list[str]) -> int:
                     time.sleep(0.1)
         probe = subprocess.run(['dapr', 'list', '--output', 'json'], env=environment,
                                text=True, capture_output=True, timeout=10)
-        result['daprBeforeCommand'] = {'exitCode': probe.returncode, 'applications': json.loads(probe.stdout)}
+        detail = probe.stderr.strip()
+        if len(detail) > 512:
+            detail = detail[:512] + '...'
+        result['daprBeforeCommand'] = {'exitCode': probe.returncode, 'stderr': detail}
         if probe.returncode != 0:
-            raise RuntimeError(f'Private Dapr registration probe exited {probe.returncode}.')
+            raise RuntimeError(f'Private Dapr registration probe exited {probe.returncode}. stderr: {detail}')
+        result['daprBeforeCommand']['applications'] = json.loads(probe.stdout)
         if result['daprBeforeCommand']['applications'] != []:
             raise RuntimeError('Private Dapr environment contains pre-existing applications.')
         result['prerequisitesReady'] = True
@@ -163,7 +169,7 @@ def inside(run_dir: Path, command: list[str]) -> int:
                                          stdout=output, stderr=error, start_new_session=True)
                 started = time.monotonic()
                 try:
-                    result['commandExitCode'] = child.wait(timeout=900)
+                    result['commandExitCode'] = child.wait(timeout=COMMAND_TIMEOUT_SECONDS)
                 except subprocess.TimeoutExpired:
                     stop_owned(child)
                     result['commandExitCode'] = 124
@@ -182,17 +188,19 @@ def inside(run_dir: Path, command: list[str]) -> int:
         print(f'Private environment failed: {type(exception).__name__}: {exception}', flush=True)
         return 1
     finally:
+        for private_key in certificate_dir.glob('*.key'):
+            private_key.unlink()
         for process in reversed(list(processes.values())):
             stop_owned(process)
         for log in logs:
             log.close()
-        for private_key in certificate_dir.glob('*.key'):
-            private_key.unlink()
         result['ownedInfrastructureStopped'] = {name: process.poll() for name, process in processes.items()}
         (run_dir / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
 
 
 if __name__ == '__main__':
+    if not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
+        sys.exit('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime directory.')
     if sys.argv[1:2] == ['--inside']:
         sys.exit(inside(Path(sys.argv[2]), sys.argv[4:]))
     command = sys.argv[1:]

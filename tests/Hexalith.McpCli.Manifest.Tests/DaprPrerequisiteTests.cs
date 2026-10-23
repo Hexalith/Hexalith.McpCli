@@ -7,7 +7,8 @@ using Hexalith.McpCli.Integration.Tests;
 namespace Hexalith.McpCli.Manifest.Tests;
 
 /// <summary>Passes only when missing Dapr prerequisites produce the platform's explicit skip result.</summary>
-public sealed class DaprPrerequisiteTests
+/// <param name="workspace">The shared disposable stand-ins for the root source checkouts.</param>
+public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) : IClassFixture<DaprPrerequisiteWorkspace>
 {
     /// <summary>Executes the actual smoke in a fresh process with an unreachable reserved control-plane port.</summary>
     [Theory]
@@ -47,15 +48,14 @@ public sealed class DaprPrerequisiteTests
         string port = ((IPEndPoint)unavailable.LocalEndPoint!).Port.ToString(System.Globalization.CultureInfo.InvariantCulture);
         string root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string assembly = Path.Combine(root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
         string dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH")
             ?? (Path.GetFileNameWithoutExtension(Environment.ProcessPath) == "dotnet" ? Environment.ProcessPath
                 : Path.GetFullPath(Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet")))!;
         var start = new ProcessStartInfo(dotnet)
         {
-            WorkingDirectory = root, RedirectStandardOutput = true, RedirectStandardError = true,
+            WorkingDirectory = workspace.Root, RedirectStandardOutput = true, RedirectStandardError = true,
         };
-        start.ArgumentList.Add(assembly);
+        start.ArgumentList.Add(workspace.Assembly);
         start.ArgumentList.Add("-method");
         start.ArgumentList.Add("*AuthenticatedQueryReturnsSuccessfulDocument");
         string stub = Path.Combine(root, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0");
