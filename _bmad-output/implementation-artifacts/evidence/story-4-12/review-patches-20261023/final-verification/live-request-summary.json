@@ -1,0 +1,24 @@
+{
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    }
+  ],
+  "wrongKeySignatureValidationLogged": true,
+  "successfulQueryDocumentAsserted": true,
+  "inheritedEnvironment": {
+    "HEXALITH_EVENTSTORE_TEST_REDIS_PORT": "19999",
+    "PYTHONOPTIMIZE": "1"
+  },
+  "effectiveRedisPort": "6379",
+  "rawLogs": "/tmp/mcpcli-412-maintained-bootstrap-s_20faao/runtime/runs/20261023T173959Z-1e42b7b8",
+  "stderrBytes": 0,
+  "privateKeysRemaining": 0
+}

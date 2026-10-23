@@ -1,0 +1,9 @@
+test_bootstrap_refuses_an_existing_runtime_before_using_docker (test_runtime.RuntimeTests.test_bootstrap_refuses_an_existing_runtime_before_using_docker) ... ok
+test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch (test_runtime.RuntimeTests.test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch) ... ok
+test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container (test_runtime.RuntimeTests.test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container) ... ok
+test_wrapper_requires_each_namespace_to_differ_before_running_commands (test_runtime.RuntimeTests.test_wrapper_requires_each_namespace_to_differ_before_running_commands) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.014s
+
+OK

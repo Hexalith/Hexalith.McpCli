@@ -1,0 +1,26 @@
+{
+  "unauthorizedRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "status": 401
+    }
+  ],
+  "wrongKeySignatureValidationLogged": true,
+  "successfulQueryDocumentAsserted": true,
+  "testSummary": "Hexalith.McpCli.Integration.Tests  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 18.378s",
+  "wrapperExitCode": 0,
+  "privateProcesses": {
+    "sentry": 0,
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  },
+  "rawLogs": "/tmp/mcpcli-story412-isolation-mhb5mtn8/runs/20261023T172418Z-58f839ac",
+  "note": "Sanitized summary; raw runtime output and credentials are not copied into the repository."
+}

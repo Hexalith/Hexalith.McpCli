@@ -120,6 +120,7 @@ jobs:
           global-json-file: global.json
       - name: Build and discover the live smoke without starting source services
         run: |
+          python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
           dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
           dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
           dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"

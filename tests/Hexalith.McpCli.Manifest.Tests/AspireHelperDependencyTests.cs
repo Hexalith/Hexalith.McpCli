@@ -55,6 +55,44 @@ public sealed class AspireHelperDependencyTests
             DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
     }
 
+    /// <summary>Missing transitive artifacts cannot disappear from the reviewed closure.</summary>
+    [Fact]
+    public void UnresolvedTransitiveDependencyIsRejected()
+    {
+        var (policy, graph) = Candidate();
+        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
+        nodes[Helper] = nodes[Helper] with { Dependencies = new Dictionary<string, string> { ["Aspire.Hosting"] = "2.0.0" } };
+        Assert.Equal([$"Helper {Helper}/1.0.0 has an unresolved dependency Aspire.Hosting: Topology > {Helper}/1.0.0 > Aspire.Hosting/2.0.0"],
+            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
+    }
+
+    /// <summary>Transitive projects and unapproved helper packages cannot bypass root review.</summary>
+    [Theory]
+    [InlineData("Transitive.Source", "project")]
+    [InlineData("Hexalith.Unreviewed.Aspire", "package")]
+    public void TransitiveUnreviewedDependenciesAreRejected(string dependency, string type)
+    {
+        var (policy, graph) = Candidate();
+        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
+        nodes[Helper] = nodes[Helper] with { Dependencies = new Dictionary<string, string> { [dependency] = "2.0.0" } };
+        nodes[dependency] = new(dependency, "2.0.0", type, new Dictionary<string, string>(), []);
+        string identity = nodes[dependency].Identity;
+        Assert.Equal([$"Helper {Helper}/1.0.0 has a forbidden dependency {identity}: Topology > {Helper}/1.0.0 > {identity}"],
+            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
+    }
+
+    /// <summary>Restore parsing failures remain admission failures even when helpers resolve.</summary>
+    [Fact]
+    public void RestoreLoadFailuresArePreserved()
+    {
+        var (policy, graph) = Candidate();
+        Assert.Equal(["Restore resolves multiple versions of Aspire.Hosting: Topology > Aspire.Hosting/2.0.0"],
+            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with
+            {
+                LoadFailures = ["Restore resolves multiple versions of Aspire.Hosting: Topology > Aspire.Hosting/2.0.0"],
+            }, [Helper]));
+    }
+
     /// <summary>The actual NuGet client fails closed when the helper artifact is unavailable.</summary>
     [Fact]
     public async Task MissingHelperRestoreCannotFallBackToWorkspaceOrGlobalPackages()
@@ -73,6 +111,7 @@ public sealed class AspireHelperDependencyTests
             };
             foreach (string argument in new[] { "restore", "Missing.csproj", "--configfile", "NuGet.Config", "--packages", Path.Combine(root, "packages"), "-p:RestoreFallbackFolders=" })
                 start.ArgumentList.Add(argument);
+            start.Environment["DOTNET_CLI_UI_LANGUAGE"] = "en";
             using Process process = Process.Start(start)!;
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
             timeout.CancelAfter(TimeSpan.FromSeconds(30));

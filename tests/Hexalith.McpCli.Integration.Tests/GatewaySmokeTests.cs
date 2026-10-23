@@ -27,7 +27,8 @@ public sealed class GatewaySmokeTests(AspireTopologyFixture fixture)
             ListTenantsQuery.QueryType, ListTenantsQuery.ProjectionType);
         AuthenticationHeaderValue validIdentity = http.DefaultRequestHeaders.Authorization!;
         await RequireUnauthorizedAsync(null);
-        await RequireUnauthorizedAsync(new AuthenticationHeaderValue("Bearer", "invalid-token"));
+        using HttpClient wrongKey = fixture.CreateAuthenticatedGatewayClient(invalidSignature: true);
+        await RequireUnauthorizedAsync(wrongKey.DefaultRequestHeaders.Authorization);
         http.DefaultRequestHeaders.Authorization = validIdentity;
         EventStoreQueryResult result = await GatewaySmokeProbe.ExecuteAsync(gateway, request, TestContext.Current.CancellationToken).ConfigureAwait(true);
 

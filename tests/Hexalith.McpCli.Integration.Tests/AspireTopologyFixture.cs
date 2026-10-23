@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
+using Hexalith.EventStore.Aspire;
 using Hexalith.EventStore.Testing.Integration;
 using Hexalith.McpCli.AppHost;
 
@@ -31,6 +32,9 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <summary>Rejects an existing requested topology before the platform starts or waits on resources.</summary>
     public new async ValueTask InitializeAsync()
     {
+        if (Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_TOPOLOGY") != "1")
+            throw new InvalidOperationException("Live topology tests require tools/live-topology/run-isolated.py; refusing to use host Dapr or Redis.");
+        TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
         _additionalPrerequisiteFailure = await TopologyPrerequisites.GetFailureAsync().ConfigureAwait(false);
         if (_additionalPrerequisiteFailure is not null) return;
 
@@ -53,7 +57,7 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     }
 
     /// <summary>Creates a caller-owned client at the platform-discovered endpoint with a short-lived test identity.</summary>
-    internal HttpClient CreateAuthenticatedGatewayClient()
+    internal HttpClient CreateAuthenticatedGatewayClient(bool invalidSignature = false)
     {
         // The pinned Gateway client sets buffering before its first request, so it
         // needs a fresh client after the platform's liveness client has been used.
@@ -67,7 +71,7 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
             ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + 300,
         }));
         string unsigned = header + "." + payload;
-        string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(_signingKey), Encoding.ASCII.GetBytes(unsigned)));
+        string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(invalidSignature ? Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)) : _signingKey), Encoding.ASCII.GetBytes(unsigned)));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", unsigned + "." + signature);
         return client;
     }

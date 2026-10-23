@@ -1,0 +1,67 @@
+{
+  "headAtVerification": "c432b45e3833aa69337d55e6d206c443d2d99331",
+  "projects": [
+    {
+      "project": "Abstractions",
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    {
+      "project": "Analyzers",
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    {
+      "project": "Core",
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    {
+      "project": "Cli",
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    {
+      "project": "Mcp",
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    {
+      "project": "Manifest",
+      "total": 196,
+      "failed": 0,
+      "succeeded": 196,
+      "skipped": 0
+    }
+  ],
+  "passed": 1476,
+  "failed": 0,
+  "skipped": 5,
+  "live": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "runtimeToolTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "matrixCoverage": {
+    "qualifiedTopology": "GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument",
+    "missingOrForbiddenHelper": "AspireHelperDependencyTests",
+    "missingRootSource": "TopologyConfigurationTests; TopologyLaunchTests; TopologyFixtureLaunchTests",
+    "missingDaprPrerequisites": "DaprPrerequisiteTests (passing outer assertions of skipped child)",
+    "aliveButUnusableGateway": "GatewaySmokeBoundaryTests.AliveGatewayThatNeverAnswersQueryFailsWithinSmokeDeadline",
+    "conflictingUserTopology": "TopologyLaunchTests.ExistingApplicationStopsLaunch; OccupiedPortStopsLaunch"
+  }
+}

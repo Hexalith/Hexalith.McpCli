@@ -1,0 +1,70 @@
+{
+  "headAtVerification": "c432b45e3833aa69337d55e6d206c443d2d99331",
+  "projects": [
+    {
+      "project": "Abstractions",
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    {
+      "project": "Analyzers",
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    {
+      "project": "Core",
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    {
+      "project": "Cli",
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    {
+      "project": "Mcp",
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    {
+      "project": "Manifest",
+      "total": 199,
+      "failed": 0,
+      "succeeded": 199,
+      "skipped": 0
+    }
+  ],
+  "passed": 1479,
+  "failed": 0,
+  "skipped": 5,
+  "live": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 17.483
+  },
+  "runtimeToolTests": {
+    "passed": 9,
+    "failed": 0
+  },
+  "discoveredSmokes": [
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"
+  ],
+  "review": {
+    "layers": 3,
+    "findings": 15,
+    "patchedGroups": 7,
+    "rejectedLowFindings": 6,
+    "newDeferrals": 0
+  }
+}

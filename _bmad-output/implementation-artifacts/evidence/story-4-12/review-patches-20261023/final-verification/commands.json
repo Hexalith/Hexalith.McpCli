@@ -1,0 +1,121 @@
+[
+  {
+    "check": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Cli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Mcp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "Manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "runtime-tools",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "smoke-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-list",
+      "tests"
+    ],
+    "exitCode": 0
+  }
+]

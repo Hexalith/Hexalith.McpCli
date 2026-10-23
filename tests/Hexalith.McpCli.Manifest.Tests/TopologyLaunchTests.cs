@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Hexalith.McpCli.Manifest.Tests;
 
@@ -62,6 +64,101 @@ public sealed class TopologyLaunchTests : IDisposable
         Assert.Equal(2, result.ExitCode);
         Assert.Equal(string.Empty, result.Stdout);
         Assert.Equal("Cannot validate topology conflicts: Dapr entry 0 must be an object with a non-empty string 'appId'." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>Non-JSON Dapr output is contained by the executable diagnostic boundary.</summary>
+    [Fact]
+    public async Task NonJsonDaprOutputStopsLaunch()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "not-json");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        string expected = Assert.ThrowsAny<JsonException>(() => JsonDocument.Parse("not-json" + Environment.NewLine)).Message;
+        Assert.Equal(expected + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>A missing Dapr executable reports one diagnostic without an unhandled stack trace.</summary>
+    [Fact]
+    public async Task MissingDaprExecutableStopsLaunch()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", missingDapr: true);
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        string expected = new System.ComponentModel.Win32Exception(2).Message;
+        Assert.Equal($"An error occurred trying to start process 'dapr' with working directory '{_root}'. {expected}" + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>Every route field is required even when the executable only runs preflight.</summary>
+    [Theory]
+    [InlineData("TenantId")]
+    [InlineData("Domain")]
+    [InlineData("Version")]
+    [InlineData("AppId")]
+    [InlineData("MethodName")]
+    public async Task EmptyRouteFieldStopsPreflight(string field)
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", extraArgument: $"--Gateway:Routes:system|tenants|v1:{field}= ");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal($"Gateway:Routes:system|tenants|v1:{field} is required." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>A registration with an absent field fails before preflight can report success.</summary>
+    [Fact]
+    public async Task MissingRouteFieldStopsPreflight()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", extraArgument: "--Gateway:Routes:extra:TenantId=system");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal("Gateway:Routes:extra:Domain is required." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>An empty configured topic override is rejected before topology creation.</summary>
+    [Fact]
+    public async Task EmptyTopicOverrideStopsPreflight()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", extraArgument: "--Gateway:TopicOverrides:global-administrators= ");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal("Gateway:TopicOverrides:global-administrators is required." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>Malformed topology flags use the same exact exit and channel contract as port errors.</summary>
+    [Theory]
+    [InlineData("PreflightOnly")]
+    [InlineData("InspectComposition")]
+    public async Task NonBooleanTopologyFlagStopsLaunch(string flag)
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", extraArgument: $"--Topology:{flag}=invalid");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal($"Failed to convert configuration value 'invalid' at 'Topology:{flag}' to type 'System.Boolean'." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>Direct live execution requires the same isolation sentinel as the fixture.</summary>
+    [Theory]
+    [InlineData(null)]
+    [InlineData("0")]
+    public async Task DirectLiveLaunchWithoutIsolationStopsBeforeDapr(string? sentinel)
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "Dapr must not run", extraArgument: "--Topology:PreflightOnly=false", isolationSentinel: sentinel);
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal("Live topology tests require tools/live-topology/run-isolated.py; refusing to use host Dapr or Redis." + Environment.NewLine, result.Stderr);
     }
 
     /// <summary>A qualified preflight exits cleanly without starting its source projects.</summary>
@@ -150,9 +247,15 @@ public sealed class TopologyLaunchTests : IDisposable
     {
         string assembly = PrepareHost();
         PrepareSources();
-        var result = await InvokeAsync(assembly, new string('k', 32), "[]", inspect: true);
+        const string signingKey = "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
+        using var available = new TcpListener(IPAddress.Loopback, 0);
+        available.Start();
+        string gatewayPort = ((IPEndPoint)available.LocalEndpoint).Port.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        available.Stop();
+        var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true);
         Assert.Equal(0, result.ExitCode);
         Assert.Equal(string.Empty, result.Stderr);
+        Assert.DoesNotContain(signingKey, result.Stdout);
         using JsonDocument document = JsonDocument.Parse(result.Stdout);
         string host = document.RootElement.GetProperty("appHostDirectory").GetString()!;
         JsonElement[] resources = document.RootElement.GetProperty("resources").EnumerateArray().ToArray();
@@ -164,8 +267,42 @@ public sealed class TopologyLaunchTests : IDisposable
             Assert.Equal(64, resource.GetProperty("sidecarTokenLength").GetInt32());
             Assert.True(resource.GetProperty("tokensMatch").GetBoolean());
             Assert.Equal(Path.Combine(host, "DaprComponents", "accesscontrol.yaml"), resource.GetProperty("configuration").GetString());
-            if (resource.GetProperty("name").GetString() == "eventstore")
+            string module = resource.GetProperty("name").GetString() switch
+            {
+                "eventstore" => "Hexalith.EventStore",
+                "tenants" => "Hexalith.Tenants",
+                "parties" => "Hexalith.Parties",
+                _ => throw new InvalidOperationException("Unexpected resource."),
+            };
+            Assert.Equal(Path.Combine(_root, "references", module, "src", module, module + ".csproj"), resource.GetProperty("projectPath").GetString());
+            JsonElement authentication = resource.GetProperty("authentication");
+            Assert.Equal("mcpcli-live-tests", authentication.GetProperty("issuer").GetString());
+            Assert.Equal("hexalith-eventstore", authentication.GetProperty("audience").GetString());
+            Assert.Equal("hexalith-eventstore", authentication.GetProperty("validAudience").GetString());
+            Assert.Equal("HS256", authentication.GetProperty("algorithm").GetString());
+            Assert.Equal("false", authentication.GetProperty("requireHttpsMetadata").GetString());
+            Assert.Equal(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(signingKey))), authentication.GetProperty("signingKeyHash").GetString());
+            JsonElement settings = resource.GetProperty("gatewaySettings");
+            if (module == "Hexalith.EventStore")
+            {
                 Assert.Equal(host, resource.GetProperty("contentRoot").GetString());
+                Assert.Equal(int.Parse(gatewayPort, System.Globalization.CultureInfo.InvariantCulture), resource.GetProperty("daprHttpPort").GetInt32());
+                var expected = new Dictionary<string, string>();
+                foreach ((string route, string tenant, string domain, string app) in new[]
+                {
+                    ("system|tenants|v1", "system", "tenants", "tenants"),
+                    ("system|global-administrators|v1", "system", "global-administrators", "tenants"),
+                    ("*|party|v1", "*", "party", "parties"),
+                })
+                {
+                    foreach ((string field, string value) in new[] { ("TenantId", tenant), ("Domain", domain), ("Version", "v1"), ("AppId", app), ("MethodName", "process") })
+                        expected.Add($"EventStore__DomainServices__Registrations__{route}__{field}", value);
+                }
+                expected.Add("EventStore__Publisher__TopicOverrides__global-administrators", "tenants.events");
+                Assert.Equal(expected.OrderBy(pair => pair.Key, StringComparer.Ordinal),
+                    settings.EnumerateObject().Select(property => new KeyValuePair<string, string>(property.Name, property.Value.GetString()!)).OrderBy(pair => pair.Key, StringComparer.Ordinal));
+            }
+            else Assert.Empty(settings.EnumerateObject());
         }
     }
 
@@ -206,7 +343,7 @@ public sealed class TopologyLaunchTests : IDisposable
         }
     }
 
-    private async Task<(int ExitCode, string Stdout, string Stderr)> InvokeAsync(string assembly, string key, string snapshot, string? requestedPort = null, string? daprExit = null, string? daprError = null, bool inspect = false)
+    private async Task<(int ExitCode, string Stdout, string Stderr)> InvokeAsync(string assembly, string key, string snapshot, string? requestedPort = null, string? daprExit = null, string? daprError = null, bool inspect = false, bool missingDapr = false, string? extraArgument = null, string? isolationSentinel = null)
     {
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
@@ -215,13 +352,27 @@ public sealed class TopologyLaunchTests : IDisposable
         listener.Start();
         int port = ((IPEndPoint)listener.LocalEndpoint).Port;
         listener.Stop();
-        var start = new ProcessStartInfo("dotnet")
+        string dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH")
+            ?? Path.GetFullPath(Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
+        var start = new ProcessStartInfo(dotnet)
         {
             WorkingDirectory = _root, RedirectStandardOutput = true, RedirectStandardError = true,
         };
         foreach (string argument in new[] { assembly, inspect ? "--Topology:InspectComposition=true" : "--Topology:PreflightOnly=true", $"--Authentication:JwtBearer:SigningKey={key}", $"--Dapr:GatewayHttpPort={requestedPort ?? port.ToString(System.Globalization.CultureInfo.InvariantCulture)}" })
             start.ArgumentList.Add(argument);
-        start.Environment["PATH"] = stub + Path.PathSeparator + start.Environment["PATH"];
+        if (extraArgument is not null) start.ArgumentList.Add(extraArgument);
+        if (missingDapr)
+        {
+            string onlyGit = Path.Combine(_root, "git-only");
+            Directory.CreateDirectory(onlyGit);
+            string gitName = OperatingSystem.IsWindows() ? "git.exe" : "git";
+            string git = start.Environment["PATH"]!.Split(Path.PathSeparator)
+                .Select(directory => Path.Combine(directory, gitName)).First(File.Exists);
+            File.CreateSymbolicLink(Path.Combine(onlyGit, gitName), git);
+            start.Environment["PATH"] = onlyGit;
+        }
+        else start.Environment["PATH"] = stub + Path.PathSeparator + start.Environment["PATH"];
+        start.Environment["MCPCLI_ISOLATED_TOPOLOGY"] = isolationSentinel;
         start.Environment["MCPCLI_TEST_DAPR_SNAPSHOT"] = snapshot;
         start.Environment["MCPCLI_TEST_DAPR_EXIT"] = daprExit;
         start.Environment["MCPCLI_TEST_DAPR_ERROR"] = daprError;

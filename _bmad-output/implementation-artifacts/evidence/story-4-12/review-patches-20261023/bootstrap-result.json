@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    "tools/live-topology/bootstrap-runtime.py",
+    "/tmp/mcpcli-412-maintained-bootstrap-s_20faao/runtime"
+  ],
+  "exitCode": 0,
+  "runtimeDirectory": "/tmp/mcpcli-412-maintained-bootstrap-s_20faao/runtime"
+}

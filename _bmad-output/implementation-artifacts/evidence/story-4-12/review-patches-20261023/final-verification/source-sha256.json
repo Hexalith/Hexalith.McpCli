@@ -1,0 +1,20 @@
+{
+  ".github/workflows/ci.yml": "5036c4dd4624d1192805f3efb8c97fdfdf4738aa26f679321580f1a118c9480a",
+  "README.md": "7683de1f3e54e70c0092f912cb3d6db168054db0063c5ec5fe5226c7f748b54a",
+  "_bmad-output/implementation-artifacts/spec-4-12-compose-the-v1-live-test-topology.md": "dc6788cd4565d8b9ff987bedf0af29f8ca76ee862caf65a985a97bed40391ff5",
+  "_bmad-output/implementation-artifacts/sprint-status.yaml": "416fff96cb53be1f7b0254d08de7368889c62f49085e3019f88db932975fe826",
+  "tests/Hexalith.McpCli.AppHost/Program.cs": "9c4e48a080c9d9f1b50da2fcdea835781facbd876164176e51f12ae54e71fc80",
+  "tests/Hexalith.McpCli.AppHost/appsettings.json": "121cc17d7ca11fabb3ecd5a9b244cf32445930ee838f320895be22a91e3ef781",
+  "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs": "b5deaf16d58cbd93be0704a80c949fab6d399d0219c263fe919db6e3a54e5f6c",
+  "tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs": "477fb6c4eee2e8dbf0b92e6de04831f4b78c197fed35cbcc6f33ebd498784d4c",
+  "tests/Hexalith.McpCli.Manifest.Tests/AspireHelperDependencyTests.cs": "a98c35dda1f2887eabb7e34bc9a482dab7bdbead5560b0ec69b7fd14f3bef29f",
+  "tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs": "10c9938f028a5fe4c214d57b110b6ef654c0acbb7318848dd7f5f4afd1430c92",
+  "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs": "db8b848ccce5a92bd51ca503f600f71c4cd200e3221b500039ef290da872734c",
+  "tests/Hexalith.McpCli.Manifest.Tests/TopologyFixtureLaunchTests.cs": "61184875fbf14f566633240fcfd1393fde7781605c66fcae254a42bfa2fae010",
+  "tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs": "43f79e21e250d0db342367b68b424eb0bd576993d29fa6b8dffd802119a2867e",
+  "tools/live-topology/README.md": "94028cdb913ade2b27cd977b2dd63f00a9e05a596dbb18bb41040992d82a1e5c",
+  "tools/live-topology/binaries.json": "00cec44c8b4ffed1e969f71031c5f8f54f8654fafab3aafc06797c964b98ca05",
+  "tools/live-topology/bootstrap-runtime.py": "b2a457611512b1f6afee498ce8956f22f4b04aafdafd1ca71ab2096bd5edff9f",
+  "tools/live-topology/run-isolated.py": "485ee37c9391b59b67f885305844582b1269f4bc8452389e4ba2ce9e22492102",
+  "tools/live-topology/test_runtime.py": "33e2b422e71f9258415014a3fe101760d6c819cca37669fe118d8ee8a3993b12"
+}

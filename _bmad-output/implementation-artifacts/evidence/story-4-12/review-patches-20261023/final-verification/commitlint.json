@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "cliVersion": "21.2.2",
+  "message": "fix(topology): harden story 4.12 live test topology\n",
+  "messageSha256": "e2d6adbf6a1739187ead5fb890ce643692843dcc3050b57528c90cc6915cbd86",
+  "exitCode": 0
+}

@@ -52,6 +52,34 @@ public sealed class DependencyPolicyTests
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
 
+    /// <summary>Pins the separate test-only platform fixture closure, including its implementation transitives.</summary>
+    [Fact]
+    public void IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure()
+    {
+        string root = FindRepositoryRoot();
+        string project = Path.Combine(root, "tests", "Hexalith.McpCli.Integration.Tests", "Hexalith.McpCli.Integration.Tests.csproj");
+        using JsonDocument assets = JsonDocument.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(project)!, "obj", "project.assets.json")));
+        RestoredDependencyGraph graph = RestoredDependencyGraph.Load(assets.RootElement, project);
+        Assert.Empty(graph.LoadFailures);
+        Assert.Equal(new[]
+        {
+            "Hexalith.Commons.UniqueIds/2.30.3",
+            "Hexalith.EventStore.Aspire/3.126.1",
+            "Hexalith.EventStore.Client/3.126.1",
+            "Hexalith.EventStore.Contracts/3.126.1",
+            "Hexalith.EventStore.DomainService/3.126.1",
+            "Hexalith.EventStore.Server/3.126.1",
+            "Hexalith.EventStore.ServiceDefaults/3.126.1",
+            "Hexalith.EventStore.Testing/3.126.1",
+            "Hexalith.EventStore.Testing.Integration/3.126.1",
+            "Hexalith.McpCli.Abstractions/1.0.0",
+            "Hexalith.Parties.Aspire/1.6.0",
+            "Hexalith.Tenants.Aspire/5.10.0",
+            "Hexalith.Tenants.Contracts/5.10.0",
+        }, graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.Ordinal))
+            .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
+    }
+
     /// <summary>Rejects the real 55-package Projects closure and names both root and transitive framework edges.</summary>
     [Fact]
     public void ProjectsCandidateFailsOfflineWithDependencyPaths()

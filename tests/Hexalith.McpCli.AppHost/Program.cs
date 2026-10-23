@@ -19,9 +19,33 @@ builder.Configuration.AddJsonFile(Path.Combine(builder.AppHostDirectory, "appset
     .AddEnvironmentVariables().AddCommandLine(args);
 string? signingKey = builder.Configuration["Authentication:JwtBearer:SigningKey"];
 int gatewayPort;
+bool preflightOnly;
+bool inspectComposition;
+var routes = new Dictionary<string, string>();
+var topicOverrides = new Dictionary<string, string>();
 try
 {
     gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", 3501);
+    preflightOnly = builder.Configuration.GetValue<bool>("Topology:PreflightOnly");
+    inspectComposition = builder.Configuration.GetValue<bool>("Topology:InspectComposition");
+    if (!preflightOnly && !inspectComposition && Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_TOPOLOGY") != "1")
+        throw new InvalidOperationException("Live topology tests require tools/live-topology/run-isolated.py; refusing to use host Dapr or Redis.");
+    foreach (IConfigurationSection route in builder.Configuration.GetSection("Gateway:Routes").GetChildren())
+    {
+        foreach (string field in new[] { "TenantId", "Domain", "Version", "AppId", "MethodName" })
+        {
+            string? value = route[field];
+            if (string.IsNullOrWhiteSpace(value))
+                throw new InvalidOperationException($"Gateway:Routes:{route.Key}:{field} is required.");
+            routes.Add($"EventStore__DomainServices__Registrations__{route.Key}__{field}", value);
+        }
+    }
+    foreach (IConfigurationSection topic in builder.Configuration.GetSection("Gateway:TopicOverrides").GetChildren())
+    {
+        if (string.IsNullOrWhiteSpace(topic.Value))
+            throw new InvalidOperationException($"Gateway:TopicOverrides:{topic.Key} is required.");
+        topicOverrides.Add($"EventStore__Publisher__TopicOverrides__{topic.Key}", topic.Value);
+    }
     TopologyConfiguration.ValidateGatewayPort(gatewayPort);
     TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
     TopologyConfiguration.ValidateSigningKey(signingKey);
@@ -35,7 +59,7 @@ catch (Exception exception) when (exception is InvalidOperationException or Time
 }
 
 // Executable boundary checks run these same guards and exit before adding any resource.
-if (builder.Configuration.GetValue<bool>("Topology:PreflightOnly")) return 0;
+if (preflightOnly) return 0;
 
 string components = Path.Combine(builder.AppHostDirectory, "DaprComponents");
 string access = Path.Combine(components, "accesscontrol.yaml");
@@ -46,14 +70,8 @@ IResourceBuilder<ParameterResource> key = builder.AddParameter("live-test-signin
 // Load the test-owned settings instead of the source host's sample Development registrations.
 IResourceBuilder<ProjectResource> gateway = builder.AddHexalithEventStoreGatewayProject()
     .WithEnvironment("ASPNETCORE_CONTENTROOT", builder.AppHostDirectory);
-foreach (IConfigurationSection route in builder.Configuration.GetSection("Gateway:Routes").GetChildren())
-{
-    foreach (string field in new[] { "TenantId", "Domain", "Version", "AppId", "MethodName" })
-    {
-        gateway.WithEnvironment($"EventStore__DomainServices__Registrations__{route.Key}__{field}",
-            route[field] ?? throw new InvalidOperationException($"Gateway:Routes:{route.Key}:{field} is required."));
-    }
-}
+foreach ((string name, string value) in routes.Concat(topicOverrides))
+    gateway.WithEnvironment(name, value);
 
 HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, adminServer: null, adminUI: null,
     eventStoreDaprConfigPath: access, adminServerDaprConfigPath: null, resiliencyConfigPath: null,
@@ -87,7 +105,7 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
 }
 
 // Evaluate the actual composed model without starting it; never emit secret values.
-if (builder.Configuration.GetValue<bool>("Topology:InspectComposition"))
+if (inspectComposition)
 {
     var snapshots = new List<object>();
     foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
@@ -100,10 +118,24 @@ if (builder.Configuration.GetValue<bool>("Topology:InspectComposition"))
         snapshots.Add(new
         {
             name = resource.Resource.Name,
+            projectPath = resource.Resource.Annotations.OfType<IProjectMetadata>().Single().ProjectPath,
+            gatewaySettings = appEnvironment.Keys.Where(name => name.StartsWith("EventStore__DomainServices__Registrations__", StringComparison.Ordinal)
+                || name.StartsWith("EventStore__Publisher__TopicOverrides__", StringComparison.Ordinal))
+                .ToDictionary(name => name, name => appEnvironment[name].ToString()),
+            authentication = new
+            {
+                issuer = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__Issuer")),
+                audience = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__Audience")),
+                validAudience = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__ValidAudiences__0")),
+                algorithm = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__AllowedAlgorithms__0")),
+                requireHttpsMetadata = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__RequireHttpsMetadata")),
+                signingKeyHash = Hash(await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__SigningKey"))),
+            },
+            daprHttpPort = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options.DaprHttpPort,
             appTokenLength = appToken?.Length ?? 0,
             sidecarTokenLength = sidecarToken?.Length ?? 0,
             tokensMatch = !string.IsNullOrEmpty(appToken) && appToken == sidecarToken,
-            tokenHash = appToken is null ? null : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(appToken))),
+            tokenHash = Hash(appToken),
             configuration = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options.Config,
             contentRoot = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_CONTENTROOT")),
         });
@@ -122,6 +154,8 @@ async Task<Dictionary<string, object>> EnvironmentAsync(IResource resource)
         await callback.Callback(context).ConfigureAwait(false);
     return values;
 }
+
+static string? Hash(string? value) => value is null ? null : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
 
 static async Task<string?> ValueAsync(object? value) => value is IValueProvider provider
     ? await provider.GetValueAsync(CancellationToken.None).ConfigureAwait(false) : value?.ToString();
