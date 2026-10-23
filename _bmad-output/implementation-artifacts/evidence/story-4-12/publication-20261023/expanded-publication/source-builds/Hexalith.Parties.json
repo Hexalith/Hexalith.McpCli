@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-10-23T12:17:29.581206+00:00",
+  "sourceSha": "3ace477aa61f6cd936bd9c06d99fd8fe59a205a8",
+  "workingDirectory": "references/Hexalith.Parties",
+  "command": [
+    "timeout",
+    "300",
+    "dotnet",
+    "build",
+    "src/Hexalith.Parties/Hexalith.Parties.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true"
+  ],
+  "elapsedSeconds": 2.019,
+  "exitCode": 0,
+  "sourceStatusUnchanged": true,
+  "outputExcerpt": "  Hexalith.Parties.Security -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Security/bin/Release/net10.0/Hexalith.Parties.Security.dll\n  Hexalith.Parties -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.65",
+  "stdoutFile": "Hexalith.Parties.stdout.txt",
+  "stderrFile": "Hexalith.Parties.stderr.txt"
+}

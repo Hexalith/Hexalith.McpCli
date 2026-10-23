@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-10-23T12:17:27.940156+00:00",
+  "sourceSha": "4354b0e0687766c0995383f630ec54f9b2a29730",
+  "workingDirectory": "references/Hexalith.Tenants",
+  "command": [
+    "timeout",
+    "300",
+    "dotnet",
+    "build",
+    "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true"
+  ],
+  "elapsedSeconds": 1.611,
+  "exitCode": 0,
+  "sourceStatusUnchanged": true,
+  "outputExcerpt": "  Hexalith.Tenants.Server -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll\n  Hexalith.Tenants -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.24",
+  "stdoutFile": "Hexalith.Tenants.stdout.txt",
+  "stderrFile": "Hexalith.Tenants.stderr.txt"
+}

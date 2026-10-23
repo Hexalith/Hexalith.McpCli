@@ -1,0 +1,58 @@
+{
+  "verifiedAt": "2026-10-23T13:31:29.807142+00:00",
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Manifest.Tests.TopologyAccessControlTests"
+  ],
+  "semanticPermissionChange": "Only eventstore caller POST /admin/operational-index-metadata added; all existing operations, trust domains, namespaces and deny defaults preserved.",
+  "newDependencyOrPolicyRoot": false,
+  "cases": [
+    {
+      "case": "actual-permission",
+      "exitCode": 0,
+      "expectedPass": true
+    },
+    {
+      "case": "permission-removed",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "verb-broadened",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "path-broadened",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "caller-broadened",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "other-caller-granted",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "global-default-allow",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "caller-default-allow",
+      "exitCode": 1,
+      "expectedPass": false
+    },
+    {
+      "case": "restored-permission",
+      "exitCode": 0,
+      "expectedPass": true
+    }
+  ]
+}

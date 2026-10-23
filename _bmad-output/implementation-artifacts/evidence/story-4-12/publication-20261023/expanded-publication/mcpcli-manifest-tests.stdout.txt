@@ -1,0 +1,21 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers (13ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ at index 1
+                      ↓ (pos 9)
+  Expected: "Hexalith.Parties.Aspire/1.6.0"
+  Actual:   "Hexalith.McpCli.AppHost"
+                      ↑ (pos 9)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:49
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) failed with 1 error(s) (30s 464ms)
+Exit code: 2
+
+Test run summary: Failed!
+  total: 157
+  failed: 1
+  succeeded: 156
+  skipped: 0
+  duration: 30s 641ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

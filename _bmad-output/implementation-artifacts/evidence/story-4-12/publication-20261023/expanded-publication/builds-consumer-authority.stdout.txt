@@ -1,0 +1,1 @@
+Consumer package authority validation passed for 21 projects in '/tmp/story-4-12-builds-catalog'.

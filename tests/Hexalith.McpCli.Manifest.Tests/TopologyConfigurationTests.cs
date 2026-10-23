@@ -142,9 +142,10 @@ public sealed class TopologyConfigurationTests : IDisposable
     /// <summary>Invalid sidecar port settings fail before resource launch.</summary>
     [Theory]
     [InlineData(0)]
+    [InlineData(1023)]
     [InlineData(65536)]
     public void InvalidGatewayPortFails(int port)
-        => Assert.Equal("Dapr:GatewayHttpPort must be between 1 and 65535.",
+        => Assert.Equal("Dapr:GatewayHttpPort must be between 1024 and 65535.",
             Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateGatewayPort(port)).Message);
 
     /// <summary>A non-Dapr process occupying the Gateway sidecar port is also rejected.</summary>

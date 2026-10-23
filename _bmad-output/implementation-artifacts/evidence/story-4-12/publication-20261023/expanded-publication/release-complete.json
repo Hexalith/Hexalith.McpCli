@@ -1,0 +1,331 @@
+{
+  "recordedAt": "2026-10-23T12:50:06.690772+00:00",
+  "version": "1.6.0",
+  "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+  "outcome": "complete exact-source normal publication succeeded",
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-10-23T12:33:45Z",
+    "headSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+    "jobs": [
+      {
+        "completedAt": "2026-10-23T12:33:56Z",
+        "conclusion": "success",
+        "databaseId": 120416003476,
+        "name": "Verify exact green main source",
+        "startedAt": "2026-10-23T12:33:49Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Require current main with successful exact-source CI and range proof",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Require registry versions at or below the release tag floor",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 4,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39954248029/job/120416003476"
+      },
+      {
+        "completedAt": "2026-10-23T12:48:20Z",
+        "conclusion": "success",
+        "databaseId": 120416073211,
+        "name": "release",
+        "startedAt": "2026-10-23T12:34:25Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Check out dispatched source",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare domain release",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Validate changed root gitlinks before publication",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up arm64 emulation",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare release container publisher",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "NuGet trusted publishing login",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Semantic Release",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload complete release evidence",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Set up arm64 emulation",
+            "number": 16,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Prepare domain release",
+            "number": 17,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Check out dispatched source",
+            "number": 18,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39954248029/job/120416073211"
+      },
+      {
+        "completedAt": "2026-10-23T12:49:23Z",
+        "conclusion": "success",
+        "databaseId": 120422221125,
+        "name": "Verify complete exact-source publication",
+        "startedAt": "2026-10-23T12:48:53Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Check out dispatched verification source",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Check out immutable publication validator",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize dispatched source package catalog",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up dispatched source SDK for catalog evaluation",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Require published release for exact dispatched source",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify every declared registry artifact",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload complete publication verification evidence",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Set up dispatched source SDK for catalog evaluation",
+            "number": 14,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Check out immutable publication validator",
+            "number": 15,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Check out dispatched verification source",
+            "number": 16,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39954248029/job/120422221125"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-10-23T12:49:24Z",
+    "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39954248029"
+  },
+  "artifacts": [
+    {
+      "id": 12501933465,
+      "name": "release-evidence-39954248029-1",
+      "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+      "sha256": "5651d8698995b1c23e4de8c75872245cac4676a2835305990c6728713b50bcf1",
+      "retainedFile": "release-evidence-39954248029-1.zip",
+      "files": [
+        "1.6.0/parties/child-linux-amd64.config.raw",
+        "1.6.0/parties/child-linux-amd64.manifest.raw",
+        "1.6.0/parties/child-linux-arm64.config.raw",
+        "1.6.0/parties/child-linux-arm64.manifest.raw",
+        "1.6.0/parties/index.raw",
+        "1.6.0/parties/oci-validation.json",
+        "1.6.0/parties/smoke-linux-amd64.log",
+        "1.6.0/parties/smoke-linux-arm64.log",
+        "1.6.0/parties/smoke-preflight.log",
+        "1.6.0/parties/smoke-results.json",
+        "1.6.0/parties/smoke-sha256.txt",
+        "1.6.0/parties-mcp/child-linux-amd64.config.raw",
+        "1.6.0/parties-mcp/child-linux-amd64.manifest.raw",
+        "1.6.0/parties-mcp/child-linux-arm64.config.raw",
+        "1.6.0/parties-mcp/child-linux-arm64.manifest.raw",
+        "1.6.0/parties-mcp/index.raw",
+        "1.6.0/parties-mcp/oci-validation.json",
+        "1.6.0/parties-mcp/smoke-linux-amd64.log",
+        "1.6.0/parties-mcp/smoke-linux-arm64.log",
+        "1.6.0/parties-mcp/smoke-preflight.log",
+        "1.6.0/parties-mcp/smoke-results.json",
+        "1.6.0/parties-mcp/smoke-sha256.txt",
+        "1.6.0/parties-ui/child-linux-amd64.config.raw",
+        "1.6.0/parties-ui/child-linux-amd64.manifest.raw",
+        "1.6.0/parties-ui/child-linux-arm64.config.raw",
+        "1.6.0/parties-ui/child-linux-arm64.manifest.raw",
+        "1.6.0/parties-ui/index.raw",
+        "1.6.0/parties-ui/oci-validation.json",
+        "1.6.0/parties-ui/smoke-linux-amd64.log",
+        "1.6.0/parties-ui/smoke-linux-arm64.log",
+        "1.6.0/parties-ui/smoke-preflight.log",
+        "1.6.0/parties-ui/smoke-results.json",
+        "1.6.0/parties-ui/smoke-sha256.txt",
+        "1.6.0/preflight/publication-identity.json",
+        "1.6.0/preflight/publication-preflight.container.json",
+        "1.6.0/preflight/publication-preflight.publish.json",
+        "1.6.0/preflight/publication-preflight.verify.json"
+      ]
+    },
+    {
+      "id": 12501829070,
+      "name": "publication-verification-39954248029-1",
+      "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+      "sha256": "209e591db6518918dcfe738f4e1568105e6369a401307adccd322b76d97c19f2",
+      "retainedFile": "publication-verification-39954248029-1.zip",
+      "files": [
+        "containers/parties/child-0.raw",
+        "containers/parties/child-linux-amd64.config.raw",
+        "containers/parties/child-1.raw",
+        "containers/parties/child-linux-amd64.manifest.raw",
+        "containers/parties/child-linux-arm64.config.raw",
+        "containers/parties/child-linux-arm64.manifest.raw",
+        "containers/parties/config-0.raw",
+        "containers/parties/config-1.raw",
+        "containers/parties/immutable-index.raw",
+        "containers/parties/index.raw",
+        "containers/parties/oci-validation.json",
+        "containers/parties/responses.json",
+        "containers/parties/tag.raw",
+        "containers/parties-mcp/child-0.raw",
+        "containers/parties-mcp/child-1.raw",
+        "containers/parties-mcp/child-linux-amd64.config.raw",
+        "containers/parties-mcp/child-linux-amd64.manifest.raw",
+        "containers/parties-mcp/child-linux-arm64.config.raw",
+        "containers/parties-mcp/child-linux-arm64.manifest.raw",
+        "containers/parties-mcp/config-0.raw",
+        "containers/parties-mcp/config-1.raw",
+        "containers/parties-mcp/index.raw",
+        "containers/parties-mcp/immutable-index.raw",
+        "containers/parties-mcp/oci-validation.json",
+        "containers/parties-mcp/responses.json",
+        "containers/parties-mcp/tag.raw",
+        "containers/parties-ui/child-0.raw",
+        "containers/parties-ui/child-1.raw",
+        "containers/parties-ui/child-linux-amd64.config.raw",
+        "containers/parties-ui/child-linux-amd64.manifest.raw",
+        "containers/parties-ui/child-linux-arm64.config.raw",
+        "containers/parties-ui/child-linux-arm64.manifest.raw",
+        "containers/parties-ui/config-0.raw",
+        "containers/parties-ui/config-1.raw",
+        "containers/parties-ui/immutable-index.raw",
+        "containers/parties-ui/index.raw",
+        "containers/parties-ui/oci-validation.json",
+        "containers/parties-ui/responses.json",
+        "containers/parties-ui/tag.raw",
+        "nuget/hexalith.parties.adminportal.1.6.0.nupkg",
+        "nuget/hexalith.parties.aspire.1.6.0.nupkg",
+        "nuget/hexalith.parties.authentication.1.6.0.nupkg",
+        "nuget/hexalith.parties.client.1.6.0.nupkg",
+        "nuget/hexalith.parties.consumerportal.1.6.0.nupkg",
+        "nuget/hexalith.parties.contracts.1.6.0.nupkg",
+        "nuget/hexalith.parties.projections.1.6.0.nupkg",
+        "nuget/hexalith.parties.picker.1.6.0.nupkg",
+        "nuget/hexalith.parties.security.1.6.0.nupkg",
+        "nuget/hexalith.parties.testing.1.6.0.nupkg",
+        "publication-verification.json"
+      ]
+    }
+  ],
+  "environmentProtectionChanged": false
+}

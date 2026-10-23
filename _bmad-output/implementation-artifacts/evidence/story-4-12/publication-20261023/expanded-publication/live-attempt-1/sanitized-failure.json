@@ -1,0 +1,143 @@
+{
+  "outcome": "failed usability proof; not live acceptance",
+  "reason": "Gateway handler metadata discovery received 403; query registry stayed empty and projection fallback returned missing-state 404.",
+  "seededModuleData": false,
+  "authenticationPreserved": true,
+  "privateLogDirectory": "/tmp/mcpcli-story412-isolation-mhb5mtn8/runs/20261023T131809Z-e79b5faf",
+  "privateLogs": {
+    "command.stdout.txt": "d149783876f9efe983e88ff46812b8e0038c3f973007ff942cd5fc207d8d3bd3",
+    "command.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ownedInfrastructureStopped": {
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  },
+  "evidence": [
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 1039.4701ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 2003.0622ms - 500"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 69.2159ms"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 1.7980ms"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 1002.421ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 1004.6686ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.LogicalHandler",
+      "message": "End processing HTTP request after 12644.9427ms - 500"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 1.5146ms"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 2002.0664ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 1002.7309ms - 500"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 0.9637ms"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 1001.7109ms - 500"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 0.8529ms"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.ClientHandler",
+      "message": "Received HTTP response headers after 2002.5959ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:sample.LogicalHandler",
+      "message": "End processing HTTP request after 13692.6291ms - 500"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:parties.ClientHandler",
+      "message": "Received HTTP response headers after 3.8147ms - 403"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:parties.LogicalHandler",
+      "message": "End processing HTTP request after 6.6186ms - 403"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:tenants.ClientHandler",
+      "message": "Received HTTP response headers after 3.2545ms - 403"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:tenants.LogicalHandler",
+      "message": "End processing HTTP request after 4.2658ms - 403"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:tenants.ClientHandler",
+      "message": "Received HTTP response headers after 0.9122ms - 403"
+    },
+    {
+      "resource": "eventstore",
+      "category": "System.Net.Http.HttpClient.eventstore-domain-metadata:tenants.LogicalHandler",
+      "message": "End processing HTTP request after 1.272ms - 403"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 0.8689ms"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 0.9798ms"
+    },
+    {
+      "resource": "parties",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 GET http://localhost:38863/alive - 200 - text/plain 0.8719ms"
+    },
+    {
+      "resource": "eventstore",
+      "category": "Hexalith.EventStore.Server.Queries.QueryRouter",
+      "message": "Projection actor returned an unsuccessful query result: CorrelationId=01M5MEKVMJ21HKTMZ0Z3KVASPM, TenantId=system, Domain=tenants, AggregateId=index, QueryType=list-tenants, ActorId=tenant-index:system:index, ErrorMessage=No projection state available for this aggregate, Stage=QueryExecutionFailed"
+    }
+  ]
+}

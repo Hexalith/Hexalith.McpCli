@@ -1,0 +1,47 @@
+{
+  "conclusion": "success",
+  "head_sha": "ca1262562b8da711043fd698b0aea1e7b34e5c40",
+  "html_url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39958144971",
+  "id": 39958144971,
+  "run_attempt": 2,
+  "status": "completed",
+  "updated_at": "2026-10-23T14:03:39Z",
+  "jobs": [
+    {
+      "databaseId": 120444354115,
+      "name": "Build and test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-23T13:36:56Z",
+      "completedAt": "2026-10-23T14:03:39Z",
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39958144971/job/120444354115"
+    },
+    {
+      "databaseId": 120444355846,
+      "name": "Dependency review",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-23T13:36:53Z",
+      "completedAt": "2026-10-23T13:36:53Z",
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39958144971/job/120444355846"
+    },
+    {
+      "databaseId": 120444402659,
+      "name": "CodeQL / analyze",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-23T13:04:00Z",
+      "completedAt": "2026-10-23T13:07:23Z",
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39958144971/job/120444402659"
+    },
+    {
+      "databaseId": 120444419133,
+      "name": "Python contract tests",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-23T13:04:00Z",
+      "completedAt": "2026-10-23T13:06:31Z",
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39958144971/job/120444419133"
+    }
+  ]
+}

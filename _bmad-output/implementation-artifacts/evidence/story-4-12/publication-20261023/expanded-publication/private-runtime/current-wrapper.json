@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-23T13:42:21.105851+00:00",
+  "sha256": "44082cd99563f2c04e057435eb98218c281ff1e45977e879db1e0b2edb906c50",
+  "priorWrapper": "run-isolated-prior-no-mtls.py",
+  "mtlsDisabledControlRejected": true,
+  "restoredConfigurationPassed": true,
+  "newLibraryOrPolicyAllowance": false
+}

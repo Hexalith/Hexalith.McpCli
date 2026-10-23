@@ -1,0 +1,26 @@
+[
+  {
+    "attempt": 4,
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/verify-live-result.py",
+      "_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/live-attempt-4"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/verify-live-result.py\", line 16, in <module>\n    assert logs[\"sampleMetadataMentions\"] == 0, \"Gateway inherited source-host sample registrations\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Gateway inherited source-host sample registrations\n"
+  },
+  {
+    "attempt": 5,
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/verify-live-result.py",
+      "_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/live-attempt-5"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "PASS: actual smoke, private cleanup, and test-owned Gateway configuration\n",
+    "stderr": ""
+  }
+]

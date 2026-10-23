@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-23T13:17:21.822757+00:00",
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll",
+    "--Topology:PreflightOnly=true",
+    "--Authentication:JwtBearer:SigningKey=<synthetic-preflight-key>"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "conflictingRequestedApplications": [],
+  "inventoryBefore": [],
+  "inventoryAfter": [],
+  "userInventoryUnchanged": true,
+  "startedTopology": false,
+  "action": "Actual executable preflight only; no stop, restart, reuse or reconfiguration."
+}

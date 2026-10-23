@@ -1,0 +1,30 @@
+[
+  {
+    "image": "daprio/dapr:1.18.7",
+    "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+    "source": "/placement",
+    "path": "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/placement",
+    "sha256": "323907a7321bdce7f87652c7665708a7e897a5bcc87c050fbf29e693f4e834b5"
+  },
+  {
+    "image": "daprio/dapr:1.18.7",
+    "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+    "source": "/scheduler",
+    "path": "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/scheduler",
+    "sha256": "7ef9285180a3073e70f711ff030fb0b56f04df18a830aa61aadedbdec2c9ade5"
+  },
+  {
+    "image": "redis:6",
+    "imageId": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+    "source": "/usr/local/bin/redis-server",
+    "path": "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/redis-server",
+    "sha256": "0211f2f28f138d2d4253b7c2eaadb57e7371c047f4bc6e0a8a78d2221506befd"
+  },
+  {
+    "image": "daprio/dapr:1.18.7",
+    "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+    "source": "/sentry",
+    "path": "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/sentry",
+    "sha256": "6f9a569c5e476bbe25f661cc13ab6df6e0cd38a87c3928fd8792726b6a78a703"
+  }
+]

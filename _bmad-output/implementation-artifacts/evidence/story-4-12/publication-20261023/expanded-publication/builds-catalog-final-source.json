@@ -1,0 +1,18 @@
+{
+  "committedAt": "2026-10-23T13:02:07.634617+00:00",
+  "sourceSha": "ca1262562b8da711043fd698b0aea1e7b34e5c40",
+  "declarationSourceSha": "f47b7eed4a8bce09e586fcac6e83ffa6688f8923",
+  "baseSha": "b51924a4a44b58091f1dd71067d2b7aece1ad71e",
+  "refreshedFamilies": [
+    "hexalith-parties"
+  ],
+  "preservedFamilyCount": 150,
+  "unrequestedJsonFieldsPreserved": true,
+  "validatorRelaxed": false,
+  "consumerAuthorityProjects": 21,
+  "globalOnlyExistingSelectionChanges": 6,
+  "mcpCliExistingSelectionsUnchanged": true,
+  "lockedCliVersion": "21.2.4",
+  "actualInstalledCliVersion": "21.2.4",
+  "fullCommitMessageSha256": "40a049a76f50989b0059487dbae7f6f3f9ce0432ff46cfb0088df8c57bb884a1"
+}

@@ -1,0 +1,15 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.TopologyAccessControlTests.MetadataDiscoveryRequiresGatewayPostAndDefaultDeny [FAIL]
+      Assert.True() Failure
+      Expected: True
+      Actual:   False
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/TopologyAccessControlTests.cs(17,0): at Hexalith.McpCli.Manifest.Tests.TopologyAccessControlTests.MetadataDiscoveryRequiresGatewayPostAndDefaultDeny()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '61220d80c6b9679efd5639fc1a77b1bbce87a4c2521c0d57a9bf7a6d75f3a29f')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.097s

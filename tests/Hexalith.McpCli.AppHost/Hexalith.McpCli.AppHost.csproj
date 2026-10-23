@@ -1,0 +1,13 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.3">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Hexalith.EventStore.Aspire" />
+    <PackageReference Include="Hexalith.Tenants.Aspire" />
+    <PackageReference Include="Hexalith.Parties.Aspire" />
+    <Content Include="DaprComponents/**/*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

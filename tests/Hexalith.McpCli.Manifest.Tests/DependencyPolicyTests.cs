@@ -35,6 +35,23 @@ public sealed class DependencyPolicyTests
         Assert.Equal(Array.Empty<string>(), CheckTestProjectDirectory(policy, Path.Combine(root, "tests"), root));
     }
 
+    /// <summary>Checks the actual restored AppHost independently of the approved platform testing closure.</summary>
+    [Fact]
+    public void TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers()
+    {
+        string root = FindRepositoryRoot();
+        DependencyPolicy policy = DependencyPolicy.Load(Path.Combine(root, "tools", "dependency-policy.json"));
+        string project = Path.Combine(root, "tests", "Hexalith.McpCli.AppHost", "Hexalith.McpCli.AppHost.csproj");
+        using JsonDocument assets = JsonDocument.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(project)!, "obj", "project.assets.json")));
+        RestoredDependencyGraph graph = RestoredDependencyGraph.Load(assets.RootElement, project);
+        string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
+        Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
+        Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
+        Assert.Equal(new[] { "Hexalith.EventStore.Aspire/3.126.1", "Hexalith.Parties.Aspire/1.6.0", "Hexalith.Tenants.Aspire/5.10.0" },
+            graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.Ordinal))
+                .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
+    }
+
     /// <summary>Rejects the real 55-package Projects closure and names both root and transitive framework edges.</summary>
     [Fact]
     public void ProjectsCandidateFailsOfflineWithDependencyPaths()
@@ -331,6 +348,9 @@ public sealed class DependencyPolicyTests
     [InlineData("Test.Helper", "direct")]
     [InlineData("Test.Helper", "baseline")]
     [InlineData("Test.Helper", "module")]
+    [InlineData("Hexalith.Parties.Aspire", "direct")]
+    [InlineData("Hexalith.Parties.Aspire", "baseline")]
+    [InlineData("Hexalith.Parties.Aspire", "module")]
     [InlineData("Hexalith.McpCli.Sample.Contracts", "direct")]
     [InlineData("Hexalith.McpCli.Sample.Contracts", "baseline")]
     [InlineData("Hexalith.McpCli.Sample.Contracts", "module")]
@@ -338,6 +358,7 @@ public sealed class DependencyPolicyTests
     {
         var (policy, graph, projects) = Minimal();
         policy.TestPackages.Add("Test.Helper");
+        policy.TestPackages.Add("Hexalith.Parties.Aspire");
         if (list == "direct")
         {
             policy.DirectPackages.Add(id);
@@ -735,7 +756,7 @@ public sealed class DependencyPolicyTests
             "Microsoft.NET.Test.Sdk", "xunit.v3", "Shouldly", "NSubstitute", "Verify.XunitV3",
             "Microsoft.CodeAnalysis.CSharp", "Aspire.Hosting.Testing", "CommunityToolkit.Aspire.Hosting.Dapr",
             "Hexalith.EventStore.Testing", "Hexalith.EventStore.Testing.Integration", "Hexalith.EventStore.Aspire",
-            "Hexalith.Tenants.Aspire", "Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Abstractions",
+            "Hexalith.Tenants.Aspire", "Hexalith.Parties.Aspire", "Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Abstractions",
         ];
         foreach (string id in approved)
         {
@@ -814,7 +835,7 @@ public sealed class DependencyPolicyTests
                   <ItemGroup><PackageReference Include="Common.Package" /></ItemGroup>
                   <ItemGroup Condition="'$(UseHexalithProjectReferences)' == 'true'">
                     <ProjectReference Include="../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj" />
-                    <PackageReference Include="Hexalith.Parties.Aspire" />
+                    <PackageReference Include="Hexalith.Parties.Server" />
                   </ItemGroup>
                 </Project>
                 """);
@@ -822,7 +843,7 @@ public sealed class DependencyPolicyTests
             Assert.Equal(
             [
                 "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Common.Package",
-                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Aspire",
+                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Server",
                 "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj",
             ], CheckTestProjectDirectory(policy, Path.Combine(root, "tests"), root));
         }
@@ -832,10 +853,12 @@ public sealed class DependencyPolicyTests
         }
     }
 
-    /// <summary>Tests reject unapproved roots, including unpublished Parties helpers, and sibling source projects.</summary>
+    /// <summary>Tests reject unapproved roots, including domain implementation packages, and sibling source projects.</summary>
     [Theory]
     [InlineData("<PackageReference Include=\"Unexpected.Package\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Unexpected.Package")]
-    [InlineData("<PackageReference Include=\"Hexalith.Parties.Aspire\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Aspire")]
+    [InlineData("<PackageReference Include=\"Hexalith.Parties.Server\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Server")]
+    [InlineData("<PackageReference Include=\"Hexalith.Parties.Client\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Client")]
+    [InlineData("<PackageReference Include=\"Hexalith.Parties.Projections\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Projections")]
     [InlineData("<ProjectReference Include=\"../../references/External/External.csproj\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/External/External.csproj")]
     [InlineData("<ProjectReference Include=\"../../references/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj")]
     [InlineData("<ProjectReference Include=\"$(ExternalProject)\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unresolved project reference $(ExternalProject)")]
@@ -1004,7 +1027,8 @@ public sealed class DependencyPolicyTests
     private static Dictionary<string, XDocument> ReadProjects(string directory)
         => Directory.EnumerateFiles(directory, "*.csproj", SearchOption.AllDirectories).ToDictionary(path => path, XDocument.Load);
 
-    private static string FindRepositoryRoot()
+    /// <summary>Finds the owning checkout for tests of tracked repository configuration.</summary>
+    internal static string FindRepositoryRoot()
     {
         DirectoryInfo? current = new(AppContext.BaseDirectory);
         while (current is not null && !File.Exists(Path.Combine(current.FullName, "Hexalith.McpCli.slnx")))

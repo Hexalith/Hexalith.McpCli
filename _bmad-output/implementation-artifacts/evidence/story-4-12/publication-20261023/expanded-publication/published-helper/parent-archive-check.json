@@ -1,0 +1,19 @@
+{
+  "artifact": "Hexalith.Parties.Aspire.1.6.0.nupkg",
+  "sha256": "6b7678949525490453e07113611d19a7e7d6cf3c0b64e427773694da0f457695",
+  "bytes": 26220,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hexalith/Hexalith.Parties",
+    "commit": "a4716d0da37b27762d9931c778223d13e85695dc"
+  },
+  "directDependencies": {
+    "Aspire.Hosting": "13.6.3",
+    "Hexalith.EventStore.Aspire": "3.126.1"
+  },
+  "assemblies": [
+    "lib/net10.0/Hexalith.Parties.Aspire.dll"
+  ],
+  "signaturePresent": true,
+  "passed": true
+}

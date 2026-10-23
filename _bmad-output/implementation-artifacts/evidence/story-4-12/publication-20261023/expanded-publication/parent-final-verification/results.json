@@ -1,0 +1,102 @@
+[
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.431
+  },
+  {
+    "name": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.839
+  },
+  {
+    "name": "Abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.219,
+    "counts": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    }
+  },
+  {
+    "name": "Analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 3.326,
+    "counts": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    }
+  },
+  {
+    "name": "Core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 2.637,
+    "counts": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    }
+  },
+  {
+    "name": "Cli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 2,
+    "elapsedSeconds": 24.269,
+    "counts": {
+      "total": 481,
+      "failed": 1,
+      "succeeded": 478,
+      "skipped": 2
+    }
+  }
+]

@@ -1,0 +1,6 @@
+⧗   --- input ---
+test(topology): compose the v1 live test topology
+
+Compose published EventStore, Tenants and Parties helpers in a test AppHost.
+Verify authenticated Gateway queries, isolated runtime setup and launch guards.
+✔   found 0 problems, 0 warnings

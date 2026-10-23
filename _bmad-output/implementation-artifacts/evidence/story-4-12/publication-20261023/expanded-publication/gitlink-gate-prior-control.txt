@@ -1,0 +1,11 @@
+gitlink-rc-gate: recorded-pointer diff vs v1.5.2
+  references/Hexalith.Builds                    BUMP UNVALIDATED 3fcb8f38919b->70ead608ac01 — add ledger entry
+  references/Hexalith.Commons                   BUMP UNVALIDATED 5c23c818f639->1663028fb6d9 — add ledger entry
+  references/Hexalith.EventStore                BUMP UNVALIDATED 1748b16b11fb->cd193902a52a — add ledger entry
+  references/Hexalith.FrontComposer             BUMP UNVALIDATED a258b992d08e->8c61143ef4c6 — add ledger entry
+  references/Hexalith.McpCli                    BUMP UNVALIDATED 7f4a08cb4b7f->be89509d59bb — add ledger entry
+  references/Hexalith.Memories                  BUMP UNVALIDATED 0af009c20c97->b55db82c060c — add ledger entry
+  references/Hexalith.Platform                  BUMP UNVALIDATED d189c7de7429->1d646b232ad8 — add ledger entry
+  references/Hexalith.Tenants                   BUMP UNVALIDATED 66def172379f->25e3bf827a79 — add ledger entry
+
+gitlink-rc-gate: FAIL — resolve each pointer above before tagging.

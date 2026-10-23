@@ -583,3 +583,9 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: Preserve completed package results in the root enrollment receipt when a later package fails.
   evidence: Low; inherited from baseline `fce41d05e25b8c2076cc02266608460ec86ed635`. `tools/conformance-vectors/v1/check_enrolled.py:182-190` accumulates successful child results locally and assigns root `results` only after the complete package loop. A later verification failure leaves root results empty, although the completed package's separate verification receipt remains available. Persist each completed result as progress without changing overall acceptance.
+
+## Deferred from: code review of spec-4-12-compose-the-v1-live-test-topology.md (2026-10-23)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-12-compose-the-v1-live-test-topology.md`
+  summary: The published platform topology fixture can wait indefinitely for its cross-process lock before starting its startup timeout.
+  evidence: Medium; pre-existing in EventStore.Testing.Integration 3.126.1. `references/Hexalith.EventStore/src/Hexalith.EventStore.Testing.Integration/AspireTopologyFixtureBase.cs:113` calls `AcquireDaprFixtureLock` before constructing its startup CTS; `:203` retries the exclusive file open indefinitely. The platform owner should add cancellation and a finite acquisition deadline. McpCli must retain the published lifecycle rather than copy it; its supported command uses a separate outer process deadline. No equivalent ledger entry existed when checked.

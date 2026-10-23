@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "nonLivePassed": 1457,
+  "nonLiveSkipped": 5,
+  "nonLiveFailed": 0,
+  "ManifestPassed": 177,
+  "ManifestSkipped": 0,
+  "initialCliFailure": "pre-existing listener cleanup race already tracked at deferred-work.md:467; focused 19-case class and full CLI retry passed; original retained",
+  "live": {
+    "runDirectory": "/tmp/mcpcli-story412-bootstrap-4m5kgxwk/runtime/runs/20261023T144400Z-93ddc6dd",
+    "testResult": "1 passed, 0 failed, 0 skipped",
+    "gatewayQueryStatusesInRawLog": {
+      "401": 2
+    },
+    "authenticationMissingAndInvalidRejected": true,
+    "successfulDocumentAssertionsPassed": true,
+    "sampleMetadataMentions": 0,
+    "privateKeysRetainedInEvidence": false,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    },
+    "rawLogs": {
+      "command.stdout.txt": {
+        "bytes": 154283,
+        "sha256": "97b05c4a025230909ce4a2e4e1cd9bd1b56a936acb1532999ac6ffff75289675"
+      },
+      "command.stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "testSeconds": 23.741
+  },
+  "restoreBuildDiscovery": "passed",
+  "review": {
+    "layers": 3,
+    "individualFindings": 16,
+    "resolvedPatchFindings": 14,
+    "uniquePreExistingUpstreamDeferrals": 1
+  },
+  "catalogSource": "ca1262562b8da711043fd698b0aea1e7b34e5c40",
+  "catalogCi": "39958144971 attempt 2 success"
+}

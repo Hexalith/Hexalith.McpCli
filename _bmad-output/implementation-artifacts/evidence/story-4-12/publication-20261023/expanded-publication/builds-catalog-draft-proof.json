@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-23T12:04:42.523862+00:00",
+  "status": "uncommitted catalog draft; actual publication required before enrollment",
+  "catalogBaseSha": "b51924a4a44b58091f1dd71067d2b7aece1ad71e",
+  "currentMcpCliBuildsSha": "57e4ad57c5d62c2749dc4c76ffd03fdaa7e7ac22",
+  "explicitProductionPartiesOverride": "1.5.1",
+  "evaluatedChanges": {
+    "Hexalith.Parties.Aspire": {
+      "before": null,
+      "after": "1.6.0"
+    }
+  },
+  "unchangedExistingSelectionCount": 306,
+  "properties": {
+    "HexalithPartiesVersion": "1.5.1",
+    "HexalithPartiesAspireVersion": "1.6.0"
+  },
+  "catalogDraftSha256": "cb8bfdf5c0babb92481c557be6b7ace0bc249ea2cdb975f8dbe0b8e75a64c686",
+  "validation": [
+    {
+      "command": "pwsh -NoProfile -File Tools/validate-central-package-versions.ps1",
+      "exitCode": 0,
+      "entries": 307
+    },
+    {
+      "command": "pwsh -NoProfile -File Tools/test-authoritative-package-catalog.ps1",
+      "exitCode": 0,
+      "approvedIdentities": 50,
+      "sharedVersions": 3
+    }
+  ],
+  "requiredSdkInventory": {
+    "owner": "Hexalith.McpCli",
+    "path": "tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj",
+    "sdk": "Aspire.AppHost.Sdk",
+    "version": "13.6.3",
+    "alignment": "exact-catalog-package: Aspire.Hosting",
+    "inventorySha256": "1f3a7de9bb536ffde086cd25261e3a36481b37ed853d8275e3628f28a9a68428",
+    "validatorExitCode": 0,
+    "validatedInventoryEntries": 16,
+    "regressionFixtureScenarios": 30,
+    "regressionFixtureExitCode": 0
+  }
+}

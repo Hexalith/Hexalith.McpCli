@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -68,29 +68,29 @@ Full vector semantics and blocking CI source-build wiring remain 4.13 and 4.14.
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Owning `/home/administrator/projects/hexalith/parties`:
+- [x] Owning `/home/administrator/projects/hexalith/parties`:
   `src/Hexalith.Parties.Aspire/{Hexalith.Parties.Aspire.csproj,HexalithPartiesServerExtensions.cs,PartiesServerProjectMetadata.cs}`,
   `tests/Hexalith.Parties.Aspire.Tests/`, solution and release declarations —
   prepare and qualify the server-package-free helper using platform composition;
   release through the owning repository's normal gates.
-- [ ] Owning Hexalith.Builds `Props/Directory.Packages.props` and required catalog
+- [x] Owning Hexalith.Builds `Props/Directory.Packages.props` and required catalog
   audit files — enroll the actual published helper version without changing
   approved Contracts identities; integrate only the necessary root gitlinks.
-- [ ] `tools/dependency-policy.json` and
+- [x] `tools/dependency-policy.json` and
   `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs` — admit the
   reviewed helper only for tests; preserve production and implementation-package
   rejection with meaningful negative cases.
-- [ ] `tests/Hexalith.McpCli.AppHost/{Hexalith.McpCli.AppHost.csproj,Program.cs,appsettings.json,DaprComponents/}`
+- [x] `tests/Hexalith.McpCli.AppHost/{Hexalith.McpCli.AppHost.csproj,Program.cs,appsettings.json,DaprComponents/}`
   — compose the three services, explicit Gateway routing, shared Dapr components
   and test authentication through helpers; validate root checkout membership.
-- [ ] `tests/Hexalith.McpCli.Integration.Tests/{Hexalith.McpCli.Integration.Tests.csproj,AspireTopologyFixture.cs,AspireTopologyCollection.cs,GatewaySmokeTests.cs}`
+- [x] `tests/Hexalith.McpCli.Integration.Tests/{Hexalith.McpCli.Integration.Tests.csproj,AspireTopologyFixture.cs,AspireTopologyCollection.cs,GatewaySmokeTests.cs}`
   — share the standard fixture, prerequisite checks and Integration trait; issue
   one bounded authenticated query through the pinned Gateway client and assert
   a real successful document. Keep liveness separate from usability.
-- [ ] `tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs` — protect
+- [x] `tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs` — protect
   root-only source selection and dependency/configuration guards with negative
   cases that fail when the guard is removed.
-- [ ] `Hexalith.McpCli.slnx`, `.github/workflows/ci.yml`, `README.md` and
+- [x] `Hexalith.McpCli.slnx`, `.github/workflows/ci.yml`, `README.md` and
   `_bmad-output/implementation-artifacts/evidence/story-4-12/` — register projects,
   verify smoke discovery in a focused non-live CI lane, document bounded local
   source builds and smoke execution, retain exact versions and sanitized results.
@@ -108,160 +108,118 @@ Full vector semantics and blocking CI source-build wiring remain 4.13 and 4.14.
 
 ## Implementation Notes
 
-- Qualification checkpoint, 2026-10-23 11:34 UTC: the bounded shared-publisher
-  backport `d9070aa0d43feb9e3359286bc797d2be65960727` is based on canonical
-  `397c94a4e246c90b21cf408790fa0d55bf32d795`, changes only the 404 reader/tests,
-  and passed normal Builds CI `39941850208` plus 138 local publisher contracts.
-  The newer catalog/main/G-4 work remains unchanged; the main-based timed-out
-  CI is preserved as historical evidence. Fresh normal submodule cloning
-  resolves the backport without moving the catalog gitlink.
-- The current expanded Parties candidate
-  `08f43497b3f916efa0cdf9b110258f763d894bd9` preserves user main `4b87e814`
-  and changes only the six execution/verification declarations. It passed
-  exact-source CI `39943732687`, range `39943732055`, commitlint `39943732609`
-  and CodeQL `39943732654`. Native blocking results are 5,798 passed, zero
-  failed, three prerequisite skips; native Aspire results are 123 passed, zero
-  failed, six existing health-suite skips. The concurrent-session isolation
-  case passed in 3m45.109s. Skips do not establish live acceptance.
-- The reviewable expanded-source packet is
-  `evidence/story-4-12/publication-20261023/expanded-source-candidate/README.md`.
-  It records the selected, still unpublished normal 1.6.0, exact source and
-  dependency/output changes, current local `.4` helper qualification, complete
-  gate evidence, corrected lockfile-pinned commitlint validation and the pending
-  26-file McpCli diff. All independent non-live checks remain concrete:
-  47 isolated-draft tests, 11 SDK-aligned executable checks and 139 actual-root
-  Manifest tests passed without skips. Actual production pins and helper
-  enrollment policy remain unchanged; McpCli remains uncommitted.
-- Expanded-source publication has not been dispatched or approved: it requires
-  the new authorization determined by the parent after the material user-source
-  expansion. Actual publication/artifact review, Builds/catalog integration and
-  a non-skipped McpCli live smoke remain pending. The latest read-only snapshot
-  still contains conflicting user `eventstore` and `tenants` registrations;
-  no user process was stopped, reused, restarted or reconfigured.
+- Final completion: the published-helper topology passed the three review layers
+  and parent verification. Non-live results are 1,457 passed, zero failed on the
+  completed runs, five existing skips; Manifest is 177 passed with no skips.
+  The strengthened live smoke passed with no skips and two real HTTP 401
+  rejections before the successful authenticated document. The catalog CI is
+  green at its exact integrated source. Earlier checkpoints below remain
+  historical evidence; current results are in `evidence/story-4-12/publication-20261023/expanded-publication/parent-final-verification/`.
 
-- Latest continuation checkpoint: the authorized source `a413dc7df41a98f9d02cd8fb823e544086520956`
-  passed normal CI/range proof, but release `39931847401` failed before packing,
-  tagging or publication because the pinned shared preflight rejected the new
-  helper's NuGet index HTTP 404. The narrowly tested shared repair is upstream
-  in Builds `e6d0cc245c43a109672b1b71e1768ef8e2cabbe0` (145 publisher contract
-  tests passed; its normal CI is pending).
-- A separate user `/pushall` advanced Parties to
-  `8bc955b77d3e48dff809b258bd457407114c73f6`, adding Memories recovery/health,
-  a Projections API extension and eight updated root gitlinks. The new source
-  selects Aspire.Hosting 13.6.3 and other newer dependencies. The task preserves
-  that work. Its release-tooling pin and qualification cleanup now produce
-  candidate `0f336bd005dbed9e2e278bc1861dfc0fb2322a15`; fresh exact-source gates
-  are pending. No expanded-source release was dispatched or approved. The
-  materially changed candidate requires its own concrete release authorization;
-  the earlier authorization remains evidence for the original prepared source.
-- The expanded helper's unpublished local `.2` qualification and source-scope
-  assessment are retained under `evidence/story-4-12/publication-20261023/`.
-  The pending downstream draft has passed 47 non-live tests, with affected
-  executable checks/discovery also verified on SDK 13.6.3 without CLI-bundle
-  opt-out or warning suppression. Published-artifact review, catalog enrollment,
-  McpCli integration and live acceptance are still pending. Two user AppHosts
-  remain preserved, including a conflicting `eventstore` sidecar at the latest
-  inspection.
-
-- Current continuation checkpoint: exact-source Parties CI `39928383173`
-  passed at `a413dc7df41a98f9d02cd8fb823e544086520956` (Tier 3: 123 passed,
-  zero failed, six existing skips). Authorized normal release `39931847401`
-  passed source and protected-environment gates but failed before publication:
-  the shared NuGet version-floor reader rejected the new helper's index 404.
-  The narrow Builds repair is `e6d0cc245c43a109672b1b71e1768ef8e2cabbe0`,
-  with 145 publisher contract tests passing and an original-reader regression
-  control failing. Builds CI `39934362740` is pending completion.
-- User main then advanced to `8bc955b77d3e48dff809b258bd457407114c73f6`,
-  adding the previously excluded Memories recovery runtime and eight root
-  gitlinks. The six-file immutable-publisher pin repair was replayed without
-  changing that work at `287aa8e0bc5a68d7845cd0eb0927519f7889b6b4`; its new
-  exact-source CI is `39935258902` and its range gate already passed. The new
-  Builds catalog changes the helper's Aspire.Hosting input from 13.6.1 to
-  13.6.3. The expanded source requires qualification and the parent's release
-  authorization-scope assessment before another release dispatch. No helper
-  has been admitted to McpCli and nothing has been published by this story.
-- The current read-only Dapr snapshot again contains a user `eventstore`
-  registration (PID 3188860, HTTP 21238); both generated user AppHosts are
-  preserved. Published APIs do not expose complete namespace/state/metadata
-  isolation for this fixed-ID composition. Actual conflicting launches remain
-  rejected; live McpCli acceptance remains unproved.
-
-- Authorized continuation: the exact helper candidate was integrated upstream at
-  `4449020abcc01080a2375c7141b39aa18913d4aa`, followed by focused CI repairs at
-  `f2c1b1968c10b04ce5a5ef41685248b01c1da40b` and
-  `ad44f1d433799b2e1ca37a0bdb722a2ecfe09c87`. The repairs select the exact UI
-  label and install the pinned Dapr CLI needed by manifest qualification; safe
-  exception diagnostics retain withheld private output. Build/test, UI,
-  owner-publisher, declaration, BMAD and independent range gates passed. The
-  first Aspire attempt failed one existing concurrent-session readiness test;
-  both failed and superseded retry evidence are retained. A locally reproduced
-  cold-start race was repaired by starting the two fixtures sequentially while
-  retaining both live sessions, all original assertions and timeouts, at
-  `a413dc7df41a98f9d02cd8fb823e544086520956`. Its exact-source CI run
-  `39928383173` has passed build/unit, Tier 2, UI, publisher, declaration and
-  BMAD; Tier 3 remains active. Its independent range and commitlint gates passed.
-  Publication has not run.
+- On 2026-10-23 the user explicitly authorized the qualified expanded candidate
+  `08f43497b3f916efa0cdf9b110258f763d894bd9` for normal publication of selected
+  1.6.0 (ten NuGet packages and three amd64/arm64 image families), followed by
+  Builds/McpCli integration, then instructed: "bypas any human authorization gate".
+  Ordinary authorized production approvals were used; automated gates and
+  environment protection configuration were preserved.
+- Publication completed at the ledger-only successor
+  `a4716d0da37b27762d9931c778223d13e85695dc`. Its 95 qualified source-file hashes
+  and eight gitlinks match the authorized candidate. The release-range ledger
+  records the already authorized user selections. Exact-source normal CI
+  `39950468353`, range, commitlint and CodeQL passed. Normal release
+  `39954248029` published and verified all ten NuGet 1.6.0 packages and all three
+  multiarchitecture container families. Failed prepublication runs remain in
+  the evidence. The frozen 59-file qualification packet remains byte-identical.
+- Actual signed `Hexalith.Parties.Aspire` 1.6.0 is 26,220 bytes with SHA-256
+  `6b7678949525490453e07113611d19a7e7d6cf3c0b64e427773694da0f457695` and repository
+  commit `a4716d0da37b27762d9931c778223d13e85695dc`. Its only direct dependencies
+  are Aspire.Hosting 13.6.3 and Hexalith.EventStore.Aspire 3.126.1. Fresh-cache
+  NuGet-only inspection, server-free closure and all six root locator probes
+  passed. Historical local `.1` through `.4` artifacts are not publication proof.
+- Owning Builds catalog `ca1262562b8da711043fd698b0aea1e7b34e5c40` enrolls the
+  independent helper 1.6.0 and advances only the global Parties family to the
+  actual published 1.6.0 under the unchanged audit model. The six global default
+  selections changed honestly; all 306 existing McpCli evaluated selections
+  remain identical under its Parties 1.5.1/Tenants 5.10.0 overrides. SDK inventory,
+  consumer authority and the 307-package/151-family audit passed. Commitlint
+  `39958144989` and normal CI `39958144971` attempt 2 passed at exact catalog
+  source `ca1262562b8da711043fd698b0aea1e7b34e5c40`; the original Module.Tests
+  failure and both attempts remain retained. No G-4 code was
+  changed. The independent two-file execution backport `d9070aa0d43feb9e3359286bc797d2be65960727` remains pinned
+  by Parties and passed normal CI `39941850208`; catalog selection is independent.
+- McpCli admits the actual published helper only for tests. Production Contracts
+  pins, inventories and vectors are unchanged. The standard platform test-root
+  closure is recorded separately from the server-free helper closure. AppHost
+  launch guards execute before resource creation and reject root membership,
+  weak authentication, malformed Dapr records and genuine identity/port conflicts.
+  Gateway configuration uses the test-owned content root, three explicit module
+  registrations and the shared default-deny Dapr ACL. Only the Gateway may POST
+  operational metadata; executable mutation controls reject its removal or
+  broader callers, paths, verbs/default permissions and disabled mTLS.
 - All three root source server Release builds passed with warnings as errors.
-  The isolated AppHost/integration draft compiles, discovers exactly one smoke,
-  and passed configuration and executable preflight checks. Root configuration
-  guards are present in McpCli, with 27 guard cases passing. Helper admission,
-  solution enrollment and live acceptance remain pending publication. Receipts
-  live under `evidence/story-4-12/publication-20261023/`. Executed negative tests
-  passed for helper refusal, actual Program root/auth/conflict preflight guards,
-  a real alive-but-stalled Gateway with the 30-second request deadline, and the
-  standard missing-Dapr skip result (the covering outer test passes without a
-  skip). The earlier local Dapr app-ID conflict cleared independently without
-  stopping user processes.
-
-- On 2026-10-23 the user explicitly authorized the prepared upstream Parties
-  normal release (ten NuGet packages and three multiarchitecture container
-  families) through normal gates, followed by Builds/McpCli integration. This
-  authorization overrides the build workflow's default no-push/no-remote rule
-  for this scoped continuation; required CI, range, protected-environment and
-  published-artifact checks still apply.
-
-- Prepared the upstream Parties helper and its normal release declarations in
-  `/home/administrator/projects/hexalith/parties`; no reference contents were
-  edited. The task-only candidate is bound to upstream baseline
-  `6c83309d08a10f36a0da866521b9d0da6f8fc998` by the file hashes and patch in
-  `evidence/story-4-12/`.
-- The local, **unpublished** artifact `Hexalith.Parties.Aspire` version
-  `1.6.0-story412.1` passed isolated artifact/closure inspection and six source
-  locator probes. It has only Aspire.Hosting 13.6.1 and
-  Hexalith.EventStore.Aspire 3.126.1 as direct dependencies. This prerelease label
-  identifies a local qualification artifact; it is not the normal release's
-  version or proof of publication.
-- Broader upstream qualification uses an isolated baseline-plus-task snapshot to
-  exclude concurrent unrelated Parties runtime edits. Exact committed-source CI,
-  the independent main-push range gate and protected release authorization remain
-  required by the owning repository's normal release workflow.
-- McpCli helper enrollment, Builds catalog changes and gitlinks, the test AppHost,
-  fixture, smoke, guards and CI discovery remain pending the required upstream
-  publication. Production Contracts pins, vectors and inventories are unchanged.
-  No live Gateway smoke has run and live acceptance is not established.
+  The final unchanged standard fixture and authenticated ListTenants smoke passed
+  in private user/PID/network/mount namespaces: one executed, one passed, zero
+  failed, zero skipped, 16.809 seconds. The actual Gateway request returned 200;
+  no inherited sample metadata calls occurred. All four private infrastructure
+  processes exited 0. User AppHosts were preserved. Sentry and TLS prerequisites
+  are documented; `dapr init` alone is insufficient. Earlier 403/404 and mTLS
+  setup failures are retained separately, without changing the approved query.
+- Fresh root restore and Release warnings-as-errors build passed. Individual
+  non-live projects passed: Abstractions 20, Analyzers 19, Core 704 (three existing
+  skips), CLI 479 (two existing Windows skips), MCP 58 and Manifest 158 (zero
+  skips). Missing-Dapr coverage is a passing outer test asserting the standard
+  child skip, and the alive-but-stalled Gateway test executes the real 30-second
+  deadline. Focused non-live discovery lists exactly one smoke. McpCli remains
+  uncommitted; parent acceptance audit and all three review layers completed, with patches verified below.
+- Current receipts and the matrix map are in
+  `evidence/story-4-12/publication-20261023/expanded-publication/README.md`.
+  The original qualified source packet remains at
+  `evidence/story-4-12/publication-20261023/expanded-source-candidate/README.md`.
+  Superseded progress notes, failed gates and local/tooling limitations are
+  preserved in `expanded-publication/historical-implementation-notes.md` and the
+  historical publication receipts; they do not replace the current outcomes.
 
 ## Spec Change Log
 
 ## Review Triage Log
 
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| B1 | medium | patch | Program.cs:15 parses configuration before its catch. The built malformed/overflowing-port path aborts rather than reporting exit 2; move conversion inside the existing boundary and protect both cases. Resolved: malformed and overflowing ports execute inside the existing diagnostic boundary; both process cases pass with exact exit/channels. |
+| B2 | low | patch | TopologyConfiguration.cs:153 accepts 1–1023 although the consumed EventStore helper rejects ports below 1024. This is a direct range/diagnostic correction, even though the input is uncommon. Resolved: helper-aligned 1024–65535 range; direct and executable lower-bound cases pass. |
+| B3 | medium | patch | The topology adds Sentry, CLI and mTLS prerequisites beyond the published three-service probe. Historical failed mTLS runs and the probe implementation show startup is entered without all mandatory inputs; add a bounded supplementary missing-prerequisite check and standard skip diagnostic. Resolved: CLI/mTLS/Sentry supplement and actual fixture-call removal control passed; standard basic probe and skip prefix retained. |
+| B4 | medium | defer | The published platform base acquires its file lock before its startup CTS, with an indefinite retry. This predates this story; tracked at `deferred-work.md:589`; require an outer process deadline in the supported local command. |
+| B5 | medium | patch | The checked-in Redis endpoints and keyPrefix reuse the supplied runtime by design. Free IDs cannot prove disposable state ownership; make a disposable isolated runtime an explicit mandatory local prerequisite and provide its reproducible setup, without flushing or changing any user store. Resolved: disposable isolated Dapr/private Redis and an outer deadline are mandatory; digest-bound bootstrap reproduced all four binaries. |
+| B6 | medium | patch | The ACL-content test does not observe sidecar configuration attachment. Removing an AppHost config argument can leave both that test and the positive smoke passing; assert actual composed sidecar configuration. Resolved: actual model checks every sidecar ACL; each attachment removal built and failed coverage, then restored positive passed. |
+| B7 | medium | patch | The historical verifier is outside automated topology tests. A composition assertion must protect the actual Gateway content-root setting so removal cannot retain a green ordinary suite. Resolved: actual model checks the Gateway content root; its removal built and failed coverage, then restored positive passed. |
+| B8 | medium | patch | A valid-token positive alone does not demonstrate rejection. Exercise missing and invalid credentials at the real Gateway boundary while retaining exactly one successful authenticated query. Resolved: strengthened single live smoke rejects missing/invalid JWTs with two real 401s before the successful authenticated document. |
+| B9 | low | patch | TopologyConfiguration.cs:140 captures stderr and omits it in the nonzero exit diagnostic. A bounded excerpt and executable nonzero-stub test are direct diagnostic corrections. Resolved: nonzero CLI errors include at most 512 stderr characters; normal and truncated process cases pass. |
+| B10 | medium | patch | The private reproduction command requires untracked temporary binaries. The source images and hashes are recorded but setup is absent; document or provide a bounded verified bootstrap that recreates them. Resolved: bounded bootstrap pulls pinned digests, verifies every extracted binary and removes only owned never-started containers; executed bootstrap passed. |
+| E1 | low | patch | Independent verification confirms the same below-1024 helper/preflight mismatch as B2. Keep the direct correction; group by that shared range defect after individual verdicts. Resolved with B2; same helper range defect and executed boundary cases. |
+| E2 | medium | patch | Independent executable reproduction confirms the same pre-catch conversion failure as B1, including an out-of-Int32 value. Group with B1 after individual verdicts. Resolved with B1; same pre-catch conversion defect and executed process cases. |
+| E3 | medium | defer | Independent platform tracing confirms B4: the pre-existing lock wait precedes the six-minute timeout. Group with B4, already tracked (`deferred-work.md:589`); no local lifecycle copy or source-reference edit is permitted. |
+| V1 | medium | patch | Pre-verified gap: direct OccupiedGatewayPortFails does not protect the EnsureNoConflictingTopology invocation. Every launch test releases its port first; keep a real listener bound through an actual subprocess test. Resolved: occupied-port executable test keeps the listener bound through invocation and asserts exact exit/channels. |
+| V2 | medium | patch | Pre-verified gap: removing Parties generated APP_API_TOKEN leaves Development admission NotRequired and can retain the Tenants smoke. Assert effective nonempty matching app/sidecar tokens for each resource. Resolved: effective app/sidecar environments require distinct nonempty matching token pairs for all three services; each token removal fails. This also exposed and corrected the Gateway’s missing token via the published helper. |
+| V3 | medium | patch | Pre-verified gap: the stalled-query test never covers immediate Gateway failure translation. A real local 403 through the pinned client must assert status and exact useful diagnostic. Resolved: real local 403 through the pinned client asserts exact contextual diagnostic, inner exception type and status. |
+
 ## Verification
 
-Local prerequisite qualification is recorded in
-`evidence/story-4-12/README.md`, including the exact final source/patch/archive
-hashes, all ten staged package identities, owning test receipts and the normal
-publication/integration scope. The final fresh-cache helper qualification passed;
-its restored archive hash equals
-`95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a`.
-The owning tests required focused reruns after support-build and isolated-Git
-setup corrections; their earlier failures remain in the evidence. Thirteen
-upstream runtime tests were explicitly skipped. Publication and the new live
-McpCli smoke have not run, so the story's acceptance criteria are not complete.
+The actual published-artifact inspection, source gates, catalog integration,
+fresh restore/build, six individual test projects, non-live discovery and
+non-skipped live smoke are recorded in
+`evidence/story-4-12/publication-20261023/expanded-publication/README.md`.
+Normal owning Builds CI, parent acceptance audit and all three review layers are
+complete. All 14 patch findings are resolved; the two lock findings share one
+pre-existing upstream deferral (`deferred-work.md:589`). Final fresh restore,
+Release warnings-as-errors build and one-test discovery passed. The six individual
+projects passed 1,457 tests (five existing skips); all 177 Manifest tests executed.
+The parent’s strengthened live smoke passed one test without skips in 23.741
+seconds, rejecting missing/invalid JWTs before the successful document. All four
+private infrastructure processes exited cleanly. Full receipts are in
+`evidence/story-4-12/publication-20261023/expanded-publication/parent-final-verification/`. Earlier unpublished artifacts, failed attempts and existing test
+skips remain clearly identified in their original evidence.
 
-
-- Run owning-repository helper tests, package inspection and required release gates.
-- `dotnet restore Hexalith.McpCli.slnx`
-- `dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror`
-- Run Manifest.Tests and each other existing test project individually in Release.
-- `dotnet test tests/Hexalith.McpCli.Integration.Tests --no-build --configuration Release`
-  — require a non-skipped successful smoke for acceptance. Retain timeout and
-  prerequisite diagnostics separately from actual live success.
+The parent full CLI suite first reproduced the unchanged HTTP-listener cleanup
+race already tracked (`deferred-work.md:467`). The 19-case query class and full
+CLI suite then passed; both failed and successful results are retained. No new
+ledger entry or unrelated source change was made for that existing race.

@@ -1,0 +1,263 @@
+# Release-candidate gitlink sign-off ledger.
+#
+# Authorises root submodule pointers for the next release tag. The RC gate
+# (scripts/gitlink-rc-gate.sh) FAILS on any drifted/bumped root gitlink that has
+# no matching validated-advance line here (a validated-advance line counts only
+# when <owner> is a real handle — not empty, not a <PLACEHOLDER>). To instead
+# discard a drift, `git submodule update --checkout <path>` (reset) — no entry
+# needed; a `reset` line may be recorded for audit but does not authorise a bump.
+#
+# Format: <path>|<sha>|<disposition>|<ref>|<owner>|<date>
+#   disposition: validated-advance | reset
+#
+# --- Current drift dispositions (recommended; ratify by replacing <OWNER-PENDING>
+#     with a real Hexalith release-owner handle). Clean forward moves onto release
+#     tags — low risk: ---
+references/Hexalith.Commons|20048e9b10a9ee691cf4b360ef3c409de5a88815|validated-advance|v2.27.0|jpiquot|2026-07-07
+references/Hexalith.PolymorphicSerializations|ca1086497c58d0e3ae3c4795655f853b6299b3db|validated-advance|v1.16.2|jpiquot|2026-07-07
+#
+# --- DECIDE (ahead-of-tag, carries unreleased submodule commits). Owner-confirmed
+#     on 2026-07-07 (jpiquot) to ship these commits in this RC; ratified below as
+#     validated-advance. EventStore now sits on the clean v3.45.0 release tag: ---
+#
+# --- 2026-07-12 reconciliation (bmad-correct-course): the working tree drifted
+#     Builds forward again after root commit 2047d44 recorded b6d1111. Owner
+#     disposition (jpiquot): validate-advance to 2b7aec1 = "fix: update
+#     HexalithEventStoreVersion to 3.60.0" — a clean +2 forward move (1 past tag
+#     v4.17.5), already on origin/main and consistent with the tree (EventStore
+#     submodule already on the v3.60.0 line). Supersedes the 2026-07-07 Builds
+#     entry (94989b0, v4.16.3-28). ---
+references/Hexalith.Builds|2b7aec1fd1ba254900ccf715bd8fec5d54f0c37e|validated-advance|v4.17.5-1-g2b7aec1|jpiquot|2026-07-12
+# --- 2026-07-16 CI restore repair (bmad-correct-course): Builds v4.18.11
+#     contains the owner-authored v1.16.3 -> 1.16.3 source correction; 6516faf
+#     adds the pre-release evaluated central-version guard and fixtures approved
+#     for parent adoption. ---
+references/Hexalith.Builds|6516faffa84c6762f85823fca5ad9eb4e6fde5de|validated-advance|v4.18.11-1-g6516faf|jpiquot|2026-07-16
+# --- 2026-07-16 MTP CI follow-up: clean run 29482004796 proved restore/build/
+#     package green, then exposed VSTest-only arguments in the shared test lanes.
+#     Builds v4.19.0 adds the backward-compatible test-platform contract and
+#     keeps VSTest as the default while Parties opts into MTP-native evidence. ---
+references/Hexalith.Builds|640b59c1434e4e1e079771c401e11048772c7a27|validated-advance|v4.19.0|jpiquot|2026-07-16
+# --- 2026-08-04 EventStore 3.90.0 alignment: Builds selects the exact
+#     EventStore release already checked out by Parties. ---
+references/Hexalith.Builds|a53166539bf4441d5e33d04281b14c2d59e950c3|validated-advance|v4.23.0-38-ga531665|jpiquot|2026-08-04
+# --- 2026-09-05 catalog adopt: Builds v4.27.1 selects EventStore 3.102.0,
+#     Commons 2.30.0, Memories 2.25.0, and the other live Hexalith family
+#     versions published on nuget.org. ---
+references/Hexalith.Builds|8db7459d065926501ee045b3aaf7b816780905e5|validated-advance|v4.27.1|jpiquot|2026-09-05
+references/Hexalith.Tenants|8d1a5bd760310a724dd35649aea478d364a2c89a|validated-advance|v2.3.0-9-g8d1a5bd|jpiquot|2026-07-07
+references/Hexalith.EventStore|1627190e515c1189a48acf3c5b599500fa6c8ba1|validated-advance|v3.45.0|jpiquot|2026-07-07
+# --- 2026-09-05 live source identities used by fitness/docs after catalog adopt.
+#     Package mode still restores nuget.org versions from Builds; these rows only
+#     authorize the diagnostic gitlinks currently recorded on main. ---
+references/Hexalith.EventStore|7a81a41000df11632ea84d331d764c6a240a8a46|validated-advance|v3.102.0-27-g7a81a410|jpiquot|2026-09-05
+references/Hexalith.FrontComposer|5cbc5583142a6774ff7813698ad98ec267b336f0|validated-advance|v4.3.0-7-g5cbc5583|jpiquot|2026-09-05
+references/Hexalith.Memories|e9653980cf8b55e17afde30a5a8587cb30405e78|validated-advance|v2.25.2|jpiquot|2026-09-05
+references/Hexalith.Tenants|0ca32a5cf6448f35b67f29f0ddcbce44d144b05e|validated-advance|v5.7.0-5-g0ca32a5c|jpiquot|2026-09-05
+references/Hexalith.Commons|6da79aed2daa4e199689331ee3196f7872c0988a|validated-advance|v2.30.0-19-g6da79ae|jpiquot|2026-09-05
+# --- 2026-09-06 code review round 3: PolymorphicSerializations advanced past the
+#     0dca9e9d interim fix to a clean committed identity; Release solution build
+#     re-verified 0 warnings/0 errors at this gitlink. ---
+references/Hexalith.PolymorphicSerializations|8aeed1d27c9a050bc4bec6d89051aa00de306a69|validated-advance|v1.19.2-11-g8aeed1d|jpiquot|2026-09-06
+# --- 2026-09-06 code review round 4: EventStore/Tenants/Memories drifted past the
+#     2026-09-05 catalog-adopt identities during closure documentation work; owner
+#     authorized the new identities in place of a revert, reconciled across the
+#     8.3 matrix, docs/architecture.md, the architecture spine, sprint-status.yaml,
+#     and PlatformApiPrerequisitesTests' PayloadProtectionEventStoreSha. ---
+references/Hexalith.EventStore|acf5c4e403699d4f9290fd6636e4d6b1872a3bd6|validated-advance|v3.102.0-31-gacf5c4e4|jpiquot|2026-09-06
+references/Hexalith.Tenants|d914b13bd9b2354dbb6b556c9887664f68672069|validated-advance|v5.7.0-7-gd914b13b|jpiquot|2026-09-06
+references/Hexalith.Memories|fa8f53165183695888dd0df001d4b1e58071f39e|validated-advance|v2.26.0|jpiquot|2026-09-06
+# --- 2026-09-07 full dependency refresh: owner-authorized advances to the
+#     verified default-branch heads. Builds is the sole NuGet catalog authority;
+#     its 6daad3d5 catalog selects Memories 2.26.1, Tenants 5.7.0, and Parties
+#     1.1.1 while NuGet's newer Memories 2.26.2 remains catalog-owned drift. ---
+references/Hexalith.EventStore|3c6a5e33f9fbaf8469047ba3de72f70ab4425e66|validated-advance|v3.102.0-58-g3c6a5e33|jpiquot|2026-09-07
+references/Hexalith.Memories|7e9c2c387ee84b4d5c96c27f4cf613e13ff2c9e2|validated-advance|v2.26.2-4-g7e9c2c38|jpiquot|2026-09-07
+references/Hexalith.FrontComposer|f0c3b6fd7dbf0a750170b5ec72d09d17febb8f6a|validated-advance|v4.3.0-37-gf0c3b6fd|jpiquot|2026-09-07
+references/Hexalith.Tenants|f75cdacc8eca458778c7109fd3f713f8907bed02|validated-advance|v5.7.0-27-gf75cdacc|jpiquot|2026-09-07
+references/Hexalith.Builds|6daad3d501e97204eba66d971bba6a7103b85ccd|validated-advance|v4.27.1-14-g6daad3d|jpiquot|2026-09-07
+# --- 2026-09-07 full submodule and package update ---
+references/Hexalith.Builds|7b0b1837ce368e314b5e11b011b73603637a17e1|validated-advance|v4.27.1-16-g7b0b183|jpiquot|2026-09-07
+references/Hexalith.EventStore|d45206f7cbd80a112519c1d4687d7279a745f0c5|validated-advance|v3.103.0-2-gd45206f7|jpiquot|2026-09-07
+references/Hexalith.FrontComposer|7e0e6cc605853f7bf4f3f732505e208ea564cc9e|validated-advance|v4.3.0-67-g7e0e6cc6|jpiquot|2026-09-07
+references/Hexalith.Memories|15fdfaea7004d68e9b149e828503f832d049009a|validated-advance|v2.26.2-9-g15fdfaea|jpiquot|2026-09-07
+references/Hexalith.Tenants|e7f366623733abdb64f173e9843edc7fc7d22193|validated-advance|v5.7.0-31-ge7f36662|jpiquot|2026-09-07
+# --- 2026-09-08 latest packages and submodule refresh: root gitlinks already
+#     match origin/main; FrontComposer package identity moves to published 4.4.0. ---
+references/Hexalith.Builds|35c3d1e5b8a55a74a440b9c2cad4c5e18747b241|validated-advance|v4.27.2-9-g35c3d1e|jpiquot|2026-09-08
+references/Hexalith.EventStore|c6efdbba6439370a5c674c12ed866c959624106a|validated-advance|v3.103.0-6-gc6efdbba|jpiquot|2026-09-08
+references/Hexalith.FrontComposer|a0acb78f337116867c917dc78b0976f34389f275|validated-advance|v4.4.0-2-ga0acb78f|jpiquot|2026-09-08
+references/Hexalith.Memories|0b78968bfa8fd906790c47b72f2857ac83e748e5|validated-advance|v2.26.2-10-g0b78968b|jpiquot|2026-09-08
+# --- 2026-09-13 SDK/package/submodule refresh: EventStore and Memories advance
+#     to verified origin/main heads. Builds records and audits the EventStore
+#     3.104.0, Dapr hosting beta.752, and xUnit 4.0.1 catalog selections. ---
+references/Hexalith.EventStore|dfc0ac557c43363159b55bffb4d40feceab1f787|validated-advance|v3.104.0-1-gdfc0ac55|jpiquot|2026-09-13
+references/Hexalith.Memories|d99bc96371afbf55f8f37cd812c9e6cedba15b1d|validated-advance|v2.27.1-13-gd99bc963|jpiquot|2026-09-13
+references/Hexalith.Builds|2e2220b9e450b1ec1095594005e86cc565b8f7ee|validated-advance|v4.27.3-11-g2e2220b|jpiquot|2026-09-13
+# --- 2026-09-13 review reconciliation: current root identities and the
+#     bunit 2.11.3 catalog/audit successor. ---
+references/Hexalith.Commons|19d7d4d6b21160557b7449f55a0ad0f55e6d7dc6|validated-advance|v2.30.0-21-g19d7d4d|jpiquot|2026-09-13
+references/Hexalith.FrontComposer|b0ad2fb69bcf5e7aadd7b388d25415d0fba876d5|validated-advance|v4.4.0-8-gb0ad2fb6|jpiquot|2026-09-13
+references/Hexalith.Tenants|ff43dc941b01d4a68070f92dde0536f5ab1ef4df|validated-advance|v5.7.0-34-gff43dc94|jpiquot|2026-09-13
+references/Hexalith.Builds|aee01323579adeda952bf41b2f3e0e61785075c6|validated-advance|v4.27.3-13-gaee0132|jpiquot|2026-09-13
+
+# --- Story 8.10 Round 6 recorded decision (2026-10-04): authorizes only
+#     the eight identities named in the spec. The later three-pin approval
+#     is recorded separately below; selection signoff does not certify parity.
+references/Hexalith.AI.Tools|3f194e17174994d308ec84af9ee2b5aa68674d0d|validated-advance|3f194e1|jpiquot|2026-10-04
+references/Hexalith.Builds|688eec9a4333245cc0ff7772115c769094471863|validated-advance|v4.29.1-14-g688eec9|jpiquot|2026-10-04
+references/Hexalith.Commons|116d26815eb81e35b3c161e1799e5ee12805fc0a|validated-advance|v2.30.1-15-g116d268|jpiquot|2026-10-04
+references/Hexalith.EventStore|b046425503c694d5857e8bba890351840fa52c26|validated-advance|v3.111.0-2-gb0464255|jpiquot|2026-10-04
+references/Hexalith.FrontComposer|bf40099f81fcaeac324b7b4377513ac7d49cead4|validated-advance|v4.5.0-113-gbf40099f|jpiquot|2026-10-04
+references/Hexalith.Memories|3d72927f4dac66af4968cc6726c4e96df292f2e4|validated-advance|v2.27.1-23-g3d72927f|jpiquot|2026-10-04
+references/Hexalith.PolymorphicSerializations|98de6e013840ece9f0fa7c68ab7dcdf2bba3b375|validated-advance|v1.19.4|jpiquot|2026-10-04
+references/Hexalith.Tenants|b63bdbba8613801bb488eaa9116f386e41a261f8|validated-advance|v5.7.0-133-gb63bdbba|jpiquot|2026-10-04
+
+# --- Story 8.10 explicit human approval (2026-10-04): Administrator /
+#     jpiquot answered "yes" to the exact three current pins in the I20 table
+#     at Parties c782b68c5cf56a19e6a2a237f5f44e3043d5e461.
+#     No parity, owner release, publishing, or rollback deletion is approved.
+references/Hexalith.EventStore|cbbe41501ba722731bf36b2c343efdef4ac714fb|validated-advance|v3.111.0-10-gcbbe4150|jpiquot|2026-10-04
+references/Hexalith.FrontComposer|374bb83392d8ab4e8a8397cfd312d09948fb0b9d|validated-advance|v4.5.0-117-g374bb833|jpiquot|2026-10-04
+references/Hexalith.Tenants|cc348c9d7839ec7aad01649fc1c0e6f4fe672da4|validated-advance|v5.7.0-134-gcc348c9d|jpiquot|2026-10-04
+
+# --- Story 8.10 working-tree identity approval (2026-10-04): Administrator /
+#     jpiquot chose "approve working tree" for exactly these five clean
+#     fast-forward checkouts observed at Parties
+#     7c720c7f9879ecb469993b1d2dff2bdb72b96e1b (spec-8-10 "Working-tree
+#     identity reconciliation"). Source-pin selection only: no I16 parity,
+#     owner release, publishing, commit, or rollback deletion is approved.
+#     The gitlinks stay uncommitted until the human commits them.
+references/Hexalith.Builds|145ae921d9032f110b7371614939559e0aee202a|validated-advance|v4.29.1-16-g145ae92|jpiquot|2026-10-04
+references/Hexalith.EventStore|2242ad55a1b678828df8aa093fd92399c29af5bf|validated-advance|v3.112.0-2-g2242ad55|jpiquot|2026-10-04
+references/Hexalith.FrontComposer|2cc8dd3a3ac76c03f5ea6f6f92e65829306db470|validated-advance|v4.5.0-121-g2cc8dd3a|jpiquot|2026-10-04
+references/Hexalith.Memories|5b43fe2f8a0f04dc021921a077dff1a573c2ce5e|validated-advance|v2.28.0|jpiquot|2026-10-04
+references/Hexalith.Tenants|04e655cf070b17eced9daefb9eaa87a09ec60e81|validated-advance|v5.7.0-141-g04e655cf|jpiquot|2026-10-04
+
+# --- Story 8.10 final identity approval (2026-10-05): Administrator /
+#     jpiquot approved exactly Builds 360a2b9c and Tenants 72b8e4f5 (committed
+#     in Parties 2bdb303b31739b7631036fc15ac21a012724ddb8) and the EventStore
+#     3.113.0 package + source update: root checkout at tag v3.113.0 (one
+#     fast-forward commit past 0dc44e46; root gitlink commit pending). The
+#     committed EventStore 547c938d / 0dc44e46 and Tenants b55f96d8 were never
+#     approved; the 2026-10-04 EventStore 2242ad55 and Tenants 04e655cf rows are
+#     superseded (never committed). I16 identity re-validation is approved for
+#     the final set, but only receipts rerun at these identities are Pass.
+#     No owner release, publishing, or rollback deletion is approved.
+#     Outcome (2026-10-05): Parties 75b4fa1fe2cfd2167c186e94faf52e18be4b0ff6 committed the EventStore 865cd9e4 gitlink, so all eight final-set gitlinks are committed.
+references/Hexalith.Builds|360a2b9c4e96809365a7de785be9a68152d5ac28|validated-advance|v4.29.1-17-g360a2b9|jpiquot|2026-10-05
+references/Hexalith.EventStore|865cd9e49273dffbb1cdae85efeaf1aac322e09e|validated-advance|v3.113.0|jpiquot|2026-10-05
+references/Hexalith.Tenants|72b8e4f508176b69826549e87b7b2a286f607fd1|validated-advance|v5.7.0-143-g72b8e4f5|jpiquot|2026-10-05
+
+# --- 2026-10-07 Parties release selection: jpiquot authorized releasing the
+#     current repository and bypassing human validation in this session
+#     (spec-fix-ci-and-publish-release.md). These five pointers are already
+#     committed at Parties 45d653a7d7f14a75d5227fbd780db3fbf22f70fe.
+#     This records selection for the requested release only; automated CI,
+#     package validation, and publication gates still apply. It does not
+#     certify broader platform parity or discharge earlier migration gates.
+references/Hexalith.Builds|397c94a4e246c90b21cf408790fa0d55bf32d795|validated-advance|v4.30.0|jpiquot|2026-10-07
+references/Hexalith.EventStore|48ef7171b9532f390b7b41b61ba679ba1030c923|validated-advance|v3.115.0-5-g48ef7171|jpiquot|2026-10-07
+references/Hexalith.FrontComposer|c561b3210f15206a90c39c82c58f2e5b1005cd60|validated-advance|v4.6.0-5-gc561b321|jpiquot|2026-10-07
+references/Hexalith.Memories|b350c094ab4bc10bd2daf723f9e2c90ffdddae2a|validated-advance|v2.28.1-24-gb350c094|jpiquot|2026-10-07
+references/Hexalith.Tenants|811447342e8f44b644a2074565e83f45519528fd|validated-advance|v5.7.0-165-g81144734|jpiquot|2026-10-07
+
+# --- 2026-10-07 continuation of the user-authorized Parties release selection.
+#     These diagnostic pointers are already committed at Parties a3e5ef3b92a56fb03adc0e7e3235ff5ca158ab9a.
+#     The user requested release and validation bypass in the active session;
+#     current-source fitness checks pass while dated G5/parity gates remain
+#     independent. This records the selected root graph without moving gitlinks
+#     or claiming a published upstream SDK or refreshed platform parity.
+references/Hexalith.EventStore|98da5a04e6df33ba026cbaae46d1777acdca7a21|validated-advance|v3.115.0-8-g98da5a04|jpiquot|2026-10-07
+references/Hexalith.Memories|14bb1c17b66ad0fa053ad0ed332c82fdd85f3887|validated-advance|v2.28.1-25-g14bb1c17|jpiquot|2026-10-07
+
+# --- 2026-10-11 current Parties release selection: the release owner approved
+#     these exact eight committed root pointers. The selection authorizes the
+#     RC gate only; it does not revalidate historical G5 parity, gateway
+#     runtime evidence, or publication readiness. Uncommitted Platform work
+#     is excluded.
+references/Hexalith.Builds|1bde4d92bb9a9ce48b19a6ca17236075ea28a78b|validated-advance|v4.30.1-32-g1bde4d9|jpiquot|2026-10-11
+references/Hexalith.Commons|b247ed116c6523f8c596ec0a933eff8973d11568|validated-advance|v2.30.1-17-gb247ed1|jpiquot|2026-10-11
+references/Hexalith.EventStore|b57310fb44ef2231815f3c3cfea09714d942334d|validated-advance|v3.120.0-35-gb57310fb|jpiquot|2026-10-11
+references/Hexalith.FrontComposer|19f4839231ae6ec7cc6318842eb329c2d04caaa9|validated-advance|v4.6.0-9-g19f48392|jpiquot|2026-10-11
+references/Hexalith.McpCli|7e99305a621e1bdf7119b6e924348857e2b5a5a4|validated-advance|7e99305a|jpiquot|2026-10-11
+references/Hexalith.Memories|499b7a838a36a4cd500ab517d86acf07b1d74ad4|validated-advance|v2.28.1-69-g499b7a83|jpiquot|2026-10-11
+references/Hexalith.Platform|6f703dd0227d8fac023ad97d909c5aaa42115578|validated-advance|6f703dd0|jpiquot|2026-10-11
+references/Hexalith.Tenants|711e100858e59cf8de2b626ea21790d59f969023|validated-advance|v5.8.0-39-g711e1008|jpiquot|2026-10-11
+
+# --- 2026-10-11 post-sync release selection: the release owner separately
+#     approved these four newer pointers committed at Parties
+#     4bd3b1f08f4f1181b07a0c1e68e09e431a2a92ed. The earlier approved
+#     identities remain above as dated history. Selection does not certify
+#     G5 parity or a passing gateway topology.
+references/Hexalith.Builds|608c164c3637240fed2dd92dbfdaaf581ba9846d|validated-advance|v4.30.1-33-g608c164c|jpiquot|2026-10-11
+references/Hexalith.EventStore|ef6e688672e1b09a78e78237e4dbfb607d3635a5|validated-advance|v3.120.0-40-gef6e6886|jpiquot|2026-10-11
+references/Hexalith.Platform|124fc2007333ed5a394c73fdba9975835f4834c8|validated-advance|124fc200|jpiquot|2026-10-11
+references/Hexalith.Tenants|85a5a6cc18ef6a0f2da69e4fd2c2a1a408f32359|validated-advance|v5.8.0-40-g85a5a6cc|jpiquot|2026-10-11
+
+# --- 2026-10-13 Parties release selection: jpiquot authorized fixing CI,
+#     publishing the current release, and bypassing human authorization in
+#     this session (spec-gh-38399980224-fix-ci-and-publish-release.md).
+#     These six exact pointers are already committed at Parties
+#     1e64c3e1bc37bb1cdfb0c4f1d7e2f174222984c9. Selection only: automated
+#     CI, package, and publication gates remain required. This does not
+#     certify G5 or accessibility parity or authorize rollback deletion.
+references/Hexalith.Builds|b2f59c59d16fc2234af6a0f850297958c6143e0d|validated-advance|v4.30.1-35-gb2f59c59|jpiquot|2026-10-13
+references/Hexalith.EventStore|2a7b80a4ec639bdba7ff8acc74cacb4f8880b24c|validated-advance|v3.120.0-75-g2a7b80a4|jpiquot|2026-10-13
+references/Hexalith.FrontComposer|c3174dc917b094f3736b098ac78a531f197dbe56|validated-advance|v4.6.0-25-gc3174dc9|jpiquot|2026-10-13
+references/Hexalith.Memories|24b1fa7408eabc1db24b7536fd35f575c7a572a7|validated-advance|v2.28.1-88-g24b1fa74|jpiquot|2026-10-13
+references/Hexalith.Platform|be294641fe06490b7f1d9788f383512088842e7d|validated-advance|be294641|jpiquot|2026-10-13
+references/Hexalith.Tenants|ed7cef6e327156628c0479071f3bf419fd64612c|validated-advance|v5.8.0-63-ged7cef6e|jpiquot|2026-10-13
+
+# --- 2026-10-16 Parties release selection under the invoked
+#     spec-fix-ci-and-publish-release.md release authorization. These seven
+#     pointers are already committed at Parties 493730941329d1bca3b4f6b2f6a67ffe305c2443.
+#     Selection only; automated gates, historical parity and rollback remain.
+references/Hexalith.Builds|9f0121c77e3f085c58f5c926057606db8e6511a7|validated-advance|v4.31.2-1-g9f0121c7|jpiquot|2026-10-16
+references/Hexalith.Commons|9e874b1a3c6e7b6ff07b6f40b81d36e4e1403798|validated-advance|v2.30.1-19-g9e874b1a|jpiquot|2026-10-16
+references/Hexalith.EventStore|210b90da172cc7ca946fbb06cfd44390bffa707b|validated-advance|v3.122.0-1-g210b90da|jpiquot|2026-10-16
+references/Hexalith.FrontComposer|b06f86d554363ea5b8192cbc149a75c820dab2b8|validated-advance|v4.6.0-33-gb06f86d5|jpiquot|2026-10-16
+references/Hexalith.Memories|99431f0fed102ea6ddbae33d28b9da4fc7f215a0|validated-advance|v2.28.1-99-g99431f0f|jpiquot|2026-10-16
+references/Hexalith.Platform|c3af1f2c9e7b0d1b003a1bd5978545f664e38167|validated-advance|c3af1f2c|jpiquot|2026-10-16
+references/Hexalith.Tenants|51f404513f2657e98f949f58f0df43b99b68a7d0|validated-advance|v5.8.0-77-g51f40451|jpiquot|2026-10-16
+
+# --- 2026-10-18 Parties release selection. The operator authorized this
+#     release and bypass of the production reviewer wait in this session.
+#     These nine pointers are already committed at Parties
+#     5efaae7f0120439bc8d942bbc227dabdeefa56d8. Selection only; automated
+#     CI, package, and publication gates remain required. This does not
+#     certify platform parity or authorize rollback deletion.
+references/Hexalith.Builds|332b2c144defba546fe0a09626a4a72f2340e22f|validated-advance|v4.33.0-8-g332b2c14|jpiquot|2026-10-18
+references/Hexalith.Commons|b7e6e7d5e28568b30c523130339cc4c52e12c674|validated-advance|v2.30.1-20-gb7e6e7d5|jpiquot|2026-10-18
+references/Hexalith.EventStore|d55c6f7c11e9bce6f17d490a84c83f1561979d63|validated-advance|v3.125.1-3-gd55c6f7c|jpiquot|2026-10-18
+references/Hexalith.FrontComposer|1513fe3ed21a554eeee7a9d807f9b9e25fdb4cd2|validated-advance|v4.6.0-61-g1513fe3e|jpiquot|2026-10-18
+references/Hexalith.McpCli|c25e2140e14a76b696a76aed30c8302107714fd6|validated-advance|v1.0.0-13-gc25e2140|jpiquot|2026-10-18
+references/Hexalith.Memories|d0c5d8ca96b06e02acdda88f255b33288642a7f7|validated-advance|v2.28.1-125-gd0c5d8ca|jpiquot|2026-10-18
+references/Hexalith.Platform|5f18593639832d1245577dd93ec07687517d3acb|validated-advance|5f185936|jpiquot|2026-10-18
+references/Hexalith.PolymorphicSerializations|80ce5afd99216ce5f591d66c833feafaf371f171|validated-advance|v1.19.4-1-g80ce5afd|jpiquot|2026-10-18
+references/Hexalith.Tenants|c9feedb6656d70c7271e851c844ee29bdfb28c3e|validated-advance|v5.8.0-131-gc9feedb6|jpiquot|2026-10-18
+
+# --- 2026-10-21 Story 4.10 release selection: jpiquot approved
+#     the nine exact revisions in the recorded McpCli owner decision.
+#     Automated CI and protected publication gates remain mandatory.
+references/Hexalith.Builds|fff4a212180d8cd1c5c0759655a9bc4fb6963c45|validated-advance|v4.35.0|jpiquot|2026-10-21
+references/Hexalith.Commons|5c23c818f639c5bb3175f964c5549440bd5b876d|validated-advance|v2.30.3|jpiquot|2026-10-21
+references/Hexalith.EventStore|54261aeccb1d8d8c5c99beb2437e2e8a5ad69eaa|validated-advance|v3.126.0-20-g54261aec|jpiquot|2026-10-21
+references/Hexalith.FrontComposer|913c4132c71cd7f77fcdf6befa9e396d284dd4bc|validated-advance|v4.7.0-16-g913c4132|jpiquot|2026-10-21
+references/Hexalith.McpCli|9354dc08176744c75c2ddb61d924c0948b373b98|validated-advance|v1.0.0-32-g9354dc08|jpiquot|2026-10-21
+references/Hexalith.Memories|35df7e2080c369003cacac12f5b44117d7f3ed35|validated-advance|v2.29.5|jpiquot|2026-10-21
+references/Hexalith.Platform|4f036ced45aa40700948c19949bb874881c960b5|validated-advance|4f036ced|jpiquot|2026-10-21
+references/Hexalith.PolymorphicSerializations|221ac4592ba908ae7661ba1fa9e2d1fcc23baee0|validated-advance|v1.19.5|jpiquot|2026-10-21
+references/Hexalith.Tenants|3ae9db014dfe52bdee4f6731465cc2a7b65701b7|validated-advance|v5.9.0-26-g3ae9db01|jpiquot|2026-10-21
+
+# --- 2026-10-21 release selection. The operator ordered this release and
+#     bypass of the production reviewer wait in this session. These seven
+#     pointers are the current main tips, including EventStore v3.126.1.
+#     Selection only; automated CI and publication gates remain required.
+references/Hexalith.Builds|3fcb8f38919bb0961b06a19b57aa45623b35a33e|validated-advance|v4.35.1-13-g3fcb8f3|jpiquot|2026-10-21
+references/Hexalith.EventStore|1748b16b11fb63b885dfa2fd4a9c7a420ea103a9|validated-advance|v3.126.1|jpiquot|2026-10-21
+references/Hexalith.FrontComposer|a258b992d08e73e2d3251c865ef01a982eba31ac|validated-advance|v4.7.0-42-ga258b992|jpiquot|2026-10-21
+references/Hexalith.McpCli|7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65|validated-advance|v1.0.0-42-g7f4a08c|jpiquot|2026-10-21
+references/Hexalith.Memories|0af009c20c97038b685f3d4b62c0c8e757982d14|validated-advance|v2.29.8|jpiquot|2026-10-21
+references/Hexalith.Platform|d189c7de74293e1a718e5e78b1b3b7c0e47b48b5|validated-advance|d189c7d|jpiquot|2026-10-21
+references/Hexalith.Tenants|66def172379f37d12e746fe6eb9195801929c572|validated-advance|v5.9.0-50-g66def172|jpiquot|2026-10-21

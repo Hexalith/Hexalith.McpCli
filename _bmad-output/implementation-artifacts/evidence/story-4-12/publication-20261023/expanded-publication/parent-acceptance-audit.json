@@ -1,0 +1,38 @@
+{
+  "reviewedAt": "2026-10-23T14:01:26.857363+00:00",
+  "baselineCommit": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+  "head": "e5ed21a451d1b32c860a71164ed1a09a9febebc3",
+  "owningIndexUntouched": true,
+  "tasksVerified": 7,
+  "acceptanceCriteriaVerified": 4,
+  "matrixRowsVerified": 6,
+  "productionPolicyFieldsUnchanged": true,
+  "productionSourcesContractsPinsVectorsInventoriesUnchanged": true,
+  "frozenQualificationFilesVerified": 59,
+  "implementationHandoffFilesVerified": 182,
+  "nonLive": {
+    "passed": 1438,
+    "failed": 0,
+    "existingSkips": 5,
+    "manifestPassed": 158,
+    "manifestSkipped": 0
+  },
+  "live": {
+    "attempt": 5,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "testSeconds": 16.809,
+    "actualGatewayStatus": 200,
+    "sampleMetadataMentions": 0,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    }
+  },
+  "auditCorrection": "Reordered retained-result checks so the inherited-sample control now fails on the sample-registration assertion. No assertion was removed; final positive still passes. Original control receipt retained.",
+  "catalogCi": "39958144971 attempt 2 pending; all prior package/publisher checks passed",
+  "result": "acceptance matrix and implementation verified; workflow review pending"
+}

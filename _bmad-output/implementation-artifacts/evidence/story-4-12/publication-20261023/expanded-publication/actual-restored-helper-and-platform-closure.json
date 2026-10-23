@@ -1,0 +1,169 @@
+{
+  "reviewedAt": "2026-10-23T13:10:54.980801+00:00",
+  "actualRestoredHelperArchiveSha256": "6b7678949525490453e07113611d19a7e7d6cf3c0b64e427773694da0f457695",
+  "appHostPackageCount": 82,
+  "appHostHexalithPackages": {
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "Hexalith.Parties.Aspire": "1.6.0",
+    "Hexalith.Tenants.Aspire": "5.10.0"
+  },
+  "actualCpmPartiesHelperClosure": {
+    "Aspire.Hosting": "13.6.3",
+    "Aspire.Hosting.Keycloak": "13.6.3-preview.1.26521.2",
+    "Aspire.Hosting.Redis": "13.6.3",
+    "AspNetCore.HealthChecks.Redis": "9.0.0",
+    "AspNetCore.HealthChecks.Uris": "9.0.0",
+    "CommunityToolkit.Aspire.Hosting.Dapr": "13.6.1-beta.935",
+    "Fractions": "7.3.0",
+    "Google.Protobuf": "3.36.1",
+    "Grpc.AspNetCore": "2.83.0",
+    "Grpc.AspNetCore.Server": "2.83.0",
+    "Grpc.AspNetCore.Server.ClientFactory": "2.83.0",
+    "Grpc.Core.Api": "2.84.0",
+    "Grpc.Net.Client": "2.84.0",
+    "Grpc.Net.ClientFactory": "2.84.0",
+    "Grpc.Net.Common": "2.84.0",
+    "Grpc.Tools": "2.83.0",
+    "Hex1b": "0.168.0",
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "Hexalith.Parties.Aspire": "1.6.0",
+    "KubernetesClient": "19.0.2",
+    "MessagePack": "3.1.12",
+    "MessagePack.Annotations": "3.1.12",
+    "MessagePackAnalyzer": "3.1.12",
+    "Microsoft.Extensions.AI.Abstractions": "10.11.0",
+    "Microsoft.Extensions.Caching.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Configuration": "10.0.13",
+    "Microsoft.Extensions.Configuration.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Configuration.Binder": "10.0.13",
+    "Microsoft.Extensions.Configuration.CommandLine": "10.0.13",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "10.0.13",
+    "Microsoft.Extensions.Configuration.FileExtensions": "10.0.13",
+    "Microsoft.Extensions.Configuration.Json": "10.0.13",
+    "Microsoft.Extensions.Configuration.UserSecrets": "10.0.13",
+    "Microsoft.Extensions.DependencyInjection": "10.0.13",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Diagnostics": "10.0.13",
+    "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Diagnostics.HealthChecks": "10.0.12",
+    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "10.0.12",
+    "Microsoft.Extensions.FileProviders.Abstractions": "10.0.13",
+    "Microsoft.Extensions.FileProviders.Physical": "10.0.13",
+    "Microsoft.Extensions.FileSystemGlobbing": "10.0.13",
+    "Microsoft.Extensions.Hosting": "10.0.13",
+    "Microsoft.Extensions.Hosting.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Http": "10.0.13",
+    "Microsoft.Extensions.Logging": "10.0.13",
+    "Microsoft.Extensions.Logging.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Logging.Configuration": "10.0.13",
+    "Microsoft.Extensions.Logging.Console": "10.0.13",
+    "Microsoft.Extensions.Logging.Debug": "10.0.13",
+    "Microsoft.Extensions.Logging.EventLog": "10.0.13",
+    "Microsoft.Extensions.Logging.EventSource": "10.0.13",
+    "Microsoft.Extensions.Options": "10.0.13",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.13",
+    "Microsoft.Extensions.Primitives": "10.0.13",
+    "Microsoft.NET.StringTools": "18.4.0",
+    "Microsoft.VisualStudio.Threading.Only": "17.14.15",
+    "Microsoft.VisualStudio.Validation": "17.13.22",
+    "Microsoft.Win32.SystemEvents": "6.0.0",
+    "ModelContextProtocol": "2.3.0",
+    "ModelContextProtocol.Core": "2.3.0",
+    "Nerdbank.MessagePack": "1.2.4",
+    "Nerdbank.Streams": "2.13.16",
+    "Newtonsoft.Json": "13.0.4",
+    "OpenTelemetry": "1.20.1",
+    "OpenTelemetry.Api": "1.20.1",
+    "OpenTelemetry.Api.ProviderBuilderExtensions": "1.20.1",
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.20.1",
+    "OpenTelemetry.Extensions.Hosting": "1.20.1",
+    "Polly.Core": "8.7.0",
+    "PolyType": "1.3.1",
+    "QRCoder": "1.7.0",
+    "RESPite": "3.4.5",
+    "Semver": "3.0.0",
+    "StackExchange.Redis": "3.4.5",
+    "StreamJsonRpc": "2.25.29",
+    "System.Diagnostics.EventLog": "10.0.13",
+    "System.Drawing.Common": "6.0.0",
+    "System.IO.Hashing": "10.0.12",
+    "YamlDotNet": "18.1.0"
+  },
+  "publishedDefaultToCpmDifferences": {
+    "Microsoft.Extensions.Caching.Abstractions": {
+      "publishedDefault": "10.0.10",
+      "mcpCliCpm": "10.0.13"
+    },
+    "Microsoft.Extensions.Diagnostics.HealthChecks": {
+      "publishedDefault": "8.0.31",
+      "mcpCliCpm": "10.0.12"
+    },
+    "OpenTelemetry.Api.ProviderBuilderExtensions": {
+      "publishedDefault": "1.20.0",
+      "mcpCliCpm": "1.20.1"
+    },
+    "Microsoft.Extensions.AI.Abstractions": {
+      "publishedDefault": "10.8.3",
+      "mcpCliCpm": "10.11.0"
+    },
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+      "publishedDefault": "1.20.0",
+      "mcpCliCpm": "1.20.1"
+    },
+    "Aspire.Hosting.Redis": {
+      "publishedDefault": "13.6.1",
+      "mcpCliCpm": "13.6.3"
+    },
+    "ModelContextProtocol": {
+      "publishedDefault": "2.2.0",
+      "mcpCliCpm": "2.3.0"
+    },
+    "OpenTelemetry.Extensions.Hosting": {
+      "publishedDefault": "1.20.0",
+      "mcpCliCpm": "1.20.1"
+    },
+    "ModelContextProtocol.Core": {
+      "publishedDefault": "2.2.0",
+      "mcpCliCpm": "2.3.0"
+    },
+    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": {
+      "publishedDefault": "8.0.31",
+      "mcpCliCpm": "10.0.12"
+    },
+    "Aspire.Hosting.Keycloak": {
+      "publishedDefault": "13.6.1-preview.1.26506.6",
+      "mcpCliCpm": "13.6.3-preview.1.26521.2"
+    },
+    "OpenTelemetry": {
+      "publishedDefault": "1.20.0",
+      "mcpCliCpm": "1.20.1"
+    },
+    "OpenTelemetry.Api": {
+      "publishedDefault": "1.20.0",
+      "mcpCliCpm": "1.20.1"
+    }
+  },
+  "serverFreeAppHost": true,
+  "platformFixtureDirectApprovedTestRoot": "Hexalith.EventStore.Testing.Integration/3.126.1",
+  "platformFixtureExactHexalithPackageClosure": {
+    "Hexalith.Commons.UniqueIds": "2.30.3",
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "Hexalith.EventStore.Client": "3.126.1",
+    "Hexalith.EventStore.Contracts": "3.126.1",
+    "Hexalith.EventStore.DomainService": "3.126.1",
+    "Hexalith.EventStore.Server": "3.126.1",
+    "Hexalith.EventStore.ServiceDefaults": "3.126.1",
+    "Hexalith.EventStore.Testing": "3.126.1",
+    "Hexalith.EventStore.Testing.Integration": "3.126.1",
+    "Hexalith.McpCli.Abstractions": "1.0.0",
+    "Hexalith.Parties.Aspire": "1.6.0",
+    "Hexalith.Tenants.Aspire": "5.10.0",
+    "Hexalith.Tenants.Contracts": "5.10.0"
+  },
+  "policyChangePath": [
+    "testPackages"
+  ],
+  "policyAddedOnlyTestRoot": "Hexalith.Parties.Aspire",
+  "productionPolicyFieldsUnchanged": true,
+  "result": "pass"
+}

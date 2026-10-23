@@ -86,6 +86,7 @@
     "Hexalith.EventStore.Testing",
     "Hexalith.EventStore.Testing.Integration",
     "Hexalith.EventStore.Aspire",
+    "Hexalith.Parties.Aspire",
     "Hexalith.Tenants.Aspire"
   ],
   "sampleContracts": "Hexalith.McpCli.Sample.Contracts"

@@ -1,0 +1,11 @@
+{
+  "downloadedAt": "2026-10-23T12:47:11.073676+00:00",
+  "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.aspire/1.6.0/hexalith.parties.aspire.1.6.0.nupkg",
+  "status": 200,
+  "version": "1.6.0",
+  "bytes": 26220,
+  "sha256": "6b7678949525490453e07113611d19a7e7d6cf3c0b64e427773694da0f457695",
+  "artifact": "Hexalith.Parties.Aspire.1.6.0.nupkg",
+  "admittedToMcpCli": false,
+  "completeReleaseVerificationPending": true
+}

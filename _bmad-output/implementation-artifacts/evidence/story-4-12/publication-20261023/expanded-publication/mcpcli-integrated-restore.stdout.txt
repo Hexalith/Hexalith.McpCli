@@ -1,0 +1,6 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj (in 82 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 138 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj (in 297 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj (in 298 ms).
+  21 of 25 projects are up-to-date for restore.

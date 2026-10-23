@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-10-23T14:43:36.627604+00:00",
+  "reviewLayers": [
+    "blind-hunter",
+    "edge-case-hunter",
+    "verification-gap"
+  ],
+  "individualFindings": 16,
+  "patchFindings": 14,
+  "resolvedPatchFindings": 14,
+  "deferredFindings": 2,
+  "uniqueUpstreamDeferrals": 1,
+  "upstreamDeferral": "deferred-work.md:589",
+  "existingVerificationFlake": "already tracked (deferred-work.md:467)",
+  "implementationSourceHashesUnchanged": true,
+  "parentFullVerification": "passed; parent-final-verification/summary.json"
+}

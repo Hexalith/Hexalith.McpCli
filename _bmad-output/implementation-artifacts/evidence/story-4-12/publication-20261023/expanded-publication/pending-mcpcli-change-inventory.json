@@ -1,0 +1,129 @@
+{
+  "head": "e5ed21a451d1b32c860a71164ed1a09a9febebc3",
+  "newCommitCreatedByStory": false,
+  "frozenIntentUnchanged": true,
+  "frozenIntentSha256": "a15ed103fd7462b7c5ccd1274dd39474f713280f00ad9c53e1a638252b2b0cde",
+  "buildsGitlink": "ca1262562b8da711043fd698b0aea1e7b34e5c40",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "0ac194e1d423581b22b5830740fcaf98c1d4ca735fbe1f8366752e43083ee59d",
+      "untracked": false
+    },
+    {
+      "path": "Hexalith.McpCli.slnx",
+      "sha256": "32ed10ba6f1a13e0d9624ff67504662d3bc2114fad3c9e9bdc5752912a2063d7",
+      "untracked": false
+    },
+    {
+      "path": "README.md",
+      "sha256": "aa77e2087475250fd11a4c31b98bdce9ad972f53fbb2ecf11661f1c31f39ee7a",
+      "untracked": false
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-4-12-compose-the-v1-live-test-topology.md",
+      "sha256": "c9a814ac183b02148b246a4ac0cf1a95e8b325de13a81a3e374485f15bac1a9d",
+      "untracked": false
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/DaprComponents/accesscontrol.yaml",
+      "sha256": "a7ef0ad27388200dfe9d415c6efc32ea1cdc76ef4c8346d1c2b5ff9f0dab8c5f",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/DaprComponents/pubsub.yaml",
+      "sha256": "1759801d99ba77ed5239a4d334b8af88cc92e92b7279aa7ee9c5e631a68aeebe",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml",
+      "sha256": "22672b5484b5ad048c9bf00ab1c326bbaa004e836265b8e79aba17d347b81e69",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj",
+      "sha256": "85004eefe8c40d6d5b475fb1988d5b94f44580929ae6b3799ca4480014ef7175",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/Program.cs",
+      "sha256": "bb5bfc8ea9b138e5a9c760d08e6c69e72959a6331bbc6bd888677d410c0cd869",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.AppHost/appsettings.json",
+      "sha256": "c4499aa6e6730d36c1b8ee1d860390565c78d173b84b0f41dc6c054602518142",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyCollection.cs",
+      "sha256": "3a8c0bbd7f6e7f16a32bdea39fa26b36406db128b4256e1ef157c6e38e38f9a9",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs",
+      "sha256": "d00c5181c7436c1f918e8368ab1179db7c6cd9749ec417dc43726086eda7f16b",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs",
+      "sha256": "589e009042cb478561bf503c4e9e5abd54ae216162e07246c582a32011595941",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs",
+      "sha256": "845b9ccec885884a0a27d3b96db5c1ad6b811d7e187fb247e3e463b1719734bb",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj",
+      "sha256": "b3660e872630bd0223c8cf9f8e5517e6e21c119bda2d74171926ca60a0a06685",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs",
+      "sha256": "5349650c0ba5c65971f9808adf58af34ec5d539b0df318a0f2df7fd0b8025d69",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs",
+      "sha256": "5083b83806884317615cb51a3844576052e1f7e1809acf72dbdb9547968b1f34",
+      "untracked": false
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/GatewaySmokeBoundaryTests.cs",
+      "sha256": "6942aa981c343593b50929af786cc74c7d0aa8d2fe847ce6c9bf0b11c4dcd931",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "sha256": "c1c8c053bad7f8bdc020083d41a5f52c37bb3693f10dc16106e22462778022b1",
+      "untracked": false
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/TopologyAccessControlTests.cs",
+      "sha256": "77a07caf453c3528f40897ac43df29eddc379e8956003ba31ed1e644cad34bb9",
+      "untracked": true
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs",
+      "sha256": "bfab6f72099630e3c1549a4c20f0517882d2a64c315874b0aa7e6f6b00362b46",
+      "untracked": true
+    },
+    {
+      "path": "tests/fixtures/Topology.DaprStub/Program.cs",
+      "sha256": "759a21a77dd30597082483c7d335110bc08cfd8e2e4422357ccc01eb19e092fe",
+      "untracked": true
+    },
+    {
+      "path": "tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj",
+      "sha256": "e623452e403dc346c41691b1d06c402074a76d8f11ebc6f58b78d7b4b7f792ac",
+      "untracked": true
+    },
+    {
+      "path": "tools/dependency-policy.json",
+      "sha256": "a01b15ff5bb5cbea6accd39a93c71fbdb0313996961d37fb1b8cec6f737fe5ca",
+      "untracked": false
+    }
+  ]
+}

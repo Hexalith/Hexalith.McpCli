@@ -1,0 +1,22 @@
+{
+  "inspectedAt": "2026-10-23T12:48:21.212833+00:00",
+  "version": "1.6.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hexalith/Hexalith.Parties",
+    "commit": "a4716d0da37b27762d9931c778223d13e85695dc"
+  },
+  "directDependencies": {
+    "Aspire.Hosting": "13.6.3",
+    "Hexalith.EventStore.Aspire": "3.126.1"
+  },
+  "assemblies": {
+    "lib/net10.0/Hexalith.Parties.Aspire.dll": "ffb428476c3920ed6bdf759287884a40c44610fd221ea292784b46de70cfcd2b"
+  },
+  "nugetSignaturePresent": true,
+  "sourceMetadataValidatedByOwningValidator": true,
+  "freshRegistryRestoreMatchedArchive": true,
+  "serverFreeResolvedPackageCount": 80,
+  "sourceLocatorProbeCount": 6,
+  "result": "pass"
+}

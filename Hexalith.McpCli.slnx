@@ -7,6 +7,9 @@
     <Project Path="src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" />
+    <Project Path="tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj" />
+    <Project Path="tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj" />
     <Project Path="tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
     <Project Path="tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj" />
     <Project Path="tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj" />

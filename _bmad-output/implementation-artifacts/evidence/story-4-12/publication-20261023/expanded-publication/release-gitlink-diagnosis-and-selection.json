@@ -1,0 +1,69 @@
+{
+  "recordedAt": "2026-10-23T12:02:03.339873+00:00",
+  "authorizedSourceSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "owner": "jpiquot",
+  "authenticatedOwnerId": 6775094,
+  "change": "Append only selection authorization for eight already committed user-selected root identities; preserve all historical rows.",
+  "gitlinksMoved": false,
+  "newRuntimeOrDependencyCode": false,
+  "rows": [
+    {
+      "path": "references/Hexalith.EventStore",
+      "sourceSha": "cd193902a52abb02572528958436d79a8ae25b9a",
+      "describe": "v3.126.1-41-gcd193902a",
+      "clean": true,
+      "releaseFloorSha": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9"
+    },
+    {
+      "path": "references/Hexalith.Memories",
+      "sourceSha": "b55db82c060caf917a142fdb6585fa7340b01647",
+      "describe": "v2.29.8-17-gb55db82c",
+      "clean": true,
+      "releaseFloorSha": "0af009c20c97038b685f3d4b62c0c8e757982d14"
+    },
+    {
+      "path": "references/Hexalith.FrontComposer",
+      "sourceSha": "8c61143ef4c6a983bfe1d25865857b9b4cd240c9",
+      "describe": "v4.7.0-64-g8c61143e",
+      "clean": true,
+      "releaseFloorSha": "a258b992d08e73e2d3251c865ef01a982eba31ac"
+    },
+    {
+      "path": "references/Hexalith.Tenants",
+      "sourceSha": "25e3bf827a7963ec79b57b4918290b3fed728706",
+      "describe": "v5.10.1-24-g25e3bf82",
+      "clean": true,
+      "releaseFloorSha": "66def172379f37d12e746fe6eb9195801929c572"
+    },
+    {
+      "path": "references/Hexalith.Commons",
+      "sourceSha": "1663028fb6d9f46a0bf17919edeb21bb99be1587",
+      "describe": "v2.30.3-4-g1663028",
+      "clean": true,
+      "releaseFloorSha": "5c23c818f639c5bb3175f964c5549440bd5b876d"
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "sourceSha": "70ead608ac01f66dfcd80c13bb71152dac6c128e",
+      "describe": "v4.36.0-11-g70ead60",
+      "clean": true,
+      "releaseFloorSha": "3fcb8f38919bb0961b06a19b57aa45623b35a33e"
+    },
+    {
+      "path": "references/Hexalith.McpCli",
+      "sourceSha": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+      "describe": "v1.0.0-59-gbe89509",
+      "clean": true,
+      "releaseFloorSha": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65"
+    },
+    {
+      "path": "references/Hexalith.Platform",
+      "sourceSha": "1d646b232ad862f6da1d8dd0953fe96ccd273fee",
+      "describe": "1d646b2",
+      "clean": true,
+      "releaseFloorSha": "d189c7de74293e1a718e5e78b1b3b7c0e47b48b5"
+    }
+  ],
+  "previousLedgerSha256": "545a6256ed0c462bfc46e87ea1d71a3ac65838ae660bb7c04c27523731fb3a2f",
+  "newLedgerSha256": "9981b2b4039cc3db5eaafd411b712608feb60fcde00c64d20771365708c2f832"
+}

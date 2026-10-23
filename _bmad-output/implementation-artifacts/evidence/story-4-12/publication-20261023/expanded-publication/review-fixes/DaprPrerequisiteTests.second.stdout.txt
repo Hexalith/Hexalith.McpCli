@@ -1,0 +1,14 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "basic", expected: null) [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "DAPR integration prerequisites are unavailable. Ru"···
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(62,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '61220d80c6b9679efd5639fc1a77b1bbce87a4c2521c0d57a9bf7a6d75f3a29f')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 10, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 7.409s

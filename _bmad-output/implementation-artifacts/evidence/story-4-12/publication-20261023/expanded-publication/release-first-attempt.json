@@ -1,0 +1,136 @@
+{
+  "conclusion": "failure",
+  "headSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "jobs": [
+    {
+      "completedAt": "2026-10-23T11:53:56Z",
+      "conclusion": "success",
+      "databaseId": 120399618894,
+      "name": "Verify exact green main source",
+      "startedAt": "2026-10-23T11:53:48Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Require current main with successful exact-source CI and range proof",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Require registry versions at or below the release tag floor",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 4,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39949316094/job/120399618894"
+    },
+    {
+      "completedAt": "2026-10-23T11:59:45Z",
+      "conclusion": "failure",
+      "databaseId": 120399689670,
+      "name": "release",
+      "startedAt": "2026-10-23T11:54:19Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Check out dispatched source",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Prepare domain release",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "failure",
+          "name": "Validate changed root gitlinks before publication",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Set up arm64 emulation",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Prepare release container publisher",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "NuGet trusted publishing login",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Semantic Release",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload complete release evidence",
+          "number": 9,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Prepare domain release",
+          "number": 17,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Check out dispatched source",
+          "number": 18,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39949316094/job/120399689670"
+    },
+    {
+      "completedAt": "2026-10-23T11:59:46Z",
+      "conclusion": "skipped",
+      "databaseId": 120401958345,
+      "name": "Verify complete exact-source publication",
+      "startedAt": "2026-10-23T11:59:46Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39949316094/job/120401958345"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39949316094"
+}

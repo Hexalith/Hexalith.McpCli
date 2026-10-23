@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "exitCode": 0,
+  "expectedVersion": "21.2.2",
+  "actualVersion": "21.2.2",
+  "messageSha256": "eb3d4cd2bb8b0fa2df8d873311e8315e8c491c3bf7a8d1fc308de71ccfc2b5c9",
+  "messageFile": "/tmp/mcpcli-4-12-commit-axtciiwh/message.txt",
+  "npmCiExitCode": 0
+}

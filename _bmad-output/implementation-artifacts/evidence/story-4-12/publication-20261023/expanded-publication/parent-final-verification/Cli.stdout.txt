@@ -1,0 +1,50 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync
+  Windows file attributes are required for this fixture.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync
+  Windows ACLs are required for this fixture.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Cli.Tests.QueryCommandTests.PayloadSourcesUseOneDescriptorRoutedPostAsync(source: "inline", aggregateSource: "accessor", nullPayload: True, tenantFlag: True) (15ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+  Xunit.MicrosoftTestingPlatform.XunitException: System.InvalidOperationException : Please call the Start() method before calling this method.
+    at System.Net.HttpListener.BeginGetContext(AsyncCallback callback, Object state)
+    at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl(Func`3 beginMethod, Func`2 endFunction, Action`1 endAction, Object state, TaskCreationOptions creationOptions)
+    at Hexalith.McpCli.Cli.Tests.QueryCommandTests.<>c__DisplayClass2_0.<<PayloadSourcesUseOneDescriptorRoutedPostAsync>b__0>d.MoveNext() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/QueryCommandTests.cs:68
+    --- End of stack trace from previous location ---
+    at Hexalith.McpCli.Cli.Tests.QueryCommandTests.PayloadSourcesUseOneDescriptorRoutedPostAsync(String source, String aggregateSource, Boolean nullPayload, Boolean tenantFlag) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/QueryCommandTests.cs:177
+    --- End of stack trace from previous location ---
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) failed with 1 error(s) (23s 579ms)
+Exit code: 2
+  Error output: info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:36997/api/v1/queries
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:36997/api/v1/queries
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 3.8666ms - 200
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 4.4182ms - 200
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:46147/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:46147/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 1.8677ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 1.9645ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:42845/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:42845/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 0.7439ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 0.8315ms - 202
+
+Test run summary: Failed!
+  total: 481
+  failed: 1
+  succeeded: 478
+  skipped: 2
+  duration: 23s 776ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

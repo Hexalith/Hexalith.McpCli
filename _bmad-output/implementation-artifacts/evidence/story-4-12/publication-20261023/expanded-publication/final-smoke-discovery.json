@@ -1,0 +1,13 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-list",
+    "tests"
+  ],
+  "exitCode": 0,
+  "discovered": [
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"
+  ],
+  "startsSourceServices": false
+}

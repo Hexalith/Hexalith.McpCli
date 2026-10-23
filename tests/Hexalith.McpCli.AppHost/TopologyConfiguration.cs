@@ -139,7 +139,9 @@ internal static class TopologyConfiguration
 
         if (process.ExitCode != 0)
         {
-            throw new InvalidOperationException($"Topology conflict check 'dapr list --output json' exited {process.ExitCode}.");
+            string detail = error.GetAwaiter().GetResult().Trim();
+            if (detail.Length > 512) detail = detail[..512] + "...";
+            throw new InvalidOperationException($"Topology conflict check 'dapr list --output json' exited {process.ExitCode}. stderr: {detail}");
         }
 
         ValidateRunningApplications(output.GetAwaiter().GetResult());
@@ -150,9 +152,9 @@ internal static class TopologyConfiguration
     /// <summary>Rejects an occupied or invalid Gateway sidecar port before launch.</summary>
     internal static void ValidateGatewayPort(int port)
     {
-        if (port is < 1 or > 65535)
+        if (port is < 1024 or > 65535)
         {
-            throw new InvalidOperationException("Dapr:GatewayHttpPort must be between 1 and 65535.");
+            throw new InvalidOperationException("Dapr:GatewayHttpPort must be between 1024 and 65535.");
         }
 
         using var listener = new TcpListener(IPAddress.Loopback, port);

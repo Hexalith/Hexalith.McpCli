@@ -1,0 +1,12 @@
+{
+  "runId": 39949316094,
+  "sourceSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "failedStep": "Validate changed root gitlinks before publication",
+  "reason": "Eight already committed user-advanced root identities lack matching validated-advance authorization rows relative to v1.5.2.",
+  "privateLogPath": "/tmp/story-4-12-release-39949316094/release-job.log",
+  "privateLogSha256": "57839d3adbec1ccf31064998ad5a01c81035719022441edfec5c636fd246ea1c",
+  "sanitizedExcerpt": "release-gitlink-failure.txt",
+  "releaseArtifactCount": 0,
+  "semanticReleaseInvoked": false,
+  "tagPackageOrImagePublished": false
+}

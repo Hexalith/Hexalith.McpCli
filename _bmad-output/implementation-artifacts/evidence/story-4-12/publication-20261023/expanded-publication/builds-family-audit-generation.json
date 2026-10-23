@@ -1,0 +1,21 @@
+{
+  "startedAt": "2026-10-23T12:51:13.343409+00:00",
+  "elapsedSeconds": 14.074,
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/audit-central-package-versions.ps1",
+    "-PriorAuditPath",
+    "/tmp/story-4-12-builds-audit-before.json",
+    "-Family",
+    "hexalith-parties",
+    "-OutputPath",
+    "Tools/package-version-audit.json"
+  ],
+  "exitCode": 0,
+  "declarationSourceSha": "29d420ca4e018c7ffe857834d4247a82d005cd08",
+  "priorAuditPath": "/tmp/story-4-12-builds-audit-before.json",
+  "priorAuditSha256": "548c19e833a71f7dbb03f7bf1120b8428a83ff0d3a194587d3805688bde1f7a7",
+  "generatedAuditSha256": "ff3fb5a0720934619a010a3097218e3ac245d1c3555928f2b1de30852c77a63e"
+}

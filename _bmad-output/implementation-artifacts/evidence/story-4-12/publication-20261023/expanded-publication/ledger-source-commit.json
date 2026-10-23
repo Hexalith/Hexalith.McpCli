@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-23T12:03:09.683230+00:00",
+  "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+  "authorizedParentSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "changedFiles": [
+    ".gitlink-signoff.tsv"
+  ],
+  "rootGitlinksMoved": false,
+  "onlySelectionAuthorizationReceipt": true,
+  "fullCommitMessageSha256": "464b1c3f6593203a3099089ebe4b8f94b38fef8a48270bf1fd163839e1a71371",
+  "normalExactSourceGatesRequired": true,
+  "artifactBuildInputsOrRuntimeCodeChanged": false,
+  "releaseAuthorizationInputChanged": true,
+  "sourceProvenanceShaChanges": true
+}

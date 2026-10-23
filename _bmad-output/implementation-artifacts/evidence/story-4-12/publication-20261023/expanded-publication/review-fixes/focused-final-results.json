@@ -1,0 +1,22 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 8.169
+  },
+  {
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.GatewaySmokeBoundaryTests"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 30.437
+  }
+]

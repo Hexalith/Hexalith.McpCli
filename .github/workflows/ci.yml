@@ -105,3 +105,30 @@ jobs:
           name: enrolled-module-evidence
           path: ${{ runner.temp }}/enrolled-evidence/
           if-no-files-found: warn
+
+  topology-smoke-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - name: Initialize root-declared Builds submodule
+        run: git submodule update --init -- references/Hexalith.Builds
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Build and discover the live smoke without starting source services
+        run: |
+          dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
+          dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
+          dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
+          python3 - "$RUNNER_TEMP/topology-smoke-discovery.txt" <<'PYTHON'
+          import pathlib, sys
+          discovered = [line for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
+                        if line.startswith("Hexalith.McpCli.Integration.Tests.")]
+          expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
+          if discovered != expected:
+              raise SystemExit(f"Expected exactly the live Gateway smoke; discovered {discovered!r}")
+          print(discovered[0])
+          PYTHON

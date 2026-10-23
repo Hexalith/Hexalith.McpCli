@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Cli-focused",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Cli.Tests.QueryCommandTests"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.966,
+    "counts": {}
+  },
+  {
+    "name": "Cli-retry",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 18.198,
+    "counts": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    }
+  },
+  {
+    "name": "Mcp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 3.032,
+    "counts": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    }
+  },
+  {
+    "name": "Manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 31.277,
+    "counts": {
+      "total": 177,
+      "failed": 0,
+      "succeeded": 177,
+      "skipped": 0
+    }
+  },
+  {
+    "name": "discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-list",
+      "tests"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.215,
+    "counts": {},
+    "discovered": [
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"
+    ]
+  }
+]

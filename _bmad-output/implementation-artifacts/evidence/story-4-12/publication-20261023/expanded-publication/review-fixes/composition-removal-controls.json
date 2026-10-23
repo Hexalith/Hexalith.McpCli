@@ -1,0 +1,37 @@
+[
+  {
+    "removed": "gateway-token",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "tenants-token",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "parties-token",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "gateway-acl",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "tenants-acl",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "parties-acl",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  },
+  {
+    "removed": "gateway-content-root",
+    "buildExitCode": 0,
+    "testExitCode": 1
+  }
+]

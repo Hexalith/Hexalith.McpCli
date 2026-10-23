@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" />
+    <PackageReference Include="Aspire.Hosting.Testing" />
+    <PackageReference Include="Hexalith.EventStore.Testing.Integration" />
+    <PackageReference Include="Hexalith.EventStore.Client" />
+    <PackageReference Include="Hexalith.Tenants.Contracts" />
+    <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />
+  </ItemGroup>
+</Project>

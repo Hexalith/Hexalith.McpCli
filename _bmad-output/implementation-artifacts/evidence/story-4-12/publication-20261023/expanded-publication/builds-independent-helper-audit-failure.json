@@ -1,0 +1,9 @@
+{
+  "declarationSourceSha": "29d420ca4e018c7ffe857834d4247a82d005cd08",
+  "command": "pwsh -NoProfile -File Tools/validate-package-version-audit.ps1",
+  "exitCode": 1,
+  "diagnostic": "Package version audit validation failed with 1 error(s):\n- Internal package family 'hexalith-parties' must select one aligned catalog version; found Hexalith.Parties.AdminPortal='1.5.2', Hexalith.Parties.Aspire='1.6.0', Hexalith.Parties.Client='1.5.2', Hexalith.Parties.ConsumerPortal='1.5.2', Hexalith.Parties.Contracts='1.5.2', Hexalith.Parties.Picker='1.5.2', Hexalith.Parties.Testing='1.5.2'.\n",
+  "failedAuditPath": "/tmp/story-4-12-builds-audit-unaligned-helper.json",
+  "failedAuditSha256": "ff3fb5a0720934619a010a3097218e3ac245d1c3555928f2b1de30852c77a63e",
+  "resolution": "Retain existing family-alignment gate; advance only the six global Parties defaults to the actual fully verified published 1.6.0. McpCli keeps its explicit production Contracts overrides."
+}

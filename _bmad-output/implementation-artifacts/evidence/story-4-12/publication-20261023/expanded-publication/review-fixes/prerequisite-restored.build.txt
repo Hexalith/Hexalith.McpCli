@@ -1,0 +1,8 @@
+  Hexalith.McpCli.AppHost -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll
+  Hexalith.McpCli.Integration.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.91

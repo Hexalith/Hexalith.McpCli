@@ -1,0 +1,2 @@
+Package version audit validation failed with 1 error(s):
+- Internal package family 'hexalith-parties' must select one aligned catalog version; found Hexalith.Parties.AdminPortal='1.5.2', Hexalith.Parties.Aspire='1.6.0', Hexalith.Parties.Client='1.5.2', Hexalith.Parties.ConsumerPortal='1.5.2', Hexalith.Parties.Contracts='1.5.2', Hexalith.Parties.Picker='1.5.2', Hexalith.Parties.Testing='1.5.2'.

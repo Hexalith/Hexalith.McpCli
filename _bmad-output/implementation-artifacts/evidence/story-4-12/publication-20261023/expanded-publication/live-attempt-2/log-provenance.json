@@ -1,0 +1,14 @@
+{
+  "runDirectory": "/tmp/mcpcli-story412-isolation-mhb5mtn8/runs/20261023T133305Z-296be73d",
+  "rawLogs": {
+    "command.stdout.txt": {
+      "bytes": 175707,
+      "sha256": "bca7ad18f5cb8711062347e909e4a608880a8e7c05748248b029df99db17290d"
+    },
+    "command.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "sampleMetadataMentions": 20
+}

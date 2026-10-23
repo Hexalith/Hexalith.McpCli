@@ -1,0 +1,11 @@
+{
+  "runDirectory": "/tmp/mcpcli-story412-bootstrap-4m5kgxwk/runtime/runs/20261023T143856Z-d299021f",
+  "stdoutSha256": "688f028e85d2a4a23083e5ed0ba02d94c14d1633bbaf3d1f16043d3c47c097a0",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "recordedGatewayPostStatuses": [
+    "401",
+    "401"
+  ],
+  "successfulAuthenticatedDocumentProof": "The executed smoke passed all pinned Gateway client result/document assertions. The final HTTP completion log was not flushed before resource disposal; no additional 200 log is claimed.",
+  "rawLogsRetainedOutsideRepository": true
+}

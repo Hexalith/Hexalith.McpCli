@@ -1,0 +1,10 @@
+{
+  "startedAt": "2026-10-23T11:53:44.633397+00:00",
+  "sourceSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "verifiedRemoteMainSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "authorization": "Explicit user approval of qualified expanded source 08f43497 and subsequent Builds/McpCli integration; ordinary protected-production approval authorized, automated gates retained.",
+  "command": "gh workflow run release.yml --repo Hexalith/Hexalith.Parties --ref main",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

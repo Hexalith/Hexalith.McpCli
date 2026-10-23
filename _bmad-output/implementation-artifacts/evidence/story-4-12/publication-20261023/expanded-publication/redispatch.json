@@ -1,0 +1,12 @@
+{
+  "dispatchedAt": "2026-10-23T12:33:46.347362+00:00",
+  "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+  "authorizedOriginalSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "onlyDelta": "Previously authorized root selection receipt in .gitlink-signoff.tsv",
+  "verifiedRemoteMainSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+  "exactSourceGates": "a471-gates/normal-gates.json",
+  "command": "gh workflow run release.yml --repo Hexalith/Hexalith.Parties --ref main",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

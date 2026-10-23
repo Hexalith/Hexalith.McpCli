@@ -1,0 +1,94 @@
+{
+  "namespaces": {
+    "user": "user:[4026532785]",
+    "pid": "pid:[4026532787]",
+    "net": "net:[4026532788]",
+    "mnt": "mnt:[4026532786]"
+  },
+  "supervisorPid": 1,
+  "services": {
+    "redis": {
+      "pid": 7,
+      "arguments": [
+        "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/redis-server",
+        "--bind",
+        "127.0.0.1",
+        "--port",
+        "6379",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--dir",
+        "/tmp/mcpcli-story412-isolation-mhb5mtn8/runs/20261023T131809Z-e79b5faf",
+        "--loglevel",
+        "warning"
+      ]
+    },
+    "placement": {
+      "pid": 8,
+      "arguments": [
+        "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/placement",
+        "--port",
+        "6050",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18080",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn"
+      ]
+    },
+    "scheduler": {
+      "pid": 9,
+      "arguments": [
+        "/tmp/mcpcli-story412-isolation-mhb5mtn8/bin/scheduler",
+        "--port",
+        "6060",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18081",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn",
+        "--etcd-data-dir",
+        "/tmp/mcpcli-story412-isolation-mhb5mtn8/runs/20261023T131809Z-e79b5faf/scheduler-data",
+        "--override-broadcast-host-port",
+        "127.0.0.1:6060"
+      ]
+    }
+  },
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests"
+  ],
+  "environmentOverrides": {
+    "GOMAXPROCS": "2",
+    "DOTNET_PROCESSOR_COUNT": "2",
+    "HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT": "6050",
+    "HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT": "6060",
+    "Dapr__PlacementHostAddress": "127.0.0.1:6050",
+    "Dapr__SchedulerHostAddress": "127.0.0.1:6060",
+    "Dapr__GatewayHttpPort": "3501"
+  },
+  "daprBeforeCommand": {
+    "exitCode": 0,
+    "applications": []
+  },
+  "prerequisitesReady": true,
+  "commandExitCode": 1,
+  "commandElapsedSeconds": 49.607,
+  "ownedInfrastructureStopped": {
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  }
+}

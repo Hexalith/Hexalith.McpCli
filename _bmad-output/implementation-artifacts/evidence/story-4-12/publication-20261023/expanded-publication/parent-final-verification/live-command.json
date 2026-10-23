@@ -1,0 +1,20 @@
+{
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "960",
+    "python3",
+    "_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/private-runtime/run-isolated.py",
+    "--",
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests"
+  ],
+  "environmentOverrides": {
+    "MCPCLI_ISOLATED_RUNTIME_DIR": "/tmp/mcpcli-story412-bootstrap-4m5kgxwk/runtime"
+  },
+  "exitCode": 0,
+  "elapsedSeconds": 24.77
+}

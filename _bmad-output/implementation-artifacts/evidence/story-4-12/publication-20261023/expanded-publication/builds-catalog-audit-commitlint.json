@@ -1,0 +1,18 @@
+[
+  {
+    "purpose": "catalog",
+    "lockedCliVersion": "21.2.4",
+    "actualInstalledCliVersion": "21.2.4",
+    "nodeVersion": "24.22.1",
+    "fullMessageSha256": "28e168189d401b121103188639f71af7e379b8ddcf804ab1038f73d454744897",
+    "exitCode": 0
+  },
+  {
+    "purpose": "audit",
+    "lockedCliVersion": "21.2.4",
+    "actualInstalledCliVersion": "21.2.4",
+    "nodeVersion": "24.22.1",
+    "fullMessageSha256": "40a049a76f50989b0059487dbae7f6f3f9ce0432ff46cfb0088df8c57bb884a1",
+    "exitCode": 0
+  }
+]

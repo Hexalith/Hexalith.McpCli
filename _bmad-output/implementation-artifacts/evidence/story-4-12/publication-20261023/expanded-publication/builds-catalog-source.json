@@ -1,0 +1,16 @@
+{
+  "committedAt": "2026-10-23T12:50:51.021853+00:00",
+  "sourceSha": "29d420ca4e018c7ffe857834d4247a82d005cd08",
+  "baseSha": "b51924a4a44b58091f1dd71067d2b7aece1ad71e",
+  "files": [
+    "Props/Directory.Packages.props",
+    "Tools/package-version-exceptions.json"
+  ],
+  "publishedHelperVersion": "1.6.0",
+  "publishedHelperSha256": "6b7678949525490453e07113611d19a7e7d6cf3c0b64e427773694da0f457695",
+  "existing306SelectionsUnchanged": true,
+  "lockedCliVersion": "21.2.4",
+  "actualInstalledCliVersion": "21.2.4",
+  "fullCommitMessageSha256": "28e168189d401b121103188639f71af7e379b8ddcf804ab1038f73d454744897",
+  "auditStillToRegenerate": true
+}

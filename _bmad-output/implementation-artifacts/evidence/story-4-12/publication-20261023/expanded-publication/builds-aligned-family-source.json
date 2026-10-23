@@ -1,0 +1,9 @@
+{
+  "committedAt": "2026-10-23T12:57:59.870333+00:00",
+  "sourceSha": "f47b7eed4a8bce09e586fcac6e83ffa6688f8923",
+  "changedFile": "Props/Directory.Packages.props",
+  "globalOnlyChangedSelections": 6,
+  "mcpCliExistingSelectionsUnchanged": true,
+  "validatorRelaxed": false,
+  "fullCommitMessageSha256": "00a3e531666c76e07c9a8810c3189fe94374202c02b632e74a7ab0f147fe9a6d"
+}

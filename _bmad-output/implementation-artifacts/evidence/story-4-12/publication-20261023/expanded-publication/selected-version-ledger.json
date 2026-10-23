@@ -1,0 +1,11 @@
+{
+  "sourceSha": "a4716d0da37b27762d9931c778223d13e85695dc",
+  "previousTag": "v1.5.2",
+  "releaseType": "minor",
+  "commitCount": 27,
+  "selectedVersion": "1.6.0",
+  "nodeVersion": "v24.22.1",
+  "operation": "Pure pinned commit analysis; no semantic-release verify/prepare/tag/publish hooks invoked",
+  "commitAnalyzerVersion": "13.0.1",
+  "published": false
+}

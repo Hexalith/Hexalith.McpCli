@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-10-23T13:15:21.847390+00:00",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Manifest.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 31.114,
+  "supersedes": "mcpcli-manifest-tests.json (one positive assertion included its own root as a package)"
+}

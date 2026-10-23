@@ -1,0 +1,63 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "cli", expected: "Dapr CLI is not available on PATH.") [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Dapr CLI is not available on PATH."
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "slow-cli", expected: "Dapr CLI '--version' exceeded 3 seconds.") [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Dapr CLI '--version' exceeded 3 seconds."
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "DAPR_TRUST_ANCHORS", expected: "Required mTLS credential DAPR_TRUST_ANCHORS is mis"···) [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS credential DAPR_TRUST_ANCHORS is mis"···
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "DAPR_CERT_CHAIN", expected: "Required mTLS credential DAPR_CERT_CHAIN is missin"···) [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS credential DAPR_CERT_CHAIN is missin"···
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "DAPR_CERT_KEY", expected: "Required mTLS credential DAPR_CERT_KEY is missing.") [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS credential DAPR_CERT_KEY is missing."
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "NAMESPACE", expected: "Required mTLS setting NAMESPACE must be 'default'.") [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS setting NAMESPACE must be 'default'."
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "DAPR_CONTROLPLANE_NAMESPACE", expected: "Required mTLS setting DAPR_CONTROLPLANE_NAMESPACE "···) [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS setting DAPR_CONTROLPLANE_NAMESPACE "···
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+    Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(missing: "DAPR_CONTROLPLANE_TRUST_DOMAIN", expected: "Required mTLS setting DAPR_CONTROLPLANE_TRUST_DOMA"···) [FAIL]
+      Assert.Contains() Failure: Sub-string not found
+      String:    "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f ("···
+      Not found: "Required mTLS setting DAPR_CONTROLPLANE_TRUST_DOMA"···
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs(67,0): at Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess(String missing, String expected)
+        --- End of stack trace from previous location ---
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '61220d80c6b9679efd5639fc1a77b1bbce87a4c2521c0d57a9bf7a6d75f3a29f')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 10, Errors: 0, Failed: 8, Skipped: 0, Not Run: 0, Time: 3.952s

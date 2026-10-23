@@ -1,0 +1,15 @@
+{
+  "startedAt": "2026-10-23T13:11:27.960092+00:00",
+  "command": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 6.228
+}
