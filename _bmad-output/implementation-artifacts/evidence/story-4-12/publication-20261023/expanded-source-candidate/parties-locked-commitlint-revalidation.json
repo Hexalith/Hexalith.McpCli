@@ -1,0 +1,62 @@
+{
+  "owningRepository": "Hexalith/Hexalith.Parties",
+  "actualLockedCliVersion": "21.2.2",
+  "nodeVersion": "24.22.1",
+  "initialIsolatedToolCacheVersion": "21.2.4",
+  "initialToolWasLockfilePinned": false,
+  "historicalReceipts": "Original committed-message output receipts remain unchanged in the parent folder; this canonical raw-message validation supersedes their local tool qualification. Remote successful owning commitlint gates remain independent evidence.",
+  "pendingReceiptCaveat": "The first generic pending-message output filenames were reused during early revalidation; the separately named locked message/output files here are authoritative.",
+  "command": "node-24.22.1 node_modules/@commitlint/cli/cli.js --verbose < canonical-message.txt",
+  "existingMessages": [
+    {
+      "sha": "4449020abcc01080a2375c7141b39aa18913d4aa",
+      "messageSha256": "154e285d031f98f643a75f4cc55adb622b4656340c5efb8aeae1578cfb187e18",
+      "messageBytes": 177,
+      "messageFile": "parties-locked-4449020a-message.txt",
+      "exitCode": 0
+    },
+    {
+      "sha": "f2c1b1968c10b04ce5a5ef41685248b01c1da40b",
+      "messageSha256": "267499de6f2ebe356dfdc95438ef6fdfac2c5485e6f9c879fe0614f82dd1a8d1",
+      "messageBytes": 191,
+      "messageFile": "parties-locked-f2c1b196-message.txt",
+      "exitCode": 0
+    },
+    {
+      "sha": "ad44f1d433799b2e1ca37a0bdb722a2ecfe09c87",
+      "messageSha256": "19f92be002bdbeb29989199f2c55a625a76cbf009b1805b0db5e1832f52deaef",
+      "messageBytes": 175,
+      "messageFile": "parties-locked-ad44f1d4-message.txt",
+      "exitCode": 0
+    },
+    {
+      "sha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+      "messageSha256": "e17632462b4dc44bd1c148b085c766f7c6be21ee48d553575facfe0f1fffd538",
+      "messageBytes": 251,
+      "messageFile": "parties-locked-a413dc7d-message.txt",
+      "exitCode": 0
+    },
+    {
+      "sha": "287aa8e0bc5a68d7845cd0eb0927519f7889b6b4",
+      "messageSha256": "f63924d68515026a63ce0c2ba17f6bbefef13b8221b5477b6035f6b43342fa97",
+      "messageBytes": 58,
+      "messageFile": "parties-locked-287aa8e0-message.txt",
+      "exitCode": 0
+    },
+    {
+      "sha": "0f336bd005dbed9e2e278bc1861dfc0fb2322a15",
+      "messageSha256": "479dfc96186d65386390c7f2320f4d862b0c5e79ce6987e0a04379fa4c984662",
+      "messageBytes": 49,
+      "messageFile": "parties-locked-0f336bd0-message.txt",
+      "exitCode": 0
+    }
+  ],
+  "pendingMessage": {
+    "messageFile": "parties-backport-pin-locked-message.txt",
+    "messageSha256": "113379a3f4ad1853668429ca7e8782f0e27c124e57a2e1062f635f01e71083c3",
+    "messageBytes": 47,
+    "exitCode": 0
+  },
+  "usedCommitSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "committedMessageMatchesValidatedHash": true
+}

@@ -1,0 +1,12 @@
+{
+  "runId": 39931847401,
+  "sourceSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "approvedAt": "2026-10-23T09:29:53.744210+00:00",
+  "environmentId": 19131558330,
+  "environment": "production",
+  "authorization": "Existing explicit user authorization recorded in story spec Implementation Notes",
+  "normalPendingDeploymentApproval": true,
+  "deploymentIds": [
+    7274808370
+  ]
+}

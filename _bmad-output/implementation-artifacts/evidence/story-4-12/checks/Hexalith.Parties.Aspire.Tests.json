@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.Parties.Aspire.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:19:22.480421+00:00",
+  "exitCode": 0,
+  "stdout": "Running tests from <isolated-parties-snapshot>/tests/Hexalith.Parties.Aspire.Tests/bin/Release/net10.0/Hexalith.Parties.Aspire.Tests.dll (net10.0|x64)\n<isolated-parties-snapshot>/tests/Hexalith.Parties.Aspire.Tests/bin/Release/net10.0/Hexalith.Parties.Aspire.Tests.dll (net10.0|x64) passed (1s 021ms)\n\nTest run summary: Passed!\n  total: 9\n  failed: 0\n  succeeded: 9\n  skipped: 0\n  duration: 1s 375ms\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:19:24.828665+00:00"
+}

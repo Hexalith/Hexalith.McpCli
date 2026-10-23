@@ -1,0 +1,402 @@
+{
+  "conclusion": "success",
+  "event": "push",
+  "headBranch": "prerelease",
+  "headSha": "d9070aa0d43feb9e3359286bc797d2be65960727",
+  "jobs": [
+    {
+      "completedAt": "2026-10-23T11:10:21Z",
+      "conclusion": "success",
+      "databaseId": 120374940398,
+      "name": "Build and test",
+      "startedAt": "2026-10-23T10:51:02Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Initialize .NET",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate central package versions",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test authoritative package catalog",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test central package version validator",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate package version audit",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test package version audit generator",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test package version audit validator",
+          "number": 9,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate Builds consumer package authority",
+          "number": 10,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test consumer package authority validator",
+          "number": 11,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate package version exception inventory",
+          "number": 12,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test package version exception validator",
+          "number": 13,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate Dapr package versions",
+          "number": 14,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test Dapr package validator",
+          "number": 15,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test domain workflow test-platform contracts",
+          "number": 16,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test caller-owned domain release preparation",
+          "number": 17,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Setup Node.js",
+          "number": 18,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Install Node.js dependencies",
+          "number": 19,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Verify npm dependency provenance and signatures",
+          "number": 20,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test commitlint workflow contracts",
+          "number": 21,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test legacy package publisher contracts",
+          "number": 22,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-4 tool package publisher contracts",
+          "number": 23,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-4 release lifecycle contracts",
+          "number": 24,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-4 release source guard",
+          "number": 25,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-4 tool package qualification gate",
+          "number": 26,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-4 tool package artifact validator",
+          "number": 27,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Restore",
+          "number": 28,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Build",
+          "number": 29,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test Hexalith.Builds.Module.Tests",
+          "number": 30,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test Hexalith.Builds.Evidence.Tests",
+          "number": 31,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test Hexalith.Builds.Tooling.IntegrationTests",
+          "number": 32,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Qualify G-4 tool source and Release packages",
+          "number": 33,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test multi-platform container publisher contracts",
+          "number": 34,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test governed workflow provenance",
+          "number": 35,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Setup Node.js",
+          "number": 68,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Initialize .NET",
+          "number": 69,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 70,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 71,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39941850208/job/120374940398"
+    },
+    {
+      "completedAt": "2026-10-23T10:50:41Z",
+      "conclusion": "success",
+      "databaseId": 120374940570,
+      "name": "Python contract tests",
+      "startedAt": "2026-10-23T10:50:24Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test G-6 runtime/toolchain evidence validator",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test container publisher helpers",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test governed workflow provenance evaluator",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Setup Node.js",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Install Node.js dependencies",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Test commitlint helpers",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Setup Node.js",
+          "number": 15,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 16,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39941850208/job/120374940570"
+    },
+    {
+      "completedAt": "2026-10-23T10:53:46Z",
+      "conclusion": "success",
+      "databaseId": 120374940659,
+      "name": "CodeQL / analyze",
+      "startedAt": "2026-10-23T10:51:08Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Initialize CodeQL",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Perform CodeQL Analysis",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Perform CodeQL Analysis",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Initialize CodeQL",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 9,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39941850208/job/120374940659"
+    },
+    {
+      "completedAt": "2026-10-23T10:49:56Z",
+      "conclusion": "skipped",
+      "databaseId": 120374941943,
+      "name": "Dependency review",
+      "startedAt": "2026-10-23T10:49:56Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39941850208/job/120374941943"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/39941850208",
+  "workflowDatabaseId": 320718206
+}

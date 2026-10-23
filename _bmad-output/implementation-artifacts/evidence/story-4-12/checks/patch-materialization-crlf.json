@@ -1,0 +1,35 @@
+{
+  "result": "pass",
+  "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "taskTreeSha256": "023abd2f23d0e56dd6a4474bb8e07ba3a2e4f113c0da66dbb967f52e951324fa",
+  "patchSha256": "eaf3003eeab9ce1dcaf19f75837a5b80472a62d053263c66fb4a016436b36be0",
+  "verifiedFileCount": 26,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "<evidence>/parties-helper.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "<evidence>/parties-helper.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "note": "CR-at-EOL recognition honors required C# CRLF; no repository config or owning index was changed."
+}

@@ -1,0 +1,1402 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index c7bdfca..6f26685 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -105,3 +105,30 @@ jobs:
+           name: enrolled-module-evidence
+           path: ${{ runner.temp }}/enrolled-evidence/
+           if-no-files-found: warn
++
++  topology-smoke-discovery:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          submodules: false
++      - name: Initialize root-declared Builds submodule
++        run: git submodule update --init -- references/Hexalith.Builds
++      - name: Set up .NET
++        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
++        with:
++          global-json-file: global.json
++      - name: Build and discover the live smoke without starting source services
++        run: |
++          dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
++          dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
++          dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
++          python3 - "$RUNNER_TEMP/topology-smoke-discovery.txt" <<'PYTHON'
++          import pathlib, sys
++          discovered = [line for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
++                        if line.startswith("Hexalith.McpCli.Integration.Tests.")]
++          expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
++          if discovered != expected:
++              raise SystemExit(f"Expected exactly the live Gateway smoke; discovered {discovered!r}")
++          print(discovered[0])
++          PYTHON
+diff --git a/Hexalith.McpCli.slnx b/Hexalith.McpCli.slnx
+index a5e8c99..a3d4e12 100644
+--- a/Hexalith.McpCli.slnx
++++ b/Hexalith.McpCli.slnx
+@@ -7,6 +7,9 @@
+     <Project Path="src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
+   </Folder>
+   <Folder Name="/tests/">
++    <Project Path="tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" />
++    <Project Path="tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj" />
++    <Project Path="tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj" />
+     <Project Path="tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
+     <Project Path="tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj" />
+     <Project Path="tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj" />
+diff --git a/README.md b/README.md
+index d6c818b..c3f832e 100644
+--- a/README.md
++++ b/README.md
+@@ -94,7 +94,7 @@ The CLI and MCP server share one catalog and executor. McpCli discovers operatio
+ 
+ `DependencyPolicyTests` enforces this boundary against the restored production graph and project references. `tools/dependency-policy.json` pins the exact closure reachable from the approved stack roots, the Decoration Package, and each flagged Contracts module. A module cannot widen that baseline or import another module's packages. Every rejected dependency includes its resolved identity and path from `Hexalith.McpCli`; every restored package permits only the `Microsoft.NETCore.App` framework reference. Adding a production direct root requires a PRD change and review of `directPackages`.
+ 
+-Test projects may use the policy's `directPackages`, enrolled modules, the Decoration Package, the named test packages (including EventStore testing/Aspire helpers and `Hexalith.Tenants.Aspire`), and the synthetic `Hexalith.McpCli.Sample.Contracts` fixture. Any other package, including one listed only in `baselinePackages`, is rejected as a direct test dependency. The gate checks the references evaluated in Debug and Release, plus every `PackageReference` and `ProjectReference` in the test project file itself, whatever its condition. The test packages and the sample are rejected in the production runtime graph even if added to a production policy list. The build-time analyzer project at `src/Hexalith.McpCli.Analyzers` is excluded from the production source-project checks; it uses `Microsoft.CodeAnalysis.CSharp` and `Microsoft.CodeAnalysis.Analyzers` with `PrivateAssets="all"`. Test projects may reference local `src/` projects and `tests/` fixtures, but cannot reference projects in `references/`. `Hexalith.Parties.Aspire` remains unapproved until published and reviewed.
++Test projects may use the policy's `directPackages`, enrolled modules, the Decoration Package, the named test packages (including EventStore testing/Aspire helpers and `Hexalith.Tenants.Aspire`), and the synthetic `Hexalith.McpCli.Sample.Contracts` fixture. Any other package, including one listed only in `baselinePackages`, is rejected as a direct test dependency. The gate checks the references evaluated in Debug and Release, plus every `PackageReference` and `ProjectReference` in the test project file itself, whatever its condition. The test packages and the sample are rejected in the production runtime graph even if added to a production policy list. The build-time analyzer project at `src/Hexalith.McpCli.Analyzers` is excluded from the production source-project checks; it uses `Microsoft.CodeAnalysis.CSharp` and `Microsoft.CodeAnalysis.Analyzers` with `PrivateAssets="all"`. Test projects may reference local `src/` projects and `tests/` fixtures, but cannot reference projects in `references/`. `Hexalith.Parties.Aspire` 1.6.0 is approved only for this test topology after exact published archive and closure review. Its independent Builds pin leaves the production Parties Contracts pin unchanged. The AppHost helper closure is checked separately and cannot contain implementation packages; the already approved EventStore testing roots retain their recorded platform testing closure.
+ 
+ Offline captured closures prove that decorated Tenants- and Parties-shaped packages can depend on McpCli Abstractions without adding production dependencies. `Hexalith.Projects.Contracts` 1.0.0 remains excluded: its closure adds `Microsoft.AspNetCore.App` and UI/web dependencies such as Fluxor, Fluent UI, and FrontComposer.Shell. Adding those packages to the baseline still fails the gate. Run a fresh `dotnet restore Hexalith.McpCli.slnx` before building and running `tests/Hexalith.McpCli.Manifest.Tests`; the candidate checks read committed fixtures and require no network restore.
+ 
+@@ -225,3 +225,26 @@ The stdio MCP server advertises five generic tools in a normal session, in this
+ MCP execution requires `operation` and `payload` as strings: `payload` contains JSON text with the module's property casing, for example `{"operation":"sample.get-item","payload":"{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}"}` for an enrolled sample contract. File and stdin shorthand (`@file`, `-`) belongs to the CLI; MCP passes JSON text directly. Both execution tools accept optional string `tenant` and `aggregateId`. `send_command` also accepts string `correlationId` and `idempotencyKey`, plus an `extensions` object mapping keys to string values. `run_query` accepts string `entityId` and `cursor`, plus integer `pageSize` and `offset`. The tenant, identifier, extension, and paging rules above apply unchanged.
+ 
+ MCP success returns the same complete document as CLI/Core in `structuredContent`, with `isError: false` and matching JSON in the first text content item. Command results omit `idempotencyKey` unless supplied and `result` unless returned; query results always contain `document`, preserving objects, scalars, arrays, and JSON null, and include `paging` only when the Gateway returns it. Core refusals and Gateway failures return `isError: true` with the same `{"error": ...}` document in structured and text content. Unexpected tool exceptions return a sanitized `internal_error`. Missing required arguments and values that do not match the input schema return JSON-RPC invalid-parameters errors before execution. `run_query` `pageSize` and `offset` values that are not representable as an Int32 integer (for example `2147483648`, `25.0`, or `1e20`) also return invalid-parameters, with the message "<field> must be representable as an Int32 integer." Each advertised output schema has an object root and closed success/error document branches; embedded payload schemas and returned JSON values retain their own allowed structure. Both the legacy `2025-06-18` initialization flow and the `2026-07-28` discovery flow are verified through SDK stdio clients.
++
++
++## Live topology smoke
++
++The test AppHost composes the root EventStore, Tenants and Parties servers through published Aspire helpers. It requires only the direct checkouts declared in this repository's `.gitmodules`; it refuses missing, undeclared, linked or copied source directories before starting resources. No server project or module implementation package is added to McpCli.
++
++Initialize only those root dependencies, then build each source server from its own checkout. Each command has a separate five-minute bound and uses published sibling dependencies:
++
++```bash
++git submodule update --init -- references/Hexalith.Builds references/Hexalith.EventStore references/Hexalith.Tenants references/Hexalith.Parties
++(cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true)
++(cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true)
++(cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true)
++dotnet restore Hexalith.McpCli.slnx
++dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror
++dotnet test tests/Hexalith.McpCli.Integration.Tests --no-build --configuration Release
++```
++
++`timeout` is the GNU coreutils command; on other platforms use an equivalent process deadline. Install the Dapr CLI and run `dapr init` first; Redis, placement and scheduler must be reachable. Missing prerequisites produce the platform diagnostic, `DAPR integration prerequisites are unavailable. Run 'dapr init' and ensure Redis, placement, and scheduler are reachable.`, and a skipped smoke. A skip does not establish live acceptance.
++
++The shared platform fixture owns startup, liveness checks and disposal. Startup uses its six-minute startup budget and explicit two-minute resource readiness/liveness bounds. After liveness passes, the smoke sends one authenticated `ListTenants` query through the pinned Gateway client with a separate 30-second deadline and requires a successful document. Each fixture generates its own short-lived signing key and test identity; JWT validation and sidecar app-channel authentication stay enabled. No identity server is required.
++
++The requested Dapr IDs are `eventstore`, `tenants` and `parties`, with Gateway sidecar HTTP port `3501`. Existing registrations or an occupied port cause an explicit conflict failure; the harness never stops, restarts or reuses a user topology. Run the smoke only when these identities and port are available. The focused CI discovery job builds and lists this smoke without starting source services. Full live vector semantics and the blocking source-build Aspire lane remain separate follow-up stories.
+diff --git a/tests/Hexalith.McpCli.AppHost/DaprComponents/accesscontrol.yaml b/tests/Hexalith.McpCli.AppHost/DaprComponents/accesscontrol.yaml
+new file mode 100644
+index 0000000..59c1c02
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/DaprComponents/accesscontrol.yaml
+@@ -0,0 +1,36 @@
++apiVersion: dapr.io/v1alpha1
++kind: Configuration
++metadata:
++  name: mcpcli-live-access
++spec:
++  accessControl:
++    defaultAction: deny
++    trustDomain: public
++    policies:
++      - appId: eventstore
++        defaultAction: deny
++        trustDomain: public
++        namespace: default
++        operations:
++          - name: /process
++            httpVerb: ['POST']
++            action: allow
++          - name: /query
++            httpVerb: ['POST']
++            action: allow
++      - appId: tenants
++        defaultAction: deny
++        trustDomain: public
++        namespace: default
++        operations:
++          - name: /api/v1/queries
++            httpVerb: ['POST']
++            action: allow
++      - appId: parties
++        defaultAction: deny
++        trustDomain: public
++        namespace: default
++        operations:
++          - name: /api/v1/queries
++            httpVerb: ['POST']
++            action: allow
+diff --git a/tests/Hexalith.McpCli.AppHost/DaprComponents/pubsub.yaml b/tests/Hexalith.McpCli.AppHost/DaprComponents/pubsub.yaml
+new file mode 100644
+index 0000000..c73bf0c
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/DaprComponents/pubsub.yaml
+@@ -0,0 +1,13 @@
++apiVersion: dapr.io/v1alpha1
++kind: Component
++metadata:
++  name: pubsub
++spec:
++  type: pubsub.redis
++  version: v1
++  metadata:
++    - name: redisHost
++      value: localhost:6379
++    - name: redisPassword
++      value: ''
++scopes: [eventstore, tenants, parties]
+diff --git a/tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml b/tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml
+new file mode 100644
+index 0000000..30998d1
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml
+@@ -0,0 +1,17 @@
++apiVersion: dapr.io/v1alpha1
++kind: Component
++metadata:
++  name: statestore
++spec:
++  type: state.redis
++  version: v1
++  metadata:
++    - name: redisHost
++      value: localhost:6379
++    - name: redisPassword
++      value: ''
++    - name: actorStateStore
++      value: 'true'
++    - name: keyPrefix
++      value: name
++scopes: [eventstore, tenants, parties]
+diff --git a/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj b/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj
+new file mode 100644
+index 0000000..d917adb
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj
+@@ -0,0 +1,13 @@
++<Project Sdk="Aspire.AppHost.Sdk/13.6.3">
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++    <AspireUseCliBundle>true</AspireUseCliBundle>
++  </PropertyGroup>
++  <ItemGroup>
++    <PackageReference Include="Hexalith.EventStore.Aspire" />
++    <PackageReference Include="Hexalith.Tenants.Aspire" />
++    <PackageReference Include="Hexalith.Parties.Aspire" />
++    <Content Include="DaprComponents/**/*" CopyToOutputDirectory="PreserveNewest" />
++    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
++  </ItemGroup>
++</Project>
+diff --git a/tests/Hexalith.McpCli.AppHost/Program.cs b/tests/Hexalith.McpCli.AppHost/Program.cs
+new file mode 100644
+index 0000000..2708a05
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/Program.cs
+@@ -0,0 +1,79 @@
++using Aspire.Hosting;
++using Aspire.Hosting.ApplicationModel;
++
++using Hexalith.EventStore.Aspire;
++using Hexalith.McpCli.AppHost;
++using Hexalith.Parties.Aspire;
++using Hexalith.Tenants.Aspire;
++
++using Microsoft.Extensions.Configuration;
++
++IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
++builder.Configuration.AddJsonFile(Path.Combine(builder.AppHostDirectory, "appsettings.json"), optional: false)
++    .AddEnvironmentVariables().AddCommandLine(args);
++string? signingKey = builder.Configuration["Authentication:JwtBearer:SigningKey"];
++int gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", 3501);
++try
++{
++    TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
++    TopologyConfiguration.ValidateSigningKey(signingKey);
++    TopologyConfiguration.EnsureNoConflictingTopology(gatewayPort);
++}
++catch (Exception exception) when (exception is InvalidOperationException or TimeoutException
++    or System.ComponentModel.Win32Exception or System.Text.Json.JsonException)
++{
++    Console.Error.WriteLine(exception.Message);
++    return 2;
++}
++
++// Executable boundary checks run these same guards and exit before adding any resource.
++if (builder.Configuration.GetValue<bool>("Topology:PreflightOnly")) return 0;
++
++string components = Path.Combine(builder.AppHostDirectory, "DaprComponents");
++string access = Path.Combine(components, "accesscontrol.yaml");
++string? placement = builder.Configuration["Dapr:PlacementHostAddress"];
++string? scheduler = builder.Configuration["Dapr:SchedulerHostAddress"];
++IResourceBuilder<ParameterResource> key = builder.AddParameter("live-test-signing-key", () => signingKey!, secret: true);
++
++IResourceBuilder<ProjectResource> gateway = builder.AddHexalithEventStoreGatewayProject();
++foreach (IConfigurationSection route in builder.Configuration.GetSection("Gateway:Routes").GetChildren())
++{
++    foreach (string field in new[] { "TenantId", "Domain", "Version", "AppId", "MethodName" })
++    {
++        gateway.WithEnvironment($"EventStore__DomainServices__Registrations__{route.Key}__{field}",
++            route[field] ?? throw new InvalidOperationException($"Gateway:Routes:{route.Key}:{field} is required."));
++    }
++}
++
++HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, adminServer: null, adminUI: null,
++    eventStoreDaprConfigPath: access, adminServerDaprConfigPath: null, resiliencyConfigPath: null,
++    stateStoreComponentPath: Path.Combine(components, "statestore.yaml"),
++    eventStoreDaprHttpPort: gatewayPort, daprPlacementHostAddress: placement,
++    daprSchedulerHostAddress: scheduler, pubSubComponentPath: Path.Combine(components, "pubsub.yaml"));
++IResourceBuilder<ProjectResource> tenants = builder.AddHexalithTenantsServer(topology, access,
++    daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
++    .WithGeneratedEventStoreAppChannelToken();
++IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(topology, access,
++    daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
++    .WithGeneratedEventStoreAppChannelToken();
++
++foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
++{
++    resource.WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
++        .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
++        .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)
++        .WithEnvironment("Authentication__JwtBearer__Issuer", "mcpcli-live-tests")
++        .WithEnvironment("Authentication__JwtBearer__Audience", "hexalith-eventstore")
++        .WithEnvironment("Authentication__JwtBearer__ValidAudiences__0", "hexalith-eventstore")
++        .WithEnvironment("Authentication__JwtBearer__AllowedAlgorithms__0", "HS256")
++        .WithEnvironment("Authentication__JwtBearer__SigningKey", key)
++        .WithEnvironment("Authentication__JwtBearer__RequireHttpsMetadata", "false");
++    foreach (EndpointAnnotation endpoint in resource.Resource.Annotations.OfType<EndpointAnnotation>())
++    {
++        endpoint.Port = null;
++        endpoint.TargetPort = null;
++    }
++}
++
++await builder.Build().RunAsync().ConfigureAwait(false);
++return 0;
+diff --git a/tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs b/tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs
+new file mode 100644
+index 0000000..36df82b
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs
+@@ -0,0 +1,168 @@
++using System.Diagnostics;
++using System.Net;
++using System.Net.Sockets;
++using System.Text;
++using System.Text.Json;
++
++namespace Hexalith.McpCli.AppHost;
++
++/// <summary>Validates the source and local runtime boundary before starting the test topology.</summary>
++internal static class TopologyConfiguration
++{
++    /// <summary>The Dapr applications owned by this topology.</summary>
++    internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties"];
++
++    /// <summary>The root source checkouts required by the published helpers.</summary>
++    internal static readonly string[] Modules = ["Hexalith.EventStore", "Hexalith.Tenants", "Hexalith.Parties"];
++
++    /// <summary>Requires each server to come from its declared direct root checkout.</summary>
++    internal static void ValidateWorkspace(string root)
++    {
++        string modulesPath = Path.Combine(root, ".gitmodules");
++        var declared = new HashSet<string>(StringComparer.Ordinal);
++        bool inSubmodule = false;
++        foreach (string line in File.Exists(modulesPath) ? File.ReadLines(modulesPath) : [])
++        {
++            string text = line.Trim();
++            if (text.StartsWith('['))
++            {
++                inSubmodule = text.StartsWith("[submodule ", StringComparison.Ordinal) && text.EndsWith(']');
++            }
++            else if (inSubmodule)
++            {
++                int separator = text.IndexOf('=');
++                if (separator >= 0 && text[..separator].Trim() == "path")
++                {
++                    declared.Add(text[(separator + 1)..].Trim().Trim('"'));
++                }
++            }
++        }
++
++        foreach (string module in Modules)
++        {
++            string relative = "references/" + module;
++            string checkout = Path.Combine(root, "references", module);
++            string project = Path.Combine(checkout, "src", module, module + ".csproj");
++            if (!declared.Contains(relative))
++            {
++                throw new InvalidOperationException($"Required root checkout '{relative}' is not declared in '{modulesPath}'. Required project: '{project}'.");
++            }
++
++            if (!File.Exists(project))
++            {
++                throw new InvalidOperationException($"Required root source project '{project}' is missing. Initialize only the declared root checkout '{relative}'.");
++            }
++
++            if (new DirectoryInfo(checkout).LinkTarget is not null
++                || !File.Exists(Path.Combine(checkout, ".git")) && !Directory.Exists(Path.Combine(checkout, ".git")))
++            {
++                throw new InvalidOperationException($"Required root checkout '{checkout}' must be a direct Git checkout, not a sibling link or copied source directory.");
++            }
++
++            var start = new ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
++            foreach (string argument in new[] { "-C", checkout, "rev-parse", "--show-toplevel" }) start.ArgumentList.Add(argument);
++            using Process git = Process.Start(start) ?? throw new InvalidOperationException($"Cannot verify root checkout '{checkout}'.");
++            Task<string> output = git.StandardOutput.ReadToEndAsync();
++            Task<string> error = git.StandardError.ReadToEndAsync();
++            if (!git.WaitForExit(10000))
++            {
++                git.Kill(entireProcessTree: true);
++                throw new TimeoutException($"Root checkout verification exceeded 10 seconds for '{checkout}'.");
++            }
++
++            string actual = output.GetAwaiter().GetResult().Trim();
++            _ = error.GetAwaiter().GetResult();
++            if (git.ExitCode != 0 || string.IsNullOrWhiteSpace(actual)
++                || !Path.GetFullPath(actual).Equals(Path.GetFullPath(checkout),
++                    OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
++            {
++                throw new InvalidOperationException($"Required root checkout '{checkout}' is not its own Git working tree.");
++            }
++        }
++    }
++
++    /// <summary>Requires an explicit signing key suitable for the platform's Development JWT validation.</summary>
++    internal static void ValidateSigningKey(string? key)
++    {
++        if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
++        {
++            throw new InvalidOperationException("Authentication:JwtBearer:SigningKey must contain at least 32 UTF-8 bytes for the Development test topology.");
++        }
++    }
++
++    /// <summary>Rejects a requested topology whose Dapr identities are already in use.</summary>
++    internal static void ValidateRunningApplications(string snapshot)
++    {
++        using JsonDocument document = JsonDocument.Parse(snapshot);
++        if (document.RootElement.ValueKind != JsonValueKind.Array)
++        {
++            throw new InvalidOperationException("Cannot validate topology conflicts: 'dapr list --output json' must return an array.");
++        }
++
++        var applications = new HashSet<string>(StringComparer.Ordinal);
++        int index = 0;
++        foreach (JsonElement item in document.RootElement.EnumerateArray())
++        {
++            if (item.ValueKind != JsonValueKind.Object || !item.TryGetProperty("appId", out JsonElement identity)
++                || identity.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(identity.GetString()))
++            {
++                throw new InvalidOperationException($"Cannot validate topology conflicts: Dapr entry {index} must be an object with a non-empty string 'appId'.");
++            }
++
++            applications.Add(identity.GetString()!);
++            index++;
++        }
++
++        string[] conflicts = applications.Where(id => ApplicationIds.Contains(id, StringComparer.Ordinal))
++            .Order(StringComparer.Ordinal).ToArray();
++        if (conflicts.Length > 0)
++        {
++            throw new InvalidOperationException($"Conflicting Dapr application IDs: {string.Join(", ", conflicts)}. The requested test topology cannot start alongside these applications.");
++        }
++    }
++
++    /// <summary>Checks live Dapr registrations and the Gateway sidecar port without altering existing processes.</summary>
++    internal static void EnsureNoConflictingTopology(int gatewayPort)
++    {
++        var start = new ProcessStartInfo("dapr") { RedirectStandardOutput = true, RedirectStandardError = true };
++        start.ArgumentList.Add("list");
++        start.ArgumentList.Add("--output");
++        start.ArgumentList.Add("json");
++        using Process process = Process.Start(start) ?? throw new InvalidOperationException("Could not run 'dapr list --output json' to check topology conflicts.");
++        Task<string> output = process.StandardOutput.ReadToEndAsync();
++        Task<string> error = process.StandardError.ReadToEndAsync();
++        if (!process.WaitForExit(10000))
++        {
++            process.Kill(entireProcessTree: true);
++            throw new TimeoutException("Topology conflict check 'dapr list --output json' exceeded 10 seconds.");
++        }
++
++        if (process.ExitCode != 0)
++        {
++            throw new InvalidOperationException($"Topology conflict check 'dapr list --output json' exited {process.ExitCode}.");
++        }
++
++        ValidateRunningApplications(output.GetAwaiter().GetResult());
++        _ = error.GetAwaiter().GetResult();
++        ValidateGatewayPort(gatewayPort);
++    }
++
++    /// <summary>Rejects an occupied or invalid Gateway sidecar port before launch.</summary>
++    internal static void ValidateGatewayPort(int port)
++    {
++        if (port is < 1 or > 65535)
++        {
++            throw new InvalidOperationException("Dapr:GatewayHttpPort must be between 1 and 65535.");
++        }
++
++        using var listener = new TcpListener(IPAddress.Loopback, port);
++        try
++        {
++            listener.Start();
++        }
++        catch (SocketException exception)
++        {
++            throw new InvalidOperationException($"Gateway Dapr HTTP port {port} is already in use; the test topology cannot start.", exception);
++        }
++    }
++}
+diff --git a/tests/Hexalith.McpCli.AppHost/appsettings.json b/tests/Hexalith.McpCli.AppHost/appsettings.json
+new file mode 100644
+index 0000000..21e69c5
+--- /dev/null
++++ b/tests/Hexalith.McpCli.AppHost/appsettings.json
+@@ -0,0 +1,10 @@
++{
++  "Dapr": { "GatewayHttpPort": 3501 },
++  "Gateway": {
++    "Routes": {
++      "system|tenants|v1": { "TenantId": "system", "Domain": "tenants", "Version": "v1", "AppId": "tenants", "MethodName": "process" },
++      "system|global-administrators|v1": { "TenantId": "system", "Domain": "global-administrators", "Version": "v1", "AppId": "tenants", "MethodName": "process" },
++      "*|party|v1": { "TenantId": "*", "Domain": "party", "Version": "v1", "AppId": "parties", "MethodName": "process" }
++    }
++  }
++}
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyCollection.cs b/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyCollection.cs
+new file mode 100644
+index 0000000..4e7bd22
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyCollection.cs
+@@ -0,0 +1,5 @@
++namespace Hexalith.McpCli.Integration.Tests;
++
++/// <summary>Shares one platform fixture and serializes the live topology tests.</summary>
++[CollectionDefinition("AspireTopology", DisableParallelization = true)]
++public sealed class AspireTopologyCollection : ICollectionFixture<AspireTopologyFixture>;
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs b/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs
+new file mode 100644
+index 0000000..b80163e
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs
+@@ -0,0 +1,62 @@
++using System.Net.Http.Headers;
++using System.Security.Cryptography;
++using System.Text;
++using System.Text.Json;
++
++using Hexalith.EventStore.Testing.Integration;
++using Hexalith.McpCli.AppHost;
++
++namespace Hexalith.McpCli.Integration.Tests;
++
++/// <summary>Uses the platform lifecycle and prerequisite handling for the three-service test topology.</summary>
++public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.Hexalith_McpCli_AppHost>, IAsyncLifetime
++{
++    private readonly string _signingKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
++
++    /// <inheritdoc/>
++    protected override IReadOnlyList<AspireResource> Resources =>
++    [
++        new("eventstore", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
++        new("tenants", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
++        new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
++    ];
++
++    /// <inheritdoc/>
++    protected override IReadOnlyList<string> ExtraAppArgs =>
++    [
++        $"--Authentication:JwtBearer:SigningKey={_signingKey}",
++    ];
++
++    /// <summary>Rejects an existing requested topology before the platform starts or waits on resources.</summary>
++    public new async ValueTask InitializeAsync()
++    {
++        if (DaprTestPrerequisites.IsAvailable)
++        {
++            TopologyConfiguration.EnsureNoConflictingTopology(3501);
++        }
++
++        await base.InitializeAsync().ConfigureAwait(false);
++    }
++
++    /// <summary>Creates a caller-owned client at the platform-discovered endpoint with a short-lived test identity.</summary>
++    internal HttpClient CreateAuthenticatedGatewayClient()
++    {
++        // The pinned Gateway client sets buffering before its first request, so it
++        // needs a fresh client after the platform's liveness client has been used.
++        var client = new HttpClient { BaseAddress = Client("eventstore").BaseAddress, Timeout = TimeSpan.FromSeconds(35) };
++        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
++        string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
++        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
++        {
++            ["iss"] = "mcpcli-live-tests", ["aud"] = "hexalith-eventstore", ["sub"] = "mcpcli-live-smoke",
++            ["tenants"] = "[\"system\"]", ["domains"] = "[\"tenants\"]", ["permissions"] = "[\"query:read\"]",
++            ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + 300,
++        }));
++        string unsigned = header + "." + payload;
++        string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(_signingKey), Encoding.ASCII.GetBytes(unsigned)));
++        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", unsigned + "." + signature);
++        return client;
++    }
++
++    private static string Encode(byte[] bytes) => Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
++}
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs b/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs
+new file mode 100644
+index 0000000..eb74f46
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs
+@@ -0,0 +1,30 @@
++using Hexalith.EventStore.Client.Gateway;
++using Hexalith.EventStore.Contracts.Queries;
++
++namespace Hexalith.McpCli.Integration.Tests;
++
++/// <summary>Bounds the single usability request independently of the platform's startup/liveness budget.</summary>
++internal static class GatewaySmokeProbe
++{
++    /// <summary>The fixed maximum duration of the authenticated Gateway request.</summary>
++    internal static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(30);
++
++    /// <summary>Executes exactly one Gateway query after the fixture has established resource liveness.</summary>
++    internal static async Task<EventStoreQueryResult> ExecuteAsync(IEventStoreGatewayClient gateway, SubmitQueryRequest request, CancellationToken cancellationToken = default)
++    {
++        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
++        timeout.CancelAfter(RequestTimeout);
++        try
++        {
++            return await gateway.SubmitQueryAsync(request, cancellationToken: timeout.Token).ConfigureAwait(false);
++        }
++        catch (OperationCanceledException exception) when (timeout.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
++        {
++            throw new TimeoutException("Authenticated Gateway query exceeded 30 seconds after resource liveness passed. Check Gateway routing, sidecars and domain-service logs.", exception);
++        }
++        catch (EventStoreGatewayException exception)
++        {
++            throw new InvalidOperationException($"Authenticated Gateway query failed with HTTP {exception.StatusCode} after resource liveness passed. Check Gateway routing, authentication and domain-service logs.", exception);
++        }
++    }
++}
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs b/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs
+new file mode 100644
+index 0000000..d1353c4
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs
+@@ -0,0 +1,37 @@
++using System.Text.Json;
++
++using Hexalith.EventStore.Client.Gateway;
++using Hexalith.EventStore.Contracts.Queries;
++using Hexalith.EventStore.Testing.Integration;
++using Hexalith.Tenants.Contracts.Queries;
++
++using Microsoft.Extensions.Options;
++
++namespace Hexalith.McpCli.Integration.Tests;
++
++/// <summary>Separates resource liveness from a bounded authenticated Gateway usability proof.</summary>
++[Collection("AspireTopology")]
++[Trait("Category", "Integration")]
++public sealed class GatewaySmokeTests(AspireTopologyFixture fixture)
++{
++    /// <summary>Requires an actual successful query document through the pinned Gateway client.</summary>
++    [DaprFact]
++    public async Task AuthenticatedQueryReturnsSuccessfulDocument()
++    {
++        fixture.SkipIfUnavailable();
++        using HttpClient http = fixture.CreateAuthenticatedGatewayClient();
++        IEventStoreGatewayClient gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
++        var request = new SubmitQueryRequest("system", ListTenantsQuery.Domain, "index",
++            ListTenantsQuery.QueryType, ListTenantsQuery.ProjectionType);
++        EventStoreQueryResult result = await GatewaySmokeProbe.ExecuteAsync(gateway, request, TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++        Assert.False(result.IsNotModified);
++        Assert.False(string.IsNullOrWhiteSpace(result.CorrelationId));
++        Assert.True(result.Payload.HasValue, "The Gateway returned no successful query document.");
++        JsonElement document = result.Payload.Value;
++        Assert.Equal(JsonValueKind.Object, document.ValueKind);
++        Assert.Equal(JsonValueKind.Array, document.GetProperty("items").ValueKind);
++        Assert.Contains(document.GetProperty("hasMore").ValueKind, new[] { JsonValueKind.True, JsonValueKind.False });
++        Assert.Contains(document.GetProperty("cursor").ValueKind, new[] { JsonValueKind.Null, JsonValueKind.String });
++    }
++}
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj b/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
+new file mode 100644
+index 0000000..55afa87
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
+@@ -0,0 +1,10 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <ItemGroup>
++    <ProjectReference Include="../Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" />
++    <PackageReference Include="Aspire.Hosting.Testing" />
++    <PackageReference Include="Hexalith.EventStore.Testing.Integration" />
++    <PackageReference Include="Hexalith.EventStore.Client" />
++    <PackageReference Include="Hexalith.Tenants.Contracts" />
++    <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />
++  </ItemGroup>
++</Project>
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/AspireHelperDependencyTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/AspireHelperDependencyTests.cs
+new file mode 100644
+index 0000000..38469e5
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Manifest.Tests/AspireHelperDependencyTests.cs
+@@ -0,0 +1,103 @@
++using System.Diagnostics;
++using System.Xml.Linq;
++
++namespace Hexalith.McpCli.Manifest.Tests;
++
++/// <summary>Executes missing-helper and forbidden-helper admission failures without a live topology.</summary>
++public sealed class AspireHelperDependencyTests
++{
++    private const string Helper = "Hexalith.Parties.Aspire";
++
++    /// <summary>Missing published artifacts fail by package identity and never fall back to source.</summary>
++    [Fact]
++    public void MissingHelperHasAnExactDiagnostic()
++    {
++        var (policy, graph) = Candidate();
++        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
++        nodes.Remove(Helper);
++        Assert.Equal([$"Required helper {Helper}/1.0.0 is missing from restore."],
++            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
++    }
++
++    /// <summary>Unreviewed roots cannot use a helper-shaped name to enter tests.</summary>
++    [Fact]
++    public void UnreviewedHelperIsRejected()
++    {
++        var (policy, graph) = Candidate();
++        policy.TestPackages.Clear();
++        Assert.Equal([$"Helper {Helper} is not approved for tests."], DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, [Helper]));
++    }
++
++    /// <summary>A source project cannot substitute for the required published artifact.</summary>
++    [Fact]
++    public void SourceHelperIsRejected()
++    {
++        var (policy, graph) = Candidate();
++        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
++        nodes[Helper] = nodes[Helper] with { Type = "project", ProjectPath = "/source/helper.csproj" };
++        Assert.Equal([$"Required helper {Helper}/1.0.0 must be a published package; source project helpers are forbidden."],
++            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
++    }
++
++    /// <summary>Both domain implementations and platform server packages are forbidden in helper closures.</summary>
++    [Theory]
++    [InlineData("Hexalith.Parties.Server")]
++    [InlineData("Hexalith.Parties.Client")]
++    [InlineData("Hexalith.Parties.Projections")]
++    [InlineData("Hexalith.EventStore.Server")]
++    public void HelperWithImplementationDependencyIsRejected(string dependency)
++    {
++        var (policy, graph) = Candidate();
++        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
++        nodes[Helper] = nodes[Helper] with { Dependencies = new Dictionary<string, string> { [dependency] = "2.0.0" } };
++        nodes[dependency] = new(dependency, "2.0.0", "package", new Dictionary<string, string>(), []);
++        Assert.Equal([$"Helper {Helper}/1.0.0 has a forbidden dependency {dependency}/2.0.0: Topology > {Helper}/1.0.0 > {dependency}/2.0.0"],
++            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
++    }
++
++    /// <summary>The actual NuGet client fails closed when the helper artifact is unavailable.</summary>
++    [Fact]
++    public async Task MissingHelperRestoreCannotFallBackToWorkspaceOrGlobalPackages()
++    {
++        string root = Path.Combine(Path.GetTempPath(), "mcpcli-missing-helper-" + Guid.NewGuid().ToString("N"));
++        Directory.CreateDirectory(Path.Combine(root, "empty"));
++        try
++        {
++            File.WriteAllText(Path.Combine(root, "Missing.csproj"), $"<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include=\"{Helper}\" Version=\"0.0.0-missing-fixture\" /></ItemGroup></Project>");
++            new XDocument(new XElement("configuration", new XElement("packageSources", new XElement("clear"),
++                new XElement("add", new XAttribute("key", "empty"), new XAttribute("value", Path.Combine(root, "empty"))))))
++                .Save(Path.Combine(root, "NuGet.Config"));
++            var start = new ProcessStartInfo("dotnet")
++            {
++                WorkingDirectory = root, RedirectStandardOutput = true, RedirectStandardError = true,
++            };
++            foreach (string argument in new[] { "restore", "Missing.csproj", "--configfile", "NuGet.Config", "--packages", Path.Combine(root, "packages"), "-p:RestoreFallbackFolders=" })
++                start.ArgumentList.Add(argument);
++            using Process process = Process.Start(start)!;
++            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
++            timeout.CancelAfter(TimeSpan.FromSeconds(30));
++            Task<string> output = process.StandardOutput.ReadToEndAsync(timeout.Token);
++            Task<string> error = process.StandardError.ReadToEndAsync(timeout.Token);
++            try { await process.WaitForExitAsync(timeout.Token).ConfigureAwait(true); }
++            finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
++            Assert.Equal(1, process.ExitCode);
++            Assert.Contains($"error NU1101: Unable to find package {Helper}. No packages exist with this id in source(s): empty", await output.ConfigureAwait(true));
++            Assert.Equal(string.Empty, await error.ConfigureAwait(true));
++        }
++        finally
++        {
++            Directory.Delete(root, recursive: true);
++        }
++    }
++
++    private static (DependencyPolicy Policy, RestoredDependencyGraph Graph) Candidate()
++    {
++        var policy = new DependencyPolicy { TestPackages = new(StringComparer.OrdinalIgnoreCase) { Helper } };
++        var nodes = new Dictionary<string, RestoredDependencyNode>(StringComparer.OrdinalIgnoreCase)
++        {
++            ["Topology"] = new("Topology", "", "project", new Dictionary<string, string> { [Helper] = "1.0.0" }, []),
++            [Helper] = new(Helper, "1.0.0", "package", new Dictionary<string, string>(), []),
++        };
++        return (policy, new("Topology", nodes, []));
++    }
++}
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs
+new file mode 100644
+index 0000000..d6d39dc
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs
+@@ -0,0 +1,46 @@
++using System.Diagnostics;
++using System.Net;
++using System.Net.Sockets;
++
++namespace Hexalith.McpCli.Manifest.Tests;
++
++/// <summary>Passes only when missing Dapr prerequisites produce the platform's explicit skip result.</summary>
++public sealed class DaprPrerequisiteTests
++{
++    /// <summary>Executes the actual smoke in a fresh process with an unreachable reserved control-plane port.</summary>
++    [Fact]
++    public async Task MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess()
++    {
++        using var unavailable = new Socket(Socket.OSSupportsIPv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork,
++            SocketType.Stream, ProtocolType.Tcp);
++        if (Socket.OSSupportsIPv6) unavailable.DualMode = true;
++        unavailable.Bind(new IPEndPoint(Socket.OSSupportsIPv6 ? IPAddress.IPv6Any : IPAddress.Loopback, 0));
++        // Binding without listening reserves the port while ensuring TCP probes fail.
++        string port = ((IPEndPoint)unavailable.LocalEndPoint!).Port.ToString(System.Globalization.CultureInfo.InvariantCulture);
++        string root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
++        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
++        string assembly = Path.Combine(root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
++        var start = new ProcessStartInfo("dotnet")
++        {
++            WorkingDirectory = root, RedirectStandardOutput = true, RedirectStandardError = true,
++        };
++        start.ArgumentList.Add(assembly);
++        start.ArgumentList.Add("-method");
++        start.ArgumentList.Add("*AuthenticatedQueryReturnsSuccessfulDocument");
++        start.Environment["HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT"] = port;
++        start.Environment["HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT"] = port;
++        using Process process = Process.Start(start)!;
++        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
++        timeout.CancelAfter(TimeSpan.FromSeconds(30));
++        Task<string> output = process.StandardOutput.ReadToEndAsync(timeout.Token);
++        Task<string> error = process.StandardError.ReadToEndAsync(timeout.Token);
++        try { await process.WaitForExitAsync(timeout.Token).ConfigureAwait(true); }
++        finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
++        string stdout = await output.ConfigureAwait(true);
++        Assert.Equal(0, process.ExitCode);
++        Assert.Equal(string.Empty, await error.ConfigureAwait(true));
++        Assert.Contains("DAPR integration prerequisites are unavailable. Run 'dapr init' and ensure Redis, placement, and scheduler are reachable.", stdout);
++        Assert.Contains("Total: 1, Errors: 0, Failed: 0, Skipped: 1", stdout);
++        Assert.DoesNotContain("Skipped: 0", stdout);
++    }
++}
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs
+index cac3af2..8e341a6 100644
+--- a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs
++++ b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyGate.cs
+@@ -242,6 +242,48 @@ internal static class DependencyPolicyGate
+         return failures.Order(StringComparer.Ordinal).ToArray();
+     }
+ 
++    /// <summary>Requires published, reviewed Aspire helpers whose closure contains no Hexalith implementation packages.</summary>
++    public static string[] CheckAspireHelperClosure(DependencyPolicy policy, RestoredDependencyGraph graph, IEnumerable<string> requiredHelpers)
++    {
++        var failures = new List<string>(graph.LoadFailures);
++        foreach (string helper in requiredHelpers.Order(StringComparer.Ordinal))
++        {
++            if (!policy.TestPackages.Contains(helper))
++            {
++                failures.Add($"Helper {helper} is not approved for tests.");
++                continue;
++            }
++
++            if (!graph.Nodes.TryGetValue(helper, out RestoredDependencyNode? root))
++            {
++                string version = graph.Nodes[graph.RootId].Dependencies.GetValueOrDefault(helper, "unresolved");
++                failures.Add($"Required helper {helper}/{version} is missing from restore.");
++                continue;
++            }
++
++            if (root.Type != "package")
++            {
++                failures.Add($"Required helper {helper}/{root.Version} must be a published package; source project helpers are forbidden.");
++                continue;
++            }
++
++            foreach ((string id, string path) in graph.PathsFrom(helper, policy.DecorationPackage.Key, stopAtDecoration: false))
++            {
++                if (!graph.Nodes.TryGetValue(id, out RestoredDependencyNode? dependency))
++                {
++                    failures.Add($"Helper {root.Identity} has an unresolved dependency {id}: {path}");
++                }
++                else if (dependency.Type != "package" || id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase)
++                    && (!id.EndsWith(".Aspire", StringComparison.OrdinalIgnoreCase) || !policy.TestPackages.Contains(id)))
++                {
++                    failures.Add($"Helper {root.Identity} has a forbidden dependency {dependency.Identity}: {path}");
++                }
++            }
++        }
++
++        return failures.Order(StringComparer.Ordinal).ToArray();
++    }
++
+     /// <summary>Allows reviewed testing roots and local fixtures, rejecting external project references.</summary>
+     public static string[] CheckTestProjects(DependencyPolicy policy, IReadOnlyDictionary<string, XDocument> projects, string root)
+     {
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
+index 0cdec67..412ad33 100644
+--- a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
++++ b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
+@@ -35,6 +35,22 @@ public sealed class DependencyPolicyTests
+         Assert.Equal(Array.Empty<string>(), CheckTestProjectDirectory(policy, Path.Combine(root, "tests"), root));
+     }
+ 
++    /// <summary>Checks the actual restored AppHost independently of the approved platform testing closure.</summary>
++    [Fact]
++    public void TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers()
++    {
++        string root = FindRepositoryRoot();
++        DependencyPolicy policy = DependencyPolicy.Load(Path.Combine(root, "tools", "dependency-policy.json"));
++        string project = Path.Combine(root, "tests", "Hexalith.McpCli.AppHost", "Hexalith.McpCli.AppHost.csproj");
++        using JsonDocument assets = JsonDocument.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(project)!, "obj", "project.assets.json")));
++        RestoredDependencyGraph graph = RestoredDependencyGraph.Load(assets.RootElement, project);
++        string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
++        Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
++        Assert.Equal(new[] { "Hexalith.EventStore.Aspire/3.126.1", "Hexalith.Parties.Aspire/1.6.0", "Hexalith.Tenants.Aspire/5.10.0" },
++            graph.Nodes.Values.Where(node => node.Id.StartsWith("Hexalith.", StringComparison.Ordinal))
++                .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
++    }
++
+     /// <summary>Rejects the real 55-package Projects closure and names both root and transitive framework edges.</summary>
+     [Fact]
+     public void ProjectsCandidateFailsOfflineWithDependencyPaths()
+@@ -331,6 +347,9 @@ public sealed class DependencyPolicyTests
+     [InlineData("Test.Helper", "direct")]
+     [InlineData("Test.Helper", "baseline")]
+     [InlineData("Test.Helper", "module")]
++    [InlineData("Hexalith.Parties.Aspire", "direct")]
++    [InlineData("Hexalith.Parties.Aspire", "baseline")]
++    [InlineData("Hexalith.Parties.Aspire", "module")]
+     [InlineData("Hexalith.McpCli.Sample.Contracts", "direct")]
+     [InlineData("Hexalith.McpCli.Sample.Contracts", "baseline")]
+     [InlineData("Hexalith.McpCli.Sample.Contracts", "module")]
+@@ -338,6 +357,7 @@ public sealed class DependencyPolicyTests
+     {
+         var (policy, graph, projects) = Minimal();
+         policy.TestPackages.Add("Test.Helper");
++        policy.TestPackages.Add("Hexalith.Parties.Aspire");
+         if (list == "direct")
+         {
+             policy.DirectPackages.Add(id);
+@@ -735,7 +755,7 @@ public sealed class DependencyPolicyTests
+             "Microsoft.NET.Test.Sdk", "xunit.v3", "Shouldly", "NSubstitute", "Verify.XunitV3",
+             "Microsoft.CodeAnalysis.CSharp", "Aspire.Hosting.Testing", "CommunityToolkit.Aspire.Hosting.Dapr",
+             "Hexalith.EventStore.Testing", "Hexalith.EventStore.Testing.Integration", "Hexalith.EventStore.Aspire",
+-            "Hexalith.Tenants.Aspire", "Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Abstractions",
++            "Hexalith.Tenants.Aspire", "Hexalith.Parties.Aspire", "Hexalith.McpCli.Sample.Contracts", "Hexalith.McpCli.Abstractions",
+         ];
+         foreach (string id in approved)
+         {
+@@ -814,7 +834,7 @@ public sealed class DependencyPolicyTests
+                   <ItemGroup><PackageReference Include="Common.Package" /></ItemGroup>
+                   <ItemGroup Condition="'$(UseHexalithProjectReferences)' == 'true'">
+                     <ProjectReference Include="../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj" />
+-                    <PackageReference Include="Hexalith.Parties.Aspire" />
++                    <PackageReference Include="Hexalith.Parties.Server" />
+                   </ItemGroup>
+                 </Project>
+                 """);
+@@ -822,7 +842,7 @@ public sealed class DependencyPolicyTests
+             Assert.Equal(
+             [
+                 "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Common.Package",
+-                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Aspire",
++                "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Server",
+                 "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj",
+             ], CheckTestProjectDirectory(policy, Path.Combine(root, "tests"), root));
+         }
+@@ -832,10 +852,12 @@ public sealed class DependencyPolicyTests
+         }
+     }
+ 
+-    /// <summary>Tests reject unapproved roots, including unpublished Parties helpers, and sibling source projects.</summary>
++    /// <summary>Tests reject unapproved roots, including domain implementation packages, and sibling source projects.</summary>
+     [Theory]
+     [InlineData("<PackageReference Include=\"Unexpected.Package\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Unexpected.Package")]
+-    [InlineData("<PackageReference Include=\"Hexalith.Parties.Aspire\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Aspire")]
++    [InlineData("<PackageReference Include=\"Hexalith.Parties.Server\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Server")]
++    [InlineData("<PackageReference Include=\"Hexalith.Parties.Client\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Client")]
++    [InlineData("<PackageReference Include=\"Hexalith.Parties.Projections\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unapproved package Hexalith.Parties.Projections")]
+     [InlineData("<ProjectReference Include=\"../../references/External/External.csproj\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/External/External.csproj")]
+     [InlineData("<ProjectReference Include=\"../../references/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj references an unapproved project ../../references/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj")]
+     [InlineData("<ProjectReference Include=\"$(ExternalProject)\" />", "Test project tests/Topology.Tests/Topology.Tests.csproj has an unresolved project reference $(ExternalProject)")]
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/GatewaySmokeBoundaryTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/GatewaySmokeBoundaryTests.cs
+new file mode 100644
+index 0000000..7dabd1a
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Manifest.Tests/GatewaySmokeBoundaryTests.cs
+@@ -0,0 +1,83 @@
++using System.Diagnostics;
++using System.Net;
++using System.Net.Sockets;
++using System.Text;
++
++using Hexalith.EventStore.Client.Gateway;
++using Hexalith.EventStore.Contracts.Queries;
++using Hexalith.McpCli.Integration.Tests;
++
++using Microsoft.Extensions.Options;
++
++namespace Hexalith.McpCli.Manifest.Tests;
++
++/// <summary>Proves a live listener can still be unusable and the real smoke query remains bounded.</summary>
++public sealed class GatewaySmokeBoundaryTests
++{
++    /// <summary>An alive HTTP endpoint that never answers the query fails at the shipped smoke deadline.</summary>
++    [Fact]
++    public async Task AliveGatewayThatNeverAnswersQueryFailsWithinSmokeDeadline()
++    {
++        using var listener = new TcpListener(IPAddress.Loopback, 0);
++        listener.Start();
++        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
++        using var serverLifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
++        serverLifetime.CancelAfter(TimeSpan.FromSeconds(40));
++        int requests = 0;
++        Task server = ServeAsync();
++        var endpoint = new Uri($"http://127.0.0.1:{port}");
++        using var livenessClient = new HttpClient { BaseAddress = endpoint };
++        using HttpResponseMessage alive = await livenessClient.GetAsync("alive", serverLifetime.Token).ConfigureAwait(true);
++        Assert.Equal(HttpStatusCode.OK, alive.StatusCode);
++        using var http = new HttpClient { BaseAddress = endpoint, Timeout = TimeSpan.FromSeconds(40) };
++        var gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
++        var request = new SubmitQueryRequest("test", "example", "index", "list-example");
++        var elapsed = Stopwatch.StartNew();
++        try
++        {
++            TimeoutException failure = await Assert.ThrowsAsync<TimeoutException>(() => GatewaySmokeProbe.ExecuteAsync(gateway, request, TestContext.Current.CancellationToken)
++                .WaitAsync(TimeSpan.FromSeconds(35), TestContext.Current.CancellationToken));
++            Assert.Equal("Authenticated Gateway query exceeded 30 seconds after resource liveness passed. Check Gateway routing, sidecars and domain-service logs.", failure.Message);
++            Assert.Equal(TimeSpan.FromSeconds(30), GatewaySmokeProbe.RequestTimeout);
++            Assert.InRange(elapsed.Elapsed, TimeSpan.FromSeconds(29), TimeSpan.FromSeconds(35));
++            Assert.Equal(2, Volatile.Read(ref requests));
++        }
++        finally
++        {
++            serverLifetime.Cancel();
++            listener.Stop();
++            try { await server.ConfigureAwait(true); }
++            catch (OperationCanceledException) { }
++        }
++
++        async Task ServeAsync()
++        {
++            for (int index = 0; index < 2; index++)
++            {
++                using TcpClient connection = await listener.AcceptTcpClientAsync(serverLifetime.Token).ConfigureAwait(true);
++                using NetworkStream stream = connection.GetStream();
++                byte[] buffer = new byte[4096];
++                var headersBuffer = new StringBuilder();
++                while (!headersBuffer.ToString().Contains("\r\n\r\n", StringComparison.Ordinal))
++                {
++                    int read = await stream.ReadAsync(buffer, serverLifetime.Token).ConfigureAwait(true);
++                    Assert.True(read > 0, "The test request ended before its headers were complete.");
++                    headersBuffer.Append(Encoding.ASCII.GetString(buffer, 0, read));
++                }
++                string headers = headersBuffer.ToString();
++                if (index == 0)
++                {
++                    Assert.StartsWith("GET /alive ", headers);
++                    await stream.WriteAsync(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"), serverLifetime.Token).ConfigureAwait(true);
++                    Interlocked.Increment(ref requests);
++                }
++                else
++                {
++                    Assert.StartsWith("POST /api/v1/queries ", headers);
++                    Interlocked.Increment(ref requests);
++                    await Task.Delay(Timeout.InfiniteTimeSpan, serverLifetime.Token).ConfigureAwait(true);
++                }
++            }
++        }
++    }
++}
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj b/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj
+index c447c60..de130af 100644
+--- a/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj
++++ b/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj
+@@ -1,5 +1,11 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+   <ItemGroup>
++    <PackageReference Include="Hexalith.EventStore.Client" />
++    <Compile Include="../Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs" Link="GatewaySmokeProbe.cs" />
++    <ProjectReference Include="../Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" IsAspireProjectResource="false" ReferenceOutputAssembly="false" />
++    <ProjectReference Include="../Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj" ReferenceOutputAssembly="false" />
++    <ProjectReference Include="../fixtures/Topology.DaprStub/Topology.DaprStub.csproj" ReferenceOutputAssembly="false" />
++    <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />
+     <ProjectReference Include="../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
+     <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
+     <ProjectReference Include="../fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs
+new file mode 100644
+index 0000000..57e0393
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs
+@@ -0,0 +1,163 @@
++using System.Diagnostics;
++using System.Net;
++using System.Net.Sockets;
++
++using Hexalith.McpCli.AppHost;
++
++namespace Hexalith.McpCli.Manifest.Tests;
++
++/// <summary>Protects the root source, authentication and collision guards without starting a topology.</summary>
++public sealed class TopologyConfigurationTests : IDisposable
++{
++    private readonly string _root = Path.Combine(Path.GetTempPath(), "mcpcli-topology-" + Guid.NewGuid().ToString("N"));
++
++    /// <summary>Creates a declared, isolated root source workspace for a guard probe.</summary>
++    public TopologyConfigurationTests()
++    {
++        Directory.CreateDirectory(_root);
++        File.WriteAllText(Path.Combine(_root, ".gitmodules"), string.Join('\n', TopologyConfiguration.Modules.Select(
++            module => $"[submodule \"{module}\"]\n path = references/{module}")));
++        foreach (string module in TopologyConfiguration.Modules)
++        {
++            string checkout = Path.Combine(_root, "references", module);
++            string project = Path.Combine(checkout, "src", module, module + ".csproj");
++            Directory.CreateDirectory(Path.GetDirectoryName(project)!);
++            File.WriteAllText(project, "<Project />");
++            var start = new ProcessStartInfo("git");
++            foreach (string argument in new[] { "init", "--quiet", checkout }) start.ArgumentList.Add(argument);
++            using Process git = Process.Start(start)!;
++            git.WaitForExit();
++            Assert.Equal(0, git.ExitCode);
++        }
++    }
++
++    /// <summary>A declared direct Git checkout is accepted.</summary>
++    [Fact]
++    public void DeclaredDirectRootSourcesPass() => TopologyConfiguration.ValidateWorkspace(_root);
++
++    /// <summary>Every module must be explicitly declared by the root workspace.</summary>
++    [Theory]
++    [InlineData("Hexalith.EventStore")]
++    [InlineData("Hexalith.Tenants")]
++    [InlineData("Hexalith.Parties")]
++    public void ExistingUndeclaredSourceFails(string module)
++    {
++        string modules = Path.Combine(_root, ".gitmodules");
++        File.WriteAllText(modules, File.ReadAllText(modules).Replace("references/" + module, "references/Other/references/" + module, StringComparison.Ordinal));
++        string project = Path.Combine(_root, "references", module, "src", module, module + ".csproj");
++        Assert.Equal($"Required root checkout 'references/{module}' is not declared in '{modules}'. Required project: '{project}'.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
++    }
++
++    /// <summary>Nested or sibling files cannot substitute for the missing required direct path.</summary>
++    [Theory]
++    [InlineData("nested")]
++    [InlineData("root-level")]
++    public void AlternateLayoutCannotReplaceRootSource(string layout)
++    {
++        const string module = "Hexalith.Parties";
++        string checkout = Path.Combine(_root, "references", module);
++        string destination = layout == "nested"
++            ? Path.Combine(_root, "references", "Other", "references", module)
++            : Path.Combine(_root, module);
++        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
++        Directory.Move(checkout, destination);
++        string project = Path.Combine(checkout, "src", module, module + ".csproj");
++        Assert.Equal($"Required root source project '{project}' is missing. Initialize only the declared root checkout 'references/{module}'.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
++    }
++
++    /// <summary>A copied directory and a forged Git marker do not establish a root checkout.</summary>
++    [Theory]
++    [InlineData(false)]
++    [InlineData(true)]
++    public void CopiedSourceIsNotAQualifiedCheckout(bool forgedMarker)
++    {
++        string checkout = Path.Combine(_root, "references", "Hexalith.Parties");
++        Directory.Delete(Path.Combine(checkout, ".git"), recursive: true);
++        if (forgedMarker) File.WriteAllText(Path.Combine(checkout, ".git"), "gitdir: missing");
++        string expected = forgedMarker
++            ? $"Required root checkout '{checkout}' is not its own Git working tree."
++            : $"Required root checkout '{checkout}' must be a direct Git checkout, not a sibling link or copied source directory.";
++        Assert.Equal(expected, Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
++    }
++
++    /// <summary>A link to another checkout cannot be admitted as the declared root checkout.</summary>
++    [Fact]
++    public void SiblingLinkIsRejected()
++    {
++        string checkout = Path.Combine(_root, "references", "Hexalith.Parties");
++        string elsewhere = Path.Combine(_root, "elsewhere");
++        Directory.Move(checkout, elsewhere);
++        Directory.CreateSymbolicLink(checkout, elsewhere);
++        Assert.Equal($"Required root checkout '{checkout}' must be a direct Git checkout, not a sibling link or copied source directory.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
++    }
++
++    /// <summary>No absent or undersized key can silently enable unauthenticated test traffic.</summary>
++    [Theory]
++    [InlineData(null)]
++    [InlineData("")]
++    [InlineData(" ")]
++    [InlineData("short")]
++    public void MissingOrWeakSigningKeyFails(string? key)
++        => Assert.Equal("Authentication:JwtBearer:SigningKey must contain at least 32 UTF-8 bytes for the Development test topology.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateSigningKey(key)).Message);
++
++    /// <summary>Each requested application identity is protected independently.</summary>
++    [Theory]
++    [InlineData("eventstore")]
++    [InlineData("tenants")]
++    [InlineData("parties")]
++    public void ExistingRequestedApplicationFails(string appId)
++        => Assert.Equal($"Conflicting Dapr application IDs: {appId}. The requested test topology cannot start alongside these applications.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateRunningApplications("[{\"appId\":\"" + appId + "\"}]")).Message);
++
++    /// <summary>An unrelated application does not prevent an independent topology from running.</summary>
++    [Fact]
++    public void UnrelatedApplicationAndStrongKeyPass()
++    {
++        TopologyConfiguration.ValidateRunningApplications("[{\"appId\":\"other-service\"}]");
++        TopologyConfiguration.ValidateSigningKey(new string('k', 32));
++    }
++
++    /// <summary>An unexpected conflict-check document fails closed.</summary>
++    [Fact]
++    public void NonArrayDaprSnapshotFails()
++        => Assert.Equal("Cannot validate topology conflicts: 'dapr list --output json' must return an array.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateRunningApplications("{}")).Message);
++
++    /// <summary>Malformed Dapr records fail with a stable preflight diagnostic.</summary>
++    [Theory]
++    [InlineData("[{}]")]
++    [InlineData("[null]")]
++    [InlineData("[42]")]
++    [InlineData("[{\"appId\":42}]")]
++    [InlineData("[{\"appId\":null}]")]
++    [InlineData("[{\"appId\":\"\"}]")]
++    public void MalformedDaprRecordFails(string snapshot)
++        => Assert.Equal("Cannot validate topology conflicts: Dapr entry 0 must be an object with a non-empty string 'appId'.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateRunningApplications(snapshot)).Message);
++
++    /// <summary>Invalid sidecar port settings fail before resource launch.</summary>
++    [Theory]
++    [InlineData(0)]
++    [InlineData(65536)]
++    public void InvalidGatewayPortFails(int port)
++        => Assert.Equal("Dapr:GatewayHttpPort must be between 1 and 65535.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateGatewayPort(port)).Message);
++
++    /// <summary>A non-Dapr process occupying the Gateway sidecar port is also rejected.</summary>
++    [Fact]
++    public void OccupiedGatewayPortFails()
++    {
++        using var listener = new TcpListener(IPAddress.Loopback, 0);
++        listener.Start();
++        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
++        Assert.Equal($"Gateway Dapr HTTP port {port} is already in use; the test topology cannot start.",
++            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateGatewayPort(port)).Message);
++    }
++
++    /// <inheritdoc/>
++    public void Dispose() => Directory.Delete(_root, recursive: true);
++}
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs
+new file mode 100644
+index 0000000..2eb1f1c
+--- /dev/null
++++ b/tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs
+@@ -0,0 +1,142 @@
++using System.Diagnostics;
++using System.Net;
++using System.Net.Sockets;
++
++namespace Hexalith.McpCli.Manifest.Tests;
++
++/// <summary>Executes the AppHost entry point and proves its launch guards precede resource creation.</summary>
++public sealed class TopologyLaunchTests : IDisposable
++{
++    private readonly string _root = Path.Combine(Path.GetTempPath(), "mcpcli-launch-" + Guid.NewGuid().ToString("N"));
++
++    /// <summary>Root membership is enforced by the executable entry point.</summary>
++    [Fact]
++    public async Task MissingDeclaredRootStopsLaunch()
++    {
++        string assembly = PrepareHost();
++        string project = Path.Combine(_root, "references", "Hexalith.EventStore", "src", "Hexalith.EventStore", "Hexalith.EventStore.csproj");
++        var result = await InvokeAsync(assembly, new string('k', 32), "[]");
++        Assert.Equal(2, result.ExitCode);
++        Assert.Equal(string.Empty, result.Stdout);
++        Assert.Equal($"Required root checkout 'references/Hexalith.EventStore' is not declared in '{Path.Combine(_root, ".gitmodules")}'. Required project: '{project}'.{Environment.NewLine}", result.Stderr);
++    }
++
++    /// <summary>The executable rejects a weak key before invoking Dapr or creating resources.</summary>
++    [Fact]
++    public async Task WeakSigningKeyStopsLaunch()
++    {
++        string assembly = PrepareHost();
++        PrepareSources();
++        var result = await InvokeAsync(assembly, "short-private-test-key", "invalid snapshot: Dapr must not run");
++        Assert.Equal(2, result.ExitCode);
++        Assert.Equal(string.Empty, result.Stdout);
++        Assert.Equal("Authentication:JwtBearer:SigningKey must contain at least 32 UTF-8 bytes for the Development test topology." + Environment.NewLine, result.Stderr);
++    }
++
++    /// <summary>The executable rejects an occupied requested identity before adding a resource.</summary>
++    [Fact]
++    public async Task ExistingApplicationStopsLaunch()
++    {
++        string assembly = PrepareHost();
++        PrepareSources();
++        var result = await InvokeAsync(assembly, new string('k', 32), "[{\"appId\":\"eventstore\"}]");
++        Assert.Equal(2, result.ExitCode);
++        Assert.Equal(string.Empty, result.Stdout);
++        Assert.Equal("Conflicting Dapr application IDs: eventstore. The requested test topology cannot start alongside these applications." + Environment.NewLine, result.Stderr);
++    }
++
++    /// <summary>Malformed Dapr records use the executable's diagnostic boundary before resources start.</summary>
++    [Theory]
++    [InlineData("[{}]")]
++    [InlineData("[null]")]
++    [InlineData("[42]")]
++    [InlineData("[{\"appId\":42}]")]
++    [InlineData("[{\"appId\":null}]")]
++    [InlineData("[{\"appId\":\"\"}]")]
++    public async Task MalformedDaprSnapshotStopsLaunch(string snapshot)
++    {
++        string assembly = PrepareHost();
++        PrepareSources();
++        var result = await InvokeAsync(assembly, new string('k', 32), snapshot);
++        Assert.Equal(2, result.ExitCode);
++        Assert.Equal(string.Empty, result.Stdout);
++        Assert.Equal("Cannot validate topology conflicts: Dapr entry 0 must be an object with a non-empty string 'appId'." + Environment.NewLine, result.Stderr);
++    }
++
++    /// <summary>A qualified preflight exits cleanly without starting its source projects.</summary>
++    [Fact]
++    public async Task ValidPreflightExitsBeforeResourceCreation()
++    {
++        string assembly = PrepareHost();
++        PrepareSources();
++        var result = await InvokeAsync(assembly, new string('k', 32), "[]");
++        Assert.Equal(0, result.ExitCode);
++        Assert.Equal(string.Empty, result.Stdout);
++        Assert.Equal(string.Empty, result.Stderr);
++    }
++
++    private string PrepareHost()
++    {
++        string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
++        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
++        string output = Path.Combine(repository, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0");
++        string target = Path.Combine(_root, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0");
++        Directory.CreateDirectory(Path.Combine(_root, "src"));
++        foreach (string source in Directory.EnumerateFiles(output, "*", SearchOption.AllDirectories))
++        {
++            string destination = Path.Combine(target, Path.GetRelativePath(output, source));
++            Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
++            File.Copy(source, destination);
++        }
++
++        return Path.Combine(target, "Hexalith.McpCli.AppHost.dll");
++    }
++
++    private void PrepareSources()
++    {
++        string[] modules = ["Hexalith.EventStore", "Hexalith.Tenants", "Hexalith.Parties"];
++        File.WriteAllText(Path.Combine(_root, ".gitmodules"), string.Join('\n', modules.Select(module =>
++            $"[submodule \"{module}\"]\n path = references/{module}")));
++        foreach (string module in modules)
++        {
++            string checkout = Path.Combine(_root, "references", module);
++            string directory = Path.Combine(checkout, "src", module);
++            Directory.CreateDirectory(directory);
++            File.WriteAllText(Path.Combine(directory, module + ".csproj"), "<Project />");
++            var start = new ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
++            foreach (string argument in new[] { "init", "--quiet", checkout }) start.ArgumentList.Add(argument);
++            using Process git = Process.Start(start)!;
++            git.WaitForExit();
++            Assert.Equal(0, git.ExitCode);
++        }
++    }
++
++    private async Task<(int ExitCode, string Stdout, string Stderr)> InvokeAsync(string assembly, string key, string snapshot)
++    {
++        string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
++        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
++        string stub = Path.Combine(repository, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0");
++        using var listener = new TcpListener(IPAddress.Loopback, 0);
++        listener.Start();
++        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
++        listener.Stop();
++        var start = new ProcessStartInfo("dotnet")
++        {
++            WorkingDirectory = _root, RedirectStandardOutput = true, RedirectStandardError = true,
++        };
++        foreach (string argument in new[] { assembly, "--Topology:PreflightOnly=true", $"--Authentication:JwtBearer:SigningKey={key}", $"--Dapr:GatewayHttpPort={port}" })
++            start.ArgumentList.Add(argument);
++        start.Environment["PATH"] = stub + Path.PathSeparator + start.Environment["PATH"];
++        start.Environment["MCPCLI_TEST_DAPR_SNAPSHOT"] = snapshot;
++        using Process process = Process.Start(start)!;
++        Task<string> output = process.StandardOutput.ReadToEndAsync();
++        Task<string> error = process.StandardError.ReadToEndAsync();
++        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
++        try { await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false); }
++        finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
++        return (process.ExitCode, await output.ConfigureAwait(false), await error.ConfigureAwait(false));
++    }
++
++    /// <inheritdoc/>
++    public void Dispose() => Directory.Delete(_root, recursive: true);
++}
+diff --git a/tests/fixtures/Topology.DaprStub/Program.cs b/tests/fixtures/Topology.DaprStub/Program.cs
+new file mode 100644
+index 0000000..e583bf0
+--- /dev/null
++++ b/tests/fixtures/Topology.DaprStub/Program.cs
+@@ -0,0 +1,8 @@
++if (!args.SequenceEqual(new[] { "list", "--output", "json" }))
++{
++    Console.Error.WriteLine("The preflight fixture supports only 'dapr list --output json'.");
++    return 64;
++}
++
++Console.WriteLine(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_SNAPSHOT") ?? "[]");
++return 0;
+diff --git a/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj b/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj
+new file mode 100644
+index 0000000..6a27a7c
+--- /dev/null
++++ b/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj
+@@ -0,0 +1,6 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++    <AssemblyName>dapr</AssemblyName>
++  </PropertyGroup>
++</Project>
+diff --git a/tools/dependency-policy.json b/tools/dependency-policy.json
+index 934c85b..87bc6f8 100644
+--- a/tools/dependency-policy.json
++++ b/tools/dependency-policy.json
+@@ -86,6 +86,7 @@
+     "Hexalith.EventStore.Testing",
+     "Hexalith.EventStore.Testing.Integration",
+     "Hexalith.EventStore.Aspire",
++    "Hexalith.Parties.Aspire",
+     "Hexalith.Tenants.Aspire"
+   ],
+   "sampleContracts": "Hexalith.McpCli.Sample.Contracts"

@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "initialBeforeBroadChecks": {
+    "sourceTreeSha256": "b4968e355431d31e6849d0ce5850d62387f75d2eaea11dfa7bc253f05af6fd00",
+    "sourceFileCount": 6598,
+    "taskTreeSha256": "810b1236faeef61046d5851cdc1bf0a02141ab20992081e21b809ea2ec451fa7"
+  },
+  "finalFrozenCandidate": {
+    "taskTreeSha256": "fb3fd64a23d52934688fb8b6cb35148d82a75adc4c585c3c91dfeb59ce2179da",
+    "sourceTreeSha256": "9c9de5a0ab507cd8377972048163700266f52432a89781f6c06c1c905a2a0679",
+    "sourceFileCount": 6598,
+    "taskFilesMatchingSnapshotAndOwningCheckout": 26,
+    "unexpectedChangesAfterFreeze": [],
+    "owningTaskFilesChangedDuringQualification": []
+  },
+  "intentionalScopeExpansion": "Normal release gates required the trusted-publishing inventory and project inventory docs/test updates. These were frozen before focused reruns and final package staging. Final task file hashes are checked before artifact qualification and after all checks.",
+  "rootTrackedCheckoutsClean": true
+}

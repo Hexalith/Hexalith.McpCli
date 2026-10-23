@@ -1,0 +1,33 @@
+{
+  "owningRepository": "Hexalith/Hexalith.Parties",
+  "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "files": {
+    ".github/workflows/ci.yml": "fb1207d4864b980d152c70304f9fd625c2fae5d2bf48f5ad5b45eff956a7c8c0",
+    ".github/workflows/release.yml": "6ebe101da77c1e72e621d16d5cc62abec56271f6277a223eb930b958917ad53f",
+    "Hexalith.Parties.Standalone.slnx": "ecc8386d82cc5885f7dbbb8e76acac6589ba21cf7b6ebea52c99d0f8b09413e2",
+    "Hexalith.Parties.slnx": "28a300ddaa2c562cbd0037313a49961d3cb766c4e65c3adcb0aa40fae8f2ab98",
+    "README.md": "1d06d8a4d9b7b7afa5cc2a35a5833cba8083aa36e4d198c5d3c10506ccc6ddcb",
+    "docs/architecture.md": "187e9c8e3334034160f5d0e408ab39c468536508b5c182295772aacfdcfa4929",
+    "docs/ci.md": "c2a30a9796abfc75f473aa355c86ead654183b60ccb1e0e890ac6012703f886f",
+    "docs/component-inventory.md": "1cae987de93c91e6ba2688c00598de905599308b21de9498ec9721e0e428de33",
+    "docs/index.md": "630a3921a983c20d447ca751b484a31f8c84630f7de9db21e37039baa89397da",
+    "docs/project-overview.md": "257fd5b3d40cc0d1c42aef56a361d3d0ec7b830bea09524d600e2af0d47668e8",
+    "docs/source-tree-analysis.md": "b2f1bbe973f3372d86ae347ec5c1d1970a8f7c0394d27c399b4986abf345de6b",
+    "scripts/pack-release-packages.py": "7aacf6036fdd1f430b708a1b4b9bad53161aec206735f5f263a869552691cb10",
+    "scripts/test.ps1": "97bc28e5f995ce192e67b141842911c055d912590b4c7a8ca724f4af52f5283f",
+    "scripts/validate-nuget-packages.py": "9bcbd131a7bf1d6844b61ac05dcbe793da8a460630d3d2d0175b1f6e0c50a5f5",
+    "scripts/validate-publication-preflight.sh": "775c0fcd30b99dc182f84ea3d13d46d58ed012d6c4438e9f283e4984345a07f9",
+    "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj": "11b829af2ab2cdb65134d7a3f4d8fe89197b6a07b33169b3b6d1482d01d5128f",
+    "src/Hexalith.Parties.Aspire/HexalithPartiesServerExtensions.cs": "0084b2359d84b23938b0f37535b25217ec9d4b36e1e508fed6da7c814448cd4d",
+    "src/Hexalith.Parties.Aspire/PartiesServerProjectMetadata.cs": "ecf3817ba718fb6558ef83fbcaf3fee8098a6d74607e2bdb48612063cb81616c",
+    "tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj": "038148f1debde8dbff7b2ee0448c7d38624975089121124efcca4cdc9535e055",
+    "tests/Hexalith.Parties.Aspire.Tests/PartiesServerCompositionTests.cs": "0f7ae93c05bef72dc5c5de28cbee1718c660bc1ce0382d072fdc8fd07bce8f6a",
+    "tests/Hexalith.Parties.Ci.Tests/CommonsHttpRestoreRoutingTests.cs": "63c6e9583d16e76f645a24a42a09b88dfdd2b2d7c7a8ed42ee2fb2660920a54f",
+    "tests/Hexalith.Parties.Ci.Tests/PartiesContainerPublishWorkflowTests.cs": "522d1483bc6ca17e39631c42caf50c39744903337d9a0305a90e90e63a097770",
+    "tests/Hexalith.Parties.Ci.Tests/release_artifact_cases.py": "9f04cda6a2611a687f9a5978a0f74757ae49a274606102ca81bff07f10fba952",
+    "tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs": "9533240328ab2d982dee59b41d0d73bfe589d082e80f38f0a3996b7ee21829b1",
+    "tools/nuget-trusted-publishing-policy.json": "0cf398851c67c91479a16a35123d59bd03d9e6822f4a8746abe1c9a16f4d7593",
+    "tools/release-packages.json": "7fd2e99fb282419b8ca9bf639a4af503386c0db650e3b0ee79aa89f97e92a991"
+  },
+  "taskTreeSha256": "ce01b0e5a2500cdb69a5166fcff2b6c3f089daef81a5b826742a07ca7237ccbb"
+}

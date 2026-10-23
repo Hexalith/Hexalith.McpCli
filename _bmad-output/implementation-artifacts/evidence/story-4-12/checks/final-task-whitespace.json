@@ -1,0 +1,15 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.whitespace=cr-at-eol",
+    "diff",
+    "--check",
+    "--",
+    "<26 task paths from source-manifest.json>"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

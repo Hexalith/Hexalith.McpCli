@@ -1,0 +1,27 @@
+{
+  "runId": 39934362740,
+  "sourceSha": "e6d0cc245c43a109672b1b71e1768ef8e2cabbe0",
+  "jobId": 120350500611,
+  "gate": "Build and test",
+  "conclusion": "cancelled",
+  "cause": "Configured job execution time limit of 45m0s",
+  "observedModuleTestFailures": [
+    "Hexalith.Builds.ModuleTool.Tests.ModuleRunnerReviewRegressionTests.EveryExitInspectsEncodedReportsAsync(scenario: \"utf16-safe\") (25ms)",
+    "Hexalith.Builds.ModuleTool.Tests.ModuleRunnerReviewRegressionTests.EveryExitInspectsEncodedReportsAsync(scenario: \"utf16-failed\") (6ms)",
+    "Hexalith.Builds.ModuleTool.Tests.ModuleRunnerReviewRegressionTests.CancellationDuringCleanupPreservesCommittedOutcomeAsync(fails: False) (214ms)",
+    "Hexalith.Builds.ModuleTool.Tests.Workspace.PlatformModelCatalogTests.ModelBuildAppliesPinnedCatalogOnceBeforeOwnerPropsAsync(mode: Source, changeLiveCatalog: False) (9s 507ms)",
+    "Hexalith.Builds.ModuleTool.Tests.Workspace.PlatformModelCatalogTests.ModelBuildAppliesPinnedCatalogOnceBeforeOwnerPropsAsync(mode: Package, changeLiveCatalog: False) (9s 066ms)",
+    "Hexalith.Builds.ModuleTool.Tests.Workspace.PlatformModelCatalogTests.ModelBuildAppliesPinnedCatalogOnceBeforeOwnerPropsAsync(mode: Source, changeLiveCatalog: True) (8s 708ms)",
+    "Hexalith.Builds.ModuleTool.Tests.Workspace.PlatformModelCatalogTests.ModelBuildAppliesPinnedCatalogOnceBeforeOwnerPropsAsync(mode: Package, changeLiveCatalog: True) (9s 010ms)",
+    "Hexalith.Builds.ModuleTool.Tests.ModuleRunnerReviewRegressionTests.SetupUsesInitialFiniteLifetimeAsync(phase: \"startup\") (10m 00s 003ms)",
+    "Hexalith.Builds.ModuleTool.Tests.ModuleRunnerReviewRegressionTests.SetupUsesInitialFiniteLifetimeAsync(phase: \"early-mapping\") (10m 00s 002ms)"
+  ],
+  "observedFailure": "Setup regression phases ran for 600 seconds each, returned exit 3 HXR021 readiness deadline instead of expected exit 4. No Module runner/domain code was changed by the two-file publisher preflight repair.",
+  "publisherContractTests": {
+    "passed": 145,
+    "failed": 0
+  },
+  "pythonJob": "success",
+  "codeQl": "success",
+  "scope": "Read-only diagnosis; no retry or Module runtime/test edits yet."
+}

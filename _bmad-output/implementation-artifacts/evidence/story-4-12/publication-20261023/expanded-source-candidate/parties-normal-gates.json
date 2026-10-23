@@ -1,0 +1,811 @@
+{
+  "recordedAt": "2026-10-23T11:35:02.097925+00:00",
+  "sourceCommit": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "remoteMainSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "status": "all exact-source normal CI/range/commitlint/CodeQL gates passed; expanded-source publication authorization pending",
+  "publicationDispatched": false,
+  "runs": [
+    {
+      "conclusion": "success",
+      "createdAt": "2026-10-23T11:06:12Z",
+      "event": "push",
+      "headBranch": "main",
+      "headSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-23T11:06:51Z",
+          "conclusion": "success",
+          "databaseId": 120381352442,
+          "name": "BMAD configuration tests",
+          "startedAt": "2026-10-23T11:06:44Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test configuration merging and resolvers",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 7,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120381352442"
+        },
+        {
+          "completedAt": "2026-10-23T11:08:10Z",
+          "conclusion": "success",
+          "databaseId": 120381352552,
+          "name": "Parties Platform declaration",
+          "startedAt": "2026-10-23T11:06:44Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize direct declaration owners",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Restore the pinned module tool",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate Parties with its reference declarations",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Check the owner ACL declaration",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test strict declaration rendering",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 15,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 16,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120381352552"
+        },
+        {
+          "completedAt": "2026-10-23T11:09:07Z",
+          "conclusion": "success",
+          "databaseId": 120381352602,
+          "name": "Owner publisher qualification",
+          "startedAt": "2026-10-23T11:06:44Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize owner publisher build dependencies",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install Dapr CLI for manifest publisher",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Qualify actual owner manifests and rejection controls",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120381352602"
+        },
+        {
+          "completedAt": "2026-10-23T11:17:43Z",
+          "conclusion": "success",
+          "databaseId": 120381352604,
+          "name": "ci / build-and-test",
+          "startedAt": "2026-10-23T11:06:44Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Validate governed CI contract",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Checkout approved Builds actions",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Evaluate governed workflow provenance",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Initialize root-declared submodules (governed)",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize root-declared submodules",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize .NET",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Cache NuGet packages",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Validate test platform input",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Restore",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Build",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate package consumer references",
+              "number": 13,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Unit tests (Tier 1, VSTest)",
+              "number": 14,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+              "number": 15,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Install and initialize Dapr (governed)",
+              "number": 16,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install and initialize Dapr",
+              "number": 17,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Integration tests (Tier 2, VSTest)",
+              "number": 18,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Integration tests (Tier 2, Microsoft.Testing.Platform)",
+              "number": 19,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Validate coverage gates",
+              "number": 20,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fail on blocking test failures",
+              "number": 21,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload test and coverage evidence",
+              "number": 22,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Cache NuGet packages",
+              "number": 42,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Initialize .NET",
+              "number": 43,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 44,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 45,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120381352604"
+        },
+        {
+          "completedAt": "2026-10-23T11:09:09Z",
+          "conclusion": "success",
+          "databaseId": 120381352682,
+          "name": "UI accessibility",
+          "startedAt": "2026-10-23T11:06:44Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize UI build dependencies",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install locked browser-test dependencies",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test browser server configuration",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Typecheck browser tests",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test restored UI asset resolution",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install Chromium and system dependencies",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Build UI with published dependencies",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run UI browser gate",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload UI browser evidence",
+              "number": 13,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+              "number": 24,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "number": 25,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 26,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 27,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120381352682"
+        },
+        {
+          "completedAt": "2026-10-23T11:33:45Z",
+          "conclusion": "success",
+          "databaseId": 120385606234,
+          "name": "ci / aspire-tests",
+          "startedAt": "2026-10-23T11:17:47Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize root-declared submodules",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize .NET",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Cache NuGet packages",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Restore and Build",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install and initialize Dapr",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "skipped",
+              "name": "Aspire contract tests (Tier 3, non-Performance, VSTest)",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Aspire contract tests (Tier 3, non-Performance, Microsoft.Testing.Platform)",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test summary",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload test results",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Cache NuGet packages",
+              "number": 20,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Initialize .NET",
+              "number": 21,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 22,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 23,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120385606234"
+        },
+        {
+          "completedAt": "2026-10-23T11:17:44Z",
+          "conclusion": "skipped",
+          "databaseId": 120385608710,
+          "name": "ci / performance-tests",
+          "startedAt": "2026-10-23T11:17:44Z",
+          "status": "completed",
+          "steps": [],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687/job/120385608710"
+        }
+      ],
+      "name": "CI",
+      "status": "completed",
+      "updatedAt": "2026-10-23T11:33:46Z",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732687"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-10-23T11:06:12Z",
+      "event": "push",
+      "headBranch": "main",
+      "headSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-23T11:06:21Z",
+          "conclusion": "success",
+          "databaseId": 120381163816,
+          "name": "Root gitlink RC gate",
+          "startedAt": "2026-10-23T11:06:15Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Checkout",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Determine base ref",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Root gitlink RC gate",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Checkout",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732055/job/120381163816"
+        }
+      ],
+      "name": "Release Candidate Gate",
+      "status": "completed",
+      "updatedAt": "2026-10-23T11:06:21Z",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732055"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-10-23T11:06:12Z",
+      "event": "push",
+      "headBranch": "main",
+      "headSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-23T11:06:36Z",
+          "conclusion": "success",
+          "databaseId": 120381165355,
+          "name": "commitlint / commitlint",
+          "startedAt": "2026-10-23T11:06:16Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v7.0.1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v7.1.0",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install dependencies",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Verify npm dependency provenance and signatures",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate commit messages",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v7.1.0",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v7.0.1",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732609/job/120381165355"
+        }
+      ],
+      "name": "Commitlint",
+      "status": "completed",
+      "updatedAt": "2026-10-23T11:06:37Z",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732609"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-10-23T11:06:12Z",
+      "event": "push",
+      "headBranch": "main",
+      "headSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-23T11:10:22Z",
+          "conclusion": "success",
+          "databaseId": 120381165423,
+          "name": "codeql / analyze",
+          "startedAt": "2026-10-23T11:06:15Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v7.0.1",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize CodeQL",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Perform CodeQL Analysis",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Perform CodeQL Analysis",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Initialize CodeQL",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v7.0.1",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732654/job/120381165423"
+        }
+      ],
+      "name": "CodeQL",
+      "status": "completed",
+      "updatedAt": "2026-10-23T11:10:23Z",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39943732654"
+    }
+  ],
+  "testReceipts": [
+    "parties-blocking-test-counts.json",
+    "parties-aspire-test-counts.json"
+  ],
+  "note": "Normal configured unused VSTest/performance steps remain skipped. No required gate, assertion, readiness requirement or timeout was weakened."
+}

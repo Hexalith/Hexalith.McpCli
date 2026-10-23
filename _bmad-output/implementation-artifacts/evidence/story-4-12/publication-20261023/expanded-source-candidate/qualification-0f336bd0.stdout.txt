@@ -1,0 +1,49 @@
+{
+  "artifact": "Hexalith.Parties.Aspire.1.6.0-story412.3.nupkg",
+  "version": "1.6.0-story412.3",
+  "sha256": "800b1e81796962ddf4d2222b3ca2c81495717cf20e11f6a476f4e8fa00a38f31",
+  "published": false,
+  "assemblies": [
+    "lib/net10.0/Hexalith.Parties.Aspire.dll"
+  ],
+  "artifactBytes": 13154,
+  "sourceBinding": {
+    "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+    "taskTreeSha256": "a7dd5b67cb9ec40552a07f3a999a28bab0fa7b455ba186cb9c99c6d3c4f030e5",
+    "sourceCommit": "0f336bd005dbed9e2e278bc1861dfc0fb2322a15"
+  },
+  "directDependencies": {
+    "Aspire.Hosting": "13.6.3",
+    "Hexalith.EventStore.Aspire": "3.126.1"
+  },
+  "rootSelection": [
+    {
+      "case": "own-root",
+      "result": "pass"
+    },
+    {
+      "case": "direct-root-reference",
+      "result": "pass"
+    },
+    {
+      "case": "missing",
+      "result": "pass"
+    },
+    {
+      "case": "nested-only",
+      "result": "pass"
+    },
+    {
+      "case": "root-level-only",
+      "result": "pass"
+    },
+    {
+      "case": "sibling-only",
+      "result": "pass"
+    }
+  ],
+  "restoredArtifactSha256": "800b1e81796962ddf4d2222b3ca2c81495717cf20e11f6a476f4e8fa00a38f31",
+  "resolvedClosureSha256": "f7ab69e60e92507acc5f6010bf68770dc3e85904e6342292420c19ff41f54fbe",
+  "result": "pass"
+}
+Resolved packages: 80

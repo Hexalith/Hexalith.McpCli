@@ -1,0 +1,34 @@
+{
+  "owningBuildsRepairSha": "e6d0cc245c43a109672b1b71e1768ef8e2cabbe0",
+  "publisherTests": {
+    "total": 145,
+    "failed": 0,
+    "skipped": 0
+  },
+  "partiesPinRepair": {
+    "beforeRebaseSha": "e594d097e2bda7b162a9c624c16885fc4c3a6f22",
+    "afterRebaseSha": "287aa8e0bc5a68d7845cd0eb0927519f7889b6b4",
+    "changedFiles": 6,
+    "affectedContractTests": {
+      "total": 132,
+      "failed": 0,
+      "skipped": 0,
+      "elapsedSeconds": 89.13
+    }
+  },
+  "earlierLocalSetupFailure": {
+    "total": 439,
+    "failed": 70,
+    "causes": {
+      "missingNewPinnedBuildsGitObject": 64,
+      "missingFullSolutionRestoreAndUiBuildEvidence": 6
+    },
+    "resolution": "Fetched only the declared root Builds dependency commit object, preserving its checkout for that lookup; reran both affected publication classes. Full restored-solution qualification remains the fresh exact-source CI gate."
+  },
+  "helperTestsOnExpandedInput": {
+    "total": 9,
+    "failed": 0,
+    "skipped": 0,
+    "elapsedSeconds": 0.291
+  }
+}

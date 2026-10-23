@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-23T11:30:44.539619+00:00",
+  "command": "dapr list -o json",
+  "readOnly": true,
+  "requestedAppIds": [
+    "eventstore",
+    "tenants",
+    "parties"
+  ],
+  "conflicts": [
+    {
+      "appId": "eventstore",
+      "httpPort": 29155,
+      "grpcPort": 29156,
+      "appPort": 8080,
+      "daprdPid": 1810448,
+      "created": "2026-10-23 12:58.01"
+    },
+    {
+      "appId": "tenants",
+      "httpPort": 29146,
+      "grpcPort": 29147,
+      "appPort": 61448,
+      "daprdPid": 1810473,
+      "created": "2026-10-23 12:58.01"
+    }
+  ],
+  "action": "Preserved all user resources. No start, stop, restart, reuse or reconfiguration.",
+  "liveAcceptance": "not established"
+}

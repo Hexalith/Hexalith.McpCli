@@ -1,0 +1,18 @@
+{
+  "isolatedDraft": true,
+  "helperAdmitted": false,
+  "build": "Release warnings-as-errors passed",
+  "processTests": {
+    "total": 4,
+    "failed": 0,
+    "skipped": 0,
+    "coverage": [
+      "Program rejects missing declared root before resources",
+      "Program rejects weak key before Dapr/resource creation",
+      "Program rejects existing requested app ID before resources",
+      "Valid preflight exits without launching fake source projects"
+    ],
+    "outputAssertions": "Exact exit code, complete stdout and complete stderr"
+  },
+  "fixture": "Cross-platform BCL-only Dapr list stub; child-only PATH/environment; no global process or environment mutation"
+}

@@ -1,0 +1,52 @@
+{
+  "references/Hexalith.EventStore": {
+    "commit": "1748b16b11fb63b885dfa2fd4a9c7a420ea103a9",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.Memories": {
+    "commit": "0af009c20c97038b685f3d4b62c0c8e757982d14",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.FrontComposer": {
+    "commit": "a258b992d08e73e2d3251c865ef01a982eba31ac",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.Tenants": {
+    "commit": "66def172379f37d12e746fe6eb9195801929c572",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.AI.Tools": {
+    "commit": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.Commons": {
+    "commit": "5c23c818f639c5bb3175f964c5549440bd5b876d",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.Builds": {
+    "commit": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.PolymorphicSerializations": {
+    "commit": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.McpCli": {
+    "commit": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  },
+  "references/Hexalith.Platform": {
+    "commit": "d189c7de74293e1a718e5e78b1b3b7c0e47b48b5",
+    "source": "existing owning-root checkout; local shared clone",
+    "nestedSubmodulesInitialized": false
+  }
+}

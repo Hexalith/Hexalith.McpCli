@@ -1,0 +1,88 @@
+{
+  "observedAtSourceSha": "287aa8e0bc5a68d7845cd0eb0927519f7889b6b4",
+  "rootCheckouts": {
+    "references/Hexalith.EventStore": {
+      "sha": "cd193902a52abb02572528958436d79a8ae25b9a",
+      "describe": "v3.126.1-41-gcd193902",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.Memories": {
+      "sha": "b55db82c060caf917a142fdb6585fa7340b01647",
+      "describe": "v2.29.8-17-gb55db82c",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.FrontComposer": {
+      "sha": "8c61143ef4c6a983bfe1d25865857b9b4cd240c9",
+      "describe": "v4.7.0-64-g8c61143e",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.Tenants": {
+      "sha": "25e3bf827a7963ec79b57b4918290b3fed728706",
+      "describe": "v5.10.1-24-g25e3bf82",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.AI.Tools": {
+      "sha": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+      "describe": "3f194e17",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.Commons": {
+      "sha": "1663028fb6d9f46a0bf17919edeb21bb99be1587",
+      "describe": "v2.30.3-4-g1663028f",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.Builds": {
+      "sha": "70ead608ac01f66dfcd80c13bb71152dac6c128e",
+      "describe": "v4.36.0-11-g70ead608",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.PolymorphicSerializations": {
+      "sha": "221ac4592ba908ae7661ba1fa9e2d1fcc23baee0",
+      "describe": "v1.19.5",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.McpCli": {
+      "sha": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+      "describe": "v1.0.0-59-gbe89509d",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    },
+    "references/Hexalith.Platform": {
+      "sha": "1d646b232ad862f6da1d8dd0953fe96ccd273fee",
+      "describe": "1d646b23",
+      "clean": true,
+      "initializedNestedSubmodules": 0
+    }
+  },
+  "eventStoreDescribeFromRetainedReleaseTag": "v3.126.0-100-gcd193902",
+  "scope": "Git selection/cleanliness facts only; no extension of historical runtime, parity, custody or release approval.",
+  "evaluatedDefaultRelease": {
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.Parties/Hexalith.Parties.csproj",
+      "-nologo",
+      "-p:Configuration=Release",
+      "-getProperty:HexalithEventStoreVersion,HexalithCommonsVersion,HexalithFrontComposerVersion,HexalithMemoriesVersion,HexalithTenantsVersion,HexalithPartiesVersion"
+    ],
+    "properties": {
+      "Properties": {
+        "HexalithEventStoreVersion": "3.126.1",
+        "HexalithCommonsVersion": "2.30.3",
+        "HexalithFrontComposerVersion": "4.7.0",
+        "HexalithMemoriesVersion": "2.29.8",
+        "HexalithTenantsVersion": "5.10.1",
+        "HexalithPartiesVersion": "1.5.2"
+      }
+    },
+    "exitCode": 0
+  }
+}

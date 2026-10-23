@@ -1,0 +1,16 @@
+{
+  "sourceSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "change": "Schedule cold startup sequentially while retaining both concurrently live sessions and all original routing/state/cross-denial/peer-disposal assertions",
+  "originalReadinessChecksAndTimeoutsPreserved": true,
+  "qualifiedLocalTest": {
+    "total": 1,
+    "failed": 0,
+    "skipped": 0,
+    "elapsedSeconds": 124.535
+  },
+  "file": "tests/Hexalith.Parties.IntegrationTests/Topology/PartiesTopologyIsolationTests.cs",
+  "sha256": "61ccabeae4a489784adeccbb8f11c67194c43d081ef31e5dce9d6679b8c2fec7",
+  "priorExactSourceRetry": "39916336068 attempt 2 cancelled by normal CI concurrency after a same-SHA push event",
+  "priorSameShaFullRun": 39927882576,
+  "publicationDispatched": false
+}

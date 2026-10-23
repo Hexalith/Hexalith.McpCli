@@ -1,0 +1,1 @@
+fix(release): use new-package-aware publication preflight

@@ -1,0 +1,15 @@
+{
+  "sourceSha": "4449020abcc01080a2375c7141b39aa18913d4aa",
+  "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "taskFileCount": 26,
+  "taskTreeSha256": "023abd2f23d0e56dd6a4474bb8e07ba3a2e4f113c0da66dbb967f52e951324fa",
+  "committedBytesMatchQualification": true,
+  "rangeProof": {
+    "runId": 39914044345,
+    "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39914044345",
+    "conclusion": "success"
+  },
+  "ciRunId": 39914044727,
+  "releaseDispatched": false,
+  "originalOwningWorktreeUntouched": true
+}

@@ -1,0 +1,6 @@
+⧗   --- input ---
+fix(ci): diagnose publisher and target detail label
+
+Keep publisher output private while identifying known failure types.
+Match the detail region exactly when a retry button is also present.
+✔   found 0 problems, 0 warnings

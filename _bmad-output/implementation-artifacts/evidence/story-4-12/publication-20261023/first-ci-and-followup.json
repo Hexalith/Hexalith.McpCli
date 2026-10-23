@@ -1,0 +1,16 @@
+{
+  "helperSourceSha": "4449020abcc01080a2375c7141b39aa18913d4aa",
+  "exactSourceCiRun": 39914044727,
+  "buildAndTest": "success",
+  "baselineFailuresReproduced": [
+    "Owner publisher qualification: command exit -6 with output withheld",
+    "UI edit-form test: substring label matches detail region and retry button"
+  ],
+  "localPublisher": "11 tests passed, including private-output regression",
+  "localBrowser": "1 focused edit-form test passed using Node 24.22.1 and npm 11.19.1",
+  "followupScope": [
+    "Allowlisted publisher exception identities, with all raw output still withheld",
+    "Exact intended Party detail label"
+  ],
+  "publicationDispatched": false
+}

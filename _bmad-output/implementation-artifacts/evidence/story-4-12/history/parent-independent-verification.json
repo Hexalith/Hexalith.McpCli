@@ -1,0 +1,12 @@
+{
+  "result": "pass",
+  "status": "historical; superseded after final README and inventory updates",
+  "verifiedBy": "parent agent independently",
+  "artifactSha256": "c361f454ce4d2bd6d40da5e95f1172ef5020922b9d173070877e995ce4499d10",
+  "verified": [
+    "archive SHA-256",
+    "package ID and local version",
+    "only helper DLL is packaged",
+    "exact direct dependencies Aspire.Hosting 13.6.1 and Hexalith.EventStore.Aspire 3.126.1"
+  ]
+}

@@ -1,0 +1,5 @@
+test(topology): stagger isolated session startup
+
+Keep both sessions live for routing, state, cross-call rejection and
+peer-disposal proofs without overlapping every cold host startup.
+Preserve all readiness checks and their existing timeout budgets.

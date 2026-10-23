@@ -1,0 +1,16 @@
+[
+  {
+    "sourceSha": "e6d0cc245c43a109672b1b71e1768ef8e2cabbe0",
+    "lockedCliVersion": "21.2.4",
+    "actualInstalledCliVersion": "21.2.4",
+    "canonicalMessageSha256": "f1fba44f60089388955881f2e1c0662ccb505eb131205fc58e27e0ccce33d596",
+    "priorExactMessageValidationExitCode": 0
+  },
+  {
+    "sourceSha": "d9070aa0d43feb9e3359286bc797d2be65960727",
+    "lockedCliVersion": "21.2.3",
+    "actualInstalledCliVersion": "21.2.3",
+    "canonicalMessageSha256": "f1fba44f60089388955881f2e1c0662ccb505eb131205fc58e27e0ccce33d596",
+    "priorExactMessageValidationExitCode": 0
+  }
+]

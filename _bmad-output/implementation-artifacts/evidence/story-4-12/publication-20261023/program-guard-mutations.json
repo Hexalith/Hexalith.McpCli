@@ -1,0 +1,42 @@
+{
+  "draftOnly": true,
+  "programSha256": "298815b7730d719e0d3a0a617b5c92a3a5f8c1a7921ee52ae85d469d45899868",
+  "mutations": [
+    {
+      "guard": "root-source",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-method",
+        "*MissingDeclaredRootStopsLaunch"
+      ],
+      "exitCode": 1,
+      "expectedTestFailure": true
+    },
+    {
+      "guard": "auth-key",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-method",
+        "*WeakSigningKeyStopsLaunch"
+      ],
+      "exitCode": 1,
+      "expectedTestFailure": true
+    },
+    {
+      "guard": "runtime-conflict",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-method",
+        "*ExistingApplicationStopsLaunch"
+      ],
+      "exitCode": 1,
+      "expectedTestFailure": true
+    }
+  ],
+  "restoredBuildExitCode": 0,
+  "restoredTestsExitCode": 0,
+  "restoredTestsSummary": "4 passed; no skips"
+}

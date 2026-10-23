@@ -242,6 +242,48 @@ internal static class DependencyPolicyGate
         return failures.Order(StringComparer.Ordinal).ToArray();
     }
 
+    /// <summary>Requires published, reviewed Aspire helpers whose closure contains no Hexalith implementation packages.</summary>
+    public static string[] CheckAspireHelperClosure(DependencyPolicy policy, RestoredDependencyGraph graph, IEnumerable<string> requiredHelpers)
+    {
+        var failures = new List<string>(graph.LoadFailures);
+        foreach (string helper in requiredHelpers.Order(StringComparer.Ordinal))
+        {
+            if (!policy.TestPackages.Contains(helper))
+            {
+                failures.Add($"Helper {helper} is not approved for tests.");
+                continue;
+            }
+
+            if (!graph.Nodes.TryGetValue(helper, out RestoredDependencyNode? root))
+            {
+                string version = graph.Nodes[graph.RootId].Dependencies.GetValueOrDefault(helper, "unresolved");
+                failures.Add($"Required helper {helper}/{version} is missing from restore.");
+                continue;
+            }
+
+            if (root.Type != "package")
+            {
+                failures.Add($"Required helper {helper}/{root.Version} must be a published package; source project helpers are forbidden.");
+                continue;
+            }
+
+            foreach ((string id, string path) in graph.PathsFrom(helper, policy.DecorationPackage.Key, stopAtDecoration: false))
+            {
+                if (!graph.Nodes.TryGetValue(id, out RestoredDependencyNode? dependency))
+                {
+                    failures.Add($"Helper {root.Identity} has an unresolved dependency {id}: {path}");
+                }
+                else if (dependency.Type != "package" || id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase)
+                    && (!id.EndsWith(".Aspire", StringComparison.OrdinalIgnoreCase) || !policy.TestPackages.Contains(id)))
+                {
+                    failures.Add($"Helper {root.Identity} has a forbidden dependency {dependency.Identity}: {path}");
+                }
+            }
+        }
+
+        return failures.Order(StringComparer.Ordinal).ToArray();
+    }
+
     /// <summary>Allows reviewed testing roots and local fixtures, rejecting external project references.</summary>
     public static string[] CheckTestProjects(DependencyPolicy policy, IReadOnlyDictionary<string, XDocument> projects, string root)
     {

@@ -1,0 +1,129 @@
+{
+  "artifact": "Hexalith.Parties.Aspire.1.6.0-story412.1.nupkg",
+  "version": "1.6.0-story412.1",
+  "sha256": "95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a",
+  "published": false,
+  "assemblies": [
+    "lib/net10.0/Hexalith.Parties.Aspire.dll"
+  ],
+  "artifactBytes": 13160,
+  "sourceBinding": {
+    "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+    "taskTreeSha256": "fb3fd64a23d52934688fb8b6cb35148d82a75adc4c585c3c91dfeb59ce2179da"
+  },
+  "directDependencies": {
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "Aspire.Hosting": "13.6.1"
+  },
+  "rootSelection": [
+    {
+      "case": "own-root",
+      "result": "pass"
+    },
+    {
+      "case": "direct-root-reference",
+      "result": "pass"
+    },
+    {
+      "case": "missing",
+      "result": "pass"
+    },
+    {
+      "case": "nested-only",
+      "result": "pass"
+    },
+    {
+      "case": "root-level-only",
+      "result": "pass"
+    },
+    {
+      "case": "sibling-only",
+      "result": "pass"
+    }
+  ],
+  "restoredArtifactSha256": "95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a",
+  "resolvedClosure": {
+    "AspNetCore.HealthChecks.Redis": "9.0.0",
+    "AspNetCore.HealthChecks.Uris": "9.0.0",
+    "Aspire.Hosting.Keycloak": "13.6.1-preview.1.26506.6",
+    "Aspire.Hosting.Redis": "13.6.1",
+    "Aspire.Hosting": "13.6.1",
+    "CommunityToolkit.Aspire.Hosting.Dapr": "13.6.1-beta.935",
+    "Fractions": "7.3.0",
+    "Google.Protobuf": "3.36.1",
+    "Grpc.AspNetCore.Server.ClientFactory": "2.83.0",
+    "Grpc.AspNetCore.Server": "2.83.0",
+    "Grpc.AspNetCore": "2.83.0",
+    "Grpc.Core.Api": "2.84.0",
+    "Grpc.Net.Client": "2.84.0",
+    "Grpc.Net.ClientFactory": "2.84.0",
+    "Grpc.Net.Common": "2.84.0",
+    "Grpc.Tools": "2.83.0",
+    "Hex1b": "0.168.0",
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "Hexalith.Parties.Aspire": "1.6.0-story412.1",
+    "KubernetesClient": "19.0.2",
+    "MessagePack.Annotations": "3.1.12",
+    "MessagePack": "3.1.12",
+    "MessagePackAnalyzer": "3.1.12",
+    "Microsoft.Extensions.AI.Abstractions": "10.8.3",
+    "Microsoft.Extensions.Caching.Abstractions": "10.0.10",
+    "Microsoft.Extensions.Configuration.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Configuration.Binder": "10.0.13",
+    "Microsoft.Extensions.Configuration.CommandLine": "10.0.13",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "10.0.13",
+    "Microsoft.Extensions.Configuration.FileExtensions": "10.0.13",
+    "Microsoft.Extensions.Configuration.Json": "10.0.13",
+    "Microsoft.Extensions.Configuration.UserSecrets": "10.0.13",
+    "Microsoft.Extensions.Configuration": "10.0.13",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.13",
+    "Microsoft.Extensions.DependencyInjection": "10.0.13",
+    "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "8.0.31",
+    "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.31",
+    "Microsoft.Extensions.Diagnostics": "10.0.13",
+    "Microsoft.Extensions.FileProviders.Abstractions": "10.0.13",
+    "Microsoft.Extensions.FileProviders.Physical": "10.0.13",
+    "Microsoft.Extensions.FileSystemGlobbing": "10.0.13",
+    "Microsoft.Extensions.Hosting.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Hosting": "10.0.13",
+    "Microsoft.Extensions.Http": "10.0.13",
+    "Microsoft.Extensions.Logging.Abstractions": "10.0.13",
+    "Microsoft.Extensions.Logging.Configuration": "10.0.13",
+    "Microsoft.Extensions.Logging.Console": "10.0.13",
+    "Microsoft.Extensions.Logging.Debug": "10.0.13",
+    "Microsoft.Extensions.Logging.EventLog": "10.0.13",
+    "Microsoft.Extensions.Logging.EventSource": "10.0.13",
+    "Microsoft.Extensions.Logging": "10.0.13",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.13",
+    "Microsoft.Extensions.Options": "10.0.13",
+    "Microsoft.Extensions.Primitives": "10.0.13",
+    "Microsoft.NET.StringTools": "18.4.0",
+    "Microsoft.VisualStudio.Threading.Only": "17.14.15",
+    "Microsoft.VisualStudio.Validation": "17.13.22",
+    "Microsoft.Win32.SystemEvents": "6.0.0",
+    "ModelContextProtocol.Core": "2.2.0",
+    "ModelContextProtocol": "2.2.0",
+    "Nerdbank.MessagePack": "1.2.4",
+    "Nerdbank.Streams": "2.13.16",
+    "Newtonsoft.Json": "13.0.4",
+    "OpenTelemetry.Api.ProviderBuilderExtensions": "1.20.0",
+    "OpenTelemetry.Api": "1.20.0",
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.20.0",
+    "OpenTelemetry.Extensions.Hosting": "1.20.0",
+    "OpenTelemetry": "1.20.0",
+    "Polly.Core": "8.7.0",
+    "PolyType": "1.3.1",
+    "QRCoder": "1.7.0",
+    "RESPite": "3.4.5",
+    "Semver": "3.0.0",
+    "StackExchange.Redis": "3.4.5",
+    "StreamJsonRpc": "2.25.29",
+    "System.Diagnostics.EventLog": "10.0.13",
+    "System.Drawing.Common": "6.0.0",
+    "System.IO.Hashing": "10.0.12",
+    "YamlDotNet": "18.1.0"
+  },
+  "resolvedClosureSha256": "4ceba91b3af0550d6bfc9f357ca54542191ba84ba246fbd120317217a3a295de",
+  "result": "pass"
+}

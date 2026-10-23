@@ -1,0 +1,11 @@
+{
+  "mutation": "Restore pre-fix unguarded GetProperty/GetString enumeration in actual Program dependency",
+  "mutationTestExit": 1,
+  "expected": "Executable malformed-snapshot cases fail with full channel and exit assertions",
+  "configurationSha256": "8cc0628b2ecded9b19128d46e82bfecd62bd2cb280ba7f34cd4fc6d02b5c5344",
+  "restoredTest": {
+    "total": 37,
+    "failed": 0,
+    "skipped": 0
+  }
+}

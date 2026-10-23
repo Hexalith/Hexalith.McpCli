@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll",
+    "-method",
+    "Hexalith.Parties.Ci.Tests.PartiesContainerPublishWorkflowTests.ReleasePackageManifestDeclaresExactTenPackageInventory"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:27:56.614609+00:00",
+  "exitCode": 0,
+  "stdout": "xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)\n  Discovering: Hexalith.Parties.Ci.Tests\n  Discovered:  Hexalith.Parties.Ci.Tests\n  Starting:    Hexalith.Parties.Ci.Tests\n  Finished:    Hexalith.Parties.Ci.Tests (ID = 'ebf30574c1c44a05f3caba8bc10cc7c3c7382457f66d8127b3f787b8e2b8bb6c')\n=== TEST EXECUTION SUMMARY ===\n   Hexalith.Parties.Ci.Tests  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.138s\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:27:57.003515+00:00"
+}

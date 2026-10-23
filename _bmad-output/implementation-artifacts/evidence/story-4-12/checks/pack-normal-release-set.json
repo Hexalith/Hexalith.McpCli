@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "scripts/pack-release-packages.py",
+    "<qualification-root>/release-packages",
+    "1.6.0-story412.1"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:21:37.758705+00:00",
+  "exitCode": 0,
+  "stdout": "  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Aspire.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Contracts.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Client.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.AdminPortal.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.ConsumerPortal.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Picker.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Authentication.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Projections.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Security.1.6.0-story412.1.nupkg'.\n  Successfully created package '<qualification-root>/release-packages/Hexalith.Parties.Testing.1.6.0-story412.1.nupkg'.\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:21:47.381275+00:00"
+}

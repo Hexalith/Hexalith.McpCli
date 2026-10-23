@@ -1,0 +1,21 @@
+{
+  "command": [
+    "timeout",
+    "300",
+    "dotnet",
+    "build",
+    "src/Hexalith.Parties/Hexalith.Parties.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true"
+  ],
+  "workingDirectory": "references/Hexalith.Parties",
+  "sourceSha": "3ace477aa61f6cd936bd9c06d99fd8fe59a205a8",
+  "startedAt": "2026-10-23T07:29:47.613933+00:00",
+  "elapsedSeconds": 2.609,
+  "exitCode": 0,
+  "outputExcerpt": "  Determining projects to restore...\n  Restored /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj (in 199 ms).\n  Restored /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Projections/Hexalith.Parties.Projections.csproj (in 199 ms).\n  Restored /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Security/Hexalith.Parties.Security.csproj (in 199 ms).\n  Restored /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj (in 199 ms).\n  Restored /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties/Hexalith.Parties.csproj (in 351 ms).\n  Hexalith.Parties.Contracts -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll\n  Hexalith.Parties.Authentication -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Authentication/bin/Release/net10.0/Hexalith.Parties.Authentication.dll\n  Hexalith.Parties.Projections -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Projections/bin/Release/net10.0/Hexalith.Parties.Projections.dll\n  Hexalith.Parties.Security -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties.Security/bin/Release/net10.0/Hexalith.Parties.Security.dll\n  Hexalith.Parties -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:02.32"
+}

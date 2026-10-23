@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.Parties.Mcp.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:20:25.510896+00:00",
+  "exitCode": 0,
+  "stdout": "Running tests from <isolated-parties-snapshot>/tests/Hexalith.Parties.Mcp.Tests/bin/Release/net10.0/Hexalith.Parties.Mcp.Tests.dll (net10.0|x64)\n<isolated-parties-snapshot>/tests/Hexalith.Parties.Mcp.Tests/bin/Release/net10.0/Hexalith.Parties.Mcp.Tests.dll (net10.0|x64) passed (1s 624ms)\n\nTest run summary: Passed!\n  total: 94\n  failed: 0\n  succeeded: 94\n  skipped: 0\n  duration: 1s 875ms\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:20:28.640801+00:00"
+}

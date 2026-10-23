@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "scripts/validate-nuget-packages.py",
+    "<qualification-root>/release-packages"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:21:47.405986+00:00",
+  "exitCode": 0,
+  "stdout": "Validated 10 NuGet packages at version 1.6.0-story412.1:\n- Hexalith.Parties.AdminPortal\n- Hexalith.Parties.Aspire\n- Hexalith.Parties.Authentication\n- Hexalith.Parties.Client\n- Hexalith.Parties.ConsumerPortal\n- Hexalith.Parties.Contracts\n- Hexalith.Parties.Picker\n- Hexalith.Parties.Projections\n- Hexalith.Parties.Security\n- Hexalith.Parties.Testing\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:21:48.462732+00:00"
+}

@@ -1,0 +1,4 @@
+feat(aspire): add server-free parties composition
+
+Publish a source-locating helper through the normal package and
+container release gates, without a server package dependency.

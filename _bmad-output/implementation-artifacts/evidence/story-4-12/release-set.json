@@ -1,0 +1,57 @@
+{
+  "versionLabel": "1.6.0-story412.1",
+  "published": false,
+  "purpose": "local qualification only; the normal release workflow computes the official version",
+  "packages": [
+    {
+      "file": "Hexalith.Parties.AdminPortal.1.6.0-story412.1.nupkg",
+      "sha256": "8f31c8cc61e557f0eb4b7e1df69ac945706ec09abe4ca3d751dbb0453dcfcead",
+      "bytes": 134425
+    },
+    {
+      "file": "Hexalith.Parties.Aspire.1.6.0-story412.1.nupkg",
+      "sha256": "95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a",
+      "bytes": 13160
+    },
+    {
+      "file": "Hexalith.Parties.Authentication.1.6.0-story412.1.nupkg",
+      "sha256": "fd9d4c21ab5ce18d2350ff5f91400944395e5f3da8da2d8b2efdc1675c33687c",
+      "bytes": 13817
+    },
+    {
+      "file": "Hexalith.Parties.Client.1.6.0-story412.1.nupkg",
+      "sha256": "3dc436996a62487381a19c04355ceb96eeda9ea789d74c338d11d918b705c66a",
+      "bytes": 48122
+    },
+    {
+      "file": "Hexalith.Parties.ConsumerPortal.1.6.0-story412.1.nupkg",
+      "sha256": "01a80d5138e21022e357df75fe202c38c0e82c54ced59507f2e7ffff6dc50296",
+      "bytes": 68472
+    },
+    {
+      "file": "Hexalith.Parties.Contracts.1.6.0-story412.1.nupkg",
+      "sha256": "5e22f35c40b5e7192637398512a87aa17a33a2094ba17f5711c9cd17d52795f0",
+      "bytes": 116706
+    },
+    {
+      "file": "Hexalith.Parties.Picker.1.6.0-story412.1.nupkg",
+      "sha256": "306461eec2113e92ef9f65afa079f8a223c8b7d0357bf4fa2525aea66513646a",
+      "bytes": 46936
+    },
+    {
+      "file": "Hexalith.Parties.Projections.1.6.0-story412.1.nupkg",
+      "sha256": "c9a2a77f80d2f79becc3eb0fb276d2bcc701004fbfc4570a984e4cd8e4c99e1a",
+      "bytes": 57970
+    },
+    {
+      "file": "Hexalith.Parties.Security.1.6.0-story412.1.nupkg",
+      "sha256": "a50a84aa15bb77bb2a512f2d97d5f76c699bb0e1a4356e876b851f16aaf12cbb",
+      "bytes": 71420
+    },
+    {
+      "file": "Hexalith.Parties.Testing.1.6.0-story412.1.nupkg",
+      "sha256": "63eca68890e8fc3f623627f0275db77af016c284de4eb55fa6b56b7e5dee1540",
+      "bytes": 19364
+    }
+  ]
+}

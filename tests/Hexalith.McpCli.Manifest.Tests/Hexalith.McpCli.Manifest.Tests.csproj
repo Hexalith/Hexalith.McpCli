@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />
     <ProjectReference Include="../Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj" />
     <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
     <ProjectReference Include="../fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj" />

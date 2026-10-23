@@ -1,0 +1,18 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:27:57.035082+00:00",
+  "exitCode": 0,
+  "stdout": "  Hexalith.Parties.Contracts -> <isolated-parties-snapshot>/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll\n  Hexalith.Parties.Authentication -> <isolated-parties-snapshot>/src/Hexalith.Parties.Authentication/bin/Release/net10.0/Hexalith.Parties.Authentication.dll\n  Hexalith.Parties.Projections -> <isolated-parties-snapshot>/src/Hexalith.Parties.Projections/bin/Release/net10.0/Hexalith.Parties.Projections.dll\n  Hexalith.Parties.Security -> <isolated-parties-snapshot>/src/Hexalith.Parties.Security/bin/Release/net10.0/Hexalith.Parties.Security.dll\n  Hexalith.Parties -> <isolated-parties-snapshot>/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll\n  Hexalith.Parties.Client -> <isolated-parties-snapshot>/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll\n  Hexalith.Parties.Testing -> <isolated-parties-snapshot>/src/Hexalith.Parties.Testing/bin/Release/net10.0/Hexalith.Parties.Testing.dll\n  Hexalith.Parties.EventStoreGateway.TestHost -> <isolated-parties-snapshot>/tests/Hexalith.Parties.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.Parties.EventStoreGateway.TestHost.dll\n  Hexalith.Parties.Tests -> <isolated-parties-snapshot>/tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:05.33\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:28:02.694354+00:00"
+}

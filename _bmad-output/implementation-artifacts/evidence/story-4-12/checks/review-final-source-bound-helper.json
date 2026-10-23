@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "<mcpcli-checkout>/_bmad-output/implementation-artifacts/evidence/story-4-12/qualify-parties-helper.py",
+    "<isolated-parties-snapshot>",
+    "<qualification-root>/release-packages/Hexalith.Parties.Aspire.1.6.0-story412.1.nupkg",
+    "<qualification-root>/source-manifest.json"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:40:11.512006+00:00",
+  "exitCode": 0,
+  "stdout": "{\n  \"artifact\": \"Hexalith.Parties.Aspire.1.6.0-story412.1.nupkg\",\n  \"version\": \"1.6.0-story412.1\",\n  \"sha256\": \"95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a\",\n  \"published\": false,\n  \"assemblies\": [\n    \"lib/net10.0/Hexalith.Parties.Aspire.dll\"\n  ],\n  \"artifactBytes\": 13160,\n  \"sourceBinding\": {\n    \"baselineCommit\": \"6c83309d08a10f36a0da866521b9d0da6f8fc998\",\n    \"taskTreeSha256\": \"ce01b0e5a2500cdb69a5166fcff2b6c3f089daef81a5b826742a07ca7237ccbb\"\n  },\n  \"directDependencies\": {\n    \"Aspire.Hosting\": \"13.6.1\",\n    \"Hexalith.EventStore.Aspire\": \"3.126.1\"\n  },\n  \"rootSelection\": [\n    {\n      \"case\": \"own-root\",\n      \"result\": \"pass\"\n    },\n    {\n      \"case\": \"direct-root-reference\",\n      \"result\": \"pass\"\n    },\n    {\n      \"case\": \"missing\",\n      \"result\": \"pass\"\n    },\n    {\n      \"case\": \"nested-only\",\n      \"result\": \"pass\"\n    },\n    {\n      \"case\": \"root-level-only\",\n      \"result\": \"pass\"\n    },\n    {\n      \"case\": \"sibling-only\",\n      \"result\": \"pass\"\n    }\n  ],\n  \"restoredArtifactSha256\": \"95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a\",\n  \"resolvedClosureSha256\": \"4ceba91b3af0550d6bfc9f357ca54542191ba84ba246fbd120317217a3a295de\",\n  \"result\": \"pass\"\n}\nResolved packages: 80\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:40:14.783357+00:00"
+}

@@ -1,0 +1,25 @@
+{
+  "packages": {
+    "Hexalith.EventStore.Aspire": "3.126.1",
+    "CommunityToolkit.Aspire.Hosting.Dapr": "13.6.1-beta.935"
+  },
+  "hostDapr": {
+    "cli": "1.18.2",
+    "runtime": "1.18.7"
+  },
+  "finding": "The published helper and Toolkit surfaces do not provide a complete per-topology namespace, state and CLI-metadata isolation configuration. Keep genuine fixed-ID conflict rejection.",
+  "observations": [
+    "EventStore AddHexalithEventStore overloads expose ports, placement/scheduler addresses, component paths and names, but no namespace or Gateway Dapr app-ID override.",
+    "DaprSidecarOptions has 32 properties, including AppId and RuntimePath, but no Namespace or CLI metadata-directory property. RuntimePath selects the daprd installation directory.",
+    "Calling WithDaprSidecar again creates an additional same-name sidecar resource; it is not an override of the existing composed sidecar.",
+    "Host Dapr CLI List scans all daprd processes and command lines. A separate runtime directory does not partition that process inventory.",
+    "The Dapr runtime supports NAMESPACE for service/component isolation, but that alone does not isolate actor state or the CLI process inventory."
+  ],
+  "sources": [
+    "https://github.com/dapr/cli/blob/v1.18.2/pkg/standalone/list.go",
+    "https://github.com/dapr/cli/blob/v1.18.2/pkg/standalone/run.go",
+    "https://docs.dapr.io/reference/environment/",
+    "https://v1-17.docs.dapr.io/developing-applications/building-blocks/actors/namespaced-actors/"
+  ],
+  "scope": "Read-only inspection of exact published package APIs, local CLI help and primary Dapr source/documentation; no user resource mutations."
+}

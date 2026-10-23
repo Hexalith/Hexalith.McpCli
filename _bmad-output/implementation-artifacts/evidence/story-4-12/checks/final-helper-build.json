@@ -1,0 +1,18 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:30:16.186045+00:00",
+  "exitCode": 0,
+  "stdout": "  Hexalith.Parties.Aspire -> <isolated-parties-snapshot>/src/Hexalith.Parties.Aspire/bin/Release/net10.0/Hexalith.Parties.Aspire.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:04.78\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:30:21.625425+00:00"
+}

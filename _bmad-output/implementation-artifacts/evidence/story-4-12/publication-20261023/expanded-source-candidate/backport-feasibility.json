@@ -1,0 +1,30 @@
+{
+  "assessedAt": "2026-10-23T10:45:16.717543+00:00",
+  "canonicalBaseSha": "397c94a4e246c90b21cf408790fa0d55bf32d795",
+  "historicalGreenCi": {
+    "id": 37573822625,
+    "url": "https://github.com/Hexalith/Hexalith.Builds/actions/runs/37573822625"
+  },
+  "twoFilePatchPreimage": {
+    "Github/publish-containers/publication_preflight.py": {
+      "matchesPatchPreimage": true,
+      "preimageSha256": "f87b48e649092cc68de8f07977bae48c65f0570007f60de42887201988ee0062"
+    },
+    "Github/publish-containers/tests/test_publication_preflight.py": {
+      "matchesPatchPreimage": true,
+      "preimageSha256": "4ad0beba03a616dc7527703a942ddc02c7d25e28abdf075ba5d0644cd3d96437"
+    }
+  },
+  "normalCiTrigger": "Unmodified ci.yml push branches main/prerelease; no workflow_dispatch. Pull-request merge CI would reintroduce main and is unsuitable.",
+  "proposedQualificationRef": "refs/heads/prerelease (observed absent; creation must refuse an existing ref)",
+  "immutableIdentity": "Pin and verify the exact resulting commit SHA, independent of any later branch movement.",
+  "publishWorkflow": "build-release.yml is manual workflow_dispatch only; do not dispatch it.",
+  "failingG4Classes": "Both current failing class files were added after the canonical base.",
+  "callerCompatibility": "prepare-domain-release validates an exact execution repository/SHA and separately uses the caller-selected catalog gitlink. No execution ancestry-on-main restriction.",
+  "catalogGitlinkPreserved": "70ead608ac01f66dfcd80c13bb71152dac6c128e",
+  "limitations": [
+    "Historical green CI does not guarantee a fresh run will pass with current external services.",
+    "Commitlint auto-trigger at the old base is main-only; exact pinned local validation remains required."
+  ],
+  "mutationsPerformedForAssessment": false
+}

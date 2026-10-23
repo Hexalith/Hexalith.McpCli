@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "scripts/validate-consumer-package-references.py",
+    "<qualification-root>/release-packages"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:21:48.487936+00:00",
+  "exitCode": 1,
+  "stdout": "  Successfully created package '/tmp/hexalith-parties-consumer-package-smoke/support-packages/Hexalith.Commons.UniqueIds.2.30.3.nupkg'.\n  Successfully created package '/tmp/hexalith-parties-consumer-package-smoke/support-packages/Hexalith.Commons.UniqueIds.2.30.3.snupkg'.\n<user-home>/.dotnet/sdk/10.0.402/NuGet.Build.Tasks.Pack.targets(226,5): error NU5026: The file '<isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/bin/Release/net10.0/Hexalith.Commons.Http.dll' to be packed was not found on disk. [<isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/Hexalith.Commons.Http.csproj]\n",
+  "stderr": "Consumer package validation failed: Command '['dotnet', 'pack', '<isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.Http/Hexalith.Commons.Http.csproj', '--no-build', '--configuration', 'Release', '--output', '/tmp/hexalith-parties-consumer-package-smoke/support-packages', '-p:Version=2.30.3', '-p:MinVerVersionOverride=2.30.3', '-p:PackageVersion=2.30.3', '/m:1', '/nr:false']' returned non-zero exit status 1.\n",
+  "finishedAt": "2026-10-23T05:21:51.789037+00:00"
+}

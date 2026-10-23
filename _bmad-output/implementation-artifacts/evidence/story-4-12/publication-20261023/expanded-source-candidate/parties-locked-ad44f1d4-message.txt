@@ -1,0 +1,4 @@
+fix(ci): install dapr for owner manifest publishing
+
+The Aspire Dapr lifecycle hook resolves the CLI during manifest
+publication, even when no topology or runtime is started.

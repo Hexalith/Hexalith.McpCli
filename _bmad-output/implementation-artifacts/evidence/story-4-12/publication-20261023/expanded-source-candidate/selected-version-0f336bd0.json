@@ -1,0 +1,12 @@
+{
+  "sourceSha": "0f336bd005dbed9e2e278bc1861dfc0fb2322a15",
+  "previousTag": "v1.5.2",
+  "releaseType": "minor",
+  "selectedVersion": "1.6.0",
+  "commitCount": 24,
+  "nodeVersion": "v24.22.1",
+  "operation": "Pure pinned commit analysis; no semantic-release verify/prepare/tag/publish hooks invoked",
+  "commitAnalyzerVersion": "13.0.1",
+  "semanticReleaseConfig": "release.config.cjs defaults, unchanged from the failed normal release that selected 1.6.0",
+  "published": false
+}

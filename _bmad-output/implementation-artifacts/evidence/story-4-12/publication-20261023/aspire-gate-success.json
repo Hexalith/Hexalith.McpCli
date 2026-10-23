@@ -1,0 +1,37 @@
+{
+  "runId": 39928383173,
+  "jobId": 120335240096,
+  "sourceSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "conclusion": "success",
+  "nativeReports": [
+    {
+      "file": "aspire-results.trx",
+      "counters": {
+        "total": "129",
+        "executed": "123",
+        "passed": "123",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "6",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "isolationTest": [
+        {
+          "name": "Hexalith.Parties.IntegrationTests.Topology.PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync",
+          "outcome": "Passed",
+          "duration": "00:03:36.9380000"
+        }
+      ],
+      "reportSha256": "cbaa71d2ea7b8b62de1c07d2496173df3753c55b88a13465c3bdb58bbab36bb5"
+    }
+  ]
+}

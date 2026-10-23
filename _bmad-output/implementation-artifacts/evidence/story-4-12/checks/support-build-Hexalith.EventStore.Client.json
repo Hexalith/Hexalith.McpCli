@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:MinVerVersionOverride=3.126.1"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:26:57.209371+00:00",
+  "exitCode": 0,
+  "stdout": "  Determining projects to restore...\n  Restored <isolated-parties-snapshot>/references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj (in 219 ms).\n  1 of 2 projects are up-to-date for restore.\n  Hexalith.EventStore.Contracts -> <isolated-parties-snapshot>/references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/bin/Release/net10.0/Hexalith.EventStore.Contracts.dll\n  Hexalith.EventStore.Client -> <isolated-parties-snapshot>/references/Hexalith.EventStore/src/Hexalith.EventStore.Client/bin/Release/net10.0/Hexalith.EventStore.Client.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:02.59\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:27:00.101743+00:00"
+}

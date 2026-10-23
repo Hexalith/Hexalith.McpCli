@@ -1,0 +1,86 @@
+{
+  "repository": "Hexalith/Hexalith.Parties",
+  "sourceSha": "08f43497b3f916efa0cdf9b110258f763d894bd9",
+  "runId": 39943732687,
+  "artifactId": 12497574203,
+  "artifactName": "aspire-test-results",
+  "archiveSha256": "4186488f82e9d15c8f876da09388ff8aee685fbb0e5987e2dee304ffc8dc4a39",
+  "recordedAt": "2026-10-23T11:34:15.583710+00:00",
+  "files": [
+    {
+      "nativeFile": "aspire/aspire-results.trx",
+      "sha256": "3072aee33fd8c0bec51b8c8d67ac04691a0c993626083118db2d4ba281414021",
+      "counters": {
+        "total": 129,
+        "executed": 123,
+        "passed": 123,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 6,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "notPassed": [
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.AliveEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+          "outcome": "NotExecuted"
+        },
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthEndpoint_WithAllDaprComponentsRunning_DoesNotIncludeDegradationHeadersAsync",
+          "outcome": "NotExecuted"
+        },
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.ReadyEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+          "outcome": "NotExecuted"
+        },
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthEndpoint_WithAllDaprComponentsRunning_Returns200Async",
+          "outcome": "NotExecuted"
+        },
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.HealthAndReadyEndpoints_WithDaprSidecarStopped_Return503ThenRecoverAsync",
+          "outcome": "NotExecuted"
+        },
+        {
+          "test": "Hexalith.Parties.IntegrationTests.HealthChecks.HealthEndpointE2ETests.QueryEndpoints_WithPubSubUnavailable_ReturnCachedDataWithDegradationHeaders",
+          "outcome": "NotExecuted"
+        }
+      ],
+      "isolationTests": [
+        {
+          "testName": "Hexalith.Parties.IntegrationTests.Topology.DaprMtlsBootstrapTests.IsolatedConfiguration_RemapsOnlyGeneratedAclIdentitiesAndNamespace",
+          "outcome": "Passed",
+          "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+          "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+          "testId": "e6ad9d31-1571-4a72-8a28-18eb0e0805d7",
+          "executionId": "e6ad9d31-1571-4a72-8a28-18eb0e0805d7",
+          "computerName": "unknown",
+          "duration": "00:00:00.0010000",
+          "startTime": "2026-10-23T11:23:26.5214322+00:00",
+          "endTime": "2026-10-23T11:23:26.5228524+00:00"
+        },
+        {
+          "testName": "Hexalith.Parties.IntegrationTests.Topology.PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync",
+          "outcome": "Passed",
+          "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+          "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+          "testId": "69018c2c-2ba5-443c-988e-a9cd48f271b1",
+          "executionId": "69018c2c-2ba5-443c-988e-a9cd48f271b1",
+          "computerName": "unknown",
+          "duration": "00:03:45.1090000",
+          "startTime": "2026-10-23T11:23:26.5246546+00:00",
+          "endTime": "2026-10-23T11:27:11.6342023+00:00"
+        }
+      ]
+    }
+  ],
+  "retainedArchive": "parties-aspire-test-results.zip"
+}

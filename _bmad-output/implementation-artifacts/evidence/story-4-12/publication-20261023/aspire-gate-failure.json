@@ -1,0 +1,15 @@
+{
+  "sourceSha": "ad44f1d433799b2e1ca37a0bdb722a2ecfe09c87",
+  "runId": 39916336068,
+  "jobId": 120293374577,
+  "test": "PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync",
+  "total": 129,
+  "succeeded": 122,
+  "failed": 1,
+  "skipped": 6,
+  "failure": "first.IsAvailable false: /v1.0/healthz remained HTTP 500 for two minutes",
+  "command": "dotnet test tests/Hexalith.Parties.IntegrationTests --no-build --configuration Release --filter-not-trait Category=Performance --results-directory TestResults/aspire --report-xunit-trx --report-xunit-trx-filename aspire-results.trx",
+  "failureExcerpt": "2026-10-23T07:27:14.0348587Z Running tests from /home/runner/work/Hexalith.Parties/Hexalith.Parties/tests/Hexalith.Parties.IntegrationTests/bin/Release/net10.0/Hexalith.Parties.IntegrationTests.dll (net10.0|x64)\n2026-10-23T07:30:13.7948492Z \u001b[31mfailed\u001b[m Hexalith.Parties.IntegrationTests.Topology.PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync \u001b[90m(2m 56s 496ms)\u001b[m\n2026-10-23T07:30:13.7950637Z   from /home/runner/work/Hexalith.Parties/Hexalith.Parties/tests/Hexalith.Parties.IntegrationTests/bin/Release/net10.0/Hexalith.Parties.IntegrationTests.dll (net10.0|x64)\n2026-10-23T07:30:13.7951654Z \u001b[31m  Shouldly.ShouldAssertException : first.IsAvailable\n2026-10-23T07:30:13.7951998Z       should be\n2026-10-23T07:30:13.7952206Z   True\n2026-10-23T07:30:13.7952396Z       but was\n2026-10-23T07:30:13.7952590Z   False\n2026-10-23T07:30:13.7952783Z   \n2026-10-23T07:30:13.7952988Z   Additional Info:\n2026-10-23T07:30:13.7953620Z       TimeoutException: Endpoint did not become ready within 00:02:00. Url: /v1.0/healthz. Last status: InternalServerError. Last error: n/a\n2026-10-23T07:30:13.7955596Z \u001b[m\u001b[90m    at Hexalith.Parties.IntegrationTests.Topology.PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync() in /home/runner/work/Hexalith.Parties/Hexalith.Parties/tests/Hexalith.Parties.IntegrationTests/Topology/PartiesTopologyIsolationTests.cs:55\u001b[90m\n2026-10-23T07:30:13.7957417Z     at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\n2026-10-23T07:30:13.7959543Z     at Hexalith.Parties.IntegrationTests.Topology.PartiesTopologyIsolationTests.ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync() in /home/runner/work/Hexalith.Parties/Hexalith.Parties/tests/Hexalith.Parties.IntegrationTests/Topology/PartiesTopologyIsolationTests.cs:92\u001b[90m\n2026-10-23T07:30:13.7961006Z     at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()",
+  "rawFullLog": "/tmp/story-4-12-aspire-ci-failure.log",
+  "publicationDispatched": false
+}

@@ -1,0 +1,31 @@
+{
+  "result": "pass",
+  "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "taskTreeSha256": "fb3fd64a23d52934688fb8b6cb35148d82a75adc4c585c3c91dfeb59ce2179da",
+  "patchSha256": "41da8c76c130a7c7d5f5b184b908fff3b22627c7797b5453a8d6633f4319c601",
+  "verifiedFileCount": 26,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "<evidence>/parties-helper.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "<evidence>/parties-helper.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "<evidence>/parties-helper.patch:741: trailing whitespace.\nusing Aspire.Hosting;\n<evidence>/parties-helper.patch:742: trailing whitespace.\nusing Aspire.Hosting.ApplicationModel;\n<evidence>/parties-helper.patch:743: trailing whitespace.\n\n<evidence>/parties-helper.patch:744: trailing whitespace.\nusing Hexalith.EventStore.Aspire;\n<evidence>/parties-helper.patch:745: trailing whitespace.\n\nwarning: squelched 148 whitespace errors\nwarning: 153 lines add whitespace errors.\n"
+    }
+  ],
+  "note": "Only a disposable archive materialization was changed; owning repository/index were untouched."
+}

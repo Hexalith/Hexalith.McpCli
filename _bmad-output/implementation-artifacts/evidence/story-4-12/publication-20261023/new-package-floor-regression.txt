@@ -1,0 +1,37 @@
+E
+======================================================================
+ERROR: test_new_nuget_package_404_has_no_prior_versions (test_publication_preflight.PublicationPreflightTests.test_new_nuget_package_404_has_no_prior_versions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/story-4-12-builds-publication/Github/publish-containers/publication_preflight.py", line 753, in _read_json_response
+    with URL_OPENER.open(request, timeout=30) as response:
+         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+urllib.error.HTTPError: HTTP Error 404: Not Found
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/story-4-12-builds-publication/Github/publish-containers/tests/test_publication_preflight.py", line 917, in test_new_nuget_package_404_has_no_prior_versions
+    observation = self.validator._nuget_version_observation("Hexalith.Fixture.Aspire")
+  File "/tmp/story-4-12-builds-publication/Github/publish-containers/publication_preflight.py", line 862, in _nuget_version_observation
+    document = _read_json_response(
+        f"https://api.nuget.org/v3-flatcontainer/{normalized}/index.json",
+        {"Accept": "application/json"},
+        "version-floor-unavailable",
+    )
+  File "/tmp/story-4-12-builds-publication/Github/publish-containers/publication_preflight.py", line 758, in _read_json_response
+    raise PreflightError(code, "External release version lookup could not be completed.") from error
+publication_preflight.PreflightError: External release version lookup could not be completed.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (errors=1)

@@ -1,0 +1,10 @@
+{
+  "observedErrorCode": "version-floor-unavailable",
+  "safeMessage": "External release version lookup could not be completed.",
+  "causeType": "HTTPError",
+  "httpStatus": 404,
+  "package": "Hexalith.Parties.Aspire",
+  "sharedPreflightSha": "397c94a4e246c90b21cf408790fa0d55bf32d795",
+  "phase": "verifyRelease before tagging, packing or publication",
+  "candidateVersion": "1.6.0"
+}

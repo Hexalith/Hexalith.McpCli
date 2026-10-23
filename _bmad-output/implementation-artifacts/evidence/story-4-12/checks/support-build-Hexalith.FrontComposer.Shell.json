@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell/Hexalith.FrontComposer.Shell.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:MinVerVersionOverride=4.7.0"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:27:02.275920+00:00",
+  "exitCode": 0,
+  "stdout": "  Determining projects to restore...\n  Restored <isolated-parties-snapshot>/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts.UI/Hexalith.FrontComposer.Contracts.UI.csproj (in 182 ms).\n  Restored <isolated-parties-snapshot>/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell/Hexalith.FrontComposer.Shell.csproj (in 182 ms).\n  1 of 3 projects are up-to-date for restore.\n  Hexalith.FrontComposer.Contracts -> <isolated-parties-snapshot>/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts/bin/Release/net10.0/Hexalith.FrontComposer.Contracts.dll\n  Hexalith.FrontComposer.Contracts.UI -> <isolated-parties-snapshot>/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Contracts.UI/bin/Release/net10.0/Hexalith.FrontComposer.Contracts.UI.dll\n  Hexalith.FrontComposer.Shell -> <isolated-parties-snapshot>/references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell/bin/Release/net10.0/Hexalith.FrontComposer.Shell.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:07.26\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:27:09.803917+00:00"
+}

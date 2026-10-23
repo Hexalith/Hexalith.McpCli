@@ -1,0 +1,14 @@
+{
+  "command": "PARTIES_MTLS_TOPOLOGY_TESTS=true timeout 600 dotnet tests/Hexalith.Parties.IntegrationTests/bin/Release/net10.0/Hexalith.Parties.IntegrationTests.dll -method *ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync",
+  "sourceBaseline": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "sourceContext": "Isolated candidate snapshot; unchanged runtime fixture",
+  "daprRuntime": "1.18.7",
+  "total": 1,
+  "failed": 1,
+  "skipped": 0,
+  "elapsedSeconds": 273.015,
+  "failure": "first.IsAvailable false: a later sidecar /v1.0/healthz remained 500 for 2 minutes",
+  "runtimeObservation": "Both eventstore sidecars eventually reached 204; one tenants sidecar never reported placement readiness before cleanup",
+  "userProcessesAffected": false,
+  "rawLog": "/tmp/story-4-12-isolation-local.log"
+}

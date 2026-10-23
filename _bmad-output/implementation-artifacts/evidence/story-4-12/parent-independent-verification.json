@@ -1,0 +1,21 @@
+{
+  "result": "pass",
+  "sourceFileCount": 26,
+  "taskTreeSha256": "023abd2f23d0e56dd6a4474bb8e07ba3a2e4f113c0da66dbb967f52e951324fa",
+  "patchSha256": "eaf3003eeab9ce1dcaf19f75837a5b80472a62d053263c66fb4a016436b36be0",
+  "archiveSha256": "95218af9fe9345fbf496602a5474e2d0c30c035ddc9b7778992996928601a73a",
+  "resolvedPackageCount": 80,
+  "releaseArchivesVerified": 10,
+  "receiptExitCodesVerified": [
+    "standalone-build",
+    "isolated-ci-tests",
+    "focused-client-package-tests",
+    "focused-fitness-after-snapshot-repair",
+    "focused-release-inventory",
+    "final-pack-normal-release-set",
+    "final-validate-normal-release-set",
+    "final-validate-isolated-consumers"
+  ],
+  "liveAcceptance": false,
+  "published": false
+}

@@ -1,0 +1,450 @@
+{
+  "candidateSourceSha": "287aa8e0bc5a68d7845cd0eb0927519f7889b6b4",
+  "previousAuthorizedGreenSourceSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "newUserMainSha": "8bc955b77d3e48dff809b258bd457407114c73f6",
+  "buildsCatalogBefore": "3fcb8f38919bb0961b06a19b57aa45623b35a33e",
+  "buildsCatalogAfter": "70ead608ac01f66dfcd80c13bb71152dac6c128e",
+  "catalogPinChanges": {
+    "Aspire.Azure.Messaging.ServiceBus": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Azure.Security.KeyVault": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Azure.Storage.Blobs": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Azure.Storage.Queues": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting.Azure.AppContainers": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting.Azure.CosmosDB": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting.Docker": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting.Keycloak": {
+      "before": "13.6.1-preview.1.26506.6",
+      "after": "13.6.3-preview.1.26521.2"
+    },
+    "Aspire.Hosting.Kubernetes": {
+      "before": "13.6.1-preview.1.26506.6",
+      "after": "13.6.3-preview.1.26521.2"
+    },
+    "Aspire.Hosting.Redis": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Hosting.Testing": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Aspire.Microsoft.Azure.Cosmos": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "FsCheck": {
+      "before": "3.5.0",
+      "after": "3.6.0"
+    },
+    "FsCheck.Xunit.v3": {
+      "before": "3.5.0",
+      "after": "3.6.0"
+    },
+    "Hexalith.Conversations.Client": {
+      "before": "1.2.0",
+      "after": "1.3.0"
+    },
+    "Hexalith.Conversations.Contracts": {
+      "before": "1.2.0",
+      "after": "1.3.0"
+    },
+    "Hexalith.Folders": {
+      "before": "1.3.0",
+      "after": "1.3.1"
+    },
+    "Hexalith.Folders.Aspire": {
+      "before": "1.3.0",
+      "after": "1.3.1"
+    },
+    "Hexalith.Folders.Client": {
+      "before": "1.3.0",
+      "after": "1.3.1"
+    },
+    "Hexalith.Folders.Contracts": {
+      "before": "1.3.0",
+      "after": "1.3.1"
+    },
+    "Hexalith.Folders.Testing": {
+      "before": "1.3.0",
+      "after": "1.3.1"
+    },
+    "Hexalith.Memories.Aspire": {
+      "before": "2.27.1",
+      "after": "2.29.8"
+    },
+    "Hexalith.Memories.Client.Rest": {
+      "before": "2.27.1",
+      "after": "2.29.8"
+    },
+    "Hexalith.Memories.Contracts": {
+      "before": "2.27.1",
+      "after": "2.29.8"
+    },
+    "Hexalith.Parties.AdminPortal": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.Client": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.ConsumerPortal": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.Contracts": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.Picker": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.Server": {
+      "before": "1.5.1",
+      "after": null
+    },
+    "Hexalith.Parties.ServiceDefaults": {
+      "before": "1.5.1",
+      "after": null
+    },
+    "Hexalith.Parties.Testing": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    },
+    "Hexalith.Parties.UI": {
+      "before": "1.5.1",
+      "after": null
+    },
+    "Hexalith.Projects": {
+      "before": "1.0.0",
+      "after": "1.2.0"
+    },
+    "Hexalith.Projects.Client": {
+      "before": "1.0.0",
+      "after": "1.2.0"
+    },
+    "Hexalith.Projects.Contracts": {
+      "before": "1.0.0",
+      "after": "1.2.0"
+    },
+    "Hexalith.Projects.ServiceDefaults": {
+      "before": "1.0.0",
+      "after": "1.2.0"
+    },
+    "Hexalith.Projects.Testing": {
+      "before": "1.0.0",
+      "after": "1.2.0"
+    },
+    "Hexalith.Tenants.Aspire": {
+      "before": "5.9.0",
+      "after": "5.10.1"
+    },
+    "Hexalith.Tenants.Client": {
+      "before": "5.9.0",
+      "after": "5.10.1"
+    },
+    "Hexalith.Tenants.Contracts": {
+      "before": "5.9.0",
+      "after": "5.10.1"
+    },
+    "Hexalith.Tenants.Server": {
+      "before": "5.9.0",
+      "after": "5.10.1"
+    },
+    "Hexalith.Tenants.Testing": {
+      "before": "5.9.0",
+      "after": "5.10.1"
+    },
+    "Hexalith.Tenants.UI": {
+      "before": "5.9.0",
+      "after": null
+    },
+    "Hexalith.Works.Contracts": {
+      "before": null,
+      "after": "1.0.2"
+    },
+    "HotChocolate": {
+      "before": "16.6.8",
+      "after": "16.6.9"
+    },
+    "Microsoft.Identity.Client": {
+      "before": "4.91.0",
+      "after": "4.91.1"
+    },
+    "Microsoft.OpenApi": {
+      "before": "2.12.2",
+      "after": "2.13.0"
+    },
+    "Microsoft.Playwright": {
+      "before": "1.63.0",
+      "after": "1.64.0"
+    },
+    "ModelContextProtocol": {
+      "before": "2.2.0",
+      "after": "2.3.0"
+    },
+    "ModelContextProtocol.AspNetCore": {
+      "before": "2.2.0",
+      "after": "2.3.0"
+    },
+    "OpenTelemetry": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Exporter.InMemory": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Extensions.Hosting": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Instrumentation.AspNetCore": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Instrumentation.GrpcNetClient": {
+      "before": "1.20.0-beta.1",
+      "after": "1.20.1-beta.1"
+    },
+    "OpenTelemetry.Instrumentation.Http": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Instrumentation.Runtime": {
+      "before": "1.20.0",
+      "after": "1.20.1"
+    },
+    "OpenTelemetry.Instrumentation.StackExchangeRedis": {
+      "before": "1.20.0-beta.1",
+      "after": "1.20.1-beta.1"
+    },
+    "Radzen.Blazor": {
+      "before": "12.1.4",
+      "after": "12.1.6"
+    },
+    "StyleCop.Analyzers": {
+      "before": "1.3.109-beta",
+      "after": "1.3.151-beta"
+    },
+    "Swashbuckle.AspNetCore": {
+      "before": "10.3.0",
+      "after": "10.3.1"
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI": {
+      "before": "10.3.0",
+      "after": "10.3.1"
+    },
+    "System.Security.Cryptography.Pkcs": {
+      "before": null,
+      "after": "10.0.13"
+    },
+    "System.Security.Cryptography.Xml": {
+      "before": null,
+      "after": "10.0.13"
+    },
+    "bunit": {
+      "before": "2.11.3",
+      "after": "2.12.5"
+    }
+  },
+  "outputDirectPinChanges": {
+    "Hexalith.Parties.Contracts": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Client": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.AdminPortal": {
+      "directDeclaredPinChanges": {
+        "Hexalith.Tenants.Client": {
+          "before": "5.9.0",
+          "after": "5.10.1"
+        },
+        "Hexalith.Tenants.Contracts": {
+          "before": "5.9.0",
+          "after": "5.10.1"
+        }
+      },
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.ConsumerPortal": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Picker": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Authentication": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Projections": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Security": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Testing": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "Hexalith.Parties.Aspire": {
+      "directDeclaredPinChanges": {
+        "Aspire.Hosting": {
+          "before": "13.6.1",
+          "after": "13.6.3"
+        }
+      },
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "container:parties": {
+      "directDeclaredPinChanges": {
+        "Hexalith.Tenants.Client": {
+          "before": "5.9.0",
+          "after": "5.10.1"
+        },
+        "Hexalith.Memories.Client.Rest": {
+          "before": "2.27.1",
+          "after": "2.29.8"
+        }
+      },
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "container:parties-mcp": {
+      "directDeclaredPinChanges": {
+        "ModelContextProtocol.AspNetCore": {
+          "before": "2.2.0",
+          "after": "2.3.0"
+        }
+      },
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    },
+    "container:parties-ui": {
+      "directDeclaredPinChanges": {},
+      "conditionNote": "Lists version differences for declared package roots; actual restored closure remains subject to exact-source CI and published-artifact validation."
+    }
+  },
+  "packageCount": 10,
+  "containerFamilies": [
+    "parties",
+    "parties-mcp",
+    "parties-ui"
+  ],
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ],
+  "scopeAssessmentPending": true,
+  "publicationDispatched": false,
+  "helperQualification": {
+    "artifact": "Hexalith.Parties.Aspire.1.6.0-story412.2.nupkg",
+    "version": "1.6.0-story412.2",
+    "sha256": "3c05051fbe5e56a28b2a89461efee60423324d59fdd950b88ce8dac4a4ecc9b5",
+    "published": false,
+    "assemblies": [
+      "lib/net10.0/Hexalith.Parties.Aspire.dll"
+    ],
+    "artifactBytes": 13159,
+    "sourceBinding": {
+      "baselineCommit": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+      "taskTreeSha256": "ccd8f57b2e0e61b3ee29c2dae0c0a4ec9bec527274ca3cc65757e08dd89ebb74",
+      "sourceCommit": "287aa8e0bc5a68d7845cd0eb0927519f7889b6b4"
+    },
+    "directDependencies": {
+      "Aspire.Hosting": "13.6.3",
+      "Hexalith.EventStore.Aspire": "3.126.1"
+    },
+    "rootSelection": [
+      {
+        "case": "own-root",
+        "result": "pass"
+      },
+      {
+        "case": "direct-root-reference",
+        "result": "pass"
+      },
+      {
+        "case": "missing",
+        "result": "pass"
+      },
+      {
+        "case": "nested-only",
+        "result": "pass"
+      },
+      {
+        "case": "root-level-only",
+        "result": "pass"
+      },
+      {
+        "case": "sibling-only",
+        "result": "pass"
+      }
+    ],
+    "restoredArtifactSha256": "3c05051fbe5e56a28b2a89461efee60423324d59fdd950b88ce8dac4a4ecc9b5",
+    "resolvedClosureSha256": "541bc3c2d91f9d0d6299b53a8d71ea2408f817e3f23e8b1d74ae5436ee06852c",
+    "result": "pass"
+  },
+  "helperClosureChanges": {
+    "Aspire.Hosting": {
+      "before": "13.6.1",
+      "after": "13.6.3"
+    },
+    "Hexalith.Parties.Aspire": {
+      "before": "1.6.0-story412.1",
+      "after": "1.6.0-story412.2"
+    }
+  },
+  "unchangedSourceInputs": [
+    "tools/release-packages.json",
+    "src/Hexalith.Parties.Aspire/**",
+    "src/Hexalith.Parties.Contracts/**",
+    "all project files",
+    "Directory.Build.props",
+    "Directory.Build.targets",
+    "original publication scripts/workflow (except the six-file immutable execution/verification SHA repair)"
+  ],
+  "newRuntimeEffects": [
+    "SDK-backed durable ingestion intent and mapping recovery preserve outstanding Memories cleanup obligations across restart and cancellation.",
+    "Cleanup requires terminal ingestion and qualified structured unit absence before exact mapping subtraction; unresolved obligations remain retained.",
+    "Projection notification forwards the canonical sequence through an additive default-compatible public interface overload in Hexalith.Parties.Projections.",
+    "The server health surface adds ingestion-status route reachability while explicitly withholding tenant authorization and physical-erasure qualification.",
+    "Only Projections has changed implementation source among the ten NuGet project roots; every archive will still be rebuilt at the new shared semantic release version/source metadata.",
+    "The parties server container includes the new recovery/runtime source. MCP and UI host source is unchanged, but all three container families are rebuilt with the new source labels and selected dependency catalog."
+  ]
+}

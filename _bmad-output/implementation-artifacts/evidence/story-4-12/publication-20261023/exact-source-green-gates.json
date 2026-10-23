@@ -1,0 +1,43 @@
+{
+  "sourceSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "checkedAt": "2026-10-23T09:26:02.638703+00:00",
+  "liveMainSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "gates": {
+    "ci.yml": [
+      {
+        "id": 39928383173,
+        "workflowId": 309910255,
+        "headSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39928383173",
+        "updatedAt": "2026-10-23T09:24:53Z"
+      }
+    ],
+    "rc-gate.yml": [
+      {
+        "id": 39928382521,
+        "workflowId": 308991611,
+        "headSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39928382521",
+        "updatedAt": "2026-10-23T08:57:56Z"
+      }
+    ],
+    "commitlint.yml": [
+      {
+        "id": 39928383020,
+        "workflowId": 309910257,
+        "headSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39928383020",
+        "updatedAt": "2026-10-23T08:58:07Z"
+      }
+    ]
+  }
+}

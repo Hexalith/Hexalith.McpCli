@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-23T09:32:09.389843+00:00",
+  "conflicts": [
+    {
+      "appId": "eventstore",
+      "httpPort": 21238,
+      "grpcPort": 17789,
+      "appPort": 43695,
+      "daprdPid": 3188860,
+      "created": "2026-10-23 11:18.30"
+    }
+  ],
+  "action": "Read-only observation; no stop, restart, reuse or reconfiguration of user resources."
+}

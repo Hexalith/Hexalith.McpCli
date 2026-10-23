@@ -1,0 +1,141 @@
+{
+  "conclusion": "failure",
+  "headSha": "a413dc7df41a98f9d02cd8fb823e544086520956",
+  "jobs": [
+    {
+      "completedAt": "2026-10-23T09:28:17Z",
+      "conclusion": "success",
+      "databaseId": 120341785118,
+      "name": "Verify exact green main source",
+      "startedAt": "2026-10-23T09:28:08Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Require current main with successful exact-source CI and range proof",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Require registry versions at or below the release tag floor",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 4,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39931847401/job/120341785118"
+    },
+    {
+      "completedAt": "2026-10-23T09:39:21Z",
+      "conclusion": "failure",
+      "databaseId": 120342599164,
+      "name": "release",
+      "startedAt": "2026-10-23T09:32:25Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Check out dispatched source",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Prepare domain release",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate changed root gitlinks before publication",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Set up arm64 emulation",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Prepare release container publisher",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "NuGet trusted publishing login",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "failure",
+          "name": "Semantic Release",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload complete release evidence",
+          "number": 9,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Set up arm64 emulation",
+          "number": 16,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Prepare domain release",
+          "number": 17,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Check out dispatched source",
+          "number": 18,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39931847401/job/120342599164"
+    },
+    {
+      "completedAt": "2026-10-23T09:39:21Z",
+      "conclusion": "skipped",
+      "databaseId": 120347065037,
+      "name": "Verify complete exact-source publication",
+      "startedAt": "2026-10-23T09:39:21Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/39931847401/job/120347065037"
+    }
+  ],
+  "status": "completed"
+}

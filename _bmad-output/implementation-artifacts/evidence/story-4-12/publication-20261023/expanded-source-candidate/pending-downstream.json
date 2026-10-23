@@ -1,0 +1,34 @@
+{
+  "status": "proposed only; not enrolled or applied",
+  "proposedPublishedVersion": "1.6.0",
+  "qualificationHelper": "1.6.0-story412.2 (unpublished local artifact)",
+  "baselineMcpCliCommit": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+  "files": 26,
+  "patchSha256": "f3348b3319bc65c50bb858f7468d3e8d2272d9089e8fece35fb0ac2eda799f58",
+  "preconditions": [
+    "Expanded upstream source authorization and successful normal publication",
+    "Inspect actual published archive, repository provenance and fresh restored closure",
+    "Commit independent helper catalog pin/audit in owning Builds and integrate its final necessary gitlink",
+    "Rebuild/restore full real McpCli solution and run all required projects/checks",
+    "Real smoke must run without skipped acceptance and without conflicting user resources"
+  ],
+  "productionPolicyChanged": false,
+  "rootReferenceContentsEdited": false,
+  "patchApplyCheck": {
+    "baseline": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+    "command": "git apply --check pending-downstream.patch",
+    "exitCode": 0
+  },
+  "sdkQualification": {
+    "version": "13.6.3",
+    "cliBundle": true,
+    "warningSuppression": false,
+    "preflightAndPrerequisiteTests": {
+      "total": 11,
+      "failed": 0,
+      "skipped": 0,
+      "elapsedSeconds": 2.309
+    },
+    "discovery": "exactly the one Gateway smoke"
+  }
+}

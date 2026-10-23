@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "references/Hexalith.Tenants/src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:MinVerVersionOverride=5.9.0"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:27:11.249448+00:00",
+  "exitCode": 0,
+  "stdout": "  Determining projects to restore...\n  Restored <isolated-parties-snapshot>/references/Hexalith.Tenants/src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj (in 220 ms).\n  1 of 2 projects are up-to-date for restore.\n  Hexalith.Tenants.Contracts -> <isolated-parties-snapshot>/references/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll\n  Hexalith.Tenants.Client -> <isolated-parties-snapshot>/references/Hexalith.Tenants/src/Hexalith.Tenants.Client/bin/Release/net10.0/Hexalith.Tenants.Client.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.46\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:27:13.019277+00:00"
+}

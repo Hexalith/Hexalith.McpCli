@@ -1,0 +1,46 @@
+{
+  "helperAdmission": {
+    "location": "actual McpCli Manifest.Tests",
+    "total": 8,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      "missing restored helper",
+      "unreviewed helper",
+      "source-project substitution",
+      "Parties server/client/projection dependency",
+      "EventStore server dependency in helper",
+      "actual isolated empty-feed NuGet restore rejection"
+    ]
+  },
+  "gatewayDeadline": {
+    "location": "isolated draft using same smoke probe implementation",
+    "realPinnedClient": "Hexalith.EventStore.Client 3.126.1",
+    "liveness": "HTTP /alive returned 200",
+    "queryBehavior": "Listener accepted exactly one POST /api/v1/queries but withheld the response",
+    "requestDeadlineSeconds": 30,
+    "total": 1,
+    "failed": 0,
+    "skipped": 0,
+    "elapsedSeconds": 30.159
+  },
+  "publicationAdmitted": false,
+  "startupBudgetSeparateFromQueryDeadline": true,
+  "missingDapr": {
+    "location": "isolated draft executing the actual integration smoke in a child process",
+    "outerTest": {
+      "total": 1,
+      "failed": 0,
+      "skipped": 0,
+      "elapsedSeconds": 2.99
+    },
+    "childSmoke": {
+      "total": 1,
+      "failed": 0,
+      "skipped": 1
+    },
+    "diagnostic": "DAPR integration prerequisites are unavailable. Run 'dapr init' and ensure Redis, placement, and scheduler are reachable.",
+    "control": "placement and scheduler TCP ports reserved without listening; inherited host Dapr processes unchanged",
+    "liveAcceptance": false
+  }
+}

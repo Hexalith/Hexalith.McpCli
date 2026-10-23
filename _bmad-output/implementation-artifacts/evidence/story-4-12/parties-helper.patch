@@ -1,0 +1,820 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 3059b2ad..d2c9e0c6 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -28,6 +28,7 @@ jobs:
+       run-consumer-validation: true
+       run-coverage-gate: false
+       unit-test-projects: |
++        tests/Hexalith.Parties.Aspire.Tests
+         tests/Hexalith.Parties.Contracts.Tests
+         tests/Hexalith.Parties.Authentication.Tests
+         tests/Hexalith.Parties.Client.Tests
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 1e39a4ab..e1b19a03 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -237,7 +237,7 @@ jobs:
+           while IFS= read -r package_id; do
+             [ -n "$package_id" ] || continue
+             index_url="https://api.nuget.org/v3-flatcontainer/$(printf '%s' "$package_id" | tr '[:upper:]' '[:lower:]')/index.json"
+-            # Retry transient transport faults: a single CDN blip across nine serial probes would
++            # Retry transient transport faults: a single CDN blip across ten serial probes would
+             # otherwise abort an operator-initiated release and read as permanent drift.
+             if ! index_status="$(curl --silent --show-error --location --max-time 30 \
+               --retry 3 --retry-connrefused --retry-all-errors \
+@@ -328,7 +328,7 @@ jobs:
+           source-branch: main
+           source-ci-workflow: ci.yml
+           package-manifest: tools/release-packages.json
+-          expected-package-count: 9
++          expected-package-count: 10
+           publication-flag: ${{ vars.HEXALITH_RELEASE_PUBLISH_ENABLED }}
+           nuget-user: ${{ vars.NUGET_USER }}
+       - name: Validate changed root gitlinks before publication
+@@ -374,7 +374,7 @@ jobs:
+           HEXALITH_RELEASE_SOURCE_BRANCH: main
+           HEXALITH_RELEASE_SOURCE_CI_WORKFLOW: ci.yml
+           HEXALITH_RELEASE_PACKAGE_MANIFEST: tools/release-packages.json
+-          HEXALITH_RELEASE_EXPECTED_PACKAGE_COUNT: '9'
++          HEXALITH_RELEASE_EXPECTED_PACKAGE_COUNT: '10'
+           HEXALITH_RELEASE_RESERVED_VERSION: ''
+           HEXALITH_RELEASE_AUTHORITY_ISSUE_URL: ''
+           HEXALITH_RELEASE_AUTHORITY_OWNER: ''
+diff --git a/Hexalith.Parties.Standalone.slnx b/Hexalith.Parties.Standalone.slnx
+index d36b3ebe..84c8d58a 100644
+--- a/Hexalith.Parties.Standalone.slnx
++++ b/Hexalith.Parties.Standalone.slnx
+@@ -3,6 +3,7 @@
+     <Project Path="samples/Hexalith.Parties.Sample/Hexalith.Parties.Sample.csproj" />
+   </Folder>
+   <Folder Name="/src/">
++    <Project Path="src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj" />
+     <Project Path="src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj" />
+     <Project Path="src/Hexalith.Parties.AppHost/Hexalith.Parties.AppHost.csproj" />
+     <Project Path="src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj" />
+@@ -18,6 +19,7 @@
+     <Project Path="src/Hexalith.Parties/Hexalith.Parties.csproj" />
+   </Folder>
+   <Folder Name="/tests/">
++    <Project Path="tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.AdminPortal.Tests/Hexalith.Parties.AdminPortal.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.Authentication.Tests/Hexalith.Parties.Authentication.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj" />
+diff --git a/Hexalith.Parties.slnx b/Hexalith.Parties.slnx
+index 33d553f3..2ca3c9db 100644
+--- a/Hexalith.Parties.slnx
++++ b/Hexalith.Parties.slnx
+@@ -21,6 +21,7 @@
+     <Project Path="references/Hexalith.PolymorphicSerializations/src/libraries/Hexalith.PolymorphicSerializations/Hexalith.PolymorphicSerializations.csproj" />
+   </Folder>
+   <Folder Name="/src/">
++    <Project Path="src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj" />
+     <Project Path="src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj" />
+     <Project Path="src/Hexalith.Parties.AppHost/Hexalith.Parties.AppHost.csproj" />
+     <Project Path="src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj" />
+@@ -66,6 +67,7 @@
+     <Project Path="references/Hexalith.Tenants/src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj" />
+   </Folder>
+   <Folder Name="/tests/">
++    <Project Path="tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.AdminPortal.Tests/Hexalith.Parties.AdminPortal.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.Authentication.Tests/Hexalith.Parties.Authentication.Tests.csproj" />
+     <Project Path="tests/Hexalith.Parties.Client.Tests/Hexalith.Parties.Client.Tests.csproj" />
+diff --git a/README.md b/README.md
+index 21976375..606f27b8 100644
+--- a/README.md
++++ b/README.md
+@@ -4,6 +4,18 @@ Hexalith.Parties is a ready-to-deploy party management domain service for people
+ 
+ > **GDPR Notice:** Some GDPR infrastructure exists, and crypto-shredding is enabled by default, but the default key store is `LocalDevKeyStorageBackend` (in-memory, dev-only). **Do not store regulated EU personal data** until a production KMS or secret-store-backed key provider is provisioned. The MVP warning switch is separate from the crypto feature; see [deployment-guide.md](docs/deployment-guide.md) for the current runtime ownership boundary.
+ 
++## Consuming the Parties Aspire helper
++
++`Hexalith.Parties.Aspire` adds the separately built Parties server to a consuming
++AppHost with `AddHexalithPartiesServer(eventStore, daprConfigPath)`. It delegates
++state-store, pub/sub, health and sidecar wiring to `Hexalith.EventStore.Aspire`;
++the package does not depend on the Parties server. The consumer supplies
++Gateway routing, JWT validation and the app-channel token through platform helpers.
++Source is resolved only in the owning repository or its direct
++`references/Hexalith.Parties` checkout, and must be built before launch.
++The helper is included in the normal protected release; adding source does not
++mean a version is published or approved for downstream enrollment.
++
+ ## Key Features
+ 
+ - **EventStore gateway** -- Public command/query ingress uses `POST /api/v1/commands` and `POST /api/v1/queries` with `Domain="party"`.
+@@ -94,8 +106,8 @@ See the [Getting Started Guide](docs/getting-started.md) for the full EventStore
+ 
+ ## Project Structure
+ 
+-The repository contains exactly **13 projects under `src` plus one sample
+-project**, **15 runnable .NET test projects plus one support host**
++The repository contains exactly **14 projects under `src` plus one sample
++project**, **16 runnable .NET test projects plus one support host**
+ (`Hexalith.Parties.EventStoreGateway.TestHost`), with Playwright e2e coverage
+ alongside them. Adopter-facing packages (left column) are the only modules
+ consumers normally reference directly. Modules under
+@@ -106,6 +118,7 @@ dependencies — do not reference them from consumer applications.
+ Hexalith.Parties/
+   src/
+     Hexalith.Parties.AppHost/        # Aspire orchestration (entry point, dev-only)
++    Hexalith.Parties.Aspire/         # platform composition helper; no server package dependency
+     # Adopter-facing
+     Hexalith.Parties.Client/         # Typed EventStore gateway client (IPartiesCommandClient / IPartiesQueryClient)
+     Hexalith.Parties.Contracts/      # Shared DTOs, commands, events, value objects
+diff --git a/docs/architecture.md b/docs/architecture.md
+index 04a64e6b..cbe50e80 100644
+--- a/docs/architecture.md
++++ b/docs/architecture.md
+@@ -12,7 +12,7 @@ It is **not** an auth provider, CRM, or identity server — it is the party/cont
+ 
+ | Attribute | Value |
+ |-----------|-------|
+-| Repository type | Monolith — single cohesive .NET solution (`Hexalith.Parties.slnx`), exactly 13 projects under `src` plus one sample project + 15 runnable .NET test projects + 1 support host + Playwright e2e |
++| Repository type | Monolith — single cohesive .NET solution (`Hexalith.Parties.slnx`), exactly 14 projects under `src` plus one sample project + 16 runnable .NET test projects + 1 support host + Playwright e2e |
+ | Primary language | C# / **.NET 10** (SDK pinned `10.0.402`) |
+ | Architecture style | Event sourcing + CQRS + EventStore SDK domain/projection/query handlers, gateway-fronted (EventStore) |
+ | Orchestration | .NET Aspire 13.6.1 (`dotnet aspire run`) |
+@@ -307,6 +307,7 @@ The annotated tree is in **[source-tree-analysis.md](source-tree-analysis.md)**;
+ ```
+ src/
+   Hexalith.Parties.AppHost/        # Current Aspire dev/rollback entry point; retire after G8 platform-host parity
++  Hexalith.Parties.Aspire/         # platform composition helper; no server package dependency
+   # Adopter-facing
+   Hexalith.Parties.Client/         # typed EventStore gateway client
+   Hexalith.Parties.Contracts/      # commands, events, value objects, read models (no infra deps)
+@@ -330,7 +331,7 @@ scripts/  # local test runner, package validation, and Parties container publish
+ 
+ ## 11. Testing & CI
+ 
+-- Exactly **15 runnable .NET test projects plus one support host** (`Hexalith.Parties.EventStoreGateway.TestHost`) and the Playwright e2e workspace, uniformly **xUnit v3** for runnable .NET tests (Shouldly + NSubstitute; bunit for Blazor). Lanes via `scripts/test.ps1 -Lane {unit|integration|topology|ci|all|coverage}`. `Hexalith.Parties.IntegrationTests` spins up the **full Aspire topology** (`Aspire.Hosting.Testing`), gracefully skipping when Docker/DAPR is absent; `Hexalith.Parties.Ci.Tests` validates static GitHub Actions publication contracts and executes the release source-gate shell against mocked GitHub API fixtures. Architectural fitness tests pin contract/dependency boundaries.
++- Exactly **16 runnable .NET test projects plus one support host** (`Hexalith.Parties.EventStoreGateway.TestHost`) and the Playwright e2e workspace, uniformly **xUnit v3** for runnable .NET tests (Shouldly + NSubstitute; bunit for Blazor). Lanes via `scripts/test.ps1 -Lane {unit|integration|topology|ci|all|coverage}`. `Hexalith.Parties.IntegrationTests` spins up the **full Aspire topology** (`Aspire.Hosting.Testing`), gracefully skipping when Docker/DAPR is absent; `Hexalith.Parties.Ci.Tests` validates static GitHub Actions publication contracts and executes the release source-gate shell against mocked GitHub API fixtures. Architectural fitness tests pin contract/dependency boundaries.
+ - **CI/CD:** `.github/workflows/ci.yml` delegates restore/build/package-consumer validation and test tiers to `Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@332b2c144defba546fe0a09626a4a72f2340e22f`; `.github/workflows/release.yml` is a manual caller that requires current `main` and successful exact-source push proof from `ci.yml` before protected approval. Shared preparation and the complete Parties-owned container publisher use one reviewed immutable Hexalith.Builds commit, with caller-owned NuGet trusted publishing. The publication wrapper enforces the same full-CI proof. Submodules are checked out as **root-repository submodules only, never recursive**. See [ci.md](ci.md), [build-gate.md](build-gate.md), [ci-secrets-checklist.md](ci-secrets-checklist.md).
+ - **Package API prerequisite:** resolved by published EventStore 3.117.0. The actual DomainService assembly exposes `RequireEventStoreSidecarChannel<TBuilder>`, and the default package-mode Release solution build passes with zero warnings and errors. Security/rebuild calls, package-mode dependencies, and mandatory exact-source full-CI release proof remain intact. The earlier 3.115.0 CS1061 and 3.88.0 rebuild CS0246 failures are historical. See [ci.md](ci.md#required-eventstore-publication) for publication provenance, consumer verification, and the remaining integrated-topology prerequisites.
+ 
+diff --git a/docs/ci.md b/docs/ci.md
+index 6903e215..1f8e5c0f 100644
+--- a/docs/ci.md
++++ b/docs/ci.md
+@@ -151,7 +151,7 @@ set `NuGetPackageSourceCredentials_additional-source-1` (adjust the number for
+ later sources) to `Username=<user>;Password=<token>`, following
+ [NuGet's authenticated-feed guidance](https://learn.microsoft.com/en-us/nuget/consume-packages/consuming-packages-authenticated-feeds).
+ 
+-The publication preflight freezes the exact source, nine-package manifest, and complete three-container destination set. It rejects missing credentials, identity drift, or an existing package/container version before the first publication write; duplicate skipping is deliberately disabled.
++The publication preflight freezes the exact source, ten-package manifest, and complete three-container destination set. It rejects missing credentials, identity drift, or an existing package/container version before the first publication write; duplicate skipping is deliberately disabled.
+ 
+ After publication, verification considers only published, non-draft GitHub Releases
+ with canonical stable `vMAJOR.MINOR.PATCH` tags: exactly three numeric components,
+@@ -170,7 +170,7 @@ and Builds `397c94a4e246c90b21cf408790fa0d55bf32d795`, with persisted checkout
+ credentials disabled. It also initializes only the dispatched root Builds
+ gitlink, without recursion, and installs the SDK from `global.json` to evaluate
+ that source's package catalog. `scripts/verify-release-publication.py` requires
+-all nine unique IDs in `tools/release-packages.json`, downloads each `.nupkg`,
++all ten unique IDs in `tools/release-packages.json`, downloads each `.nupkg`,
+ and reuses archive, README/license and dependency-boundary validation. Nuspec
+ ID, version, repository URL, repository type `git` and commit must match the
+ release exactly. Existing required dependency and version checks use the evaluated
+@@ -311,7 +311,7 @@ DependencyInjection.Abstractions floors aligned to `10.0.13`. NuGet audit stays
+ active. The Web SDK prunes this package from the UI in favor of the shared ASP.NET
+ runtime, so the UI alone requires runtime `10.0.13` through
+ `RuntimeFrameworkVersion`. Local UI starts require that runtime to be installed.
+-The UI ships as a container outside the unchanged nine-package NuGet manifest;
++The UI ships as a container outside the ten-package NuGet manifest;
+ the existing container liveness gate remains required. The separately built
+ EventStore diagnostic source project retains its own upstream catalog and can
+ still report the older SignalR vulnerability; this is not the owned package graph.
+diff --git a/docs/component-inventory.md b/docs/component-inventory.md
+index 3cef22ab..485064d5 100644
+--- a/docs/component-inventory.md
++++ b/docs/component-inventory.md
+@@ -1,8 +1,8 @@
+ # Component Inventory — Hexalith.Parties
+ 
+-> Regenerated by BMAD *Document Project* (**full rescan**, deep, 2026-06-02) and reconciled for Epic 8 readiness on 2026-10-04 (external-dependency versions refreshed 2026-10-04 for the Builds catalog Aspire, DAPR, and Fluent UI updates). Inventory of exactly 13 projects under `src` plus one sample project, 15 runnable .NET test projects plus one support host, Blazor UI components, and the retained DAPR actor.
++> Regenerated by BMAD *Document Project* (**full rescan**, deep, 2026-06-02) and reconciled for Epic 8 readiness on 2026-10-04 (external-dependency versions refreshed 2026-10-04 for the Builds catalog Aspire, DAPR, and Fluent UI updates). Inventory of exactly 14 projects under `src` plus one sample project, 16 runnable .NET test projects plus one support host, Blazor UI components, and the retained DAPR actor.
+ 
+-## Source projects (13)
++## Source projects (14)
+ 
+ 📦 = adopter-facing NuGet package · 🔒 = internal (domain-service-host private) · ▶ = dev tooling
+ 
+@@ -20,6 +20,7 @@
+ | `Hexalith.Parties` | 🔒 host | no | Domain service host: `PartyAggregate`, DI (`AddParties`), EventStore SDK `/process`+`/query`+`/project`, auth, middleware, health, validation |
+ | `Hexalith.Parties.Projections` | 🔒 | yes* | SDK projection handlers/folds + read-model models/eraser (Dapr projection actors retired in Story 8.6) |
+ | `Hexalith.Parties.Security` | 🔒 | yes* | crypto-shredding: AES-256-GCM, key mgmt/rotation, erasure, `PartyKeyRetryActor` |
++| `Hexalith.Parties.Aspire` | 📦 | yes | root-workspace server locator and platform composition helper; no server dependency |
+ | `Hexalith.Parties.Testing` | 🔒 | no | shared test utilities |
+ 
+ `*` packable by default per `Directory.Build.props`, but these are documented as internal — not consumer dependencies.
+@@ -90,7 +91,9 @@ The `parties-ui` host registers scoped adapters for those ports and delegates to
+ | `FreshnessStatus.razor` | Display | dot plus text freshness indicator with polite live-region semantics |
+ | `ProfileField.razor` | Display | reusable profile label/value rendering |
+ 
+-## Test projects (15 runnable .NET test projects + one support host + Playwright e2e)
++## Test projects (16 runnable .NET test projects + one support host + Playwright e2e)
++
++`Hexalith.Parties.Aspire.Tests` protects the helper composition and dependency boundary.
+ 
+ | Project | Type | Coverage |
+ |---------|------|----------|
+diff --git a/docs/index.md b/docs/index.md
+index 05851af3..dc932adf 100644
+--- a/docs/index.md
++++ b/docs/index.md
+@@ -9,7 +9,7 @@
+ - **Architecture:** Event sourcing + CQRS + EventStore SDK domain/projection/query handlers, fronted by the **Hexalith.EventStore** gateway
+ - **Orchestration:** .NET Aspire 13.6.1 (`dotnet aspire run --project src/Hexalith.Parties.AppHost`)
+ - **Public surface:** EventStore `POST /api/v1/commands` & `/api/v1/queries` (`Domain="party"`); typed .NET client; `parties-mcp` (5 tools)
+-- **Scale:** exactly 13 projects under `src` plus one sample project, 15 runnable .NET test projects plus one support host, and Playwright e2e — roughly 408 source `.cs`, 231 test `.cs`, and 36 `.razor` files (counts as of 2026-08-19; indicative, not gated)
++- **Scale:** exactly 14 projects under `src` plus one sample project, 16 runnable .NET test projects plus one support host, and Playwright e2e — roughly 408 source `.cs`, 231 test `.cs`, and 36 `.razor` files (counts as of 2026-08-19; indicative, not gated)
+ 
+ ## Quick reference
+ 
+diff --git a/docs/project-overview.md b/docs/project-overview.md
+index f2694bc8..26a1d82e 100644
+--- a/docs/project-overview.md
++++ b/docs/project-overview.md
+@@ -14,7 +14,7 @@ Public command and query traffic goes through **Hexalith.EventStore**; the `part
+ |---|---|
+ | **Domain** | Party records (Person / Organization), contact channels, identifiers, GDPR consent & erasure |
+ | **Style** | Event sourcing + CQRS + EventStore SDK domain/projection/query handlers, fronted by the EventStore gateway |
+-| **Repository** | Monolith - exactly 13 projects under `src` plus one sample project, 15 runnable .NET test projects plus one support host, and Playwright e2e |
++| **Repository** | Monolith - exactly 14 projects under `src` plus one sample project, 16 runnable .NET test projects plus one support host, and Playwright e2e |
+ | **Language / runtime** | C# / **.NET 10** (SDK `10.0.402`) |
+ | **Orchestration** | .NET Aspire 13.6.1 (`dotnet aspire run`) |
+ | **Eventing** | DAPR pub/sub — CloudEvents 1.0 on `{tenant}.parties.events` (Redis local; Kafka/RabbitMQ/Service Bus in prod) |
+diff --git a/docs/source-tree-analysis.md b/docs/source-tree-analysis.md
+index 9ea052fb..24501884 100644
+--- a/docs/source-tree-analysis.md
++++ b/docs/source-tree-analysis.md
+@@ -4,7 +4,7 @@
+ 
+ ```
+ Hexalith.Parties/
+-├── Hexalith.Parties.slnx              # Solution (13 projects under `src` + one sample project + 15 runnable tests + 1 support host + e2e)
++├── Hexalith.Parties.slnx              # Solution (14 projects under `src` + one sample project + 16 runnable tests + 1 support host + e2e)
+ ├── Directory.Build.props              # net10.0, Nullable, ImplicitUsings, TreatWarningsAsErrors=true, MinVer
+ ├── Directory.Build.targets            # shared MSBuild targets
+ ├── Directory.Packages.props           # central package versions (ManagePackageVersionsCentrally)
+@@ -21,6 +21,7 @@ Hexalith.Parties/
+ │   │   │                              #     subscription-parties, accesscontrol.*.yaml (deny-by-default except accesscontrol.eventstore-admin.yaml, defaultAction: allow)
+ │   │   ├── KeycloakRealms/            #   hexalith-realm.json (local IdP realm import)
+ │   │   └── Properties/launchSettings.json  # http profile :15100, OTLP :21100
++│   ├── Hexalith.Parties.Aspire/         # platform composition helper; no server package dependency
+ │   │
+ │   │   # ───────── Adopter-facing packages ─────────
+ │   ├── Hexalith.Parties.Client/       # 📦 Typed EventStore gateway client
+@@ -86,7 +87,7 @@ Hexalith.Parties/
+ │   │   │                              #   erasure verification, key-op audit, PartyKeyRetryActor
+ │   └── Hexalith.Parties.Testing/      # 🔒 shared test utilities
+ │
+-├── tests/                             # 15 runnable .NET test projects + 1 support host + Playwright e2e workspace
++├── tests/                             # 16 runnable .NET test projects + 1 support host + Playwright e2e workspace
+ │   ├── Hexalith.Parties.Tests/                 # largest — health, rebuild, search, architectural fitness
+ │   ├── Hexalith.Parties.IntegrationTests/      # full Aspire topology E2E (Aspire.Hosting.Testing)
+ │   ├── Hexalith.Parties.Ci.Tests/              # GitHub Actions/Zot publication contract validation
+diff --git a/scripts/pack-release-packages.py b/scripts/pack-release-packages.py
+index ee72832e..03c9ac54 100755
+--- a/scripts/pack-release-packages.py
++++ b/scripts/pack-release-packages.py
+@@ -12,6 +12,7 @@ from msbuild_properties import MsbuildPropertyResolutionError, resolve_hexalith_
+ 
+ 
+ PACKAGE_PROJECTS = [
++    "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj",
+     "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+     "src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj",
+     "src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj",
+diff --git a/scripts/test.ps1 b/scripts/test.ps1
+index 69e6a1ea..9ee6a788 100644
+--- a/scripts/test.ps1
++++ b/scripts/test.ps1
+@@ -68,6 +68,7 @@ function Invoke-TestProject {
+ }
+ 
+ $unitProjects = @(
++    "tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj",
+     "tests/Hexalith.Parties.Contracts.Tests/Hexalith.Parties.Contracts.Tests.csproj",
+     "tests/Hexalith.Parties.Authentication.Tests/Hexalith.Parties.Authentication.Tests.csproj",
+     "tests/Hexalith.Parties.Client.Tests/Hexalith.Parties.Client.Tests.csproj",
+diff --git a/scripts/validate-nuget-packages.py b/scripts/validate-nuget-packages.py
+index a522cb72..73e255a8 100755
+--- a/scripts/validate-nuget-packages.py
++++ b/scripts/validate-nuget-packages.py
+@@ -29,6 +29,7 @@ EXPECTED_PACKAGE_IDS = frozenset(
+         "Hexalith.Parties.Projections",
+         "Hexalith.Parties.Security",
+         "Hexalith.Parties.Testing",
++        "Hexalith.Parties.Aspire",
+     }
+ )
+ 
+@@ -217,6 +218,11 @@ def get_metadata(package_path: Path) -> PackageMetadata:
+ 
+ def validate_dependency_boundaries(package_path: Path, metadata: PackageMetadata) -> None:
+     """Validate package dependency metadata against the intended package boundaries."""
++    if metadata.package_id == "Hexalith.Parties.Aspire":
++        unexpected = sorted(dependency.package_id for dependency in metadata.dependencies
++                            if dependency.package_id not in {"Aspire.Hosting", "Hexalith.EventStore.Aspire"})
++        if unexpected:
++            raise ValueError(f"{package_path.name}: Aspire helper has forbidden dependencies: {unexpected}")
+     forbidden_ids = {package_id.casefold() for package_id in FORBIDDEN_DEPENDENCY_IDS}
+     forbidden_fragments = tuple(fragment.casefold() for fragment in FORBIDDEN_DEPENDENCY_FRAGMENTS)
+     forbidden_dependencies = sorted(
+@@ -272,7 +278,10 @@ def validate_event_store_dependency_versions(
+         DependencyGroupMetadata(None, tuple(metadata.dependencies)),
+     )
+     event_store_prefix = EVENT_STORE_DEPENDENCY_PREFIX.casefold()
+-    required_id = REQUIRED_EVENT_STORE_DEPENDENCY_ID.casefold()
++    required_dependency_id = ("Hexalith.EventStore.Aspire"
++                              if metadata.package_id == "Hexalith.Parties.Aspire"
++                              else REQUIRED_EVENT_STORE_DEPENDENCY_ID)
++    required_id = required_dependency_id.casefold()
+ 
+     for index, group in enumerate(groups, start=1):
+         group_label = group.target_framework or f"unnamed group {index}"
+@@ -293,7 +302,7 @@ def validate_event_store_dependency_versions(
+         if len(required_dependencies) != 1 or required_dependencies[0].version != expected_version:
+             raise ValueError(
+                 f"{package_path.name}: dependency group '{group_label}' must contain exactly one required "
+-                f"{REQUIRED_EVENT_STORE_DEPENDENCY_ID} dependency at version {expected_version}, "
++                f"{required_dependency_id} dependency at version {expected_version}, "
+                 f"found {required_versions or '<missing>'}"
+             )
+ 
+@@ -327,7 +336,7 @@ def load_package_inventory(manifest: Path) -> tuple[str, ...]:
+     if (any(not isinstance(package_id, str) for package_id in ids)
+             or len({package_id.casefold() for package_id in ids}) != len(ids)
+             or set(ids) != EXPECTED_PACKAGE_IDS):
+-        raise ValueError("Release package inventory must declare exactly the nine unique Parties package IDs")
++        raise ValueError("Release package inventory must declare exactly the ten unique Parties package IDs")
+     return tuple(ids)
+ 
+ 
+diff --git a/scripts/validate-publication-preflight.sh b/scripts/validate-publication-preflight.sh
+index 96fa3840..bc6a8077 100755
+--- a/scripts/validate-publication-preflight.sh
++++ b/scripts/validate-publication-preflight.sh
+@@ -14,9 +14,9 @@ contract_directory="${HEXALITH_RELEASE_CONTRACT_DIRECTORY:-$PWD/.hexalith/releas
+ publication_preflight="${HEXALITH_PUBLICATION_PREFLIGHT:-./.hexalith/release/publication_preflight.py}"
+ evidence_directory="${HEXALITH_RELEASE_EVIDENCE_DIRECTORY:-$PWD/.hexalith/release-evidence/$version/preflight}"
+ 
+-# Hexalith.Parties publishes exactly these nine NuGet packages. Keep this declaration
++# Hexalith.Parties publishes exactly these ten NuGet packages. Keep this declaration
+ # independent from the manifest so an inventory change fails closed until reviewed.
+-readonly expected_package_count=9
++readonly expected_package_count=10
+ 
+ fail() {
+   echo "[publication-preflight] $1" >&2
+diff --git a/tests/Hexalith.Parties.Ci.Tests/CommonsHttpRestoreRoutingTests.cs b/tests/Hexalith.Parties.Ci.Tests/CommonsHttpRestoreRoutingTests.cs
+index fa0c5e9c..f8ae3de5 100644
+--- a/tests/Hexalith.Parties.Ci.Tests/CommonsHttpRestoreRoutingTests.cs
++++ b/tests/Hexalith.Parties.Ci.Tests/CommonsHttpRestoreRoutingTests.cs
+@@ -467,6 +467,9 @@ with tempfile.TemporaryDirectory() as temporary_root:
+             )
+         if package_id in validator.REQUIRED_COMMONS_HTTP_DEPENDENCY_PACKAGES:
+             dependencies.append(validator.DependencyMetadata("Hexalith.Commons.Http", commons_version))
++        if package_id == "Hexalith.Parties.Aspire":
++            dependencies = [validator.DependencyMetadata("Aspire.Hosting", "13.6.1"),
++                            validator.DependencyMetadata("Hexalith.EventStore.Aspire", contracts_version)]
+         return validator.PackageMetadata(
+             package_id,
+             "1.2.3",
+@@ -1254,6 +1257,53 @@ with tempfile.TemporaryDirectory() as temporary_root:
+         }
+     }
+ 
++    /// <summary>Validates the helper platform dependency and rejects implementation packages.</summary>
++    [Fact]
++    public void AspireHelperRequiresPlatformAndRejectsEveryImplementationDependency()
++    {
++        const string probe = """
++import dataclasses
++import importlib.util
++import sys
++from pathlib import Path
++scripts = Path(sys.argv[1])
++sys.path.insert(0, str(scripts))
++spec = importlib.util.spec_from_file_location("aspire_validator_probe", scripts / "validate-nuget-packages.py")
++module = importlib.util.module_from_spec(spec)
++sys.modules[spec.name] = module
++spec.loader.exec_module(module)
++path = Path("Hexalith.Parties.Aspire.1.6.0.nupkg")
++dependencies = frozenset([module.DependencyMetadata("Aspire.Hosting", "13.6.1"),
++                          module.DependencyMetadata("Hexalith.EventStore.Aspire", "3.126.1")])
++metadata = module.PackageMetadata("Hexalith.Parties.Aspire", "1.6.0", "README.md", True, dependencies)
++module.validate_dependency_boundaries(path, metadata)
++module.validate_event_store_dependency_versions(path, metadata, "3.126.1")
++for package_id in ["Hexalith.Parties", "Hexalith.Parties.Client", "Hexalith.Parties.Projections",
++                   "Hexalith.EventStore.Server", "Hexalith.EventStore.Client", "Unexpected.Package"]:
++    invalid = dataclasses.replace(metadata, dependencies=dependencies | {module.DependencyMetadata(package_id, "1.0.0")})
++    try:
++        module.validate_dependency_boundaries(path, invalid)
++    except ValueError as error:
++        if package_id not in str(error):
++            raise
++    else:
++        raise SystemExit(f"Helper admitted forbidden dependency {package_id}")
++for replacement in [frozenset(), frozenset([module.DependencyMetadata("Hexalith.EventStore.Contracts", "3.126.1")]),
++                    frozenset([module.DependencyMetadata("Hexalith.EventStore.Aspire", "0.0.1")])]:
++    try:
++        module.validate_event_store_dependency_versions(path, dataclasses.replace(metadata, dependencies=replacement), "3.126.1")
++    except ValueError as error:
++        if "Hexalith.EventStore.Aspire" not in str(error):
++            raise
++    else:
++        raise SystemExit("Helper admitted a missing or mismatched platform dependency")
++print("aspire-boundary|verified")
++""";
++        (int exitCode, string output, string error) = RunPython("-c", probe, CiTestPaths.RepoFile("scripts"));
++        exitCode.ShouldBe(0, error);
++        output.ShouldContain("aspire-boundary|verified");
++    }
++
+     [Fact]
+     public void PythonProcessHarnessDrainsBothStreamsAndEnforcesTimeout()
+     {
+diff --git a/tests/Hexalith.Parties.Ci.Tests/PartiesContainerPublishWorkflowTests.cs b/tests/Hexalith.Parties.Ci.Tests/PartiesContainerPublishWorkflowTests.cs
+index cab5df39..c4a21c11 100644
+--- a/tests/Hexalith.Parties.Ci.Tests/PartiesContainerPublishWorkflowTests.cs
++++ b/tests/Hexalith.Parties.Ci.Tests/PartiesContainerPublishWorkflowTests.cs
+@@ -6,7 +6,7 @@ namespace Hexalith.Parties.Ci.Tests;
+ 
+ public sealed class PartiesContainerPublishWorkflowTests
+ {
+-    private const int ExpectedPackageCount = 9;
++    private const int ExpectedPackageCount = 10;
+     private const string BuildsValidationSha = "332b2c144defba546fe0a09626a4a72f2340e22f";
+     private const string BuildsExecutionSha = "397c94a4e246c90b21cf408790fa0d55bf32d795";
+     private static readonly TimeSpan WorkflowReadTimeout = TimeSpan.FromSeconds(10);
+@@ -134,7 +134,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+         preparation.ShouldContain("source-branch: main\n");
+         preparation.ShouldContain("source-ci-workflow: ci.yml\n");
+         preparation.ShouldContain("package-manifest: tools/release-packages.json\n");
+-        preparation.ShouldContain("expected-package-count: 9\n");
++        preparation.ShouldContain("expected-package-count: 10\n");
+         publisher.ShouldContain("uses: ./.hexalith/builds-execution/Github/publish-containers\n");
+         publisher.ShouldContain($"builds-execution-sha: {BuildsExecutionSha}\n");
+         workflow.ShouldContain("actions/workflows/ci.yml/runs");
+@@ -329,7 +329,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+             "HEXALITH_RELEASE_SOURCE_BRANCH: main",
+             "HEXALITH_RELEASE_SOURCE_CI_WORKFLOW: ci.yml",
+             "HEXALITH_RELEASE_PACKAGE_MANIFEST: tools/release-packages.json",
+-            "HEXALITH_RELEASE_EXPECTED_PACKAGE_COUNT: '9'",
++            "HEXALITH_RELEASE_EXPECTED_PACKAGE_COUNT: '10'",
+             "HEXALITH_RELEASE_RESERVED_VERSION: ''",
+             "HEXALITH_RELEASE_AUTHORITY_ISSUE_URL: ''",
+             "HEXALITH_RELEASE_AUTHORITY_OWNER: ''",
+@@ -452,7 +452,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+         containerTargets.ShouldContain("<ContainerGenerateLabelsImageSource>false</ContainerGenerateLabelsImageSource>");
+         containerTargets.ShouldNotContain("Hexalith.EventStore");
+ 
+-        publicationPreflight.ShouldContain("readonly expected_package_count=9");
++        publicationPreflight.ShouldContain("readonly expected_package_count=10");
+         publicationPreflight.ShouldContain(
+             "HEXALITH_RELEASE_SOURCE_CI_WORKFLOW must be exactly ci.yml.");
+         publicationPreflight.ShouldNotContain("commitlint.yml");
+@@ -466,12 +466,15 @@ public sealed class PartiesContainerPublishWorkflowTests
+     }
+ 
+     [Fact]
+-    public void ReleasePackageManifestDeclaresExactNinePackageInventory()
++    public void ReleasePackageManifestDeclaresExactTenPackageInventory()
+     {
+         using JsonDocument manifest = JsonDocument.Parse(CiTestPaths.ReadRepoFile("tools/release-packages.json"));
+         JsonElement[] packages = manifest.RootElement.GetProperty("packages").EnumerateArray().ToArray();
+ 
+         packages.Length.ShouldBe(ExpectedPackageCount);
++        using JsonDocument policy = JsonDocument.Parse(CiTestPaths.ReadRepoFile("tools/nuget-trusted-publishing-policy.json"));
++        policy.RootElement.GetProperty("packageIds").EnumerateArray().Select(package => package.GetString())
++            .ShouldBe(packages.Select(package => package.GetProperty("id").GetString()));
+         packages.Select(package => package.GetProperty("id").GetString()).ShouldBe(
+         [
+             "Hexalith.Parties.Contracts",
+@@ -483,6 +486,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+             "Hexalith.Parties.Projections",
+             "Hexalith.Parties.Security",
+             "Hexalith.Parties.Testing",
++            "Hexalith.Parties.Aspire",
+         ]);
+         packages.Select(package => package.GetProperty("project").GetString()).ShouldBe(
+         [
+@@ -495,6 +499,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+             "src/Hexalith.Parties.Projections/Hexalith.Parties.Projections.csproj",
+             "src/Hexalith.Parties.Security/Hexalith.Parties.Security.csproj",
+             "src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj",
++            "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj",
+         ]);
+     }
+ 
+@@ -564,15 +569,15 @@ public sealed class PartiesContainerPublishWorkflowTests
+             "registry.hexalith.com/parties-mcp",
+             "registry.hexalith.com/parties-ui",
+         ]);
+-        ArgumentValues(arguments, "--expected-package-count").ShouldBe(["9"]);
++        ArgumentValues(arguments, "--expected-package-count").ShouldBe(["10"]);
+         ArgumentValues(arguments, "--phase").ShouldBe([phase]);
+     }
+ 
+     [Theory]
+     [InlineData(null)]
+     [InlineData("")]
+-    [InlineData("8")]
+-    [InlineData("10")]
++    [InlineData("9")]
++    [InlineData("11")]
+     public void PublicationPreflightWrapperRejectsPackageCountDriftBeforeSharedPreflight(string? packageCount)
+     {
+         if (OperatingSystem.IsWindows())
+@@ -584,7 +589,7 @@ public sealed class PartiesContainerPublishWorkflowTests
+             RunPublicationPreflightWrapper("verify", packageCount);
+ 
+         exitCode.ShouldNotBe(0);
+-        error.ShouldContain("expected-package-count input must be exactly 9");
++        error.ShouldContain("expected-package-count input must be exactly 10");
+         preflightInvoked.ShouldBeFalse();
+     }
+ 
+diff --git a/tests/Hexalith.Parties.Ci.Tests/release_artifact_cases.py b/tests/Hexalith.Parties.Ci.Tests/release_artifact_cases.py
+index c0a8b928..5faeb6f0 100644
+--- a/tests/Hexalith.Parties.Ci.Tests/release_artifact_cases.py
++++ b/tests/Hexalith.Parties.Ci.Tests/release_artifact_cases.py
+@@ -88,6 +88,8 @@ def run(repository, scenario):
+             fields += f"<id>{package_id}</id>"
+         dependency_values = [("Hexalith.EventStore.Contracts", event_store_version),
+                              ("Hexalith.Commons.Http", commons_version), ("Hexalith.Commons.UniqueIds", commons_version)]
++        if package_id == "Hexalith.Parties.Aspire":
++            dependency_values = [("Aspire.Hosting", "13.6.1"), ("Hexalith.EventStore.Aspire", event_store_version)]
+         if affected and scenario == "forbidden-dependency":
+             dependency_values.append(("Hexalith.Parties", "1.2.3"))
+         if affected and scenario == "no-dependencies":
+@@ -263,7 +265,7 @@ def run(repository, scenario):
+         assert (result.returncode == 0) == expected, (scenario, result.stdout, result.stderr, receipt)
+         assert receipt["result"] == ("pass" if expected else "fail")
+         if expected:
+-            assert len(receipt["packages"]) == 9 and len(receipt["images"]) == 3
++            assert len(receipt["packages"]) == len(package_ids) and len(receipt["images"]) == 3
+             for package in receipt["packages"]:
+                 downloaded = (evidence / package["file"]).read_bytes()
+                 assert package["sha256"] == hashlib.sha256(downloaded).hexdigest()
+diff --git a/tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs b/tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs
+index 5525c7c3..977cb8c3 100644
+--- a/tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs
++++ b/tests/Hexalith.Parties.Tests/FitnessTests/DocumentationFitnessTests.cs
+@@ -17,6 +17,7 @@ public sealed class DocumentationFitnessTests
+         "Hexalith.Parties",
+         "Hexalith.Parties.AdminPortal",
+         "Hexalith.Parties.AppHost",
++        "Hexalith.Parties.Aspire",
+         "Hexalith.Parties.Authentication",
+         "Hexalith.Parties.Client",
+         "Hexalith.Parties.ConsumerPortal",
+@@ -49,6 +50,7 @@ public sealed class DocumentationFitnessTests
+     private static readonly string[] ExpectedRunnableProjects =
+     [
+         "Hexalith.Parties.AdminPortal.Tests",
++        "Hexalith.Parties.Aspire.Tests",
+         "Hexalith.Parties.Authentication.Tests",
+         "Hexalith.Parties.Ci.Tests",
+         "Hexalith.Parties.Client.Tests",
+@@ -116,9 +118,9 @@ public sealed class DocumentationFitnessTests
+         {
+             string documentation = Read(root, relativePath);
+             string normalizedDocumentation = Regex.Replace(documentation, @"\s+", " ", RegexOptions.CultureInvariant);
+-            normalizedDocumentation.ShouldContain("13 projects under `src`", Case.Insensitive, relativePath);
++            normalizedDocumentation.ShouldContain("14 projects under `src`", Case.Insensitive, relativePath);
+             normalizedDocumentation.ShouldContain("one sample project", Case.Insensitive, relativePath);
+-            documentation.ShouldContain("15 runnable", Case.Insensitive, relativePath);
++            documentation.ShouldContain("16 runnable", Case.Insensitive, relativePath);
+             documentation.ShouldContain("support host", Case.Insensitive, relativePath);
+         }
+     }
+diff --git a/tools/nuget-trusted-publishing-policy.json b/tools/nuget-trusted-publishing-policy.json
+index 0bb98581..c40e341c 100644
+--- a/tools/nuget-trusted-publishing-policy.json
++++ b/tools/nuget-trusted-publishing-policy.json
+@@ -21,7 +21,8 @@
+     "Hexalith.Parties.Authentication",
+     "Hexalith.Parties.Projections",
+     "Hexalith.Parties.Security",
+-    "Hexalith.Parties.Testing"
++    "Hexalith.Parties.Testing",
++    "Hexalith.Parties.Aspire"
+   ],
+   "setupUrl": "https://www.nuget.org/account/TrustedPublishing",
+   "documentationUrl": "https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing",
+diff --git a/tools/release-packages.json b/tools/release-packages.json
+index 5675f1c9..d1913836 100644
+--- a/tools/release-packages.json
++++ b/tools/release-packages.json
+@@ -35,6 +35,10 @@
+     {
+       "id": "Hexalith.Parties.Testing",
+       "project": "src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj"
++    },
++    {
++      "id": "Hexalith.Parties.Aspire",
++      "project": "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj"
+     }
+   ]
+ }
+diff --git a/src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj b/src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj
+new file mode 100644
+index 00000000..8d39c7da
+--- /dev/null
++++ b/src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj
+@@ -0,0 +1,15 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <Description>Aspire composition helper for the Hexalith Parties domain service. The server is launched from root workspace source and is not a package dependency.</Description>
++    <!-- Keep platform transitive pins in the platform package, not this helper's direct API. -->
++    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
++    <PackageTags>parties;dapr;aspire;eventsourcing;dotnet</PackageTags>
++    <!-- EventStore.Aspire uses the Aspire-aligned prerelease Dapr integration. -->
++    <NoWarn>$(NoWarn);NU5104</NoWarn>
++  </PropertyGroup>
++  <ItemGroup>
++    <PackageReference Include="Aspire.Hosting" />
++    <PackageReference Include="Hexalith.EventStore.Aspire" />
++    <InternalsVisibleTo Include="Hexalith.Parties.Aspire.Tests" />
++  </ItemGroup>
++</Project>
+diff --git a/src/Hexalith.Parties.Aspire/HexalithPartiesServerExtensions.cs b/src/Hexalith.Parties.Aspire/HexalithPartiesServerExtensions.cs
+new file mode 100644
+index 00000000..f8cdf9be
+--- /dev/null
++++ b/src/Hexalith.Parties.Aspire/HexalithPartiesServerExtensions.cs
+@@ -0,0 +1,42 @@
++using Aspire.Hosting;
++using Aspire.Hosting.ApplicationModel;
++
++using Hexalith.EventStore.Aspire;
++
++namespace Hexalith.Parties.Aspire;
++
++/// <summary>Composes the Parties domain service through the shared EventStore platform.</summary>
++public static class HexalithPartiesServerExtensions
++{
++    /// <summary>Adds the separately built Parties server with shared Dapr state and pub/sub components.</summary>
++    /// <param name="builder">The consuming AppHost builder.</param>
++    /// <param name="eventStore">The shared EventStore topology.</param>
++    /// <param name="daprConfigPath">The Dapr access-control configuration file.</param>
++    /// <param name="appId">The resource name and Dapr application identifier.</param>
++    /// <param name="daprPlacementHostAddress">The optional placement service address.</param>
++    /// <param name="daprSchedulerHostAddress">The optional scheduler service address.</param>
++    /// <returns>The Parties resource for authentication and other composition-specific configuration.</returns>
++    /// <remarks>
++    /// Authentication, Gateway routing and app-channel tokens remain the consuming AppHost's responsibility.
++    /// This package contains no Parties server implementation or dependency and never builds the server.
++    /// </remarks>
++    public static IResourceBuilder<ProjectResource> AddHexalithPartiesServer(
++        this IDistributedApplicationBuilder builder,
++        HexalithEventStoreResources eventStore,
++        string daprConfigPath,
++        string appId = "parties",
++        string? daprPlacementHostAddress = null,
++        string? daprSchedulerHostAddress = null)
++    {
++        ArgumentNullException.ThrowIfNull(builder);
++        ArgumentNullException.ThrowIfNull(eventStore);
++        ArgumentException.ThrowIfNullOrWhiteSpace(daprConfigPath);
++        ArgumentException.ThrowIfNullOrWhiteSpace(appId);
++
++        return builder.AddProject<PartiesServerProjectMetadata>(appId)
++            .AddEventStoreDomainModule(
++                eventStore, appId, daprConfigPath,
++                daprPlacementHostAddress: daprPlacementHostAddress,
++                daprSchedulerHostAddress: daprSchedulerHostAddress);
++    }
++}
+diff --git a/src/Hexalith.Parties.Aspire/PartiesServerProjectMetadata.cs b/src/Hexalith.Parties.Aspire/PartiesServerProjectMetadata.cs
+new file mode 100644
+index 00000000..135c2046
+--- /dev/null
++++ b/src/Hexalith.Parties.Aspire/PartiesServerProjectMetadata.cs
+@@ -0,0 +1,17 @@
++using Aspire.Hosting;
++using Aspire.Hosting.ApplicationModel;
++
++using Hexalith.EventStore.Aspire;
++
++namespace Hexalith.Parties.Aspire;
++
++/// <summary>Locates the separately built Parties server in the consuming root workspace.</summary>
++internal sealed class PartiesServerProjectMetadata : IProjectMetadata
++{
++    /// <inheritdoc/>
++    public string ProjectPath => RepositoryProjectPaths.GetReferencedModuleProjectPath(
++        "Hexalith.Parties", "src", "Hexalith.Parties", "Hexalith.Parties.csproj");
++
++    /// <inheritdoc/>
++    public bool SuppressBuild => true;
++}
+diff --git a/tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj b/tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj
+new file mode 100644
+index 00000000..fa6d94b8
+--- /dev/null
++++ b/tests/Hexalith.Parties.Aspire.Tests/Hexalith.Parties.Aspire.Tests.csproj
+@@ -0,0 +1,15 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <IsPackable>false</IsPackable>
++  </PropertyGroup>
++  <ItemGroup>
++    <ProjectReference Include="../../src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj" />
++    <PackageReference Include="Microsoft.NET.Test.Sdk" />
++    <PackageReference Include="xunit.v3" />
++    <PackageReference Include="Shouldly" />
++  </ItemGroup>
++  <ItemGroup>
++    <Using Include="Xunit" />
++    <Using Include="Shouldly" />
++  </ItemGroup>
++</Project>
+diff --git a/tests/Hexalith.Parties.Aspire.Tests/PartiesServerCompositionTests.cs b/tests/Hexalith.Parties.Aspire.Tests/PartiesServerCompositionTests.cs
+new file mode 100644
+index 00000000..4276780d
+--- /dev/null
++++ b/tests/Hexalith.Parties.Aspire.Tests/PartiesServerCompositionTests.cs
+@@ -0,0 +1,79 @@
++using Aspire.Hosting;
++using Aspire.Hosting.ApplicationModel;
++
++using CommunityToolkit.Aspire.Hosting.Dapr;
++
++using Hexalith.EventStore.Aspire;
++
++namespace Hexalith.Parties.Aspire.Tests;
++
++/// <summary>Protects the published helper's platform composition and dependency boundary.</summary>
++public class PartiesServerCompositionTests
++{
++    /// <summary>The helper launches root workspace source without building or referencing the server assembly.</summary>
++    [Fact]
++    public void MetadataLocatesOwnRootSourceAndSuppressesBuild()
++    {
++        var metadata = new PartiesServerProjectMetadata();
++        metadata.ProjectPath.ShouldBe(Path.Combine(RepositoryProjectPaths.GetRepositoryRoot(),
++            "src", "Hexalith.Parties", "Hexalith.Parties.csproj"));
++        metadata.SuppressBuild.ShouldBeTrue();
++        typeof(HexalithPartiesServerExtensions).Assembly.GetReferencedAssemblies()
++            .ShouldNotContain(assembly => assembly.Name == "Hexalith.Parties"
++                || assembly.Name!.StartsWith("Hexalith.Parties.", StringComparison.Ordinal));
++    }
++
++    /// <summary>The service shares the platform components and forwards caller-supplied sidecar settings.</summary>
++    [Fact]
++    public void CompositionSharesPlatformComponentsAndForwardsSidecarSettings()
++    {
++        IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder();
++        IResourceBuilder<ProjectResource> gateway = builder.AddHexalithEventStoreGatewayProject();
++        HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, null);
++        IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(topology,
++            "/test/parties-access.yaml", "parties-smoke", "localhost:6050", "localhost:6060");
++
++        parties.Resource.Name.ShouldBe("parties-smoke");
++        IDaprSidecarResource sidecar = parties.Resource.Annotations.OfType<DaprSidecarAnnotation>().Single().Sidecar;
++        DaprSidecarOptions options = sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Single().Options;
++        options.AppId.ShouldBe("parties-smoke");
++        options.Config.ShouldBe("/test/parties-access.yaml");
++        options.PlacementHostAddress.ShouldBe("localhost:6050");
++        options.SchedulerHostAddress.ShouldBe("localhost:6060");
++        options.EnableAppHealthCheck.ShouldBe(true);
++        options.AppHealthCheckPath.ShouldBe("/alive");
++        sidecar.Annotations.OfType<DaprComponentReferenceAnnotation>().Select(item => item.Component)
++            .ShouldContain(topology.StateStore.Resource);
++        sidecar.Annotations.OfType<DaprComponentReferenceAnnotation>().Select(item => item.Component)
++            .ShouldContain(topology.PubSub.Resource);
++        parties.Resource.Annotations.OfType<WaitAnnotation>().Select(item => item.Resource)
++            .ShouldContain(gateway.Resource);
++    }
++
++    /// <summary>Invalid required arguments fail before adding a Parties resource.</summary>
++    [Theory]
++    [InlineData(null, "parties")]
++    [InlineData("", "parties")]
++    [InlineData(" ", "parties")]
++    [InlineData("access.yaml", null)]
++    [InlineData("access.yaml", "")]
++    [InlineData("access.yaml", " ")]
++    public void InvalidConfigurationDoesNotMutateTopology(string? config, string? appId)
++    {
++        IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder();
++        HexalithEventStoreResources topology = builder.AddHexalithEventStore(
++            builder.AddHexalithEventStoreGatewayProject(), null);
++        IResource[] before = builder.Resources.ToArray();
++        Should.Throw<ArgumentException>(() => builder.AddHexalithPartiesServer(topology, config!, appId!));
++        builder.Resources.ShouldBe(before);
++    }
++
++    /// <summary>Null platform arguments fail explicitly.</summary>
++    [Fact]
++    public void NullPlatformArgumentsFailExplicitly()
++    {
++        IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder();
++        Should.Throw<ArgumentNullException>(() => builder.AddHexalithPartiesServer(null!, "access.yaml"));
++        Should.Throw<ArgumentNullException>(() => HexalithPartiesServerExtensions.AddHexalithPartiesServer(null!, null!, "access.yaml"));
++    }
++}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/Hexalith.Commons.UniqueIds.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:MinVerVersionOverride=2.30.3"
+  ],
+  "workingDirectory": "<isolated-parties-snapshot>",
+  "startedAt": "2026-10-23T05:26:52.553459+00:00",
+  "exitCode": 0,
+  "stdout": "  Determining projects to restore...\n  Restored <isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/Hexalith.Commons.UniqueIds.csproj (in 145 ms).\n  Hexalith.Commons.UniqueIds -> <isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/net10.0/Hexalith.Commons.UniqueIds.dll\n  Successfully created package '<isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/Hexalith.Commons.UniqueIds.1.0.0.nupkg'.\n  Successfully created package '<isolated-parties-snapshot>/references/Hexalith.Commons/src/libraries/Hexalith.Commons.UniqueIds/bin/Release/Hexalith.Commons.UniqueIds.1.0.0.snupkg'.\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.26\n",
+  "stderr": "",
+  "finishedAt": "2026-10-23T05:26:54.091684+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "baselineSource": "6c83309d08a10f36a0da866521b9d0da6f8fc998",
+  "baselineRun": 39856260397,
+  "baselineJob": 120100431453,
+  "baselineTest": "ConcurrentSessions_IsolateStreamsRejectCrossCallsAndSurvivePeerDisposalAsync",
+  "baselineFailure": "first.IsAvailable false: /v1.0/healthz HTTP 500 after 2 minutes",
+  "candidateSource": "ad44f1d433799b2e1ca37a0bdb722a2ecfe09c87",
+  "candidateRun": 39916336068,
+  "sameFailure": true,
+  "normalFailedJobRerunRequested": true,
+  "readinessWeakened": false,
+  "skipsAdded": false
+}

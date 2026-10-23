@@ -1,0 +1,27 @@
+{
+  "commands": [
+    "dotnet restore Hexalith.McpCli.slnx",
+    "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror -m:1",
+    "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release"
+  ],
+  "exitCodes": [
+    0,
+    0,
+    0
+  ],
+  "manifestTests": {
+    "total": 139,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 23.311
+  },
+  "actualRestoredProductionPins": {
+    "Hexalith.Parties.Contracts": "1.5.1",
+    "Hexalith.Tenants.Contracts": "5.10.0",
+    "Hexalith.EventStore.Client": "3.126.1",
+    "Hexalith.EventStore.Contracts": "3.126.1"
+  },
+  "dependencyPolicyByteIdenticalToBaseline": true,
+  "publishedHelperEnrolled": false,
+  "mcpCliCommitted": false
+}

@@ -1,0 +1,13 @@
+{
+  "executionSha": "d9070aa0d43feb9e3359286bc797d2be65960727",
+  "catalogCheckoutSha": "70ead608ac01f66dfcd80c13bb71152dac6c128e",
+  "catalogGitlinkUnchanged": true,
+  "normalRootSubmoduleUpdateResolvedExecution": true,
+  "explicitMetadataFetchRequired": false,
+  "fetchedRef": "refs/remotes/origin/prerelease",
+  "remoteFetch": "+refs/heads/*:refs/remotes/origin/*",
+  "checkoutClean": true,
+  "nestedSubmodulesInitialized": false,
+  "normalCommand": "git -c submodule.recurse=false submodule update --init -- references/Hexalith.Builds",
+  "result": "pass"
+}

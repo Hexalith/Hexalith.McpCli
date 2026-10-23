@@ -1,0 +1,17 @@
+{
+  "publishedHelperIsolationLimit": "EventStore.Aspire 3.126.1 hard-codes the Gateway sidecar appId eventstore",
+  "existingProcessesStoppedOrReused": false,
+  "liveAcceptance": false,
+  "earlierObservation": {
+    "requestedApplicationIdsPresent": [
+      "eventstore",
+      "tenants",
+      "parties"
+    ],
+    "applicationProcessesStoppedOrReusedByThisTask": false
+  },
+  "latestObservation": {
+    "conflicts": [],
+    "note": "Previously conflicting applications ended independently; a future live attempt must check again."
+  }
+}

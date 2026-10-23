@@ -1,0 +1,17 @@
+{
+  "sourceSha": "f2c1b1968c10b04ce5a5ef41685248b01c1da40b",
+  "ciRunId": 39915513994,
+  "ciOwnerPublisherJobId": 120288258060,
+  "ciException": "Aspire.Hosting.DistributedApplicationException",
+  "localFullOwnerSuite": "11 passed",
+  "sandboxProbe": {
+    "tool": "bwrap",
+    "isolation": "Private mounts hide /usr/local/bin and ~/.dapr/bin; /dev remains usable; existing user files/processes unchanged",
+    "build": false,
+    "publisherExitCode": -6,
+    "distributedApplicationException": true,
+    "knownReason": "Unable to locate the Dapr CLI.",
+    "rawOutputRetained": false
+  },
+  "repair": "Install pinned dapr/setup-dapr CLI 1.18.0 for the existing owner-publisher job; no Dapr runtime or topology starts"
+}

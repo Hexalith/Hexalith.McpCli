@@ -1,0 +1,22 @@
+{
+  "admittedToMcpCli": false,
+  "helperArtifact": "Local qualification only: Hexalith.Parties.Aspire 1.6.0-story412.1",
+  "compilation": "AppHost and Integration.Tests passed Release warnings-as-errors",
+  "configurationGuards": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nonLiveDiscovery": [
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"
+  ],
+  "negativeFixtureProbe": {
+    "total": 1,
+    "failed": 1,
+    "skipped": 0,
+    "reason": "Required root EventStore checkout is not declared in the isolated draft workspace",
+    "resourcesStarted": false
+  },
+  "liveAcceptance": false
+}
