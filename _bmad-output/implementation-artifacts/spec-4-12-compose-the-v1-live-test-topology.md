@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -395,3 +395,101 @@ Parent checks during triage:
 - `low` — Inherited `GIT_DIR`, `GIT_WORK_TREE` or `GIT_INDEX_FILE` misdirect `git` (EC). No repository hook runs these tests, and the fix scrubs three call sites.
 - `low` — Sentry reachable only on `::1` while the configuration names 127.0.0.1 (EC). The wrapper binds 127.0.0.1, and the fix adds address-specific probing.
 - `maybe-false` (low if true) — The 403 boundary server's single read could leave body bytes unread and reset the connection (EC). It passed 25 of 25 isolated runs. Stress-running under parallel CI load would settle it.
+
+### Review Findings (code review pass 2, 2026-10-23)
+
+Code review 2026-10-23 of the full committed story range `be89509..d9dc31a` (`e5ed21a`, `3196d3d`, `c432b45`, `d9dc31a`).
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 35 files, +2,575/−7, 2,880 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 52 normalized findings (BH 19, EC 21, VG 5, AA 7). 17 survive as 10 patch entries and 1 defer; 35 are rejected. No decision is needed.
+
+Parent checks during triage:
+- With `MCPCLI_ISOLATED_TOPOLOGY=1` and no `dapr` on `PATH`, the built smoke exits 0 with `Skipped: 1`. With `-failSkips` it exits 1, reporting `[FAIL]` and `FAIL_SKIP : DAPR integration prerequisites are unavailable…`.
+- The reusable `ci / build-and-test` job initializes every root submodule (`git -c submodule.recurse=false submodule update --init`). The repository's own jobs initialize only Builds. Manifest.Tests took 47.2 s in CI run `40000531511`.
+- `ExistingSentryListenerDoesNotFailPrerequisiteRun` took 9.6 s, and 9.3 s pinned to one core, against its 30 s budget.
+- The pinned `daprio/dapr` and `redis` values are registry digests: `docker pull` resolves them (`Digest: sha256:0ac4…`).
+- The extracted `redis-server` links host `libssl.so.3`, `libcrypto.so.3`, `libz.so.1` and `libzstd.so.1`.
+- `tools/live-topology/runs/` is not git-ignored. An empty `MCPCLI_ISOLATED_RUNTIME_DIR` resolves to the working directory.
+
+- [ ] [Review][Patch] P15 — medium. A skipped smoke inside the wrapper exits 0, like a pass. [README.md:248]
+  - xUnit v3 exits 0 for a skip. With Docker stopped, the base fixture skips inside the wrapper, which then records `commandExitCode: 0` and prints `Command completed: exit 0`.
+  - AC4 requires the recorded result to distinguish skipped, failed and passed proof; only a manual read of stdout does so today.
+  - Fix: add `-failSkips` to both documented live commands (`README.md:248`, `tools/live-topology/README.md:31`). A skip then exits 1 and stays identifiable as `FAIL_SKIP` with the standard diagnostic (AA).
+- [ ] [Review][Patch] P16 — medium. `DaprPrerequisiteTests` depends on the real root source checkouts. [tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs:79]
+  - It runs the repository's Integration.Tests output with the isolation sentinel set. The fixture now calls `ValidateWorkspace` before any prerequisite probe (`AspireTopologyFixture.cs:37`).
+  - On a checkout with only `references/Hexalith.Builds` initialized, which is the documented minimum for restore, all ten cases and `ExistingSentryListenerDoesNotFailPrerequisiteRun` fail with "Required root source project … is missing" instead of skipping. CI passes only because the reusable job initializes every root submodule.
+  - Fix: run the child against a temporary root with declared, git-initialized stand-in checkouts, prepared once per test process. This follows the `TopologyFixtureLaunchTests` and `TopologyLaunchTests.PrepareSources` pattern (EC).
+- [ ] [Review][Patch] P17 — medium. Composition inspection omits settings that the live run depends on. [tests/Hexalith.McpCli.AppHost/Program.cs:134]
+  - Omitted settings:
+    - each sidecar's placement and scheduler addresses (the wrapper's private 6050/6060);
+    - `ASPNETCORE_ENVIRONMENT` and `DOTNET_ENVIRONMENT`;
+    - the empty `Authentication__JwtBearer__Authority`;
+    - the statestore and pubsub component paths;
+    - the cleared endpoint ports.
+  - Dropping any of them keeps `ComposedResourcesKeepTokensAclAndGatewayContentRoot` green; only a manual live run fails. Without the placement and scheduler arguments, sidecars fall back to default addresses where nothing listens inside the namespace.
+  - Fix: add these non-secret values to the snapshot. Pass `--Dapr:PlacementHostAddress` and `--Dapr:SchedulerHostAddress` in that test, and assert every value for all three resources (VG, BH).
+- [ ] [Review][Patch] P18 — medium. The wrapper's child deadline path is untested. [tools/live-topology/run-isolated.py:166]
+  - The 900 s literal cannot be injected. No test covers the path from timeout through `stop_owned(child)` to `commandExitCode` 124.
+  - This deadline is the guard for the tracked indefinite platform lock wait (`deferred-work.md:589`). Changing 124 to 0 would let a hung run pass, and all nine runtime tests would stay green.
+  - Fix: move the deadline into a module constant, patch it in `wrapper_fixture`, and add a hung-child mode. It asserts exit 124, the recorded receipt, and that the real child was stopped (BH).
+- [ ] [Review][Patch] P19 — medium. The 10 s bounds on `dapr list` and `git rev-parse` are untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:134]
+  - Replacing `WaitForExit(10000)` with `WaitForExit()` (`:67`, `:134`), or removing `TimeoutException` from the `Program.cs:54` filter, keeps every test green. The Dapr stub delays only `--version`.
+  - Fix: make the stub honor a delay for `list` and add a slow `git` shim. For both, assert exit 2, empty stdout and the exact "exceeded 10 seconds" stderr (VG, AA).
+- [ ] [Review][Patch] P20 — medium. Private-key cleanup and result withholding are untested. [tools/live-topology/run-isolated.py:190]
+  - VG showed that deleting the `*.key` unlink loop, or copying `DAPR_CERT_KEY` into `result.json`, leaves all nine runtime tests green. `result.json` is the receipt copied into story evidence.
+  - Fix: in the `success` fixture run, assert that `issuer.key` is gone and that `private-test-credential` appears in no run file except the child's own output (VG).
+- [ ] [Review][Patch] P21 — low. The runtime directory can resolve inside the checkout. [tools/live-topology/run-isolated.py:17]
+  - When `MCPCLI_ISOLATED_RUNTIME_DIR` is unset, it falls back to the script directory. When it is empty, it resolves to the working directory; the root README command produces this when `$private_runtime` is unset in a new shell.
+  - Runs then land in `tools/live-topology/runs/` or `runs/`, neither of which is git-ignored. They contain `outside.json`, `result.json`, certificates, logs, and Redis and scheduler data.
+  - Fix: in `__main__`, refuse an unset or empty value with a clear message before creating anything, and add a test (BH, EC).
+- [ ] [Review][Patch] P22 — low. The private Dapr probe parses stdout before checking the exit code. [tools/live-topology/run-isolated.py:153]
+  - A failing `dapr list` with empty stdout records `JSONDecodeError` instead of `Private Dapr registration probe exited N.`, and its stderr is never recorded. The `dapr-exit` fixture returns valid `[]`, which hides this.
+  - Fix: check the exit code first, record a bounded stderr excerpt, and make the fixture return empty stdout (VG, BH, EC).
+- [ ] [Review][Patch] P23 — low. The README's live-smoke text contradicts the wrapper. [README.md:253]
+  - It says the wrapper supplies the `DAPR_*` variables "with your local CA and issuer credentials". The wrapper actually reads fresh credentials from its private Sentry.
+  - "On other platforms use an equivalent process deadline" (`:251`) implies portability. The wrapper is Linux-only (`unshare`, `/proc/self/ns`), and the fixture refuses to run without it.
+  - It names Sentry at `localhost:50001`, but the configuration and wrapper pin `127.0.0.1:50001`.
+  - Fix: correct these three statements (AA, BH).
+- [ ] [Review][Patch] P24 — low. The runtime requirements omit the host libraries that `redis-server` needs. [tools/live-topology/README.md:10]
+  - The hash-pinned `redis-server` links host `libssl.so.3`, `libcrypto.so.3`, `libz.so.1` and `libzstd.so.1`, but the requirements say only "OpenSSL". A host without them fails with "redis exited before prerequisites were ready".
+  - Fix: name the OpenSSL 3, zlib and zstd shared libraries in the requirements (BH).
+- [x] [Review][Defer] D1 — low. The agent instructions do not describe the live-topology project and tools. [AGENTS.md:100] — deferred: agent-context edit, tracked under the Story 4.12 ledger heading.
+  - `AGENTS.md:100` says a test project missing from the CI list is silently skipped. Integration.Tests is deliberately absent, and the `dotnet test` command that `AGENTS.md:99` prescribes fails for it outside the wrapper.
+  - The CI `tools/live-topology` unittest check is not named, and the "about 35 s" figure for Manifest.Tests is now 47.2 s in CI (BH).
+
+#### Rejected (code review pass 2, 2026-10-23)
+
+- `low` — The fixture hard-codes port 3501 (VG, BH). Already rejected in pass 1: the wrapper and README fix 3501, and the AppHost rechecks the configured port. The fix adds parsing.
+- `low` — The isolation refusal precedes the prerequisite probes, so a direct run on a host without Dapr fails instead of skipping (AA). This is the user's P12 choice: fail unless the wrapper sentinel is present. "Never report live acceptance" still holds; aligning the frozen matrix row would mean renegotiating the spec.
+- `low` — A plain `dapr init` host cannot pass the smoke, because the topology uses a default-deny ACL with mTLS (AA). Under P12 and P14 the wrapper is the only supported environment, and it supplies Sentry and mTLS. Elsewhere the smoke refuses or skips and never claims success. Changing this would mean renegotiating the spec.
+- `low` — Integration.Tests restores EventStore server packages, and the "Never" constraint text is unchanged (AA). This was accepted in P13 with a pinning test; the only remaining fix is a spec edit.
+- `low` — The `[submodule]` section check in `.gitmodules` parsing has no test (AA). Git writes `path` keys only inside submodule sections, so the guarded case does not occur in practice.
+- `low` — The outer wrapper exits on SIGTERM before the inner cleanup finishes (BH). This affects only a run that has already timed out. `timeout` still exits non-zero, and the inner supervisor finishes cleanup (the R-BH5 precedent).
+- `low` — SIGTERM's `SystemExit` bypasses `except Exception`, leaving no exit code in `result.json` (EC). This affects only an interrupted run, which still exits non-zero; PID-namespace teardown kills the child. The fix adds signal handling.
+- `low` — Up to about 90 s of startup plus the 900 s child deadline can exceed the 960 s outer deadline (EC). This needs both a hung child and slow startup; the full live run took 17.5 s. Either deadline ends in a non-zero exit.
+- `low` — The mount namespace still shares `/tmp` and `~/.dapr`, including the platform lock (BH). The lock wait is the tracked `deferred-work.md:589` entry, which already requires an outer deadline. Redis, scheduler and certificate state are private. A private `/tmp` adds mount handling.
+- `low` — The isolation check is only an environment variable (BH). This is the P12 sentinel the user chose; bypassing it needs a deliberate export. `DaprPrerequisiteTests` reserves the placement and scheduler ports, so its child cannot launch.
+- `low` — The `daprd` version and presence are not verified (BH, EC). Already rejected in pass 1: a wrong or missing runtime fails visibly at readiness, and pinning adds a guard.
+- `low` — One shared ACL file applies every allowed operation to all three targets (BH). Already rejected in pass 1: per-callee configs add files and tests for a disposable topology.
+- `false` — The smoke never queries Parties (BH). The frozen task requires exactly one bounded query. Composition inspection asserts the Parties routes, and live Parties semantics belong to 4.13.
+- `low` — The JWT negative cases omit expired, wrong-issuer, wrong-audience and `alg:none` tokens (BH). The topology sets only the issuer, audience and key values, which inspection pins. The validation rules are the platform's, and the wrong-key 401 proves they run.
+- `false` — The closure tests pin only `Hexalith.*` packages, so a helper patch could add dependencies silently (BH). The Builds catalog pins helper versions exactly, and the identity assertion fails on any helper version change, which forces a re-review.
+- `low` — Helper and fixture versions are C# literals outside the policy file (BH). Already rejected in pass 1: a Builds bump fails Manifest.Tests loudly, and the documented bump procedure runs that suite.
+- `low` — The launch tests copy whole build outputs, and configuration still comes from the source directory (BH). Already rejected in pass 1: the copy moves the workspace root that `GetRepositoryRoot` derives. The suite ran in 47.2 s in CI.
+- `low` — `GatewaySmokeProbe`'s caller-cancellation exclusion is untested, and the timeout test waits 30 s (BH). Removing the exclusion only changes the exception text of a run the caller already cancelled. The 30 s wait is the pinned shipped deadline.
+- `low` — A symlinked ancestor makes a valid checkout fail (EC). Already rejected in pass 1.
+- `low` — `.gitmodules` entries written as `Path =`, or with comments or trailing slashes, are misread (EC). Git writes the lowercase `path = ` form. The fix adds parsing.
+- `low` — A listener bound only on `[::1]` to the Gateway port goes undetected (EC). Already rejected in pass 1.
+- `low` — A guard that returns 2 under the testing builder surfaces only as "entry point exited without building" (EC). The fixture runs the runtime-dependent guards itself first. The remaining guards check checked-in configuration covered by `TopologyLaunchTests`, and the AppHost still writes its diagnostic to stderr.
+- `low` — Setting both `PreflightOnly` and `InspectComposition` silently skips inspection (EC). These internal test flags are set only by tests, and the fix adds a branch.
+- `false` — Missing or duplicate annotations make inspection crash (EC). Inspection is test-only, and a helper change that produces such a model should fail loudly; the composition test does.
+- `false` — The 30 s budget for ten nested runs can be flaky (EC). Measured at 9.6 s, and 9.3 s pinned to one core; CI passed.
+- `maybe-false` (low if true) — The 403 server's single read could reset the connection (EC). Same as pass 1: it passed 25 of 25 isolated runs.
+- `low` — The wrapper runs `bin/` without re-verifying hashes (EC). Tampering needs write access to the user's own private directory, and a partial binary fails loudly at start.
+- `low` — Sentry certificates could be read while still being written (EC). This narrow race fails loudly in mTLS, and every recorded live run passed.
+- `low` — A network setup or `mkdir` failure before the `try` leaves no `result.json` (EC). It fails loudly with a traceback and a non-zero exit; moving it adds receipt handling.
+- `false` — The bootstrap pulls by image ID, which fails with the classic image store (EC). The pinned values are registry digests: `docker pull` resolved them (`Digest: sha256:0ac4…`), so classic-store hosts can pull them too.
+- `false` — A registry port in an image reference breaks the tag split (EC). `binaries.json` contains only `daprio/dapr` and `redis`, so no such reference is reachable.
+- `low` — A timed-out `docker create` can orphan a container (EC). Already rejected in the follow-up review (R-BH3).
+- `low` — A failed `docker cp` can leave a partial file (EC). The bootstrap exits non-zero and refuses to reuse the directory, and a partial executable fails loudly at start.
