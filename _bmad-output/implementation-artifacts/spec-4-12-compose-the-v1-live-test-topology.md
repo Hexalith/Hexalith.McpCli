@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -574,3 +574,102 @@ inventory or vector changed in this resumed run. Final source-bound commands,
 counts and sanitized runtime receipts are in
 `evidence/story-4-12/review-pass-2-20261023/verification.json` and
 `evidence/story-4-12/review-pass-2-20261023/parent-verification/`.
+
+### Review Findings (code review pass 3, 2026-10-24)
+
+Code review 2026-10-24 of the full committed story range `be89509..c1a3e46` (`e5ed21a`, `3196d3d`, `c432b45`, `d9dc31a`, `6646412`, `c1a3e46`).
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 36 files, +2,819/−7, 3,130 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 44 normalized findings (BH 13, EC 17, VG 6, AA 8). 11 survive as 8 patch entries; 33 are rejected. No decision is needed and nothing is deferred.
+
+Parent checks during triage:
+- At `v3.126.1`, `DaprTestPrerequisites` hard-codes Redis `6379` (`const int RedisPort`). Only `AspireTopologyFixtureBase` and `DaprDiagnostics.ResolveRedisPort` honor `HEXALITH_EVENTSTORE_TEST_REDIS_PORT`.
+- `Aspire.AppHost.Sdk` 13.6.3 (`Sdk/Sdk.targets:76`) skips `AddReferenceToDashboardAndDCP` when `AspireUseCliBundle` is `true`. The AppHost `project.assets.json` has no Orchestration or Dashboard package. `~/.aspire/bundle` holds `dcp` and `dashboard`, and `aspire --version` reports `13.6.1`. The Builds catalog pins neither package. Story evidence records that the bundle was enabled to remove the ASPIRE010 suppression.
+- Two EventStore `v3.126.1` base `appsettings.json` values have code defaults that match: `RateLimiting` (`PermitLimit 1000`, `WindowSeconds 60`) and `Publisher:PubSubName` (`pubsub`). The Gateway reads no `Gateway` section. Of the AppHost `Dapr` section it reads only `Dapr:DeclarativeSubscriptions`, which is absent there.
+- `ExistingSentryListenerDoesNotFailPrerequisiteRun` took 9.1 s, and 8.9 s pinned to one core, including the P16 workspace copy (budget 30 s). CI run `40021086071` at `c1a3e46` passed.
+- `private-runtime/README.md` in the evidence explains the veth pair: "The private veth pair supplies multicast-capable networking". The maintained `run-isolated.py` does not carry that explanation.
+
+- [ ] [Review][Patch] P25 — medium. The wrapper's environment handoff to the child is mostly unpinned. [tools/live-topology/run-isolated.py:58]
+  - `inside()` sets three groups of variables:
+    - the placement and scheduler port overrides and `Dapr__*` (`:58`);
+    - `NAMESPACE`, `DAPR_CONTROLPLANE_TRUST_DOMAIN` and `DAPR_CONTROLPLANE_NAMESPACE` (`:77`);
+    - `DAPR_TRUST_ANCHORS`, `DAPR_CERT_CHAIN` and `DAPR_CERT_KEY` (`:127`).
+  - `TopologyPrerequisites.GetMtlsFailureAsync` and the platform's `DaprLocalEndpoints` consume these variables.
+  - The `success` child prints only the Redis port, the isolation flag and `DAPR_CERT_KEY`. VG deleted `DAPR_CONTROLPLANE_TRUST_DOMAIN` and `DAPR_TRUST_ANCHORS` and changed the placement port to 50005; all 14 Python tests passed.
+  - Fix: make the `success` child dump all six mTLS and control-plane variables and the placement, scheduler and Gateway port variables. Assert their exact values, or that they are non-empty for the certificates. Also assert that the placement and scheduler ports equal the `--port` arguments of the services recorded in `result.json` (VG).
+- [ ] [Review][Patch] P26 — medium. The wrapper's readiness failure guards are untested. [tools/live-topology/run-isolated.py:123]
+  - Untested guards:
+    - "Sentry exited before generating certificates" (`:123`);
+    - "Private Sentry certificates were not ready" (`:125`);
+    - "{name} exited before prerequisites were ready" (`:141`);
+    - "Private prerequisite port {port} did not become reachable" (`:151`).
+  - `wrapper_fixture` writes the certificates synchronously, `Daemon.poll` returns `None` until the child succeeds, and `Connection` always connects. VG removed both early-exit checks and all 14 Python tests passed.
+  - Without the guards, a crashed daemon surfaces only after 40 s with a generic timeout, or the supervisor hangs until the outer 960 s deadline.
+  - Fix:
+    - Move the 40 s readiness bound into a module constant, following P18's `COMMAND_TIMEOUT_SECONDS`.
+    - Add fixture modes for: Sentry exits early, certificates never appear, a daemon exits during readiness, and a port never connects.
+    - For each mode, assert exit 1, the exact `result.json` error and that no `command.stdout.txt` exists (VG, AA).
+- [ ] [Review][Patch] P27 — medium. The fixture's broken-CLI prerequisite branch is untested. [tests/Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs:27]
+  - "Dapr CLI '--version' did not report an installed CLI." is never reached: the stub always prints `CLI version: test-fixture` and exits 0 for `--version` (`tests/fixtures/Topology.DaprStub/Program.cs:10`).
+  - Removing the check makes a broken or foreign `dapr` fail later at `dapr list` instead of producing the standard skip.
+  - Fix: let the stub fail `--version` under a test variable. Add a `DaprPrerequisiteTests` row asserting the standard skip prefix plus this exact detail, and update the nested `Total: 10` count (`DaprPrerequisiteTests.cs:131`) (VG, AA).
+- [ ] [Review][Patch] P28 — medium. `ValidateWorkspace`'s physical top-level comparison is untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:76]
+  - Every negative case fails earlier:
+    - the forged `.git` file at git's nonzero exit, which uses the same message;
+    - the sibling link at `LinkTarget`;
+    - the alternate layouts at the missing project.
+  - Removing the comparison stays green. Yet pass 1 rejected the "symlinked `references/` parent" finding precisely because this comparison rejects it.
+  - Fix: add a `TopologyConfigurationTests` case in which `references` is a symlink to another directory, and assert the exact "is not its own Git working tree" message (AA).
+- [ ] [Review][Patch] P29 — medium. The contents of `statestore.yaml` and `pubsub.yaml` are unpinned. [tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml:9]
+  - Composition inspection checks only each component's `LocalPath`. Nothing checks:
+    - `redisHost: localhost:6379`, which must match the wrapper's private Redis;
+    - `actorStateStore: 'true'`, `keyPrefix`, or the component names `statestore` and `pubsub` (the Gateway's `PubSubName` default is `pubsub`);
+    - the `scopes`.
+  - Dropping `parties` from `scopes` or flipping `actorStateStore` keeps CI green. Even the live `ListTenants` smoke cannot see the Parties scope.
+  - The live-lane remainder of VG's finding belongs to Story 4.14 by the frozen spec.
+  - Fix: rewrite both files as JSON, as `accesscontrol.yaml` already is, and add a content test modeled on `TopologyAccessControlTests` that also cross-checks the Redis port with `run-isolated.py` (BH, VG).
+- [ ] [Review][Patch] P30 — medium. The Aspire CLI bundle is an undocumented live prerequisite. [tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj:4]
+  - `AspireUseCliBundle=true` means DCP and the dashboard come from the developer's `~/.aspire/bundle`, not from Builds-pinned packages. That bundle is 13.6.1 here, while the SDK and hosting packages are 13.6.3.
+  - Neither README lists the Aspire CLI among the live requirements. On a host without it, the documented live command fails at orchestration startup, and the discovery CI job cannot notice because building does not need DCP.
+  - Fix: name the Aspire CLI bundle and its version in `README.md:251` and the `tools/live-topology/README.md:10` requirements. Moving DCP to Builds-pinned packages would be an upstream catalog change outside this patch (BH).
+- [ ] [Review][Patch] P31 — low. The maintained wrapper does not say why it creates the veth pair. [tools/live-topology/run-isolated.py:50]
+  - `mcpcli0`/`mcpcli1` with `172.31.251.1/24` look unused. The qualification evidence says the pair supplies multicast-capable networking, so a maintainer reusing the tool in 4.13 or 4.14 could remove it and break the private topology.
+  - Fix: add a one-line comment stating that purpose (BH).
+- [ ] [Review][Patch] P32 — low. The bootstrap leaves its pulled images in the host Docker store without saying so. [tools/live-topology/README.md:21]
+  - The bootstrap pulls `daprio/dapr` and `redis` by digest and removes only its extraction containers. The README describes that cleanup but not that both images remain.
+  - Fix: add one sentence noting that the images remain and naming the `docker image rm` cleanup for the two pinned references (BH).
+
+#### Rejected (code review pass 3, 2026-10-24)
+
+- `low` — The Gateway's AppHost content root drops the Gateway's own base `appsettings.json` (BH). At `v3.126.1` the RateLimiting and PubSubName code defaults equal the base values. The one setting that mattered, the topic override, was restored in P1 and is pinned by inspection. What remains is the MediatR licence log-level suppression. A separate content root would not restore base settings either.
+- `low` — Readiness probes TCP ports while the `--healthz-port` flags go unused (BH). The flags give the three control-plane daemons distinct health ports in one namespace, so removing them is wrong. Every recorded live run passed TCP readiness, and health polling adds code.
+- `low` — The host environment passes unfiltered into the private run (BH). A stray, fully specified `Gateway__Routes__*` in the caller's shell is uncommon, and partial routes already exit 2. An allowlist must still carry PATH, HOME and the .NET variables, which adds lifecycle code.
+- `low` — `result.json` cannot tell a skip from a failure (BH, AA). Carried from P15: with `-failSkips` the recorded run directory keeps `command.stdout.txt` with `FAIL_SKIP` and the xUnit counts. Structured report parsing adds code.
+- `low` — `MCPCLI_ISOLATED_RUNTIME_DIR=.` or another in-checkout path is accepted, and `runs/` is not ignored (BH). An unprepared path fails at the missing `bin/sentry`, before Sentry creates any key. A prepared runtime inside the checkout shows up as untracked. Refusing repository paths or requiring the receipt adds guards.
+- `false` — The README's "server-free closure" claim is untrue because only `Hexalith.*` identities are pinned (BH). The claim and AC1 concern Hexalith implementation packages, which `CheckAspireHelperClosure` rejects. `Grpc.AspNetCore.Server` and the Keycloak hosting library are third-party, Builds-governed transitives, and the AppHost composes no Keycloak resource (the pass-2 rejection).
+- `low` — The inspection snapshot omits the sidecar Dapr app ID (BH). The pinned helpers set the IDs, and any helper version change fails the identity pin. A changed ID fails the live run loudly at the ACL and routing.
+- `low` — Nothing proves at run time that the default-deny ACL is enforced (BH). Inspection pins each sidecar's configuration attachment and mTLS. Earlier failed runs recorded real ACL 403s, and a negative live call extends the single-query smoke.
+- `low` — `ExistingSentryListenerDoesNotFailPrerequisiteRun` hard-codes `Total: 10` (BH). A changed row count fails visibly, with the actual summary printed. Reflection-based counting adds code. P27 updates the number.
+- `low` — A copied clone or a `git init`'d copy passes as the declared checkout (EC). Already rejected in pass 1 (gitlink comparison).
+- `low` — A symlink inside the checkout passes (EC). Already rejected as R-BH7.
+- `low` — A symlinked ancestor rejects a valid checkout (EC). Already rejected in passes 1 and 2.
+- `low` — An inherited `GIT_DIR` or `GIT_WORK_TREE` misdirects `git` (EC). Already rejected in pass 1.
+- `low` — A `<root>/<module>.slnx` would redirect the helper locator (EC). That file does not exist in the McpCli root, inspection pins every resolved project path, and the fix adds a guard.
+- `low` — An `[::1]`-only listener on the Gateway port goes undetected (EC). Already rejected in passes 1 and 2.
+- `low` — Failures outside the guarded block crash with a stack trace (EC). Workspace validation precedes helper composition. The checked-in `appsettings.json` is always present, and inspection-lookup crashes were rejected in pass 2. Widening the filter adds branches.
+- `false` — An empty `Gateway:Routes` passes preflight and fails only live (EC). `ComposedResourcesKeepTokensAclAndGatewayContentRoot` asserts the exact registration set, so an empty or renamed section fails CI.
+- `low` — The fixture hard-codes port 3501 (EC, VG). Already rejected in passes 1 and 2.
+- `false` — The probe diagnostic hides the cause behind 200 or 503 (EC). Already rejected in pass 1: the inner exception carries the detail.
+- `low` — A nonexistent or typo'd runtime directory creates a stray tree and fails late (EC). The resulting error names the missing `bin/sentry` path. A receipt check adds a guard.
+- `low` — A failure in network setup or the certificate directory before the `try` leaves no receipt (EC). Already rejected in pass 2.
+- `low` — `issuer.key` can be read while still being written (EC). Already rejected in pass 2.
+- `low` — Startup plus the 900 s child deadline can exceed the outer 960 s (EC). Already rejected in pass 2.
+- `low` — A `docker create` timeout or TERM before the container ID is captured orphans the container (EC). Already rejected as R-BH3 and F-EC2.
+- `false` — The 30 s budget for the nested prerequisite run is flaky (EC). Re-measured after P16: 9.1 s, and 8.9 s on one core.
+- `maybe-false` (low if true) — The 403 server's single read could reset the connection (EC). Already rejected in passes 1 and 2 (25 of 25 isolated runs).
+- `low` — No test reaches the fixture's early conflict refusal (VG). Carried from pass 1. Reaching it needs a PONG on the hard-coded Redis `6379` (verified above) plus placement and scheduler listeners. The AppHost's identical check still refuses the conflict before any resource starts.
+- `low` — Nothing checks that the root servers are built before launch (AA). An unbuilt checkout fails loudly within the platform's bounded readiness. The README build block is mandatory, and `WithCompiledProjectExecutable` would change the composition.
+- `low` — Helper admission pins identity, not the content hash (AA). Only nuget.org is configured, and published versions are immutable there. A hash literal adds another value to maintain on every bump.
+- `false` — The shared fixture's Tenants-only identity is a module-specific branch (AA). The fixture has no branch on module, and the claims serve the single required query. Parameterizing identities is Story 4.13 work.
+- `low` — JWT validation is wired through configuration keys rather than the helpers (AA). The helpers require Keycloak resources, which the Never clause forbids. The remaining fix is spec wording.
