@@ -1,0 +1,18 @@
+{
+  "label": "manifest-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Manifest.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 31.143,
+  "recordedAtUtc": "2026-10-24T04:16:28.870955+00:00",
+  "stdout": "Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)\n/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) passed (30s 514ms)\n\nTest run summary: Passed!\n  total: 212\n  failed: 0\n  succeeded: 212\n  skipped: 0\n  duration: 30s 665ms\n",
+  "stderr": ""
+}

@@ -1,0 +1,18 @@
+{
+  "label": "analyzers-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Analyzers.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 5.409,
+  "recordedAtUtc": "2026-10-24T04:15:33.242839+00:00",
+  "stdout": "Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64)\n/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64) passed (4s 479ms)\n\nTest run summary: Passed!\n  total: 19\n  failed: 0\n  succeeded: 19\n  skipped: 0\n  duration: 4s 775ms\n",
+  "stderr": ""
+}

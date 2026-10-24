@@ -1,0 +1,58 @@
+[
+  {
+    "mutation": "placement-tls-removed",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "scope": "temporary copy; working tree source unmodified",
+    "exitCode": 1,
+    "rejectedByTargetAssertion": true,
+    "elapsedSeconds": 0.149
+  },
+  {
+    "mutation": "sentry-trust-domain-changed",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "scope": "temporary copy; working tree source unmodified",
+    "exitCode": 1,
+    "rejectedByTargetAssertion": true,
+    "elapsedSeconds": 0.148
+  },
+  {
+    "mutation": "loopback-setup-removed",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "scope": "temporary copy; working tree source unmodified",
+    "exitCode": 1,
+    "rejectedByTargetAssertion": true,
+    "elapsedSeconds": 0.142
+  },
+  {
+    "mutation": "empty-command-success-restored",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_inner_wrapper_refuses_an_empty_command_without_recording_success"
+    ],
+    "scope": "temporary copy; working tree source unmodified",
+    "exitCode": 1,
+    "rejectedByTargetAssertion": true,
+    "elapsedSeconds": 0.122
+  }
+]

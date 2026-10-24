@@ -125,6 +125,42 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual('private-test-credential', child['DAPR_CERT_KEY'])
             receipt = json.loads((run_dir / 'result.json').read_text())
             self.assertEqual('6379', receipt['environmentOverrides']['HEXALITH_EVENTSTORE_TEST_REDIS_PORT'])
+            certificate_dir = run_dir / 'sentry-certificates'
+            expected_services = {
+                'sentry': [str(wrapper.RUNTIME_DIR / 'bin/sentry'), '--port', '50001', '--listen-address', '127.0.0.1',
+                           '--trust-domain', 'public', '--issuer-credentials', str(certificate_dir),
+                           '--config', str(run_dir / 'sentry-config.json'),
+                           '--healthz-port', '18082', '--healthz-listen-address', '127.0.0.1',
+                           '--enable-metrics=false', '--log-level', 'warn'],
+                'redis': [str(wrapper.RUNTIME_DIR / 'bin/redis-server'), '--bind', '127.0.0.1', '--port', '6379',
+                          '--save', '', '--appendonly', 'no', '--dir', str(run_dir), '--loglevel', 'warning'],
+                'placement': [str(wrapper.RUNTIME_DIR / 'bin/placement'), '--port', '6050', '--listen-address', '0.0.0.0',
+                              '--healthz-port', '18080', '--healthz-listen-address', '127.0.0.1',
+                              '--enable-metrics=false', '--log-level', 'warn', '--tls-enabled',
+                              '--trust-domain', 'public', '--sentry-address', '127.0.0.1:50001',
+                              '--trust-anchors-file', str(certificate_dir / 'ca.crt')],
+                'scheduler': [str(wrapper.RUNTIME_DIR / 'bin/scheduler'), '--port', '6060', '--listen-address', '0.0.0.0',
+                              '--healthz-port', '18081', '--healthz-listen-address', '127.0.0.1',
+                              '--enable-metrics=false', '--log-level', 'warn',
+                              '--etcd-data-dir', str(run_dir / 'scheduler-data'),
+                              '--override-broadcast-host-port', '127.0.0.1:6060', '--tls-enabled',
+                              '--trust-domain', 'public', '--sentry-address', '127.0.0.1:50001',
+                              '--trust-anchors-file', str(certificate_dir / 'ca.crt')],
+            }
+            self.assertEqual(expected_services, {name: service['arguments'] for name, service in receipt['services'].items()})
+            calls = [json.loads(line) for line in (run_dir / 'infrastructure-calls.jsonl').read_text().splitlines()]
+            expected_network = [
+                ['ip', 'link', 'set', 'lo', 'up'],
+                ['ip', 'link', 'add', 'mcpcli0', 'type', 'veth', 'peer', 'name', 'mcpcli1'],
+                ['ip', 'addr', 'add', '172.31.251.1/24', 'dev', 'mcpcli0'],
+                ['ip', 'link', 'set', 'mcpcli0', 'up'],
+                ['ip', 'link', 'set', 'mcpcli1', 'up'],
+            ]
+            self.assertEqual([{'kind': 'run', 'arguments': arguments} for arguments in expected_network], calls[:5])
+            self.assertEqual({'kind': 'launch', 'arguments': expected_services['sentry']}, calls[5])
+            self.assertEqual(['scheduler', 'placement', 'redis-server', 'sentry'],
+                             [call['arguments'][0] for call in calls if call['kind'] == 'stop'])
+            self.assertEqual({name: 0 for name in expected_services}, receipt['ownedInfrastructureStopped'])
             for name in ('placement', 'scheduler'):
                 arguments = receipt['services'][name]['arguments']
                 port = arguments[arguments.index('--port') + 1]
@@ -266,6 +302,18 @@ os.execv(sys.executable, [sys.executable, os.environ['MCPCLI_TEST_WRAPPER_FIXTUR
             self.assertEqual(23, result.returncode, result.stdout + result.stderr)
             self.assertEqual(23, json.loads((run_dir / 'result.json').read_text())['commandExitCode'])
 
+    def test_inner_wrapper_refuses_an_empty_command_without_recording_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = Path(directory)
+            result = self.wrapper_process(run_dir, 'empty-command')
+            self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+            self.assertEqual('', result.stderr)
+            self.assertIn('Private environment failed: IndexError: list index out of range\n', result.stdout)
+            receipt = json.loads((run_dir / 'result.json').read_text())
+            self.assertEqual([], receipt['command'])
+            self.assertEqual(1, receipt['commandExitCode'])
+            self.assertEqual({'type': 'IndexError', 'message': 'list index out of range'}, receipt['error'])
+
     def test_wrapper_rejects_a_daemon_that_exits_during_a_successful_child(self):
         with tempfile.TemporaryDirectory() as directory:
             run_dir = Path(directory)
@@ -343,6 +391,23 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
     cwd = json.loads((run_dir / 'outside.json').read_text())['cwd'] if supplied_command is not None else str(run_dir)
     (run_dir / 'outside.json').write_text(json.dumps({'namespaces': original, 'cwd': cwd}))
     real_popen = subprocess.Popen
+    fixture_assertions = unittest.TestCase()
+    expected_daemon_environment = os.environ.copy()
+    expected_daemon_environment.update({
+        'MCPCLI_ISOLATED_TOPOLOGY': '1',
+        'GOMAXPROCS': '2',
+        'DOTNET_PROCESSOR_COUNT': '2',
+        'DOTNET_CLI_TELEMETRY_OPTOUT': '1',
+        'HEXALITH_EVENTSTORE_TEST_REDIS_PORT': '6379',
+        'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT': '6050',
+        'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT': '6060',
+        'Dapr__PlacementHostAddress': '127.0.0.1:6050',
+        'Dapr__SchedulerHostAddress': '127.0.0.1:6060',
+        'Dapr__GatewayHttpPort': '3501',
+        'NAMESPACE': 'default',
+        'DAPR_CONTROLPLANE_TRUST_DOMAIN': 'public',
+        'DAPR_CONTROLPLANE_NAMESPACE': 'default',
+    })
 
     class Daemon:
         returncode = None
@@ -373,8 +438,13 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
         def recv(self, _):
             return b'-ERR wrong service' if mode == 'redis' else b'+PONG\r\n'
 
+    def record_call(kind, arguments):
+        with (run_dir / 'infrastructure-calls.jsonl').open('a') as log:
+            log.write(json.dumps({'kind': kind, 'arguments': arguments}) + '\n')
+
     def start(arguments, **kwargs):
-        if arguments[0] == sys.executable:
+        record_call('launch', arguments)
+        if not arguments or arguments[0] == sys.executable:
             process = real_popen(arguments, **kwargs)
             if mode == 'ignores-term':
                 deadline = time.monotonic() + 2
@@ -387,6 +457,21 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
                     time.sleep(0.01)
             return process
         name = Path(arguments[0]).name
+        fixture_assertions.assertIs(True, kwargs.get('start_new_session'), name)
+        fixture_assertions.assertEqual(run_dir, kwargs.get('cwd'), name)
+        log_name = 'redis' if name == 'redis-server' else name
+        fixture_assertions.assertEqual(str(run_dir / (log_name + '.log')), kwargs['stdout'].name)
+        fixture_assertions.assertEqual('wb', kwargs['stdout'].mode)
+        fixture_assertions.assertFalse(kwargs['stdout'].closed)
+        fixture_assertions.assertEqual(subprocess.STDOUT, kwargs.get('stderr'), name)
+        expected_environment = expected_daemon_environment.copy()
+        if name != 'sentry':
+            expected_environment.update({'DAPR_TRUST_ANCHORS': 'public-test-certificate',
+                                         'DAPR_CERT_CHAIN': 'public-test-certificate',
+                                         'DAPR_CERT_KEY': 'private-test-credential'})
+        fixture_assertions.assertEqual(set(expected_environment), set(kwargs['env']), name)
+        for key, value in expected_environment.items():
+            fixture_assertions.assertTrue(kwargs['env'][key] == value, name + ' environment variable ' + key)
         if name == 'sentry' and mode not in ('sentry-exit', 'sentry-no-certificates'):
             certificates = run_dir / 'sentry-certificates'
             for filename in ('ca.crt', 'issuer.crt', 'issuer.key'):
@@ -394,6 +479,7 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
         return Daemon(name)
 
     def run(arguments, **_):
+        record_call('run', arguments)
         return subprocess.CompletedProcess(arguments, 7 if mode == 'dapr-exit' else 0,
                                            '' if mode == 'dapr-exit' else '[{"appId":"existing"}]' if mode == 'dapr-apps' else '[]',
                                            'probe failure: ' + 'x' * 600 if mode == 'dapr-exit' else '')
@@ -413,6 +499,7 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
                     process.kill()
                     process.wait(timeout=5)
                 (run_dir / 'child-exit.json').write_text(json.dumps({'pid': process.pid, 'returncode': process.returncode}))
+        record_call('stop', [process.name])
         if mode == 'interrupted-shutdown':
             (run_dir / 'keys-at-shutdown.json').write_text(json.dumps(
                 [file.name for file in (run_dir / 'sentry-certificates').glob('*.key')]))
@@ -438,6 +525,8 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
         child = [sys.executable, '-c',
                  "import pathlib,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); "
                  "pathlib.Path('child-started').touch(); time.sleep(60)"]
+    if mode == 'empty-command':
+        child = []
     if supplied_command is not None:
         child = supplied_command
     with patch.object(wrapper, 'namespaces', return_value=current), \

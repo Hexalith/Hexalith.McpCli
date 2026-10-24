@@ -1,0 +1,16 @@
+test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... FAIL
+
+======================================================================
+FAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp20v4eaic/test_runtime.py", line 150, in test_wrapper_pins_the_effective_child_environment_to_private_services
+    self.assertEqual(expected_services, {name: service['arguments'] for name, service in receipt['services'].items()})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'sen[105 chars]', 'public', '--issuer-credentials', '/tmp/tmp[1219 chars]rt']} != {'sen[105 chars]', 'private', '--issuer-credentials', '/tmp/tm[1220 chars]rt']}
+Diff is 2538 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.081s
+
+FAILED (failures=1)

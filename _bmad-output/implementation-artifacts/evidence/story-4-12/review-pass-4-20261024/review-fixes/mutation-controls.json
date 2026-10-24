@@ -1,0 +1,32 @@
+[
+  {
+    "mutation": "daemon-process-group-removed",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "scope": "temporary copy; working-tree source unchanged",
+    "exitCode": 1,
+    "elapsedSeconds": 0.155,
+    "stdout": "",
+    "stderr": "test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... FAIL\n\n======================================================================\nFAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/story412-review-control-_cc8yi_t/test_runtime.py\", line 108, in test_wrapper_pins_the_effective_child_environment_to_private_services\n    self.assertEqual(0, result.returncode, result.stdout + result.stderr)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1 : Private environment failed: AssertionError: True is not None : sentry\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.079s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "all-but-last-daemon-stop-removed",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "scope": "temporary copy; working-tree source unchanged",
+    "exitCode": 1,
+    "elapsedSeconds": 0.223,
+    "stdout": "",
+    "stderr": "test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... FAIL\n\n======================================================================\nFAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/story412-review-control-xpkwrcq2/test_runtime.py\", line 161, in test_wrapper_pins_the_effective_child_environment_to_private_services\n    self.assertEqual(['scheduler', 'placement', 'redis-server', 'sentry'],\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     [call['arguments'][0] for call in calls if call['kind'] == 'stop'])\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: ['scheduler', 'placement', 'redis-server', 'sentry'] != ['scheduler']\n\nFirst list contains 3 additional elements.\nFirst extra element 1:\n'placement'\n\n- ['scheduler', 'placement', 'redis-server', 'sentry']\n+ ['scheduler']\n\n----------------------------------------------------------------------\nRan 1 test in 0.123s\n\nFAILED (failures=1)\n"
+  }
+]

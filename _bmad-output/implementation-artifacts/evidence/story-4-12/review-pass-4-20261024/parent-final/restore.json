@@ -1,0 +1,15 @@
+{
+  "label": "restore",
+  "command": [
+    "dotnet",
+    "restore",
+    "Hexalith.McpCli.slnx"
+  ],
+  "displayCommand": "dotnet restore Hexalith.McpCli.slnx",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 2.017,
+  "recordedAtUtc": "2026-10-24T04:15:22.566917+00:00",
+  "stdout": "  Determining projects to restore...\n  All projects are up-to-date for restore.\n",
+  "stderr": ""
+}

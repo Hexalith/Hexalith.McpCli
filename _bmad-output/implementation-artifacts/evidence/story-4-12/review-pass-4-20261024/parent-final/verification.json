@@ -1,0 +1,162 @@
+{
+  "baseCommit": "d0c82033241f394ad7e6e5f9816835ed07c82f7c",
+  "status": "accepted after implementation, six-row matrix audit and three independent review layers",
+  "sourceMap": {
+    "file": "implementation-file-map.json",
+    "sha256": "76e8aea16aa081b308027b00037d675e91538dda8c32cefe6ff824ddf1216975",
+    "fileCount": 44,
+    "representation": "SHA-256 of exact working-tree bytes; compact sorted-key UTF-8 JSON without trailing newline"
+  },
+  "checks": "commands.json",
+  "nonLiveCounts": {
+    "abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "core": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    "cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    "manifest": {
+      "total": 212,
+      "failed": 0,
+      "succeeded": 212,
+      "skipped": 0
+    }
+  },
+  "nonLiveSummary": {
+    "passed": 1492,
+    "failed": 0,
+    "existingSkipped": 5
+  },
+  "pythonPassed": 18,
+  "pythonOptimizedPassed": 18,
+  "live": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "testSeconds": 19.09,
+    "rejectedCredentialRequests": 2,
+    "hostApplicationsPreserved": 7,
+    "runDirectory": "/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T041643Z-45aa6678",
+    "remainingPrivateKeys": 0,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    }
+  },
+  "review": {
+    "layers": 3,
+    "findings": 13,
+    "patched": 3,
+    "rejected": 10,
+    "carriedRejections": 8,
+    "newDeferred": 0,
+    "patches": [
+      "P41",
+      "P42",
+      "P43"
+    ],
+    "focusedEvidence": "../review-fixes/mutation-controls.json"
+  },
+  "priorAcceptanceCheckpoint": "../parent-acceptance/verification.json",
+  "matrix": [
+    {
+      "state": "Qualified helpers, built source and available Dapr",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument",
+        "DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers"
+      ],
+      "evidence": [
+        "live-command.stdout.json",
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Missing helper or forbidden helper dependency",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "AspireHelperDependencyTests"
+      ],
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Missing or undeclared root checkout",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "TopologyConfigurationTests",
+        "TopologyLaunchTests.MissingDeclaredRootStopsLaunch",
+        "TopologyFixtureLaunchTests.UnsafeOrIncompleteFixtureFailsBeforeInfrastructure"
+      ],
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Missing Dapr prerequisites",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess"
+      ],
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Resources alive but Gateway unusable",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "GatewaySmokeBoundaryTests.AliveGatewayThatNeverAnswersQueryFailsWithinSmokeDeadline",
+        "GatewaySmokeBoundaryTests.ForbiddenGatewayReportsImmediateContextAndPinnedException"
+      ],
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Conflicting user topology",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "TopologyConfigurationTests.ExistingRequestedApplicationFails",
+        "TopologyLaunchTests.ExistingApplicationStopsLaunch",
+        "TopologyLaunchTests.OccupiedPortStopsLaunch"
+      ],
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    }
+  ],
+  "frozenIntentUnchangedFromHead": true,
+  "scopeLimits": [
+    "Full live vector semantics remain Story 4.13.",
+    "Blocking source-build live CI remains Story 4.14."
+  ],
+  "commitlint": "commitlint.json"
+}

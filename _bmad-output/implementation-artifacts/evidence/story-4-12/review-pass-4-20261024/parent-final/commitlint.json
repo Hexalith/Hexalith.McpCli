@@ -1,0 +1,22 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input": "test(topology): harden story 4.12 live topology\n",
+  "exitCode": 0,
+  "stdout": "\u29d7   --- input ---\ntest(topology): harden story 4.12 live topology\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": "",
+  "messageFile": "/tmp/story-4-12-commit-message.txt",
+  "pinnedVersion": "21.2.2",
+  "toolingInstall": {
+    "command": [
+      "npm",
+      "ci"
+    ],
+    "exitCode": 0
+  }
+}

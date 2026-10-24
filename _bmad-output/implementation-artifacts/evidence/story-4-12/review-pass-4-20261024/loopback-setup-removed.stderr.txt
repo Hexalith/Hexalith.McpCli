@@ -1,0 +1,21 @@
+test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... FAIL
+
+======================================================================
+FAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmpcbzflgwi/test_runtime.py", line 159, in test_wrapper_pins_the_effective_child_environment_to_private_services
+    self.assertEqual([{'kind': 'run', 'arguments': arguments} for arguments in expected_network], calls[:5])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'ki[36 chars]k', 'set', 'lo', 'up']}, {'kind': 'run', 'argu[310 chars]p']}] != [{'ki[36 chars]k', 'add', 'mcpcli0', 'type', 'veth', 'peer', [623 chars]n']}]
+
+First differing element 0:
+{'kin[35 chars]k', 'set', 'lo', 'up']}
+{'kin[35 chars]k', 'add', 'mcpcli0', 'type', 'veth', 'peer', [14 chars]i1']}
+
+Diff is 1515 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.079s
+
+FAILED (failures=1)

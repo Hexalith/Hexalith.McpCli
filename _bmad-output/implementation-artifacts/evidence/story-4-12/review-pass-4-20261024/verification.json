@@ -1,0 +1,38 @@
+{
+  "baseCommit": "d0c82033241f394ad7e6e5f9816835ed07c82f7c",
+  "status": "P37\u2013P40 implemented; focused checks passed; parent acceptance and workflow review pending",
+  "sourceMap": {
+    "file": "implementation-file-map.json",
+    "sha256": "299fe9bc8b84795a0346ed700653ae6fda7fa843fa0d7670f0db1174dcc0b0ec",
+    "fileCount": 6,
+    "representation": "SHA-256 of exact working-tree bytes; compact sorted-key UTF-8 JSON without trailing newline"
+  },
+  "checks": "checks.json",
+  "mutationChecks": "mutation-checks.json",
+  "manifest": {
+    "total": 210,
+    "passed": 210,
+    "failed": 0,
+    "skipped": 0
+  },
+  "python": {
+    "normalPassed": 18,
+    "optimizedPassed": 18,
+    "failed": 0
+  },
+  "discoveredLiveSmokes": 1,
+  "liveRun": "Not rerun in this implementation checkpoint; prior accepted live receipt remains ../review-pass-3-20261024/parent-final/verification.json.",
+  "patches": [
+    "P37",
+    "P38",
+    "P39",
+    "P40"
+  ],
+  "frozenIntentUnchangedFromBase": true,
+  "frozenIntentSha256": "a15ed103fd7462b7c5ccd1274dd39474f713280f00ad9c53e1a638252b2b0cde",
+  "scopeLimits": [
+    "Live vector semantics remain Story 4.13.",
+    "Blocking live CI remains Story 4.14.",
+    "Existing agent-context and platform-lock ledger entries remain unchanged."
+  ]
+}

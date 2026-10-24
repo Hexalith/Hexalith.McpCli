@@ -1,0 +1,16 @@
+test_inner_wrapper_refuses_an_empty_command_without_recording_success (test_runtime.RuntimeTests.test_inner_wrapper_refuses_an_empty_command_without_recording_success) ... FAIL
+
+======================================================================
+FAIL: test_inner_wrapper_refuses_an_empty_command_without_recording_success (test_runtime.RuntimeTests.test_inner_wrapper_refuses_an_empty_command_without_recording_success)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmpnj8g17hr/test_runtime.py", line 306, in test_inner_wrapper_refuses_an_empty_command_without_recording_success
+    self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.060s
+
+FAILED (failures=1)

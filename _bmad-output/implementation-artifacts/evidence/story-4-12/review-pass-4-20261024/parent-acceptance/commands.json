@@ -1,0 +1,199 @@
+[
+  {
+    "label": "source-eventstore-build",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "displayCommand": "timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.EventStore",
+    "exitCode": 0,
+    "elapsedSeconds": 3.244,
+    "recordedAtUtc": "2026-10-24T04:01:44.628847+00:00"
+  },
+  {
+    "label": "source-tenants-build",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "displayCommand": "timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants",
+    "exitCode": 0,
+    "elapsedSeconds": 2.015,
+    "recordedAtUtc": "2026-10-24T04:01:46.643730+00:00"
+  },
+  {
+    "label": "source-parties-build",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.Parties/Hexalith.Parties.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "displayCommand": "timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Parties",
+    "exitCode": 0,
+    "elapsedSeconds": 2.018,
+    "recordedAtUtc": "2026-10-24T04:01:48.662122+00:00"
+  },
+  {
+    "label": "abstractions-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "displayCommand": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 1.537,
+    "recordedAtUtc": "2026-10-24T04:01:50.199975+00:00"
+  },
+  {
+    "label": "analyzers-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "displayCommand": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 3.722,
+    "recordedAtUtc": "2026-10-24T04:01:53.921938+00:00"
+  },
+  {
+    "label": "core-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "displayCommand": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 2.258,
+    "recordedAtUtc": "2026-10-24T04:01:56.180534+00:00"
+  },
+  {
+    "label": "cli-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "displayCommand": "dotnet test tests/Hexalith.McpCli.Cli.Tests --no-build --configuration Release",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 16.964,
+    "recordedAtUtc": "2026-10-24T04:02:13.145222+00:00"
+  },
+  {
+    "label": "mcp-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "displayCommand": "dotnet test tests/Hexalith.McpCli.Mcp.Tests --no-build --configuration Release",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 2.199,
+    "recordedAtUtc": "2026-10-24T04:02:15.343112+00:00"
+  },
+  {
+    "label": "host-dapr-before",
+    "command": [
+      "dapr",
+      "list",
+      "--output",
+      "json"
+    ],
+    "displayCommand": "dapr list --output json",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 0.115,
+    "recordedAtUtc": "2026-10-24T04:02:15.458502+00:00"
+  },
+  {
+    "label": "live-smoke",
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+      "PYTHONOPTIMIZE=1",
+      "HEXALITH_EVENTSTORE_TEST_REDIS_PORT=19999",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "960",
+      "python3",
+      "tools/live-topology/run-isolated.py",
+      "--",
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+      "-failSkips"
+    ],
+    "displayCommand": "env MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime PYTHONOPTIMIZE=1 HEXALITH_EVENTSTORE_TEST_REDIS_PORT=19999 timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 23.065,
+    "recordedAtUtc": "2026-10-24T04:02:38.685804+00:00"
+  },
+  {
+    "label": "host-dapr-after",
+    "command": [
+      "dapr",
+      "list",
+      "--output",
+      "json"
+    ],
+    "displayCommand": "dapr list --output json",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 0.11,
+    "recordedAtUtc": "2026-10-24T04:02:38.796193+00:00"
+  }
+]

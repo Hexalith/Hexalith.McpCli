@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -108,11 +108,22 @@ Full vector semantics and blocking CI source-build wiring remain 4.13 and 4.14.
 
 ## Implementation Notes
 
-- Final status (2026-10-24): all P25–P36 patches, parent acceptance and workflow
-  review are complete. Final verification passed 1,490 non-live .NET tests, 17
-  Python checks and one isolated live smoke without skips. Earlier pending
-  notes below are historical; current evidence is
-  `evidence/story-4-12/review-pass-3-20261024/parent-final/verification.json`.
+- Review pass 4 implementation checkpoint (2026-10-24): P37–P40 are resolved.
+  Exact daemon arguments and network setup ordering are protected; both README
+  claims are corrected; an empty inner command records failure. Fresh restore,
+  Release warnings-as-errors solution build, all 210 Manifest cases, 18 Python
+  checks in normal and optimized execution, exact one-smoke discovery and four
+  mutation controls passed. Current focused receipts and source bindings are
+  in `evidence/story-4-12/review-pass-4-20261024/verification.json`. Parent
+  acceptance and workflow review remain pending; no fresh live smoke ran in
+  this implementation checkpoint. The previous accepted live run is retained
+  in the pass-3 final evidence below.
+
+- Final status (2026-10-24): all P37–P43 patches, parent acceptance and workflow
+  review are complete. Final verification passed 1,492 non-live .NET tests, 18
+  Python checks normally and under optimization, and one isolated live smoke
+  without skips. Earlier pending notes below are historical; current evidence is
+  `evidence/story-4-12/review-pass-4-20261024/parent-final/verification.json`.
 
 - Review pass 3 patches P25–P32 are implemented. The Release warnings-as-errors
   solution build and all three bounded root server builds passed. Six individual
@@ -770,17 +781,17 @@ Parent checks during triage:
 - `subprocess.Popen([])` raises `IndexError`, which `inside()`'s existing `except Exception` records as exit 1.
 - At `3b17388` the 17 maintained Python checks pass in 4.5 s, and the working tree is clean.
 
-- [ ] [Review][Patch] P37 — medium. The wrapper's daemon launch arguments and private network setup are unasserted. [tools/live-topology/run-isolated.py:83]
+- [x] [Review][Patch] P37 — medium. The wrapper's daemon launch arguments and private network setup are unasserted. [tools/live-topology/run-isolated.py:83]
   - Tests read only the placement and scheduler `--port` values from `result.json`, and the fixture's fake `subprocess.run` ignores its arguments.
   - VG: removing `--tls-enabled` from placement, changing Sentry's `--trust-domain`, or deleting `ip link set lo up` leaves every Python and Manifest test green. A mismatch with `accesscontrol.yaml` (trust domain `public`, Sentry `127.0.0.1:50001`) appears only at the next manual live run, which Stories 4.13 and 4.14 depend on.
   - Fix: in `test_wrapper_pins_the_effective_child_environment_to_private_services`, assert the full `receipt['services'][name]['arguments']` of all four daemons, with `RUNTIME_DIR`, `run_dir` and the certificate directory substituted. Record the fake `run` calls and assert that the exact five `ip` commands precede the first daemon launch (VG).
-- [ ] [Review][Patch] P38 — low. The README says copied source directories are refused, but a copied clone passes. [README.md:232]
+- [x] [Review][Patch] P38 — low. The README says copied source directories are refused, but a copied clone passes. [README.md:232]
   - `ValidateWorkspace` rejects a checkout without its own `.git` and one whose physical top level differs. A clone copied or re-cloned into `references/<module>` has its own `.git` and top level, so it passes. Comparing the gitlink stays rejected (passes 1 and 3).
   - Fix (wording only): say the AppHost refuses missing, undeclared or linked checkouts and source directories that are not their own Git working tree, and that it does not compare the checkout with the recorded gitlink (AA, BH).
-- [ ] [Review][Patch] P39 — low. The README describes fixture skips that the mandatory wrapper does not produce. [README.md:251]
+- [x] [Review][Patch] P39 — low. The README describes fixture skips that the mandatory wrapper does not produce. [README.md:251]
   - The wrapper checks Redis, Sentry, placement, scheduler and an empty `dapr list` before starting the child. A missing native binary or Dapr CLI therefore ends the run with `Private environment failed: FileNotFoundError: …` and exit 1 (`tools/live-topology/run-isolated.py:190`), before any smoke. The README documents only the fixture's skip texts.
   - Fix: add one sentence stating that a wrapper-level prerequisite failure ends the run with `Private environment failed: …` and exit 1 before the smoke, and that the skip diagnostics describe the fixture's own checks (AA).
-- [ ] [Review][Patch] P40 — low. The inner supervisor still records a passing receipt when it runs no command. [tools/live-topology/run-isolated.py:185]
+- [x] [Review][Patch] P40 — low. The inner supervisor still records a passing receipt when it runs no command. [tools/live-topology/run-isolated.py:185]
   - After readiness, the `if command:` block falls through to `result['commandExitCode'] = 0` and `return 0`. P35 refuses an empty command only in the outer `__main__`; the `--inside` path forwards `sys.argv[4:]` unchecked. No public entry point reaches this branch, and no test covers it.
   - Fix: delete the `if command:` condition and the fallback at `:185-186`. An empty command then fails inside the existing `except` with exit 1 (AA).
 - [x] [Review][Defer] D2 — medium. The live smoke runs in no CI job, so the composed topology and the fixture's token can regress while CI stays green. [.github/workflows/ci.yml:108] — deferred: already tracked by Story 4.14 (`_bmad-output/planning-artifacts/epics.md:1477`), which makes the integration project the blocking `aspire-test-project`; the frozen spec keeps the blocking tier there. No ledger entry was added because the planned story owns it (VG).
@@ -824,3 +835,74 @@ Parent checks during triage:
 - `low` — Sentry certificates could be read while still being written (EC). Already rejected in passes 2 and 3.
 - `low` — A partial or `-LOADING` Redis reply aborts the run (EC). `-LOADING` cannot occur, because Redis starts with `--save ''`, `--appendonly no` and a fresh directory. Partial reads were rejected as R-EC3 and G-EC4.
 - `low` — `stop_owned` raising inside the `finally` skips later stops and the `result.json` write (EC). It needs a process that survives SIGKILL for 5 s; R-BH4 and G-EC3 rejected the same cleanup-recovery state.
+
+### Parent acceptance audit for review pass 4 (2026-10-24)
+
+The parent inspected the full story implementation diff and the resumed P37–P40
+patches, verified every execution task and all six frozen matrix rows, and
+checked the exact six-file implementation checkpoint map. Fresh source-server
+builds and all six non-live suites passed: 1,490 .NET tests, zero failures and
+five existing unrelated skips; all 210 Manifest cases ran. All eighteen Python
+checks passed normally and under optimization, and all four removal/change
+controls failed at their target assertions. The isolated live smoke passed
+without skips in 22.094 seconds, rejected missing and wrong-key credentials,
+and returned the authenticated document. All four private daemons exited 0;
+no private keys remained; all seven host Dapr applications kept their identities
+and ports. The reused native binaries matched their pinned SHA-256 values.
+
+Current source binding, exact commands and the executed matrix mapping are in
+`evidence/story-4-12/review-pass-4-20261024/parent-acceptance/verification.json`.
+Frozen intent, dependency pins, gitlinks, inventories, vectors and ledger entries
+remain unchanged. Workflow review follows this audit.
+
+### Workflow review of pass 4 implementation (2026-10-24)
+
+All three context-free review layers completed before triage. The verification
+reviewer found no new gaps. The blind layer returned ten findings (its arithmetic
+line is not a finding); the edge-case layer returned three. Each finding was
+classified separately before grouping. Three independent direct patches survive;
+eight carried dispositions retain their earlier rejection. No intent gap,
+spec loopback, dependency update, publication or new deferral is needed.
+
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| H-BH1 | medium | patch | The actual fixture-closure assertion filters `Hexalith.` with `Ordinal`, although NuGet graph identities are case-insensitive. A lowercase unreviewed transitive package is omitted. Use case-insensitive selection and a regression that injects an unreviewed mixed-case package into the real restored graph. |
+| H-BH2 | medium | patch | The daemon stand-in records arguments but ignores `Popen` options. Removing `start_new_session=True` leaves tests green although cleanup calls `killpg(process.pid)`. Assert actual daemon launch options, including process-group ownership and effective environment. |
+| H-BH3 | medium | patch | The successful wrapper test does not inspect all four shutdown results or stop calls. Stopping only scheduler can retain a passing test. Record daemon stop calls and require each owned daemon to stop with its final status recorded. |
+| H-BH4 | low | reject | A daemon can exit during the bounded child wait, delaying failure until that wait returns. It still cannot produce accepted live proof: the post-command check rejects it and the outer deadline bounds the run. Continuous monitoring adds supervision branches for an uncommon crash after successful readiness. |
+| H-BH5 | low | reject | carried: R-BH3, F-EC2 and G-EC2 already cover interruption or timeout after Docker creates a never-started extraction container but before its ID is captured. Recovery naming/state remains disproportionate; no running user container is affected. |
+| H-BH6 | low | reject | carried: pass 2 rejected the same SIGTERM/SystemExit receipt gap. An interrupted run exits nonzero, the PID namespace ends its child, and private-key cleanup still runs. New interruption receipt handling remains unnecessary for acceptance. |
+| H-BH7 | low | reject | An installed local `ip` command stalling before daemon launch was not demonstrated. The mandatory outer deadline already fails that run; adding per-command timeout guards addresses an uncommon substituted-tool or failed-kernel state. |
+| H-BH8 | low | reject | carried: passes 2 and 3 rejected missing structured receipts for namespace/network/certificate-directory failures before the `try`. Such startup failures exit nonzero before any child topology can establish live acceptance; widening the lifecycle boundary adds branches. |
+| H-BH9 | low | reject | carried: pass-4 code review rejected discarded Git stderr at the same physical-root check. The checkout diagnostic remains precise for supported owned checkouts; a separate bounded nonzero-exit diagnostic adds handling for uncommon ownership or corruption failures. |
+| H-BH10 | low | reject | carried: F-EC1 already covers a substituted CLI exiting while a descendant holds its output pipes. Installed Dapr has not shown that behavior; stream/descendant cancellation adds lifecycle handling and the supported run retains its outer deadline. |
+| H-EC1 | low | reject | carried: F-BH1 and G-EC1 already record the independently reproduced inherited-output-descendant overrun in Git/Dapr probes. The actual installed tools were not shown to abandon such children; extra stream/process cancellation remains rejected. |
+| H-EC2 | low | reject | carried: R-BH3, F-EC2 and G-EC2 already record the same ambiguous Docker-create interruption orphan. New unique naming and recovery state remains disproportionate for a never-started extraction container. |
+| H-EC3 | low | reject | carried: R-BH4 and G-EC3 already record the process-exit race between timeout and SIGKILL. Namespace destruction still terminates private processes; independent shutdown recovery remains rejected. |
+
+- [x] [Review][Patch] P41 — Select Hexalith package identities case-insensitively and protect the real integration closure assertion with injected lowercase/mixed-case unreviewed packages.
+- [x] [Review][Patch] P42 — Assert daemon process-group ownership and effective `Popen` launch wiring in the inert supervisor fixture.
+- [x] [Review][Patch] P43 — Assert exact stop calls and final stopped status for all four owned daemons.
+
+### Final workflow-review closure for pass 4 (2026-10-24)
+
+P37–P43 are resolved. The parent inspected the three final review patches and
+reran fresh restore, the Release warnings-as-errors solution build, all six
+non-live suites, eighteen Python checks normally and under optimization, three
+bounded root source-server builds, exact one-smoke discovery and the isolated
+live smoke. All checks passed: 1,492 non-live .NET tests, zero failures and five
+existing unrelated skips; all 212 Manifest cases ran. The single live smoke
+passed without skips in 19.090 seconds, with two real 401 rejections before
+the authenticated document. All four private daemons exited 0, no private keys
+remained, and all seven host Dapr applications kept their identities and ports.
+
+Three independent review layers produced thirteen findings: three direct patches
+are complete and ten findings were rejected, including eight carried earlier
+dispositions. No new work was deferred. Removal controls reject loss of daemon
+process-group ownership and partial cleanup. Lowercase and mixed-case injected
+transitives are rejected by the actual pinned integration closure assertion.
+
+Current source binding, exact commands and sanitized results are recorded in
+`evidence/story-4-12/review-pass-4-20261024/parent-final/verification.json`;
+earlier checkpoints remain unchanged. Frozen intent, dependency pins, gitlinks,
+production code, inventories, vectors and existing ledger entries are intact.

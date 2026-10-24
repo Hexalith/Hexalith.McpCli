@@ -1,0 +1,11 @@
+{
+  "hostApplicationsPreserved": 7,
+  "liveRunDirectory": "/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T040215Z-cdc87047",
+  "privateKeysRemaining": 0,
+  "ownedInfrastructureStopped": {
+    "sentry": 0,
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  }
+}

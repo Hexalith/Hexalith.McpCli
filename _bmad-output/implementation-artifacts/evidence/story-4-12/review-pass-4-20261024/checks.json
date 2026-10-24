@@ -1,0 +1,89 @@
+[
+  {
+    "name": "solution-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "recording": "Exact stdout observed through exec_command/write_stdin before the captured checks; stderr empty."
+  },
+  {
+    "name": "solution-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 2.95
+  },
+  {
+    "name": "manifest-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 31.178
+  },
+  {
+    "name": "python-tests",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 6.129
+  },
+  {
+    "name": "optimized-python-tests",
+    "command": [
+      "python3",
+      "-O",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 5.566
+  },
+  {
+    "name": "smoke-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-list",
+      "tests"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exitCode": 0,
+    "elapsedSeconds": 0.166
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "label": "cli-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Cli.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Cli.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 16.964,
+  "recordedAtUtc": "2026-10-24T04:02:13.145222+00:00",
+  "stdout": "Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)\nskipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync\n  Windows file attributes are required for this fixture.\n  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)\nskipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync\n  Windows ACLs are required for this fixture.\n  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)\n/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) passed (16s 301ms)\n\nTest run summary: Passed!\n  total: 481\n  failed: 0\n  succeeded: 479\n  skipped: 2\n  duration: 16s 471ms\n",
+  "stderr": ""
+}

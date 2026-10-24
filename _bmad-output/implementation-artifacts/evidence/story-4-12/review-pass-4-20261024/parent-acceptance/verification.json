@@ -1,0 +1,151 @@
+{
+  "baseCommit": "d0c82033241f394ad7e6e5f9816835ed07c82f7c",
+  "status": "parent task, acceptance and six-row matrix audit passed; workflow review pending",
+  "sourceMap": {
+    "file": "implementation-file-map.json",
+    "sha256": "86d1406be3e60f24935cebbb90b6e7c048f099ccf84373c4b5a4ba8d2d78fdf6",
+    "fileCount": 44,
+    "representation": "SHA-256 of exact working-tree bytes; compact sorted-key UTF-8 JSON without trailing newline"
+  },
+  "implementationChecks": "../checks.json",
+  "checks": "commands.json",
+  "nonLiveCounts": {
+    "abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "core": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    "cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    "manifest": {
+      "total": 210,
+      "failed": 0,
+      "succeeded": 210,
+      "skipped": 0
+    }
+  },
+  "nonLiveSummary": {
+    "passed": 1490,
+    "failed": 0,
+    "existingSkipped": 5
+  },
+  "pythonPassed": 18,
+  "pythonOptimizedPassed": 18,
+  "live": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "testSeconds": 22.094,
+    "rejectedCredentialRequests": 2,
+    "hostApplicationsPreserved": 7,
+    "liveRunDirectory": "/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T040215Z-cdc87047",
+    "privateKeysRemaining": 0,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    }
+  },
+  "matrix": [
+    {
+      "state": "Qualified helpers, built source and available Dapr",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument",
+        "DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers"
+      ],
+      "evidence": [
+        "live-command.stdout.json",
+        "../manifest-tests.stdout.txt"
+      ]
+    },
+    {
+      "state": "Missing helper or forbidden helper dependency",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "AspireHelperDependencyTests"
+      ],
+      "evidence": [
+        "../manifest-tests.stdout.txt"
+      ]
+    },
+    {
+      "state": "Missing or undeclared root checkout",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "TopologyConfigurationTests",
+        "TopologyLaunchTests.MissingDeclaredRootStopsLaunch",
+        "TopologyFixtureLaunchTests.UnsafeOrIncompleteFixtureFailsBeforeInfrastructure"
+      ],
+      "evidence": [
+        "../manifest-tests.stdout.txt"
+      ]
+    },
+    {
+      "state": "Missing Dapr prerequisites",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "DaprPrerequisiteTests.MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess"
+      ],
+      "evidence": [
+        "../manifest-tests.stdout.txt"
+      ]
+    },
+    {
+      "state": "Resources alive but Gateway unusable",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "GatewaySmokeBoundaryTests.AliveGatewayThatNeverAnswersQueryFailsWithinSmokeDeadline",
+        "GatewaySmokeBoundaryTests.ForbiddenGatewayReportsImmediateContextAndPinnedException"
+      ],
+      "evidence": [
+        "../manifest-tests.stdout.txt"
+      ]
+    },
+    {
+      "state": "Conflicting user topology",
+      "result": "passed",
+      "executedCoveringChecks": [
+        "TopologyConfigurationTests.ExistingRequestedApplicationFails",
+        "TopologyLaunchTests.ExistingApplicationStopsLaunch",
+        "TopologyLaunchTests.OccupiedPortStopsLaunch"
+      ],
+      "evidence": [
+        "../manifest-tests.stdout.txt"
+      ]
+    }
+  ],
+  "frozenIntentUnchangedFromHead": true,
+  "reviewPatchTasksComplete": [
+    "P37",
+    "P38",
+    "P39",
+    "P40"
+  ],
+  "workflowReview": "pending",
+  "priorImplementationCheckpoint": "../verification.json"
+}

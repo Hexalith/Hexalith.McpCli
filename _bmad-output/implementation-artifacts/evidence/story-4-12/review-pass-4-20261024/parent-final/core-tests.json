@@ -1,0 +1,18 @@
+{
+  "label": "core-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Core.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 2.707,
+  "recordedAtUtc": "2026-10-24T04:15:35.950194+00:00",
+  "stdout": "Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)\nskipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls\n  Windows ACLs are exercised only on Windows.\n  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)\nskipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten\n  Windows ACLs are exercised only on Windows.\n  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)\nskipped Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction\n  Runs only in the fresh benchmark child process.\n  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)\n/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64) passed (1s 964ms)\n\nTest run summary: Passed!\n  total: 707\n  failed: 0\n  succeeded: 704\n  skipped: 3\n  duration: 2s 148ms\n",
+  "stderr": ""
+}

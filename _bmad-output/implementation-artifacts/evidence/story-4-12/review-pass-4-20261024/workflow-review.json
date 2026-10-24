@@ -1,0 +1,44 @@
+{
+  "layers": {
+    "blindHunter": {
+      "findings": 10,
+      "arithmeticLineExcluded": true
+    },
+    "edgeCaseHunter": {
+      "findings": 3
+    },
+    "verificationGap": {
+      "findings": 0,
+      "result": "No verification gaps found."
+    }
+  },
+  "triage": {
+    "totalFindings": 13,
+    "patches": [
+      "H-BH1",
+      "H-BH2",
+      "H-BH3"
+    ],
+    "rejected": [
+      "H-BH4",
+      "H-BH5",
+      "H-BH6",
+      "H-BH7",
+      "H-BH8",
+      "H-BH9",
+      "H-BH10",
+      "H-EC1",
+      "H-EC2",
+      "H-EC3"
+    ],
+    "carriedRejections": 8,
+    "newDeferred": 0,
+    "taskIds": [
+      "P41",
+      "P42",
+      "P43"
+    ]
+  },
+  "fullDiff": "/tmp/story-4-12-full-f1sdfhho.diff",
+  "dispositions": "../../../spec-4-12-compose-the-v1-live-test-topology.md#workflow-review-of-pass-4-implementation-2026-10-24"
+}

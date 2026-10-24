@@ -1,0 +1,28 @@
+{
+  "label": "live-smoke",
+  "command": [
+    "env",
+    "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+    "PYTHONOPTIMIZE=1",
+    "HEXALITH_EVENTSTORE_TEST_REDIS_PORT=19999",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "960",
+    "python3",
+    "tools/live-topology/run-isolated.py",
+    "--",
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+    "-failSkips"
+  ],
+  "displayCommand": "env MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime PYTHONOPTIMIZE=1 HEXALITH_EVENTSTORE_TEST_REDIS_PORT=19999 timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 20.051,
+  "recordedAtUtc": "2026-10-24T04:17:03.934553+00:00",
+  "stdout": "Isolated run: /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T041643Z-45aa6678\nPrivate Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.\nCommand completed: exit 0; logs: /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T041643Z-45aa6678\n",
+  "stderr": ""
+}

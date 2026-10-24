@@ -1,0 +1,18 @@
+{
+  "label": "abstractions-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Abstractions.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 2.027,
+  "recordedAtUtc": "2026-10-24T04:15:27.832846+00:00",
+  "stdout": "Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64)\n/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64) passed (738ms)\n\nTest run summary: Passed!\n  total: 20\n  failed: 0\n  succeeded: 20\n  skipped: 0\n  duration: 1s 080ms\n",
+  "stderr": ""
+}

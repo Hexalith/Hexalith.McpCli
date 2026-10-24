@@ -165,25 +165,22 @@ def inside(run_dir: Path, command: list[str]) -> int:
             raise RuntimeError('Private Dapr environment contains pre-existing applications.')
         result['prerequisitesReady'] = True
         print('Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.', flush=True)
-        if command:
-            with (run_dir / 'command.stdout.txt').open('wb') as output, (run_dir / 'command.stderr.txt').open('wb') as error:
-                child = subprocess.Popen(command, cwd=outside['cwd'], env=environment,
-                                         stdout=output, stderr=error, start_new_session=True)
-                started = time.monotonic()
-                try:
-                    result['commandExitCode'] = child.wait(timeout=COMMAND_TIMEOUT_SECONDS)
-                except subprocess.TimeoutExpired:
-                    stop_owned(child)
-                    result['commandExitCode'] = 124
-                result['commandElapsedSeconds'] = round(time.monotonic() - started, 3)
-            if result['commandExitCode'] == 0:
-                for name, process in processes.items():
-                    if process.poll() is not None:
-                        raise RuntimeError(f'{name} exited while the command ran: {process.returncode}')
-            print(f"Command completed: exit {result['commandExitCode']}; logs: {run_dir}", flush=True)
-            return result['commandExitCode']
-        result['commandExitCode'] = 0
-        return 0
+        with (run_dir / 'command.stdout.txt').open('wb') as output, (run_dir / 'command.stderr.txt').open('wb') as error:
+            child = subprocess.Popen(command, cwd=outside['cwd'], env=environment,
+                                     stdout=output, stderr=error, start_new_session=True)
+            started = time.monotonic()
+            try:
+                result['commandExitCode'] = child.wait(timeout=COMMAND_TIMEOUT_SECONDS)
+            except subprocess.TimeoutExpired:
+                stop_owned(child)
+                result['commandExitCode'] = 124
+            result['commandElapsedSeconds'] = round(time.monotonic() - started, 3)
+        if result['commandExitCode'] == 0:
+            for name, process in processes.items():
+                if process.poll() is not None:
+                    raise RuntimeError(f'{name} exited while the command ran: {process.returncode}')
+        print(f"Command completed: exit {result['commandExitCode']}; logs: {run_dir}", flush=True)
+        return result['commandExitCode']
     except Exception as exception:
         result['error'] = {'type': type(exception).__name__, 'message': str(exception)}
         result['commandExitCode'] = 1

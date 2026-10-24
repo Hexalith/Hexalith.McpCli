@@ -1,0 +1,23 @@
+{
+  "label": "source-tenants-build",
+  "command": [
+    "timeout",
+    "300",
+    "dotnet",
+    "build",
+    "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true"
+  ],
+  "displayCommand": "timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants",
+  "exitCode": 0,
+  "elapsedSeconds": 2.015,
+  "recordedAtUtc": "2026-10-24T04:01:46.643730+00:00",
+  "stdout": "  Determining projects to restore...\n  All projects are up-to-date for restore.\n  Hexalith.Tenants.Contracts -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll\n  Hexalith.Tenants.Server -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll\n  Hexalith.Tenants -> /home/administrator/projects/hexalith/mcpcli/references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.60\n",
+  "stderr": ""
+}

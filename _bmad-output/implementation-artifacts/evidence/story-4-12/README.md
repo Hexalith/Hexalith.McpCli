@@ -1,16 +1,22 @@
 # Story 4.12 current evidence index
 
-The normal upstream release and downstream helper enrollment are complete.
-All P25–P36 patches passed final parent acceptance and three independent review
-layers. Final validation passed 1,490 non-live .NET tests (five existing unrelated
-skips), 17 Python checks and the isolated live smoke without skips. No new work
-was deferred. Earlier receipts retain their original identities and outcomes.
+The upstream release, downstream helper enrollment and live topology are
+complete. Review pass 4 patches P37–P43 and all workflow review patches passed
+final acceptance: 1,492 non-live .NET tests, eighteen Python tests normally and
+under optimization, and one isolated live smoke without skips. Five unrelated
+pre-existing .NET skips remain. All four private daemons exited 0, no private
+keys remained, and all seven host Dapr applications were preserved.
 
-- [Current final verification](review-pass-3-20261024/parent-final/verification.json): reviewed source map, exact final commands, acceptance matrix and live result.
-- [Final acceptance details](review-pass-3-20261024/parent-final/README.md): final counts, review dispositions and process preservation.
-- [Completed publication and provenance](publication-20261023/expanded-publication/README.md): signed Parties Aspire 1.6.0, normal release gates, Builds integration and published-artifact checks.
-- [Initial pass 3 checkpoint](review-pass-3-20261024/verification.json): preserved pre-review implementation evidence.
-- [Review follow-up checks](review-pass-3-20261024/review-fixes/summary.json): focused P33–P36 coverage and removal controls.
+Three independent review layers returned thirteen findings: three were patched
+and ten rejected; no new work was deferred. Earlier receipts keep their original
+identities and outcomes.
+
+- [Current final verification](review-pass-4-20261024/parent-final/verification.json): reviewed source map, exact commands, executed matrix and live result.
+- [Current acceptance details](review-pass-4-20261024/parent-final/README.md): final counts, review dispositions and process preservation.
+- [Pass 4 implementation checkpoint](review-pass-4-20261024/verification.json): initial P37–P40 source map, focused checks and controls.
+- [Pass 4 workflow review](review-pass-4-20261024/workflow-review.json): all three layer outcomes and triage totals.
+- [Previous final verification](review-pass-3-20261024/parent-final/verification.json): preserved earlier acceptance.
+- [Completed publication and provenance](publication-20261023/expanded-publication/README.md): signed Parties Aspire 1.6.0, release gates, Builds integration and artifact checks.
 - [Prior review pass 2 verification](review-pass-2-20261023/verification.json): earlier source map and checks.
 - [Prior completed review verification](review-patches-20261023/final-verification/): earlier runtime and live results.
 
