@@ -1,0 +1,26 @@
+{
+  "label": "live-smoke",
+  "command": [
+    "env",
+    "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "960",
+    "python3",
+    "tools/live-topology/run-isolated.py",
+    "--",
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+    "-failSkips"
+  ],
+  "displayCommand": "env MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 26.837,
+  "recordedAtUtc": "2026-10-24T02:07:13.830807+00:00",
+  "stdout": "live-smoke.stdout.txt",
+  "stderr": "live-smoke.stderr.txt"
+}

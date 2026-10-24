@@ -1,0 +1,16 @@
+{
+  "label": "review-fixes/configuration-tests",
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Manifest.Tests.TopologyConfigurationTests"
+  ],
+  "displayCommand": "dotnet tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll -class Hexalith.McpCli.Manifest.Tests.TopologyConfigurationTests",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.816,
+  "recordedAtUtc": "2026-10-24T02:26:42.700259+00:00",
+  "stdout": "review-fixes/configuration-tests.stdout.txt",
+  "stderr": "review-fixes/configuration-tests.stderr.txt"
+}

@@ -1,0 +1,14 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.TopologyConfigurationTests.LinkedReferencesParentIsNotAQualifiedCheckout [FAIL]
+      Assert.Throws() Failure: No exception was thrown
+      Expected: typeof(System.InvalidOperationException)
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs(106,0): at Hexalith.McpCli.Manifest.Tests.TopologyConfigurationTests.LinkedReferencesParentIsNotAQualifiedCheckout()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = 'beaee3150e4c016d96dd2afa3f6641c494c487f465451ebff3747c5be0f6d995')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.131s

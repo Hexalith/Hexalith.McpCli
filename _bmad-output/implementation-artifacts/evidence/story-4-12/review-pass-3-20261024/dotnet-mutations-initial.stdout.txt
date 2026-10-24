@@ -1,0 +1,1 @@
+Four of four focused .NET guard/component mutations rejected in a disposable source snapshot.

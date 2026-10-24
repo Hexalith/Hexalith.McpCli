@@ -1,0 +1,15 @@
+{
+  "label": "source-tenants-build",
+  "command": [
+    "bash",
+    "-c",
+    "cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+  ],
+  "displayCommand": "bash -c 'cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 1.418,
+  "recordedAtUtc": "2026-10-24T02:29:02.100274+00:00",
+  "stdout": "source-tenants-build.stdout.txt",
+  "stderr": "source-tenants-build.stderr.txt"
+}

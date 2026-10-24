@@ -1,0 +1,3 @@
+Isolated run: /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T022904Z-d1c25e89
+Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.
+Command completed: exit 0; logs: /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime/runs/20261024T022904Z-d1c25e89

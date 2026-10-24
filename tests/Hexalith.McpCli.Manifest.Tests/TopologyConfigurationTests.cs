@@ -94,15 +94,37 @@ public sealed class TopologyConfigurationTests : IDisposable
             Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
     }
 
+    /// <summary>A linked references parent cannot redirect declared checkouts outside their physical root path.</summary>
+    [Fact]
+    public void LinkedReferencesParentIsNotAQualifiedCheckout()
+    {
+        string references = Path.Combine(_root, "references");
+        string elsewhere = Path.Combine(_root, "physical-references");
+        Directory.Move(references, elsewhere);
+        Directory.CreateSymbolicLink(references, elsewhere);
+        string checkout = Path.Combine(references, TopologyConfiguration.Modules[0]);
+        Assert.Equal($"Required root checkout '{checkout}' is not its own Git working tree.",
+            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateWorkspace(_root)).Message);
+    }
+
     /// <summary>No absent or undersized key can silently enable unauthenticated test traffic.</summary>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("short")]
+    [InlineData("0123456789012345678901234567890")]
+    [InlineData("éééééééééééééééa")]
     public void MissingOrWeakSigningKeyFails(string? key)
         => Assert.Equal("Authentication:JwtBearer:SigningKey must contain at least 32 UTF-8 bytes for the Development test topology.",
             Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateSigningKey(key)).Message);
+
+    /// <summary>Sixteen accented characters and eleven ideographs meet the 32-byte key minimum.</summary>
+    /// <param name="key">A key with fewer than 32 characters and at least 32 UTF-8 bytes.</param>
+    [Theory]
+    [InlineData("éééééééééééééééé")]
+    [InlineData("界界界界界界界界界界界")]
+    public void MultibyteSigningKeyMeetsByteMinimum(string key) => TopologyConfiguration.ValidateSigningKey(key);
 
     /// <summary>Each requested application identity is protected independently.</summary>
     [Theory]

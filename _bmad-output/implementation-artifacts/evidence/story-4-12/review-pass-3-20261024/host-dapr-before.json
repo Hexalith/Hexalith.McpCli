@@ -1,0 +1,16 @@
+{
+  "label": "host-dapr-before",
+  "command": [
+    "dapr",
+    "list",
+    "--output",
+    "json"
+  ],
+  "displayCommand": "dapr list --output json",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.165,
+  "recordedAtUtc": "2026-10-24T02:04:54.371628+00:00",
+  "stdout": "host-dapr-before.stdout.txt",
+  "stderr": "host-dapr-before.stderr.txt"
+}

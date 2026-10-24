@@ -1,0 +1,16 @@
+{
+  "label": "review-fixes/prerequisite-tests",
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests"
+  ],
+  "displayCommand": "dotnet tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll -class Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 14.046,
+  "recordedAtUtc": "2026-10-24T02:26:31.415858+00:00",
+  "stdout": "review-fixes/prerequisite-tests.stdout.txt",
+  "stderr": "review-fixes/prerequisite-tests.stderr.txt"
+}

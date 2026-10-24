@@ -1,0 +1,14 @@
+{
+  "label": "python-mutations",
+  "command": [
+    "python3",
+    "/tmp/story-4-12-pass-3-mutations.py"
+  ],
+  "displayCommand": "python3 /tmp/story-4-12-pass-3-mutations.py",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 24.377,
+  "recordedAtUtc": "2026-10-24T02:07:10.111744+00:00",
+  "stdout": "python-mutations.stdout.txt",
+  "stderr": "python-mutations.stderr.txt"
+}

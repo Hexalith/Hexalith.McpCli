@@ -16,6 +16,7 @@ import uuid
 
 RUNTIME_DIR = Path(os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', Path(__file__).resolve().parent)).resolve()
 COMMAND_TIMEOUT_SECONDS = 900
+PREREQUISITE_TIMEOUT_SECONDS = 40
 STOP_GRACE_SECONDS = 10
 
 
@@ -45,6 +46,7 @@ def inside(run_dir: Path, command: list[str]) -> int:
     if any(current[key] == outside['namespaces'][key] for key in current):
         raise RuntimeError('The supervisor requires private user, PID, network and mount namespaces.')
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))
+    # The private veth pair supplies multicast-capable networking for the topology.
     for arguments in (
         ['ip', 'link', 'set', 'lo', 'up'],
         ['ip', 'link', 'add', 'mcpcli0', 'type', 'veth', 'peer', 'name', 'mcpcli1'],
@@ -116,7 +118,7 @@ def inside(run_dir: Path, command: list[str]) -> int:
             processes[name] = process
             result['services'][name] = {'pid': process.pid, 'arguments': arguments}
             if name == 'sentry':
-                deadline = time.monotonic() + 40
+                deadline = time.monotonic() + PREREQUISITE_TIMEOUT_SECONDS
                 certificate_files = ['ca.crt', 'issuer.crt', 'issuer.key']
                 while not all((certificate_dir / filename).is_file() for filename in certificate_files):
                     if process.poll() is not None:
@@ -133,7 +135,7 @@ def inside(run_dir: Path, command: list[str]) -> int:
                 result['mtls'] = {'enabled': True, 'trustDomain': 'public', 'namespace': 'default',
                                   'sentryAddress': '127.0.0.1:50001',
                                   'certificateValuesWithheld': True}
-        deadline = time.monotonic() + 40
+        deadline = time.monotonic() + PREREQUISITE_TIMEOUT_SECONDS
         for port in (50001, 6379, 6050, 6060):
             while True:
                 for name, process in processes.items():
@@ -206,6 +208,8 @@ if __name__ == '__main__':
     command = sys.argv[1:]
     if command[:1] == ['--']:
         command = command[1:]
+    if not command:
+        sys.exit('A command to execute is required.')
     run_id = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-' + uuid.uuid4().hex[:8]
     run_dir = RUNTIME_DIR / 'runs' / run_id
     run_dir.mkdir(parents=True)

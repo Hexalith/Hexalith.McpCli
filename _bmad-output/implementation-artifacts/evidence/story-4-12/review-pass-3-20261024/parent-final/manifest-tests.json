@@ -1,0 +1,18 @@
+{
+  "label": "manifest-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Manifest.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 31.095,
+  "recordedAtUtc": "2026-10-24T02:28:54.185312+00:00",
+  "stdout": "manifest-tests.stdout.txt",
+  "stderr": "manifest-tests.stderr.txt"
+}

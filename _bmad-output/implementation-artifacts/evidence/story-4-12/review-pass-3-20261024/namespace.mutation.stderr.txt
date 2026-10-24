@@ -1,0 +1,25 @@
+F
+======================================================================
+FAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (__main__.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-pass3-mutation-i3agbcp_/test_runtime.py", line 122, in test_wrapper_pins_the_effective_child_environment_to_private_services
+    self.assertEqual(expected, {key: child[key] for key in expected})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'MCP[315 chars]CE': 'default', 'DAPR_CONTROLPLANE_TRUST_DOMAI[50 chars]ult'} != {'MCP[315 chars]CE': None, 'DAPR_CONTROLPLANE_TRUST_DOMAIN': '[45 chars]ult'}
+  {'DAPR_CONTROLPLANE_NAMESPACE': 'default',
+   'DAPR_CONTROLPLANE_TRUST_DOMAIN': 'public',
+   'Dapr__GatewayHttpPort': '3501',
+   'Dapr__PlacementHostAddress': '127.0.0.1:6050',
+   'Dapr__SchedulerHostAddress': '127.0.0.1:6060',
+   'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT': '6050',
+   'HEXALITH_EVENTSTORE_TEST_REDIS_PORT': '6379',
+   'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT': '6060',
+   'MCPCLI_ISOLATED_TOPOLOGY': '1',
+-  'NAMESPACE': 'default'}
++  'NAMESPACE': None}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.140s
+
+FAILED (failures=1)

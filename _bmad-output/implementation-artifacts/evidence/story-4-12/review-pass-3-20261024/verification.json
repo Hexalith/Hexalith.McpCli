@@ -1,0 +1,673 @@
+{
+  "baseCommit": "2a857e39f03357285820c3b340cf889813e3f964",
+  "storyBaselineCommit": "be89509d59bb6ba53a0382e26219edb0625b47f4",
+  "scope": "P25–P32 implemented and verified; parent acceptance audit and workflow review pending.",
+  "sourceBinding": {
+    "file": "implementation-file-map.json",
+    "canonicalSha256": "ed1fa4b028324ca8ba0415f3c2152d9c83d54a744c9c07139d8cea938a3b5e71",
+    "canonicalRepresentation": "UTF-8 JSON with sorted keys, compact separators and unescaped Unicode, without a final newline",
+    "implementationFiles": 44,
+    "repositoryRevision": "2a857e39f03357285820c3b340cf889813e3f964",
+    "includesUncommittedChanges": true
+  },
+  "runtimeSourceCheckouts": "runtime-source-checkouts.json",
+  "frozenIntent": "intent-preservation.json",
+  "checks": [
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "displayCommand": "dotnet restore Hexalith.McpCli.slnx",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.933,
+      "recordedAtUtc": "2026-10-24T02:04:05.307981+00:00",
+      "stdout": "restore.stdout.txt",
+      "stderr": "restore.stderr.txt",
+      "receipt": "restore.json"
+    },
+    {
+      "label": "release-build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "displayCommand": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 3.698,
+      "recordedAtUtc": "2026-10-24T02:04:20.338861+00:00",
+      "stdout": "release-build.stdout.txt",
+      "stderr": "release-build.stderr.txt",
+      "receipt": "release-build.json"
+    },
+    {
+      "label": "source-eventstore-build",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "displayCommand": "bash -c 'cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 9.469,
+      "recordedAtUtc": "2026-10-24T02:05:23.977998+00:00",
+      "stdout": "source-eventstore-build.stdout.txt",
+      "stderr": "source-eventstore-build.stderr.txt",
+      "receipt": "source-eventstore-build.json"
+    },
+    {
+      "label": "source-tenants-build",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "displayCommand": "bash -c 'cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 2.43,
+      "recordedAtUtc": "2026-10-24T02:05:50.181589+00:00",
+      "stdout": "source-tenants-build.stdout.txt",
+      "stderr": "source-tenants-build.stderr.txt",
+      "receipt": "source-tenants-build.json"
+    },
+    {
+      "label": "source-parties-build",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "displayCommand": "bash -c 'cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 3.242,
+      "recordedAtUtc": "2026-10-24T02:05:51.234472+00:00",
+      "stdout": "source-parties-build.stdout.txt",
+      "stderr": "source-parties-build.stderr.txt",
+      "receipt": "source-parties-build.json"
+    },
+    {
+      "label": "abstractions-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.167,
+      "recordedAtUtc": "2026-10-24T02:05:48.929317+00:00",
+      "stdout": "abstractions-tests.stdout.txt",
+      "stderr": "abstractions-tests.stderr.txt",
+      "receipt": "abstractions-tests.json"
+    },
+    {
+      "label": "analyzers-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 3.886,
+      "recordedAtUtc": "2026-10-24T02:05:52.867991+00:00",
+      "stdout": "analyzers-tests.stdout.txt",
+      "stderr": "analyzers-tests.stderr.txt",
+      "receipt": "analyzers-tests.json"
+    },
+    {
+      "label": "core-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 2.736,
+      "recordedAtUtc": "2026-10-24T02:05:55.661112+00:00",
+      "stdout": "core-tests.stdout.txt",
+      "stderr": "core-tests.stderr.txt",
+      "receipt": "core-tests.json"
+    },
+    {
+      "label": "cli-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Cli.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 17.46,
+      "recordedAtUtc": "2026-10-24T02:06:13.261700+00:00",
+      "stdout": "cli-tests.stdout.txt",
+      "stderr": "cli-tests.stderr.txt",
+      "receipt": "cli-tests.json"
+    },
+    {
+      "label": "mcp-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Mcp.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 2.119,
+      "recordedAtUtc": "2026-10-24T02:06:15.431634+00:00",
+      "stdout": "mcp-tests.stdout.txt",
+      "stderr": "mcp-tests.stderr.txt",
+      "receipt": "mcp-tests.json"
+    },
+    {
+      "label": "manifest-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "displayCommand": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 31.311,
+      "recordedAtUtc": "2026-10-24T02:06:46.788338+00:00",
+      "stdout": "manifest-tests.stdout.txt",
+      "stderr": "manifest-tests.stderr.txt",
+      "receipt": "manifest-tests.json"
+    },
+    {
+      "label": "runtime-tests-final",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/live-topology",
+        "-p",
+        "test_*.py"
+      ],
+      "displayCommand": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 4.279,
+      "recordedAtUtc": "2026-10-24T02:07:48.838205+00:00",
+      "stdout": "runtime-tests-final.stdout.txt",
+      "stderr": "runtime-tests-final.stderr.txt",
+      "receipt": "runtime-tests-final.json"
+    },
+    {
+      "label": "smoke-discovery",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-list",
+        "tests"
+      ],
+      "displayCommand": "dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.166,
+      "recordedAtUtc": "2026-10-24T02:05:15.802598+00:00",
+      "stdout": "smoke-discovery.stdout.txt",
+      "stderr": "smoke-discovery.stderr.txt",
+      "receipt": "smoke-discovery.json"
+    },
+    {
+      "label": "bootstrap",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=20s",
+        "900",
+        "python3",
+        "tools/live-topology/bootstrap-runtime.py",
+        "/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime"
+      ],
+      "displayCommand": "timeout --signal=TERM --kill-after=20s 900 python3 tools/live-topology/bootstrap-runtime.py /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 3.932,
+      "recordedAtUtc": "2026-10-24T02:05:04.220101+00:00",
+      "stdout": "bootstrap.stdout.txt",
+      "stderr": "bootstrap.stderr.txt",
+      "receipt": "bootstrap.json"
+    },
+    {
+      "label": "live-smoke",
+      "command": [
+        "env",
+        "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=20s",
+        "960",
+        "python3",
+        "tools/live-topology/run-isolated.py",
+        "--",
+        "dotnet",
+        "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+        "-failSkips"
+      ],
+      "displayCommand": "env MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 26.837,
+      "recordedAtUtc": "2026-10-24T02:07:13.830807+00:00",
+      "stdout": "live-smoke.stdout.txt",
+      "stderr": "live-smoke.stderr.txt",
+      "receipt": "live-smoke.json"
+    },
+    {
+      "label": "host-dapr-before",
+      "command": [
+        "dapr",
+        "list",
+        "--output",
+        "json"
+      ],
+      "displayCommand": "dapr list --output json",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.165,
+      "recordedAtUtc": "2026-10-24T02:04:54.371628+00:00",
+      "stdout": "host-dapr-before.stdout.txt",
+      "stderr": "host-dapr-before.stderr.txt",
+      "receipt": "host-dapr-before.json"
+    },
+    {
+      "label": "host-dapr-after",
+      "command": [
+        "dapr",
+        "list",
+        "--output",
+        "json"
+      ],
+      "displayCommand": "dapr list --output json",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.165,
+      "recordedAtUtc": "2026-10-24T02:07:34.442762+00:00",
+      "stdout": "host-dapr-after.stdout.txt",
+      "stderr": "host-dapr-after.stderr.txt",
+      "receipt": "host-dapr-after.json"
+    },
+    {
+      "label": "python-mutations",
+      "command": [
+        "python3",
+        "/tmp/story-4-12-pass-3-mutations.py"
+      ],
+      "displayCommand": "python3 /tmp/story-4-12-pass-3-mutations.py",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 24.377,
+      "recordedAtUtc": "2026-10-24T02:07:10.111744+00:00",
+      "stdout": "python-mutations.stdout.txt",
+      "stderr": "python-mutations.stderr.txt",
+      "receipt": "python-mutations.json"
+    },
+    {
+      "label": "dotnet-mutations",
+      "command": [
+        "python3",
+        "/tmp/story-4-12-pass-3-dotnet-mutations.py"
+      ],
+      "displayCommand": "python3 /tmp/story-4-12-pass-3-dotnet-mutations.py",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 10.094,
+      "recordedAtUtc": "2026-10-24T02:11:47.673512+00:00",
+      "stdout": "dotnet-mutations.stdout.txt",
+      "stderr": "dotnet-mutations.stderr.txt",
+      "receipt": "dotnet-mutations.json"
+    },
+    {
+      "label": "whitespace-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "displayCommand": "git diff --check",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.165,
+      "recordedAtUtc": "2026-10-24T02:12:50.999398+00:00",
+      "stdout": "whitespace-check.stdout.txt",
+      "stderr": "whitespace-check.stderr.txt",
+      "receipt": "whitespace-check.json"
+    }
+  ],
+  "nonLiveCounts": {
+    "abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "core": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    "cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    "manifest": {
+      "total": 205,
+      "failed": 0,
+      "succeeded": 205,
+      "skipped": 0
+    }
+  },
+  "nonLiveSummary": {
+    "passed": 1485,
+    "failed": 0,
+    "existingSkipped": 5,
+    "manifestPassed": 205
+  },
+  "pythonSummary": {
+    "passed": 15,
+    "failed": 0,
+    "guardMutationsRejected": 11,
+    "receipt": "runtime-tests-final.json",
+    "mutationReceipt": "python-mutation-controls.json"
+  },
+  "dotnetMutationSummary": {
+    "rejected": 4,
+    "expectedAssertionFailuresPerMutation": 1,
+    "receipt": "dotnet-mutation-controls.json"
+  },
+  "discoveredSmoke": [
+    "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"
+  ],
+  "liveSummary": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "testSeconds": 25.627,
+    "childSeconds": 25.942,
+    "rejectedCredentialRequests": 2,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    },
+    "remainingPrivateKeys": 0,
+    "result": "live-result.json",
+    "stdout": "live-command.stdout.txt",
+    "stderr": "live-command.stderr.txt",
+    "hostProcessPreservation": "host-process-preservation.json"
+  },
+  "acceptanceMatrix": [
+    {
+      "state": "Qualified helpers, built source and available Dapr",
+      "result": "passed",
+      "evidence": [
+        "source-eventstore-build.json",
+        "source-tenants-build.json",
+        "source-parties-build.json",
+        "manifest-tests.json",
+        "live-result.json",
+        "live-command.stdout.txt"
+      ],
+      "coverage": "Published helper identities/server-free AppHost closure and separately pinned platform fixture closure passed Manifest tests; all three services started and the authenticated document smoke passed without skips."
+    },
+    {
+      "state": "Missing helper or forbidden helper dependency",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ],
+      "coverage": "AspireHelperDependencyTests plus DependencyPolicyTests reject missing helper artifacts, forbidden implementation dependencies and unapproved roots with exact package/path diagnostics."
+    },
+    {
+      "state": "Missing or undeclared root checkout",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json",
+        "physical-root-guard-removal.stdout.txt"
+      ],
+      "coverage": "TopologyConfigurationTests, TopologyLaunchTests and TopologyFixtureLaunchTests cover root-only checkouts and required-path diagnostics. The new linked-parent regression fails when the physical-root comparison is removed."
+    },
+    {
+      "state": "Missing Dapr prerequisites",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json",
+        "runtime-tests-final.json",
+        "cli-version-guard-removal.stdout.txt"
+      ],
+      "coverage": "DaprPrerequisiteTests run the real nested smoke against disposable declared checkout stand-ins and assert the standard skip prefix, detail, output channels and skipped count. The new broken-CLI guard removal fails exactly its new row; all four private readiness failures refuse child launch."
+    },
+    {
+      "state": "Resources alive but Gateway unusable",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ],
+      "coverage": "GatewaySmokeBoundaryTests exercise a real HTTP 403 through the pinned client and the shipped 30-second alive-but-stalled request deadline with useful diagnostics."
+    },
+    {
+      "state": "Conflicting user topology",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json",
+        "host-process-preservation.json",
+        "live-result.json"
+      ],
+      "coverage": "TopologyLaunchTests reject actual occupied ports and Dapr identities. The successful isolated smoke preserved every host Dapr identity, process ID and port and stopped all four private infrastructure processes."
+    }
+  ],
+  "initialExperiments": [
+    {
+      "receipt": "python-mutations-initial.json",
+      "qualifiesCurrentVerification": false,
+      "reason": "Removing only the redundant first NAMESPACE assignment preserved the later assignment; corrected control removes both."
+    },
+    {
+      "receipt": "dotnet-mutation-controls-initial.json",
+      "qualifiesCurrentVerification": false,
+      "reason": "The first disposable snapshot omitted the solution root marker; two component controls failed before their assertions. Corrected snapshot and expected-assertion checks qualify all final controls."
+    }
+  ],
+  "limitations": [
+    "Full live vector semantics remain Story 4.13.",
+    "Blocking source-build live CI remains Story 4.14.",
+    "Existing platform file-lock and agent-context deferrals remain unchanged; outer process deadline remains mandatory.",
+    "Parent acceptance audit and workflow review pending."
+  ],
+  "receiptFileHashes": {
+    "README.md": "1b9419084e972e629c09a48f2f54ec03bbd2c92af9afcdc5a4b0e7fee589d654",
+    "abstractions-tests.json": "70b24603ec65b240a999106734e9df042d7a3aadf2944aa487832ec856f2aa70",
+    "abstractions-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "abstractions-tests.stdout.txt": "9656327d9d1feb452c6bfbd0a8965262b48fd36ea2c28d3b3e10046ab0b3068d",
+    "actor-state-disabled-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actor-state-disabled-initial.stdout.txt": "df4d1cc477905355670d8ab0aa4cc88703922465676b1b3a1c0d7315dd3171d7",
+    "actor-state-disabled.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actor-state-disabled.stdout.txt": "b59ecbdeeaeb9d25a1790e0b94cacf3430e6451e69a6527d644c393188034361",
+    "analyzers-tests.json": "718439c674ddd3d023adfbad94fdaaaa952b7f2ddc99be0adf52fe589a6e8cc0",
+    "analyzers-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analyzers-tests.stdout.txt": "29745a0d125a2529b1ff091aea1d85e0d8aa47133433087b6d6b4dc70b52df9f",
+    "bootstrap-runtime-receipt.json": "3d576dca6267fe761162ec52f61c2612a5e24926a9ac837d1fd09bb786df73fb",
+    "bootstrap.json": "539b3e83787c8b5c439b5d475b1538205999f3de735e22e27073b169dd2ca371",
+    "bootstrap.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bootstrap.stdout.txt": "1cd297b1fc65bc32d0c202bab3a63f99565c31e583365ff164906da39f9e4a56",
+    "cli-tests.json": "936be86b1646aeae2236130a7b2674720f655898a562e1c3e3efbb590aa24f42",
+    "cli-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli-tests.stdout.txt": "f61894c55babab7dd2441fbc2bc7dea6ac04d19a11ec6875d0f92d0620c637e7",
+    "cli-version-guard-removal-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli-version-guard-removal-initial.stdout.txt": "e704f88fbb2867fe63135ae1bf5f4f05f6dd5abaace3fbfdcf6b4c8f99e61972",
+    "cli-version-guard-removal.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli-version-guard-removal.stdout.txt": "fe99cad9801256f3805b1e88e27de74d54d9315be1b4b0873b5d35fb7ba8f3fd",
+    "core-tests.json": "5d92484e7382dae9e5aed988482046ce50649a485f82cae5a9e0bc2940300a3e",
+    "core-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core-tests.stdout.txt": "dd26c861aac451b315bd9eb07c0b35f15e2007b4408ec1b5153e442ec08c1e1e",
+    "dapr_cert_chain.mutation.stderr.txt": "e784182a9b11b7c3ec7bd5262148de45489acc9fa9ec98976aa722a33c097963",
+    "dapr_cert_chain.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dapr_cert_key.mutation.stderr.txt": "529971260f15322ae26a6b7aac72172b9d7947635a6696fe03883675c6966de1",
+    "dapr_cert_key.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dapr_controlplane_namespace.mutation.stderr.txt": "5aa88155f2f4e79639530aa7d5aeeb5c830862941c0408fb22658306903b7c8a",
+    "dapr_controlplane_namespace.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dapr_controlplane_trust_domain.mutation.stderr.txt": "4b74985d659a197ab1ce8c1d539e75a6120cf007c7f9d7bba2e158aab7badc9d",
+    "dapr_controlplane_trust_domain.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dapr_trust_anchors.mutation.stderr.txt": "694a1e517a78bc9636b8babff378f7d28bb4fec38e250c3d9ca103b7c69ada5a",
+    "dapr_trust_anchors.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dotnet-mutated-build-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dotnet-mutated-build-initial.stdout.txt": "aa45a2b27b160162ed8d4ea0e01f440dbc7fbc80b64f4be21a888d7d5683ed23",
+    "dotnet-mutated-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dotnet-mutated-build.stdout.txt": "ecdf7e7353574d9f682f27a182a112becfdbcedf063cee4b009ef974f2e1c0e1",
+    "dotnet-mutation-controls-initial.json": "f95f5353d3ca4bc24b12f38dc65f900bc48dbf2426b003e9483eba6dba284d87",
+    "dotnet-mutation-controls.json": "66ba1f1a2f1f983d7613c49eed027a2ca83db2ec64c1290cd881c2e1935ee137",
+    "dotnet-mutations-initial.json": "2b7db10014419f4198b0abc8b2d7149ac5d70a28f5865729599cd6d3fbb6b7d4",
+    "dotnet-mutations-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dotnet-mutations-initial.stdout.txt": "19235aa79ba33926b003be7ad8254cfb210cf3c20418ef60ae108cbf7c89b1d1",
+    "dotnet-mutations.json": "63ac825f68be56c4bb108e342514bbeee370ea1d8140a29038ee86388c61eacf",
+    "dotnet-mutations.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dotnet-mutations.stdout.txt": "19235aa79ba33926b003be7ad8254cfb210cf3c20418ef60ae108cbf7c89b1d1",
+    "host-dapr-after.json": "76c86886f62303735cbc99891dd34dc587b8223a19c2aba28f5ddd90f0bdcdb2",
+    "host-dapr-after.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host-dapr-after.stdout.txt": "4eb36d0266d6e582be326c7b37937d9e1c6583c88acf6773e8656b3e6fb94e8d",
+    "host-dapr-before.json": "4e8e294b325c17a577780d1dd071e5fedc96e6029e7642f3ab53d50238ad010b",
+    "host-dapr-before.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host-dapr-before.stdout.txt": "4eb36d0266d6e582be326c7b37937d9e1c6583c88acf6773e8656b3e6fb94e8d",
+    "host-process-preservation.json": "3e2d9735a44dda210ffd7f7eee9ddde402edb9bde57b677acf1aaa339266fc90",
+    "implementation-file-map.json": "32d4f43e7212b19da5a98525ddfea27f8e5f35f400b0dc7c6825af1ddc4a104e",
+    "intent-preservation.json": "059bbedde49ac411ccc379db8cfb49098f1b1507191ca8877eaebb4ceeb14c80",
+    "live-command.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "live-command.stdout.txt": "ad5fc24bb543d5fb27d31a859029211439fee6bfa2df7664721215e2205d234d",
+    "live-outside.json": "d20a630e61a1c92a97ab403e61d6e6e678895c154d6c14185d42db8057cedf82",
+    "live-placement.log": "126b00601e49e341dafd22b6ad395adce41db99643fbbbba6f1c39e0f07c31ff",
+    "live-redis.log": "0496e5c53ceff995785b5224322e7f95147356e31ac8a43946341f030929d693",
+    "live-result.json": "95ea1dc2b1ec5ec95307b7a5bd59b4d26546029d6905bd1d9c9bac42a61eec89",
+    "live-scheduler.log": "de0c1a4f5eab4ad4323e6cb8c73f965cd41272c5d49ec8ed92077ab43a7c3f68",
+    "live-sentry.log": "cddb4861c92b5aafc85961d4a6e2781d75fd23719d89a43c700bb31a3904c906",
+    "live-smoke.json": "2921abc7f31f2dc418ee91f2d2da54d068be1c3d076dadc95f2dece73ac82810",
+    "live-smoke.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "live-smoke.stdout.txt": "f1df5d5832e2962277da202fd3cdf1448b67bfdf89b51e4aff2527c9519c239d",
+    "manifest-tests.json": "67d3dc2c84862f4df8f4e643ccf711b5acad3849a889dc9188f7ee371a757e0c",
+    "manifest-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest-tests.stdout.txt": "05f6bf1a7895583e1a0efe802b242306133804d4d36f9ae7dd3dff3080f5cd98",
+    "mcp-tests.json": "e1432d4b5cab5b71407bd19b27a242fe5df20dec46cf5ce1e9078a42446ae27b",
+    "mcp-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mcp-tests.stdout.txt": "885e9cd7e05e62aa6844df69eaea9e6fb2a055dd2abe5041ca1955dc94455786",
+    "missing-certificate-timeout.mutation.stderr.txt": "6df9af8c2815b13b1f534fa882b75ffde22609647310e8141e96605e1865aa12",
+    "missing-certificate-timeout.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "missing-daemon-exit-guard.mutation.stderr.txt": "b1df4517f716003bc4ab53000482d373420aa55c4da849700e333f46df730474",
+    "missing-daemon-exit-guard.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "missing-port-timeout.mutation.stderr.txt": "f598b74667b91a15a49d94eb5115eb6a0c80cc9498d396e1dbdca76632b14543",
+    "missing-port-timeout.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "missing-sentry-exit-guard.mutation.stderr.txt": "be6b0a1f0727d9708830f774a444676d2136863c111d47c1d0e3e3d405ab3166",
+    "missing-sentry-exit-guard.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "namespace-initial.mutation.stderr.txt": "c3342b1933452bb0edf40c747cb3f3254b4552d59cf1675a6a97965b06994f1c",
+    "namespace-initial.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "namespace.mutation.stderr.txt": "b2b7772aea9e11af698bc84d076e06269fce223a7f0e3637d1cd514dbf41dee6",
+    "namespace.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parties-scope-removed-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parties-scope-removed-initial.stdout.txt": "df4d1cc477905355670d8ab0aa4cc88703922465676b1b3a1c0d7315dd3171d7",
+    "parties-scope-removed.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parties-scope-removed.stdout.txt": "acdd07514c8a79f24018ff4fabda588e2e5d37838a59030809d044604c1877b8",
+    "physical-root-guard-removal-initial.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "physical-root-guard-removal-initial.stdout.txt": "47616668270a16b694843e432b4406c14bb4aec541057916fa04fa4f69268071",
+    "physical-root-guard-removal.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "physical-root-guard-removal.stdout.txt": "e1ff6e96c9ecfef9bfca892906dc8d6b00a292baf5bbfba380281140082a1d87",
+    "python-mutation-controls.json": "49829394b971208ea6db284c18fc882c571db96e38aa6c17641fc300f789cc76",
+    "python-mutations-initial.json": "192a358772d147f2281166c08a58cb9a1fdc8e9daf3f51f1b026f0400887b357",
+    "python-mutations-initial.stderr.txt": "e5b2876a778dfe996476e89c5298227c4e9c07fbc597a2770ac495109b363096",
+    "python-mutations-initial.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "python-mutations.json": "d51013f47621fbf08b1225bc6530031a1ff4b9174673c75d67ad92c7d7750347",
+    "python-mutations.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "python-mutations.stdout.txt": "2ee188d6e0e8716406f8e01707129562be7324cd9b99246e34fdf79efc7f2d2e",
+    "record-command.py": "caf27d0901499eed5b9469d2c2246b3aaea9ac805f0ed372d3f48fbe6bcb7245",
+    "release-build.json": "9da6daf15535edf34f91280d214bf43e089fbd955a9c552c016f5375b6eabb46",
+    "release-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-build.stdout.txt": "e9958b1f28a3c8a2619174ec9a457753a95a68165cc990b89595cc64391e09e0",
+    "restore.json": "a02003c5a06ab0acba2cd8b63aa0ca09cccd81d8d2fc6f5da39d040d5b895d83",
+    "restore.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restore.stdout.txt": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+    "runtime-source-checkouts.json": "634f449a47155e1224f5eaedf69ae5e98cc529fd0c67315e9cd4d9843df46967",
+    "runtime-tests-final.json": "202d633e2947dd4988492ab523c76d712a8872aca56df8272f9beb9c720d299d",
+    "runtime-tests-final.stderr.txt": "71a2d9251969378a3874d882e4fbc6c01d508519df37a472a36cc934cc785227",
+    "runtime-tests-final.stdout.txt": "259c2bc440518d47e2f4777c63865c031fb1bec24929c7dd260b4e19419c5c88",
+    "runtime-tests.json": "644515cba868a2dd38481d022b7bc7885fc4fd82aa80750fb6fcb62c563c6f3e",
+    "runtime-tests.stderr.txt": "c4a79d343b777361252540ec990f990f009e20c0d334faab1776ad77f5296257",
+    "runtime-tests.stdout.txt": "5efcfd8600c254c94a2a33258c123468075924eca1c169ffa78bb8001d4bf828",
+    "smoke-discovery.json": "9960c05a443e41c04143ac38a46a98ccf5ab2b97ab3a81360eca74ef59202b70",
+    "smoke-discovery.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "smoke-discovery.stdout.txt": "186b33f7d0bafddd91d45e5dc642ba059c1a4079ca89d8faaf5d096644fb2328",
+    "source-binding.json": "2b7eaf8d69573cf6003f299827ad051e398f3318f0b40daf0ccabd21a71b8f63",
+    "source-eventstore-build.json": "04d6eb9ba8cb7801012387a00195cb62174478c138c200be380dd1ddfa5b9bd5",
+    "source-eventstore-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-eventstore-build.stdout.txt": "0303d1a2dbac79ea4c855fc616ccc8b1338e19deea0bcb23c9de93e5bce6682e",
+    "source-parties-build.json": "7e7645392f03325da71c7269042a71d334fafa83eaed09aeae5d833bce9052ab",
+    "source-parties-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-parties-build.stdout.txt": "3fa741ac584048f485fa7dce0abb2a3af7f9ee639a11da62f321741b1f2dcee8",
+    "source-tenants-build.json": "67a211c8731f9f29fd73ff9b9d58bcb994f711e058ff5a392ebdfc4d172e6c8d",
+    "source-tenants-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-tenants-build.stdout.txt": "3a32d6f38f859fc04742f3146cd7851cf436acd313516ac45855130905e922a4",
+    "verify-dotnet-mutations.py": "1b9d1b605747ea8fdc74b0265992aaf0aebb8b09f3bd30e08c129e6337da7e20",
+    "verify-python-mutations.py": "56e0090d870f21699656d4bc943b2328390542fbeeb5a0f28886884d15ecd571",
+    "whitespace-check.json": "f6cdbb5c3a195fab1415103d388a3befd43a2000b6dfb93508bfe7012df95a1f",
+    "whitespace-check.stderr.txt": "1601d1adffbf7344e816019309cf1fe8712c9ca8bdec615524745bcc5e0ed279",
+    "whitespace-check.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrong-placement-port.mutation.stderr.txt": "2d18535ee36d0380bd4eb4acbfc28e90c7a10acf18a7d888fdabab33d7934469",
+    "wrong-placement-port.mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "label": "review-fixes/outer-wrapper-mutations",
+  "command": [
+    "python3",
+    "_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/review-fixes/verify-outer-wrapper-mutations.py"
+  ],
+  "displayCommand": "python3 _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/review-fixes/verify-outer-wrapper-mutations.py",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.516,
+  "recordedAtUtc": "2026-10-24T02:27:14.190902+00:00",
+  "stdout": "review-fixes/outer-wrapper-mutations.stdout.txt",
+  "stderr": "review-fixes/outer-wrapper-mutations.stderr.txt"
+}

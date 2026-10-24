@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/story-4-12-pass-3-mutations.py", line 34, in <module>
+    if result.returncode == 0: raise RuntimeError('Mutation survived: '+label)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Mutation survived: namespace

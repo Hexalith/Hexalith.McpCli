@@ -1,0 +1,15 @@
+{
+  "label": "whitespace-check",
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "displayCommand": "git diff --check",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.165,
+  "recordedAtUtc": "2026-10-24T02:12:50.999398+00:00",
+  "stdout": "whitespace-check.stdout.txt",
+  "stderr": "whitespace-check.stderr.txt"
+}

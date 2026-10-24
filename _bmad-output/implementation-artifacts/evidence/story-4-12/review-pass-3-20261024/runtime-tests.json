@@ -1,0 +1,21 @@
+{
+  "label": "runtime-tests",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "tools/live-topology",
+    "-p",
+    "test_*.py"
+  ],
+  "displayCommand": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 4.377,
+  "recordedAtUtc": "2026-10-24T02:04:46.004629+00:00",
+  "stdout": "runtime-tests.stdout.txt",
+  "stderr": "runtime-tests.stderr.txt"
+}

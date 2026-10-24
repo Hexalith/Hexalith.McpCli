@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_wrapper_pins_the_effective_child_environment_to_private_services (__main__.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-pass3-mutation-5trpbqs3/test_runtime.py", line 124, in test_wrapper_pins_the_effective_child_environment_to_private_services
+    self.assertTrue(child[key], key)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: None is not true : DAPR_CERT_KEY
+
+----------------------------------------------------------------------
+Ran 1 test in 0.162s
+
+FAILED (failures=1)

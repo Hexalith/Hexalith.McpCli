@@ -1,0 +1,14 @@
+{
+  "label": "dotnet-mutations",
+  "command": [
+    "python3",
+    "/tmp/story-4-12-pass-3-dotnet-mutations.py"
+  ],
+  "displayCommand": "python3 /tmp/story-4-12-pass-3-dotnet-mutations.py",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 10.094,
+  "recordedAtUtc": "2026-10-24T02:11:47.673512+00:00",
+  "stdout": "dotnet-mutations.stdout.txt",
+  "stderr": "dotnet-mutations.stderr.txt"
+}

@@ -1,0 +1,138 @@
+{
+  "baseCommit": "2a857e39f03357285820c3b340cf889813e3f964",
+  "status": "accepted after implementation, parent matrix audit and three independent review layers",
+  "sourceMap": {
+    "file": "implementation-file-map.json",
+    "canonicalSha256": "643f5c3a74b86933ce44de1da8971e122c2c3d5fd9a6e1c3d03e63272e576d08",
+    "fileCount": 44,
+    "representation": "SHA-256 of exact working-tree bytes; map is compact sorted-key UTF-8 JSON without trailing newline"
+  },
+  "checks": "commands.json",
+  "nonLiveCounts": {
+    "abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "core": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    "cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    },
+    "manifest": {
+      "total": 210,
+      "failed": 0,
+      "succeeded": 210,
+      "skipped": 0
+    }
+  },
+  "nonLiveSummary": {
+    "passed": 1490,
+    "failed": 0,
+    "existingSkipped": 5
+  },
+  "pythonPassed": 17,
+  "live": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "testSeconds": 17.544,
+    "rejectedCredentialRequests": 2,
+    "ownedInfrastructureStopped": {
+      "sentry": 0,
+      "redis": 0,
+      "placement": 0,
+      "scheduler": 0
+    },
+    "remainingPrivateKeys": 0,
+    "hostApplicationsPreserved": 7
+  },
+  "review": {
+    "layers": 3,
+    "findings": 15,
+    "patched": 4,
+    "rejected": 11,
+    "newDeferred": 0,
+    "patches": [
+      "P33",
+      "P34",
+      "P35",
+      "P36"
+    ],
+    "focusedEvidence": "../review-fixes/summary.json"
+  },
+  "matrix": [
+    {
+      "state": "Qualified helpers, built source and available Dapr",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json",
+        "live-result.json"
+      ]
+    },
+    {
+      "state": "Missing helper or forbidden helper dependency",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Missing or undeclared root checkout",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Missing Dapr prerequisites",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Resources alive but Gateway unusable",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    },
+    {
+      "state": "Conflicting user topology",
+      "result": "passed",
+      "evidence": [
+        "manifest-tests.json"
+      ]
+    }
+  ],
+  "scopeLimits": [
+    "Full live vector semantics remain story 4.13.",
+    "Blocking source-build live CI remains story 4.14."
+  ],
+  "priorCheckpoint": "../verification.json",
+  "postValidationMetadataChange": {
+    "file": ".gitattributes",
+    "purpose": "Preserve exact recorded runtime stdout bytes and allow its timestamp-only records. No implementation or test code changed after verification."
+  }
+}

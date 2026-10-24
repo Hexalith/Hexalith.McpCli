@@ -11,3 +11,7 @@ _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/e
 _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/prior-ledger.tsv -text whitespace=-blank-at-eol,cr-at-eol
 # Preserve every byte of the frozen qualification packet, including its file-hash index.
 _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-source-candidate/** -text
+
+# Retain exact hash-bound live runtime output, including timestamp-only records.
+_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt -text whitespace=-blank-at-eol
+_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt -text whitespace=-blank-at-eol

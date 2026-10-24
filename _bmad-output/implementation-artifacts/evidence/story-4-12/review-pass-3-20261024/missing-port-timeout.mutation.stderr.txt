@@ -1,0 +1,29 @@
+E
+======================================================================
+ERROR: test_wrapper_refuses_readiness_failures_before_starting_the_child (__main__.RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child) (mode='unreachable-port')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-pass3-mutation-ci1k_vwb/test_runtime.py", line 147, in test_wrapper_refuses_readiness_failures_before_starting_the_child
+    result = self.wrapper_process(run_dir, mode)
+  File "/tmp/mcpcli-pass3-mutation-ci1k_vwb/test_runtime.py", line 238, in wrapper_process
+    return subprocess.run(command, env=environment, text=True, capture_output=True, timeout=10)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2154, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1268, in _check_timeout
+    raise TimeoutExpired(
+    ...<2 lines>...
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/tmp/mcpcli-pass3-mutation-ci1k_vwb/test_runtime.py', '--wrapper-fixture', '/tmp/tmpst41m9fk', 'unreachable-port']' timed out after 10 seconds
+
+----------------------------------------------------------------------
+Ran 1 test in 10.354s
+
+FAILED (errors=1)

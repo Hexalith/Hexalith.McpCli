@@ -1,0 +1,15 @@
+{
+  "label": "source-eventstore-build",
+  "command": [
+    "bash",
+    "-c",
+    "cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+  ],
+  "displayCommand": "bash -c 'cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 2.22,
+  "recordedAtUtc": "2026-10-24T02:29:00.682006+00:00",
+  "stdout": "source-eventstore-build.stdout.txt",
+  "stderr": "source-eventstore-build.stderr.txt"
+}

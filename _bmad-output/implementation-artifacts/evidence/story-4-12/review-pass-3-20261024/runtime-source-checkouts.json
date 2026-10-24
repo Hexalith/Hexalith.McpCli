@@ -1,0 +1,32 @@
+{
+  "references/Hexalith.EventStore": {
+    "gitlink": "2361e7b6760a7d0065c67661c2e95c2af94bdb4d",
+    "actualRevision": "2361e7b6760a7d0065c67661c2e95c2af94bdb4d",
+    "trackedWorkingTreeClean": true,
+    "builtOutputSha256": {
+      "references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.dll": "6106afc44b8c9b3135770b117c6939e5685a51cb8cb817284f8e856529d61cdc",
+      "references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.deps.json": "2db22cdf28912b553ffbad4a92ba58675804eeb85e0b07016a74f08bf0a5984c",
+      "references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.runtimeconfig.json": "f71b4c67b5233a19be9131b5fe4b45fe7829997cf2b42e762d6baa037da93863"
+    }
+  },
+  "references/Hexalith.Tenants": {
+    "gitlink": "4354b0e0687766c0995383f630ec54f9b2a29730",
+    "actualRevision": "4354b0e0687766c0995383f630ec54f9b2a29730",
+    "trackedWorkingTreeClean": true,
+    "builtOutputSha256": {
+      "references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll": "d59b23d9d54ba0f70295a8febdf1e8cc1d4842dbe13beda8dded0a4afb56c924",
+      "references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.deps.json": "6a06413fa21a4980332a3686927bd666a8a01fdeae1e35f65282a870ae0477ca",
+      "references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.runtimeconfig.json": "f71b4c67b5233a19be9131b5fe4b45fe7829997cf2b42e762d6baa037da93863"
+    }
+  },
+  "references/Hexalith.Parties": {
+    "gitlink": "3ace477aa61f6cd936bd9c06d99fd8fe59a205a8",
+    "actualRevision": "3ace477aa61f6cd936bd9c06d99fd8fe59a205a8",
+    "trackedWorkingTreeClean": true,
+    "builtOutputSha256": {
+      "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll": "6c9f80d90e0336fbed886d68e111bb9e8187bd44c457dd7ad8ded305dede23f4",
+      "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.deps.json": "49bcca2bdd440479cd1a57c69389fc13923d93b178c33f6a75a5efc45d65db86",
+      "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.runtimeconfig.json": "f71b4c67b5233a19be9131b5fe4b45fe7829997cf2b42e762d6baa037da93863"
+    }
+  }
+}

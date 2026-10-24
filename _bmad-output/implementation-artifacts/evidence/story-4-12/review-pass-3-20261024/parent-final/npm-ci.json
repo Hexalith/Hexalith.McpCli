@@ -1,0 +1,14 @@
+{
+  "label": "npm-ci",
+  "command": [
+    "npm",
+    "ci"
+  ],
+  "displayCommand": "npm ci",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 6.781,
+  "recordedAtUtc": "2026-10-24T02:29:29.612194+00:00",
+  "stdout": "npm-ci.stdout.txt",
+  "stderr": "npm-ci.stderr.txt"
+}

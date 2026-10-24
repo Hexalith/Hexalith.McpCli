@@ -1,0 +1,79 @@
+[
+  {
+    "label": "dotnet-mutated-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu",
+    "exitCode": 0,
+    "elapsedSeconds": 2.255,
+    "expectedSuccess": true,
+    "stdout": "dotnet-mutated-build.stdout.txt",
+    "stderr": "dotnet-mutated-build.stderr.txt"
+  },
+  {
+    "label": "physical-root-guard-removal",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "*LinkedReferencesParentIsNotAQualifiedCheckout"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu",
+    "exitCode": 1,
+    "elapsedSeconds": 0.312,
+    "expectedSuccess": false,
+    "stdout": "physical-root-guard-removal.stdout.txt",
+    "stderr": "physical-root-guard-removal.stderr.txt"
+  },
+  {
+    "label": "cli-version-guard-removal",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "*MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu",
+    "exitCode": 1,
+    "elapsedSeconds": 6.765,
+    "expectedSuccess": false,
+    "stdout": "cli-version-guard-removal.stdout.txt",
+    "stderr": "cli-version-guard-removal.stderr.txt"
+  },
+  {
+    "label": "actor-state-disabled",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu",
+    "exitCode": 1,
+    "elapsedSeconds": 0.302,
+    "expectedSuccess": false,
+    "stdout": "actor-state-disabled.stdout.txt",
+    "stderr": "actor-state-disabled.stderr.txt"
+  },
+  {
+    "label": "parties-scope-removed",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-cv6_hilu",
+    "exitCode": 1,
+    "elapsedSeconds": 0.302,
+    "expectedSuccess": false,
+    "stdout": "parties-scope-removed.stdout.txt",
+    "stderr": "parties-scope-removed.stderr.txt"
+  }
+]

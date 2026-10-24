@@ -1,0 +1,15 @@
+{
+  "label": "python-mutations",
+  "command": [
+    "python3",
+    "/tmp/story-4-12-pass-3-mutations.py"
+  ],
+  "displayCommand": "python3 /tmp/story-4-12-pass-3-mutations.py",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 1,
+  "elapsedSeconds": 0.572,
+  "recordedAtUtc": "2026-10-24T02:06:20.587941+00:00",
+  "stdout": "python-mutations-initial.stdout.txt",
+  "stderr": "python-mutations-initial.stderr.txt",
+  "diagnostic": "Initial mutation removed only the redundant first NAMESPACE assignment; the later certificate-environment update still set NAMESPACE. The corrected control removes both assignments and all 11 controls reject their mutations."
+}

@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_wrapper_refuses_readiness_failures_before_starting_the_child (__main__.RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child) (mode='readiness-daemon-exit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-pass3-mutation-9tvqfnw5/test_runtime.py", line 151, in test_wrapper_refuses_readiness_failures_before_starting_the_child
+    self.assertEqual({'type': error_type, 'message': message}, receipt['error'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'typ[19 chars] 'message': 'redis exited before prerequisites were ready: 19'} != {'typ[19 chars] 'message': 'redis exited while the command ran: 19'}
++ {'message': 'redis exited while the command ran: 19', 'type': 'RuntimeError'}
+- {'message': 'redis exited before prerequisites were ready: 19',
+-  'type': 'RuntimeError'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.496s
+
+FAILED (failures=1)

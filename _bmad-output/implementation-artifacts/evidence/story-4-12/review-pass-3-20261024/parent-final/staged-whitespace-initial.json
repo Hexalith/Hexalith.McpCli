@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check"
+  ],
+  "exitCode": 2,
+  "stdout": "_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt:506: trailing whitespace.\n+      74: 2026-10-24T02:06:51.3120000Z \n_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt:512: trailing whitespace.\n+      79: 2026-10-24T02:06:51.3250000Z \n_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt:518: trailing whitespace.\n+      79: 2026-10-24T02:06:51.3120000Z \n_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt:518: trailing whitespace.\n+      74: 2026-10-24T02:29:07.6120000Z \n_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt:526: trailing whitespace.\n+      79: 2026-10-24T02:29:07.6600000Z \n_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt:530: trailing whitespace.\n+      79: 2026-10-24T02:29:07.6600000Z \n",
+  "stderr": "",
+  "qualifiesAcceptance": false,
+  "reason": "Untouched runtime stdout contains timestamp-only records ending in a space; preserve exact hash-bound bytes through targeted Git attributes."
+}

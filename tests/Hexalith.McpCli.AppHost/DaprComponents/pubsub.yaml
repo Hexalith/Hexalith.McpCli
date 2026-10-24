@@ -1,13 +1,26 @@
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: pubsub
-spec:
-  type: pubsub.redis
-  version: v1
-  metadata:
-    - name: redisHost
-      value: localhost:6379
-    - name: redisPassword
-      value: ''
-scopes: [eventstore, tenants, parties]
+{
+  "apiVersion": "dapr.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "pubsub"
+  },
+  "spec": {
+    "type": "pubsub.redis",
+    "version": "v1",
+    "metadata": [
+      {
+        "name": "redisHost",
+        "value": "localhost:6379"
+      },
+      {
+        "name": "redisPassword",
+        "value": ""
+      }
+    ]
+  },
+  "scopes": [
+    "eventstore",
+    "tenants",
+    "parties"
+  ]
+}

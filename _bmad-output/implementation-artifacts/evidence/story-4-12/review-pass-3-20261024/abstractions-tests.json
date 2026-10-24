@@ -1,0 +1,18 @@
+{
+  "label": "abstractions-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Abstractions.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 1.167,
+  "recordedAtUtc": "2026-10-24T02:05:48.929317+00:00",
+  "stdout": "abstractions-tests.stdout.txt",
+  "stderr": "abstractions-tests.stderr.txt"
+}

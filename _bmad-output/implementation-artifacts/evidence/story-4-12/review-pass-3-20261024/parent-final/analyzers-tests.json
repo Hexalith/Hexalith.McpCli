@@ -1,0 +1,18 @@
+{
+  "label": "analyzers-tests",
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Analyzers.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "displayCommand": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 3.072,
+  "recordedAtUtc": "2026-10-24T02:27:59.986684+00:00",
+  "stdout": "analyzers-tests.stdout.txt",
+  "stderr": "analyzers-tests.stderr.txt"
+}

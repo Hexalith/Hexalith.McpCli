@@ -7,7 +7,9 @@ if (args.Contains("rev-parse") && int.TryParse(Environment.GetEnvironmentVariabl
 if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_DELAY_MS"), out int delay)) Thread.Sleep(delay);
 if (args.SequenceEqual(new[] { "--version" }))
 {
-    Console.WriteLine("CLI version: test-fixture");
+    if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_VERSION_EXIT"), out int versionExit) && versionExit != 0)
+        return versionExit;
+    Console.WriteLine(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_VERSION_OUTPUT") ?? "CLI version: test-fixture");
     return 0;
 }
 

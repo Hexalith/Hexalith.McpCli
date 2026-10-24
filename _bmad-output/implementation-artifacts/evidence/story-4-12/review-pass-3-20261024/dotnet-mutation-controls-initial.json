@@ -1,0 +1,79 @@
+[
+  {
+    "label": "dotnet-mutated-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa",
+    "exitCode": 0,
+    "elapsedSeconds": 2.251,
+    "expectedSuccess": true,
+    "stdout": "dotnet-mutated-build-initial.stdout.txt",
+    "stderr": "dotnet-mutated-build-initial.stderr.txt"
+  },
+  {
+    "label": "physical-root-guard-removal",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "*LinkedReferencesParentIsNotAQualifiedCheckout"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa",
+    "exitCode": 1,
+    "elapsedSeconds": 0.322,
+    "expectedSuccess": false,
+    "stdout": "physical-root-guard-removal-initial.stdout.txt",
+    "stderr": "physical-root-guard-removal-initial.stderr.txt"
+  },
+  {
+    "label": "cli-version-guard-removal",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "*MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa",
+    "exitCode": 1,
+    "elapsedSeconds": 6.733,
+    "expectedSuccess": false,
+    "stdout": "cli-version-guard-removal-initial.stdout.txt",
+    "stderr": "cli-version-guard-removal-initial.stderr.txt"
+  },
+  {
+    "label": "actor-state-disabled",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa",
+    "exitCode": 1,
+    "elapsedSeconds": 0.3,
+    "expectedSuccess": false,
+    "stdout": "actor-state-disabled-initial.stdout.txt",
+    "stderr": "actor-state-disabled-initial.stderr.txt"
+  },
+  {
+    "label": "parties-scope-removed",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests"
+    ],
+    "cwd": "/tmp/mcpcli-pass3-dotnet-mutations-eiojompa",
+    "exitCode": 1,
+    "elapsedSeconds": 0.291,
+    "expectedSuccess": false,
+    "stdout": "parties-scope-removed-initial.stdout.txt",
+    "stderr": "parties-scope-removed-initial.stderr.txt"
+  }
+]

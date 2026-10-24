@@ -15,6 +15,8 @@ public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) :
     [InlineData("basic", "Basic platform Redis, placement or scheduler prerequisites are unavailable.")]
     [InlineData("sentry", "Dapr Sentry is not reachable on localhost:50001.")]
     [InlineData("cli", "Dapr CLI is not available on PATH.")]
+    [InlineData("broken-cli", "Dapr CLI '--version' did not report an installed CLI.")]
+    [InlineData("malformed-cli", "Dapr CLI '--version' did not report an installed CLI.")]
     [InlineData("slow-cli", "Dapr CLI '--version' exceeded 3 seconds.")]
     [InlineData("DAPR_TRUST_ANCHORS", "Required mTLS credential DAPR_TRUST_ANCHORS is missing.")]
     [InlineData("DAPR_CERT_CHAIN", "Required mTLS credential DAPR_CERT_CHAIN is missing.")]
@@ -78,6 +80,8 @@ public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) :
             start.Environment["DAPR_CONTROLPLANE_TRUST_DOMAIN"] = missing == "DAPR_CONTROLPLANE_TRUST_DOMAIN" ? string.Empty : "public";
             start.Environment["MCPCLI_ISOLATED_TOPOLOGY"] = "1";
             start.Environment["MCPCLI_TEST_DAPR_DELAY_MS"] = missing == "slow-cli" ? "10000" : null;
+            start.Environment["MCPCLI_TEST_DAPR_VERSION_EXIT"] = missing == "broken-cli" ? "7" : null;
+            start.Environment["MCPCLI_TEST_DAPR_VERSION_OUTPUT"] = missing == "malformed-cli" ? "Foreign executable version 1.0" : null;
             start.Environment["HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT"] = port;
             start.Environment["HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT"] = port;
             using Process process = Process.Start(start)!;
@@ -128,7 +132,7 @@ public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) :
         Assert.Equal(0, process.ExitCode);
         Assert.Equal(string.Empty, await error);
         Assert.Contains("Cannot test missing Sentry: localhost:50001 already has a listener.", stdout);
-        Assert.Contains("Total: 10, Errors: 0, Failed: 0, Skipped: 1", stdout);
+        Assert.Contains("Total: 12, Errors: 0, Failed: 0, Skipped: 1", stdout);
     }
 
     /// <summary>Sentry transport probing accepts a real listener and rejects a reserved non-listening port.</summary>

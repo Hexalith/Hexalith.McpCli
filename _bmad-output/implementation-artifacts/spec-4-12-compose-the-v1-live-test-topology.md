@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -107,6 +107,23 @@ Full vector semantics and blocking CI source-build wiring remain 4.13 and 4.14.
   recorded result distinguishes skipped, failed and genuinely passed live proof.
 
 ## Implementation Notes
+
+- Final status (2026-10-24): all P25–P36 patches, parent acceptance and workflow
+  review are complete. Final verification passed 1,490 non-live .NET tests, 17
+  Python checks and one isolated live smoke without skips. Earlier pending
+  notes below are historical; current evidence is
+  `evidence/story-4-12/review-pass-3-20261024/parent-final/verification.json`.
+
+- Review pass 3 patches P25–P32 are implemented. The Release warnings-as-errors
+  solution build and all three bounded root server builds passed. Six individual
+  non-live suites passed 1,485 tests with zero failures and five existing skips;
+  all 205 Manifest cases executed. All 15 maintained Python checks passed, and
+  discovery lists exactly one live smoke. The fresh, hash-verified isolated
+  runtime passed that smoke without skips in 25.627 seconds; all four private
+  daemons exited 0, no private keys remained, and host Dapr identities were
+  preserved. Current exact commands, source binding, patch and acceptance-matrix
+  mapping are in `evidence/story-4-12/review-pass-3-20261024/`. Parent acceptance
+  audit and workflow review remain pending for this resumed implementation.
 
 - Code review pass 2 patches P15–P24 are implemented. Fresh restore and the
   final Release warnings-as-errors solution build passed; all 201 Manifest cases
@@ -590,7 +607,7 @@ Parent checks during triage:
 - `ExistingSentryListenerDoesNotFailPrerequisiteRun` took 9.1 s, and 8.9 s pinned to one core, including the P16 workspace copy (budget 30 s). CI run `40021086071` at `c1a3e46` passed.
 - `private-runtime/README.md` in the evidence explains the veth pair: "The private veth pair supplies multicast-capable networking". The maintained `run-isolated.py` does not carry that explanation.
 
-- [ ] [Review][Patch] P25 — medium. The wrapper's environment handoff to the child is mostly unpinned. [tools/live-topology/run-isolated.py:58]
+- [x] [Review][Patch] P25 — medium. The wrapper's environment handoff to the child is mostly unpinned. [tools/live-topology/run-isolated.py:58]
   - `inside()` sets three groups of variables:
     - the placement and scheduler port overrides and `Dapr__*` (`:58`);
     - `NAMESPACE`, `DAPR_CONTROLPLANE_TRUST_DOMAIN` and `DAPR_CONTROLPLANE_NAMESPACE` (`:77`);
@@ -598,7 +615,7 @@ Parent checks during triage:
   - `TopologyPrerequisites.GetMtlsFailureAsync` and the platform's `DaprLocalEndpoints` consume these variables.
   - The `success` child prints only the Redis port, the isolation flag and `DAPR_CERT_KEY`. VG deleted `DAPR_CONTROLPLANE_TRUST_DOMAIN` and `DAPR_TRUST_ANCHORS` and changed the placement port to 50005; all 14 Python tests passed.
   - Fix: make the `success` child dump all six mTLS and control-plane variables and the placement, scheduler and Gateway port variables. Assert their exact values, or that they are non-empty for the certificates. Also assert that the placement and scheduler ports equal the `--port` arguments of the services recorded in `result.json` (VG).
-- [ ] [Review][Patch] P26 — medium. The wrapper's readiness failure guards are untested. [tools/live-topology/run-isolated.py:123]
+- [x] [Review][Patch] P26 — medium. The wrapper's readiness failure guards are untested. [tools/live-topology/run-isolated.py:123]
   - Untested guards:
     - "Sentry exited before generating certificates" (`:123`);
     - "Private Sentry certificates were not ready" (`:125`);
@@ -610,18 +627,18 @@ Parent checks during triage:
     - Move the 40 s readiness bound into a module constant, following P18's `COMMAND_TIMEOUT_SECONDS`.
     - Add fixture modes for: Sentry exits early, certificates never appear, a daemon exits during readiness, and a port never connects.
     - For each mode, assert exit 1, the exact `result.json` error and that no `command.stdout.txt` exists (VG, AA).
-- [ ] [Review][Patch] P27 — medium. The fixture's broken-CLI prerequisite branch is untested. [tests/Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs:27]
+- [x] [Review][Patch] P27 — medium. The fixture's broken-CLI prerequisite branch is untested. [tests/Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs:27]
   - "Dapr CLI '--version' did not report an installed CLI." is never reached: the stub always prints `CLI version: test-fixture` and exits 0 for `--version` (`tests/fixtures/Topology.DaprStub/Program.cs:10`).
   - Removing the check makes a broken or foreign `dapr` fail later at `dapr list` instead of producing the standard skip.
   - Fix: let the stub fail `--version` under a test variable. Add a `DaprPrerequisiteTests` row asserting the standard skip prefix plus this exact detail, and update the nested `Total: 10` count (`DaprPrerequisiteTests.cs:131`) (VG, AA).
-- [ ] [Review][Patch] P28 — medium. `ValidateWorkspace`'s physical top-level comparison is untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:76]
+- [x] [Review][Patch] P28 — medium. `ValidateWorkspace`'s physical top-level comparison is untested. [tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs:76]
   - Every negative case fails earlier:
     - the forged `.git` file at git's nonzero exit, which uses the same message;
     - the sibling link at `LinkTarget`;
     - the alternate layouts at the missing project.
   - Removing the comparison stays green. Yet pass 1 rejected the "symlinked `references/` parent" finding precisely because this comparison rejects it.
   - Fix: add a `TopologyConfigurationTests` case in which `references` is a symlink to another directory, and assert the exact "is not its own Git working tree" message (AA).
-- [ ] [Review][Patch] P29 — medium. The contents of `statestore.yaml` and `pubsub.yaml` are unpinned. [tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml:9]
+- [x] [Review][Patch] P29 — medium. The contents of `statestore.yaml` and `pubsub.yaml` are unpinned. [tests/Hexalith.McpCli.AppHost/DaprComponents/statestore.yaml:9]
   - Composition inspection checks only each component's `LocalPath`. Nothing checks:
     - `redisHost: localhost:6379`, which must match the wrapper's private Redis;
     - `actorStateStore: 'true'`, `keyPrefix`, or the component names `statestore` and `pubsub` (the Gateway's `PubSubName` default is `pubsub`);
@@ -629,14 +646,14 @@ Parent checks during triage:
   - Dropping `parties` from `scopes` or flipping `actorStateStore` keeps CI green. Even the live `ListTenants` smoke cannot see the Parties scope.
   - The live-lane remainder of VG's finding belongs to Story 4.14 by the frozen spec.
   - Fix: rewrite both files as JSON, as `accesscontrol.yaml` already is, and add a content test modeled on `TopologyAccessControlTests` that also cross-checks the Redis port with `run-isolated.py` (BH, VG).
-- [ ] [Review][Patch] P30 — medium. The Aspire CLI bundle is an undocumented live prerequisite. [tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj:4]
+- [x] [Review][Patch] P30 — medium. The Aspire CLI bundle is an undocumented live prerequisite. [tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj:4]
   - `AspireUseCliBundle=true` means DCP and the dashboard come from the developer's `~/.aspire/bundle`, not from Builds-pinned packages. That bundle is 13.6.1 here, while the SDK and hosting packages are 13.6.3.
   - Neither README lists the Aspire CLI among the live requirements. On a host without it, the documented live command fails at orchestration startup, and the discovery CI job cannot notice because building does not need DCP.
   - Fix: name the Aspire CLI bundle and its version in `README.md:251` and the `tools/live-topology/README.md:10` requirements. Moving DCP to Builds-pinned packages would be an upstream catalog change outside this patch (BH).
-- [ ] [Review][Patch] P31 — low. The maintained wrapper does not say why it creates the veth pair. [tools/live-topology/run-isolated.py:50]
+- [x] [Review][Patch] P31 — low. The maintained wrapper does not say why it creates the veth pair. [tools/live-topology/run-isolated.py:50]
   - `mcpcli0`/`mcpcli1` with `172.31.251.1/24` look unused. The qualification evidence says the pair supplies multicast-capable networking, so a maintainer reusing the tool in 4.13 or 4.14 could remove it and break the private topology.
   - Fix: add a one-line comment stating that purpose (BH).
-- [ ] [Review][Patch] P32 — low. The bootstrap leaves its pulled images in the host Docker store without saying so. [tools/live-topology/README.md:21]
+- [x] [Review][Patch] P32 — low. The bootstrap leaves its pulled images in the host Docker store without saying so. [tools/live-topology/README.md:21]
   - The bootstrap pulls `daprio/dapr` and `redis` by digest and removes only its extraction containers. The README describes that cleanup but not that both images remain.
   - Fix: add one sentence noting that the images remain and naming the `docker image rm` cleanup for the two pinned references (BH).
 
@@ -673,3 +690,67 @@ Parent checks during triage:
 - `low` — Helper admission pins identity, not the content hash (AA). Only nuget.org is configured, and published versions are immutable there. A hash literal adds another value to maintain on every bump.
 - `false` — The shared fixture's Tenants-only identity is a module-specific branch (AA). The fixture has no branch on module, and the claims serve the single required query. Parameterizing identities is Story 4.13 work.
 - `low` — JWT validation is wired through configuration keys rather than the helpers (AA). The helpers require Keycloak resources, which the Never clause forbids. The remaining fix is spec wording.
+
+### Parent acceptance audit for review pass 3 (2026-10-24)
+
+The parent inspected the topology implementation and resumed code delta, checked
+every execution task and all six frozen matrix rows, and independently verified
+all 44 implementation hashes and 134 receipt-file hashes against the current
+working tree. All 20 recorded validation commands exited successfully. The six
+non-live suites passed 1,485 tests with five existing unrelated skips; every one
+of the 205 Manifest cases ran. The isolated live smoke passed without skips,
+rejected missing and wrong-key credentials, and returned the authenticated
+document. All four private daemons exited 0, and no private keys remained.
+Frozen intent and historical qualification packets remain unchanged. Exact
+audit totals are recorded in `evidence/story-4-12/review-pass-3-20261024/parent-acceptance.json`.
+Workflow review follows this audit.
+
+### Workflow review of pass 3 implementation (2026-10-24)
+
+All three context-free review layers completed before triage. Each of their
+fifteen findings was classified separately before grouping. Four independent
+root causes survive as direct patches; no intent gap, spec loopback, publication,
+dependency update or new deferral is needed.
+
+| Finding | Verdict | Route | Evidence and disposition |
+| --- | --- | --- | --- |
+| G-BH1 | low | patch | The new broken-CLI row covers nonzero exit only; the stub always prints the accepted version marker on zero exit. Add an exit-zero malformed-version row protecting the existing output-format predicate. |
+| G-BH2 | low | reject | carried: pass-2 rejected the untested caller-cancellation exclusion. Removing it changes only the diagnostic for an already cancelled call; the caller still receives cancellation and the run fails. |
+| G-BH3 | low | patch | Signing-key tests cover ASCII short and 32-byte inputs but not 31 bytes or a shorter multibyte string meeting the byte threshold. Direct boundary cases protect the specified UTF-8 byte rule. |
+| G-BH4 | low | reject | A failing version probe loses its captured stderr, but retains the exact '--version' prerequisite diagnostic and standard skip. Additional result formatting/length handling addresses uncommon broken-tool failures and adds branches. |
+| G-BH5 | low | reject | carried: pass-1 rejected Dapr version pin enforcement; the documented version is a prerequisite, and a wrong runtime fails visibly. A supported-version check adds a guard. |
+| G-BH6 | low | reject | A missing Aspire bundle fails at the platform's orchestration startup. P30 explicitly documents the required bundle; reproducing platform bundle resolution in the fixture adds prerequisite logic for an unmet documented requirement. |
+| G-BH7 | medium | patch | The actual outer entry point accepts an empty command, creates infrastructure and reports exit zero without a test. Refuse empty commands before any directory or namespace setup; cover both empty syntaxes. |
+| G-BH8 | low | reject | An ip setup failure retains its command and exit status but hides captured stderr. This occurs before launch in an unsupported/failed namespace setup; adding a new exception/receipt boundary is disproportionate to this uncommon diagnostic loss. |
+| G-BH9 | low | reject | A failing discovery process can leave stdout only in the redirected file, although stderr and the nonzero step remain visible. No actual failure of this fixed discovery invocation after a passing build was demonstrated; extra CI failure-handling branches address an uncommon diagnostic state. |
+| G-BH10 | low | reject | The current source map explicitly binds exact uncommitted working-tree bytes, unlike the immutable upstream qualification packet. A different checkout's line-ending conversion can invalidate that historical snapshot; a repo-wide line-ending policy or normalized replacement would change the evidence model rather than directly correct this run. |
+| G-EC1 | low | reject | carried: F-BH1 already records the reproduced inherited-output-descendant timeout overrun. Installed git/Dapr were not shown to abandon pipe-owning children; extra stream/descendant cancellation remains rejected and the supported run retains its outer deadline. |
+| G-EC2 | low | reject | carried: R-BH3 and F-EC2 already record the ambiguous docker-create timeout/termination orphan. Exact recovery naming/state adds complexity for a never-started extraction container; no running user container is affected. |
+| G-EC3 | low | reject | carried: R-BH4 already records the narrow exit-between-timeout-and-SIGKILL race. Namespace destruction still terminates private processes; independent shutdown recovery remains rejected. |
+| G-EC4 | low | reject | carried: R-EC3 already records theoretical fragmented Redis PONG reads on private local loopback. An accumulation loop remains disproportionate for the short single-write reply in the supported environment. |
+| G-VG1 | medium | patch | Trusted pre-verified gap: deleting outer '*command' forwarding leaves all fifteen Python tests green and permits success without a smoke. Exercise the configured public CLI through a controlled namespace launcher and real child, asserting its marker/output, receipt and nonzero status. |
+
+- [x] [Review][Patch] P33 — Add the malformed exit-zero Dapr version-output row and update the nested theory count.
+- [x] [Review][Patch] P34 — Pin 31-byte rejection and multibyte 32-byte signing-key admission.
+- [x] [Review][Patch] P35 — Refuse empty outer wrapper commands before creating files or entering namespaces.
+- [x] [Review][Patch] P36 — Exercise actual outer CLI command forwarding and exit propagation with a real child under the inert fixture.
+
+### Final workflow-review closure (2026-10-24)
+
+P33–P36 are resolved. The parent reviewed the final patches and reran fresh
+restore, Release warnings-as-errors solution build, three bounded source-server
+builds, six individual non-live suites, seventeen Python tests, exact one-smoke
+discovery and the isolated live smoke. All checks passed: 1,490 non-live .NET
+tests, zero failed and five existing unrelated skips; all 210 Manifest cases ran.
+The live smoke passed one test without skips in 17.544 seconds, with two real
+401 rejections before the authenticated document. All four private daemons
+exited 0, no private keys remained, and all seven host Dapr applications were
+preserved. Every frozen matrix row passed its executed checks.
+
+The three independent review layers produced fifteen findings. Four direct
+patches are complete and eleven findings were rejected, including six carried
+earlier dispositions. No new work was deferred. Existing ledger entries remain
+unchanged. Final commands, source bindings and sanitized results are recorded
+in `evidence/story-4-12/review-pass-3-20261024/parent-final/verification.json`.
+The earlier pass-3 implementation checkpoint remains unchanged and is superseded
+by this final parent acceptance. Frozen intent and historical packets are intact.

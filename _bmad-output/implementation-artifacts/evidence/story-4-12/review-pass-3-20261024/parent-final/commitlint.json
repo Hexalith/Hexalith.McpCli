@@ -1,0 +1,16 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "/tmp/mcpcli-4-12-commit-8gxh6e6r.txt",
+  "stdinSha256": "19ee34a4216e889c936174bbe052644de6a6dc53a0efb080240821fc6ed7c509",
+  "pinnedCliVersion": "21.2.2",
+  "exitCode": 0,
+  "elapsedSeconds": 0.47,
+  "stdout": "commitlint.stdout.txt",
+  "stderr": "commitlint.stderr.txt"
+}

@@ -1,0 +1,15 @@
+{
+  "label": "source-parties-build",
+  "command": [
+    "bash",
+    "-c",
+    "cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+  ],
+  "displayCommand": "bash -c 'cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true'",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 1.619,
+  "recordedAtUtc": "2026-10-24T02:29:03.719626+00:00",
+  "stdout": "source-parties-build.stdout.txt",
+  "stderr": "source-parties-build.stderr.txt"
+}

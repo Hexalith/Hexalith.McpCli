@@ -9,7 +9,9 @@ non-launching AppHost preflight and composition inspection remain available.
 
 Requirements: Linux amd64, Python 3, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
-Docker with a successful `docker info`, Dapr CLI 1.18.2 and runtime 1.18.7 at
+Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
+bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.3),
+Dapr CLI 1.18.2 and runtime 1.18.7 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. Install Dapr independently without initializing or changing a user
 environment. Build the three root source servers and integration tests using the
@@ -20,6 +22,8 @@ native binaries from digest-pinned official images. The bootstrap verifies each
 SHA-256 in `binaries.json`, refuses existing destination directories, and removes
 only its own never-started extraction containers by exact ID. Docker pulls have
 a 300-second bound; create, copy and removal commands have separate bounds.
+Both pulled images remain in the host Docker store; remove them when no longer
+needed with `docker image rm daprio/dapr@sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf`.
 
 If bootstrap fails, choose a fresh task-owned directory before retrying, for
 example by rerunning `private_runtime="$(mktemp -d)/runtime"`. A failed destination

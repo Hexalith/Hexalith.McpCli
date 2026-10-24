@@ -1,0 +1,22 @@
+F
+======================================================================
+FAIL: test_wrapper_refuses_readiness_failures_before_starting_the_child (__main__.RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child) (mode='sentry-exit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-pass3-mutation-itpu4tgc/test_runtime.py", line 151, in test_wrapper_refuses_readiness_failures_before_starting_the_child
+    self.assertEqual({'type': error_type, 'message': message}, receipt['error'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'type': 'RuntimeError', 'message': 'Sentry exited [31 chars] 17'} != {'type': 'TimeoutError', 'message': 'Private Sentry[25 chars]ady'}
+- {'message': 'Sentry exited before generating certificates: 17',
++ {'message': 'Private Sentry certificates were not ready',
+-  'type': 'RuntimeError'}
+?           ^^^^
+
++  'type': 'TimeoutError'}
+?           ^   +++
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.729s
+
+FAILED (failures=1)

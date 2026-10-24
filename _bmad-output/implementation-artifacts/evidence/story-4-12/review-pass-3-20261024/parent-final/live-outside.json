@@ -1,0 +1,9 @@
+{
+  "namespaces": {
+    "user": "user:[4026531837]",
+    "pid": "pid:[4026532221]",
+    "net": "net:[4026531840]",
+    "mnt": "mnt:[4026532219]"
+  },
+  "cwd": "/home/administrator/projects/hexalith/mcpcli"
+}

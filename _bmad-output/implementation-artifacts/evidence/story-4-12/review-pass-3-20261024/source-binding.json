@@ -1,0 +1,8 @@
+{
+  "file": "implementation-file-map.json",
+  "canonicalSha256": "ed1fa4b028324ca8ba0415f3c2152d9c83d54a744c9c07139d8cea938a3b5e71",
+  "canonicalRepresentation": "UTF-8 JSON with sorted keys, compact separators and unescaped Unicode, without a final newline",
+  "implementationFiles": 44,
+  "repositoryRevision": "2a857e39f03357285820c3b340cf889813e3f964",
+  "includesUncommittedChanges": true
+}

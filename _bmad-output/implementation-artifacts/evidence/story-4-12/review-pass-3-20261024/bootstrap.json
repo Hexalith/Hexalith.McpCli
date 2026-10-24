@@ -1,0 +1,19 @@
+{
+  "label": "bootstrap",
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "900",
+    "python3",
+    "tools/live-topology/bootstrap-runtime.py",
+    "/tmp/story-4-12-pass-3-20261024-lnlNCH/runtime"
+  ],
+  "displayCommand": "timeout --signal=TERM --kill-after=20s 900 python3 tools/live-topology/bootstrap-runtime.py /tmp/story-4-12-pass-3-20261024-lnlNCH/runtime",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 3.932,
+  "recordedAtUtc": "2026-10-24T02:05:04.220101+00:00",
+  "stdout": "bootstrap.stdout.txt",
+  "stderr": "bootstrap.stderr.txt"
+}

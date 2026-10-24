@@ -1,0 +1,14 @@
+{
+  "sourceMapVerified": 44,
+  "receiptHashesVerified": 134,
+  "successfulCommandsVerified": 20,
+  "nonLivePassed": 1485,
+  "nonLiveSkipped": 5,
+  "livePassed": 1,
+  "liveSkipped": 0,
+  "matrixRowsPassed": 6,
+  "frozenIntentPreserved": true,
+  "allTasksChecked": true,
+  "sourceMapCanonicalSha256": "ed1fa4b028324ca8ba0415f3c2152d9c83d54a744c9c07139d8cea938a3b5e71",
+  "diffFile": "/tmp/mcpcli-4-12-review-m68rl5f6.diff"
+}

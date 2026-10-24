@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch (__main__.RuntimeTests.test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-wrapper-review-mutation-mj75w8cd/test_runtime.py", line 186, in test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch
+    self.assertEqual(23, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 23 != 0 : Isolated run: /tmp/tmpyz1nqob9/runtime/runs/20261024T022714Z-7dcd2daa
+Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.113s
+
+FAILED (failures=1)

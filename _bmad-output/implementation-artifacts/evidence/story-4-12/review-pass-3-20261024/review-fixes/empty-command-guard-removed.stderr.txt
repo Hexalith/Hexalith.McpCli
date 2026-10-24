@@ -1,0 +1,23 @@
+FF
+======================================================================
+FAIL: test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces (__main__.RuntimeTests.test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces) (arguments=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-wrapper-review-mutation-_l01h8m5/test_runtime.py", line 174, in test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces
+    self.assertEqual(1, result.returncode)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces (__main__.RuntimeTests.test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces) (arguments=['--'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-wrapper-review-mutation-_l01h8m5/test_runtime.py", line 174, in test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces
+    self.assertEqual(1, result.returncode)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.214s
+
+FAILED (failures=2)

@@ -101,21 +101,55 @@ class RuntimeTests(unittest.TestCase):
                 self.assertIn(diagnostic, result.stdout + result.stderr)
                 self.assertFalse((Path(directory) / 'command.stdout.txt').exists())
 
-    def test_wrapper_pins_the_effective_child_redis_probe_to_private_redis(self):
+    def test_wrapper_pins_the_effective_child_environment_to_private_services(self):
         with tempfile.TemporaryDirectory() as directory:
             run_dir = Path(directory)
             result = self.wrapper_process(run_dir, 'success')
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             child = json.loads((run_dir / 'command.stdout.txt').read_text())
-            self.assertEqual('6379', child['redisPort'])
-            self.assertEqual('1', child['isolated'])
-            self.assertEqual('private-test-credential', child['credential'])
+            expected = {
+                'MCPCLI_ISOLATED_TOPOLOGY': '1',
+                'HEXALITH_EVENTSTORE_TEST_REDIS_PORT': '6379',
+                'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT': '6050',
+                'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT': '6060',
+                'Dapr__PlacementHostAddress': '127.0.0.1:6050',
+                'Dapr__SchedulerHostAddress': '127.0.0.1:6060',
+                'Dapr__GatewayHttpPort': '3501',
+                'NAMESPACE': 'default',
+                'DAPR_CONTROLPLANE_TRUST_DOMAIN': 'public',
+                'DAPR_CONTROLPLANE_NAMESPACE': 'default',
+            }
+            self.assertEqual(expected, {key: child[key] for key in expected})
+            for key in ('DAPR_TRUST_ANCHORS', 'DAPR_CERT_CHAIN', 'DAPR_CERT_KEY'):
+                self.assertTrue(child[key], key)
+            self.assertEqual('private-test-credential', child['DAPR_CERT_KEY'])
             receipt = json.loads((run_dir / 'result.json').read_text())
             self.assertEqual('6379', receipt['environmentOverrides']['HEXALITH_EVENTSTORE_TEST_REDIS_PORT'])
+            for name in ('placement', 'scheduler'):
+                arguments = receipt['services'][name]['arguments']
+                port = arguments[arguments.index('--port') + 1]
+                self.assertEqual(port, child['HEXALITH_EVENTSTORE_TEST_' + name.upper() + '_PORT'])
+                self.assertEqual('127.0.0.1:' + port, child['Dapr__' + name.title() + 'HostAddress'])
             self.assertFalse((run_dir / 'sentry-certificates/issuer.key').exists())
             for file in run_dir.rglob('*'):
                 if file.is_file() and file != run_dir / 'command.stdout.txt':
                     self.assertNotIn('private-test-credential', file.read_text(), str(file))
+
+    def test_wrapper_refuses_readiness_failures_before_starting_the_child(self):
+        for mode, error_type, message in (
+            ('sentry-exit', 'RuntimeError', 'Sentry exited before generating certificates: 17'),
+            ('sentry-no-certificates', 'TimeoutError', 'Private Sentry certificates were not ready'),
+            ('readiness-daemon-exit', 'RuntimeError', 'redis exited before prerequisites were ready: 19'),
+            ('unreachable-port', 'TimeoutError', 'Private prerequisite port 6060 did not become reachable'),
+        ):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                run_dir = Path(directory)
+                result = self.wrapper_process(run_dir, mode)
+                self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+                receipt = json.loads((run_dir / 'result.json').read_text())
+                self.assertEqual(1, receipt['commandExitCode'])
+                self.assertEqual({'type': error_type, 'message': message}, receipt['error'])
+                self.assertFalse((run_dir / 'command.stdout.txt').exists())
 
     def test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files(self):
         for value in (None, '', '   '):
@@ -131,6 +165,59 @@ class RuntimeTests(unittest.TestCase):
                 self.assertEqual('', result.stdout)
                 self.assertEqual('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime directory.\n', result.stderr)
                 self.assertEqual([], list(Path(directory).iterdir()))
+
+    def test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces(self):
+        for arguments in ([], ['--']):
+            with self.subTest(arguments=arguments), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                result = self.public_wrapper_process(root, arguments)
+                self.assertEqual(1, result.returncode)
+                self.assertEqual('', result.stdout)
+                self.assertEqual('A command to execute is required.\n', result.stderr)
+                self.assertEqual(['unshare'], [file.name for file in root.iterdir()])
+
+    def test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            command = [sys.executable, '-c',
+                       "import pathlib,sys; pathlib.Path('supplied-child-marker').write_text('supplied child ran'); "
+                       "print('supplied child stdout'); print('supplied child stderr', file=sys.stderr); sys.exit(23)"]
+            result = self.public_wrapper_process(root, ['--', *command])
+            self.assertEqual(23, result.returncode, result.stdout + result.stderr)
+            self.assertEqual('', result.stderr)
+            self.assertEqual('supplied child ran', (root / 'supplied-child-marker').read_text())
+            runs = list((root / 'runtime/runs').iterdir())
+            self.assertEqual(1, len(runs))
+            run_dir = runs[0]
+            self.assertEqual('supplied child stdout\n', (run_dir / 'command.stdout.txt').read_text())
+            self.assertEqual('supplied child stderr\n', (run_dir / 'command.stderr.txt').read_text())
+            receipt = json.loads((run_dir / 'result.json').read_text())
+            self.assertEqual(command, receipt['command'])
+            self.assertEqual(23, receipt['commandExitCode'])
+            self.assertEqual(['unshare', '--user', '--map-root-user', '--net', '--pid', '--mount',
+                              '--fork', '--mount-proc', sys.executable,
+                              str(Path(__file__).with_name('run-isolated.py').resolve()),
+                              '--inside', str(run_dir), '--', *command],
+                             ['unshare', *json.loads((root / 'namespace-launch.json').read_text())])
+
+    def public_wrapper_process(self, root, arguments):
+        launcher = root / 'unshare'
+        launcher.write_text('#!' + sys.executable + '\n' + r"""
+import json, os, pathlib, sys
+arguments = sys.argv[1:]
+pathlib.Path(os.environ['MCPCLI_TEST_NAMESPACE_LAUNCH']).write_text(json.dumps(arguments))
+inside = arguments.index('--inside')
+os.execv(sys.executable, [sys.executable, os.environ['MCPCLI_TEST_WRAPPER_FIXTURE'],
+    '--wrapper-fixture', arguments[inside + 1], 'supplied-command', '--', *arguments[inside + 3:]])
+""")
+        launcher.chmod(0o700)
+        environment = os.environ.copy()
+        environment['PATH'] = str(root) + os.pathsep + environment.get('PATH', '')
+        environment['MCPCLI_ISOLATED_RUNTIME_DIR'] = str(root / 'runtime')
+        environment['MCPCLI_TEST_NAMESPACE_LAUNCH'] = str(root / 'namespace-launch.json')
+        environment['MCPCLI_TEST_WRAPPER_FIXTURE'] = str(Path(__file__).resolve())
+        return subprocess.run([sys.executable, str(Path(__file__).with_name('run-isolated.py').resolve()), *arguments],
+                              cwd=root, env=environment, text=True, capture_output=True, timeout=10)
 
     def test_wrapper_stops_a_real_hung_child_and_records_its_deadline(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -196,6 +283,11 @@ class RuntimeTests(unittest.TestCase):
         command.extend([str(Path(__file__).resolve()), '--wrapper-fixture', str(run_dir), mode])
         environment = os.environ.copy()
         environment['HEXALITH_EVENTSTORE_TEST_REDIS_PORT'] = '19999'
+        for variable in ('NAMESPACE', 'DAPR_CONTROLPLANE_TRUST_DOMAIN', 'DAPR_CONTROLPLANE_NAMESPACE',
+                         'DAPR_TRUST_ANCHORS', 'DAPR_CERT_CHAIN', 'DAPR_CERT_KEY',
+                         'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT', 'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT',
+                         'Dapr__PlacementHostAddress', 'Dapr__SchedulerHostAddress', 'Dapr__GatewayHttpPort'):
+            environment.pop(variable, None)
         return subprocess.run(command, env=environment, text=True, capture_output=True, timeout=10)
 
     def test_bootstrap_termination_during_extraction_removes_its_owned_container(self):
@@ -242,13 +334,14 @@ if sys.argv[1] == 'cp':
                 process.stderr.close()
 
 
-def wrapper_fixture(run_dir, mode):
+def wrapper_fixture(run_dir, mode, supplied_command=None):
     """Run the real supervisor and real child with inert private-infrastructure stand-ins."""
     original = {name: 'outside-' + name for name in ('user', 'pid', 'net', 'mnt')}
     current = {name: 'inside-' + name for name in original}
     if mode == 'namespace':
         current['net'] = original['net']
-    (run_dir / 'outside.json').write_text(json.dumps({'namespaces': original, 'cwd': str(run_dir)}))
+    cwd = json.loads((run_dir / 'outside.json').read_text())['cwd'] if supplied_command is not None else str(run_dir)
+    (run_dir / 'outside.json').write_text(json.dumps({'namespaces': original, 'cwd': cwd}))
     real_popen = subprocess.Popen
 
     class Daemon:
@@ -259,6 +352,10 @@ def wrapper_fixture(run_dir, mode):
             self.pid = 100
 
         def poll(self):
+            if mode == 'sentry-exit' and self.name == 'sentry':
+                self.returncode = 17
+            if mode == 'readiness-daemon-exit' and self.name == 'redis-server':
+                self.returncode = 19
             if mode == 'failed-daemon' and self.name == 'redis-server' and (run_dir / 'child-succeeded').exists():
                 self.returncode = 17
             return self.returncode
@@ -290,7 +387,7 @@ def wrapper_fixture(run_dir, mode):
                     time.sleep(0.01)
             return process
         name = Path(arguments[0]).name
-        if name == 'sentry':
+        if name == 'sentry' and mode not in ('sentry-exit', 'sentry-no-certificates'):
             certificates = run_dir / 'sentry-certificates'
             for filename in ('ca.crt', 'issuer.crt', 'issuer.key'):
                 (certificates / filename).write_text('private-test-credential' if filename.endswith('.key') else 'public-test-certificate')
@@ -300,6 +397,11 @@ def wrapper_fixture(run_dir, mode):
         return subprocess.CompletedProcess(arguments, 7 if mode == 'dapr-exit' else 0,
                                            '' if mode == 'dapr-exit' else '[{"appId":"existing"}]' if mode == 'dapr-apps' else '[]',
                                            'probe failure: ' + 'x' * 600 if mode == 'dapr-exit' else '')
+
+    def connect(address, **_):
+        if mode == 'unreachable-port' and address[1] == 6060:
+            raise OSError('Controlled unreachable private port')
+        return Connection()
 
     def stop(process):
         if isinstance(process, real_popen):
@@ -319,8 +421,13 @@ def wrapper_fixture(run_dir, mode):
             process.returncode = 0
 
     real_stop = wrapper.stop_owned
+    child_variables = ['MCPCLI_ISOLATED_TOPOLOGY', 'HEXALITH_EVENTSTORE_TEST_REDIS_PORT',
+                       'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT', 'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT',
+                       'Dapr__PlacementHostAddress', 'Dapr__SchedulerHostAddress', 'Dapr__GatewayHttpPort',
+                       'NAMESPACE', 'DAPR_CONTROLPLANE_TRUST_DOMAIN', 'DAPR_CONTROLPLANE_NAMESPACE',
+                       'DAPR_TRUST_ANCHORS', 'DAPR_CERT_CHAIN', 'DAPR_CERT_KEY']
     child = [sys.executable, '-c',
-             "import json,os,pathlib,sys; print(json.dumps({'redisPort':os.environ.get('HEXALITH_EVENTSTORE_TEST_REDIS_PORT'),'isolated':os.environ.get('MCPCLI_ISOLATED_TOPOLOGY'),'credential':os.environ.get('DAPR_CERT_KEY')})); "
+             "import json,os,pathlib,sys; print(json.dumps({key:os.environ.get(key) for key in " + repr(child_variables) + "})); "
              "pathlib.Path('child-succeeded').touch(); sys.exit(" + ('23' if mode == 'failing-child' else '0') + ")"]
     if mode == 'hung-child':
         child = [sys.executable, '-c',
@@ -331,11 +438,14 @@ def wrapper_fixture(run_dir, mode):
         child = [sys.executable, '-c',
                  "import pathlib,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); "
                  "pathlib.Path('child-started').touch(); time.sleep(60)"]
+    if supplied_command is not None:
+        child = supplied_command
     with patch.object(wrapper, 'namespaces', return_value=current), \
             patch.object(wrapper.os, 'getpid', return_value=2 if mode == 'pid' else 1), \
             patch.object(wrapper.subprocess, 'run', side_effect=run), \
             patch.object(wrapper.subprocess, 'Popen', side_effect=start), \
-            patch.object(wrapper.socket, 'create_connection', return_value=Connection()), \
+            patch.object(wrapper.socket, 'create_connection', side_effect=connect), \
+            patch.object(wrapper, 'PREREQUISITE_TIMEOUT_SECONDS', 0.05), \
             patch.object(wrapper, 'COMMAND_TIMEOUT_SECONDS', 0.5 if mode in ('hung-child', 'ignores-term') else wrapper.COMMAND_TIMEOUT_SECONDS), \
             patch.object(wrapper, 'STOP_GRACE_SECONDS', 0.2 if mode == 'ignores-term' else wrapper.STOP_GRACE_SECONDS), \
             patch.object(wrapper, 'stop_owned', side_effect=stop):
@@ -344,5 +454,5 @@ def wrapper_fixture(run_dir, mode):
 
 if __name__ == '__main__':
     if sys.argv[1:2] == ['--wrapper-fixture']:
-        sys.exit(wrapper_fixture(Path(sys.argv[2]), sys.argv[3]))
+        sys.exit(wrapper_fixture(Path(sys.argv[2]), sys.argv[3], sys.argv[5:] if sys.argv[4:5] == ['--'] else None))
     unittest.main()

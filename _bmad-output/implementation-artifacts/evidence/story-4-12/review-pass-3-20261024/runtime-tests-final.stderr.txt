@@ -1,0 +1,20 @@
+test_bootstrap_refuses_an_existing_runtime_before_using_docker (test_runtime.RuntimeTests.test_bootstrap_refuses_an_existing_runtime_before_using_docker) ... ok
+test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch (test_runtime.RuntimeTests.test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch) ... ok
+test_bootstrap_termination_during_extraction_removes_its_owned_container (test_runtime.RuntimeTests.test_bootstrap_termination_during_extraction_removes_its_owned_container) ... ok
+test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container (test_runtime.RuntimeTests.test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container) ... ok
+test_optimized_wrapper_preserves_safety_guards (test_runtime.RuntimeTests.test_optimized_wrapper_preserves_safety_guards) ... ok
+test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline (test_runtime.RuntimeTests.test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline) ... ok
+test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... ok
+test_wrapper_propagates_a_real_failing_child_exit_and_records_it (test_runtime.RuntimeTests.test_wrapper_propagates_a_real_failing_child_exit_and_records_it) ... ok
+test_wrapper_records_bounded_stderr_before_parsing_a_failed_dapr_probe (test_runtime.RuntimeTests.test_wrapper_records_bounded_stderr_before_parsing_a_failed_dapr_probe) ... ok
+test_wrapper_refuses_readiness_failures_before_starting_the_child (test_runtime.RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child) ... ok
+test_wrapper_rejects_a_daemon_that_exits_during_a_successful_child (test_runtime.RuntimeTests.test_wrapper_rejects_a_daemon_that_exits_during_a_successful_child) ... ok
+test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown (test_runtime.RuntimeTests.test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown) ... ok
+test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files (test_runtime.RuntimeTests.test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files) ... ok
+test_wrapper_requires_each_namespace_to_differ_before_running_commands (test_runtime.RuntimeTests.test_wrapper_requires_each_namespace_to_differ_before_running_commands) ... ok
+test_wrapper_stops_a_real_hung_child_and_records_its_deadline (test_runtime.RuntimeTests.test_wrapper_stops_a_real_hung_child_and_records_its_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 4.202s
+
+OK

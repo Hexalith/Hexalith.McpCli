@@ -1,0 +1,17 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.13)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+    Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests.SharedComponentsMatchPrivateRedisAndServiceScopes(name: "statestore", type: "state.redis") [FAIL]
+      Assert.Equal() Failure: Collections differ
+                 ↓ (pos 0)
+      Expected: [["actorStateStore"] = "true", ["keyPrefix"] = "name", ["redisHost"] = "localhost:6379", ["redisPassword"] = ""]
+      Actual:   [["actorStateStore"] = "false", ["keyPrefix"] = "name", ["redisHost"] = "localhost:6379", ["redisPassword"] = ""]
+                 ↑ (pos 0)
+      Stack Trace:
+        tests/Hexalith.McpCli.Manifest.Tests/TopologyDaprComponentTests.cs(38,0): at Hexalith.McpCli.Manifest.Tests.TopologyDaprComponentTests.SharedComponentsMatchPrivateRedisAndServiceScopes(String name, String type)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '65af3d29c5330070e6d35e03cc0b466d99f39c0cfff47e0e2891fbf9911eb77b')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 2, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.128s

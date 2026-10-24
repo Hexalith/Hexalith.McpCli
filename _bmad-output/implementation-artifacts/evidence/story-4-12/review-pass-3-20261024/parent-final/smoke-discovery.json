@@ -1,0 +1,16 @@
+{
+  "label": "smoke-discovery",
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-list",
+    "tests"
+  ],
+  "displayCommand": "dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.166,
+  "recordedAtUtc": "2026-10-24T02:29:03.885949+00:00",
+  "stdout": "smoke-discovery.stdout.txt",
+  "stderr": "smoke-discovery.stderr.txt"
+}

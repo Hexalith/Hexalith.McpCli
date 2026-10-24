@@ -1,0 +1,120 @@
+{
+  "identical": true,
+  "applicationCount": 7,
+  "identitiesBefore": [
+    {
+      "appId": "eventstore",
+      "daprdPid": 2788133,
+      "cliPid": 2787751,
+      "httpPort": 29382,
+      "grpcPort": 29383,
+      "appPort": 8080
+    },
+    {
+      "appId": "eventstore-admin",
+      "daprdPid": 2788197,
+      "cliPid": 2787750,
+      "httpPort": 29379,
+      "grpcPort": 29380,
+      "appPort": 8090
+    },
+    {
+      "appId": "eventstore-admin-ui",
+      "daprdPid": 2788221,
+      "cliPid": 2787847,
+      "httpPort": 29376,
+      "grpcPort": 29377,
+      "appPort": 8092
+    },
+    {
+      "appId": "memories",
+      "daprdPid": 2776492,
+      "cliPid": 2776378,
+      "httpPort": 29367,
+      "grpcPort": 29368,
+      "appPort": 5000
+    },
+    {
+      "appId": "sample",
+      "daprdPid": 2788246,
+      "cliPid": 2787895,
+      "httpPort": 29364,
+      "grpcPort": 29365,
+      "appPort": 61447
+    },
+    {
+      "appId": "tenants",
+      "daprdPid": 2788223,
+      "cliPid": 2787922,
+      "httpPort": 29373,
+      "grpcPort": 29374,
+      "appPort": 61448
+    },
+    {
+      "appId": "tenants-api",
+      "daprdPid": 2788273,
+      "cliPid": 2787865,
+      "httpPort": 29370,
+      "grpcPort": 29371,
+      "appPort": 51096
+    }
+  ],
+  "identitiesAfter": [
+    {
+      "appId": "eventstore",
+      "daprdPid": 2788133,
+      "cliPid": 2787751,
+      "httpPort": 29382,
+      "grpcPort": 29383,
+      "appPort": 8080
+    },
+    {
+      "appId": "eventstore-admin",
+      "daprdPid": 2788197,
+      "cliPid": 2787750,
+      "httpPort": 29379,
+      "grpcPort": 29380,
+      "appPort": 8090
+    },
+    {
+      "appId": "eventstore-admin-ui",
+      "daprdPid": 2788221,
+      "cliPid": 2787847,
+      "httpPort": 29376,
+      "grpcPort": 29377,
+      "appPort": 8092
+    },
+    {
+      "appId": "memories",
+      "daprdPid": 2776492,
+      "cliPid": 2776378,
+      "httpPort": 29367,
+      "grpcPort": 29368,
+      "appPort": 5000
+    },
+    {
+      "appId": "sample",
+      "daprdPid": 2788246,
+      "cliPid": 2787895,
+      "httpPort": 29364,
+      "grpcPort": 29365,
+      "appPort": 61447
+    },
+    {
+      "appId": "tenants",
+      "daprdPid": 2788223,
+      "cliPid": 2787922,
+      "httpPort": 29373,
+      "grpcPort": 29374,
+      "appPort": 61448
+    },
+    {
+      "appId": "tenants-api",
+      "daprdPid": 2788273,
+      "cliPid": 2787865,
+      "httpPort": 29370,
+      "grpcPort": 29371,
+      "appPort": 51096
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+[
+  {
+    "mutation": "namespace",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-i3agbcp_/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "07675ee95818cb6253411eb15ddd8e150f44b12f7db12ca06e466f3eed3e3a7a",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "namespace.mutation.stdout.txt",
+    "stderr": "namespace.mutation.stderr.txt"
+  },
+  {
+    "mutation": "dapr_controlplane_trust_domain",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-hn7c6b9o/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "63ccd9e036db35e02190eedd641c5811e8a0e6c7f3206d107a2847060ad02a71",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "dapr_controlplane_trust_domain.mutation.stdout.txt",
+    "stderr": "dapr_controlplane_trust_domain.mutation.stderr.txt"
+  },
+  {
+    "mutation": "dapr_controlplane_namespace",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-i0at3bs2/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "f471349959bdfed4ae9ef0bc5de650cbeaedd6c00d6a3d59cc953e41ce2a04cd",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "dapr_controlplane_namespace.mutation.stdout.txt",
+    "stderr": "dapr_controlplane_namespace.mutation.stderr.txt"
+  },
+  {
+    "mutation": "dapr_trust_anchors",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-m2n0llwe/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "77f57ddc39b6fb8675c9ef59e8fc172c11c85225736094da38911082ef950edc",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "dapr_trust_anchors.mutation.stdout.txt",
+    "stderr": "dapr_trust_anchors.mutation.stderr.txt"
+  },
+  {
+    "mutation": "dapr_cert_chain",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-mk0q_q91/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "348b0c90bf8d0cc9b7154d78bb5f91857d20a74579361e08a5f4b0485f776922",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "dapr_cert_chain.mutation.stdout.txt",
+    "stderr": "dapr_cert_chain.mutation.stderr.txt"
+  },
+  {
+    "mutation": "dapr_cert_key",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-5trpbqs3/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "d6dd192060be0c9c59fa79f0d661a06b7b815c381df6c8fff62886f56aef2eb0",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "dapr_cert_key.mutation.stdout.txt",
+    "stderr": "dapr_cert_key.mutation.stderr.txt"
+  },
+  {
+    "mutation": "wrong-placement-port",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-wj_8k867/test_runtime.py",
+      "RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services"
+    ],
+    "mutatedWrapperSha256": "60a4dfa1d287067ebeea18cbce5dcf089971aeb9f7396403ea15b2e23ddb87be",
+    "test": "test_wrapper_pins_the_effective_child_environment_to_private_services",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "wrong-placement-port.mutation.stdout.txt",
+    "stderr": "wrong-placement-port.mutation.stderr.txt"
+  },
+  {
+    "mutation": "missing-sentry-exit-guard",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-itpu4tgc/test_runtime.py",
+      "RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child"
+    ],
+    "mutatedWrapperSha256": "9fdc2fa3e4c5a94685bf80a361e0163d13bb1d74734d63a0f352631aa6511f66",
+    "test": "test_wrapper_refuses_readiness_failures_before_starting_the_child",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "missing-sentry-exit-guard.mutation.stdout.txt",
+    "stderr": "missing-sentry-exit-guard.mutation.stderr.txt"
+  },
+  {
+    "mutation": "missing-certificate-timeout",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-n9psrsdx/test_runtime.py",
+      "RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child"
+    ],
+    "mutatedWrapperSha256": "ee349917d2883290248e982affc0fceb37e21dac69777da412458e1df273841f",
+    "test": "test_wrapper_refuses_readiness_failures_before_starting_the_child",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "missing-certificate-timeout.mutation.stdout.txt",
+    "stderr": "missing-certificate-timeout.mutation.stderr.txt"
+  },
+  {
+    "mutation": "missing-daemon-exit-guard",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-9tvqfnw5/test_runtime.py",
+      "RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child"
+    ],
+    "mutatedWrapperSha256": "b6b0844ad4fd4d46711c561615b79da95244c79fb3cfdb716893d9d29e31bbdd",
+    "test": "test_wrapper_refuses_readiness_failures_before_starting_the_child",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "missing-daemon-exit-guard.mutation.stdout.txt",
+    "stderr": "missing-daemon-exit-guard.mutation.stderr.txt"
+  },
+  {
+    "mutation": "missing-port-timeout",
+    "command": [
+      "python3",
+      "/tmp/mcpcli-pass3-mutation-ci1k_vwb/test_runtime.py",
+      "RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child"
+    ],
+    "mutatedWrapperSha256": "e4ec86bc0b16bcba4453cbacfe15ac78af62909fc0a0742abd5b76b6a7fc7539",
+    "test": "test_wrapper_refuses_readiness_failures_before_starting_the_child",
+    "exitCode": 1,
+    "rejected": true,
+    "stdout": "missing-port-timeout.mutation.stdout.txt",
+    "stderr": "missing-port-timeout.mutation.stderr.txt"
+  }
+]

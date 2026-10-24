@@ -1,0 +1,76 @@
+{
+  "scope": "Four workflow-review follow-ups; focused checks only. Parent performs final source binding and full verification.",
+  "sourceFiles": {
+    "tests/fixtures/Topology.DaprStub/Program.cs": "9798e0b94acbcd617eae53bbbbb9a0020296d3732b82eba09cbbefea912b1fb6",
+    "tests/Hexalith.McpCli.Manifest.Tests/DaprPrerequisiteTests.cs": "1dea1b88601aa2ff3320e30f901a15b719e39c76ba6bfcd05a4d1402c8afd0e3",
+    "tests/Hexalith.McpCli.Manifest.Tests/TopologyConfigurationTests.cs": "cc89669b840a4733506a1e5cd4c60e0f52afe699071d0e52af2172f0af3c7a74",
+    "tools/live-topology/run-isolated.py": "f97c1ee1ffeccaeaa4b3cebc4851a21ddf80225e1758a7c75e305b2c5d40bc86",
+    "tools/live-topology/test_runtime.py": "245c34c9008a6bc4211fa5001f6a173dfbc9ab6cf09ee91ce8d6b34890780dd4"
+  },
+  "checks": [
+    {
+      "receipt": "python-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/live-topology",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "receipt": "manifest-build.json",
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0
+    },
+    {
+      "receipt": "prerequisite-tests.json",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Manifest.Tests.DaprPrerequisiteTests"
+      ],
+      "exitCode": 0
+    },
+    {
+      "receipt": "configuration-tests.json",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Manifest.Tests.TopologyConfigurationTests"
+      ],
+      "exitCode": 0
+    },
+    {
+      "receipt": "outer-wrapper-mutations.json",
+      "command": [
+        "python3",
+        "_bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/review-fixes/verify-outer-wrapper-mutations.py"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "results": {
+    "pythonTestsPassed": 17,
+    "prerequisiteTestsPassed": 14,
+    "configurationTestsPassed": 33,
+    "outerWrapperMutationsRejectedByAssertion": 2,
+    "failed": 0
+  },
+  "initialImplementationCheckpointPreserved": true
+}

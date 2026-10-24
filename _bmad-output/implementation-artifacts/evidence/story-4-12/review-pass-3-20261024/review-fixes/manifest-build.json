@@ -1,0 +1,19 @@
+{
+  "label": "review-fixes/manifest-build",
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "displayCommand": "dotnet build tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj --no-restore --configuration Release -warnaserror",
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 3.85,
+  "recordedAtUtc": "2026-10-24T02:25:40.292182+00:00",
+  "stdout": "review-fixes/manifest-build.stdout.txt",
+  "stderr": "review-fixes/manifest-build.stderr.txt"
+}
