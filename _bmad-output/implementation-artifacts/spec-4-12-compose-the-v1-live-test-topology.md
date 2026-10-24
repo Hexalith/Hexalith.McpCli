@@ -2,7 +2,7 @@
 title: '4.12 Compose the v1 live test topology'
 type: 'feature'
 created: '2026-10-23'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'be89509d59bb6ba53a0382e26219edb0625b47f4'
@@ -754,3 +754,73 @@ unchanged. Final commands, source bindings and sanitized results are recorded
 in `evidence/story-4-12/review-pass-3-20261024/parent-final/verification.json`.
 The earlier pass-3 implementation checkpoint remains unchanged and is superseded
 by this final parent acceptance. Frozen intent and historical packets are intact.
+
+### Review Findings (code review pass 4, 2026-10-24)
+
+Code review 2026-10-24 of the full committed story range `be89509..3b17388` (`e5ed21a`, `3196d3d`, `c432b45`, `d9dc31a`, `6646412`, `c1a3e46`, `2a857e3`, `3b17388`).
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 37 files, +3,047/−7, 3,364 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 50 normalized findings (BH 24, EC 18, VG 4, AA 4). 7 survive as 4 patch entries and 2 defer entries; 43 are rejected. No decision is needed.
+
+Parent checks during triage:
+- At `v3.126.1`, `AspireTopologyFixtureBase.cs:127-128` appends `--Dapr:PlacementHostAddress=localhost:{PlacementPort}` and `--Dapr:SchedulerHostAddress=localhost:{SchedulerPort}` after `ExtraAppArgs`. The ports come from `HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT` and `HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT` (`DaprLocalEndpoints.cs:28`, `:31`).
+- The repository root has no `NuGet.config`.
+- Story 4.14 (`_bmad-output/planning-artifacts/epics.md:1477`) makes the integration project the blocking `aspire-test-project`.
+- `subprocess.Popen([])` raises `IndexError`, which `inside()`'s existing `except Exception` records as exit 1.
+- At `3b17388` the 17 maintained Python checks pass in 4.5 s, and the working tree is clean.
+
+- [ ] [Review][Patch] P37 — medium. The wrapper's daemon launch arguments and private network setup are unasserted. [tools/live-topology/run-isolated.py:83]
+  - Tests read only the placement and scheduler `--port` values from `result.json`, and the fixture's fake `subprocess.run` ignores its arguments.
+  - VG: removing `--tls-enabled` from placement, changing Sentry's `--trust-domain`, or deleting `ip link set lo up` leaves every Python and Manifest test green. A mismatch with `accesscontrol.yaml` (trust domain `public`, Sentry `127.0.0.1:50001`) appears only at the next manual live run, which Stories 4.13 and 4.14 depend on.
+  - Fix: in `test_wrapper_pins_the_effective_child_environment_to_private_services`, assert the full `receipt['services'][name]['arguments']` of all four daemons, with `RUNTIME_DIR`, `run_dir` and the certificate directory substituted. Record the fake `run` calls and assert that the exact five `ip` commands precede the first daemon launch (VG).
+- [ ] [Review][Patch] P38 — low. The README says copied source directories are refused, but a copied clone passes. [README.md:232]
+  - `ValidateWorkspace` rejects a checkout without its own `.git` and one whose physical top level differs. A clone copied or re-cloned into `references/<module>` has its own `.git` and top level, so it passes. Comparing the gitlink stays rejected (passes 1 and 3).
+  - Fix (wording only): say the AppHost refuses missing, undeclared or linked checkouts and source directories that are not their own Git working tree, and that it does not compare the checkout with the recorded gitlink (AA, BH).
+- [ ] [Review][Patch] P39 — low. The README describes fixture skips that the mandatory wrapper does not produce. [README.md:251]
+  - The wrapper checks Redis, Sentry, placement, scheduler and an empty `dapr list` before starting the child. A missing native binary or Dapr CLI therefore ends the run with `Private environment failed: FileNotFoundError: …` and exit 1 (`tools/live-topology/run-isolated.py:190`), before any smoke. The README documents only the fixture's skip texts.
+  - Fix: add one sentence stating that a wrapper-level prerequisite failure ends the run with `Private environment failed: …` and exit 1 before the smoke, and that the skip diagnostics describe the fixture's own checks (AA).
+- [ ] [Review][Patch] P40 — low. The inner supervisor still records a passing receipt when it runs no command. [tools/live-topology/run-isolated.py:185]
+  - After readiness, the `if command:` block falls through to `result['commandExitCode'] = 0` and `return 0`. P35 refuses an empty command only in the outer `__main__`; the `--inside` path forwards `sys.argv[4:]` unchecked. No public entry point reaches this branch, and no test covers it.
+  - Fix: delete the `if command:` condition and the fallback at `:185-186`. An empty command then fails inside the existing `except` with exit 1 (AA).
+- [x] [Review][Defer] D2 — medium. The live smoke runs in no CI job, so the composed topology and the fixture's token can regress while CI stays green. [.github/workflows/ci.yml:108] — deferred: already tracked by Story 4.14 (`_bmad-output/planning-artifacts/epics.md:1477`), which makes the integration project the blocking `aspire-test-project`; the frozen spec keeps the blocking tier there. No ledger entry was added because the planned story owns it (VG).
+- [x] [Review][Defer] D3 — low. The "zero module-specific code" policy text does not exempt the live-topology test composition. [AGENTS.md:83] — deferred: agent-context edit, filed under the Story 4.12 ledger heading next to D1.
+  - `tests/Hexalith.McpCli.AppHost/Program.cs:82` and `:85` call the Tenants and Parties server helpers. `TopologyConfiguration.cs:13` and `:16` list the three modules, and the smoke uses `ListTenantsQuery` with a Tenants-only identity.
+  - The frozen spec requires this composition, and it has no per-module branch. However, an agent that follows `AGENTS.md:83` could report it as a violation or refuse later topology work (AA).
+
+#### Rejected (code review pass 4, 2026-10-24)
+
+- `low` — The fixture's conflict check (app IDs and port 3501) runs in no test (VG). Carried from passes 1 and 3. VG's new route moves the call ahead of `DaprTestPrerequisites.IsAvailable`. The host-run `basic` prerequisite row would then probe the real port 3501 and fail wherever a user sidecar holds it, so the fix also needs skip handling. Inside the wrapper, `dapr list` is verified empty and the network namespace is private, so the check cannot fire on the supported path; the AppHost repeats it anyway.
+- `low` — The fixture hard-codes port 3501 (VG, BH, EC). Already rejected in passes 1–3.
+- `false` — The helper closure gate ignores non-`Hexalith.*` packages, contradicting the server-free claim (BH). Already rejected in passes 2 and 3.
+- `low` — Version literals live in C# tests instead of the policy file (BH). Already rejected in passes 1 and 2: a Builds bump fails Manifest.Tests loudly.
+- `false` — Route validation checks only non-empty values, and a deleted `Gateway:Routes` fails only live (BH). Already rejected in pass 3: `ComposedResourcesKeepTokensAclAndGatewayContentRoot` asserts the exact registration set, including `AppId` and `MethodName`.
+- `low` — One shared ACL file is not target-scoped (BH). Already rejected in passes 1 and 2.
+- `false` — Parties is checked only for liveness, and neither head runs against the topology (BH). Already rejected in pass 2: the frozen task is one bounded query, and live module and head semantics belong to Story 4.13.
+- `low` — The JWT negatives omit wrong issuer or audience, expiry and `alg:none` (BH). Already rejected in pass 2.
+- `low` — A failure in network setup or in creating the certificate directory, before the `try`, leaves no `result.json` (BH, EC). Already rejected in passes 2 and 3.
+- `low` — SIGTERM's `SystemExit` during the child wait leaves no `commandExitCode`, and the child is not stopped gracefully (BH, EC). Already rejected in pass 2.
+- `low` — The wrapper does not verify the runtime directory, the binary hashes or the Dapr versions (BH, EC). Already rejected in passes 1–3.
+- `low` — The mount namespace shares `/tmp`, so the platform lock can block the isolated run (BH). Already rejected in pass 2; the lock wait is tracked at `deferred-work.md:589`.
+- `false` — The fixture's command line overrides the wrapper's `Dapr__PlacementHostAddress` and `Dapr__SchedulerHostAddress`, so the environment test pins unused values (BH). The fixture builds `localhost:{port}` from the port variables (verified above). The test pins both port variables and cross-checks them against the daemons' `--port`, so the effective addresses are pinned.
+- `low` — `TopologyDaprComponentTests` matches a line of `run-isolated.py` with a regex (BH). A reformat fails the test loudly with its own message, which forces a recheck. A shared data file would add an artifact for three readers.
+- `low` — Manifest.Tests adds real 30 s and 10 s waits and repeated output copies (BH). Already rejected in passes 1 and 2.
+- `low` — The subprocess test helpers drop captured output on timeout and are duplicated with drift (BH). A timed-out test still fails. Duplication and the unbounded `git init` were rejected in pass 1 and as F-BH8, and a shared helper adds code.
+- `false` — The nested prerequisite run's 30 s budget is tight (BH, EC). Already rejected in passes 2 and 3 (9.1 s measured). BH observed about 14 s while four review layers ran at the same time.
+- `maybe-false` (low if true) — The 403 server's single read could reset the connection (BH, EC). Already rejected in passes 1–3 (25 of 25 isolated runs).
+- `false` — The Gateway's AppHost content root loads the AppHost's settings, and the copied outputs are unused (BH). Already rejected in passes 1 and 3: the Gateway reads no `Gateway` section and, of `Dapr`, only the absent `DeclarativeSubscriptions`. No `appsettings.Development.json` exists.
+- `low` — The exit-2 filter misses `IOException` and `UnauthorizedAccessException`, and `appsettings.json` loads outside it (BH, EC). Already rejected in passes 1 and 3.
+- `false` — `MissingHelperRestoreCannotFallBackToWorkspaceOrGlobalPackages` proves only stock NuGet behavior (BH). The repository root has no `NuGet.config` with a workspace source. The actual AppHost restore is gated by `CheckAspireHelperClosure`, which rejects a project-type helper (`SourceHelperIsRejected`).
+- `false` — The bootstrap never checks the `image` tags (BH). Images are pulled by digest, and each extracted binary's SHA-256 is verified; the tag selects nothing.
+- `false` — `docker rm` with `check=True` in the `finally` hides the original error (BH). Python chains the original exception as `__context__`, and the traceback prints both.
+- `low` — A `docker create` timeout or TERM before the container ID is captured orphans the container (BH, EC). Already rejected as R-BH3, F-EC2 and G-EC2.
+- `low` — A symlinked ancestor rejects a valid checkout (EC). Already rejected in passes 1–3.
+- `low` — `ValidateWorkspace` discards `git rev-parse` stderr, so a dubious-ownership refusal reads as "not its own Git working tree" (EC). The running user owns the checkouts, both locally and in CI. The fix adds a separate nonzero-exit diagnostic; the version-probe equivalent was rejected as G-BH4.
+- `low` — Bind failures other than `EADDRINUSE` read as "already in use" (EC). Already rejected in pass 1.
+- `low` — An `[::1]`-only listener on the Gateway port goes undetected (EC). Already rejected in passes 1–3.
+- `low` — `.gitmodules` keys with other casing, trailing slashes or `./` are misread (EC). Already rejected in pass 2.
+- `false` — The probe misreports synthesized statuses as HTTP statuses (EC). Already rejected in passes 1 and 3.
+- `low` — A missing `git` or a denied symlink leaks the `cli` case's temporary directory (EC). Without `git`, the class fixture's `git init` fails before any case runs. Symlink denial occurs only on Windows, and CI runs on Linux.
+- `low` — Sentry certificates could be read while still being written (EC). Already rejected in passes 2 and 3.
+- `low` — A partial or `-LOADING` Redis reply aborts the run (EC). `-LOADING` cannot occur, because Redis starts with `--save ''`, `--appendonly no` and a fresh directory. Partial reads were rejected as R-EC3 and G-EC4.
+- `low` — `stop_owned` raising inside the `finally` skips later stops and the `result.json` write (EC). It needs a process that survives SIGKILL for 5 s; R-BH4 and G-EC3 rejected the same cleanup-recovery state.
