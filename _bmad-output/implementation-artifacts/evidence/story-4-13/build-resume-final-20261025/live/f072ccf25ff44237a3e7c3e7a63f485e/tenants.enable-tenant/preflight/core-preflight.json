@@ -1,0 +1,66 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.enable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5STJG7EKEH7AAX54ATCB86G",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-enable",
+          "Name": "Vector Enable",
+          "Description": null
+        },
+        "correlationId": "01M5STJG7EKEH7AAX54ATCB86G"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.enable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5STJG7VDRN6E4S272KJR6GQ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M5STJG7VDRN6E4S272KJR6GQ"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.enable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5STJG7WGZ937CRSRNEKYFVW",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "enable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M5STJG7WGZ937CRSRNEKYFVW"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.enable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-enable"
+        }
+      }
+    }
+  ]
+}

@@ -1,7 +1,25 @@
 # Story 4.13 implementation evidence
 
+Latest completion evidence: [final resumed build](build-resume-final-20261025/README.md).
+Its final reviewed generation passes 21/21 vectors, 249 Manifest tests, 85
+live-tool tests and the independent smoke, with all six follow-up patch groups
+verified. The older generations below remain historical evidence.
+
+The latest committed-code review patch packet is
+[`review-patches-20261025/`](review-patches-20261025/README.md). It closes P1–P14,
+retains 243 passing Manifest cases, 81 live-tool Python cases, detected
+predicate/guard mutations, the full offline preflight and a fresh complete live
+lane against the current user-selected source checkouts. Generation
+`7370f00a1b6b4b4d8a576175a650c257` passes all 21 vectors with zero skips; its
+independent audit proves 142 phases, exactly 53 Command submissions with 53
+unique message IDs, 89 Query attempts, current bindings and owned cleanup.
+The separate final independent smoke also passes. Exact commands, source hashes,
+immutable captured inputs and sanitized receipts are retained in that packet.
+
+The earlier implementation-review evidence below remains preserved unchanged.
+
 The post-review full lane passes all 21 vectors with zero failures/skips.
-`live-complete/live-lane.json` identifies the authoritative generation
+`live-complete/live-lane.json` identifies the earlier implementation-review generation
 `a45347517d3446de80684c5b084ca366`. The independent audit proves 142 declared
 phases, 53 Command submissions with 53 distinct message IDs, 89 Query attempts,
 matching current plan hashes and successful owned cleanup for every child.
@@ -88,8 +106,9 @@ timeout --signal=TERM --kill-after=30s 21600 \
   --output _bmad-output/implementation-artifacts/evidence/story-4-13/live-complete
 ```
 
-The upstream fix remains in [Parties PR #58](https://github.com/Hexalith/Hexalith.Parties/pull/58).
+The historical upstream qualification proposed the fix in [Parties PR #58](https://github.com/Hexalith/Hexalith.Parties/pull/58).
 Its CI repeats the same five baseline failures from main (public Contracts snapshot
 and existing source-evidence checks); `ci-baseline-comparison.json` in the upstream
 packet lists them and hashes both raw logs. No owner main merge or publication
-occurred. The active owner's unrelated staged/working changes were preserved.
+occurred in that packet; the later user sync selected the squash merge
+`559b91c8`, now qualified by `review-patches-20261025/`. The active owner's unrelated staged/working changes were preserved.

@@ -52,6 +52,15 @@ class RunnerTests(unittest.TestCase):
             self.observe(head, self.call())
         self.assertEqual(2, len(head.calls))
 
+    def test_missing_persisted_document_deadline_retains_declared_assertion_paths(self):
+        head = Head([{'error': {'code': 'gateway_error', 'status': 404}}] * 3)
+        call = self.call()
+        call['assertions'].append({'path': '/document/id', 'operator': 'equals', 'value': 'missing-entity'})
+        with self.assertRaisesRegex(VectorError, r'/invocation fixture.operation: read deadline: .*404') as failure:
+            self.observe(head, call)
+        self.assertIn('declared assertion paths: ["/document/value", "/document/id"]', str(failure.exception))
+        self.assertEqual(2, len(head.calls))
+
     def test_final_process_timeout_retains_the_semantic_assertion_path(self):
         head = Head([])
         document = {'operation': 'fixture.operation', 'tenant': 'test', 'document': {'value': 0}}
@@ -95,6 +104,37 @@ class RunnerTests(unittest.TestCase):
             self.observe(head, self.call())
         self.assertEqual(1, len(head.calls))
 
+    def test_returned_document_identity_guards_reject_one_cli_response(self):
+        identifier = '01ARZ3NDEKTSV4RRFFQ69G5FAV'
+        for kind, defect, message in [('query', 'operation', '/operation or /tenant'),
+                                      ('query', 'tenant', '/operation or /tenant'),
+                                      ('command', 'operation', '/operation or /tenant'),
+                                      ('command', 'tenant', '/operation or /tenant'),
+                                      ('query', 'document', '/document is missing'),
+                                      ('command', 'messageId', 'invalid accepted identifiers'),
+                                      ('command', 'correlationId', '/correlationId differs')]:
+            with self.subTest(kind=kind, defect=defect):
+                call = self.call(kind)
+                # These guards must protect calls even when vector assertions only check acceptance.
+                call['assertions'] = []
+                document = dict(operation='fixture.operation', tenant='test', document={'value': 7},
+                                status='accepted', aggregateId='approved-id', messageId=identifier,
+                                correlationId=identifier)
+                if defect == 'document':
+                    del document['document']
+                else:
+                    document[defect] = ('01ARZ3NDEKTSV4RRFFQ69G5FAW' if defect == 'correlationId' else 'wrong')
+                    if defect == 'messageId':
+                        document['correlationId'] = document['messageId']
+                head = Head([document])
+                # A read may poll, but this deterministic deadline leaves exactly one attempt to inspect.
+                ticks = iter([0, 0, 1])
+                with self.assertRaisesRegex(VectorError, message):
+                    run_live.observe(head, call, 'http://127.0.0.1/', {}, {},
+                                     {'deadlineSeconds': 1, 'pollSeconds': .5},
+                                     {'phase': '/invocation', 'attempts': []}, clock=lambda: next(ticks))
+                self.assertEqual(1, len(head.calls))
+
     def test_actual_returned_cursor_is_captured_and_asserted(self):
         head = Head([{'document': {'value': 7}, 'paging': {'nextCursor': 'signed-real-cursor'}}])
         call = self.call()
@@ -122,6 +162,32 @@ class RunnerTests(unittest.TestCase):
             content = (output / 'live-result.json').read_text()
             self.assertNotIn('private-token', content)
             self.assertEqual('failed', json.loads(content)['result'])
+
+    def test_live_entry_guards_fail_before_preflight_or_execution(self):
+        valid = {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
+                 'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/'}
+        refused = [('MCPCLI_ISOLATED_TOPOLOGY', None), ('MCPCLI_ISOLATED_TOPOLOGY', '0'),
+                   ('MCPCLI_LIVE_TOKEN', ''), ('MCPCLI_LIVE_TOKEN', None),
+                   ('MCPCLI_LIVE_URL', ''), ('MCPCLI_LIVE_URL', 'https://127.0.0.1/'),
+                   ('MCPCLI_LIVE_URL', 'http://example.com/'), ('MCPCLI_LIVE_URL', 'http://127.0.0.2/'),
+                   ('MCPCLI_LIVE_URL', 'http://user@127.0.0.1/'), ('MCPCLI_LIVE_URL', 'http://user:secret@localhost/'),
+                   ('MCPCLI_LIVE_URL', 'http://:secret@localhost/'), ('MCPCLI_LIVE_URL', 'http://@127.0.0.1/'),
+                   ('MCPCLI_LIVE_URL', 'http://localhost/?query=value'), ('MCPCLI_LIVE_URL', 'http://[::1]/#fragment')]
+        for key, value in refused:
+            with self.subTest(key=key, value=value), tempfile.TemporaryDirectory() as directory:
+                environment = dict(valid)
+                if value is None:
+                    del environment[key]
+                else:
+                    environment[key] = value
+                with patch.dict('os.environ', environment, clear=True), \
+                        patch.object(run_live, 'preflight') as preflight, patch.object(run_live, 'execute') as execute:
+                    self.assertEqual(1, run_live.main(['--operation', 'fixture.operation', '--output', directory]))
+                preflight.assert_not_called()
+                execute.assert_not_called()
+                report = json.loads((Path(directory) / 'live-result.json').read_text())
+                self.assertEqual('failed', report['result'])
+                self.assertEqual([], report['phases'])
 
 
 class ExecutionTests(unittest.TestCase):

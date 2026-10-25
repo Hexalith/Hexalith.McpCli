@@ -1,10 +1,12 @@
 """A skipped, empty, stale or failed isolated process cannot grant full acceptance."""
 import importlib.util
+import io
 import json
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from contextlib import redirect_stdout
 
 from live_plans import VectorError, BINDING_KEYS, selection_binding
 
@@ -73,6 +75,9 @@ class LaneTests(unittest.TestCase):
             self.assertEqual(21, child.call_count)
             for i, call in enumerate(child.call_args_list):
                 self.assertIn('Operation=fixture.operation-' + str(i), call.args[0])
+                self.assertEqual(1, call.args[0].count('-trait'))
+                self.assertEqual('Hexalith.McpCli.Integration.Tests.LiveVectorTests',
+                                 call.args[0][call.args[0].index('-class') + 1])
                 self.assertEqual('fixture.operation-' + str(i), call.args[1]['MCPCLI_LIVE_OPERATION'])
                 self.assertIn('run-isolated.py', call.args[0][1])
                 self.assertEqual(str(lane.ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), call.args[1]['MCPCLI_LIVE_HOST'])
@@ -80,6 +85,29 @@ class LaneTests(unittest.TestCase):
             result = json.loads((Path(directory) / 'live-lane.json').read_text())
             self.assertEqual(21, result['failed']); self.assertEqual(0, result['passed'])
             self.assertFalse(result['fullLiveAccepted'])
+
+    def test_out_of_range_child_timeout_starts_no_topology(self):
+        for timeout in ['0', '961']:
+            with self.subTest(timeout=timeout), tempfile.TemporaryDirectory() as directory, \
+                    patch.object(lane, 'preflight') as preflight, patch.object(lane, 'bounded_child') as child:
+                self.assertEqual(1, lane.main(['--output', directory, '--child-timeout', timeout]))
+                preflight.assert_not_called()
+                child.assert_not_called()
+                report = json.loads((Path(directory) / 'live-lane.json').read_text())
+                self.assertEqual('failed', report['result'])
+                self.assertIn('--child-timeout must be between 1 and 960 seconds.', report['error'])
+
+    def test_preflight_only_prints_summary_and_never_starts_children(self):
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(lane, 'preflight', return_value=[{'operation': 'fixture.operation'}]), \
+                patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
+                patch.object(lane, 'bounded_child') as child, redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(0, lane.main(['--output', directory, '--preflight-only']))
+            child.assert_not_called()
+            report = json.loads((Path(directory) / 'live-lane.json').read_text())
+            self.assertEqual('preflight-only', report['result'])
+            self.assertFalse(report['fullLiveAccepted'])
+            self.assertEqual(f'PREFLIGHT-ONLY: full live acceptance=False; receipt: {Path(directory) / "live-lane.json"}\n', stdout.getvalue())
 
     def test_unknown_selector_starts_no_topology(self):
         with tempfile.TemporaryDirectory() as directory, \
@@ -94,7 +122,7 @@ class LaneTests(unittest.TestCase):
     def test_success_requires_fresh_binding_case_and_owned_cleanup(self):
         for broken in [None, 'binding', 'operation', 'semantic-result', 'cleanup', 'cleanup-missing',
                        'child-exit', 'prerequisite', 'bootstrap', 'bootstrap-status', 'bootstrap-count',
-                       'bootstrap-ready', 'bootstrap-source', 'phase-missing', 'phase-duplicated', 'command-repeated', 'command-omitted']:
+                       'bootstrap-ready', 'bootstrap-source', 'bootstrap-interrupted', 'phase-missing', 'phase-duplicated', 'command-repeated', 'command-omitted']:
             with self.subTest(broken=broken), tempfile.TemporaryDirectory() as directory:
                 selection = {'operation': 'fixture.operation', **{key: 'bound-' + key for key in
                     BINDING_KEYS}}
@@ -125,13 +153,25 @@ class LaneTests(unittest.TestCase):
                         'backupReference': 'bad' if broken == 'bootstrap' else 'sha256:genesis-hash;file:/private/initial-empty.rdb'}))
                     (output / 'child.stdout.txt').write_text('Isolated run: ' + str(runtime) + '\n')
                     return 0
+                read_text = Path.read_text
+                def read(path, *args, **kwargs):
+                    if broken == 'bootstrap-interrupted' and path.name == 'writer-bootstrap.json':
+                        raise SystemExit(143)
+                    return read_text(path, *args, **kwargs)
                 with patch.object(lane, 'preflight', return_value=[selection]), \
                         patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
                         patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                        patch.object(Path, 'read_text', autospec=True, side_effect=read), \
                         patch.object(lane, 'bounded_child', side_effect=child):
-                    self.assertEqual(1 if broken else 0, lane.main(['--output', directory]))
+                    if broken == 'bootstrap-interrupted':
+                        with self.assertRaises(SystemExit):
+                            lane.main(['--output', directory])
+                    else:
+                        self.assertEqual(1 if broken else 0, lane.main(['--output', directory]))
                 result = json.loads((Path(directory) / 'live-lane.json').read_text())
                 self.assertEqual(broken is None, result['fullLiveAccepted'])
+                if broken == 'bootstrap-interrupted':
+                    self.assertNotEqual('passed', result['vectors'][0]['result'])
 
     def test_real_child_deadline_stops_only_its_owned_process_group(self):
         import subprocess

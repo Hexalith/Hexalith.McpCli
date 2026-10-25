@@ -34,7 +34,9 @@ internal static class LiveVectorProcess
         Assert.True(process.ExitCode == 0, $"Live vector {operation} failed: {diagnostic}");
         Assert.True(File.Exists(receipt), $"Live vector {operation} omitted its receipt.");
         using JsonDocument result = JsonDocument.Parse(await File.ReadAllTextAsync(receipt, cancellationToken).ConfigureAwait(false));
-        Assert.Equal(operation, result.RootElement.GetProperty("operation").GetString());
-        Assert.Equal("passed", result.RootElement.GetProperty("result").GetString());
+        string? returnedOperation = result.RootElement.GetProperty("operation").GetString();
+        string? returnedResult = result.RootElement.GetProperty("result").GetString();
+        Assert.True(operation == returnedOperation, $"Live vector {operation} returned a different Operation: {returnedOperation?.Replace(token, "<redacted>", StringComparison.Ordinal)}.");
+        Assert.True(returnedResult == "passed", $"Live vector {operation} returned an unsuccessful result: {returnedResult?.Replace(token, "<redacted>", StringComparison.Ordinal)}.");
     }
 }

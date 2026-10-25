@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs" Link="AdministratorAuthorityBootstrap.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveVectorProcess.cs" Link="LiveVectorProcess.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveVectorSelection.cs" Link="LiveVectorSelection.cs" />
     <PackageReference Include="Hexalith.EventStore.Client" />
+    <PackageReference Include="Hexalith.Tenants.Contracts" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs" Link="GatewaySmokeProbe.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/ProjectionWriterBootstrap.cs" Link="ProjectionWriterBootstrap.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs" Link="TopologyPrerequisites.cs" />

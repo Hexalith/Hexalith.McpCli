@@ -1,0 +1,53 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5STY3ZWGQPS80RKS689EYSM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Original",
+          "Description": "Description cleared by the update"
+        },
+        "correlationId": "01M5STY3ZWGQPS80RKS689EYSM"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5STY405QGRY3QDFTCASGV1J",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Renamed",
+          "Description": null
+        },
+        "correlationId": "01M5STY405QGRY3QDFTCASGV1J"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/build-resume-final-20261025/live/f072ccf25ff44237a3e7c3e7a63f485e/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-update"
+        }
+      }
+    }
+  ]
+}

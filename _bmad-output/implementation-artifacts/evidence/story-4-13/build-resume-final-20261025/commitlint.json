@@ -1,0 +1,9 @@
+{
+  "command": "npx --no -- commitlint --verbose < /tmp/mcpcli-413-resume-commit-message.txt",
+  "exitCode": 0,
+  "toolingInstallation": {
+    "command": "npm ci",
+    "exitCode": 0
+  },
+  "messageFile": "commit-message.txt"
+}

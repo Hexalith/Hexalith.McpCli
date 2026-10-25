@@ -7,11 +7,6 @@ using System.Text.Json;
 using Hexalith.EventStore.Aspire;
 using Hexalith.EventStore.Testing.Integration;
 using Hexalith.McpCli.AppHost;
-using Hexalith.EventStore.Client.Gateway;
-using Hexalith.EventStore.Contracts.Queries;
-using Hexalith.Tenants.Contracts.Queries;
-
-using Microsoft.Extensions.Options;
 
 namespace Hexalith.McpCli.Integration.Tests;
 
@@ -107,35 +102,7 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     {
         using var http = new HttpClient { BaseAddress = GatewayEndpoint, Timeout = TimeSpan.FromSeconds(15) };
         http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateLiveIdentity());
-        IEventStoreGatewayClient gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
-        var request = new SubmitQueryRequest("system", GetGlobalAdministratorsQuery.Domain, "global-administrators",
-            GetGlobalAdministratorsQuery.QueryType, GetGlobalAdministratorsQuery.ProjectionType);
-        using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        deadline.CancelAfter(TimeSpan.FromSeconds(60));
-        string failure = "No successful privileged administrator document.";
-        try
-        {
-            while (true)
-            {
-                try
-                {
-                    EventStoreQueryResult result = await gateway.SubmitQueryAsync(request, cancellationToken: deadline.Token).ConfigureAwait(false);
-                    if (result.Payload is { } payload && payload.TryGetProperty("items", out JsonElement items)
-                        && items.EnumerateArray().Any(item => item.GetProperty("userId").GetString() == AdministratorId))
-                        return;
-                    failure = "Privileged query omitted the persisted bootstrap administrator.";
-                }
-                catch (EventStoreGatewayException exception)
-                {
-                    failure = $"Privileged query HTTP {exception.StatusCode}.";
-                }
-                await Task.Delay(TimeSpan.FromMilliseconds(500), deadline.Token).ConfigureAwait(false);
-            }
-        }
-        catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
-        {
-            throw new TimeoutException($"Bootstrap authority did not converge in 60 seconds. {failure}", exception);
-        }
+        await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, cancellationToken).ConfigureAwait(false);
     }
 
     private string CreateIdentity(bool invalidSignature, bool live)
@@ -147,7 +114,7 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
             ["iss"] = "mcpcli-live-tests", ["aud"] = "hexalith-eventstore", ["sub"] = live ? AdministratorId : "mcpcli-live-smoke",
             ["tenants"] = live ? "[\"system\",\"tenant-a\"]" : "[\"system\"]",
             ["domains"] = live ? "[\"tenants\",\"party\",\"global-administrators\"]" : "[\"tenants\"]",
-            ["permissions"] = live ? "[\"command:write\",\"query:read\"]" : "[\"query:read\"]",
+            ["permissions"] = live ? "[\"command:submit\",\"query:read\"]" : "[\"query:read\"]",
             ["global_admin"] = live ? "true" : "false",
             ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + (live ? 600 : 300),
         }));

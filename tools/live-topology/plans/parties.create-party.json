@@ -34,6 +34,66 @@
             "path": "/document/personDetails/firstName",
             "operator": "equals",
             "value": "Ada"
+          },
+          {
+            "path": "/document/type",
+            "operator": "equals",
+            "value": "Person"
+          },
+          {
+            "path": "/document/isErased",
+            "operator": "equals",
+            "value": false
+          },
+          {
+            "path": "/document/personDetails/lastName",
+            "operator": "equals",
+            "value": "Lovelace"
+          },
+          {
+            "path": "/document/contactChannels",
+            "operator": "arrayLength",
+            "value": 1
+          },
+          {
+            "path": "/document/contactChannels/0/id",
+            "operator": "equals",
+            "value": "email-story49"
+          },
+          {
+            "path": "/document/contactChannels/0/type",
+            "operator": "equals",
+            "value": "Email"
+          },
+          {
+            "path": "/document/contactChannels/0/value",
+            "operator": "equals",
+            "value": "ada@example.test"
+          },
+          {
+            "path": "/document/contactChannels/0/isPreferred",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "path": "/document/identifiers",
+            "operator": "arrayLength",
+            "value": 1
+          },
+          {
+            "path": "/document/identifiers/0/id",
+            "operator": "equals",
+            "value": "external-story49"
+          },
+          {
+            "path": "/document/identifiers/0/type",
+            "operator": "equals",
+            "value": "Other"
+          },
+          {
+            "path": "/document/identifiers/0/value",
+            "operator": "equals",
+            "value": "customer-49"
           }
         ]
       }

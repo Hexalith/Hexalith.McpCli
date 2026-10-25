@@ -1,0 +1,47 @@
+FAILED: full live acceptance=False; receipt: /tmp/tmpfsfsxazh/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp1q561npf/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpin9a28i4/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2s3qe8v9/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpw8glpr5t/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp7utwnp7_/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpsrt2d2kp/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpvm69sa56/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp5800g1qy/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpny5yo_wr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp4f3gz9_k/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp5gav70fx/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpos4vhxuq/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpymy8k2qb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmps_263dnk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpgduiwh1s/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpkbi2jlt4/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp9inojl1n/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpgravg6zy/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpedz35v_z/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp8ablrzw1/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpacxcic0b/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpkud69in_/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp6_6g7lfs/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmpuio1tpk9/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpneko_h86/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp8dhl1xm9/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmphl95qvjc/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpjyhf4fws/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp7kfz1mdw/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp8z4zhdj1/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmph5aj518s/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpe6v6hy5o/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp38t1zmw2/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp9ucdayoq/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpun05eqsc/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpv6hj7n1j/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp3of53f1t/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmppiu4u5uk/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpjguldvt_/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmptk6fobkb/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmplyg1zy93/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp04ltsfeq/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmppmjxfncm/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmplzkctna1/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpgjsqf4o7/live-result.json
+Verified four private runtime binaries in /tmp/tmp1q2lsaj6/runtime

@@ -105,70 +105,69 @@ def main(argv=None) -> int:
         save()
         if args.preflight_only:
             report['result'] = 'preflight-only'
-            save()
-            return 0
-        if not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
-            raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
-        for item, outcome in zip(selections, report['vectors']):
-            operation = item['operation']
-            output = generation / operation
-            output.mkdir()
-            outcome.update(result='running', output=str(output.relative_to(args.output)))
-            command = [sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
-                       'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
-                       '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')]
-            outcome['command'] = command
-            save()
-            environment = os.environ.copy()
-            for key in list(environment):
-                if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
-                    del environment[key]
-            environment.update(MCPCLI_LIVE_OPERATION=operation, MCPCLI_LIVE_OUTPUT=str(output),
-                               MCPCLI_LIVE_HOST=str(args.host.resolve()),
-                               MCPCLI_LIVE_BINDING=json.dumps(selection_binding(item)))
-            try:
-                code = bounded_child(command, environment, output, args.child_timeout)
-                outcome['exitCode'] = code
-                if code != 0:
-                    raise VectorError(f'{operation}: isolated child exited {code}; see {output}')
-                require_case(output / 'tests.xml', operation)
-                live = json.loads((output / 'live-result.json').read_text())
-                if live.get('operation') != operation or live.get('result') != 'passed' \
-                        or live.get('binding') != selection_binding(item):
-                    raise VectorError(f'{operation}: missing, stale or unsuccessful semantic receipt')
-                require_phases(item, live.get('phases', []))
-                # Verify the wrapper's ownership receipt, including successful private infrastructure cleanup.
-                lines = (output / 'child.stdout.txt').read_text().splitlines()
-                runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
-                if len(runs) != 1:
-                    raise VectorError(f'{operation}: missing isolated runtime receipt')
-                owned = json.loads((runs[0] / 'result.json').read_text())
-                if owned.get('commandExitCode') != 0 or not owned.get('prerequisitesReady') \
-                        or set(owned.get('ownedInfrastructureStopped', {})) != {'sentry', 'redis', 'placement', 'scheduler'} \
-                        or any(value is None for value in owned['ownedInfrastructureStopped'].values()):
-                    raise VectorError(f'{operation}: private runtime did not prove successful cleanup')
-                outcome.update(result='passed', isolatedReceipt=str(runs[0] / 'result.json'))
-                bootstrap = json.loads((output / 'writer-bootstrap.json').read_text())
-                backup = owned.get('initialRedisBackup', {})
-                reference = 'sha256:' + backup.get('sha256', '') + ';file:' + backup.get('backupFile', '')
-                if bootstrap.get('result') != 'passed' or bootstrap.get('activationCount') != 1 \
-                        or bootstrap.get('readinessObserved') is not True or bootstrap.get('backupReference') != reference \
-                        or len(bootstrap.get('sourceCommit', '')) != 40:
-                    raise VectorError(f'{operation}: private writer bootstrap is missing or not bound to its genesis backup')
-            except Exception as error:
-                outcome.update(result='failed', error=f'{type(error).__name__}: {error}')
-            save()
-        report['passed'] = sum(item['result'] == 'passed' for item in report['vectors'])
-        report['failed'] = sum(item['result'] == 'failed' for item in report['vectors'])
-        report['fullLiveAccepted'] = not args.operation and report['failed'] == 0 and report['passed'] == len(report['coverage'])
-        report['result'] = 'passed' if report['fullLiveAccepted'] else 'partial' if not report['failed'] else 'failed'
+        else:
+            if not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
+                raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
+            for item, outcome in zip(selections, report['vectors']):
+                operation = item['operation']
+                output = generation / operation
+                output.mkdir()
+                outcome.update(result='running', output=str(output.relative_to(args.output)))
+                command = [sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
+                           'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
+                           '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')]
+                outcome['command'] = command
+                save()
+                environment = os.environ.copy()
+                for key in list(environment):
+                    if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
+                        del environment[key]
+                environment.update(MCPCLI_LIVE_OPERATION=operation, MCPCLI_LIVE_OUTPUT=str(output),
+                                   MCPCLI_LIVE_HOST=str(args.host.resolve()),
+                                   MCPCLI_LIVE_BINDING=json.dumps(selection_binding(item)))
+                try:
+                    code = bounded_child(command, environment, output, args.child_timeout)
+                    outcome['exitCode'] = code
+                    if code != 0:
+                        raise VectorError(f'{operation}: isolated child exited {code}; see {output}')
+                    require_case(output / 'tests.xml', operation)
+                    live = json.loads((output / 'live-result.json').read_text())
+                    if live.get('operation') != operation or live.get('result') != 'passed' \
+                            or live.get('binding') != selection_binding(item):
+                        raise VectorError(f'{operation}: missing, stale or unsuccessful semantic receipt')
+                    require_phases(item, live.get('phases', []))
+                    # Verify the wrapper's ownership receipt, including successful private infrastructure cleanup.
+                    lines = (output / 'child.stdout.txt').read_text().splitlines()
+                    runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
+                    if len(runs) != 1:
+                        raise VectorError(f'{operation}: missing isolated runtime receipt')
+                    owned = json.loads((runs[0] / 'result.json').read_text())
+                    if owned.get('commandExitCode') != 0 or not owned.get('prerequisitesReady') \
+                            or set(owned.get('ownedInfrastructureStopped', {})) != {'sentry', 'redis', 'placement', 'scheduler'} \
+                            or any(value is None for value in owned['ownedInfrastructureStopped'].values()):
+                        raise VectorError(f'{operation}: private runtime did not prove successful cleanup')
+                    bootstrap = json.loads((output / 'writer-bootstrap.json').read_text())
+                    backup = owned.get('initialRedisBackup', {})
+                    reference = 'sha256:' + backup.get('sha256', '') + ';file:' + backup.get('backupFile', '')
+                    if bootstrap.get('result') != 'passed' or bootstrap.get('activationCount') != 1 \
+                            or bootstrap.get('readinessObserved') is not True or bootstrap.get('backupReference') != reference \
+                            or len(bootstrap.get('sourceCommit', '')) != 40:
+                        raise VectorError(f'{operation}: private writer bootstrap is missing or not bound to its genesis backup')
+                    outcome.update(result='passed', isolatedReceipt=str(runs[0] / 'result.json'))
+                except Exception as error:
+                    outcome.update(result='failed', error=f'{type(error).__name__}: {error}')
+                save()
+            report['passed'] = sum(item['result'] == 'passed' for item in report['vectors'])
+            report['failed'] = sum(item['result'] == 'failed' for item in report['vectors'])
+            report['fullLiveAccepted'] = not args.operation and report['failed'] == 0 and report['passed'] == len(report['coverage'])
+            report['result'] = 'passed' if report['fullLiveAccepted'] else 'partial' if not report['failed'] else 'failed'
     except Exception as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')
     finally:
         save()
         signal.signal(signal.SIGTERM, previous_handler)
     print(f"{report['result'].upper()}: full live acceptance={report['fullLiveAccepted']}; receipt: {receipt}")
-    return 0 if report['result'] in ('passed', 'partial') else 1
+    return 0 if report['result'] in ('passed', 'partial', 'preflight-only') else 1
 
 
 if __name__ == '__main__':

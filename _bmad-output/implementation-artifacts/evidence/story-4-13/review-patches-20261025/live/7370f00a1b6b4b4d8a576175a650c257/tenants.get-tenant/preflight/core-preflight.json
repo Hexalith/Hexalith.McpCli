@@ -1,0 +1,70 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/tmp/mcpcli-413-review-live/7370f00a1b6b4b4d8a576175a650c257/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SR02R6ZC12RRV012PSN0YN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "Name": "Vector Read",
+          "Description": "Read by the McpCli v1 vector"
+        },
+        "correlationId": "01M5SR02R6ZC12RRV012PSN0YN"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-review-live/7370f00a1b6b4b4d8a576175a650c257/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5SR02RHG0VVM5Z9JV71PHED",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "UserId": "vector-reader@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5SR02RHG0VVM5Z9JV71PHED"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-review-live/7370f00a1b6b4b4d8a576175a650c257/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5SR02RKN5Z4FJXBTBCYGMXX",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-read",
+          "Key": "locale",
+          "Value": "fr-FR"
+        },
+        "correlationId": "01M5SR02RKN5Z4FJXBTBCYGMXX"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-review-live/7370f00a1b6b4b4d8a576175a650c257/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-read"
+        }
+      }
+    }
+  ]
+}

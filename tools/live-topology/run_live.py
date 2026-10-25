@@ -21,10 +21,11 @@ def observe(head: HeadProcess, call: dict, url: str, action: dict, values: dict,
     """Submit writes once. Only reads may converge, within an independent hard deadline."""
     deadline = clock() + plan['deadlineSeconds']
     last_failure = None
+    assertion_paths = json.dumps([assertion['path'] for assertion in call['assertions']])
     while True:
         remaining = deadline - clock()
         if remaining <= 0:
-            raise VectorError(f"{record['phase']} {call['operation']}: read deadline: {last_failure}")
+            raise VectorError(f"{record['phase']} {call['operation']}: read deadline: {last_failure}; declared assertion paths: {assertion_paths}")
         original_timeout = head.timeout
         head.timeout = min(original_timeout, remaining)
         attempt = {'result': 'running'}
@@ -87,7 +88,7 @@ def observe(head: HeadProcess, call: dict, url: str, action: dict, values: dict,
                 raise
             remaining = deadline - clock()
             if remaining <= 0:
-                raise VectorError(f"{record['phase']} {call['operation']}: read deadline: {last_failure}") from error
+                raise VectorError(f"{record['phase']} {call['operation']}: read deadline: {last_failure}; declared assertion paths: {assertion_paths}") from error
             pause(min(plan['pollSeconds'], remaining))
         finally:
             head.timeout = original_timeout
@@ -152,7 +153,7 @@ def main(argv=None) -> int:
         from urllib.parse import urlparse
         parsed = urlparse(url)
         if parsed.scheme != 'http' or parsed.hostname not in ('localhost', '127.0.0.1', '::1') \
-                or parsed.username or parsed.password or parsed.query or parsed.fragment or not token:
+                or parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment or not token:
             raise VectorError('Private discovered loopback endpoint and short-lived identity are required.')
         selections = preflight(args.host.resolve(), args.output / 'preflight', operation=args.operation)
         selected = [item for item in selections if item['operation'] == args.operation]

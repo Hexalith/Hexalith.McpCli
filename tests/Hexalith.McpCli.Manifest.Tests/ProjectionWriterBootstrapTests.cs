@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -133,6 +134,69 @@ public sealed class ProjectionWriterBootstrapTests : IDisposable
             ProjectionWriterBootstrap.ActivateAsync(http, Backup(), new string('a', 40), TestContext.Current.CancellationToken));
         Assert.Equal("Private projection writer activation returned no Activated receipt.", failure.Message);
         Assert.Equal(1, calls);
+        Assert.False(File.Exists(Path.Combine(_root, "writer-bootstrap.json")));
+    }
+
+    /// <summary>Persistent unreadiness fails at the real 30-second deadline without reactivating or recording success.</summary>
+    [Fact]
+    public async Task PersistentUnreadinessFailsAtBootstrapDeadlineWithoutSuccessReceipt()
+    {
+        int posts = 0, reads = 0;
+        using var handler = new ProjectionWriterBootstrapHandler(request =>
+        {
+            if (request.Method == HttpMethod.Post)
+            {
+                posts++;
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"status\":\"Activated\"}") });
+            }
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.Equal("/ready", request.RequestUri!.AbsolutePath);
+            reads++;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable));
+        });
+        using var http = new HttpClient(handler) { BaseAddress = new Uri("http://127.0.0.1:1234/"), Timeout = TimeSpan.FromSeconds(40) };
+        var elapsed = Stopwatch.StartNew();
+        OperationCanceledException failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            ProjectionWriterBootstrap.ActivateAsync(http, Backup(), new string('a', 40), TestContext.Current.CancellationToken)
+                .WaitAsync(TimeSpan.FromSeconds(35), TestContext.Current.CancellationToken));
+        Assert.True(failure.CancellationToken.IsCancellationRequested);
+        Assert.InRange(elapsed.Elapsed, TimeSpan.FromSeconds(29), TimeSpan.FromSeconds(35));
+        Assert.Equal(1, posts);
+        Assert.True(reads > 1);
+        Assert.False(File.Exists(Path.Combine(_root, "writer-bootstrap.json")));
+    }
+
+    /// <summary>Caller cancellation stops readiness polling promptly and cannot publish a success receipt.</summary>
+    [Fact]
+    public async Task CallerCancellationStopsReadinessWithoutReactivationOrSuccessReceipt()
+    {
+        int posts = 0, reads = 0;
+        var observed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        using var handler = new ProjectionWriterBootstrapHandler(request =>
+        {
+            if (request.Method == HttpMethod.Post)
+            {
+                posts++;
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"status\":\"Activated\"}") });
+            }
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.Equal("/ready", request.RequestUri!.AbsolutePath);
+            reads++;
+            observed.TrySetResult();
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable));
+        });
+        using var http = new HttpClient(handler) { BaseAddress = new Uri("http://127.0.0.1:1234/") };
+        using var caller = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        Task pending = ProjectionWriterBootstrap.ActivateAsync(http, Backup(), new string('a', 40), caller.Token);
+        await observed.Task.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+        var elapsed = Stopwatch.StartNew();
+        caller.Cancel();
+        OperationCanceledException failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            pending.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken));
+        Assert.True(failure.CancellationToken.IsCancellationRequested);
+        Assert.True(elapsed.Elapsed < TimeSpan.FromSeconds(5));
+        Assert.Equal(1, posts);
+        Assert.True(reads >= 1);
         Assert.False(File.Exists(Path.Combine(_root, "writer-bootstrap.json")));
     }
 

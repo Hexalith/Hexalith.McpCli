@@ -1,0 +1,38 @@
+{
+  "rootCommit": "4b60d49e842d58adc139fd2f6058ab1073e12d6d",
+  "referenceCommits": {
+    "Hexalith.Builds": "e171c5a788eab183b32683431b084198c9b8d373",
+    "Hexalith.EventStore": "6ca1b4cb9d422017138541036b3c23397265de98",
+    "Hexalith.Tenants": "8804c10b8a900860ea2394c81eff78d23bb3c0a4",
+    "Hexalith.Parties": "559b91c812a422f9890e448f7942e645f3739b2b"
+  },
+  "sha256": {
+    ".github/workflows/ci.yml": "7cf7e18299826010a458bef29289ecaf0bcfbe4f5eb1bde4f2a0dbf18c57176c",
+    "README.md": "ed6c125c8409a86d801c8d6e437769d22fced6217ecce2040d896636920fea8c",
+    "_bmad-output/implementation-artifacts/evidence/story-4-13/README.md": "09462a609ec5da708337e8bae867c76eec0c43c7e4f1e8501ffb7f1e74acacbc",
+    "_bmad-output/implementation-artifacts/spec-4-13-test-every-vector-against-live-gateway-semantics.md": "d7dc478ef1ee00d50e01a2536c9e678ce0a8dadd3678c819117a2a0a2c17cca5",
+    "tests/Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs": "3a87448f80b34b65ab24dfa053bb5de176f028049cca9ccc5d67c8e6034a43aa",
+    "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs": "3cc576b8741941ea303fded808cfc4c9b6200677e79e4f34108d7b2fbeab56c2",
+    "tests/Hexalith.McpCli.Integration.Tests/LiveVectorProcess.cs": "89b1b53ef6f761d0dbd4bc9a898fa8fa0ea951019ea1ddbad8178f14df301f3f",
+    "tests/Hexalith.McpCli.Manifest.Tests/AdministratorAuthorityBootstrapTests.cs": "5eea8b191504ba9d9c1429bf6a4f70bcccf8fb434781c44d1aef746d606463a9",
+    "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj": "ed30d1d50e163f89ede87e4c4ef338865a8508675096ead3e2bafedd1de9e9cd",
+    "tests/Hexalith.McpCli.Manifest.Tests/LiveVectorProcessTests.cs": "2f278ea59b962b757cce25fc2f08a9044e146ca51ef88e454c0224f309b5f331",
+    "tests/Hexalith.McpCli.Manifest.Tests/ProjectionWriterBootstrapTests.cs": "a9148723d8af170ab87671aaaa4cef1b50669dff7f06221850d6176996820cd6",
+    "tools/live-topology/README.md": "691466a4cb3ea9684090a2f4798e9bf9b31ff88e4a0e32dc2bd839bc1d30d08d",
+    "tools/live-topology/live_plans.py": "353606b6b627985be7fedf4da9a42d9918e4d6342cbecbd994a46970fafac337",
+    "tools/live-topology/plans/parties.create-party.json": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+    "tools/live-topology/run-vectors.py": "ba2a40a7b4623372b36ee05ef8f3d2363f87494d2c486ee972455ab140b2f64f",
+    "tools/live-topology/run_live.py": "d69dc64c6c4ce78e80cf4f48988fc8c949ed497b84f05e660b4003f3b8bc1c53",
+    "tools/live-topology/test_lane.py": "1749424400aa993b1de2d514d3a2019d3434ad8d71d46facad54bf4ed65726e4",
+    "tools/live-topology/test_live_plans.py": "2b3b91fb20190713f52da812797ede671fdb2ab5a482fc66a9d1dca9194455b4",
+    "tools/live-topology/test_live_runner.py": "4b14d24bc91542130ae1458195062da5f84f6a8ae957448943d7b744f6441f95"
+  },
+  "binarySha256": {
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll": "76383440cf594a80807ae26b47a6f9390e4b4c7b4c5f284ff18cb7064a4d78a4",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll": "8176567c2576361a7d62b894ebd7d71513b1ba72976b55c86eb7a56eab351b27",
+    "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll": "21108ebfc114f624a2859a7e360fb03d8acf640f51c4113b85351105a316c7f2",
+    "references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.dll": "cbd2206b61d99c6536a9efe6b145798b8f5b971e3b336fe501b280e7ba29d724",
+    "references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll": "f61465903228598c3020cb6b82ce82541d15af2672887905cbcb98fb9fb32f25",
+    "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll": "faac589a7138b7d7cab7df90ac9f868c8c1c0f13927a8ca5712a0b2f722bb95d"
+  }
+}

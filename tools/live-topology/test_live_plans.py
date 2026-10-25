@@ -110,6 +110,59 @@ class PlanTests(unittest.TestCase):
     def test_input_binding_cannot_change_static_fields(self):
         self.reject(lambda p: p['actions'][-1]['bindings'][0].update(path='/payload/From'), 'time binding|static binding')
 
+    def test_duplicate_binding_target_is_rejected(self):
+        self.reject(lambda p: p['actions'][-1]['bindings'].append(
+            copy.deepcopy(p['actions'][-1]['bindings'][0])), 'duplicate binding target')
+
+    def test_cursor_binding_requires_a_capture_of_the_returned_cursor(self):
+        invocation = next(i for i, action in enumerate(self.plan['actions']) if action.get('step') == '/invocation')
+        def mutate(plan):
+            plan['actions'][invocation]['captures'].append(
+                {'name': 'other-string', 'path': '/document/items/0/userId', 'type': 'string'})
+            plan['actions'][-1]['bindings'][0]['capture'] = 'other-string'
+        self.reject(mutate, 'cursor must bind a captured returned cursor')
+
+    def test_time_binding_requires_a_timestamp_capture(self):
+        self.vector = ROOT / 'tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json'
+        self.plan = json.loads((ROOT / 'tools/live-topology/plans/tenants.get-tenant-audit.json').read_text())
+        action = next(i for i, item in enumerate(self.plan['actions']) if item.get('label') == 'time-upper-inclusive')
+        self.reject(lambda p: p['actions'][action]['bindings'][0].update(capture='continuation'),
+                    'time binding requires a timestamp capture')
+
+    def test_step_binding_cannot_replace_static_cursor_input(self):
+        # Keep the plan valid while changing only the frozen fixture input and its exact digest.
+        vector = json.loads(self.vector.read_text())
+        vector['postconditions'][0]['envelope']['cursor'] = 'approved-static-cursor'
+        with tempfile.TemporaryDirectory() as directory:
+            self.vector = Path(directory) / 'vector.json'
+            self.vector.write_text(json.dumps(vector))
+            self.plan['vectorSha256'] = digest(self.vector)
+            self.reject(lambda _: None, 'cannot weaken static vector inputs')
+
+    def test_duplicate_capture_name_is_rejected(self):
+        invocation = next(i for i, action in enumerate(self.plan['actions']) if action.get('step') == '/invocation')
+        self.reject(lambda p: p['actions'][invocation]['captures'].append(
+            copy.deepcopy(p['actions'][invocation]['captures'][0])), 'duplicate capture')
+
+    def test_duplicate_assertion_binding_index_is_rejected(self):
+        invocation = next(i for i, action in enumerate(self.plan['actions']) if action.get('step') == '/invocation')
+        self.reject(lambda p: p['actions'][invocation]['assertionBindings'].append(
+            copy.deepcopy(p['actions'][invocation]['assertionBindings'][0])), 'invalid or duplicate assertion selector')
+
+    def test_assertion_binding_requires_matching_capture_type_phase_and_path(self):
+        invocation = next(i for i, action in enumerate(self.plan['actions']) if action.get('step') == '/invocation')
+        for mismatch in ['type', 'phase', 'path']:
+            def mutate(plan):
+                capture = plan['actions'][invocation]['captures'][0]
+                if mismatch == 'type':
+                    capture['type'] = 'timestamp'
+                elif mismatch == 'path':
+                    capture['path'] = '/document/items/0/userId'
+                else:
+                    plan['actions'][1]['captures'] = [plan['actions'][invocation]['captures'].pop()]
+            with self.subTest(mismatch=mismatch):
+                self.reject(mutate, 'cannot weaken static vector assertions')
+
     def test_capture_types_are_checked_without_coercion(self):
         for value in [None, '', 2, True, []]:
             with self.subTest(value=value), self.assertRaises(VectorError):
@@ -159,6 +212,72 @@ class PlanTests(unittest.TestCase):
         actual = {assertion['path']: assertion['value'] for assertion in observation['assertions'] if assertion['operator'] == 'equals'}
         self.assertEqual(expected, {key: actual[key] for key in expected})
 
+    def test_create_party_observation_retains_complete_submitted_content(self):
+        plan = json.loads((ROOT / 'tools/live-topology/plans/parties.create-party.json').read_text())
+        observation = next(action['query'] for action in plan['actions'] if action.get('label') == 'persisted-invocation')
+        expected = {('/document/id', 'equals'): 'party-story49', ('/document/type', 'equals'): 'Person',
+                    ('/document/isActive', 'equals'): True, ('/document/isErased', 'equals'): False,
+                    ('/document/personDetails/firstName', 'equals'): 'Ada',
+                    ('/document/personDetails/lastName', 'equals'): 'Lovelace',
+                    ('/document/contactChannels', 'arrayLength'): 1,
+                    ('/document/contactChannels/0/id', 'equals'): 'email-story49',
+                    ('/document/contactChannels/0/type', 'equals'): 'Email',
+                    ('/document/contactChannels/0/value', 'equals'): 'ada@example.test',
+                    ('/document/contactChannels/0/isPreferred', 'equals'): True,
+                    ('/document/identifiers', 'arrayLength'): 1,
+                    ('/document/identifiers/0/id', 'equals'): 'external-story49',
+                    ('/document/identifiers/0/type', 'equals'): 'Other',
+                    ('/document/identifiers/0/value', 'equals'): 'customer-49'}
+        actual = {(item['path'], item['operator']): item['value'] for item in observation['assertions']}
+        self.assertEqual(expected, {key: actual[key] for key in expected})
+
+    def test_malformed_core_output_retains_sanitized_process_diagnostics(self):
+        import live_plans
+        import subprocess
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        head = SimpleNamespace(_base=lambda: ['dotnet', '/selected/adapter.dll'], timeout=30,
+                               env={'EVENTSTORE_TOKEN': 'private-token', 'CLIENT_SECRET': 'private-secret'})
+        for stdout in ['not-json private-token', '["private-token"]']:
+            with self.subTest(stdout=stdout), patch.object(live_plans.subprocess, 'run', return_value=
+                    subprocess.CompletedProcess([], 2, stdout, 'adapter stderr private-secret')) as process:
+                with self.assertRaisesRegex(VectorError, 'no valid document') as failure:
+                    live_plans.validate_call(head, {'operation': 'fixture.operation'})
+                message = str(failure.exception)
+                self.assertIn('fixture.operation', message)
+                self.assertIn('"command": ["dotnet", "/selected/adapter.dll", "--validate-vectors",', message)
+                self.assertIn('"exitCode": 2', message)
+                self.assertIn(json.dumps(stdout.replace('private-token', '<redacted>')), message)
+                self.assertIn('"stderr": "adapter stderr <redacted>"', message)
+                self.assertNotIn('private-token', message)
+                self.assertNotIn('private-secret', message)
+                process.assert_called_once()
+
+    def test_failed_core_responses_retain_sanitized_process_diagnostics(self):
+        import live_plans
+        import subprocess
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        head = SimpleNamespace(_base=lambda: ['dotnet', '/selected/adapter.dll'], timeout=30,
+                               env={'EVENTSTORE_TOKEN': 'private-token'})
+        for code, result in [(7, {'findings': [], 'requests': [{}]}),
+                             (0, {'findings': ['incompatible private-token'], 'requests': [{}]}),
+                             (0, {'findings': [], 'requests': []}),
+                             (0, {'findings': [], 'requests': None}),
+                             (0, {'findings': [], 'requests': {'unexpected': 'shape'}})]:
+            stdout = json.dumps(result)
+            with self.subTest(code=code, result=result), patch.object(live_plans.subprocess, 'run', return_value=
+                    subprocess.CompletedProcess([], code, stdout, 'adapter stderr private-token')) as process:
+                with self.assertRaisesRegex(VectorError, 'resolved Core compatibility failed') as failure:
+                    live_plans.validate_call(head, {'operation': 'fixture.operation'})
+                message = str(failure.exception)
+                self.assertIn('"command": ["dotnet", "/selected/adapter.dll", "--validate-vectors",', message)
+                self.assertIn(f'"exitCode": {code}', message)
+                self.assertIn(json.dumps(stdout.replace('private-token', '<redacted>')), message)
+                self.assertIn('"stderr": "adapter stderr <redacted>"', message)
+                self.assertNotIn('private-token', message)
+                process.assert_called_once()
+
     def test_actual_preflight_delegates_artifact_inventory_and_core_rejections(self):
         import live_plans
         from unittest.mock import patch
@@ -199,7 +318,7 @@ class PlanTests(unittest.TestCase):
         host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
         with tempfile.TemporaryDirectory() as home:
             head = HeadProcess(host, home, 30)
-            for name in ['parties.list-parties', 'parties.search-parties', 'parties.update-party']:
+            for name in ['parties.create-party', 'parties.list-parties', 'parties.search-parties', 'parties.update-party']:
                 plan = json.loads((ROOT / 'tools/live-topology/plans' / (name + '.json')).read_text())
                 for action in plan['actions']:
                     if 'query' in action:

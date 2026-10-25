@@ -2,7 +2,7 @@
 title: '4.13 Test every vector against live Gateway semantics'
 type: 'feature'
 created: '2026-10-25'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'aabc03c68c56ac8085ee1b145654576f5fd201a4'
@@ -111,9 +111,52 @@ All fourteen findings were graded before grouping. B1/E1 share the same adapter-
 
 **Completion:** All patch groups are implemented and covered by the 70-case Python and 240-case Manifest runs, including actual C# child handoff, genuine stale DLL rejection, preflight delegation, executor cardinality and hard-termination progress. The final complete live generation `a45347517d3446de80684c5b084ca366` passes all 21 vectors and the added filter/update observations; the separate final smoke also passes. Parent receipt/phase/binding/cleanup audits pass.
 
+The later committed-code review patches P1–P14 are complete. The persisted
+administrator predicate is now protected by three real-client Manifest cases,
+including its actual 60-second deadline, and a compiled weakened-predicate
+mutation fails. The complete offline preflight now runs in the existing CI
+venv; every missing plan/identity/entry/selector guard has focused coverage.
+Writer-bootstrap validation precedes a passing vector receipt and a successful
+preflight-only run prints its summary. The private URL guard also refuses empty
+userinfo, and the identity declares `command:submit`. Documentation corrections
+cover idempotent steps, exact ACL routes, the 3.127.0 fixture packages,
+companion-plan enrollment and Python 3.11.
+
+The fresh full lane `7370f00a1b6b4b4d8a576175a650c257` qualifies the current
+user-selected Parties `559b91c8` and EventStore `6ca1b4cb` source checkouts:
+21 passed, zero failures/skips, 142 phases, exactly 53 Command submissions with
+53 distinct message IDs and 89 Query attempts. Its independent binding,
+assertion, cursor/time, genesis-backup and cleanup audit passes, as does the
+separate final smoke. Fresh restore, Release warnings-as-errors build, all six
+non-live .NET suites (243 Manifest cases), 81 live-tool and 158 conformance
+Python cases, exact 22-case discovery, complete offline preflight and all three
+source-server builds pass. All 24 targeted Python mutations are detected.
+Evidence and exact commands: `evidence/story-4-13/review-patches-20261025/`.
+
+### Resumed build review (2026-10-25)
+
+All three required layers completed against the full baseline diff. Each finding was graded before grouping; seven claims survive as six internal patch groups. No intent/specification loopback or deferral is required.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| R2-B1 | low | reject | RID omission is reproducible with a synthetic Linux runtime dependency. The exact approved production closure has only Windows EventLog RID assets; the supported Linux lane has no active RID DLL to omit. Adding active-RID selection/guards addresses no current runtime failure and adds complexity. |
+| R2-B2 | low | reject | `require_phases` checks phase identity and submission cardinality. Its sole production writer, `execute`/`observe`, records and verifies the actual documents before marking a phase passed; the demonstrated receipt requires external fabrication or replacing that writer. Revalidating every document in the consumer duplicates that boundary for an unlikely malformed-receipt case. |
+| R2-B3 | low | reject | carried: checkout commit versus deployed bytes was already triaged under the 2026-10-25 code review. This private activation receipt records the cutover source; current qualification separately hashes every actual server assembly and checks the selected source commits. Adding runtime dirty-tree/provenance guards remains unnecessary complexity for this recorded private lane. |
+| R2-B4 | low | reject | `fromisoformat` accepts a space-separated timestamp, but real captures come from the Gateway's typed timestamp serializer and retain timezone/type checks. No production capture with the proposed syntax was shown; another parser guard would add complexity without an observed failure. |
+| R2-B5 | medium | patch: create observation | The create vector and its read barrier omit supplied last name, enum/preference fields and collection counts. Changing those persisted values still passes the present assertions. Add companion content assertions without changing approved vector bytes. |
+| R2-B6 | low | patch: CI evidence | The new complete preflight writes its receipts to runner temp, and this job has no artifact upload. Retain that existing directory with the repository's pinned upload action and `always()` so failures remain diagnosable. |
+| R2-B7 | low | patch: adapter diagnostics | `validate_call` discards exit/stdout/stderr on invalid JSON and omits stderr on a failed valid response. Preserve the failed command and sanitized process diagnostics in the existing internal failure message and test the boundary. |
+| R2-B8 | low | reject | carried: non-atomic `live-lane.json` writes were already triaged in the code-review rejected list. A kill during the small write produces an unparsable receipt that fails closed; atomic receipt hardening is extra complexity for that unlikely window. |
+| R2-B9 | medium | patch: writer deadline | Persistent readiness 503s never appear in the current writer-bootstrap tests; deleting the 30-second aggregate deadline leaves them green. Protect the shipped timeout and caller cancellation, exactly one activation, and absence of a success receipt. |
+| R2-B10 | medium | patch: process failures | The actual C# handoff test covers success only. Add child fixtures that protect nonzero exit, missing receipt, wrong Operation and failed result, including stale receipt invalidation and credential-safe diagnostics. |
+| R2-E1 | medium | patch: timeout paths | Repeated Gateway 404s for an unpersisted entity never reach a document assertion, so `observe` times out with the Operation/phase but no declared assertion path. Include those paths in the existing read-deadline diagnostic and test the absent-document case. |
+| R2-V1 | medium | patch: writer deadline (R2-B9) | Pre-verified regression gap: perpetual readiness 503s escape only through the untested 30-second cancellation and otherwise consume the wrapper's 900-second bound. Same missing timeout test as R2-B9. |
+
+**Final resumed-build verification:** All six follow-up groups above are fixed and protected by focused tests. Fresh parent verification passes the Release warnings-as-errors build, all six non-live .NET suites (1,529 passed; five existing skips), 249 Manifest cases, 85 live-tool and 158 conformance Python cases, complete offline preflight and exact 22-case discovery. The final generation `f072ccf25ff44237a3e7c3e7a63f485e` passes all 21 vectors with zero skips; independent audits prove 142 phases, 53 unique single Command submissions, real cursor/time bindings and all cleanup. The separate smoke and six-row matrix audit pass. Final commands, source/binary bindings and sanitized receipts are in `evidence/story-4-13/build-resume-final-20261025/README.md`. No findings are deferred.
+
 ## Design Notes
 
-No unresolved intent choices remain. The McpCli footprint is test tooling, topology configuration and documentation, plus the qualified upstream host protocol repair and reference integration. Parties PR #58 remains open on independently reproduced baseline CI failures.
+No unresolved intent choices remain. The McpCli footprint is test tooling, topology configuration and documentation, plus the qualified upstream host protocol repair and reference integration. The historical owner packet records Parties PR #58 and its independently reproduced baseline CI failures; the current user-selected squash-merge checkout is qualified by the new review-patch packet above.
 
 Fresh state per vector preserves fixed Parties identifiers and exact Tenants index counts. Companion plans leave v1 schema, owner approval receipts and vector bytes intact. They close the existing dynamic-value handoff at `deferred-work.md:513`; they cannot silently discard business assertions. Infrastructure bootstrap uses the existing server-owned path, while vector setup remains generic Operation calls.
 
@@ -139,48 +182,48 @@ Parent checks during triage:
 - `datetime.fromisoformat` accepts the 7-digit fractional audit timestamps on Python 3.11 and later (checked on 3.14.4). Earlier versions reject them, and no README states a minimum Python version.
 - `6043ca8` was committed during this review. It moves only gitlinks: Parties goes from `d83fec24`, a PR #58 branch commit, to the squash merge `559b91c8` on Parties main. Builds goes from `1783c0a` to `e171c5a`, with no change to `Props/Directory.Packages.props`. The live evidence remains bound to `d83fec24`, and `d83fec24` and `559b91c8` differ in 82 files.
 
-- [ ] [Review][Patch] P1 — medium. The persisted-administrator barrier has no test that fails when it is removed. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:106]
+- [x] [Review][Patch] P1 — medium. The persisted-administrator barrier has no test that fails when it is removed. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:106]
   - `RequireAdministratorAuthorityAsync` gates every vector and the smoke, but only live callers reach it. Replacing its predicate with `result.Payload is not null` leaves every non-live test green. A live run would then fail only intermittently, as Commands race the bootstrap (VG, BH, AA).
   - Fix: move the polling into a static helper that takes an `HttpClient`, like `ProjectionWriterBootstrap`, and link it into Manifest.Tests. Using `ProjectionWriterBootstrapHandler`, test three cases: a document without the administrator keeps polling; one with the administrator returns; a run that never sees it throws the exact `TimeoutException` message.
-- [ ] [Review][Patch] P2 — medium. CI never runs the complete preflight, so 18 of the 21 plans pass Core validation only in the manual live lane. [.github/workflows/ci.yml:125]
+- [x] [Review][Patch] P2 — medium. CI never runs the complete preflight, so 18 of the 21 plans pass Core validation only in the manual live lane. [.github/workflows/ci.yml:125]
   - VG added an unknown payload property to a `tenants.get-tenant-audit` observation. `load_plan` and every CI test accepted it; `validate_call` rejects it. VG ran `run-vectors.py --preflight-only` locally with no topology, and it exited 0 (VG).
   - Fix: add `python3 tools/live-topology/run-vectors.py --output "$RUNNER_TEMP/live-preflight" --preflight-only` to the `topology-vector-discovery` job after its build, inside the existing venv.
-- [ ] [Review][Patch] P3 — medium. Seven `load_plan` binding guards have no failing test. [tools/live-topology/live_plans.py:125]
+- [x] [Review][Patch] P3 — medium. Seven `load_plan` binding guards have no failing test. [tools/live-topology/live_plans.py:125]
   - The guards: duplicate binding target, cursor bound to a capture not from `/paging/nextCursor`, time binding without a timestamp capture, step binding over non-`scripted-` input, duplicate capture name, duplicate assertion index, and capture tuple mismatch.
   - VG removed all seven, and the suite stayed green. Dropping the `/paging/nextCursor` check would let any returned string feed the continuation cursor (VG).
   - Fix: add one `reject(...)` case per guard in `test_live_plans.py`, based on `tenants.get-tenant-users` and `tenants.get-tenant-audit`.
-- [ ] [Review][Patch] P4 — medium. The checks in `observe()` on the returned document's identity are untested. [tools/live-topology/run_live.py:40]
+- [x] [Review][Patch] P4 — medium. The checks in `observe()` on the returned document's identity are untested. [tools/live-topology/run_live.py:40]
   - No test fails when these are removed: the `/operation` and `/tenant` match, the required query `/document`, the Command ULID format, and the `correlationId` default. For Parties Commands and plan observations, these checks are the only tenant check (VG).
   - Fix: add `RunnerTests` cases for a mismatched tenant or operation, a query without `document`, a non-ULID `messageId` and a mismatched `correlationId`. Each should raise `VectorError` after exactly one CLI call.
-- [ ] [Review][Patch] P5 — medium. The live entry guards are untested. [tools/live-topology/run_live.py:149]
+- [x] [Review][Patch] P5 — medium. The live entry guards are untested. [tools/live-topology/run_live.py:149]
   - Removing any of these leaves every test green: the `MCPCLI_ISOLATED_TOPOLOGY=1` requirement, the loopback-http-only endpoint with no userinfo, query or fragment, the non-empty token, and the `--child-timeout` range in `run-vectors.py:95`. Without the hostname check, admin-token Commands could go to any URL (VG).
   - Fix: add a table test in `test_live_runner.py` for each refused environment. It should assert exit 1, a `failed` receipt, and that neither `preflight` nor `execute` is called. Add a `test_lane.py` case for `--child-timeout 961` that starts no child.
-- [ ] [Review][Patch] P6 — medium. Nothing ties the parent's child command to `LiveVectorSelection.Require`. [tools/live-topology/run-vectors.py:117]
+- [x] [Review][Patch] P6 — medium. Nothing ties the parent's child command to `LiveVectorSelection.Require`. [tools/live-topology/run-vectors.py:117]
   - `LiveVectorSelectionTests.MatchingProcessSelectionIsAccepted` claims to use "the actual parent command form" but builds its own list. `test_lane.py` checks only `Operation=<op>` and `run-isolated.py`. Adding a second `-trait` or renaming the `-class` value keeps every test green but breaks every live child (VG).
   - Fix: in `test_failed_children_keep_all_operation_outcomes_and_exact_selectors`, assert there is exactly one `-trait` and that the token after `-class` is `Hexalith.McpCli.Integration.Tests.LiveVectorTests`.
-- [ ] [Review][Patch] P7 — low. A vector is marked `passed` before its writer-bootstrap binding is checked. [tools/live-topology/run-vectors.py:150]
+- [x] [Review][Patch] P7 — low. A vector is marked `passed` before its writer-bootstrap binding is checked. [tools/live-topology/run-vectors.py:150]
   - `outcome.update(result='passed', …)` runs before `writer-bootstrap.json` is validated. A SIGTERM between the two raises `SystemExit`, which `except Exception` does not catch, so the saved receipt lists that vector as passed (BH, EC).
   - Fix: move the `outcome.update(result='passed', …)` call after the bootstrap check.
-- [ ] [Review][Patch] P8 — low. A successful `--preflight-only` run prints nothing. [tools/live-topology/run-vectors.py:109]
+- [x] [Review][Patch] P8 — low. A successful `--preflight-only` run prints nothing. [tools/live-topology/run-vectors.py:109]
   - `return 0` inside the `try` skips the summary `print` after `finally`, so the documented diagnostic command prints no stdout result (VG).
   - Fix: let the preflight-only path fall through to the existing summary instead of returning early.
-- [ ] [Review][Patch] P9 — low. The live identity declares `command:write`, which is not an EventStore permission. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:150]
+- [x] [Review][Patch] P9 — low. The live identity declares `command:write`, which is not an EventStore permission. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:150]
   - EventStore accepts only `command:submit` or `commands:*` for Commands. The identity is authorized only because `global_admin` bypasses the permission check, so the declared write scope has no effect. Without that bypass, every vector Command would be denied (AA).
   - Fix: declare `command:submit`, which EventStore's own local token also uses (`LocalAuthenticationTokenCommand.cs:96`).
-- [ ] [Review][Patch] P10 — low. The docs claim every Command's read barrier observes a persisted change. Repeated idempotent Commands cannot show one. [tools/live-topology/README.md:113]
+- [x] [Review][Patch] P10 — low. The docs claim every Command's read barrier observes a persisted change. Repeated idempotent Commands cannot show one. [tools/live-topology/README.md:113]
   - The approved `deactivate-party` vector deactivates the same party twice. `persisted-invocation` asserts the same `isActive: false` that `persisted-prerequisites-1` already proved, so it passes whatever the second Command did. `require_phases` proves one accepted submission, but no state change (BH, AA, EC).
   - A generic "barrier value must change" guard would reject this approved vector.
   - Fix (wording only): in the lane README and `README.md:268`, say that a repeated idempotent Command step is proven by its single accepted submission plus unchanged persisted state, not by a new effect.
-- [ ] [Review][Patch] P11 — low. The lane README misstates the ACL entries. [tools/live-topology/README.md:97]
+- [x] [Review][Patch] P11 — low. The lane README misstates the ACL entries. [tools/live-topology/README.md:97]
   - "POST `/project` from EventStore (including `/project/v2`)" reads as one prefix rule. `accesscontrol.yaml` and `TopologyAccessControlTests` declare two exact entries (AA).
   - Fix (wording only): "POST `/project` and `/project/v2` from EventStore".
-- [ ] [Review][Patch] P12 — low. The README still gives the platform fixture's EventStore server packages as 3.126.1. [README.md:97]
+- [x] [Review][Patch] P12 — low. The README still gives the platform fixture's EventStore server packages as 3.126.1. [README.md:97]
   - This change pins `.Server`, `.DomainService` and `.ServiceDefaults` at 3.127.0 in `DependencyPolicyTests` and `tools/dependency-policy.json`, but leaves the README sentence unchanged (BH).
   - Fix: change it to 3.127.0.
-- [ ] [Review][Patch] P13 — low. The enrollment docs omit the new companion-plan requirement. [README.md:122]
+- [x] [Review][Patch] P13 — low. The enrollment docs omit the new companion-plan requirement. [README.md:122]
   - Preflight refuses a vector without `tools/live-topology/plans/<operation>.json` ("Live plan inventory differs"). CI discovery now compares cases with the vector files and pins 21. The enrollment paragraph mentions neither, and further domain modules are planned (BH).
   - Fix: add one sentence. Each approved vector needs a strict companion plan, and the v1 count pins in `ci.yml` and `test_live_plans.py` change with v1 scope.
-- [ ] [Review][Patch] P14 — low. The lane needs Python 3.11 or later, which is not documented. [tools/live-topology/README.md:71]
+- [x] [Review][Patch] P14 — low. The lane needs Python 3.11 or later, which is not documented. [tools/live-topology/README.md:71]
   - `live_plans.timestamp()` uses `datetime.fromisoformat`, which rejects the Gateway's 7-digit fractional audit timestamps before Python 3.11. On older interpreters the audit captures fail as "Invalid timestamp" (BH).
   - Fix: state the Python 3.11 minimum in the lane README.
 

@@ -1,0 +1,100 @@
+[
+  {
+    "command": "dotnet restore Hexalith.McpCli.slnx",
+    "result": 0,
+    "output": "restore.txt"
+  },
+  {
+    "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+    "result": 0,
+    "output": "build.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "abstractions-tests.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "analyzers-tests.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "core-tests.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Mcp.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "mcp-tests.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Cli.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "cli-tests.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+    "result": 0,
+    "output": "manifest.txt"
+  },
+  {
+    "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+    "result": 0,
+    "output": "python.txt"
+  },
+  {
+    "command": "python3 -m unittest discover -v -s tools/conformance-vectors/v1 -p 'test_*.py'",
+    "result": 0,
+    "output": "conformance.txt"
+  },
+  {
+    "command": "dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -preEnumerateTheories -list tests",
+    "result": 0,
+    "output": "discovery.txt"
+  },
+  {
+    "command": "python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-413-review-preflight --preflight-only",
+    "result": 0,
+    "output": "preflight.txt"
+  },
+  {
+    "command": "timeout --signal=TERM --kill-after=20s 900 python3 tools/live-topology/bootstrap-runtime.py /tmp/mcpcli-413-review-runtime-20261025/runtime",
+    "result": 0,
+    "output": "runtime-bootstrap.txt"
+  },
+  {
+    "cwd": "references/Hexalith.EventStore",
+    "command": "timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "result": 0,
+    "output": "eventstore-build.txt"
+  },
+  {
+    "cwd": "references/Hexalith.Tenants",
+    "command": "timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "result": 0,
+    "output": "tenants-build.txt"
+  },
+  {
+    "cwd": "references/Hexalith.Parties",
+    "command": "timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true",
+    "result": 0,
+    "output": "parties-build.txt"
+  },
+  {
+    "command": "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-review-runtime-20261025/runtime timeout --signal=TERM --kill-after=30s 21600 python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-413-review-live",
+    "result": 0,
+    "output": "live.txt"
+  },
+  {
+    "command": "python3 _bmad-output/implementation-artifacts/evidence/story-4-13/review-patches-20261025/audit-live.py /home/administrator/projects/hexalith/mcpcli /tmp/mcpcli-413-review-live",
+    "result": 0,
+    "output": "live-audit.json"
+  },
+  {
+    "command": "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-review-runtime-20261025/runtime timeout --signal=TERM --kill-after=20s 960 python3 tools/live-topology/run-isolated.py -- dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/mcpcli-413-review-smoke/tests.xml",
+    "result": 0,
+    "output": "smoke.txt"
+  }
+]

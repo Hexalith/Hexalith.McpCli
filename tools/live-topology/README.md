@@ -7,7 +7,7 @@ four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
 The integration fixture and live AppHost refuse execution without that sentinel;
 non-launching AppHost preflight and composition inspection remain available.
 
-Requirements: Linux amd64, Python 3, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
+Requirements: Linux amd64, Python 3.11 or later, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
 bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.3),
@@ -94,8 +94,8 @@ executing any vector, a bounded privileged `get-global-administrators` Query mus
 return that persisted administrator. The independent smoke uses this same read barrier
 before its single final usability Query, because resource liveness can precede
 handler capability readiness. This infrastructure proof does not enroll
-the excluded Query in the Catalog. The ACL admits only POST `/project` from
-EventStore (including `/project/v2`) and POST `/api/v1/commands` from Tenants in addition to the smoke's
+the excluded Query in the Catalog. The ACL admits only POST `/project` and `/project/v2` from
+EventStore and POST `/api/v1/commands` from Tenants in addition to the smoke's
 existing permissions. Authentication, mTLS and default deny remain required.
 
 Before starting any application, the wrapper verifies `DBSIZE=0` and saves an
@@ -111,7 +111,9 @@ error can mean a missing SDK read model rather than actor routing.
 
 `plans/*.json` are test-only companions bound to exact approved vector SHA-256
 digests. Every original step occurs once in the original order. Read barriers
-check persisted changes after Commands; all original static assertions remain.
+check persisted state after Commands. A repeated idempotent Command step is
+proven by its single accepted submission plus unchanged persisted state; all
+original static assertions remain.
 Scripted cursor assertions explicitly capture nonempty returned cursors and bind
 the later continuation call. The audit plan captures real event timestamps and
 probes category exclusion, inclusive lower/upper bounds, and windows before and

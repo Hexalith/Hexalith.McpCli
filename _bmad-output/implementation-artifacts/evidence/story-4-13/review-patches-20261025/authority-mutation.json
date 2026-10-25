@@ -1,0 +1,17 @@
+{
+  "detected": true,
+  "runs": [
+    {
+      "mutated": false,
+      "exitCode": 0,
+      "stdout": "accepted\n",
+      "stderr": ""
+    },
+    {
+      "mutated": true,
+      "exitCode": 2,
+      "stdout": "missing administrator released barrier after one query\n",
+      "stderr": ""
+    }
+  ]
+}

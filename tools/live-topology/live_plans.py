@@ -180,14 +180,27 @@ def validate_call(head: HeadProcess, call: dict) -> None:
     with tempfile.TemporaryDirectory(prefix='mcpcli-live-core-') as directory:
         path = Path(directory) / 'call.json'
         path.write_text(json.dumps({'prerequisites': [], 'invocation': call, 'postconditions': []}))
-        process = subprocess.run(head._base() + ['--validate-vectors', str(path)], env=head.env,
+        command = head._base() + ['--validate-vectors', str(path)]
+        process = subprocess.run(command, env=head.env,
                                  capture_output=True, text=True, timeout=head.timeout, check=False)
+        secrets = [value for key, value in head.env.items() if value and
+                   any(marker in key.upper() for marker in ('TOKEN', 'PASSWORD', 'SECRET', 'SIGNINGKEY'))]
+        def sanitize(value: str) -> str:
+            for secret in sorted(secrets, key=len, reverse=True):
+                value = value.replace(secret, '<redacted>')
+            return value
+        diagnostic = json.dumps({'command': [sanitize(argument) for argument in command],
+                                 'exitCode': process.returncode, 'stdout': sanitize(process.stdout),
+                                 'stderr': sanitize(process.stderr)})
         try:
             result = json.loads(process.stdout)
         except ValueError as error:
-            raise VectorError('Core live-call validation returned no valid document.') from error
-        if process.returncode or result.get('findings') or len(result.get('requests', [])) != 1:
-            raise VectorError(f"{call['operation']}: resolved Core compatibility failed: {result.get('findings')}")
+            raise VectorError(f"{call['operation']}: Core live-call validation returned no valid document. {diagnostic}") from error
+        if not isinstance(result, dict):
+            raise VectorError(f"{call['operation']}: Core live-call validation returned no valid document. {diagnostic}")
+        if process.returncode or result.get('findings') or not isinstance(result.get('requests'), list) \
+                or len(result['requests']) != 1:
+            raise VectorError(f"{call['operation']}: resolved Core compatibility failed: {sanitize(str(result.get('findings')))}; {diagnostic}")
 
 
 def check_dependencies(assets: dict, policy: dict) -> None:

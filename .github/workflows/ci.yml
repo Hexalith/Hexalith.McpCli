@@ -127,6 +127,7 @@ jobs:
           source "$RUNNER_TEMP/mcpcli-live-venv/bin/activate"
           dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
           dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
+          python3 tools/live-topology/run-vectors.py --output "$RUNNER_TEMP/live-preflight" --preflight-only
           python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
           dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -preEnumerateTheories -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
           python3 - "$RUNNER_TEMP/topology-smoke-discovery.txt" <<'PYTHON'
@@ -142,3 +143,10 @@ jobs:
               raise SystemExit(f"Expected every approved live vector plus smoke; discovered {discovered!r}")
           print(f"Discovered {len(operations)} live vectors and the independent Gateway smoke.")
           PYTHON
+      - name: Retain complete live preflight receipts and diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: live-preflight-evidence
+          path: ${{ runner.temp }}/live-preflight/
+          if-no-files-found: warn
