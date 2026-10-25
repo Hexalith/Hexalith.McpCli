@@ -1,0 +1,15 @@
+{
+  "result": "passed",
+  "runId": "a45347517d3446de80684c5b084ca366",
+  "vectors": 21,
+  "phases": 142,
+  "commandSubmissions": 53,
+  "distinctMessageIds": 53,
+  "parentPhaseAudit": "passed",
+  "currentPlanHashes": "matched",
+  "finalSmoke": {
+    "passed": 1,
+    "skipped": 0,
+    "ownedCleanup": true
+  }
+}

@@ -1,0 +1,553 @@
+{
+  "externalUpdate": "8962e2f",
+  "scope": "External Builds selection preserved; exact policy versions reconciled without adding package IDs or changing Contracts approvals.",
+  "packages": [
+    {
+      "package": "hexalith.eventstore.client",
+      "version": "3.127.0",
+      "archiveSha256": "7b70f3da61e55f1987160dbdcdbe151e80abd92201ede8c5e5613926d56e8684",
+      "dependencies": [
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "3.127.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dapr.Client",
+          "version": "1.18.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.AspNetCore.DataProtection.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Binder",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Http",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": [
+        {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "e1d8b17160202761ab5c9606cafbcf4d1a4b92c3"
+        }
+      ]
+    },
+    {
+      "package": "hexalith.eventstore.contracts",
+      "version": "3.127.0",
+      "archiveSha256": "0c71fabfb8f1dad3acadb752f67c68138a347785e2203f77ed22dfa819dfc678",
+      "dependencies": [
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": [
+        {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "e1d8b17160202761ab5c9606cafbcf4d1a4b92c3"
+        }
+      ]
+    },
+    {
+      "package": "hexalith.eventstore.aspire",
+      "version": "3.127.0",
+      "archiveSha256": "b742dca375db5c256ce1cba49d4de716d75ca09fc378e98abfbaec9cba346558",
+      "dependencies": [
+        {
+          "id": "Aspire.Hosting",
+          "version": "13.6.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Aspire.Hosting.Keycloak",
+          "version": "13.6.3-preview.1.26521.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Aspire.Hosting.Redis",
+          "version": "13.6.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "CommunityToolkit.Aspire.Hosting.Dapr",
+          "version": "13.6.1-beta.935",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Grpc.Net.ClientFactory",
+          "version": "2.84.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "MessagePack",
+          "version": "3.1.12",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Binder",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.FileExtensions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.UserSecrets",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Http",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ModelContextProtocol",
+          "version": "2.3.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Newtonsoft.Json",
+          "version": "13.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Extensions.Hosting",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "StackExchange.Redis",
+          "version": "3.4.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "YamlDotNet",
+          "version": "18.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": [
+        {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "e1d8b17160202761ab5c9606cafbcf4d1a4b92c3"
+        }
+      ]
+    },
+    {
+      "package": "hexalith.eventstore.testing.integration",
+      "version": "3.127.0",
+      "archiveSha256": "b0dc94ffb4ba5e08bc276c100fcdc8cc1ff9f09656da19ce12e19da801ff1b17",
+      "dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "3.127.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "3.127.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "3.127.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Testing",
+          "version": "3.127.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Aspire.Hosting",
+          "version": "13.6.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Aspire.Hosting.Testing",
+          "version": "13.6.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dapr.Actors.AspNetCore",
+          "version": "1.18.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "xunit.v3.assert",
+          "version": "4.0.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "xunit.v3.extensibility.core",
+          "version": "4.0.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dapr.Actors",
+          "version": "1.18.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dapr.AspNetCore",
+          "version": "1.18.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dapr.Client",
+          "version": "1.18.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Grpc.Net.ClientFactory",
+          "version": "2.84.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "MediatR",
+          "version": "14.2.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "MessagePack",
+          "version": "3.1.12",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.AspNetCore.Authentication.JwtBearer",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.AspNetCore.DataProtection.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Binder",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.FileExtensions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.UserSecrets",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Http",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Http.Resilience",
+          "version": "10.11.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Abstractions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+          "version": "10.0.13",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.Extensions.ServiceDiscovery",
+          "version": "10.11.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.Abstractions",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.Logging",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.Protocols",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Microsoft.IdentityModel.Tokens",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "ModelContextProtocol",
+          "version": "2.3.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Newtonsoft.Json",
+          "version": "13.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Extensions.Hosting",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Instrumentation.AspNetCore",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Instrumentation.Http",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "OpenTelemetry.Instrumentation.Runtime",
+          "version": "1.20.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Shouldly",
+          "version": "4.3.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "version": "8.23.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "YamlDotNet",
+          "version": "18.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": [
+        {
+          "type": "git",
+          "url": "https://github.com/Hexalith/Hexalith.EventStore",
+          "commit": "e1d8b17160202761ab5c9606cafbcf4d1a4b92c3"
+        }
+      ]
+    }
+  ],
+  "environmentRepair": {
+    "path": "/dev/shm",
+    "before": "root:root 0755",
+    "command": "sudo -n chmod 1777 /dev/shm",
+    "after": "root:root 1777"
+  }
+}

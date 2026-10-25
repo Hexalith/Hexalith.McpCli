@@ -1,0 +1,77 @@
+{
+  "rows": [
+    {
+      "state": "Complete approved inputs",
+      "result": "passed",
+      "tests": [
+        "test_all_21_approved_vectors_have_valid_plans",
+        "test_full_coverage_cannot_be_inferred_from_returned_preflight_subset",
+        "test_success_requires_fresh_binding_case_and_owned_cleanup"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    },
+    {
+      "state": "Stale package, vector or live-plan binding",
+      "result": "passed",
+      "tests": [
+        "test_unreviewed_or_stale_restored_package_fails_preflight",
+        "test_stale_vector_hash_rejects_plan",
+        "test_execution_uses_frozen_bytes_and_rejects_approval_races",
+        "test_preflight_failure_invalidates_prior_lane_success"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    },
+    {
+      "state": "Delayed bootstrap/projection",
+      "result": "passed",
+      "tests": [
+        "test_only_queries_poll_for_persisted_convergence",
+        "test_write_acceptance_is_submitted_once",
+        "test_write_failure_is_never_retried",
+        "test_wrapper_refuses_nonempty_store_or_failed_backup_before_application_launch"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    },
+    {
+      "state": "Dynamic cursor/time",
+      "result": "passed",
+      "tests": [
+        "test_capture_types_are_checked_without_coercion",
+        "test_real_typed_values_bind_existing_targets",
+        "test_actual_returned_cursor_is_captured_and_asserted"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    },
+    {
+      "state": "Missing prerequisite, invalid selector or unresolved binding",
+      "result": "passed",
+      "tests": [
+        "test_wrapper_refuses_readiness_failures_before_starting_the_child",
+        "test_unknown_selector_starts_no_topology",
+        "test_unresolved_cursor_is_rejected_before_execution",
+        "test_exactly_one_passing_selected_case_is_required"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    },
+    {
+      "state": "Semantic mismatch",
+      "result": "passed",
+      "tests": [
+        "test_broken_business_effect_fails_with_phase_operation_and_path",
+        "test_final_process_timeout_retains_the_semantic_assertion_path",
+        "test_failed_capture_does_not_commit_partial_values"
+      ],
+      "testEvidence": "parent-audit/final/python-live.stderr.txt",
+      "liveEvidence": "parent-audit/live-acceptance-audit.json"
+    }
+  ],
+  "fullLiveCases": 21,
+  "commandSubmissions": 53,
+  "skips": 0,
+  "result": "passed"
+}

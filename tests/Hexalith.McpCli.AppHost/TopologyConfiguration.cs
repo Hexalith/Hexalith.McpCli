@@ -9,6 +9,16 @@ namespace Hexalith.McpCli.AppHost;
 /// <summary>Validates the source and local runtime boundary before starting the test topology.</summary>
 internal static class TopologyConfiguration
 {
+    /// <summary>The private test administrator configured for the server-owned bootstrap.</summary>
+    internal const string BootstrapAdministratorId = "mcpcli-live-admin";
+
+    /// <summary>Requires authentic bootstrap for exactly the identity used by the private fixture.</summary>
+    internal static void ValidateBootstrap(bool enabled, string? userId)
+    {
+        if (!enabled || userId != BootstrapAdministratorId)
+            throw new InvalidOperationException($"Tenants bootstrap must be enabled for the test-owned administrator '{BootstrapAdministratorId}'.");
+    }
+
     /// <summary>The Dapr applications owned by this topology.</summary>
     internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties"];
 

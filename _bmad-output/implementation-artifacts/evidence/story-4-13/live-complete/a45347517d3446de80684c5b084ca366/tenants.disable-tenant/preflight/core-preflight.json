@@ -1,0 +1,51 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SG6F0GFRNK1G752ZDAH63H",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-disable",
+          "Name": "Vector Disable",
+          "Description": null
+        },
+        "correlationId": "01M5SG6F0GFRNK1G752ZDAH63H"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5SG6F0WR6WACDXCQ5FCZ5Q4",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5SG6F0WR6WACDXCQ5FCZ5Q4"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    }
+  ]
+}

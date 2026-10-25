@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.update-tenant",
+  "vectorSha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-update"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-update"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Update Original"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": "Description cleared by the update"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-update"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-update"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Update Renamed"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

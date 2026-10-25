@@ -1,0 +1,7 @@
+{
+  ".": "8962e2f2570459dbea2976f789b468aa5c6353c6",
+  "references/Hexalith.EventStore": "5be0c309f457d0af1f169bc591609fb4be6473ce",
+  "references/Hexalith.Tenants": "14133e96d2c5efb13270580f920133079707398b",
+  "references/Hexalith.Parties": "d83fec24167aafd4edfc4d2f7310d6a87a218a1c",
+  "references/Hexalith.Builds": "1783c0a377615063f3222c1d28f3ab513af4e72f"
+}

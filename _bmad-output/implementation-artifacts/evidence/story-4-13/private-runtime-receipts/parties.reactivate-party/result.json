@@ -1,0 +1,157 @@
+{
+  "namespaces": {
+    "user": "user:[4026532320]",
+    "pid": "pid:[4026532322]",
+    "net": "net:[4026532958]",
+    "mnt": "mnt:[4026532321]"
+  },
+  "supervisorPid": 1,
+  "services": {
+    "sentry": {
+      "pid": 7,
+      "arguments": [
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/bin/sentry",
+        "--port",
+        "50001",
+        "--listen-address",
+        "127.0.0.1",
+        "--trust-domain",
+        "public",
+        "--issuer-credentials",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/sentry-certificates",
+        "--config",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/sentry-config.json",
+        "--healthz-port",
+        "18082",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn"
+      ]
+    },
+    "redis": {
+      "pid": 14,
+      "arguments": [
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/bin/redis-server",
+        "--bind",
+        "127.0.0.1",
+        "--port",
+        "6379",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--dir",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77",
+        "--loglevel",
+        "warning"
+      ]
+    },
+    "placement": {
+      "pid": 15,
+      "arguments": [
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/bin/placement",
+        "--port",
+        "6050",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18080",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn",
+        "--tls-enabled",
+        "--trust-domain",
+        "public",
+        "--sentry-address",
+        "127.0.0.1:50001",
+        "--trust-anchors-file",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/sentry-certificates/ca.crt"
+      ]
+    },
+    "scheduler": {
+      "pid": 16,
+      "arguments": [
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/bin/scheduler",
+        "--port",
+        "6060",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18081",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn",
+        "--etcd-data-dir",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/scheduler-data",
+        "--override-broadcast-host-port",
+        "127.0.0.1:6060",
+        "--tls-enabled",
+        "--trust-domain",
+        "public",
+        "--sentry-address",
+        "127.0.0.1:50001",
+        "--trust-anchors-file",
+        "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/sentry-certificates/ca.crt"
+      ]
+    }
+  },
+  "command": [
+    "dotnet",
+    "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+    "-trait",
+    "Operation=parties.reactivate-party",
+    "-preEnumerateTheories",
+    "-failSkips",
+    "-result-xml",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.reactivate-party/tests.xml"
+  ],
+  "environmentOverrides": {
+    "MCPCLI_ISOLATED_TOPOLOGY": "1",
+    "GOMAXPROCS": "2",
+    "DOTNET_PROCESSOR_COUNT": "2",
+    "HEXALITH_EVENTSTORE_TEST_REDIS_PORT": "6379",
+    "HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT": "6050",
+    "HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT": "6060",
+    "Dapr__PlacementHostAddress": "127.0.0.1:6050",
+    "Dapr__SchedulerHostAddress": "127.0.0.1:6060",
+    "Dapr__GatewayHttpPort": "3501",
+    "NAMESPACE": "default",
+    "DAPR_CONTROLPLANE_TRUST_DOMAIN": "public",
+    "DAPR_CONTROLPLANE_NAMESPACE": "default"
+  },
+  "mtls": {
+    "enabled": true,
+    "trustDomain": "public",
+    "namespace": "default",
+    "sentryAddress": "127.0.0.1:50001",
+    "certificateValuesWithheld": true
+  },
+  "daprBeforeCommand": {
+    "exitCode": 0,
+    "stderr": "",
+    "applications": []
+  },
+  "initialRedisBackup": {
+    "databaseSize": 0,
+    "createdBeforeApplications": true,
+    "backupFile": "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T121800Z-0e34af77/initial-empty.rdb",
+    "sha256": "a4cba97a78b3ad0bff0de0fe63c50a3dfb433a110b27402e2777a62800ab4f6e"
+  },
+  "prerequisitesReady": true,
+  "commandExitCode": 0,
+  "commandElapsedSeconds": 47.301,
+  "ownedInfrastructureStopped": {
+    "sentry": 0,
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  }
+}

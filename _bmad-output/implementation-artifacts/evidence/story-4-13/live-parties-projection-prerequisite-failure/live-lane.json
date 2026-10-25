@@ -1,0 +1,148 @@
+{
+  "runId": "6fed374028f043a6956cc5424de5d13c",
+  "result": "pending",
+  "fullLiveAccepted": false,
+  "vectors": [
+    {
+      "operation": "parties.create-party",
+      "result": "failed",
+      "output": "6fed374028f043a6956cc5424de5d13c/parties.create-party",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run-isolated.py",
+        "--",
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+        "-trait",
+        "Operation=parties.create-party",
+        "-preEnumerateTheories",
+        "-failSkips",
+        "-result-xml",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6fed374028f043a6956cc5424de5d13c/parties.create-party/tests.xml"
+      ],
+      "exitCode": 1,
+      "error": "VectorError: parties.create-party: isolated child exited 1; see /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6fed374028f043a6956cc5424de5d13c/parties.create-party"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "result": "running",
+      "output": "6fed374028f043a6956cc5424de5d13c/parties.deactivate-party",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run-isolated.py",
+        "--",
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+        "-trait",
+        "Operation=parties.deactivate-party",
+        "-preEnumerateTheories",
+        "-failSkips",
+        "-result-xml",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6fed374028f043a6956cc5424de5d13c/parties.deactivate-party/tests.xml"
+      ]
+    },
+    {
+      "operation": "parties.get-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.list-parties",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.search-parties",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.update-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "result": "not-run"
+    }
+  ],
+  "coverage": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ]
+}

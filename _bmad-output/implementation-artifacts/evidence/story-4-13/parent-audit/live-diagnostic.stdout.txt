@@ -1,0 +1,1 @@
+PARTIAL: full live acceptance=False; receipt: /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-diagnostic-create/live-lane.json

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "operation": "parties.search-parties",
+  "vectorSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "path": "/document/personDetails/firstName",
+            "operator": "equals",
+            "value": "Ada"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "nonmatching-query",
+      "query": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": "no-match-story-4-13",
+          "Type": "Person",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          },
+          {
+            "path": "/document/totalCount",
+            "operator": "equals",
+            "value": 0
+          },
+          {
+            "path": "/paging/totalCount",
+            "operator": "equals",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "label": "nonmatching-type",
+      "query": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Organization",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          },
+          {
+            "path": "/document/totalCount",
+            "operator": "equals",
+            "value": 0
+          },
+          {
+            "path": "/paging/totalCount",
+            "operator": "equals",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "label": "nonmatching-active",
+      "query": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": false
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          },
+          {
+            "path": "/document/totalCount",
+            "operator": "equals",
+            "value": 0
+          },
+          {
+            "path": "/paging/totalCount",
+            "operator": "equals",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ]
+}

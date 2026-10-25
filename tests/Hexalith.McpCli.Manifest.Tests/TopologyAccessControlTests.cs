@@ -34,8 +34,8 @@ public sealed class TopologyAccessControlTests
             Assert.Equal("default", policy.GetProperty("namespace").GetString());
             JsonElement[] operations = policy.GetProperty("operations").EnumerateArray().ToArray();
             string[] allowedPaths = caller == "eventstore"
-                ? ["/admin/operational-index-metadata", "/process", "/query"]
-                : ["/api/v1/queries"];
+                ? ["/admin/operational-index-metadata", "/process", "/project", "/project/v2", "/query"]
+                : caller == "tenants" ? ["/api/v1/commands", "/api/v1/queries"] : ["/api/v1/queries"];
             Assert.Equal(allowedPaths, operations.Select(operation => operation.GetProperty("name").GetString()).Order(StringComparer.Ordinal));
             Assert.All(operations, operation =>
             {

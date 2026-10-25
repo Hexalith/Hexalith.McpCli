@@ -1,0 +1,142 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SGCW92HNGGWK6JBE97A53S",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "Name": "Vector Membership A",
+          "Description": null
+        },
+        "correlationId": "01M5SGCW92HNGGWK6JBE97A53S"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5SGCW9JRH3YARPHEA994C9T",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5SGCW9JRH3YARPHEA994C9T"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5SGCW9NETYX46P7XDT8JXR4",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "Name": "Vector Membership B",
+          "Description": null
+        },
+        "correlationId": "01M5SGCW9NETYX46P7XDT8JXR4"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M5SGCW9PBVXFRN9QNT564VXN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5SGCW9PBVXFRN9QNT564VXN"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/4",
+      "body": {
+        "messageId": "01M5SGCW9PBVXFRN9QNT564VXP",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "Name": "Vector Membership C",
+          "Description": null
+        },
+        "correlationId": "01M5SGCW9PBVXFRN9QNT564VXP"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/5",
+      "body": {
+        "messageId": "01M5SGCW9PBVXFRN9QNT564VXQ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5SGCW9PBVXFRN9QNT564VXQ"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-user-tenants-cursor-1"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.add-user-to-tenant/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SBN3230PWB9ZS1Q51Z8MQA",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-members",
+          "Name": "Vector Members",
+          "Description": null
+        },
+        "correlationId": "01M5SBN3230PWB9ZS1Q51Z8MQA"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.add-user-to-tenant/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5SBN32DQHQ9VGQZJEJE5V5N",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-members",
+          "UserId": "vector-user-1@example.com",
+          "Role": "TenantContributor"
+        },
+        "correlationId": "01M5SBN32DQHQ9VGQZJEJE5V5N"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.add-user-to-tenant/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-members"
+        }
+      }
+    }
+  ]
+}

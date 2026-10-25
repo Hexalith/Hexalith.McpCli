@@ -1,0 +1,19 @@
+{
+  "stagedDiffUnchanged": true,
+  "workingFilesUnchanged": {
+    "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs": true,
+    "src/Hexalith.Parties/Program.cs": true,
+    "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs": true
+  },
+  "before": {
+    "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs": "8dd3560c20ecf52d7acb16762583522e8158dcdd7ad77e27fb689495e747c1be",
+    "src/Hexalith.Parties/Program.cs": "3468af3de7efc5eeff80ccd8c26ab61279e43c4b3b9dd9897ea4a401d1926d4a",
+    "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs": "29f471f8ff48b07f358ae623bfabc90b0396613d525c7564dc37c827b3c71754"
+  },
+  "after": {
+    "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs": "8dd3560c20ecf52d7acb16762583522e8158dcdd7ad77e27fb689495e747c1be",
+    "src/Hexalith.Parties/Program.cs": "3468af3de7efc5eeff80ccd8c26ab61279e43c4b3b9dd9897ea4a401d1926d4a",
+    "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs": "29f471f8ff48b07f358ae623bfabc90b0396613d525c7564dc37c827b3c71754"
+  },
+  "ownerMutationsPerformed": false
+}

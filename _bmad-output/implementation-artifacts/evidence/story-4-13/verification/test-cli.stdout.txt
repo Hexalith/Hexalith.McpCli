@@ -1,0 +1,53 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync
+  Windows file attributes are required for this fixture.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync
+  Windows ACLs are required for this fixture.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ExistingDevShmResultIsTruncatedAsync (1ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+  Xunit.MicrosoftTestingPlatform.XunitException: System.UnauthorizedAccessException : Access to the path '/dev/shm/mcpcli-result-136130f4acf1439bb0146297f094b967.json' is denied.
+  ---- System.IO.IOException : Permission denied
+    at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+    at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+    at System.IO.File.OpenHandle(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+    at System.IO.File.WriteToFileAsync(String path, FileMode mode, ReadOnlyMemory`1 contents, Encoding encoding, CancellationToken cancellationToken)
+    at Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ExistingDevShmResultIsTruncatedAsync() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs:870
+    --- End of stack trace from previous location ---
+    ----- Inner Stack Trace -----
+    
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) failed with 1 error(s) (23s 666ms)
+Exit code: 2
+  Error output: info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:34909/api/v1/queries
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:34909/api/v1/queries
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 3.8723ms - 200
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 4.0278ms - 200
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:43471/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:43471/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 1.991ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 2.116ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+        Start processing HTTP request POST http://127.0.0.1:38069/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+        Sending HTTP request POST http://127.0.0.1:38069/api/v1/commands
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+        Received HTTP response headers after 3.0901ms - 202
+  info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+        End processing HTTP request after 3.1717ms - 202
+
+Test run summary: Failed!
+  total: 481
+  failed: 1
+  succeeded: 478
+  skipped: 2
+  duration: 23s 830ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

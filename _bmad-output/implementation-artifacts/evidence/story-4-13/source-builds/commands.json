@@ -1,0 +1,56 @@
+[
+  {
+    "module": "Hexalith.EventStore",
+    "cwd": "references/Hexalith.EventStore",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.EventStore/Hexalith.EventStore.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0
+  },
+  {
+    "module": "Hexalith.Tenants",
+    "cwd": "references/Hexalith.Tenants",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0
+  },
+  {
+    "module": "Hexalith.Parties",
+    "cwd": "references/Hexalith.Parties",
+    "command": [
+      "timeout",
+      "300",
+      "dotnet",
+      "build",
+      "src/Hexalith.Parties/Hexalith.Parties.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0
+  }
+]

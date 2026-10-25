@@ -30,6 +30,7 @@ public sealed class GatewaySmokeTests(AspireTopologyFixture fixture)
         using HttpClient wrongKey = fixture.CreateAuthenticatedGatewayClient(invalidSignature: true);
         await RequireUnauthorizedAsync(wrongKey.DefaultRequestHeaders.Authorization);
         http.DefaultRequestHeaders.Authorization = validIdentity;
+        await fixture.RequireAdministratorAuthorityAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         EventStoreQueryResult result = await GatewaySmokeProbe.ExecuteAsync(gateway, request, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.IsNotModified);

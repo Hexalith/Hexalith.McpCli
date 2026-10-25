@@ -1,0 +1,189 @@
+{
+  "operation": "tenants.set-tenant-configuration",
+  "result": "passed",
+  "phases": [
+    {
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config",
+          "Name": "Vector Configuration",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M5SGJBSX7G16SAR3A380SB3C",
+            "correlationId": "01M5SGJBSX7G16SAR3A380SB3C",
+            "tenant": "system",
+            "aggregateId": "vector-config",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-10-25T12:29:04.2736374+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/invocation",
+      "operation": "tenants.set-tenant-configuration",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.set-tenant-configuration",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.set-tenant-configuration",
+            "messageId": "01M5SGJE666SSY88WZ452F70ZY",
+            "correlationId": "01M5SGJE666SSY88WZ452F70ZY",
+            "tenant": "system",
+            "aggregateId": "vector-config",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-10-25T12:29:04.2736374+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-10-25T12:29:04.2736374+00:00"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0",
+    "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+    "vectorSha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+    "planSha256": "57555bb68249cdddf1766badf4448b67cd4b016b9b3818482a9bd213e3d7fe5b",
+    "approvalSha256": "13467ec9437a5928e12e9cd09b28310a449b673eb697bd9099664c2c7cd93d24",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

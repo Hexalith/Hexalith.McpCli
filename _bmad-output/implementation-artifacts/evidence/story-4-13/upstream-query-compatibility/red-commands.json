@@ -1,0 +1,27 @@
+[
+  {
+    "name": "candidate-baseline-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1"
+    ],
+    "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+    "exitCode": 0
+  },
+  {
+    "name": "red-host-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Tests/bin/Release/net10.0/Hexalith.Parties.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Tests.Gateway.PartyHostQueryDiscoveryTests"
+    ],
+    "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+    "exitCode": 0
+  }
+]

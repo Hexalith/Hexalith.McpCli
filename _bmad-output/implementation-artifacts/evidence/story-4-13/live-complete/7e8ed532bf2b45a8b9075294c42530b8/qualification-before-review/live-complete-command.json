@@ -1,0 +1,15 @@
+{
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30s",
+    "21600",
+    "python3",
+    "tools/live-topology/run-vectors.py",
+    "--output",
+    "_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete"
+  ],
+  "environment": {
+    "MCPCLI_ISOLATED_RUNTIME_DIR": "/tmp/mcpcli-413-runtime-7jz660m_/runtime"
+  }
+}

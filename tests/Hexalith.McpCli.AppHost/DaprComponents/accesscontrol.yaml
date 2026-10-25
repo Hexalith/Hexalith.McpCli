@@ -30,6 +30,16 @@
               "action": "allow"
             },
             {
+              "name": "/project",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
+              "name": "/project/v2",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
               "name": "/admin/operational-index-metadata",
               "httpVerb": [
                 "POST"
@@ -44,6 +54,11 @@
           "trustDomain": "public",
           "namespace": "default",
           "operations": [
+            {
+              "name": "/api/v1/commands",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
             {
               "name": "/api/v1/queries",
               "httpVerb": [

@@ -1,0 +1,9 @@
+{
+  "archive": "captured-inputs.pre-review.tar.gz",
+  "sha256": "d19254d3868f9adf1ac8cfe59db4a83797894179dc2c4c4a94198006169065b9",
+  "fileCount": 2346,
+  "expandedBytes": 11168235,
+  "fileInventorySha256": "eb18ced7f39a8b243dfb117bd22b1306762230a6607d4846b451159ebfadc1a7",
+  "verification": "Every archived member was read back and matched its original SHA-256 before consolidation.",
+  "extract": "tar -xzf captured-inputs.tar.gz (from this evidence directory)"
+}

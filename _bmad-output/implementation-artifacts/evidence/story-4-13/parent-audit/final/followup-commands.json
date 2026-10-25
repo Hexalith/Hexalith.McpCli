@@ -1,0 +1,60 @@
+[
+  {
+    "name": "production-rebuild",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 20.278
+  },
+  {
+    "name": "bootstrap-guards",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.ProjectionWriterBootstrapTests",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/parent-audit/final/bootstrap-guards.xml"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.008
+  },
+  {
+    "name": "production-manifest",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll",
+      "--manifest-catalog"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.465
+  },
+  {
+    "name": "smoke-after-bootstrap-barrier",
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "960",
+      "python3",
+      "tools/live-topology/run-isolated.py",
+      "--",
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+      "-failSkips",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/parent-audit/final/smoke-after-bootstrap-barrier.xml"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 22.582
+  }
+]

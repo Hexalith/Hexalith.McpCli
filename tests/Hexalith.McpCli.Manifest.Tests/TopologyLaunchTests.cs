@@ -173,6 +173,21 @@ public sealed class TopologyLaunchTests : IDisposable
         Assert.Equal(string.Empty, result.Stderr);
     }
 
+    /// <summary>The executable enforces authentic bootstrap before creating any resource.</summary>
+    [Theory]
+    [InlineData("--Tenants:BootstrapGlobalAdminEnabled=false")]
+    [InlineData("--Tenants:BootstrapGlobalAdminUserId=")]
+    [InlineData("--Tenants:BootstrapGlobalAdminUserId=another-administrator")]
+    public async Task IncompleteBootstrapStopsPreflight(string argument)
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", extraArgument: argument);
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal("Tenants bootstrap must be enabled for the test-owned administrator 'mcpcli-live-admin'." + Environment.NewLine, result.Stderr);
+    }
+
     /// <summary>Configuration conversion failures stay inside the executable diagnostic boundary.</summary>
     [Theory]
     [InlineData("not-a-port")]
@@ -271,11 +286,13 @@ public sealed class TopologyLaunchTests : IDisposable
         available.Stop();
         var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true,
             extraArguments: ["--Dapr:PlacementHostAddress=127.0.0.1:6050", "--Dapr:SchedulerHostAddress=127.0.0.1:6060"]);
-        Assert.Equal(0, result.ExitCode);
+        Assert.True(result.ExitCode == 0, result.Stderr + result.Stdout);
         Assert.Equal(string.Empty, result.Stderr);
         Assert.DoesNotContain(signingKey, result.Stdout);
         using JsonDocument document = JsonDocument.Parse(result.Stdout);
         string host = document.RootElement.GetProperty("appHostDirectory").GetString()!;
+        Assert.Equal(new[] { "eventstore-app-api-token", "parties-app-api-token", "tenants-app-api-token" },
+            document.RootElement.GetProperty("appChannelTokenParameters").EnumerateArray().Select(parameter => parameter.GetString()));
         JsonElement[] resources = document.RootElement.GetProperty("resources").EnumerateArray().ToArray();
         Assert.Equal(new[] { "eventstore", "tenants", "parties" }, resources.Select(resource => resource.GetProperty("name").GetString()));
         Assert.Equal(3, resources.Select(resource => resource.GetProperty("tokenHash").GetString()).Distinct(StringComparer.Ordinal).Count());
@@ -317,6 +334,8 @@ public sealed class TopologyLaunchTests : IDisposable
             Assert.Equal("false", authentication.GetProperty("requireHttpsMetadata").GetString());
             Assert.Equal(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(signingKey))), authentication.GetProperty("signingKeyHash").GetString());
             JsonElement settings = resource.GetProperty("gatewaySettings");
+            Assert.Equal(module == "Hexalith.Tenants" ? "True" : null, resource.GetProperty("bootstrapEnabled").GetString());
+            Assert.Equal(module == "Hexalith.Tenants" ? "mcpcli-live-admin" : null, resource.GetProperty("bootstrapUserId").GetString());
             if (module == "Hexalith.EventStore")
             {
                 Assert.Equal(host, resource.GetProperty("contentRoot").GetString());

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.get-tenant-users",
+  "vectorSha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-users"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Users"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-a@example.com",
+              "role": "TenantOwner"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/2"
+    },
+    {
+      "label": "persisted-prerequisites-2",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-b@example.com",
+              "role": "TenantContributor"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/3"
+    },
+    {
+      "label": "persisted-prerequisites-3",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-c@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation",
+      "captures": [
+        {
+          "name": "continuation",
+          "path": "/paging/nextCursor",
+          "type": "string"
+        }
+      ],
+      "assertionBindings": [
+        {
+          "index": 6,
+          "capture": "continuation"
+        }
+      ]
+    },
+    {
+      "step": "/postconditions/0",
+      "bindings": [
+        {
+          "path": "/envelope/cursor",
+          "capture": "continuation"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.disable-tenant",
+  "vectorSha256": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-disable"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Disable"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-disable"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Disabled"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

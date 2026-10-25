@@ -1,0 +1,22 @@
+[
+  {
+    "module": "Hexalith.EventStore",
+    "sourceCommit": "5be0c309f457d0af1f169bc591609fb4be6473ce",
+    "hostDllSha256": "e6771cf98bcfab5c1572cee7b8d3950b3abc639c184926cfa4012b505acf304b",
+    "platformLibraries": {
+      "Hexalith.EventStore.Contracts/3.127.0": "project",
+      "Hexalith.EventStore.DomainService/3.127.0": "project",
+      "Hexalith.EventStore.Gateway/3.127.0": "project",
+      "Hexalith.EventStore.Server/3.127.0": "project"
+    }
+  },
+  {
+    "module": "Hexalith.Parties",
+    "sourceCommit": "1ef274ea0471643d83f924147e85ac8326cf6a47",
+    "hostDllSha256": "ee25f6273a46e90428c05d77b81e00ffbe966ae8a6c4e03614e551819e6a4438",
+    "platformLibraries": {
+      "Hexalith.EventStore.Contracts/3.127.0": "package",
+      "Hexalith.EventStore.DomainService/3.127.0": "package"
+    }
+  }
+]

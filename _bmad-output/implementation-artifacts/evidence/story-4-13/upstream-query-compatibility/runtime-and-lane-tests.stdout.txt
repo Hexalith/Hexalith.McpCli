@@ -1,0 +1,10 @@
+FAILED: full live acceptance=False; receipt: /tmp/tmpdc92fmjk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpse2rqjpe/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpyl6bhis1/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmp9xfxwfw5/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpek4ax1_q/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp8bslt0ou/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmps_mmdzz0/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmprc_scgrp/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmpmi5sfl5s/live-result.json
+Verified four private runtime binaries in /tmp/tmp2ywmr49_/runtime

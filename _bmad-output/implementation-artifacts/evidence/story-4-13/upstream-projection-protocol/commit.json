@@ -1,0 +1,9 @@
+{
+  "branch": "fix/mcpcli-413-projection-outcomes-20261025",
+  "sha": "d83fec24167aafd4edfc4d2f7310d6a87a218a1c",
+  "files": {
+    "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs": "6832979c30c540c28d1532e128ac0e66759f1b16239fe000cef2f2ff97283273",
+    "tests/Hexalith.Parties.Tests/Gateway/PartyProjectionProtocolSerializationTests.cs": "98e4bb97e15f3eb031dc685851911a047d8fc6241a14b3f72f23991e1cb38008"
+  },
+  "commitlintReceipt": "commitlint.json"
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "push",
+    "-u",
+    "origin",
+    "fix/mcpcli-413-projection-outcomes-20261025"
+  ],
+  "exitCode": 0,
+  "stdout": "branch 'fix/mcpcli-413-projection-outcomes-20261025' set up to track 'origin/fix/mcpcli-413-projection-outcomes-20261025'.\n",
+  "stderr": "remote: \nremote: Create a pull request for 'fix/mcpcli-413-projection-outcomes-20261025' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Parties/pull/new/fix/mcpcli-413-projection-outcomes-20261025        \nremote: \nremote: GitHub found 16 vulnerabilities on Hexalith/Hexalith.Parties's default branch (2 critical, 3 high, 8 moderate, 3 low). To find out more, visit:        \nremote:      https://github.com/Hexalith/Hexalith.Parties/security/dependabot        \nremote: \nTo https://github.com/Hexalith/Hexalith.Parties.git\n * [new branch]        fix/mcpcli-413-projection-outcomes-20261025 -> fix/mcpcli-413-projection-outcomes-20261025\n"
+}

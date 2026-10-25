@@ -1,0 +1,65 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "python-live",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "topology-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.Topology*"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "selected-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-preEnumerateTheories",
+      "-list",
+      "tests",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+      "-trait",
+      "Operation=tenants.get-tenant-audit"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "lane-preflight",
+    "command": [
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/live-lane-attempt"
+    ],
+    "exitCode": 1
+  }
+]

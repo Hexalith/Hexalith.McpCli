@@ -1,0 +1,1 @@
+drwxr-xr-x 2 root root 40 Oct 24 13:34 /dev/shm

@@ -1,0 +1,315 @@
+"""Exercise bounded reads and exactly-once write submission without a live service."""
+import json
+from pathlib import Path
+import tempfile
+import subprocess
+import unittest
+from unittest.mock import patch
+
+import run_live
+from validate import VectorError
+
+
+class Head:
+    def __init__(self, documents):
+        self.timeout = 30
+        self.calls = []
+        self.documents = iter(documents)
+
+    def cli(self, *arguments):
+        self.calls.append((arguments, self.timeout))
+        document = next(self.documents)
+        if 'error' not in document:
+            document = {'operation': 'fixture.operation', 'tenant': 'test', **document}
+        return (2 if 'error' in document else 0), document
+
+
+class RunnerTests(unittest.TestCase):
+    def call(self, kind='query'):
+        return {'operation': 'fixture.operation', 'kind': kind, 'payload': {}, 'envelope': {'tenant': 'test'},
+                'expectedGateway': {'body': {'aggregateId': 'approved-id'}},
+                'assertions': [{'path': '/document/value', 'operator': 'equals', 'value': 7}]}
+
+    def observe(self, head, call, action=None, values=None, record=None):
+        tick = [0]
+        def clock(): return tick[0]
+        def pause(seconds): tick[0] += seconds
+        return run_live.observe(head, call, 'http://127.0.0.1/', action or {}, values if values is not None else {},
+                                {'deadlineSeconds': 1, 'pollSeconds': .5},
+                                record if record is not None else {'phase': '/invocation', 'attempts': []},
+                                clock=clock, pause=pause)
+
+    def test_only_queries_poll_for_persisted_convergence(self):
+        head = Head([{'document': {'value': 0}}, {'document': {'value': 7}}])
+        self.assertEqual(7, self.observe(head, self.call())['document']['value'])
+        self.assertEqual(2, len(head.calls))
+        self.assertLessEqual(head.calls[-1][1], .5)
+        self.assertEqual(30, head.timeout)
+
+    def test_broken_business_effect_fails_with_phase_operation_and_path(self):
+        head = Head([{'document': {'value': 0}}] * 3)
+        with self.assertRaisesRegex(VectorError, r'/invocation fixture.operation: read deadline: .*?/document/value'):
+            self.observe(head, self.call())
+        self.assertEqual(2, len(head.calls))
+
+    def test_final_process_timeout_retains_the_semantic_assertion_path(self):
+        head = Head([])
+        document = {'operation': 'fixture.operation', 'tenant': 'test', 'document': {'value': 0}}
+        record = {'phase': '/invocation', 'attempts': []}
+        with patch.object(head, 'cli', side_effect=[(0, document), subprocess.TimeoutExpired('dotnet', .5)]):
+            with self.assertRaisesRegex(VectorError, r'read deadline: .*?/document/value'):
+                self.observe(head, self.call(), record=record)
+        self.assertIn('/document/value', record['lastFailure'])
+        self.assertIn('timed out', record['lastTimeout'])
+
+    def test_write_failure_is_never_retried(self):
+        head = Head([{'document': {'value': 0}}, {'document': {'value': 7}}])
+        with self.assertRaisesRegex(VectorError, '/document/value'):
+            self.observe(head, self.call('command'))
+        self.assertEqual(1, len(head.calls))
+
+    def test_write_acceptance_is_submitted_once(self):
+        identifier = '01ARZ3NDEKTSV4RRFFQ69G5FAV'
+        head = Head([{'status': 'accepted', 'messageId': identifier, 'correlationId': identifier, 'aggregateId': 'approved-id'}])
+        call = self.call('command')
+        call['assertions'] = [{'path': '/status', 'operator': 'equals', 'value': 'accepted'}]
+        self.observe(head, call)
+        self.assertEqual(1, len(head.calls))
+
+    def test_command_requires_approved_aggregate_identity(self):
+        for aggregate in [None, 'wrong-id']:
+            with self.subTest(aggregate=aggregate):
+                identifier = '01ARZ3NDEKTSV4RRFFQ69G5FAV'
+                document = dict(status='accepted', messageId=identifier, correlationId=identifier)
+                if aggregate is not None: document['aggregateId'] = aggregate
+                call = self.call('command')
+                call['assertions'] = [{'path': '/status', 'operator': 'equals', 'value': 'accepted'}]
+                head = Head([document])
+                with self.assertRaisesRegex(VectorError, '/aggregateId'):
+                    self.observe(head, call)
+                self.assertEqual(1, len(head.calls))
+
+    def test_unauthorized_query_does_not_poll(self):
+        head = Head([{'error': {'code': 'gateway_error', 'status': 401}}])
+        with self.assertRaisesRegex(VectorError, 'CLI exit 2'):
+            self.observe(head, self.call())
+        self.assertEqual(1, len(head.calls))
+
+    def test_actual_returned_cursor_is_captured_and_asserted(self):
+        head = Head([{'document': {'value': 7}, 'paging': {'nextCursor': 'signed-real-cursor'}}])
+        call = self.call()
+        call['assertions'].append({'path': '/paging/nextCursor', 'operator': 'equals', 'value': 'scripted-cursor'})
+        values = {}
+        self.observe(head, call, {'captures': [{'name': 'cursor', 'path': '/paging/nextCursor', 'type': 'string'}],
+                                  'assertionBindings': [{'index': 1, 'capture': 'cursor'}]}, values)
+        self.assertEqual('signed-real-cursor', values['cursor'])
+
+    def test_failed_capture_does_not_commit_partial_values(self):
+        head = Head([{'document': {'value': 0}, 'paging': {'nextCursor': 'premature'}}] * 3)
+        values = {}
+        with self.assertRaises(VectorError):
+            self.observe(head, self.call(), {'captures': [{'name': 'cursor', 'path': '/paging/nextCursor', 'type': 'string'}]}, values)
+        self.assertEqual({}, values)
+
+    def test_failing_preflight_invalidates_receipt_and_redacts_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            (output / 'live-result.json').write_text('{"result":"passed"}')
+            with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
+                                          'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/'}), \
+                    patch.object(run_live, 'preflight', side_effect=VectorError('bad private-token')):
+                self.assertEqual(1, run_live.main(['--operation', 'fixture.operation', '--output', str(output)]))
+            content = (output / 'live-result.json').read_text()
+            self.assertNotIn('private-token', content)
+            self.assertEqual('failed', json.loads(content)['result'])
+
+
+class ExecutionTests(unittest.TestCase):
+    def selection(self, operation='parties.deactivate-party'):
+        from live_plans import ROOT, load_plan
+        vector = next(path for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')
+                      if json.loads(path.read_text())['operation'] == operation)
+        plan = load_plan(ROOT / 'tools/live-topology/plans' / (operation + '.json'), vector)
+        return {'operation': operation, 'vector': vector, 'plan': plan}
+
+    @staticmethod
+    def put(document, pointer, value):
+        tokens = pointer[1:].split('/')
+        parent = document
+        for i, token in enumerate(tokens[:-1]):
+            key = int(token) if isinstance(parent, list) else token
+            container = [] if tokens[i + 1].isdigit() else {}
+            if isinstance(parent, list):
+                while len(parent) <= key: parent.append({})
+            if key not in parent if isinstance(parent, dict) else parent[key] is None:
+                parent[key] = container
+            parent = parent[key]
+        key = int(tokens[-1]) if isinstance(parent, list) else tokens[-1]
+        if isinstance(parent, list):
+            while len(parent) <= key: parent.append({})
+        parent[key] = value
+
+    def documents(self, selection):
+        from live_plans import _load_json, _steps
+        import copy
+        steps = dict(_steps(_load_json(selection['vector'])))
+        documents, calls = [], []
+        command = 0
+        for action in selection['plan']['actions']:
+            call = steps[action['step']] if 'step' in action else action['query']
+            calls.append(call)
+            document = {'operation': call['operation'], 'tenant': call['envelope']['tenant']}
+            if call['kind'] == 'command':
+                command += 1
+                identifier = str(command).zfill(26)
+                document.update(status='accepted', aggregateId=call['expectedGateway']['body']['aggregateId'],
+                                messageId=identifier, correlationId=call['envelope'].get('correlationId', identifier))
+            else:
+                document['document'] = {}
+                response = call.get('scriptedResponse', {}).get('body', {})
+                if 'payload' in response: document['document'] = copy.deepcopy(response['payload'])
+                paging = response.get('metadata', {}).get('paging')
+                if paging is not None: document['paging'] = copy.deepcopy(paging)
+            for assertion in call['assertions']:
+                if assertion['operator'] == 'exists' and assertion['value'] is False:
+                    continue
+                present, _ = run_live._pointer(document, assertion['path'])
+                if present:
+                    continue
+                value = assertion['value']
+                if assertion['operator'] == 'arrayLength': value = [{} for _ in range(value)]
+                elif assertion['operator'] == 'contains': value = [value]
+                elif assertion['operator'] == 'exists': value = 'present'
+                self.put(document, assertion['path'], value)
+            for capture in action.get('captures', []):
+                self.put(document, capture['path'], '2026-01-01T00:00:00Z' if capture['type'] == 'timestamp' else 'real-cursor')
+            documents.append(document)
+        return calls, documents
+
+    def execute(self, selection, documents, report=None):
+        head = Head(documents)
+        head.env = {}
+        head.allow_extensions = lambda _: None
+        report = report if report is not None else {'phases': []}
+        original = run_live.observe
+        tick = [0]
+        def pause(seconds): tick[0] += seconds
+        def observe(*args, **kwargs):
+            return original(*args, **kwargs, clock=lambda: tick[0], pause=pause)
+        with patch.object(run_live, 'HeadProcess', return_value=head), patch.object(run_live, 'validate_call'), \
+                patch.object(run_live, 'observe', side_effect=observe):
+            run_live.execute(selection, Path('/selected/host.dll'), 'http://127.0.0.1/', 'private-token', report)
+        return head, report
+
+    def test_every_vector_submits_each_declared_command_once_at_executor_boundary(self):
+        from live_plans import ROOT, require_phases
+        for path in sorted((ROOT / 'tools/live-topology/plans').glob('*.json')):
+            operation = json.loads(path.read_text())['operation']
+            with self.subTest(operation=operation):
+                selection = self.selection(operation)
+                calls, documents = self.documents(selection)
+                head, report = self.execute(selection, documents)
+                self.assertEqual(len(calls), len(head.calls))
+                require_phases(selection, report['phases'])
+                commands = [call for call in calls if call['kind'] == 'command']
+                actual = [phase for phase in report['phases'] if phase['kind'] == 'command']
+                self.assertEqual([call['operation'] for call in commands], [phase['operation'] for phase in actual])
+                self.assertTrue(all(len(phase['attempts']) == 1 for phase in actual))
+
+    def test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat(self):
+        selection = self.selection()
+        calls, documents = self.documents(selection)
+        delayed = dict(documents[1], document={})
+        head, report = self.execute(selection, [documents[0], delayed, *documents[1:]])
+        self.assertEqual(len(calls) + 1, len(head.calls))
+        commands = [phase for phase in report['phases'] if phase['kind'] == 'command']
+        self.assertEqual(['parties.create-party', 'parties.deactivate-party', 'parties.deactivate-party'],
+                         [phase['operation'] for phase in commands])
+        self.assertTrue(all(len(phase['attempts']) == 1 for phase in commands))
+        self.assertEqual(2, len(report['phases'][1]['attempts']))
+
+    def test_reused_message_identity_fails_repeated_noop_phase(self):
+        selection = self.selection()
+        calls, documents = self.documents(selection)
+        indices = [i for i, call in enumerate(calls) if call['kind'] == 'command']
+        documents[indices[-1]]['messageId'] = documents[indices[-2]]['messageId']
+        report = {'phases': []}
+        with self.assertRaisesRegex(VectorError, '/messageId was reused'):
+            self.execute(selection, documents, report)
+        self.assertEqual('failed', report['phases'][-1]['result'])
+
+    def test_ordinary_failed_observation_marks_its_phase_failed(self):
+        selection = self.selection()
+        _, documents = self.documents(selection)
+        report = {'phases': []}
+        with self.assertRaisesRegex(VectorError, 'CLI exit 2'):
+            self.execute(selection, [documents[0], {'error': {'code': 'gateway_error', 'status': 403}}], report)
+        self.assertEqual('passed', report['phases'][0]['result'])
+        self.assertEqual('failed', report['phases'][1]['result'])
+        self.assertEqual('failed', report['phases'][1]['attempts'][0]['result'])
+
+    def test_parent_binding_mismatch_never_reaches_execute(self):
+        from live_plans import BINDING_KEYS
+        for changed in BINDING_KEYS:
+            with self.subTest(changed=changed), tempfile.TemporaryDirectory() as directory:
+                binding = {key: 'parent-' + key for key in BINDING_KEYS}
+                selected = {'operation': 'fixture.operation', **binding, changed: 'valid-new-identity'}
+                with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
+                                              'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/', 'MCPCLI_LIVE_BINDING': json.dumps(binding)}), \
+                        patch.object(run_live, 'preflight', return_value=[selected]), patch.object(run_live, 'execute') as execute:
+                    self.assertEqual(1, run_live.main(['--operation', 'fixture.operation', '--output', directory]))
+                execute.assert_not_called()
+                self.assertIn('parent preflight binding', json.loads((Path(directory) / 'live-result.json').read_text())['error'])
+
+    def test_hard_termination_retains_prior_phases_and_sanitized_inflight_attempt(self):
+        import os
+        import sys
+        import time
+        from live_plans import ROOT, BINDING_KEYS
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            binding = {key: key for key in BINDING_KEYS}
+            script = '''
+import json,os,pathlib,sys,time
+sys.path.insert(0, sys.argv[1])
+import run_live
+from live_plans import _load_json,_steps
+vector=pathlib.Path(sys.argv[2]); plan=json.loads(pathlib.Path(sys.argv[3]).read_text())
+selection=dict(operation='parties.deactivate-party',vector=vector,plan=plan,**json.loads(os.environ['MCPCLI_LIVE_BINDING']))
+run_live.preflight=lambda *a,**k:[selection]
+run_live.validate_call=lambda *a:None
+class Head:
+ def __init__(self,*a): self.env={}; self.timeout=30; self.count=0
+ def allow_extensions(self,*a): pass
+ def cli(self,*a):
+  self.count+=1
+  if self.count>1:
+   pathlib.Path(sys.argv[4],'blocked').touch()
+   time.sleep(60)
+  call=dict(_steps(_load_json(vector)))['/prerequisites/0']
+  return 0,dict(operation=call['operation'],tenant=call['envelope']['tenant'],status='accepted',aggregateId=call['expectedGateway']['body']['aggregateId'],messageId='0'*25+'1',correlationId=call['envelope']['correlationId'],note=os.environ['MCPCLI_LIVE_TOKEN'])
+run_live.HeadProcess=Head
+sys.exit(run_live.main(['--operation','parties.deactivate-party','--output',sys.argv[4]]))
+'''
+            selection = self.selection()
+            environment = os.environ.copy()
+            environment.update(MCPCLI_ISOLATED_TOPOLOGY='1', MCPCLI_LIVE_URL='http://127.0.0.1:1234/',
+                               MCPCLI_LIVE_TOKEN='private-kill-token', MCPCLI_LIVE_BINDING=json.dumps(binding))
+            process = subprocess.Popen([sys.executable, '-c', script, str(ROOT / 'tools/live-topology'),
+                                        str(selection['vector']), str(ROOT / 'tools/live-topology/plans/parties.deactivate-party.json'), directory],
+                                       env=environment, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            try:
+                deadline = time.monotonic() + 10
+                while not (output / 'blocked').exists() and process.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.01)
+                self.assertTrue((output / 'blocked').exists())
+                process.kill(); process.communicate(timeout=5)
+                raw = (output / 'live-result.json').read_text()
+                self.assertNotIn('private-kill-token', raw)
+                report = json.loads(raw)
+                self.assertEqual('passed', report['phases'][0]['result'])
+                self.assertEqual('running', report['phases'][1]['result'])
+                self.assertEqual(1, len(report['phases'][1]['attempts']))
+            finally:
+                if process.poll() is None: process.kill()
+                process.communicate(timeout=5)

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "docker-info",
+    "command": [
+      "docker",
+      "info",
+      "--format",
+      "{{.ServerVersion}}"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "docker-socket",
+    "command": [
+      "curl",
+      "--unix-socket",
+      "/var/run/docker.sock",
+      "--max-time",
+      "5",
+      "-sS",
+      "http://localhost/version"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "tmpfs-mode",
+    "command": [
+      "ls",
+      "-ld",
+      "/dev/shm"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "private-runtime-bootstrap",
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "900",
+      "python3",
+      "tools/live-topology/bootstrap-runtime.py",
+      "/tmp/mcpcli-413-runtime-7jz660m_/runtime"
+    ],
+    "exitCode": 0
+  }
+]

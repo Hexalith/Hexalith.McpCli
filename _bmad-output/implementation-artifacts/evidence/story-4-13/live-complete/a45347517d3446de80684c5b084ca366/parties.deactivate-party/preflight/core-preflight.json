@@ -1,0 +1,87 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.deactivate-party/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SFTTJWVRJQKNHVGXYWEPX7",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.deactivate-party/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5SFTTK6THBHBXSXZQQK8YN3",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.deactivate-party/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5SFTTK6THBHBXSXZQQK8YN4",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.deactivate-party/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

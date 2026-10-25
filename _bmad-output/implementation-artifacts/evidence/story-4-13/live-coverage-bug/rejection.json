@@ -1,0 +1,9 @@
+{
+  "reason": "Preflight selector was overwritten by Catalog loop variable; returned execution subset was incorrectly treated as complete. Historical receipt rejected.",
+  "actualExecutedOperations": [
+    "tenants.update-tenant"
+  ],
+  "expectedCount": 21,
+  "rejectedReceiptSha256": "85d2c8cd4bc2c989937348bcb1a908161d3b7ea75864bae99e657884bbc6cc5b",
+  "accepted": false
+}

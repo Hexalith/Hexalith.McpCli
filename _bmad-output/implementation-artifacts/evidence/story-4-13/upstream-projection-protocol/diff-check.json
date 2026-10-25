@@ -1,0 +1,11 @@
+{
+  "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "exitCode": 2,
+  "stdout": "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:1: trailing whitespace.\n+using System.Text.Json.Serialization;\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:2: trailing whitespace.\n+\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:14: trailing whitespace.\n+using Hexalith.EventStore.Contracts.Projections;\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:410: trailing whitespace.\n+        _ = services.ConfigureHttpJsonOptions(options =>\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:411: trailing whitespace.\n+        {\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:412: trailing whitespace.\n+            PartiesJsonOptions.ApplyTo(options.SerializerOptions);\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:413: trailing whitespace.\n+            // SDK projection outcomes use numeric protocol values; domain payload enums stay strings.\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:414: trailing whitespace.\n+            options.SerializerOptions.Converters.Insert(0, new JsonNumberEnumConverter<ProjectionDispatchStatus>());\nsrc/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs:415: trailing whitespace.\n+        });\n",
+  "stderr": ""
+}

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "ci",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 7.122,
+  "node": "v26.4.0",
+  "npm": "11.18.0"
+}

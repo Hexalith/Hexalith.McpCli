@@ -1,0 +1,43 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Hexalith.McpCli.Analyzers -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Successfully created package '/tmp/tmp.W2uNtCeHgh/feed/Hexalith.McpCli.Abstractions.1.0.0.nupkg'.
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Hexalith.McpCli.Analyzers -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+  The package Hexalith.McpCli.Sample.Contracts.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package '/tmp/tmp.W2uNtCeHgh/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg'.
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 131 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 1.15 sec).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 1.15 sec).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 1.15 sec).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 1.16 sec).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 1.16 sec).
+  Hexalith.McpCli.Analyzers -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Core -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.ConformanceHost -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.74
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+Validated 3 vector(s) against /tmp/tmp.W2uNtCeHgh/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg
+PASS sample.create-item: discovery, 2 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.get-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS nonempty enrollment: exact packaged sample, 53 resolved packages, approval input hashes and complete replay.
+PASS real SDK signed paging, timestamp grammar, ordered ASCII property matching, explicit-null/missing payload, internal errors, 304/semantic/status-override outcomes and command204 replay; missing-payload head differences refuse parity.
+PASS all prerequisite/invocation/postcondition kinds, schemas, identifiers and excessive depth fail offline with located Core diagnostics.
+PASS combined manifest: all production packages plus the explicit temporary sample pass independent artifact and complete Catalog replay.
+PASS pending inventory: exact approval diagnostic from the real checker; replay blocked and stale success/hash invalidated.
+PASS false semantic assertion: replay failed with useful diagnostics; stale success/hash invalidated.

@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "command": "python3 -m unittest -v test_live_plans test_live_runner test_lane test_runtime",
+      "cwd": "tools/live-topology",
+      "exitCode": 0,
+      "passed": 65,
+      "scope": "initial affected-file suites"
+    },
+    {
+      "command": "python3 -m unittest -v test_live_plans test_live_runner test_lane",
+      "cwd": "tools/live-topology",
+      "exitCode": 0,
+      "passed": 49,
+      "scope": "after adding compiled-client, inventory/Core delegation, Core observations and failed-phase regressions"
+    },
+    {
+      "command": "python3 -m unittest -v test_live_plans.AdapterDependencyTests test_live_runner.ExecutionTests.test_every_vector_submits_each_declared_command_once_at_executor_boundary test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup",
+      "cwd": "tools/live-topology",
+      "exitCode": 0,
+      "passed": 5,
+      "scope": "final phase-cardinality guard and actual adapter TFM mapping"
+    },
+    {
+      "command": "python3 -m unittest -v test_live_plans.AdapterDependencyTests",
+      "cwd": "tools/live-topology",
+      "exitCode": 0,
+      "passed": 3,
+      "scope": "final executable dependency-reference metadata guard"
+    },
+    {
+      "command": "dotnet build tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj --no-restore --configuration Release -warnaserror -m:1",
+      "cwd": ".",
+      "exitCode": 0,
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": "dotnet tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll -class Hexalith.McpCli.Manifest.Tests.LiveVectorProcessTests -class Hexalith.McpCli.Manifest.Tests.LiveVectorSelectionTests",
+      "cwd": ".",
+      "exitCode": 0,
+      "passed": 8,
+      "skipped": 0
+    }
+  ],
+  "uniqueAffectedPythonCases": 70,
+  "fullVerificationDeferredToParent": true,
+  "approvedVectorFilesChanged": false,
+  "correctedAttempt": "The actual-adapter positive guard test initially failed because modern NuGet assets name the target net10.0 while executable deps use .NETCoreApp,Version=v10.0. The explicit equivalent-TFM mapping was added; the same positive test and focused dependency tests then passed."
+}

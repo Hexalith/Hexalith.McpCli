@@ -1,0 +1,58 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/parties.get-party/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SBEXFC8Q7PD9V07PJK1KG7",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/parties.get-party/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "entityId": "party-story49",
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

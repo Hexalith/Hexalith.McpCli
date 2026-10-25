@@ -35,6 +35,16 @@ public sealed class TopologyConfigurationTests : IDisposable
     [Fact]
     public void DeclaredDirectRootSourcesPass() => TopologyConfiguration.ValidateWorkspace(_root);
 
+    /// <summary>Disabled or mismatched bootstrap cannot silently create a different authority.</summary>
+    [Theory]
+    [InlineData(false, "mcpcli-live-admin")]
+    [InlineData(true, null)]
+    [InlineData(true, "")]
+    [InlineData(true, "another-administrator")]
+    public void IncompleteBootstrapFails(bool enabled, string? userId)
+        => Assert.Equal("Tenants bootstrap must be enabled for the test-owned administrator 'mcpcli-live-admin'.",
+            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateBootstrap(enabled, userId)).Message);
+
     /// <summary>Every module must be explicitly declared by the root workspace.</summary>
     [Theory]
     [InlineData("Hexalith.EventStore")]

@@ -1,0 +1,34 @@
+{
+  "runId": "066f6e8ed74343dd93562a4cf7b1499e",
+  "result": "passed",
+  "fullLiveAccepted": true,
+  "vectors": [
+    {
+      "operation": "tenants.update-tenant",
+      "result": "passed",
+      "output": "066f6e8ed74343dd93562a4cf7b1499e/tenants.update-tenant",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run-isolated.py",
+        "--",
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+        "-trait",
+        "Operation=tenants.update-tenant",
+        "-preEnumerateTheories",
+        "-failSkips",
+        "-result-xml",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/066f6e8ed74343dd93562a4cf7b1499e/tenants.update-tenant/tests.xml"
+      ],
+      "exitCode": 0,
+      "isolatedReceipt": "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T094130Z-b2f37e58/result.json"
+    }
+  ],
+  "coverage": [
+    "tenants.update-tenant"
+  ],
+  "passed": 1,
+  "failed": 0
+}

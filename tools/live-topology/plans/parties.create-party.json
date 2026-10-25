@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "operation": "parties.create-party",
+  "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "path": "/document/personDetails/firstName",
+            "operator": "equals",
+            "value": "Ada"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

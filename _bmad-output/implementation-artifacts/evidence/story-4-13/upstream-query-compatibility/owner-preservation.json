@@ -1,0 +1,6 @@
+{
+  "stagedDiffUnchanged": true,
+  "assistantProductionChanges": [],
+  "retainedRegression": "/tmp/mcpcli-413-qualified-jip0st1u/parties/tests/Hexalith.Parties.Tests/Gateway/PartyHostQueryDiscoveryTests.cs",
+  "ownerProgramUnchanged": true
+}

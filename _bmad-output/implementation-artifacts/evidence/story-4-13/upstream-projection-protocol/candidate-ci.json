@@ -1,0 +1,9 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "repos/Hexalith/Hexalith.Parties/actions/jobs/121148538727/logs"
+  ],
+  "exitCode": 0,
+  "capturedAt": "2026-10-25T11:04:43.836718+00:00"
+}

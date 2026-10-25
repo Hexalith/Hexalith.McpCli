@@ -1,0 +1,121 @@
+[
+  {
+    "name": "python-live",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:11:08.889658+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 5.488
+  },
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:11:14.378327+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 1.391
+  },
+  {
+    "name": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:11:15.770108+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 13.185
+  },
+  {
+    "name": "manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:11:28.954431+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 31.099
+  },
+  {
+    "name": "sample-validation",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:12:00.052430+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 24.245
+  },
+  {
+    "name": "sample-loopback",
+    "command": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:12:24.296087+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 771.061
+  },
+  {
+    "name": "restore-after-loopback",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:25:15.324048+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 1.417
+  },
+  {
+    "name": "smoke",
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "960",
+      "python3",
+      "tools/live-topology/run-isolated.py",
+      "--",
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+      "-failSkips",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/parent-audit/final/smoke.xml"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "startedAt": "2026-10-25T11:25:16.741273+00:00",
+    "exitCode": 1,
+    "elapsedSeconds": 29.43
+  }
+]

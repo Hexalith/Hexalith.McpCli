@@ -1,0 +1,14 @@
+{
+  "owner": "/home/administrator/projects/hexalith/parties",
+  "head": "9c116910f9d712b82ae27ceb1946605d76c8a451",
+  "trackedFilesSha256": {
+    "_bmad-output/implementation-artifacts/deferred-work.md": "a597a47a6bc817dc8dccccef6d066365ea1715aa20e785b0b6a0b907e5df89cd",
+    "_bmad-output/implementation-artifacts/spec-five-processing-and-memories-erasure-deferred-items.md": "eec9c834261c187488d966a5f1c143ec803e419279418f5cd2d45fe612db6b09",
+    "src/Hexalith.Parties.Client/AdminPortal/HttpAdminPortalGdprClient.cs": "7e25cce83c6d0cbb94506e523785db74c7639bd00ace6200f05aa367227f6b15",
+    "src/Hexalith.Parties.Projections/Handlers/PartyDetailSdkProjectionHandler.cs": "fbca567d47e60a630994884860224ab595dcdb5d4a97b4d6f11d8ef4c40c1f56",
+    "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs": "29f471f8ff48b07f358ae623bfabc90b0396613d525c7564dc37c827b3c71754",
+    "src/Hexalith.Parties/Program.cs": "3468af3de7efc5eeff80ccd8c26ab61279e43c4b3b9dd9897ea4a401d1926d4a"
+  },
+  "status": "MM _bmad-output/implementation-artifacts/deferred-work.md\n M _bmad-output/implementation-artifacts/spec-five-processing-and-memories-erasure-deferred-items.md\nA  _bmad-output/implementation-artifacts/tests/five-processing-and-memories-erasure-2026-10-25/review1-owned-files.json\n m references/Hexalith.EventStore\n m references/Hexalith.Memories\n M src/Hexalith.Parties.Client/AdminPortal/HttpAdminPortalGdprClient.cs\n M src/Hexalith.Parties.Projections/Handlers/PartyDetailSdkProjectionHandler.ProcessingBuckets.cs\n M src/Hexalith.Parties.Projections/Handlers/PartyDetailSdkProjectionHandler.cs\n M src/Hexalith.Parties/Queries/PartySdkQueryService.ProcessingBuckets.cs\n M tests/Hexalith.Parties.Client.Tests/AdminPortal/AdminPortalGdprOperationContractTests.cs\nM  tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs\n M tests/Hexalith.Parties.Tests/Projections/PartyProcessingGenerationRecoveryTests.cs\n?? _bmad-output/implementation-artifacts/spec-ext-parties-1-owner-delivery.md\n?? src/Hexalith.Parties.Projections/Models/PartyProcessingBucketValidation.cs\n",
+  "stagedDiffSha256": "1e22b72b51d0cde79dee50761f764c1d5813719e47427cbb84e649b82a3b1f2e"
+}

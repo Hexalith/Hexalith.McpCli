@@ -1,0 +1,12 @@
+[
+  {
+    "host": "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.deps.json",
+    "package": "Hexalith.EventStore.DomainService/3.127.0",
+    "packageSha256": "d84ea5f5e3d78829c69ac271a876a9f2d21fbf55e9cdc7a74c62b2fff193c5ff",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/Hexalith/Hexalith.EventStore",
+      "commit": "e1d8b17160202761ab5c9606cafbcf4d1a4b92c3"
+    }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "test(conformance): verify all vectors against live gateway semantics\n\nExecute all 21 approved vectors in fresh authenticated topologies.\nBind adapter dependencies and plans before execution and retain phase receipts.\n\nVerify 53 single command submissions, real cursors, filters and cleanup.\nIntegrate the qualified Parties projection-outcome compatibility fix.\n",
+  "exitCode": 0,
+  "validator": "@commitlint/cli 21.2.2",
+  "configuration": "commitlint.config.mjs"
+}

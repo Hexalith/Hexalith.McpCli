@@ -1,0 +1,114 @@
+{
+  "runId": "cc263e56c72543e8a0a56c380eddfb0a",
+  "result": "preflight-only",
+  "fullLiveAccepted": false,
+  "vectors": [
+    {
+      "operation": "parties.create-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.get-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.list-parties",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.search-parties",
+      "result": "not-run"
+    },
+    {
+      "operation": "parties.update-party",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "result": "not-run"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "result": "not-run"
+    }
+  ],
+  "coverage": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-tenant",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ]
+}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -36,6 +37,32 @@ def stop_owned(process: subprocess.Popen) -> None:
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL)
             process.wait(timeout=5)
+
+
+def backup_empty_redis(run_dir: Path) -> dict:
+    """Retain a provider-native genesis backup before any application can write."""
+    for command, expected in ((b'*1\r\n$6\r\nDBSIZE\r\n', b':0\r\n'),
+                              (b'*1\r\n$4\r\nSAVE\r\n', b'+OK\r\n')):
+        with socket.create_connection(('127.0.0.1', 6379), timeout=5) as connection:
+            connection.sendall(command)
+            reply = b''
+            while not reply.endswith(b'\r\n') and len(reply) < 128:
+                fragment = connection.recv(128 - len(reply))
+                if not fragment:
+                    break
+                reply += fragment
+            if reply != expected:
+                raise RuntimeError('Private Redis must be empty and its pre-application backup must succeed.')
+    backup = run_dir / 'initial-empty.rdb'
+    content = (run_dir / 'dump.rdb').read_bytes()
+    if not content.startswith(b'REDIS'):
+        raise RuntimeError('Private Redis backup has no RDB header.')
+    backup.write_bytes(content)
+    backup.chmod(0o400)
+    proof = {'databaseSize': 0, 'createdBeforeApplications': True, 'backupFile': str(backup),
+             'sha256': hashlib.sha256(content).hexdigest()}
+    (run_dir / 'initial-redis-backup.json').write_text(json.dumps(proof, indent=2) + '\n')
+    return proof
 
 
 def inside(run_dir: Path, command: list[str]) -> int:
@@ -163,6 +190,8 @@ def inside(run_dir: Path, command: list[str]) -> int:
         result['daprBeforeCommand']['applications'] = json.loads(probe.stdout)
         if result['daprBeforeCommand']['applications'] != []:
             raise RuntimeError('Private Dapr environment contains pre-existing applications.')
+        result['initialRedisBackup'] = backup_empty_redis(run_dir)
+        environment['MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT'] = str(run_dir / 'initial-redis-backup.json')
         result['prerequisitesReady'] = True
         print('Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.', flush=True)
         with (run_dir / 'command.stdout.txt').open('wb') as output, (run_dir / 'command.stderr.txt').open('wb') as error:

@@ -1,0 +1,64 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.search-parties/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SG0CBDBXTZZMFEYYK7K9AM",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/a45347517d3446de80684c5b084ca366/parties.search-parties/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "parties",
+        "queryType": "PartySearch",
+        "projectionType": "party-index",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": true
+        },
+        "entityId": "parties",
+        "projectionActorType": "PartyIndexProjectionQueryActor",
+        "paging": {
+          "pageSize": 2,
+          "offset": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.get-tenant-audit",
+  "vectorSha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-audit"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Audit"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-audited@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/2"
+    },
+    {
+      "label": "persisted-prerequisites-2",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-audit"
+          },
+          {
+            "path": "/document/configuration/audit.marker",
+            "operator": "equals",
+            "value": "administrative"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/3"
+    },
+    {
+      "label": "persisted-prerequisites-3",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-audited@example.com",
+              "role": "TenantContributor"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation",
+      "captures": [
+        {
+          "name": "continuation",
+          "path": "/paging/nextCursor",
+          "type": "string"
+        },
+        {
+          "name": "firstTime",
+          "path": "/document/items/0/timestamp",
+          "type": "timestamp"
+        }
+      ],
+      "assertionBindings": [
+        {
+          "index": 7,
+          "capture": "continuation"
+        }
+      ]
+    },
+    {
+      "step": "/postconditions/0",
+      "bindings": [
+        {
+          "path": "/envelope/cursor",
+          "capture": "continuation"
+        }
+      ],
+      "captures": [
+        {
+          "name": "lastTime",
+          "path": "/document/items/0/timestamp",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "label": "category-administrative",
+      "query": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Administrative"
+        },
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 100
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 2
+          },
+          {
+            "path": "/document/items/0/eventType",
+            "operator": "equals",
+            "value": "TenantCreated"
+          },
+          {
+            "path": "/document/items/1/eventType",
+            "operator": "equals",
+            "value": "TenantConfigurationSet"
+          }
+        ]
+      },
+      "bindings": []
+    },
+    {
+      "label": "time-upper-inclusive",
+      "query": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 100
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 1
+          },
+          {
+            "path": "/document/items/0/eventType",
+            "operator": "equals",
+            "value": "UserAddedToTenant"
+          }
+        ]
+      },
+      "bindings": [
+        {
+          "path": "/payload/To",
+          "capture": "firstTime"
+        }
+      ]
+    },
+    {
+      "label": "time-lower-inclusive",
+      "query": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 100
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 1
+          },
+          {
+            "path": "/document/items/0/eventType",
+            "operator": "equals",
+            "value": "UserRoleChanged"
+          }
+        ]
+      },
+      "bindings": [
+        {
+          "path": "/payload/From",
+          "capture": "lastTime"
+        }
+      ]
+    },
+    {
+      "label": "time-before-first",
+      "query": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 100
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          }
+        ]
+      },
+      "bindings": [
+        {
+          "path": "/payload/To",
+          "capture": "firstTime",
+          "offsetSeconds": -0.001
+        }
+      ]
+    },
+    {
+      "label": "time-after-last",
+      "query": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 100
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          }
+        ]
+      },
+      "bindings": [
+        {
+          "path": "/payload/From",
+          "capture": "lastTime",
+          "offsetSeconds": 0.001
+        }
+      ]
+    }
+  ]
+}

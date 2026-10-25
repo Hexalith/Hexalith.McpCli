@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-413-party-commit.txt"
+  ],
+  "message": "fix(host): preserve numeric projection outcomes\n",
+  "exitCode": 0,
+  "node": "v24.22.1",
+  "npm": "11.19.1"
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "gh",
+    "pr",
+    "create",
+    "--repo",
+    "Hexalith/Hexalith.Parties",
+    "--base",
+    "main",
+    "--head",
+    "fix/mcpcli-413-projection-outcomes-20261025",
+    "--title",
+    "fix(host): preserve numeric projection outcomes",
+    "--body-file",
+    "/tmp/mcpcli-413-party-pr-body.md"
+  ],
+  "exitCode": 0,
+  "stdout": "https://github.com/Hexalith/Hexalith.Parties/pull/58\n",
+  "stderr": "Warning: 36 uncommitted changes\n"
+}

@@ -1,0 +1,10 @@
+{
+  "archive": "captured-inputs.tar.gz",
+  "sha256": "d85d1117a9991091104e3bae801ce8d2ae76c78decc33b3a797ace82355429ff",
+  "fileCount": 3358,
+  "expandedBytes": 16111063,
+  "newPostReviewInputs": 1012,
+  "fileInventorySha256": "dadf774f15a7d762d5bfcdbf940adb13b16f3a09cfe4d6f2f918dc85df6feee4",
+  "verification": "Every original and new member was read back and matched its SHA-256 before consolidation.",
+  "extract": "tar -xzf captured-inputs.tar.gz (from this evidence directory)"
+}

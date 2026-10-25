@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 67 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 152 ms).
+  Restored /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 152 ms).
+  Hexalith.McpCli.Analyzers -> /tmp/tmp.az3mj8sRVB/artifacts/bin/Hexalith.McpCli.Analyzers/release/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /tmp/tmp.az3mj8sRVB/artifacts/bin/Hexalith.McpCli.Abstractions/release/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/tmp.az3mj8sRVB/artifacts/bin/Hexalith.McpCli.Sample.Contracts/release/Hexalith.McpCli.Sample.Contracts.dll
+  The package Hexalith.McpCli.Sample.Contracts.1.0.0 is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package '/tmp/tmp.az3mj8sRVB/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg'.
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+PASS sample.rename-item: discovery, 1 reset Gateway step(s), documents, requests, validation/Gateway error parity
+Validated 3 vector(s) against /tmp/tmp.az3mj8sRVB/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg
+sha512-wj+Ve4Nza+ppE7KCCfOh7P5sAchrW0YrcekemiaVH61/a3q/WSF9LQIM7XEkGpQlehxLMn0v0RZ3NN4yFL7cBw==  /tmp/tmp.az3mj8sRVB/feed/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg

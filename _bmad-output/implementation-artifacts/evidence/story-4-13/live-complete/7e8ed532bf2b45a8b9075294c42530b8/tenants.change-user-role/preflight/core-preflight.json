@@ -1,0 +1,70 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.change-user-role/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SBP6Y92G74J6CS5ZB9XCSM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-roles",
+          "Name": "Vector Roles",
+          "Description": null
+        },
+        "correlationId": "01M5SBP6Y92G74J6CS5ZB9XCSM"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.change-user-role/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5SBP6YMTMVSJMPVTQ522VKT",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5SBP6YMTMVSJMPVTQ522VKT"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.change-user-role/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5SBP6YQ4Q0D0RF32TQXS2B9",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "change-user-role",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "NewRole": "TenantOwner"
+        },
+        "correlationId": "01M5SBP6YQ4Q0D0RF32TQXS2B9"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/7e8ed532bf2b45a8b9075294c42530b8/tenants.change-user-role/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-roles"
+        }
+      }
+    }
+  ]
+}

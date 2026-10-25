@@ -1,0 +1,3 @@
+Isolated run: /tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T122248Z-3ffe788f
+Private Sentry, Redis, TLS placement and TLS scheduler are ready; Dapr has no pre-existing applications.
+Command completed: exit 0; logs: /tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T122248Z-3ffe788f

@@ -1,0 +1,298 @@
+{
+  "operation": "tenants.list-tenants",
+  "result": "passed",
+  "phases": [
+    {
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-list-a",
+          "Name": "Vector List A",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M5SAB0685K2YS3TQBA2330J6",
+            "correlationId": "01M5SAB0685K2YS3TQBA2330J6",
+            "tenant": "system",
+            "aggregateId": "vector-list-a",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-a"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-list-a",
+              "name": "Vector List A",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-10-25T10:40:11.5733547+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/prerequisites/1",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-list-b",
+          "Name": "Vector List B",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M5SAB2V4818X1XTJPJEDYP2E",
+            "correlationId": "01M5SAB2V4818X1XTJPJEDYP2E",
+            "tenant": "system",
+            "aggregateId": "vector-list-b",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-b"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-list-b",
+              "name": "Vector List B",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-10-25T10:40:14.3533592+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/prerequisites/2",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-list-c",
+          "Name": "Vector List C",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M5SAB5PJ6021MTSE4668FTPH",
+            "correlationId": "01M5SAB5PJ6021MTSE4668FTPH",
+            "tenant": "system",
+            "aggregateId": "vector-list-c",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-prerequisites-2",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-c"
+        },
+        "envelope": {
+          "tenant": "system"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "system",
+            "document": {
+              "tenantId": "vector-list-c",
+              "name": "Vector List C",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-10-25T10:40:17.1796547+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/invocation",
+      "operation": "tenants.list-tenants",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.list-tenants",
+        "kind": "query",
+        "payload": {},
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 2
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.list-tenants",
+            "tenant": "system",
+            "document": {
+              "items": [
+                {
+                  "tenantId": "vector-list-a",
+                  "name": "Vector List A",
+                  "status": "Active"
+                },
+                {
+                  "tenantId": "vector-list-b",
+                  "name": "Vector List B",
+                  "status": "Active"
+                }
+              ],
+              "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAACtdopAMRHlzPbcLzJw4ZiPQ-0rn_iJE7-Fz029lnMReu2enq29yqb1jYIwV-2_y75d8U8oWyCNnuwwAZBEqjtg2wgJNDaFcI34NcF08vq0JFvHrdmrOqDvfECQUxqHbTC51yowRxAwJA1bZKytkOtWPpszv_TBAnK7XH_me-YlzrZWKQ3mkHdh3qNmEZO02KTolx9x7JPYBm880-NE_rzR_SLMnw6BBll-c5Jdgjw9qM6lIo82o5VCYof6E6XkDnBvhDosCFhUnuScktafLW7C0kZgl2oH2ihLRofDZvoTIA",
+              "hasMore": true
+            },
+            "paging": {
+              "pageSize": 2,
+              "nextCursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAACtdopAMRHlzPbcLzJw4ZiPQ-0rn_iJE7-Fz029lnMReu2enq29yqb1jYIwV-2_y75d8U8oWyCNnuwwAZBEqjtg2wgJNDaFcI34NcF08vq0JFvHrdmrOqDvfECQUxqHbTC51yowRxAwJA1bZKytkOtWPpszv_TBAnK7XH_me-YlzrZWKQ3mkHdh3qNmEZO02KTolx9x7JPYBm880-NE_rzR_SLMnw6BBll-c5Jdgjw9qM6lIo82o5VCYof6E6XkDnBvhDosCFhUnuScktafLW7C0kZgl2oH2ihLRofDZvoTIA",
+              "hasMore": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/postconditions/0",
+      "operation": "tenants.list-tenants",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.list-tenants",
+        "kind": "query",
+        "payload": {},
+        "envelope": {
+          "tenant": "system",
+          "pageSize": 2,
+          "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAACtdopAMRHlzPbcLzJw4ZiPQ-0rn_iJE7-Fz029lnMReu2enq29yqb1jYIwV-2_y75d8U8oWyCNnuwwAZBEqjtg2wgJNDaFcI34NcF08vq0JFvHrdmrOqDvfECQUxqHbTC51yowRxAwJA1bZKytkOtWPpszv_TBAnK7XH_me-YlzrZWKQ3mkHdh3qNmEZO02KTolx9x7JPYBm880-NE_rzR_SLMnw6BBll-c5Jdgjw9qM6lIo82o5VCYof6E6XkDnBvhDosCFhUnuScktafLW7C0kZgl2oH2ihLRofDZvoTIA"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.list-tenants",
+            "tenant": "system",
+            "document": {
+              "items": [
+                {
+                  "tenantId": "vector-list-c",
+                  "name": "Vector List C",
+                  "status": "Active"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 2,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "5.10.0",
+    "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+    "vectorSha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+    "planSha256": "f7a5dd08ac96ba4fee473cbd57104ec6a43409aa270b21010a211c364e63cc97",
+    "approvalSha256": "13467ec9437a5928e12e9cd09b28310a449b673eb697bd9099664c2c7cd93d24",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {
+    "continuation": "CfDJ8AAAAAAAAAAAAAAAAAAAAACtdopAMRHlzPbcLzJw4ZiPQ-0rn_iJE7-Fz029lnMReu2enq29yqb1jYIwV-2_y75d8U8oWyCNnuwwAZBEqjtg2wgJNDaFcI34NcF08vq0JFvHrdmrOqDvfECQUxqHbTC51yowRxAwJA1bZKytkOtWPpszv_TBAnK7XH_me-YlzrZWKQ3mkHdh3qNmEZO02KTolx9x7JPYBm880-NE_rzR_SLMnw6BBll-c5Jdgjw9qM6lIo82o5VCYof6E6XkDnBvhDosCFhUnuScktafLW7C0kZgl2oH2ihLRofDZvoTIA"
+  }
+}

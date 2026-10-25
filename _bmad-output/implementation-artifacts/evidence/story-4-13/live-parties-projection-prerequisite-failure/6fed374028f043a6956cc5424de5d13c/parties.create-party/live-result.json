@@ -1,0 +1,639 @@
+{
+  "operation": "parties.create-party",
+  "result": "failed",
+  "phases": [
+    {
+      "phase": "/invocation",
+      "operation": "parties.create-party",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "parties.create-party",
+        "kind": "command",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.create-party",
+            "messageId": "01M5S76JN1XAERD8QSY1Z8JFJ6",
+            "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+            "tenant": "tenant-a",
+            "aggregateId": "party-story49",
+            "status": "accepted",
+            "result": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [],
+              "createdAt": "2026-10-25T09:45:20.9607677+00:00",
+              "lastModifiedAt": "2026-10-25T09:45:20.9615169+00:00",
+              "isRestricted": false,
+              "isErased": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-invocation",
+      "operation": "parties.get-party",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        }
+      },
+      "result": "running",
+      "attempts": [
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76KWW60D6BFVEZ019425S"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76N2HXQ6QXW1AM3DG0Z38"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76P5DZS268PPEEGMT2W8Q"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76Q94Q5HGD9NG5R0MZ649"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76RCGQ64WR10H1CC7WE26"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76SF4PJ9BPAXYFAM95F38"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76TJV7S6JBMGZBQ85E0KZ"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76VNABQZ4VG5F34CMN56T"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76WRT226WHH4FPX3H4EHQ"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76XV5N94SMWR72H9HBGVQ"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S76YXXJFD238E4JPZ7YZXH"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S7700DYCSE3QQDBB6G4SGY"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S7712X42K3Q1NG4PTH80G5"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S7726GPVS73BC4PZSXBHM8"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S7739V98ZQ3GT9P1D4Z2D4"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S774CKW2Y3CNRRBVSXM8KY"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S775GS7Q7MWDBRGJKGAC8A"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S776K30RBEXRASQWEWDTYW"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S777NST16XM83Q4DJ24MJ6"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S778QQB9P82238RFGJDW87"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S779T068DPMGM7PSYVYXRZ"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77AW0PF3VWVGW7W0WEYXP"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77BZ4T1QMFT2JAARX9FHK"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77D2BV0Q8CYSG0QFM4ARS"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77E6372R9MY1BAN3BVKQK"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77FA0R3R2B6R8A7DD3ZH7"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77GE0VYMWQEPA981NZKMT"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77HHMJHNZK91N8QKG3R76"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77JM6EWATH4H118ABB2W7"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77KPZVGC0HAW7TKA4DEZV"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77MT1QGTT3Q8EPW1PCA2H"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77NX384XAJGF0R5RR8F7X"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77Q00GTQ8751QYD7PA59N"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77R2SHCV12MD942733ZNT"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77S5S5M32HAD0K6ABTRQP"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77T9H1KHCNQ5TNV6ZPMSV"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77VCJSTPQCMKVKGTS2BK0"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77WFA4PE27E1NJNHAJCT6"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77XK4J09ZM7WH01M7DETT"
+            }
+          }
+        },
+        {
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 500,
+              "detail": "actor-not-found-infrastructure",
+              "reason": "query_internal_error",
+              "retryAfter": "30",
+              "correlationId": "01M5S77YNMZ9KWBFCGT7RKXDW6"
+            }
+          }
+        }
+      ],
+      "lastFailure": "Command '['dotnet', '/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll', 'query', 'parties.get-party', '--payload', '{\"PartyId\":\"party-story49\"}', '--format', 'json', '--url', 'http://localhost:45327/', '--tenant', 'tenant-a']' timed out after 0.01238576699688565 seconds"
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "planSha256": "1aed63d003a75049dfcadf103d7c2fd2205cc2ba85ff589fe3e334b558ecec17",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+  },
+  "error": "VectorError: persisted-invocation parties.get-party: read deadline: Command '['dotnet', '/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll', 'query', 'parties.get-party', '--payload', '{\"PartyId\":\"party-story49\"}', '--format', 'json', '--url', 'http://localhost:45327/', '--tenant', 'tenant-a']' timed out after 0.01238576699688565 seconds"
+}

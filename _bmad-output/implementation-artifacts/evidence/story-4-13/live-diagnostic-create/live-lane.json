@@ -1,0 +1,54 @@
+{
+  "runId": "bb8a0d003224456a8899b923e04aa60f",
+  "result": "partial",
+  "fullLiveAccepted": false,
+  "vectors": [
+    {
+      "operation": "tenants.create-tenant",
+      "result": "passed",
+      "output": "bb8a0d003224456a8899b923e04aa60f/tenants.create-tenant",
+      "command": [
+        "/usr/bin/python3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run-isolated.py",
+        "--",
+        "dotnet",
+        "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+        "-trait",
+        "Operation=tenants.create-tenant",
+        "-preEnumerateTheories",
+        "-failSkips",
+        "-result-xml",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-diagnostic-create/bb8a0d003224456a8899b923e04aa60f/tenants.create-tenant/tests.xml"
+      ],
+      "exitCode": 0,
+      "isolatedReceipt": "/tmp/mcpcli-413-runtime-7jz660m_/runtime/runs/20261025T093737Z-d215fb6a/result.json"
+    }
+  ],
+  "coverage": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-tenant",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ],
+  "passed": 1,
+  "failed": 0
+}

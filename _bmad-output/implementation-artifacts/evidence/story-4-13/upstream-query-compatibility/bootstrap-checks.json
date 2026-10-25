@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.ProjectionWriterBootstrapTests",
+      "-class",
+      "Hexalith.McpCli.Manifest.Tests.TopologyAccessControlTests"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0
+  }
+]

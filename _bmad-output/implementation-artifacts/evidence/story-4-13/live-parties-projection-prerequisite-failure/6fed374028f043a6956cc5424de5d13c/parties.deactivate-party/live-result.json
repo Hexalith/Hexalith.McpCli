@@ -1,0 +1,5 @@
+{
+  "operation": "parties.deactivate-party",
+  "result": "pending",
+  "phases": []
+}

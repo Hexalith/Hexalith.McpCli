@@ -1,0 +1,36 @@
+[
+  {
+    "command": [
+      "git",
+      "switch",
+      "-c",
+      "fix/mcpcli-413-projection-outcomes-20261025"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "Switched to a new branch 'fix/mcpcli-413-projection-outcomes-20261025'\n"
+  },
+  {
+    "command": [
+      "git",
+      "add",
+      "--",
+      "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs",
+      "tests/Hexalith.Parties.Tests/Gateway/PartyProjectionProtocolSerializationTests.cs"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "commit",
+      "-F",
+      "/tmp/mcpcli-413-party-commit.txt"
+    ],
+    "exitCode": 0,
+    "stdout": "[fix/mcpcli-413-projection-outcomes-20261025 d83fec24] fix(host): preserve numeric projection outcomes\n 2 files changed, 84 insertions(+), 1 deletion(-)\n create mode 100644 tests/Hexalith.Parties.Tests/Gateway/PartyProjectionProtocolSerializationTests.cs\n",
+    "stderr": ""
+  }
+]

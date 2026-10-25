@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.get-tenant",
+  "vectorSha256": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-read"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-read"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Read"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": "Read by the McpCli v1 vector"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-read"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-reader@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/2"
+    },
+    {
+      "label": "persisted-prerequisites-2",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-read"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-read"
+          },
+          {
+            "path": "/document/configuration/locale",
+            "operator": "equals",
+            "value": "fr-FR"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Disposable live topology runtime
 
-Run the live Gateway smoke only through `run-isolated.py`. It creates fresh Linux
+Run the live Gateway smoke and semantic cases only through `run-isolated.py`. It creates fresh Linux
 user, PID, network and mount namespaces, a private Redis, Dapr Sentry, placement
 and scheduler, fresh mTLS credentials and disposable state. After checking all
 four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
@@ -55,8 +55,88 @@ timeout. Never use a host Redis or user Dapr environment for this smoke.
 
 These maintained tools are shared by later live-semantic and CI work. The
 original qualified copies and receipts remain unchanged in the story 4.12
-evidence directory. Non-live checks run with:
+evidence directory. Non-live checks require the root-declared Builds checkout
+and a restored, built production adapter. From the repository root, restore and
+build the Integration.Tests project; this also builds its production
+ConformanceHost dependency and provides the restore assets used by the Python
+preflight tests. These checks run without starting source servers or Docker:
 
 ```sh
+dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
+dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
+python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt
 python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
 ```
+
+## Complete semantic lane
+
+Build the source servers and solution using the root README, then prepare the
+private runtime above. `run-vectors.py` preflights the entire production-enrolled
+set and launches one fresh isolated test process per approved vector:
+
+```sh
+MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" \
+timeout --signal=TERM --kill-after=30s 21600 \
+  python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-vector-evidence
+```
+
+The outer six-hour bound covers 21 independently bounded children (960 seconds
+each). The wrapper retains its existing 900-second child bound. The selected
+Python runner has an eight-minute process budget, each CLI process a maximum of
+30 seconds, and each read observation a 45-second deadline. Only Queries poll;
+declared Command steps are submitted once, including intentional repeated
+business actions declared as distinct vector steps. The independent smoke can
+still be run with the earlier command and is not substituted for a vector.
+
+The fixtures bootstrap `mcpcli-live-admin` through the existing authenticated
+Development bootstrap, using the same fresh signing key as the Gateway. Before
+executing any vector, a bounded privileged `get-global-administrators` Query must
+return that persisted administrator. The independent smoke uses this same read barrier
+before its single final usability Query, because resource liveness can precede
+handler capability readiness. This infrastructure proof does not enroll
+the excluded Query in the Catalog. The ACL admits only POST `/project` from
+EventStore (including `/project/v2`) and POST `/api/v1/commands` from Tenants in addition to the smoke's
+existing permissions. Authentication, mTLS and default deny remain required.
+
+Before starting any application, the wrapper verifies `DBSIZE=0` and saves an
+actual provider-native Redis RDB backup. It retains immutable backup bytes and a
+SHA-256 receipt outside the repository. After proving persisted administrator
+authority, the fixture invokes the existing authenticated platform writer-v2
+activation endpoint once and observes `/ready`. The backup and private
+namespaces establish a fresh store with no old writers or retry workers; no
+domain data or control-plane state is written directly. The lane binds each
+activation receipt to that child's genesis backup. This prerequisite enables
+Parties' SDK named projections; a legacy `actor-not-found-infrastructure` query
+error can mean a missing SDK read model rather than actor routing.
+
+`plans/*.json` are test-only companions bound to exact approved vector SHA-256
+digests. Every original step occurs once in the original order. Read barriers
+check persisted changes after Commands; all original static assertions remain.
+Scripted cursor assertions explicitly capture nonempty returned cursors and bind
+the later continuation call. The audit plan captures real event timestamps and
+probes category exclusion, inclusive lower/upper bounds, and windows before and
+after matching events. Every original, observation and resolved dynamic call
+passes production Core validation without contacting a Gateway before dispatch.
+There are no module-specific runner branches or direct state-store mutations.
+
+For diagnostics, these commands still preflight the complete approved set:
+
+```sh
+python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-preflight --preflight-only
+MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" timeout --signal=TERM --kill-after=30s 1000 \
+  python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-selected --operation tenants.get-tenant-audit
+```
+
+A preflight-only receipt and a successful selected subset always retain
+`fullLiveAccepted: false`. Each invocation invalidates `live-lane.json` first
+and uses a new generation directory for child outputs. The lane requires exactly
+one passing, unskipped Operation-labelled xUnit case, a matching fresh semantic
+receipt and successful owned infrastructure cleanup for each child. A missing
+prerequisite, skipped case, timeout, assertion mismatch or incomplete run cannot
+grant full acceptance. Standard platform prerequisite diagnostics remain in
+child logs. Receipts record complete coverage and every attempted outcome even
+when another vector fails. `live-result.json` retains the Operation, phase,
+assertion path, query attempts, sanitized documents and immutable input bindings;
+credentials are excluded. Namespace and service cleanup details remain under
+`$private_runtime/runs/`. The non-live CI job discovers all 21 vector cases plus
+smoke; a blocking live CI job belongs to Story 4.14.

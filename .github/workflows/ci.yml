@@ -106,7 +106,7 @@ jobs:
           path: ${{ runner.temp }}/enrolled-evidence/
           if-no-files-found: warn
 
-  topology-smoke-discovery:
+  topology-vector-discovery:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -118,18 +118,27 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
-      - name: Build and discover the live smoke without starting source services
+      - name: Install pinned non-live plan validator
         run: |
-          python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
+          python3 -m venv "$RUNNER_TEMP/mcpcli-live-venv"
+          "$RUNNER_TEMP/mcpcli-live-venv/bin/python" -m pip install -r tools/conformance-vectors/v1/requirements.txt
+      - name: Build and discover every live vector plus the independent smoke without starting source services
+        run: |
+          source "$RUNNER_TEMP/mcpcli-live-venv/bin/activate"
           dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
           dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
-          dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
+          python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
+          dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -preEnumerateTheories -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
           python3 - "$RUNNER_TEMP/topology-smoke-discovery.txt" <<'PYTHON'
-          import pathlib, sys
+          import json, pathlib, sys
           discovered = [line for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
                         if line.startswith("Hexalith.McpCli.Integration.Tests.")]
+          operations = sorted(json.loads(path.read_text())["operation"] for path in
+                              pathlib.Path("tools/conformance-vectors/v1/modules").rglob("*.vector.json"))
           expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
-          if discovered != expected:
-              raise SystemExit(f"Expected exactly the live Gateway smoke; discovered {discovered!r}")
-          print(discovered[0])
+          expected += ['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'
+                       for operation in operations]
+          if len(operations) != 21 or sorted(discovered) != sorted(expected):
+              raise SystemExit(f"Expected every approved live vector plus smoke; discovered {discovered!r}")
+          print(f"Discovered {len(operations)} live vectors and the independent Gateway smoke.")
           PYTHON

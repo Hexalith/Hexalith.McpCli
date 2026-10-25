@@ -25,6 +25,28 @@ wrapper = load('run-isolated')
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_redis_genesis_backup_reads_fragmented_resp_without_resubmitting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'dump.rdb').write_bytes(b'REDIS0012private-empty-state')
+            class Connection:
+                def __init__(self, fragments): self.fragments = iter(fragments); self.commands = []
+                def __enter__(self): return self
+                def __exit__(self, *_): pass
+                def sendall(self, command): self.commands.append(command)
+                def recv(self, _): return next(self.fragments, b'')
+            connections = [Connection([b':', b'0', b'\r', b'\n']), Connection([b'+O', b'K\r', b'\n'])]
+            with patch.object(wrapper.socket, 'create_connection', side_effect=connections):
+                proof = wrapper.backup_empty_redis(root)
+            self.assertEqual(0, proof['databaseSize'])
+            self.assertTrue(all(len(connection.commands) == 1 for connection in connections))
+            self.assertEqual(b'REDIS0012private-empty-state', (root / 'initial-empty.rdb').read_bytes())
+            incomplete = Connection([b':0\r'])
+            with patch.object(wrapper.socket, 'create_connection', return_value=incomplete):
+                with self.assertRaisesRegex(RuntimeError, 'Private Redis must be empty'):
+                    wrapper.backup_empty_redis(root)
+            self.assertEqual(1, len(incomplete.commands))
+
     def test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container(self):
         self.extract(mismatch=False)
 
@@ -167,6 +189,11 @@ class RuntimeTests(unittest.TestCase):
                 self.assertEqual(port, child['HEXALITH_EVENTSTORE_TEST_' + name.upper() + '_PORT'])
                 self.assertEqual('127.0.0.1:' + port, child['Dapr__' + name.title() + 'HostAddress'])
             self.assertFalse((run_dir / 'sentry-certificates/issuer.key').exists())
+            backup = receipt['initialRedisBackup']
+            self.assertEqual(0, backup['databaseSize'])
+            self.assertTrue(backup['createdBeforeApplications'])
+            self.assertEqual(hashlib.sha256((run_dir / 'initial-empty.rdb').read_bytes()).hexdigest(), backup['sha256'])
+            self.assertEqual(str(run_dir / 'initial-redis-backup.json'), child['MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT'])
             for file in run_dir.rglob('*'):
                 if file.is_file() and file != run_dir / 'command.stdout.txt':
                     self.assertNotIn('private-test-credential', file.read_text(), str(file))
@@ -185,6 +212,19 @@ class RuntimeTests(unittest.TestCase):
                 receipt = json.loads((run_dir / 'result.json').read_text())
                 self.assertEqual(1, receipt['commandExitCode'])
                 self.assertEqual({'type': error_type, 'message': message}, receipt['error'])
+                self.assertFalse((run_dir / 'command.stdout.txt').exists())
+
+    def test_wrapper_refuses_nonempty_store_or_failed_backup_before_application_launch(self):
+        for mode in ['nonempty-redis', 'failed-redis-backup', 'bad-redis-backup-header']:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                run_dir = Path(directory)
+                result = self.wrapper_process(run_dir, mode)
+                self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+                receipt = json.loads((run_dir / 'result.json').read_text())
+                expected = ('Private Redis backup has no RDB header.' if mode == 'bad-redis-backup-header' else
+                            'Private Redis must be empty and its pre-application backup must succeed.')
+                self.assertEqual(expected, receipt['error']['message'])
+                self.assertNotIn('prerequisitesReady', receipt)
                 self.assertFalse((run_dir / 'command.stdout.txt').exists())
 
     def test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files(self):
@@ -426,16 +466,22 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
             return self.returncode
 
     class Connection:
+        sent = b''
         def __enter__(self):
             return self
 
         def __exit__(self, *_):
             pass
 
-        def sendall(self, _):
-            pass
+        def sendall(self, command):
+            self.sent = command
 
         def recv(self, _):
+            if b'DBSIZE' in self.sent:
+                return b':1\r\n' if mode == 'nonempty-redis' else b':0\r\n'
+            if b'SAVE' in self.sent:
+                (run_dir / 'dump.rdb').write_bytes(b'INVALID' if mode == 'bad-redis-backup-header' else b'REDIS0012empty-test-state')
+                return b'-ERR failed' if mode == 'failed-redis-backup' else b'+OK\r\n'
             return b'-ERR wrong service' if mode == 'redis' else b'+PONG\r\n'
 
     def record_call(kind, arguments):
@@ -512,7 +558,7 @@ def wrapper_fixture(run_dir, mode, supplied_command=None):
                        'HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT', 'HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT',
                        'Dapr__PlacementHostAddress', 'Dapr__SchedulerHostAddress', 'Dapr__GatewayHttpPort',
                        'NAMESPACE', 'DAPR_CONTROLPLANE_TRUST_DOMAIN', 'DAPR_CONTROLPLANE_NAMESPACE',
-                       'DAPR_TRUST_ANCHORS', 'DAPR_CERT_CHAIN', 'DAPR_CERT_KEY']
+                       'DAPR_TRUST_ANCHORS', 'DAPR_CERT_CHAIN', 'DAPR_CERT_KEY', 'MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT']
     child = [sys.executable, '-c',
              "import json,os,pathlib,sys; print(json.dumps({key:os.environ.get(key) for key in " + repr(child_variables) + "})); "
              "pathlib.Path('child-succeeded').touch(); sys.exit(" + ('23' if mode == 'failing-child' else '0') + ")"]

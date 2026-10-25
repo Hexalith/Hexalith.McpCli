@@ -1,0 +1,84 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Parties", version: "1.4.0", packagedDecoration: True) (50ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ
+  Expected: []
+  Actual:   ["Restored package Hexalith.EventStore.Client/3.127."···, "Restored package Hexalith.EventStore.Contracts/3.1"···]
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:140
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Tenants", version: "5.8.0", packagedDecoration: False) (7ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ
+  Expected: []
+  Actual:   ["Restored package Hexalith.EventStore.Client/3.127."···, "Restored package Hexalith.EventStore.Contracts/3.1"···]
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:140
+    at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Tenants", version: "5.8.0", packagedDecoration: True) (2ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ
+  Expected: []
+  Actual:   ["Restored package Hexalith.EventStore.Client/3.127."···, "Restored package Hexalith.EventStore.Contracts/3.1"···]
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:140
+    at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(module: "Parties", version: "1.4.0", packagedDecoration: False) (9ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ
+  Expected: []
+  Actual:   ["Restored package Hexalith.EventStore.Client/3.127."···, "Restored package Hexalith.EventStore.Contracts/3.1"···]
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.DecoratedCandidatePassesOffline(String module, String version, Boolean packagedDecoration) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:140
+    at InvokeStub_DependencyPolicyTests.DecoratedCandidatePassesOffline(Object, Span`1)
+    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+failed Hexalith.McpCli.Manifest.Tests.TopologyLaunchTests.ComposedResourcesKeepTokensAclAndGatewayContentRoot (582ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Values differ
+  Expected: 0
+  Actual:   134
+    at Hexalith.McpCli.Manifest.Tests.TopologyLaunchTests.ComposedResourcesKeepTokensAclAndGatewayContentRoot() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/TopologyLaunchTests.cs:289
+    --- End of stack trace from previous location ---
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure (2ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ
+  Expected: []
+  Actual:   ["Restored package Hexalith.EventStore.Client/3.127."···, "Restored package Hexalith.EventStore.Contracts/3.1"···]
+             ↑ (pos 0)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:20
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers (4ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ at index 0
+                                            ↓ (pos 31)
+  Expected: "Hexalith.EventStore.Aspire/3.126.1"
+  Actual:   "Hexalith.EventStore.Aspire/3.127.0"
+                                            ↑ (pos 31)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:50
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure (4ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ at index 1
+                                            ↓ (pos 31)
+  Expected: "Hexalith.EventStore.Aspire/3.126.1"
+  Actual:   "Hexalith.EventStore.Aspire/3.127.0"
+                                            ↑ (pos 31)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.AssertIntegrationFixtureClosure(RestoredDependencyGraph graph) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:1055
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:58
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) failed with 8 error(s) (53s 641ms)
+Exit code: 2
+
+Test run summary: Failed!
+  total: 220
+  failed: 8
+  succeeded: 212
+  skipped: 0
+  duration: 53s 825ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

@@ -1,0 +1,17 @@
+{
+  "path": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+  "baseSha": "9c116910f9d712b82ae27ceb1946605d76c8a451",
+  "patchSha256": "be1c6f8b34ea7626d86ad01f4f8578e8cfd415c9e3e6d499ab80b477da8b3abb",
+  "files": {
+    "src/Hexalith.Parties/Extensions/PartiesServiceCollectionExtensions.cs": "6832979c30c540c28d1532e128ac0e66759f1b16239fe000cef2f2ff97283273",
+    "tests/Hexalith.Parties.Tests/Gateway/PartyProjectionProtocolSerializationTests.cs": "98e4bb97e15f3eb031dc685851911a047d8fc6241a14b3f72f23991e1cb38008"
+  },
+  "packageBindings": {
+    "Hexalith.EventStore.Contracts/3.127.0": "package",
+    "Hexalith.EventStore.DomainService/3.127.0": "package"
+  },
+  "otherExistingCandidateFile": "tests/Hexalith.Parties.Tests/Gateway/PartyHostQueryDiscoveryTests.cs (prior query compatibility proof, excluded from this patch)",
+  "committed": false,
+  "integrated": false,
+  "publicationRequired": false
+}

@@ -1,0 +1,9 @@
+⧗   --- input ---
+test(conformance): verify all vectors against live gateway semantics
+
+Execute all 21 approved vectors in fresh authenticated topologies.
+Bind adapter dependencies and plans before execution and retain phase receipts.
+
+Verify 53 single command submissions, real cursors, filters and cleanup.
+Integrate the qualified Parties projection-outcome compatibility fix.
+✔   found 0 problems, 0 warnings

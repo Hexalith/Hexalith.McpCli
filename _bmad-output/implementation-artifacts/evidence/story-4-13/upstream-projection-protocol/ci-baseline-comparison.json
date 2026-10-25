@@ -1,0 +1,27 @@
+{
+  "candidate": {
+    "sourceSha256": "a67da5455d8eedb66593fed8af9214c2bffa600e0b8a1a308e24006bb4345bb9",
+    "archive": "candidate-ci.log.gz",
+    "archiveSha256": "8de00e2c8a8abe9103a55c3648e3031d3b0c473b588f62baede0841202bb59c3",
+    "failedTests": [
+      "Hexalith.Parties.Contracts.Tests.Package.ContractsPublicApiSnapshotTests.PublicContractSurface_MatchesCheckedInSnapshot",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.NonConsumedSourceSelectionsMatchCurrentGitReceipts(dependency: \"McpCli\")",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.NonConsumedSourceSelectionsMatchCurrentGitReceipts(dependency: \"Platform\")",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.Matrix_ValidationEvidenceCommandsAreReproducible"
+    ]
+  },
+  "main": {
+    "sourceSha256": "35226e1e81a27f6d8c878d5ce0a510000c0656bbb135483272ecc230467d8964",
+    "archive": "main-ci.log.gz",
+    "archiveSha256": "4460152e9ee3ed5e61afd09b0aa2e4d7a30d476cb9bea9dd691c06bae099e471",
+    "failedTests": [
+      "Hexalith.Parties.Contracts.Tests.Package.ContractsPublicApiSnapshotTests.PublicContractSurface_MatchesCheckedInSnapshot",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.FinalDependencyReceiptsMatchTheSelectedPackageAndSourceGraph",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.NonConsumedSourceSelectionsMatchCurrentGitReceipts(dependency: \"McpCli\")",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.NonConsumedSourceSelectionsMatchCurrentGitReceipts(dependency: \"Platform\")",
+      "Hexalith.Parties.Tests.FitnessTests.PlatformApiPrerequisitesTests.Matrix_ValidationEvidenceCommandsAreReproducible"
+    ]
+  },
+  "sameFailures": true
+}

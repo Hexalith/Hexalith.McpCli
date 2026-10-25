@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.Parties.Tests/Hexalith.Parties.Tests.csproj",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/parties",
+  "exitCode": 1
+}

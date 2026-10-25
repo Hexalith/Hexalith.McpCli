@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.get-user-tenants",
+  "vectorSha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-a"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-membership-a"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Membership A"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-a"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-member@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/2"
+    },
+    {
+      "label": "persisted-prerequisites-2",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-b"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-membership-b"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Membership B"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/3"
+    },
+    {
+      "label": "persisted-prerequisites-3",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-b"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-member@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/4"
+    },
+    {
+      "label": "persisted-prerequisites-4",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-c"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-membership-c"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Membership C"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/5"
+    },
+    {
+      "label": "persisted-prerequisites-5",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-membership-c"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-member@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation",
+      "captures": [
+        {
+          "name": "continuation",
+          "path": "/paging/nextCursor",
+          "type": "string"
+        }
+      ],
+      "assertionBindings": [
+        {
+          "index": 7,
+          "capture": "continuation"
+        }
+      ]
+    },
+    {
+      "step": "/postconditions/0",
+      "bindings": [
+        {
+          "path": "/envelope/cursor",
+          "capture": "continuation"
+        }
+      ]
+    }
+  ]
+}

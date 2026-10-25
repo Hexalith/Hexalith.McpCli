@@ -1,0 +1,20 @@
+[
+  {
+    "command": [
+      "ilspycmd",
+      "-t",
+      "Hexalith.EventStore.Queries.HandlerAwareQueryRouter",
+      "references/Hexalith.EventStore/src/Hexalith.EventStore/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "ilspycmd",
+      "-t",
+      "Hexalith.Parties.Queries.PartySdkQueryService",
+      "references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties.dll"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "result": "passed",
+  "runs": [
+    {
+      "run": "smoke-after-bootstrap-barrier.stdout",
+      "passed": 1,
+      "skipped": 0,
+      "ownedCleanup": true
+    },
+    {
+      "run": "smoke-after-bootstrap-barrier-2.stdout",
+      "passed": 1,
+      "skipped": 0,
+      "ownedCleanup": true
+    },
+    {
+      "run": "smoke-after-bootstrap-barrier-3.stdout",
+      "passed": 1,
+      "skipped": 0,
+      "ownedCleanup": true
+    }
+  ]
+}

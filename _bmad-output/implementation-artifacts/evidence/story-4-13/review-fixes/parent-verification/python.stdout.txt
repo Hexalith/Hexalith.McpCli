@@ -1,0 +1,31 @@
+FAILED: full live acceptance=False; receipt: /tmp/tmpew3wur8r/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpu5cl5fdw/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmppzsykug5/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwjuc7eax/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmp058iqkyy/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpy5utz9kk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp4le1_n1g/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpkbx42dmf/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_efpruom/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp3xmpkmmf/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpmrhof_dl/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpobwq8g5u/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpp8mgj4rz/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmprxxr_34s/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp89qe32j0/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphbgie9gz/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp7u1qlyod/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpqkhopsds/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpuyczd4zv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpxk_5fuqv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpfs8pg41v/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpccslvyw7/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmp719xaycp/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpnquzsxgs/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpznt4cged/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmp6gppccom/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpj4m6pidw/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpw0tfv6qh/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmpjyc_v0u4/live-result.json
+FAILED fixture.operation; receipt: /tmp/tmptu_u_pu1/live-result.json
+Verified four private runtime binaries in /tmp/tmpwsttzxhp/runtime

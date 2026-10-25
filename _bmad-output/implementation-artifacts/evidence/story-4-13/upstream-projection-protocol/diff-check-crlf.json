@@ -1,0 +1,13 @@
+{
+  "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+  "command": [
+    "git",
+    "-c",
+    "core.whitespace=cr-at-eol",
+    "diff",
+    "--check"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

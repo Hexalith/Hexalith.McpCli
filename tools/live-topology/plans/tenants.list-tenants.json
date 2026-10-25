@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.list-tenants",
+  "vectorSha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-a"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-list-a"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector List A"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-b"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-list-b"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector List B"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/2"
+    },
+    {
+      "label": "persisted-prerequisites-2",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-list-c"
+        },
+        "envelope": {
+          "tenant": "system"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-list-c"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector List C"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation",
+      "captures": [
+        {
+          "name": "continuation",
+          "path": "/paging/nextCursor",
+          "type": "string"
+        }
+      ],
+      "assertionBindings": [
+        {
+          "index": 6,
+          "capture": "continuation"
+        }
+      ]
+    },
+    {
+      "step": "/postconditions/0",
+      "bindings": [
+        {
+          "path": "/envelope/cursor",
+          "capture": "continuation"
+        }
+      ]
+    }
+  ]
+}

@@ -49,6 +49,8 @@ try
     TopologyConfiguration.ValidateGatewayPort(gatewayPort);
     TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
     TopologyConfiguration.ValidateSigningKey(signingKey);
+    TopologyConfiguration.ValidateBootstrap(builder.Configuration.GetValue<bool>("Tenants:BootstrapGlobalAdminEnabled"),
+        builder.Configuration["Tenants:BootstrapGlobalAdminUserId"]);
     TopologyConfiguration.EnsureNoConflictingTopology(gatewayPort);
 }
 catch (Exception exception) when (exception is InvalidOperationException or TimeoutException
@@ -78,10 +80,15 @@ HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, ad
     stateStoreComponentPath: Path.Combine(components, "statestore.yaml"),
     eventStoreDaprHttpPort: gatewayPort, daprPlacementHostAddress: placement,
     daprSchedulerHostAddress: scheduler, pubSubComponentPath: Path.Combine(components, "pubsub.yaml"));
-gateway.WithGeneratedEventStoreAppChannelToken();
+// Newer helpers provision this secret themselves; retain that authenticated channel.
+// Earlier approved helpers still require the explicit token wiring.
+if (!builder.Resources.OfType<ParameterResource>().Any(parameter => parameter.Name == gateway.Resource.Name + "-app-api-token"))
+    gateway.WithGeneratedEventStoreAppChannelToken();
 IResourceBuilder<ProjectResource> tenants = builder.AddHexalithTenantsServer(topology, access,
     daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
-    .WithGeneratedEventStoreAppChannelToken();
+    .WithGeneratedEventStoreAppChannelToken()
+    .WithEnvironment("Tenants__BootstrapGlobalAdminEnabled", builder.Configuration["Tenants:BootstrapGlobalAdminEnabled"])
+    .WithEnvironment("Tenants__BootstrapGlobalAdminUserId", builder.Configuration["Tenants:BootstrapGlobalAdminUserId"]);
 IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(topology, access,
     daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
     .WithGeneratedEventStoreAppChannelToken();
@@ -148,9 +155,18 @@ if (inspectComposition)
             tokenHash = Hash(appToken),
             configuration = options.Config,
             contentRoot = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_CONTENTROOT")),
+            bootstrapEnabled = await ValueAsync(appEnvironment.GetValueOrDefault("Tenants__BootstrapGlobalAdminEnabled")),
+            bootstrapUserId = await ValueAsync(appEnvironment.GetValueOrDefault("Tenants__BootstrapGlobalAdminUserId")),
         });
     }
-    Console.WriteLine(JsonSerializer.Serialize(new { appHostDirectory = builder.AppHostDirectory, resources = snapshots }));
+    Console.WriteLine(JsonSerializer.Serialize(new
+    {
+        appHostDirectory = builder.AppHostDirectory,
+        resources = snapshots,
+        appChannelTokenParameters = builder.Resources.OfType<ParameterResource>()
+            .Where(parameter => parameter.Name.EndsWith("-app-api-token", StringComparison.Ordinal))
+            .Select(parameter => parameter.Name).Order(StringComparer.Ordinal),
+    }));
     return 0;
 }
 

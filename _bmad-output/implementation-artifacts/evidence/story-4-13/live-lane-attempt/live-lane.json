@@ -1,0 +1,7 @@
+{
+  "runId": "3e0a62ec6db94646ae99bbb432dc0cfb",
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "vectors": [],
+  "error": "VectorError: Restored production dependency closure differs from tools/dependency-policy.json: {\"hexalith.eventstore.client\": {\"approved\": \"3.126.1\", \"restored\": \"3.127.0\"}, \"hexalith.eventstore.contracts\": {\"approved\": \"3.126.1\", \"restored\": \"3.127.0\"}}"
+}

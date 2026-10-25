@@ -1,0 +1,11 @@
+{
+  "command": [
+    "git",
+    "commit",
+    "--file",
+    "/tmp/mcpcli-413-commit-message.txt"
+  ],
+  "validatedMessageSha256": "5d26667ab1e805a1666e741268fd9918f487ab30acc2e7ce9369ee4dc47664af",
+  "commitlintEvidence": "commitlint.json",
+  "scope": "Story 4.13 task-owned changes and authorized Parties gitlink integration; no root push."
+}

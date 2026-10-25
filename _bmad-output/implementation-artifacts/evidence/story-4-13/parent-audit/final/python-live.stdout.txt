@@ -1,0 +1,19 @@
+FAILED: full live acceptance=False; receipt: /tmp/tmp9s1pn8pj/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmprj_y4wsi/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcp08poqz/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmps17qu6me/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp44rewgt_/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp3qz0ig0k/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpl6dw53lk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpvx_xn2__/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp0ppyoayl/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpsf3u0fvr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpyee1uieg/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpjk3bdc7l/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp5kfnvi2a/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_s1v6qey/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpk1k733vz/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp0k48sram/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2fyj3sue/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmp49qixbpm/live-result.json
+Verified four private runtime binaries in /tmp/tmpurhpipke/runtime

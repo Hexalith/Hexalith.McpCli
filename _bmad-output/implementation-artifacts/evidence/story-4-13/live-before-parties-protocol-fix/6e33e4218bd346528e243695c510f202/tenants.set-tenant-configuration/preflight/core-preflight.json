@@ -1,0 +1,53 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6e33e4218bd346528e243695c510f202/tenants.set-tenant-configuration/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5SAEAGVBXWMXCWG275DZ8MF",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-config",
+          "Name": "Vector Configuration",
+          "Description": null
+        },
+        "correlationId": "01M5SAEAGVBXWMXCWG275DZ8MF"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6e33e4218bd346528e243695c510f202/tenants.set-tenant-configuration/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5SAEAH6GF1E9YX1STXGPMBE",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-config",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "correlationId": "01M5SAEAH6GF1E9YX1STXGPMBE"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/6e33e4218bd346528e243695c510f202/tenants.set-tenant-configuration/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-config"
+        }
+      }
+    }
+  ]
+}

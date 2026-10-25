@@ -1,0 +1,90 @@
+{
+  "path": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+  "owner": "/home/administrator/projects/hexalith/parties",
+  "baseSha": "9c116910f9d712b82ae27ceb1946605d76c8a451",
+  "setupCommands": [
+    {
+      "command": [
+        "git",
+        "worktree",
+        "add",
+        "--detach",
+        "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+        "HEAD"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/parties/references/Hexalith.AI.Tools",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "/home/administrator/projects/hexalith/parties/references/Hexalith.AI.Tools",
+        "/tmp/mcpcli-413-qualified-jip0st1u/parties/references/Hexalith.AI.Tools"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties/references/Hexalith.AI.Tools",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/parties/references/Hexalith.Builds",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "/home/administrator/projects/hexalith/parties/references/Hexalith.Builds",
+        "/tmp/mcpcli-413-qualified-jip0st1u/parties/references/Hexalith.Builds"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/parties",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "1783c0a377615063f3222c1d28f3ab513af4e72f"
+      ],
+      "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties/references/Hexalith.Builds",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/mcpcli-413-qualified-jip0st1u/parties",
+      "exitCode": 0
+    }
+  ]
+}
