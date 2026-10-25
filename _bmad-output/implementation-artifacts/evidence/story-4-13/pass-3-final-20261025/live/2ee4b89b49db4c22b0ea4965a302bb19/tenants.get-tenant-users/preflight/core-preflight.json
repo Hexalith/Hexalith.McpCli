@@ -1,0 +1,108 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5TD2WN3ZH8M6C1PXZZXT8WP",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "Name": "Vector Users",
+          "Description": null
+        },
+        "correlationId": "01M5TD2WN3ZH8M6C1PXZZXT8WP"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5TD2WNDJQTCZDKB2BKW667M",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-a@example.com",
+          "Role": "TenantOwner"
+        },
+        "correlationId": "01M5TD2WNDJQTCZDKB2BKW667M"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5TD2WNF7D86HVD6DH70DNV8",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-b@example.com",
+          "Role": "TenantContributor"
+        },
+        "correlationId": "01M5TD2WNF7D86HVD6DH70DNV8"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M5TD2WNF7D86HVD6DH70DNV9",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-c@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5TD2WNF7D86HVD6DH70DNV9"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant-users/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-tenant-users-cursor-1"
+        }
+      }
+    }
+  ]
+}

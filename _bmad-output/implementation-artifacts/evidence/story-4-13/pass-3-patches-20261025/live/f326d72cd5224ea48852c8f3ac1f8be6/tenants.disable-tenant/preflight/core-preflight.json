@@ -1,0 +1,51 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2YNRAP0WTGGQKF7K7FXSS",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-disable",
+          "Name": "Vector Disable",
+          "Description": null
+        },
+        "correlationId": "01M5T2YNRAP0WTGGQKF7K7FXSS"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2YNRKYDH99M1WAGD4S65T",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5T2YNRKYDH99M1WAGD4S65T"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    }
+  ]
+}

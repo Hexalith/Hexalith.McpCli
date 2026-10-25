@@ -27,6 +27,10 @@ public sealed class ProjectionWriterBootstrapTests : IDisposable
     public async Task ActivationIsSubmittedOnceAndReadinessOnlyPolls()
     {
         string receipt = Backup();
+        string sourceCommit = new string('a', 40);
+        using JsonDocument backup = JsonDocument.Parse(File.ReadAllText(receipt));
+        string expectedReference = "sha256:" + backup.RootElement.GetProperty("sha256").GetString()
+            + ";file:" + Path.GetFullPath(backup.RootElement.GetProperty("backupFile").GetString()!);
         int posts = 0, reads = 0;
         using var handler = new ProjectionWriterBootstrapHandler(async request =>
         {
@@ -35,8 +39,8 @@ public sealed class ProjectionWriterBootstrapTests : IDisposable
                 posts++;
                 Assert.Equal("/api/v1/admin/projections/delivery-writer-protocol/activate", request.RequestUri!.AbsolutePath);
                 using JsonDocument body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync().ConfigureAwait(false));
-                Assert.Equal(new string('a', 40), body.RootElement.GetProperty("cutoverCommit").GetString());
-                Assert.Equal(ProjectionWriterBootstrap.VerifyBackup(receipt), body.RootElement.GetProperty("backupReference").GetString());
+                Assert.Equal(sourceCommit, body.RootElement.GetProperty("cutoverCommit").GetString());
+                Assert.Equal(expectedReference, body.RootElement.GetProperty("backupReference").GetString());
                 foreach (string flag in new[] { "writersQuiesced", "retryWorkersQuiesced", "downgradeProhibitedAcknowledged" })
                     Assert.True(body.RootElement.GetProperty(flag).GetBoolean());
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"status\":\"Activated\"}") };
@@ -46,11 +50,13 @@ public sealed class ProjectionWriterBootstrapTests : IDisposable
             return new HttpResponseMessage(++reads == 1 ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.OK);
         });
         using var http = new HttpClient(handler) { BaseAddress = new Uri("http://127.0.0.1:1234/") };
-        await ProjectionWriterBootstrap.ActivateAsync(http, receipt, new string('a', 40), TestContext.Current.CancellationToken);
+        await ProjectionWriterBootstrap.ActivateAsync(http, receipt, sourceCommit, TestContext.Current.CancellationToken);
         Assert.Equal(1, posts);
         Assert.Equal(2, reads);
         using JsonDocument result = JsonDocument.Parse(File.ReadAllText(Path.Combine(_root, "writer-bootstrap.json")));
         Assert.Equal("passed", result.RootElement.GetProperty("result").GetString());
+        Assert.Equal(expectedReference, result.RootElement.GetProperty("backupReference").GetString());
+        Assert.Equal(sourceCommit, result.RootElement.GetProperty("sourceCommit").GetString());
         Assert.Equal(1, result.RootElement.GetProperty("activationCount").GetInt32());
         Assert.True(result.RootElement.GetProperty("readinessObserved").GetBoolean());
     }

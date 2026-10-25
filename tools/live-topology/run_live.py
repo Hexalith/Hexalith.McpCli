@@ -174,6 +174,8 @@ def main(argv=None) -> int:
         # Defensive redaction covers adapter errors as well as ordinary result documents.
         save()
     print(f"{report['result'].upper()} {args.operation}; receipt: {receipt}")
+    if report['result'] == 'failed':
+        print(report['error'].replace(token, '<redacted>') if token else report['error'])
     return 0 if report['result'] == 'passed' else 1
 
 

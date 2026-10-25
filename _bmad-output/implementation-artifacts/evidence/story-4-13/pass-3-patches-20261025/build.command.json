@@ -1,0 +1,13 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 16.717
+}

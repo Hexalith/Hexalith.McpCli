@@ -24,6 +24,7 @@ class LaneTests(unittest.TestCase):
             with self.subTest(selections=selections), self.assertRaisesRegex(VectorError, 'complete approved vector coverage'):
                 lane.require_coverage(selections, expected)
         with tempfile.TemporaryDirectory() as directory, \
+                patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
                 patch.object(lane, 'expected_operations', return_value=expected), \
                 patch.object(lane, 'preflight', return_value=[{'operation': 'fixture.second'}]), \
                 patch.object(lane, 'bounded_child') as child:
@@ -58,8 +59,11 @@ class LaneTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
             (output / 'live-lane.json').write_text('{"result":"passed","fullLiveAccepted":true}')
-            with patch.object(lane, 'preflight', side_effect=VectorError('stale binding')), patch.object(lane, 'bounded_child') as child:
+            with patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                    patch.object(lane, 'preflight', side_effect=VectorError('stale binding')) as preflight, \
+                    patch.object(lane, 'bounded_child') as child:
                 self.assertEqual(1, lane.main(['--output', directory]))
+                preflight.assert_called_once()
             result = json.loads((output / 'live-lane.json').read_text())
             self.assertEqual('failed', result['result']); self.assertFalse(result['fullLiveAccepted'])
             child.assert_not_called()
@@ -109,18 +113,34 @@ class LaneTests(unittest.TestCase):
             self.assertFalse(report['fullLiveAccepted'])
             self.assertEqual(f'PREFLIGHT-ONLY: full live acceptance=False; receipt: {Path(directory) / "live-lane.json"}\n', stdout.getvalue())
 
-    def test_unknown_selector_starts_no_topology(self):
-        with tempfile.TemporaryDirectory() as directory, \
-                patch.object(lane, 'preflight', return_value=[{'operation': 'fixture.operation'}]), \
-                patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
-                patch.object(lane, 'bounded_child') as child:
-            self.assertEqual(1, lane.main(['--output', directory, '--operation', 'unknown']))
-            child.assert_not_called()
-            result = json.loads((Path(directory) / 'live-lane.json').read_text())
-            self.assertIn('Selector must name exactly one', result['error'])
+    def test_unknown_or_empty_selector_starts_no_topology(self):
+        for selector in ['unknown', '']:
+            with self.subTest(selector=selector), tempfile.TemporaryDirectory() as directory, \
+                    patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                    patch.object(lane, 'preflight', return_value=[{'operation': 'fixture.operation'}]), \
+                    patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
+                    patch.object(lane, 'bounded_child') as child:
+                self.assertEqual(1, lane.main(['--output', directory, '--operation', selector]))
+                child.assert_not_called()
+                result = json.loads((Path(directory) / 'live-lane.json').read_text())
+                self.assertIn('Selector must name exactly one', result['error'])
+
+    def test_missing_runtime_fails_before_preflight_or_child(self):
+        for runtime in [None, '', '   ']:
+            environment = {} if runtime is None else {'MCPCLI_ISOLATED_RUNTIME_DIR': runtime}
+            with self.subTest(runtime=runtime), tempfile.TemporaryDirectory() as directory, \
+                    patch.dict('os.environ', environment, clear=True), \
+                    patch.object(lane, 'preflight') as preflight, patch.object(lane, 'bounded_child') as child:
+                self.assertEqual(1, lane.main(['--output', directory]))
+                preflight.assert_not_called()
+                child.assert_not_called()
+                result = json.loads((Path(directory) / 'live-lane.json').read_text())
+                self.assertEqual('failed', result['result'])
+                self.assertFalse(result['fullLiveAccepted'])
+                self.assertIn('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.', result['error'])
 
     def test_success_requires_fresh_binding_case_and_owned_cleanup(self):
-        for broken in [None, 'binding', 'operation', 'semantic-result', 'cleanup', 'cleanup-missing',
+        for broken in [None, 'selected-subset', 'binding', 'operation', 'semantic-result', 'cleanup', 'cleanup-missing',
                        'child-exit', 'prerequisite', 'bootstrap', 'bootstrap-status', 'bootstrap-count',
                        'bootstrap-ready', 'bootstrap-source', 'bootstrap-interrupted', 'phase-missing', 'phase-duplicated', 'command-repeated', 'command-omitted']:
             with self.subTest(broken=broken), tempfile.TemporaryDirectory() as directory:
@@ -158,18 +178,28 @@ class LaneTests(unittest.TestCase):
                     if broken == 'bootstrap-interrupted' and path.name == 'writer-bootstrap.json':
                         raise SystemExit(143)
                     return read_text(path, *args, **kwargs)
-                with patch.object(lane, 'preflight', return_value=[selection]), \
-                        patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
+                selections = ([{'operation': 'fixture.first'}, selection] if broken == 'selected-subset' else [selection])
+                arguments = ['--output', directory]
+                if broken == 'selected-subset': arguments.extend(['--operation', 'fixture.operation'])
+                with patch.object(lane, 'preflight', return_value=selections), \
+                        patch.object(lane, 'expected_operations', return_value=[item['operation'] for item in selections]), \
                         patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
                         patch.object(Path, 'read_text', autospec=True, side_effect=read), \
-                        patch.object(lane, 'bounded_child', side_effect=child):
+                        patch.object(lane, 'bounded_child', side_effect=child) as process:
                     if broken == 'bootstrap-interrupted':
                         with self.assertRaises(SystemExit):
-                            lane.main(['--output', directory])
+                            lane.main(arguments)
                     else:
-                        self.assertEqual(1 if broken else 0, lane.main(['--output', directory]))
+                        self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
                 result = json.loads((Path(directory) / 'live-lane.json').read_text())
                 self.assertEqual(broken is None, result['fullLiveAccepted'])
+                if broken == 'selected-subset':
+                    process.assert_called_once()
+                    command = process.call_args.args[0]
+                    self.assertEqual(1, command.count('-trait'))
+                    self.assertEqual('Operation=fixture.operation', command[command.index('-trait') + 1])
+                    self.assertEqual('partial', result['result'])
+                    self.assertEqual(['fixture.operation'], [item['operation'] for item in result['vectors']])
                 if broken == 'bootstrap-interrupted':
                     self.assertNotEqual('passed', result['vectors'][0]['result'])
 

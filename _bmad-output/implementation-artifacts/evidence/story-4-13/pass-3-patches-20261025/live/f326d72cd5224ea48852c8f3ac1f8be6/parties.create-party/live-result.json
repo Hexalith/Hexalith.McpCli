@@ -1,0 +1,239 @@
+{
+  "operation": "parties.create-party",
+  "result": "passed",
+  "phases": [
+    {
+      "phase": "/invocation",
+      "operation": "parties.create-party",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "parties.create-party",
+        "kind": "command",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.create-party",
+            "messageId": "01M5T2MBPR946A0063WV2DKA7M",
+            "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+            "tenant": "tenant-a",
+            "aggregateId": "party-story49",
+            "status": "accepted",
+            "result": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [],
+              "createdAt": "2026-10-25T17:44:44.156221+00:00",
+              "lastModifiedAt": "2026-10-25T17:44:44.156611+00:00",
+              "isRestricted": false,
+              "isErased": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-invocation",
+      "operation": "parties.get-party",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.get-party",
+            "tenant": "tenant-a",
+            "document": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [
+                {
+                  "displayName": "Ada Lovelace",
+                  "sortName": "Lovelace, Ada",
+                  "changedAt": "2026-10-25T17:44:44.1826077+00:00",
+                  "triggeredBy": "PartyCreated"
+                }
+              ],
+              "createdAt": "2026-10-25T17:44:44.1826077+00:00",
+              "lastModifiedAt": "2026-10-25T17:44:44.1826077+00:00",
+              "isRestricted": false,
+              "isErased": false,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/postconditions/0",
+      "operation": "parties.get-party",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.get-party",
+            "tenant": "tenant-a",
+            "document": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [
+                {
+                  "displayName": "Ada Lovelace",
+                  "sortName": "Lovelace, Ada",
+                  "changedAt": "2026-10-25T17:44:44.1826077+00:00",
+                  "triggeredBy": "PartyCreated"
+                }
+              ],
+              "createdAt": "2026-10-25T17:44:44.1826077+00:00",
+              "lastModifiedAt": "2026-10-25T17:44:44.1826077+00:00",
+              "isRestricted": false,
+              "isErased": false,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "planSha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+  },
+  "captures": {}
+}

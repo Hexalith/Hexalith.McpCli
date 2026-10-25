@@ -1,0 +1,53 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5TDAF6M2J3DY7EX29A8CGPF",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Original",
+          "Description": "Description cleared by the update"
+        },
+        "correlationId": "01M5TDAF6M2J3DY7EX29A8CGPF"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5TDAF6YCSCTH1BN19K4GBXB",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Renamed",
+          "Description": null
+        },
+        "correlationId": "01M5TDAF6YCSCTH1BN19K4GBXB"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.update-tenant/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-update"
+        }
+      }
+    }
+  ]
+}

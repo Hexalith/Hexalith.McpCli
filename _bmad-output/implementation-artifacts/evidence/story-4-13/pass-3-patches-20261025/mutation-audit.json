@@ -1,0 +1,50 @@
+{
+  "result": "passed",
+  "mutations": [
+    {
+      "mutation": "passing-binding-removed",
+      "source": "tools/live-topology/run_live.py",
+      "before": "report['binding'] = selection_binding(selected[0])",
+      "after": "binding = selection_binding(selected[0])",
+      "test": "RunnerTests.test_successful_main_retains_bound_inputs_and_passing_phases",
+      "exitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "subset-grants-full-acceptance",
+      "source": "tools/live-topology/run-vectors.py",
+      "before": "not args.operation and report['failed'] == 0 and report['passed'] == len(report['coverage'])",
+      "after": "report['failed'] == 0 and report['passed'] == len(report['vectors'])",
+      "test": "LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup",
+      "exitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "diagnostic-omitted",
+      "source": "tools/live-topology/run_live.py",
+      "before": "print(report['error'].replace(token, '<redacted>') if token else report['error'])",
+      "after": "pass",
+      "test": "RunnerTests.test_failing_preflight_invalidates_receipt_and_redacts_identity",
+      "exitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "empty-selector-accepted",
+      "source": "tools/live-topology/run-vectors.py",
+      "before": "if args.operation is not None:",
+      "after": "if args.operation:",
+      "test": "LaneTests.test_unknown_or_empty_selector_starts_no_topology",
+      "exitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "missing-runtime-preflights",
+      "source": "tools/live-topology/run-vectors.py",
+      "before": "if not args.preflight_only and not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():",
+      "after": "if False:",
+      "test": "LaneTests.test_missing_runtime_fails_before_preflight_or_child",
+      "exitCode": 1,
+      "detected": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Retained 21 private ownership/backup receipts; archived and byte-verified immutable inputs and sanitized runtime diagnostics.

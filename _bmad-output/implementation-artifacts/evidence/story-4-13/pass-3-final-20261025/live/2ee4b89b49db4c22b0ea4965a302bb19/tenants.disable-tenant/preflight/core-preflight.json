@@ -1,0 +1,51 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5TCZJ3H6VZA7FXR2X22B1PJ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-disable",
+          "Name": "Vector Disable",
+          "Description": null
+        },
+        "correlationId": "01M5TCZJ3H6VZA7FXR2X22B1PJ"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5TCZJ3TTSG54HXRSBA6AD9W",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5TCZJ3TTSG54HXRSBA6AD9W"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.disable-tenant/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    }
+  ]
+}

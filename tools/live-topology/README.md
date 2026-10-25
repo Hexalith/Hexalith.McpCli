@@ -130,7 +130,8 @@ MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" timeout --signal=TERM --kill-afte
 ```
 
 A preflight-only receipt and a successful selected subset always retain
-`fullLiveAccepted: false`. Each invocation invalidates `live-lane.json` first
+`fullLiveAccepted: false`. An empty `--operation` is refused; a live run without
+`MCPCLI_ISOLATED_RUNTIME_DIR` fails before preflight. Each invocation invalidates `live-lane.json` first
 and uses a new generation directory for child outputs. The lane requires exactly
 one passing, unskipped Operation-labelled xUnit case, a matching fresh semantic
 receipt and successful owned infrastructure cleanup for each child. A missing
@@ -139,6 +140,7 @@ grant full acceptance. Standard platform prerequisite diagnostics remain in
 child logs. Receipts record complete coverage and every attempted outcome even
 when another vector fails. `live-result.json` retains the Operation, phase,
 assertion path, query attempts, sanitized documents and immutable input bindings;
-credentials are excluded. Namespace and service cleanup details remain under
+credentials are excluded. Failed vectors also print their sanitized phase and
+assertion diagnostics so they appear in the selected test failure. Namespace and service cleanup details remain under
 `$private_runtime/runs/`. The non-live CI job discovers all 21 vector cases plus
 smoke; a blocking live CI job belongs to Story 4.14.

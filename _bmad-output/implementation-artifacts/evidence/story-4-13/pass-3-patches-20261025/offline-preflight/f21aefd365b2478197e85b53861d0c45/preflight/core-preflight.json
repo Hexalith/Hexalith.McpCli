@@ -1,0 +1,1444 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/create-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB7K6E3JP9MNY9E5PW5W",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/create-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB88J1BY9YPBRFSHXNAH",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB88J1BY9YPBRFSHXNAJ",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB88J1BY9YPBRFSHXNAK",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB88J1BY9YPBRFSHXNAM",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "entityId": "party-story49",
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/list-parties.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB89K8BNKNHRWVWTWCE6",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/list-parties.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "parties",
+        "queryType": "PartyIndex",
+        "projectionType": "party-index",
+        "payload": {
+          "Type": "Person",
+          "Active": true,
+          "CreatedAfter": "2026-01-01T00:00:00Z"
+        },
+        "entityId": "parties",
+        "projectionActorType": "PartyIndexProjectionQueryActor",
+        "paging": {
+          "pageSize": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8A2NPRCVYE7GFT5X9T",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8A2NPRCVYE7GFT5X9V",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8A2NPRCVYE7GFT5X9W",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.ReactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8BH78QAZ08E5R9C3X6",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "parties",
+        "queryType": "PartySearch",
+        "projectionType": "party-index",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": true
+        },
+        "entityId": "parties",
+        "projectionActorType": "PartyIndexProjectionQueryActor",
+        "paging": {
+          "pageSize": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/update-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8BH78QAZ08E5R9C3X7",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/update-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8BH78QAZ08E5R9C3X8",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.UpdatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Augusta Ada",
+            "LastName": "Lovelace"
+          },
+          "UpdateContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Value": "augusta@example.test"
+            }
+          ],
+          "RemoveIdentifierIds": [
+            "external-story49"
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Parties.Contracts/update-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8CGWBQSXDNNKV06GTR",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-members",
+          "Name": "Vector Members",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8CGWBQSXDNNKV06GTR"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8EDP7GAWBKH1SSPEWS",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-members",
+          "UserId": "vector-user-1@example.com",
+          "Role": "TenantContributor"
+        },
+        "correlationId": "01M5T2HB8EDP7GAWBKH1SSPEWS"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-members"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8GR4APNY1ETGHWYBGK",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-roles",
+          "Name": "Vector Roles",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8GR4APNY1ETGHWYBGK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8GR4APNY1ETGHWYBGM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8GR4APNY1ETGHWYBGM"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8GR4APNY1ETGHWYBGN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "change-user-role",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "NewRole": "TenantOwner"
+        },
+        "correlationId": "01M5T2HB8GR4APNY1ETGHWYBGN"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-roles"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8GR4APNY1ETGHWYBGP",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-create",
+          "Name": "Vector Create Corporation",
+          "Description": "Created by the McpCli v1 vector"
+        },
+        "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-create"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DG",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-disable",
+          "Name": "Vector Disable",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DG"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DH",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DH"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DJ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-enable",
+          "Name": "Vector Enable",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DJ"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DK",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "enable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DM"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-enable"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8HHHT70EP5E4RYN9DN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-audit",
+          "Name": "Vector Audit",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8HHHT70EP5E4RYN9DN"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYN"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYP",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-audit",
+          "Key": "audit.marker",
+          "Value": "administrative"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYP"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYQ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "commandType": "change-user-role",
+        "payload": {
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com",
+          "NewRole": "TenantContributor"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYQ"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "queryType": "get-tenant-audit",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "paging": {
+          "pageSize": 1
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "queryType": "get-tenant-audit",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "paging": {
+          "pageSize": 1,
+          "cursor": "scripted-tenant-audit-cursor-1"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYR",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "Name": "Vector Users",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYR"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYS",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-a@example.com",
+          "Role": "TenantOwner"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYS"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYT",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-b@example.com",
+          "Role": "TenantContributor"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYT"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M5T2HB8J794MP5DZKYD22EYV",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-c@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8J794MP5DZKYD22EYV"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-users",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-tenant-users-cursor-1"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PD",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "Name": "Vector Read",
+          "Description": "Read by the McpCli v1 vector"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PD"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PE",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "UserId": "vector-reader@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PE"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PF",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-read",
+          "Key": "locale",
+          "Value": "fr-FR"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PF"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-read"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PG",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "Name": "Vector Membership A",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PG"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PH",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PH"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PJ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "Name": "Vector Membership B",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PJ"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PK",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PK"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/4",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PM",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "Name": "Vector Membership C",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PM"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/5",
+      "body": {
+        "messageId": "01M5T2HB8KPRG7HP5AG425P0PN",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8KPRG7HP5AG425P0PN"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-user-tenants-cursor-1"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA0",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-a",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-list-a",
+          "Name": "Vector List A",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA0"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA1",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-b",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-list-b",
+          "Name": "Vector List B",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA1"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA2",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-list-c",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-list-c",
+          "Name": "Vector List C",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA2"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "list-tenants",
+        "projectionType": "tenant-index",
+        "payload": {},
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "list-tenants",
+        "projectionType": "tenant-index",
+        "payload": {},
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-list-tenants-cursor-1"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA3",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Name": "Vector Configuration Removal",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA3"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA4",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA4"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8M9CZXVKRAXH55TWA5",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "remove-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Key": "billing.plan"
+        },
+        "correlationId": "01M5T2HB8M9CZXVKRAXH55TWA5"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CA",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "Name": "Vector Removal",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CA"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CB",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CB"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CC",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "remove-user-from-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CC"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-removal"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CD",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-config",
+          "Name": "Vector Configuration",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CD"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CE",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-config",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CE"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-config",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-config"
+        }
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CF",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Original",
+          "Description": "Description cleared by the update"
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CF"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2HB8NVN7B2NHTZDZSQ3CG",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "commandType": "update-tenant",
+        "payload": {
+          "TenantId": "vector-update",
+          "Name": "Vector Update Renamed",
+          "Description": null
+        },
+        "correlationId": "01M5T2HB8NVN7B2NHTZDZSQ3CG"
+      }
+    },
+    {
+      "source": "/tmp/mcpcli-413-pass3-preflight/f21aefd365b2478197e85b53861d0c45/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-update",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-update"
+        }
+      }
+    }
+  ]
+}

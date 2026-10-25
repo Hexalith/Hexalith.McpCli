@@ -1,0 +1,103 @@
+[
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/audit-live.py",
+      "/home/administrator/projects/hexalith/mcpcli",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.2,
+    "name": "live-audit"
+  },
+  {
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass3-runtime-20261025/runtime",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=30s",
+      "21600",
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 793.681,
+    "name": "live-lane"
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 19.27,
+    "name": "live-tools"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/audit-matrix.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.024,
+    "name": "matrix-audit"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/audit-paging.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.019,
+    "name": "paging-audit"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/offline-preflight",
+      "--preflight-only"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 37.672,
+    "name": "preflight"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/retain-evidence.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.543,
+    "name": "retention"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/audit-reuse.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.32,
+    "name": "reuse-audit"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/audit-reuse.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.296,
+    "name": "reuse-final-audit"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "preservedPaths": [
+    "tools/conformance-vectors/v1/modules",
+    "tools/inventory-coverage",
+    "references",
+    "Directory.Build.props",
+    "Directory.Packages.props",
+    "tools/dependency-policy.json"
+  ],
+  "sourceFilesChecked": 435,
+  "binaryFilesChecked": 507,
+  "referencesUnchanged": true
+}

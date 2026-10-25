@@ -145,6 +145,46 @@
           }
         ]
       }
+    },
+    {
+      "label": "offset-after-only-match",
+      "query": {
+        "operation": "parties.list-parties",
+        "kind": "query",
+        "payload": {
+          "Type": "Person",
+          "Active": true,
+          "CreatedAfter": "2026-01-01T00:00:00Z"
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 2
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          },
+          {
+            "path": "/document/totalCount",
+            "operator": "equals",
+            "value": 1
+          },
+          {
+            "path": "/paging/offset",
+            "operator": "equals",
+            "value": 2
+          },
+          {
+            "path": "/paging/totalCount",
+            "operator": "equals",
+            "value": 1
+          }
+        ]
+      }
     }
   ]
 }

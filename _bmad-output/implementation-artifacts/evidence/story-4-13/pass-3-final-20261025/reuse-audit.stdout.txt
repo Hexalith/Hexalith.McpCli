@@ -1,0 +1,11 @@
+{
+  "result": "passed",
+  "historicalFilesVerified": 315,
+  "changedSources": [
+    "tools/live-topology/plans/parties.list-parties.json",
+    "tools/live-topology/plans/parties.search-parties.json",
+    "tools/live-topology/test_live_runner.py"
+  ],
+  "unchangedSources": 432,
+  "unchangedBinaries": 507
+}

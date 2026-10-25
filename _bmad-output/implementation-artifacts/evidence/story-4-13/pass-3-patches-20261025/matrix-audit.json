@@ -1,0 +1,35 @@
+{
+  "fullLiveAccepted": false,
+  "rows": [
+    {
+      "state": "Complete approved inputs",
+      "result": "incomplete",
+      "evidence": "All 21 vectors are selected; both Parties offset probes conflict with the current owning contract. See live/live-lane.json."
+    },
+    {
+      "state": "Stale package, vector or live-plan binding",
+      "result": "passed",
+      "evidence": "Complete offline preflight and 88 live-tool tests protect package/artifact/inventory/Core and parent-child binding checks."
+    },
+    {
+      "state": "Delayed bootstrap/projection",
+      "result": "passed",
+      "evidence": "251 Manifest cases include transient/persistent Gateway 503 authority tests; 88 live-tool cases preserve bounded read polling and exactly-once Commands."
+    },
+    {
+      "state": "Dynamic cursor/time",
+      "result": "partially-qualified",
+      "evidence": "Tenants get-tenant-users and get-tenant-audit live cases pass with real values. Parties list/search offset observations return HTTP 400."
+    },
+    {
+      "state": "Missing prerequisite, invalid selector or unresolved binding",
+      "result": "passed",
+      "evidence": "Missing-runtime and empty-selector tests refuse execution; selected subset remains partial; full failed lane cannot grant acceptance."
+    },
+    {
+      "state": "Semantic mismatch",
+      "result": "passed",
+      "evidence": "Regression tests retain phase, Operation and assertion paths; real failing Parties cases expose sanitized failure diagnostics in selected MTP test output."
+    }
+  ]
+}

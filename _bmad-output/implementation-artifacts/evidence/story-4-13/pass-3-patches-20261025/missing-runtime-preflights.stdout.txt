@@ -1,0 +1,3 @@
+FAILED: full live acceptance=False; receipt: /tmp/tmp4az66kxo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphmhoibe7/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp1q_q6bgo/live-lane.json

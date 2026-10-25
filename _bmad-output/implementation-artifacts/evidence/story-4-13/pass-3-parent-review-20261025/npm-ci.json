@@ -1,0 +1,7 @@
+{
+  "command": [
+    "npm",
+    "ci"
+  ],
+  "exitCode": 0
+}

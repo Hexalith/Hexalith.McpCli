@@ -1,0 +1,15 @@
+test_failing_preflight_invalidates_receipt_and_redacts_identity (test_live_runner.RunnerTests.test_failing_preflight_invalidates_receipt_and_redacts_identity) ... FAIL
+
+======================================================================
+FAIL: test_failing_preflight_invalidates_receipt_and_redacts_identity (test_live_runner.RunnerTests.test_failing_preflight_invalidates_receipt_and_redacts_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 170, in test_failing_preflight_invalidates_receipt_and_redacts_identity
+    self.assertIn('VectorError: /invocation fixture.operation: /document/value invalid <redacted>', stdout.getvalue())
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'VectorError: /invocation fixture.operation: /document/value invalid <redacted>' not found in 'FAILED fixture.operation; receipt: /tmp/tmpcpyjnkza/live-result.json\n'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)

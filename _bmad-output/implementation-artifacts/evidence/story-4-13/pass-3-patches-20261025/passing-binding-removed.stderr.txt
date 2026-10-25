@@ -1,0 +1,15 @@
+test_successful_main_retains_bound_inputs_and_passing_phases (test_live_runner.RunnerTests.test_successful_main_retains_bound_inputs_and_passing_phases) ... ERROR
+
+======================================================================
+ERROR: test_successful_main_retains_bound_inputs_and_passing_phases (test_live_runner.RunnerTests.test_successful_main_retains_bound_inputs_and_passing_phases)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 197, in test_successful_main_retains_bound_inputs_and_passing_phases
+    self.assertEqual(binding, report['binding'])
+                              ~~~~~~^^^^^^^^^^^
+KeyError: 'binding'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (errors=1)

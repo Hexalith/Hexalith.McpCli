@@ -1,0 +1,48 @@
+test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) ... 
+  test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime=None) ... FAIL
+  test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime='') ... FAIL
+  test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime='   ') ... FAIL
+
+======================================================================
+FAIL: test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 135, in test_missing_runtime_fails_before_preflight_or_child
+    preflight.assert_not_called()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 947, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'preflight' to not have been called. Called 1 times.
+Calls: [call(PosixPath('/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), PosixPath('/tmp/tmp4az66kxo/24bf393ed25c428abb2c9d26544dc300/preflight')),
+ call().__iter__()].
+
+======================================================================
+FAIL: test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 135, in test_missing_runtime_fails_before_preflight_or_child
+    preflight.assert_not_called()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 947, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'preflight' to not have been called. Called 1 times.
+Calls: [call(PosixPath('/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), PosixPath('/tmp/tmphmhoibe7/694a4e2ceb924e988f421c9e012d890e/preflight')),
+ call().__iter__()].
+
+======================================================================
+FAIL: test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) (runtime='   ')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 135, in test_missing_runtime_fails_before_preflight_or_child
+    preflight.assert_not_called()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 947, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'preflight' to not have been called. Called 1 times.
+Calls: [call(PosixPath('/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), PosixPath('/tmp/tmp1q_q6bgo/df6ba46d92ac472db0f7d928a18b849d/preflight')),
+ call().__iter__()].
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=3)

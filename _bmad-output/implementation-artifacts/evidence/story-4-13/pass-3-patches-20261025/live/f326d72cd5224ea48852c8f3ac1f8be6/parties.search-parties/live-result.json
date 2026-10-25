@@ -1,0 +1,422 @@
+{
+  "operation": "parties.search-parties",
+  "result": "failed",
+  "phases": [
+    {
+      "phase": "/prerequisites/0",
+      "operation": "parties.create-party",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "parties.create-party",
+        "kind": "command",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.create-party",
+            "messageId": "01M5T2S80CMKNAHFJTE84MKMT3",
+            "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
+            "tenant": "tenant-a",
+            "aggregateId": "party-story49",
+            "status": "accepted",
+            "result": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [],
+              "createdAt": "2026-10-25T17:47:24.1843192+00:00",
+              "lastModifiedAt": "2026-10-25T17:47:24.184664+00:00",
+              "isRestricted": false,
+              "isErased": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "persisted-prerequisites-0",
+      "operation": "parties.get-party",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.get-party",
+            "tenant": "tenant-a",
+            "document": {
+              "id": "party-story49",
+              "type": "Person",
+              "isActive": true,
+              "displayName": "Ada Lovelace",
+              "sortName": "Lovelace, Ada",
+              "personDetails": {
+                "firstName": "Ada",
+                "lastName": "Lovelace"
+              },
+              "contactChannels": [
+                {
+                  "id": "email-story49",
+                  "type": "Email",
+                  "value": "ada@example.test",
+                  "isPreferred": true
+                }
+              ],
+              "identifiers": [
+                {
+                  "id": "external-story49",
+                  "type": "Other",
+                  "value": "customer-49"
+                }
+              ],
+              "consentRecords": [],
+              "nameHistory": [
+                {
+                  "displayName": "Ada Lovelace",
+                  "sortName": "Lovelace, Ada",
+                  "changedAt": "2026-10-25T17:47:24.2067031+00:00",
+                  "triggeredBy": "PartyCreated"
+                }
+              ],
+              "createdAt": "2026-10-25T17:47:24.2067031+00:00",
+              "lastModifiedAt": "2026-10-25T17:47:24.2067031+00:00",
+              "isRestricted": false,
+              "isErased": false,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "/invocation",
+      "operation": "parties.search-parties",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.search-parties",
+            "tenant": "tenant-a",
+            "document": {
+              "items": [
+                {
+                  "party": {
+                    "id": "party-story49",
+                    "type": "Person",
+                    "isActive": true,
+                    "displayName": "Ada Lovelace",
+                    "sortName": "Lovelace, Ada",
+                    "createdAt": "2026-10-25T17:47:24.2067031+00:00",
+                    "lastModifiedAt": "2026-10-25T17:47:24.2067031+00:00",
+                    "isErased": false
+                  },
+                  "matches": [
+                    {
+                      "matchedField": "displayName",
+                      "matchType": "prefix",
+                      "score": 0.8
+                    }
+                  ],
+                  "relevanceScore": 0.82
+                }
+              ],
+              "page": 1,
+              "pageSize": 2,
+              "totalCount": 1,
+              "totalPages": 1,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            },
+            "paging": {
+              "pageSize": 2,
+              "offset": 0,
+              "totalCount": 1,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "nonmatching-query",
+      "operation": "parties.search-parties",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": "no-match-story-4-13",
+          "Type": "Person",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.search-parties",
+            "tenant": "tenant-a",
+            "document": {
+              "items": [],
+              "page": 1,
+              "pageSize": 2,
+              "totalCount": 0,
+              "totalPages": 1,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            },
+            "paging": {
+              "pageSize": 2,
+              "offset": 0,
+              "totalCount": 0,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "nonmatching-type",
+      "operation": "parties.search-parties",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Organization",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.search-parties",
+            "tenant": "tenant-a",
+            "document": {
+              "items": [],
+              "page": 1,
+              "pageSize": 2,
+              "totalCount": 0,
+              "totalPages": 1,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            },
+            "paging": {
+              "pageSize": 2,
+              "offset": 0,
+              "totalCount": 0,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "nonmatching-active",
+      "operation": "parties.search-parties",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": false
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 0
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "parties.search-parties",
+            "tenant": "tenant-a",
+            "document": {
+              "items": [],
+              "page": 1,
+              "pageSize": 2,
+              "totalCount": 0,
+              "totalPages": 1,
+              "freshness": {
+                "status": "Current",
+                "warningCodes": []
+              }
+            },
+            "paging": {
+              "pageSize": 2,
+              "offset": 0,
+              "totalCount": 0,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "offset-after-only-match",
+      "operation": "parties.search-parties",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "parties.search-parties",
+        "kind": "query",
+        "payload": {
+          "Query": " Ada ",
+          "Type": "Person",
+          "Active": true
+        },
+        "envelope": {
+          "tenant": "tenant-a",
+          "entityId": "parties",
+          "pageSize": 2,
+          "offset": 1
+        }
+      },
+      "result": "failed",
+      "attempts": [
+        {
+          "result": "failed",
+          "exitCode": 2,
+          "document": {
+            "error": {
+              "code": "gateway_error",
+              "status": 400,
+              "detail": "The supplied cursor is invalid.",
+              "reason": "query_invalid_page",
+              "correlationId": "01M5T2SDXJYQMAX2SX691Z9YGV"
+            }
+          }
+        }
+      ],
+      "lastFailure": "offset-after-only-match parties.search-parties: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 400, 'detail': 'The supplied cursor is invalid.', 'reason': 'query_invalid_page', 'correlationId': '01M5T2SDXJYQMAX2SX691Z9YGV'}}",
+      "error": "VectorError: offset-after-only-match parties.search-parties: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 400, 'detail': 'The supplied cursor is invalid.', 'reason': 'query_invalid_page', 'correlationId': '01M5T2SDXJYQMAX2SX691Z9YGV'}}"
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "vectorSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "planSha256": "c7d163c47788b7a83eb2d773e0a2a7f1aed0cbe69ea00ff474dc2ca9acecb1d4",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+  },
+  "captures": {},
+  "error": "VectorError: offset-after-only-match parties.search-parties: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 400, 'detail': 'The supplied cursor is invalid.', 'reason': 'query_invalid_page', 'correlationId': '01M5T2SDXJYQMAX2SX691Z9YGV'}}"
+}

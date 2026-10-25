@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tools/live-topology/run-vectors.py",
+    "--output",
+    "/tmp/mcpcli-413-pass3-preflight",
+    "--preflight-only"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 42.813
+}

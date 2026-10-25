@@ -1,0 +1,29 @@
+{
+  "result": "passed",
+  "cases": 22,
+  "vectorCases": 21,
+  "independentSmokeCases": 1,
+  "operations": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ]
+}

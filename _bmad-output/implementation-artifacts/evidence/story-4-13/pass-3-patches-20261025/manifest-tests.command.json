@@ -1,0 +1,12 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Manifest.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 122.547
+}

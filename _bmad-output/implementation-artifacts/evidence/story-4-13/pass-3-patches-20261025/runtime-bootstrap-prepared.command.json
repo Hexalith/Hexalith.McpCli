@@ -1,0 +1,13 @@
+{
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "900",
+    "python3",
+    "tools/live-topology/bootstrap-runtime.py",
+    "/tmp/mcpcli-413-pass3-runtime-20261025/runtime"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 4.214
+}

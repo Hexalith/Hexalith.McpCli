@@ -80,8 +80,8 @@ HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, ad
     stateStoreComponentPath: Path.Combine(components, "statestore.yaml"),
     eventStoreDaprHttpPort: gatewayPort, daprPlacementHostAddress: placement,
     daprSchedulerHostAddress: scheduler, pubSubComponentPath: Path.Combine(components, "pubsub.yaml"));
-// Newer helpers provision this secret themselves; retain that authenticated channel.
-// Earlier approved helpers still require the explicit token wiring.
+// The pinned helper provisions the Gateway token in run mode.
+// Apply explicit token wiring only when the helper has not provisioned it.
 if (!builder.Resources.OfType<ParameterResource>().Any(parameter => parameter.Name == gateway.Resource.Name + "-app-api-token"))
     gateway.WithGeneratedEventStoreAppChannelToken();
 IResourceBuilder<ProjectResource> tenants = builder.AddHexalithTenantsServer(topology, access,

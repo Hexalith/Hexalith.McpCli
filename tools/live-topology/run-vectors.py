@@ -94,10 +94,12 @@ def main(argv=None) -> int:
     try:
         if not 1 <= args.child_timeout <= 960:
             raise VectorError('--child-timeout must be between 1 and 960 seconds.')
+        if not args.preflight_only and not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
+            raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
         selections = preflight(args.host.resolve(), generation / 'preflight')
         report['coverage'] = expected_operations()
         require_coverage(selections, report['coverage'])
-        if args.operation:
+        if args.operation is not None:
             selections = [item for item in selections if item['operation'] == args.operation]
             if len(selections) != 1:
                 raise VectorError('Selector must name exactly one approved vector Operation.')
@@ -106,8 +108,6 @@ def main(argv=None) -> int:
         if args.preflight_only:
             report['result'] = 'preflight-only'
         else:
-            if not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
-                raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
             for item, outcome in zip(selections, report['vectors']):
                 operation = item['operation']
                 output = generation / operation

@@ -1,0 +1,44 @@
+{
+  "result": "passed",
+  "baselineCommit": "aabc03c68c56ac8085ee1b145654576f5fd201a4",
+  "reviewedHead": "dc282889e624a4c990faa3f005ad7eaa8db7a473",
+  "layers": {
+    "blind-hunter": {
+      "findings": 10,
+      "patches": 3,
+      "rejected": 7
+    },
+    "edge-case-hunter": {
+      "findings": 0
+    },
+    "verification-gap": {
+      "findings": 0
+    }
+  },
+  "deferred": 0,
+  "live": {
+    "runId": "2ee4b89b49db4c22b0ea4965a302bb19",
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "phases": 144,
+    "commandSubmissions": 53,
+    "distinctCommandMessageIds": 53,
+    "queryAttempts": 91
+  },
+  "parentPythonCommand": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "tools/live-topology",
+    "-p",
+    "test_*.py"
+  ],
+  "parentPythonExitCode": 0,
+  "parentPythonPassed": 88,
+  "finalTestSourceSha256": "c6c7ae31119d5b41489e58c40b5a0767d8be3203a52a37145aec6e2bed3df5a9",
+  "runtimeRequalification": "All execution inputs/plans and all 507 binaries unchanged after the passing lane; only test assertions, evidence preservation and documentation changed during final review."
+}

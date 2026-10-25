@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tools/live-topology/run-vectors.py",
+    "--output",
+    "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/offline-preflight",
+    "--preflight-only"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 37.672
+}

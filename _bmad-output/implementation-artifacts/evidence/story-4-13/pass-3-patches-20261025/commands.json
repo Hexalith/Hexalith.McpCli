@@ -1,0 +1,287 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.277,
+    "name": "abstractions-tests"
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 3.892,
+    "name": "analyzers-tests"
+  },
+  {
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 16.717,
+    "name": "build"
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 16.679,
+    "name": "cli-tests"
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/conformance-vectors/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 25.008,
+    "name": "conformance-tools"
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 3.786,
+    "name": "core-tests"
+  },
+  {
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-preEnumerateTheories",
+      "-list",
+      "tests"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.257,
+    "name": "discovery"
+  },
+  {
+    "command": [
+      "bash",
+      "-c",
+      "cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 2.614,
+    "name": "eventstore-build"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/audit-failed-lane.py",
+      "/home/administrator/projects/hexalith/mcpcli",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.099,
+    "name": "failed-lane-audit"
+  },
+  {
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass3-runtime-20261025/runtime",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=30s",
+      "21600",
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 768.347,
+    "name": "live-lane"
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 36.134,
+    "name": "live-tools"
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 122.547,
+    "name": "manifest-tests"
+  },
+  {
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 2.171,
+    "name": "mcp-tests"
+  },
+  {
+    "command": [
+      "python3",
+      "/tmp/story413-pass3-mutations.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.867,
+    "name": "mutation-audit"
+  },
+  {
+    "command": [
+      "bash",
+      "-c",
+      "cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 2.015,
+    "name": "parties-build"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "/tmp/mcpcli-413-pass3-preflight",
+      "--preflight-only"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 42.813,
+    "name": "preflight"
+  },
+  {
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 4.288,
+    "name": "restore"
+  },
+  {
+    "command": [
+      "python3",
+      "/tmp/story413-pass3-retain.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.713,
+    "name": "retention"
+  },
+  {
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "900",
+      "python3",
+      "tools/live-topology/bootstrap-runtime.py",
+      "/tmp/mcpcli-413-pass3-runtime-20261025/runtime"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 4.214,
+    "name": "runtime-bootstrap-prepared"
+  },
+  {
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "900",
+      "python3",
+      "tools/live-topology/bootstrap-runtime.py",
+      "/tmp/mcpcli-413-pass3-runtime-20261025/runtime"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 0.21,
+    "name": "runtime-bootstrap"
+  },
+  {
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass3-runtime-20261025/runtime",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "960",
+      "python3",
+      "tools/live-topology/run-isolated.py",
+      "--",
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+      "-failSkips",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/smoke.xml"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 49.756,
+    "name": "smoke"
+  },
+  {
+    "command": [
+      "bash",
+      "-c",
+      "cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.711,
+    "name": "tenants-build"
+  }
+]

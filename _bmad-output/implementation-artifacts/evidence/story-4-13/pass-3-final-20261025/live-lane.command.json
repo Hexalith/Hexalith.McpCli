@@ -1,0 +1,16 @@
+{
+  "command": [
+    "env",
+    "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass3-runtime-20261025/runtime",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30s",
+    "21600",
+    "python3",
+    "tools/live-topology/run-vectors.py",
+    "--output",
+    "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 793.681
+}

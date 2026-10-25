@@ -1,6 +1,16 @@
 # Story 4.13 implementation evidence
 
-Latest completion evidence: [final resumed build](build-resume-final-20261025/README.md).
+Latest qualification: [final supported-offset pass](pass-3-final-20261025/README.md).
+All nine pass-3 patches are verified. Generation `2ee4b89b49db4c22b0ea4965a302bb19` passes
+21/21 vectors with 144 phases and exactly 53 single Command submissions. The
+user-approved Parties probes use offset 2/pageSize 2. Fresh Python/preflight and
+independent live/matrix audits pass; unchanged .NET/build/smoke evidence is
+reused with exact source/binary hash checks.
+
+The [offset-1 failure packet](pass-3-patches-20261025/README.md) remains unchanged
+as historical evidence: its two paging refusals cannot grant acceptance.
+
+Prior completion evidence: [final resumed build](build-resume-final-20261025/README.md).
 Its final reviewed generation passes 21/21 vectors, 249 Manifest tests, 85
 live-tool tests and the independent smoke, with all six follow-up patch groups
 verified. The older generations below remain historical evidence.

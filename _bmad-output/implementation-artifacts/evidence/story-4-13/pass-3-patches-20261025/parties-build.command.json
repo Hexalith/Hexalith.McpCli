@@ -1,0 +1,9 @@
+{
+  "command": [
+    "bash",
+    "-c",
+    "cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 2.015
+}

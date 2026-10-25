@@ -1,0 +1,158 @@
+{
+  "result": "passed",
+  "runId": "2ee4b89b49db4c22b0ea4965a302bb19",
+  "vectors": 21,
+  "phases": 144,
+  "commandSubmissions": 53,
+  "distinctCommandMessageIds": 53,
+  "queryAttempts": 91,
+  "operations": [
+    {
+      "operation": "parties.create-party",
+      "phases": 3,
+      "commands": 1,
+      "queryAttempts": 2,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.get-party",
+      "phases": 3,
+      "commands": 1,
+      "queryAttempts": 2,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.list-parties",
+      "phases": 7,
+      "commands": 1,
+      "queryAttempts": 6,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.search-parties",
+      "phases": 7,
+      "commands": 1,
+      "queryAttempts": 6,
+      "result": "passed"
+    },
+    {
+      "operation": "parties.update-party",
+      "phases": 5,
+      "commands": 2,
+      "queryAttempts": 3,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "phases": 5,
+      "commands": 2,
+      "queryAttempts": 3,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "phases": 3,
+      "commands": 1,
+      "queryAttempts": 2,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "phases": 5,
+      "commands": 2,
+      "queryAttempts": 3,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "phases": 15,
+      "commands": 4,
+      "queryAttempts": 11,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "phases": 10,
+      "commands": 4,
+      "queryAttempts": 6,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "phases": 14,
+      "commands": 6,
+      "queryAttempts": 8,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "phases": 8,
+      "commands": 3,
+      "queryAttempts": 5,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "phases": 7,
+      "commands": 3,
+      "queryAttempts": 4,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "phases": 5,
+      "commands": 2,
+      "queryAttempts": 3,
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "phases": 5,
+      "commands": 2,
+      "queryAttempts": 3,
+      "result": "passed"
+    }
+  ]
+}

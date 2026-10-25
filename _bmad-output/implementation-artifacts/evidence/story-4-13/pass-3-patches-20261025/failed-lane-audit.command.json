@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/audit-failed-lane.py",
+    "/home/administrator/projects/hexalith/mcpcli",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 0.099
+}

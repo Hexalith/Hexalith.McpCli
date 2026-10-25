@@ -1,0 +1,70 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M5TD44931991B41BY1Z20FWJ",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "Name": "Vector Read",
+          "Description": "Read by the McpCli v1 vector"
+        },
+        "correlationId": "01M5TD44931991B41BY1Z20FWJ"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M5TD449EXE4CR9Z1PSYW4AKC",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-read",
+          "UserId": "vector-reader@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M5TD449EXE4CR9Z1PSYW4AKC"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M5TD449HKJ2WWPN96CACDD4A",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "TenantId": "vector-read",
+          "Key": "locale",
+          "Value": "fr-FR"
+        },
+        "correlationId": "01M5TD449HKJ2WWPN96CACDD4A"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025/live/2ee4b89b49db4c22b0ea4965a302bb19/tenants.get-tenant/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-read",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-read"
+        }
+      }
+    }
+  ]
+}

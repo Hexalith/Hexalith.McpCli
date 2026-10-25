@@ -1,0 +1,25 @@
+{
+  "result": "blocked",
+  "finding": "Spec P5 requires offset 1/pageSize 2; the currently selected Parties implementation and its tests explicitly reject an offset not divisible by page size.",
+  "generation": "f326d72cd5224ea48852c8f3ac1f8be6",
+  "operations": [
+    "parties.list-parties",
+    "parties.search-parties"
+  ],
+  "sourceEvidence": {
+    "ownerGuard": {
+      "path": "references/Hexalith.Parties/src/Hexalith.Parties/Queries/PartySdkQueryService.cs",
+      "sha256": "13e2e16d00877fb6122ca8a0f86bd0785af3058fa80336f14ca2ca93ba749484"
+    },
+    "ownerTests": {
+      "path": "references/Hexalith.Parties/tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "sha256": "dec7d53f9000f4981d5b710501786c3577ebfba9cf82752e4d95689da4dcf01e"
+    }
+  },
+  "guardLines": "665-668",
+  "testLines": "2730,2733,2735-2745",
+  "gatewayStatus": 400,
+  "gatewayReason": "query_invalid_page",
+  "upstreamChanges": false,
+  "ownerCommit": "559b91c812a422f9890e448f7942e645f3739b2b"
+}

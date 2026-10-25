@@ -2,7 +2,7 @@
 title: '4.13 Test every vector against live Gateway semantics'
 type: 'feature'
 created: '2026-10-25'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'aabc03c68c56ac8085ee1b145654576f5fd201a4'
@@ -87,6 +87,8 @@ Verification commands, source bindings and historical outcomes are indexed in `e
 
 ## Spec Change Log
 
+- 2026-10-25: The user approved the recommended resolution of pass-3 P5: preserve Parties' existing paging contract and test offset 2 with pageSize 2. Update only the companion probes and their regression expectations, then rerun the full lane and complete build review. The prior offset-1 failure packet remains historical evidence; arbitrary-offset support is outside this continuation.
+
 ## Review Triage Log
 
 
@@ -154,9 +156,30 @@ All three required layers completed against the full baseline diff. Each finding
 
 **Final resumed-build verification:** All six follow-up groups above are fixed and protected by focused tests. Fresh parent verification passes the Release warnings-as-errors build, all six non-live .NET suites (1,529 passed; five existing skips), 249 Manifest cases, 85 live-tool and 158 conformance Python cases, complete offline preflight and exact 22-case discovery. The final generation `f072ccf25ff44237a3e7c3e7a63f485e` passes all 21 vectors with zero skips; independent audits prove 142 phases, 53 unique single Command submissions, real cursor/time bindings and all cleanup. The separate smoke and six-row matrix audit pass. Final commands, source/binary bindings and sanitized receipts are in `evidence/story-4-13/build-resume-final-20261025/README.md`. No findings are deferred.
 
+### Final review after approved paging clarification (2026-10-25)
+
+The blind review returned ten claims; edge-case and verification-gap reviewers returned no findings. Each claim was graded before grouping. The parent independently rechecked the passing 21-vector receipt, all 144 phases, 53 unique single Command submissions, all bindings/assertions/cleanup, and every matrix test name against its passing output.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| R3-B1 | medium | patch: archive preservation | `pass-3-final-20261025/retain-evidence.py:29` reopens the input archive with `w:gz` after deleting its originals. A rerun would replace it with an empty archive. Refuse pre-existing archives before copying or deleting anything, and prove refusal preserves retained hashes. |
+| R3-B2 | low | reject | carried: R2-B8 and the earlier code review already rejected atomic public-receipt writes. The code is unchanged; a kill during a small write fails closed, and adding another atomic-write path addresses an unlikely window. |
+| R3-B3 | low | reject | Two simultaneous callers deliberately sharing one `--output` can overwrite its latest public receipt. Individual generations remain separate and each command reports its own exit/result. Output-directory locking or a new receipt surface adds complexity for this unusual operator collision. |
+| R3-B4 | false | reject | The failed outcome points to its child output directory, whose `child.stdout.txt` retains the exact isolated runtime path before startup. Both real failed cases were located and retained using that output; diagnostics and cleanup locations are not lost when `isolatedReceipt` is absent from the success-only fields. |
+| R3-B5 | low | reject | `HeadProcess.cli` does omit stderr for valid JSON, but the shipped calls use JSON output and their expected failures carry complete error documents with empty stderr. No missing real diagnostic was demonstrated. Extending the shared adapter return/receipt contract adds complexity for a hypothetical auxiliary diagnostic. |
+| R3-B6 | low | reject | carried: the prior code review rejected binding local executable DLLs against an overlapping rebuild. No code at that boundary changed. This qualification separately checks all 507 runtime DLL hashes; adding a new per-child binding addresses an uncommon rebuild during a lane. |
+| R3-B7 | low | reject | The second-page probes assert the approved goal's items, total count and offset; retained live results also show correct page size/page/hasMore. A metadata-only mutant could evade these particular assertions, but no incorrect producer was demonstrated. Additional guards for every optional returned field add coverage beyond the approved probe without resolving a present failure. |
+| R3-B8 | maybe-false | reject | No implementation that empties all populated later pages was demonstrated. The approved Parties vector contains one matching item, and the user explicitly chose its supported second-page boundary; Tenants separately proves populated continuation contents. Assessing the proposed module defect needs a separately approved populated Parties fixture, adding Commands and scope to the preserved vectors (low if true here). |
+| R3-B9 | low | patch: nonretry coverage | The focused runner suite protects 401/403 but not the individual 400 or non-Gateway refusal branches. The actual offset-1 run demonstrates a reachable 400, and removing that category would delay its refusal. Extend the existing test to assert the exact diagnostic and one attempt for each category. |
+| R3-B10 | low | patch: audit prerequisites documentation | The one-off paging/reuse scripts bind the recorded checkout/runtime paths; the reuse audit also requires the original built DLLs, which are intentionally not shipped in the packet. Clarify these prerequisites and identify the explicit-path retained-result audit, rather than adding a new portable audit API. |
+
+Three small patch groups survive: archive preservation, focused nonretry tests, and evidence documentation. No execution/plan change, intent loopback or deferral is required.
+
+**Final review completion:** All three patch groups are complete. The parent reran all 88 live-tool tests successfully and independently verified all live assertions/bindings/cleanup, both packet indexes, all archive members and 507 unchanged runtime DLLs. The only post-qualification source change is the expanded nonretry test; execution code and plans retain the passing 21-vector qualification. No findings are deferred. Parent evidence: `evidence/story-4-13/pass-3-parent-review-20261025/`.
+
 ## Design Notes
 
-No unresolved intent choices remain. The McpCli footprint is test tooling, topology configuration and documentation, plus the qualified upstream host protocol repair and reference integration. The historical owner packet records Parties PR #58 and its independently reproduced baseline CI failures; the current user-selected squash-merge checkout is qualified by the new review-patch packet above.
+The original implementation choices and pass-3 P5 are resolved. The user approved preserving Parties' existing paging contract and testing offset 2 with page size 2. The McpCli footprint is test tooling, topology configuration and documentation, plus the qualified upstream host protocol repair and reference integration. The historical owner packet records Parties PR #58 and its independently reproduced baseline CI failures; the current user-selected squash-merge checkout is qualified by the new review-patch packet above.
 
 Fresh state per vector preserves fixed Parties identifiers and exact Tenants index counts. Companion plans leave v1 schema, owner approval receipts and vector bytes intact. They close the existing dynamic-value handoff at `deferred-work.md:513`; they cannot silently discard business assertions. Infrastructure bootstrap uses the existing server-owned path, while vector setup remains generic Operation calls.
 
@@ -267,33 +290,41 @@ Parent checks during triage:
 - Final evidence timings (`evidence/story-4-13/build-resume-final-20261025/commands.json`): Manifest.Tests 61.6 s, complete preflight 34.9 s, full 21-vector lane 876 s.
 - Each of the eight `preflight()` refusals AA4 names duplicates a later check: strict module/operation discovery, `validate_call`, plan loading or CI discovery. `run-isolated.py:230` independently refuses a missing `MCPCLI_ISOLATED_RUNTIME_DIR`.
 
-- [ ] [Review][Patch] P1 — medium. The authority barrier's retry on Gateway errors has no test. [tests/Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs:38]
+- [x] [Review][Patch] P1 — medium. The authority barrier's retry on Gateway errors has no test. [tests/Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs:38]
   - All three `AdministratorAuthorityBootstrapTests` reply HTTP 200 with `success: true`. Deleting or narrowing the `EventStoreGatewayException` catch keeps them green. A single readiness 404/503 would then abort the smoke and every vector, which is the startup race this barrier was added for (VG).
   - Fix: using `ProjectionWriterBootstrapHandler`, answer 503 first and the administrator document second; assert two calls and success. Add a deadline variant that asserts the "Privileged query HTTP 503." text in the `TimeoutException` message.
-- [ ] [Review][Patch] P2 — medium. The `writer-bootstrap.json` contract between C# and Python is never pinned. [tests/Hexalith.McpCli.Integration.Tests/ProjectionWriterBootstrap.cs:56]
+- [x] [Review][Patch] P2 — medium. The `writer-bootstrap.json` contract between C# and Python is never pinned. [tests/Hexalith.McpCli.Integration.Tests/ProjectionWriterBootstrap.cs:56]
   - `run-vectors.py:149-155` rebuilds `sha256:<sha256>;file:<backupFile>` from the wrapper receipt and requires an exact match and a 40-character `sourceCommit`. The C# test compares the request body only with `VerifyBackup`'s own output (`ProjectionWriterBootstrapTests.cs:39`), and asserts only `result`, `activationCount` and `readinessObserved` in the receipt. `test_lane.py` hand-writes both files. Changing the separator, or dropping either field, leaves every test green and fails all 21 live children (VG).
   - Fix: in `ActivationIsSubmittedOnceAndReadinessOnlyPolls`, assert that the receipt's `backupReference` equals `"sha256:" + <receipt sha256> + ";file:" + <full backupFile path>`, built from the test's own receipt values, and that `sourceCommit` equals the submitted commit.
-- [ ] [Review][Patch] P3 — medium. No test drives `run_live.main` to a passing receipt. [tools/live-topology/run_live.py:162]
+- [x] [Review][Patch] P3 — medium. No test drives `run_live.main` to a passing receipt. [tools/live-topology/run_live.py:162]
   - Every `main` test ends in a failure or a kill. VG turned `report['binding'] = …` into a local that is still compared but no longer stored, and all 19 `test_live_runner.py` tests passed. Every live child would then fail the lane's "missing, stale or unsuccessful semantic receipt" check (VG).
   - Fix: add a `RunnerTests` case that patches `preflight` (binding matching `MCPCLI_LIVE_BINDING`) and `execute` (appending passing phases). Assert exit 0 and the receipt's `operation`, `result: passed`, `binding` and phases.
-- [ ] [Review][Patch] P4 — medium. Nothing protects `fullLiveAccepted: false` for a selected subset. [tools/live-topology/run-vectors.py:162]
+- [x] [Review][Patch] P4 — medium. Nothing protects `fullLiveAccepted: false` for a selected subset. [tools/live-topology/run-vectors.py:162]
   - The only success test runs one vector against a one-operation coverage list, so a subset and the complete set look the same. VG changed the expression to `failed == 0 and passed == len(report['vectors'])`, and all 11 `test_lane.py` tests passed. A single-vector diagnostic would then write `result: passed` and `fullLiveAccepted: true`, against AC4 (VG).
   - Fix: add a `LaneTests` case with two covered operations, `--operation` naming the second, and a passing child. Assert exit 0, exactly one child selected with `Operation=<second>`, `result: partial` and `fullLiveAccepted: false`.
-- [ ] [Review][Patch] P5 — medium. Parties list and search never observe a non-first page. [tools/live-topology/plans/parties.list-parties.json:58]
+- [x] [Review][Patch] P5 — medium. Parties list and search never observe a non-first page. [tools/live-topology/plans/parties.list-parties.json:58]
   - Both vectors seed one party and use `pageSize: 2, offset: 0`. Every added probe also uses `offset: 0` (`parties.list-parties.json:58,93,128`; `parties.search-parties.json:58,93,128`). A server that ignores the Envelope offset passes every Parties assertion, so AC2's "non-default pages … produce expected later contents" is unproven for Parties (AA).
-  - Fix: add one Query probe to each plan, with the invocation's own filters and Envelope `offset: 1, pageSize: 2`. Assert `/document/items arrayLength 0`, `/document/totalCount equals 1`, `/paging/offset equals 1` and `/paging/totalCount equals 1`. No Command or vector changes; requalify with a fresh complete lane.
-- [ ] [Review][Patch] P6 — low. A failed live vector reports neither its phase nor its assertion path outside the nested receipt. [tools/live-topology/run_live.py:176]
+  - Fix (user-approved clarification, 2026-10-25): add one Query probe to each plan, with the invocation's own filters and Envelope `offset: 2, pageSize: 2`. Assert `/document/items arrayLength 0`, `/document/totalCount equals 1`, `/paging/offset equals 2` and `/paging/totalCount equals 1`. This is the supported second-page boundary under Parties' existing page-aligned offset contract. No Command, approved vector, dependency or upstream changes; requalify with a fresh complete lane.
+- [x] [Review][Patch] P6 — low. A failed live vector reports neither its phase nor its assertion path outside the nested receipt. [tools/live-topology/run_live.py:176]
   - `run_live` prints only `FAILED <op>; receipt: <path>`, and that is all `LiveVectorProcess` puts in the xUnit failure and therefore in `tests.xml`. `live-lane.json` says only "isolated child exited 1; see <output>". The phase and paths exist only in `<generation>/<op>/live-result.json` (AC3; I/O row "Semantic mismatch") (AA).
   - Fix: on failure, also print the token-redacted `report['error']`, which already names the phase, the Operation and the declared assertion paths. Assert it in an existing failing `main` test.
-- [ ] [Review][Patch] P7 — low. `--operation ""` runs the complete lane. [tools/live-topology/run-vectors.py:100]
+- [x] [Review][Patch] P7 — low. `--operation ""` runs the complete lane. [tools/live-topology/run-vectors.py:100]
   - `if args.operation:` treats an empty selector, for example from an unset shell variable, as no selector. The diagnostic then starts all 21 vectors instead of refusing (EC).
   - Fix: use `if args.operation is not None:`, and add a `test_lane.py` case that asserts the refusal and that no child starts.
-- [ ] [Review][Patch] P8 — low. A missing `MCPCLI_ISOLATED_RUNTIME_DIR` is refused only after the full preflight. [tools/live-topology/run-vectors.py:109]
+- [x] [Review][Patch] P8 — low. A missing `MCPCLI_ISOLATED_RUNTIME_DIR` is refused only after the full preflight. [tools/live-topology/run-vectors.py:109]
   - The check runs after the preflight, which took 34.9 s in the final evidence, whereas `--child-timeout` is validated first (BH).
   - Fix: for runs without `--preflight-only`, move the check before `preflight()`, next to the child-timeout check, and assert that preflight is not called.
-- [ ] [Review][Patch] P9 — low. The AppHost's app-channel comment gives the wrong reason for the fallback. [tests/Hexalith.McpCli.AppHost/Program.cs:83]
+- [x] [Review][Patch] P9 — low. The AppHost's app-channel comment gives the wrong reason for the fallback. [tests/Hexalith.McpCli.AppHost/Program.cs:83]
   - The comment attributes the branch to "earlier approved helpers". The pinned 3.127.0 helper provisions `eventstore-app-api-token` only in run mode (see the parent checks), and every supported path is run mode. The fallback can therefore run only outside run mode, where the helper deliberately leaves the token to the deployment (BH).
   - Fix (wording only): say that the pinned helper provisions the Gateway token in run mode, and the explicit wiring applies only when it has not.
+
+**Historical offset-1 qualification (2026-10-25):** P1–P4 and P6–P9 are implemented and verified. The initial P5 companion probes (`offset: 1`, `pageSize: 2`, original filters) were implemented but remained unqualified. Fresh full generation `f326d72cd5224ea48852c8f3ac1f8be6` executes all 21 vectors with 19 passes, two failures and zero skips. Only `parties.list-parties` and `parties.search-parties` fail, both at `offset-after-only-match` with Gateway HTTP 400 `query_invalid_page` ("The supplied cursor is invalid."). The receipt correctly retains `fullLiveAccepted: false`.
+
+The selected Parties owner commit `559b91c812a422f9890e448f7942e645f3739b2b` explicitly rejects offsets not divisible by page size at `references/Hexalith.Parties/src/Hexalith.Parties/Queries/PartySdkQueryService.cs:665`. Its existing `PublicPaging_RejectsInvalidBoundsCursorAndOffsetBeforeReadAsync` test pins these exact list/search inputs at `references/Hexalith.Parties/tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs:2730` and `:2733`, and asserts rejection before reads at `:2741`–`:2745`. Changing only the guard would also be insufficient: list/search currently convert offsets to page numbers before invoking their paged providers. The user subsequently resolved this demonstrated contract conflict by approving the supported next-page probe (`offset: 2`, `pageSize: 2`), as recorded in the Spec Change Log. The historical failure packet remains preserved; approved vectors, Contracts, dependencies and reference checkouts remain unchanged.
+
+Fresh verification passes restore, Release warnings-as-errors build, all three source-server builds, all six non-live .NET suites (1,531 passed, five existing skips; 251 Manifest cases), 88 live-tool and 158 conformance Python tests, complete offline preflight and exact 22-case discovery. Five focused Python mutations are detected. The independent smoke passes with zero skips. The full-run audit verifies all 144 declared phases, exactly 53 single Command submissions with distinct IDs, the successful static/cursor/time assertions, the two precise paging refusals and all 22 private topology cleanups. Exact commands, source/binary bindings, failure receipts and owner anchors are retained in `evidence/story-4-13/pass-3-patches-20261025/README.md`. No failing live result is presented as full acceptance.
+
+**Final pass-3 qualification after user approval (2026-10-25):** All nine patches are implemented and verified. Generation `2ee4b89b49db4c22b0ea4965a302bb19` passes all 21 vectors with zero failures/skips and `fullLiveAccepted: true`. Its independent audit proves 144 phases, exactly 53 single Command submissions with distinct IDs, 91 Query attempts, real cursor/time bindings, every original/additional assertion and all 21 private cleanups. Both Parties probes preserve the invocation filters, return empty second pages at offset 2/pageSize 2, and retain totalCount 1. Fresh 88-case live-tool tests, complete offline preflight and the six-row matrix audit pass. Exact hashes prove the existing .NET/source-build, conformance, discovery and independent-smoke evidence remains applicable; only the two plans and their Python regression expectations changed. The offset-1 packet is preserved byte-for-byte as historical evidence. Final commands, bindings, audits and sanitized receipts: `evidence/story-4-13/pass-3-final-20261025/README.md`.
 
 #### Rejected (code review pass 3, 2026-10-25)
 

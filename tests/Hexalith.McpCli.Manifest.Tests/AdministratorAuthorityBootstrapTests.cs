@@ -45,6 +45,39 @@ public sealed class AdministratorAuthorityBootstrapTests
         Assert.Equal(1, calls);
     }
 
+    /// <summary>A transient Gateway failure keeps the authority barrier polling until membership is persisted.</summary>
+    [Fact]
+    public async Task GatewayFailureKeepsPollingUntilAdministratorAppears()
+    {
+        int calls = 0;
+        using var handler = new ProjectionWriterBootstrapHandler(_ => Task.FromResult(++calls == 1
+            ? new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+            : Response(AdministratorId)));
+        using var http = new HttpClient(handler) { BaseAddress = new Uri("http://127.0.0.1:1234/") };
+        await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, TestContext.Current.CancellationToken);
+        Assert.Equal(2, calls);
+    }
+
+    /// <summary>Persistent Gateway failures retain their HTTP status when the actual authority deadline expires.</summary>
+    [Fact]
+    public async Task GatewayFailuresReachAuthorityDeadlineWithStatus()
+    {
+        int calls = 0;
+        using var handler = new ProjectionWriterBootstrapHandler(_ =>
+        {
+            calls++;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable));
+        });
+        using var http = new HttpClient(handler) { BaseAddress = new Uri("http://127.0.0.1:1234/") };
+        var elapsed = Stopwatch.StartNew();
+        TimeoutException failure = await Assert.ThrowsAsync<TimeoutException>(() =>
+            AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, TestContext.Current.CancellationToken)
+                .WaitAsync(TimeSpan.FromSeconds(70), TestContext.Current.CancellationToken));
+        Assert.Equal("Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.", failure.Message);
+        Assert.InRange(elapsed.Elapsed, TimeSpan.FromSeconds(59), TimeSpan.FromSeconds(70));
+        Assert.True(calls > 1);
+    }
+
     /// <summary>Resource liveness and successful documents cannot substitute for authority before the real deadline.</summary>
     [Fact]
     public async Task MissingPersistedAdministratorFailsAtAuthorityDeadline()

@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "passed": 1,
+  "skipped": 0,
+  "ownedCleanup": true,
+  "emptyGenesisBackup": true,
+  "privateReceipt": "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T174918Z-0623bbca/result.json"
+}

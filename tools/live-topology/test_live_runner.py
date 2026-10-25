@@ -1,4 +1,6 @@
 """Exercise bounded reads and exactly-once write submission without a live service."""
+from contextlib import redirect_stdout
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -98,11 +100,23 @@ class RunnerTests(unittest.TestCase):
                     self.observe(head, call)
                 self.assertEqual(1, len(head.calls))
 
-    def test_unauthorized_query_does_not_poll(self):
-        head = Head([{'error': {'code': 'gateway_error', 'status': 401}}])
-        with self.assertRaisesRegex(VectorError, 'CLI exit 2'):
-            self.observe(head, self.call())
-        self.assertEqual(1, len(head.calls))
+    def test_nonretryable_query_error_does_not_poll(self):
+        errors = [{'code': 'gateway_error', 'status': status, 'detail': 'Gateway refused the query.'}
+                  for status in (400, 401, 403)]
+        errors.append({'code': 'validation_failed', 'operation': 'fixture.operation',
+                       'violations': [{'path': '/id', 'message': 'Invalid identifier.'}]})
+        for error in errors:
+            with self.subTest(error=error):
+                document = {'error': error}
+                head = Head([document])
+                record = {'phase': '/invocation', 'attempts': []}
+                diagnostic = f'/invocation fixture.operation: CLI exit 2: {document}'
+                with self.assertRaises(VectorError) as failure:
+                    self.observe(head, self.call(), record=record)
+                self.assertEqual(diagnostic, str(failure.exception))
+                self.assertEqual(diagnostic, record['lastFailure'])
+                self.assertEqual([{'result': 'failed', 'exitCode': 2, 'document': document}], record['attempts'])
+                self.assertEqual(1, len(head.calls))
 
     def test_returned_document_identity_guards_reject_one_cli_response(self):
         identifier = '01ARZ3NDEKTSV4RRFFQ69G5FAV'
@@ -157,11 +171,43 @@ class RunnerTests(unittest.TestCase):
             (output / 'live-result.json').write_text('{"result":"passed"}')
             with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
                                           'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/'}), \
-                    patch.object(run_live, 'preflight', side_effect=VectorError('bad private-token')):
+                    patch.object(run_live, 'preflight', side_effect=VectorError(
+                        '/invocation fixture.operation: /document/value invalid private-token')), \
+                    redirect_stdout(io.StringIO()) as stdout:
                 self.assertEqual(1, run_live.main(['--operation', 'fixture.operation', '--output', str(output)]))
             content = (output / 'live-result.json').read_text()
             self.assertNotIn('private-token', content)
             self.assertEqual('failed', json.loads(content)['result'])
+            self.assertNotIn('private-token', stdout.getvalue())
+            self.assertIn('VectorError: /invocation fixture.operation: /document/value invalid <redacted>', stdout.getvalue())
+
+    def test_successful_main_retains_bound_inputs_and_passing_phases(self):
+        from live_plans import BINDING_KEYS
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            vector = output / 'vector.json'
+            vector.write_text(json.dumps({'prerequisites': [], 'invocation': self.call('command'), 'postconditions': []}))
+            binding = {key: 'bound-' + key for key in BINDING_KEYS}
+            selection = {'operation': 'fixture.operation', 'vector': vector,
+                         'plan': {'actions': [{'step': '/invocation'}]}, **binding}
+            phases = [{'phase': '/invocation', 'operation': 'fixture.operation', 'kind': 'command',
+                       'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
+            def execute(selected, host, url, token, report, *, checkpoint):
+                self.assertEqual(selection, selected)
+                report['phases'].extend(phases)
+                checkpoint()
+            with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
+                                          'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/',
+                                          'MCPCLI_LIVE_BINDING': json.dumps(binding)}), \
+                    patch.object(run_live, 'preflight', return_value=[selection]), \
+                    patch.object(run_live, 'execute', side_effect=execute) as executed:
+                self.assertEqual(0, run_live.main(['--operation', 'fixture.operation', '--output', directory]))
+            executed.assert_called_once()
+            report = json.loads((output / 'live-result.json').read_text())
+            self.assertEqual('fixture.operation', report['operation'])
+            self.assertEqual('passed', report['result'])
+            self.assertEqual(binding, report['binding'])
+            self.assertEqual(phases, report['phases'])
 
     def test_live_entry_guards_fail_before_preflight_or_execution(self):
         valid = {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
@@ -293,6 +339,23 @@ class ExecutionTests(unittest.TestCase):
                          [phase['operation'] for phase in commands])
         self.assertTrue(all(len(phase['attempts']) == 1 for phase in commands))
         self.assertEqual(2, len(report['phases'][1]['attempts']))
+
+    def test_parties_offset_probes_reject_a_server_that_repeats_the_first_page(self):
+        for operation in ['parties.list-parties', 'parties.search-parties']:
+            with self.subTest(operation=operation):
+                selection = self.selection(operation)
+                calls, documents = self.documents(selection)
+                invocation_index = next(i for i, action in enumerate(selection['plan']['actions'])
+                                        if action.get('step') == '/invocation')
+                probe_index = next(i for i, call in enumerate(calls) if call['envelope'].get('offset') == 2)
+                probe, invocation = calls[probe_index], calls[invocation_index]
+                self.assertEqual(invocation['payload'], probe['payload'])
+                self.assertEqual({**invocation['envelope'], 'offset': 2, 'pageSize': 2}, probe['envelope'])
+                repeated = {**documents[probe_index], 'document': documents[invocation_index]['document']}
+                report = {'phases': []}
+                with self.assertRaisesRegex(VectorError, 'offset-after-only-match .*?/document/items'):
+                    self.execute(selection, documents[:probe_index] + [repeated] * 91, report)
+                self.assertEqual('failed', report['phases'][-1]['result'])
 
     def test_reused_message_identity_fails_repeated_noop_phase(self):
         selection = self.selection()

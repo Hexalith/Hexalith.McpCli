@@ -1,0 +1,36 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.create-tenant/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M5T2X6VFEKA5PJAH9VHNSD1K",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-create",
+          "Name": "Vector Create Corporation",
+          "Description": "Created by the McpCli v1 vector"
+        },
+        "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+      }
+    },
+    {
+      "source": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.create-tenant/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-create",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-create"
+        }
+      }
+    }
+  ]
+}

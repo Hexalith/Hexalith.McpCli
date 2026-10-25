@@ -1,0 +1,13 @@
+{
+  "result": "passed",
+  "currentPacketFiles": 259,
+  "historicalPacketFiles": 315,
+  "unchangedBinaries": 507,
+  "postQualificationSourceChanges": [
+    "tools/live-topology/test_live_runner.py"
+  ],
+  "archiveMembers": {
+    "live-inputs.tar.gz": 1058,
+    "runtime-diagnostics.tar.gz": 126
+  }
+}

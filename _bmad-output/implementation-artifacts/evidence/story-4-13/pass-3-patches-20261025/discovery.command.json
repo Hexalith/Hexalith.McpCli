@@ -1,0 +1,11 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-preEnumerateTheories",
+    "-list",
+    "tests"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 0.257
+}

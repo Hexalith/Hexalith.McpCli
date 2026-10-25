@@ -1,0 +1,157 @@
+{
+  "namespaces": {
+    "user": "user:[4026532318]",
+    "pid": "pid:[4026532321]",
+    "net": "net:[4026532322]",
+    "mnt": "mnt:[4026532320]"
+  },
+  "supervisorPid": 1,
+  "services": {
+    "sentry": {
+      "pid": 7,
+      "arguments": [
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/bin/sentry",
+        "--port",
+        "50001",
+        "--listen-address",
+        "127.0.0.1",
+        "--trust-domain",
+        "public",
+        "--issuer-credentials",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/sentry-certificates",
+        "--config",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/sentry-config.json",
+        "--healthz-port",
+        "18082",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn"
+      ]
+    },
+    "redis": {
+      "pid": 14,
+      "arguments": [
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/bin/redis-server",
+        "--bind",
+        "127.0.0.1",
+        "--port",
+        "6379",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--dir",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46",
+        "--loglevel",
+        "warning"
+      ]
+    },
+    "placement": {
+      "pid": 15,
+      "arguments": [
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/bin/placement",
+        "--port",
+        "6050",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18080",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn",
+        "--tls-enabled",
+        "--trust-domain",
+        "public",
+        "--sentry-address",
+        "127.0.0.1:50001",
+        "--trust-anchors-file",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/sentry-certificates/ca.crt"
+      ]
+    },
+    "scheduler": {
+      "pid": 16,
+      "arguments": [
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/bin/scheduler",
+        "--port",
+        "6060",
+        "--listen-address",
+        "0.0.0.0",
+        "--healthz-port",
+        "18081",
+        "--healthz-listen-address",
+        "127.0.0.1",
+        "--enable-metrics=false",
+        "--log-level",
+        "warn",
+        "--etcd-data-dir",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/scheduler-data",
+        "--override-broadcast-host-port",
+        "127.0.0.1:6060",
+        "--tls-enabled",
+        "--trust-domain",
+        "public",
+        "--sentry-address",
+        "127.0.0.1:50001",
+        "--trust-anchors-file",
+        "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/sentry-certificates/ca.crt"
+      ]
+    }
+  },
+  "command": [
+    "dotnet",
+    "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Integration.Tests.LiveVectorTests",
+    "-trait",
+    "Operation=tenants.remove-tenant-configuration",
+    "-preEnumerateTheories",
+    "-failSkips",
+    "-result-xml",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/live/f326d72cd5224ea48852c8f3ac1f8be6/tenants.remove-tenant-configuration/tests.xml"
+  ],
+  "environmentOverrides": {
+    "MCPCLI_ISOLATED_TOPOLOGY": "1",
+    "GOMAXPROCS": "2",
+    "DOTNET_PROCESSOR_COUNT": "2",
+    "HEXALITH_EVENTSTORE_TEST_REDIS_PORT": "6379",
+    "HEXALITH_EVENTSTORE_TEST_PLACEMENT_PORT": "6050",
+    "HEXALITH_EVENTSTORE_TEST_SCHEDULER_PORT": "6060",
+    "Dapr__PlacementHostAddress": "127.0.0.1:6050",
+    "Dapr__SchedulerHostAddress": "127.0.0.1:6060",
+    "Dapr__GatewayHttpPort": "3501",
+    "NAMESPACE": "default",
+    "DAPR_CONTROLPLANE_TRUST_DOMAIN": "public",
+    "DAPR_CONTROLPLANE_NAMESPACE": "default"
+  },
+  "mtls": {
+    "enabled": true,
+    "trustDomain": "public",
+    "namespace": "default",
+    "sentryAddress": "127.0.0.1:50001",
+    "certificateValuesWithheld": true
+  },
+  "daprBeforeCommand": {
+    "exitCode": 0,
+    "stderr": "",
+    "applications": []
+  },
+  "initialRedisBackup": {
+    "databaseSize": 0,
+    "createdBeforeApplications": true,
+    "backupFile": "/tmp/mcpcli-413-pass3-runtime-20261025/runtime/runs/20261025T175428Z-d7911a46/initial-empty.rdb",
+    "sha256": "d060b6f3ee8e82628aad6e640accb0230e059c46756d1fd6fb292845c7812cb1"
+  },
+  "prerequisitesReady": true,
+  "commandExitCode": 0,
+  "commandElapsedSeconds": 28.838,
+  "ownedInfrastructureStopped": {
+    "sentry": 0,
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  }
+}
