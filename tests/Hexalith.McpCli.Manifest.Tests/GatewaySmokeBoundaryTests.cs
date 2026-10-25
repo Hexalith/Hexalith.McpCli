@@ -110,4 +110,60 @@ public sealed class GatewaySmokeBoundaryTests
             }
         }
     }
+
+    /// <summary>Caller cancellation stays a cancellation and is not reported as the 30-second smoke timeout.</summary>
+    [Fact]
+    public async Task CallerCancellationRemainsCancellationRatherThanSmokeTimeout()
+    {
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        using var serverLifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        serverLifetime.CancelAfter(TimeSpan.FromSeconds(10));
+        var accepted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        Task server = AcceptAndHoldAsync();
+        using var http = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{port}"), Timeout = TimeSpan.FromSeconds(40) };
+        var gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
+        using var caller = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        var elapsed = Stopwatch.StartNew();
+        Task<EventStoreQueryResult> pending = GatewaySmokeProbe.ExecuteAsync(gateway,
+            new SubmitQueryRequest("test", "example", "index", "list-example"), caller.Token);
+        try
+        {
+            Task arrived = await Task.WhenAny(accepted.Task, pending).WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+            Assert.Same(accepted.Task, arrived);
+            caller.Cancel();
+            Task finished = await Task.WhenAny(pending, Task.Delay(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken));
+            Assert.Same(pending, finished);
+            Exception failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
+            Assert.DoesNotContain("exceeded 30 seconds", failure.Message, StringComparison.Ordinal);
+            Assert.True(elapsed.Elapsed < TimeSpan.FromSeconds(5), "Caller cancellation waited for the smoke deadline.");
+        }
+        finally
+        {
+            caller.Cancel();
+            serverLifetime.Cancel();
+            listener.Stop();
+            try { await server.ConfigureAwait(true); }
+            catch (OperationCanceledException) { }
+        }
+
+        async Task AcceptAndHoldAsync()
+        {
+            using TcpClient connection = await listener.AcceptTcpClientAsync(serverLifetime.Token).ConfigureAwait(true);
+            using NetworkStream stream = connection.GetStream();
+            byte[] buffer = new byte[4096];
+            var headersBuffer = new StringBuilder();
+            while (!headersBuffer.ToString().Contains("\r\n\r\n", StringComparison.Ordinal))
+            {
+                int read = await stream.ReadAsync(buffer, serverLifetime.Token).ConfigureAwait(true);
+                Assert.True(read > 0, "The test request ended before its headers were complete.");
+                headersBuffer.Append(Encoding.ASCII.GetString(buffer, 0, read));
+            }
+
+            Assert.StartsWith("POST /api/v1/queries ", headersBuffer.ToString());
+            accepted.TrySetResult();
+            await Task.Delay(Timeout.InfiniteTimeSpan, serverLifetime.Token).ConfigureAwait(true);
+        }
+    }
 }

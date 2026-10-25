@@ -906,3 +906,48 @@ Current source binding, exact commands and sanitized results are recorded in
 `evidence/story-4-12/review-pass-4-20261024/parent-final/verification.json`;
 earlier checkpoints remain unchanged. Frozen intent, dependency pins, gitlinks,
 production code, inventories, vectors and existing ledger entries are intact.
+
+### Review Findings (code review pass 5, 2026-10-25)
+
+Code review 2026-10-25 of the product chunk on `main` at `253b21b`, from baseline `be89509`. 38 files, +3,160/−8, 3,499 diff lines. Full mode, with `epic-4-context.md` loaded. Tracking files and `evidence/story-4-12/` were left for later runs.
+
+Layers: Blind Hunter, Edge Case Hunter, Verification Gap, and Acceptance Auditor. None failed. Acceptance Auditor reported no acceptance miss.
+
+- [x] [Review][Patch] The smoke probe's caller-cancellation guard is untested [tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeProbe.cs:21]
+  - `ExecuteAsync` wraps `OperationCanceledException` as the 30-second `TimeoutException` only when its own timer fired and the caller token is still active.
+  - `GatewaySmokeBoundaryTests` never cancels the caller token. Dropping `&& !cancellationToken.IsCancellationRequested` still leaves those tests green, and an aborted smoke is then diagnosed as a hung authenticated query.
+- [x] [Review][Defer] The authenticated smoke success path is not executed by normal CI [.github/workflows/ci.yml:126] — deferred: already tracked (`spec` pass 4 D2; Story 4.14 owns the blocking Aspire lane at `_bmad-output/planning-artifacts/epics.md`). No new ledger entry.
+- [x] [Review][Defer] The isolated smoke can wait on the platform fixture lock in the shared temp directory [references/Hexalith.EventStore/src/Hexalith.EventStore.Testing.Integration/AspireTopologyFixtureBase.cs:203] — deferred: already tracked (`deferred-work.md:589`). No new ledger entry.
+
+#### Rejected (code review pass 5, 2026-10-25)
+
+- `false` — Default-deny omits `/project` and `/replay-state`, so an empty `items` page can pass the smoke. The frozen smoke is one `ListTenants` document, and pass 4's live run returned that document through this ACL. An empty page is a successful query on an empty store.
+- `false` — `redisHost: localhost:6379` misses Redis bound to `127.0.0.1`. Pass 4's isolated smoke reached Redis with that pairing, and `TopologyDaprComponentTests` locks it.
+- `false` — The fixture's `localhost:{port}` placement and scheduler arguments miss the IPv4 listeners. The same live smoke started the sidecars with those arguments and passed. `ComposedResourcesKeepTokensAclAndGatewayContentRoot` pins the effective addresses.
+- `false` — The `mcpcli1` veth has no address, so host Docker cannot reach the private daemons. The child command runs in the same network namespace, and the daemons listen on `127.0.0.1` or `0.0.0.0` there. Docker is only the platform `docker info` probe.
+- `low` — `DAPR_CERT_KEY` is copied into the Redis, placement, and scheduler environments. The key is a disposable per-run issuer key, and splitting those environments adds a second environment map.
+- `low` — The wrapper does not rehash binaries or require Dapr CLI 1.18.2 and runtime 1.18.7. Carried from passes 1–3. Bootstrap already checks the four SHA-256 values, and a wrong CLI still fails inside the outer deadline.
+- `false` — A timed-out `dapr list` in the wrapper has no bounded diagnostic. `TimeoutExpired` is caught, printed as `Private environment failed: …`, and written to `result.json`.
+- `false` — A daemon that exits during a failing command is dropped. The wrapper keeps the command's exit code, and `ownedInfrastructureStopped` still records each daemon. The success-only raise is what stops a crash from hiding behind exit 0.
+- `false` — `--inside` with an empty command raises `IndexError`. That path returns exit 1 and is pinned by `test_inner_wrapper_refuses_an_empty_command`. The public entry rejects an empty command before `unshare`.
+- `false` — `ReadToEndAsync` then `WaitForExit` deadlocks on xUnit's synchronization context. The reads start before the wait, and this test host does not install a context that would resume them on the blocked thread. The missing `IOException` catch was already rejected in passes 1 and 3.
+- `false` — The 30-second parent budget cannot cover the twelve prerequisite cases. Passes 2 and 3 measured that test at 9.1 s and 9.6 s. `git init` runs once in the fixture, and only the slow-CLI case waits, on a 3-second probe.
+- `maybe-false` (low if true) — `return 0` after `RunAsync` hides a non-zero `Environment.ExitCode`. Nothing in this diff shows `RunAsync` setting that code and then returning. A thrown startup failure never reaches the return.
+- `low` — The live fixture puts the signing key on the AppHost command line. The key is random and lasts one smoke. Moving it off `ExtraAppArgs` changes the platform fixture's only argument channel.
+- `false` — `CheckAspireHelperClosure` allows non-`Hexalith` packages. The method comment and the tests limit the ban to non-package nodes and unapproved `Hexalith.*` packages. Carried from passes 2 and 3.
+- `false` — `ValidateWorkspace` does not compare a checkout with its gitlink. `README.md` states that boundary, and the guard checks declaration, the project file, and that the directory is its own working tree.
+- `false` — The root README expands `$private_runtime` without assigning it. The command comment points at the bootstrap that assigns it, and an empty `MCPCLI_ISOLATED_RUNTIME_DIR` exits before the smoke with an explicit message.
+- `low` — `stop_owned` can throw on `SIGKILL` and skip `result.json`. Carried as R-BH4 and G-EC3. It requires the process to disappear between the grace timeout and `SIGKILL`.
+- `low` — `ip` setup sits before the supervisor `try`, so a failure skips `result.json`. Carried as H-BH8. The process still exits non-zero before any live claim, and the outer deadline bounds a hung `ip`.
+- `low` — Sentry certificate files can be read before the write finishes. Carried from passes 2 and 3. A stability loop is extra machinery for a write that the accepted live run completed.
+- `false` — The bootstrap success line always says four binaries. `binaries.json` has four records, and a hash or copy failure raises before that line.
+- `low` — A missing `appsettings.json` is loaded before the exit-2 catch. Carried from passes 1 and 3. The file ships with the AppHost, and a missing file already fails the process.
+- `false` — An empty `Gateway:Routes` section passes preflight. The shipped file has the three routes, and `ComposedResourcesKeepTokensAclAndGatewayContentRoot` asserts that set.
+- `low` — Setting preflight and inspect together skips inspection and returns 0. The launch tests pass one flag. Rejecting both adds a branch for a combination the supported commands do not use.
+- `low` — A blank placement or scheduler address is passed through. The wrapper and the fixture set those addresses on the supported path.
+- `low` — `FileNotFoundException` during composition is not exit 2. `ValidateWorkspace` already fails a missing checkout with exit 2 before resources are added.
+- `low` — A bind-mounted checkout can pass the working-tree check. Reaching that state takes an extra mount, and a device-id comparison adds a new rule.
+- `low` — A hung unauthorized query fails as `OperationCanceledException` rather than the probe's timeout text. The assertion still fails within 30 seconds and names the exception. A second wrapper adds a branch beside the authenticated probe.
+- `false` — A missing graph root throws `KeyNotFoundException` instead of an admission failure. `RestoredDependencyGraph` always inserts `RootId`, and `MissingHelperHasAnExactDiagnostic` keeps that root.
+- `low` — `git init` in the topology test setup has no timeout. Carried from pass 1. A local `git init` hang was not shown, and a timeout wrapper adds process-kill handling.
+- `false` — `InvokeAsync` reads `ExitCode` before a killed host has exited. On timeout, `WaitForExitAsync` throws and the return that reads `ExitCode` does not run.
