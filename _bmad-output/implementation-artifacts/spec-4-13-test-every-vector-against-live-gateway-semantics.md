@@ -2,7 +2,7 @@
 title: '4.13 Test every vector against live Gateway semantics'
 type: 'feature'
 created: '2026-10-25'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'aabc03c68c56ac8085ee1b145654576f5fd201a4'
@@ -122,3 +122,88 @@ Fresh state per vector preserves fixed Parties identifiers and exact Tenants ind
 - `dotnet restore Hexalith.McpCli.slnx`, then `dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror`.
 - Run each existing non-live test project separately; run Python suites under `tools/live-topology` and `tools/conformance-vectors/v1`, plus exact MTP discovery.
 - Build the three root source servers using the documented Story 4.12 commands; bootstrap private binaries and run `run-vectors.py` with outer and per-child deadlines. Require 21 passed vectors, zero failures/skips and owned cleanup.
+
+### Review Findings (code review, 2026-10-25)
+
+Code review 2026-10-25 of the committed story range `aabc03c..7f503ae` (`8962e2f`, `7f503ae`), plus the owning Parties fix `d83fec24`.
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 59 files, +5,142/−39, 5,801 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 46 normalized findings (BH 18, EC 11, VG 7, AA 10). 19 survive as 14 patch entries; 27 are rejected. No decision is needed, and nothing is deferred.
+
+Parent checks during triage:
+- EventStore lets global administrators skip the permission, domain and tenant checks (`ClaimsRbacValidator.cs:35-37`, `ClaimsTenantValidator.cs:23`). Commands require `command:submit` or `commands:*` (`AuthorizationConstants.cs:4-5`).
+- The Parties vector `deactivate-party` declares two identical `parties.deactivate-party` Command steps on `party-story49`: the prerequisite at `/prerequisites/1` and the `/invocation`.
+- Every Manifest test child that reads `MCPCLI_ISOLATED_TOPOLOGY` sets it explicitly (`DaprPrerequisiteTests.cs:81`, `TopologyFixtureLaunchTests.cs:38`, `TopologyLaunchTests.cs:442`). Only `ProjectionWriterBootstrap.ActivateAsync` reads `MCPCLI_LIVE_OUTPUT`.
+- No isolated child in the story evidence exceeded 54.3 s `commandElapsedSeconds`; the wrapper bound is 900 s.
+- `datetime.fromisoformat` accepts the 7-digit fractional audit timestamps on Python 3.11 and later (checked on 3.14.4). Earlier versions reject them, and no README states a minimum Python version.
+- `6043ca8` was committed during this review. It moves only gitlinks: Parties goes from `d83fec24`, a PR #58 branch commit, to the squash merge `559b91c8` on Parties main. Builds goes from `1783c0a` to `e171c5a`, with no change to `Props/Directory.Packages.props`. The live evidence remains bound to `d83fec24`, and `d83fec24` and `559b91c8` differ in 82 files.
+
+- [ ] [Review][Patch] P1 — medium. The persisted-administrator barrier has no test that fails when it is removed. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:106]
+  - `RequireAdministratorAuthorityAsync` gates every vector and the smoke, but only live callers reach it. Replacing its predicate with `result.Payload is not null` leaves every non-live test green. A live run would then fail only intermittently, as Commands race the bootstrap (VG, BH, AA).
+  - Fix: move the polling into a static helper that takes an `HttpClient`, like `ProjectionWriterBootstrap`, and link it into Manifest.Tests. Using `ProjectionWriterBootstrapHandler`, test three cases: a document without the administrator keeps polling; one with the administrator returns; a run that never sees it throws the exact `TimeoutException` message.
+- [ ] [Review][Patch] P2 — medium. CI never runs the complete preflight, so 18 of the 21 plans pass Core validation only in the manual live lane. [.github/workflows/ci.yml:125]
+  - VG added an unknown payload property to a `tenants.get-tenant-audit` observation. `load_plan` and every CI test accepted it; `validate_call` rejects it. VG ran `run-vectors.py --preflight-only` locally with no topology, and it exited 0 (VG).
+  - Fix: add `python3 tools/live-topology/run-vectors.py --output "$RUNNER_TEMP/live-preflight" --preflight-only` to the `topology-vector-discovery` job after its build, inside the existing venv.
+- [ ] [Review][Patch] P3 — medium. Seven `load_plan` binding guards have no failing test. [tools/live-topology/live_plans.py:125]
+  - The guards: duplicate binding target, cursor bound to a capture not from `/paging/nextCursor`, time binding without a timestamp capture, step binding over non-`scripted-` input, duplicate capture name, duplicate assertion index, and capture tuple mismatch.
+  - VG removed all seven, and the suite stayed green. Dropping the `/paging/nextCursor` check would let any returned string feed the continuation cursor (VG).
+  - Fix: add one `reject(...)` case per guard in `test_live_plans.py`, based on `tenants.get-tenant-users` and `tenants.get-tenant-audit`.
+- [ ] [Review][Patch] P4 — medium. The checks in `observe()` on the returned document's identity are untested. [tools/live-topology/run_live.py:40]
+  - No test fails when these are removed: the `/operation` and `/tenant` match, the required query `/document`, the Command ULID format, and the `correlationId` default. For Parties Commands and plan observations, these checks are the only tenant check (VG).
+  - Fix: add `RunnerTests` cases for a mismatched tenant or operation, a query without `document`, a non-ULID `messageId` and a mismatched `correlationId`. Each should raise `VectorError` after exactly one CLI call.
+- [ ] [Review][Patch] P5 — medium. The live entry guards are untested. [tools/live-topology/run_live.py:149]
+  - Removing any of these leaves every test green: the `MCPCLI_ISOLATED_TOPOLOGY=1` requirement, the loopback-http-only endpoint with no userinfo, query or fragment, the non-empty token, and the `--child-timeout` range in `run-vectors.py:95`. Without the hostname check, admin-token Commands could go to any URL (VG).
+  - Fix: add a table test in `test_live_runner.py` for each refused environment. It should assert exit 1, a `failed` receipt, and that neither `preflight` nor `execute` is called. Add a `test_lane.py` case for `--child-timeout 961` that starts no child.
+- [ ] [Review][Patch] P6 — medium. Nothing ties the parent's child command to `LiveVectorSelection.Require`. [tools/live-topology/run-vectors.py:117]
+  - `LiveVectorSelectionTests.MatchingProcessSelectionIsAccepted` claims to use "the actual parent command form" but builds its own list. `test_lane.py` checks only `Operation=<op>` and `run-isolated.py`. Adding a second `-trait` or renaming the `-class` value keeps every test green but breaks every live child (VG).
+  - Fix: in `test_failed_children_keep_all_operation_outcomes_and_exact_selectors`, assert there is exactly one `-trait` and that the token after `-class` is `Hexalith.McpCli.Integration.Tests.LiveVectorTests`.
+- [ ] [Review][Patch] P7 — low. A vector is marked `passed` before its writer-bootstrap binding is checked. [tools/live-topology/run-vectors.py:150]
+  - `outcome.update(result='passed', …)` runs before `writer-bootstrap.json` is validated. A SIGTERM between the two raises `SystemExit`, which `except Exception` does not catch, so the saved receipt lists that vector as passed (BH, EC).
+  - Fix: move the `outcome.update(result='passed', …)` call after the bootstrap check.
+- [ ] [Review][Patch] P8 — low. A successful `--preflight-only` run prints nothing. [tools/live-topology/run-vectors.py:109]
+  - `return 0` inside the `try` skips the summary `print` after `finally`, so the documented diagnostic command prints no stdout result (VG).
+  - Fix: let the preflight-only path fall through to the existing summary instead of returning early.
+- [ ] [Review][Patch] P9 — low. The live identity declares `command:write`, which is not an EventStore permission. [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:150]
+  - EventStore accepts only `command:submit` or `commands:*` for Commands. The identity is authorized only because `global_admin` bypasses the permission check, so the declared write scope has no effect. Without that bypass, every vector Command would be denied (AA).
+  - Fix: declare `command:submit`, which EventStore's own local token also uses (`LocalAuthenticationTokenCommand.cs:96`).
+- [ ] [Review][Patch] P10 — low. The docs claim every Command's read barrier observes a persisted change. Repeated idempotent Commands cannot show one. [tools/live-topology/README.md:113]
+  - The approved `deactivate-party` vector deactivates the same party twice. `persisted-invocation` asserts the same `isActive: false` that `persisted-prerequisites-1` already proved, so it passes whatever the second Command did. `require_phases` proves one accepted submission, but no state change (BH, AA, EC).
+  - A generic "barrier value must change" guard would reject this approved vector.
+  - Fix (wording only): in the lane README and `README.md:268`, say that a repeated idempotent Command step is proven by its single accepted submission plus unchanged persisted state, not by a new effect.
+- [ ] [Review][Patch] P11 — low. The lane README misstates the ACL entries. [tools/live-topology/README.md:97]
+  - "POST `/project` from EventStore (including `/project/v2`)" reads as one prefix rule. `accesscontrol.yaml` and `TopologyAccessControlTests` declare two exact entries (AA).
+  - Fix (wording only): "POST `/project` and `/project/v2` from EventStore".
+- [ ] [Review][Patch] P12 — low. The README still gives the platform fixture's EventStore server packages as 3.126.1. [README.md:97]
+  - This change pins `.Server`, `.DomainService` and `.ServiceDefaults` at 3.127.0 in `DependencyPolicyTests` and `tools/dependency-policy.json`, but leaves the README sentence unchanged (BH).
+  - Fix: change it to 3.127.0.
+- [ ] [Review][Patch] P13 — low. The enrollment docs omit the new companion-plan requirement. [README.md:122]
+  - Preflight refuses a vector without `tools/live-topology/plans/<operation>.json` ("Live plan inventory differs"). CI discovery now compares cases with the vector files and pins 21. The enrollment paragraph mentions neither, and further domain modules are planned (BH).
+  - Fix: add one sentence. Each approved vector needs a strict companion plan, and the v1 count pins in `ci.yml` and `test_live_plans.py` change with v1 scope.
+- [ ] [Review][Patch] P14 — low. The lane needs Python 3.11 or later, which is not documented. [tools/live-topology/README.md:71]
+  - `live_plans.timestamp()` uses `datetime.fromisoformat`, which rejects the Gateway's 7-digit fractional audit timestamps before Python 3.11. On older interpreters the audit captures fail as "Invalid timestamp" (BH).
+  - Fix: state the Python 3.11 minimum in the lane README.
+
+#### Rejected (code review, 2026-10-25)
+
+- `low` — `LiveVectorProcess` starts `python3` from `PATH`, while the parent uses `sys.executable` (BH). With the documented commands both resolve to the same interpreter, and a missing `jsonschema` fails loudly at import. The fix adds an environment parameter.
+- `low` — The nested time bounds (360 s startup + 60 s + 40 s + 480 s runner) exceed the wrapper's 900 s, and the 8-minute runner deadline throws without stdout (BH, AA, EC). Observed children take at most 54 s. A kill fails closed, `run-vectors.py` names the Operation, and `live-result.json` keeps the phase progress. No single constant makes every bound nest (the audit plan's worst case is about 615 s), so the fix means restructuring the shared 4.12 wrapper bound.
+- `low` — `ActivateAsync` reports a readiness timeout as a bare `TaskCanceledException`, and a malformed 200 body as `KeyNotFoundException` or `JsonException` (BH). These fail loudly on states never observed, and the fix adds guard branches.
+- `false` — A non-object payload or an item without `userId` escapes the authority retry loop (EC; the BH sub-claim is merged into P1). Before readiness the Gateway answers 404, which is caught as `EventStoreGatewayException`. An immediate loud failure on a malformed document is correct.
+- `low` — `cutoverCommit` comes from `git rev-parse` of the checkout, not the deployed bytes, and a dirty tree goes unnoticed (BH, EC). It only records the activation in a disposable private store. Adding a dirty-tree guard is a new branch.
+- `false` — Writer activation cites a stale genesis backup, and in-flight bootstrap deliveries break the quiescence attestation (BH, EC). Capturing the backup before application startup is the spec's Code Map decision. The authority barrier (`LiveVectorTests.cs:36`) runs before activation (`:37`) and proves that the only writer's projected effect has already landed, and no other application writes in the private namespace.
+- `false` — `ProjectionWriterBootstrapTests` changes process-wide variables that parallel tests inherit (BH). No other reader exists (see the parent checks).
+- `maybe-false` (low if true) — The AppHost's token-parameter check depends on the helper's parameter name and its fallback branch is dead (BH). Versions are pinned exactly, and a helper bump already reruns `TopologyLaunchTests`. Settling it would need a helper that renames the parameter.
+- `false` — The Parties fix pins only `ProjectionDispatchStatus`, and its test calls `Results.Ok` directly (BH). The passing lane exercises every endpoint the Gateway calls on the Parties host (`/process`, `/query`, `/project/v2`). The spec's task 1 asks for proof at the real-host `Results.Ok` level. The other gitlink commits are the user's own sync.
+- `false` — `aspire.config.json` lacks a final newline and sits outside the Code Map (BH, AA). It arrived in the user's sync commit `8962e2f`, not the story commit, and no tool or CI check reads its trailing newline. Adding ConformanceHost to `Hexalith.McpCli.slnx` lets the documented solution build produce the default `--host` adapter.
+- `low` — `observe()` retries deterministic failures and ignores `retryable` until the 45 s deadline, and may check a stale `document` (BH). A stale document can only be a non-terminal earlier result, because a terminal one would already have raised. Retrying only delays a failure that still fails closed with its last error. The fix adds classification branches.
+- `maybe-false` (low if true) — The ACL admits v1 `/project` as well as `/project/v2` without proof that v1 is needed (BH). To settle it, remove `/project` and rerun the lane. Default deny still governs every other route.
+- `low` — `ValidateBootstrap` has no test for a non-boolean flag (BH). `GetValue<bool>` throws `InvalidOperationException`, which the existing diagnostic boundary already catches, and nobody passes non-boolean values in practice.
+- `false` — The EventStore policy bump (3.127.0) landed in a later commit than the Builds gitlink move (AA). `HEAD` is consistent, and both commits are already pushed.
+- `false` — The integrated Parties commit is not on Parties main (AA). This is superseded: `6043ca8` moved the gitlink to `559b91c8`. The evidence binding to `d83fec24` is noted in the parent checks.
+- `false` — The Acceptance Auditor's ruled-out 15 s HTTP timeout and its six-row matrix confirmation (AA). The auditor reported both as non-defects.
+- `low` — `run_live` does not hash the adapter DLL and project assemblies, so a rebuild between parent and child goes unnoticed (EC). That requires rebuilding the checkout during a lane run. The child re-runs the package, artifact and Catalog preflight, and the fix adds a new binding key.
+- `false` — Live JWT tenants and domains are hard-coded, so a vector with another tenant would get 403 (EC). Global administrators bypass tenant and domain validation (see the parent checks).
+- `false` — `LiveVectorSelection.Require` runs only after the collection fixture has started the topology (EC). It still runs before any vector Command (`LiveVectorTests.cs:33` precedes `:36-41`), and the fixture refuses a non-isolated environment (`AspireTopologyFixture.cs:43`), so only private disposable state is touched.
+- `low` — `live-lane.json` is not written atomically (EC). Truncation needs a SIGKILL during a sub-millisecond write after the TERM-path save, and an unparseable receipt fails closed.
+- `false` — "Endpoint and identity travel privately" is contradicted by the CLI's `--url` argument (EC). The sentence describes the C#-to-runner handoff, which uses environment variables (`LiveVectorProcess.cs:21-22`). The `--url` value is a non-secret loopback address inside the private PID namespace, and the token stays in `EVENTSTORE_TOKEN`.
