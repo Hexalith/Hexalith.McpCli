@@ -79,7 +79,7 @@ development_status:
   4-10-add-parties-queries-and-pin-complete-coverage: done
   4-11-prove-both-heads-agree-against-a-loopback-gateway: done
   4-12-compose-the-v1-live-test-topology: done
-  4-13-test-every-vector-against-live-gateway-semantics: backlog
+  4-13-test-every-vector-against-live-gateway-semantics: in-progress
   4-14-make-the-live-semantic-lane-blocking-in-ci: backlog
   4-15-publish-the-no-new-server-rule: backlog
   4-16-stage-and-validate-the-paired-packages: backlog

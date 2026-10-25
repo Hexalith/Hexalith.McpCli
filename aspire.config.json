@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj"
+  }
+}
