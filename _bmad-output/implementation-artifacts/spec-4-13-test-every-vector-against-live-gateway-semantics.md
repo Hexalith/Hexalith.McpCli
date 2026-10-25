@@ -2,7 +2,7 @@
 title: '4.13 Test every vector against live Gateway semantics'
 type: 'feature'
 created: '2026-10-25'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'aabc03c68c56ac8085ee1b145654576f5fd201a4'
@@ -250,3 +250,74 @@ Parent checks during triage:
 - `false` — `LiveVectorSelection.Require` runs only after the collection fixture has started the topology (EC). It still runs before any vector Command (`LiveVectorTests.cs:33` precedes `:36-41`), and the fixture refuses a non-isolated environment (`AspireTopologyFixture.cs:43`), so only private disposable state is touched.
 - `low` — `live-lane.json` is not written atomically (EC). Truncation needs a SIGKILL during a sub-millisecond write after the TERM-path save, and an unparseable receipt fails closed.
 - `false` — "Endpoint and identity travel privately" is contradicted by the CLI's `--url` argument (EC). The sentence describes the C#-to-runner handoff, which uses environment variables (`LiveVectorProcess.cs:21-22`). The `--url` value is a non-secret loopback address inside the private PID namespace, and the token stays in `EVENTSTORE_TOKEN`.
+
+### Review Findings (code review pass 3, 2026-10-25)
+
+Code review 2026-10-25 of the committed story range `aabc03c..0d0ca22` (`8962e2f`, `7f503ae`, `6043ca8`, `4b60d49`, `0d0ca22`).
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 59 files, +5,591/−41, 6,250 diff lines, full mode, with `epic-4-context.md` as context. The Parties fix reviewed in pass 1 (`d83fec24`, now the squash merge `559b91c8`) is outside this diff.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 32 normalized findings (BH 15, EC 8, VG 5, AA 4). 9 survive as 9 patch entries; 23 are rejected. No decision is needed, and nothing is deferred.
+
+Parent checks during triage:
+- `main` has no branch protection or rulesets (`gh api repos/{owner}/{repo}/branches/main/protection` returns 404 "Branch not protected"; `rules/branches/main` returns `[]`), so renaming the CI job cannot orphan a required check.
+- No approved vector step expects an error: none has a `scriptedResponse.statusCode` of 400 or more, or an `/error` assertion.
+- The pinned 3.127.0 helper calls `WithGeneratedEventStoreAppChannelToken()` for the Gateway only when `ExecutionContext.IsRunMode` (`src/Hexalith.EventStore.Aspire/HexalithEventStoreExtensions.cs:273-276` at tag `v3.127.0`). Live runs and `--Topology:InspectComposition` both build in run mode.
+- Only the `tenants.remove-user-from-tenant` `/invocation` barrier has no positive document assertion (`/document/items arrayLength 0`). Its previous barrier proved the user present, so it still observes a real change.
+- Final evidence timings (`evidence/story-4-13/build-resume-final-20261025/commands.json`): Manifest.Tests 61.6 s, complete preflight 34.9 s, full 21-vector lane 876 s.
+- Each of the eight `preflight()` refusals AA4 names duplicates a later check: strict module/operation discovery, `validate_call`, plan loading or CI discovery. `run-isolated.py:230` independently refuses a missing `MCPCLI_ISOLATED_RUNTIME_DIR`.
+
+- [ ] [Review][Patch] P1 — medium. The authority barrier's retry on Gateway errors has no test. [tests/Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs:38]
+  - All three `AdministratorAuthorityBootstrapTests` reply HTTP 200 with `success: true`. Deleting or narrowing the `EventStoreGatewayException` catch keeps them green. A single readiness 404/503 would then abort the smoke and every vector, which is the startup race this barrier was added for (VG).
+  - Fix: using `ProjectionWriterBootstrapHandler`, answer 503 first and the administrator document second; assert two calls and success. Add a deadline variant that asserts the "Privileged query HTTP 503." text in the `TimeoutException` message.
+- [ ] [Review][Patch] P2 — medium. The `writer-bootstrap.json` contract between C# and Python is never pinned. [tests/Hexalith.McpCli.Integration.Tests/ProjectionWriterBootstrap.cs:56]
+  - `run-vectors.py:149-155` rebuilds `sha256:<sha256>;file:<backupFile>` from the wrapper receipt and requires an exact match and a 40-character `sourceCommit`. The C# test compares the request body only with `VerifyBackup`'s own output (`ProjectionWriterBootstrapTests.cs:39`), and asserts only `result`, `activationCount` and `readinessObserved` in the receipt. `test_lane.py` hand-writes both files. Changing the separator, or dropping either field, leaves every test green and fails all 21 live children (VG).
+  - Fix: in `ActivationIsSubmittedOnceAndReadinessOnlyPolls`, assert that the receipt's `backupReference` equals `"sha256:" + <receipt sha256> + ";file:" + <full backupFile path>`, built from the test's own receipt values, and that `sourceCommit` equals the submitted commit.
+- [ ] [Review][Patch] P3 — medium. No test drives `run_live.main` to a passing receipt. [tools/live-topology/run_live.py:162]
+  - Every `main` test ends in a failure or a kill. VG turned `report['binding'] = …` into a local that is still compared but no longer stored, and all 19 `test_live_runner.py` tests passed. Every live child would then fail the lane's "missing, stale or unsuccessful semantic receipt" check (VG).
+  - Fix: add a `RunnerTests` case that patches `preflight` (binding matching `MCPCLI_LIVE_BINDING`) and `execute` (appending passing phases). Assert exit 0 and the receipt's `operation`, `result: passed`, `binding` and phases.
+- [ ] [Review][Patch] P4 — medium. Nothing protects `fullLiveAccepted: false` for a selected subset. [tools/live-topology/run-vectors.py:162]
+  - The only success test runs one vector against a one-operation coverage list, so a subset and the complete set look the same. VG changed the expression to `failed == 0 and passed == len(report['vectors'])`, and all 11 `test_lane.py` tests passed. A single-vector diagnostic would then write `result: passed` and `fullLiveAccepted: true`, against AC4 (VG).
+  - Fix: add a `LaneTests` case with two covered operations, `--operation` naming the second, and a passing child. Assert exit 0, exactly one child selected with `Operation=<second>`, `result: partial` and `fullLiveAccepted: false`.
+- [ ] [Review][Patch] P5 — medium. Parties list and search never observe a non-first page. [tools/live-topology/plans/parties.list-parties.json:58]
+  - Both vectors seed one party and use `pageSize: 2, offset: 0`. Every added probe also uses `offset: 0` (`parties.list-parties.json:58,93,128`; `parties.search-parties.json:58,93,128`). A server that ignores the Envelope offset passes every Parties assertion, so AC2's "non-default pages … produce expected later contents" is unproven for Parties (AA).
+  - Fix: add one Query probe to each plan, with the invocation's own filters and Envelope `offset: 1, pageSize: 2`. Assert `/document/items arrayLength 0`, `/document/totalCount equals 1`, `/paging/offset equals 1` and `/paging/totalCount equals 1`. No Command or vector changes; requalify with a fresh complete lane.
+- [ ] [Review][Patch] P6 — low. A failed live vector reports neither its phase nor its assertion path outside the nested receipt. [tools/live-topology/run_live.py:176]
+  - `run_live` prints only `FAILED <op>; receipt: <path>`, and that is all `LiveVectorProcess` puts in the xUnit failure and therefore in `tests.xml`. `live-lane.json` says only "isolated child exited 1; see <output>". The phase and paths exist only in `<generation>/<op>/live-result.json` (AC3; I/O row "Semantic mismatch") (AA).
+  - Fix: on failure, also print the token-redacted `report['error']`, which already names the phase, the Operation and the declared assertion paths. Assert it in an existing failing `main` test.
+- [ ] [Review][Patch] P7 — low. `--operation ""` runs the complete lane. [tools/live-topology/run-vectors.py:100]
+  - `if args.operation:` treats an empty selector, for example from an unset shell variable, as no selector. The diagnostic then starts all 21 vectors instead of refusing (EC).
+  - Fix: use `if args.operation is not None:`, and add a `test_lane.py` case that asserts the refusal and that no child starts.
+- [ ] [Review][Patch] P8 — low. A missing `MCPCLI_ISOLATED_RUNTIME_DIR` is refused only after the full preflight. [tools/live-topology/run-vectors.py:109]
+  - The check runs after the preflight, which took 34.9 s in the final evidence, whereas `--child-timeout` is validated first (BH).
+  - Fix: for runs without `--preflight-only`, move the check before `preflight()`, next to the child-timeout check, and assert that preflight is not called.
+- [ ] [Review][Patch] P9 — low. The AppHost's app-channel comment gives the wrong reason for the fallback. [tests/Hexalith.McpCli.AppHost/Program.cs:83]
+  - The comment attributes the branch to "earlier approved helpers". The pinned 3.127.0 helper provisions `eventstore-app-api-token` only in run mode (see the parent checks), and every supported path is run mode. The fallback can therefore run only outside run mode, where the helper deliberately leaves the token to the deployment (BH).
+  - Fix (wording only): say that the pinned helper provisions the Gateway token in run mode, and the explicit wiring applies only when it has not.
+
+#### Rejected (code review pass 3, 2026-10-25)
+
+- `low` — The nested time bounds exceed the wrapper's 900 s, and the audit plan's 11 Query phases × 45 s exceed the 480 s runner budget (BH). Carried from pass 1. A passing phase converges in well under a second, so the worst case arises only on phases that are already failing. A kill fails closed, and `live-result.json` keeps the phase progress.
+- `low` — The same nested time bounds, reported as worst-case budgets (EC). Carried from pass 1, as above.
+- `low` — The 8-minute runner deadline, the readiness loop and the `git` wait end in a bare `OperationCanceledException` (BH). Carried from pass 1, and R2-B9 pinned the readiness deadline's current behaviour. All three fail loudly; the fix adds conversion branches.
+- `low` — The `LiveVectorProcess` 8-minute deadline throws without diagnostics (EC). Carried from pass 1, as above.
+- `low` — The repeated idempotent `deactivate-party` proof cannot exclude a late effect, and the barrier rule accepts only-negative assertions (BH). Pass 1's P10 settled this wording. The only barrier without a positive assertion follows a positive earlier observation (see the parent checks), so a generic guard would address plans that do not exist.
+- `false` — `aspire.config.json` is accidental and outside Platform rules (BH). It came from the user's sync commit `8962e2f`, not the story commits. Carried from pass 1.
+- `low` — Manifest.Tests now waits on the real 60 s and 30 s deadlines (BH). Pass 1's P1 and R2-B9 chose this deliberately, to protect the shipped deadlines. The measured run is 61.6 s, and injectable deadlines would add parameters. CLAUDE.md's "about 35 s" is now about 62 s, but no command depends on that figure.
+- `low` — `LiveVectorProcess` uses `python3` from `PATH` while the parent uses `sys.executable`, and Manifest.Tests now needs `python3` (BH). The interpreter mismatch is carried from pass 1. Manifest.Tests runs only on `ubuntu-latest`, where `python3` exists, and the conformance gates already require it.
+- `low` — A SIGTERM leaves `live-lane.json` saying `pending` with a `running` vector (BH). Only the 6-hour outer deadline sends TERM. The receipt keeps `fullLiveAccepted: false` and the process exits 143, and the fix adds an interrupted state.
+- `low` — Sentry issuer credentials reach the runner and CLI environments (BH). They belong to a disposable private CA, created per run inside the owned namespace, and no receipt or diagnostic writes the environment. An allow-list adds complexity.
+- `false` — The hard-coded live claims are not checked against the plans (BH). Global administrators bypass tenant and domain validation. Carried from pass 1.
+- `low` — `cutoverCommit` is not bound to the deployed bytes (BH). Carried from pass 1 and R2-B3.
+- `low` — The same `cutoverCommit` claim, for a dirty tree (EC). Carried, as above.
+- `false` — Malformed administrator documents escape the authority poll loop (BH). An immediate loud failure is correct. Carried from pass 1.
+- `false` — The same malformed-document claim (EC). Carried, as above.
+- `low` — The live tooling imports private `run_loopback` helpers (BH). A loopback refactor would fail at import and in `test_live_runner.py`/`test_live_plans.py`; promoting a shared module is a refactor.
+- `low` — `live-plan.schema.json` duplicates its definitions in both `oneOf` branches and gives vague errors (BH). The issue is developer-only, and the fix is a schema refactor.
+- `false` — The CI job rename orphans a required check, and the discovery temp file keeps its old name. These are rejected sub-claims of the BH finding that survives as P8, so they are not counted among the 23 rejected findings. `main` has no required checks (see the parent checks), and only the same step reads the temp file.
+- `low` — A readiness `GET` that throws `HttpRequestException` aborts after the one-time activation (EC). The Gateway that just answered the activation keeps serving, no such fault was observed, and the fix adds a catch branch.
+- `false` — Preflight accepts a vector step that expects an error, which then fails live (EC). No approved vector expects an error (see the parent checks), and a future one would fail loudly.
+- `low` — Python older than 3.11 makes the timestamp captures fail as read deadlines (EC). P14 documents the 3.11 minimum, the deadline message keeps the "Invalid timestamp" failure, and a runtime guard adds a branch.
+- `low` — CI lists the live cases but never runs them (VG). The spec's Never boundary assigns blocking live CI to Story 4.14, and that story's AC owns it (`_bmad-output/planning-artifacts/epics.md:1477`).
+- `low` — The plan schema and validator allow time bindings only at `/payload/From` and `/payload/To` (AA). The allow-list is generic and carries no module identity. Enrolling a module with differently named time fields is rare, and widening the allow-list changes both schema branches and the guard that pass 1's P3 protects.
+- `low` — Eight `preflight()` refusals, the runtime-directory refusal and the inherited-variable stripping have no removal-sensitive tests (AA). Each duplicates a later check (see the parent checks), so removing one leaves another failing check, and tests cannot protect such duplicates without deleting them.
