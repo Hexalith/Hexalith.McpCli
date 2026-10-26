@@ -75,8 +75,16 @@ elif name == 'git':
         print(root if mode == 'copied-source' else pathlib.Path.cwd())
     elif args == ['rev-parse', 'HEAD']:
         print('a' * 40)
-elif name == 'unshare' and mode == 'namespace-denied':
-    print('unshare: Operation not permitted', file=sys.stderr); sys.exit(1)
+elif name == 'sudo':
+    if args != ['-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0']:
+        sys.exit(89)
+    if mode == 'namespace-setup-failure':
+        print('hosted namespace setup failed', file=sys.stderr); sys.exit(1)
+    (root / 'namespace-enabled').touch()
+elif name == 'unshare':
+    if mode in ('namespace-denied', 'namespace-still-denied', 'namespace-setup-failure') or \
+            (mode == 'namespace-needs-setup' and not (root / 'namespace-enabled').exists()):
+        print('unshare: write failed /proc/self/uid_map: Operation not permitted', file=sys.stderr); sys.exit(1)
 '''
 
 BOOTSTRAP = r'''
@@ -182,7 +190,7 @@ class CiHooksTests(unittest.TestCase):
         tests.touch()
         self.bin = self.root / 'stub-bin'
         self.bin.mkdir()
-        for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'aspire', 'unshare', 'ip', 'daprd'):
+        for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'aspire', 'unshare', 'ip', 'daprd', 'sudo'):
             path = self.bin / tool
             path.write_text(TOOL)
             path.chmod(0o700)
@@ -200,6 +208,8 @@ class CiHooksTests(unittest.TestCase):
         self.env.pop('MCPCLI_CI_PREPARATION', None)
         self.env.pop('ASPIRE_TEST_PROJECT', None)
         self.env.pop('TEST_PLATFORM', None)
+        self.env.pop('GITHUB_ACTIONS', None)
+        self.env.pop('RUNNER_ENVIRONMENT', None)
 
     def invoke(self, script, mode=''):
         self.env['FIXTURE_MODE'] = mode
@@ -270,6 +280,37 @@ class CiHooksTests(unittest.TestCase):
                 self.assertNotEqual(0, result.returncode)
                 self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+
+    def test_hosted_namespace_setup_reprobes_before_building_sources(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
+        result = self.invoke('prepare-ci.sh', 'namespace-needs-setup')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        calls = self.calls()
+        probes = [index for index, call in enumerate(calls) if call[0] == 'unshare']
+        setup = next(index for index, call in enumerate(calls) if call[0] == 'sudo')
+        build = next(index for index, call in enumerate(calls) if call[0] == 'dotnet' and call[2] == 'build')
+        self.assertEqual(2, len(probes))
+        self.assertLess(probes[0], setup)
+        self.assertLess(setup, probes[1])
+        self.assertLess(probes[1], build)
+        self.assertIn('Operation not permitted', (self.evidence / 'namespace-probe.stderr.txt').read_text())
+
+    def test_hosted_namespace_setup_and_reprobe_failures_stop_source_builds(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
+        for mode in ('namespace-setup-failure', 'namespace-still-denied'):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                (self.root / 'calls.jsonl').unlink(missing_ok=True)
+                result = self.invoke('prepare-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
+                self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+
+    def test_self_hosted_namespace_failure_never_changes_host_configuration(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='self-hosted')
+        result = self.invoke('prepare-ci.sh', 'namespace-denied')
+        self.assertNotEqual(0, result.returncode)
+        self.assertFalse(any(call[0] == 'sudo' for call in self.calls()))
 
     def test_missing_source_is_named_before_build(self):
         source = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties/Hexalith.Parties.csproj'

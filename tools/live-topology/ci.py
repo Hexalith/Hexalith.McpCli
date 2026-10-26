@@ -146,8 +146,17 @@ def prepare(evidence: Path) -> None:
         if tools['daprd'] != '1.18.7':
             raise RuntimeError('The initialized daprd must be version 1.18.7.')
         bounded(['docker', 'info', '--format', '{{.ServerVersion}}'], 30, evidence / 'docker-info')
-        bounded(['unshare', '--user', '--map-root-user', '--net', '--pid', '--mount', '--fork', '--mount-proc', 'true'],
-                30, evidence / 'namespace-probe')
+        namespace_probe = ['unshare', '--user', '--map-root-user', '--net', '--pid', '--mount', '--fork', '--mount-proc', 'true']
+        try:
+            bounded(namespace_probe, 30, evidence / 'namespace-probe')
+        except RuntimeError:
+            if os.environ.get('GITHUB_ACTIONS') != 'true' or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted':
+                raise
+            # Only the disposable hosted VM is configured; every test still
+            # proves private user/PID/network/mount namespaces in the wrapper.
+            bounded(['sudo', '-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0'],
+                    30, evidence / 'hosted-namespace-setup')
+            bounded(namespace_probe, 30, evidence / 'namespace-probe-configured')
         temporary_root = Path(os.environ.get('RUNNER_TEMP') or tempfile.gettempdir()).resolve()
         if temporary_root.is_relative_to(evidence.resolve()):
             raise RuntimeError('RUNNER_TEMP must be outside the evidence upload directory; no private directory was created.')

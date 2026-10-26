@@ -162,6 +162,13 @@ They never initialize nested dependencies or change host Redis/Dapr services.
 The SDK is selected by `global.json`, including its `latestPatch` roll-forward
 policy. Preparation records both the declared policy and selected SDK version;
 an SDK-resolution failure stops preparation before source builds.
+When the initial namespace probe is denied on a disposable GitHub-hosted runner,
+preparation uses bounded noninteractive `sudo sysctl` to permit unprivileged
+user namespaces, then repeats the actual probe before building sources.
+This follows [Ubuntu's user-namespace configuration](https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces).
+Local and self-hosted environments retain operator-managed namespace permissions.
+Every live child still proves all four private namespaces; setup or probe failure
+fails preparation.
 
 `prepare-ci.sh` first validates all three declared direct Git source checkouts,
 then builds EventStore, Tenants and Parties from their own working directories.

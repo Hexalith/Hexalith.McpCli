@@ -1,0 +1,1 @@
+ci: prepare private namespaces on hosted Ubuntu runners

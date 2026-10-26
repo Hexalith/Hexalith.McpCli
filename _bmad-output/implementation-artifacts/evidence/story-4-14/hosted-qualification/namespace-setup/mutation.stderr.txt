@@ -1,0 +1,21 @@
+test_hosted_namespace_setup_reprobes_before_building_sources (__main__.CiHooksTests.test_hosted_namespace_setup_reprobes_before_building_sources) ... FAIL
+
+======================================================================
+FAIL: test_hosted_namespace_setup_reprobes_before_building_sources (__main__.CiHooksTests.test_hosted_namespace_setup_reprobes_before_building_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-namespace-mutation-vse7dlgl/test_ci.py", line 287, in test_hosted_namespace_setup_reprobes_before_building_sources
+    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : Running (30s): dotnet --version
+Running (30s): dapr --version
+Running (30s): /tmp/tmpbvy_xaww/home/.dapr/bin/daprd --version
+Running (30s): docker info --format {{.ServerVersion}}
+Running (30s): unshare --user --map-root-user --net --pid --mount --fork --mount-proc true
+Live CI failed: RuntimeError: unshare --user --map-root-user --net --pid --mount --fork --mount-proc true exited 1; see /tmp/tmpbvy_xaww/evidence/namespace-probe.stderr.txt
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.399s
+
+FAILED (failures=1)

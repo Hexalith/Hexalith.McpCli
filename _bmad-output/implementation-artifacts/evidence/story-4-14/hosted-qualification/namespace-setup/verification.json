@@ -1,0 +1,21 @@
+{
+  "sourceRevision": "aea0e13a7b6adc9f5dfb134f811353e8a6eeb79a",
+  "run": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40375850526",
+  "jobId": 121761802136,
+  "failure": "unshare: write failed /proc/self/uid_map: Operation not permitted",
+  "artifactId": 12676900088,
+  "correction": "After a denied probe, configure only the disposable GitHub-hosted VM user-namespace setting with bounded noninteractive sudo, then require the real probe to pass. Preserve local/self-hosted configuration and all child isolation checks.",
+  "primarySource": "https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p test_ci.py",
+      "tests": 27,
+      "exitCode": 0
+    },
+    {
+      "mutation": "Disable hosted namespace setup",
+      "result": "Hosted recovery regression fails as expected."
+    }
+  ],
+  "hostedLiveAcceptance": "pending corrected run"
+}
