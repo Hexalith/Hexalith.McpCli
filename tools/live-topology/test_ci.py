@@ -47,7 +47,9 @@ if name == 'timeout':
     os.execvp(command[0], command)
 if name == 'dotnet':
     if args == ['--version']:
-        print('10.0.402')
+        if mode == 'missing-sdk':
+            print('A compatible .NET SDK was not found.', file=sys.stderr); sys.exit(145)
+        print('10.0.403' if mode == 'sdk-patch-rollforward' else '10.0.402')
     elif args[0] == 'build':
         if mode == 'build-failure' and 'Tenants' in args[1]:
             print('named source build failure', file=sys.stderr); sys.exit(23)
@@ -167,7 +169,7 @@ class CiHooksTests(unittest.TestCase):
         (modules.parent / 'requirements.txt').write_text('jsonschema==4.26.0\n')
         for index in range(21):
             (modules / f'{index}.vector.json').write_text(json.dumps({'operation': f'sample.operation-{index:02}'}))
-        (self.root / 'global.json').write_text('{"sdk":{"version":"10.0.402"}}')
+        (self.root / 'global.json').write_text('{"sdk":{"version":"10.0.402","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
         for module in ('EventStore', 'Tenants', 'Parties'):
             checkout = self.root / 'references' / ('Hexalith.' + module)
@@ -239,6 +241,25 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(3, len(prepared['sources']))
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
         self.assertNotIn('fixture-secret-token', json.dumps(prepared))
+
+    def test_repository_sdk_rollforward_accepts_selected_newer_patch(self):
+        result = self.invoke('prepare-ci.sh', 'sdk-patch-rollforward')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('prepared', receipt['result'])
+        self.assertEqual('10.0.403', receipt['tools']['dotnet'])
+        self.assertEqual({'version': '10.0.402', 'rollForward': 'latestPatch'}, receipt['tools']['sdkPolicy'])
+        version_call = next(call for call in self.calls() if call[0] == 'dotnet' and call[2:] == ['--version'])
+        self.assertEqual(str(self.root), version_call[1])
+
+    def test_repository_sdk_resolution_failure_stops_before_source_builds(self):
+        result = self.invoke('prepare-ci.sh', 'missing-sdk')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('dotnet --version exited 145', result.stderr)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertEqual('A compatible .NET SDK was not found.\n', (self.evidence / 'dotnet-version.stderr.txt').read_text())
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_prerequisite_failures_precede_source_builds(self):
         for mode in ('namespace-denied', 'wrong-dapr', 'undeclared-source', 'copied-source'):

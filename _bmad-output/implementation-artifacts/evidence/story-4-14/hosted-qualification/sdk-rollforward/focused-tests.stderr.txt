@@ -1,0 +1,29 @@
+test_caller_contract_and_unsafe_evidence_paths_are_refused (test_ci.CiHooksTests.test_caller_contract_and_unsafe_evidence_paths_are_refused) ... ok
+test_changed_prepared_binary_refuses_live (test_ci.CiHooksTests.test_changed_prepared_binary_refuses_live) ... ok
+test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics (test_ci.CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics) ... ok
+test_exited_child_signal_race_preserves_cancellation_diagnostics (test_ci.CiHooksTests.test_exited_child_signal_race_preserves_cancellation_diagnostics) ... ok
+test_failed_preparation_retains_owned_private_location (test_ci.CiHooksTests.test_failed_preparation_retains_owned_private_location) ... ok
+test_generated_signing_keys_are_redacted_without_breaking_json (test_ci.CiHooksTests.test_generated_signing_keys_are_redacted_without_breaking_json) ... ok
+test_installed_bundle_must_match_fresh_selected_cli_bytes (test_ci.CiHooksTests.test_installed_bundle_must_match_fresh_selected_cli_bytes) ... ok
+test_malformed_native_ownership_proof_is_refused (test_ci.CiHooksTests.test_malformed_native_ownership_proof_is_refused) ... ok
+test_missing_bundle_is_provisioned_before_build_and_setup_failure_propagates (test_ci.CiHooksTests.test_missing_bundle_is_provisioned_before_build_and_setup_failure_propagates) ... ok
+test_missing_preparation_and_reused_runtime_refuse_live (test_ci.CiHooksTests.test_missing_preparation_and_reused_runtime_refuse_live) ... ok
+test_missing_source_is_named_before_build (test_ci.CiHooksTests.test_missing_source_is_named_before_build) ... ok
+test_missing_tool_is_named_before_build (test_ci.CiHooksTests.test_missing_tool_is_named_before_build) ... ok
+test_nested_python_uses_prepared_venv_and_its_installed_modules (test_ci.CiHooksTests.test_nested_python_uses_prepared_venv_and_its_installed_modules) ... ok
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (test_ci.CiHooksTests.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... ok
+test_prerequisite_failures_precede_source_builds (test_ci.CiHooksTests.test_prerequisite_failures_precede_source_builds) ... ok
+test_private_temp_root_must_not_overlap_evidence (test_ci.CiHooksTests.test_private_temp_root_must_not_overlap_evidence) ... ok
+test_repository_sdk_resolution_failure_stops_before_source_builds (test_ci.CiHooksTests.test_repository_sdk_resolution_failure_stops_before_source_builds) ... ok
+test_repository_sdk_rollforward_accepts_selected_newer_patch (test_ci.CiHooksTests.test_repository_sdk_rollforward_accepts_selected_newer_patch) ... ok
+test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics) ... ok
+test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed (test_ci.CiHooksTests.test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed) ... ok
+test_source_failure_and_timeout_never_prepare_or_execute_live (test_ci.CiHooksTests.test_source_failure_and_timeout_never_prepare_or_execute_live) ... ok
+test_unowned_evidence_is_untouched_and_retry_requires_fresh_directory (test_ci.CiHooksTests.test_unowned_evidence_is_untouched_and_retry_requires_fresh_directory) ... ok
+test_vector_nonacceptance_and_nonzero_exits_still_run_smoke (test_ci.CiHooksTests.test_vector_nonacceptance_and_nonzero_exits_still_run_smoke) ... ok
+test_required_inputs_and_existing_focused_lanes_remain_configured (test_ci.CiWorkflowTests.test_required_inputs_and_existing_focused_lanes_remain_configured) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 45.332s
+
+OK

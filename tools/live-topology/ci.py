@@ -132,10 +132,10 @@ def prepare(evidence: Path) -> None:
             if not ctypes.util.find_library(library):
                 raise RuntimeError(f'Missing prerequisite shared library: {library}')
         tools = receipt['tools']
+        tools['sdkPolicy'] = json.loads((ROOT / 'global.json').read_text())['sdk']
+        # This command runs at ROOT, so the SDK resolver enforces global.json,
+        # including its explicitly permitted patch roll-forward policy.
         tools['dotnet'] = bounded(['dotnet', '--version'], 30, evidence / 'dotnet-version')
-        expected_sdk = json.loads((ROOT / 'global.json').read_text())['sdk']['version']
-        if tools['dotnet'] != expected_sdk:
-            raise RuntimeError(f'.NET SDK {expected_sdk} is required; found {tools["dotnet"]}.')
         tools['dapr'] = bounded(['dapr', '--version'], 30, evidence / 'dapr-version')
         if not re.search(r'CLI version: 1\.18\.2\s', tools['dapr'] + '\n') or not re.search(r'Runtime version: 1\.18\.7\s', tools['dapr'] + '\n'):
             raise RuntimeError('Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required; initialize Dapr in the reusable workflow.')

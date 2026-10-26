@@ -159,6 +159,9 @@ OpenSSL 3, zlib/zstd, Docker, GNU `timeout`, Git, curl, `unshare`, `ip` and work
 user/PID/network/mount namespaces are required. The hooks name missing tools,
 sources, namespace permissions and source-build commands before live acceptance.
 They never initialize nested dependencies or change host Redis/Dapr services.
+The SDK is selected by `global.json`, including its `latestPatch` roll-forward
+policy. Preparation records both the declared policy and selected SDK version;
+an SDK-resolution failure stops preparation before source builds.
 
 `prepare-ci.sh` first validates all three declared direct Git source checkouts,
 then builds EventStore, Tenants and Parties from their own working directories.

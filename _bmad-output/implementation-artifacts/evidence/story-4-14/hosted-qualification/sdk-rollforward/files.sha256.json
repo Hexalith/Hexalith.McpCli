@@ -1,0 +1,10 @@
+{
+  "mutation.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "commitlint.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "verification.json": "b72e2dbbd1716f1135e85bfacb15de7ef83ec26334fcedf6411f14bcaf1ea86d",
+  "focused-tests.stderr.txt": "b8246ec22138c2f773a19ac2deafe8a2d28cb491de543ec0155cd1bb08b0edf7",
+  "focused-tests.stdout.txt": "855cf64883d8c250cfc9205d10a7dd7ed847ec1cb476264a0e76dea0846eeb1b",
+  "commitlint.stdout.txt": "b604289bfa38331a5de32be117d349729c0b89d99782e20be6018747696164f6",
+  "commit-message.txt": "42444355b42b3f8d32f95786f82986a9f249731e5aa5ead64642158fce2cb379",
+  "mutation.stderr.txt": "c09b42bc3ef825f4425159899b5af4ab5c50cd387da6eb78c80051b8b3a86fce"
+}

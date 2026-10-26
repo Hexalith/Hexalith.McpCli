@@ -1,0 +1,26 @@
+{
+  "sourceRevision": "3eb1635e6a10d9e9da8dd747908c983e99c2289f",
+  "run": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40370370231",
+  "attempt": 3,
+  "jobId": 121753172160,
+  "failure": "Live CI failed: RuntimeError: .NET SDK 10.0.402 is required; found 10.0.403.",
+  "repositoryPolicy": {
+    "version": "10.0.402",
+    "rollForward": "latestPatch"
+  },
+  "correction": "Use the .NET SDK resolver from the repository root and retain declared policy plus actual selection in preparation evidence.",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p test_ci.py",
+      "tests": 24,
+      "exitCode": 0
+    },
+    {
+      "mutation": "Restore exact SDK equality guard",
+      "result": "New patch-roll-forward test fails as expected."
+    }
+  ],
+  "upstreamBuildsRevision": "35587cfd104c5750d8ec3c0716933f386d6a0232",
+  "upstreamPublished": true,
+  "hostedLiveAcceptance": "pending corrected run"
+}

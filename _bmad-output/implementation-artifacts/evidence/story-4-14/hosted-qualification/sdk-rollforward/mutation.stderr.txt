@@ -1,0 +1,17 @@
+test_repository_sdk_rollforward_accepts_selected_newer_patch (__main__.CiHooksTests.test_repository_sdk_rollforward_accepts_selected_newer_patch) ... FAIL
+
+======================================================================
+FAIL: test_repository_sdk_rollforward_accepts_selected_newer_patch (__main__.CiHooksTests.test_repository_sdk_rollforward_accepts_selected_newer_patch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-sdk-mutation-_2tiucq2/test_ci.py", line 247, in test_repository_sdk_rollforward_accepts_selected_newer_patch
+    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : Running (30s): dotnet --version
+Live CI failed: RuntimeError: Rejected SDK patch roll-forward
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.136s
+
+FAILED (failures=1)
