@@ -48,6 +48,13 @@ class RunnerTests(unittest.TestCase):
         self.assertLessEqual(head.calls[-1][1], .5)
         self.assertEqual(30, head.timeout)
 
+    def test_cli_receives_private_endpoint_and_envelope_identity(self):
+        head = Head([{'document': {'value': 7}}])
+        call = self.call()
+        call['envelope']['actor'] = 'fixture-actor'
+        self.observe(head, call)
+        self.assertEqual(('http://127.0.0.1/', 'test', 'fixture-actor'), head.calls[0][0][1:])
+
     def test_broken_business_effect_fails_with_phase_operation_and_path(self):
         head = Head([{'document': {'value': 0}}] * 3)
         with self.assertRaisesRegex(VectorError, r'/invocation fixture.operation: read deadline: .*?/document/value'):
@@ -214,6 +221,8 @@ class RunnerTests(unittest.TestCase):
                        'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
             def execute(selected, host, url, token, report, *, checkpoint):
                 self.assertEqual(selection, selected)
+                self.assertEqual('http://127.0.0.1:1234/', url)
+                self.assertEqual('private-token', token)
                 report['phases'].extend(phases)
                 checkpoint()
             with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
@@ -336,6 +345,12 @@ class ExecutionTests(unittest.TestCase):
         for checked, phase in zip(validate.call_args_list, report['phases']):
             self.assertIs(head, checked.args[0])
             self.assertEqual(phase['resolvedCall'], {key: checked.args[1][key] for key in phase['resolvedCall']})
+        # The identity reaches the CLI only through its private environment; every attempt names the private endpoint and envelope.
+        self.assertEqual('private-token', head.env['EVENTSTORE_TOKEN'])
+        self.assertEqual([('http://127.0.0.1/', phase['resolvedCall']['envelope']['tenant'], phase['resolvedCall']['envelope'].get('actor'))
+                          for phase in report['phases'] for _ in phase['attempts']],
+                         [tuple(arguments[1:]) for arguments, _ in head.calls])
+        self.assertNotIn('private-token', json.dumps([arguments for arguments, _ in head.calls]))
         return head, report
 
     def test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation(self):

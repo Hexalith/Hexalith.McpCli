@@ -276,6 +276,72 @@ lane.main(['--output',sys.argv[2],'--preflight-only'])
             pid = int((output / 'child.stdout.txt').read_text())
             with self.assertRaises(ProcessLookupError): os.kill(pid, 0)
 
+    def test_outer_termination_stops_the_running_session_child_and_never_accepts(self):
+        import os
+        import signal
+        import subprocess
+        import sys
+        import time
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            script = '''
+import importlib.util,pathlib,sys
+sys.path.insert(0,sys.argv[1])
+spec=importlib.util.spec_from_file_location('lane',pathlib.Path(sys.argv[1])/'run-vectors.py')
+lane=importlib.util.module_from_spec(spec); spec.loader.exec_module(lane)
+from live_plans import BINDING_KEYS
+selection={'operation':'fixture.operation',**{key:key for key in BINDING_KEYS}}
+lane.preflight=lambda *args:[selection]
+lane.expected_operations=lambda:['fixture.operation']
+sleeper=[sys.executable,'-c','import os,pathlib,sys,time; pathlib.Path(sys.argv[1]).write_text(str(os.getpid())); time.sleep(60)',str(pathlib.Path(sys.argv[2])/'child.pid')]
+bounded_child=lane.bounded_child
+lane.bounded_child=lambda command,environment,output,timeout: bounded_child(sleeper,environment,output,timeout)
+lane.main(['--output',sys.argv[2]])
+'''
+            process = subprocess.Popen([sys.executable, '-c', script, str(Path(__file__).resolve().parent), directory],
+                                       env={**os.environ, 'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'},
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            pid = None
+            try:
+                deadline = time.monotonic() + 10
+                while not (output / 'child.pid').exists() and process.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.01)
+                pid = int((output / 'child.pid').read_text())
+                process.send_signal(signal.SIGTERM)
+                process.communicate(timeout=30)
+                self.assertEqual(143, process.returncode)
+                with self.assertRaises(ProcessLookupError): os.kill(pid, 0)
+                result = json.loads((output / 'live-lane.json').read_text())
+                self.assertFalse(result['fullLiveAccepted'])
+                self.assertEqual(['fixture.operation'], [item['operation'] for item in result['vectors']])
+                self.assertNotIn('passed', [item['result'] for item in result['vectors']])
+            finally:
+                if process.poll() is None: process.kill()
+                process.communicate(timeout=5)
+                if pid is not None:
+                    try: os.kill(pid, signal.SIGKILL)
+                    except ProcessLookupError: pass
+
+    def test_child_selector_lists_exactly_its_operation_case_from_built_tests(self):
+        import subprocess
+        operations = lane.expected_operations()
+        selections = [{'operation': operation, **{key: key for key in BINDING_KEYS}} for operation in operations]
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(lane, 'preflight', return_value=selections), \
+                patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                patch.object(lane, 'bounded_child', return_value=1) as child:
+            self.assertEqual(1, lane.main(['--output', directory]))
+        self.assertEqual(len(operations), child.call_count)
+        for operation, call in zip(operations, child.call_args_list):
+            with self.subTest(operation=operation):
+                # Run the exact isolated selector against the built assembly, listing instead of writing results.
+                selector = call.args[0][call.args[0].index('--') + 1:]
+                index = selector.index('-result-xml')
+                selector[index:index + 2] = ['-list', 'tests']
+                listed = subprocess.run(selector, cwd=lane.ROOT, capture_output=True, text=True, timeout=60, check=True)
+                self.assertEqual(['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'],
+                                 [line for line in listed.stdout.splitlines() if line.startswith('Hexalith.McpCli.Integration.Tests.')])
+
     def test_explicit_host_selection_is_forwarded_privately_to_child(self):
         with tempfile.TemporaryDirectory() as directory:
             selected_host = Path(directory) / 'custom host.dll'

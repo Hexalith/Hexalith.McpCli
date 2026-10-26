@@ -240,7 +240,7 @@ def shared_runtime_assemblies(host: Path) -> set[str]:
 
 
 def check_adapter_dependencies(host: Path, assets: dict) -> None:
-    """Bind executable metadata and every private package DLL to the approved restore."""
+    """Bind executable metadata and private package runtime DLLs, including RID assets, to the approved restore; satellite resources are not compared."""
     deps = _load_json(host.with_suffix('.deps.json'))
     actual = {identity: value for identity, value in deps['libraries'].items() if value['type'] == 'package'}
     expected = {identity: value for identity, value in assets['libraries'].items() if value['type'] == 'package'}
