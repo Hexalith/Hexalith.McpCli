@@ -1,0 +1,253 @@
+diff --git a/.github/workflows/domain-ci.md b/.github/workflows/domain-ci.md
+index 3d06796..9608101 100644
+--- a/.github/workflows/domain-ci.md
++++ b/.github/workflows/domain-ci.md
+@@ -34,6 +34,31 @@ coverage is deliberately not collected and is excluded from the coverage gates;
+ TRX results are always uploaded as the `aspire-test-results` artifact. Set
+ `aspire-continue-on-error: false` in a module that wants the tier blocking.
+ 
++## Optional Aspire preparation and runner hooks
++
++`aspire-prepare-script` and `aspire-runner-script` accept repository-relative bash
++script files. Preparation runs after the Release solution build and Dapr
++initialization; the runner replaces only the ordinary Aspire test command.
++Omitting the hooks preserves the existing VSTest/MTP commands and defaults.
++Script paths and `aspire-evidence-path` reject absolute paths, traversal, shell
++syntax and symbolic links. Inputs are passed through environment variables and
++quoted arguments, without evaluating command strings.
++
++Each hook receives `ASPIRE_TEST_PROJECT`, `TEST_PLATFORM` and
++`ASPIRE_EVIDENCE_PATH`. A preparer may export nonsecret paths for its runner using
++`GITHUB_ENV`; consumers are responsible for keeping credentials and private
++runtime state out of uploaded evidence. `aspire-prepare-timeout-minutes` defaults
++to 30 and accepts 1–60; `aspire-runner-timeout-minutes` defaults to 30 and accepts
++1–340. GNU `timeout` enforces each bound with a 30-second kill grace in addition
++to the Actions step deadline. Hook failures and deadline exits fail their steps.
++The finite `aspire-timeout-minutes` must be an integer at most 360 and allow all
++enabled hook budgets plus at least five minutes for the rest of the job.
++
++`aspire-evidence-path` defaults to `TestResults/aspire-hook-evidence`; its contents
++are retained as `aspire-hook-evidence` for seven days on success and failure.
++Keep `aspire-continue-on-error: false` for a blocking caller. Hooks do not change
++the nightly performance tier, enable publication, or initialize nested submodules.
++
+ ## Blocking Test Shard Results
+ 
+ Each active Tier 1 and Tier 2 step runs every configured project, even when an
+diff --git a/.github/workflows/domain-ci.yml b/.github/workflows/domain-ci.yml
+index abd2673..e69cbc8 100644
+--- a/.github/workflows/domain-ci.yml
++++ b/.github/workflows/domain-ci.yml
+@@ -111,6 +111,29 @@ on:
+         required: false
+         type: boolean
+         default: true
++      aspire-prepare-script:
++        description: 'Optional repository-relative bash script preparing the Aspire tier after Dapr initialization.'
++        required: false
++        type: string
++        default: ''
++      aspire-runner-script:
++        description: 'Optional repository-relative bash script replacing the default Aspire test invocation.'
++        required: false
++        type: string
++        default: ''
++      aspire-prepare-timeout-minutes:
++        required: false
++        type: number
++        default: 30
++      aspire-runner-timeout-minutes:
++        required: false
++        type: number
++        default: 30
++      aspire-evidence-path:
++        description: 'Repository-relative directory for support-safe hook evidence; always uploaded for hook callers.'
++        required: false
++        type: string
++        default: 'TestResults/aspire-hook-evidence'
+       build-timeout-minutes:
+         required: false
+         type: number
+@@ -838,6 +861,47 @@ jobs:
+           submodules: false
+       - name: Initialize root-declared submodules
+         uses: Hexalith/Hexalith.Builds/Github/initialize-build@fff4a212180d8cd1c5c0759655a9bc4fb6963c45 # BUILD-REL-1
++      - name: Validate Aspire hooks
++        id: validate-aspire-hooks
++        if: ${{ inputs.aspire-prepare-script != '' || inputs.aspire-runner-script != '' }}
++        shell: bash
++        env:
++          ASPIRE_PREPARE_SCRIPT: ${{ inputs.aspire-prepare-script }}
++          ASPIRE_RUNNER_SCRIPT: ${{ inputs.aspire-runner-script }}
++          ASPIRE_EVIDENCE_PATH: ${{ inputs.aspire-evidence-path }}
++          ASPIRE_PREPARE_TIMEOUT: ${{ inputs.aspire-prepare-timeout-minutes }}
++          ASPIRE_RUNNER_TIMEOUT: ${{ inputs.aspire-runner-timeout-minutes }}
++          ASPIRE_JOB_TIMEOUT: ${{ inputs.aspire-timeout-minutes }}
++        run: |
++          set -euo pipefail
++          python3 - <<'PYHOOKS'
++          import os, pathlib, re
++          root = pathlib.Path.cwd().resolve()
++          def relative(name, file=False):
++              value = os.environ[name]
++              if not value and file:
++                  return
++              path = pathlib.PurePosixPath(value)
++              if not re.fullmatch(r'[A-Za-z0-9_./-]+', value) or path.is_absolute() or any(part in ('.', '..') for part in value.split('/')):
++                  raise SystemExit(f'{name} must be a repository-relative path without traversal.')
++              target = root / value
++              if any(part.is_symlink() for part in [target, *target.parents] if part != root and root in part.parents):
++                  raise SystemExit(f'{name} must not traverse symbolic links.')
++              if file and not target.is_file():
++                  raise SystemExit(f'{name} does not name an existing script: {value}')
++          relative('ASPIRE_PREPARE_SCRIPT', True)
++          relative('ASPIRE_RUNNER_SCRIPT', True)
++          relative('ASPIRE_EVIDENCE_PATH')
++          bounds = {}
++          for name, maximum in [('ASPIRE_PREPARE_TIMEOUT', 60), ('ASPIRE_RUNNER_TIMEOUT', 340), ('ASPIRE_JOB_TIMEOUT', 360)]:
++              value = os.environ[name]
++              if not re.fullmatch(r'[1-9][0-9]*', value) or not 1 <= int(value) <= maximum:
++                  raise SystemExit(f'{name} must be an integer from 1 to {maximum} minutes.')
++              bounds[name] = int(value)
++          required = sum(bounds[name] for name, script in [('ASPIRE_PREPARE_TIMEOUT', 'ASPIRE_PREPARE_SCRIPT'), ('ASPIRE_RUNNER_TIMEOUT', 'ASPIRE_RUNNER_SCRIPT')] if os.environ[script])
++          if required + 5 > bounds['ASPIRE_JOB_TIMEOUT']:
++              raise SystemExit('Aspire job timeout must allow hook budgets plus at least five minutes for setup and evidence.')
++          PYHOOKS
+       - name: Initialize .NET
+         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+         with:
+@@ -859,10 +923,36 @@ jobs:
+         with:
+           version: ${{ inputs.dapr-version }}
+           runtime-version: ${{ inputs.dapr-runtime-version }}
++      - name: Prepare Aspire tier
++        if: ${{ inputs.aspire-prepare-script != '' }}
++        timeout-minutes: ${{ inputs.aspire-prepare-timeout-minutes }}
++        shell: bash
++        env:
++          ASPIRE_PREPARE_SCRIPT: ${{ inputs.aspire-prepare-script }}
++          ASPIRE_PREPARE_TIMEOUT: ${{ inputs.aspire-prepare-timeout-minutes }}
++          ASPIRE_TEST_PROJECT: ${{ inputs.aspire-test-project }}
++          TEST_PLATFORM: ${{ inputs.test-platform }}
++          ASPIRE_EVIDENCE_PATH: ${{ inputs.aspire-evidence-path }}
++        run: |
++          set -euo pipefail
++          timeout --signal=TERM --kill-after=30s "$((ASPIRE_PREPARE_TIMEOUT * 60))" bash "$ASPIRE_PREPARE_SCRIPT" </dev/null
++      - name: Run Aspire hook
++        if: ${{ inputs.aspire-runner-script != '' }}
++        timeout-minutes: ${{ inputs.aspire-runner-timeout-minutes }}
++        shell: bash
++        env:
++          ASPIRE_RUNNER_SCRIPT: ${{ inputs.aspire-runner-script }}
++          ASPIRE_RUNNER_TIMEOUT: ${{ inputs.aspire-runner-timeout-minutes }}
++          ASPIRE_TEST_PROJECT: ${{ inputs.aspire-test-project }}
++          TEST_PLATFORM: ${{ inputs.test-platform }}
++          ASPIRE_EVIDENCE_PATH: ${{ inputs.aspire-evidence-path }}
++        run: |
++          set -euo pipefail
++          timeout --signal=TERM --kill-after=30s "$((ASPIRE_RUNNER_TIMEOUT * 60))" bash "$ASPIRE_RUNNER_SCRIPT" </dev/null
+       # Coverage is not collected here: this tier is advisory (non-blocking by
+       # default) and its coverage is intentionally excluded from the gates.
+       - name: Aspire contract tests (Tier 3, non-Performance, VSTest)
+-        if: ${{ inputs.test-platform == 'vstest' }}
++        if: ${{ inputs.aspire-runner-script == '' && inputs.test-platform == 'vstest' }}
+         shell: bash
+         env:
+           ASPIRE_TEST_PROJECT: ${{ inputs.aspire-test-project }}
+@@ -874,7 +964,7 @@ jobs:
+           --logger "trx;LogFileName=aspire-results.trx"
+           --results-directory TestResults/aspire
+       - name: Aspire contract tests (Tier 3, non-Performance, Microsoft.Testing.Platform)
+-        if: ${{ inputs.test-platform == 'microsoft-testing-platform' }}
++        if: ${{ inputs.aspire-runner-script == '' && inputs.test-platform == 'microsoft-testing-platform' }}
+         shell: bash
+         env:
+           ASPIRE_TEST_PROJECT: ${{ inputs.aspire-test-project }}
+@@ -893,6 +983,13 @@ jobs:
+         run: |
+           echo "## Tier 3 Aspire Contract Tests" >> "$GITHUB_STEP_SUMMARY"
+           echo "Status: $JOB_STATUS" >> "$GITHUB_STEP_SUMMARY"
++      - name: Upload Aspire hook evidence
++        if: ${{ always() && steps.validate-aspire-hooks.outcome == 'success' }}
++        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: aspire-hook-evidence
++          path: ${{ inputs.aspire-evidence-path }}
++          retention-days: 7
+       - name: Upload test results
+         if: always()
+         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+diff --git a/Tools/test-domain-workflow-test-platforms.ps1 b/Tools/test-domain-workflow-test-platforms.ps1
+index 98e7ed7..30d28bd 100644
+--- a/Tools/test-domain-workflow-test-platforms.ps1
++++ b/Tools/test-domain-workflow-test-platforms.ps1
+@@ -501,6 +501,69 @@ $ciWorkflow = Get-Content -LiteralPath $ciWorkflowPath -Raw
+ $releaseWorkflow = Get-Content -LiteralPath $releaseWorkflowPath -Raw
+ $buildReleaseWorkflow = Get-Content -LiteralPath $buildReleaseWorkflowPath -Raw
+ 
++$hookValidation = Get-NamedStepBlock -Content $ciWorkflow -StepName 'Validate Aspire hooks'
++$hookBody = Get-StepRunBody -Block $hookValidation -StepName 'Validate Aspire hooks'
++$hookEnvironment = @{
++    ASPIRE_PREPARE_SCRIPT = 'hooks/prepare.sh'
++    ASPIRE_RUNNER_SCRIPT = 'hooks/run.sh'
++    ASPIRE_EVIDENCE_PATH = 'TestResults/aspire-hook-evidence'
++    ASPIRE_PREPARE_TIMEOUT = '40'
++    ASPIRE_RUNNER_TIMEOUT = '300'
++    ASPIRE_JOB_TIMEOUT = '360'
++}
++$hookFixture = "mkdir -p hooks`nprintf 'exit 0\n' > hooks/prepare.sh`nprintf 'exit 0\n' > hooks/run.sh`n"
++$hookResult = Invoke-WorkflowBashBody -Body ($hookFixture + $hookBody) -Environment $hookEnvironment
++Assert-Condition -Name 'Aspire valid hooks' -Condition ($hookResult.ExitCode -eq 0) -Failure "rejected valid hooks: $($hookResult.Output)"
++foreach ($scenario in @(
++    @{ Key = 'ASPIRE_PREPARE_SCRIPT'; Value = '../outside.sh' },
++    @{ Key = 'ASPIRE_RUNNER_SCRIPT'; Value = '/tmp/run.sh' },
++    @{ Key = 'ASPIRE_RUNNER_SCRIPT'; Value = 'hooks/missing.sh' },
++    @{ Key = 'ASPIRE_RUNNER_SCRIPT'; Value = 'hooks/run.sh;true' },
++    @{ Key = 'ASPIRE_EVIDENCE_PATH'; Value = '.' },
++    @{ Key = 'ASPIRE_EVIDENCE_PATH'; Value = 'TestResults/../outside' },
++    @{ Key = 'ASPIRE_PREPARE_TIMEOUT'; Value = '0' },
++    @{ Key = 'ASPIRE_PREPARE_TIMEOUT'; Value = '61' },
++    @{ Key = 'ASPIRE_RUNNER_TIMEOUT'; Value = '341' },
++    @{ Key = 'ASPIRE_RUNNER_TIMEOUT'; Value = '0.5' },
++    @{ Key = 'ASPIRE_JOB_TIMEOUT'; Value = '361' },
++    @{ Key = 'ASPIRE_JOB_TIMEOUT'; Value = '340' }
++)) {
++    $environment = $hookEnvironment.Clone()
++    $environment[$scenario.Key] = $scenario.Value
++    $result = Invoke-WorkflowBashBody -Body ($hookFixture + $hookBody) -Environment $environment
++    Assert-Condition -Name "Aspire invalid $($scenario.Key)=$($scenario.Value)" -Condition ($result.ExitCode -ne 0) -Failure 'accepted invalid hook inputs.'
++}
++$symlinkResult = Invoke-WorkflowBashBody -Body ($hookFixture + "mv hooks/run.sh hooks/real.sh`nln -s real.sh hooks/run.sh`n" + $hookBody) -Environment $hookEnvironment
++Assert-Condition -Name 'Aspire linked script' -Condition ($symlinkResult.ExitCode -ne 0) -Failure 'accepted a symbolic link.'
++foreach ($step in @(
++    @{ Name = 'Prepare Aspire tier'; Script = 'ASPIRE_PREPARE_SCRIPT'; Bound = 'ASPIRE_PREPARE_TIMEOUT' },
++    @{ Name = 'Run Aspire hook'; Script = 'ASPIRE_RUNNER_SCRIPT'; Bound = 'ASPIRE_RUNNER_TIMEOUT' }
++)) {
++    $block = Get-NamedStepBlock -Content $ciWorkflow -StepName $step.Name
++    $body = Get-StepRunBody -Block $block -StepName $step.Name
++    Assert-Contains -Name $step.Name -Content $block -Expected 'timeout-minutes: ${{ inputs.aspire-'
++    Assert-Contains -Name $step.Name -Content $block -Expected 'TEST_PLATFORM: ${{ inputs.test-platform }}'
++    Assert-Contains -Name $step.Name -Content $body -Expected '--signal=TERM --kill-after=30s'
++    foreach ($code in @(0, 23, 124)) {
++        $environment = @{ $step.Script = 'hooks/run.sh'; $step.Bound = '2' }
++        $fixture = "mkdir -p hooks`nprintf 'exit $code\n' > hooks/run.sh`n"
++        $result = Invoke-WorkflowBashBody -Body ($fixture + $body) -Environment $environment
++        Assert-Condition -Name "$($step.Name) exit $code" -Condition ($result.ExitCode -eq $code) -Failure "returned $($result.ExitCode)."
++    }
++    $result = Invoke-WorkflowBashBody -Body ('timeout() { [ "$3" = 120 ] || exit 99; return 124; }' + "`n" + $body) -Environment @{ $step.Script = 'hooks/run.sh'; $step.Bound = '2' }
++    Assert-Condition -Name "$($step.Name) timeout propagation" -Condition ($result.ExitCode -eq 124) -Failure 'lost the bound or deadline exit.'
++}
++$aspireJob = $ciWorkflow.Substring($ciWorkflow.IndexOf('  aspire-tests:')).Split('  performance-tests:')[0]
++Assert-Condition -Name 'Aspire preparation ordering' -Condition ($aspireJob.IndexOf('Install and initialize Dapr') -lt $aspireJob.IndexOf('Prepare Aspire tier') -and $aspireJob.IndexOf('Prepare Aspire tier') -lt $aspireJob.IndexOf('Run Aspire hook')) -Failure 'does not initialize Dapr before preparation and execution.'
++foreach ($platform in @('VSTest', 'Microsoft.Testing.Platform')) {
++    $block = Get-NamedStepBlock -Content $ciWorkflow -StepName "Aspire contract tests (Tier 3, non-Performance, $platform)"
++    Assert-Contains -Name "Aspire default $platform" -Content $block -Expected "inputs.aspire-runner-script == '' && inputs.test-platform =="
++}
++$hookUpload = Get-NamedStepBlock -Content $ciWorkflow -StepName 'Upload Aspire hook evidence'
++Assert-Contains -Name 'Aspire hook upload' -Content $hookUpload -Expected 'always()'
++Assert-Contains -Name 'Aspire hook upload validation gate' -Content $hookUpload -Expected "steps.validate-aspire-hooks.outcome == 'success'"
++Assert-Contains -Name 'Aspire hook upload path' -Content $hookUpload -Expected 'path: ${{ inputs.aspire-evidence-path }}'
++
+ foreach ($workflow in @(
+     [pscustomobject] @{ Name = 'domain-ci.yml'; Content = $ciWorkflow },
+     [pscustomobject] @{ Name = 'domain-release.yml'; Content = $releaseWorkflow }

@@ -1,0 +1,10 @@
+{
+  "owningCheckout": "/home/administrator/projects/hexalith/builds",
+  "baseCommit": "09af6ef818beb27490c87c00ed83dd581a7e6d8d",
+  "qualifiedCommit": "833a58fa125fdc3a3135c16d0e04cca3f1b63264",
+  "priorMcpCliGitlink": "e171c5a788eab183b32683431b084198c9b8d373",
+  "integration": "local Git bundle; no network Git operation",
+  "published": false,
+  "hostedCiProven": false,
+  "packageQualification": "Explicitly retain EventStore3.127.0, Tenants5.10.0 and Parties1.5.1; no approved Contracts or vector changes."
+}

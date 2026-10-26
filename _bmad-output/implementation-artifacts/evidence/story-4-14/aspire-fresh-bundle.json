@@ -1,0 +1,19 @@
+{
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=20s",
+    "180",
+    "aspire",
+    "setup",
+    "--install-path",
+    "/tmp/mcpcli-story-4-14-aspire-bundle",
+    "--non-interactive"
+  ],
+  "exitCode": 0,
+  "source": "https://github.com/microsoft/aspire/blob/v13.6.1/src/Aspire.Cli/Commands/SetupCommand.cs",
+  "binaries": {
+    "dcp/dcp": "3a64784ef47718959f8410a164b9e3a981ea6617b2af5dd0f11398a7a11e47f5",
+    "dashboard/Aspire.Dashboard": "72e006b4f19c87c369315a908797926b4f633107d585aec4a5878ed0acd1201d"
+  }
+}

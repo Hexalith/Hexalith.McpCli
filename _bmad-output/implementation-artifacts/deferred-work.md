@@ -602,3 +602,12 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-13-test-every-vector-against-live-gateway-semantics.md`
   summary: RID runtime DLL bytes are compared only when the deps-relative path already exists beside the host, so a flattened copy can skip the check.
   evidence: Unverified (`maybe-false`); medium if true. `tools/live-topology/live_plans.py:283` compares bytes only when `(host.parent / asset).is_file()`. The next loop checks non-RID `runtime` assets by file name. Settle by listing `runtimeTargets` in the built `tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.deps.json` and checking whether any of those DLLs exist beside the host under a flattened name with bytes that differ from the nupkg. Chunk A review. The ledger had no equivalent entry.
+
+## Deferred from: implementation review of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-26)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: Qualify the live lane on the actual hosted Ubuntu runner and resolve any namespace prerequisite restrictions.
+  evidence: Unverified (maybe-false); medium if true. `tools/live-topology/ci.py:149` probes capability-bearing user/PID/network/mount namespaces, and the upstream Aspire job uses ubuntu-latest. The local isolated full lane passes, but hosted AppArmor behavior has not been exercised. A real hosted run's namespace-probe result settles this; retain fail-closed behavior and do not relax isolation. No equivalent ledger entry was found before append.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: Publish the qualified upstream Builds hook revision before integrating the pinned McpCli caller and obtaining hosted CI acceptance.
+  evidence: High integration blocker. `.github/workflows/ci.yml:18` pins the qualified local Builds revision `35587cfd104c5750d8ec3c0716933f386d6a0232`; `_bmad-output/implementation-artifacts/evidence/story-4-14/review-fixes/verification.json:2` records the revision and unpublished status. Implementation explicitly prohibited remote Git operations. The concrete qualified commit and full passing local evidence are ready for the final integration decision; no hosted acceptance or story completion is claimed. No equivalent ledger entry was found before append.

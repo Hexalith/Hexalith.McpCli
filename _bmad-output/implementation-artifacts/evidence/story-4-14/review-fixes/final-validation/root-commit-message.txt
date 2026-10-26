@@ -1,0 +1,1 @@
+ci: make the live semantic lane blocking in CI

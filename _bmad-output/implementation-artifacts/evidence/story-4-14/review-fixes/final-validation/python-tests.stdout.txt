@@ -1,0 +1,85 @@
+Running (1s): inert-child
+FAILED: full live acceptance=False; receipt: /tmp/tmpa7pjy1ho/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_ygov1ji/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpdt7f49ms/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp5gynfhmy/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmplxahsp2e/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp06lg8a7q/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpe29tz7zv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_3wnkm2t/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp08dncdsn/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcgm6pjkz/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpckvwfyac/live-lane.json
+PARTIAL: full live acceptance=False; receipt: /tmp/tmpp7s9o_f_/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphrtg0cxq/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwluqb3mx/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpobk_aui8/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpc54_h9wb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpslfyiplo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2t8mq9ab/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwu4el794/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp1vdcu5vy/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpdhpyzvr2/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpfyjslohh/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpzvnrfff7/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcuhnrot1/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmph5kaec10/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_2z63xkd/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpgt5pfc_k/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcsf9t_10/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpag2lhtvo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp3rkta777/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphvrz0vsr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpij82x55x/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpk0gw5udu/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmplmhzp8oo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp17dwqnrt/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcil9zzvb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpkcdg2s76/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpx2pgxmct/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmpibumu5xv/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp148bfyjd/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp3q4kdbvq/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp_ph4irj9/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpimj_7hnq/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpij21pjjb/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpz2_my488/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpmvl17qx8/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmpdojqf4ey/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmp11xcpufy/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp_49y07jf/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmposa0z2qc/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpju9uk0ok/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpykvacmdi/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp0bce3ev1/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpwv9jnr27/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp9no080ak/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpe0w4pkxx/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpd6vz40dg/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpucwfv8vv/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpu4nj04sl/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpswxxrkk6/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+PASSED fixture.operation; receipt: /tmp/tmph4yf95ic/live-result.json
+Verified four private runtime binaries in /tmp/tmprei0pfk2/runtime

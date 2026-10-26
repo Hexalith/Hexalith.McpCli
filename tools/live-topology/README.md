@@ -146,4 +146,83 @@ assertion path, query attempts, sanitized documents and immutable input bindings
 credentials are excluded. Failed vectors also print their sanitized phase and
 assertion diagnostics so they appear in the selected test failure. Namespace and service cleanup details remain under
 `$private_runtime/runs/`. The non-live CI job discovers all 21 vector cases plus
-smoke; a blocking live CI job belongs to Story 4.14.
+smoke; the required CI lane executes them through the hooks below.
+
+## Required CI lane
+
+The caller pins the qualified Builds workflow and supplies the Integration.Tests
+project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
+Builds keeps the six non-live Release test projects ahead of its Aspire tier,
+builds the Release solution again in that fresh job and initializes Dapr CLI
+1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11+,
+OpenSSL 3, zlib/zstd, Docker, GNU `timeout`, Git, curl, `unshare`, `ip` and working
+user/PID/network/mount namespaces are required. The hooks name missing tools,
+sources, namespace permissions and source-build commands before live acceptance.
+They never initialize nested dependencies or change host Redis/Dapr services.
+
+`prepare-ci.sh` first validates all three declared direct Git source checkouts,
+then builds EventStore, Tenants and Parties from their own working directories.
+Each server build has its own 300-second deadline and uses the documented
+`UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
+Aspire CLI 13.6.1 is installed from the official installer when absent; bounded
+`aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
+existing incompatible CLI or Dapr version is refused. Python requirements are
+installed in a task-owned virtual environment. The existing bootstrap extracts
+the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
+`RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
+preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
+status, tool versions and executable hashes are retained; the EventStore package
+pin remains 3.127.0 to preserve the approved package/vector qualification when
+integrating the newer Builds catalog.
+
+From the repository root, after the focused Release checks and host Dapr
+initialization, run the same preparation and execution path:
+
+```sh
+ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh
+ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/run-ci.sh
+```
+
+The preparation hook has a 2400-second outer deadline. Its prepared runtime must
+have no previous runs and still contain the qualified binaries. The execution
+hook has an 18000-second outer deadline: `run-vectors.py` gets 16200 seconds and
+the independent `GatewaySmokeTests` wrapper gets 960 seconds with `-failSkips`.
+The vector runner's 960-second child and wrapper's 900-second command limits
+remain enforced. The 360-minute hosted job budget includes preparation, testing,
+setup and upload. The vector aggregate may time out before the sum of every
+child's maximum budget; that is a failed lane, with partial evidence retained.
+
+`ASPIRE_EVIDENCE_PATH` must be a repository-relative directory without traversal
+or symbolic links. Its default is `TestResults/live-ci`.
+Preparation requires an absent or empty evidence directory, and records an
+ownership marker before writing its receipts. A retry needs a fresh evidence
+directory, for example `ASPIRE_EVIDENCE_PATH=TestResults/live-ci-retry`, supplied
+to both hooks; existing user files are refused and left unchanged. Builds rejects
+nonempty evidence before enabling its upload. `RUNNER_TEMP` must be outside the
+evidence upload directory. Failed preparation retains its owned private directory
+path for cleanup. Nested Python processes inherit the prepared virtual environment.
+Every installed Aspire bundle file is compared with a fresh extraction from the
+selected qualified CLI; mismatched installed bytes are refused.
+
+Each run invalidates
+`ci-live.json` before execution and writes a new generation directory. Acceptance
+requires exactly 21 passing vector outcomes, complete coverage, fresh matching
+semantic receipts, successful cleanup and a separate one-case, unskipped passing
+authenticated smoke XML. Vector assertion failures still allow the independent
+smoke attempt; neither smoke nor preflight/subset evidence can replace vectors.
+The runner refuses reused private runtimes. Rerun preparation to retry a lane.
+
+The `aspire-hook-evidence` artifact is retained seven days on success and failure
+after hook paths have passed upstream validation. It contains `preparation.json`,
+per-command sanitized stdout/stderr and exit/deadline records, `ci-live.json`,
+generation-specific vector receipts and smoke XML, and allowlisted runtime logs
+under `<generation>/runtime-diagnostics/`. Runtime keys, certificate material,
+Redis RDB files and scheduler data are excluded; JWTs, PEM material and known
+credential values are redacted from diagnostic text. Raw private runtime state
+stays outside uploaded evidence. Keep its location from `preparation.json` until
+diagnostics are complete, then remove only that task-owned directory.
+
+The upstream hook commit is available locally and has not been pushed during
+implementation. Hosted acceptance remains unproven until it is published and an
+actual hosted run passes. This CI change does not enable paired release; the
+bootstrap-only release gate continues to refuse it.

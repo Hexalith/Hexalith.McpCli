@@ -1,0 +1,72 @@
+{
+  "result": "passed",
+  "fullLiveAccepted": true,
+  "qualifiedUpstreamRevision": "35587cfd104c5750d8ec3c0716933f386d6a0232",
+  "upstreamPublished": false,
+  "hostedCiProven": false,
+  "passedVectors": 21,
+  "smoke": "passed",
+  "liveSkips": 0,
+  "runId": "81ad04271a5244f69e41b8f903378bc8",
+  "preparationRunId": "fb1190e561c14d478a74d3296bf01591",
+  "archiveSha256": "356034f05df9ab964cf5f4fa645666c2a55e9c2d09868b7703f6d1dc24485fcc",
+  "archiveFilesMatchOriginal": true,
+  "secretScanCandidates": [],
+  "venvFirstInPath": true,
+  "privateRuntimeOutsideEvidence": true,
+  "counts": {
+    "archiveFiles": 1446,
+    "xmlCases": 22,
+    "ownedCleanupReceipts": 22,
+    "phases": 144,
+    "commandSubmissions": 53,
+    "queryAttempts": 91
+  },
+  "focusedTests": {
+    "Abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0
+    },
+    "Analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0
+    },
+    "Core": {
+      "total": 707,
+      "failed": 0,
+      "succeeded": 704,
+      "skipped": 3
+    },
+    "Manifest": {
+      "total": 251,
+      "failed": 0,
+      "succeeded": 251,
+      "skipped": 0
+    },
+    "Cli": {
+      "total": 481,
+      "failed": 0,
+      "succeeded": 479,
+      "skipped": 2
+    },
+    "Mcp": {
+      "total": 58,
+      "failed": 0,
+      "succeeded": 58,
+      "skipped": 0
+    }
+  },
+  "sourceFingerprints": {
+    ".github/workflows/ci.yml": "d043561d5ef7cf4c805182d12357cacef02b39717ce165e174399c850815ec8a",
+    "Directory.Build.props": "207fedf0aacbc4f9578a816b0d0549fef41288b173dfda60c79dd96b548999d1",
+    "tools/live-topology/ci.py": "de1a861d71fe0892ab3f251de71066d783e4862968dcea90af7815df4b34069e",
+    "tools/live-topology/prepare-ci.sh": "2d2ffbaa4d06c6f0872b9bbd94cb20ddd4ae36846830e54099a2d4d8627b47d3",
+    "tools/live-topology/run-ci.sh": "cfb42b6574b377f3079d1ef23bfecd52cbb2d1340e5a6f0bc7cdbf4b8dbeca72",
+    "tools/live-topology/test_ci.py": "06a776f82cb9829faba1b3fc395a39cce356433b5a793c8a90c9206775358665"
+  },
+  "originalRuntime": "/tmp/mcpcli-live-ci-1sy6jyex/runtime"
+}

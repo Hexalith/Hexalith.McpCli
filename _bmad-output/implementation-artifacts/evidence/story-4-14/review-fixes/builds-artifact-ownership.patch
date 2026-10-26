@@ -1,0 +1,43 @@
+diff --git a/.github/workflows/domain-ci.md b/.github/workflows/domain-ci.md
+index 9608101..0a7a5a5 100644
+--- a/.github/workflows/domain-ci.md
++++ b/.github/workflows/domain-ci.md
+@@ -43,6 +43,9 @@ Omitting the hooks preserves the existing VSTest/MTP commands and defaults.
+ Script paths and `aspire-evidence-path` reject absolute paths, traversal, shell
+ syntax and symbolic links. Inputs are passed through environment variables and
+ quoted arguments, without evaluating command strings.
++The evidence directory must be absent or empty at job entry; pre-existing files
++are unowned and reject validation, so the always-run upload cannot expose them.
++Use a fresh evidence directory for retries; no user files are deleted.
+ 
+ Each hook receives `ASPIRE_TEST_PROJECT`, `TEST_PLATFORM` and
+ `ASPIRE_EVIDENCE_PATH`. A preparer may export nonsecret paths for its runner using
+diff --git a/.github/workflows/domain-ci.yml b/.github/workflows/domain-ci.yml
+index e69cbc8..42d4399 100644
+--- a/.github/workflows/domain-ci.yml
++++ b/.github/workflows/domain-ci.yml
+@@ -892,6 +892,9 @@ jobs:
+           relative('ASPIRE_PREPARE_SCRIPT', True)
+           relative('ASPIRE_RUNNER_SCRIPT', True)
+           relative('ASPIRE_EVIDENCE_PATH')
++          evidence = root / os.environ['ASPIRE_EVIDENCE_PATH']
++          if evidence.exists() and (not evidence.is_dir() or any(evidence.iterdir())):
++              raise SystemExit('ASPIRE_EVIDENCE_PATH must name a fresh empty directory; existing files are unowned and will not be uploaded.')
+           bounds = {}
+           for name, maximum in [('ASPIRE_PREPARE_TIMEOUT', 60), ('ASPIRE_RUNNER_TIMEOUT', 340), ('ASPIRE_JOB_TIMEOUT', 360)]:
+               value = os.environ[name]
+diff --git a/Tools/test-domain-workflow-test-platforms.ps1 b/Tools/test-domain-workflow-test-platforms.ps1
+index 30d28bd..2b4cfe9 100644
+--- a/Tools/test-domain-workflow-test-platforms.ps1
++++ b/Tools/test-domain-workflow-test-platforms.ps1
+@@ -535,6 +535,10 @@ foreach ($scenario in @(
+ }
+ $symlinkResult = Invoke-WorkflowBashBody -Body ($hookFixture + "mv hooks/run.sh hooks/real.sh`nln -s real.sh hooks/run.sh`n" + $hookBody) -Environment $hookEnvironment
+ Assert-Condition -Name 'Aspire linked script' -Condition ($symlinkResult.ExitCode -ne 0) -Failure 'accepted a symbolic link.'
++$seededEvidence = "mkdir -p TestResults/aspire-hook-evidence`nprintf 'private-key-sentinel\n' > TestResults/aspire-hook-evidence/issuer.key`n"
++$seededResult = Invoke-WorkflowBashBody -Body ($hookFixture + $seededEvidence + $hookBody) -Environment $hookEnvironment
++Assert-Condition -Name 'Aspire unowned evidence rejection' -Condition ($seededResult.ExitCode -ne 0) -Failure 'accepted pre-existing files for the always-run artifact upload.'
++Assert-Contains -Name 'Aspire unowned evidence diagnostic' -Content $seededResult.Output -Expected 'fresh empty directory'
+ foreach ($step in @(
+     @{ Name = 'Prepare Aspire tier'; Script = 'ASPIRE_PREPARE_SCRIPT'; Bound = 'ASPIRE_PREPARE_TIMEOUT' },
+     @{ Name = 'Run Aspire hook'; Script = 'ASPIRE_RUNNER_SCRIPT'; Bound = 'ASPIRE_RUNNER_TIMEOUT' }

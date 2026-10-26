@@ -1,0 +1,159 @@
+[
+  {
+    "name": "workflow-lint",
+    "command": [
+      "actionlint",
+      "-shellcheck=",
+      ".github/workflows/ci.yml"
+    ],
+    "exitCode": 0,
+    "seconds": 0.277
+  },
+  {
+    "name": "shell-syntax",
+    "command": [
+      "bash",
+      "-n",
+      "tools/live-topology/prepare-ci.sh",
+      "tools/live-topology/run-ci.sh"
+    ],
+    "exitCode": 0,
+    "seconds": 0.008
+  },
+  {
+    "name": "python-tests",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "seconds": 63.679
+  },
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exitCode": 0,
+    "seconds": 1.75
+  },
+  {
+    "name": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exitCode": 0,
+    "seconds": 18.554
+  },
+  {
+    "name": "test-Abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 1.241
+  },
+  {
+    "name": "test-Analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 3.592
+  },
+  {
+    "name": "test-Core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 2.216
+  },
+  {
+    "name": "test-Manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 122.234
+  },
+  {
+    "name": "test-Cli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 18.233
+  },
+  {
+    "name": "test-Mcp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exitCode": 0,
+    "seconds": 2.139
+  },
+  {
+    "name": "prepare-ci",
+    "command": [
+      "bash",
+      "tools/live-topology/prepare-ci.sh"
+    ],
+    "exitCode": 0,
+    "seconds": 21.493
+  },
+  {
+    "name": "run-ci",
+    "command": [
+      "bash",
+      "tools/live-topology/run-ci.sh"
+    ],
+    "exitCode": 0,
+    "seconds": 801.714
+  }
+]

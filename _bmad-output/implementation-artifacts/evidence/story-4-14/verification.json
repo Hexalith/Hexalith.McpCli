@@ -1,0 +1,66 @@
+{
+  "upstream": {
+    "qualifiedCommit": "833a58fa125fdc3a3135c16d0e04cca3f1b63264",
+    "published": false,
+    "hostedCiProof": "Unavailable: build implementation prohibits pushes and remote Git operations."
+  },
+  "checks": [
+    {
+      "command": "pwsh -NoProfile -File Tools/test-domain-workflow-test-platforms.ps1",
+      "repository": "Hexalith.Builds",
+      "exitCode": 0,
+      "assertions": 321
+    },
+    {
+      "command": "actionlint -shellcheck= .github/workflows/domain-ci.yml",
+      "repository": "Hexalith.Builds",
+      "exitCode": 0
+    },
+    {
+      "command": "actionlint -shellcheck= .github/workflows/ci.yml",
+      "repository": "Hexalith.McpCli",
+      "exitCode": 0
+    },
+    {
+      "command": "bash -n tools/live-topology/prepare-ci.sh tools/live-topology/run-ci.sh",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "exitCode": 0,
+      "tests": 110
+    },
+    {
+      "command": "dotnet restore Hexalith.McpCli.slnx",
+      "exitCode": 0
+    },
+    {
+      "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "exitCode": 0
+    },
+    {
+      "command": "ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh",
+      "exitCode": 0
+    },
+    {
+      "command": "ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/run-ci.sh",
+      "exitCode": 0
+    }
+  ],
+  "focusedTests": "focused-tests.json",
+  "live": {
+    "runId": "5fc0d36a0e1f4c76ad634ca07da76e74",
+    "preparationRunId": "3fe2bded58ee46b5b7d0da8fe294ff54",
+    "passedVectors": 21,
+    "independentSmoke": "passed",
+    "skipped": 0,
+    "failed": 0,
+    "ownedRuntimeReceipts": 22,
+    "runtime": "/tmp/mcpcli-live-ci-zy77bjba/runtime",
+    "sourceEvidence": "/home/administrator/projects/hexalith/mcpcli/TestResults/live-ci",
+    "archive": "live-ci.tar.gz",
+    "archiveMemberFiles": 1441,
+    "archiveMembersMatchOriginalBytes": true,
+    "archiveSha256": "54999e4cc67ebb8761900221c7d1c4e26267d2dc57c0c7bddf87ae2be984b381"
+  }
+}

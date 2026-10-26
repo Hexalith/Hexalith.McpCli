@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@main
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@35587cfd104c5750d8ec3c0716933f386d6a0232
     with:
       solution: Hexalith.McpCli.slnx
       test-platform: microsoft-testing-platform
@@ -26,7 +26,16 @@ jobs:
         tests/Hexalith.McpCli.Manifest.Tests
         tests/Hexalith.McpCli.Cli.Tests
         tests/Hexalith.McpCli.Mcp.Tests
-      # Add the blocking Aspire tier after the harness and upstream source-build seam exist.
+      aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
+      aspire-continue-on-error: false
+      aspire-prepare-script: tools/live-topology/prepare-ci.sh
+      aspire-runner-script: tools/live-topology/run-ci.sh
+      aspire-prepare-timeout-minutes: 40
+      aspire-runner-timeout-minutes: 300
+      aspire-timeout-minutes: 360
+      aspire-evidence-path: TestResults/live-ci
+      dapr-version: '1.18.2'
+      dapr-runtime-version: '1.18.7'
 
   conformance-vector-contract:
     runs-on: ubuntu-latest

@@ -1,0 +1,34 @@
+{
+  "qualifiedLocalBuildsCommit": "35587cfd104c5750d8ec3c0716933f386d6a0232",
+  "published": false,
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p test_ci.py",
+      "tests": 22,
+      "exitCode": 0
+    },
+    {
+      "command": "pwsh -NoProfile -File Tools/test-domain-workflow-test-platforms.ps1",
+      "repository": "Hexalith.Builds",
+      "assertions": 323,
+      "exitCode": 0
+    },
+    {
+      "command": "actionlint -shellcheck= .github/workflows/domain-ci.yml",
+      "repository": "Hexalith.Builds",
+      "exitCode": 0
+    },
+    {
+      "command": "actionlint -shellcheck= .github/workflows/ci.yml",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 tools/live-topology/test_ci.py CiHooksTests.test_generated_signing_keys_are_redacted_without_breaking_json CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics -v",
+      "tests": 2,
+      "exitCode": 0,
+      "reason": "Final coverage also includes escaped JSON fragments outside a surrounding JSON document."
+    }
+  ],
+  "cleanupMutationControl": "Removing the detached-child cleanup block from a disposable fixture causes the real SIGTERM test to fail because the child remains alive. Test finally removes its owned leftover child.",
+  "fullVerification": "Not rerun in this review-fix handoff; parent owns fresh full verification and live proof."
+}

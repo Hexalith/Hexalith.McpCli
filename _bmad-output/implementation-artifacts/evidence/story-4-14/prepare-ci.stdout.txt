@@ -1,0 +1,25 @@
+Running (30s): dotnet --version
+Running (30s): dapr --version
+Running (30s): /home/administrator/.dapr/bin/daprd --version
+Running (30s): docker info --format {{.ServerVersion}}
+Running (30s): unshare --user --map-root-user --net --pid --mount --fork --mount-proc true
+Running (30s): aspire --version
+Running (10s): git config --file /home/administrator/projects/hexalith/mcpcli/.gitmodules --get-regexp ^submodule\..*\.path$
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (300s): dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (300s): dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (300s): dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (60s): /usr/bin/python3 -m venv /tmp/mcpcli-live-ci-zy77bjba/venv
+Running (180s): /tmp/mcpcli-live-ci-zy77bjba/venv/bin/python -m pip install --disable-pip-version-check -r /home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/requirements.txt
+Running (30s): /tmp/mcpcli-live-ci-zy77bjba/venv/bin/python --version
+Running (30s): /tmp/mcpcli-live-ci-zy77bjba/venv/bin/python -c import importlib.metadata; print(importlib.metadata.version("jsonschema"))
+Running (900s): /tmp/mcpcli-live-ci-zy77bjba/venv/bin/python /home/administrator/projects/hexalith/mcpcli/tools/live-topology/bootstrap-runtime.py /tmp/mcpcli-live-ci-zy77bjba/runtime
+Prepared live CI: /home/administrator/projects/hexalith/mcpcli/TestResults/live-ci/preparation.json
