@@ -2,7 +2,7 @@
 title: '4.13 Test every vector against live Gateway semantics'
 type: 'feature'
 created: '2026-10-25'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'aabc03c68c56ac8085ee1b145654576f5fd201a4'
@@ -352,3 +352,39 @@ Fresh verification passes restore, Release warnings-as-errors build, all three s
 - `low` — CI lists the live cases but never runs them (VG). The spec's Never boundary assigns blocking live CI to Story 4.14, and that story's AC owns it (`_bmad-output/planning-artifacts/epics.md:1477`).
 - `low` — The plan schema and validator allow time bindings only at `/payload/From` and `/payload/To` (AA). The allow-list is generic and carries no module identity. Enrolling a module with differently named time fields is rare, and widening the allow-list changes both schema branches and the guard that pass 1's P3 protects.
 - `low` — Eight `preflight()` refusals, the runtime-directory refusal and the inherited-variable stripping have no removal-sensitive tests (AA). Each duplicates a later check (see the parent checks), so removing one leaves another failing check, and tests cannot protect such duplicates without deleting them.
+
+### Review Findings (code review pass 4, chunk A `tools/live-topology`, 2026-10-26)
+
+- [ ] [Review][Patch] Inventory coverage findings never surface — `subprocess.run(..., check=True)` raises `CalledProcessError` when the host exits 1, so the `inventory coverage failed` branch is unreachable and the finding JSON is dropped. [`tools/live-topology/live_plans.py:352`]
+- [ ] [Review][Patch] The lane accepts a genesis backup it does not re-hash — `backupReference` is compared to `sha256:` plus the child receipt fields, and an empty or unread RDB still matches when both child JSON files agree. [`tools/live-topology/run-vectors.py:151`]
+- [ ] [Review][Patch] A query CLI failure before `document` is assigned is polled until the read deadline — `head.cli` raises `VectorError` on invalid JSON via `_fail`, `document` is not reset each attempt, and the non-retryable check is skipped. [`tools/live-topology/run_live.py:85`]
+- [ ] [Review][Patch] A whitespace-only `MCPCLI_LIVE_TOKEN` passes the loopback identity guard — `not token` rejects `''` and accepts `'   '`. [`tools/live-topology/run_live.py:156`]
+- [ ] [Review][Patch] Case-insensitive package-id collisions drop an approved version — the closure map is keyed by `casefold()`, so two policy ids that differ only by case keep one version and the compare can pass. [`tools/live-topology/live_plans.py:208`]
+- [ ] [Review][Patch] Execution tests never read the cursor or audit window the CLI is given — deleting `resolve()` at `run_live.py:110` still passes `test_every_vector_submits_each_declared_command_once_at_executor_boundary`, because responses are built from assertion paths. [`tools/live-topology/run_live.py:110`]
+- [ ] [Review][Patch] `execute` Core validation is mocked and never asserted — removing `validate_call(head, call)` leaves every `ExecutionTests` method green, and preflight only validates placeholder captures. [`tools/live-topology/test_live_runner.py:311`]
+- [ ] [Review][Patch] A converged query (failed poll, then pass) is not required to satisfy `require_phases` — forcing one attempt for every kind still passes the suite, so a live read that converges on the second poll can lose full acceptance with no test failure. [`tools/live-topology/live_plans.py:48`]
+- [ ] [Review][Patch] The child environment strip has no absence assertion — deleting the `MCPCLI_LIVE_` / `EVENTSTORE_` loop still passes the lane tests, which only check that four keys are present. [`tools/live-topology/run-vectors.py:123`]
+- [ ] [Review][Patch] RID `runtimeTargets` byte checks can be deleted without a failing test — the adapter fixture never sets `runtimeTargets`, and the built-host test only requires the current tree to pass. [`tools/live-topology/live_plans.py:277`]
+- [ ] [Review][Patch] A phase marked passed with a nonzero last `exitCode` is not locked by a test — deleting the `exitCode != 0` conjunct still passes `LaneTests`, which only uses `exitCode` 0. [`tools/live-topology/live_plans.py:47`]
+- [ ] [Review][Patch] The pending receipt written before preflight is only observed after `main` returns — removing the write at `run-vectors.py:83` still passes, because the `VectorError` handler saves `failed` later; a kill during preflight can leave the previous `fullLiveAccepted: true` file. [`tools/live-topology/run-vectors.py:83`]
+- [x] [Review][Defer] RID DLL bytes are compared only when the deps-relative path already exists beside the host [`tools/live-topology/live_plans.py:283`] — deferred, unverified medium: settle by listing `runtimeTargets` in the built ConformanceHost `deps.json` and checking whether any of those DLLs sit beside the host under a flattened name with bytes that differ from the nupkg.
+
+#### Rejected (code review pass 4, chunk A, 2026-10-26)
+
+- `false` — `offsetSeconds` formatting drops the `Z` suffix and a 7th fractional digit, so audit windows miss the approved instants (BH). The qualified audit capture is already `+00:00` (`lastTime` `…7583416+00:00`), the lane passed, and truncating 100 ns stays inside the 1 ms exclusion. The static `Z` values are placeholders `resolve` replaces.
+- `false` — `load_plan` accepts `offsetSeconds` on a cursor and a cursor binding whose envelope has no `cursor` (BH). Preflight calls `resolve` before any Command; `timestamp()` and `replace()` fail that plan there.
+- `low` — The command read barrier allows `exists: true`, `equals: null`, and a query that does not name the command aggregate (BH, EC). Current plans observe the command document (for example `parties.create-party` `persisted-invocation`). A stricter generic guard would only constrain plans that do not exist, and it adds branches. Pass 3 rejected the same class of barrier tightening.
+- `low` — `require_case` ignores xUnit `not-run` and the test `type` (BH). It already requires one assembly, one test, `passed=1`, method `ApprovedVectorHasPersistentSemantics`, and the Operation trait. The child command pins `-class LiveVectorTests`.
+- `low` — SIGTERM leaves `live-lane.json` at `pending` with a `running` vector (BH, EC). Carried from pass 3. Only the six-hour outer deadline sends TERM. `fullLiveAccepted` stays false and the process exits 143. Recording an interrupted state adds a branch.
+- `false` — A lane timeout SIGKILLs the supervisor and leaves Redis, Sentry, placement, and scheduler running, then stops the lane (BH). Those processes live in the `unshare --pid` namespace, so killing its init reaps them. `run-vectors.py` marks that vector failed and continues.
+- `false` — The genesis backup's `createdBeforeApplications` flag, default-DB `DBSIZE`, `REDIS` header, and writable JSON receipt can bless a non-empty store (BH). The backup runs on the just-started private Redis before the command. Every database is empty at that moment; the header is the `SAVE` output.
+- `low` — Plans may set `deadlineSeconds` up to 120, and `run_live.py` has no 45-second or eight-minute cap (BH). Every plan sets 45. The schema maximum is 120. The eight-minute cap is the C# `LiveVectorProcess` wait, outside this chunk. A second cap adds a limit the plans do not use.
+- `false` — Twenty-one children at 960 seconds leave only 1440 seconds inside the 21600-second outer bound (BH). That remainder is the documented slack, and the qualified lane finished inside it.
+- `low` — The child environment keeps credentials other than `MCPCLI_LIVE_*` and `EVENTSTORE_*` (BH). The topology boots from the operator environment. Pass 3 rejected the same inheritance for the disposable signing key. An allow-list can break startup.
+- `false` — `partial` and `preflight-only` share exit 0 with full acceptance (BH). A vector failure returns 1. Those two results are explicit modes and keep `fullLiveAccepted` false.
+- `false` — Preflight placeholders mean audit cursors and ±0.001 s windows are never Core-validated (BH). `execute` calls `validate_call` on the resolved call. The missing test is the patch on `test_live_runner.py:311`.
+- `low` — `commandExitCode` of `false` or `0.0` counts as success (EC). `run-isolated.py` writes an int. A type guard adds a branch for a receipt the wrapper does not emit.
+- `low` — A truthy non-boolean `prerequisitesReady` passes (EC). The wrapper sets boolean `True`.
+- `low` — `activationCount` of `true` or `1.0` counts as one activation (EC). The wrapper writes int `1`. `True == 1` is not a receipt it emits.
+- `low` — `sourceCommit` is only checked for length 40 (EC). The wrapper writes a git sha. Length 40 already rejects the tested `unknown` placeholder.
+- `low` — JSON escaping can leave the live token in the receipt (EC). The shipped identity is a base64 JWT (`AspireTopologyFixture`). `json.dumps` does not escape that alphabet, so the existing replace redacts it. Walking the tree is extra machinery for tokens the generator does not emit.
