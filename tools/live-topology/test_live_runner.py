@@ -118,7 +118,25 @@ class RunnerTests(unittest.TestCase):
                 self.assertEqual([{'result': 'failed', 'exitCode': 2, 'document': document}], record['attempts'])
                 self.assertEqual(1, len(head.calls))
 
-    def test_returned_document_identity_guards_reject_one_cli_response(self):
+    def test_malformed_cli_output_fails_immediately_even_after_a_converging_poll(self):
+        for previous in [None, {'error': {'code': 'gateway_error', 'status': 404}},
+                         {'document': {'value': 0}}]:
+            with self.subTest(previous=previous):
+                head = Head([])
+                responses = [] if previous is None else [(2 if 'error' in previous else 0,
+                    {'operation': 'fixture.operation', 'tenant': 'test', **previous})]
+                responses.append(VectorError('invalid JSON stdout; stderr adapter crashed'))
+                record = {'phase': '/invocation', 'attempts': []}
+                with patch.object(head, 'cli', side_effect=responses) as cli:
+                    with self.assertRaisesRegex(VectorError,
+                            '/invocation fixture.operation: invalid JSON stdout; stderr adapter crashed'):
+                        self.observe(head, self.call(), record=record)
+                self.assertEqual(len(responses), cli.call_count)
+                self.assertEqual('failed', record['result'])
+                self.assertEqual({'result': 'failed'}, record['attempts'][-1])
+                self.assertEqual(30, head.timeout)
+
+    def test_invalid_output_contract_cannot_converge_to_a_later_valid_response(self):
         identifier = '01ARZ3NDEKTSV4RRFFQ69G5FAV'
         for kind, defect, message in [('query', 'operation', '/operation or /tenant'),
                                       ('query', 'tenant', '/operation or /tenant'),
@@ -131,23 +149,25 @@ class RunnerTests(unittest.TestCase):
                 call = self.call(kind)
                 # These guards must protect calls even when vector assertions only check acceptance.
                 call['assertions'] = []
-                document = dict(operation='fixture.operation', tenant='test', document={'value': 7},
-                                status='accepted', aggregateId='approved-id', messageId=identifier,
-                                correlationId=identifier)
+                valid = dict(operation='fixture.operation', tenant='test', document={'value': 7},
+                             status='accepted', aggregateId='approved-id', messageId=identifier,
+                             correlationId=identifier)
+                document = valid.copy()
                 if defect == 'document':
                     del document['document']
                 else:
                     document[defect] = ('01ARZ3NDEKTSV4RRFFQ69G5FAW' if defect == 'correlationId' else 'wrong')
                     if defect == 'messageId':
                         document['correlationId'] = document['messageId']
-                head = Head([document])
-                # A read may poll, but this deterministic deadline leaves exactly one attempt to inspect.
-                ticks = iter([0, 0, 1])
-                with self.assertRaisesRegex(VectorError, message):
-                    run_live.observe(head, call, 'http://127.0.0.1/', {}, {},
-                                     {'deadlineSeconds': 1, 'pollSeconds': .5},
-                                     {'phase': '/invocation', 'attempts': []}, clock=lambda: next(ticks))
+                head = Head([document, valid])
+                record = {'phase': '/invocation', 'attempts': []}
+                with self.assertRaisesRegex(VectorError, message) as failure:
+                    self.observe(head, call, record=record)
+                self.assertNotIn('read deadline', str(failure.exception))
                 self.assertEqual(1, len(head.calls))
+                self.assertEqual('failed', record['result'])
+                self.assertEqual([{'result': 'failed', 'exitCode': 0, 'document': document}], record['attempts'])
+                self.assertEqual(30, head.timeout)
 
     def test_actual_returned_cursor_is_captured_and_asserted(self):
         head = Head([{'document': {'value': 7}, 'paging': {'nextCursor': 'signed-real-cursor'}}])
@@ -213,7 +233,7 @@ class RunnerTests(unittest.TestCase):
         valid = {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
                  'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/'}
         refused = [('MCPCLI_ISOLATED_TOPOLOGY', None), ('MCPCLI_ISOLATED_TOPOLOGY', '0'),
-                   ('MCPCLI_LIVE_TOKEN', ''), ('MCPCLI_LIVE_TOKEN', None),
+                   ('MCPCLI_LIVE_TOKEN', ''), ('MCPCLI_LIVE_TOKEN', None), ('MCPCLI_LIVE_TOKEN', '   \t\n'),
                    ('MCPCLI_LIVE_URL', ''), ('MCPCLI_LIVE_URL', 'https://127.0.0.1/'),
                    ('MCPCLI_LIVE_URL', 'http://example.com/'), ('MCPCLI_LIVE_URL', 'http://127.0.0.2/'),
                    ('MCPCLI_LIVE_URL', 'http://user@127.0.0.1/'), ('MCPCLI_LIVE_URL', 'http://user:secret@localhost/'),
@@ -298,7 +318,7 @@ class ExecutionTests(unittest.TestCase):
             documents.append(document)
         return calls, documents
 
-    def execute(self, selection, documents, report=None):
+    def execute(self, selection, documents, report=None, *, validation=None):
         head = Head(documents)
         head.env = {}
         head.allow_extensions = lambda _: None
@@ -308,10 +328,65 @@ class ExecutionTests(unittest.TestCase):
         def pause(seconds): tick[0] += seconds
         def observe(*args, **kwargs):
             return original(*args, **kwargs, clock=lambda: tick[0], pause=pause)
-        with patch.object(run_live, 'HeadProcess', return_value=head), patch.object(run_live, 'validate_call'), \
+        with patch.object(run_live, 'HeadProcess', return_value=head), \
+                patch.object(run_live, 'validate_call', side_effect=validation) as validate, \
                 patch.object(run_live, 'observe', side_effect=observe):
             run_live.execute(selection, Path('/selected/host.dll'), 'http://127.0.0.1/', 'private-token', report)
+        self.assertEqual(len(selection['plan']['actions']), validate.call_count)
+        for checked, phase in zip(validate.call_args_list, report['phases']):
+            self.assertIs(head, checked.args[0])
+            self.assertEqual(phase['resolvedCall'], {key: checked.args[1][key] for key in phase['resolvedCall']})
         return head, report
+
+    def test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation(self):
+        from live_plans import HeadProcess, ROOT, validate_call
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        first = '2026-10-20T12:34:56.123456+00:00'
+        last = '2026-10-20T12:35:57.654321+00:00'
+        for operation in ['tenants.get-tenant-users', 'tenants.get-tenant-audit']:
+            with self.subTest(operation=operation), tempfile.TemporaryDirectory() as home:
+                selection = self.selection(operation)
+                _, documents = self.documents(selection)
+                actions = selection['plan']['actions']
+                for action, document in zip(actions, documents):
+                    for capture in action.get('captures', []):
+                        value = {'continuation': 'signed-cursor-from-live-result',
+                                 'firstTime': first, 'lastTime': last}[capture['name']]
+                        self.put(document, capture['path'], value)
+                core = HeadProcess(host, home, 30)
+                def validate(_, call):
+                    validate_call(core, call)
+                head, report = self.execute(selection, documents, validation=validate)
+                indices = {action.get('step', action.get('label')): index for index, action in enumerate(actions)}
+                continuation = head.calls[indices['/postconditions/0']][0][0]
+                self.assertEqual('signed-cursor-from-live-result', continuation[continuation.index('--cursor') + 1])
+                if operation == 'tenants.get-tenant-audit':
+                    expected = {'time-upper-inclusive': ('To', first), 'time-lower-inclusive': ('From', last),
+                                'time-before-first': ('To', '2026-10-20T12:34:56.122456+00:00'),
+                                'time-after-last': ('From', '2026-10-20T12:35:57.655321+00:00')}
+                    for phase, (field, value) in expected.items():
+                        arguments = head.calls[indices[phase]][0][0]
+                        payload = json.loads(arguments[arguments.index('--payload') + 1])
+                        self.assertEqual(value, payload[field], phase)
+
+    def test_resolved_core_refusal_prevents_that_phase_from_reaching_cli(self):
+        from live_plans import HeadProcess, ROOT, validate_call
+        selection = self.selection('tenants.get-tenant-audit')
+        _, documents = self.documents(selection)
+        action = next(item for item in selection['plan']['actions'] if item.get('label') == 'time-upper-inclusive')
+        action['query']['payload']['UnexpectedProperty'] = True
+        rejected_index = selection['plan']['actions'].index(action)
+        report = {'phases': []}
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        with tempfile.TemporaryDirectory() as home:
+            core = HeadProcess(host, home, 30)
+            def validate(_, call):
+                validate_call(core, call)
+            with self.assertRaisesRegex(VectorError, 'resolved Core compatibility failed'):
+                self.execute(selection, documents, report, validation=validate)
+        self.assertEqual(rejected_index + 1, len(report['phases']))
+        self.assertEqual('failed', report['phases'][-1]['result'])
+        self.assertEqual([], report['phases'][-1]['attempts'])
 
     def test_every_vector_submits_each_declared_command_once_at_executor_boundary(self):
         from live_plans import ROOT, require_phases
@@ -329,6 +404,7 @@ class ExecutionTests(unittest.TestCase):
                 self.assertTrue(all(len(phase['attempts']) == 1 for phase in actual))
 
     def test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat(self):
+        from live_plans import require_phases
         selection = self.selection()
         calls, documents = self.documents(selection)
         delayed = dict(documents[1], document={})
@@ -339,6 +415,7 @@ class ExecutionTests(unittest.TestCase):
                          [phase['operation'] for phase in commands])
         self.assertTrue(all(len(phase['attempts']) == 1 for phase in commands))
         self.assertEqual(2, len(report['phases'][1]['attempts']))
+        require_phases(selection, report['phases'])
 
     def test_parties_offset_probes_reject_a_server_that_repeats_the_first_page(self):
         for operation in ['parties.list-parties', 'parties.search-parties']:

@@ -1,5 +1,6 @@
 """A skipped, empty, stale or failed isolated process cannot grant full acceptance."""
 import importlib.util
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -59,8 +60,14 @@ class LaneTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
             (output / 'live-lane.json').write_text('{"result":"passed","fullLiveAccepted":true}')
+            def refuse_preflight(*_):
+                pending = json.loads((output / 'live-lane.json').read_text())
+                self.assertEqual('pending', pending['result'])
+                self.assertFalse(pending['fullLiveAccepted'])
+                self.assertEqual([], pending['vectors'])
+                raise VectorError('stale binding')
             with patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
-                    patch.object(lane, 'preflight', side_effect=VectorError('stale binding')) as preflight, \
+                    patch.object(lane, 'preflight', side_effect=refuse_preflight) as preflight, \
                     patch.object(lane, 'bounded_child') as child:
                 self.assertEqual(1, lane.main(['--output', directory]))
                 preflight.assert_called_once()
@@ -68,12 +75,51 @@ class LaneTests(unittest.TestCase):
             self.assertEqual('failed', result['result']); self.assertFalse(result['fullLiveAccepted'])
             child.assert_not_called()
 
+    def test_hard_kill_during_preflight_cannot_leave_previous_success(self):
+        import os
+        import subprocess
+        import sys
+        import time
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            (output / 'live-lane.json').write_text('{"result":"passed","fullLiveAccepted":true}')
+            script = '''
+import importlib.util,pathlib,sys,time
+sys.path.insert(0,sys.argv[1])
+spec=importlib.util.spec_from_file_location('lane',pathlib.Path(sys.argv[1])/'run-vectors.py')
+lane=importlib.util.module_from_spec(spec); spec.loader.exec_module(lane)
+def preflight(*args):
+ pathlib.Path(sys.argv[2],'blocked').touch()
+ time.sleep(60)
+lane.preflight=preflight
+lane.main(['--output',sys.argv[2],'--preflight-only'])
+'''
+            process = subprocess.Popen([sys.executable, '-c', script, str(Path(__file__).resolve().parent), directory],
+                                       env=os.environ.copy(), stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            try:
+                deadline = time.monotonic() + 10
+                while not (output / 'blocked').exists() and process.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.01)
+                self.assertTrue((output / 'blocked').exists())
+                process.kill()
+                process.communicate(timeout=5)
+                pending = json.loads((output / 'live-lane.json').read_text())
+                self.assertEqual('pending', pending['result'])
+                self.assertFalse(pending['fullLiveAccepted'])
+                self.assertEqual([], pending['vectors'])
+            finally:
+                if process.poll() is None: process.kill()
+                process.communicate(timeout=5)
+
     def test_failed_children_keep_all_operation_outcomes_and_exact_selectors(self):
         with tempfile.TemporaryDirectory() as directory:
             selections = [{'operation': f'fixture.operation-{i}', **{key: key for key in BINDING_KEYS}} for i in range(21)]
             with patch.object(lane, 'preflight', return_value=selections), \
                     patch.object(lane, 'expected_operations', return_value=[item['operation'] for item in selections]), \
-                    patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                    patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime',
+                        'MCPCLI_LIVE_TOKEN': 'inherited-token', 'MCPCLI_LIVE_URL': 'http://user-topology/',
+                        'MCPCLI_LIVE_UNEXPECTED': 'inherited-value', 'EVENTSTORE_TOKEN': 'user-token',
+                        'EVENTSTORE_TENANT': 'user-tenant', 'EVENTSTORE_UNEXPECTED': 'inherited-value'}), \
                     patch.object(lane, 'bounded_child', return_value=1) as child:
                 self.assertEqual(1, lane.main(['--output', directory]))
             self.assertEqual(21, child.call_count)
@@ -86,6 +132,9 @@ class LaneTests(unittest.TestCase):
                 self.assertIn('run-isolated.py', call.args[0][1])
                 self.assertEqual(str(lane.ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), call.args[1]['MCPCLI_LIVE_HOST'])
                 self.assertEqual(selection_binding(selections[i]), json.loads(call.args[1]['MCPCLI_LIVE_BINDING']))
+                self.assertEqual({'MCPCLI_LIVE_OPERATION', 'MCPCLI_LIVE_OUTPUT', 'MCPCLI_LIVE_HOST', 'MCPCLI_LIVE_BINDING'},
+                                 {key for key in call.args[1] if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_'))})
+                self.assertEqual('/private/test-runtime', call.args[1]['MCPCLI_ISOLATED_RUNTIME_DIR'])
             result = json.loads((Path(directory) / 'live-lane.json').read_text())
             self.assertEqual(21, result['failed']); self.assertEqual(0, result['passed'])
             self.assertFalse(result['fullLiveAccepted'])
@@ -142,7 +191,9 @@ class LaneTests(unittest.TestCase):
     def test_success_requires_fresh_binding_case_and_owned_cleanup(self):
         for broken in [None, 'selected-subset', 'binding', 'operation', 'semantic-result', 'cleanup', 'cleanup-missing',
                        'child-exit', 'prerequisite', 'bootstrap', 'bootstrap-status', 'bootstrap-count',
-                       'bootstrap-ready', 'bootstrap-source', 'bootstrap-interrupted', 'phase-missing', 'phase-duplicated', 'command-repeated', 'command-omitted']:
+                       'bootstrap-ready', 'bootstrap-source', 'bootstrap-interrupted', 'phase-missing', 'phase-duplicated', 'command-repeated', 'command-omitted',
+                       'phase-exit', 'backup-missing', 'backup-empty', 'backup-changed', 'backup-header', 'backup-outside',
+                       'backup-not-empty', 'backup-not-genesis']:
             with self.subTest(broken=broken), tempfile.TemporaryDirectory() as directory:
                 selection = {'operation': 'fixture.operation', **{key: 'bound-' + key for key in
                     BINDING_KEYS}}
@@ -158,19 +209,28 @@ class LaneTests(unittest.TestCase):
                     if broken == 'phase-duplicated': phases *= 2
                     if broken == 'command-repeated': phases[0]['attempts'] *= 2
                     if broken == 'command-omitted': phases[0]['attempts'] = []
+                    if broken == 'phase-exit': phases[0]['attempts'][-1]['exitCode'] = 2
                     (output / 'live-result.json').write_text(json.dumps({
                         'operation': 'wrong' if broken == 'operation' else 'fixture.operation',
                         'result': 'failed' if broken == 'semantic-result' else 'passed', 'binding': binding, 'phases': phases}))
                     runtime = output / 'runtime'; runtime.mkdir()
+                    backup_file = (output if broken == 'backup-outside' else runtime) / 'initial-empty.rdb'
+                    backup_file.write_bytes(b'' if broken == 'backup-empty' else b'not an RDB' if broken == 'backup-header' else b'REDIS0011fixture')
+                    backup_hash = hashlib.sha256(backup_file.read_bytes()).hexdigest()
+                    if broken == 'backup-missing': backup_file.unlink()
+                    if broken == 'backup-changed': backup_file.write_bytes(b'REDIS0011changed')
+                    backup = {'sha256': backup_hash, 'backupFile': str(backup_file),
+                              'databaseSize': 1 if broken == 'backup-not-empty' else 0,
+                              'createdBeforeApplications': broken != 'backup-not-genesis'}
                     stopped = {name: 0 for name in ['sentry', 'redis', 'placement', 'scheduler']}
                     if broken == 'cleanup': stopped['redis'] = None
                     if broken == 'cleanup-missing': del stopped['sentry']
                     (runtime / 'result.json').write_text(json.dumps({'commandExitCode': 1 if broken == 'child-exit' else 0, 'prerequisitesReady': broken != 'prerequisite',
-                        'ownedInfrastructureStopped': stopped, 'initialRedisBackup': {'sha256': 'genesis-hash', 'backupFile': '/private/initial-empty.rdb'}}))
+                        'ownedInfrastructureStopped': stopped, 'initialRedisBackup': backup}))
                     (output / 'writer-bootstrap.json').write_text(json.dumps({'result': 'failed' if broken == 'bootstrap-status' else 'passed',
                         'sourceCommit': 'unknown' if broken == 'bootstrap-source' else 'a' * 40,
                         'activationCount': 2 if broken == 'bootstrap-count' else 1, 'readinessObserved': broken != 'bootstrap-ready',
-                        'backupReference': 'bad' if broken == 'bootstrap' else 'sha256:genesis-hash;file:/private/initial-empty.rdb'}))
+                        'backupReference': 'bad' if broken == 'bootstrap' else 'sha256:' + backup_hash + ';file:' + str(backup_file)}))
                     (output / 'child.stdout.txt').write_text('Isolated run: ' + str(runtime) + '\n')
                     return 0
                 read_text = Path.read_text
@@ -202,6 +262,8 @@ class LaneTests(unittest.TestCase):
                     self.assertEqual(['fixture.operation'], [item['operation'] for item in result['vectors']])
                 if broken == 'bootstrap-interrupted':
                     self.assertNotEqual('passed', result['vectors'][0]['result'])
+                if broken and broken.startswith('backup-'):
+                    self.assertIn('genesis backup', result['vectors'][0]['error'])
 
     def test_real_child_deadline_stops_only_its_owned_process_group(self):
         import subprocess

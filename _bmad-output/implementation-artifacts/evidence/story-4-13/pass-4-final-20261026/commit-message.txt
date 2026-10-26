@@ -1,0 +1,1 @@
+test(conformance): harden story 4.13 live vector validation

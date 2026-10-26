@@ -1,0 +1,15 @@
+inventory-findings: detected
+backup-bytes: detected
+malformed-output: detected
+attempt-document-reset: detected
+blank-token: detected
+policy-id-collision: detected
+resolved-inputs: detected
+resolved-core-validation: detected
+converged-query-receipt: detected
+inherited-environment: detected
+rid-runtime-bytes: detected
+last-phase-exit: detected
+pending-before-preflight: detected
+rid-metadata: detected
+invalid-output-contract: detected

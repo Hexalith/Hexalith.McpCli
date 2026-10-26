@@ -1,0 +1,6 @@
+{
+  "result": "passed",
+  "runtime": "/tmp/mcpcli-413-pass4-runtime-20261026/runtime",
+  "binaries": 4,
+  "bootstrapReceipt": "runtime-bootstrap-receipt.json"
+}

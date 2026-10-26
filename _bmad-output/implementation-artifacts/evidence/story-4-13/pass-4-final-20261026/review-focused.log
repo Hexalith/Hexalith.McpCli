@@ -1,0 +1,55 @@
+test_actual_built_adapter_matches_restored_production_closure (test_live_plans.AdapterDependencyTests.test_actual_built_adapter_matches_restored_production_closure) ... ok
+test_adapter_closure_rejects_stale_private_bytes_and_dependency_metadata (test_live_plans.AdapterDependencyTests.test_adapter_closure_rejects_stale_private_bytes_and_dependency_metadata) ... ok
+test_genuine_stale_compiled_gateway_client_is_rejected_with_current_deps (test_live_plans.AdapterDependencyTests.test_genuine_stale_compiled_gateway_client_is_rejected_with_current_deps) ... ok
+test_rid_runtime_assets_verify_present_bytes_and_restored_inventory (test_live_plans.AdapterDependencyTests.test_rid_runtime_assets_verify_present_bytes_and_restored_inventory) ... ok
+test_actual_returned_cursor_is_captured_and_asserted (test_live_runner.RunnerTests.test_actual_returned_cursor_is_captured_and_asserted) ... ok
+test_broken_business_effect_fails_with_phase_operation_and_path (test_live_runner.RunnerTests.test_broken_business_effect_fails_with_phase_operation_and_path) ... ok
+test_command_requires_approved_aggregate_identity (test_live_runner.RunnerTests.test_command_requires_approved_aggregate_identity) ... ok
+test_failed_capture_does_not_commit_partial_values (test_live_runner.RunnerTests.test_failed_capture_does_not_commit_partial_values) ... ok
+test_failing_preflight_invalidates_receipt_and_redacts_identity (test_live_runner.RunnerTests.test_failing_preflight_invalidates_receipt_and_redacts_identity) ... ok
+test_final_process_timeout_retains_the_semantic_assertion_path (test_live_runner.RunnerTests.test_final_process_timeout_retains_the_semantic_assertion_path) ... ok
+test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) ... ok
+test_live_entry_guards_fail_before_preflight_or_execution (test_live_runner.RunnerTests.test_live_entry_guards_fail_before_preflight_or_execution) ... ok
+test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) ... ok
+test_missing_persisted_document_deadline_retains_declared_assertion_paths (test_live_runner.RunnerTests.test_missing_persisted_document_deadline_retains_declared_assertion_paths) ... ok
+test_nonretryable_query_error_does_not_poll (test_live_runner.RunnerTests.test_nonretryable_query_error_does_not_poll) ... ok
+test_only_queries_poll_for_persisted_convergence (test_live_runner.RunnerTests.test_only_queries_poll_for_persisted_convergence) ... ok
+test_successful_main_retains_bound_inputs_and_passing_phases (test_live_runner.RunnerTests.test_successful_main_retains_bound_inputs_and_passing_phases) ... ok
+test_write_acceptance_is_submitted_once (test_live_runner.RunnerTests.test_write_acceptance_is_submitted_once) ... ok
+test_write_failure_is_never_retried (test_live_runner.RunnerTests.test_write_failure_is_never_retried) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.713s
+
+OK
+FAILED fixture.operation; receipt: /tmp/tmpgigof5lb/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmp28ym_bvt/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmp3ef0_wy5/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpm0g2wlms/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpihw2ntp9/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpqgt042j6/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpo24i9w9p/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp_2b4nb_f/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpbez_9czi/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpk2i1ogoi/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpuhwfxvk_/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp3o3po4x0/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpyqt1h29e/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp81beb_3g/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpaie57rh4/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+PASSED fixture.operation; receipt: /tmp/tmpw8qpz6jk/live-result.json

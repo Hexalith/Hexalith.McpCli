@@ -1,0 +1,42 @@
+PASSED: full live acceptance=True; receipt: /tmp/tmpl6oll08u/live-lane.json
+PARTIAL: full live acceptance=False; receipt: /tmp/tmpay2i45rn/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp59kzyndk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpn2r9tedk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpslcbrxn3/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp98z4sxjg/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpaa150tbh/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpcfo51zks/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpb3_fbp7s/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmps0lvp527/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphp9l64lk/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpl221poaz/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpi7vixkqr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpdwjutqk2/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp90a4kn75/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpdxpvcu5j/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpvyh1v0gl/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmph5pryhxw/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpqk5lbpx3/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpfjml9iss/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp4vkvlbjn/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpjqmt7417/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp4lkhnvv2/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpzpn8phgi/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp0o8rmzcs/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpfsdl2t0f/live-lane.json
+test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) ... 
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='phase-exit') ... FAIL
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='phase-exit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.068s
+
+FAILED (failures=1)

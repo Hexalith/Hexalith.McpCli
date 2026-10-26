@@ -1,0 +1,72 @@
+test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) ... 
+  test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous=None) ... ERROR
+  test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous={'error': {'code': 'gateway_error', 'status': 404}}) ... ERROR
+  test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous={'document': {'value': 0}}) ... ERROR
+
+======================================================================
+ERROR: test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run_live.py", line 37, in observe
+    try:
+    
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1245, in _execute_mock_call
+    raise result
+validate.VectorError: invalid JSON stdout; stderr adapter crashed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run_live.py", line 39, in observe
+    except VectorError as error:
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+validate.VectorError: /invocation fixture.operation: invalid JSON stdout; stderr adapter crashed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 133, in test_malformed_cli_output_fails_immediately_even_after_a_converging_poll
+    self.observe(head, self.call(), record=record)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 39, in observe
+    return run_live.observe(head, call, 'http://127.0.0.1/', action or {}, values if values is not None else {},
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            {'deadlineSeconds': 1, 'pollSeconds': .5},
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            record if record is not None else {'phase': '/invocation', 'attempts': []},
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            clock=clock, pause=pause)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/run_live.py", line 83, in observe
+    checkpoint()
+    
+UnboundLocalError: cannot access local variable 'document' where it is not associated with a value
+
+======================================================================
+ERROR: test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous={'error': {'code': 'gateway_error', 'status': 404}})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 135, in test_malformed_cli_output_fails_immediately_even_after_a_converging_poll
+    self.assertEqual('failed', record['result'])
+                               ~~~~~~^^^^^^^^^^
+KeyError: 'result'
+
+======================================================================
+ERROR: test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) (previous={'document': {'value': 0}})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 135, in test_malformed_cli_output_fails_immediately_even_after_a_converging_poll
+    self.assertEqual('failed', record['result'])
+                               ~~~~~~^^^^^^^^^^
+KeyError: 'result'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (errors=3)

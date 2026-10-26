@@ -105,7 +105,8 @@ authority, the fixture invokes the existing authenticated platform writer-v2
 activation endpoint once and observes `/ready`. The backup and private
 namespaces establish a fresh store with no old writers or retry workers; no
 domain data or control-plane state is written directly. The lane binds each
-activation receipt to that child's genesis backup. This prerequisite enables
+activation receipt to that child's genesis backup, rereads its retained RDB bytes
+and verifies the SHA-256 and owned location before accepting the child. This prerequisite enables
 Parties' SDK named projections; a legacy `actor-not-found-infrastructure` query
 error can mean a missing SDK read model rather than actor routing.
 
@@ -119,6 +120,8 @@ the later continuation call. The audit plan captures real event timestamps and
 probes category exclusion, inclusive lower/upper bounds, and windows before and
 after matching events. Every original, observation and resolved dynamic call
 passes production Core validation without contacting a Gateway before dispatch.
+Malformed CLI output, mismatched response identities and missing Query documents
+fail immediately; they are not read-convergence conditions.
 There are no module-specific runner branches or direct state-store mutations.
 
 For diagnostics, these commands still preflight the complete approved set:

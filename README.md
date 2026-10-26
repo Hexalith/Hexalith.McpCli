@@ -256,7 +256,7 @@ The shared platform fixture owns startup, liveness checks and disposal. Startup 
 
 The requested Dapr IDs are `eventstore`, `tenants` and `parties`, with Gateway sidecar HTTP port `3501`. Existing registrations or an occupied port cause an explicit conflict failure; the harness never stops, restarts or reuses a user topology. Run live tests only inside the disposable wrapper. The focused CI discovery job builds and lists all 21 Operation-labelled vector cases plus the independent smoke without starting source services; the blocking live CI tier remains Story 4.14.
 
-The isolated wrapper retains a verified empty Redis RDB backup before applications start. After proving persisted administrator authority, the fixture activates the existing platform writer-v2 protocol once through its authenticated maintenance endpoint and observes readiness. EventStore can then invoke Parties' SDK named projections over authenticated POST `/project/v2`; default deny remains enforced. No direct state-store setup is required.
+The isolated wrapper retains a verified empty Redis RDB backup before applications start. After proving persisted administrator authority, the fixture activates the existing platform writer-v2 protocol once through its authenticated maintenance endpoint and observes readiness. The parent lane verifies the retained backup bytes, SHA-256 and owned location before accepting each child's result. EventStore can then invoke Parties' SDK named projections over authenticated POST `/project/v2`; default deny remains enforced. No direct state-store setup is required.
 
 After the same source builds and [private-runtime bootstrap](tools/live-topology/README.md), execute the complete semantic lane with an outer deadline:
 

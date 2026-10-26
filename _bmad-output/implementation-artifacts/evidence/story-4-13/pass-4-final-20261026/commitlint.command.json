@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "/tmp/mcpcli-story-4-13-commit-message.txt",
+  "exitCode": 0
+}

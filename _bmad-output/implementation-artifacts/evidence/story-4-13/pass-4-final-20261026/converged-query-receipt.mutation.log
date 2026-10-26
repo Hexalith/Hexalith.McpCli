@@ -1,0 +1,17 @@
+test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat (test_live_runner.ExecutionTests.test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat) ... ERROR
+
+======================================================================
+ERROR: test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat (test_live_runner.ExecutionTests.test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 418, in test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat
+    require_phases(selection, report['phases'])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/live_plans.py", line 49, in require_phases
+    raise VectorError(f"{declared['phase']}: incomplete semantic phase or invalid Command attempt cardinality")
+validate.VectorError: persisted-prerequisites-0: incomplete semantic phase or invalid Command attempt cardinality
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (errors=1)

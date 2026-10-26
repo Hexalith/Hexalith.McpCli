@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "cases": 1,
+  "skips": 0,
+  "isolatedReceipt": "/tmp/mcpcli-413-pass4-runtime-20261026/runtime/runs/20261026T075949Z-bb7305d7/result.json",
+  "cleanup": {
+    "sentry": 0,
+    "redis": 0,
+    "placement": 0,
+    "scheduler": 0
+  }
+}

@@ -205,7 +205,12 @@ def validate_call(head: HeadProcess, call: dict) -> None:
 
 def check_dependencies(assets: dict, policy: dict) -> None:
     """Require the reviewed exact production closure, including the Gateway client."""
-    expected = {name.casefold(): version for name, version in (policy['baselinePackages'] | policy['modules']).items()}
+    expected = {}
+    for packages in (policy['baselinePackages'], policy['modules']):
+        for name, version in packages.items():
+            if name.casefold() in expected:
+                raise VectorError(f'Production dependency policy has duplicate package {name}.')
+            expected[name.casefold()] = version
     actual = {}
     for identity, library in assets['libraries'].items():
         if library['type'] != 'package':
@@ -277,9 +282,10 @@ def check_adapter_dependencies(host: Path, assets: dict) -> None:
             rid_assets = target.get(identity, {}).get('runtimeTargets', {})
             restored_rid = restored_target.get(identity, {}).get('runtimeTargets', {})
             for asset, metadata in rid_assets.items():
+                if asset not in restored_rid or any(metadata.get(key) != restored_rid[asset].get(key)
+                                                    for key in ('rid', 'assetType')):
+                    raise VectorError(f'{host}: executable RID runtime asset differs: {identity}: {asset}')
                 if metadata.get('assetType') == 'runtime' and asset.endswith('.dll'):
-                    if asset not in restored_rid:
-                        raise VectorError(f'{host}: executable RID runtime asset differs: {identity}')
                     output = host.parent / asset
                     if output.is_file() and output.read_bytes() != archive.read(asset):
                         raise VectorError(f'{output}: private runtime DLL bytes differ from restored package {identity}')
@@ -349,9 +355,10 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
             if findings:
                 raise VectorError('\n'.join(findings))
             inventory_check = subprocess.run(head._base() + ['--inventory', str(inventory)], env=head.env,
-                                             capture_output=True, text=True, timeout=30, check=True)
-            if json.loads(inventory_check.stdout):
-                raise VectorError(f'{package}: inventory coverage failed')
+                                             capture_output=True, text=True, timeout=30, check=False)
+            if inventory_check.returncode or json.loads(inventory_check.stdout):
+                raise VectorError(f'{package}: inventory coverage failed (exit {inventory_check.returncode}); '
+                                  f'stdout: {inventory_check.stdout!r}; stderr: {inventory_check.stderr!r}')
             for catalog_operation, kind in operations.items():
                 if catalog_operation in catalog or catalog_operation.split('.')[0] != receipt['module']:
                     raise VectorError('Duplicate or mismatched owning Catalog Operation.')

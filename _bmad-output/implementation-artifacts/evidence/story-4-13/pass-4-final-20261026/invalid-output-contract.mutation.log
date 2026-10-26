@@ -1,0 +1,36 @@
+test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) ... 
+  test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='operation') ... FAIL
+  test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='tenant') ... FAIL
+  test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='document') ... FAIL
+
+======================================================================
+FAIL: test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='operation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 164, in test_invalid_output_contract_cannot_converge_to_a_later_valid_response
+    with self.assertRaisesRegex(VectorError, message) as failure:
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+======================================================================
+FAIL: test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='tenant')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 164, in test_invalid_output_contract_cannot_converge_to_a_later_valid_response
+    with self.assertRaisesRegex(VectorError, message) as failure:
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+======================================================================
+FAIL: test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) (kind='query', defect='document')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 164, in test_invalid_output_contract_cannot_converge_to_a_later_valid_response
+    with self.assertRaisesRegex(VectorError, message) as failure:
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: VectorError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=3)

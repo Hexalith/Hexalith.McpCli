@@ -1,0 +1,22 @@
+{
+  "README.md": "eca3283ea1cc6de0eab2b2d65dd3399afd6610b656ad063f0ba8d2ead68eac11",
+  "attempt-document-reset.mutation.log": "014cfa9aa214c277cc67d1a3c5cbf55a876ae5fe922753a8d2cb06512ca06fbf",
+  "backup-bytes.mutation.log": "05b2b0719413e4df830d40249f67f7e2f98118a6c983c7c51f6dfa0bb7eb4b8e",
+  "blank-token.mutation.log": "0f1def4feba73133a1f9f4282a3fc2c870a1d4162f65c9946ff8eae154fd5e71",
+  "check-mutations.py": "cac3eee591b109c03bb8ef32505bf72b306583159444d3107df05f5da4a787de",
+  "commands.json": "2b289bdf5b14f9e1b43fa3c37f18a7f43d950d0557d279fd61b99cd4a51b76ef",
+  "converged-query-receipt.mutation.log": "7b30c41b7b471042625c7e1b4b61c2a5ed2c4bb6de8c7bf3a5886eb03963b2d9",
+  "inherited-environment.mutation.log": "6cbda1f5b56658a892af5f2bb7fbe363385d24a176ad2aa9a8ca462804b7414f",
+  "inventory-findings.mutation.log": "07e613d2a50f4d8a43e560a45e22fb92026eb5c430f663ecc0c92646067720a7",
+  "last-phase-exit.mutation.log": "afc79c1b5c46ba55f68e9ad91d578e48f5feeacfe26c8d4cf33e612cb36c2c3f",
+  "malformed-output.mutation.log": "53a4a625534ba8224ca5abb9932f8f5ac310eacc82c8cc5b7b8ea7c796c8527f",
+  "mutations.json": "1fc025dff1b6f7426900861f11b2e0d50a32b4c72c16f80c8ef0cc7bc64e06b3",
+  "pending-before-preflight.mutation.log": "2418ce5c3d92680a5b5a5ef90f5ad0b3f7c933614f1d927ffe1b5a7cffa86607",
+  "policy-id-collision.mutation.log": "2aa931248fc6e203b4683c381a6760aa51c8200053ff431e017dc6d30b03fdc5",
+  "resolved-core-validation.mutation.log": "ff357ce99cef0297edd5d818cbacd768d97c6159496a3c380852b0ae9ad3e64b",
+  "resolved-inputs.mutation.log": "0ee16a0f951eb3c0baf5d9ed76f8df27caf168cfc02d297b99edc22806432add",
+  "rid-runtime-bytes.mutation.log": "6df282b474d54d9e082e1423265854fde99fc2ec3d3e16202d512212814c319e",
+  "source-bindings.json": "f71c56d8f840f6732ba6fd364d7e94b3e4c32e4a0d1b65186df4a6bd934f3e76",
+  "tests-green.log": "1b1ec2a7bc3dfafdff3802b8e9d4db76fbdef93b7fda2c28f3a62224d1813d8a",
+  "tests-red.log": "e2fe16376fd77254bda8e75a142c7807d6687454ecc08dca98a36760b1f07a95"
+}

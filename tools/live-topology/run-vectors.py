@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -47,6 +48,22 @@ def require_case(path: Path, operation: str) -> None:
     if test.get('result') != 'Pass' or test.get('method') != 'ApprovedVectorHasPersistentSemantics' \
             or ('Operation', operation) not in traits:
         raise VectorError(f'{operation}: result does not identify the selected passing vector')
+
+
+def verified_backup_reference(backup: dict, run_directory: Path) -> str:
+    """Bind acceptance to the owned genesis RDB bytes, not just matching receipt fields."""
+    try:
+        path = Path(backup['backupFile']).resolve()
+        if path.parent != run_directory.resolve():
+            raise VectorError('Private genesis backup is outside its isolated run directory.')
+        content = path.read_bytes()
+    except (KeyError, OSError, TypeError) as error:
+        raise VectorError(f'Private genesis backup cannot be read: {error}') from error
+    actual = hashlib.sha256(content).hexdigest()
+    if backup.get('databaseSize') != 0 or backup.get('createdBeforeApplications') is not True \
+            or not content.startswith(b'REDIS') or backup.get('sha256') != actual:
+        raise VectorError('Private genesis backup bytes or pre-application evidence do not match its receipt.')
+    return f'sha256:{actual};file:{path}'
 
 
 def bounded_child(command: list[str], environment: dict, output: Path, timeout: float) -> int:
@@ -148,7 +165,7 @@ def main(argv=None) -> int:
                         raise VectorError(f'{operation}: private runtime did not prove successful cleanup')
                     bootstrap = json.loads((output / 'writer-bootstrap.json').read_text())
                     backup = owned.get('initialRedisBackup', {})
-                    reference = 'sha256:' + backup.get('sha256', '') + ';file:' + backup.get('backupFile', '')
+                    reference = verified_backup_reference(backup, runs[0])
                     if bootstrap.get('result') != 'passed' or bootstrap.get('activationCount') != 1 \
                             or bootstrap.get('readinessObserved') is not True or bootstrap.get('backupReference') != reference \
                             or len(bootstrap.get('sourceCommit', '')) != 40:

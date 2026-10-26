@@ -1,0 +1,50 @@
+FAILED fixture.operation; receipt: /tmp/tmpakac4m67/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmpzoh8rp30/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmp36hwsmah/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpov1zlzb3/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpj92fl6rb/live-result.json
+VectorError: Exactly one approved Operation must be selected.
+FAILED fixture.operation; receipt: /tmp/tmpsu0_2_r2/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp78yjjiik/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpaysrlkp9/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp8_jrrw6t/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmprw_jcot6/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpqsetj99x/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp9b6geq0u/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp_esliosp/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp17ew7bhh/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpxnpaibx1/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+test_live_entry_guards_fail_before_preflight_or_execution (test_live_runner.RunnerTests.test_live_entry_guards_fail_before_preflight_or_execution) ... 
+  test_live_entry_guards_fail_before_preflight_or_execution (test_live_runner.RunnerTests.test_live_entry_guards_fail_before_preflight_or_execution) (key='MCPCLI_LIVE_TOKEN', value='   \t\n') ... FAIL
+
+======================================================================
+FAIL: test_live_entry_guards_fail_before_preflight_or_execution (test_live_runner.RunnerTests.test_live_entry_guards_fail_before_preflight_or_execution) (key='MCPCLI_LIVE_TOKEN', value='   \t\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 252, in test_live_entry_guards_fail_before_preflight_or_execution
+    preflight.assert_not_called()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 947, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'preflight' to not have been called. Called 1 times.
+Calls: [call(PosixPath('/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), PosixPath('/tmp/tmpj92fl6rb/preflight'), operation='fixture.operation'),
+ call().__iter__()].
+
+----------------------------------------------------------------------
+Ran 1 test in 0.022s
+
+FAILED (failures=1)

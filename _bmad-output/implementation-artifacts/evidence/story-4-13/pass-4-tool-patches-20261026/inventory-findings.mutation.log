@@ -1,0 +1,30 @@
+test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight (test_live_plans.PlanTests.test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight) ... ERROR
+
+======================================================================
+ERROR: test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight (test_live_plans.PlanTests.test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_plans.py", line 319, in test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight
+    live_plans.preflight(host, Path(directory), operation='parties.list-parties')
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/live_plans.py", line 356, in preflight
+    inventory_check = subprocess.run(head._base() + ['--inventory', str(inventory)], env=head.env,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                     capture_output=True, text=True, timeout=30, check=False)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_plans.py", line 313, in run
+    raise subprocess.CalledProcessError(1, arguments, '["inventory finding"]', 'coverage diagnostics')
+subprocess.CalledProcessError: Command '['dotnet', '/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll', '--inventory', '/tmp/tmpa1a8gtb3/inputs/Hexalith.Parties.Contracts/inventory.json']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.828s
+
+FAILED (errors=1)

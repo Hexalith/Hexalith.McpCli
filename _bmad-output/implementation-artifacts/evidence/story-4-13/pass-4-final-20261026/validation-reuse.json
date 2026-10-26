@@ -1,0 +1,186 @@
+{
+  "result": "passed",
+  "unchangedBinaries": 507,
+  "changedSources": [
+    "README.md",
+    "tools/live-topology/README.md",
+    "tools/live-topology/live_plans.py",
+    "tools/live-topology/run-vectors.py",
+    "tools/live-topology/run_live.py",
+    "tools/live-topology/test_lane.py",
+    "tools/live-topology/test_live_plans.py",
+    "tools/live-topology/test_live_runner.py"
+  ],
+  "unchangedSources": 427,
+  "priorPacket": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-final-20261025",
+  "priorBindingSha256": "dd2e31f1cbba780b39a08900038cf6a39e41ce60713648e84c33a04978712c53",
+  "referenceCommits": {
+    "Hexalith.Builds": "e171c5a788eab183b32683431b084198c9b8d373",
+    "Hexalith.EventStore": "6ca1b4cb9d422017138541036b3c23397265de98",
+    "Hexalith.Tenants": "8804c10b8a900860ea2394c81eff78d23bb3c0a4",
+    "Hexalith.Parties": "559b91c812a422f9890e448f7942e645f3739b2b"
+  },
+  "historicalFilesVerified": 315,
+  "reusedValidation": {
+    "restore": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/restore.command.json",
+      "sha256": "79e8ead026fb59f7ca5ef25b5187a1cc8732d2d421b91902d5e1ee6e8bbc89b1",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0
+    },
+    "build": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/build.command.json",
+      "sha256": "44eab7bb15ddf5d716dbfff7e1800659e13d5ae7b1947cbbae9ef70d1ad84f29",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0
+    },
+    "eventstore-build": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/eventstore-build.command.json",
+      "sha256": "5fe1ee60e26766cfdfba2c43af61b87e5a2b40e86e5e5db6e5671276ca1eb742",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.EventStore && timeout 300 dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "exitCode": 0
+    },
+    "tenants-build": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/tenants-build.command.json",
+      "sha256": "04e4f17ac66f30334c6b48e898e90a56e85b81a119aa4cf9bcabcb79115af183",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.Tenants && timeout 300 dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "exitCode": 0
+    },
+    "parties-build": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/parties-build.command.json",
+      "sha256": "baf0141e1ede1d3737ed5ce8d53f4da00a20ab7c00189cc20a9965dc618c403f",
+      "command": [
+        "bash",
+        "-c",
+        "cd references/Hexalith.Parties && timeout 300 dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true"
+      ],
+      "exitCode": 0
+    },
+    "abstractions-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/abstractions-tests.command.json",
+      "sha256": "90780b80fb7c4d55ac3d09f28b0a2da987a61d7a924c03979b3247e557a4a8dc",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "analyzers-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/analyzers-tests.command.json",
+      "sha256": "467505c00388bb992769c37b9cb9ec76e6b2c9363b80ac9206ef9a1a01b1b86a",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "core-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/core-tests.command.json",
+      "sha256": "4e7e88ae6a3a268f7736c45593f24e8aff220d1147204f0114d253b5ffc4c2ce",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "manifest-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/manifest-tests.command.json",
+      "sha256": "a0f6d80f08ad4559822af54e1fbdba941c818b9c12b566c6f04feb268ab7b0e1",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "cli-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/cli-tests.command.json",
+      "sha256": "27aa1be891909105c000d4c1ec4e50468cf9fa9418b2070d7b9c0a42e3b9e4cc",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "mcp-tests": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/mcp-tests.command.json",
+      "sha256": "2968505ac74baeae8fac9a3a7aa32dd449d9ac873e126b0647e2ea6536f2d285",
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0
+    },
+    "conformance-tools": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/conformance-tools.command.json",
+      "sha256": "28818168e1190d4479cfc662deccb26c9fab0958c9f7a0a4dd08b67775079d4a",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/conformance-vectors/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0
+    },
+    "discovery": {
+      "receipt": "_bmad-output/implementation-artifacts/evidence/story-4-13/pass-3-patches-20261025/discovery.command.json",
+      "sha256": "33df79e6f39acfcafe8df8924589d0d2aebaeab30096027dc89ae93f061a37f4",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-preEnumerateTheories",
+        "-list",
+        "tests"
+      ],
+      "exitCode": 0
+    }
+  }
+}

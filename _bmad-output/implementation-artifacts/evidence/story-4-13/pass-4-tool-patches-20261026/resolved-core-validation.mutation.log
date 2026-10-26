@@ -1,0 +1,18 @@
+test_resolved_core_refusal_prevents_that_phase_from_reaching_cli (test_live_runner.ExecutionTests.test_resolved_core_refusal_prevents_that_phase_from_reaching_cli) ... FAIL
+
+======================================================================
+FAIL: test_resolved_core_refusal_prevents_that_phase_from_reaching_cli (test_live_runner.ExecutionTests.test_resolved_core_refusal_prevents_that_phase_from_reaching_cli)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 384, in test_resolved_core_refusal_prevents_that_phase_from_reaching_cli
+    self.execute(selection, documents, report, validation=validate)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_live_runner.py", line 333, in execute
+    self.assertEqual(len(selection['plan']['actions']), validate.call_count)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 15 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)

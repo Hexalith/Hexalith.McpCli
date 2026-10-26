@@ -31,16 +31,23 @@ def observe(head: HeadProcess, call: dict, url: str, action: dict, values: dict,
         attempt = {'result': 'running'}
         record['attempts'].append(attempt)
         checkpoint()
+        document = None
+        invalid_contract = False
         try:
             arguments, _, _ = _call_args(call)
-            code, document = head.cli(arguments, url, call['envelope']['tenant'], call['envelope'].get('actor'))
+            try:
+                code, document = head.cli(arguments, url, call['envelope']['tenant'], call['envelope'].get('actor'))
+            except VectorError as error:
+                raise VectorError(f"{record['phase']} {call['operation']}: {error}") from error
             attempt.update(exitCode=code, document=document)
             checkpoint()
             if code != 0 or 'error' in document:
                 raise VectorError(f"{record['phase']} {call['operation']}: CLI exit {code}: {document}")
             if document.get('operation') != call['operation'] or document.get('tenant') != call['envelope']['tenant']:
+                invalid_contract = True
                 raise VectorError(f"{record['phase']} {call['operation']}: /operation or /tenant does not match the submitted call")
             if call['kind'] == 'query' and 'document' not in document:
+                invalid_contract = True
                 raise VectorError(f"{record['phase']} {call['operation']}: /document is missing")
             captured = values.copy()
             for capture in action.get('captures', []):
@@ -77,12 +84,12 @@ def observe(head: HeadProcess, call: dict, url: str, action: dict, values: dict,
                 record['lastTimeout'] = str(error)
             record['lastFailure'] = last_failure
             checkpoint()
-            if call['kind'] == 'command':
+            if call['kind'] == 'command' or invalid_contract or (document is None and isinstance(error, VectorError)):
                 record['result'] = 'failed'
                 checkpoint()
                 raise
             # Authentication and Core refusals do not represent projection convergence.
-            if 'document' in locals() and 'error' in document \
+            if document is not None and 'error' in document \
                     and (document['error'].get('code') != 'gateway_error'
                          or document['error'].get('status') in (400, 401, 403)):
                 raise
@@ -153,7 +160,7 @@ def main(argv=None) -> int:
         from urllib.parse import urlparse
         parsed = urlparse(url)
         if parsed.scheme != 'http' or parsed.hostname not in ('localhost', '127.0.0.1', '::1') \
-                or parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment or not token:
+                or parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment or not token.strip():
             raise VectorError('Private discovered loopback endpoint and short-lived identity are required.')
         selections = preflight(args.host.resolve(), args.output / 'preflight', operation=args.operation)
         selected = [item for item in selections if item['operation'] == args.operation]

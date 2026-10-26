@@ -1,0 +1,102 @@
+PASSED: full live acceptance=True; receipt: /tmp/tmpwkgtsahj/live-lane.json
+PARTIAL: full live acceptance=False; receipt: /tmp/tmpzurjwl7m/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2x1ffmi9/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpxpvna1sc/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwpxfjmx9/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpv999ix0u/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp9xutb665/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpoyvprxyb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpkahsy4eb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp1crx1s55/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpzvtbkwpv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmphqih1ib8/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpp8n1lfur/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp23iwbhfx/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmptgmhbtmz/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmprri_0qpr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwejx5u2k/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpdix33_5x/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpxlf3sdh0/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpxxqim974/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpvnq240dl/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpp4y19mgx/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpzbc5n66s/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpm5igl6ef/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpg7ojo1c9/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmpgm5nbhtf/live-lane.json
+test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) ... 
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-missing') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-empty') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-changed') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-header') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-outside') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-not-empty') ... FAIL
+  test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-not-genesis') ... FAIL
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-empty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-changed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-header')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-outside')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-not-empty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) (broken='backup-not-genesis')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_lane.py", line 253, in test_success_requires_fresh_binding_case_and_owned_cleanup
+    self.assertEqual(0 if broken in (None, 'selected-subset') else 1, lane.main(arguments))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.072s
+
+FAILED (failures=7)

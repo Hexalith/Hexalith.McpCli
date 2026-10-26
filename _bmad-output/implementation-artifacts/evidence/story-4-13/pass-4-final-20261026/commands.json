@@ -1,0 +1,105 @@
+[
+  {
+    "name": "live-tools",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 28.215
+  },
+  {
+    "name": "mutations",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/check-mutations.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 8.28
+  },
+  {
+    "name": "live",
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass4-runtime-20261026/runtime",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=30s",
+      "21600",
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/live"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 722.384
+  },
+  {
+    "name": "smoke",
+    "command": [
+      "env",
+      "MCPCLI_ISOLATED_RUNTIME_DIR=/tmp/mcpcli-413-pass4-runtime-20261026/runtime",
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=20s",
+      "960",
+      "python3",
+      "tools/live-topology/run-isolated.py",
+      "--",
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Integration.Tests.GatewaySmokeTests",
+      "-failSkips",
+      "-result-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/smoke.xml"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 28.137
+  },
+  {
+    "name": "live-audit",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/audit-live.py",
+      "/home/administrator/projects/hexalith/mcpcli",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/live"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.083
+  },
+  {
+    "name": "paging-audit",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/audit-paging.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.019
+  },
+  {
+    "name": "matrix-audit",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/audit-matrix.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.016
+  },
+  {
+    "name": "retention",
+    "command": [
+      "python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-final-20261026/retain-evidence.py"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.496
+  }
+]

@@ -69,6 +69,15 @@ class PlanTests(unittest.TestCase):
         with self.assertRaisesRegex(VectorError, 'duplicate package'):
             check_dependencies({'libraries': {'Gateway.Client/0.9.0': {'type': 'package'}, **approved}}, policy)
 
+    def test_policy_package_ids_cannot_collide_case_insensitively(self):
+        for policy in [
+                {'baselinePackages': {'Gateway.Client': '0.9.0', 'gateway.client': '1.0.0'}, 'modules': {}},
+                {'baselinePackages': {}, 'modules': {'Gateway.Client': '0.9.0', 'gateway.client': '1.0.0'}},
+                {'baselinePackages': {'Gateway.Client': '0.9.0'}, 'modules': {'gateway.client': '1.0.0'}},
+                {'baselinePackages': {'Gateway.Client': '0.9.0'}, 'modules': {'Gateway.Client': '1.0.0'}}]:
+            with self.subTest(policy=policy), self.assertRaisesRegex(VectorError, 'policy.*duplicate package'):
+                check_dependencies({'libraries': {'Gateway.Client/1.0.0': {'type': 'package'}}}, policy)
+
     def test_unknown_fields_fail_closed(self):
         self.reject(lambda p: p.update(retryCommands=True), 'Additional properties')
         self.reject(lambda p: p['actions'][0].update(ignoreAssertions=True), 'not valid under any')
@@ -300,12 +309,17 @@ class PlanTests(unittest.TestCase):
         def run(arguments, **kwargs):
             if '--inventory' in arguments:
                 inventory_calls.append(arguments)
-                return subprocess.CompletedProcess(arguments, 0, '["inventory finding"]', '')
+                if kwargs.get('check'):
+                    raise subprocess.CalledProcessError(1, arguments, '["inventory finding"]', 'coverage diagnostics')
+                return subprocess.CompletedProcess(arguments, 1, '["inventory finding"]', 'coverage diagnostics')
             return real_run(arguments, **kwargs)
         with tempfile.TemporaryDirectory() as directory, patch.object(live_plans, 'check_adapter_dependencies'), \
                 patch.object(live_plans.subprocess, 'run', side_effect=run):
-            with self.assertRaisesRegex(VectorError, 'inventory coverage failed'):
+            with self.assertRaisesRegex(VectorError, 'inventory coverage failed') as failure:
                 live_plans.preflight(host, Path(directory), operation='parties.list-parties')
+            self.assertIn('inventory finding', str(failure.exception))
+            self.assertIn('coverage diagnostics', str(failure.exception))
+            self.assertIn('exit 1', str(failure.exception))
         self.assertEqual(1, len(inventory_calls))
         with tempfile.TemporaryDirectory() as directory, patch.object(live_plans, 'check_adapter_dependencies'), \
                 patch.object(live_plans, 'validate_vectors', return_value=['vector validator finding']) as validate:
@@ -379,6 +393,42 @@ class AdapterDependencyTests(unittest.TestCase):
                 with patch.object(live_plans, 'shared_runtime_assemblies', return_value={'System.Runtime.dll'}):
                     if defect:
                         with self.assertRaisesRegex((VectorError, RuntimeError), 'differ|missing'):
+                            live_plans.check_adapter_dependencies(host, assets)
+                    else:
+                        live_plans.check_adapter_dependencies(host, assets)
+
+    def test_rid_runtime_assets_verify_present_bytes_and_restored_inventory(self):
+        import base64
+        import hashlib
+        import live_plans
+        import zipfile
+        from unittest.mock import patch
+        for defect in [None, 'absent-other-os', 'bytes', 'unrestored-asset', 'rid', 'asset-type']:
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory:
+                host, assets, deps = self.fixture(directory)
+                identity = 'Gateway.Client/1.0.0'
+                target = deps['runtimeTarget']['name']
+                asset = 'runtimes/win/lib/net10.0/Gateway.Client.dll'
+                metadata = {'rid': 'win', 'assetType': 'runtime'}
+                deps['targets'][target][identity]['runtimeTargets'] = {asset: metadata.copy()}
+                assets['targets'][target][identity]['runtimeTargets'] = {} if defect == 'unrestored-asset' else {asset: metadata}
+                if defect == 'rid': deps['targets'][target][identity]['runtimeTargets'][asset]['rid'] = 'linux-x64'
+                if defect == 'asset-type': deps['targets'][target][identity]['runtimeTargets'][asset]['assetType'] = 'native'
+                package = host.parent / 'cache/gateway.client/1.0.0/gateway.client.1.0.0.nupkg'
+                with zipfile.ZipFile(package, 'a') as archive:
+                    archive.writestr(asset, b'approved RID assembly')
+                content_hash = base64.b64encode(hashlib.sha512(package.read_bytes()).digest()).decode()
+                assets['libraries'][identity]['sha512'] = content_hash
+                deps['libraries'][identity]['sha512'] = 'sha512-' + content_hash
+                host.with_suffix('.deps.json').write_text(json.dumps(deps))
+                if defect != 'absent-other-os':
+                    output = host.parent / asset
+                    output.parent.mkdir(parents=True)
+                    output.write_bytes(b'stale RID assembly' if defect == 'bytes' else b'approved RID assembly')
+                with patch.object(live_plans, 'shared_runtime_assemblies', return_value={'System.Runtime.dll'}):
+                    if defect in ('bytes', 'unrestored-asset', 'rid', 'asset-type'):
+                        message = 'private runtime DLL bytes differ' if defect == 'bytes' else 'RID runtime asset differs'
+                        with self.assertRaisesRegex(VectorError, message):
                             live_plans.check_adapter_dependencies(host, assets)
                     else:
                         live_plans.check_adapter_dependencies(host, assets)

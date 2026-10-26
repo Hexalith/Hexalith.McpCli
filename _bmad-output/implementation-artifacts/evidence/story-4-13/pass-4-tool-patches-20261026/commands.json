@@ -1,0 +1,23 @@
+[
+  {
+    "stage": "before runtime fixes",
+    "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py' > /tmp/mcpcli-pass4-tests-red.log 2>&1",
+    "exitCode": 1,
+    "result": "94 tests; 14 failing subcases and 2 errors",
+    "log": "tests-red.log"
+  },
+  {
+    "stage": "after runtime fixes",
+    "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py' > /tmp/mcpcli-pass4-tests-green.log 2>&1",
+    "exitCode": 0,
+    "result": "94 tests passed",
+    "log": "tests-green.log"
+  },
+  {
+    "stage": "guard-removal mutation qualification",
+    "command": "python3 _bmad-output/implementation-artifacts/evidence/story-4-13/pass-4-tool-patches-20261026/check-mutations.py",
+    "exitCode": 0,
+    "result": "13 of 13 mutations detected",
+    "log": "mutations.json"
+  }
+]

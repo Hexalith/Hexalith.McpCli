@@ -1,0 +1,26 @@
+{
+  "result": "passed",
+  "runId": "bae564f9c585417eb9a5ae95d2c8e797",
+  "operations": [
+    {
+      "operation": "parties.list-parties",
+      "originalFiltersPreserved": true,
+      "firstPageItems": 1,
+      "laterPageItems": 0,
+      "pageSize": 2,
+      "offset": 2,
+      "totalCount": 1,
+      "queryAttempts": 1
+    },
+    {
+      "operation": "parties.search-parties",
+      "originalFiltersPreserved": true,
+      "firstPageItems": 1,
+      "laterPageItems": 0,
+      "pageSize": 2,
+      "offset": 2,
+      "totalCount": 1,
+      "queryAttempts": 1
+    }
+  ]
+}
