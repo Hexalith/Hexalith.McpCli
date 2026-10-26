@@ -213,6 +213,8 @@ evidence upload directory. Failed preparation retains its owned private director
 path for cleanup. Nested Python processes inherit the prepared virtual environment.
 Every installed Aspire bundle file is compared with a fresh extraction from the
 selected qualified CLI; mismatched installed bytes are refused.
+GitHub-hosted runners first refresh the complete installed bundle with the pinned
+CLI's `setup --force`, including its managed launcher, before this hash comparison.
 
 Each run invalidates
 `ci-live.json` before execution and writes a new generation directory. Acceptance

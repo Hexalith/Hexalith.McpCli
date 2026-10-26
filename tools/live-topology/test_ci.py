@@ -61,9 +61,11 @@ elif name == 'daprd':
 elif name == 'aspire':
     if args and args[0] == 'setup':
         if mode == 'bundle-setup-failure': sys.exit(18)
-        for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
+        for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard', 'managed/aspire-managed'):
             file = pathlib.Path(args[args.index('--install-path') + 1]) / 'bundle' / relative
-            file.parent.mkdir(parents=True, exist_ok=True); file.write_text('qualified bundle')
+            file.parent.mkdir(parents=True, exist_ok=True)
+            wrong = mode == 'bundle-home-mismatch' and relative == 'managed/aspire-managed' and file.parents[2] == pathlib.Path.home() / '.aspire'
+            file.write_text('corrupted managed bundle' if wrong else 'qualified bundle')
     else:
         print('13.6.1+qualified')
 elif name == 'git':
@@ -197,7 +199,7 @@ class CiHooksTests(unittest.TestCase):
         home = self.root / 'home'
         (home / '.dapr/bin').mkdir(parents=True)
         (home / '.dapr/bin/daprd').symlink_to(self.bin / 'daprd')
-        for name in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
+        for name in ('dcp/dcp', 'dashboard/Aspire.Dashboard', 'managed/aspire-managed'):
             file = home / '.aspire/bundle' / name
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_text('qualified bundle')
@@ -492,6 +494,24 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual('failed', receipt['result'])
         self.assertTrue(Path(receipt['privateDirectory']).is_dir())
         self.assertFalse(Path(receipt['privateDirectory']).is_relative_to(self.evidence))
+
+    def test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
+        managed = Path(self.env['HOME']) / '.aspire/bundle/managed/aspire-managed'
+        managed.write_text('older cached managed bundle')
+        self.prepare()
+        self.assertEqual('qualified bundle', managed.read_text())
+        setup = [call for call in self.calls() if call[0] == 'aspire' and call[2] == 'setup'
+                 and str(Path(self.env['HOME']) / '.aspire') in call]
+        self.assertEqual(1, len(setup))
+        self.assertIn('--force', setup[0])
+
+    def test_hosted_bundle_refresh_still_rejects_mismatched_managed_payload(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
+        result = self.invoke('prepare-ci.sh', 'bundle-home-mismatch')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Qualified Aspire bundle mismatch: managed/aspire-managed', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_installed_bundle_must_match_fresh_selected_cli_bytes(self):
         installed = Path(self.env['HOME']) / '.aspire/bundle/dcp/dcp'

@@ -1,0 +1,25 @@
+{
+  "sourceRevision": "6738b9e43aaf70f6d8fba04c58ba752ac019fff7",
+  "run": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40377962105",
+  "jobId": 121769241154,
+  "artifactId": 12678610763,
+  "failure": "Qualified Aspire bundle mismatch: managed/aspire-managed",
+  "correction": "On disposable GitHub-hosted runners, refresh the complete installed cache with the selected CLI setup --force, then retain the full fresh-extraction hash comparison. Preserve local stale-cache refusal.",
+  "vendorSource": "https://github.com/microsoft/aspire/blob/v13.6.1/src/Aspire.Cli/Bundles/BundleService.cs",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p test_ci.py",
+      "tests": 29,
+      "exitCode": 0
+    },
+    {
+      "realCliCacheRefresh": "490 payload files byte-hash-identical to a fresh extraction",
+      "exitCode": 0
+    },
+    {
+      "mutation": "Skip the hosted cache refresh",
+      "result": "New managed-cache regression fails as expected."
+    }
+  ],
+  "hostedLiveAcceptance": "pending corrected run"
+}

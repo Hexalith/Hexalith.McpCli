@@ -181,8 +181,9 @@ def prepare(evidence: Path) -> None:
         fresh_bundle = private / 'qualified-aspire'
         bounded(['aspire', 'setup', '--install-path', str(fresh_bundle), '--force', '--non-interactive'],
                 180, evidence / 'aspire-bundle-extract')
-        if any(not (bundle / 'bundle' / relative).is_file() for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard')):
-            bounded(['aspire', 'setup', '--install-path', str(bundle), '--non-interactive'], 180, evidence / 'aspire-bundle-setup')
+        hosted_runner = os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_ENVIRONMENT') == 'github-hosted'
+        if hosted_runner or any(not (bundle / 'bundle' / relative).is_file() for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard')):
+            bounded(['aspire', 'setup', '--install-path', str(bundle), '--force', '--non-interactive'], 180, evidence / 'aspire-bundle-setup')
         expected_bundle = {str(path.relative_to(fresh_bundle / 'bundle')): hashlib.sha256(path.read_bytes()).hexdigest()
                            for path in (fresh_bundle / 'bundle').rglob('*') if path.is_file()}
         if not {'dcp/dcp', 'dashboard/Aspire.Dashboard'} <= set(expected_bundle):

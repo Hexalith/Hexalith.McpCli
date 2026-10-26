@@ -1,0 +1,26 @@
+test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation (__main__.CiHooksTests.test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation) ... FAIL
+
+======================================================================
+FAIL: test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation (__main__.CiHooksTests.test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-bundle-mutation-ux0kspsp/test_ci.py", line 502, in test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation
+    self.prepare()
+    ~~~~~~~~~~~~^^
+  File "/tmp/mcpcli-bundle-mutation-ux0kspsp/test_ci.py", line 235, in prepare
+    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : Running (30s): dotnet --version
+Running (30s): dapr --version
+Running (30s): /tmp/tmp_wu8idg1/home/.dapr/bin/daprd --version
+Running (30s): docker info --format {{.ServerVersion}}
+Running (30s): unshare --user --map-root-user --net --pid --mount --fork --mount-proc true
+Running (30s): aspire --version
+Running (180s): aspire setup --install-path /tmp/tmp_wu8idg1/mcpcli-live-ci-ohafjcnt/qualified-aspire --force --non-interactive
+Live CI failed: RuntimeError: Qualified Aspire bundle mismatch: managed/aspire-managed; installed bytes differ from the selected CLI embedded bundle.
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.530s
+
+FAILED (failures=1)

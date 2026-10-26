@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/tmp/mcpcli-aspire-fresh-install-7lfyru07/bin/aspire",
+    "setup",
+    "--install-path",
+    "/tmp/mcpcli-aspire-fresh-install-7lfyru07/legacy-cache",
+    "--force",
+    "--non-interactive"
+  ],
+  "exitCode": 0,
+  "cliSha256": "82d2aacd2432040cb3f9391e39e3ea7ed3d6e6c0143c4e0dfe38cfbb04b02bc0",
+  "filesCompared": 490,
+  "allHashesMatchFreshExtraction": true,
+  "managedPayloadSha256": "f9a9a0d2d2c83a5ff337c74c457bce11c14e4551715383ca31b64f5691f5deb5"
+}

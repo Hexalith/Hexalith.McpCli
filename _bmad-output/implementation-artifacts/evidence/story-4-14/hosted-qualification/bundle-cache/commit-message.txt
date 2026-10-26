@@ -1,0 +1,1 @@
+ci: refresh the qualified Aspire bundle on hosted runners
