@@ -611,3 +611,28 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
   summary: Publish the qualified upstream Builds hook revision before integrating the pinned McpCli caller and obtaining hosted CI acceptance.
   evidence: High integration blocker. `.github/workflows/ci.yml:18` pins the qualified local Builds revision `35587cfd104c5750d8ec3c0716933f386d6a0232`; `_bmad-output/implementation-artifacts/evidence/story-4-14/review-fixes/verification.json:2` records the revision and unpublished status. Implementation explicitly prohibited remote Git operations. The concrete qualified commit and full passing local evidence are ready for the final integration decision; no hosted acceptance or story completion is claimed. No equivalent ledger entry was found before append.
+
+## Deferred from: code review of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-27)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: The blocking hosted live lane is intermittent. A Dapr sidecar can lose its gRPC port to another process inside the private topology, and the fixture's liveness checks do not detect the dead sidecar before vectors run.
+  evidence: High (verified occurrence, recurrence rate unknown).
+    - Attempt 1 of hosted run `40381146665` (HEAD `f6fc9ae`) failed. Its `aspire-hook-evidence` artifact is `12681110107`, generation `5887d89d9f734931bd0391b432a64ff2`, and its runtime-diagnostics `command.stdout.txt` is for run `20261026T185945Z-d09a00de`.
+    - In that run, the Parties sidecar logged `Failed to listen for gRPC server on TCP address :44173 with error: listen tcp :44173: bind: address already in use` and then `Dapr runtime stopped`. Port 44173 is inside Linux's default ephemeral range.
+    - EventStore's `POST /v1.0/invoke/parties/method/process` then returned 500 (`DomainServiceException`), so `parties.create-party` failed with `gateway_error` 500 at `/invocation`.
+    - Attempt 2 (artifact `12680213617`) passed all 21 vectors and the smoke.
+    - The fixture (`tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:51`) passed resource liveness before the vector ran. The CI hooks failed the attempt correctly.
+    - Possible directions, not yet decided:
+      - prove each sidecar's health before vectors;
+      - keep the private network namespace's `net.ipv4.ip_local_port_range` away from the ports the topology allocates;
+      - assign fixed ports inside each private namespace.
+    - Settle the rate by running the hosted lane repeatedly and grepping each artifact for `address already in use`.
+    - The ledger had no equivalent entry.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: The agent instructions still say `HexalithEventStoreVersion` comes from the Builds props, but McpCli now pins it in `Directory.Build.props`.
+  evidence: Low to medium.
+    - `AGENTS.md:92` (byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`) says the compiled EventStore package is `HexalithEventStoreVersion` "in the Builds props".
+    - `Directory.Build.props:4` now pins 3.127.0, while `references/Hexalith.Builds/Props/Directory.Packages.props:9` defaults to 3.128.0.
+    - An agent that confirms members against the Builds value could use a 3.128.0-only API, which then fails to compile against the restored 3.127.0 package.
+    - Fix in the next bmad-project-context refresh: point the line at `Directory.Build.props`, copy `AGENTS.md` to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+    - The ledger had no equivalent entry.

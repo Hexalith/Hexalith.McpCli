@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '2026-10-26'
+last_updated: '2026-10-27'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -80,7 +80,7 @@ development_status:
   4-11-prove-both-heads-agree-against-a-loopback-gateway: done
   4-12-compose-the-v1-live-test-topology: done
   4-13-test-every-vector-against-live-gateway-semantics: done
-  4-14-make-the-live-semantic-lane-blocking-in-ci: review
+  4-14-make-the-live-semantic-lane-blocking-in-ci: in-progress
   4-15-publish-the-no-new-server-rule: backlog
   4-16-stage-and-validate-the-paired-packages: backlog
   4-17-verify-the-operator-setup-experience: backlog
