@@ -305,3 +305,94 @@ The parent independently verified all 39 indexed evidence files, seven initial s
 All three review layers completed and every finding is triaged above. G9 now decodes escaped JSON string diagnostics before redacting known environment credentials, re-encoding only changed strings. Quotes, backslashes, newlines and nested JSON are protected; ordinary text stays unchanged. The new regression failed before the correction. Four targeted tests and the final complete 138-test Python suite pass. Execution and acceptance code have identical ASTs before/after this sanitizer-only correction, and replaying all 168 retained live diagnostic files produces identical output. The complete native lane was qualified before G9; it was not rerun for this diagnostic-only correction. No .NET code or build inputs changed after the recorded fresh Release build and 1,531 passing .NET tests.
 
 No unresolved code finding remains. Build implementation is complete; sprint status remains `review` pending upstream publication and hosted acceptance of the new Builds pin. Final parent evidence: [verification](evidence/story-4-14/build-review-20261027/verification.json), [Python output](evidence/story-4-14/build-review-20261027/python-tests.txt) and [current source fingerprints](evidence/story-4-14/build-review-20261027/source-hashes.json). The existing integration, Dapr intermittence and agent-context follow-ups remain tracked without duplication.
+
+### Review Findings (code review pass 2, 2026-10-27)
+
+Code review pass 2, 2026-10-27, of the committed story range `4934512..8bfd1e0` plus the owning Builds hook commits `09af6ef..857ef02` (paths prefixed `Hexalith.Builds/` in the diff). This is the first review of `c6a19e8` (the 15 pass-1 patches) and `8bfd1e0` (gitlink sync).
+
+- **Code-only scope:** excludes `_bmad-output/` and `references/`. 12 files (+1,535/−7), 1,795 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed.
+- **Result:** 50 normalized findings (BH 17, EC 20, VG 5, AA 7, plus 1 from parent verification). After triage: 2 decision-needed, 6 patch, 2 defer and 28 rejected. Both decisions were resolved as option (a), giving 8 patches.
+
+Parent checks during triage:
+- **CI on `main` cannot start.** GitHub answers `No commit found for SHA: 857ef02dbb4bde1bd4e678546aa41e73fb7d68b1` (HTTP 422). Runs `40558089073` (`c6a19e8`) and `40558426472` (`8bfd1e0`) failed in 0 s with "workflow file issue" and zero jobs.
+- **Builds state:**
+  - `857ef02` is on no ref in the owning checkout. It is reachable only as the detached HEAD of the worktree `/tmp/mcpcli-414-builds-review-20261027`.
+  - The gitlink `cad9252` is an ancestor of Builds remote `main` (`cbe58fa`). Builds `main` changed `domain-ci.yml` again afterwards, in `2256924`, `568417a` and `35f185a`.
+- **The last run that executed failed.** Run `40550130133` (HEAD `b0e87c8`, pin `35587cf`) failed its blocking `aspire-tests` job.
+  - 20 of 21 vectors passed and the smoke passed. `parties.deactivate-party` failed with `Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 404.`
+  - Its runtime diagnostics show the Tenants sidecar logged `listen tcp :40625: bind: address already in use`.
+  - The hooks failed the run correctly.
+- **Source versions moved.** `8bfd1e0` moved the source gitlinks to EventStore `b1dd186`, Tenants `2cf3a96` and Parties `ea2bf5a`. At HEAD, `dotnet msbuild -getProperty:HexalithEventStoreVersion -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true` gives EventStore 3.128.0, Tenants 3.128.2 and Parties 3.128.0.
+- **Mutation check:** the parent ran each mutation separately against `CiHooksTests`.
+  - Removing any of these sub-conditions keeps the suite green: `len(expected)`/`set(expected)`, `coverage`, `lane.result`, `passed`/`failed`, outcome Operations and per-item `exitCode` (`ci.py:346-351`). Removing the `ci.py:211-212` guard does too.
+  - Removing `lane.fullLiveAccepted` or the per-item `result` check fails a test.
+
+- [ ] [Review][Patch] D1 — high, decided 2026-10-27: option (a). The caller pins Builds `857ef02`, which was never published, and `/pushall` then moved the gitlink to the divergent `cad9252`. As a result no CI job runs on `main`, and Builds `main` lacks the P11/P13 wording. [.github/workflows/ci.yml:18] (BH, AA, VG, EC)
+  - `cad9252` contains the hook code that passed hosted at `35587cf`. It differs from `857ef02` only in the P11/P13 `domain-ci.md` wording and in the stricter Tier 1/2 TRX checks.
+  - The checked-in `references/Hexalith.Builds/.github/workflows/domain-ci.md:34` and `:55` still carry the old sentences.
+  - The ledger item at `deferred-work.md:612` tracks publication of `857ef02`. Publishing it now would need a merge onto Builds `main`, not just a push.
+  - **Option (a), recommended:** pin `ci.yml:18` to the current gitlink `cad9252`, then run hosted CI once. That run also qualifies the moved source gitlinks. Re-land the `857ef02` wording as a separate Builds docs commit, and move the pin and gitlink together at the next Builds bump.
+  - **Option (b):** cherry-pick `857ef02` onto Builds `main` and push it. Move the pin and gitlink together to the new SHA, then run hosted CI. This completes P13 now, but it pulls in the three later `domain-ci.yml` changes (including `568417a`, the release execution gates) unqualified.
+  - **Option (c):** push `857ef02` to a Builds branch or tag so GitHub can resolve it, and keep the pin. The gitlink stays divergent and the wording stays off `main`.
+- [ ] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). No test ties the workflow pin to the gitlink, so the `8bfd1e0` divergence passed silently. [tools/live-topology/test_ci.py:875] (BH, EC)
+  - `CiWorkflowTests` only checks that the pin is 40 hex characters. Pass 1 rejected tying the two because they serve different purposes; this pass shows them drifting apart.
+  - **Option (a), recommended:** assert that the pin equals `git ls-tree HEAD references/Hexalith.Builds`, which works in shallow CI checkouts. Every Builds bump then moves both in one commit, as P13 prescribed. This would have caught `8bfd1e0` locally. It cannot prove publication: at `c6a19e8` both were equal and both unpublished.
+  - **Option (b):** keep them independent, and only document that they move together.
+- [ ] [Review][Patch] P1 — medium. Fifteen guards still have no test that fails when the guard is removed. [tools/live-topology/test_ci.py:319] (VG, AA, BH, parent mutations)
+  - **Each removal keeps `CiHooksTests` green:**
+    - the platform/Python gate (`ci.py:132`)
+    - the zlib/zstd check (`:143`)
+    - the Dapr CLI half of `:151`
+    - `daprd` presence (`:154`)
+    - bundle-extraction completeness (`:202`)
+    - the checkout symlink/`.git` condition (`:222`)
+    - the `copy_diagnostics` symlink skips (`:296`, `:299`)
+    - the smoke receipt count (`:383`)
+    - six sub-conditions of the 21-vector acceptance check (`:346-351`)
+  - **Fix:** add one removal-sensitive case per guard that asserts its message and that no build or live step ran. For the acceptance conditions, either add one malformed-lane fixture per condition or delete the conditions that only restate `fullLiveAccepted`.
+- [ ] [Review][Patch] P2 — medium. Lane-level `run-vectors.py` failures are not named, and not-run Operations are reported as failed. [tools/live-topology/ci.py:358] (AA)
+  - Preflight, admission, coverage and runtime-variable failures land only in the top-level `error` of `live-lane.json` (`run-vectors.py:182`), with `vectors` empty or not-run.
+  - `run-vectors.py` writes nothing to stderr. CI and `ci-live.json` therefore point to an empty `vectors-process.stderr.txt`, and the cause is visible only after downloading the artifact. This misses matrix row 2 and AC3.
+  - On an aggregate timeout, `running` and `not-run` items are listed under "failed Operations".
+  - **Fix:** copy `lane['error']` into `report['vectors']` and into the raised message, point at the stdout receipt line, and name only `result == 'failed'` items as failed. Cover each case with a fixture.
+- [ ] [Review][Patch] P3 — medium. The source-server version matrix in the README is false at HEAD. [tools/live-topology/README.md:187] (AA, BH, EC)
+  - `:187-189` says EventStore and Tenants resolve 3.128.0 and Parties 3.127.0. After `8bfd1e0` they resolve 3.128.0, 3.128.2 and 3.128.0, and nothing asserts the numbers.
+  - **Fix (wording only):** say that each source build's resolved `HexalithEventStoreVersion` is recorded in `preparation.json`, and keep only the McpCli 3.127.0 pin statement.
+- [ ] [Review][Patch] P4 — low. The `Missing qualified Aspire bundle prerequisite` guard is unreachable. [tools/live-topology/ci.py:211] (AA, parent mutation)
+  - The hash loop at `:201-204` already requires both files, so removing the guard keeps every test green.
+  - **Fix:** delete the guard and keep the hash recording.
+- [ ] [Review][Patch] P5 — low. The Python prerequisite accepts 3.11.0–3.11.3, which raise `TypeError` on the Aspire archive path. [tools/live-topology/ci.py:132] (BH, AA, EC)
+  - `tarfile.extractall(..., filter='data')` (`:184`) needs 3.11.4 or later; Debian 12 ships 3.11.2.
+  - **Fix:** require `(3, 11, 4)` and update `tools/live-topology/README.md:10` and `:157`.
+- [ ] [Review][Patch] P6 — low. The Builds hook-ordering assertion passes when the Aspire job's Dapr step is missing. [Hexalith.Builds/Tools/test-domain-workflow-test-platforms.ps1:561] (EC)
+  - `IndexOf` returns −1, and the global Dapr checks at `:693-696` find the build-and-test job's step instead.
+  - **Fix (owning Builds repository):** assert that each index is at least 0. Land it together with the D1 re-land of the Builds wording.
+- [x] [Review][Defer] The live lane is intermittent: the Dapr sidecar port-bind race recurred [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:51] — deferred: pre-existing topology, already tracked (`deferred-work.md:619`).
+  - New occurrence: in run `40550130133`, the Tenants sidecar lost `:40625`, bootstrap timed out, and `parties.deactivate-party` failed.
+  - Two of the three executed hosted full-lane attempts have now failed this way, so the blocking lane is red more often than green.
+- [x] [Review][Defer] `AGENTS.md` still says `HexalithEventStoreVersion` comes from the Builds props [AGENTS.md:92] — deferred: agent-context file, already tracked (`deferred-work.md:633`).
+
+#### Rejected (code review pass 2, 2026-10-27)
+
+- BH4, EC15 `false` — Duplicate receipt spellings or an unverified run directory. `run-vectors.py:173` takes each receipt from its own child's `Isolated run:` line, and each child creates a new run. The 22-run count (`ci.py:389`) stands. This was rejected in pass 1.
+- BH5, EC7 `false` — Unsanitized generation JSON. `live-lane.json` is structural, the C# receipts are sanitized at their source (4.13), and no secret is mapped into the hook environment. This was rejected in pass 1.
+- BH6, EC8 `maybe-false` (low if true) — Unquoted, Python-repr or truncated PEM forms, unsigned JWTs and other environment-name redaction gaps. No emitter of these forms has been shown, and the fixture keys are disposable. This was rejected in pass 1.
+- BH7, EC10 `low` — Dirty, or HEAD-not-gitlink, source checkouts are accepted. CI checks out exact gitlinks and the status is recorded; the fix adds guards for local runs only. This was rejected as B8 and BH7.
+- BH10, EC16 `low` — `run` does not re-hash the tools between hooks. Changing them requires altering trusted artifacts between hooks; no false pass was shown. This was rejected in the resumed Build review.
+- BH12 `false` — The deadline literals can drift silently. Every literal is pinned: 2280 at `test_ci.py:295`, 16200/960/17700 at `:426-427`, and 40/300/360 in `CiWorkflowTests`. Editing any one of them fails a test.
+- BH13 `low` — The 960 s smoke bound is shorter than the wrapper's worst case. This is the documented 960/900 s design from 4.13; the smoke takes about 40 s. The README wording was rejected in pass 1 as `false`.
+- BH14 `low` — The 30 s kill grace on the Builds outer `timeout` cannot run. McpCli's own hook deadlines (2280 s and 17700 s) fire 120 s and 300 s before the step limits, with their grace inside. The Builds bound is a backstop.
+- BH15, EC11 `low` — Transitive Python dependencies are unpinned. This is the same requirements file and policy as the existing conformance gates; the fix adds a hashed lock file.
+- BH16, EC13 `low` — Extra files in the installed Aspire bundle are not examined. P10 made the README state this one-way comparison; no extra-file harm has been shown.
+- BH17 `low` — The Builds and `ci.py` path rules disagree, two inputs lack descriptions, and a few PowerShell cases are missing. The caller's inputs are fixed and pinned, and every mismatch fails loudly. This was rejected in pass 1.
+- AA7 `low` — A deadline expiry is reported only as exit 124. The command, project and `timeoutSeconds` are recorded in `*.command.json`; the fix adds a branch for a rare state.
+- EC3 `low` — The wait after SIGKILL can expire. That needs a process to survive SIGKILL for more than 5 s; the fix adds exception handling.
+- EC4 `low` — A second TERM can arrive during cleanup. GNU `timeout`'s own `--kill-after` still kills the group. This was rejected in pass 1.
+- EC5 `low` — `ci.py`'s 10 s TERM wait is shorter than the 20 s grace `run-vectors.py` gives its children. This is reachable only by external cancellation: the 17700 s hook bound cannot fire before the 16200 + 960 s inner bounds. The isolated child, already sent TERM, still completes its own cleanup.
+- EC6 `low` — An I/O fault in `run()`'s `finally` skips the remaining redaction. No such fault has been shown. This was rejected in pass 1.
+- EC9 `maybe-false` (low if true) — Children inherit the terminal's stdin locally. No invoked child reads stdin: setup passes `--non-interactive` and sudo runs with `-n`.
+- EC12 `false` — An `aspire --version` banner causes a spurious refusal. The qualified 13.6.1 output passed in the local and hosted runs; other output comes from a different CLI and is correctly refused.
+- EC14 `false` — Bool or float lane counters are accepted. Acceptance also requires each of the 21 outcomes to have `result == 'passed'`, which a parent mutation proved is tested. The producer writes ints (`run-vectors.py:177-178`).
+- EC20 `low` — Hook callers get an empty `aspire-test-results` upload warning. It is a warning only; the `domain-ci.md` wording is accurate in effect.
+- VG (other) `false` — A reviewer shared a scratch directory with another reviewer. This is a process note, not a defect in the diff; the review inputs were verified intact.

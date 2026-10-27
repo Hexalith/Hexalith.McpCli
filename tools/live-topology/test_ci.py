@@ -875,6 +875,19 @@ class CiWorkflowTests(unittest.TestCase):
         self.assertRegex(caller, r'uses: Hexalith/Hexalith.Builds/\.github/workflows/domain-ci.yml@[0-9a-f]{40}\n')
         self.assertIn('len(operations) != 21 or sorted(discovered) != sorted(expected)', workflow)
 
+    def test_workflow_pin_matches_builds_gitlink(self):
+        root = HERE.parents[1]
+        workflow = (root / '.github/workflows/ci.yml').read_text()
+        caller = workflow.split('  ci:\n', 1)[1].split('\n  conformance-vector-contract:', 1)[0]
+        match = re.search(
+            r'uses: Hexalith/Hexalith.Builds/\.github/workflows/domain-ci.yml@([0-9a-f]{40})\n',
+            caller)
+        self.assertIsNotNone(match)
+        recorded = subprocess.run(
+            ['git', 'ls-tree', 'HEAD', 'references/Hexalith.Builds'],
+            cwd=root, check=True, capture_output=True, text=True).stdout.split()
+        self.assertEqual(match.group(1), recorded[2])
+
 
 if __name__ == '__main__':
     unittest.main()
