@@ -280,6 +280,10 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('Release', call)
+            if Path(call[1]).name == 'Hexalith.Tenants':
+                self.assertIn('-p:HexalithEventStoreFromSource=true', call)
+            else:
+                self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
         deadlines = [call[4] for call in calls if call[0] == 'timeout' and call[5:7] == ['dotnet', 'build']]
         self.assertEqual(['300'] * 3, deadlines)
         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
@@ -292,6 +296,10 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-getProperty:HexalithEventStoreVersion', call)
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
+            if Path(call[1]).name == 'Hexalith.Tenants':
+                self.assertIn('-p:HexalithEventStoreFromSource=true', call)
+            else:
+                self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())

@@ -23,6 +23,9 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
+# Tenants compiles against the sibling EventStore checkout. Its synced source
+# references routing contracts added after the published 3.128.2 package.
+SOURCE_EVENTSTORE = {'Hexalith.Tenants'}
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
@@ -231,12 +234,14 @@ def prepare(evidence: Path) -> None:
         for source in receipt['sources']:
             module = source['module']
             project = f'src/{module}/{module}.csproj'
+            properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true']
+            if module in SOURCE_EVENTSTORE:
+                properties.append('-p:HexalithEventStoreFromSource=true')
             source['HexalithEventStoreVersion'] = bounded(
-                ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion',
-                 '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true'],
+                ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=ROOT / 'references' / module)
             command = ['dotnet', 'build', f'src/{module}/{module}.csproj', '--configuration', 'Release', '-warnaserror', '-m:1',
-                       '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true']
+                       *properties]
             bounded(command, 300, evidence / (module + '-build'), cwd=ROOT / 'references' / module)
         python = private / 'venv/bin/python'
         bounded([sys.executable, '-m', 'venv', str(private / 'venv')], 60, evidence / 'python-venv')

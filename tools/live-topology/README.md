@@ -174,6 +174,9 @@ fails preparation.
 then builds EventStore, Tenants and Parties from their own working directories.
 Each server build has its own 300-second deadline and uses the documented
 `UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
+Tenants also sets `HexalithEventStoreFromSource=true` so it compiles against the
+sibling EventStore checkout. That checkout contains the routing contracts added
+after the published `Hexalith.EventStore.Contracts` 3.128.2 package.
 Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
