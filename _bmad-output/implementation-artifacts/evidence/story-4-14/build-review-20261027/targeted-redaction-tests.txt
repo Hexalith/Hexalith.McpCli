@@ -1,0 +1,9 @@
+test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) ... ok
+test_generated_signing_keys_are_redacted_without_breaking_json (test_ci.CiHooksTests.test_generated_signing_keys_are_redacted_without_breaking_json) ... ok
+test_generation_child_logs_and_xml_are_redacted (test_ci.CiHooksTests.test_generation_child_logs_and_xml_are_redacted) ... ok
+test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics (test_ci.CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 5.826s
+
+OK

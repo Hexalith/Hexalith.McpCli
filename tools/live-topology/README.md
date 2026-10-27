@@ -174,16 +174,19 @@ fails preparation.
 then builds EventStore, Tenants and Parties from their own working directories.
 Each server build has its own 300-second deadline and uses the documented
 `UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
-Aspire CLI 13.6.1 is installed from the official installer when absent; bounded
+Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
+absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
 existing incompatible CLI or Dapr version is refused. Python requirements are
 installed in a task-owned virtual environment. The existing bootstrap extracts
 the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 `RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
-status, tool versions and executable hashes are retained; the EventStore package
-pin remains 3.127.0 to preserve the approved package/vector qualification when
-integrating the newer Builds catalog.
+status, each source build's resolved `HexalithEventStoreVersion`, tool versions
+and executable hashes are retained. Only McpCli's own restore pins EventStore
+3.127.0 to preserve its approved package/vector qualification. Source servers
+follow their own configuration and the pinned Builds catalog; EventStore and
+Tenants resolve 3.128.0 while Parties resolves 3.127.0.
 
 From the repository root, after the focused Release checks and host Dapr
 initialization, run the same preparation and execution path:
@@ -193,14 +196,19 @@ ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh
 ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/run-ci.sh
 ```
 
-The preparation hook has a 2400-second outer deadline. Its prepared runtime must
+The preparation hook has a 2280-second outer deadline inside its 40-minute step.
+Its prepared runtime must
 have no previous runs and still contain the qualified binaries. The execution
-hook has an 18000-second outer deadline: `run-vectors.py` gets 16200 seconds and
+hook has a 17700-second outer deadline inside its 300-minute step:
+`run-vectors.py` gets 16200 seconds and
 the independent `GatewaySmokeTests` wrapper gets 960 seconds with `-failSkips`.
 The vector runner's 960-second child and wrapper's 900-second command limits
 remain enforced. The 360-minute hosted job budget includes preparation, testing,
 setup and upload. The vector aggregate may time out before the sum of every
 child's maximum budget; that is a failed lane, with partial evidence retained.
+Each hook's 30-second kill grace fits inside its Actions step deadline.
+On cancellation, detached-child cleanup waits ten seconds after TERM and at
+most five more after KILL so the hook can retain its failure receipt.
 
 `ASPIRE_EVIDENCE_PATH` must be a repository-relative directory without traversal
 or symbolic links. Its default is `TestResults/live-ci`.
@@ -211,8 +219,8 @@ to both hooks; existing user files are refused and left unchanged. Builds reject
 nonempty evidence before enabling its upload. `RUNNER_TEMP` must be outside the
 evidence upload directory. Failed preparation retains its owned private directory
 path for cleanup. Nested Python processes inherit the prepared virtual environment.
-Every installed Aspire bundle file is compared with a fresh extraction from the
-selected qualified CLI; mismatched installed bytes are refused.
+Every file in a fresh extraction from the selected qualified Aspire CLI must
+match the installed bundle; mismatched installed bytes are refused.
 GitHub-hosted runners first refresh the complete installed bundle with the pinned
 CLI's `setup --force`, including its managed launcher, before this hash comparison.
 
@@ -234,7 +242,5 @@ credential values are redacted from diagnostic text. Raw private runtime state
 stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
 
-The upstream hook commit is available locally and has not been pushed during
-implementation. Hosted acceptance remains unproven until it is published and an
-actual hosted run passes. This CI change does not enable paired release; the
-bootstrap-only release gate continues to refuse it.
+Paired package publication remains disabled; the bootstrap-only release gate
+continues to refuse it.

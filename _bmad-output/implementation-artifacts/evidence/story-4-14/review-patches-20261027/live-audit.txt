@@ -1,0 +1,62 @@
+{
+  "sourceHead": "b0e87c80e684275a7ba0d0dee0f430a58fe06360",
+  "builds": {
+    "base": "35587cfd104c5750d8ec3c0716933f386d6a0232",
+    "qualifiedCommit": "857ef02dbb4bde1bd4e678546aa41e73fb7d68b1",
+    "published": false,
+    "workflowAssertions": 323,
+    "commitlint": "passed",
+    "changedPaths": [
+      ".github/workflows/domain-ci.md"
+    ]
+  },
+  "verification": {
+    "releaseRestore": "passed",
+    "releaseWarningsAsErrorsBuild": "passed",
+    "dotnetPassed": 1531,
+    "dotnetExistingSkipped": 5,
+    "dotnetFailed": 0,
+    "dotnetProjects": {
+      "Abstractions": 20,
+      "Analyzers": 19,
+      "Core": 704,
+      "Manifest": 251,
+      "Cli": 479,
+      "Mcp": 58
+    },
+    "pythonTests": 137,
+    "guardRemovalMutationsCaught": 18,
+    "callerInputRemovalsCaught": 3,
+    "bashSyntax": "passed",
+    "callerActionlint": "passed",
+    "buildsActionlint": "passed"
+  },
+  "live": {
+    "fullLiveAccepted": true,
+    "vectorsPassed": 21,
+    "smokePassed": 1,
+    "passingXmlCases": 22,
+    "ownedCleanupReceipts": 22,
+    "semanticPhases": 144,
+    "commandSubmissions": 53,
+    "distinctCommandMessageIds": 53,
+    "queryAttempts": 91,
+    "evidenceDirectory": "/home/administrator/projects/hexalith/mcpcli/TestResults/live-ci-review-patches-20261027",
+    "privateDirectory": "/tmp/mcpcli-live-ci-ec8j5yg3",
+    "archiveFilesComparedWithOriginals": 1455,
+    "archiveSha256": "242473b2795ab6c92f39604269f6f0feb2de3be41efe240272a8607aefebbab3",
+    "aspireArchive": {
+      "url": "https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz",
+      "sha256": "f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8"
+    },
+    "sourceEventStoreVersions": {
+      "Hexalith.EventStore": "3.128.0",
+      "Hexalith.Tenants": "3.128.0",
+      "Hexalith.Parties": "3.127.0"
+    }
+  },
+  "remaining": [
+    "Publish the qualified local Builds revision and obtain hosted acceptance for the updated caller.",
+    "Previously deferred Dapr port-bind intermittence and agent-context package-version wording remain outside these patches."
+  ]
+}

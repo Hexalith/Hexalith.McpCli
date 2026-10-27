@@ -2,6 +2,7 @@
 """Bounded CI preparation and acceptance for the existing isolated semantic lane."""
 from __future__ import annotations
 
+import ctypes
 import ctypes.util
 import hashlib
 import json
@@ -13,6 +14,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import tarfile
 import tempfile
 import uuid
 import xml.etree.ElementTree as ET
@@ -24,6 +26,8 @@ MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
+ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz'
+ASPIRE_CLI_SHA256 = 'f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8'
 
 
 def sanitized(text: str) -> str:
@@ -34,10 +38,12 @@ def sanitized(text: str) -> str:
                   lambda match: match[1] + match['quote'] + '"[REDACTED]' + match['quote'] + '"', text)
     # A JSON string token can also contain an escaped JSON diagnostic or command.
     def redact_string(match):
-        if not re.search('SigningKey', match.group(), re.I) or '\\' not in match.group():
+        if '\\' not in match.group():
             return match.group()
         try:
-            return json.dumps(sanitized(json.loads(match.group())))
+            decoded = json.loads(match.group())
+            redacted = sanitized(decoded)
+            return json.dumps(redacted) if redacted != decoded else match.group()
         except json.JSONDecodeError:
             return match.group()
     text = re.sub(r'"(?:[^"\\]|\\.)*"', redact_string, text)
@@ -71,7 +77,7 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
                 except ProcessLookupError:
                     pass  # The child can exit between poll and the process-group signal.
                 try:
-                    child.wait(timeout=30)
+                    child.wait(timeout=10)
                 except subprocess.TimeoutExpired:
                     try:
                         os.killpg(child.pid, signal.SIGKILL)
@@ -128,7 +134,12 @@ def prepare(evidence: Path) -> None:
         for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'unshare', 'ip', 'curl', 'bash'):
             if not shutil.which(tool):
                 raise RuntimeError(f'Missing prerequisite: {tool}')
-        for library in ('ssl', 'crypto', 'z', 'zstd'):
+        for library in ('libssl.so.3', 'libcrypto.so.3'):
+            try:
+                ctypes.CDLL(library)
+            except OSError as error:
+                raise RuntimeError(f'Missing prerequisite shared library: {library}') from error
+        for library in ('z', 'zstd'):
             if not ctypes.util.find_library(library):
                 raise RuntimeError(f'Missing prerequisite shared library: {library}')
         tools = receipt['tools']
@@ -142,9 +153,6 @@ def prepare(evidence: Path) -> None:
         daprd = Path.home() / '.dapr/bin/daprd'
         if not daprd.is_file():
             raise RuntimeError(f'Missing initialized Dapr runtime: {daprd}')
-        tools['daprd'] = bounded([str(daprd), '--version'], 30, evidence / 'daprd-version')
-        if tools['daprd'] != '1.18.7':
-            raise RuntimeError('The initialized daprd must be version 1.18.7.')
         bounded(['docker', 'info', '--format', '{{.ServerVersion}}'], 30, evidence / 'docker-info')
         namespace_probe = ['unshare', '--user', '--map-root-user', '--net', '--pid', '--mount', '--fork', '--mount-proc', 'true']
         try:
@@ -164,12 +172,17 @@ def prepare(evidence: Path) -> None:
         receipt['privateDirectory'] = str(private)
         save(evidence / 'preparation.json', receipt)
         if not shutil.which('aspire'):
-            installer = private / 'install-aspire.sh'
+            archive = private / 'aspire-cli.tar.gz'
             bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--connect-timeout', '15', '--max-time', '120',
-                     'https://aspire.dev/install.sh', '-o', str(installer)], 130, evidence / 'aspire-download')
-            tools['aspireInstallerSha256'] = hashlib.sha256(installer.read_bytes()).hexdigest()
-            bounded(['bash', str(installer), '--version', '13.6.1', '--skip-path'], 300, evidence / 'aspire-install')
-            os.environ['PATH'] = str(Path.home() / '.aspire/bin') + os.pathsep + os.environ['PATH']
+                     ASPIRE_CLI_URL, '-o', str(archive)], 130, evidence / 'aspire-download')
+            digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+            if digest != ASPIRE_CLI_SHA256:
+                raise RuntimeError('Aspire CLI release archive SHA-256 mismatch; refusing extraction.')
+            tools['aspireArchive'] = {'url': ASPIRE_CLI_URL, 'sha256': digest}
+            installed_cli = private / 'aspire-cli'
+            with tarfile.open(archive, 'r:gz') as release:
+                release.extractall(installed_cli, filter='data')
+            os.environ['PATH'] = str(installed_cli) + os.pathsep + os.environ['PATH']
         tools['aspire'] = bounded(['aspire', '--version'], 30, evidence / 'aspire-version')
         if tools['aspire'].split('+')[0] != '13.6.1':
             raise RuntimeError('Aspire CLI 13.6.1 is required.')
@@ -215,7 +228,13 @@ def prepare(evidence: Path) -> None:
                       'commit': bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / (module + '-commit'), cwd=checkout),
                       'status': bounded(['git', 'status', '--porcelain', '--untracked-files=normal'], 10, evidence / (module + '-status'), cwd=checkout)}
             receipt['sources'].append(source)
-        for module in MODULES:
+        for source in receipt['sources']:
+            module = source['module']
+            project = f'src/{module}/{module}.csproj'
+            source['HexalithEventStoreVersion'] = bounded(
+                ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion',
+                 '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true'],
+                30, evidence / (module + '-eventstore-version'), cwd=ROOT / 'references' / module)
             command = ['dotnet', 'build', f'src/{module}/{module}.csproj', '--configuration', 'Release', '-warnaserror', '-m:1',
                        '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true']
             bounded(command, 300, evidence / (module + '-build'), cwd=ROOT / 'references' / module)
@@ -295,16 +314,17 @@ def run(evidence: Path) -> None:
         prepared = json.loads(source.read_text())
         if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
             raise ValueError('Current successful preparation receipt is required.')
-        runtime = Path(prepared['runtime']).resolve()
+        prepared_runtime = Path(prepared['runtime']).resolve()
         python = Path(prepared['python'])
-        if not runtime.is_dir() or not python.is_file() or not TESTS.is_file():
+        if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
             raise ValueError('Prepared private runtime, Python and built Release integration tests are required.')
         for row in json.loads((ROOT / 'tools/live-topology/binaries.json').read_text()):
-            binary = runtime / 'bin' / Path(row['source']).name
+            binary = prepared_runtime / 'bin' / Path(row['source']).name
             if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
                 raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
-        if (runtime / 'runs').exists():
+        if (prepared_runtime / 'runs').exists():
             raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
+        runtime = prepared_runtime
         environment = os.environ.copy()
         for key in list(environment):
             if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
@@ -334,8 +354,17 @@ def run(evidence: Path) -> None:
                 require_owned(Path(item['isolatedReceipt']), runtime)
             report['vectors'] = {'result': 'passed', 'count': 21, 'receipt': str(vectors / 'live-lane.json')}
         except Exception as error:
-            vector_error = error
-            report['vectors'] = {'result': 'failed', 'error': str(error)}
+            failures = []
+            if (vectors / 'live-lane.json').is_file():
+                try:
+                    lane = json.loads((vectors / 'live-lane.json').read_text())
+                    failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
+                                for item in lane.get('vectors', []) if item.get('result') != 'passed']
+                except (ValueError, AttributeError, TypeError):
+                    pass  # Retain the original failure and still attempt the independent smoke.
+            detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
+            vector_error = RuntimeError(str(error) + detail)
+            report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures}
         # Smoke stays independent and runs even after a vector assertion failure.
         smoke = generation / 'smoke'
         smoke.mkdir()

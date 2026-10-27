@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "bash",
+      "tools/live-topology/prepare-ci.sh"
+    ],
+    "environment": {
+      "ASPIRE_EVIDENCE_PATH": "TestResults/live-ci-review-patches-20261027",
+      "existingAspireHiddenFromPath": true
+    },
+    "exitCode": 0,
+    "elapsedSeconds": 22.135
+  },
+  {
+    "command": [
+      "bash",
+      "tools/live-topology/run-ci.sh"
+    ],
+    "environment": {
+      "ASPIRE_EVIDENCE_PATH": "TestResults/live-ci-review-patches-20261027",
+      "existingAspireHiddenFromPath": true
+    },
+    "exitCode": 0,
+    "elapsedSeconds": 820.096
+  }
+]

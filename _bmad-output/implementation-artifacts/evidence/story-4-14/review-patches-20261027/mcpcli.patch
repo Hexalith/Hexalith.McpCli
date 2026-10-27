@@ -1,0 +1,862 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 1d2fb9f..ba1f345 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -15,7 +15,7 @@ permissions:
+ 
+ jobs:
+   ci:
+-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@35587cfd104c5750d8ec3c0716933f386d6a0232
++    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@857ef02dbb4bde1bd4e678546aa41e73fb7d68b1
+     with:
+       solution: Hexalith.McpCli.slnx
+       test-platform: microsoft-testing-platform
+diff --git a/README.md b/README.md
+index a2b3fc3..2a34ac5 100644
+--- a/README.md
++++ b/README.md
+@@ -267,7 +267,7 @@ MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" timeout --signal=TERM --kill-afte
+ 
+ Each vector gets a new isolated process, Redis and authenticated topology. Exact restored packages, owner approvals, inventory hashes, complete Catalog coverage, all vector bytes and strict companion plans are rechecked before vector Commands. The existing Development bootstrap persists the test administrator through its authenticated server-owned path; a privileged Query must then prove that administrator's persisted membership. Each declared Command is submitted once. A repeated idempotent Command step is proven by its single accepted submission plus unchanged persisted state. Explicit Queries observe persisted effects within 45-second deadlines; continuation cursors and audit timestamps come from real query documents. Static v1 assertions remain enforced. Endpoint and identity travel privately in the runner environment. Failed vectors print sanitized phase and assertion diagnostics in the selected test failure. The [lane documentation](tools/live-topology/README.md) explains preflight-only and selected-vector diagnostics, receipt locations, and partial/skip behavior. Full acceptance requires all 21 passing, unskipped cases and owned cleanup; acceptance responses alone do not prove semantics.
+ 
+-CI now configures the reusable Builds Aspire tier as required: `aspire-test-project: tests/Hexalith.McpCli.Integration.Tests`, `test-platform: microsoft-testing-platform`, and `aspire-continue-on-error: false`. The six focused Release test projects finish before that tier. After the tier's Release build and host Dapr initialization, its preparation hook verifies prerequisites, builds the three root source servers with published sibling dependencies, installs the pinned Python requirements and qualified Aspire bundle when missing, and prepares a fresh private runtime. The runner executes all 21 vectors and the independent authenticated smoke, requiring complete fresh receipts, zero skips and owned cleanup. Any failed prerequisite, source build, semantic assertion, deadline or incomplete receipt fails the tier.
++CI now configures the reusable Builds Aspire tier as required: `aspire-test-project: tests/Hexalith.McpCli.Integration.Tests`, `test-platform: microsoft-testing-platform`, and `aspire-continue-on-error: false`. The six focused Release test projects finish before that tier. After the tier's Release build and host Dapr initialization, its preparation hook verifies prerequisites, builds the three root source servers with published sibling dependencies, installs the pinned Python requirements and prepares a fresh private runtime. When Aspire CLI is absent, preparation downloads its pinned 13.6.1 release archive and verifies its SHA-256 before extraction. GitHub-hosted runners refresh the complete qualified Aspire bundle before comparing its payload hashes. The runner executes all 21 vectors and the independent authenticated smoke, requiring complete fresh receipts, zero skips and owned cleanup. Any failed prerequisite, source build, semantic assertion, deadline or incomplete receipt fails the tier.
+ 
+ After the same focused Release checks and Dapr initialization, reproduce the two bounded CI hooks from this repository root:
+ 
+@@ -276,4 +276,4 @@ ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh
+ ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/run-ci.sh
+ ```
+ 
+-Preparation has a 40-minute outer limit; the runner has a five-hour limit, including a 270-minute vector limit and a separate 960-second smoke limit. Each isolated child retains its 900-second deadline. The complete job is limited to 360 minutes. `TestResults/live-ci/ci-live.json` grants acceptance only for a complete passing invocation. Preparation identities, source-build diagnostics, vector receipts, smoke XML and sanitized runtime diagnostics are uploaded on success and failure; private credentials and Redis contents stay outside that evidence directory. See the [CI evidence and prerequisites](tools/live-topology/README.md#required-ci-lane) for the exact locations. The pinned Builds hook revision is qualified locally; hosted CI proof requires that revision to be published upstream. Paired package publication remains disabled.
++Preparation has a 38-minute outer limit inside its 40-minute step; the runner has a 295-minute limit inside its 300-minute step, including a 270-minute vector limit and a separate 960-second smoke limit. Both hooks allow a 30-second kill grace; detached-child cleanup waits at most 15 seconds after cancellation. Each isolated child retains its 900-second deadline. The complete job is limited to 360 minutes. `TestResults/live-ci/ci-live.json` grants acceptance only for a complete passing invocation. Preparation identities, source-build diagnostics, vector receipts, smoke XML and sanitized runtime diagnostics are uploaded on success and failure; private credentials and Redis contents stay outside that evidence directory. See the [CI evidence and prerequisites](tools/live-topology/README.md#required-ci-lane) for the exact locations. Paired package publication remains disabled.
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index 85ee5f4..46ef357 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -607,10 +607,12 @@ status: open
+ 
+ - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+   summary: Qualify the live lane on the actual hosted Ubuntu runner and resolve any namespace prerequisite restrictions.
+-  evidence: Unverified (maybe-false); medium if true. `tools/live-topology/ci.py:149` probes capability-bearing user/PID/network/mount namespaces, and the upstream Aspire job uses ubuntu-latest. The local isolated full lane passes, but hosted AppArmor behavior has not been exercised. A real hosted run's namespace-probe result settles this; retain fail-closed behavior and do not relax isolation. No equivalent ledger entry was found before append.
++  evidence: Originally unverified (maybe-false); medium if true. `tools/live-topology/ci.py:155` probes capability-bearing user/PID/network/mount namespaces, and the upstream Aspire job uses ubuntu-latest. Hosted run `40377962105` proves bounded hosted-only namespace setup and the real re-probe succeed; attempt 2 of `40381146665` passes all 21 vectors and the independent smoke, as recorded in the source spec's 2026-10-27 review findings. Isolation and native namespace proofs remain required.
++  status: resolved (2026-10-27) by the recorded hosted namespace and full-live evidence; new Builds-pin publication/hosted qualification is tracked separately below.
+ - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+-  summary: Publish the qualified upstream Builds hook revision before integrating the pinned McpCli caller and obtaining hosted CI acceptance.
+-  evidence: High integration blocker. `.github/workflows/ci.yml:18` pins the qualified local Builds revision `35587cfd104c5750d8ec3c0716933f386d6a0232`; `_bmad-output/implementation-artifacts/evidence/story-4-14/review-fixes/verification.json:2` records the revision and unpublished status. Implementation explicitly prohibited remote Git operations. The concrete qualified commit and full passing local evidence are ready for the final integration decision; no hosted acceptance or story completion is claimed. No equivalent ledger entry was found before append.
++  summary: Publish the newly qualified Builds revision and obtain hosted CI acceptance for the updated pinned caller.
++  evidence: High integration blocker for the current pin. The former `35587cfd104c5750d8ec3c0716933f386d6a0232` revision was published and passed hosted run `40381146665`, attempt 2, as recorded in the source spec. Review patch P13 now moves `.github/workflows/ci.yml:18` and the gitlink to documentation-only child `857ef02dbb4bde1bd4e678546aa41e73fb7d68b1`. `_bmad-output/implementation-artifacts/evidence/story-4-14/review-patches-20261027/verification.json:5` records this new locally qualified, unpublished revision, 323 owner workflow assertions and complete passing local hooks. Its exact owner patch and local Git bundle are retained alongside the index. This implementation stage prohibits pushes and Git remote operations, so no hosted resolution or acceptance is claimed for the new pin.
++  status: open for `857ef02`; the earlier publication requirement for `35587cf` is resolved. This updates the existing integration item rather than appending a duplicate.
+ 
+ ## Deferred from: code review of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-27)
+ 
+diff --git a/_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md b/_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md
+index f723635..1d38297 100644
+--- a/_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md
++++ b/_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md
+@@ -158,7 +158,7 @@ Parent checks during triage:
+ - **Mutation check:** each mutation was run separately against `CiHooksTests`. Removing any of the nine guards or paths named in P7 keeps all 28 hook tests green. The VG layer's mutations back P2–P6 in the same way.
+ - The current suite passes locally: 29 tests in 32 s.
+ 
+-- [ ] [Review][Patch] D1 — medium, decided 2026-10-27: option (a). The source-built EventStore and Tenants servers moved to EventStore 3.128.0 packages without any record of it. [tools/live-topology/ci.py:219]
++- [x] [Review][Patch] D1 — medium, decided 2026-10-27: option (a). The source-built EventStore and Tenants servers moved to EventStore 3.128.0 packages without any record of it. [tools/live-topology/ci.py:219]
+   - **Cause:** Moving the Builds gitlink changed the catalog default that the three source builds read. EventStore and Tenants now resolve 3.128.0; Parties keeps its own 3.127.0 pin. In 4.13 all three resolved 3.127.0.
+   - **Why it matters:** `tools/live-topology/README.md:184-186` says the 3.127.0 pin "preserve[s] the approved package/vector qualification", but that pin covers only McpCli's own restore. `preparation.json` records source SHAs and git status, not the resolved package versions, so the mixed topology is invisible in the evidence (BH, EC).
+   - **Already proven:** both the local run and hosted attempt 2 pass with this mix.
+@@ -166,7 +166,7 @@ Parent checks during triage:
+     - The servers follow the pinned catalog, as Platform's run/debug composition does.
+     - The vector approval binds McpCli's packages, not the servers'.
+   - **Option (b):** pass `-p:HexalithEventStoreVersion=3.127.0`, taken from McpCli's pin, to all three source builds (`tools/live-topology/ci.py:219`). This restores the 4.13 topology exactly: all three gitlinks are unchanged and built against 3.127.0 at baseline. It adds a second copy of the pin and leaves local source-build instructions on the catalog version.
+-- [ ] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). Every hosted run executes an unverified `https://aspire.dev/install.sh`, and the CLI is qualified only by its version string. [tools/live-topology/ci.py:166]
++- [x] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). Every hosted run executes an unverified `https://aspire.dev/install.sh`, and the CLI is qualified only by its version string. [tools/live-topology/ci.py:166]
+   - **Evidence:** `ci.py:166-175` records the installer's SHA-256 but never compares it.
+     - Hosted evidence shows the install branch runs on every GitHub-hosted job.
+     - The bundle check (`ci.py:181-194`) compares the installed bundle with an extraction from the same unpinned CLI, so it cannot detect a bad CLI.
+@@ -175,26 +175,26 @@ Parent checks during triage:
+   - **Option (a), recommended:** download the 13.6.1 CLI release archive directly and verify a pinned SHA-256 before extracting it, dropping `install.sh`. This matches Platform's checksum-verified release-asset preparation for Dapr.
+   - **Option (b):** pin the `install.sh` digest. CI then fails whenever upstream edits that unversioned script, and the script's own downloads are still trusted.
+   - **Option (c):** keep the version-only qualification and document it.
+-- [ ] [Review][Patch] P1 — medium. Failed vectors are not named in the CI log or in `ci-live.json`. [tools/live-topology/ci.py:338]
++- [x] [Review][Patch] P1 — medium. Failed vectors are not named in the CI log or in `ci-live.json`. [tools/live-topology/ci.py:338]
+   - On a vector failure, both `ci-live.json` and the stderr line say only `run-vectors.py … exited 1; see …/vectors-process.stderr.txt`. That file is empty, because `run-vectors.py` prints its single summary line to stdout.
+   - In hosted attempt 1, finding `parties.create-party` and its Gateway 500 meant downloading the 2.5 MB artifact. Matrix row 4 and AC3 require the Operation/phase where available (AA).
+   - **Fix:** when `vectors/live-lane.json` exists, copy each non-passing `{operation, result, error}` into `report['vectors']['failures']`, and name the failing Operations in the raised message that `main` prints. Cover it with a fixture outcome that carries an error.
+-- [ ] [Review][Patch] P2 — medium. The `stale-isolation` fixture cannot catch removal of the receipt containment check. [tools/live-topology/test_ci.py:145]
++- [x] [Review][Patch] P2 — medium. The `stale-isolation` fixture cannot catch removal of the receipt containment check. [tools/live-topology/test_ci.py:145]
+   - The fixture points at a non-existent `/outside/current-runtime/result.json`. With the `ci.py:251` containment condition replaced by `False`, all hook tests still pass, because `read_text()` raises `FileNotFoundError` instead (VG).
+   - **Fix:** write a complete owned `result.json` and `outside.json` in a sibling runtime directory, and assert the "outside the prepared runtime" error.
+-- [ ] [Review][Patch] P3 — medium. The smoke's own ownership and cleanup proof has no independent test. [tools/live-topology/ci.py:356]
++- [x] [Review][Patch] P3 — medium. The smoke's own ownership and cleanup proof has no independent test. [tools/live-topology/ci.py:356]
+   - `missing-cleanup` also breaks every vector run, so vector acceptance already fails. Replacing `:356` with `pass` keeps the suite green (VG, BH).
+   - **Fix:** add a fixture mode that changes only `owned('smoke')`. Assert that the vectors `passed` and that the smoke ownership error appears in `ci-live.json`.
+-- [ ] [Review][Patch] P4 — medium. No test covers the exact count of 22 isolated runtimes. [tools/live-topology/ci.py:360]
++- [x] [Review][Patch] P4 — medium. No test covers the exact count of 22 isolated runtimes. [tools/live-topology/ci.py:360]
+   - Replacing the condition with `if False:` keeps every test green (VG, BH).
+   - **Fix:** add a fixture mode that creates an extra `runs/<name>` directory, and assert the count error and `fullLiveAccepted: false`.
+-- [ ] [Review][Patch] P5 — medium. The final redaction pass over generation logs and XML is untested. [tools/live-topology/ci.py:369]
++- [x] [Review][Patch] P5 — medium. The final redaction pass over generation logs and XML is untested. [tools/live-topology/ci.py:369]
+   - Emptying the pattern tuple, or dropping only `tests.xml`, keeps every test green. The end-to-end test reads only `runtime-diagnostics/` (VG).
+   - **Fix:** make the `run-vectors.py` fixture write `<op>/child.stdout.txt` and `tests.xml` containing secrets: a JWT, a PEM block, an env token and a generated `SigningKey`. Assert that none of them appear anywhere under `receipt['output']`.
+-- [ ] [Review][Patch] P6 — medium. The refusal of a symlinked evidence path in `ci.py` has no test. [tools/live-topology/ci.py:100]
++- [x] [Review][Patch] P6 — medium. The refusal of a symlinked evidence path in `ci.py` has no test. [tools/live-topology/ci.py:100]
+   - Replacing the guard with `if False:` keeps the suite green. `test_caller_contract_and_unsafe_evidence_paths_are_refused` covers only `../outside` and `.`, and for local runs `ci.py` is the only guard (VG, BH).
+   - **Fix:** add a symlinked `ASPIRE_EVIDENCE_PATH` subcase that asserts the message and checks the link target is left untouched.
+-- [ ] [Review][Patch] P7 — medium. Nine more guards and bounds can be removed with no test failing. [tools/live-topology/test_ci.py:419]
++- [x] [Review][Patch] P7 — medium. Nine more guards and bounds can be removed with no test failing. [tools/live-topology/test_ci.py:419]
+   - **Mutations that left all hook tests green (parent check):**
+     - the preparation-path match (`ci.py:293`)
+     - the ownership-ID match (`:296`)
+@@ -210,17 +210,17 @@ Parent checks during triage:
+     - Assert the outer `timeout` calls from the stub log.
+     - Pin the three caller inputs.
+     - Assert the expected stderr in the cases that currently check only a nonzero exit.
+-- [ ] [Review][Patch] P8 — low. The READMEs keep claims that the hosted-qualification commits made stale. [README.md:279]
++- [x] [Review][Patch] P8 — low. The READMEs keep claims that the hosted-qualification commits made stale. [README.md:279]
+   - `README.md:279` says the pinned Builds revision "is qualified locally; hosted CI proof requires that revision to be published upstream". `tools/live-topology/README.md:237-239` says it "has not been pushed" and that hosted acceptance "remains unproven". Both are now false (see the parent checks).
+   - `README.md:270` says the bundle is installed "when missing", but GitHub-hosted runners always force-refresh it (`ci.py:185`) (BH, AA).
+   - **Fix (wording only):** drop the publication-status sentences, since status belongs in the evidence. Keep "Paired package publication remains disabled". State that hosted runners refresh the bundle.
+-- [ ] [Review][Patch] P9 — low. The OpenSSL 3 prerequisite check accepts any libssl. [tools/live-topology/ci.py:132]
++- [x] [Review][Patch] P9 — low. The OpenSSL 3 prerequisite check accepts any libssl. [tools/live-topology/ci.py:132]
+   - `tools/live-topology/README.md:10` requires `libssl.so.3` and `libcrypto.so.3`, but `find_library('ssl')` also accepts OpenSSL 1.1. The failure then appears later, with no prerequisite named (AA, EC, BH).
+   - **Fix:** load the exact `libssl.so.3` and `libcrypto.so.3` sonames, and name whichever one is missing.
+-- [ ] [Review][Patch] P10 — low. The README says every installed bundle file is compared; only the expected files are. [tools/live-topology/README.md:214]
++- [x] [Review][Patch] P10 — low. The README says every installed bundle file is compared; only the expected files are. [tools/live-topology/README.md:214]
+   - `ci.py:191` iterates over the fresh extraction, so extra files in `~/.aspire/bundle` are never examined (EC).
+   - **Fix (wording only):** say that every file of a fresh extraction from the selected CLI must match the installed bundle.
+-- [ ] [Review][Patch] P11 — low. The hook deadlines equal their step limits, and `bounded()`'s 35 s cleanup outlasts the hook's 30 s kill grace. [tools/live-topology/prepare-ci.sh:5]
++- [x] [Review][Patch] P11 — low. The hook deadlines equal their step limits, and `bounded()`'s 35 s cleanup outlasts the hook's 30 s kill grace. [tools/live-topology/prepare-ci.sh:5]
+   - **The deadlines:** 2400 s and 18000 s equal both the caller's 40- and 300-minute steps and the Builds wrapper's `timeout`, so the Actions step deadline races the TERM path.
+   - **The grace mismatch:** after TERM, `bounded()` waits 30 s and then 5 s more (`ci.py:74`), but the hook SIGKILLs Python after 30 s. This loses the failure receipt and the in-flight output.
+   - **Reachability:** preparation's inner bounds add up to more than 2400 s, so a slow preparation can reach this (hosted preparation took 54 s). The runner hook cannot fire before its inner bounds do.
+@@ -230,10 +230,10 @@ Parent checks during triage:
+     - Make `bounded()`'s wait after TERM shorter than the hook's kill grace.
+     - Update both READMEs.
+     - Correct the Builds sentence together with P13.
+-- [ ] [Review][Patch] P12 — low. When a reused runtime is refused, its earlier runs are still copied into this generation's diagnostics. [tools/live-topology/ci.py:298]
++- [x] [Review][Patch] P12 — low. When a reused runtime is refused, its earlier runs are still copied into this generation's diagnostics. [tools/live-topology/ci.py:298]
+   - `runtime` is set before the freshness check at `:306`, so `finally` copies the old `runs/*` under the new generation (EC). Only a local rerun without new preparation reaches this.
+   - **Fix:** assign the `runtime` that `finally` uses only after the freshness check passes.
+-- [ ] [Review][Patch] P13 — low. Builds' `domain-ci.md` still says TRX results are always uploaded. [Hexalith.Builds/.github/workflows/domain-ci.md:34]
++- [x] [Review][Patch] P13 — low. Builds' `domain-ci.md` still says TRX results are always uploaded. [Hexalith.Builds/.github/workflows/domain-ci.md:34]
+   - With a runner hook, the default Aspire test steps are skipped, so `aspire-test-results` has no TRX to upload. Hook output goes to the `aspire-hook-evidence` artifact instead (BH, EC).
+   - **Fix (owning Builds repository, wording only):** limit the TRX sentence to callers without a runner hook, and fix the P11 grace sentence in the same commit. Then move the McpCli pin and gitlink.
+ - [x] [Review][Defer] The hosted live lane is intermittent: a port bind race in a Dapr sidecar failed `parties.create-party` [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:51] — deferred: pre-existing topology (Stories 4.12–4.13), exposed now that the lane is blocking.
+@@ -264,3 +264,16 @@ Parent checks during triage:
+ - `low` — A dirty or non-gitlink source checkout is accepted (EC). CI checkouts are always clean gitlinks and status is recorded. The same class was rejected as B8.
+ - `false` — The final redaction pass follows symlinked logs outside the evidence directory (EC). No program under test creates such links.
+ - `false` — Duplicate receipt directories, or a smoke that reuses a vector's run, can pass with fewer than 22 proofs (EC). This needs `run-vectors.py` or `run-isolated.py` to misbehave. The distinct-receipt set and the 22-entry count already guard the paths that were shown, and P4 adds a test for the count.
++
++
++### Review patch resolution and local qualification (2026-10-27)
++
++All 15 code-review patches (D1, D2 and P1–P13) are implemented. Source preparation records each server's resolved `HexalithEventStoreVersion`; the real run confirms EventStore/Tenants at 3.128.0 and Parties at 3.127.0 while McpCli retains 3.127.0. Missing Aspire tooling now comes from the official 13.6.1 release archive after a pinned SHA-256 check, exercised by hiding existing launchers during actual preparation. Failed vector Operations and their errors are retained in `ci-live.json` and named in stderr. Exact OpenSSL 3 prerequisites, shorter cancellation cleanup, deadline margins, current-runtime-only diagnostics, independent ownership/count/redaction guards and corrected documentation are qualified.
++
++The owning Builds documentation-only commit is `857ef02dbb4bde1bd4e678546aa41e73fb7d68b1`, directly based on the former `35587cf` pin. Its 323 workflow assertions, actionlint and pinned commitlint pass; the caller pin and gitlink now select it. The local Git bundle and exact patch are retained. No push or Git remote operation was performed, so publication and hosted resolution of this new revision remain open; the prior hosted acceptance of `35587cf` is preserved as historical proof.
++
++Fresh Release restore and `-warnaserror` build pass with zero warnings/errors. All six focused projects pass: 1,531 tests passed, zero failed, five existing non-live skips. All 137 Python tests pass. Eighteen guard-removal mutations and three caller-input removals each fail their intended assertions. Bash syntax and caller actionlint pass.
++
++The exact preparation/runner shell hooks pass in 22.135/820.096 seconds: 21 passing vectors and independent authenticated smoke, zero live skips/failures, 22 passing XML cases, 22 owned cleanup receipts, 144 semantic phases, 53 single Command submissions with 53 distinct message IDs and 91 Query attempts. Every one of the 1,455 archived evidence files matches its original bytes; private runtime credentials/state remain excluded. Evidence: [review patch qualification](evidence/story-4-14/review-patches-20261027/README.md) and [verification index](evidence/story-4-14/review-patches-20261027/verification.json).
++
++The hosted namespace follow-up is resolved by the already-recorded hosted runs. Publication/hosted acceptance for the new documentation-only Builds revision remains the existing integration ledger item. The pre-existing Dapr port-bind intermittence and agent-context version wording remain deferred; no duplicate ledger entries were appended. This local qualification does not claim hosted acceptance for the new pin or enable paired publication.
+Submodule references/Hexalith.Builds 35587cf..857ef02:
+  > docs(ci): clarify Aspire hook evidence and deadlines
+diff --git a/tools/live-topology/README.md b/tools/live-topology/README.md
+index 9489a10..af1c66e 100644
+--- a/tools/live-topology/README.md
++++ b/tools/live-topology/README.md
+@@ -174,16 +174,19 @@ fails preparation.
+ then builds EventStore, Tenants and Parties from their own working directories.
+ Each server build has its own 300-second deadline and uses the documented
+ `UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
+-Aspire CLI 13.6.1 is installed from the official installer when absent; bounded
++Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
++absent, with a pinned SHA-256 verified before extraction; bounded
+ `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
+ existing incompatible CLI or Dapr version is refused. Python requirements are
+ installed in a task-owned virtual environment. The existing bootstrap extracts
+ the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
+ `RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
+ preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
+-status, tool versions and executable hashes are retained; the EventStore package
+-pin remains 3.127.0 to preserve the approved package/vector qualification when
+-integrating the newer Builds catalog.
++status, each source build's resolved `HexalithEventStoreVersion`, tool versions
++and executable hashes are retained. Only McpCli's own restore pins EventStore
++3.127.0 to preserve its approved package/vector qualification. Source servers
++follow their own configuration and the pinned Builds catalog; EventStore and
++Tenants resolve 3.128.0 while Parties resolves 3.127.0.
+ 
+ From the repository root, after the focused Release checks and host Dapr
+ initialization, run the same preparation and execution path:
+@@ -193,14 +196,19 @@ ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh
+ ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/run-ci.sh
+ ```
+ 
+-The preparation hook has a 2400-second outer deadline. Its prepared runtime must
++The preparation hook has a 2280-second outer deadline inside its 40-minute step.
++Its prepared runtime must
+ have no previous runs and still contain the qualified binaries. The execution
+-hook has an 18000-second outer deadline: `run-vectors.py` gets 16200 seconds and
++hook has a 17700-second outer deadline inside its 300-minute step:
++`run-vectors.py` gets 16200 seconds and
+ the independent `GatewaySmokeTests` wrapper gets 960 seconds with `-failSkips`.
+ The vector runner's 960-second child and wrapper's 900-second command limits
+ remain enforced. The 360-minute hosted job budget includes preparation, testing,
+ setup and upload. The vector aggregate may time out before the sum of every
+ child's maximum budget; that is a failed lane, with partial evidence retained.
++Each hook's 30-second kill grace fits inside its Actions step deadline.
++On cancellation, detached-child cleanup waits ten seconds after TERM and at
++most five more after KILL so the hook can retain its failure receipt.
+ 
+ `ASPIRE_EVIDENCE_PATH` must be a repository-relative directory without traversal
+ or symbolic links. Its default is `TestResults/live-ci`.
+@@ -211,8 +219,8 @@ to both hooks; existing user files are refused and left unchanged. Builds reject
+ nonempty evidence before enabling its upload. `RUNNER_TEMP` must be outside the
+ evidence upload directory. Failed preparation retains its owned private directory
+ path for cleanup. Nested Python processes inherit the prepared virtual environment.
+-Every installed Aspire bundle file is compared with a fresh extraction from the
+-selected qualified CLI; mismatched installed bytes are refused.
++Every file in a fresh extraction from the selected qualified Aspire CLI must
++match the installed bundle; mismatched installed bytes are refused.
+ GitHub-hosted runners first refresh the complete installed bundle with the pinned
+ CLI's `setup --force`, including its managed launcher, before this hash comparison.
+ 
+@@ -234,7 +242,5 @@ credential values are redacted from diagnostic text. Raw private runtime state
+ stays outside uploaded evidence. Keep its location from `preparation.json` until
+ diagnostics are complete, then remove only that task-owned directory.
+ 
+-The upstream hook commit is available locally and has not been pushed during
+-implementation. Hosted acceptance remains unproven until it is published and an
+-actual hosted run passes. This CI change does not enable paired release; the
+-bootstrap-only release gate continues to refuse it.
++Paired package publication remains disabled; the bootstrap-only release gate
++continues to refuse it.
+diff --git a/tools/live-topology/ci.py b/tools/live-topology/ci.py
+index 11e092c..0916336 100644
+--- a/tools/live-topology/ci.py
++++ b/tools/live-topology/ci.py
+@@ -2,6 +2,7 @@
+ """Bounded CI preparation and acceptance for the existing isolated semantic lane."""
+ from __future__ import annotations
+ 
++import ctypes
+ import ctypes.util
+ import hashlib
+ import json
+@@ -13,6 +14,7 @@ import shutil
+ import signal
+ import subprocess
+ import sys
++import tarfile
+ import tempfile
+ import uuid
+ import xml.etree.ElementTree as ET
+@@ -24,6 +26,8 @@ MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
+ SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
+ NAMESPACES = {'user', 'pid', 'net', 'mnt'}
+ OWNER_FILE = '.mcpcli-ci-owner'
++ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz'
++ASPIRE_CLI_SHA256 = 'f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8'
+ 
+ 
+ def sanitized(text: str) -> str:
+@@ -71,7 +75,7 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
+                 except ProcessLookupError:
+                     pass  # The child can exit between poll and the process-group signal.
+                 try:
+-                    child.wait(timeout=30)
++                    child.wait(timeout=10)
+                 except subprocess.TimeoutExpired:
+                     try:
+                         os.killpg(child.pid, signal.SIGKILL)
+@@ -128,7 +132,12 @@ def prepare(evidence: Path) -> None:
+         for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'unshare', 'ip', 'curl', 'bash'):
+             if not shutil.which(tool):
+                 raise RuntimeError(f'Missing prerequisite: {tool}')
+-        for library in ('ssl', 'crypto', 'z', 'zstd'):
++        for library in ('libssl.so.3', 'libcrypto.so.3'):
++            try:
++                ctypes.CDLL(library)
++            except OSError as error:
++                raise RuntimeError(f'Missing prerequisite shared library: {library}') from error
++        for library in ('z', 'zstd'):
+             if not ctypes.util.find_library(library):
+                 raise RuntimeError(f'Missing prerequisite shared library: {library}')
+         tools = receipt['tools']
+@@ -142,9 +151,6 @@ def prepare(evidence: Path) -> None:
+         daprd = Path.home() / '.dapr/bin/daprd'
+         if not daprd.is_file():
+             raise RuntimeError(f'Missing initialized Dapr runtime: {daprd}')
+-        tools['daprd'] = bounded([str(daprd), '--version'], 30, evidence / 'daprd-version')
+-        if tools['daprd'] != '1.18.7':
+-            raise RuntimeError('The initialized daprd must be version 1.18.7.')
+         bounded(['docker', 'info', '--format', '{{.ServerVersion}}'], 30, evidence / 'docker-info')
+         namespace_probe = ['unshare', '--user', '--map-root-user', '--net', '--pid', '--mount', '--fork', '--mount-proc', 'true']
+         try:
+@@ -164,12 +170,17 @@ def prepare(evidence: Path) -> None:
+         receipt['privateDirectory'] = str(private)
+         save(evidence / 'preparation.json', receipt)
+         if not shutil.which('aspire'):
+-            installer = private / 'install-aspire.sh'
++            archive = private / 'aspire-cli.tar.gz'
+             bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--connect-timeout', '15', '--max-time', '120',
+-                     'https://aspire.dev/install.sh', '-o', str(installer)], 130, evidence / 'aspire-download')
+-            tools['aspireInstallerSha256'] = hashlib.sha256(installer.read_bytes()).hexdigest()
+-            bounded(['bash', str(installer), '--version', '13.6.1', '--skip-path'], 300, evidence / 'aspire-install')
+-            os.environ['PATH'] = str(Path.home() / '.aspire/bin') + os.pathsep + os.environ['PATH']
++                     ASPIRE_CLI_URL, '-o', str(archive)], 130, evidence / 'aspire-download')
++            digest = hashlib.sha256(archive.read_bytes()).hexdigest()
++            if digest != ASPIRE_CLI_SHA256:
++                raise RuntimeError('Aspire CLI release archive SHA-256 mismatch; refusing extraction.')
++            tools['aspireArchive'] = {'url': ASPIRE_CLI_URL, 'sha256': digest}
++            installed_cli = private / 'aspire-cli'
++            with tarfile.open(archive, 'r:gz') as release:
++                release.extractall(installed_cli, filter='data')
++            os.environ['PATH'] = str(installed_cli) + os.pathsep + os.environ['PATH']
+         tools['aspire'] = bounded(['aspire', '--version'], 30, evidence / 'aspire-version')
+         if tools['aspire'].split('+')[0] != '13.6.1':
+             raise RuntimeError('Aspire CLI 13.6.1 is required.')
+@@ -215,7 +226,13 @@ def prepare(evidence: Path) -> None:
+                       'commit': bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / (module + '-commit'), cwd=checkout),
+                       'status': bounded(['git', 'status', '--porcelain', '--untracked-files=normal'], 10, evidence / (module + '-status'), cwd=checkout)}
+             receipt['sources'].append(source)
+-        for module in MODULES:
++        for source in receipt['sources']:
++            module = source['module']
++            project = f'src/{module}/{module}.csproj'
++            source['HexalithEventStoreVersion'] = bounded(
++                ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion',
++                 '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true'],
++                30, evidence / (module + '-eventstore-version'), cwd=ROOT / 'references' / module)
+             command = ['dotnet', 'build', f'src/{module}/{module}.csproj', '--configuration', 'Release', '-warnaserror', '-m:1',
+                        '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true']
+             bounded(command, 300, evidence / (module + '-build'), cwd=ROOT / 'references' / module)
+@@ -295,16 +312,17 @@ def run(evidence: Path) -> None:
+         prepared = json.loads(source.read_text())
+         if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
+             raise ValueError('Current successful preparation receipt is required.')
+-        runtime = Path(prepared['runtime']).resolve()
++        prepared_runtime = Path(prepared['runtime']).resolve()
+         python = Path(prepared['python'])
+-        if not runtime.is_dir() or not python.is_file() or not TESTS.is_file():
++        if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
+             raise ValueError('Prepared private runtime, Python and built Release integration tests are required.')
+         for row in json.loads((ROOT / 'tools/live-topology/binaries.json').read_text()):
+-            binary = runtime / 'bin' / Path(row['source']).name
++            binary = prepared_runtime / 'bin' / Path(row['source']).name
+             if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
+                 raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
+-        if (runtime / 'runs').exists():
++        if (prepared_runtime / 'runs').exists():
+             raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
++        runtime = prepared_runtime
+         environment = os.environ.copy()
+         for key in list(environment):
+             if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
+@@ -334,8 +352,17 @@ def run(evidence: Path) -> None:
+                 require_owned(Path(item['isolatedReceipt']), runtime)
+             report['vectors'] = {'result': 'passed', 'count': 21, 'receipt': str(vectors / 'live-lane.json')}
+         except Exception as error:
+-            vector_error = error
+-            report['vectors'] = {'result': 'failed', 'error': str(error)}
++            failures = []
++            if (vectors / 'live-lane.json').is_file():
++                try:
++                    lane = json.loads((vectors / 'live-lane.json').read_text())
++                    failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
++                                for item in lane.get('vectors', []) if item.get('result') != 'passed']
++                except (ValueError, AttributeError, TypeError):
++                    pass  # Retain the original failure and still attempt the independent smoke.
++            detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
++            vector_error = RuntimeError(str(error) + detail)
++            report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures}
+         # Smoke stays independent and runs even after a vector assertion failure.
+         smoke = generation / 'smoke'
+         smoke.mkdir()
+diff --git a/tools/live-topology/prepare-ci.sh b/tools/live-topology/prepare-ci.sh
+index d7fbd37..53e6d82 100644
+--- a/tools/live-topology/prepare-ci.sh
++++ b/tools/live-topology/prepare-ci.sh
+@@ -2,4 +2,4 @@
+ # The reusable workflow initializes host Dapr before this bounded preparation hook.
+ set -euo pipefail
+ cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.."
+-exec timeout --signal=TERM --kill-after=30s 2400 python3 tools/live-topology/ci.py prepare
++exec timeout --signal=TERM --kill-after=30s 2280 python3 tools/live-topology/ci.py prepare
+diff --git a/tools/live-topology/run-ci.sh b/tools/live-topology/run-ci.sh
+index 90a53d6..f00d4fe 100644
+--- a/tools/live-topology/run-ci.sh
++++ b/tools/live-topology/run-ci.sh
+@@ -1,4 +1,4 @@
+ #!/usr/bin/env bash
+ set -euo pipefail
+ cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.."
+-exec timeout --signal=TERM --kill-after=30s 18000 python3 tools/live-topology/ci.py run
++exec timeout --signal=TERM --kill-after=30s 17700 python3 tools/live-topology/ci.py run
+diff --git a/tools/live-topology/test_ci.py b/tools/live-topology/test_ci.py
+index 6aba9d6..ba5871d 100644
+--- a/tools/live-topology/test_ci.py
++++ b/tools/live-topology/test_ci.py
+@@ -3,12 +3,16 @@ from __future__ import annotations
+ 
+ import json
+ import importlib.util
++import hashlib
++import io
+ import os
+ from pathlib import Path
++import re
+ import shutil
+ import signal
+ import subprocess
+ import sys
++import tarfile
+ import tempfile
+ import time
+ import unittest
+@@ -53,6 +57,8 @@ if name == 'dotnet':
+     elif args[0] == 'build':
+         if mode == 'build-failure' and 'Tenants' in args[1]:
+             print('named source build failure', file=sys.stderr); sys.exit(23)
++    elif args[0] == 'msbuild':
++        print('3.127.0' if pathlib.Path.cwd().name == 'Hexalith.Parties' else '3.128.0')
+     sys.exit(0)
+ if name == 'dapr':
+     print('CLI version: 1.18.2\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
+@@ -67,7 +73,12 @@ elif name == 'aspire':
+             wrong = mode == 'bundle-home-mismatch' and relative == 'managed/aspire-managed' and file.parents[2] == pathlib.Path.home() / '.aspire'
+             file.write_text('corrupted managed bundle' if wrong else 'qualified bundle')
+     else:
+-        print('13.6.1+qualified')
++        print('13.6.2+unqualified' if mode == 'wrong-aspire' else '13.6.1+qualified')
++elif name == 'curl':
++    import shutil
++    destination = pathlib.Path(args[args.index('-o') + 1])
++    if mode == 'corrupted-aspire-archive': destination.write_bytes(b'unqualified archive')
++    else: shutil.copyfile(root / 'aspire-fixture.tar.gz', destination)
+ elif name == 'git':
+     if args[0] == 'config':
+         for module in ('EventStore', 'Tenants', 'Parties'):
+@@ -93,7 +104,7 @@ BOOTSTRAP = r'''
+ import hashlib, json, pathlib, sys
+ runtime = pathlib.Path(sys.argv[1]); (runtime / 'bin').mkdir(parents=True)
+ for row in json.loads(pathlib.Path(__file__).with_name('binaries.json').read_text()):
+-    (runtime / 'bin' / pathlib.Path(row['source']).name).write_bytes(b'qualified-fixture')
++    (runtime / 'bin' / pathlib.Path(row['source']).name).write_bytes(b'tampered' if __import__('os').environ.get('FIXTURE_MODE') == 'bootstrap-hash-mismatch' else b'qualified-fixture')
+ (runtime / 'bootstrap-receipt.json').write_text('[]')
+ '''
+ 
+@@ -102,19 +113,20 @@ import base64, json, os, pathlib, signal, subprocess, sys, time
+ root = pathlib.Path(os.environ['FIXTURE_ROOT'])
+ runtime = pathlib.Path(os.environ['MCPCLI_ISOLATED_RUNTIME_DIR'])
+ mode = os.environ.get('FIXTURE_MODE', '')
+-def owned(name):
+-    path = runtime / 'runs' / name; path.mkdir(parents=True)
++def owned(name, base=runtime):
++    path = base / 'runs' / name; path.mkdir(parents=True)
+     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
+     result = {'commandExitCode': 0, 'prerequisitesReady': True, 'namespaces': namespaces, 'supervisorPid': 1,
+               'ownedInfrastructureStopped': {key: 0 for key in ('sentry', 'redis', 'placement', 'scheduler')}}
+-    if mode == 'missing-cleanup': result['ownedInfrastructureStopped'].pop('redis')
++    if mode == 'missing-cleanup' or (mode == 'smoke-missing-cleanup' and name == 'smoke'):
++        result['ownedInfrastructureStopped'].pop('redis')
+     (path / 'result.json').write_text(json.dumps(result))
+     (path / 'outside.json').write_text(json.dumps({'namespaces': {key: key + ':[' + str(1000 + index) + ']' for index, key in enumerate(namespaces)}}))
+     (path / 'command.stdout.txt').write_text('eyJfixture.payload.signature\n-----BEGIN PRIVATE KEY-----\nfixture credential\n-----END PRIVATE KEY-----\n' + os.environ.get('TEST_SECRET_TOKEN', ''))
+     (path / 'issuer.key').write_text('must not be uploaded')
+     (path / 'dump.rdb').write_text('must not be uploaded')
+     secret = base64.b64encode(os.urandom(32)).decode()
+-    (root / 'generated-signing-key.txt').write_text(secret)
++    with (root / 'generated-signing-keys.txt').open('a') as keys: keys.write(secret + '\n')
+     (path / 'generated-json.txt').write_text(json.dumps({'SigningKey': secret}))
+     with (path / 'command.stdout.txt').open('a') as log:
+         log.write('\n' + json.dumps({'Authentication:JwtBearer:SigningKey': secret}) + '\n')
+@@ -140,11 +152,22 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
+     if mode == 'partial-vectors': receipt['fullLiveAccepted'] = False
+     if mode == 'skipped-vector': outcomes[0]['result'] = 'skipped'
+     if mode == 'incomplete-vectors': outcomes.pop()
+-    if mode == 'failed-vectors': receipt.update(result='failed', failed=1)
++    if mode == 'failed-vectors':
++        receipt.update(result='failed', passed=20, failed=1)
++        outcomes[0].update(result='failed', error='phase observe-party: gateway_error 500')
+     if mode == 'duplicate-isolation': outcomes[1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
+-    if mode == 'stale-isolation': outcomes[0]['isolatedReceipt'] = '/outside/current-runtime/result.json'
+-    if mode != 'missing-vectors': (output / 'live-lane.json').write_text(json.dumps(receipt))
+-    sys.exit(19 if mode == 'vector-exit' else 0)
++    if mode == 'stale-isolation': outcomes[0]['isolatedReceipt'] = str(owned('foreign', runtime.parent / 'sibling-runtime') / 'result.json')
++    if mode == 'extra-runtime': (runtime / 'runs/unexpected').mkdir()
++    if mode == 'generation-secrets':
++        secret = base64.b64encode(os.urandom(32)).decode()
++        with (root / 'generated-signing-keys.txt').open('a') as keys: keys.write(secret + '\n')
++        content = 'eyJfixture.payload.signature\n-----BEGIN PRIVATE KEY-----\nfixture credential\n-----END PRIVATE KEY-----\n' + os.environ['TEST_SECRET_TOKEN'] + '\n' + json.dumps({'SigningKey': secret})
++        child = output / operations[0]; child.mkdir()
++        (child / 'child.stdout.txt').write_text(content)
++        (child / 'tests.xml').write_text('<test>' + content + '</test>')
++    if mode != 'missing-vectors':
++        (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
++    sys.exit(19 if mode == 'vector-exit' else 1 if mode == 'failed-vectors' else 0)
+ else:
+     path = owned('smoke')
+     result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
+@@ -170,7 +193,6 @@ class CiHooksTests(unittest.TestCase):
+             shutil.copyfile(HERE / name, self.tools / name)
+         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
+             (self.tools / name).write_text(content)
+-        import hashlib
+         binaries = [{'source': '/' + name, 'sha256': hashlib.sha256(b'qualified-fixture').hexdigest()}
+                     for name in ('redis-server', 'sentry', 'placement', 'scheduler')]
+         (self.tools / 'binaries.json').write_text(json.dumps(binaries))
+@@ -192,10 +214,21 @@ class CiHooksTests(unittest.TestCase):
+         tests.touch()
+         self.bin = self.root / 'stub-bin'
+         self.bin.mkdir()
+-        for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'aspire', 'unshare', 'ip', 'daprd', 'sudo'):
++        for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'aspire', 'unshare', 'ip', 'daprd', 'sudo', 'curl'):
+             path = self.bin / tool
+             path.write_text(TOOL)
+             path.chmod(0o700)
++        archive = self.root / 'aspire-fixture.tar.gz'
++        with tarfile.open(archive, 'w:gz') as release:
++            member = tarfile.TarInfo('aspire')
++            payload = TOOL.encode()
++            member.size = len(payload)
++            member.mode = 0o700
++            release.addfile(member, io.BytesIO(payload))
++        ci = self.tools / 'ci.py'
++        ci.write_text(ci.read_text().replace(
++            "ASPIRE_CLI_SHA256 = 'f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8'",
++            'ASPIRE_CLI_SHA256 = ' + repr(hashlib.sha256(archive.read_bytes()).hexdigest())))
+         home = self.root / 'home'
+         (home / '.dapr/bin').mkdir(parents=True)
+         (home / '.dapr/bin/daprd').symlink_to(self.bin / 'daprd')
+@@ -251,6 +284,16 @@ class CiHooksTests(unittest.TestCase):
+         self.assertEqual(['300'] * 3, deadlines)
+         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
+         self.assertEqual(3, len(prepared['sources']))
++        self.assertEqual(['3.128.0', '3.128.0', '3.127.0'],
++                         [source['HexalithEventStoreVersion'] for source in prepared['sources']])
++        property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
++        self.assertEqual(3, len(property_calls))
++        for call in property_calls:
++            self.assertIn('-getProperty:HexalithEventStoreVersion', call)
++            self.assertIn('-p:UseHexalithProjectReferences=false', call)
++            self.assertIn('-p:UseNuGetDeps=true', call)
++        self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
++                          'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
+         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
+         self.assertNotIn('fixture-secret-token', json.dumps(prepared))
+ 
+@@ -274,12 +317,16 @@ class CiHooksTests(unittest.TestCase):
+         self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+ 
+     def test_prerequisite_failures_precede_source_builds(self):
+-        for mode in ('namespace-denied', 'wrong-dapr', 'undeclared-source', 'copied-source'):
++        for mode, message in [('namespace-denied', 'unshare --user'),
++                              ('wrong-dapr', 'Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required'),
++                              ('undeclared-source', 'Missing declared direct root source prerequisite'),
++                              ('copied-source', 'is not its own Git working tree')]:
+             with self.subTest(mode=mode):
+                 self.fresh_evidence()
+                 (self.root / 'calls.jsonl').unlink(missing_ok=True)
+                 result = self.invoke('prepare-ci.sh', mode)
+                 self.assertNotEqual(0, result.returncode)
++                self.assertIn(message, result.stderr)
+                 self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
+                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+ 
+@@ -305,6 +352,8 @@ class CiHooksTests(unittest.TestCase):
+                 (self.root / 'calls.jsonl').unlink(missing_ok=True)
+                 result = self.invoke('prepare-ci.sh', mode)
+                 self.assertNotEqual(0, result.returncode)
++                self.assertIn('exited 1', result.stderr)
++                self.assertIn('sudo -n sysctl' if mode == 'namespace-setup-failure' else 'unshare --user', result.stderr)
+                 self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
+                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+ 
+@@ -312,6 +361,7 @@ class CiHooksTests(unittest.TestCase):
+         self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='self-hosted')
+         result = self.invoke('prepare-ci.sh', 'namespace-denied')
+         self.assertNotEqual(0, result.returncode)
++        self.assertIn('unshare --user', result.stderr)
+         self.assertFalse(any(call[0] == 'sudo' for call in self.calls()))
+ 
+     def test_missing_source_is_named_before_build(self):
+@@ -324,6 +374,7 @@ class CiHooksTests(unittest.TestCase):
+ 
+     def test_missing_tool_is_named_before_build(self):
+         for tool in ('python3', 'bash', 'curl', 'dirname'):
++            (self.bin / tool).unlink(missing_ok=True)
+             (self.bin / tool).symlink_to(shutil.which(tool))
+         self.env['PATH'] = str(self.bin)
+         (self.bin / 'ip').unlink()
+@@ -363,24 +414,29 @@ class CiHooksTests(unittest.TestCase):
+         self.assertIs(True, receipt['fullLiveAccepted'])
+         self.assertEqual(21, receipt['vectors']['count'])
+         self.assertEqual('passed', receipt['smoke']['result'])
+-        files = list((Path(receipt['output']) / 'runtime-diagnostics').rglob('*'))
++        files = list(Path(receipt['output']).rglob('*'))
+         self.assertEqual(22, len([file for file in files if file.name == 'result.json']))
+         self.assertFalse(any(file.name in ('issuer.key', 'dump.rdb') for file in files))
+         content = ''.join(file.read_text() for file in files if file.is_file())
+-        for secret in ('fixture credential', 'fixture-secret-token', 'eyJfixture.payload.signature'):
++        secrets = ['fixture credential', 'fixture-secret-token', 'eyJfixture.payload.signature',
++                   *(self.root / 'generated-signing-keys.txt').read_text().splitlines()]
++        for secret in secrets:
+             self.assertNotIn(secret, content)
+         deadlines = [call[4] for call in self.calls() if call[0] == 'timeout' and any(value.endswith(('run-vectors.py', 'run-isolated.py')) for value in call)]
+         self.assertEqual(['16200', '960'], deadlines)
++        self.assertIn(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '17700',
++                       'python3', 'tools/live-topology/ci.py', 'run'], self.calls())
+         self.assertTrue(Path(prepared['runtime']).is_dir())
+         self.fresh_evidence()
+         failed_preparation = self.invoke('prepare-ci.sh', 'wrong-dapr')
+         self.assertNotEqual(0, failed_preparation.returncode)
++        self.assertIn('Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required', failed_preparation.stderr)
+         self.assertIs(False, json.loads((self.evidence / 'ci-live.json').read_text())['fullLiveAccepted'])
+ 
+     def test_vector_nonacceptance_and_nonzero_exits_still_run_smoke(self):
+         self.prepare()
+         preparation = json.loads((self.evidence / 'preparation.json').read_text())
+-        for mode in ('partial-vectors', 'skipped-vector', 'incomplete-vectors', 'failed-vectors', 'missing-vectors', 'vector-exit', 'vector-timeout', 'duplicate-isolation', 'stale-isolation'):
++        for mode in ('partial-vectors', 'skipped-vector', 'incomplete-vectors', 'failed-vectors', 'missing-vectors', 'malformed-vectors', 'vector-exit', 'vector-timeout', 'duplicate-isolation', 'stale-isolation'):
+             with self.subTest(mode=mode):
+                 shutil.rmtree(Path(preparation['runtime']) / 'runs', ignore_errors=True)
+                 result = self.invoke('run-ci.sh', mode)
+@@ -388,6 +444,14 @@ class CiHooksTests(unittest.TestCase):
+                 receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                 self.assertIs(False, receipt['fullLiveAccepted'])
+                 self.assertEqual('passed', receipt['smoke']['result'])
++                expected = {'missing-vectors': 'live-lane.json', 'malformed-vectors': 'Expecting property name enclosed in double quotes',
++                            'vector-exit': 'exited 19', 'failed-vectors': 'exited 1',
++                            'vector-timeout': 'exited 124', 'stale-isolation': 'Isolated receipt is outside the prepared runtime.'}
++                self.assertIn(expected.get(mode, 'Complete current passing evidence for all 21 vectors is required'), result.stderr)
++                if mode == 'failed-vectors':
++                    self.assertIn('failed Operations: sample.operation-00', result.stderr)
++                    self.assertEqual([{'operation': 'sample.operation-00', 'result': 'failed',
++                                       'error': 'phase observe-party: gateway_error 500'}], receipt['vectors']['failures'])
+ 
+     def test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed(self):
+         preparation = self.prepare()
+@@ -397,16 +461,61 @@ class CiHooksTests(unittest.TestCase):
+                 result = self.invoke('run-ci.sh', mode)
+                 self.assertNotEqual(0, result.returncode)
+                 self.assertIs(False, json.loads((self.evidence / 'ci-live.json').read_text())['fullLiveAccepted'])
++                expected = {'missing-smoke': 'tests.xml', 'smoke-exit': 'exited 17',
++                            'missing-cleanup': 'Private runtime did not prove prerequisites, private namespaces and owned cleanup.'}
++                self.assertIn(expected.get(mode, 'Independent smoke must contain exactly one passing, unskipped authenticated Gateway case.'), result.stderr)
++
++    def test_smoke_cleanup_proof_is_required_after_all_vectors_pass(self):
++        self.prepare()
++        result = self.invoke('run-ci.sh', 'smoke-missing-cleanup')
++        self.assertNotEqual(0, result.returncode)
++        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
++        self.assertEqual('passed', receipt['vectors']['result'])
++        self.assertIs(False, receipt['fullLiveAccepted'])
++        self.assertIn('Private runtime did not prove prerequisites, private namespaces and owned cleanup.', receipt['error'])
++        self.assertIn('Private runtime did not prove prerequisites', result.stderr)
++
++    def test_extra_runtime_refuses_complete_lane_acceptance(self):
++        self.prepare()
++        result = self.invoke('run-ci.sh', 'extra-runtime')
++        self.assertNotEqual(0, result.returncode)
++        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
++        self.assertEqual('passed', receipt['vectors']['result'])
++        self.assertEqual('passed', receipt['smoke']['result'])
++        self.assertIs(False, receipt['fullLiveAccepted'])
++        self.assertIn('Expected exactly 21 fresh vector runtimes and one independent smoke runtime.', result.stderr)
++
++    def test_generation_child_logs_and_xml_are_redacted(self):
++        self.prepare()
++        result = self.invoke('run-ci.sh', 'generation-secrets')
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
++        content = ''.join(path.read_text() for path in Path(receipt['output']).rglob('*') if path.is_file())
++        secrets = ['fixture credential', 'fixture-secret-token', 'eyJfixture.payload.signature',
++                   *(self.root / 'generated-signing-keys.txt').read_text().splitlines()]
++        for secret in secrets:
++            self.assertNotIn(secret, content)
++        for name in ('child.stdout.txt', 'tests.xml'):
++            child = Path(receipt['output']) / 'vectors/sample.operation-00' / name
++            self.assertIn('[REDACTED PEM]', child.read_text())
++            self.assertIn('[REDACTED JWT]', child.read_text())
++            self.assertIn('"SigningKey": "[REDACTED]"', child.read_text())
+ 
+     def test_missing_preparation_and_reused_runtime_refuse_live(self):
+         result = self.invoke('run-ci.sh')
+         self.assertNotEqual(0, result.returncode)
++        self.assertIn('A task-owned prepared evidence directory is required.', result.stderr)
+         prepared = self.prepare()
+-        (Path(prepared['runtime']) / 'runs').mkdir()
++        stale = Path(prepared['runtime']) / 'runs/old-generation'
++        stale.mkdir(parents=True)
++        (stale / 'command.stdout.txt').write_text('previous invocation diagnostics')
+         result = self.invoke('run-ci.sh')
+         self.assertNotEqual(0, result.returncode)
+         self.assertIn('fresh prepared runtime', result.stderr)
+         self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
++        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
++        self.assertFalse((self.evidence / receipt['runId']).exists())
++        self.assertEqual('previous invocation diagnostics', (stale / 'command.stdout.txt').read_text())
+ 
+     def test_changed_prepared_binary_refuses_live(self):
+         prepared = self.prepare()
+@@ -417,19 +526,107 @@ class CiHooksTests(unittest.TestCase):
+         self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
+ 
+     def test_caller_contract_and_unsafe_evidence_paths_are_refused(self):
+-        for key, value in [('ASPIRE_TEST_PROJECT', 'other-tests'), ('TEST_PLATFORM', 'vstest'),
+-                           ('ASPIRE_EVIDENCE_PATH', '../outside'), ('ASPIRE_EVIDENCE_PATH', '.')]:
++        for key, value, message in [('ASPIRE_TEST_PROJECT', 'other-tests', 'ASPIRE_TEST_PROJECT must be tests/Hexalith.McpCli.Integration.Tests.'),
++                                   ('TEST_PLATFORM', 'vstest', 'TEST_PLATFORM must be microsoft-testing-platform.'),
++                                   ('ASPIRE_EVIDENCE_PATH', '../outside', 'ASPIRE_EVIDENCE_PATH must be a repository-relative directory without traversal.'),
++                                   ('ASPIRE_EVIDENCE_PATH', '.', 'ASPIRE_EVIDENCE_PATH must be a repository-relative directory without traversal.')]:
+             with self.subTest(key=key, value=value):
+                 self.fresh_evidence()
+                 old = self.env.get(key)
+                 self.env[key] = value
+                 result = self.invoke('prepare-ci.sh')
+                 self.assertNotEqual(0, result.returncode)
++                self.assertIn(message, result.stderr)
+                 if old is None:
+                     self.env.pop(key)
+                 else:
+                     self.env[key] = old
+ 
++    def test_symlinked_evidence_is_refused_without_touching_its_target(self):
++        target = self.root / 'outside-evidence'
++        target.mkdir()
++        original = target / 'owned-by-user.txt'
++        original.write_text('preserve user data')
++        self.evidence.symlink_to(target, target_is_directory=True)
++        result = self.invoke('prepare-ci.sh')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('ASPIRE_EVIDENCE_PATH must not traverse symbolic links.', result.stderr)
++        self.assertEqual([original], list(target.iterdir()))
++        self.assertEqual('preserve user data', original.read_text())
++
++    def test_preparation_path_and_ownership_must_match_current_evidence(self):
++        prepared = self.prepare()
++        alternate = self.root / 'other-preparation.json'
++        alternate.write_text(json.dumps(prepared))
++        self.env['MCPCLI_CI_PREPARATION'] = str(alternate)
++        result = self.invoke('run-ci.sh')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Preparation must come from the current evidence directory.', result.stderr)
++        self.env.pop('MCPCLI_CI_PREPARATION')
++        prepared['ownershipId'] = '0' * 32
++        (self.evidence / 'preparation.json').write_text(json.dumps(prepared))
++        result = self.invoke('run-ci.sh')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Current successful preparation receipt is required.', result.stderr)
++        self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
++
++    def test_missing_built_integration_tests_refuses_live(self):
++        self.prepare()
++        tests = self.root / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
++        tests.unlink()
++        result = self.invoke('run-ci.sh')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Prepared private runtime, Python and built Release integration tests are required.', result.stderr)
++        self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
++
++    def test_wrong_aspire_version_refuses_source_builds(self):
++        result = self.invoke('prepare-ci.sh', 'wrong-aspire')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Aspire CLI 13.6.1 is required.', result.stderr)
++        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
++
++    def test_bootstrapped_binary_hash_mismatch_refuses_preparation(self):
++        result = self.invoke('prepare-ci.sh', 'bootstrap-hash-mismatch')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Private runtime binary hash mismatch: redis-server', result.stderr)
++        receipt = json.loads((self.evidence / 'preparation.json').read_text())
++        self.assertEqual('failed', receipt['result'])
++
++    def test_missing_aspire_installs_only_a_digest_verified_release_archive(self):
++        (self.bin / 'aspire').unlink()
++        for tool in ('python3', 'bash', 'dirname'):
++            (self.bin / tool).symlink_to(shutil.which(tool))
++        self.env['PATH'] = str(self.bin)
++        prepared = self.prepare()
++        downloaded = prepared['tools']['aspireArchive']
++        self.assertEqual('https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz', downloaded['url'])
++        self.assertEqual(hashlib.sha256((self.root / 'aspire-fixture.tar.gz').read_bytes()).hexdigest(), downloaded['sha256'])
++        self.assertTrue((Path(prepared['privateDirectory']) / 'aspire-cli/aspire').is_file())
++        self.assertFalse(any('install.sh' in str(call) for call in self.calls()))
++        self.fresh_evidence()
++        result = self.invoke('prepare-ci.sh', 'corrupted-aspire-archive')
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn('Aspire CLI release archive SHA-256 mismatch; refusing extraction.', result.stderr)
++        receipt = json.loads((self.evidence / 'preparation.json').read_text())
++        self.assertFalse((Path(receipt['privateDirectory']) / 'aspire-cli').exists())
++
++    def test_exact_openssl_three_sonames_are_required_before_builds(self):
++        module = self.ci_module()
++        for missing in ('libssl.so.3', 'libcrypto.so.3'):
++            with self.subTest(missing=missing):
++                self.fresh_evidence()
++                def load(name):
++                    if name == missing:
++                        raise OSError('missing exact soname')
++                    return object()
++                with patch.dict(os.environ, self.env, clear=True), patch.object(module.ctypes, 'CDLL', side_effect=load):
++                    evidence = module.evidence_directory(preparing=True)
++                    with self.assertRaisesRegex(RuntimeError, 'Missing prerequisite shared library: ' + re.escape(missing)):
++                        module.prepare(evidence)
++                receipt = json.loads((self.evidence / 'preparation.json').read_text())
++                self.assertEqual('failed', receipt['result'])
++                self.assertIn(missing, receipt['error'])
++
+     def test_nested_python_uses_prepared_venv_and_its_installed_modules(self):
+         prepared = self.prepare()
+         result = self.invoke('run-ci.sh')
+@@ -490,6 +687,8 @@ class CiHooksTests(unittest.TestCase):
+     def test_failed_preparation_retains_owned_private_location(self):
+         result = self.invoke('prepare-ci.sh', 'bundle-setup-failure')
+         self.assertNotEqual(0, result.returncode)
++        self.assertIn('aspire setup', result.stderr)
++        self.assertIn('exited 18', result.stderr)
+         receipt = json.loads((self.evidence / 'preparation.json').read_text())
+         self.assertEqual('failed', receipt['result'])
+         self.assertTrue(Path(receipt['privateDirectory']).is_dir())
+@@ -620,6 +819,29 @@ class CiHooksTests(unittest.TestCase):
+         self.assertIn('last child diagnostic', output.with_name('output.stdout.txt').read_text())
+         self.assertEqual(0, json.loads(output.with_name('output.command.json').read_text())['exitCode'])
+ 
++    def test_cancellation_escalation_finishes_within_outer_kill_grace(self):
++        module = self.ci_module()
++        class IgnoresTerm:
++            pid = 123456789
++            returncode = None
++            timeouts = []
++            def poll(self):
++                return None
++            def wait(self, *, timeout):
++                self.timeouts.append(timeout)
++                if len(self.timeouts) == 1:
++                    raise SystemExit(143)
++                if len(self.timeouts) == 2:
++                    raise subprocess.TimeoutExpired('inert-child', timeout)
++                self.returncode = -9
++                return self.returncode
++        child = IgnoresTerm()
++        with patch.object(module.subprocess, 'Popen', return_value=child), patch.object(module.os, 'killpg') as kill:
++            with self.assertRaises(SystemExit):
++                module.bounded(['inert-child'], 1, self.root / 'escalation')
++        self.assertEqual([41, 10, 5], child.timeouts)
++        self.assertEqual([(child.pid, signal.SIGTERM), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list])
++
+ 
+ class CiWorkflowTests(unittest.TestCase):
+     def test_required_inputs_and_existing_focused_lanes_remain_configured(self):
+@@ -630,7 +852,9 @@ class CiWorkflowTests(unittest.TestCase):
+                      'aspire-continue-on-error: false', 'aspire-timeout-minutes: 360',
+                      "dapr-version: '1.18.2'", "dapr-runtime-version: '1.18.7'",
+                      'aspire-prepare-script: tools/live-topology/prepare-ci.sh',
+-                     'aspire-runner-script: tools/live-topology/run-ci.sh'):
++                     'aspire-runner-script: tools/live-topology/run-ci.sh',
++                     'aspire-prepare-timeout-minutes: 40', 'aspire-runner-timeout-minutes: 300',
++                     'aspire-evidence-path: TestResults/live-ci'):
+             self.assertIn(line, caller)
+         for project in ('Abstractions', 'Analyzers', 'Core', 'Manifest', 'Cli', 'Mcp'):
+             self.assertIn(f'tests/Hexalith.McpCli.{project}.Tests', caller)

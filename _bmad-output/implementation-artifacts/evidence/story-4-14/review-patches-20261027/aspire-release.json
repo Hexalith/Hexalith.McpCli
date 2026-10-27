@@ -1,0 +1,13 @@
+{
+  "releaseTag": "v13.6.1",
+  "asset": "aspire-cli-linux-x64-13.6.1.tar.gz",
+  "url": "https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz",
+  "publishedDigest": "sha256:f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8",
+  "downloadedSha256": "f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8",
+  "selectedCli": "13.6.1+3751e615ad660621f2a7aa4c390ef48e08a0eed8",
+  "selectedCliExecutable": {
+    "path": "/tmp/mcpcli-live-ci-ec8j5yg3/aspire-cli/aspire",
+    "sha256": "82d2aacd2432040cb3f9391e39e3ea7ed3d6e6c0143c4e0dfe38cfbb04b02bc0"
+  },
+  "expectedBundleFiles": 490
+}

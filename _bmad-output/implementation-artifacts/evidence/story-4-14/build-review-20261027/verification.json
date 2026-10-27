@@ -1,0 +1,40 @@
+{
+  "review": {
+    "layersCompleted": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "blindFindings": 10,
+    "edgeFindings": 1,
+    "verificationGaps": 0,
+    "newPatch": "G9: JSON-escaped environment secret redaction",
+    "unresolvedCodeFindings": 0,
+    "deferred": "Existing upstream publication/hosted qualification item"
+  },
+  "parentAudit": {
+    "indexedFilesVerified": 39,
+    "initialSourceFingerprintsVerified": 7,
+    "archiveFilesComparedWithOriginals": 1455,
+    "passingUnskippedXmlCases": 22,
+    "nativeOwnedCleanupReceipts": 22,
+    "fullLiveAccepted": true,
+    "frozenIntentUnchanged": true,
+    "approvedContractsVectorsAndPolicyUnchanged": true
+  },
+  "postPatchVerification": {
+    "pythonCommand": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+    "exitCode": 0,
+    "pythonTests": 138,
+    "targetedRedactionTests": 4,
+    "onlyProductionFunctionChangedAfterLiveRun": "sanitized",
+    "executionAndAcceptanceAstUnchanged": true,
+    "liveDiagnosticFilesReplayedWithIdenticalOutput": 168,
+    "liveLaneRerunAfterSanitizerOnlyPatch": false,
+    "releaseAndSixDotnetProjects": "Previously qualified in adjacent review-patches-20261027 packet; no .NET code or build inputs changed afterward",
+    "commitlint": "passed: 0 problems, 0 warnings"
+  },
+  "qualifiedBuildsRevision": "857ef02dbb4bde1bd4e678546aa41e73fb7d68b1",
+  "published": false,
+  "integrationFollowup": "Publish the qualified Builds revision before hosted resolution of the updated caller and obtain hosted acceptance."
+}

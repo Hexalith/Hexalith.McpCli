@@ -1,0 +1,229 @@
+test_bootstrapped_binary_hash_mismatch_refuses_preparation (test_ci.CiHooksTests.test_bootstrapped_binary_hash_mismatch_refuses_preparation) ... ok
+test_caller_contract_and_unsafe_evidence_paths_are_refused (test_ci.CiHooksTests.test_caller_contract_and_unsafe_evidence_paths_are_refused) ... ok
+test_cancellation_escalation_finishes_within_outer_kill_grace (test_ci.CiHooksTests.test_cancellation_escalation_finishes_within_outer_kill_grace) ... Running (1s): inert-child
+ok
+test_changed_prepared_binary_refuses_live (test_ci.CiHooksTests.test_changed_prepared_binary_refuses_live) ... ok
+test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics (test_ci.CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics) ... ok
+test_exact_openssl_three_sonames_are_required_before_builds (test_ci.CiHooksTests.test_exact_openssl_three_sonames_are_required_before_builds) ... ok
+test_exited_child_signal_race_preserves_cancellation_diagnostics (test_ci.CiHooksTests.test_exited_child_signal_race_preserves_cancellation_diagnostics) ... Running (1s): inert-child
+ok
+test_extra_runtime_refuses_complete_lane_acceptance (test_ci.CiHooksTests.test_extra_runtime_refuses_complete_lane_acceptance) ... ok
+test_failed_preparation_retains_owned_private_location (test_ci.CiHooksTests.test_failed_preparation_retains_owned_private_location) ... ok
+test_generated_signing_keys_are_redacted_without_breaking_json (test_ci.CiHooksTests.test_generated_signing_keys_are_redacted_without_breaking_json) ... ok
+test_generation_child_logs_and_xml_are_redacted (test_ci.CiHooksTests.test_generation_child_logs_and_xml_are_redacted) ... ok
+test_hosted_bundle_refresh_still_rejects_mismatched_managed_payload (test_ci.CiHooksTests.test_hosted_bundle_refresh_still_rejects_mismatched_managed_payload) ... ok
+test_hosted_namespace_setup_and_reprobe_failures_stop_source_builds (test_ci.CiHooksTests.test_hosted_namespace_setup_and_reprobe_failures_stop_source_builds) ... ok
+test_hosted_namespace_setup_reprobes_before_building_sources (test_ci.CiHooksTests.test_hosted_namespace_setup_reprobes_before_building_sources) ... ok
+test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation (test_ci.CiHooksTests.test_hosted_runner_refreshes_complete_existing_bundle_before_hash_validation) ... ok
+test_installed_bundle_must_match_fresh_selected_cli_bytes (test_ci.CiHooksTests.test_installed_bundle_must_match_fresh_selected_cli_bytes) ... ok
+test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) ... ok
+test_malformed_native_ownership_proof_is_refused (test_ci.CiHooksTests.test_malformed_native_ownership_proof_is_refused) ... ok
+test_missing_aspire_installs_only_a_digest_verified_release_archive (test_ci.CiHooksTests.test_missing_aspire_installs_only_a_digest_verified_release_archive) ... ok
+test_missing_built_integration_tests_refuses_live (test_ci.CiHooksTests.test_missing_built_integration_tests_refuses_live) ... ok
+test_missing_bundle_is_provisioned_before_build_and_setup_failure_propagates (test_ci.CiHooksTests.test_missing_bundle_is_provisioned_before_build_and_setup_failure_propagates) ... ok
+test_missing_preparation_and_reused_runtime_refuse_live (test_ci.CiHooksTests.test_missing_preparation_and_reused_runtime_refuse_live) ... ok
+test_missing_source_is_named_before_build (test_ci.CiHooksTests.test_missing_source_is_named_before_build) ... ok
+test_missing_tool_is_named_before_build (test_ci.CiHooksTests.test_missing_tool_is_named_before_build) ... ok
+test_nested_python_uses_prepared_venv_and_its_installed_modules (test_ci.CiHooksTests.test_nested_python_uses_prepared_venv_and_its_installed_modules) ... ok
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (test_ci.CiHooksTests.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... ok
+test_preparation_path_and_ownership_must_match_current_evidence (test_ci.CiHooksTests.test_preparation_path_and_ownership_must_match_current_evidence) ... ok
+test_prerequisite_failures_precede_source_builds (test_ci.CiHooksTests.test_prerequisite_failures_precede_source_builds) ... ok
+test_private_temp_root_must_not_overlap_evidence (test_ci.CiHooksTests.test_private_temp_root_must_not_overlap_evidence) ... ok
+test_repository_sdk_resolution_failure_stops_before_source_builds (test_ci.CiHooksTests.test_repository_sdk_resolution_failure_stops_before_source_builds) ... ok
+test_repository_sdk_rollforward_accepts_selected_newer_patch (test_ci.CiHooksTests.test_repository_sdk_rollforward_accepts_selected_newer_patch) ... ok
+test_self_hosted_namespace_failure_never_changes_host_configuration (test_ci.CiHooksTests.test_self_hosted_namespace_failure_never_changes_host_configuration) ... ok
+test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics) ... ok
+test_smoke_cleanup_proof_is_required_after_all_vectors_pass (test_ci.CiHooksTests.test_smoke_cleanup_proof_is_required_after_all_vectors_pass) ... ok
+test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed (test_ci.CiHooksTests.test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed) ... ok
+test_source_failure_and_timeout_never_prepare_or_execute_live (test_ci.CiHooksTests.test_source_failure_and_timeout_never_prepare_or_execute_live) ... ok
+test_symlinked_evidence_is_refused_without_touching_its_target (test_ci.CiHooksTests.test_symlinked_evidence_is_refused_without_touching_its_target) ... ok
+test_unowned_evidence_is_untouched_and_retry_requires_fresh_directory (test_ci.CiHooksTests.test_unowned_evidence_is_untouched_and_retry_requires_fresh_directory) ... ok
+test_vector_nonacceptance_and_nonzero_exits_still_run_smoke (test_ci.CiHooksTests.test_vector_nonacceptance_and_nonzero_exits_still_run_smoke) ... ok
+test_wrong_aspire_version_refuses_source_builds (test_ci.CiHooksTests.test_wrong_aspire_version_refuses_source_builds) ... ok
+test_required_inputs_and_existing_focused_lanes_remain_configured (test_ci.CiWorkflowTests.test_required_inputs_and_existing_focused_lanes_remain_configured) ... ok
+test_child_selector_lists_exactly_its_operation_case_from_built_tests (test_lane.LaneTests.test_child_selector_lists_exactly_its_operation_case_from_built_tests) ... ok
+test_exactly_one_passing_selected_case_is_required (test_lane.LaneTests.test_exactly_one_passing_selected_case_is_required) ... ok
+test_explicit_host_selection_is_forwarded_privately_to_child (test_lane.LaneTests.test_explicit_host_selection_is_forwarded_privately_to_child) ... ok
+test_extra_or_empty_results_are_rejected (test_lane.LaneTests.test_extra_or_empty_results_are_rejected) ... ok
+test_failed_children_keep_all_operation_outcomes_and_exact_selectors (test_lane.LaneTests.test_failed_children_keep_all_operation_outcomes_and_exact_selectors) ... ok
+test_full_coverage_cannot_be_inferred_from_returned_preflight_subset (test_lane.LaneTests.test_full_coverage_cannot_be_inferred_from_returned_preflight_subset) ... ok
+test_hard_kill_during_preflight_cannot_leave_previous_success (test_lane.LaneTests.test_hard_kill_during_preflight_cannot_leave_previous_success) ... ok
+test_missing_runtime_fails_before_preflight_or_child (test_lane.LaneTests.test_missing_runtime_fails_before_preflight_or_child) ... ok
+test_out_of_range_child_timeout_starts_no_topology (test_lane.LaneTests.test_out_of_range_child_timeout_starts_no_topology) ... ok
+test_outer_termination_stops_the_running_session_child_and_never_accepts (test_lane.LaneTests.test_outer_termination_stops_the_running_session_child_and_never_accepts) ... ok
+test_preflight_failure_invalidates_prior_lane_success (test_lane.LaneTests.test_preflight_failure_invalidates_prior_lane_success) ... ok
+test_preflight_only_prints_summary_and_never_starts_children (test_lane.LaneTests.test_preflight_only_prints_summary_and_never_starts_children) ... ok
+test_real_child_deadline_stops_only_its_owned_process_group (test_lane.LaneTests.test_real_child_deadline_stops_only_its_owned_process_group) ... ok
+test_success_requires_fresh_binding_case_and_owned_cleanup (test_lane.LaneTests.test_success_requires_fresh_binding_case_and_owned_cleanup) ... ok
+test_unknown_or_empty_selector_starts_no_topology (test_lane.LaneTests.test_unknown_or_empty_selector_starts_no_topology) ... ok
+test_actual_built_adapter_matches_restored_production_closure (test_live_plans.AdapterDependencyTests.test_actual_built_adapter_matches_restored_production_closure) ... ok
+test_adapter_closure_rejects_stale_private_bytes_and_dependency_metadata (test_live_plans.AdapterDependencyTests.test_adapter_closure_rejects_stale_private_bytes_and_dependency_metadata) ... ok
+test_genuine_stale_compiled_gateway_client_is_rejected_with_current_deps (test_live_plans.AdapterDependencyTests.test_genuine_stale_compiled_gateway_client_is_rejected_with_current_deps) ... ok
+test_rid_runtime_assets_verify_present_bytes_and_restored_inventory (test_live_plans.AdapterDependencyTests.test_rid_runtime_assets_verify_present_bytes_and_restored_inventory) ... ok
+test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight (test_live_plans.PlanTests.test_actual_inventory_coverage_and_vector_validator_rejections_stop_preflight) ... ok
+test_actual_preflight_delegates_artifact_inventory_and_core_rejections (test_live_plans.PlanTests.test_actual_preflight_delegates_artifact_inventory_and_core_rejections) ... ok
+test_all_21_approved_vectors_have_valid_plans (test_live_plans.PlanTests.test_all_21_approved_vectors_have_valid_plans) ... ok
+test_assertion_binding_requires_matching_capture_type_phase_and_path (test_live_plans.PlanTests.test_assertion_binding_requires_matching_capture_type_phase_and_path) ... ok
+test_capture_types_are_checked_without_coercion (test_live_plans.PlanTests.test_capture_types_are_checked_without_coercion) ... ok
+test_changed_companion_observations_pass_actual_core_validation (test_live_plans.PlanTests.test_changed_companion_observations_pass_actual_core_validation) ... ok
+test_command_without_persisted_barrier_fails (test_live_plans.PlanTests.test_command_without_persisted_barrier_fails) ... ok
+test_create_party_observation_retains_complete_submitted_content (test_live_plans.PlanTests.test_create_party_observation_retains_complete_submitted_content) ... ok
+test_cursor_assertion_cannot_be_dropped (test_live_plans.PlanTests.test_cursor_assertion_cannot_be_dropped) ... ok
+test_cursor_binding_requires_a_capture_of_the_returned_cursor (test_live_plans.PlanTests.test_cursor_binding_requires_a_capture_of_the_returned_cursor) ... ok
+test_duplicate_assertion_binding_index_is_rejected (test_live_plans.PlanTests.test_duplicate_assertion_binding_index_is_rejected) ... ok
+test_duplicate_binding_target_is_rejected (test_live_plans.PlanTests.test_duplicate_binding_target_is_rejected) ... ok
+test_duplicate_capture_name_is_rejected (test_live_plans.PlanTests.test_duplicate_capture_name_is_rejected) ... ok
+test_duplicate_or_missing_steps_fail (test_live_plans.PlanTests.test_duplicate_or_missing_steps_fail) ... ok
+test_envelope_only_assertions_cannot_qualify_as_persisted_barriers (test_live_plans.PlanTests.test_envelope_only_assertions_cannot_qualify_as_persisted_barriers) ... ok
+test_execution_uses_frozen_bytes_and_rejects_approval_races (test_live_plans.PlanTests.test_execution_uses_frozen_bytes_and_rejects_approval_races) ... ok
+test_failed_core_responses_retain_sanitized_process_diagnostics (test_live_plans.PlanTests.test_failed_core_responses_retain_sanitized_process_diagnostics) ... ok
+test_float_assertion_selector_reports_located_integer_failure (test_live_plans.PlanTests.test_float_assertion_selector_reports_located_integer_failure) ... ok
+test_full_preflight_checks_all_calls_and_child_checks_only_selected_calls (test_live_plans.PlanTests.test_full_preflight_checks_all_calls_and_child_checks_only_selected_calls) ... ok
+test_input_binding_cannot_change_static_fields (test_live_plans.PlanTests.test_input_binding_cannot_change_static_fields) ... ok
+test_malformed_core_output_retains_sanitized_process_diagnostics (test_live_plans.PlanTests.test_malformed_core_output_retains_sanitized_process_diagnostics) ... ok
+test_negative_party_predicates_and_complete_update_observation_are_retained (test_live_plans.PlanTests.test_negative_party_predicates_and_complete_update_observation_are_retained) ... ok
+test_observation_assertion_operands_keep_strict_json_types (test_live_plans.PlanTests.test_observation_assertion_operands_keep_strict_json_types) ... ok
+test_policy_package_ids_cannot_collide_case_insensitively (test_live_plans.PlanTests.test_policy_package_ids_cannot_collide_case_insensitively) ... ok
+test_real_typed_values_bind_existing_targets (test_live_plans.PlanTests.test_real_typed_values_bind_existing_targets) ... ok
+test_scripted_input_requires_explicit_binding (test_live_plans.PlanTests.test_scripted_input_requires_explicit_binding) ... ok
+test_stale_vector_hash_rejects_plan (test_live_plans.PlanTests.test_stale_vector_hash_rejects_plan) ... ok
+test_static_assertion_cannot_be_replaced (test_live_plans.PlanTests.test_static_assertion_cannot_be_replaced) ... ok
+test_step_binding_cannot_replace_static_cursor_input (test_live_plans.PlanTests.test_step_binding_cannot_replace_static_cursor_input) ... ok
+test_time_binding_requires_a_timestamp_capture (test_live_plans.PlanTests.test_time_binding_requires_a_timestamp_capture) ... ok
+test_unknown_fields_fail_closed (test_live_plans.PlanTests.test_unknown_fields_fail_closed) ... ok
+test_unresolved_cursor_is_rejected_before_execution (test_live_plans.PlanTests.test_unresolved_cursor_is_rejected_before_execution) ... ok
+test_unreviewed_or_stale_restored_package_fails_preflight (test_live_plans.PlanTests.test_unreviewed_or_stale_restored_package_fails_preflight) ... ok
+test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation (test_live_runner.ExecutionTests.test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation) ... ok
+test_every_vector_submits_each_declared_command_once_at_executor_boundary (test_live_runner.ExecutionTests.test_every_vector_submits_each_declared_command_once_at_executor_boundary) ... ok
+test_hard_termination_retains_prior_phases_and_sanitized_inflight_attempt (test_live_runner.ExecutionTests.test_hard_termination_retains_prior_phases_and_sanitized_inflight_attempt) ... ok
+test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat (test_live_runner.ExecutionTests.test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat) ... ok
+test_ordinary_failed_observation_marks_its_phase_failed (test_live_runner.ExecutionTests.test_ordinary_failed_observation_marks_its_phase_failed) ... ok
+test_parent_binding_mismatch_never_reaches_execute (test_live_runner.ExecutionTests.test_parent_binding_mismatch_never_reaches_execute) ... ok
+test_parties_offset_probes_reject_a_server_that_repeats_the_first_page (test_live_runner.ExecutionTests.test_parties_offset_probes_reject_a_server_that_repeats_the_first_page) ... ok
+test_resolved_core_refusal_prevents_that_phase_from_reaching_cli (test_live_runner.ExecutionTests.test_resolved_core_refusal_prevents_that_phase_from_reaching_cli) ... ok
+test_reused_message_identity_fails_repeated_noop_phase (test_live_runner.ExecutionTests.test_reused_message_identity_fails_repeated_noop_phase) ... ok
+test_actual_returned_cursor_is_captured_and_asserted (test_live_runner.RunnerTests.test_actual_returned_cursor_is_captured_and_asserted) ... ok
+test_broken_business_effect_fails_with_phase_operation_and_path (test_live_runner.RunnerTests.test_broken_business_effect_fails_with_phase_operation_and_path) ... ok
+test_cli_receives_private_endpoint_and_envelope_identity (test_live_runner.RunnerTests.test_cli_receives_private_endpoint_and_envelope_identity) ... ok
+test_command_requires_approved_aggregate_identity (test_live_runner.RunnerTests.test_command_requires_approved_aggregate_identity) ... ok
+test_failed_capture_does_not_commit_partial_values (test_live_runner.RunnerTests.test_failed_capture_does_not_commit_partial_values) ... ok
+test_failing_preflight_invalidates_receipt_and_redacts_identity (test_live_runner.RunnerTests.test_failing_preflight_invalidates_receipt_and_redacts_identity) ... ok
+test_final_process_timeout_retains_the_semantic_assertion_path (test_live_runner.RunnerTests.test_final_process_timeout_retains_the_semantic_assertion_path) ... ok
+test_invalid_output_contract_cannot_converge_to_a_later_valid_response (test_live_runner.RunnerTests.test_invalid_output_contract_cannot_converge_to_a_later_valid_response) ... ok
+test_live_entry_guards_fail_before_preflight_or_execution (test_live_runner.RunnerTests.test_live_entry_guards_fail_before_preflight_or_execution) ... ok
+test_malformed_cli_output_fails_immediately_even_after_a_converging_poll (test_live_runner.RunnerTests.test_malformed_cli_output_fails_immediately_even_after_a_converging_poll) ... ok
+test_missing_persisted_document_deadline_retains_declared_assertion_paths (test_live_runner.RunnerTests.test_missing_persisted_document_deadline_retains_declared_assertion_paths) ... ok
+test_nonretryable_query_error_does_not_poll (test_live_runner.RunnerTests.test_nonretryable_query_error_does_not_poll) ... ok
+test_only_queries_poll_for_persisted_convergence (test_live_runner.RunnerTests.test_only_queries_poll_for_persisted_convergence) ... ok
+test_successful_main_retains_bound_inputs_and_passing_phases (test_live_runner.RunnerTests.test_successful_main_retains_bound_inputs_and_passing_phases) ... ok
+test_write_acceptance_is_submitted_once (test_live_runner.RunnerTests.test_write_acceptance_is_submitted_once) ... ok
+test_write_failure_is_never_retried (test_live_runner.RunnerTests.test_write_failure_is_never_retried) ... ok
+test_bootstrap_refuses_an_existing_runtime_before_using_docker (test_runtime.RuntimeTests.test_bootstrap_refuses_an_existing_runtime_before_using_docker) ... ok
+test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch (test_runtime.RuntimeTests.test_bootstrap_removes_rejected_bytes_and_its_container_on_hash_mismatch) ... ok
+test_bootstrap_termination_during_extraction_removes_its_owned_container (test_runtime.RuntimeTests.test_bootstrap_termination_during_extraction_removes_its_owned_container) ... ok
+test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container (test_runtime.RuntimeTests.test_bootstrap_verifies_bytes_and_removes_only_its_extraction_container) ... ok
+test_inner_wrapper_refuses_an_empty_command_without_recording_success (test_runtime.RuntimeTests.test_inner_wrapper_refuses_an_empty_command_without_recording_success) ... ok
+test_optimized_wrapper_preserves_safety_guards (test_runtime.RuntimeTests.test_optimized_wrapper_preserves_safety_guards) ... ok
+test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch (test_runtime.RuntimeTests.test_public_wrapper_forwards_the_supplied_child_and_its_failure_through_namespace_launch) ... ok
+test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces (test_runtime.RuntimeTests.test_public_wrapper_requires_a_command_before_creating_files_or_launching_namespaces) ... ok
+test_redis_genesis_backup_reads_fragmented_resp_without_resubmitting (test_runtime.RuntimeTests.test_redis_genesis_backup_reads_fragmented_resp_without_resubmitting) ... ok
+test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline (test_runtime.RuntimeTests.test_wrapper_forces_a_sigterm_ignoring_child_to_exit_at_its_deadline) ... ok
+test_wrapper_pins_the_effective_child_environment_to_private_services (test_runtime.RuntimeTests.test_wrapper_pins_the_effective_child_environment_to_private_services) ... ok
+test_wrapper_propagates_a_real_failing_child_exit_and_records_it (test_runtime.RuntimeTests.test_wrapper_propagates_a_real_failing_child_exit_and_records_it) ... ok
+test_wrapper_records_bounded_stderr_before_parsing_a_failed_dapr_probe (test_runtime.RuntimeTests.test_wrapper_records_bounded_stderr_before_parsing_a_failed_dapr_probe) ... ok
+test_wrapper_refuses_nonempty_store_or_failed_backup_before_application_launch (test_runtime.RuntimeTests.test_wrapper_refuses_nonempty_store_or_failed_backup_before_application_launch) ... ok
+test_wrapper_refuses_readiness_failures_before_starting_the_child (test_runtime.RuntimeTests.test_wrapper_refuses_readiness_failures_before_starting_the_child) ... ok
+test_wrapper_rejects_a_daemon_that_exits_during_a_successful_child (test_runtime.RuntimeTests.test_wrapper_rejects_a_daemon_that_exits_during_a_successful_child) ... ok
+test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown (test_runtime.RuntimeTests.test_wrapper_removes_private_keys_before_an_interrupted_daemon_shutdown) ... ok
+test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files (test_runtime.RuntimeTests.test_wrapper_requires_a_nonempty_explicit_runtime_before_creating_files) ... ok
+test_wrapper_requires_each_namespace_to_differ_before_running_commands (test_runtime.RuntimeTests.test_wrapper_requires_each_namespace_to_differ_before_running_commands) ... ok
+test_wrapper_stops_a_real_hung_child_and_records_its_deadline (test_runtime.RuntimeTests.test_wrapper_stops_a_real_hung_child_and_records_its_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 138 tests in 98.673s
+
+OK
+FAILED: full live acceptance=False; receipt: /tmp/tmpcj4dzju1/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpzn66ko9f/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpw07pn_nn/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpaii52glp/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpjujjapnw/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp24s_2odo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2lxpy_5n/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmppsfsdl1g/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpbx6ghvdm/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp_tf_mcb3/live-lane.json
+PASSED: full live acceptance=True; receipt: /tmp/tmp9cr9qv83/live-lane.json
+PARTIAL: full live acceptance=False; receipt: /tmp/tmpctr8oza3/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp7g0noqam/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmplcghj12n/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpnog48j8a/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp2xb10bzo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpa99i1pgm/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpyw6pci0a/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpoktmxb2x/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmplmrog2f3/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpqkf94g6x/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp8mq4cvia/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpqi37jy9p/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpq79776pb/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpk1kbnogf/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpugx03cq_/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmppwrpkkuo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp8kzhuqfo/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpyp0z3dao/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp901wgey4/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmplpqvja26/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp8i1ejqxv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpwmox08cr/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpm190jbiv/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpzo3xme01/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp43oxfim9/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmpnvvbixyn/live-lane.json
+FAILED: full live acceptance=False; receipt: /tmp/tmp4nhi3dr8/live-lane.json
+FAILED fixture.operation; receipt: /tmp/tmp6h1fblbr/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp192yatja/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp8xndoxwt/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmph2sp3vfs/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmp8ypq2y69/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpt9cdq_y0/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpc23nk3nu/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /tmp/tmpgqtgabdl/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmpdp8czdo9/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /tmp/tmppps7clo4/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpoj3oqtod/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp8hza6wtf/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp6w38ak9n/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpm8kobz42/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp151iqdct/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpfqw_2pkm/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpv92y7j0b/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpcbsj0rfp/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp4d9uhzd5/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpvq58c_o1/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmpvmuf4ng4/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /tmp/tmp00qbourk/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+PASSED fixture.operation; receipt: /tmp/tmpiaix7e30/live-result.json
+Verified four private runtime binaries in /tmp/tmpemfjvfkt/runtime

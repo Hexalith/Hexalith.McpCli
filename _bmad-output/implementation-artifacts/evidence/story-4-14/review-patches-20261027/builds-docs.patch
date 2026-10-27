@@ -1,0 +1,27 @@
+diff --git a/.github/workflows/domain-ci.md b/.github/workflows/domain-ci.md
+index 0a7a5a5..4f93d62 100644
+--- a/.github/workflows/domain-ci.md
++++ b/.github/workflows/domain-ci.md
+@@ -31,7 +31,8 @@ The Aspire tier is **advisory (non-blocking) by default**
+ (`aspire-continue-on-error: true`): full-topology Aspire runs on shared runners
+ are inherently flakier than Tier 1/2, so they signal without gating merges. Its
+ coverage is deliberately not collected and is excluded from the coverage gates;
+-TRX results are always uploaded as the `aspire-test-results` artifact. Set
++Callers without a runner hook upload TRX results as the `aspire-test-results`
++artifact; runner-hook evidence uses `aspire-hook-evidence` instead. Set
+ `aspire-continue-on-error: false` in a module that wants the tier blocking.
+ 
+ ## Optional Aspire preparation and runner hooks
+@@ -52,8 +53,10 @@ Each hook receives `ASPIRE_TEST_PROJECT`, `TEST_PLATFORM` and
+ `GITHUB_ENV`; consumers are responsible for keeping credentials and private
+ runtime state out of uploaded evidence. `aspire-prepare-timeout-minutes` defaults
+ to 30 and accepts 1–60; `aspire-runner-timeout-minutes` defaults to 30 and accepts
+-1–340. GNU `timeout` enforces each bound with a 30-second kill grace in addition
+-to the Actions step deadline. Hook failures and deadline exits fail their steps.
++1–340. GNU `timeout` enforces each bound with a 30-second kill grace, subject to
++the Actions step deadline. A hook's own deadline and cleanup grace must fit
++inside that step limit to retain cancellation diagnostics. Hook failures and
++deadline exits fail their steps.
+ The finite `aspire-timeout-minutes` must be an integer at most 360 and allow all
+ enabled hook budgets plus at least five minutes for the rest of the job.
+ 

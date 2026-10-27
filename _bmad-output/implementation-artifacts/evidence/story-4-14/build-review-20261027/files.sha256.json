@@ -1,0 +1,8 @@
+{
+  "python-tests.txt": "dd552c49c31af02152d93d095e8733500da96e89b663eb76e86565fe9e3cc514",
+  "commitlint.txt": "af89c2454946cf58cc50f477b6501233f42d0cee5316aabfc933d7fcc91163a0",
+  "verification.json": "e1583309783d7827fa3f10d2a03a5771ed42bebf047af3ad070409d2668d9208",
+  "source-hashes.json": "c0be5a6925044f39ba145003b701e939891abd72eb923bfb850b8ed7772840cb",
+  "targeted-redaction-tests.txt": "240d1fe8e0e93f1a2d565cc7ac2ac2339c10719602fc7c73df7b013d3e12cf74",
+  "commit-message.txt": "92736e3f4e4a54eb7999d56867e42b1e65a0e0785876a3370727761657e36c63"
+}

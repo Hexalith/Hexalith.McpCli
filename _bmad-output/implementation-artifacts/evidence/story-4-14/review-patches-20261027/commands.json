@@ -1,0 +1,92 @@
+[
+  {
+    "command": "dotnet restore Hexalith.McpCli.slnx",
+    "exitCode": 0,
+    "output": "restore.txt"
+  },
+  {
+    "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+    "exitCode": 0,
+    "output": "build.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Abstractions.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Abstractions.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Analyzers.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Analyzers.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Core.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Manifest.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Cli.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Cli.txt"
+  },
+  {
+    "command": "dotnet test tests/Hexalith.McpCli.Mcp.Tests --no-build --configuration Release",
+    "exitCode": 0,
+    "output": "test-Mcp.txt"
+  },
+  {
+    "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+    "exitCode": 0,
+    "output": "python-tests.txt"
+  },
+  {
+    "command": "bash -n tools/live-topology/prepare-ci.sh tools/live-topology/run-ci.sh",
+    "exitCode": 0,
+    "output": "bash-syntax.txt"
+  },
+  {
+    "command": "actionlint .github/workflows/ci.yml",
+    "exitCode": 0,
+    "output": "actionlint.txt"
+  },
+  {
+    "command": "pwsh -NoProfile -File Tools/test-domain-workflow-test-platforms.ps1",
+    "cwd": "/tmp/mcpcli-414-builds-review-20261027",
+    "exitCode": 0,
+    "output": "builds-workflow-tests.txt"
+  },
+  {
+    "command": "actionlint .github/workflows/domain-ci.yml",
+    "cwd": "/tmp/mcpcli-414-builds-review-20261027",
+    "exitCode": 0,
+    "output": "builds-actionlint.txt"
+  },
+  {
+    "command": "npm ci",
+    "cwd": "/home/administrator/projects/hexalith/builds",
+    "exitCode": 0,
+    "output": "builds-npm-ci.txt"
+  },
+  {
+    "command": "npx --no -- commitlint --verbose < /tmp/mcpcli-414-builds-message.txt",
+    "cwd": "/home/administrator/projects/hexalith/builds",
+    "exitCode": 0,
+    "input": "docs(ci): clarify Aspire hook evidence and deadlines\n",
+    "output": "builds-commitlint.txt"
+  },
+  {
+    "command": "python3 /tmp/mcpcli-414-review-mutations.py",
+    "exitCode": 0,
+    "output": "mutations.txt"
+  },
+  {
+    "command": "python3 /tmp/mcpcli-414-finalize-review.py",
+    "exitCode": 0,
+    "output": "live-audit.txt"
+  }
+]

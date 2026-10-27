@@ -2,7 +2,7 @@
 title: '4.14 Make the live semantic lane blocking in CI'
 type: 'feature'
 created: '2026-10-26'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '49345128c189ff3955c00afb9f587b7a31c0ab15'
@@ -93,6 +93,26 @@ Patch groups are internal corrections to demonstrated states; no public surface 
 
 ## Design Notes
 
+### Resumed Build review triage (2026-10-27)
+
+All three required layers completed against the full baseline diff. Verification Gap reported no gaps. Blind Hunter supplied BH1–BH10; Edge Case Hunter supplied EC1. Each finding is recorded separately below before grouping.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| BH1 | high | defer: existing integration item | Carried B3: the new `857ef02` caller revision is locally qualified and unpublished. The existing integration ledger item already tracks publication and hosted acceptance; the implementation stage prohibits remote operations. |
+| BH2 | medium | patch G9 | Parent directly reproduced `sanitized(json.dumps({'diagnostic': secret}))` preserving known environment secrets containing quotes, backslashes and newlines. Redact their serialized representations and add regression coverage without changing the public surface. |
+| BH3 | false | reject | Carried rejection: the real vector receipts are structural or sanitized by their producer. The reproduction introduces an additional arbitrary JSON emitter absent from the actual runner; no production diagnostic JSON exposing a credential was identified. |
+| BH4 | false | reject | Carried rejection: real `run-vectors.py` constructs distinct absolute receipt paths from its owned runs; it does not emit alternate `..` spellings for one receipt. The fixture changes the producer contract rather than demonstrating an actual duplicate-runtime acceptance path. |
+| BH5 | false | reject | Carried rejection: the real independent wrapper creates and prints its own new run, never a vector run. Repointing fixture stdout and adding an unused run does not occur in the actual wrapper; the distinct vector receipts and exact 22-run check remain enforced. |
+| BH6 | low | reject | Carried rejection: an additional I/O fault during diagnostics can leave acceptance false with `running` status; no real fault was demonstrated. Independent persistence adds exception-handling complexity for an uncommon failure and cannot turn this state into acceptance. |
+| BH7 | low | reject | The proposed drift requires changing trusted checkouts or built artifacts between hooks. Hosted jobs retain their checkout and record source identities; no stale-artifact semantic false pass was shown. Additional artifact-binding gates would guard an unshown state. |
+| BH8 | low | reject | Smoke failures already persist the top-level failed result and actionable error with acceptance false; no consumer requires a nested failed-smoke object. Adding a parallel exception branch supplies redundant metadata for an uncommon failure. |
+| BH9 | false | reject | P1 explicitly requires failed Operation names in stderr and `{operation,result,error}` in the receipt. Both exist; phase/error details are retained in `vectors.failures`, and failed Operations are named in the console. |
+| BH10 | false | reject | D2 replaces downloads through the unverified installer with a checksum-verified release archive. Existing operator-installed tooling remains a trusted prerequisite with version and payload checks; no unchecked archive is downloaded or extracted on that path. Actual fresh hosted-style preparation exercised the verified download branch. |
+| EC1 | high | defer: existing integration item | Carried B3, separately recorded: workflow resolution requires publication of `857ef02`. Already tracked in `deferred-work.md` under this source spec; no duplicate ledger entry is added. |
+
+BH1 and EC1 share the existing upstream-publication dependency. G9 is the only new code correction from this review. All other findings are rejected individually on the evidence above.
+
 Optional script hooks keep module-specific setup out of Builds. Pass validated paths through environment variables without evaluating command strings. Preserve 900/960-second child bounds and a finite outer/job budget including setup.
 
 The owning Builds checkout is clean on main at `09af6ef818beb27490c87c00ed83dd581a7e6d8d`; McpCli currently references `e171c5a788eab183b32683431b084198c9b8d373`. Recheck before implementation. Reconcile dependency policy and Manifest validation if reference integration changes restored versions.
@@ -158,7 +178,7 @@ Parent checks during triage:
 - **Mutation check:** each mutation was run separately against `CiHooksTests`. Removing any of the nine guards or paths named in P7 keeps all 28 hook tests green. The VG layer's mutations back P2–P6 in the same way.
 - The current suite passes locally: 29 tests in 32 s.
 
-- [ ] [Review][Patch] D1 — medium, decided 2026-10-27: option (a). The source-built EventStore and Tenants servers moved to EventStore 3.128.0 packages without any record of it. [tools/live-topology/ci.py:219]
+- [x] [Review][Patch] D1 — medium, decided 2026-10-27: option (a). The source-built EventStore and Tenants servers moved to EventStore 3.128.0 packages without any record of it. [tools/live-topology/ci.py:219]
   - **Cause:** Moving the Builds gitlink changed the catalog default that the three source builds read. EventStore and Tenants now resolve 3.128.0; Parties keeps its own 3.127.0 pin. In 4.13 all three resolved 3.127.0.
   - **Why it matters:** `tools/live-topology/README.md:184-186` says the 3.127.0 pin "preserve[s] the approved package/vector qualification", but that pin covers only McpCli's own restore. `preparation.json` records source SHAs and git status, not the resolved package versions, so the mixed topology is invisible in the evidence (BH, EC).
   - **Already proven:** both the local run and hosted attempt 2 pass with this mix.
@@ -166,7 +186,7 @@ Parent checks during triage:
     - The servers follow the pinned catalog, as Platform's run/debug composition does.
     - The vector approval binds McpCli's packages, not the servers'.
   - **Option (b):** pass `-p:HexalithEventStoreVersion=3.127.0`, taken from McpCli's pin, to all three source builds (`tools/live-topology/ci.py:219`). This restores the 4.13 topology exactly: all three gitlinks are unchanged and built against 3.127.0 at baseline. It adds a second copy of the pin and leaves local source-build instructions on the catalog version.
-- [ ] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). Every hosted run executes an unverified `https://aspire.dev/install.sh`, and the CLI is qualified only by its version string. [tools/live-topology/ci.py:166]
+- [x] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). Every hosted run executes an unverified `https://aspire.dev/install.sh`, and the CLI is qualified only by its version string. [tools/live-topology/ci.py:166]
   - **Evidence:** `ci.py:166-175` records the installer's SHA-256 but never compares it.
     - Hosted evidence shows the install branch runs on every GitHub-hosted job.
     - The bundle check (`ci.py:181-194`) compares the installed bundle with an extraction from the same unpinned CLI, so it cannot detect a bad CLI.
@@ -175,26 +195,26 @@ Parent checks during triage:
   - **Option (a), recommended:** download the 13.6.1 CLI release archive directly and verify a pinned SHA-256 before extracting it, dropping `install.sh`. This matches Platform's checksum-verified release-asset preparation for Dapr.
   - **Option (b):** pin the `install.sh` digest. CI then fails whenever upstream edits that unversioned script, and the script's own downloads are still trusted.
   - **Option (c):** keep the version-only qualification and document it.
-- [ ] [Review][Patch] P1 — medium. Failed vectors are not named in the CI log or in `ci-live.json`. [tools/live-topology/ci.py:338]
+- [x] [Review][Patch] P1 — medium. Failed vectors are not named in the CI log or in `ci-live.json`. [tools/live-topology/ci.py:338]
   - On a vector failure, both `ci-live.json` and the stderr line say only `run-vectors.py … exited 1; see …/vectors-process.stderr.txt`. That file is empty, because `run-vectors.py` prints its single summary line to stdout.
   - In hosted attempt 1, finding `parties.create-party` and its Gateway 500 meant downloading the 2.5 MB artifact. Matrix row 4 and AC3 require the Operation/phase where available (AA).
   - **Fix:** when `vectors/live-lane.json` exists, copy each non-passing `{operation, result, error}` into `report['vectors']['failures']`, and name the failing Operations in the raised message that `main` prints. Cover it with a fixture outcome that carries an error.
-- [ ] [Review][Patch] P2 — medium. The `stale-isolation` fixture cannot catch removal of the receipt containment check. [tools/live-topology/test_ci.py:145]
+- [x] [Review][Patch] P2 — medium. The `stale-isolation` fixture cannot catch removal of the receipt containment check. [tools/live-topology/test_ci.py:145]
   - The fixture points at a non-existent `/outside/current-runtime/result.json`. With the `ci.py:251` containment condition replaced by `False`, all hook tests still pass, because `read_text()` raises `FileNotFoundError` instead (VG).
   - **Fix:** write a complete owned `result.json` and `outside.json` in a sibling runtime directory, and assert the "outside the prepared runtime" error.
-- [ ] [Review][Patch] P3 — medium. The smoke's own ownership and cleanup proof has no independent test. [tools/live-topology/ci.py:356]
+- [x] [Review][Patch] P3 — medium. The smoke's own ownership and cleanup proof has no independent test. [tools/live-topology/ci.py:356]
   - `missing-cleanup` also breaks every vector run, so vector acceptance already fails. Replacing `:356` with `pass` keeps the suite green (VG, BH).
   - **Fix:** add a fixture mode that changes only `owned('smoke')`. Assert that the vectors `passed` and that the smoke ownership error appears in `ci-live.json`.
-- [ ] [Review][Patch] P4 — medium. No test covers the exact count of 22 isolated runtimes. [tools/live-topology/ci.py:360]
+- [x] [Review][Patch] P4 — medium. No test covers the exact count of 22 isolated runtimes. [tools/live-topology/ci.py:360]
   - Replacing the condition with `if False:` keeps every test green (VG, BH).
   - **Fix:** add a fixture mode that creates an extra `runs/<name>` directory, and assert the count error and `fullLiveAccepted: false`.
-- [ ] [Review][Patch] P5 — medium. The final redaction pass over generation logs and XML is untested. [tools/live-topology/ci.py:369]
+- [x] [Review][Patch] P5 — medium. The final redaction pass over generation logs and XML is untested. [tools/live-topology/ci.py:369]
   - Emptying the pattern tuple, or dropping only `tests.xml`, keeps every test green. The end-to-end test reads only `runtime-diagnostics/` (VG).
   - **Fix:** make the `run-vectors.py` fixture write `<op>/child.stdout.txt` and `tests.xml` containing secrets: a JWT, a PEM block, an env token and a generated `SigningKey`. Assert that none of them appear anywhere under `receipt['output']`.
-- [ ] [Review][Patch] P6 — medium. The refusal of a symlinked evidence path in `ci.py` has no test. [tools/live-topology/ci.py:100]
+- [x] [Review][Patch] P6 — medium. The refusal of a symlinked evidence path in `ci.py` has no test. [tools/live-topology/ci.py:100]
   - Replacing the guard with `if False:` keeps the suite green. `test_caller_contract_and_unsafe_evidence_paths_are_refused` covers only `../outside` and `.`, and for local runs `ci.py` is the only guard (VG, BH).
   - **Fix:** add a symlinked `ASPIRE_EVIDENCE_PATH` subcase that asserts the message and checks the link target is left untouched.
-- [ ] [Review][Patch] P7 — medium. Nine more guards and bounds can be removed with no test failing. [tools/live-topology/test_ci.py:419]
+- [x] [Review][Patch] P7 — medium. Nine more guards and bounds can be removed with no test failing. [tools/live-topology/test_ci.py:419]
   - **Mutations that left all hook tests green (parent check):**
     - the preparation-path match (`ci.py:293`)
     - the ownership-ID match (`:296`)
@@ -210,17 +230,17 @@ Parent checks during triage:
     - Assert the outer `timeout` calls from the stub log.
     - Pin the three caller inputs.
     - Assert the expected stderr in the cases that currently check only a nonzero exit.
-- [ ] [Review][Patch] P8 — low. The READMEs keep claims that the hosted-qualification commits made stale. [README.md:279]
+- [x] [Review][Patch] P8 — low. The READMEs keep claims that the hosted-qualification commits made stale. [README.md:279]
   - `README.md:279` says the pinned Builds revision "is qualified locally; hosted CI proof requires that revision to be published upstream". `tools/live-topology/README.md:237-239` says it "has not been pushed" and that hosted acceptance "remains unproven". Both are now false (see the parent checks).
   - `README.md:270` says the bundle is installed "when missing", but GitHub-hosted runners always force-refresh it (`ci.py:185`) (BH, AA).
   - **Fix (wording only):** drop the publication-status sentences, since status belongs in the evidence. Keep "Paired package publication remains disabled". State that hosted runners refresh the bundle.
-- [ ] [Review][Patch] P9 — low. The OpenSSL 3 prerequisite check accepts any libssl. [tools/live-topology/ci.py:132]
+- [x] [Review][Patch] P9 — low. The OpenSSL 3 prerequisite check accepts any libssl. [tools/live-topology/ci.py:132]
   - `tools/live-topology/README.md:10` requires `libssl.so.3` and `libcrypto.so.3`, but `find_library('ssl')` also accepts OpenSSL 1.1. The failure then appears later, with no prerequisite named (AA, EC, BH).
   - **Fix:** load the exact `libssl.so.3` and `libcrypto.so.3` sonames, and name whichever one is missing.
-- [ ] [Review][Patch] P10 — low. The README says every installed bundle file is compared; only the expected files are. [tools/live-topology/README.md:214]
+- [x] [Review][Patch] P10 — low. The README says every installed bundle file is compared; only the expected files are. [tools/live-topology/README.md:214]
   - `ci.py:191` iterates over the fresh extraction, so extra files in `~/.aspire/bundle` are never examined (EC).
   - **Fix (wording only):** say that every file of a fresh extraction from the selected CLI must match the installed bundle.
-- [ ] [Review][Patch] P11 — low. The hook deadlines equal their step limits, and `bounded()`'s 35 s cleanup outlasts the hook's 30 s kill grace. [tools/live-topology/prepare-ci.sh:5]
+- [x] [Review][Patch] P11 — low. The hook deadlines equal their step limits, and `bounded()`'s 35 s cleanup outlasts the hook's 30 s kill grace. [tools/live-topology/prepare-ci.sh:5]
   - **The deadlines:** 2400 s and 18000 s equal both the caller's 40- and 300-minute steps and the Builds wrapper's `timeout`, so the Actions step deadline races the TERM path.
   - **The grace mismatch:** after TERM, `bounded()` waits 30 s and then 5 s more (`ci.py:74`), but the hook SIGKILLs Python after 30 s. This loses the failure receipt and the in-flight output.
   - **Reachability:** preparation's inner bounds add up to more than 2400 s, so a slow preparation can reach this (hosted preparation took 54 s). The runner hook cannot fire before its inner bounds do.
@@ -230,10 +250,10 @@ Parent checks during triage:
     - Make `bounded()`'s wait after TERM shorter than the hook's kill grace.
     - Update both READMEs.
     - Correct the Builds sentence together with P13.
-- [ ] [Review][Patch] P12 — low. When a reused runtime is refused, its earlier runs are still copied into this generation's diagnostics. [tools/live-topology/ci.py:298]
+- [x] [Review][Patch] P12 — low. When a reused runtime is refused, its earlier runs are still copied into this generation's diagnostics. [tools/live-topology/ci.py:298]
   - `runtime` is set before the freshness check at `:306`, so `finally` copies the old `runs/*` under the new generation (EC). Only a local rerun without new preparation reaches this.
   - **Fix:** assign the `runtime` that `finally` uses only after the freshness check passes.
-- [ ] [Review][Patch] P13 — low. Builds' `domain-ci.md` still says TRX results are always uploaded. [Hexalith.Builds/.github/workflows/domain-ci.md:34]
+- [x] [Review][Patch] P13 — low. Builds' `domain-ci.md` still says TRX results are always uploaded. [Hexalith.Builds/.github/workflows/domain-ci.md:34]
   - With a runner hook, the default Aspire test steps are skipped, so `aspire-test-results` has no TRX to upload. Hook output goes to the `aspire-hook-evidence` artifact instead (BH, EC).
   - **Fix (owning Builds repository, wording only):** limit the TRX sentence to callers without a runner hook, and fix the P11 grace sentence in the same commit. Then move the McpCli pin and gitlink.
 - [x] [Review][Defer] The hosted live lane is intermittent: a port bind race in a Dapr sidecar failed `parties.create-party` [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:51] — deferred: pre-existing topology (Stories 4.12–4.13), exposed now that the lane is blocking.
@@ -264,3 +284,24 @@ Parent checks during triage:
 - `low` — A dirty or non-gitlink source checkout is accepted (EC). CI checkouts are always clean gitlinks and status is recorded. The same class was rejected as B8.
 - `false` — The final redaction pass follows symlinked logs outside the evidence directory (EC). No program under test creates such links.
 - `false` — Duplicate receipt directories, or a smoke that reuses a vector's run, can pass with fewer than 22 proofs (EC). This needs `run-vectors.py` or `run-isolated.py` to misbehave. The distinct-receipt set and the 22-entry count already guard the paths that were shown, and P4 adds a test for the count.
+
+
+### Review patch resolution and local qualification (2026-10-27)
+
+All 15 code-review patches (D1, D2 and P1–P13) are implemented. Source preparation records each server's resolved `HexalithEventStoreVersion`; the real run confirms EventStore/Tenants at 3.128.0 and Parties at 3.127.0 while McpCli retains 3.127.0. Missing Aspire tooling now comes from the official 13.6.1 release archive after a pinned SHA-256 check, exercised by hiding existing launchers during actual preparation. Failed vector Operations and their errors are retained in `ci-live.json` and named in stderr. Exact OpenSSL 3 prerequisites, shorter cancellation cleanup, deadline margins, current-runtime-only diagnostics, independent ownership/count/redaction guards and corrected documentation are qualified.
+
+The owning Builds documentation-only commit is `857ef02dbb4bde1bd4e678546aa41e73fb7d68b1`, directly based on the former `35587cf` pin. Its 323 workflow assertions, actionlint and pinned commitlint pass; the caller pin and gitlink now select it. The local Git bundle and exact patch are retained. No push or Git remote operation was performed, so publication and hosted resolution of this new revision remain open; the prior hosted acceptance of `35587cf` is preserved as historical proof.
+
+Fresh Release restore and `-warnaserror` build pass with zero warnings/errors. All six focused projects pass: 1,531 tests passed, zero failed, five existing non-live skips. All 137 Python tests pass. Eighteen guard-removal mutations and three caller-input removals each fail their intended assertions. Bash syntax and caller actionlint pass.
+
+The exact preparation/runner shell hooks pass in 22.135/820.096 seconds: 21 passing vectors and independent authenticated smoke, zero live skips/failures, 22 passing XML cases, 22 owned cleanup receipts, 144 semantic phases, 53 single Command submissions with 53 distinct message IDs and 91 Query attempts. Every one of the 1,455 archived evidence files matches its original bytes; private runtime credentials/state remain excluded. Evidence: [review patch qualification](evidence/story-4-14/review-patches-20261027/README.md) and [verification index](evidence/story-4-14/review-patches-20261027/verification.json).
+
+The hosted namespace follow-up is resolved by the already-recorded hosted runs. Publication/hosted acceptance for the new documentation-only Builds revision remains the existing integration ledger item. The pre-existing Dapr port-bind intermittence and agent-context version wording remain deferred; no duplicate ledger entries were appended. This local qualification does not claim hosted acceptance for the new pin or enable paired publication.
+
+### Parent Build review completion (2026-10-27)
+
+The parent independently verified all 39 indexed evidence files, seven initial source fingerprints, all 1,455 archived files against the original run, 22 passing/unskipped XML cases and 22 native ownership/cleanup receipts. The frozen intent, production Contracts, approved vectors and dependency policy are unchanged. Every matrix row retains executed passing coverage: full native lane and hook acceptance; named prerequisite failures; source build failures/deadlines; failed, skipped and incomplete receipts; and the 323-assertion owner workflow suite for callers without hooks.
+
+All three review layers completed and every finding is triaged above. G9 now decodes escaped JSON string diagnostics before redacting known environment credentials, re-encoding only changed strings. Quotes, backslashes, newlines and nested JSON are protected; ordinary text stays unchanged. The new regression failed before the correction. Four targeted tests and the final complete 138-test Python suite pass. Execution and acceptance code have identical ASTs before/after this sanitizer-only correction, and replaying all 168 retained live diagnostic files produces identical output. The complete native lane was qualified before G9; it was not rerun for this diagnostic-only correction. No .NET code or build inputs changed after the recorded fresh Release build and 1,531 passing .NET tests.
+
+No unresolved code finding remains. Build implementation is complete; sprint status remains `review` pending upstream publication and hosted acceptance of the new Builds pin. Final parent evidence: [verification](evidence/story-4-14/build-review-20261027/verification.json), [Python output](evidence/story-4-14/build-review-20261027/python-tests.txt) and [current source fingerprints](evidence/story-4-14/build-review-20261027/source-hashes.json). The existing integration, Dapr intermittence and agent-context follow-ups remain tracked without duplication.

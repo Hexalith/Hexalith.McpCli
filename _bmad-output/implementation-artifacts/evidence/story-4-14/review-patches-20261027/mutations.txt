@@ -1,0 +1,18 @@
+P2 receipt containment: caught
+P3 smoke ownership: caught
+P4 runtime count: caught
+P5 generation redaction: caught
+P5 XML redaction: caught
+P6 symlink path: caught
+P7 preparation path: caught
+P7 ownership ID: caught
+P7 Integration DLL: caught
+P7 Aspire version: caught
+P7 preparation binary hash: caught
+P7 preparation outer timeout: caught
+P7 runner outer timeout: caught
+P7 Aspire install: caught
+D2 archive hash: caught
+P9 OpenSSL exact sonames: caught
+P11 cleanup grace: caught
+P12 reused runtime diagnostics: caught

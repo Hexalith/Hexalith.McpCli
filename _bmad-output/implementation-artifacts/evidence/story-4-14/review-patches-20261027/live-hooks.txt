@@ -1,0 +1,4 @@
+Starting exact CI hook: prepare-ci.sh
+prepare-ci.sh exited 0
+Starting exact CI hook: run-ci.sh
+run-ci.sh exited 0

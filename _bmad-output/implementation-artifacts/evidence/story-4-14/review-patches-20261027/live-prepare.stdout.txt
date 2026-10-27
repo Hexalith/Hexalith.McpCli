@@ -1,0 +1,29 @@
+Running (30s): dotnet --version
+Running (30s): dapr --version
+Running (30s): docker info --format {{.ServerVersion}}
+Running (30s): unshare --user --map-root-user --net --pid --mount --fork --mount-proc true
+Running (130s): curl --fail --silent --show-error --location --connect-timeout 15 --max-time 120 https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz -o /tmp/mcpcli-live-ci-ec8j5yg3/aspire-cli.tar.gz
+Running (30s): aspire --version
+Running (180s): aspire setup --install-path /tmp/mcpcli-live-ci-ec8j5yg3/qualified-aspire --force --non-interactive
+Running (10s): git config --file /home/administrator/projects/hexalith/mcpcli/.gitmodules --get-regexp ^submodule\..*\.path$
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (10s): git rev-parse --show-toplevel
+Running (10s): git rev-parse HEAD
+Running (10s): git status --porcelain --untracked-files=normal
+Running (30s): dotnet msbuild src/Hexalith.EventStore/Hexalith.EventStore.csproj -getProperty:HexalithEventStoreVersion -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (300s): dotnet build src/Hexalith.EventStore/Hexalith.EventStore.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (30s): dotnet msbuild src/Hexalith.Tenants/Hexalith.Tenants.csproj -getProperty:HexalithEventStoreVersion -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (300s): dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (30s): dotnet msbuild src/Hexalith.Parties/Hexalith.Parties.csproj -getProperty:HexalithEventStoreVersion -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (300s): dotnet build src/Hexalith.Parties/Hexalith.Parties.csproj --configuration Release -warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true
+Running (60s): /usr/bin/python3 -m venv /tmp/mcpcli-live-ci-ec8j5yg3/venv
+Running (180s): /tmp/mcpcli-live-ci-ec8j5yg3/venv/bin/python -m pip install --disable-pip-version-check -r /home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/requirements.txt
+Running (30s): /tmp/mcpcli-live-ci-ec8j5yg3/venv/bin/python --version
+Running (30s): /tmp/mcpcli-live-ci-ec8j5yg3/venv/bin/python -c import importlib.metadata; print(importlib.metadata.version("jsonschema"))
+Running (900s): /tmp/mcpcli-live-ci-ec8j5yg3/venv/bin/python /home/administrator/projects/hexalith/mcpcli/tools/live-topology/bootstrap-runtime.py /tmp/mcpcli-live-ci-ec8j5yg3/runtime
+Prepared live CI: /home/administrator/projects/hexalith/mcpcli/TestResults/live-ci-review-patches-20261027/preparation.json
