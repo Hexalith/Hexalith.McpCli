@@ -2,7 +2,7 @@
 title: '4.14 Make the live semantic lane blocking in CI'
 type: 'feature'
 created: '2026-10-26'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '49345128c189ff3955c00afb9f587b7a31c0ab15'
@@ -335,10 +335,12 @@ Parent checks during triage:
   - **Option (a), recommended:** pin `ci.yml:18` to the current gitlink `cad9252`, then run hosted CI once. That run also qualifies the moved source gitlinks. Re-land the `857ef02` wording as a separate Builds docs commit, and move the pin and gitlink together at the next Builds bump.
   - **Option (b):** cherry-pick `857ef02` onto Builds `main` and push it. Move the pin and gitlink together to the new SHA, then run hosted CI. This completes P13 now, but it pulls in the three later `domain-ci.yml` changes (including `568417a`, the release execution gates) unqualified.
   - **Option (c):** push `857ef02` to a Builds branch or tag so GitHub can resolve it, and keep the pin. The gitlink stays divergent and the wording stays off `main`.
+  - **Status at `84c2220`:** a separate `/pushall` moved the pin and gitlink together to the published Builds `12e48f1`, not `cad9252`, and hosted run `40565620918` resolves the workflow. `12e48f1` does not contain `857ef02`, and its `domain-ci.md:34` still carries the old TRX sentence. The re-land of the Builds wording and hosted acceptance of `12e48f1` remain open. Do not move the pin back to `cad9252`.
 - [ ] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). No test ties the workflow pin to the gitlink, so the `8bfd1e0` divergence passed silently. [tools/live-topology/test_ci.py:875] (BH, EC)
   - `CiWorkflowTests` only checks that the pin is 40 hex characters. Pass 1 rejected tying the two because they serve different purposes; this pass shows them drifting apart.
   - **Option (a), recommended:** assert that the pin equals `git ls-tree HEAD references/Hexalith.Builds`, which works in shallow CI checkouts. Every Builds bump then moves both in one commit, as P13 prescribed. This would have caught `8bfd1e0` locally. It cannot prove publication: at `c6a19e8` both were equal and both unpublished.
   - **Option (b):** keep them independent, and only document that they move together.
+  - **Status at `84c2220`:** `test_workflow_pin_matches_builds_gitlink` (`tools/live-topology/test_ci.py:878`) now asserts that the pin equals the gitlink, and it passes locally. Its removal sensitivity (moving the pin or the gitlink alone) is not yet shown.
 - [ ] [Review][Patch] P1 — medium. Fifteen guards still have no test that fails when the guard is removed. [tools/live-topology/test_ci.py:319] (VG, AA, BH, parent mutations)
   - **Each removal keeps `CiHooksTests` green:**
     - the platform/Python gate (`ci.py:132`)
