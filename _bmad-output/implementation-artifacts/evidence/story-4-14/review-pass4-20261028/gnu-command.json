@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci"
+  ],
+  "timeoutImplementation": "GNU coreutils 9.7 via temporary PATH shim",
+  "exitCode": 0,
+  "elapsedSeconds": 96.43749333900632
+}

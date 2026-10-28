@@ -1,0 +1,185 @@
+source-commit-cwd-removal
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 329, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual(hashlib.sha1(str(checkout).encode()).hexdigest(), source['commit'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '9c27c214965bb082cf925b451a46f8236394ec2c' != '4c15193ec16c8e4cb4578ffdb1017decde94e8b3'
+- 9c27c214965bb082cf925b451a46f8236394ec2c
++ 4c15193ec16c8e4cb4578ffdb1017decde94e8b3
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.694s
+
+FAILED (failures=1)
+
+source-status-removal
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... ERROR
+
+======================================================================
+ERROR: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 330, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual('M  ' + checkout.name + '-fixture.txt', source['status'])
+                                                             ~~~~~~^^^^^^^^^^
+KeyError: 'status'
+
+----------------------------------------------------------------------
+Ran 1 test in 1.495s
+
+FAILED (errors=1)
+
+source-status-cwd-removal
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 330, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual('M  ' + checkout.name + '-fixture.txt', source['status'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'M  Hexalith.EventStore-fixture.txt' != 'M  tmp0g6qrtvy-fixture.txt'
+- M  Hexalith.EventStore-fixture.txt
++ M  tmp0g6qrtvy-fixture.txt
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.694s
+
+FAILED (failures=1)
+
+executable-hash-corruption
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 339, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual(hashlib.sha256((self.bin / name).read_bytes()).hexdigest(), executable['sha256'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'aad78236f6dd152721b44794cb73c230afba37bc0ec69ee6e8652b250efbf7f6' != '0000000000000000000000000000000000000000000000000000000000000000'
+- aad78236f6dd152721b44794cb73c230afba37bc0ec69ee6e8652b250efbf7f6
++ 0000000000000000000000000000000000000000000000000000000000000000
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.686s
+
+FAILED (failures=1)
+
+daprd-hash-corruption
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 341, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual(hashlib.sha256((self.bin / 'daprd').read_bytes()).hexdigest(), tools['daprdSha256'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'aad78236f6dd152721b44794cb73c230afba37bc0ec69ee6e8652b250efbf7f6' != '0000000000000000000000000000000000000000000000000000000000000000'
+- aad78236f6dd152721b44794cb73c230afba37bc0ec69ee6e8652b250efbf7f6
++ 0000000000000000000000000000000000000000000000000000000000000000
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.689s
+
+FAILED (failures=1)
+
+bundle-index-hash-corruption
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 346, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual(hashlib.sha256(b'qualified bundle').hexdigest(), digest)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'c7e4f1f57e8b69e509c5eeddb77d71288a2fca0ec6bd015c32eb015a7654b39b' != '0000000000000000000000000000000000000000000000000000000000000000'
+- c7e4f1f57e8b69e509c5eeddb77d71288a2fca0ec6bd015c32eb015a7654b39b
++ 0000000000000000000000000000000000000000000000000000000000000000
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.701s
+
+FAILED (failures=1)
+
+bundle-tool-hash-corruption
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... FAIL
+
+======================================================================
+FAIL: test_preparation_order_bounds_source_flags_and_nonsecret_exports (__main__.MutatedCase.test_preparation_order_bounds_source_flags_and_nonsecret_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 349, in test_preparation_order_bounds_source_flags_and_nonsecret_exports
+    self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'c7e4f1f57e8b69e509c5eeddb77d71288a2fca0ec6bd015c32eb015a7654b39b' != '0000000000000000000000000000000000000000000000000000000000000000'
+- c7e4f1f57e8b69e509c5eeddb77d71288a2fca0ec6bd015c32eb015a7654b39b
++ 0000000000000000000000000000000000000000000000000000000000000000
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.689s
+
+FAILED (failures=1)
+
+lane-receipt-diagnostic-removal
+test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) ... 
+  test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-preflight') ... FAIL
+  test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-admission') ... FAIL
+  test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-coverage') ... FAIL
+  test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-runtime') ... FAIL
+
+======================================================================
+FAIL: test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-preflight')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 652, in test_lane_level_errors_are_named_and_only_failed_operations_are_failures
+    self.assertIn(lane_receipt, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'lane receipt: /tmp/tmp4tg_ygwb/evidence/4d03836eb10840e88c7f223844d94596/vectors/live-lane.json' not found in 'Live CI failed: RuntimeError: Complete current passing evidence for all 21 vectors is required; partial/preflight/skipped evidence is refused.; lane error: named lane-preflight prerequisite failure; runner stdout: /tmp/tmp4tg_ygwb/evidence/4d03836eb10840e88c7f223844d94596/vectors-process.stdout.txt\n'
+
+======================================================================
+FAIL: test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-admission')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 652, in test_lane_level_errors_are_named_and_only_failed_operations_are_failures
+    self.assertIn(lane_receipt, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'lane receipt: /tmp/tmp4tg_ygwb/evidence/25867a9619da4ac9b5f1883ccc33a269/vectors/live-lane.json' not found in 'Live CI failed: RuntimeError: Complete current passing evidence for all 21 vectors is required; partial/preflight/skipped evidence is refused.; lane error: named lane-admission prerequisite failure; runner stdout: /tmp/tmp4tg_ygwb/evidence/25867a9619da4ac9b5f1883ccc33a269/vectors-process.stdout.txt\n'
+
+======================================================================
+FAIL: test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-coverage')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 652, in test_lane_level_errors_are_named_and_only_failed_operations_are_failures
+    self.assertIn(lane_receipt, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'lane receipt: /tmp/tmp4tg_ygwb/evidence/2f3033bc03bd4a66bf0851ff00d4acf8/vectors/live-lane.json' not found in 'Live CI failed: RuntimeError: Complete current passing evidence for all 21 vectors is required; partial/preflight/skipped evidence is refused.; lane error: named lane-coverage prerequisite failure; runner stdout: /tmp/tmp4tg_ygwb/evidence/2f3033bc03bd4a66bf0851ff00d4acf8/vectors-process.stdout.txt\n'
+
+======================================================================
+FAIL: test_lane_level_errors_are_named_and_only_failed_operations_are_failures (__main__.MutatedCase.test_lane_level_errors_are_named_and_only_failed_operations_are_failures) (mode='lane-runtime')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 652, in test_lane_level_errors_are_named_and_only_failed_operations_are_failures
+    self.assertIn(lane_receipt, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'lane receipt: /tmp/tmp4tg_ygwb/evidence/d0b519b4c1414edca8e1cb5d16ba99ef/vectors/live-lane.json' not found in 'Live CI failed: RuntimeError: Complete current passing evidence for all 21 vectors is required; partial/preflight/skipped evidence is refused.; lane error: named lane-runtime prerequisite failure; runner stdout: /tmp/tmp4tg_ygwb/evidence/d0b519b4c1414edca8e1cb5d16ba99ef/vectors-process.stdout.txt\n'
+
+----------------------------------------------------------------------
+Ran 1 test in 2.543s
+
+FAILED (failures=4)
+

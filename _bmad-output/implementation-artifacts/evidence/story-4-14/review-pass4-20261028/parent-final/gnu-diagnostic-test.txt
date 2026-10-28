@@ -1,0 +1,6 @@
+test_stdout_only_source_failure_names_both_retained_output_paths (test_ci.CiHooksTests.test_stdout_only_source_failure_names_both_retained_output_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.360s
+
+OK

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "tools/live-topology",
+    "-p",
+    "test_*.py"
+  ],
+  "exitCode": 0,
+  "testsPassed": 156,
+  "testsSkipped": 0,
+  "suiteSeconds": 132.948,
+  "timeoutImplementation": "uutils coreutils 0.8.0"
+}

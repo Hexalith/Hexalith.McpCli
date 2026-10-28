@@ -1,0 +1,16 @@
+test_stdout_only_source_failure_names_both_retained_output_paths (__main__.MissingStdoutPath.test_stdout_only_source_failure_names_both_retained_output_paths) ... FAIL
+
+======================================================================
+FAIL: test_stdout_only_source_failure_names_both_retained_output_paths (__main__.MissingStdoutPath.test_stdout_only_source_failure_names_both_retained_output_paths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 576, in test_stdout_only_source_failure_names_both_retained_output_paths
+    self.assertEqual(f'Live CI failed: RuntimeError: {error}\n', result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Live[231 chars]; stdout: /tmp/tmpep0ely35/evidence/Hexalith.T[90 chars]xt\n' != 'Live[231 chars]; stderr: /tmp/tmpep0ely35/evidence/Hexalith.T[21 chars]xt\n'
+Diff is 1300 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 1.364s
+
+FAILED (failures=1)

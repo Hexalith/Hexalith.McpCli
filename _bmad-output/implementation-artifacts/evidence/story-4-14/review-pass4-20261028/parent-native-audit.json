@@ -1,0 +1,9 @@
+{
+  "archiveSha256": "15bde706b18e14684abf16e5ddd37527d2f3eb273fbcaf426b9f00b7f9097848",
+  "filesMatchedOriginals": 1452,
+  "vectorsPassed": 21,
+  "independentSmokePassed": 1,
+  "passingXmlCases": 22,
+  "ownedCleanupReceipts": 22,
+  "freshLiveOrDotnetRun": false
+}

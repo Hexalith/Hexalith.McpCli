@@ -1,0 +1,23 @@
+[
+  {
+    "command": [
+      "bash",
+      "-n",
+      "tools/live-topology/prepare-ci.sh",
+      "tools/live-topology/run-ci.sh"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "actionlint",
+      ".github/workflows/ci.yml",
+      ".github/workflows/commitlint.yml"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

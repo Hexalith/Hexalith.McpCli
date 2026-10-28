@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-28",
+  "headBeforePass4": "a4b455ef44f0e8c1ab60f6d07c7335dcbfd661b7",
+  "selectedBuildsRevision": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "patchesCompleted": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "parentBuildReviewPending": true,
+  "python": {
+    "commandReceipt": "python-command.json",
+    "passed": 156,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 132.948
+  },
+  "gnuHookTests": {
+    "commandReceipt": "gnu-command.json",
+    "passed": 59,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 96.378
+  },
+  "mutationsDetected": 8,
+  "ownerWorkflowAssertions": 411,
+  "ownerCommand": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "references/Hexalith.Builds/Tools/test-domain-workflow-test-platforms.ps1"
+  ],
+  "historicalNativeAudit": "parent-native-audit.json",
+  "freshLiveOrDotnetRunClaimed": false,
+  "remoteOperationsPerformed": false,
+  "artifacts": {
+    "README.md": {
+      "sha256": "5220663e4bc5926c6e1f8283c6ca3189c4fd2029961e2ce7954cec87cfe58095",
+      "size": 3292
+    },
+    "builds-tests.txt": {
+      "sha256": "6e591f69ad3ecf4a1d8e25676790be4d742d3a75dde8f8765b6a7f4d26e30cc6",
+      "size": 61
+    },
+    "check-mutations.py": {
+      "sha256": "1d0d70ca6a69283aff0f1ed536f9f235af85a04f3f3a2be3afabf3d1575f58e1",
+      "size": 3252
+    },
+    "gnu-command.json": {
+      "sha256": "8717fae8ef7d1440f35863eb71bd00ee851dc9ec43e8813b85031e208fa6b1f9",
+      "size": 216
+    },
+    "gnu-hook-tests.txt": {
+      "sha256": "e3dbaa7d8a1e18c6798489a9717277b0190822d81df0d5fb57d5d97d5513e6fc",
+      "size": 9490
+    },
+    "mutation-checks.txt": {
+      "sha256": "e6846849aebb35282bcb8cb986b9849519902ebce5b77353a5c76a810427dd8c",
+      "size": 13778
+    },
+    "mutation-results.json": {
+      "sha256": "e1692c6070e8cf5f82acdb24018c130fd39fff545100782ea2f8a206d4d996f9",
+      "size": 863
+    },
+    "parent-native-audit.json": {
+      "sha256": "2211015a2c6f21053d40ac920feb81e9559b3a36189e948a24d963b5bb31bb54",
+      "size": 265
+    },
+    "python-command.json": {
+      "sha256": "96003975d9ef39560fa3d12d83cb105c65cd49b98e1e2782201d0187bf522259",
+      "size": 293
+    },
+    "python-tests.txt": {
+      "sha256": "281e275212f196f1ab7f9e73526e247076d8a50321b04b418839e9cecb0c04b2",
+      "size": 31092
+    },
+    "scope-verification.json": {
+      "sha256": "01601bc758688e411f51d01433fe4d28ccbd75f48c50c9ca79f6934a9165eafd",
+      "size": 752
+    },
+    "source-hashes.json": {
+      "sha256": "abf3e48534ca08230152d32411a26940394e1cc4147adbd53120b258408bc03b",
+      "size": 575
+    },
+    "static-checks.json": {
+      "sha256": "2d07e2b566a307a69b4bc0a53b29daf5654aa0770dfbe3a2b726adb5de73421d",
+      "size": 859
+    }
+  }
+}

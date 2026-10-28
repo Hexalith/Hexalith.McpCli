@@ -107,7 +107,7 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
                 try:
                     os.kill(child.pid, signal.SIGTERM)
                 except ProcessLookupError:
-                    pass  # The child can exit between poll and the process-group signal.
+                    pass  # The child can exit between poll and the supervisor signal.
                 try:
                     # The vector runner allows its detached child 20 seconds
                     # to clean up. Leave it that grace inside our 30-second bound.
@@ -142,7 +142,9 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
             save(output.parent / (output.name + '.command.json'), {'command': list(map(str, command)), 'cwd': str(cwd),
                  'timeoutSeconds': seconds, 'exitCode': child.returncode})
     if code != 0:
-        raise RuntimeError(f'{" ".join(map(str, command))} exited {code}; see {output.parent / (output.name + ".stderr.txt")}')
+        raise RuntimeError(f'{" ".join(map(str, command))} exited {code}; '
+                           f'stdout: {output.parent / (output.name + ".stdout.txt")}; '
+                           f'stderr: {output.parent / (output.name + ".stderr.txt")}')
     return content.strip()
 
 

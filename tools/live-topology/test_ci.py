@@ -21,7 +21,7 @@ from unittest.mock import patch
 HERE = Path(__file__).resolve().parent
 
 TOOL = r'''#!/usr/bin/env python3
-import json, os, pathlib, subprocess, sys
+import hashlib, json, os, pathlib, subprocess, sys
 name = pathlib.Path(sys.argv[0]).name
 args = sys.argv[1:]
 root = pathlib.Path(os.environ['FIXTURE_ROOT'])
@@ -55,8 +55,8 @@ if name == 'dotnet':
             print('A compatible .NET SDK was not found.', file=sys.stderr); sys.exit(145)
         print('10.0.403' if mode == 'sdk-patch-rollforward' else '10.0.402')
     elif args[0] == 'build':
-        if mode == 'build-failure' and 'Tenants' in args[1]:
-            print('named source build failure', file=sys.stderr); sys.exit(23)
+        if mode in ('build-failure', 'build-stdout-failure') and 'Tenants' in args[1]:
+            print('named source build failure', file=sys.stdout if mode == 'build-stdout-failure' else sys.stderr); sys.exit(23)
     elif args[0] == 'msbuild':
         print('3.127.0' if pathlib.Path.cwd().name == 'Hexalith.Parties' else '3.128.0')
     sys.exit(0)
@@ -90,7 +90,9 @@ elif name == 'git':
     elif args == ['rev-parse', '--show-toplevel']:
         print(root if mode == 'copied-source' else pathlib.Path.cwd())
     elif args == ['rev-parse', 'HEAD']:
-        print('a' * 40)
+        print(hashlib.sha1(str(pathlib.Path.cwd()).encode()).hexdigest())
+    elif args == ['status', '--porcelain', '--untracked-files=normal']:
+        print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
 elif name == 'sudo':
     if args != ['-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0']:
         sys.exit(89)
@@ -319,6 +321,32 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(['300'] * 3, deadlines)
         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
         self.assertEqual(3, len(prepared['sources']))
+        checkouts = [self.root / 'references' / module for module in
+                     ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')]
+        for source, checkout in zip(prepared['sources'], checkouts):
+            self.assertEqual(checkout.name, source['module'])
+            self.assertEqual(str(checkout.relative_to(self.root)), source['path'])
+            self.assertEqual(hashlib.sha1(str(checkout).encode()).hexdigest(), source['commit'])
+            self.assertEqual('M  ' + checkout.name + '-fixture.txt', source['status'])
+        for arguments in (['rev-parse', 'HEAD'], ['status', '--porcelain', '--untracked-files=normal']):
+            self.assertEqual([str(checkout) for checkout in checkouts],
+                             [call[1] for call in calls if call[0] == 'git' and call[2:] == arguments])
+        tools = prepared['tools']
+        self.assertEqual({'aspire', 'dapr', 'dotnet'}, set(tools['executables']))
+        for name, executable in tools['executables'].items():
+            self.assertEqual(str(self.bin / name), executable['path'])
+            self.assertRegex(executable['sha256'], r'\A[0-9a-f]{64}\Z')
+            self.assertEqual(hashlib.sha256((self.bin / name).read_bytes()).hexdigest(), executable['sha256'])
+        self.assertRegex(tools['daprdSha256'], r'\A[0-9a-f]{64}\Z')
+        self.assertEqual(hashlib.sha256((self.bin / 'daprd').read_bytes()).hexdigest(), tools['daprdSha256'])
+        bundle_hashes = json.loads((self.evidence / 'aspire-bundle-hashes.json').read_text())
+        self.assertEqual({'dcp/dcp', 'dashboard/Aspire.Dashboard', 'managed/aspire-managed'}, set(bundle_hashes))
+        for relative, digest in bundle_hashes.items():
+            self.assertRegex(digest, r'\A[0-9a-f]{64}\Z')
+            self.assertEqual(hashlib.sha256(b'qualified bundle').hexdigest(), digest)
+        for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
+            self.assertEqual(str(Path(self.env['HOME']) / '.aspire/bundle' / relative), tools[relative]['path'])
+            self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
         self.assertEqual(['3.128.0', '3.128.0', '3.127.0'],
                          [source['HexalithEventStoreVersion'] for source in prepared['sources']])
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
@@ -536,6 +564,27 @@ class CiHooksTests(unittest.TestCase):
                 self.assertIn('dotnet build src/Hexalith.', result.stderr)
                 self.assertFalse(any('run-vectors.py' in str(call) or 'bootstrap-runtime.py' in str(call) for call in self.calls()))
 
+    def test_stdout_only_source_failure_names_both_retained_output_paths(self):
+        result = self.invoke('prepare-ci.sh', 'build-stdout-failure')
+        self.assertEqual(1, result.returncode)
+        command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
+                   '-warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
+                   '-p:HexalithEventStoreFromSource=true')
+        stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
+        stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
+        error = f'{command} exited 23; stdout: {stdout}; stderr: {stderr}'
+        self.assertEqual(f'Live CI failed: RuntimeError: {error}\n', result.stderr)
+        self.assertIn('Running (300s): ' + command, result.stdout)
+        self.assertEqual('named source build failure\n', stdout.read_text())
+        self.assertEqual('', stderr.read_text())
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertEqual('RuntimeError: ' + error, receipt['error'])
+        self.assertEqual({'result': 'not-run', 'fullLiveAccepted': False},
+                         json.loads((self.evidence / 'ci-live.json').read_text()))
+        self.assertFalse(any(any(value.endswith(('bootstrap-runtime.py', 'run-vectors.py', 'run-isolated.py'))
+                                 for value in call) for call in self.calls()))
+
     def test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics(self):
         prepared = self.prepare()
         result = self.invoke('run-ci.sh')
@@ -620,6 +669,9 @@ class CiHooksTests(unittest.TestCase):
                 receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                 self.assertEqual(message, receipt['vectors']['laneError'])
                 self.assertIn(message, receipt['vectors']['error'])
+                lane_receipt = 'lane receipt: ' + str(Path(receipt['output']) / 'vectors/live-lane.json')
+                self.assertIn(lane_receipt, result.stderr)
+                self.assertIn(lane_receipt, receipt['vectors']['error'])
                 self.assertIs(False, receipt['fullLiveAccepted'])
                 self.assertEqual('passed', receipt['smoke']['result'])
                 self.assertEqual([], receipt['vectors']['failures'])
@@ -1164,7 +1216,8 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
             with self.assertRaises(ProcessLookupError):
                 os.kill(child, 0)
             self.assertTrue((output / 'process.stderr.txt').is_file())
-            self.assertEqual(124, json.loads((output / 'process.command.json').read_text())['exitCode'])
+            # uutils reports external TERM as 124; GNU propagates the child's 143.
+            self.assertIn(json.loads((output / 'process.command.json').read_text())['exitCode'], (124, 143))
         finally:
             if process.poll() is None:
                 process.kill()

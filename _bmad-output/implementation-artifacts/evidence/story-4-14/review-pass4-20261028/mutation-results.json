@@ -1,0 +1,50 @@
+[
+  {
+    "name": "source-commit-cwd-removal",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "source-status-removal",
+    "detected": true,
+    "failures": 0,
+    "errors": 1
+  },
+  {
+    "name": "source-status-cwd-removal",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "executable-hash-corruption",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "daprd-hash-corruption",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "bundle-index-hash-corruption",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "bundle-tool-hash-corruption",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "lane-receipt-diagnostic-removal",
+    "detected": true,
+    "failures": 4,
+    "errors": 0
+  }
+]

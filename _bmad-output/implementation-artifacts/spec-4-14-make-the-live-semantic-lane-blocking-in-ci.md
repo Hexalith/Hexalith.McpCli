@@ -2,7 +2,7 @@
 title: '4.14 Make the live semantic lane blocking in CI'
 type: 'feature'
 created: '2026-10-26'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '49345128c189ff3955c00afb9f587b7a31c0ab15'
@@ -125,6 +125,30 @@ All three required layers completed against the full story source diff and retai
 | B3-EC1 | low | carried reject | Same malformed, entity-encoded XML claim as pass-3 EC7, recorded independently before grouping. No actual truncated credential-bearing test output is identified, so the earlier rejection stands. |
 | B3-EC2 | low | carried reject | Diagnostic-copy I/O failure before final redaction repeats pass-2 EC6 and pass-3 EC1. No I/O failure or exposed child credential is shown; acceptance remains false. A private-output publication redesign guards an unshown rare state. |
 | B3-VG1 | medium | patch runner contract regression | Pre-verified removal-sensitive gap: the existing caller-contract test invokes preparation only. Removing only run()'s require_contract() leaves it green and can grant acceptance to an unsupported runner caller. Add both runner project/platform refusals after successful preparation, checking diagnostics, the failed receipt and absence of vector/smoke execution. |
+
+### Final Build review of pass-4 corrections (2026-10-28)
+
+All three required layers completed against the full baseline diff. Verification
+Gap found no gaps. Blind Hunter returned ten findings and Edge Case Hunter
+returned two; each receives an individual verdict below before grouping.
+
+| ID | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B4-BH1 | low | reject | A direct helper reproduction preserves the synthetic six-character `TEST_PASSWORD=short7`. No supported lane emitter uses a credential this short: generated identity and mTLS material are long, and the hooks receive no mapped secret. Removing the length floor can replace ordinary short substrings throughout receipts; a safe short-value policy needs additional matching rules for an uncommon unsupported diagnostic state. |
+| B4-BH2 | maybe-false | carried reject: low if true | Carried B3-BH3/pass-3 EC5: ordinary quoted SigningKey assignments remain the same claim at the same sanitizer. No actual lane emitter of that form is identified; the retained native packets contain no detectable credential output. |
+| B4-BH3 | low | carried reject | Carried B3-BH4/pass-3 EC7: malformed XML with entity-encoded credentials repeats the unchanged fallback claim. No real truncated credential-bearing test output is identified; adding fallback decoding guards an unshown state. |
+| B4-BH4 | low | carried reject | Carried B3-EC2/pass-2 EC6: an I/O failure during diagnostics can leave acceptance false with a running receipt. No such I/O fault is shown; independent finalization persistence adds exception-handling complexity for that rare state. |
+| B4-BH5 | low | carried reject | Carried B3-BH6/pass-3 EC1: forced termination before final redaction repeats the unchanged publication-boundary claim. No real credential exposure is shown; moving all raw output would redesign the existing boundary. |
+| B4-BH6 | low | patch diagnostics | Parent ran `bounded()` with an actual failing `dotnet build` of a task-owned nonexistent project: MSB1009 appears only in retained stdout, stderr is empty, and the raised message points only at stderr. Include both output paths and execute a stdout-only source-failure regression. |
+| B4-BH7 | maybe-false | reject: low if true | Finding a compression SONAME does not prove loadability, but both discovered libraries load on the qualified host and no supported failing host is demonstrated. A real discovered-but-unloadable zlib/zstd installation would settle it; adding another prerequisite branch merely advances a rare failure that cannot grant acceptance. |
+| B4-BH8 | low | carried reject | Carried pass-4 P4's SDK sub-point: per-checkout SDK capture is additional provenance, not evidence that the current sources built with an incorrect SDK or produced a false semantic result. The source commands and commits are recorded; extra capture remains unnecessary. |
+| B4-BH9 | low | carried reject | Carried resumed-review BH8: failed smoke already produces a failed top-level receipt, actionable error and false acceptance. No consumer requires a parallel nested smoke failure record. |
+| B4-BH10 | low | reject: spec edit | The historical review summaries mix findings and grouped disposition counts. The requested correction edits this build's spec, which the review workflow explicitly excludes as a repair finding; individual historical dispositions remain recorded. |
+| B4-EC1 | low | carried reject | Carried pass-2 EC4/pass-3 EC2: a second cancellation signal can interrupt cleanup. The reviewer reproduced that already-described state; the unchanged earlier disposition rejects signal masking complexity for repeated cancellation, which never grants acceptance and discards the hosted VM. |
+| B4-EC2 | low | reject | Independently repeats B4-BH1's short environment credential state. The minimum-length replacement policy avoids corrupting receipts with common short substrings; no actual short credential emitter in this lane is identified, and robust handling would require a new matching policy. |
+
+Only B4-BH6 survives triage and routes to a small internal diagnostic correction.
+No new deferred-ledger entry is required. Existing deferrals remain tracked.
 
 ## Design Notes
 
@@ -541,13 +565,13 @@ Parent checks during triage:
 - **One test depends on that difference.** With `gnutimeout` shimmed as `timeout`, the hook suite runs 59 tests and only `test_cancellation_waits_for_real_vector_runner_detached_child_cleanup` fails (`124 != 143`). The same test passes under uutils.
 - **Final sanitization fits the kill grace.** Sanitizing a full 22-run archived packet (`review-pass2-20261028/final/live-ci.tar.gz`: 320 files, 10.8 MB) takes 1.31 s.
 
-- [ ] [Review][Patch] P1 — medium. The nested cancellation test pins uutils `timeout` behavior while every README requires GNU `timeout` [tools/live-topology/test_ci.py:1167] (EC1, EC2, EC14). The test asserts that `process.command.json` records exit code 124 after an external TERM. Only uutils reports 124; under GNU coreutils, the documented prerequisite, it is 143 and the test fails. The documented non-live check `python3 -m unittest discover -s tools/live-topology` is therefore red on any GNU-coreutils host. The docs also name an implementation that neither the hosted image nor the local qualification used: `README.md:251` says "GNU coreutils `timeout`", and `tools/live-topology/README.md:11` and `:160` say "GNU `timeout`". **Fix:**
+- [x] [Review][Patch] P1 — medium. The nested cancellation test pins uutils `timeout` behavior while every README requires GNU `timeout` [tools/live-topology/test_ci.py:1167] (EC1, EC2, EC14). The test asserts that `process.command.json` records exit code 124 after an external TERM. Only uutils reports 124; under GNU coreutils, the documented prerequisite, it is 143 and the test fails. The documented non-live check `python3 -m unittest discover -s tools/live-topology` is therefore red on any GNU-coreutils host. The docs also name an implementation that neither the hosted image nor the local qualification used: `README.md:251` says "GNU coreutils `timeout`", and `tools/live-topology/README.md:11` and `:160` say "GNU `timeout`". **Fix:**
   - Accept both statuses, e.g. `assertIn(…, (124, 143))`, with a comment: uutils reports an external TERM as 124, and GNU propagates the child's 143.
   - Name both implementations in the three README places, e.g. "GNU or uutils coreutils `timeout`".
-- [ ] [Review][Patch] P2 — medium. Nothing protects the source identities recorded in `preparation.json` [tools/live-topology/test_ci.py:305] (VG1, pre-verified). Each source's `commit` and `status` (`tools/live-topology/ci.py:275-276`), `tools['executables']`, `daprdSha256` and the bundle hashes are never read by a test. The `git` stub answers `'a' * 40` from any directory. Removing `cwd=checkout` from the commit call and dropping `status` keeps all 57 `CiHooksTests` green. This is the matrix row 1 "retain source identities" evidence. **Fix:** make the stub return a value derived from the working directory, then assert each source's `commit`/`status` and the working directory of those git calls. Also check that the recorded executable, daprd and bundle hashes are present SHA-256 values.
-- [ ] [Review][Patch] P3 — low. The lane receipt path in stderr is documented but not asserted [tools/live-topology/test_ci.py:610] (VG2, pre-verified). `tools/live-topology/ci.py:424` appends `lane receipt: <generation>/vectors/live-lane.json`, and `README.md:270` promises it. Deleting that clause keeps all 57 `CiHooksTests` green. **Fix:** assert the exact `lane receipt: …` text in both `result.stderr` and `receipt['vectors']['error']`.
-- [ ] [Review][Patch] P4 — low. The README says `preparation.json` records the EventStore version that each source resolves; for Tenants that value is only a source version stamp [tools/live-topology/README.md:194] (AA3, BH2). Under the approved `HexalithEventStoreFromSource=true` exception, Tenants sets `HexalithEventStoreVersion` to `$(HexalithEventStoreSourceVersion)` (`references/Hexalith.Tenants/Directory.Build.props:14,89`). That is a version stamp on the sibling EventStore source, not a resolved package. Pass-3 triage read the hosted receipt as Tenants "resolving" 3.128.3, so the wording already misled one reader. **Fix:** correct the sentence: Tenants' recorded value stamps the sibling EventStore source, whose commit is the EventStore source entry. Recording `HexalithEventStoreRoot` is not included; nested checkouts are never initialized (carried pass-3 BH4/EC11/AA3). The Release-configuration sub-point repeats pass-3 B3-BH8 (`false`). The unrecorded per-checkout SDK is `low` and would add capture.
-- [ ] [Review][Patch] P5 — low. The READMEs mix up the manual-wrapper and CI-hook prerequisites [tools/live-topology/README.md:17] (AA2, AA5).
+- [x] [Review][Patch] P2 — medium. Nothing protects the source identities recorded in `preparation.json` [tools/live-topology/test_ci.py:305] (VG1, pre-verified). Each source's `commit` and `status` (`tools/live-topology/ci.py:275-276`), `tools['executables']`, `daprdSha256` and the bundle hashes are never read by a test. The `git` stub answers `'a' * 40` from any directory. Removing `cwd=checkout` from the commit call and dropping `status` keeps all 57 `CiHooksTests` green. This is the matrix row 1 "retain source identities" evidence. **Fix:** make the stub return a value derived from the working directory, then assert each source's `commit`/`status` and the working directory of those git calls. Also check that the recorded executable, daprd and bundle hashes are present SHA-256 values.
+- [x] [Review][Patch] P3 — low. The lane receipt path in stderr is documented but not asserted [tools/live-topology/test_ci.py:610] (VG2, pre-verified). `tools/live-topology/ci.py:424` appends `lane receipt: <generation>/vectors/live-lane.json`, and `README.md:270` promises it. Deleting that clause keeps all 57 `CiHooksTests` green. **Fix:** assert the exact `lane receipt: …` text in both `result.stderr` and `receipt['vectors']['error']`.
+- [x] [Review][Patch] P4 — low. The README says `preparation.json` records the EventStore version that each source resolves; for Tenants that value is only a source version stamp [tools/live-topology/README.md:194] (AA3, BH2). Under the approved `HexalithEventStoreFromSource=true` exception, Tenants sets `HexalithEventStoreVersion` to `$(HexalithEventStoreSourceVersion)` (`references/Hexalith.Tenants/Directory.Build.props:14,89`). That is a version stamp on the sibling EventStore source, not a resolved package. Pass-3 triage read the hosted receipt as Tenants "resolving" 3.128.3, so the wording already misled one reader. **Fix:** correct the sentence: Tenants' recorded value stamps the sibling EventStore source, whose commit is the EventStore source entry. Recording `HexalithEventStoreRoot` is not included; nested checkouts are never initialized (carried pass-3 BH4/EC11/AA3). The Release-configuration sub-point repeats pass-3 B3-BH8 (`false`). The unrecorded per-checkout SDK is `low` and would add capture.
+- [x] [Review][Patch] P5 — low. The READMEs mix up the manual-wrapper and CI-hook prerequisites [tools/live-topology/README.md:17] (AA2, AA5).
   - Only `ci.py` needs `venv`/`ensurepip`; the manual path uses `python3 -m pip install` (`tools/live-topology/README.md:68`). Yet the manual-wrapper requirements in `README.md:251` and `tools/live-topology/README.md:10` list them.
   - `tools/live-topology/README.md:17` says to install Dapr "without initializing or changing a user environment". `tools/live-topology/README.md:196` and `README.md:272` tell CI reproducers to do "host Dapr initialization", and the Builds `dapr-init` action runs a full `dapr init --runtime-version`.
 
@@ -555,9 +579,9 @@ Parent checks during triage:
   - Move the `venv`/`ensurepip` clause to the CI-hook prerequisites.
   - Scope line 17 to direct wrapper runs.
   - State that reproducing the hooks needs the workflow's full `dapr init --runtime-version 1.18.7`.
-- [ ] [Review][Patch] P6 — low. The comment above the EventStore pin calls it a vector-bound Contracts pin [Directory.Build.props:3] (AA4). The comment says "Keep enrolled Contracts on the exact artifacts bound by the approved vectors", and it now also covers `HexalithEventStoreVersion` 3.128.3. Approvals bind only the enrolled Tenants/Parties Contracts artifacts, which is why the 3.128.3 adoption needed no re-approval. **Fix:** reword it, e.g. "Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors." AA4's request for a spec record of the dependency upgrades is rejected because that fix edits the spec under review (carried pass-3 AA6).
-- [ ] [Review][Patch] P7 — low. A `bounded()` comment names a process-group signal, but the code signals only the supervisor [tools/live-topology/ci.py:110] (BH9). `os.kill(child.pid, SIGTERM)` targets only the `timeout` supervisor, which forwards TERM to its command. **Fix:** reword the comment, e.g. "between poll and the supervisor signal". BH9's second claim, that `child.wait(timeout=1)` can raise and skip diagnostics, is carried as rejected (pass-2 EC3, pass-3 EC3).
-- [ ] [Review][Patch] P8 — low. `git diff --check` over the story range still flags two story-4-14 evidence files [.gitattributes:13] (BH11). `git diff --check 4934512 HEAD` reports a new blank line at EOF in `review-pass2-20261028/final/regression-mutations.txt:54` and `review-patches-20261027/builds-docs.patch:27`. Only the pass-3 packet has `-blank-at-eof`. **Fix:** add `-blank-at-eof` to the `story-4-14/**` rule and remove the pass-specific line.
+- [x] [Review][Patch] P6 — low. The comment above the EventStore pin calls it a vector-bound Contracts pin [Directory.Build.props:3] (AA4). The comment says "Keep enrolled Contracts on the exact artifacts bound by the approved vectors", and it now also covers `HexalithEventStoreVersion` 3.128.3. Approvals bind only the enrolled Tenants/Parties Contracts artifacts, which is why the 3.128.3 adoption needed no re-approval. **Fix:** reword it, e.g. "Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors." AA4's request for a spec record of the dependency upgrades is rejected because that fix edits the spec under review (carried pass-3 AA6).
+- [x] [Review][Patch] P7 — low. A `bounded()` comment names a process-group signal, but the code signals only the supervisor [tools/live-topology/ci.py:110] (BH9). `os.kill(child.pid, SIGTERM)` targets only the `timeout` supervisor, which forwards TERM to its command. **Fix:** reword the comment, e.g. "between poll and the supervisor signal". BH9's second claim, that `child.wait(timeout=1)` can raise and skip diagnostics, is carried as rejected (pass-2 EC3, pass-3 EC3).
+- [x] [Review][Patch] P8 — low. `git diff --check` over the story range still flags two story-4-14 evidence files [.gitattributes:13] (BH11). `git diff --check 4934512 HEAD` reports a new blank line at EOF in `review-pass2-20261028/final/regression-mutations.txt:54` and `review-patches-20261027/builds-docs.patch:27`. Only the pass-3 packet has `-blank-at-eof`. **Fix:** add `-blank-at-eof` to the `story-4-14/**` rule and remove the pass-specific line.
 - [x] [Review][Defer] The agent instructions list outdated package versions [AGENTS.md:78] — deferred. This is an agent-context file, and the ledger had no entry. The line says "ModelContextProtocol 2.2.0, System.CommandLine 2.0.12", while `tools/dependency-policy.json:64-66` pins 2.3.0 and 2.0.14; this range moved System.CommandLine 2.0.13 → 2.0.14. The same text is in `CLAUDE.md` and `.github/copilot-instructions.md`. (BH8)
 - [x] [Review][Defer] The new generic-runner rule does not cover the approved module-specific source-build list in `ci.py` [AGENTS.md:83] — deferred. This is an agent-context fix, and the ledger had no entry. `3c3a0f2` added "Keep the runners in `tools/live-topology/` generic; change module behavior upstream". `tools/live-topology/ci.py:26-29` names EventStore, Tenants and Parties and carries the approved Tenants `SOURCE_EVENTSTORE` exception, both required by this spec. The guidance and the spec-required code now disagree. (BH1)
 
@@ -582,3 +606,40 @@ Parent checks during triage:
 - EC12 `low` — The Builds hook bound equals the step deadline. Repeats pass-3 BH2 and pass-2 BH14.
 - EC13 `low` — Script paths that start with `-`. Repeats pass-3 BH2 and B3-BH1.
 - EC15 `maybe-false` (low if true) — Abstractions 1.1.0 in the Integration.Tests closure. Repeats pass-3 BH11.
+
+
+### Pass-4 implementation and verification (2026-10-28)
+
+All eight pass-4 patches (P1–P8) are implemented. The composed cancellation regression accepts uutils' external-TERM status 124 and GNU's child-propagated 143 while still requiring the detached child to stop and diagnostics to survive. The source/tool identity test now uses checkout-dependent Git responses and checks exact per-checkout commit/status capture, command working directories, executable/daprd hashes and every expected bundle hash. Lane-level failures must retain the exact lane receipt path in stderr and the JSON error. Both READMEs distinguish manual-wrapper prerequisites from hook-only venv/ensurepip support, require full workflow Dapr initialization for hook reproduction, name both qualified timeout implementations and explain Tenants' source-version stamp. Pin/supervisor comments and story-wide captured-evidence whitespace attributes are corrected.
+
+The full non-live Python suite passes 156 tests in 132.948 seconds with zero skips or failures under uutils coreutils 0.8.0. All 59 hook/workflow tests also pass with GNU coreutils 9.7 in 96.378 seconds. Eight isolated removal/corruption mutations fail their intended identity/hash/diagnostic assertions. The selected Builds checkout passes all 411 executable workflow assertions; bash syntax, actionlint and `git diff --check` over the complete story range pass. The CI helper's AST, effective build XML, frozen intent, production/tests/workflows, approved vectors, dependencies, wrappers and paired-publication refusal are unchanged.
+
+The parent independently re-audited the historical final native archive: its SHA-256 and all 1,452 files match the originals; all 21 vectors, the independent authenticated smoke, 22 XML cases and 22 owned cleanup receipts pass. No fresh live, hosted or .NET run is claimed for these test/comment/documentation corrections. All five matrix rows retain executed passing coverage through the complete current Python suite, fresh owner assertions and re-audited historical native/.NET packet. Existing Dapr intermittence and the two agent-context follow-ups remain separately tracked; no duplicate ledger item is added. Parent Build review remains pending. Evidence: [pass-4 implementation packet](evidence/story-4-14/review-pass4-20261028/README.md).
+
+### Final pass-4 Build completion (2026-10-28)
+
+All three required review layers completed. Twelve findings have individual
+verdicts in the Review Triage Log: one diagnostic patch is resolved, eleven
+retain rejected/carried dispositions, and no new work is deferred. Verification
+Gap found no missing coverage. The added diagnostic regression fails when its
+stdout path is removed, and passes under both timeout implementations. Failed
+commands now name both retained output files, including MSBuild failures emitted
+only to stdout.
+
+The parent's final full Python suite passes 157 tests in 125.794 seconds with
+zero skips or failures. The initial GNU suite retains 59 passing tests, with the
+new diagnostic test separately passing under GNU. All eight initial mutations
+and the additional stdout-path removal are detected; the current owner packet
+retains 411 passing workflow assertions. Every frozen matrix row has executed
+passing coverage, and the parent verified all implementation packet hashes and
+source fingerprints before review.
+
+The only executable helper change after the preserved native qualification is
+the final failure diagnostic in `bounded()`; every other AST node and effective
+build XML is unchanged. No fresh live or .NET qualification is claimed. The
+historical native archive still matches all 1,452 originals and proves 21 vectors,
+independent smoke and 22 owned cleanup receipts. Its Release/.NET and the recorded
+hosted qualification remain applicable. Existing Dapr intermittence and the two
+agent-context corrections retain their prior tracking. The original frozen intent
+and baseline remain intact. Build is complete; sprint status is review for
+maintainer acceptance. Evidence: [final parent verification](evidence/story-4-14/review-pass4-20261028/parent-final/README.md).

@@ -1,0 +1,95 @@
+{
+  "resumeHead": "a4b455ef44f0e8c1ab60f6d07c7335dcbfd661b7",
+  "baselineCommit": "49345128c189ff3955c00afb9f587b7a31c0ab15",
+  "selectedBuildsRevision": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "python": {
+    "passed": 157,
+    "failed": 0,
+    "skipped": 0,
+    "suiteSeconds": 125.794
+  },
+  "gnu": {
+    "initialSuitePassed": 59,
+    "finalDiagnosticTestPassed": true
+  },
+  "ownerWorkflowAssertions": 411,
+  "mutationsDetected": {
+    "initial": 8,
+    "finalDiagnostic": 1
+  },
+  "review": {
+    "layers": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "findingsIndividuallyTriaged": 12,
+    "patched": 1,
+    "rejectedOrCarried": 11,
+    "newDeferrals": 0,
+    "verificationGaps": 0
+  },
+  "historicalNativeAudit": "../parent-native-audit.json",
+  "freshNativeOrDotnetQualificationClaimed": false,
+  "commitlint": {
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "commit-message.txt",
+    "exitCode": 0,
+    "evidence": "commitlint.txt"
+  },
+  "remoteOperationsPerformed": false,
+  "artifacts": {
+    "README.md": {
+      "sha256": "d4f312e7dab8c55526541cf97f06c3a86ce0f6e4a8adf24fd609240445dfeadc",
+      "size": 2396
+    },
+    "commit-message.txt": {
+      "sha256": "cbd60dba379f24888dc448ceae11183edb5464179e63579e8a5bc1e7c0baea8a",
+      "size": 50
+    },
+    "commitlint.txt": {
+      "sha256": "27c947fb5c727e5d7708d27d97d387934bcdec42cfe75e025d18764f730e3ca8",
+      "size": 105
+    },
+    "diagnostic-mutation.txt": {
+      "sha256": "22b168457bfe5e15c2ca60a57b9f3c976f38ed400eb14e641999ae7ee0b30c3a",
+      "size": 1190
+    },
+    "gnu-diagnostic-test.txt": {
+      "sha256": "1472ba7e02e64d992c4a4ca39920ddcd02c39fb82d120cc92efafc13ce02c7c1",
+      "size": 257
+    },
+    "python-command.json": {
+      "sha256": "2b19f0e04c3680a1448417b9590eb170dfb2aa5bd8a1a5a7b038c152ffcc0ab7",
+      "size": 210
+    },
+    "python-tests.txt": {
+      "sha256": "bf868960e36df4151be762d93a575fa6a0e07791fc2b4dcd29e932f218df811e",
+      "size": 31252
+    },
+    "scope-verification.json": {
+      "sha256": "98ffb7fcfebbaacc6b4387d2014d275fc26f8acc519dd78b6902baf34e5c662d",
+      "size": 236
+    },
+    "source-hashes.json": {
+      "sha256": "37d4647de413928da066c33692bd88223f9d41bb57a78a9f1ac98561d3ed46e4",
+      "size": 1013
+    },
+    "static-checks.json": {
+      "sha256": "f3da084adb728bf61016b6bbd299c3df1f260be22693d502e77e825d16ab2872",
+      "size": 379
+    }
+  },
+  "whitespaceChecks": {
+    "staged": 0,
+    "fullStoryRange": 0
+  }
+}

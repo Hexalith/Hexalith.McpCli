@@ -1,0 +1,23 @@
+{
+  "headBeforePass4": "a4b455ef44f0e8c1ab60f6d07c7335dcbfd661b7",
+  "selectedBuildsRevision": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "ciPythonAstUnchanged": true,
+  "directoryBuildPropsXmlUnchanged": true,
+  "frozenIntentUnchanged": true,
+  "protectedPathsUnchanged": [
+    "src",
+    "tests",
+    "references",
+    "tools/dependency-policy.json",
+    "scripts/verify-release-source.py",
+    "tools/conformance-vectors/v1/modules",
+    "tools/live-topology/prepare-ci.sh",
+    "tools/live-topology/run-ci.sh",
+    "tools/live-topology/run-vectors.py",
+    "tools/live-topology/run-isolated.py",
+    "tools/live-topology/binaries.json",
+    ".github/workflows"
+  ],
+  "freshLiveOrDotnetRunClaimed": false,
+  "remoteOperationsPerformed": false
+}

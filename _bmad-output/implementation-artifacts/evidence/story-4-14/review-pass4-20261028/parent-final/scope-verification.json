@@ -1,0 +1,6 @@
+{
+  "ciHelperChange": "Only final bounded() RuntimeError diagnostic; all other AST nodes unchanged.",
+  "effectiveBuildXmlUnchanged": true,
+  "freshLiveOrDotnetRunRequired": false,
+  "parentNativeAudit": "../parent-native-audit.json"
+}

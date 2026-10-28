@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <!-- Keep enrolled Contracts on the exact artifacts bound by the approved vectors. -->
+    <!-- Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors. -->
     <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">3.128.3</HexalithEventStoreVersion>
     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.1</HexalithPartiesVersion>
     <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">5.10.0</HexalithTenantsVersion>

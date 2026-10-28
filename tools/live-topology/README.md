@@ -7,16 +7,16 @@ four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
 The integration fixture and live AppHost refuse execution without that sentinel;
 non-launching AppHost preflight and composition inspection remain available.
 
-Requirements: Linux amd64, Python 3.11.4 or later with `venv` and `ensurepip` support,
-GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
+Requirements: Linux amd64, Python 3.11.4 or later,
+GNU or uutils coreutils `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
 bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.4),
 Dapr CLI 1.18.2 and runtime 1.18.7 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
-permitted. Install Dapr independently without initializing or changing a user
-environment. Build the three root source servers and integration tests using the
-repository README first.
+permitted. For direct wrapper runs, install Dapr independently without
+initializing or changing a user environment. Build the three root source servers
+and integration tests using the repository README first.
 
 From the repository root, create a new task-owned directory and extract the four
 native binaries from digest-pinned official images. The bootstrap verifies each
@@ -156,8 +156,8 @@ project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
 Builds keeps the six non-live Release test projects ahead of its Aspire tier,
 builds the Release solution again in that fresh job and initializes Dapr CLI
 1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11.4+
-with `venv` and `ensurepip` support,
-OpenSSL 3, zlib/zstd, Docker, GNU `timeout`, Git, curl, `unshare`, `ip` and working
+with `venv` and `ensurepip` support, OpenSSL 3, zlib/zstd, Docker,
+GNU or uutils coreutils `timeout`, Git, curl, `unshare`, `ip` and working
 user/PID/network/mount namespaces are required. The hooks name missing tools,
 sources, namespace permissions and source-build commands before live acceptance.
 They never initialize nested dependencies or change host Redis/Dapr services.
@@ -188,13 +188,16 @@ installed in a task-owned virtual environment. The existing bootstrap extracts
 the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 `RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
-status, each source build's resolved `HexalithEventStoreVersion`, tool versions
-and executable hashes are retained. Only McpCli's own restore pins EventStore
+status, each source build's `HexalithEventStoreVersion`, tool versions and
+executable hashes are retained. Only McpCli's own restore pins EventStore
 3.128.3. Source servers follow their own configuration and the pinned Builds
-catalog; `preparation.json` records the version each one resolves.
+catalog. For package-based builds, `preparation.json` records the resolved
+EventStore package version. Tenants' recorded value stamps the sibling EventStore
+source, whose commit is recorded in the EventStore source entry.
 
-From the repository root, after the focused Release checks and host Dapr
-initialization, run the same preparation and execution path:
+From the repository root, after the focused Release checks and the workflow's
+full `dapr init --runtime-version 1.18.7`, run the same preparation and execution
+path:
 
 ```sh
 ASPIRE_EVIDENCE_PATH=TestResults/live-ci bash tools/live-topology/prepare-ci.sh
