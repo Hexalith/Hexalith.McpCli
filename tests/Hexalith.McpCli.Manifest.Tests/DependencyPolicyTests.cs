@@ -1063,7 +1063,7 @@ public sealed class DependencyPolicyTests
             "Hexalith.EventStore.ServiceDefaults/3.128.3",
             "Hexalith.EventStore.Testing/3.128.3",
             "Hexalith.EventStore.Testing.Integration/3.128.3",
-            "Hexalith.McpCli.Abstractions/1.0.0",
+            "Hexalith.McpCli.Abstractions/1.1.0",
             "Hexalith.Parties.Aspire/1.6.0",
             "Hexalith.Tenants.Aspire/5.10.0",
             "Hexalith.Tenants.Contracts/5.10.0",

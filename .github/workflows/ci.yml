@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@b15dab4cc740b6fb2d2065682f76b8166a7e120a
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@abc0e1be8069d1c7a567515a13bb015adc407536
     with:
       solution: Hexalith.McpCli.slnx
       test-platform: microsoft-testing-platform
