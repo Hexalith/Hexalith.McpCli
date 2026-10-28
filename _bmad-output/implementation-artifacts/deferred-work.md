@@ -612,7 +612,7 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
   summary: Publish the newly qualified Builds revision and obtain hosted CI acceptance for the updated pinned caller.
   evidence: High integration blocker for the current pin. The former `35587cfd104c5750d8ec3c0716933f386d6a0232` revision was published and passed hosted run `40381146665`, attempt 2, as recorded in the source spec. Review patch P13 now moves `.github/workflows/ci.yml:18` and the gitlink to documentation-only child `857ef02dbb4bde1bd4e678546aa41e73fb7d68b1`. `_bmad-output/implementation-artifacts/evidence/story-4-14/review-patches-20261027/verification.json:5` records this new locally qualified, unpublished revision, 323 owner workflow assertions and complete passing local hooks. Its exact owner patch and local Git bundle are retained alongside the index. This implementation stage prohibits pushes and Git remote operations, so no hosted resolution or acceptance is claimed for the new pin.
-  status: open for `857ef02`; the earlier publication requirement for `35587cf` is resolved. This updates the existing integration item rather than appending a duplicate.
+  status: resolved (2026-10-28) by hosted run `40658496696` (HEAD `dbce3b1`, pin and gitlink `3d7f49a5430294da5bcd437cbdace85c62c42027`): `ci / aspire-tests` passed, and artifact `12803579896` records `fullLiveAccepted: true` with all 21 vectors and the smoke passed. `857ef02` was superseded by the published `3d7f49a` pin. Recorded by code review pass 3 of the source spec.
 
 ## Deferred from: code review of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-27)
 
