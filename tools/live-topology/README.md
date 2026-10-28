@@ -240,8 +240,10 @@ semantic receipts, successful cleanup and a separate one-case, unskipped passing
 authenticated smoke XML. Vector assertion failures still allow the independent
 smoke attempt; neither smoke nor preflight/subset evidence can replace vectors.
 Pending Operations marked `running` at a deadline or cancellation are retained
-as interrupted Operations and named in stderr. Cancellation preserves its exit
-status, including when smoke is interrupted after a vector failure.
+as interrupted Operations and named in stderr. On cancellation, including when
+smoke is interrupted after a vector failure, `ci.py` exits 143 and `ci-live.json`
+records `SystemExit: 143`. The hook's own `timeout` then exits 143 under GNU
+coreutils and 124 under uutils.
 The runner refuses reused private runtimes. Rerun preparation to retry a lane.
 
 The `aspire-hook-evidence` artifact is retained seven days on success and failure

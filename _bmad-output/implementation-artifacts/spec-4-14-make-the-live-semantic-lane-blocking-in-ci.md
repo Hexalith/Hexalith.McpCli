@@ -643,3 +643,121 @@ hosted qualification remain applicable. Existing Dapr intermittence and the two
 agent-context corrections retain their prior tracking. The original frozen intent
 and baseline remain intact. Build is complete; sprint status is review for
 maintainer acceptance. Evidence: [final parent verification](evidence/story-4-14/review-pass4-20261028/parent-final/README.md).
+
+### Review Findings (code review pass 5, 2026-10-28)
+
+Code review pass 5, 2026-10-28, of the committed story range `4934512..ff58e75` plus the owning Builds hook commits `09af6ef..857ef02` and `30455c2` (paths prefixed `Hexalith.Builds/` in the diff). This is the first review of `a4b455e` and `ff58e75`, which hold the pass-4 patches. The Builds gitlink and both workflow pins are still `3d7f49a`, so the Builds hook diffs are the same as in passes 3 and 4.
+
+- **Code-only scope:** excludes `_bmad-output/`, `references/` and the agent-instruction files changed only by `3c3a0f2`. 16 file diffs, 2,586 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed. The Acceptance Auditor found no AC violation and confirmed all five matrix rows against the pinned Builds checkout.
+- **Result:** 42 normalized findings (BH 15, EC 21, VG 1, AA 5). After triage: 0 decision-needed, 5 patch, 0 defer and 32 rejected.
+
+Parent checks during triage:
+- **Hook-level cancellation status depends on the `timeout` implementation.** A bash hook that `exec`s `timeout … python3` whose TERM handler exits 143 exits 124 under uutils 0.8.0 and 143 under GNU 9.7 after an external TERM. The hook tests cannot see this, because the `timeout` stub `exec`s its command.
+- **Seven guard clauses in `ci.py` survive removal.** Each mutation ran in an isolated scratch copy, and all 58 `CiHooksTests` stayed green after removing any one of:
+  - the `result != 'prepared'` refusal (`:366`);
+  - the owner-file content regex (`:164`);
+  - the parent-directory symlink check, narrowed to the leaf (`:156`);
+  - the `MCPCLI_LIVE_`/`EVENTSTORE_` environment scrub (`:380-382`);
+  - the smoke `errors="0"` clause (`:442`);
+  - the smoke `type` clause (`:444`);
+  - the absolute-path clause (`:153`). This one is an equivalent mutant: the empty-segment check rejects `/…` independently.
+- **Generation JSON has no unredacted credential producer.** `run_live.py:153` redacts the token in `live-result.json` before writing it, `writer-bootstrap.json` holds only commit/backup/readiness fields, and `live-lane.json` is structural.
+- **Builds `main` (`505230a`) still has the pinned `domain-ci.md` wording.** No Builds test pins that text.
+
+- [x] [Review][Patch] P1 — medium. No test protects the unquoted `SigningKey=` redaction, which is the form the fixture itself uses [tools/live-topology/ci.py:57] (VG1, pre-verified).
+  - **The gap:** `AspireTopologyFixture.cs:32` passes `--Authentication:JwtBearer:SigningKey={_signingKey}` on a command line. Only `ci.py:57` redacts that form; lines 41-42 and 55-56 match quoted JSON keys only.
+  - **The proof:** with line 57 deleted, all 58 `CiHooksTests` pass, and `sanitized()` returns a command-line key verbatim, including inside an XML attribute.
+  - **Fix:** extend `test_generated_signing_keys_are_redacted_without_breaking_json` (`test_ci.py:915`), or the RUNNERS `owned()` `command.stdout.txt` fixture, with three cases: `--Authentication:JwtBearer:SigningKey=<secret>`, `Authentication__JwtBearer__SigningKey: <secret>`, and an XML attribute containing the first. Pass each through `sanitized()` and `sanitized_xml()`, and assert the secret is absent and `SigningKey=[REDACTED]` (or `: [REDACTED]`) is present.
+- [x] [Review][Patch] P2 — low. Six `run()` and evidence-admission guard clauses have no test that fails when they are removed [tools/live-topology/ci.py:366] (BH11, AA1, AA2). The parent mutations above keep all 58 `CiHooksTests` green, against the repository rule that every new guard needs one.
+  - **The guards:** the failed-receipt refusal, the owner-file content regex, the parent-directory symlink check, the environment scrub (the smoke's only scrub; `run-vectors.py:140` re-scrubs vector children), and the smoke `errors="0"` and `type` clauses.
+  - **Fix:**
+    - In `test_preparation_path_and_ownership_must_match_current_evidence` (`test_ci.py:833`), keep the correct `ownershipId` with `result: failed` and assert the exact refusal.
+    - In `test_missing_preparation_and_reused_runtime_refuse_live` (`:758`), add a malformed owner file.
+    - Add a symlinked parent of a nested `ASPIRE_EVIDENCE_PATH` (`:821`).
+    - Set `MCPCLI_LIVE_TOKEN`/`EVENTSTORE_TENANT` in `self.env`, have the stub record its environment for the runner and smoke calls, and assert both are absent.
+    - Add `smoke-assembly-error` (`errors="1"`) and `wrong-smoke-type` modes to the smoke loop at `:712`.
+
+  The absolute-path sub-claim is `false` (equivalent mutant). The Builds symlinked-evidence PowerShell cases carry the pass-1/pass-2 rejection.
+- [x] [Review][Patch] P3 — low. The READMEs say the hooks preserve the cancellation exit status, but under the qualified uutils `timeout` the hook exits 124 [README.md:279] (BH1, EC20).
+  - **The defect:** `ci.py` exits 143 and records `SystemExit: 143`. Both hooks `exec timeout`, though, and uutils, used on the hosted ubuntu-26.04 image and locally, turns an external TERM into exit 124, the same code as a deadline. GNU propagates 143.
+  - **Where:** `README.md:279` says "cancellation preserves its exit status even after a vector failure", and `tools/live-topology/README.md:243-244` says the same.
+  - **Fix:** say that `ci.py` exits 143 and `ci-live.json` keeps `SystemExit: 143`, even after a vector failure. Then say that the hook's own status is 143 under GNU `timeout` and 124 under uutils.
+- [x] [Review][Patch] P4 — low. The owning Builds `domain-ci.md` names only GNU `timeout` and leaves a broken sentence [Hexalith.Builds/.github/workflows/domain-ci.md:57] (AA4, EC21, BH13 documentation part).
+  - **The wording:** line 57 says "GNU `timeout` enforces each bound…". Hosted `ubuntu-latest` uses uutils, whose external-TERM status differs (124, not 143). Lines 33-34 leave "…excluded from the coverage gates;" followed by a capitalised "For callers without a runner hook…".
+  - **Where:** both are present at the `3d7f49a` pin and on Builds `main` `505230a`.
+  - **Fix:** in the owning Builds checkout, say "GNU or uutils coreutils `timeout`" and end the coverage sentence with a full stop. This is a documentation-only Builds commit; McpCli's pin does not need to move.
+
+  BH13's deadline-margin half carries the pass-2 BH14, pass-3 BH2 and pass-4 EC12 rejection.
+- [x] [Review][Patch] P5 — low. The lane-level failure fixtures exit 0, but the real `run-vectors.py` exits 1 [tools/live-topology/test_ci.py:194] (AA3).
+  - **The divergence:** the `lane-preflight`, `lane-admission`, `lane-coverage` and `lane-runtime` modes write `result: failed` with a lane `error` and exit 0. The real producer returns 1 for any `failed` result (`run-vectors.py:187`).
+  - **Effect:** `test_lane_level_errors_are_named_and_only_failed_operations_are_failures` (`:659`) only exercises the acceptance `ValueError` branch, never the real `bounded()` nonzero-exit path.
+  - **Fix:** add these four modes to the exit-1 list. Every assertion in that test still holds.
+
+  On the real path, the message names `vectors-process.stdout.txt` twice: once from `bounded()` and once from `detail`. That is cosmetic, and removing it needs a branch, so it is left as is.
+
+#### Rejected (code review pass 5, 2026-10-28)
+
+- BH2 `maybe-false` (low if true) — Actions cancellation (SIGINT, SIGTERM 7.5 s later, then a tree kill) never reaches the hooks' cleanup. Repeats pass-4 BH4. Settling it needs a hosted cancel with process tracing; a cancelled run never grants acceptance.
+- BH3 `low` — `bounded()` buffers output, so a SIGKILL loses it. Repeats pass-3 EC1 and B3-BH6: the fix redesigns output placement, and every real archive contains zero redactions.
+- BH4, EC3 `false` — The final redaction skips generation JSON. `run_live.py:153` redacts `live-result.json` at its source, `writer-bootstrap.json` holds no credential, `live-lane.json` is structural, and no secret is mapped into the hooks. Repeats passes 1–3.
+- BH5, EC4, EC5 `maybe-false` (low if true) — Unterminated PEM, unsigned JWT, Python-repr `SigningKey` and entity-encoded XML forms. Repeats pass-2 BH6/EC8, pass-3 BH9/EC5/EC7, B3-BH3/4/5 and B4-BH2/3. No emitter of these forms has been shown.
+- BH6 `low` — The PATH Aspire CLI is trusted on its version string, so the bundle is compared with the CLI's own extraction. Repeats pass-3 BH8: hosted runners download and SHA-verify the CLI, and the fix adds pinned digests.
+- BH7 `low` — `daprd` and the Dapr CLI are version-checked and hash-recorded but not digest-pinned. This is the same class as pass-3 BH8. The Builds `dapr-init` action installs the official 1.18.7 release, subverting it needs a tampered install, and the fix adds pinned digests.
+- BH8, EC17 `low` — Tenants can prefer a nested EventStore checkout, and the source-exception rationale is questioned. Repeats pass-3 BH4/EC11/AA3, B3-BH2 and pass-4 EC3; nested checkouts are never initialized. The rationale is the pass-3 D1 decision (option a).
+- BH9 `low` — Dirty or non-gitlink source checkouts are accepted. Repeats B8 and pass-2/3 BH7/BH6; hosted runs record exact gitlinks.
+- BH10 `maybe-false` (low if true) — Integration.Tests resolves Abstractions 1.1.0. Repeats pass-3 BH11 and pass-4 EC15.
+- BH12 `low` — Four failure-naming gaps:
+  - A stricter `require_owned()` refusal (`ci.py:405`) does not name its Operation. `run-vectors.py:161-165` checks cleanup per Operation first, the lane receipt path is named, and wrapping it adds exception handling for a rare state.
+  - `skipped`/`not-run` naming is the pass-2 P2 design.
+  - Smoke receipt reuse is `false`: the 22-run count guards it.
+  - The 2280 s preparation deadline can fire mid-command and record only `SystemExit: 143`. Each command is announced as `Running (Ns): …` and keeps its `*.command.json`.
+- BH14, EC15 `low` — Builds `aspire-fail-skips` combined with a runner hook, filter inputs ignored by hooks, and input descriptions. Repeats pass-3 EC15 and pass-1/2 BH17; no caller combines them.
+- BH15 `false` — Local preparation silently overwrites `~/.aspire`. `tools/live-topology/README.md:185` documents that `aspire setup` extracts the bundle when missing, and it runs locally only when required bundle files are absent. The "without changing a user environment" sentence is scoped to direct wrapper runs' Dapr install (pass-4 P5).
+- EC1 `low` — A diagnostics I/O failure in `run()`'s `finally` leaves `ci-live.json` running. Repeats pass-1, pass-2 EC6, B3-EC2 and B4-BH4.
+- EC2 `false` — Symlinked generation logs. Repeats pass 1: no program under test creates such links.
+- EC6 `maybe-false` (low if true) — One credential value is a substring of another. That needs two overlapping secret-named values in the hook environment, and no secret is mapped into the hooks (B4-BH1).
+- EC7 `low` — `child.wait(timeout=1)` raising, or a second TERM during cleanup. Repeats pass-4 EC4/EC5.
+- EC8 `maybe-false` (low if true) — A cancelled isolated wrapper loses its supervisor's final `result.json`. `bounded()` waits up to 25 s for the whole owned session before KILL. Settling it needs a traced cancellation whose supervisor cleanup exceeds that bound.
+- EC9 `false` — The smoke receipt equals a vector receipt. Repeats passes 1–3: each run-isolated invocation creates its own run, and the 22-run count guards it.
+- EC10 `false` — An `aspire --version` banner refuses the qualified CLI. Repeats pass-2 EC12.
+- EC11 `low` — Extra installed bundle files. Repeats pass-2 BH16/EC13 and pass-3/4 EC9/EC11.
+- EC12 `low` — A symlinked parent of a source checkout. CI checkouts are real directories, and the fix adds a guard for an unshown state.
+- EC13 `low` — The per-checkout SDK is not recorded. Repeats the pass-4 P4 note.
+- EC14 `false` — Unbounded pre-hook steps overrun the job margin. Repeats pass 1: those steps took about 3 minutes, leaving about 17 minutes of margin.
+- EC16 `low` — The test host lacks `curl`, `python3` or `libssl`. These are documented hook prerequisites.
+- EC18 `maybe-false` (low if true) — The recorded `HexalithEventStoreVersion` is the evaluated property rather than the restored version. The exact central pin restores that version or reports NU1603, and the hosted packet restored 3.128.3. Settling it needs a source build whose assets differ from the property.
+- EC19 `low` — A cancellation during the smoke after a vector failure prints nothing to stderr: `main()` does not catch the re-raised `SystemExit`. `ci-live.json` keeps the failures, and the regression pins exit 143. It needs an external TERM inside the ≤960 s smoke window, and the fix adds a print branch.
+- AA5 `low` — The `timeout` implementation and Docker version are not recorded in `preparation.json`. This is the extra-provenance class of B8/B3-BH8: the Actions log records the runner image, and `docker-info.stdout.txt` keeps the server version.
+
+### Pass-5 patch resolution (2026-10-28)
+
+All five pass-5 patches are applied.
+
+- **P1:** the signing-key test now covers the command-line `SigningKey=` form, the `Key: value` form and an XML-attribute form, through both `sanitized()` and `sanitized_xml()`.
+- **P2:** new or extended tests cover:
+  - a current but failed preparation receipt;
+  - a malformed ownership marker;
+  - a symlinked parent of a nested evidence path;
+  - inherited `MCPCLI_LIVE_`/`EVENTSTORE_` variables, which the runner stubs record so the test can assert they never reach the vector runner or the smoke;
+  - smoke `errors="1"` and wrong-type XML.
+
+  Each new test asserts the exact stdout, stderr and receipt.
+- **P3:** both READMEs now say that `ci.py` exits 143 and records `SystemExit: 143`. The hook's own `timeout` then exits 143 under GNU and 124 under uutils.
+- **P4:** the owning Builds `domain-ci.md` names both `timeout` implementations and their external-TERM statuses, and the broken coverage sentence is fixed. This was committed on Builds `main` as `e909ffd` by a parallel session. Only documentation changed, so McpCli's `3d7f49a` pin is unchanged.
+- **P5:** the four `lane-*` fixtures exit 1 like `run-vectors.py`, and the lane-error test now also asserts the `bounded()` nonzero-exit diagnostic.
+
+Verification:
+- **Full non-live suite:** `python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'` passes 159 tests in 140.253 s under uutils `timeout` 0.8.0.
+- **GNU `timeout`:** all 60 `CiHooksTests` pass with GNU 9.7 shimmed as `timeout`, in 105.587 s.
+- **Mutations:** seven isolated guard-removal mutations, each in its own scratch copy, now fail exactly their intended tests:
+  - `ci.py:57` unquoted `SigningKey` rule;
+  - parent symlink check narrowed to the leaf;
+  - owner-file regex;
+  - environment scrub;
+  - `result != 'prepared'`;
+  - smoke `errors="0"`;
+  - smoke `type`.
+- **Other checks:** the Builds owner script passes all 411 assertions, and `git diff --check` passes in both checkouts.
+
+`ci.py` is unchanged, and so are the workflows, approved vectors, dependencies and paired-publication refusal. No live, hosted or .NET run is claimed for these test and documentation changes.

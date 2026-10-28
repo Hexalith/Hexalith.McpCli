@@ -118,6 +118,9 @@ import base64, json, os, pathlib, signal, subprocess, sys, time
 root = pathlib.Path(os.environ['FIXTURE_ROOT'])
 runtime = pathlib.Path(os.environ['MCPCLI_ISOLATED_RUNTIME_DIR'])
 mode = os.environ.get('FIXTURE_MODE', '')
+with (root / 'runner-environment.jsonl').open('a') as log:
+    log.write(json.dumps([pathlib.Path(__file__).name,
+                          sorted(key for key in os.environ if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')))]) + '\n')
 def owned(name, base=runtime):
     path = base / 'runs' / name; path.mkdir(parents=True)
     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
@@ -191,7 +194,10 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (child / 'tests.xml').write_text('<test>' + (escape(content) if mode == 'generation-xml-secrets' else content) + '</test>')
     if mode != 'missing-vectors':
         (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
-    sys.exit(124 if mode == 'lane-timeout' else 19 if mode == 'vector-exit' else 1 if mode in ('failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure') else 0)
+    # Like run-vectors.py, every failed lane result exits 1.
+    sys.exit(124 if mode == 'lane-timeout' else 19 if mode == 'vector-exit' else 1 if mode in (
+        'failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
+        'lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime') else 0)
 else:
     path = owned('smoke')
     if mode == 'cancel-smoke-after-vector-failure':
@@ -207,6 +213,8 @@ else:
     if mode == 'wrong-smoke-case': xml = xml.replace('AuthenticatedQueryReturnsSuccessfulDocument', 'OtherTest')
     if mode == 'skipped-smoke-count': xml = xml.replace('skipped="0"', 'skipped="1"')
     if mode == 'empty-smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
+    if mode == 'smoke-assembly-error': xml = xml.replace('errors="0"', 'errors="1"')
+    if mode == 'wrong-smoke-type': xml = xml.replace('GatewaySmokeTests"', 'OtherTests"')
     destination = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1])
     if mode != 'missing-smoke': destination.write_text(xml)
     if mode != 'missing-smoke-receipt': print('Isolated run: ' + str(path))
@@ -665,6 +673,7 @@ class CiHooksTests(unittest.TestCase):
                 self.assertNotEqual(0, result.returncode)
                 message = 'named ' + mode + ' prerequisite failure'
                 self.assertIn(message, result.stderr)
+                self.assertIn(' exited 1; stdout: ', result.stderr)
                 self.assertIn('vectors-process.stdout.txt', result.stderr)
                 receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                 self.assertEqual(message, receipt['vectors']['laneError'])
@@ -709,7 +718,8 @@ class CiHooksTests(unittest.TestCase):
 
     def test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed(self):
         preparation = self.prepare()
-        for mode in ('skipped-smoke', 'missing-smoke', 'smoke-exit', 'missing-cleanup', 'wrong-smoke-case', 'skipped-smoke-count', 'empty-smoke'):
+        for mode in ('skipped-smoke', 'missing-smoke', 'smoke-exit', 'missing-cleanup', 'wrong-smoke-case', 'skipped-smoke-count', 'empty-smoke',
+                     'smoke-assembly-error', 'wrong-smoke-type'):
             with self.subTest(mode=mode):
                 shutil.rmtree(Path(preparation['runtime']) / 'runs', ignore_errors=True)
                 result = self.invoke('run-ci.sh', mode)
@@ -829,6 +839,13 @@ class CiHooksTests(unittest.TestCase):
         self.assertIn('ASPIRE_EVIDENCE_PATH must not traverse symbolic links.', result.stderr)
         self.assertEqual([original], list(target.iterdir()))
         self.assertEqual('preserve user data', original.read_text())
+        (self.root / 'linked-parent').symlink_to(target, target_is_directory=True)
+        self.env['ASPIRE_EVIDENCE_PATH'] = 'linked-parent/evidence'
+        result = self.invoke('prepare-ci.sh')
+        self.assertEqual(1, result.returncode)
+        self.assertEqual('', result.stdout)
+        self.assertEqual('Live CI failed: ValueError: ASPIRE_EVIDENCE_PATH must not traverse symbolic links.\n', result.stderr)
+        self.assertEqual([original], list(target.iterdir()))
 
     def test_preparation_path_and_ownership_must_match_current_evidence(self):
         prepared = self.prepare()
@@ -839,12 +856,42 @@ class CiHooksTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Preparation must come from the current evidence directory.', result.stderr)
         self.env.pop('MCPCLI_CI_PREPARATION')
+        owner = prepared['ownershipId']
         prepared['ownershipId'] = '0' * 32
         (self.evidence / 'preparation.json').write_text(json.dumps(prepared))
         result = self.invoke('run-ci.sh')
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Current successful preparation receipt is required.', result.stderr)
+        # A current receipt that still names its runtime must also report success.
+        prepared.update(ownershipId=owner, result='failed')
+        (self.evidence / 'preparation.json').write_text(json.dumps(prepared))
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(1, result.returncode)
+        self.assertEqual('', result.stdout)
+        message = 'ValueError: Current successful preparation receipt is required.'
+        self.assertEqual(f'Live CI failed: {message}\n', result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual({'result': 'failed', 'fullLiveAccepted': False, 'runId': receipt['runId'], 'error': message}, receipt)
         self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
+
+    def test_malformed_ownership_marker_refuses_live(self):
+        self.prepare()
+        (self.evidence / '.mcpcli-ci-owner').write_text('user file\n')
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(1, result.returncode)
+        self.assertEqual('', result.stdout)
+        self.assertEqual('Live CI failed: ValueError: A task-owned prepared evidence directory is required.\n', result.stderr)
+        self.assertEqual({'result': 'not-run', 'fullLiveAccepted': False},
+                         json.loads((self.evidence / 'ci-live.json').read_text()))
+        self.assertFalse(any(value.endswith(('run-vectors.py', 'run-isolated.py')) for call in self.calls() for value in call))
+
+    def test_inherited_live_and_gateway_variables_never_reach_vectors_or_smoke(self):
+        self.prepare()
+        self.env.update(MCPCLI_LIVE_TOKEN='inherited-live-token', EVENTSTORE_TENANT='inherited-tenant')
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        recorded = [json.loads(line) for line in (self.root / 'runner-environment.jsonl').read_text().splitlines()]
+        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', []]], recorded)
 
     def test_missing_built_integration_tests_refuses_live(self):
         self.prepare()
@@ -931,6 +978,16 @@ class CiHooksTests(unittest.TestCase):
         escaped_result = module.sanitized('log: ' + escaped_fragment).removeprefix('log: ')
         self.assertNotIn(secret, escaped_result)
         self.assertEqual({'SigningKey': '[REDACTED]'}, json.loads(json.loads('"' + escaped_result + '"')))
+        # The fixture passes its key as an unquoted command-line argument.
+        for line, marker in [(f'dotnet Gateway.dll --Authentication:JwtBearer:SigningKey={secret}', 'SigningKey=[REDACTED]'),
+                             (f'Authentication__JwtBearer__SigningKey: {secret}', 'SigningKey: [REDACTED]')]:
+            with self.subTest(marker=marker):
+                redacted = module.sanitized(line)
+                self.assertNotIn(secret, redacted)
+                self.assertIn(marker, redacted)
+        xml = module.sanitized_xml(f'<failure message="args --Authentication:JwtBearer:SigningKey={secret}" />')
+        self.assertNotIn(secret, xml)
+        self.assertIn('SigningKey=[REDACTED]', xml)
 
     def test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text(self):
         module = self.ci_module()
