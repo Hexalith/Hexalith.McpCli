@@ -648,3 +648,22 @@ status: open
     - The ledger had no equivalent entry.
   status: resolved (2026-10-28)
   resolution: `AGENTS.md:78`, `AGENTS.md:93`, and `AGENTS.md:99` identify root `Directory.Build.props` as the module-pin source before the central Builds import and require checking effective restored APIs. MSBuild confirms EventStore 3.128.3, Parties 1.5.1, and Tenants 5.10.0. Synced to both entry points and tracked in `spec-resolve-five-deferred-guidance-items.md`.
+
+## Deferred from: code review pass 4 of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-28)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: The agent instructions list outdated ModelContextProtocol and System.CommandLine versions.
+  evidence: Low.
+    - `AGENTS.md:78` (byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`) says "ModelContextProtocol 2.2.0, System.CommandLine 2.0.12".
+    - `tools/dependency-policy.json:64-66` pins ModelContextProtocol 2.3.0 and System.CommandLine 2.0.14. The story 4.14 range moved System.CommandLine from 2.0.13 to 2.0.14.
+    - An agent trusting the instructions can look up APIs or release notes for the wrong package versions.
+    - Fix: correct the versions in `AGENTS.md`, or drop them in favor of the central catalog and policy. Then copy `AGENTS.md` to the other two entry points and run `scripts/check-agent-instructions-sync.sh`.
+    - The ledger had no equivalent entry.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
+  summary: The generic-runner rule in the agent instructions does not cover the spec-required, module-specific source-build list in the CI hook.
+  evidence: Low.
+    - `AGENTS.md:83` (added by `3c3a0f2`) says "Keep the runners in `tools/live-topology/` generic; change module behavior upstream".
+    - `tools/live-topology/ci.py:26-29` names EventStore, Tenants and Parties and carries the approved Tenants `SOURCE_EVENTSTORE` exception. Story 4.14 requires both: it builds "the three root source servers", and the exception was approved on 2026-10-28.
+    - An agent or reviewer following the rule will flag or "fix" this required code, as pass-4 BH1 did.
+    - Fix: state in `AGENTS.md` that the CI hook's root source-build list and its approved Tenants exception are test-only composition. Copy it to `CLAUDE.md` and `.github/copilot-instructions.md`, then run `scripts/check-agent-instructions-sync.sh`.
+    - The ledger had no equivalent entry.

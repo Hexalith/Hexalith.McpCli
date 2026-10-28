@@ -2,7 +2,7 @@
 title: '4.14 Make the live semantic lane blocking in CI'
 type: 'feature'
 created: '2026-10-26'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '49345128c189ff3955c00afb9f587b7a31c0ab15'
@@ -526,3 +526,59 @@ All three review layers completed; all 14 findings have individual verdicts in t
 The parent's final complete Python run passes 156 tests in 158.961 seconds with zero skips or failures. The selected Builds checkout again passes all 411 executable workflow assertions. All eight initial removal/pin-drift mutations and the additional runner-contract guard removal are detected. Default and Release source-property evaluations each resolve EventStore 3.128.3 for all three selected source servers, disproving the configuration-dependent receipt mismatch. Bash syntax, actionlint, whitespace and pinned commitlint validation pass.
 
 The six pass-3 patches and both final-review corrections are complete. Production/build inputs and successful semantic acceptance remain unchanged from the historical native/.NET qualification; its archive was independently re-audited above. No fresh native, hosted or .NET run is claimed. All five matrix rows have executed passing coverage through the final Python output, fresh owner assertions and re-audited native packet. The original frozen intent and baseline revision remain intact. The Build spec is done; sprint status is review for maintainer acceptance. Evidence: [final parent verification](evidence/story-4-14/review-pass3-20261028/parent-final/README.md).
+
+### Review Findings (code review pass 4, 2026-10-28)
+
+Code review pass 4, 2026-10-28, of the committed story range `4934512..a56614a` plus the owning Builds hook commits `09af6ef..857ef02` and `30455c2` (paths prefixed `Hexalith.Builds/` in the diff). This is the first review of `a56614a`, which holds the pass-3 patches. The Builds gitlink and both workflow pins are still `3d7f49a`, so the Builds hook diffs are the same as in pass 3.
+
+- **Code-only scope:** excludes `_bmad-output/`, `references/` and the agent-instruction files changed only by the interleaved non-story commit `3c3a0f2`. 18 file diffs, 2,521 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed. The Acceptance Auditor found no AC violation and confirmed all five matrix rows against the pinned Builds checkout.
+- **Result:** 33 normalized findings (BH 11, EC 15, VG 2, AA 5). After triage: 0 decision-needed, 8 patch, 2 defer and 19 rejected.
+
+Parent checks during triage:
+- **The CI image and the local host both use uutils `timeout`, not GNU.** Hosted run `40675259832` (HEAD `a56614a`) passed every job on `Image: ubuntu-26.04`. The local host is Ubuntu 26.04 with `/usr/bin/timeout` → uutils 0.8.0, and GNU coreutils 9.7 is installed as `gnutimeout`.
+- **The two implementations differ on external TERM.** A TERM sent to `timeout` whose child exits 143 makes uutils exit 124 and GNU exit 143.
+- **One test depends on that difference.** With `gnutimeout` shimmed as `timeout`, the hook suite runs 59 tests and only `test_cancellation_waits_for_real_vector_runner_detached_child_cleanup` fails (`124 != 143`). The same test passes under uutils.
+- **Final sanitization fits the kill grace.** Sanitizing a full 22-run archived packet (`review-pass2-20261028/final/live-ci.tar.gz`: 320 files, 10.8 MB) takes 1.31 s.
+
+- [ ] [Review][Patch] P1 — medium. The nested cancellation test pins uutils `timeout` behavior while every README requires GNU `timeout` [tools/live-topology/test_ci.py:1167] (EC1, EC2, EC14). The test asserts that `process.command.json` records exit code 124 after an external TERM. Only uutils reports 124; under GNU coreutils, the documented prerequisite, it is 143 and the test fails. The documented non-live check `python3 -m unittest discover -s tools/live-topology` is therefore red on any GNU-coreutils host. The docs also name an implementation that neither the hosted image nor the local qualification used: `README.md:251` says "GNU coreutils `timeout`", and `tools/live-topology/README.md:11` and `:160` say "GNU `timeout`". **Fix:**
+  - Accept both statuses, e.g. `assertIn(…, (124, 143))`, with a comment: uutils reports an external TERM as 124, and GNU propagates the child's 143.
+  - Name both implementations in the three README places, e.g. "GNU or uutils coreutils `timeout`".
+- [ ] [Review][Patch] P2 — medium. Nothing protects the source identities recorded in `preparation.json` [tools/live-topology/test_ci.py:305] (VG1, pre-verified). Each source's `commit` and `status` (`tools/live-topology/ci.py:275-276`), `tools['executables']`, `daprdSha256` and the bundle hashes are never read by a test. The `git` stub answers `'a' * 40` from any directory. Removing `cwd=checkout` from the commit call and dropping `status` keeps all 57 `CiHooksTests` green. This is the matrix row 1 "retain source identities" evidence. **Fix:** make the stub return a value derived from the working directory, then assert each source's `commit`/`status` and the working directory of those git calls. Also check that the recorded executable, daprd and bundle hashes are present SHA-256 values.
+- [ ] [Review][Patch] P3 — low. The lane receipt path in stderr is documented but not asserted [tools/live-topology/test_ci.py:610] (VG2, pre-verified). `tools/live-topology/ci.py:424` appends `lane receipt: <generation>/vectors/live-lane.json`, and `README.md:270` promises it. Deleting that clause keeps all 57 `CiHooksTests` green. **Fix:** assert the exact `lane receipt: …` text in both `result.stderr` and `receipt['vectors']['error']`.
+- [ ] [Review][Patch] P4 — low. The README says `preparation.json` records the EventStore version that each source resolves; for Tenants that value is only a source version stamp [tools/live-topology/README.md:194] (AA3, BH2). Under the approved `HexalithEventStoreFromSource=true` exception, Tenants sets `HexalithEventStoreVersion` to `$(HexalithEventStoreSourceVersion)` (`references/Hexalith.Tenants/Directory.Build.props:14,89`). That is a version stamp on the sibling EventStore source, not a resolved package. Pass-3 triage read the hosted receipt as Tenants "resolving" 3.128.3, so the wording already misled one reader. **Fix:** correct the sentence: Tenants' recorded value stamps the sibling EventStore source, whose commit is the EventStore source entry. Recording `HexalithEventStoreRoot` is not included; nested checkouts are never initialized (carried pass-3 BH4/EC11/AA3). The Release-configuration sub-point repeats pass-3 B3-BH8 (`false`). The unrecorded per-checkout SDK is `low` and would add capture.
+- [ ] [Review][Patch] P5 — low. The READMEs mix up the manual-wrapper and CI-hook prerequisites [tools/live-topology/README.md:17] (AA2, AA5).
+  - Only `ci.py` needs `venv`/`ensurepip`; the manual path uses `python3 -m pip install` (`tools/live-topology/README.md:68`). Yet the manual-wrapper requirements in `README.md:251` and `tools/live-topology/README.md:10` list them.
+  - `tools/live-topology/README.md:17` says to install Dapr "without initializing or changing a user environment". `tools/live-topology/README.md:196` and `README.md:272` tell CI reproducers to do "host Dapr initialization", and the Builds `dapr-init` action runs a full `dapr init --runtime-version`.
+
+  **Fix:**
+  - Move the `venv`/`ensurepip` clause to the CI-hook prerequisites.
+  - Scope line 17 to direct wrapper runs.
+  - State that reproducing the hooks needs the workflow's full `dapr init --runtime-version 1.18.7`.
+- [ ] [Review][Patch] P6 — low. The comment above the EventStore pin calls it a vector-bound Contracts pin [Directory.Build.props:3] (AA4). The comment says "Keep enrolled Contracts on the exact artifacts bound by the approved vectors", and it now also covers `HexalithEventStoreVersion` 3.128.3. Approvals bind only the enrolled Tenants/Parties Contracts artifacts, which is why the 3.128.3 adoption needed no re-approval. **Fix:** reword it, e.g. "Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors." AA4's request for a spec record of the dependency upgrades is rejected because that fix edits the spec under review (carried pass-3 AA6).
+- [ ] [Review][Patch] P7 — low. A `bounded()` comment names a process-group signal, but the code signals only the supervisor [tools/live-topology/ci.py:110] (BH9). `os.kill(child.pid, SIGTERM)` targets only the `timeout` supervisor, which forwards TERM to its command. **Fix:** reword the comment, e.g. "between poll and the supervisor signal". BH9's second claim, that `child.wait(timeout=1)` can raise and skip diagnostics, is carried as rejected (pass-2 EC3, pass-3 EC3).
+- [ ] [Review][Patch] P8 — low. `git diff --check` over the story range still flags two story-4-14 evidence files [.gitattributes:13] (BH11). `git diff --check 4934512 HEAD` reports a new blank line at EOF in `review-pass2-20261028/final/regression-mutations.txt:54` and `review-patches-20261027/builds-docs.patch:27`. Only the pass-3 packet has `-blank-at-eof`. **Fix:** add `-blank-at-eof` to the `story-4-14/**` rule and remove the pass-specific line.
+- [x] [Review][Defer] The agent instructions list outdated package versions [AGENTS.md:78] — deferred. This is an agent-context file, and the ledger had no entry. The line says "ModelContextProtocol 2.2.0, System.CommandLine 2.0.12", while `tools/dependency-policy.json:64-66` pins 2.3.0 and 2.0.14; this range moved System.CommandLine 2.0.13 → 2.0.14. The same text is in `CLAUDE.md` and `.github/copilot-instructions.md`. (BH8)
+- [x] [Review][Defer] The new generic-runner rule does not cover the approved module-specific source-build list in `ci.py` [AGENTS.md:83] — deferred. This is an agent-context fix, and the ledger had no entry. `3c3a0f2` added "Keep the runners in `tools/live-topology/` generic; change module behavior upstream". `tools/live-topology/ci.py:26-29` names EventStore, Tenants and Parties and carries the approved Tenants `SOURCE_EVENTSTORE` exception, both required by this spec. The guidance and the spec-required code now disagree. (BH1)
+
+#### Rejected (code review pass 4, 2026-10-28)
+
+- AA1 — Rejected: the fix edits the spec under review. It asks for a Change Log entry for the hosted `sysctl` namespace setup, which is limited to disposable GitHub-hosted VMs and followed by a second real probe.
+- BH3 `false` — `require_contract()` accepts unset inputs. Unset inputs cannot select another project or platform: the hooks always run the fixed `TESTS` DLL and runners. The guard refuses only explicit mismatches, and local reproduction intentionally runs without those variables.
+- BH4 `maybe-false` (low if true) — Actions cancellation (SIGINT, then SIGTERM after 7.5 s, then a tree kill) may never deliver TERM to `ci.py`, because Builds starts `timeout` without `exec`. Settling it needs a hosted cancel with process tracing. Even if true, a cancelled run never grants acceptance and the hosted VM is discarded. The README guarantees are stated for TERM, which the tests exercise.
+- BH5 `maybe-false` (low if true) — The local reproduction omits Builds' dev-certificate trust step. Settling it needs a hook run on a host without trusted dev certificates. If true, only local reproduction fails, and it fails loudly.
+- BH6 `low` — The 21/22 counts and the Dapr and Aspire versions are hard-coded in `ci.py`. A future enrollment fails loudly with a named message, and deriving the values adds machinery for a rare event.
+- BH7 `low` — The root README duplicates the live-topology budgets. The spec task requires both READMEs to document CI behavior, and both currently agree with `ci.yml` and the hooks (40/300/360 min, 2280/17700/16200/960 s).
+- BH10 `false` — `MCPCLI_CI_PREPARATION` serves no purpose. It is the spec-required nonsecret export, and `run()` uses it to refuse a receipt from a different evidence directory.
+- EC3 `low` — A nested Tenants EventStore checkout would take priority over the sibling. Repeats pass-3 BH4/EC11/AA3 and B3-BH2; nested checkouts are never initialized.
+- EC4 `low` — `child.wait(timeout=1)` raising `TimeoutExpired` replaces `SystemExit`. Repeats pass-2 and pass-3 EC3; it needs the `timeout` leader to survive SIGKILL.
+- EC5 `low` — A second signal during cleanup. Repeats passes 1–3 (EC2/EC4).
+- EC6 `false` — Cleanup plus final sanitization overruns the 30 s kill grace. The measured full-packet sanitization is 1.31 s, and the cleanup bound is 25 + 1 s. The 17700 s backstop cannot fire before the inner bounds.
+- EC7 `low` — A recycled PGID. Repeats pass-3 EC4.
+- EC8 `low` — Truncated PEM. Repeats pass-3 BH9/EC6 and B3-BH5.
+- EC9 `maybe-false` (low if true) — `SigningKey="v"` forms. Repeats pass-3 EC5 and B3-BH3; no emitter has been shown.
+- EC10 `false` — Secret-named environment values corrupt receipt paths. Repeats pass-3 EC8.
+- EC11 `low` — Extra installed bundle files. Repeats pass-3 EC9.
+- EC12 `low` — The Builds hook bound equals the step deadline. Repeats pass-3 BH2 and pass-2 BH14.
+- EC13 `low` — Script paths that start with `-`. Repeats pass-3 BH2 and B3-BH1.
+- EC15 `maybe-false` (low if true) — Abstractions 1.1.0 in the Integration.Tests closure. Repeats pass-3 BH11.
