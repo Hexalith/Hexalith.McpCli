@@ -1,0 +1,124 @@
+test_aggregate_deadline_names_interrupted_operation_from_pending_lane (test_ci.CiHooksTests.test_aggregate_deadline_names_interrupted_operation_from_pending_lane) ... ERROR
+test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics) ... ERROR
+test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure) ... FAIL
+test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) ... Running (16200s): /tmp/tmp7qrcft8h/mcpcli-live-ci-a9w7_cy6/venv/bin/python /tmp/tmp7qrcft8h/tools/live-topology/run-vectors.py --output /tmp/tmp7qrcft8h/evidence/548f3f5554984d4e9d968c1ee4b0078d/vectors
+
+  test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) (error='SystemExit') ... ERROR
+Running (16200s): /tmp/tmp7qrcft8h/mcpcli-live-ci-a9w7_cy6/venv/bin/python /tmp/tmp7qrcft8h/tools/live-topology/run-vectors.py --output /tmp/tmp7qrcft8h/evidence/8c01525c4ca246f188b350cb76b14b2b/vectors
+  test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) (error='KeyboardInterrupt') ... ERROR
+test_prerequisite_failures_precede_source_builds (test_ci.CiHooksTests.test_prerequisite_failures_precede_source_builds) ... ok
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... 
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='abc0e1be8069d1c7a567515a13bb015adc407536') ... FAIL
+
+======================================================================
+ERROR: test_aggregate_deadline_names_interrupted_operation_from_pending_lane (test_ci.CiHooksTests.test_aggregate_deadline_names_interrupted_operation_from_pending_lane)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 639, in test_aggregate_deadline_names_interrupted_operation_from_pending_lane
+    receipt['vectors']['interrupted'])
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'interrupted'
+
+======================================================================
+ERROR: test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 996, in test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics
+    receipt['vectors']['interrupted'])
+    ~~~~~~~^^^^^^^^^^^
+KeyError: 'vectors'
+
+======================================================================
+ERROR: test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) (error='SystemExit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp7qrcft8h/tools/live-topology/ci.py", line 426, in run
+    bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             '-class', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', '-failSkips', '-result-xml', str(smoke / 'tests.xml')],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            960, smoke / 'process', environment=environment)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1096, in execute
+    raise error
+SystemExit: 143
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1100, in test_smoke_control_exceptions_are_not_combined_with_vector_failure
+    module.run(self.evidence)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/tmp/tmp7qrcft8h/tools/live-topology/ci.py", line 452, in run
+    raise combined from error
+RuntimeError: /tmp/tmp7qrcft8h/mcpcli-live-ci-a9w7_cy6/venv/bin/python /tmp/tmp7qrcft8h/tools/live-topology/run-vectors.py --output /tmp/tmp7qrcft8h/evidence/548f3f5554984d4e9d968c1ee4b0078d/vectors exited 1; see /tmp/tmp7qrcft8h/evidence/548f3f5554984d4e9d968c1ee4b0078d/vectors-process.stderr.txt; failed Operations: sample.operation-00; lane receipt: /tmp/tmp7qrcft8h/evidence/548f3f5554984d4e9d968c1ee4b0078d/vectors/live-lane.json; runner stdout: /tmp/tmp7qrcft8h/evidence/548f3f5554984d4e9d968c1ee4b0078d/vectors-process.stdout.txt; independent smoke failed: 143
+
+======================================================================
+ERROR: test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) (error='KeyboardInterrupt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp7qrcft8h/tools/live-topology/ci.py", line 426, in run
+    bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             '-class', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', '-failSkips', '-result-xml', str(smoke / 'tests.xml')],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            960, smoke / 'process', environment=environment)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1096, in execute
+    raise error
+KeyboardInterrupt
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1100, in test_smoke_control_exceptions_are_not_combined_with_vector_failure
+    module.run(self.evidence)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/tmp/tmp7qrcft8h/tools/live-topology/ci.py", line 452, in run
+    raise combined from error
+RuntimeError: /tmp/tmp7qrcft8h/mcpcli-live-ci-a9w7_cy6/venv/bin/python /tmp/tmp7qrcft8h/tools/live-topology/run-vectors.py --output /tmp/tmp7qrcft8h/evidence/8c01525c4ca246f188b350cb76b14b2b/vectors exited 1; see /tmp/tmp7qrcft8h/evidence/8c01525c4ca246f188b350cb76b14b2b/vectors-process.stderr.txt; failed Operations: sample.operation-00; lane receipt: /tmp/tmp7qrcft8h/evidence/8c01525c4ca246f188b350cb76b14b2b/vectors/live-lane.json; runner stdout: /tmp/tmp7qrcft8h/evidence/8c01525c4ca246f188b350cb76b14b2b/vectors-process.stdout.txt; independent smoke failed: 
+
+======================================================================
+FAIL: test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1061, in test_sigterm_during_smoke_preserves_cancellation_after_vector_failure
+    self.assertEqual(143, process.returncode, stdout + stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 143 != 1 : Running (16200s): /tmp/tmp4bga9sun/mcpcli-live-ci-muwkls64/venv/bin/python /tmp/tmp4bga9sun/tools/live-topology/run-vectors.py --output /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/vectors
+Running (960s): /tmp/tmp4bga9sun/mcpcli-live-ci-muwkls64/venv/bin/python /tmp/tmp4bga9sun/tools/live-topology/run-isolated.py -- dotnet /tmp/tmp4bga9sun/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/smoke/tests.xml
+Live CI failed: RuntimeError: /tmp/tmp4bga9sun/mcpcli-live-ci-muwkls64/venv/bin/python /tmp/tmp4bga9sun/tools/live-topology/run-vectors.py --output /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/vectors exited 1; see /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/vectors-process.stderr.txt; failed Operations: sample.operation-00; lane receipt: /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/vectors/live-lane.json; runner stdout: /tmp/tmp4bga9sun/evidence/a3f33222b8ea42b3b6de20fcaa8707c3/vectors-process.stdout.txt; independent smoke failed: 143
+
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='abc0e1be8069d1c7a567515a13bb015adc407536')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: '3d7f49a5430294da5bcd437cbdace85c62c42027' != 'abc0e1be8069d1c7a567515a13bb015adc407536'
+- 3d7f49a5430294da5bcd437cbdace85c62c42027
++ abc0e1be8069d1c7a567515a13bb015adc407536
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 11.207s
+
+FAILED (failures=2, errors=4)

@@ -9,6 +9,8 @@ _bmad-output/implementation-artifacts/evidence/story-4-11/**/*.vector.json binar
 _bmad-output/implementation-artifacts/evidence/story-4-13/** -text whitespace=-blank-at-eol,cr-at-eol
 # Preserve captured workflow logs, receipts and the qualified upstream patch verbatim.
 _bmad-output/implementation-artifacts/evidence/story-4-14/** -text whitespace=-blank-at-eol,cr-at-eol
+# Preserve trailing blank lines in this packet's exact captured terminal output.
+_bmad-output/implementation-artifacts/evidence/story-4-14/review-pass3-20261028/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 _bmad-output/implementation-artifacts/evidence/story-4-12/parties-helper.patch -text whitespace=-blank-at-eol,cr-at-eol
 # Preserve hash-bound raw workflow output and the upstream CRLF ledger verbatim.
 _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/builds-catalog-ci-attempt-1-build.stdout.txt -text whitespace=-blank-at-eol

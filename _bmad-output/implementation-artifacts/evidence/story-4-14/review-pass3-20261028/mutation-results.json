@@ -1,0 +1,50 @@
+[
+  {
+    "name": "docker-readiness-removal",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "interrupted-operation-removal",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "vector-control-exception-capture-removal",
+    "detected": true,
+    "failures": 0,
+    "errors": 1
+  },
+  {
+    "name": "smoke-control-exception-guard-removal",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "caller-pin-drift",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "commitlint-pin-drift",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "name": "gitlink-drift",
+    "detected": true,
+    "failures": 2,
+    "errors": 0
+  },
+  {
+    "name": "additional-unpinned-reference",
+    "detected": true,
+    "failures": 1,
+    "errors": 0
+  }
+]

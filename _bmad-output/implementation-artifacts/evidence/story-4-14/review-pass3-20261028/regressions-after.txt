@@ -1,0 +1,13 @@
+test_aggregate_deadline_names_interrupted_operation_from_pending_lane (test_ci.CiHooksTests.test_aggregate_deadline_names_interrupted_operation_from_pending_lane) ... ok
+test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics) ... ok
+test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure) ... ok
+test_smoke_control_exceptions_are_not_combined_with_vector_failure (test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure) ... Running (16200s): /tmp/tmpgzijr_7x/mcpcli-live-ci-grvcmrrn/venv/bin/python /tmp/tmpgzijr_7x/tools/live-topology/run-vectors.py --output /tmp/tmpgzijr_7x/evidence/678b548c4a7d4a49b59086dcece59560/vectors
+Running (16200s): /tmp/tmpgzijr_7x/mcpcli-live-ci-grvcmrrn/venv/bin/python /tmp/tmpgzijr_7x/tools/live-topology/run-vectors.py --output /tmp/tmpgzijr_7x/evidence/191e79966a734b49b0cc3e565a532f8f/vectors
+ok
+test_prerequisite_failures_precede_source_builds (test_ci.CiHooksTests.test_prerequisite_failures_precede_source_builds) ... ok
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 10.261s
+
+OK

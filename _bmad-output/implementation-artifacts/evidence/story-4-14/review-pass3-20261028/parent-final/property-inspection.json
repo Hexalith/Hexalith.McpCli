@@ -1,0 +1,14 @@
+{
+  "EventStore": {
+    "default": "3.128.3",
+    "Release": "3.128.3"
+  },
+  "Tenants": {
+    "default": "3.128.3",
+    "Release": "3.128.3"
+  },
+  "Parties": {
+    "default": "3.128.3",
+    "Release": "3.128.3"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "resumeBaseline": "5aa3ee23ef4b395a4500453a50d4815e9837dd07",
+  "headBeforeCompletion": "3c3a0f294a992a4fa3f0b5c2a155bd355c9a9369",
+  "selectedBuildsRevision": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "python": {
+    "passed": 156,
+    "failed": 0,
+    "skipped": 0,
+    "commandReceipt": "python-command.json"
+  },
+  "ownerWorkflowAssertions": 411,
+  "reviews": {
+    "layersCompleted": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "findingsIndividuallyTriaged": 14,
+    "patched": 2,
+    "rejectedOrCarried": 12,
+    "newDeferrals": 0
+  },
+  "removalAndDriftChecks": {
+    "initialDetected": 8,
+    "additionalRunnerGuardRemovalDetected": true,
+    "runnerCallerSubcases": 2
+  },
+  "historicalNativeAudit": {
+    "sha256": "15bde706b18e14684abf16e5ddd37527d2f3eb273fbcaf426b9f00b7f9097848",
+    "filesComparedWithOriginals": 1452,
+    "vectorsPassed": 21,
+    "independentSmokePassed": 1,
+    "passingXmlCases": 22,
+    "ownedCleanupReceipts": 22
+  },
+  "historicalDotnet": {
+    "passed": 1531,
+    "failed": 0,
+    "existingNonLiveSkips": 5
+  },
+  "freshNativeOrDotnetRunClaimed": false,
+  "commitlint": "passed",
+  "remoteOperationsPerformed": false,
+  "artifacts": {
+    "README.md": {
+      "sha256": "c4417852a76d40811f63c4a8eddf916a644edbf5f777f184269b197fa8e18a58",
+      "size": 2789
+    },
+    "builds-tests.txt": {
+      "sha256": "6e591f69ad3ecf4a1d8e25676790be4d742d3a75dde8f8765b6a7f4d26e30cc6",
+      "size": 61
+    },
+    "commit-message.txt": {
+      "sha256": "4a7c163588e56e00c9dc292c9cb879847201f13759964d0268e5d6d482a8b79d",
+      "size": 59
+    },
+    "commitlint-command.json": {
+      "sha256": "c94f5cc81514cb8b3873a2a756863d360ff99bd9272982c53ec4ed2d565769af",
+      "size": 140
+    },
+    "commitlint.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "commitlint.stdout.txt": {
+      "sha256": "bdff862da5fba4d839a02e21cab628b8108456246ce85efa46733a8ba8fafa8e",
+      "size": 114
+    },
+    "property-inspection.json": {
+      "sha256": "3e1de2eaeab72a2f1ea40f6975b025dff05db35d80bdc9adbc484aff988b0a92",
+      "size": 219
+    },
+    "python-command.json": {
+      "sha256": "f1d1eb520ad6ad01726d3a4fe1b08aa2befebe9cdb395e7d7422e433d82f7593",
+      "size": 198
+    },
+    "python-tests.txt": {
+      "sha256": "9292f21fd385c17fa8c1f6a76412283695e991be20d95dc655c8466c6542ee73",
+      "size": 31092
+    },
+    "scope-verification.json": {
+      "sha256": "01f1caff12e3fe64803f0d62498f867514310baef23363f2f9971c63b26d615a",
+      "size": 627
+    },
+    "source-hashes.json": {
+      "sha256": "12fc9cf01a2e152cf48d5da0cc896298f26c2cf73a04a1c25c9fcae3afabe419",
+      "size": 894
+    },
+    "static-checks.json": {
+      "sha256": "0471246d82808b0606f3a414f6aedcad608347fd61edfb27f78a31f93bf9b294",
+      "size": 797
+    }
+  },
+  "stagedWhitespaceCorrection": {
+    "initialExitCode": 2,
+    "path": "mutation-checks.txt",
+    "resolution": "Packet-scoped blank-at-eof attribute preserves captured bytes.",
+    "repeatExitCode": 0
+  }
+}

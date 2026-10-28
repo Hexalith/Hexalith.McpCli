@@ -7,7 +7,8 @@ four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
 The integration fixture and live AppHost refuse execution without that sentinel;
 non-launching AppHost preflight and composition inspection remain available.
 
-Requirements: Linux amd64, Python 3.11.4 or later, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
+Requirements: Linux amd64, Python 3.11.4 or later with `venv` and `ensurepip` support,
+GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
 bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.4),
@@ -154,7 +155,8 @@ The caller pins the qualified Builds workflow and supplies the Integration.Tests
 project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
 Builds keeps the six non-live Release test projects ahead of its Aspire tier,
 builds the Release solution again in that fresh job and initializes Dapr CLI
-1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11.4+,
+1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11.4+
+with `venv` and `ensurepip` support,
 OpenSSL 3, zlib/zstd, Docker, GNU `timeout`, Git, curl, `unshare`, `ip` and working
 user/PID/network/mount namespaces are required. The hooks name missing tools,
 sources, namespace permissions and source-build commands before live acceptance.
@@ -174,9 +176,10 @@ fails preparation.
 then builds EventStore, Tenants and Parties from their own working directories.
 Each server build has its own 300-second deadline and uses the documented
 `UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
-Tenants also sets `HexalithEventStoreFromSource=true` so it compiles against the
-sibling EventStore checkout. That checkout contains the routing contracts added
-after the published `Hexalith.EventStore.Contracts` 3.128.2 package.
+Tenants also sets `HexalithEventStoreFromSource=true` so it deliberately compiles
+against the same sibling EventStore source as the root server under test.
+The published `Hexalith.EventStore.Contracts` 3.128.3 package now includes the
+routing contracts; the approved source exception keeps those builds aligned.
 Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
@@ -209,8 +212,9 @@ remain enforced. The 360-minute hosted job budget includes preparation, testing,
 setup and upload. The vector aggregate may time out before the sum of every
 child's maximum budget; that is a failed lane, with partial evidence retained.
 Each hook's 30-second kill grace fits inside its Actions step deadline.
-On cancellation, detached-child cleanup waits ten seconds after TERM and at
-most five more after KILL so the hook can retain its failure receipt.
+On cancellation, detached-child cleanup waits at most 25 seconds after TERM,
+then kills the owned process group and waits at most one more second for its
+supervisor, so the hook can retain its failure receipt.
 
 `ASPIRE_EVIDENCE_PATH` must be a repository-relative directory without traversal
 or symbolic links. Its default is `TestResults/live-ci`.
@@ -232,6 +236,9 @@ requires exactly 21 passing vector outcomes, complete coverage, fresh matching
 semantic receipts, successful cleanup and a separate one-case, unskipped passing
 authenticated smoke XML. Vector assertion failures still allow the independent
 smoke attempt; neither smoke nor preflight/subset evidence can replace vectors.
+Pending Operations marked `running` at a deadline or cancellation are retained
+as interrupted Operations and named in stderr. Cancellation preserves its exit
+status, including when smoke is interrupted after a vector failure.
 The runner refuses reused private runtimes. Rerun preparation to retry a lane.
 
 The `aspire-hook-evidence` artifact is retained seven days on success and failure

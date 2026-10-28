@@ -1,0 +1,178 @@
+docker-readiness-removal
+test_prerequisite_failures_precede_source_builds (__main__.MutatedCase.test_prerequisite_failures_precede_source_builds) ... 
+  test_prerequisite_failures_precede_source_builds (__main__.MutatedCase.test_prerequisite_failures_precede_source_builds) (mode='docker-unavailable') ... FAIL
+
+======================================================================
+FAIL: test_prerequisite_failures_precede_source_builds (__main__.MutatedCase.test_prerequisite_failures_precede_source_builds) (mode='docker-unavailable')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 368, in test_prerequisite_failures_precede_source_builds
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+----------------------------------------------------------------------
+Ran 1 test in 4.501s
+
+FAILED (failures=1)
+
+interrupted-operation-removal
+test_aggregate_deadline_names_interrupted_operation_from_pending_lane (__main__.MutatedCase.test_aggregate_deadline_names_interrupted_operation_from_pending_lane) ... FAIL
+
+======================================================================
+FAIL: test_aggregate_deadline_names_interrupted_operation_from_pending_lane (__main__.MutatedCase.test_aggregate_deadline_names_interrupted_operation_from_pending_lane)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 638, in test_aggregate_deadline_names_interrupted_operation_from_pending_lane
+    self.assertEqual([{'operation': 'sample.operation-01', 'result': 'running', 'error': None}],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     receipt['vectors']['interrupted'])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'operation': 'sample.operation-01', 'result': 'running', 'error': None}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'operation': 'sample.operation-01', 'result': 'running', 'error': None}
+
+- [{'error': None, 'operation': 'sample.operation-01', 'result': 'running'}]
++ []
+
+----------------------------------------------------------------------
+Ran 1 test in 1.942s
+
+FAILED (failures=1)
+
+vector-control-exception-capture-removal
+test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (__main__.MutatedCase.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics) ... ERROR
+
+======================================================================
+ERROR: test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics (__main__.MutatedCase.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 996, in test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics
+    receipt['vectors']['interrupted'])
+    ~~~~~~~^^^^^^^^^^^
+KeyError: 'vectors'
+
+----------------------------------------------------------------------
+Ran 1 test in 2.300s
+
+FAILED (errors=1)
+
+smoke-control-exception-guard-removal
+test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (__main__.MutatedCase.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure) ... FAIL
+
+======================================================================
+FAIL: test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (__main__.MutatedCase.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1061, in test_sigterm_during_smoke_preserves_cancellation_after_vector_failure
+    self.assertEqual(143, process.returncode, stdout + stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 143 != 1 : Running (16200s): /tmp/tmp7gnj9kut/mcpcli-live-ci-aloojt0r/venv/bin/python /tmp/tmp7gnj9kut/tools/live-topology/run-vectors.py --output /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/vectors
+Running (960s): /tmp/tmp7gnj9kut/mcpcli-live-ci-aloojt0r/venv/bin/python /tmp/tmp7gnj9kut/tools/live-topology/run-isolated.py -- dotnet /tmp/tmp7gnj9kut/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/smoke/tests.xml
+Live CI failed: RuntimeError: /tmp/tmp7gnj9kut/mcpcli-live-ci-aloojt0r/venv/bin/python /tmp/tmp7gnj9kut/tools/live-topology/run-vectors.py --output /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/vectors exited 1; see /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/vectors-process.stderr.txt; failed Operations: sample.operation-00; lane receipt: /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/vectors/live-lane.json; runner stdout: /tmp/tmp7gnj9kut/evidence/6e708e27cdc949889bd8a21f0eab1cf0/vectors-process.stdout.txt; independent smoke failed: 143
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.960s
+
+FAILED (failures=1)
+
+caller-pin-drift
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... 
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='ffffffffffffffffffffffffffffffffffffffff') ... FAIL
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='ffffffffffffffffffffffffffffffffffffffff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: '3d7f49a5430294da5bcd437cbdace85c62c42027' != 'ffffffffffffffffffffffffffffffffffffffff'
+- 3d7f49a5430294da5bcd437cbdace85c62c42027
++ ffffffffffffffffffffffffffffffffffffffff
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+
+commitlint-pin-drift
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... 
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='ffffffffffffffffffffffffffffffffffffffff') ... FAIL
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='ffffffffffffffffffffffffffffffffffffffff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: '3d7f49a5430294da5bcd437cbdace85c62c42027' != 'ffffffffffffffffffffffffffffffffffffffff'
+- 3d7f49a5430294da5bcd437cbdace85c62c42027
++ ffffffffffffffffffffffffffffffffffffffff
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+
+gitlink-drift
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... 
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='3d7f49a5430294da5bcd437cbdace85c62c42027') ... FAIL
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='3d7f49a5430294da5bcd437cbdace85c62c42027') ... FAIL
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='3d7f49a5430294da5bcd437cbdace85c62c42027')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'ffffffffffffffffffffffffffffffffffffffff' != '3d7f49a5430294da5bcd437cbdace85c62c42027'
+- ffffffffffffffffffffffffffffffffffffffff
++ 3d7f49a5430294da5bcd437cbdace85c62c42027
+
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='3d7f49a5430294da5bcd437cbdace85c62c42027')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'ffffffffffffffffffffffffffffffffffffffff' != '3d7f49a5430294da5bcd437cbdace85c62c42027'
+- ffffffffffffffffffffffffffffffffffffffff
++ 3d7f49a5430294da5bcd437cbdace85c62c42027
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=2)
+
+additional-unpinned-reference
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... 
+  test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/additional.yaml', pin='main') ... FAIL
+
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/additional.yaml', pin='main')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1250, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(recorded[2], pin)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: '3d7f49a5430294da5bcd437cbdace85c62c42027' != 'main'
+- 3d7f49a5430294da5bcd437cbdace85c62c42027
++ main
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+

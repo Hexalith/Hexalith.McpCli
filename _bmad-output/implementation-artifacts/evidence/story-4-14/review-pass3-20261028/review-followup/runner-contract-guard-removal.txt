@@ -1,0 +1,27 @@
+test_runner_contract_mismatch_refuses_live_after_preparation (__main__.RunnerContractGuardRemoved.test_runner_contract_mismatch_refuses_live_after_preparation) ... 
+  test_runner_contract_mismatch_refuses_live_after_preparation (__main__.RunnerContractGuardRemoved.test_runner_contract_mismatch_refuses_live_after_preparation) (key='ASPIRE_TEST_PROJECT', value='other-tests') ... FAIL
+  test_runner_contract_mismatch_refuses_live_after_preparation (__main__.RunnerContractGuardRemoved.test_runner_contract_mismatch_refuses_live_after_preparation) (key='TEST_PLATFORM', value='vstest') ... FAIL
+
+======================================================================
+FAIL: test_runner_contract_mismatch_refuses_live_after_preparation (__main__.RunnerContractGuardRemoved.test_runner_contract_mismatch_refuses_live_after_preparation) (key='ASPIRE_TEST_PROJECT', value='other-tests')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 759, in test_runner_contract_mismatch_refuses_live_after_preparation
+    self.assertEqual(1, result.returncode)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_runner_contract_mismatch_refuses_live_after_preparation (__main__.RunnerContractGuardRemoved.test_runner_contract_mismatch_refuses_live_after_preparation) (key='TEST_PLATFORM', value='vstest')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 759, in test_runner_contract_mismatch_refuses_live_after_preparation
+    self.assertEqual(1, result.returncode)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 3.903s
+
+FAILED (failures=2)
+DETECTED: Removing only run() require_contract() granted acceptance for both unsupported callers; both subcases failed.

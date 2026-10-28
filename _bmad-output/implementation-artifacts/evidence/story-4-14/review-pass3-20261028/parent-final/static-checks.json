@@ -1,0 +1,33 @@
+[
+  {
+    "command": [
+      "bash",
+      "-n",
+      "tools/live-topology/prepare-ci.sh",
+      "tools/live-topology/run-ci.sh"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "actionlint",
+      ".github/workflows/ci.yml",
+      ".github/workflows/commitlint.yml"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+  }
+]

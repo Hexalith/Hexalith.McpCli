@@ -1,0 +1,21 @@
+{
+  "baseline": "5aa3ee23ef4b395a4500453a50d4815e9837dd07",
+  "allOtherCiFunctionAstsUnchanged": true,
+  "successfulRunBodiesUnchanged": true,
+  "protectedPathsUnchanged": [
+    "src",
+    "tests",
+    "Directory.Build.props",
+    "Directory.Packages.props",
+    "global.json",
+    "Hexalith.McpCli.slnx",
+    "tools/dependency-policy.json",
+    "tools/conformance-vectors/v1/modules",
+    "scripts/verify-release-source.py",
+    "tools/live-topology/run-vectors.py",
+    "tools/live-topology/run-isolated.py",
+    "tools/live-topology/prepare-ci.sh",
+    "tools/live-topology/run-ci.sh"
+  ],
+  "frozenIntentUnchanged": true
+}

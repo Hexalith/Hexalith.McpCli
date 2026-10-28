@@ -24,8 +24,8 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
-# Tenants compiles against the sibling EventStore checkout. Its synced source
-# references routing contracts added after the published 3.128.2 package.
+# Published EventStore 3.128.3 includes the routing contracts. Tenants deliberately
+# compiles against the same sibling EventStore source as the root server under test.
 SOURCE_EVENTSTORE = {'Hexalith.Tenants'}
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
@@ -402,8 +402,9 @@ def run(evidence: Path) -> None:
             for item in outcomes:
                 require_owned(Path(item['isolatedReceipt']), runtime)
             report['vectors'] = {'result': 'passed', 'count': 21, 'receipt': str(vectors / 'live-lane.json')}
-        except Exception as error:
+        except BaseException as error:
             failures = []
+            interrupted = []
             lane_error = None
             if (vectors / 'live-lane.json').is_file():
                 try:
@@ -411,15 +412,22 @@ def run(evidence: Path) -> None:
                     lane_error = lane.get('error')
                     failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
                                 for item in lane.get('vectors', []) if item.get('result') == 'failed']
+                    interrupted = [{key: item.get(key) for key in ('operation', 'result', 'error')}
+                                   for item in lane.get('vectors', []) if item.get('result') == 'running']
                 except (ValueError, AttributeError, TypeError):
                     pass  # Retain the original failure and still attempt the independent smoke.
             detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
+            if interrupted:
+                detail += '; interrupted Operations: ' + ', '.join(str(item['operation']) for item in interrupted)
             if lane_error:
                 detail += f'; lane error: {lane_error}'
             detail += f'; lane receipt: {vectors / "live-lane.json"}; runner stdout: {generation / "vectors-process.stdout.txt"}'
             vector_error = RuntimeError(str(error) + detail)
             report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures,
-                                 'laneError': lane_error, 'receipt': str(vectors / 'live-lane.json')}
+                                 'interrupted': interrupted, 'laneError': lane_error, 'receipt': str(vectors / 'live-lane.json')}
+            if not isinstance(error, Exception):
+                print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
+                raise
         # Smoke stays independent and runs even after a vector assertion failure.
         smoke = generation / 'smoke'
         smoke.mkdir()
@@ -446,7 +454,7 @@ def run(evidence: Path) -> None:
         report.update(result='passed', fullLiveAccepted=True)
     except BaseException as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')
-        if report.get('vectors', {}).get('result') == 'failed' and not report.get('smoke'):
+        if isinstance(error, Exception) and report.get('vectors', {}).get('result') == 'failed' and not report.get('smoke'):
             combined = RuntimeError(f'{report["vectors"]["error"]}; independent smoke failed: {error}')
             report['error'] = f'RuntimeError: {combined}'
             raise combined from error

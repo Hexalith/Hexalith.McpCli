@@ -62,6 +62,8 @@ if name == 'dotnet':
     sys.exit(0)
 if name == 'dapr':
     print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.18.2') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
+elif name == 'docker' and mode == 'docker-unavailable':
+    print('Cannot connect to the Docker daemon', file=sys.stderr); sys.exit(1)
 elif name == 'daprd':
     print('1.18.7')
 elif name == 'aspire':
@@ -136,7 +138,12 @@ def owned(name, base=runtime):
 if pathlib.Path(__file__).name == 'run-vectors.py':
     nested = subprocess.check_output(['python3', '-c', 'import ci_prepared_only,json,sys; print(json.dumps({"prefix":sys.prefix,"executable":sys.executable,"marker":ci_prepared_only.marker}))'], text=True)
     (root / 'nested-python.json').write_text(nested)
+    output = pathlib.Path(sys.argv[sys.argv.index('--output') + 1]); output.mkdir()
+    operations = sorted(json.loads(path.read_text())['operation'] for path in (root / 'tools/conformance-vectors/v1/modules').glob('*.vector.json'))
     if mode == 'cancel-vectors':
+        outcomes = [{'operation': name, 'result': 'not-run'} for name in operations]
+        outcomes[0]['result'] = 'running'
+        (output / 'live-lane.json').write_text(json.dumps({'result': 'pending', 'fullLiveAccepted': False, 'coverage': operations, 'vectors': outcomes}))
         def terminate(*_):
             print('detached vector stopped', flush=True)
             print('detached vector stderr stopped', file=sys.stderr, flush=True)
@@ -146,8 +153,6 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         print('detached vector started', flush=True)
         (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
         while True: time.sleep(1)
-    output = pathlib.Path(sys.argv[sys.argv.index('--output') + 1]); output.mkdir()
-    operations = sorted(json.loads(path.read_text())['operation'] for path in (root / 'tools/conformance-vectors/v1/modules').glob('*.vector.json'))
     outcomes = [{'operation': name, 'result': 'passed', 'exitCode': 0, 'isolatedReceipt': str(owned(name + '-' + str(index)) / 'result.json')} for index, name in enumerate(operations)]
     receipt = {'result': 'passed', 'fullLiveAccepted': True, 'coverage': operations, 'vectors': outcomes, 'passed': 21, 'failed': 0}
     if mode == 'extra-approved-vector': outcomes[-1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
@@ -157,17 +162,18 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
     if mode == 'wrong-failed-count': receipt['failed'] = 1
     if mode == 'wrong-outcome-operation': outcomes[0]['operation'] = 'sample.unexpected'
     if mode == 'wrong-outcome-exit': outcomes[0]['exitCode'] = 1
-    if mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime', 'lane-timeout'):
+    if mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime'):
         receipt.update(result='failed', fullLiveAccepted=False, error='named ' + mode + ' prerequisite failure')
-        if mode == 'lane-timeout':
-            for item in outcomes: item['result'] = 'not-run'
-            outcomes[0]['result'] = 'running'
-            outcomes[1].update(result='failed', error='phase observe: assertion mismatch')
-        else: receipt['vectors'] = []
+        receipt['vectors'] = []
+    if mode == 'lane-timeout':
+        outcomes = [{'operation': name, 'result': 'not-run'} for name in operations]
+        outcomes[0].update(result='failed', error='phase observe: assertion mismatch')
+        outcomes[1]['result'] = 'running'
+        receipt = {'result': 'pending', 'fullLiveAccepted': False, 'coverage': operations, 'vectors': outcomes}
     if mode == 'partial-vectors': receipt['fullLiveAccepted'] = False
     if mode == 'skipped-vector': outcomes[0]['result'] = 'skipped'
     if mode == 'incomplete-vectors': outcomes.pop()
-    if mode in ('failed-vectors', 'both-fail'):
+    if mode in ('failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure'):
         receipt.update(result='failed', passed=20, failed=1)
         outcomes[0].update(result='failed', error='phase observe-party: gateway_error 500')
     if mode == 'duplicate-isolation': outcomes[1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
@@ -183,9 +189,17 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (child / 'tests.xml').write_text('<test>' + (escape(content) if mode == 'generation-xml-secrets' else content) + '</test>')
     if mode != 'missing-vectors':
         (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
-    sys.exit(19 if mode == 'vector-exit' else 1 if mode in ('failed-vectors', 'both-fail') else 0)
+    sys.exit(124 if mode == 'lane-timeout' else 19 if mode == 'vector-exit' else 1 if mode in ('failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure') else 0)
 else:
     path = owned('smoke')
+    if mode == 'cancel-smoke-after-vector-failure':
+        def terminate(*_):
+            print('independent smoke stopped', flush=True)
+            (root / 'cancel-child-stopped').touch()
+            sys.exit(143)
+        signal.signal(signal.SIGTERM, terminate)
+        (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
+        while True: time.sleep(1)
     result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
     xml = '<assemblies><assembly total="1" passed="1" failed="0" skipped="0" errors="0"><collection><test result="' + result + '" type="Hexalith.McpCli.Integration.Tests.GatewaySmokeTests" method="AuthenticatedQueryReturnsSuccessfulDocument" /></collection></assembly></assemblies>'
     if mode == 'wrong-smoke-case': xml = xml.replace('AuthenticatedQueryReturnsSuccessfulDocument', 'OtherTest')
@@ -343,6 +357,7 @@ class CiHooksTests(unittest.TestCase):
 
     def test_prerequisite_failures_precede_source_builds(self):
         for mode, message in [('namespace-denied', 'unshare --user'),
+                              ('docker-unavailable', 'docker info'),
                               ('wrong-dapr', 'Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required'),
                               ('undeclared-source', 'Missing declared direct root source prerequisite'),
                               ('copied-source', 'is not its own Git working tree')]:
@@ -594,7 +609,7 @@ class CiHooksTests(unittest.TestCase):
 
     def test_lane_level_errors_are_named_and_only_failed_operations_are_failures(self):
         prepared = self.prepare()
-        for mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime', 'lane-timeout'):
+        for mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime'):
             with self.subTest(mode=mode):
                 shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
                 result = self.invoke('run-ci.sh', mode)
@@ -607,13 +622,26 @@ class CiHooksTests(unittest.TestCase):
                 self.assertIn(message, receipt['vectors']['error'])
                 self.assertIs(False, receipt['fullLiveAccepted'])
                 self.assertEqual('passed', receipt['smoke']['result'])
-                if mode == 'lane-timeout':
-                    self.assertEqual([{'operation': 'sample.operation-01', 'result': 'failed',
-                                       'error': 'phase observe: assertion mismatch'}], receipt['vectors']['failures'])
-                    self.assertIn('failed Operations: sample.operation-01;', result.stderr)
-                else:
-                    self.assertEqual([], receipt['vectors']['failures'])
-                    self.assertNotIn('failed Operations:', result.stderr)
+                self.assertEqual([], receipt['vectors']['failures'])
+                self.assertNotIn('failed Operations:', result.stderr)
+
+    def test_aggregate_deadline_names_interrupted_operation_from_pending_lane(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'lane-timeout')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertIs(False, receipt['fullLiveAccepted'])
+        self.assertEqual('passed', receipt['smoke']['result'])
+        self.assertIsNone(receipt['vectors']['laneError'])
+        self.assertEqual([{'operation': 'sample.operation-00', 'result': 'failed',
+                           'error': 'phase observe: assertion mismatch'}], receipt['vectors']['failures'])
+        self.assertEqual([{'operation': 'sample.operation-01', 'result': 'running', 'error': None}],
+                         receipt['vectors']['interrupted'])
+        for message in ('exited 124', 'failed Operations: sample.operation-00;',
+                        'interrupted Operations: sample.operation-01;', 'vectors-process.stdout.txt'):
+            self.assertIn(message, result.stderr)
+            self.assertIn(message, receipt['vectors']['error'])
+        self.assertNotIn('sample.operation-02', result.stderr)
 
     def test_smoke_requires_exactly_one_runtime_receipt(self):
         prepared = self.prepare()
@@ -715,6 +743,28 @@ class CiHooksTests(unittest.TestCase):
                     self.env.pop(key)
                 else:
                     self.env[key] = old
+
+    def test_runner_contract_mismatch_refuses_live_after_preparation(self):
+        for key, value, message in [('ASPIRE_TEST_PROJECT', 'other-tests', 'ASPIRE_TEST_PROJECT must be tests/Hexalith.McpCli.Integration.Tests.'),
+                                   ('TEST_PLATFORM', 'vstest', 'TEST_PLATFORM must be microsoft-testing-platform.')]:
+            with self.subTest(key=key, value=value):
+                self.fresh_evidence()
+                self.prepare()
+                (self.root / 'calls.jsonl').unlink()
+                self.env[key] = value
+                try:
+                    result = self.invoke('run-ci.sh')
+                finally:
+                    self.env.pop(key)
+                self.assertEqual(1, result.returncode)
+                self.assertEqual('', result.stdout)
+                self.assertEqual(f'Live CI failed: ValueError: {message}\n', result.stderr)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertRegex(receipt['runId'], r'\A[0-9a-f]{32}\Z')
+                self.assertEqual({'result': 'failed', 'fullLiveAccepted': False, 'runId': receipt['runId'],
+                                  'error': f'ValueError: {message}'}, receipt)
+                self.assertFalse(any(value.endswith(('run-vectors.py', 'run-isolated.py'))
+                                     for call in self.calls() for value in call))
 
     def test_symlinked_evidence_is_refused_without_touching_its_target(self):
         target = self.root / 'outside-evidence'
@@ -963,6 +1013,12 @@ class CiHooksTests(unittest.TestCase):
             receipt = json.loads((self.evidence / 'ci-live.json').read_text())
             self.assertEqual('failed', receipt['result'])
             self.assertIs(False, receipt['fullLiveAccepted'])
+            self.assertEqual('SystemExit: 143', receipt['error'])
+            self.assertEqual([{'operation': 'sample.operation-00', 'result': 'running', 'error': None}],
+                             receipt['vectors']['interrupted'])
+            self.assertIn('interrupted Operations: sample.operation-00;', receipt['vectors']['error'])
+            self.assertIn('interrupted Operations: sample.operation-00;', stderr)
+            self.assertNotIn('smoke', receipt)
             output = Path(receipt['output'])
             self.assertIn('detached vector stopped', (output / 'vectors-process.stdout.txt').read_text())
             self.assertIn('detached vector stderr stopped', (output / 'vectors-process.stderr.txt').read_text())
@@ -1008,6 +1064,67 @@ class CiHooksTests(unittest.TestCase):
         self.assertIs(False, receipt['fullLiveAccepted'])
         self.assertIn('failed Operations: sample.operation-00', receipt['error'])
         self.assertIn('exited 17', receipt['error'])
+
+    def test_sigterm_during_smoke_preserves_cancellation_after_vector_failure(self):
+        self.prepare()
+        self.env['FIXTURE_MODE'] = 'cancel-smoke-after-vector-failure'
+        process = subprocess.Popen(['bash', str(self.tools / 'run-ci.sh')], env=self.env,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        child = None
+        try:
+            deadline = time.monotonic() + 8
+            while not (self.root / 'cancel-child.json').exists():
+                if process.poll() is not None or time.monotonic() >= deadline:
+                    self.fail('Smoke child did not become ready: ' + ''.join(process.communicate(timeout=2)))
+                time.sleep(.01)
+            child = json.loads((self.root / 'cancel-child.json').read_text())
+            process.send_signal(signal.SIGTERM)
+            stdout, stderr = process.communicate(timeout=8)
+            self.assertEqual(143, process.returncode, stdout + stderr)
+            with self.assertRaises(ProcessLookupError):
+                os.kill(child['pid'], 0)
+            self.assertTrue((self.root / 'cancel-child-stopped').exists())
+            receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+            self.assertEqual('failed', receipt['result'])
+            self.assertIs(False, receipt['fullLiveAccepted'])
+            self.assertEqual('SystemExit: 143', receipt['error'])
+            self.assertEqual('sample.operation-00', receipt['vectors']['failures'][0]['operation'])
+            self.assertNotIn('independent smoke failed:', stderr)
+            output = Path(receipt['output']) / 'smoke'
+            self.assertIn('independent smoke stopped', (output / 'process.stdout.txt').read_text())
+            self.assertEqual(143, json.loads((output / 'process.command.json').read_text())['exitCode'])
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.communicate(timeout=3)
+            if child:
+                try:
+                    os.killpg(child['pgid'], signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            process.stdout.close()
+            process.stderr.close()
+
+    def test_smoke_control_exceptions_are_not_combined_with_vector_failure(self):
+        prepared = self.prepare()
+        module = self.ci_module()
+        bounded = module.bounded
+        self.env['FIXTURE_MODE'] = 'failed-vectors'
+        for error in (SystemExit(143), KeyboardInterrupt()):
+            with self.subTest(error=type(error).__name__):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                def execute(command, *args, **kwargs):
+                    if any(value.endswith('run-isolated.py') for value in command):
+                        raise error
+                    return bounded(command, *args, **kwargs)
+                with patch.dict(os.environ, self.env, clear=True), patch.object(module, 'bounded', side_effect=execute):
+                    with self.assertRaises(type(error)) as raised:
+                        module.run(self.evidence)
+                self.assertIs(error, raised.exception)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertEqual(f'{type(error).__name__}: {error}', receipt['error'])
+                self.assertIs(False, receipt['fullLiveAccepted'])
+                self.assertEqual('failed', receipt['vectors']['result'])
 
     def test_cancellation_waits_for_real_vector_runner_detached_child_cleanup(self):
         output = self.root / 'nested-cancellation'
@@ -1141,16 +1258,18 @@ class CiWorkflowTests(unittest.TestCase):
 
     def test_workflow_pin_matches_builds_gitlink(self):
         root = HERE.parents[1]
-        workflow = (root / '.github/workflows/ci.yml').read_text()
-        caller = workflow.split('  ci:\n', 1)[1].split('\n  conformance-vector-contract:', 1)[0]
-        match = re.search(
-            r'uses: Hexalith/Hexalith.Builds/\.github/workflows/domain-ci.yml@([0-9a-f]{40})\n',
-            caller)
-        self.assertIsNotNone(match)
         recorded = subprocess.run(
             ['git', 'ls-tree', 'HEAD', 'references/Hexalith.Builds'],
             cwd=root, check=True, capture_output=True, text=True).stdout.split()
-        self.assertEqual(match.group(1), recorded[2])
+        references = []
+        for workflow in sorted((root / '.github/workflows').rglob('*')):
+            if workflow.suffix in ('.yml', '.yaml'):
+                references.extend((workflow, pin) for pin in re.findall(
+                    r'Hexalith/Hexalith\.Builds/[^\s@]+@([^\s#]+)', workflow.read_text()))
+        self.assertTrue(references, 'Expected pinned Hexalith.Builds workflow references.')
+        for workflow, pin in references:
+            with self.subTest(workflow=str(workflow.relative_to(root)), pin=pin):
+                self.assertEqual(recorded[2], pin)
 
 
 if __name__ == '__main__':

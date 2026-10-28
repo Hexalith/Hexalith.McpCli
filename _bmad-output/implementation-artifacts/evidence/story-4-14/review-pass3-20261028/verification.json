@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-28",
+  "baseline": "5aa3ee23ef4b395a4500453a50d4815e9837dd07",
+  "buildsWorkflowAndGitlink": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "checks": [
+    {
+      "command": "PYTHONPATH=tools/live-topology python3 -m unittest -v test_ci.CiHooksTests.test_aggregate_deadline_names_interrupted_operation_from_pending_lane test_ci.CiHooksTests.test_sigterm_stops_detached_child_and_retains_failed_receipt_and_diagnostics test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure test_ci.CiHooksTests.test_smoke_control_exceptions_are_not_combined_with_vector_failure test_ci.CiHooksTests.test_prerequisite_failures_precede_source_builds test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink",
+      "beforeExitCode": 1,
+      "afterExitCode": 0,
+      "tests": 6,
+      "before": "regressions-before.txt",
+      "after": "regressions-after.txt"
+    },
+    {
+      "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "exitCode": 0,
+      "passed": 155,
+      "skipped": 0,
+      "seconds": 154.724,
+      "output": "python-tests.txt"
+    },
+    {
+      "command": "python3 _bmad-output/implementation-artifacts/evidence/story-4-14/review-pass3-20261028/check-mutations.py",
+      "exitCode": 0,
+      "mutationsDetected": 8,
+      "output": "mutation-checks.txt"
+    },
+    {
+      "command": "bash -n tools/live-topology/prepare-ci.sh tools/live-topology/run-ci.sh",
+      "exitCode": 0,
+      "stdoutAndStderr": ""
+    },
+    {
+      "command": "actionlint .github/workflows/ci.yml .github/workflows/commitlint.yml",
+      "exitCode": 0,
+      "stdoutAndStderr": ""
+    },
+    {
+      "command": "git diff --check -- .github/workflows/commitlint.yml README.md tools/live-topology/README.md tools/live-topology/ci.py tools/live-topology/test_ci.py",
+      "exitCode": 0,
+      "stdoutAndStderr": ""
+    }
+  ],
+  "freshFullLiveRunClaimed": false,
+  "freshDotnetVerificationClaimed": false,
+  "remoteOperationsPerformed": false,
+  "artifacts": {
+    "README.md": {
+      "sha256": "aa313d3097860cad7acd78c2c3ae25408130302ca964ef3315063e7b791135ea",
+      "size": 3866
+    },
+    "check-mutations.py": {
+      "sha256": "99cf4ee688fe4295717a7a2b05e01c76a492d388c7e37fef7952be7ad3367927",
+      "size": 4260
+    },
+    "mutation-checks.txt": {
+      "sha256": "145c65f1254e684f6e63585ebb7db5ebbb4f29ab3c7edd50ed2bd1e4077ead4b",
+      "size": 11518
+    },
+    "mutation-results.json": {
+      "sha256": "89bca95d1ebaa8dce609723869f39badfad64687a18b52240f0fe2e00a62f37c",
+      "size": 867
+    },
+    "python-tests.txt": {
+      "sha256": "b76f704beec5bdcf8748d443ee4a6bbd20d04b0705194dfcaed87680464a02e6",
+      "size": 30940
+    },
+    "regressions-after.txt": {
+      "sha256": "a91001d125d32680440e6af5512ea8bf68e18094ee693af198943c1d755401e3",
+      "size": 1436
+    },
+    "regressions-before.txt": {
+      "sha256": "d0ac846feb612065bda7694c6778c7436ddc9e3ede4193e69d520be79e23d362",
+      "size": 11227
+    },
+    "scope-verification.json": {
+      "sha256": "393a9248c9dfdd29dcb1c88736d79549b91e5703ebc9f64ee861e3cadaa67abe",
+      "size": 891
+    },
+    "source-hashes.json": {
+      "sha256": "ffd9b2e0320ec5f9bbd52ab583c10bf530109432b4f656032f5ba77d71c22e20",
+      "size": 596
+    }
+  }
+}
