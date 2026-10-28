@@ -187,9 +187,8 @@ the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
 status, each source build's resolved `HexalithEventStoreVersion`, tool versions
 and executable hashes are retained. Only McpCli's own restore pins EventStore
-3.127.0 to preserve its approved package/vector qualification. Source servers
-follow their own configuration and the pinned Builds catalog; EventStore and
-Tenants resolve 3.128.0 while Parties resolves 3.127.0.
+3.128.3. Source servers follow their own configuration and the pinned Builds
+catalog; `preparation.json` records the version each one resolves.
 
 From the repository root, after the focused Release checks and host Dapr
 initialization, run the same preparation and execution path:
