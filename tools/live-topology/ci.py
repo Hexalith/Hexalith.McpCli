@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import uuid
 import xml.etree.ElementTree as ET
 
@@ -64,6 +65,29 @@ def save(path: Path, value) -> None:
     path.write_text(sanitized(json.dumps(value, indent=2)) + '\n')
 
 
+def sanitized_xml(text: str) -> str:
+    """Redact decoded XML values so entity encoding cannot hide credentials."""
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return sanitized(text)
+    changed = False
+    for element in root.iter():
+        for field in ('text', 'tail'):
+            value = getattr(element, field)
+            if value is not None:
+                redacted = sanitized(value)
+                if redacted != value:
+                    setattr(element, field, redacted)
+                    changed = True
+        for key, value in element.attrib.items():
+            redacted = sanitized(value)
+            if redacted != value:
+                element.set(key, redacted)
+                changed = True
+    return sanitized(ET.tostring(root, encoding='unicode') if changed else text)
+
+
 def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None) -> str:
     """Enforce a process bound, retain both sanitized channels, and propagate failures."""
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -71,22 +95,44 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
     print(f'Running ({seconds}s): {" ".join(map(str, command))}', flush=True)
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
         child = subprocess.Popen(actual, cwd=cwd, env=environment, stdout=stdout, stderr=stderr, start_new_session=True)
+        interrupted = False
         try:
             code = child.wait(timeout=seconds + 40)
+        except BaseException:
+            interrupted = True
+            raise
         finally:
+            cleanup_deadline = time.monotonic() + 25
             if child.poll() is None:
                 try:
-                    os.killpg(child.pid, signal.SIGTERM)
+                    os.kill(child.pid, signal.SIGTERM)
                 except ProcessLookupError:
                     pass  # The child can exit between poll and the process-group signal.
                 try:
-                    child.wait(timeout=10)
+                    # The vector runner allows its detached child 20 seconds
+                    # to clean up. Leave it that grace inside our 30-second bound.
+                    child.wait(timeout=25)
                 except subprocess.TimeoutExpired:
                     try:
                         os.killpg(child.pid, signal.SIGKILL)
                     except ProcessLookupError:
                         pass
-                    child.wait(timeout=5)
+                    child.wait(timeout=1)
+            # GNU timeout itself can exit on TERM before its command's
+            # cleanup completes. Allow that owned group the same total grace.
+            if interrupted or child.returncode != 0:
+                while time.monotonic() < cleanup_deadline:
+                    try:
+                        os.killpg(child.pid, 0)
+                    except ProcessLookupError:
+                        break
+                    time.sleep(.05)
+            # A supervisor can exit before a TERM-resistant descendant.
+            # Its session is task-owned even after the supervisor is reaped.
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
             stdout.seek(0)
             stderr.seek(0)
             content = sanitized(stdout.read().decode(errors='replace'))
@@ -132,8 +178,8 @@ def prepare(evidence: Path) -> None:
     save(evidence / 'ci-live.json', {'result': 'not-run', 'fullLiveAccepted': False})
     try:
         require_contract()
-        if sys.version_info < (3, 11) or platform.system() != 'Linux' or platform.machine() != 'x86_64':
-            raise RuntimeError('Live CI requires Linux amd64 and Python 3.11 or later.')
+        if sys.version_info < (3, 11, 4) or platform.system() != 'Linux' or platform.machine() != 'x86_64':
+            raise RuntimeError('Live CI requires Linux amd64 and Python 3.11.4 or later.')
         for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'unshare', 'ip', 'curl', 'bash'):
             if not shutil.which(tool):
                 raise RuntimeError(f'Missing prerequisite: {tool}')
@@ -211,8 +257,6 @@ def prepare(evidence: Path) -> None:
         save(evidence / 'aspire-bundle-hashes.json', expected_bundle)
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             binary = Path.home() / '.aspire/bundle' / relative
-            if not binary.is_file():
-                raise RuntimeError(f'Missing qualified Aspire bundle prerequisite: {binary}')
             tools[relative] = {'path': str(binary), 'sha256': hashlib.sha256(binary.read_bytes()).hexdigest()}
         # Check every checkout before building any source. Never initialize nested dependencies.
         declared = bounded(['git', 'config', '--file', str(ROOT / '.gitmodules'), '--get-regexp', r'^submodule\..*\.path$'],
@@ -360,16 +404,22 @@ def run(evidence: Path) -> None:
             report['vectors'] = {'result': 'passed', 'count': 21, 'receipt': str(vectors / 'live-lane.json')}
         except Exception as error:
             failures = []
+            lane_error = None
             if (vectors / 'live-lane.json').is_file():
                 try:
                     lane = json.loads((vectors / 'live-lane.json').read_text())
+                    lane_error = lane.get('error')
                     failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
-                                for item in lane.get('vectors', []) if item.get('result') != 'passed']
+                                for item in lane.get('vectors', []) if item.get('result') == 'failed']
                 except (ValueError, AttributeError, TypeError):
                     pass  # Retain the original failure and still attempt the independent smoke.
             detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
+            if lane_error:
+                detail += f'; lane error: {lane_error}'
+            detail += f'; lane receipt: {vectors / "live-lane.json"}; runner stdout: {generation / "vectors-process.stdout.txt"}'
             vector_error = RuntimeError(str(error) + detail)
-            report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures}
+            report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures,
+                                 'laneError': lane_error, 'receipt': str(vectors / 'live-lane.json')}
         # Smoke stays independent and runs even after a vector assertion failure.
         smoke = generation / 'smoke'
         smoke.mkdir()
@@ -396,13 +446,18 @@ def run(evidence: Path) -> None:
         report.update(result='passed', fullLiveAccepted=True)
     except BaseException as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')
+        if report.get('vectors', {}).get('result') == 'failed' and not report.get('smoke'):
+            combined = RuntimeError(f'{report["vectors"]["error"]}; independent smoke failed: {error}')
+            report['error'] = f'RuntimeError: {combined}'
+            raise combined from error
         raise
     finally:
         if runtime:
             copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
         for pattern in ('*.stdout.txt', '*.stderr.txt', 'tests.xml'):
             for path in (evidence / report['runId']).rglob(pattern):
-                path.write_text(sanitized(path.read_text(errors='replace')))
+                text = path.read_text(errors='replace')
+                path.write_text(sanitized_xml(text) if path.name == 'tests.xml' else sanitized(text))
         save(evidence / 'ci-live.json', report)
 
 

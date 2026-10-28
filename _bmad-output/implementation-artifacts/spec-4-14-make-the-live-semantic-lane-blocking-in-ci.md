@@ -2,7 +2,7 @@
 title: '4.14 Make the live semantic lane blocking in CI'
 type: 'feature'
 created: '2026-10-26'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '49345128c189ff3955c00afb9f587b7a31c0ab15'
@@ -20,7 +20,7 @@ context:
 
 ## Boundaries & Constraints
 
-**Always:** Keep `aspire-test-project` set to `tests/Hexalith.McpCli.Integration.Tests`, `test-platform` to `microsoft-testing-platform`, and `aspire-continue-on-error` to `false`. Run focused Release verification and Dapr initialization before live execution. Build only root-declared source servers with published sibling dependencies and separate deadlines. Preserve private namespaces, fresh stores, authentication, mTLS, bootstrap, standard prerequisites, single Command submissions, complete coverage and cleanup proof. Make Builds changes in its owning checkout; integrate a qualified upstream revision and preserve existing user edits.
+**Always:** Keep `aspire-test-project` set to `tests/Hexalith.McpCli.Integration.Tests`, `test-platform` to `microsoft-testing-platform`, and `aspire-continue-on-error` to `false`. Run focused Release verification and Dapr initialization before live execution. Build only root-declared source servers with published sibling dependencies and separate deadlines, except Tenants may use the sibling EventStore source through `HexalithEventStoreFromSource=true` (approved 2026-10-28). Preserve private namespaces, fresh stores, authentication, mTLS, bootstrap, standard prerequisites, single Command submissions, complete coverage and cleanup proof. Make Builds changes in its owning checkout; integrate a qualified upstream revision and preserve existing user edits.
 
 **Never:** Edit reference contents, initialize nested submodules, weaken guards, accept skipped/partial/preflight-only evidence, substitute smoke for vectors, change approved Contracts/vector bytes, or enable publication. Paired-release implementation remains Story 4.16; its existing refusal stays intact.
 
@@ -69,10 +69,24 @@ Approved 2026-10-26. The Build implementation stage prohibits pushes and remote 
 
 ## Spec Change Log
 
+- 2026-10-28: User approved keeping the inherited Tenants source dependency after the explicit source-versus-published question. Amend the frozen dependency constraint with that exception; preserve the passing native lane and all isolation, deadline and semantic requirements.
+
 ## Review Triage Log
 
 | ID | Verdict | Route | Evidence |
 | --- | --- | --- | --- |
+| R28-BH1 | medium | patch integration | The new pin requires the already-selected Builds checkout to be recorded with it; the HEAD comparison is expected to fail until that integration commit exists. |
+| R28-BH2 | medium | patch integration | Parties helper 2.0.0 expectations require the selected Builds catalog. Include the matching Manifest expectation hunks with the required catalog integration. |
+| R28-BH3 | medium | patch cancellation | Nested vector cleanup permits 20 seconds while CI permits 10; the composed external-cancellation path needs verification and enough cleanup grace. |
+| R28-BH4 | medium | patch redaction | XML encoding changes known credential bytes before the final text sanitizer. Parse XML values before sanitizing and protect this with a regression. |
+| R28-BH5 | medium | patch diagnostics | Smoke failure escapes before vector_error is raised, losing vector failure names from stderr when both fail. Preserve both errors in the combined diagnostic. |
+| R28-BH6 | medium | patch docs | The standalone Tenants build command lacks the now-approved source switch, so it does not reproduce the hook's build. |
+| R28-BH7 | low | patch docs | Tool/helper versions in both READMEs lag the restored SDK/helper graph; directly correct the affected claims. |
+| R28-BH8 | low | patch evidence | The new evidence README still presents the now-resolved approval checkpoint as active. Preserve history and record its resolution. |
+| R28-BH9 | low | patch evidence | FINAL.md lacks a pointer to the newest qualification; identify the historical packet and current evidence. |
+| R28-BH10 | medium | patch integration | Run the owner checks against the selected checkout and record the selected pin and unchanged reusable-workflow bytes; retain hosted proof as pending. |
+| R28-EC1 | medium | patch cancellation | A process-group supervisor may exit before TERM-resistant descendants; ensure remaining owned group members receive SIGKILL even after supervisor exit, with an executed regression. |
+| R28-VG1 | medium | patch cancellation | Pre-verified gap: current cancellation tests exercise immediate termination or separate layers, not the real nested vector runner with a resistant detached child. Add a composed regression. |
 | B1 | high | patch G1 | `LiveVectorProcess` starts `python3` from PATH; preparation records host PATH although dependencies exist only in its venv. Fresh hosted execution can fail despite successful preparation. |
 | B2 | maybe-false | defer | Hosted namespace restrictions may reject the standard unshare probe, but no actual hosted failure was reproduced. A real ubuntu-latest run and namespace diagnostic settle this medium-if-true environment prerequisite. |
 | B3 | high | defer: integration dependency | The qualified upstream commit is local and must be published before GitHub can resolve the caller. This upstream readiness dependency was explicit before implementation; retain it as a release/integration blocker rather than claim hosted completion. |
@@ -328,7 +342,7 @@ Parent checks during triage:
   - Removing any of these sub-conditions keeps the suite green: `len(expected)`/`set(expected)`, `coverage`, `lane.result`, `passed`/`failed`, outcome Operations and per-item `exitCode` (`ci.py:346-351`). Removing the `ci.py:211-212` guard does too.
   - Removing `lane.fullLiveAccepted` or the per-item `result` check fails a test.
 
-- [ ] [Review][Patch] D1 — high, decided 2026-10-27: option (a). The caller pins Builds `857ef02`, which was never published, and `/pushall` then moved the gitlink to the divergent `cad9252`. As a result no CI job runs on `main`, and Builds `main` lacks the P11/P13 wording. [.github/workflows/ci.yml:18] (BH, AA, VG, EC)
+- [x] [Review][Patch] D1 — high, decided 2026-10-27: option (a). The caller pins Builds `857ef02`, which was never published, and `/pushall` then moved the gitlink to the divergent `cad9252`. As a result no CI job runs on `main`, and Builds `main` lacks the P11/P13 wording. [.github/workflows/ci.yml:18] (BH, AA, VG, EC)
   - `cad9252` contains the hook code that passed hosted at `35587cf`. It differs from `857ef02` only in the P11/P13 `domain-ci.md` wording and in the stricter Tier 1/2 TRX checks.
   - The checked-in `references/Hexalith.Builds/.github/workflows/domain-ci.md:34` and `:55` still carry the old sentences.
   - The ledger item at `deferred-work.md:612` tracks publication of `857ef02`. Publishing it now would need a merge onto Builds `main`, not just a push.
@@ -336,12 +350,12 @@ Parent checks during triage:
   - **Option (b):** cherry-pick `857ef02` onto Builds `main` and push it. Move the pin and gitlink together to the new SHA, then run hosted CI. This completes P13 now, but it pulls in the three later `domain-ci.yml` changes (including `568417a`, the release execution gates) unqualified.
   - **Option (c):** push `857ef02` to a Builds branch or tag so GitHub can resolve it, and keep the pin. The gitlink stays divergent and the wording stays off `main`.
   - **Status at `84c2220`:** a separate `/pushall` moved the pin and gitlink together to the published Builds `12e48f1`, not `cad9252`, and hosted run `40565620918` resolves the workflow. `12e48f1` does not contain `857ef02`, and its `domain-ci.md:34` still carries the old TRX sentence. The re-land of the Builds wording and hosted acceptance of `12e48f1` remain open. Do not move the pin back to `cad9252`.
-- [ ] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). No test ties the workflow pin to the gitlink, so the `8bfd1e0` divergence passed silently. [tools/live-topology/test_ci.py:875] (BH, EC)
+- [x] [Review][Patch] D2 — medium, decided 2026-10-27: option (a). No test ties the workflow pin to the gitlink, so the `8bfd1e0` divergence passed silently. [tools/live-topology/test_ci.py:875] (BH, EC)
   - `CiWorkflowTests` only checks that the pin is 40 hex characters. Pass 1 rejected tying the two because they serve different purposes; this pass shows them drifting apart.
   - **Option (a), recommended:** assert that the pin equals `git ls-tree HEAD references/Hexalith.Builds`, which works in shallow CI checkouts. Every Builds bump then moves both in one commit, as P13 prescribed. This would have caught `8bfd1e0` locally. It cannot prove publication: at `c6a19e8` both were equal and both unpublished.
   - **Option (b):** keep them independent, and only document that they move together.
   - **Status at `84c2220`:** `test_workflow_pin_matches_builds_gitlink` (`tools/live-topology/test_ci.py:878`) now asserts that the pin equals the gitlink, and it passes locally. Its removal sensitivity (moving the pin or the gitlink alone) is not yet shown.
-- [ ] [Review][Patch] P1 — medium. Fifteen guards still have no test that fails when the guard is removed. [tools/live-topology/test_ci.py:319] (VG, AA, BH, parent mutations)
+- [x] [Review][Patch] P1 — medium. Fifteen guards still have no test that fails when the guard is removed. [tools/live-topology/test_ci.py:319] (VG, AA, BH, parent mutations)
   - **Each removal keeps `CiHooksTests` green:**
     - the platform/Python gate (`ci.py:132`)
     - the zlib/zstd check (`:143`)
@@ -353,21 +367,21 @@ Parent checks during triage:
     - the smoke receipt count (`:383`)
     - six sub-conditions of the 21-vector acceptance check (`:346-351`)
   - **Fix:** add one removal-sensitive case per guard that asserts its message and that no build or live step ran. For the acceptance conditions, either add one malformed-lane fixture per condition or delete the conditions that only restate `fullLiveAccepted`.
-- [ ] [Review][Patch] P2 — medium. Lane-level `run-vectors.py` failures are not named, and not-run Operations are reported as failed. [tools/live-topology/ci.py:358] (AA)
+- [x] [Review][Patch] P2 — medium. Lane-level `run-vectors.py` failures are not named, and not-run Operations are reported as failed. [tools/live-topology/ci.py:358] (AA)
   - Preflight, admission, coverage and runtime-variable failures land only in the top-level `error` of `live-lane.json` (`run-vectors.py:182`), with `vectors` empty or not-run.
   - `run-vectors.py` writes nothing to stderr. CI and `ci-live.json` therefore point to an empty `vectors-process.stderr.txt`, and the cause is visible only after downloading the artifact. This misses matrix row 2 and AC3.
   - On an aggregate timeout, `running` and `not-run` items are listed under "failed Operations".
   - **Fix:** copy `lane['error']` into `report['vectors']` and into the raised message, point at the stdout receipt line, and name only `result == 'failed'` items as failed. Cover each case with a fixture.
-- [ ] [Review][Patch] P3 — medium. The source-server version matrix in the README is false at HEAD. [tools/live-topology/README.md:187] (AA, BH, EC)
+- [x] [Review][Patch] P3 — medium. The source-server version matrix in the README is false at HEAD. [tools/live-topology/README.md:187] (AA, BH, EC)
   - `:187-189` says EventStore and Tenants resolve 3.128.0 and Parties 3.127.0. After `8bfd1e0` they resolve 3.128.0, 3.128.2 and 3.128.0, and nothing asserts the numbers.
   - **Fix (wording only):** say that each source build's resolved `HexalithEventStoreVersion` is recorded in `preparation.json`, and keep only the McpCli 3.127.0 pin statement.
-- [ ] [Review][Patch] P4 — low. The `Missing qualified Aspire bundle prerequisite` guard is unreachable. [tools/live-topology/ci.py:211] (AA, parent mutation)
+- [x] [Review][Patch] P4 — low. The `Missing qualified Aspire bundle prerequisite` guard is unreachable. [tools/live-topology/ci.py:211] (AA, parent mutation)
   - The hash loop at `:201-204` already requires both files, so removing the guard keeps every test green.
   - **Fix:** delete the guard and keep the hash recording.
-- [ ] [Review][Patch] P5 — low. The Python prerequisite accepts 3.11.0–3.11.3, which raise `TypeError` on the Aspire archive path. [tools/live-topology/ci.py:132] (BH, AA, EC)
+- [x] [Review][Patch] P5 — low. The Python prerequisite accepts 3.11.0–3.11.3, which raise `TypeError` on the Aspire archive path. [tools/live-topology/ci.py:132] (BH, AA, EC)
   - `tarfile.extractall(..., filter='data')` (`:184`) needs 3.11.4 or later; Debian 12 ships 3.11.2.
   - **Fix:** require `(3, 11, 4)` and update `tools/live-topology/README.md:10` and `:157`.
-- [ ] [Review][Patch] P6 — low. The Builds hook-ordering assertion passes when the Aspire job's Dapr step is missing. [Hexalith.Builds/Tools/test-domain-workflow-test-platforms.ps1:561] (EC)
+- [x] [Review][Patch] P6 — low. The Builds hook-ordering assertion passes when the Aspire job's Dapr step is missing. [Hexalith.Builds/Tools/test-domain-workflow-test-platforms.ps1:561] (EC)
   - `IndexOf` returns −1, and the global Dapr checks at `:693-696` find the build-and-test job's step instead.
   - **Fix (owning Builds repository):** assert that each index is at least 0. Land it together with the D1 re-land of the Builds wording.
 - [x] [Review][Defer] The live lane is intermittent: the Dapr sidecar port-bind race recurred [tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:51] — deferred: pre-existing topology, already tracked (`deferred-work.md:619`).
@@ -398,3 +412,25 @@ Parent checks during triage:
 - EC14 `false` — Bool or float lane counters are accepted. Acceptance also requires each of the 21 outcomes to have `result == 'passed'`, which a parent mutation proved is tested. The producer writes ints (`run-vectors.py:177-178`).
 - EC20 `low` — Hook callers get an empty `aspire-test-results` upload warning. It is a warning only; the `domain-ci.md` wording is accurate in effect.
 - VG (other) `false` — A reviewer shared a scratch directory with another reviewer. This is a process note, not a defect in the diff; the review inputs were verified intact.
+
+
+### Resumed Build verification and dependency checkpoint (2026-10-28)
+
+The local hook path passed all 21 vectors and the independent authenticated smoke, with zero live skips, 22 passing XML cases and 22 owned cleanup receipts. Parent verification checked every native receipt and all 1,452 archived evidence files. The expanded Python suite passed 148 tests; all 18 guard removals and both pin-drift mutations were detected. Release build and six focused test-project outputs record 1,531 passes and five existing non-live skips. Owner workflow checks passed 411 assertions. Evidence: [resumed verification](evidence/story-4-14/review-pass2-20261028/README.md).
+
+D1 remains open: the retained owner patch is recorded at `30455c2fbbc2a93a82fccd4255b7cd3520f20a46`, while the caller still pins `abc0e1be8069d1c7a567515a13bb015adc407536`. No remote operation or hosted acceptance is claimed. Concurrent source/catalog gitlink and Manifest-test changes were preserved.
+
+A frozen-spec conflict prevents completion: the inherited `SOURCE_EVENTSTORE` path in `tools/live-topology/ci.py` builds Tenants with `HexalithEventStoreFromSource=true`, while the frozen constraints require published sibling dependencies. The passing local lane proves this source-based configuration only. Asked the user whether to approve that exception or enforce published dependencies. Status remains `in-progress`; final Build review and completion remain pending this decision.
+
+
+### Final resumed Build completion (2026-10-28)
+
+The user approved the Tenants sibling-source exception; the frozen constraint and change log record it. The caller and selected Builds catalog now use `3d7f49a5430294da5bcd437cbdace85c62c42027`, which includes the owning documentation and ordering-test corrections. Its reusable workflow bytes equal the previous caller's bytes, and all 411 workflow assertions pass against the selected checkout. The required catalog integration includes the matching Parties helper 2.0.0 Manifest expectations. Other concurrent source gitlink edits are preserved.
+
+All three required review layers completed. Every one of their 12 findings is recorded separately in the Review Triage Log and resolved locally. The cancellation regression fails against the original HEAD with a surviving detached child and passes with the real nested runner after correction. Three additional guard-removal regressions protect XML decoding, combined vector/smoke diagnostics and descendant cleanup after supervisor exit. The broad Python run passes 151 tests; the separate committed-HEAD pin comparison also passes after integration, for 152 passing Python tests in total. Fresh restore, Release warnings-as-errors build and all six focused .NET projects pass: 1,531 passed, zero failed, five existing non-live platform skips.
+
+The repeated final CI hooks pass all 21 live vectors and the independent authenticated smoke, with zero live skips or failures, 22 passing XML cases and 22 native owned cleanup receipts. Parent audit verifies 144 semantic phases, 53 single Command submissions with 53 distinct message IDs, 91 Query attempts and all 1,452 archived files against the originals. Final source hashes and raw outputs are retained in the [current qualification packet](evidence/story-4-14/review-pass2-20261028/final/README.md). Earlier hash-bound packets remain intact; [LATEST.md](evidence/story-4-14/LATEST.md) identifies the current packet.
+
+Every matrix row has executed passing coverage: complete native acceptance; named prerequisites and namespace refusal (`test_platform_and_python_patch_prerequisites_stop_before_commands`, existing missing-tool/source/namespace cases); source failures and deadlines (`test_source_failure_and_timeout_never_prepare_or_execute_live`); failed/skipped/incomplete evidence and combined diagnostics (`test_vector_nonacceptance_and_nonzero_exits_still_run_smoke`, `test_vector_and_smoke_failures_are_both_named`, smoke refusal cases); and unchanged no-hook VSTest/MTP callers (411 owner workflow assertions). Production Contracts, approved vector bytes, dependency policy and paired-publication refusal are unchanged in this resumed patch.
+
+- [x] [Review][Defer] Hosted acceptance of the selected Builds pin remains an integration follow-up, already tracked (`deferred-work.md:612`); no duplicate ledger entry is added. The earlier `857ef02` publication issue is historical; this run verifies the selected revision through local owner history and tests, without a Git remote operation. The existing Dapr intermittence and agent-context follow-ups also retain their existing tracking. Implementation is complete locally; sprint status is `review`, not `done`.

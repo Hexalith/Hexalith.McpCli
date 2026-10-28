@@ -1,0 +1,10 @@
+{
+  "tools/live-topology/ci.py": "ecdbbfc455564f179fce52bda9d460b8deb40b02b4520f69ac64d4e3051097ff",
+  "tools/live-topology/test_ci.py": "1e3d28dc7bd7d574d79aeff9bd8e02f643609c7114d4c27d93d9766d6a631503",
+  "tools/live-topology/prepare-ci.sh": "33bbe3152a87aadd38b567336df1652cf837d5f140fe52215f26702a478d4f43",
+  "tools/live-topology/run-ci.sh": "d6e40072f35c3a687b7042ea319931d0726a9b8d7fe7c2bdb283aa77ab08b92d",
+  ".github/workflows/ci.yml": "b8f2631f5902baa40e9d059287b1c27104010b296f8c218e121d8750ffecc3c4",
+  "README.md": "a88df6008e01b8294d849d2accb827ac4f878f6e89e909855ce71a11c4f46e6d",
+  "tools/live-topology/README.md": "8be45ce476fe0cd9f52dd68fa29a81dee6fd744de518f2d23d9144c83c01e3a8",
+  "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs": "350caf8445862a946f2148e2fcb41d9f66c648e24ae85d846302ed851c040bcd"
+}

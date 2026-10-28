@@ -1,0 +1,146 @@
+[
+  {
+    "mutation": "platform",
+    "detected": true,
+    "tests": 1,
+    "failures": 0,
+    "errors": 3,
+    "output": "EEE\n======================================================================\nERROR: test_platform_and_python_patch_prerequisites_stop_before_commands (__main__.Mutant.test_platform_and_python_patch_prerequisites_stop_before_commands) (version=(3, 11, 3), system='Linux', machine='x86_64')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 154, in prepare\n    if not re.search(r'CLI version: 1\\.18\\.2\\s', tools['dapr'] + '\\n') or not re.search(r'Runtime version: 1\\.18\\.7\\s', tools['dapr'] + '\\n'):\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/re/__init__.py\", line 177, in search\n    return _compile(pattern, flags).search(string)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\nTypeError: expected string or bytes-like object, got 'MagicMock'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 375, in test_platform_and_python_patch_prerequisites_stop_before_commands\n    module.prepare(evidence)\n    ~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 267, in prepare\n    save(evidence / 'preparation.json', receipt)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 64, in save\n    path.write_text(sanitized(json.dumps(value, indent=2)) + '\\n')\n                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 242, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/usr/lib/python3.14/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 182, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n                    f'is not JSON serializable')\nTypeError: Object of type MagicMock is not JSON serializable\nwhen serializing dict item 'dotnet'\nwhen serializing dict item 'tools'\n\n======================================================================\nERROR: test_platform_and_python_patch_prerequisites_stop_before_commands (__main__.Mutant.test_platform_and_python_patch_prerequisites_stop_before_commands) (version=(3, 12, 0), system='Windows', machine='x86_64')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 154, in prepare\n    if not re.search(r'CLI version: 1\\.18\\.2\\s', tools['dapr'] + '\\n') or not re.search(r'Runtime version: 1\\.18\\.7\\s', tools['dapr'] + '\\n'):\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/re/__init__.py\", line 177, in search\n    return _compile(pattern, flags).search(string)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\nTypeError: expected string or bytes-like object, got 'MagicMock'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 375, in test_platform_and_python_patch_prerequisites_stop_before_commands\n    module.prepare(evidence)\n    ~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 267, in prepare\n    save(evidence / 'preparation.json', receipt)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 64, in save\n    path.write_text(sanitized(json.dumps(value, indent=2)) + '\\n')\n                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 242, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/usr/lib/python3.14/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 182, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n                    f'is not JSON serializable')\nTypeError: Object of type MagicMock is not JSON serializable\nwhen serializing dict item 'dotnet'\nwhen serializing dict item 'tools'\n\n======================================================================\nERROR: test_platform_and_python_patch_prerequisites_stop_before_commands (__main__.Mutant.test_platform_and_python_patch_prerequisites_stop_before_commands) (version=(3, 12, 0), system='Linux', machine='aarch64')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 154, in prepare\n    if not re.search(r'CLI version: 1\\.18\\.2\\s', tools['dapr'] + '\\n') or not re.search(r'Runtime version: 1\\.18\\.7\\s', tools['dapr'] + '\\n'):\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/re/__init__.py\", line 177, in search\n    return _compile(pattern, flags).search(string)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\nTypeError: expected string or bytes-like object, got 'MagicMock'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 375, in test_platform_and_python_patch_prerequisites_stop_before_commands\n    module.prepare(evidence)\n    ~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 267, in prepare\n    save(evidence / 'preparation.json', receipt)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/tmpx_e5hkty/tools/live-topology/ci.py\", line 64, in save\n    path.write_text(sanitized(json.dumps(value, indent=2)) + '\\n')\n                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 242, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/usr/lib/python3.14/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 182, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n                    f'is not JSON serializable')\nTypeError: Object of type MagicMock is not JSON serializable\nwhen serializing dict item 'dotnet'\nwhen serializing dict item 'tools'\n\n----------------------------------------------------------------------\nRan 1 test in 0.040s\n\nFAILED (errors=3)\n"
+  },
+  {
+    "mutation": "compression",
+    "detected": true,
+    "tests": 1,
+    "failures": 0,
+    "errors": 2,
+    "output": "EE\n======================================================================\nERROR: test_compression_libraries_are_required_before_commands (__main__.Mutant.test_compression_libraries_are_required_before_commands) (missing='z')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 154, in prepare\n    if not re.search(r'CLI version: 1\\.18\\.2\\s', tools['dapr'] + '\\n') or not re.search(r'Runtime version: 1\\.18\\.7\\s', tools['dapr'] + '\\n'):\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/re/__init__.py\", line 177, in search\n    return _compile(pattern, flags).search(string)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\nTypeError: expected string or bytes-like object, got 'MagicMock'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 389, in test_compression_libraries_are_required_before_commands\n    module.prepare(evidence)\n    ~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 267, in prepare\n    save(evidence / 'preparation.json', receipt)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 64, in save\n    path.write_text(sanitized(json.dumps(value, indent=2)) + '\\n')\n                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 242, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/usr/lib/python3.14/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 182, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n                    f'is not JSON serializable')\nTypeError: Object of type MagicMock is not JSON serializable\nwhen serializing dict item 'dotnet'\nwhen serializing dict item 'tools'\n\n======================================================================\nERROR: test_compression_libraries_are_required_before_commands (__main__.Mutant.test_compression_libraries_are_required_before_commands) (missing='zstd')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 154, in prepare\n    if not re.search(r'CLI version: 1\\.18\\.2\\s', tools['dapr'] + '\\n') or not re.search(r'Runtime version: 1\\.18\\.7\\s', tools['dapr'] + '\\n'):\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/re/__init__.py\", line 177, in search\n    return _compile(pattern, flags).search(string)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\nTypeError: expected string or bytes-like object, got 'MagicMock'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 389, in test_compression_libraries_are_required_before_commands\n    module.prepare(evidence)\n    ~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 267, in prepare\n    save(evidence / 'preparation.json', receipt)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/tmpfa3dcpqy/tools/live-topology/ci.py\", line 64, in save\n    path.write_text(sanitized(json.dumps(value, indent=2)) + '\\n')\n                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 242, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/usr/lib/python3.14/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.14/json/encoder.py\", line 182, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n                    f'is not JSON serializable')\nTypeError: Object of type MagicMock is not JSON serializable\nwhen serializing dict item 'dotnet'\nwhen serializing dict item 'tools'\n\n----------------------------------------------------------------------\nRan 1 test in 0.013s\n\nFAILED (errors=2)\n"
+  },
+  {
+    "mutation": "dapr-cli",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_dapr_cli_and_initialized_runtime_are_independently_required (__main__.Mutant.test_dapr_cli_and_initialized_runtime_are_independently_required)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 395, in test_dapr_cli_and_initialized_runtime_are_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 1.700s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "daprd",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_dapr_cli_and_initialized_runtime_are_independently_required (__main__.Mutant.test_dapr_cli_and_initialized_runtime_are_independently_required)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 402, in test_dapr_cli_and_initialized_runtime_are_independently_required\n    self.assertIn('Missing initialized Dapr runtime:', result.stderr)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'Missing initialized Dapr runtime:' not found in \"Live CI failed: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp6pa__1r7/home/.dapr/bin/daprd'\\n\"\n\n----------------------------------------------------------------------\nRan 1 test in 0.586s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "embedded-bundle",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_incomplete_embedded_bundle_stops_before_builds (__main__.Mutant.test_incomplete_embedded_bundle_stops_before_builds)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 407, in test_incomplete_embedded_bundle_stops_before_builds\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 1.686s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "source-git",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_missing_git_marker_and_symlinked_source_stop_before_builds (__main__.Mutant.test_missing_git_marker_and_symlinked_source_stop_before_builds)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 415, in test_missing_git_marker_and_symlinked_source_stop_before_builds\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 1.689s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "source-symlink",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_missing_git_marker_and_symlinked_source_stop_before_builds (__main__.Mutant.test_missing_git_marker_and_symlinked_source_stop_before_builds)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 424, in test_missing_git_marker_and_symlinked_source_stop_before_builds\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 2.621s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "diagnostic-run-symlink",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_diagnostic_copy_excludes_symlinked_runs_and_files (__main__.Mutant.test_diagnostic_copy_excludes_symlinked_runs_and_files)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 443, in test_diagnostic_copy_excludes_symlinked_runs_and_files\n    self.assertEqual(['local/command.stderr.txt'], [str(path.relative_to(output)) for path in output.rglob('*') if path.is_file()])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: ['local/command.stderr.txt'] != ['linked-run/command.stdout.txt', 'local/command.stderr.txt']\n\nFirst differing element 0:\n'local/command.stderr.txt'\n'linked-run/command.stdout.txt'\n\nSecond list contains 1 additional elements.\nFirst extra element 1:\n'local/command.stderr.txt'\n\n- ['local/command.stderr.txt']\n+ ['linked-run/command.stdout.txt', 'local/command.stderr.txt']\n\n----------------------------------------------------------------------\nRan 1 test in 0.011s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "diagnostic-file-symlink",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_diagnostic_copy_excludes_symlinked_runs_and_files (__main__.Mutant.test_diagnostic_copy_excludes_symlinked_runs_and_files)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 443, in test_diagnostic_copy_excludes_symlinked_runs_and_files\n    self.assertEqual(['local/command.stderr.txt'], [str(path.relative_to(output)) for path in output.rglob('*') if path.is_file()])\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: ['local/command.stderr.txt'] != ['local/command.stdout.txt', 'local/command.stderr.txt']\n\nFirst differing element 0:\n'local/command.stderr.txt'\n'local/command.stdout.txt'\n\nSecond list contains 1 additional elements.\nFirst extra element 1:\n'local/command.stderr.txt'\n\n- ['local/command.stderr.txt']\n+ ['local/command.stdout.txt', 'local/command.stderr.txt']\n\n----------------------------------------------------------------------\nRan 1 test in 0.011s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "smoke-count",
+    "detected": true,
+    "tests": 1,
+    "failures": 2,
+    "errors": 0,
+    "output": "FF\n======================================================================\nFAIL: test_smoke_requires_exactly_one_runtime_receipt (__main__.Mutant.test_smoke_requires_exactly_one_runtime_receipt) (mode='missing-smoke-receipt')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 624, in test_smoke_requires_exactly_one_runtime_receipt\n    self.assertIn('Independent smoke omitted its isolated runtime receipt.', result.stderr)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'Independent smoke omitted its isolated runtime receipt.' not found in 'Live CI failed: IndexError: list index out of range\\n'\n\n======================================================================\nFAIL: test_smoke_requires_exactly_one_runtime_receipt (__main__.Mutant.test_smoke_requires_exactly_one_runtime_receipt) (mode='duplicate-smoke-receipt')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 623, in test_smoke_requires_exactly_one_runtime_receipt\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 2.118s\n\nFAILED (failures=2)\n"
+  },
+  {
+    "mutation": "expected-count",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='extra-approved-vector')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 586, in test_each_vector_acceptance_field_is_independently_required\n    self.assertIn('Complete current passing evidence for all 21 vectors is required', result.stderr)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'Complete current passing evidence for all 21 vectors is required' not found in 'Live CI failed: ValueError: Expected exactly 21 fresh vector runtimes and one independent smoke runtime.\\n'\n\n----------------------------------------------------------------------\nRan 1 test in 3.393s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "expected-unique",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='duplicate-approved-operation')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.392s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "coverage",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-coverage')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.448s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "lane-result",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-lane-result')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.416s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "passed-count",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-passed-count')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.437s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "failed-count",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-failed-count')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.446s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "operation",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-outcome-operation')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.455s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "mutation": "exit",
+    "detected": true,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "output": "F\n======================================================================\nFAIL: test_each_vector_acceptance_field_is_independently_required (__main__.Mutant.test_each_vector_acceptance_field_is_independently_required) (mode='wrong-outcome-exit')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py\", line 585, in test_each_vector_acceptance_field_is_independently_required\n    self.assertNotEqual(0, result.returncode)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 == 0\n\n----------------------------------------------------------------------\nRan 1 test in 3.721s\n\nFAILED (failures=1)\n"
+  }
+]

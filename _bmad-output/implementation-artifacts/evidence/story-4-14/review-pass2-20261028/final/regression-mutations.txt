@@ -1,0 +1,54 @@
+XML final-pass decoding: DETECTED
+test_xml_entities_cannot_hide_known_secrets (final_regressions.CiHooksTests.test_xml_entities_cannot_hide_known_secrets) ... FAIL
+
+======================================================================
+FAIL: test_xml_entities_cannot_hide_known_secrets (final_regressions.CiHooksTests.test_xml_entities_cannot_hide_known_secrets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 998, in test_xml_entities_cannot_hide_known_secrets
+    self.assertNotIn('secret', path.read_text())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'secret' unexpectedly found in '<test>[REDACTED JWT]\n[REDACTED PEM]\nquote-&quot;secret&amp;value\n{&quot;SigningKey&quot;: &quot;0fPbEgIEJSu5TvpJj5E4AySlwflH7kmayS42Wm+q0nI=&quot;}</test>'
+
+----------------------------------------------------------------------
+Ran 1 test in 1.902s
+
+FAILED (failures=1)
+
+combined failures: DETECTED
+test_vector_and_smoke_failures_are_both_named (final_regressions.CiHooksTests.test_vector_and_smoke_failures_are_both_named) ... FAIL
+
+======================================================================
+FAIL: test_vector_and_smoke_failures_are_both_named (final_regressions.CiHooksTests.test_vector_and_smoke_failures_are_both_named)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1004, in test_vector_and_smoke_failures_are_both_named
+    self.assertIn('failed Operations: sample.operation-00', result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'failed Operations: sample.operation-00' not found in 'Live CI failed: RuntimeError: /tmp/tmphxoymyid/mcpcli-live-ci-nj0yb7q5/venv/bin/python /tmp/tmphxoymyid/tools/live-topology/run-isolated.py -- dotnet /tmp/tmphxoymyid/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/tmphxoymyid/evidence/6a5f55f9b7ee41adbcba07497d5b6515/smoke/tests.xml exited 17; see /tmp/tmphxoymyid/evidence/6a5f55f9b7ee41adbcba07497d5b6515/smoke/process.stderr.txt\n'
+
+----------------------------------------------------------------------
+Ran 1 test in 1.900s
+
+FAILED (failures=1)
+
+Running (1s): inert-child
+exited supervisor descendants: DETECTED
+test_exited_supervisor_still_stops_remaining_owned_group (final_regressions.CiHooksTests.test_exited_supervisor_still_stops_remaining_owned_group) ... FAIL
+
+======================================================================
+FAIL: test_exited_supervisor_still_stops_remaining_owned_group (final_regressions.CiHooksTests.test_exited_supervisor_still_stops_remaining_owned_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1067, in test_exited_supervisor_still_stops_remaining_owned_group
+    kill.assert_called_once_with(child.pid, signal.SIGKILL)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 997, in assert_called_once_with
+    raise AssertionError(msg)
+AssertionError: Expected 'killpg' to be called once. Called 0 times.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.013s
+
+FAILED (failures=1)
+

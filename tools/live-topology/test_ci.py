@@ -61,13 +61,14 @@ if name == 'dotnet':
         print('3.127.0' if pathlib.Path.cwd().name == 'Hexalith.Parties' else '3.128.0')
     sys.exit(0)
 if name == 'dapr':
-    print('CLI version: 1.18.2\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
+    print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.18.2') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
 elif name == 'daprd':
     print('1.18.7')
 elif name == 'aspire':
     if args and args[0] == 'setup':
         if mode == 'bundle-setup-failure': sys.exit(18)
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard', 'managed/aspire-managed'):
+            if mode == 'incomplete-bundle' and relative == 'dcp/dcp': continue
             file = pathlib.Path(args[args.index('--install-path') + 1]) / 'bundle' / relative
             file.parent.mkdir(parents=True, exist_ok=True)
             wrong = mode == 'bundle-home-mismatch' and relative == 'managed/aspire-managed' and file.parents[2] == pathlib.Path.home() / '.aspire'
@@ -147,27 +148,42 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         while True: time.sleep(1)
     output = pathlib.Path(sys.argv[sys.argv.index('--output') + 1]); output.mkdir()
     operations = sorted(json.loads(path.read_text())['operation'] for path in (root / 'tools/conformance-vectors/v1/modules').glob('*.vector.json'))
-    outcomes = [{'operation': name, 'result': 'passed', 'exitCode': 0, 'isolatedReceipt': str(owned(name) / 'result.json')} for name in operations]
+    outcomes = [{'operation': name, 'result': 'passed', 'exitCode': 0, 'isolatedReceipt': str(owned(name + '-' + str(index)) / 'result.json')} for index, name in enumerate(operations)]
     receipt = {'result': 'passed', 'fullLiveAccepted': True, 'coverage': operations, 'vectors': outcomes, 'passed': 21, 'failed': 0}
+    if mode == 'extra-approved-vector': outcomes[-1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
+    if mode == 'wrong-coverage': receipt['coverage'] = operations[:-1]
+    if mode == 'wrong-lane-result': receipt['result'] = 'failed'
+    if mode == 'wrong-passed-count': receipt['passed'] = 20
+    if mode == 'wrong-failed-count': receipt['failed'] = 1
+    if mode == 'wrong-outcome-operation': outcomes[0]['operation'] = 'sample.unexpected'
+    if mode == 'wrong-outcome-exit': outcomes[0]['exitCode'] = 1
+    if mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime', 'lane-timeout'):
+        receipt.update(result='failed', fullLiveAccepted=False, error='named ' + mode + ' prerequisite failure')
+        if mode == 'lane-timeout':
+            for item in outcomes: item['result'] = 'not-run'
+            outcomes[0]['result'] = 'running'
+            outcomes[1].update(result='failed', error='phase observe: assertion mismatch')
+        else: receipt['vectors'] = []
     if mode == 'partial-vectors': receipt['fullLiveAccepted'] = False
     if mode == 'skipped-vector': outcomes[0]['result'] = 'skipped'
     if mode == 'incomplete-vectors': outcomes.pop()
-    if mode == 'failed-vectors':
+    if mode in ('failed-vectors', 'both-fail'):
         receipt.update(result='failed', passed=20, failed=1)
         outcomes[0].update(result='failed', error='phase observe-party: gateway_error 500')
     if mode == 'duplicate-isolation': outcomes[1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
     if mode == 'stale-isolation': outcomes[0]['isolatedReceipt'] = str(owned('foreign', runtime.parent / 'sibling-runtime') / 'result.json')
     if mode == 'extra-runtime': (runtime / 'runs/unexpected').mkdir()
-    if mode == 'generation-secrets':
+    if mode in ('generation-secrets', 'generation-xml-secrets'):
         secret = base64.b64encode(os.urandom(32)).decode()
         with (root / 'generated-signing-keys.txt').open('a') as keys: keys.write(secret + '\n')
         content = 'eyJfixture.payload.signature\n-----BEGIN PRIVATE KEY-----\nfixture credential\n-----END PRIVATE KEY-----\n' + os.environ['TEST_SECRET_TOKEN'] + '\n' + json.dumps({'SigningKey': secret})
         child = output / operations[0]; child.mkdir()
         (child / 'child.stdout.txt').write_text(content)
-        (child / 'tests.xml').write_text('<test>' + content + '</test>')
+        from html import escape
+        (child / 'tests.xml').write_text('<test>' + (escape(content) if mode == 'generation-xml-secrets' else content) + '</test>')
     if mode != 'missing-vectors':
         (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
-    sys.exit(19 if mode == 'vector-exit' else 1 if mode == 'failed-vectors' else 0)
+    sys.exit(19 if mode == 'vector-exit' else 1 if mode in ('failed-vectors', 'both-fail') else 0)
 else:
     path = owned('smoke')
     result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
@@ -177,8 +193,9 @@ else:
     if mode == 'empty-smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
     destination = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1])
     if mode != 'missing-smoke': destination.write_text(xml)
-    print('Isolated run: ' + str(path))
-    sys.exit(17 if mode == 'smoke-exit' else 0)
+    if mode != 'missing-smoke-receipt': print('Isolated run: ' + str(path))
+    if mode == 'duplicate-smoke-receipt': print('Isolated run: ' + str(path))
+    sys.exit(17 if mode in ('smoke-exit', 'both-fail') else 0)
 '''
 
 
@@ -338,6 +355,96 @@ class CiHooksTests(unittest.TestCase):
                 self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
+    def assert_no_build_or_live(self):
+        calls = self.calls() if (self.root / 'calls.jsonl').exists() else []
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' or
+                             any(value.endswith(('run-vectors.py', 'run-isolated.py')) for value in call)
+                             for call in calls))
+
+    def test_platform_and_python_patch_prerequisites_stop_before_commands(self):
+        module = self.ci_module()
+        for version, system, machine in [((3, 11, 3), 'Linux', 'x86_64'),
+                                          ((3, 12, 0), 'Windows', 'x86_64'),
+                                          ((3, 12, 0), 'Linux', 'aarch64')]:
+            with self.subTest(version=version, system=system, machine=machine):
+                self.fresh_evidence()
+                with patch.dict(os.environ, self.env, clear=True), patch.object(module.sys, 'version_info', version), \
+                        patch.object(module.platform, 'system', return_value=system), \
+                        patch.object(module.platform, 'machine', return_value=machine), patch.object(module, 'bounded') as command:
+                    evidence = module.evidence_directory(preparing=True)
+                    with self.assertRaisesRegex(RuntimeError, 'Live CI requires Linux amd64 and Python 3.11.4 or later.'):
+                        module.prepare(evidence)
+                    command.assert_not_called()
+                self.assertEqual('failed', json.loads((evidence / 'preparation.json').read_text())['result'])
+
+    def test_compression_libraries_are_required_before_commands(self):
+        module = self.ci_module()
+        for missing in ('z', 'zstd'):
+            with self.subTest(missing=missing):
+                self.fresh_evidence()
+                with patch.dict(os.environ, self.env, clear=True), \
+                        patch.object(module.ctypes.util, 'find_library', side_effect=lambda name: None if name == missing else name), \
+                        patch.object(module, 'bounded') as command:
+                    evidence = module.evidence_directory(preparing=True)
+                    with self.assertRaisesRegex(RuntimeError, 'Missing prerequisite shared library: ' + missing):
+                        module.prepare(evidence)
+                    command.assert_not_called()
+                self.assertEqual('failed', json.loads((evidence / 'preparation.json').read_text())['result'])
+
+    def test_dapr_cli_and_initialized_runtime_are_independently_required(self):
+        result = self.invoke('prepare-ci.sh', 'wrong-dapr-cli')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required', result.stderr)
+        self.assert_no_build_or_live()
+        self.fresh_evidence()
+        (Path(self.env['HOME']) / '.dapr/bin/daprd').unlink()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Missing initialized Dapr runtime:', result.stderr)
+        self.assert_no_build_or_live()
+
+    def test_incomplete_embedded_bundle_stops_before_builds(self):
+        result = self.invoke('prepare-ci.sh', 'incomplete-bundle')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Selected qualified Aspire CLI did not extract its required embedded bundle files.', result.stderr)
+        self.assert_no_build_or_live()
+
+    def test_missing_git_marker_and_symlinked_source_stop_before_builds(self):
+        checkout = self.root / 'references/Hexalith.Parties'
+        (checkout / '.git').unlink()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Missing declared direct root source prerequisite:', result.stderr)
+        self.assert_no_build_or_live()
+        (checkout / '.git').touch()
+        target = self.root / 'actual-parties'
+        checkout.rename(target)
+        checkout.symlink_to(target, target_is_directory=True)
+        self.fresh_evidence()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Missing declared direct root source prerequisite:', result.stderr)
+        self.assert_no_build_or_live()
+
+    def test_diagnostic_copy_excludes_symlinked_runs_and_files(self):
+        module = self.ci_module()
+        runtime = self.root / 'runtime'
+        runs = runtime / 'runs'
+        runs.mkdir(parents=True)
+        foreign = self.root / 'foreign'
+        foreign.mkdir()
+        (foreign / 'command.stdout.txt').write_text('foreign diagnostic')
+        (runs / 'linked-run').symlink_to(foreign, target_is_directory=True)
+        local = runs / 'local'
+        local.mkdir()
+        (local / 'command.stdout.txt').symlink_to(foreign / 'command.stdout.txt')
+        (local / 'command.stderr.txt').write_text('owned diagnostic')
+        output = self.root / 'copied'
+        module.copy_diagnostics(runtime, output)
+        self.assertEqual(['local/command.stderr.txt'], [str(path.relative_to(output)) for path in output.rglob('*') if path.is_file()])
+        self.assertEqual('owned diagnostic', (output / 'local/command.stderr.txt').read_text())
+        self.assertEqual('foreign diagnostic', (foreign / 'command.stdout.txt').read_text())
+
     def test_hosted_namespace_setup_reprobes_before_building_sources(self):
         self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
         result = self.invoke('prepare-ci.sh', 'namespace-needs-setup')
@@ -460,6 +567,65 @@ class CiHooksTests(unittest.TestCase):
                     self.assertIn('failed Operations: sample.operation-00', result.stderr)
                     self.assertEqual([{'operation': 'sample.operation-00', 'result': 'failed',
                                        'error': 'phase observe-party: gateway_error 500'}], receipt['vectors']['failures'])
+
+    def test_each_vector_acceptance_field_is_independently_required(self):
+        prepared = self.prepare()
+        for mode in ('wrong-coverage', 'wrong-lane-result', 'wrong-passed-count', 'wrong-failed-count',
+                     'wrong-outcome-operation', 'wrong-outcome-exit', 'extra-approved-vector', 'duplicate-approved-operation'):
+            with self.subTest(mode=mode):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                modules = self.root / 'tools/conformance-vectors/v1/modules'
+                extra = modules / 'extra.vector.json'
+                if mode == 'extra-approved-vector':
+                    extra.write_text(json.dumps({'operation': 'sample.operation-00'}))
+                original = (modules / '0.vector.json').read_text()
+                if mode == 'duplicate-approved-operation':
+                    (modules / '0.vector.json').write_text((modules / '1.vector.json').read_text())
+                try:
+                    result = self.invoke('run-ci.sh', mode)
+                    self.assertNotEqual(0, result.returncode)
+                    self.assertIn('Complete current passing evidence for all 21 vectors is required', result.stderr)
+                    receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                    self.assertIs(False, receipt['fullLiveAccepted'])
+                    self.assertEqual('passed', receipt['smoke']['result'])
+                finally:
+                    extra.unlink(missing_ok=True)
+                    (modules / '0.vector.json').write_text(original)
+
+    def test_lane_level_errors_are_named_and_only_failed_operations_are_failures(self):
+        prepared = self.prepare()
+        for mode in ('lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime', 'lane-timeout'):
+            with self.subTest(mode=mode):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                result = self.invoke('run-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                message = 'named ' + mode + ' prerequisite failure'
+                self.assertIn(message, result.stderr)
+                self.assertIn('vectors-process.stdout.txt', result.stderr)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertEqual(message, receipt['vectors']['laneError'])
+                self.assertIn(message, receipt['vectors']['error'])
+                self.assertIs(False, receipt['fullLiveAccepted'])
+                self.assertEqual('passed', receipt['smoke']['result'])
+                if mode == 'lane-timeout':
+                    self.assertEqual([{'operation': 'sample.operation-01', 'result': 'failed',
+                                       'error': 'phase observe: assertion mismatch'}], receipt['vectors']['failures'])
+                    self.assertIn('failed Operations: sample.operation-01;', result.stderr)
+                else:
+                    self.assertEqual([], receipt['vectors']['failures'])
+                    self.assertNotIn('failed Operations:', result.stderr)
+
+    def test_smoke_requires_exactly_one_runtime_receipt(self):
+        prepared = self.prepare()
+        for mode in ('missing-smoke-receipt', 'duplicate-smoke-receipt'):
+            with self.subTest(mode=mode):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                result = self.invoke('run-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn('Independent smoke omitted its isolated runtime receipt.', result.stderr)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertEqual('passed', receipt['vectors']['result'])
+                self.assertIs(False, receipt['fullLiveAccepted'])
 
     def test_smoke_skips_missing_receipts_nonzero_and_cleanup_fail_closed(self):
         preparation = self.prepare()
@@ -813,6 +979,93 @@ class CiHooksTests(unittest.TestCase):
             process.stdout.close()
             process.stderr.close()
 
+    def test_xml_entities_cannot_hide_known_secrets(self):
+        module = self.ci_module()
+        secret = 'quote-"secret&value'
+        xml = '<assemblies><failure message="quote-&quot;secret&amp;value">quote-"secret&amp;value</failure></assemblies>'
+        with patch.dict(os.environ, {'TEST_SECRET_TOKEN': secret}):
+            result = module.sanitized_xml(xml)
+        self.assertNotIn('secret', result)
+        self.assertEqual(2, result.count('[REDACTED]'))
+        clean = '<assemblies>\n  <assembly passed="1" />\n</assemblies>'
+        self.assertEqual(clean, module.sanitized_xml(clean))
+        self.env['TEST_SECRET_TOKEN'] = secret
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'generation-xml-secrets')
+        self.assertEqual(0, result.returncode, result.stderr)
+        report = json.loads((self.evidence / 'ci-live.json').read_text())
+        for path in Path(report['output']).rglob('tests.xml'):
+            self.assertNotIn('secret', path.read_text())
+
+    def test_vector_and_smoke_failures_are_both_named(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'both-fail')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('failed Operations: sample.operation-00', result.stderr)
+        self.assertIn('independent smoke failed:', result.stderr)
+        self.assertIn('exited 17', result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertIs(False, receipt['fullLiveAccepted'])
+        self.assertIn('failed Operations: sample.operation-00', receipt['error'])
+        self.assertIn('exited 17', receipt['error'])
+
+    def test_cancellation_waits_for_real_vector_runner_detached_child_cleanup(self):
+        output = self.root / 'nested-cancellation'
+        output.mkdir()
+        runner = output / 'vector.py'
+        runner.write_text('''
+import importlib.util,os,pathlib,signal,sys
+sys.path.insert(0,sys.argv[1])
+spec=importlib.util.spec_from_file_location('lane',pathlib.Path(sys.argv[1])/'run-vectors.py')
+lane=importlib.util.module_from_spec(spec);spec.loader.exec_module(lane)
+signal.signal(signal.SIGTERM,lambda *_:sys.exit(143))
+child="import os,pathlib,signal,sys,time; signal.signal(signal.SIGTERM,signal.SIG_IGN); pathlib.Path(sys.argv[1]).write_text(str(os.getpid())); time.sleep(120)"
+lane.bounded_child([sys.executable,'-c',child,sys.argv[2]],os.environ.copy(),pathlib.Path(sys.argv[2]).parent,120)
+''')
+        supervisor = output / 'ci.py'
+        supervisor.write_text('''
+import importlib.util,pathlib,signal,sys
+spec=importlib.util.spec_from_file_location('ci',pathlib.Path(sys.argv[1])/'ci.py')
+ci=importlib.util.module_from_spec(spec);spec.loader.exec_module(ci)
+signal.signal(signal.SIGTERM,lambda *_:sys.exit(143))
+ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path(sys.argv[3]).parent/'process')
+''')
+        pid_file = output / 'child.pid'
+        process = subprocess.Popen([sys.executable, str(supervisor), str(HERE), str(runner), str(pid_file)],
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        child = None
+        try:
+            deadline = time.monotonic() + 10
+            while not pid_file.exists():
+                if process.poll() is not None or time.monotonic() >= deadline:
+                    self.fail('Nested child did not start: ' + ''.join(process.communicate(timeout=2)))
+                time.sleep(.01)
+            child = int(pid_file.read_text())
+            process.send_signal(signal.SIGTERM)
+            stdout, stderr = process.communicate(timeout=29)
+            self.assertEqual(143, process.returncode, stdout + stderr)
+            with self.assertRaises(ProcessLookupError):
+                os.kill(child, 0)
+            self.assertTrue((output / 'process.stderr.txt').is_file())
+            self.assertEqual(124, json.loads((output / 'process.command.json').read_text())['exitCode'])
+        finally:
+            if process.poll() is None:
+                process.kill()
+            process.communicate(timeout=3)
+            if child:
+                try:
+                    os.kill(child, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+
+    def test_exited_supervisor_still_stops_remaining_owned_group(self):
+        module = self.ci_module()
+        child = type('Exited', (), {'pid': 123456789, 'returncode': 0,
+                                    'wait': lambda *_, **__: 0, 'poll': lambda *_: 0})()
+        with patch.object(module.subprocess, 'Popen', return_value=child), patch.object(module.os, 'killpg') as kill:
+            module.bounded(['inert-child'], 1, self.root / 'exited-supervisor')
+        kill.assert_called_once_with(child.pid, signal.SIGKILL)
+
     def test_exited_child_signal_race_preserves_cancellation_diagnostics(self):
         module = self.ci_module()
         class ExitedBetweenPollAndSignal:
@@ -837,7 +1090,7 @@ class CiHooksTests(unittest.TestCase):
                 patch.object(module.os, 'killpg', side_effect=ProcessLookupError) as kill:
             with self.assertRaises(SystemExit):
                 module.bounded(['inert-child'], 1, output)
-        kill.assert_called_once_with(child.pid, signal.SIGTERM)
+        self.assertEqual([(child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list if call.args[1] != 0])
         self.assertIn('last child diagnostic', output.with_name('output.stdout.txt').read_text())
         self.assertEqual(0, json.loads(output.with_name('output.command.json').read_text())['exitCode'])
 
@@ -858,11 +1111,14 @@ class CiHooksTests(unittest.TestCase):
                 self.returncode = -9
                 return self.returncode
         child = IgnoresTerm()
-        with patch.object(module.subprocess, 'Popen', return_value=child), patch.object(module.os, 'killpg') as kill:
+        def signal_group(pid, signum):
+            if signum == 0:
+                raise ProcessLookupError
+        with patch.object(module.subprocess, 'Popen', return_value=child), patch.object(module.os, 'killpg', side_effect=signal_group) as kill:
             with self.assertRaises(SystemExit):
                 module.bounded(['inert-child'], 1, self.root / 'escalation')
-        self.assertEqual([41, 10, 5], child.timeouts)
-        self.assertEqual([(child.pid, signal.SIGTERM), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list])
+        self.assertEqual([41, 25, 1], child.timeouts)
+        self.assertEqual([(child.pid, signal.SIGKILL), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list if call.args[1] != 0])
 
 
 class CiWorkflowTests(unittest.TestCase):

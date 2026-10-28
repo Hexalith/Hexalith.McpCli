@@ -1,0 +1,6 @@
+test_each_vector_acceptance_field_is_independently_required (test_ci.CiHooksTests.test_each_vector_acceptance_field_is_independently_required) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.608s
+
+OK

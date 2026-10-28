@@ -1,0 +1,49 @@
+{
+  "callerBuildsPin": "3d7f49a5430294da5bcd437cbdace85c62c42027",
+  "selectedBuildsWorkflowAssertions": 411,
+  "sourceDependencyException": "Approved by user 2026-10-28: Tenants uses sibling EventStore source.",
+  "review": {
+    "layersCompleted": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "findingsTriaged": 12,
+    "codeFindingsResolved": true,
+    "newRegressionMutationsDetected": 3,
+    "originalCancellationRegressionDetected": true
+  },
+  "python": {
+    "passed": 152,
+    "broadSuitePassed": 151,
+    "committedHeadPinCheck": "passed",
+    "pinCheckCommit": "3fef28e7bf302a88bdb4a9f101158f9cfe499807"
+  },
+  "dotnet": {
+    "passed": 1531,
+    "failed": 0,
+    "existingNonLiveSkips": 5
+  },
+  "native": {
+    "preparation": "passed",
+    "runner": "passed",
+    "path": "TestResults/live-ci-story414-final-20261028",
+    "fullLiveAccepted": true,
+    "vectorsPassed": 21,
+    "smokePassed": 1,
+    "liveSkips": 0,
+    "ownedCleanupReceipts": 22,
+    "passingXmlCases": 22,
+    "semanticPhases": 144,
+    "commandSubmissions": 53,
+    "distinctCommandMessageIds": 53,
+    "queryAttempts": 91,
+    "archiveFilesVerified": 1452,
+    "archiveSha256": "15bde706b18e14684abf16e5ddd37527d2f3eb273fbcaf426b9f00b7f9097848"
+  },
+  "limitations": [
+    "Hosted acceptance of the selected workflow revision remains pending; no Git remote operation performed.",
+    "Native source identities are recorded from the current workspace; unrelated source gitlink edits are preserved.",
+    "Existing Dapr port-bind intermittence and agent-context follow-ups remain tracked."
+  ]
+}

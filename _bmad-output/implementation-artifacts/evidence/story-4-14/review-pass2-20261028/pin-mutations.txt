@@ -1,0 +1,37 @@
+Caller pin alone: DETECTED
+F
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1062, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(match.group(1), recorded[2])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '0000000000000000000000000000000000000000' != 'abc0e1be8069d1c7a567515a13bb015adc407536'
+- 0000000000000000000000000000000000000000
++ abc0e1be8069d1c7a567515a13bb015adc407536
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)
+
+Recorded gitlink alone: DETECTED
+F
+======================================================================
+FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1062, in test_workflow_pin_matches_builds_gitlink
+    self.assertEqual(match.group(1), recorded[2])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'abc0e1be8069d1c7a567515a13bb015adc407536' != '0000000000000000000000000000000000000000'
+- abc0e1be8069d1c7a567515a13bb015adc407536
++ 0000000000000000000000000000000000000000
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)

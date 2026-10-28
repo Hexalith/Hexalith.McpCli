@@ -1,0 +1,6 @@
+test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+OK

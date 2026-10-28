@@ -1,0 +1,32 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers (3ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ at index 1
+                                     ↓ (pos 24)
+  Expected: "Hexalith.Parties.Aspire/1.6.0"
+  Actual:   "Hexalith.Parties.Aspire/2.0.0"
+                                     ↑ (pos 24)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:50
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+failed Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure (1ms)
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+  Assert.Equal() Failure: Collections differ at index 10
+                                     ↓ (pos 24)
+  Expected: "Hexalith.Parties.Aspire/1.6.0"
+  Actual:   "Hexalith.Parties.Aspire/2.0.0"
+                                     ↑ (pos 24)
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.AssertIntegrationFixtureClosure(RestoredDependencyGraph graph) in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:1055
+    at Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure() in /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:58
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) failed with 2 error(s) (2m 01s 615ms)
+Exit code: 2
+
+Test run summary: Failed!
+  total: 251
+  failed: 2
+  succeeded: 249
+  skipped: 0
+  duration: 2m 01s 743ms
+Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)

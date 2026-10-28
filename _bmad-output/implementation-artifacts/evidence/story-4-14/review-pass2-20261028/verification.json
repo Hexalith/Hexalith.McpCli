@@ -1,0 +1,44 @@
+{
+  "implementationHead": "2d7311cbbcc592c0ea0348463037389251d1cb4b",
+  "callerBuildsPin": "abc0e1be8069d1c7a567515a13bb015adc407536",
+  "owningPatchCommit": "30455c2fbbc2a93a82fccd4255b7cd3520f20a46",
+  "commands": {
+    "restore": "dotnet restore Hexalith.McpCli.slnx",
+    "build": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+    "python": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+    "owner": "pwsh -NoProfile -File /home/administrator/projects/hexalith/builds/Tools/test-domain-workflow-test-platforms.ps1",
+    "nativePrepare": "ASPIRE_EVIDENCE_PATH=TestResults/live-ci-story414-20261028 bash tools/live-topology/prepare-ci.sh",
+    "nativeRun": "ASPIRE_EVIDENCE_PATH=TestResults/live-ci-story414-20261028 bash tools/live-topology/run-ci.sh"
+  },
+  "pythonTests": 148,
+  "hookTests": 51,
+  "ownerWorkflowAssertions": 411,
+  "dotnet": {
+    "passed": 1531,
+    "failed": 0,
+    "existingNonLiveSkips": 5
+  },
+  "guardRemovalMutations": 18,
+  "guardRemovalMutationsDetected": 18,
+  "pinDriftMutationsDetected": 2,
+  "ownerStepRemovalMutationsDetected": 3,
+  "native": {
+    "preparation": "passed",
+    "runner": "passed",
+    "path": "TestResults/live-ci-story414-20261028",
+    "fullLiveAccepted": true,
+    "vectorsPassed": 21,
+    "smokePassed": 1,
+    "liveSkips": 0,
+    "ownedCleanupReceipts": 22,
+    "passingXmlCases": 22,
+    "archiveFilesVerified": 1452,
+    "archiveSha256": "0b903e3afffc76dcd91b3e4958d25202cb6b54f36e7e01a024ab907d33579927"
+  },
+  "limitations": [
+    "No hosted or remote verification performed.",
+    "Tenants source build retains the inherited HexalithEventStoreFromSource=true switch, contrary to the frozen published-sibling-dependency constraint.",
+    "Concurrent user changes, including gitlinks and Manifest helper expectations, preserved.",
+    "Frozen-spec dependency conflict requires user resolution before completion; no status transition to done is claimed."
+  ]
+}

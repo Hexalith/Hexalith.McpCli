@@ -1,0 +1,17 @@
+[
+  {
+    "removedStep": "Install and initialize Dapr",
+    "exitCode": 1,
+    "output": "Domain workflow test-platform checks failed with 1 error(s):\n- Aspire Dapr step exists omits Dapr initialization in the Aspire job.\n"
+  },
+  {
+    "removedStep": "Prepare Aspire tier",
+    "exitCode": 1,
+    "output": "test-domain-workflow-test-platforms.ps1: Cannot bind argument to parameter 'Block' because it is an empty string.\n"
+  },
+  {
+    "removedStep": "Run Aspire hook",
+    "exitCode": 1,
+    "output": "test-domain-workflow-test-platforms.ps1: Cannot bind argument to parameter 'Block' because it is an empty string.\n"
+  }
+]

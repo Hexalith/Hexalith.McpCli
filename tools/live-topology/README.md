@@ -7,10 +7,10 @@ four namespace identities, it sets `MCPCLI_ISOLATED_TOPOLOGY=1` for its child.
 The integration fixture and live AppHost refuse execution without that sentinel;
 non-launching AppHost preflight and composition inspection remain available.
 
-Requirements: Linux amd64, Python 3.11 or later, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
+Requirements: Linux amd64, Python 3.11.4 or later, GNU `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
-bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.3),
+bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.4),
 Dapr CLI 1.18.2 and runtime 1.18.7 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. Install Dapr independently without initializing or changing a user
@@ -154,7 +154,7 @@ The caller pins the qualified Builds workflow and supplies the Integration.Tests
 project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
 Builds keeps the six non-live Release test projects ahead of its Aspire tier,
 builds the Release solution again in that fresh job and initializes Dapr CLI
-1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11+,
+1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11.4+,
 OpenSSL 3, zlib/zstd, Docker, GNU `timeout`, Git, curl, `unshare`, `ip` and working
 user/PID/network/mount namespaces are required. The hooks name missing tools,
 sources, namespace permissions and source-build commands before live acceptance.
