@@ -1,0 +1,89 @@
+{
+  "result": "root-declared-reference-updated",
+  "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "fetch",
+        "origin",
+        "main"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.AI.Tools\n * branch            main       -> FETCH_HEAD\n   3f194e1..68e6037  main       -> origin/main\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge",
+        "--ff-only",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9"
+      ],
+      "exit_code": 0,
+      "stdout": "Updating 3f194e1..68e6037\nFast-forward\n README.md                                 |  21 +-\n commitlint.config.mjs                     |   3 +\n hexalith-llm-instructions.md              |   6 +\n hexalith-mcpcli-migration-instructions.md | 104 ++++\n package-lock.json                         | 967 ++++++++++++++++++++++++++++++\n package.json                              |  10 +\n 6 files changed, 1110 insertions(+), 1 deletion(-)\n create mode 100644 commitlint.config.mjs\n create mode 100644 hexalith-mcpcli-migration-instructions.md\n create mode 100644 package-lock.json\n create mode 100644 package.json\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

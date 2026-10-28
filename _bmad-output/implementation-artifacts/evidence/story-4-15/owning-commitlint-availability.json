@@ -1,0 +1,33 @@
+{
+  "cwd": "/home/administrator/projects/hexalith/aitools",
+  "argv": [
+    "npx",
+    "--offline",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "",
+  "purpose": "Tool availability only; no commit-message candidate created or validated.",
+  "exit_code": 1,
+  "stdout": "@commitlint/cli@21.2.4 - Lint your commit messages\n\n[input] reads from stdin if --edit, --env, --from and --to are omitted\n\nOptions:\n  -c, --color           toggle colored output  [boolean] [default: true]\n  -g, --config          path to the config file; result code 9 if config is missing  [string]\n      --default-config  use built-in default config (@commitlint/config-conventional) when no rules are found  [boolean]\n      --print-config    print resolved config  [string] [choices: \"\", \"text\", \"json\"]\n  -d, --cwd             directory to execute in  [string] [default: (Working Directory)]\n  -e, --edit            read last commit message from the specified file or fallbacks to ./.git/COMMIT_EDITMSG  [string]\n  -E, --env             check message in the file at path given by environment variable value  [string]\n  -x, --extends         array of shareable configurations to extend  [array]\n  -H, --help-url        help url in error message  [string]\n  -f, --from            lower end of the commit range to lint; applies if edit=false  [string]\n      --from-last-tag   uses the last tag as the lower end of the commit range to lint; applies if edit=false and from is not set  [boolean]\n      --git-log-args    additional git log arguments as space separated string, example '--first-parent --cherry-pick'  [string]\n  -l, --last            just analyze the last commit; applies if edit=false  [boolean]\n  -o, --format          output format of the results  [string]\n  -p, --parser-preset   configuration preset to use for conventional-commits-parser  [string]\n  -q, --quiet           toggle console output  [boolean] [default: false]\n  -t, --to              upper end of the commit range to lint; applies if edit=false  [string]\n  -V, --verbose         enable verbose output for reports without problems  [boolean]\n      --legacy-output   use the legacy input output format (single-line 'input: ...')  [boolean]\n  -s, --strict          enable strict mode; result code 2 for warnings, 3 for errors  [boolean]\n      --options         path to a JSON file or Common.js module containing CLI options\n  -v, --version         display version information  [boolean]\n  -h, --help            Show help  [boolean]\n[input] is required: supply via stdin, or --env or --edit or --last or --from and --to\n",
+  "stderr": "",
+  "tracked_package_or_commitlint_files": [],
+  "configuration_probe": {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "npx",
+      "--offline",
+      "--no",
+      "--",
+      "commitlint",
+      "--print-config",
+      "json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"extends\":[],\"formatter\":\"@commitlint/format\",\"plugins\":{},\"rules\":{},\"helpUrl\":\"https://github.com/conventional-changelog/commitlint/#what-is-commitlint\",\"prompt\":{}}\n",
+    "stderr": ""
+  },
+  "conclusion": "A cached unpinned CLI is callable (21.2.4), but AI.Tools has no tracked package/lock/configuration and the resolved rules are empty. The empty-input probe is a tooling probe, not a rejected message. No owning pinned commitlint validation is available; no candidate message, commit or publication was attempted."
+}

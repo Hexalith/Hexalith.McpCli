@@ -1,0 +1,842 @@
+{
+  "result": "passed-with-qualified-owning-whitespace-check",
+  "scope": "Sequential offline documentation verification. No .NET, live, hosted or network checks.",
+  "checks": [
+    {
+      "check": "synchronization detects AGENTS.md drift",
+      "result": "pass",
+      "detail": "Exact failure channels and affected comparison names match."
+    },
+    {
+      "check": "synchronization detects CLAUDE.md drift",
+      "result": "pass",
+      "detail": "Exact failure channels and affected comparison names match."
+    },
+    {
+      "check": "synchronization detects .github/copilot-instructions.md drift",
+      "result": "pass",
+      "detail": "Exact failure channels and affected comparison names match."
+    },
+    {
+      "check": "topical link hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership",
+      "result": "pass",
+      "detail": "Owning same-folder document and ownership anchor exist."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "immutable inventory _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "result": "pass",
+      "detail": "Linked Git object and current inventory bytes agree; version remains 1.0.0."
+    },
+    {
+      "check": "six distinct immutable inventories",
+      "result": "pass",
+      "detail": "Parties, Folders, Projects, FrontComposer, ChatBot and Memories."
+    },
+    {
+      "check": "published core rule preserved",
+      "result": "pass",
+      "detail": "Existing ownership policy preserved verbatim; only same-folder migration guidance appended."
+    },
+    {
+      "check": "owning migration link README.md",
+      "result": "pass",
+      "detail": "Same-folder plan is linked by catalog and baseline."
+    },
+    {
+      "check": "owning migration link hexalith-llm-instructions.md",
+      "result": "pass",
+      "detail": "Same-folder plan is linked by catalog and baseline."
+    },
+    {
+      "check": "root README link https://github.com/Hexalith/Hexalith.AI.Tools/blob/3f194e17174994d308ec84af9ee2b5aa68674d0d/hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership",
+      "result": "pass",
+      "detail": "Published rule verified from local Git; local candidate/evidence targets exist. No network request."
+    },
+    {
+      "check": "root README link _bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-mcpcli-migration-instructions.md",
+      "result": "pass",
+      "detail": "Published rule verified from local Git; local candidate/evidence targets exist. No network request."
+    },
+    {
+      "check": "root README link _bmad-output/implementation-artifacts/evidence/story-4-15/README.md",
+      "result": "pass",
+      "detail": "Published rule verified from local Git; local candidate/evidence targets exist. No network request."
+    },
+    {
+      "check": "patch reproduces README.md",
+      "result": "pass",
+      "detail": "Exact file bytes reproduced from the published baseline."
+    },
+    {
+      "check": "patch reproduces hexalith-llm-instructions.md",
+      "result": "pass",
+      "detail": "Exact file bytes reproduced from the published baseline."
+    },
+    {
+      "check": "patch reproduces hexalith-mcpcli-migration-instructions.md",
+      "result": "pass",
+      "detail": "Exact file bytes reproduced from the published baseline."
+    },
+    {
+      "check": "archive reproduces README.md",
+      "result": "pass",
+      "detail": "Exact owner candidate bytes retained."
+    },
+    {
+      "check": "archive reproduces hexalith-llm-instructions.md",
+      "result": "pass",
+      "detail": "Exact owner candidate bytes retained."
+    },
+    {
+      "check": "archive reproduces hexalith-mcpcli-migration-instructions.md",
+      "result": "pass",
+      "detail": "Exact owner candidate bytes retained."
+    },
+    {
+      "check": "browseable plan matches owner",
+      "result": "pass",
+      "detail": "Snapshot is byte-identical."
+    },
+    {
+      "check": "root reference remains clean",
+      "result": "pass",
+      "detail": "No reference contents or metadata refs changed by implementation."
+    },
+    {
+      "check": "preserved root scripts/release-request.py",
+      "result": "pass",
+      "detail": "Exact committed bytes preserved."
+    },
+    {
+      "check": "preserved root scripts/verify-release-source.py",
+      "result": "pass",
+      "detail": "Exact committed bytes preserved."
+    },
+    {
+      "check": "preserved root AGENTS.md",
+      "result": "pass",
+      "detail": "Exact committed bytes preserved."
+    },
+    {
+      "check": "preserved root CLAUDE.md",
+      "result": "pass",
+      "detail": "Exact committed bytes preserved."
+    },
+    {
+      "check": "preserved root .github/copilot-instructions.md",
+      "result": "pass",
+      "detail": "Exact committed bytes preserved."
+    },
+    {
+      "check": "paired refusal scripts/release-request.py",
+      "result": "pass",
+      "detail": "Exact refusal occurs before registry/GitHub access."
+    },
+    {
+      "check": "paired refusal scripts/verify-release-source.py",
+      "result": "pass",
+      "detail": "Exact refusal occurs before registry/GitHub access."
+    }
+  ],
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: CLAUDE.md differs from AGENTS.md\nagent instructions out of sync: .github/copilot-instructions.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "cmp",
+        "-s",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "cmp",
+        "-s",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: CLAUDE.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "cmp",
+        "-s",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: .github/copilot-instructions.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "cmp",
+        "-s",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-sync-5ifm4_wk",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f; 24934 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b; 63493 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f; 29595 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9; 20121 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94; 41999 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597; 43255 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d:hexalith-llm-instructions.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 675be8cb518837a84aa53d67eef76863de2040c952eeed6214a9724d5d835582; 17025 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "archive",
+        "--format=tar",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 63bc29aac73b6b3568cf56e8458358c6f2a68893972421eaf9587b8d210272b8; 184320 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-patch-on9a0n4p",
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "-"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdin_sha256": "b1f5094f0fae0dc7e4280e4fe7819874e36dcff25035d74627ae48d58e4144df"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-patch-on9a0n4p",
+      "argv": [
+        "git",
+        "apply",
+        "-"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdin_sha256": "b1f5094f0fae0dc7e4280e4fe7819874e36dcff25035d74627ae48d58e4144df"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "stdout": "hexalith-llm-instructions.md:81: trailing whitespace.\n+Follow the versioned\r\nhexalith-llm-instructions.md:82: trailing whitespace.\n+[Hexalith MCP and CLI migration plan](hexalith-mcpcli-migration-instructions.md)\r\nhexalith-llm-instructions.md:83: trailing whitespace.\n+for frozen implementations, immutable inventories, approval limits and\r\nhexalith-llm-instructions.md:84: trailing whitespace.\n+retirement prerequisites. Retained compatibility implementations are never\r\nhexalith-llm-instructions.md:85: trailing whitespace.\n+templates for new modules.\r\nhexalith-llm-instructions.md:86: trailing whitespace.\n+\r\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "-c",
+        "core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD",
+        "main",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n3f194e17174994d308ec84af9ee2b5aa68674d0d\n3f194e17174994d308ec84af9ee2b5aa68674d0d\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "--no-patch",
+        "--format=fuller",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "commit 3f194e17174994d308ec84af9ee2b5aa68674d0d\nAuthor:     J\u00e9r\u00f4me Piquot <jpiquot@itaneo.com>\nAuthorDate: Sun Sep 27 22:52:41 2026 +0200\nCommit:     J\u00e9r\u00f4me Piquot <jpiquot@itaneo.com>\nCommitDate: Sun Sep 27 22:52:41 2026 +0200\n\n    docs: add section on Hexalith MCP and CLI ownership guidelines\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "--no-patch",
+        "--format=%H%n%P%n%s",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d^"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "5f93d2ec8239494852c97032c819cb1689939e36\ne671ad5d5f44c9f3cceeb693bb5ddd693c85f22b\nrefactor: streamline Hexalith LLM instructions for clarity and conciseness\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-tree",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "references/Hexalith.AI.Tools"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "160000 commit 3f194e17174994d308ec84af9ee2b5aa68674d0d\treferences/Hexalith.AI.Tools\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-tree",
+        "HEAD",
+        "references/Hexalith.AI.Tools"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "160000 commit 3f194e17174994d308ec84af9ee2b5aa68674d0d\treferences/Hexalith.AI.Tools\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 128,
+      "expected_exit_code": 128,
+      "stdout": "",
+      "stderr": "fatal: path 'hexalith-mcpcli-migration-instructions.md' does not exist in '3f194e17174994d308ec84af9ee2b5aa68674d0d'\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD",
+        "main",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n3f194e17174994d308ec84af9ee2b5aa68674d0d\n5bf12bbcec3d8a2016396c27439de9b5107f9e5d\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": " M README.md\n M hexalith-llm-instructions.md\n?? hexalith-mcpcli-migration-instructions.md\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "HEAD:scripts/release-request.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 2d292bbaa286e64ae5454a1366d51f1f7cca8ca9a67af10e3212f76a2907246a; 3107 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "HEAD:scripts/verify-release-source.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 ae61ad635df846c30e4b5d131a7a367c01f99ec450ea5067da051db7174e8107; 5782 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "HEAD:AGENTS.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6; 15532 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "HEAD:CLAUDE.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6; 15532 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "HEAD:.github/copilot-instructions.md"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "[content bytes omitted; SHA-256 f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6; 15532 bytes]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/release-request.py",
+        "1.0.0",
+        "paired"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": "Paired release is deferred until the tool, FR-22, and live gates are implemented.\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/verify-release-source.py",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "refs/heads/main",
+        "paired"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "",
+      "stderr": "Release source gate failed: Only bootstrap releases are supported; paired release remains deferred.\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/README.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/files.sha256.json"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/offline-baseline-preparation.json"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/owning-commitlint-availability.json"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/verification.json"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": "0 or 1 (new-file difference); no whitespace diagnostics",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "inventory_bindings": [
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "493730941329d1bca3b4f6b2f6a67ffe305c2443",
+      "sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "e2252f29a2dba2b64786ee483eb59fbceaadd387",
+      "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "3d256e632a7645bc2261e668ac7c74be81155f58",
+      "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "81a440a8890a17edb39924bd0cf676eb6f6b5c25",
+      "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "acc934599cf1efff36b0643eddc6a3cc4c2978d5",
+      "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "source_revision": "f6b60d5a2e9b81d84fddad789c7d9bed40d3a533",
+      "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+    }
+  ],
+  "upstream_candidate_patch_sha256": "b1f5094f0fae0dc7e4280e4fe7819874e36dcff25035d74627ae48d58e4144df",
+  "instruction_prerequisite_complete": false,
+  "story_complete": false,
+  "paired_release_ready": false,
+  "outstanding": [
+    "Review and integrate finished rule/plan into authoritative AI.Tools main.",
+    "Resolve owning pinned commitlint availability before presenting or using a candidate message.",
+    "Integrate the qualified published revision as the root baseline reference and record fresh containment/hashes/synchronization.",
+    "Complete Story 4.16 and all independent release gates."
+  ]
+}

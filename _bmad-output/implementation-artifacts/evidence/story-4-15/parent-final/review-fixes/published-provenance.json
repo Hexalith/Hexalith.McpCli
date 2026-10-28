@@ -1,0 +1,359 @@
+{
+  "captured_at_utc": "2026-10-28T17:42:59.244638+00:00",
+  "scope": "Fresh read-only publication observations and hashes of actual committed files, separate from pending Node metadata changes.",
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:README.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "1d05d00da78ccca4190915fc752cf1e8781d411717e9fd6fa1459cd9f5fba7db",
+      "stdout_bytes": 2991
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:README.md"
+      ],
+      "exit_code": 0,
+      "stdout": "4ccce0c689cd3cdf53c8dca38ada724c16ee1197\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-llm-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+      "stdout_bytes": 17307
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-llm-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "49af7a586fb58ec5607a1595771906841fd4aa90\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+      "stdout_bytes": 9418
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "04e6c0e22c75b9109bfbefb0b63ae96c24fae301\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:package.json"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "cf81a1df989ca28dc8c770dea826d14e33f0d2793b341d554dd6d6af4bbfc5ae",
+      "stdout_bytes": 259
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:package.json"
+      ],
+      "exit_code": 0,
+      "stdout": "70037e2983930dcc7ffe0f00df77b68f0c03ae79\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:package-lock.json"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "36907008bd62eef0258bd3d1a698f830df009433b9ca6550bc17cd6b1d2a47ce",
+      "stdout_bytes": 34098
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:package-lock.json"
+      ],
+      "exit_code": 0,
+      "stdout": "06f0fc092fa122408f9bbf66aaa01c8e9e3456be\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:commitlint.config.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee",
+      "stdout_bytes": 68
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:commitlint.config.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "0616fb937bb77b75355c94334276f9aa337b7c1f\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exit_code": 0,
+      "stdout": "c694bff5a29073bee6848b88c142f7da23efcf85\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+      "stdout_bytes": 24934
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+      "stdout_bytes": 63493
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+      "stdout_bytes": 29595
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+      "stdout_bytes": 20121
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+      "stdout_bytes": 41999
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[Committed file bytes hashed below; not duplicated.]",
+      "stderr": "",
+      "stdout_sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+      "stdout_bytes": 43255
+    }
+  ],
+  "published_upstream": {
+    "required_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+    "observed_main": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+    "contains_required_revision": true,
+    "remote": "https://github.com/Hexalith/Hexalith.AI.Tools.git"
+  },
+  "upstream_committed_files": {
+    "README.md": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "4ccce0c689cd3cdf53c8dca38ada724c16ee1197",
+      "sha256": "1d05d00da78ccca4190915fc752cf1e8781d411717e9fd6fa1459cd9f5fba7db",
+      "bytes": 2991,
+      "pending_working_tree_sha256": "7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d",
+      "working_tree_matches_committed": false
+    },
+    "hexalith-llm-instructions.md": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "49af7a586fb58ec5607a1595771906841fd4aa90",
+      "sha256": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+      "bytes": 17307,
+      "pending_working_tree_sha256": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+      "working_tree_matches_committed": true
+    },
+    "hexalith-mcpcli-migration-instructions.md": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "04e6c0e22c75b9109bfbefb0b63ae96c24fae301",
+      "sha256": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+      "bytes": 9418,
+      "pending_working_tree_sha256": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+      "working_tree_matches_committed": true
+    },
+    "package.json": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "70037e2983930dcc7ffe0f00df77b68f0c03ae79",
+      "sha256": "cf81a1df989ca28dc8c770dea826d14e33f0d2793b341d554dd6d6af4bbfc5ae",
+      "bytes": 259,
+      "pending_working_tree_sha256": "b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0",
+      "working_tree_matches_committed": false
+    },
+    "package-lock.json": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "06f0fc092fa122408f9bbf66aaa01c8e9e3456be",
+      "sha256": "36907008bd62eef0258bd3d1a698f830df009433b9ca6550bc17cd6b1d2a47ce",
+      "bytes": 34098,
+      "pending_working_tree_sha256": "73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9",
+      "working_tree_matches_committed": false
+    },
+    "commitlint.config.mjs": {
+      "revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "blob_id": "0616fb937bb77b75355c94334276f9aa337b7c1f",
+      "sha256": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee",
+      "bytes": 68,
+      "pending_working_tree_sha256": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee",
+      "working_tree_matches_committed": true
+    }
+  },
+  "published_inventory_revision": {
+    "inventory_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+    "observed_main": "c694bff5a29073bee6848b88c142f7da23efcf85",
+    "remote": "https://github.com/Hexalith/Hexalith.McpCli.git",
+    "contains_inventory_revision": true,
+    "scope": "Published McpCli main ancestry for the six immutable inventory links; does not claim publication of the pending root story changes."
+  },
+  "inventory_hashes": {
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+  },
+  "pending_node_metadata": {
+    "files": [
+      "README.md",
+      "package.json",
+      "package-lock.json"
+    ],
+    "publication": "Not committed or published by this correction task; parent owns publication.",
+    "unchanged_upstream_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9"
+  },
+  "result": "passed"
+}

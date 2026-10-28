@@ -1,0 +1,46 @@
+{
+  "algorithm": "SHA-256",
+  "packet_files_excluding_this_manifest": {
+    "README.md": {
+      "sha256": "2f68794c052bde4564fde90b647a3bba0a4f858389bfdc7f7af2ac4252bcea62",
+      "bytes": 4741
+    },
+    "offline-baseline-preparation.json": {
+      "sha256": "6315c171d98b476d51e7e24b47c63c5f1d108a6da3e21edd0941e73cb3528407",
+      "bytes": 2881
+    },
+    "owning-commitlint-availability.json": {
+      "sha256": "0036e5b8de00ffd9aec31db4e2d1dec8f69a46adb2cd73fe47200264edc49027",
+      "bytes": 3493
+    },
+    "upstream/hexalith-mcpcli-migration-instructions.md": {
+      "sha256": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+      "bytes": 9418
+    },
+    "upstream-candidate-files.tar.gz": {
+      "sha256": "67869559a3eae439a55f1909c28996eea4fa3f35cfcb6787c58b04aca4996a85",
+      "bytes": 10614
+    },
+    "upstream-candidate.patch.gz": {
+      "sha256": "ea438a74d41222c093f3d64dd9aef64cbd2e14543979b8a3eb8660807cb9e5bf",
+      "bytes": 4305
+    },
+    "verification.json": {
+      "sha256": "7f8c0edcf6288bfe71be0829e60362f37fe420deb84f1a2241a62dfa0b8ac172",
+      "bytes": 29229
+    }
+  },
+  "source_files": {
+    "mcpcli/README.md": "089f448c96d89df25d01e872f7c20da310dade6b10eaf9bdc2efc384ad8f3d03",
+    "mcpcli/AGENTS.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "mcpcli/CLAUDE.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "mcpcli/.github/copilot-instructions.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "mcpcli/scripts/check-agent-instructions-sync.sh": "71f4846a427a52de69f3f3b4dffdfd0e838754d639a15122139a79f7a267effe",
+    "mcpcli/scripts/release-request.py": "2d292bbaa286e64ae5454a1366d51f1f7cca8ca9a67af10e3212f76a2907246a",
+    "mcpcli/scripts/verify-release-source.py": "ae61ad635df846c30e4b5d131a7a367c01f99ec450ea5067da051db7174e8107",
+    "aitools-candidate/README.md": "fe38336d558c670a10e45d68f8d4a9f4df84cc5738bd4fc88234e1d59c036d53",
+    "aitools-candidate/hexalith-llm-instructions.md": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+    "aitools-candidate/hexalith-mcpcli-migration-instructions.md": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+    "aitools-published/3f194e17174994d308ec84af9ee2b5aa68674d0d/hexalith-llm-instructions.md": "675be8cb518837a84aa53d67eef76863de2040c952eeed6214a9724d5d835582"
+  }
+}

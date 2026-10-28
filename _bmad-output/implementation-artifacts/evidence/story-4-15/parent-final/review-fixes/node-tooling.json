@@ -1,0 +1,123 @@
+{
+  "captured_at_utc": "2026-10-28T17:42:25.632755+00:00",
+  "scope": "Pending owning Node engine/README/lock-root metadata correction only; no commit or publication.",
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "v26.4.0\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npm",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "11.18.0\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npm",
+        "install",
+        "--package-lock-only",
+        "--offline",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "exit_code": 0,
+      "stdout": "\nup to date in 139ms\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npm",
+        "ci",
+        "--offline",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "exit_code": 0,
+      "stdout": "\nadded 71 packages in 3s\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--offline",
+        "--no",
+        "--",
+        "commitlint",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "@commitlint/cli@21.2.2\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--offline",
+        "--no",
+        "--",
+        "commitlint",
+        "--print-config",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"extends\":[\"@commitlint/config-conventional\"],\"formatter\":\"@commitlint/format\",\"parserPreset\":{\"name\":\"conventional-changelog-conventionalcommits\",\"path\":\"./node_modules/conventional-changelog-conventionalcommits/src/index.js\",\"parserOpts\":{\"headerPattern\":{},\"breakingHeaderPattern\":{},\"headerCorrespondence\":[\"type\",\"scope\",\"subject\"],\"noteKeywords\":[\"BREAKING CHANGE\",\"BREAKING-CHANGE\"],\"revertPattern\":{},\"revertCorrespondence\":[\"header\",\"hash\"],\"issuePrefixes\":[\"#\"]}},\"plugins\":{},\"rules\":{\"body-leading-blank\":[1,\"always\"],\"body-max-line-length\":[2,\"always\",100],\"footer-leading-blank\":[1,\"always\"],\"footer-max-line-length\":[2,\"always\",100],\"header-max-length\":[2,\"always\",100],\"header-trim\":[2,\"always\"],\"subject-case\":[2,\"never\",[\"sentence-case\",\"start-case\",\"pascal-case\",\"upper-case\"]],\"subject-empty\":[2,\"never\"],\"subject-full-stop\":[2,\"never\",\".\"],\"type-case\":[2,\"always\",\"lower-case\"],\"type-empty\":[2,\"never\"],\"type-enum\":[2,\"always\",[\"build\",\"chore\",\"ci\",\"docs\",\"feat\",\"fix\",\"perf\",\"refactor\",\"revert\",\"style\",\"test\"]]},\"helpUrl\":\"https://github.com/conventional-changelog/commitlint/#what-is-commitlint\",\"prompt\":{\"questions\":{\"type\":{\"description\":\"Select the type of change that you're committing\",\"enum\":{\"feat\":{\"description\":\"A new feature\",\"title\":\"Features\",\"emoji\":\"\u2728\"},\"fix\":{\"description\":\"A bug fix\",\"title\":\"Bug Fixes\",\"emoji\":\"\ud83d\udc1b\"},\"docs\":{\"description\":\"Documentation only changes\",\"title\":\"Documentation\",\"emoji\":\"\ud83d\udcda\"},\"style\":{\"description\":\"Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)\",\"title\":\"Styles\",\"emoji\":\"\ud83d\udc8e\"},\"refactor\":{\"description\":\"A code change that neither fixes a bug nor adds a feature\",\"title\":\"Code Refactoring\",\"emoji\":\"\ud83d\udce6\"},\"perf\":{\"description\":\"A code change that improves performance\",\"title\":\"Performance Improvements\",\"emoji\":\"\ud83d\ude80\"},\"test\":{\"description\":\"Adding missing tests or correcting existing tests\",\"title\":\"Tests\",\"emoji\":\"\ud83d\udea8\"},\"build\":{\"description\":\"Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)\",\"title\":\"Builds\",\"emoji\":\"\ud83d\udee0\"},\"ci\":{\"description\":\"Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)\",\"title\":\"Continuous Integrations\",\"emoji\":\"\u2699\ufe0f\"},\"chore\":{\"description\":\"Other changes that don't modify src or test files\",\"title\":\"Chores\",\"emoji\":\"\u267b\ufe0f\"},\"revert\":{\"description\":\"Reverts a previous commit\",\"title\":\"Reverts\",\"emoji\":\"\ud83d\uddd1\"}}},\"scope\":{\"description\":\"What is the scope of this change (e.g. component or file name)\"},\"subject\":{\"description\":\"Write a short, imperative tense description of the change\"},\"body\":{\"description\":\"Provide a longer description of the change\"},\"isBreaking\":{\"description\":\"Are there any breaking changes?\"},\"breakingBody\":{\"description\":\"A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself\"},\"breaking\":{\"description\":\"Describe the breaking changes\"},\"isIssueAffected\":{\"description\":\"Does this change affect any open issues?\"},\"issuesBody\":{\"description\":\"If issues are closed, the commit requires a body. Please enter a longer description of the commit itself\"},\"issues\":{\"description\":\"Add issue references (e.g. \\\"fix #123\\\", \\\"re #123\\\".)\"}}}}\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--offline",
+        "--no",
+        "--",
+        "commitlint",
+        "--edit",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-commit-message.txt",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "\u29d7   --- input ---\ndocs: publish the MCP and CLI migration plan\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "lock_change": "Exactly packages[\"\"].engines.node added; every dependency entry and all other metadata unchanged.",
+  "validated_message_scope": "Previously published message at upstream 68e60375eb298854611b2fefd1dfef95bad7a8c9; no new candidate message created.",
+  "pending_working_tree_hashes": {
+    "README.md": "7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d",
+    "package.json": "b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0",
+    "package-lock.json": "73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9"
+  },
+  "result": "passed"
+}

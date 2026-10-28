@@ -1,0 +1,492 @@
+{
+  "captured_at_utc": "2026-10-28T17:49:36.603001+00:00",
+  "result": "passed",
+  "upstream_revision": "5be77fcbd96546e722b30a117516b1e03e6e4975",
+  "rule_plan_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "root_reference_revision": "5be77fcbd96546e722b30a117516b1e03e6e4975",
+  "checks": [
+    "Actual committed bytes, authoritative main and clean containing root reference match the final revision",
+    "Node prerequisite follow-up preserves the exact published ownership rule and versioned plan",
+    "Current synchronization passes with exact unchanged entry-point hashes; three executed drift controls remain valid",
+    "Independent paired-publication refusals remain enforced",
+    "All six immutable inventories are published and unchanged",
+    "Seven initial packet files and all nine preserved pre-correction parent files retain their exact bytes",
+    "Review fixes preserve dependency entries, retain passing pinned tooling results and repair snapshot navigation",
+    "Full candidate whitespace passes with explicit temporary-index setup and unchanged real index"
+  ],
+  "committed_source_hashes": {
+    "README.md": "7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d",
+    "hexalith-llm-instructions.md": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+    "hexalith-mcpcli-migration-instructions.md": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+    "package.json": "b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0",
+    "package-lock.json": "73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9",
+    "commitlint.config.mjs": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee",
+    "mcpcli/AGENTS.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "mcpcli/CLAUDE.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "mcpcli/.github/copilot-instructions.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6"
+  },
+  "published_inventory_hashes": {
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+  },
+  "commands": [
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.535923+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "5be77fcbd96546e722b30a117516b1e03e6e4975\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.945626+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.947591+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "5be77fcbd96546e722b30a117516b1e03e6e4975\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.948882+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.950934+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.952479+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:README.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.953930+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:hexalith-llm-instructions.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.955481+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.957011+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:package.json"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.958371+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:package-lock.json"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.959883+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:commitlint.config.mjs"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.961192+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-llm-instructions.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.962532+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "show",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.963825+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.969568+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.970634+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:35.971759+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/release-request.py",
+        "1.0.0",
+        "paired"
+      ],
+      "environment_overrides": {},
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Paired release is deferred until the tool, FR-22, and live gates are implemented.\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.012303+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/verify-release-source.py",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "refs/heads/main",
+        "paired"
+      ],
+      "environment_overrides": {},
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Release source gate failed: Only bootstrap releases are supported; paired release remains deferred.\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.041273+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "c694bff5a29073bee6848b88c142f7da23efcf85\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.449453+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.451527+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.453217+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.454800+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.456235+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.457706+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "[bytes SHA-256: 489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.462228+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "-c",
+        "core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol",
+        "diff",
+        "--check",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.463960+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "environment_overrides": {},
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.558067+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "read-tree",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "environment_overrides": {
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-final-index-o7kqodqo/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.579690+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md",
+        "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment_overrides": {
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-final-index-o7kqodqo/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.594024+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-files",
+        "--stage",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment_overrides": {
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-final-index-o7kqodqo/index"
+      },
+      "exit_code": 0,
+      "stdout": "160000 5be77fcbd96546e722b30a117516b1e03e6e4975 0\treferences/Hexalith.AI.Tools\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:49:36.596982+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "environment_overrides": {
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-final-index-o7kqodqo/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "temporary_index_setup": {
+    "operation": "tempfile.TemporaryDirectory",
+    "directory": "/tmp/mcpcli-story415-final-index-o7kqodqo",
+    "index_path": "/tmp/mcpcli-story415-final-index-o7kqodqo/index",
+    "initial_tree": "c694bff5a29073bee6848b88c142f7da23efcf85",
+    "index_initially_absent": true
+  },
+  "real_index_unchanged": true,
+  "matrix": {
+    "published_rule_plan_and_containing_reference": "Executed remote/committed-byte/reference/synchronization checks pass",
+    "unpublished_candidate_or_open_pr": "Documentary assessment: published plan expressly refuses completion; missing-plan and unconditional paired-release controls are independent executed checks",
+    "entry_point_drift": "Three executed controls fail as expected; exact current bytes and synchronization pass",
+    "deferred_operations_or_missing_external_approval": "Exact inventory byte checks and reviewed published approval limits pass"
+  },
+  "review": {
+    "verification_gap": "none",
+    "accepted_findings": "all corrected",
+    "deferred_findings": 0,
+    "rejected_findings": [
+      "BH8"
+    ]
+  },
+  "instruction_prerequisite_complete": true,
+  "paired_release_ready": false,
+  "root_commit": "Created locally after this receipt and manifest are finalized; no automatic root push."
+}

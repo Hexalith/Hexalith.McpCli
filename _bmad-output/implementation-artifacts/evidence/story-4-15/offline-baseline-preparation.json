@@ -1,0 +1,119 @@
+[
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "5bf12bbcec3d8a2016396c27439de9b5107f9e5d\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+    "argv": [
+      "git",
+      "merge-base",
+      "--is-ancestor",
+      "5bf12bbcec3d8a2016396c27439de9b5107f9e5d",
+      "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+    "argv": [
+      "git",
+      "pack-objects",
+      "--stdout",
+      "--revs"
+    ],
+    "stdin": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n^5bf12bbcec3d8a2016396c27439de9b5107f9e5d\n",
+    "exit_code": 0,
+    "stdout": "[binary pack transferred locally; not retained]",
+    "stderr": "",
+    "pack_bytes": 21273
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "unpack-objects",
+      "-q"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "merge",
+      "--ff-only",
+      "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+    ],
+    "exit_code": 0,
+    "stdout": "Updating 5bf12bb..3f194e1\nFast-forward\n .agents/skills/pushall/SKILL.md |   2 +\n .claude/skills/pushall/SKILL.md |   2 +\n .github/skills/pushall/SKILL.md |   2 +\n hexalith-git-instructions.md    | 236 +---------------------------------------\n hexalith-llm-instructions.md    |  47 +++-----\n 5 files changed, 25 insertions(+), 264 deletions(-)\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "status",
+      "--short",
+      "--branch"
+    ],
+    "exit_code": 0,
+    "stdout": "## main...origin/main [ahead 5]\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/administrator/projects/hexalith/aitools",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,295 @@
+{
+  "captured_at_utc": "2026-10-28T17:46:39.710386+00:00",
+  "result": "published-and-root-reference-integrated",
+  "revision": "5be77fcbd96546e722b30a117516b1e03e6e4975",
+  "parent": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "original_rule_plan_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "validated_message_sha256": "2698d079e8468615bec3b0ce139996468b5d075b74b1b163caefcc3547bf34c9",
+  "committed_source_hashes": {
+    "README.md": "7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d",
+    "hexalith-llm-instructions.md": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+    "hexalith-mcpcli-migration-instructions.md": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+    "package.json": "b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0",
+    "package-lock.json": "73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9",
+    "commitlint.config.mjs": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee"
+  },
+  "commands": [
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.139843+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "fetch",
+        "origin",
+        "main"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.AI.Tools\n * branch            main       -> FETCH_HEAD\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.555948+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.557541+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.569596+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.571821+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only"
+      ],
+      "exit_code": 0,
+      "stdout": "README.md\npackage-lock.json\npackage.json\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.573552+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.575342+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "\u29d7   --- input ---\ndocs: state the commit validation Node prerequisite\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.947341+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "commit",
+        "--file",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-review-commit-message.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "[main 5be77fc] docs: state the commit validation Node prerequisite\n 3 files changed, 8 insertions(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.956342+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "5be77fcbd96546e722b30a117516b1e03e6e4975\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:36.957962+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:main"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "To https://github.com/Hexalith/Hexalith.AI.Tools.git\n   68e6037..5be77fc  HEAD -> main\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:38.930318+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exit_code": 0,
+      "stdout": "5be77fcbd96546e722b30a117516b1e03e6e4975\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.308685+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.311320+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "fetch",
+        "origin",
+        "main"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.AI.Tools\n * branch            main       -> FETCH_HEAD\n   68e6037..5be77fc  main       -> origin/main\n"
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.690352+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge",
+        "--ff-only",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975"
+      ],
+      "exit_code": 0,
+      "stdout": "Updating 68e6037..5be77fc\nFast-forward\n README.md         | 3 ++-\n package-lock.json | 3 +++\n package.json      | 3 +++\n 3 files changed, 8 insertions(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.695617+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.697874+00:00",
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "5be77fcbd96546e722b30a117516b1e03e6e4975\n",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.699416+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:README.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: 7fdb2c8f50f64343a9780ba23efb7ee4c088967061421f209c0de31a792ef73d]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.701149+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:hexalith-llm-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: 581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.703703+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.705634+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:package.json"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: b35da55f303f16d61e54bb2e98c53beb204993dd33443ad0cfec3ae23bb8c1f0]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.707204+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:package-lock.json"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: 73c896e36d05ff5789a48c94d0685db49b32bd8f67752792b4ef9d4866c704b9]",
+      "stderr": ""
+    },
+    {
+      "observed_at_utc": "2026-10-28T17:46:39.708910+00:00",
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "show",
+        "5be77fcbd96546e722b30a117516b1e03e6e4975:commitlint.config.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "[committed bytes SHA-256: b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee]",
+      "stderr": ""
+    }
+  ]
+}

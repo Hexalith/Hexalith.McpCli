@@ -1,0 +1,44 @@
+{
+  "result": "passed",
+  "install": {
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "exit_code": 0,
+    "observed_stdout": "added 361 packages in 7s",
+    "scope": "Observed earlier tool output; validator commands captured below."
+  },
+  "records": [
+    {
+      "captured_at_utc": "2026-10-28T17:48:16.686564+00:00",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "@commitlint/cli@21.2.2\n",
+      "stderr": ""
+    },
+    {
+      "captured_at_utc": "2026-10-28T17:48:17.041873+00:00",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "\u29d7   --- input ---\ndocs: publish the no-new-server rule\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    }
+  ]
+}

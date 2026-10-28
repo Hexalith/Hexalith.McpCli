@@ -1,0 +1,339 @@
+{
+  "result": "local-checks-pass-publication-pending",
+  "checks": [
+    "All seven historical packet files match their frozen hashes",
+    "Historical 32 checks and 48 command results audited without claiming a rerun",
+    "Current local entry points remain byte-identical and synchronize",
+    "Six immutable inventory targets still match the actual source bytes",
+    "Entry points, release guards and inventories are unchanged",
+    "Pinned validator and stored exact message pass; both invalid controls fail",
+    "Owning CLI and policy pins are installed from an integrity-bound development-only lock",
+    "Complete six-file candidate passes CRLF-aware whitespace and reproduces exactly from baseline",
+    "Root tracked and untracked changes pass whitespace using a temporary index"
+  ],
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: 57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: 252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: 3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[inventory bytes: 489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:AGENTS.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[source bytes: f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:CLAUDE.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[source bytes: f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:.github/copilot-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "[source bytes: f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:scripts/release-request.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[source bytes: 2d292bbaa286e64ae5454a1366d51f1f7cca8ca9a67af10e3212f76a2907246a]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "show",
+        "c694bff5a29073bee6848b88c142f7da23efcf85:scripts/verify-release-source.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[source bytes: ae61ad635df846c30e4b5d131a7a367c01f99ec450ea5067da051db7174e8107]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "3f194e17174994d308ec84af9ee2b5aa68674d0d\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "read-tree",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "hexalith-llm-instructions.md",
+        "hexalith-mcpcli-migration-instructions.md",
+        "package.json",
+        "package-lock.json",
+        "commitlint.config.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "-c",
+        "core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol",
+        "diff",
+        "--cached",
+        "--check",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "stdout": "[complete candidate diff: 6e222428d6cca2013d7ecab1a4a49f92f58dc97362a463548819146c9693cb61]",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "archive",
+        "--format=tar",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d"
+      ],
+      "exit_code": 0,
+      "stdout": "[baseline archive: 63bc29aac73b6b3568cf56e8458358c6f2a68893972421eaf9587b8d210272b8]",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "read-tree",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md",
+        "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "[complete root diff: 3504d73b4f88363aa58ddd2ee69d16f32c477d306791e491d9da53b3583f4a5e]",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    }
+  ],
+  "source_base": "c694bff5a29073bee6848b88c142f7da23efcf85",
+  "upstream_base": "3f194e17174994d308ec84af9ee2b5aa68674d0d",
+  "candidate_paths": [
+    "README.md",
+    "hexalith-llm-instructions.md",
+    "hexalith-mcpcli-migration-instructions.md",
+    "package.json",
+    "package-lock.json",
+    "commitlint.config.mjs"
+  ],
+  "candidate_hashes": {
+    "README.md": "1d05d00da78ccca4190915fc752cf1e8781d411717e9fd6fa1459cd9f5fba7db",
+    "hexalith-llm-instructions.md": "581bcf64623b7ab25fd3a48b1e12278204a0472e6b361e411db5a7b7475065b6",
+    "hexalith-mcpcli-migration-instructions.md": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+    "package.json": "cf81a1df989ca28dc8c770dea826d14e33f0d2793b341d554dd6d6af4bbfc5ae",
+    "package-lock.json": "36907008bd62eef0258bd3d1a698f830df009433b9ca6550bc17cd6b1d2a47ce",
+    "commitlint.config.mjs": "b0acbdafc17f8ffc98a1858f0be9b9453f4e359800b7ca7b0a11e7dc0cf2bcee"
+  },
+  "upstream_candidate_patch_sha256": "6e222428d6cca2013d7ecab1a4a49f92f58dc97362a463548819146c9693cb61",
+  "matrix": {
+    "published_rule_plan_and_containing_reference": "pending-publication",
+    "unpublished_candidate_remains_incomplete": "pass-explicit-status-and-refusal-evidence",
+    "instruction_drift": "pass-historical-three-controls-audited-plus-current-sync",
+    "deferred_operations_or_missing_external_approval": "pass-unchanged-inventories-and-explicit-policy"
+  },
+  "instruction_prerequisite_complete": false,
+  "story_complete": false,
+  "historical_capture_limitations": {
+    "temporary_index": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment.",
+    "original_bytes": "Preserved before annotation in review-fixes/historical-parent-final.tar.gz with review-fixes/historical-parent-final.sha256.json."
+  }
+}

@@ -39,6 +39,14 @@ Envelope-owned tenant, actor, correlation, and idempotency members can use strin
 
 The `Hexalith.McpCli.Abstractions` package includes a build analyzer. Diagnostic `MCPCLI001` warns on a command or query type whose `[HexalithCommand]` or `[HexalithQuery]` description is empty, whitespace, or null. Supply a nonblank description to resolve it. The analyzer requires .NET SDK 10.0.4xx or later; an older SDK may report `CS9057` because its compiler cannot load the analyzer's Roslyn version. Contracts projects need only the Abstractions package reference.
 
+## MCP and CLI ownership
+
+The [authoritative Hexalith rule](https://github.com/Hexalith/Hexalith.AI.Tools/blob/5be77fcbd96546e722b30a117516b1e03e6e4975/hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership) makes `Hexalith.McpCli` the target Hexalith-owned MCP server and CLI. New modules declare gateway-ready operations in decorated Contracts; other capability classes need a separately approved generic contract and transport decision. Existing proprietary module servers, plug-ins and CLIs receive safety and continuity fixes and remain migration sources.
+
+The published [migration plan 1.0.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/5be77fcbd96546e722b30a117516b1e03e6e4975/hexalith-mcpcli-migration-instructions.md) indexes the frozen implementations, immutable inventories, approval limits and retirement prerequisites, including the outstanding EventStore Admin successor inventory. The [Story 4.15 evidence](_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/README.md) records authoritative upstream integration, the containing baseline reference and local synchronization.
+
+The instruction prerequisite for paired publication requires authoritative `main` to contain the finished rule and plan, a containing baseline reference in this repository, and passing local instruction synchronization. An open PR is insufficient. Dependency, inventory, loopback, live and package gates remain independent. Story 4.16 owns paired-release implementation; the current paired-release refusal remains in place, and the Abstractions-only bootstrap remains exempt.
+
 ## Bootstrap package release
 
 The independent [Bootstrap package workflow](https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/bootstrap-package.yml) restores and builds only Abstractions and its bundled analyzer production projects. It runs the Abstractions and analyzer author-time tests (including synthetic Contracts fixtures), release rejection tests, and a decorated consumer build with a fresh package cache, explicit NuGet configuration and cleared fallback folders. Its deliberately blank description must produce exactly one `MCPCLI001` warning, proving the packaged analyzer loads. This gate needs no decorated upstream module, tool build, Aspire tier, or FR-22 evidence.

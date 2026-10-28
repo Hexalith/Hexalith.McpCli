@@ -1,0 +1,127 @@
+{
+  "algorithm": "SHA-256",
+  "base_directory": "..",
+  "scope": "All story-4-15 evidence files excluding parent-final/files.sha256.json itself",
+  "files": {
+    "LATEST.md": {
+      "sha256": "8e30880dd27a4220a5ba2b42cee1a24c06fe9bfc2d591e95af50a950eceddda5",
+      "bytes": 198
+    },
+    "README.md": {
+      "sha256": "2f68794c052bde4564fde90b647a3bba0a4f858389bfdc7f7af2ac4252bcea62",
+      "bytes": 4741
+    },
+    "files.sha256.json": {
+      "sha256": "f1faf72426e67712b2ee36ee0bb9befb3e66e6234243134040d4b59e0d97577e",
+      "bytes": 2412
+    },
+    "offline-baseline-preparation.json": {
+      "sha256": "6315c171d98b476d51e7e24b47c63c5f1d108a6da3e21edd0941e73cb3528407",
+      "bytes": 2881
+    },
+    "owning-commitlint-availability.json": {
+      "sha256": "0036e5b8de00ffd9aec31db4e2d1dec8f69a46adb2cd73fe47200264edc49027",
+      "bytes": 3493
+    },
+    "parent-final/README.md": {
+      "sha256": "c2012cbe257e21bb5b3baa6e15bd57857b4b567bdfeb8f080c563925ca3b9963",
+      "bytes": 4060
+    },
+    "parent-final/baseline-integration.json": {
+      "sha256": "d0f33d8293dabb73b0b3efed0a26ba1eae55c9d0762971f18389dc05aaa394d1",
+      "bytes": 2859
+    },
+    "parent-final/commitlint.json": {
+      "sha256": "346002bff0a2cafb5bc6436e48564e197dbd266fe42282aa227328ac9cc31e04",
+      "bytes": 6161
+    },
+    "parent-final/final-acceptance.json": {
+      "sha256": "563ee486fc875deecef4697ee8c1b0fd7275ea751f0bfa47a966cfa39fd5de56",
+      "bytes": 18348
+    },
+    "parent-final/qualification.json": {
+      "sha256": "c13102feea9e10811c6b6693c60e0fc34278135df686c79cf2e0331988daa12e",
+      "bytes": 10114
+    },
+    "parent-final/review-fixes/README.md": {
+      "sha256": "823bca0d4ef26d88c09c8d35351d93fd726ff3d0685fe576e1c2200fbee1d833",
+      "bytes": 2123
+    },
+    "parent-final/review-fixes/historical-parent-final.sha256.json": {
+      "sha256": "1bc62e1e30edf0cd7d27031a103400f28f8eeba1b77f3dc2479f55d85ebb6316",
+      "bytes": 1142
+    },
+    "parent-final/review-fixes/historical-parent-final.tar.gz": {
+      "sha256": "33567603893d56493f487658a8e4dcfc1b82235269ffc908564ec87885ccfb8a",
+      "bytes": 42607
+    },
+    "parent-final/review-fixes/node-tooling.json": {
+      "sha256": "b0655b4b2d4f44a0ec6388aec873cfca8bb6a3622d7194155fc8aa27f87f4499",
+      "bytes": 7024
+    },
+    "parent-final/review-fixes/published-provenance.json": {
+      "sha256": "0c6d4c6f3ef450becae1377b55019fc42abb280c57c5394e5587108144ddfcba",
+      "bytes": 13359
+    },
+    "parent-final/review-fixes/temporary-index.json": {
+      "sha256": "307bfaa8fd91ed8f8c79a3de521761590a81b8b90b9b1c4044980e78966aa8c4",
+      "bytes": 10435
+    },
+    "parent-final/root-commit-message.txt": {
+      "sha256": "8ee5bbf087b9c8830079deaf8c718df620c740b94133315a4886e03345002ed8",
+      "bytes": 37
+    },
+    "parent-final/root-commitlint.json": {
+      "sha256": "e39424d2eb26e085745c2a785fc558d371a8f3cb8e7a2f45ca2531f6aea9970c",
+      "bytes": 966
+    },
+    "parent-final/upstream-candidate-files.tar.gz": {
+      "sha256": "f27ec44495a0b4261b894492fcc7ac67e35cb58ccc5152d03c6ba49ee7ae0a44",
+      "bytes": 19850
+    },
+    "parent-final/upstream-candidate.patch.gz": {
+      "sha256": "82ac8c35b6867bd47c346fabc80952476f8931dcc033be49c92a73e9e0f18dd3",
+      "bytes": 13151
+    },
+    "parent-final/upstream-commit-message.txt": {
+      "sha256": "c4a1c365744072c7c819ab346242f0b82cb20ba785c07e940ab826124e09db0d",
+      "bytes": 45
+    },
+    "parent-final/upstream-publication.json": {
+      "sha256": "d2c433c3174d5071ef3f2a2aa4ee86aa7225e3ad8b8995b04839f2c72021eef3",
+      "bytes": 6706
+    },
+    "parent-final/upstream-review-commit-message.txt": {
+      "sha256": "2698d079e8468615bec3b0ce139996468b5d075b74b1b163caefcc3547bf34c9",
+      "bytes": 52
+    },
+    "parent-final/upstream-review-publication.json": {
+      "sha256": "ea58c2cf5bae9aee378566714be9725d94b769e78f7593fb876af5568ba5a3b9",
+      "bytes": 9522
+    },
+    "parent-final/verification.json": {
+      "sha256": "0fee9b4df33dd01e53b1fcebed2c8b8e85e25995554e09b26c910b1e35da4763",
+      "bytes": 13293
+    },
+    "upstream/hexalith-llm-instructions.md": {
+      "sha256": "255592653fd5d8272dcb58517d8acfa1310c9da7fddb0a255a038a735457c453",
+      "bytes": 450
+    },
+    "upstream/hexalith-mcpcli-migration-instructions.md": {
+      "sha256": "b82261022c485f2e35af056e43edcb52f825824419b0b160d89d9460f6080f71",
+      "bytes": 9418
+    },
+    "upstream-candidate-files.tar.gz": {
+      "sha256": "67869559a3eae439a55f1909c28996eea4fa3f35cfcb6787c58b04aca4996a85",
+      "bytes": 10614
+    },
+    "upstream-candidate.patch.gz": {
+      "sha256": "ea438a74d41222c093f3d64dd9aef64cbd2e14543979b8a3eb8660807cb9e5bf",
+      "bytes": 4305
+    },
+    "verification.json": {
+      "sha256": "7f8c0edcf6288bfe71be0829e60362f37fe420deb84f1a2241a62dfa0b8ac172",
+      "bytes": 29229
+    }
+  }
+}

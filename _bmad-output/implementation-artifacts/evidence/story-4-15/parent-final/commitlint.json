@@ -1,0 +1,83 @@
+{
+  "result": "pass",
+  "checks": [
+    "locked CLI identity",
+    "nonempty conventional policy",
+    "exact candidate accepted",
+    "nonconventional control rejected",
+    "unknown type rejected"
+  ],
+  "records": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--version"
+      ],
+      "stdin": null,
+      "exit_code": 0,
+      "stdout": "@commitlint/cli@21.2.2\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--print-config",
+        "json"
+      ],
+      "stdin": null,
+      "exit_code": 0,
+      "stdout": "{\"extends\":[\"@commitlint/config-conventional\"],\"formatter\":\"@commitlint/format\",\"parserPreset\":{\"name\":\"conventional-changelog-conventionalcommits\",\"path\":\"./node_modules/conventional-changelog-conventionalcommits/src/index.js\",\"parserOpts\":{\"headerPattern\":{},\"breakingHeaderPattern\":{},\"headerCorrespondence\":[\"type\",\"scope\",\"subject\"],\"noteKeywords\":[\"BREAKING CHANGE\",\"BREAKING-CHANGE\"],\"revertPattern\":{},\"revertCorrespondence\":[\"header\",\"hash\"],\"issuePrefixes\":[\"#\"]}},\"plugins\":{},\"rules\":{\"body-leading-blank\":[1,\"always\"],\"body-max-line-length\":[2,\"always\",100],\"footer-leading-blank\":[1,\"always\"],\"footer-max-line-length\":[2,\"always\",100],\"header-max-length\":[2,\"always\",100],\"header-trim\":[2,\"always\"],\"subject-case\":[2,\"never\",[\"sentence-case\",\"start-case\",\"pascal-case\",\"upper-case\"]],\"subject-empty\":[2,\"never\"],\"subject-full-stop\":[2,\"never\",\".\"],\"type-case\":[2,\"always\",\"lower-case\"],\"type-empty\":[2,\"never\"],\"type-enum\":[2,\"always\",[\"build\",\"chore\",\"ci\",\"docs\",\"feat\",\"fix\",\"perf\",\"refactor\",\"revert\",\"style\",\"test\"]]},\"helpUrl\":\"https://github.com/conventional-changelog/commitlint/#what-is-commitlint\",\"prompt\":{\"questions\":{\"type\":{\"description\":\"Select the type of change that you're committing\",\"enum\":{\"feat\":{\"description\":\"A new feature\",\"title\":\"Features\",\"emoji\":\"\u2728\"},\"fix\":{\"description\":\"A bug fix\",\"title\":\"Bug Fixes\",\"emoji\":\"\ud83d\udc1b\"},\"docs\":{\"description\":\"Documentation only changes\",\"title\":\"Documentation\",\"emoji\":\"\ud83d\udcda\"},\"style\":{\"description\":\"Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)\",\"title\":\"Styles\",\"emoji\":\"\ud83d\udc8e\"},\"refactor\":{\"description\":\"A code change that neither fixes a bug nor adds a feature\",\"title\":\"Code Refactoring\",\"emoji\":\"\ud83d\udce6\"},\"perf\":{\"description\":\"A code change that improves performance\",\"title\":\"Performance Improvements\",\"emoji\":\"\ud83d\ude80\"},\"test\":{\"description\":\"Adding missing tests or correcting existing tests\",\"title\":\"Tests\",\"emoji\":\"\ud83d\udea8\"},\"build\":{\"description\":\"Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)\",\"title\":\"Builds\",\"emoji\":\"\ud83d\udee0\"},\"ci\":{\"description\":\"Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)\",\"title\":\"Continuous Integrations\",\"emoji\":\"\u2699\ufe0f\"},\"chore\":{\"description\":\"Other changes that don't modify src or test files\",\"title\":\"Chores\",\"emoji\":\"\u267b\ufe0f\"},\"revert\":{\"description\":\"Reverts a previous commit\",\"title\":\"Reverts\",\"emoji\":\"\ud83d\uddd1\"}}},\"scope\":{\"description\":\"What is the scope of this change (e.g. component or file name)\"},\"subject\":{\"description\":\"Write a short, imperative tense description of the change\"},\"body\":{\"description\":\"Provide a longer description of the change\"},\"isBreaking\":{\"description\":\"Are there any breaking changes?\"},\"breakingBody\":{\"description\":\"A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself\"},\"breaking\":{\"description\":\"Describe the breaking changes\"},\"isIssueAffected\":{\"description\":\"Does this change affect any open issues?\"},\"issuesBody\":{\"description\":\"If issues are closed, the commit requires a body. Please enter a longer description of the commit itself\"},\"issues\":{\"description\":\"Add issue references (e.g. \\\"fix #123\\\", \\\"re #123\\\".)\"}}}}\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "stdin": "docs: publish the MCP and CLI migration plan\n",
+      "exit_code": 0,
+      "stdout": "\u29d7   --- input ---\ndocs: publish the MCP and CLI migration plan\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "stdin": "not a conventional commit\n",
+      "exit_code": 1,
+      "stdout": "\u29d7   --- input ---\nnot a conventional commit\n\u2716   subject may not be empty [subject-empty]\n\u2716   type may not be empty [type-empty]\n\n\u2716   found 2 problems, 0 warnings\n\u24d8   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint\n\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "stdin": "invalidtype: exercise rejection\n",
+      "exit_code": 1,
+      "stdout": "\u29d7   --- input ---\ninvalidtype: exercise rejection\n\u2716   type must be one of [build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test] [type-enum]\n\n\u2716   found 1 problems, 0 warnings\n\u24d8   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint\n\n",
+      "stderr": ""
+    }
+  ]
+}

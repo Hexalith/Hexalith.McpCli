@@ -1,0 +1,262 @@
+{
+  "result": "passed",
+  "upstream_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "upstream_integration": "direct-authoritative-main",
+  "root_baseline_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+  "root_baseline_state": "qualified-working-tree-and-temporary-index; root commit pending final review",
+  "checks": [
+    "Published main, owning commit and clean containing root reference match all six qualified files",
+    "Post-integration synchronization passes; three drift controls fail and restored copies pass",
+    "Published policy and local topical links preserve inventory, approval and retirement constraints",
+    "Historical missing-plan baseline fails; published plan object exists",
+    "Both independent paired-publication refusals still execute",
+    "Approved frozen intent remains unchanged",
+    "Historical root candidate gitlink/whitespace commands lack index setup capture; fresh explicitly isolated checks are retained in review-fixes/temporary-index.json"
+  ],
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "68e60375eb298854611b2fefd1dfef95bad7a8c9\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "cmp",
+        "AGENTS.md",
+        ".github/copilot-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-post-integration-sync-u32ahnqa",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: CLAUDE.md differs from AGENTS.md\nagent instructions out of sync: .github/copilot-instructions.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-post-integration-sync-u32ahnqa",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: CLAUDE.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-post-integration-sync-u32ahnqa",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "agent instructions out of sync: .github/copilot-instructions.md differs from AGENTS.md\n"
+    },
+    {
+      "cwd": "/tmp/mcpcli-story415-post-integration-sync-u32ahnqa",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "3f194e17174994d308ec84af9ee2b5aa68674d0d:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 128,
+      "stdout": "",
+      "stderr": "fatal: path 'hexalith-mcpcli-migration-instructions.md' exists on disk, but not in '3f194e17174994d308ec84af9ee2b5aa68674d0d'\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.AI.Tools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9:hexalith-mcpcli-migration-instructions.md"
+      ],
+      "exit_code": 0,
+      "stdout": "04e6c0e22c75b9109bfbefb0b63ae96c24fae301\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/release-request.py",
+        "1.0.0",
+        "paired"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Paired release is deferred until the tool, FR-22, and live gates are implemented.\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "python3",
+        "scripts/verify-release-source.py",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "refs/heads/main",
+        "paired"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Release source gate failed: Only bootstrap releases are supported; paired release remains deferred.\n"
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "read-tree",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md",
+        "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15",
+        "references/Hexalith.AI.Tools"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-files",
+        "--stage",
+        "references/Hexalith.AI.Tools"
+      ],
+      "exit_code": 0,
+      "stdout": "160000 68e60375eb298854611b2fefd1dfef95bad7a8c9 0\treferences/Hexalith.AI.Tools\n",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "capture_limitation": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment."
+    }
+  ],
+  "audit_correction": "Initial assertion incorrectly classified pre-existing external project links as topical-file links. Corrected audit checks local topical links and the exact newly added same-folder plan reference; no policy was weakened.",
+  "matrix": {
+    "published_rule_plan_and_containing_reference": "pass",
+    "unpublished_or_missing_plan_baseline": "documentary-policy-assessment: unpublished candidates, open PRs or missing-plan baselines leave the instruction prerequisite incomplete; no executable publication-aware gate is claimed",
+    "entry_point_drift": "pass-three-post-integration-controls",
+    "deferred_operations_or_missing_external_approval": "pass-exact-inventory-bytes-and-published-approval-limits"
+  },
+  "instruction_prerequisite_complete_in_candidate": true,
+  "paired_release_ready": false,
+  "historical_capture_limitations": {
+    "temporary_index": "Historical command record omits GIT_INDEX_FILE and temporary-index setup. The original temporary path and environment were not retained and are not reconstructed. See review-fixes/temporary-index.json for a fresh check with exact setup and explicit environment.",
+    "original_bytes": "Preserved before annotation in review-fixes/historical-parent-final.tar.gz with review-fixes/historical-parent-final.sha256.json."
+  },
+  "matrix_assessment_limits": {
+    "documentary_policy": "The unpublished/open-PR readiness conclusion assesses the written rule and recorded state. No open PR or unpublished candidate was exercised through a publication-aware validator.",
+    "executable_controls": [
+      "git cat-file -e rejects the historical revision that lacks the migration-plan object.",
+      "Both release entry points unconditionally reject phase paired; these controls do not inspect upstream publication, PR status or instruction evidence."
+    ],
+    "fresh_index_evidence": "review-fixes/temporary-index.json"
+  }
+}

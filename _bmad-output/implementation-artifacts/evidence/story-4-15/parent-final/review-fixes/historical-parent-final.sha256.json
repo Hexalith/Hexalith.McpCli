@@ -1,0 +1,16 @@
+{
+  "algorithm": "SHA-256",
+  "scope": "Exact parent-final files before review-fix annotations; original bytes preserved in historical-parent-final.tar.gz.",
+  "archive_sha256": "33567603893d56493f487658a8e4dcfc1b82235269ffc908564ec87885ccfb8a",
+  "files": {
+    "README.md": "8aa7b862fbe69adb712c9918eb0931cfe5115016db1495be14f3875272c32206",
+    "baseline-integration.json": "d0f33d8293dabb73b0b3efed0a26ba1eae55c9d0762971f18389dc05aaa394d1",
+    "commitlint.json": "346002bff0a2cafb5bc6436e48564e197dbd266fe42282aa227328ac9cc31e04",
+    "qualification.json": "67b53f2c3da524c33522af8bcdcc0a2a234318186be0b321fdf00facc41ed4b3",
+    "upstream-candidate-files.tar.gz": "f27ec44495a0b4261b894492fcc7ac67e35cb58ccc5152d03c6ba49ee7ae0a44",
+    "upstream-candidate.patch.gz": "82ac8c35b6867bd47c346fabc80952476f8931dcc033be49c92a73e9e0f18dd3",
+    "upstream-commit-message.txt": "c4a1c365744072c7c819ab346242f0b82cb20ba785c07e940ab826124e09db0d",
+    "upstream-publication.json": "d2c433c3174d5071ef3f2a2aa4ee86aa7225e3ad8b8995b04839f2c72021eef3",
+    "verification.json": "f18427cbf678477759b43b1ba05d2eb31a9facfad380ce4111edc86aabcf04f0"
+  }
+}

@@ -81,7 +81,8 @@ development_status:
   4-12-compose-the-v1-live-test-topology: done
   4-13-test-every-vector-against-live-gateway-semantics: done
   4-14-make-the-live-semantic-lane-blocking-in-ci: done
-  4-15-publish-the-no-new-server-rule: backlog
+  # 4.15: rule/plan published upstream, baseline integrated, verification and Build review complete.
+  4-15-publish-the-no-new-server-rule: review
   4-16-stage-and-validate-the-paired-packages: backlog
   4-17-verify-the-operator-setup-experience: backlog
   4-18-publish-the-validated-package-pair: backlog

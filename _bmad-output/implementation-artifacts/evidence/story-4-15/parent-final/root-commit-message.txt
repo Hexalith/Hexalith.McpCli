@@ -1,0 +1,1 @@
+docs: publish the no-new-server rule

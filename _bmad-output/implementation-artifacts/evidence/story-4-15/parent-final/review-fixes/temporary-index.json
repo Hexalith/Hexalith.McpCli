@@ -1,0 +1,289 @@
+{
+  "captured_at_utc": "2026-10-28T17:44:21.550359+00:00",
+  "scope": "Fresh targeted checks replace missing historical temporary-index environment/setup capture; historical values are unknown.",
+  "commands": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null"
+      },
+      "exit_code": 0,
+      "stdout": ".git/index\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "read-tree",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-pqugcct5/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-pqugcct5/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "--",
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-pqugcct5/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-status",
+        "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+        "--",
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-pqugcct5/index"
+      },
+      "exit_code": 0,
+      "stdout": "M\tREADME.md\nM\tpackage-lock.json\nM\tpackage.json\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null"
+      },
+      "exit_code": 0,
+      "stdout": ".git/index\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "read-tree",
+        "c694bff5a29073bee6848b88c142f7da23efcf85"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-llm-instructions.md",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "--",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-llm-instructions.md",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-status",
+        "c694bff5a29073bee6848b88c142f7da23efcf85",
+        "--",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-llm-instructions.md",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      },
+      "exit_code": 0,
+      "stdout": "A\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/README.md\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/baseline-integration.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/commitlint.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/qualification.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/review-fixes/historical-parent-final.sha256.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/review-fixes/historical-parent-final.tar.gz\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/review-fixes/node-tooling.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/review-fixes/published-provenance.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-candidate-files.tar.gz\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-candidate.patch.gz\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-commit-message.txt\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/upstream-publication.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/verification.json\nA\t_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-llm-instructions.md\nM\treferences/Hexalith.AI.Tools\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "argv": [
+        "git",
+        "ls-files",
+        "--stage",
+        "references/Hexalith.AI.Tools"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      },
+      "exit_code": 0,
+      "stdout": "160000 68e60375eb298854611b2fefd1dfef95bad7a8c9 0\treferences/Hexalith.AI.Tools\n",
+      "stderr": ""
+    }
+  ],
+  "setups": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/aitools",
+      "operation": "Python tempfile.TemporaryDirectory(prefix=\"mcpcli-story415-review-index-\")",
+      "directory": "/tmp/mcpcli-story415-review-index-pqugcct5",
+      "directory_mode_octal": "0o700",
+      "index_path": "/tmp/mcpcli-story415-review-index-pqugcct5/index",
+      "index_initially_absent": true,
+      "initial_tree_revision": "68e60375eb298854611b2fefd1dfef95bad7a8c9",
+      "real_index_path": "/home/administrator/projects/hexalith/aitools/.git/index",
+      "real_index_sha256_before": "2616376b666ec7228bb2521e345a733eebcc36e3d0097a6717ebe72a0b9c9f3d",
+      "staged_paths": [
+        "README.md",
+        "package.json",
+        "package-lock.json"
+      ],
+      "real_index_unchanged": true,
+      "temporary_directory_removed": true,
+      "environment_overrides": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-pqugcct5/index"
+      }
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "operation": "Python tempfile.TemporaryDirectory(prefix=\"mcpcli-story415-review-index-\")",
+      "directory": "/tmp/mcpcli-story415-review-index-iqe3n2lg",
+      "directory_mode_octal": "0o700",
+      "index_path": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index",
+      "index_initially_absent": true,
+      "initial_tree_revision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+      "real_index_path": "/home/administrator/projects/hexalith/mcpcli/.git/index",
+      "real_index_sha256_before": "bb83c19a770ebf3805a443285cc8c72d28a2794454b2f74061c6e332f981cc49",
+      "staged_paths": [
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final",
+        "_bmad-output/implementation-artifacts/evidence/story-4-15/upstream/hexalith-llm-instructions.md",
+        "references/Hexalith.AI.Tools"
+      ],
+      "real_index_unchanged": true,
+      "temporary_directory_removed": true,
+      "environment_overrides": {
+        "LC_ALL": "C",
+        "LANG": "C",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_INDEX_FILE": "/tmp/mcpcli-story415-review-index-iqe3n2lg/index"
+      }
+    }
+  ],
+  "result": "passed",
+  "environment_capture_scope": "Task-specific Git index and locale/configuration settings are retained; ambient PATH is omitted."
+}
