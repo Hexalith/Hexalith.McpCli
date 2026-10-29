@@ -1,0 +1,71 @@
+[10:06:20 AM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[10:06:20 AM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[10:06:21 AM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-version-rGJkfY/remote.git in dry-run mode
+[10:06:21 AM] [semantic-release] › ✔  Allowed to push to the Git repository
+[10:06:21 AM] [semantic-release] › ℹ  Found git tag v1.1.0 associated with version 1.1.0 on branch main
+[10:06:21 AM] [semantic-release] › ℹ  Found 16 commits since last release
+[10:06:21 AM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: story 4.15
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: publish the no-new-server rule
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: story 4.15
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: story 4.15
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): harden story 4.14 live lane verification
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: story 4.14
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): complete blocking live semantic lane review fixes
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: resolve five deferred repository guidance items
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: story 4.14
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: submodules
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): harden the blocking live semantic lane
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: sync local changes via /pushall
+
+Advance 15 reference gitlinks to their origin main tips. The Builds move
+(b15dab4 to abc0e1b) bumps System.CommandLine to 2.0.14, Dapr to 1.19.0,
+JsonSchema.Net to 9.5.0 and the Microsoft.Extensions family to 10.0.14,
+and resolves Hexalith.McpCli.Abstractions 1.1.0 in the integration
+fixture. Align the dependency policy, the fixture closure pin, and the
+reusable workflow pins with the new Builds gitlink.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): adopt EventStore 3.128.3
+
+Move the EventStore source checkout to v3.128.3, and McpCli's own
+restore, dependency policy and expected test closures from 3.127.0 to
+3.128.3. Document that preparation records each source server's
+resolved EventStore version instead of listing stale versions.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): align reusable workflows with the Builds gitlink
+
+Pin domain CI and commitlint execution to the existing owning Builds commit.
+Preserve workflow inputs, package selections, historical evidence and the
+workflow-to-gitlink consistency guard.
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): align the Builds catalog with Aspire 13.6.4
+
+Advance the Builds gitlink to the published b15dab4 catalog so AppHost SDK 13.6.4
+and central Aspire package pins agree during clean CI restores.
+
+A fresh Release restore retains the exact production dependency-policy closure;
+no approved package or module version changes are required.
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): pin the AppHost SDK to Aspire 13.6.4
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[10:06:21 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 16 commits complete: patch release
+[10:06:21 AM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[10:06:21 AM] [semantic-release] › ℹ  The next release version is 1.1.1
+[10:06:21 AM] [semantic-release] › ⚠  Skip v1.1.1 tag creation in dry-run mode
+[10:06:21 AM] [semantic-release] › ✔  Published release 1.1.1 on default channel
+[10:06:21 AM] [semantic-release] › ℹ  Release note for version 1.1.1:

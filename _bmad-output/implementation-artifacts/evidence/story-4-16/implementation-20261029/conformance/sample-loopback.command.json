@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "bash",
+    "tools/conformance-vectors/v1/run-sample-loopback.sh"
+  ],
+  "exit_code": 0
+}

@@ -1,0 +1,29 @@
+{
+  "eligibility": "local-only",
+  "evidence": {
+    "build.command.json": "3cfc202ee8baef1c82b56aee53fbbf0d1f7752fa47e9dcdaac398803b0d72d56",
+    "build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build.stdout.txt": "7c8500d446a48ffdf714997283897bb14a41805ae369c7550b7229ba6c6b2712",
+    "pack-Hexalith.McpCli.Abstractions.command.json": "03fd1bfaaeeb98b3c8fcced4da1094a95346d368ccb2b48aae5456e16aeff414",
+    "pack-Hexalith.McpCli.Abstractions.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pack-Hexalith.McpCli.Abstractions.stdout.txt": "9fe4d36ae4201d8da95e25ff6a9023a3362c97b2a0bdc8ddfab2dd3a2830d932",
+    "pack-Hexalith.McpCli.command.json": "1fabedc61e3b043f41375edd6c5017b3a62438c02bd2a1e0f8835bd37f4e813d",
+    "pack-Hexalith.McpCli.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pack-Hexalith.McpCli.stdout.txt": "f086ab4bf92cf7de6150f230f0dc4e4f47b01a1a4eabe6a549f5438bffedce0f",
+    "restore.command.json": "f3c86255a1d64f54ac07e7797679107e0efdf780bdf593c927f4e2da962859f0",
+    "restore.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restore.stdout.txt": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+    "validate.command.json": "16d8db1894755fb47ed6a97ff9bed6686225cd24d15b5d8f8fbbab739e762d4c",
+    "validate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validate.stdout.txt": "70ea96889619c492aa9ab96b1e679fa9b5e3e042c4b6da5ba994bd5199c8a057",
+    "validation.json": "d1b1a2b35543318e4749b9b41efbfbd2e2860714556217c1025d0b73bf014a0b"
+  },
+  "packages": {
+    "Hexalith.McpCli.1.1.1.nupkg": "bc632e934b0044fb5caa135c89abf48c8f617e3336b4e89be3332e392af13357",
+    "Hexalith.McpCli.Abstractions.1.1.1.nupkg": "00fc802037f4c642793ccb1dd52734892e221b8d935c215a4d3e0510ccec10bc"
+  },
+  "schema": "mcpcli-paired-preparation/v1",
+  "source_clean": false,
+  "source_sha": "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+  "version": "1.1.1"
+}

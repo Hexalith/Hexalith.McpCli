@@ -410,7 +410,7 @@ public sealed class McpStdioProcessTests
 
     private static void AssertStartupError(string diagnostic, string code, string? argument = null)
     {
-        string marker = "{" + Environment.NewLine + "  \"error\"";
+        string marker = "{\n  \"error\"";
         int start = diagnostic.IndexOf(marker, StringComparison.Ordinal);
         start.ShouldBeGreaterThanOrEqualTo(0);
         diagnostic.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
@@ -522,7 +522,7 @@ public sealed class McpStdioProcessTests
         start.Environment.Remove("MCPCLI_STDIO_CATALOG");
         start.Environment.Remove("MCPCLI_STDIO_GATEWAY");
 
-        start.Environment["HOME"] = directory;
+        start.Environment["MCPCLI_HOME"] = directory;
         start.Environment["USERPROFILE"] = directory;
         start.Environment["MCPCLI_STDIO_PROFILE_PATH"] = Path.Combine(directory, "mcpcli.json");
         foreach ((string name, string value) in environment)

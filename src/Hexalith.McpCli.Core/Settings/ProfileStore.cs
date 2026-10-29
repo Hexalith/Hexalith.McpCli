@@ -17,40 +17,73 @@ public sealed partial class ProfileStore
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
-    private readonly string _path;
+    private readonly Lazy<string> _path;
 
-    /// <summary>Initializes the store at the default path or a test-supplied path.</summary>
+    /// <summary>Initializes the store at an explicit path, MCPCLI_HOME, or the user profile.</summary>
     /// <param name="path">The optional exact profile file path.</param>
     public ProfileStore(string? path = null)
     {
-        _path = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".eventstore", "mcpcli.json");
+        string? home = path is null ? Environment.GetEnvironmentVariable("MCPCLI_HOME") : null;
+        _path = new Lazy<string>(() => ResolvePath(path, home, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
     }
 
     /// <summary>Gets the path owned by this tool.</summary>
-    public string ProfilePath => _path;
+    public string ProfilePath => _path.Value;
+
+    /// <summary>Resolves the profile location without exposing an invalid environment value.</summary>
+    internal static string ResolvePath(string? path, string? home, string userProfile)
+    {
+        if (path is not null)
+        {
+            return path;
+        }
+
+        if (home is not null)
+        {
+            if (string.IsNullOrWhiteSpace(home) || home.Any(char.IsControl) || !Path.IsPathFullyQualified(home))
+            {
+                throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
+            }
+
+            try
+            {
+                home = Path.GetFullPath(home);
+                if (File.Exists(home))
+                {
+                    throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
+                }
+            }
+            catch (ArgumentException)
+            {
+                throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
+            }
+        }
+
+        return Path.Combine(home ?? userProfile, ".eventstore", "mcpcli.json");
+    }
 
     /// <summary>Reads and validates the version-one profile document once.</summary>
     public ProfileSnapshot Read()
     {
-        string directory = Path.GetDirectoryName(_path) ?? throw new InvalidDataException("The profile path has no directory.");
+        string directory = Path.GetDirectoryName(ProfilePath) ?? throw new InvalidDataException("The profile path has no directory.");
         if (new DirectoryInfo(directory).LinkTarget is not null)
         {
             throw new InvalidDataException("The mcpcli profile directory cannot be a symbolic link.");
         }
 
-        RejectNonRegularPath(_path);
-        if (!File.Exists(_path))
+        RejectNonRegularPath(ProfilePath);
+        if (!File.Exists(ProfilePath))
         {
             return new ProfileSnapshot(1, null, new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal));
         }
 
-        var information = new FileInfo(_path);
+        var information = new FileInfo(ProfilePath);
         if (information.Length > 1_048_576)
         {
             throw new InvalidDataException("The mcpcli profile file exceeds the size limit.");
         }
 
-        string json = File.ReadAllText(_path);
+        string json = File.ReadAllText(ProfilePath);
         ProfileSnapshot snapshot = Parse(json)
             ?? throw new InvalidDataException("The mcpcli profile document is empty.");
         if (snapshot.Version != 1 || snapshot.Profiles is null)
@@ -260,7 +293,7 @@ public sealed partial class ProfileStore
     }
 
     private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
-        => new ProfileFileTransaction(_path).Apply(Read, update, JsonOptions);
+        => new ProfileFileTransaction(ProfilePath).Apply(Read, update, JsonOptions);
 
     private static ProfileSnapshot? Parse(string json)
     {

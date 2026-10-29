@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-linux-smoke-v2/private/tools/hexalith",
+    "--version"
+  ],
+  "exit_code": 0
+}

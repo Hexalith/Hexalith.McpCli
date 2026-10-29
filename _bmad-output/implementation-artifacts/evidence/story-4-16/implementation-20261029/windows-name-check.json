@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls",
+    "result": "Skip"
+  },
+  {
+    "name": "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten",
+    "result": "Skip"
+  }
+]

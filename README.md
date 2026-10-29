@@ -45,7 +45,7 @@ The [authoritative Hexalith rule](https://github.com/Hexalith/Hexalith.AI.Tools/
 
 The published [migration plan 1.1.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/70dbf73e80787299c832d30d911b16b105ab194d/hexalith-mcpcli-migration-instructions.md) indexes the frozen implementations, immutable inventories, approval limits and retirement prerequisites, including the outstanding EventStore Admin successor inventory. The [Story 4.15 evidence](_bmad-output/implementation-artifacts/evidence/story-4-15/code-review-20261029/README.md) records authoritative upstream integration, the containing baseline reference and local synchronization.
 
-The instruction prerequisite for paired publication requires authoritative `main` to contain the finished rule and plan, a containing baseline reference in this repository, and passing local instruction synchronization. An open PR is insufficient. Dependency, inventory, loopback, live and package gates remain independent. Story 4.16 owns paired-release implementation; the current paired-release refusal remains in place, and the Abstractions-only bootstrap remains exempt.
+The instruction prerequisite for paired publication requires authoritative `main` to contain the finished rule and plan, a containing baseline reference in this repository, and passing local instruction synchronization. An open PR is insufficient. Dependency, inventory, loopback, live and package gates remain independent. Paired staging verifies these prerequisites independently of publication. Paired publication remains refused, and the Abstractions-only bootstrap remains exempt.
 
 ## Bootstrap package release
 
@@ -95,6 +95,26 @@ bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.js
 ```
 
 Update the verified published version in `HexalithMcpCliVersion` and the Abstractions entry in the owning Hexalith.Builds catalog, run its documented complete audit refresh and validation, and record the integrated Builds revision.
+
+## Stage the paired packages
+
+Dispatch `Release` from current `main` with phase `stage-paired` and an empty recovery version. This path has read-only repository permissions and does not publish packages, tags or GitHub releases. The existing `paired` publication/recovery request remains refused; operator setup and publication belong to stories 4.17–4.18.
+
+The version selector runs the pinned semantic-release analyzer in a temporary Git copy with a local temporary remote, preserving committed history and tags while excluding publication plugins. It records one next version, or an explicit `no-release` result with no staged pair. Preparation requires clean current-main source and the latest successful exact-SHA **push** CI and commitlint runs. It checks that the dependency/unit, inventory/enrollment, sample validation/loopback and live-semantic jobs and their required steps executed. Fresh FR-22 checks require the committed baseline to contain the approved rule revision, authoritative upstream integration and byte-identical agent entry points.
+
+Preparation restores/builds the solution in Release, packs only the two projects in `tools/release-packages.json`, and validates package IDs, versions, repository commits, effective packaging properties, generated/flagged/approved Contracts equality, and the portable framework-dependent, untrimmed .NET 10 managed payload. The `prepared.json` receipt binds the full source SHA, version, both package hashes and preparation evidence. Existing staging/evidence directories are refused, and a validation failure leaves diagnostics without a success receipt.
+
+One retained pair feeds isolated local-source installations on Linux, Windows and macOS. Each uses private NuGet caches, an explicit local-only source configuration and a private `MCPCLI_HOME`; smoke checks version, all offline discovery/descriptions, profile configuration, JSON/error channels, output-file bytes and MCP stdio protocol behavior without starting hosted services. Windows additionally runs the complete Core and CLI suites and requires both private-ACL tests, concurrency/admin-isolation process tests and the staging-preflight process test to pass rather than skip. macOS runs the complete CLI suite. The acceptance job compares every hash-bound receipt and the raw discovery files byte for byte. Missing OS results, required skipped tests or any mismatch produce no `accepted-pair.json`. The accepted receipt is explicitly **staging only**.
+
+For local implementation checks after `npm ci`, run from the repository root with fresh output paths:
+
+```sh
+node scripts/select-release-version.mjs /tmp/mcpcli-version.json
+python3 scripts/prepare-paired-release.py --local --selection /tmp/mcpcli-version.json --output /tmp/mcpcli-pair
+python3 scripts/smoke-paired-tool.py --staging /tmp/mcpcli-pair/packages --prepared /tmp/mcpcli-pair/prepared.json --output /tmp/mcpcli-smoke
+```
+
+`--local` records local-only evidence, including dirty-source state, and can never become accepted staging. Omit it only for eligible committed current-main source with `REPOSITORY` and read-only GitHub authentication configured. Local Linux checks do not establish Windows/macOS acceptance; actual runner receipts remain required. ARM qualification remains deferred. The [Story 4.16 evidence](_bmad-output/implementation-artifacts/evidence/story-4-16/implementation-20261029/README.md) distinguishes executed checks from pending hosted acceptance.
 
 ## Gateway boundary
 
@@ -165,7 +185,7 @@ hexalith query your-module.your-query --payload @query.json --page-size 25
 hexalith mcp --transport stdio
 ```
 
-`--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command and query payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and makes CLI `send` fail. The local profile file is `~/.eventstore/mcpcli.json`; token values are masked in `config` output. `config profile`, `config use`, and `config set` ignore `--profile` and `EVENTSTORE_PROFILE` and render their output using `--format`, then `EVENTSTORE_FORMAT`, then `json`, never the active profile's format.
+`--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command and query payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and makes CLI `send` fail. The local profile file is `~/.eventstore/mcpcli.json`. An absolute `MCPCLI_HOME` relocates it to `$MCPCLI_HOME/.eventstore/mcpcli.json` on every OS; an unset override retains the default, and an empty, relative, control-character-containing or file-valued override fails safely with `configuration_invalid`. Explicit constructor file paths take precedence. Token values are masked in `config` output. `config profile`, `config use`, and `config set` ignore `--profile` and `EVENTSTORE_PROFILE` and render their output using `--format`, then `EVENTSTORE_FORMAT`, then `json`, never the active profile's format.
 
 Commands use `hexalith send MODULE.OPERATION --payload '{"ItemId":"..."}'`, `--payload @command.json`, or `cat command.json | hexalith send MODULE.OPERATION --payload -`. The payload follows the declared schema and supplies the aggregate identifier; an optional `--aggregate-id` must equal it. A successful send exits 0, makes one Gateway request, and returns `operation`, the Gateway `messageId` when provided (otherwise the submitted message ID), the submitted `correlationId`, resolved `tenant` and `aggregateId`, and `status: "accepted"`. Each call generates a new ULID message ID and uses it as correlation unless `--correlation-id` supplies one. `--correlation-id` and `--idempotency-key` must be canonical uppercase ULIDs; any other value, including lowercase ULID text, fails with `validation_failed` instead of being replaced. The tool never generates an idempotency key. When a command declares a non-nullable or serializer-required idempotency member, the caller must supply `--idempotency-key`, including when a required member is nullable. `describe` reports this requirement as `envelope.idempotencyKeyRequired: true`. A supplied key replaces any raw mapped payload value; without it, a raw non-null key is rejected and a raw null key is removed. The result includes `idempotencyKey` only when supplied and `result` only when returned by the Gateway. It never includes a `duplicate` field. Validation failures exit 2 and submit nothing. Gateway failures exit 2 with a `gateway_error` document. A timeout or other uncertain Gateway outcome may have reached the Gateway; `gateway_error` reasons `gateway-timeout` and `gateway-unreachable` are uncertain even when the detail says the Gateway could not be reached. Do not assume that submitting the command again is safe.
 
@@ -195,7 +215,7 @@ With `--format table`, modules use tab-separated `NAME`, `OPERATIONS`, `DESCRIPT
 
 ### Output and exit codes
 
-Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
+Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. JSON uses UTF-8 with LF internally and one LF terminator on every OS; table formatting keeps the platform newline. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
 
 - Exit 0 means a result. Help, version, and normal MCP shutdown also exit 0.
 - Exit 1 is reserved for `describe --lint` with findings.

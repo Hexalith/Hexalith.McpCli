@@ -1,0 +1,109 @@
+{
+  "schema": "mcpcli-story-4-16-local-implementation/v1",
+  "captured_at_utc": "2026-10-29T09:29:32.545220+00:00",
+  "source_sha": "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+  "source_clean": false,
+  "status": "local-implementation-verified-hosted-acceptance-pending",
+  "package_version": "1.1.1",
+  "package_hashes": {
+    "Hexalith.McpCli.1.1.1.nupkg": "bc632e934b0044fb5caa135c89abf48c8f617e3336b4e89be3332e392af13357",
+    "Hexalith.McpCli.Abstractions.1.1.1.nupkg": "00fc802037f4c642793ccb1dd52734892e221b8d935c215a4d3e0510ccec10bc"
+  },
+  "retained_package_directory": "/tmp/mcpcli-416-local-pair-v2/packages",
+  "ordinary_tests": [
+    {
+      "project": "Abstractions",
+      "total": 20,
+      "passed": 20,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "project": "Analyzers",
+      "total": 19,
+      "passed": 19,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "project": "Core",
+      "total": 716,
+      "passed": 713,
+      "skipped": 3,
+      "failed": 0
+    },
+    {
+      "project": "Manifest",
+      "total": 251,
+      "passed": 251,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "project": "Cli",
+      "total": 485,
+      "passed": 483,
+      "skipped": 2,
+      "failed": 0
+    },
+    {
+      "project": "Mcp",
+      "total": 58,
+      "passed": 58,
+      "skipped": 0,
+      "failed": 0
+    }
+  ],
+  "release_tests": {
+    "full_discovery_run": 94,
+    "latest_focused_paired_run": 24,
+    "latest_focused_package_controls_run": 3,
+    "distinct_current_tests_verified": 100,
+    "note": "The full discovery run passed 75 bootstrap and 19 paired tests. Five additional paired tests passed in the final 24-test lane; one additional native-payload control passed in the final three-test package lane."
+  },
+  "linux_smoke": {
+    "status": "passed",
+    "captured_discovery_files": 26,
+    "checks": [
+      "version",
+      "offline-discovery",
+      "config",
+      "json-lf",
+      "errors",
+      "mcp-protocol",
+      "output-file",
+      "table"
+    ]
+  },
+  "platform_acceptance": {
+    "Linux": "local-only smoke passed",
+    "Windows": "not executed",
+    "Darwin": "not executed",
+    "three_os_comparison": "not executed with actual runner receipts",
+    "accepted_pair_produced": false
+  },
+  "conformance": {
+    "sample_validation": "passed",
+    "sample_loopback": "passed",
+    "post_loopback_restore": "passed",
+    "post_loopback_release_build": "passed",
+    "enrolled_coverage": "5 passed, zero skips",
+    "exact_two_module_replay": "passed; exact approved pair, production packageCount 2 and operationCount 21"
+  },
+  "source_observations": {
+    "local_record": "fr22-local.json",
+    "fresh_read_only_api_record": "fr22-fresh-api-observation.json",
+    "scope_deviation": "Read-only GitHub API calls inspected prior CI/commitlint run job names, resolved the download-artifact pin, and compared the FR-22 baseline against authoritative main before the no-remote-operations restriction was correctly applied. No later remote calls were made.",
+    "remote_writes": false,
+    "git_pushes": false,
+    "tags_or_releases": false,
+    "workflow_dispatches": false
+  },
+  "publication": "paired release-request refusal verified; bootstrap path unchanged",
+  "parent_audit_fixes": {
+    "all_tool_dlls_managed_il": true,
+    "native_files_and_native_deps_refused": true,
+    "committed_root_gitmodules_and_gitlink_type_checked": true,
+    "retained_pair_strengthened_validation": "passed"
+  }
+}

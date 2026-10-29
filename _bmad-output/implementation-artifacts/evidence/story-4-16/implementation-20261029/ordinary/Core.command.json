@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Core.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "exit_code": 0
+}

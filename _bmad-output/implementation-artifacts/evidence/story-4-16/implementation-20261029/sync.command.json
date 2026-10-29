@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "bash",
+    "scripts/check-agent-instructions-sync.sh"
+  ],
+  "exit_code": 0
+}

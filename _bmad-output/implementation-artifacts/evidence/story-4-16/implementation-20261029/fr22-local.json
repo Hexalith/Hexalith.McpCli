@@ -1,0 +1,10 @@
+{
+  "root_head": "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+  "committed_baseline": "70dbf73e80787299c832d30d911b16b105ab194d",
+  "checkout_baseline": "70dbf73e80787299c832d30d911b16b105ab194d",
+  "cached_upstream_origin_main": "70dbf73e80787299c832d30d911b16b105ab194d",
+  "observation_kind": "local committed objects/gitlink and cached remote-tracking ref; no fresh remote read for this record",
+  "committed_root_declaration": "submodule.references/Hexalith.AI.Tools.path references/Hexalith.AI.Tools",
+  "committed_gitlink_entry": "160000 commit 70dbf73e80787299c832d30d911b16b105ab194d\treferences/Hexalith.AI.Tools",
+  "strengthened_local_root_baseline_check": "70dbf73e80787299c832d30d911b16b105ab194d"
+}

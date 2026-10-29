@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "node",
+    "--check",
+    "scripts/select-release-version.mjs"
+  ],
+  "exit_code": 0
+}

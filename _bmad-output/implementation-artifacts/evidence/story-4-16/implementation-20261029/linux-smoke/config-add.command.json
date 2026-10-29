@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-linux-smoke-v2/private/tools/hexalith",
+    "config",
+    "profile",
+    "add",
+    "staged",
+    "--url",
+    "http://127.0.0.1:1",
+    "--token",
+    "staged-private-token"
+  ],
+  "exit_code": 0
+}

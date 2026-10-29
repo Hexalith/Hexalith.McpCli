@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-linux-smoke-v2/private/tools/hexalith",
+    "describe",
+    "tenants.change-user-role"
+  ],
+  "exit_code": 0
+}

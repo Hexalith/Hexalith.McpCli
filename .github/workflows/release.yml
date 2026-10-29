@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: Bootstrap Abstractions or publish the later paired tool release
+        description: Bootstrap publication, staging-only paired validation, or refused paired publication
         required: true
         type: choice
-        options: [bootstrap, paired]
+        options: [bootstrap, stage-paired, paired]
       recovery_version:
         description: Existing partial-release version to recover, for example 1.0.0; leave blank for a new release
         required: false
@@ -23,6 +23,7 @@ permissions:
 
 jobs:
   verify-source:
+    if: ${{ inputs.phase != 'stage-paired' }}
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -184,3 +185,153 @@ jobs:
           else
             gh release create "$tag" nupkgs/bootstrap/*.nupkg --verify-tag --title "$tag" --generate-notes
           fi
+
+  stage-pair:
+    if: ${{ inputs.phase == 'stage-paired' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      release: ${{ steps.select.outputs.release }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          submodules: false
+          persist-credentials: false
+      - name: Refuse staging recovery
+        env:
+          RECOVERY_VERSION: ${{ inputs.recovery_version }}
+        run: test -z "$RECOVERY_VERSION"
+      - name: Initialize only the root-declared build and baseline dependencies
+        run: git submodule update --init -- references/Hexalith.Builds references/Hexalith.AI.Tools
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - run: npm ci
+      - name: Select a version using only a temporary local Git remote
+        id: select
+        run: |
+          node scripts/select-release-version.mjs "$RUNNER_TEMP/version.json"
+          python3 - "$RUNNER_TEMP/version.json" "$GITHUB_OUTPUT" <<'PYTHON'
+          import json, sys
+          with open(sys.argv[2], 'a') as output:
+              output.write('release=' + str(json.load(open(sys.argv[1]))['release']).lower() + '\n')
+          PYTHON
+      - name: Recheck full-v1 source gates and prepare exactly one pair
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/prepare-paired-release.py --selection "$RUNNER_TEMP/version.json" --output "$RUNNER_TEMP/paired"
+      - name: Retain the sole staged pair or explicit no-release result
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paired-preparation
+          path: ${{ runner.temp }}/paired/
+          if-no-files-found: error
+      - name: Retain failed preparation diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paired-preparation-failure
+          path: ${{ runner.temp }}/paired/
+          if-no-files-found: warn
+
+  smoke-pair:
+    needs: stage-pair
+    if: ${{ needs.stage-pair.outputs.release == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          submodules: false
+          persist-credentials: false
+      - name: Initialize root-declared Builds for required platform tests
+        run: git submodule update --init -- references/Hexalith.Builds
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: paired-preparation
+          path: ${{ runner.temp }}/paired
+      - name: Install the same local tool bytes and run offline smoke
+        shell: bash
+        run: |
+          python_command=python3
+          if [ "$RUNNER_OS" = Windows ]; then python_command=python; fi
+          "$python_command" scripts/smoke-paired-tool.py --staging "$RUNNER_TEMP/paired/packages" --prepared "$RUNNER_TEMP/paired/prepared.json" --output "$RUNNER_TEMP/consumer/smoke"
+      - name: Execute required Windows Core and CLI suites or macOS CLI suite
+        shell: bash
+        run: |
+          python_command=python3
+          if [ "$RUNNER_OS" = Windows ]; then python_command=python; fi
+          "$python_command" scripts/run-paired-platform-tests.py --prepared "$RUNNER_TEMP/paired/prepared.json" --output "$RUNNER_TEMP/consumer/tests"
+      - name: Retain actual platform receipts and raw captures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paired-consumer-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/consumer/
+            !${{ runner.temp }}/consumer/smoke/private/
+            !${{ runner.temp }}/consumer/tests/home/
+          if-no-files-found: error
+
+  accept-staged-pair:
+    needs: [stage-pair, smoke-pair]
+    if: ${{ needs.stage-pair.outputs.release == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          submodules: false
+          persist-credentials: false
+      - name: Initialize root-declared baseline for fresh acceptance checks
+        run: git submodule update --init -- references/Hexalith.AI.Tools
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: paired-preparation
+          path: ${{ runner.temp }}/paired
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          pattern: paired-consumer-*
+          path: ${{ runner.temp }}/consumers
+      - name: Require source still eligible after platform execution
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_SHA: ${{ github.sha }}
+        run: python3 scripts/verify-release-source.py --staging --output "$RUNNER_TEMP/acceptance-source.json" "$DISPATCH_SHA" refs/heads/main paired
+      - name: Require every receipt, named Windows test and identical raw discovery bytes
+        run: >-
+          python3 scripts/compare-paired-evidence.py
+          --staging "$RUNNER_TEMP/paired/packages" --prepared "$RUNNER_TEMP/paired/prepared.json"
+          --consumer "$RUNNER_TEMP/consumers/paired-consumer-ubuntu-latest"
+          --consumer "$RUNNER_TEMP/consumers/paired-consumer-windows-latest"
+          --consumer "$RUNNER_TEMP/consumers/paired-consumer-macos-latest"
+          --output "$RUNNER_TEMP/accepted-pair.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: accepted-staging-only
+          path: |
+            ${{ runner.temp }}/accepted-pair.json
+            ${{ runner.temp }}/acceptance-source.json
+          if-no-files-found: error

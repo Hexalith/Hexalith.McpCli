@@ -1,0 +1,2352 @@
+diff --git a/.gitattributes b/.gitattributes
+index 0a9b0c7..05c547e 100644
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -19,3 +19,6 @@ _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/e
+ # Retain exact hash-bound live runtime output, including timestamp-only records.
+ _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt -text whitespace=-blank-at-eol
+ _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt -text whitespace=-blank-at-eol
++
++# Preserve the staged package evidence and raw cross-platform discovery bytes.
++_bmad-output/implementation-artifacts/evidence/story-4-16/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 5d22329..222d4ee 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -4,10 +4,10 @@ on:
+   workflow_dispatch:
+     inputs:
+       phase:
+-        description: Bootstrap Abstractions or publish the later paired tool release
++        description: Bootstrap publication, staging-only paired validation, or refused paired publication
+         required: true
+         type: choice
+-        options: [bootstrap, paired]
++        options: [bootstrap, stage-paired, paired]
+       recovery_version:
+         description: Existing partial-release version to recover, for example 1.0.0; leave blank for a new release
+         required: false
+@@ -23,6 +23,7 @@ permissions:
+ 
+ jobs:
+   verify-source:
++    if: ${{ inputs.phase != 'stage-paired' }}
+     runs-on: ubuntu-latest
+     permissions:
+       actions: read
+@@ -184,3 +185,153 @@ jobs:
+           else
+             gh release create "$tag" nupkgs/bootstrap/*.nupkg --verify-tag --title "$tag" --generate-notes
+           fi
++
++  stage-pair:
++    if: ${{ inputs.phase == 'stage-paired' }}
++    runs-on: ubuntu-latest
++    permissions:
++      actions: read
++      contents: read
++    outputs:
++      release: ${{ steps.select.outputs.release }}
++    steps:
++      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          ref: ${{ github.sha }}
++          fetch-depth: 0
++          submodules: false
++          persist-credentials: false
++      - name: Refuse staging recovery
++        env:
++          RECOVERY_VERSION: ${{ inputs.recovery_version }}
++        run: test -z "$RECOVERY_VERSION"
++      - name: Initialize only the root-declared build and baseline dependencies
++        run: git submodule update --init -- references/Hexalith.Builds references/Hexalith.AI.Tools
++      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
++        with:
++          global-json-file: global.json
++      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
++        with:
++          node-version: '24'
++      - run: npm ci
++      - name: Select a version using only a temporary local Git remote
++        id: select
++        run: |
++          node scripts/select-release-version.mjs "$RUNNER_TEMP/version.json"
++          python3 - "$RUNNER_TEMP/version.json" "$GITHUB_OUTPUT" <<'PYTHON'
++          import json, sys
++          with open(sys.argv[2], 'a') as output:
++              output.write('release=' + str(json.load(open(sys.argv[1]))['release']).lower() + '\n')
++          PYTHON
++      - name: Recheck full-v1 source gates and prepare exactly one pair
++        env:
++          GH_TOKEN: ${{ github.token }}
++          REPOSITORY: ${{ github.repository }}
++        run: python3 scripts/prepare-paired-release.py --selection "$RUNNER_TEMP/version.json" --output "$RUNNER_TEMP/paired"
++      - name: Retain the sole staged pair or explicit no-release result
++        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: paired-preparation
++          path: ${{ runner.temp }}/paired/
++          if-no-files-found: error
++      - name: Retain failed preparation diagnostics
++        if: ${{ failure() }}
++        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: paired-preparation-failure
++          path: ${{ runner.temp }}/paired/
++          if-no-files-found: warn
++
++  smoke-pair:
++    needs: stage-pair
++    if: ${{ needs.stage-pair.outputs.release == 'true' }}
++    strategy:
++      fail-fast: false
++      matrix:
++        os: [ubuntu-latest, windows-latest, macos-latest]
++    runs-on: ${{ matrix.os }}
++    permissions:
++      contents: read
++    steps:
++      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          ref: ${{ github.sha }}
++          submodules: false
++          persist-credentials: false
++      - name: Initialize root-declared Builds for required platform tests
++        run: git submodule update --init -- references/Hexalith.Builds
++      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
++        with:
++          global-json-file: global.json
++      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
++        with:
++          name: paired-preparation
++          path: ${{ runner.temp }}/paired
++      - name: Install the same local tool bytes and run offline smoke
++        shell: bash
++        run: |
++          python_command=python3
++          if [ "$RUNNER_OS" = Windows ]; then python_command=python; fi
++          "$python_command" scripts/smoke-paired-tool.py --staging "$RUNNER_TEMP/paired/packages" --prepared "$RUNNER_TEMP/paired/prepared.json" --output "$RUNNER_TEMP/consumer/smoke"
++      - name: Execute required Windows Core and CLI suites or macOS CLI suite
++        shell: bash
++        run: |
++          python_command=python3
++          if [ "$RUNNER_OS" = Windows ]; then python_command=python; fi
++          "$python_command" scripts/run-paired-platform-tests.py --prepared "$RUNNER_TEMP/paired/prepared.json" --output "$RUNNER_TEMP/consumer/tests"
++      - name: Retain actual platform receipts and raw captures
++        if: ${{ always() }}
++        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: paired-consumer-${{ matrix.os }}
++          path: |
++            ${{ runner.temp }}/consumer/
++            !${{ runner.temp }}/consumer/smoke/private/
++            !${{ runner.temp }}/consumer/tests/home/
++          if-no-files-found: error
++
++  accept-staged-pair:
++    needs: [stage-pair, smoke-pair]
++    if: ${{ needs.stage-pair.outputs.release == 'true' }}
++    runs-on: ubuntu-latest
++    permissions:
++      actions: read
++      contents: read
++    steps:
++      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          ref: ${{ github.sha }}
++          fetch-depth: 0
++          submodules: false
++          persist-credentials: false
++      - name: Initialize root-declared baseline for fresh acceptance checks
++        run: git submodule update --init -- references/Hexalith.AI.Tools
++      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
++        with:
++          name: paired-preparation
++          path: ${{ runner.temp }}/paired
++      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
++        with:
++          pattern: paired-consumer-*
++          path: ${{ runner.temp }}/consumers
++      - name: Require source still eligible after platform execution
++        env:
++          GH_TOKEN: ${{ github.token }}
++          REPOSITORY: ${{ github.repository }}
++          DISPATCH_SHA: ${{ github.sha }}
++        run: python3 scripts/verify-release-source.py --staging --output "$RUNNER_TEMP/acceptance-source.json" "$DISPATCH_SHA" refs/heads/main paired
++      - name: Require every receipt, named Windows test and identical raw discovery bytes
++        run: >-
++          python3 scripts/compare-paired-evidence.py
++          --staging "$RUNNER_TEMP/paired/packages" --prepared "$RUNNER_TEMP/paired/prepared.json"
++          --consumer "$RUNNER_TEMP/consumers/paired-consumer-ubuntu-latest"
++          --consumer "$RUNNER_TEMP/consumers/paired-consumer-windows-latest"
++          --consumer "$RUNNER_TEMP/consumers/paired-consumer-macos-latest"
++          --output "$RUNNER_TEMP/accepted-pair.json"
++      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: accepted-staging-only
++          path: |
++            ${{ runner.temp }}/accepted-pair.json
++            ${{ runner.temp }}/acceptance-source.json
++          if-no-files-found: error
+diff --git a/README.md b/README.md
+index c58aa5f..63dc99d 100644
+--- a/README.md
++++ b/README.md
+@@ -45,7 +45,7 @@ The [authoritative Hexalith rule](https://github.com/Hexalith/Hexalith.AI.Tools/
+ 
+ The published [migration plan 1.1.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/70dbf73e80787299c832d30d911b16b105ab194d/hexalith-mcpcli-migration-instructions.md) indexes the frozen implementations, immutable inventories, approval limits and retirement prerequisites, including the outstanding EventStore Admin successor inventory. The [Story 4.15 evidence](_bmad-output/implementation-artifacts/evidence/story-4-15/code-review-20261029/README.md) records authoritative upstream integration, the containing baseline reference and local synchronization.
+ 
+-The instruction prerequisite for paired publication requires authoritative `main` to contain the finished rule and plan, a containing baseline reference in this repository, and passing local instruction synchronization. An open PR is insufficient. Dependency, inventory, loopback, live and package gates remain independent. Story 4.16 owns paired-release implementation; the current paired-release refusal remains in place, and the Abstractions-only bootstrap remains exempt.
++The instruction prerequisite for paired publication requires authoritative `main` to contain the finished rule and plan, a containing baseline reference in this repository, and passing local instruction synchronization. An open PR is insufficient. Dependency, inventory, loopback, live and package gates remain independent. Paired staging verifies these prerequisites independently of publication. Paired publication remains refused, and the Abstractions-only bootstrap remains exempt.
+ 
+ ## Bootstrap package release
+ 
+@@ -96,6 +96,26 @@ bash scripts/smoke-bootstrap-consumer.sh 1.0.0 https://api.nuget.org/v3/index.js
+ 
+ Update the verified published version in `HexalithMcpCliVersion` and the Abstractions entry in the owning Hexalith.Builds catalog, run its documented complete audit refresh and validation, and record the integrated Builds revision.
+ 
++## Stage the paired packages
++
++Dispatch `Release` from current `main` with phase `stage-paired` and an empty recovery version. This path has read-only repository permissions and does not publish packages, tags or GitHub releases. The existing `paired` publication/recovery request remains refused; operator setup and publication belong to stories 4.17–4.18.
++
++The version selector runs the pinned semantic-release analyzer in a temporary Git copy with a local temporary remote, preserving committed history and tags while excluding publication plugins. It records one next version, or an explicit `no-release` result with no staged pair. Preparation requires clean current-main source and the latest successful exact-SHA **push** CI and commitlint runs. It checks that the dependency/unit, inventory/enrollment, sample validation/loopback and live-semantic jobs and their required steps executed. Fresh FR-22 checks require the committed baseline to contain the approved rule revision, authoritative upstream integration and byte-identical agent entry points.
++
++Preparation restores/builds the solution in Release, packs only the two projects in `tools/release-packages.json`, and validates package IDs, versions, repository commits, effective packaging properties, generated/flagged/approved Contracts equality, and the portable framework-dependent, untrimmed .NET 10 managed payload. The `prepared.json` receipt binds the full source SHA, version, both package hashes and preparation evidence. Existing staging/evidence directories are refused, and a validation failure leaves diagnostics without a success receipt.
++
++One retained pair feeds isolated local-source installations on Linux, Windows and macOS. Each uses private NuGet caches, an explicit local-only source configuration and a private `MCPCLI_HOME`; smoke checks version, all offline discovery/descriptions, profile configuration, JSON/error channels, output-file bytes and MCP stdio protocol behavior without starting hosted services. Windows additionally runs the complete Core and CLI suites and requires both private-ACL tests, concurrency/admin-isolation process tests and the staging-preflight process test to pass rather than skip. macOS runs the complete CLI suite. The acceptance job compares every hash-bound receipt and the raw discovery files byte for byte. Missing OS results, required skipped tests or any mismatch produce no `accepted-pair.json`. The accepted receipt is explicitly **staging only**.
++
++For local implementation checks after `npm ci`, run from the repository root with fresh output paths:
++
++```sh
++node scripts/select-release-version.mjs /tmp/mcpcli-version.json
++python3 scripts/prepare-paired-release.py --local --selection /tmp/mcpcli-version.json --output /tmp/mcpcli-pair
++python3 scripts/smoke-paired-tool.py --staging /tmp/mcpcli-pair/packages --prepared /tmp/mcpcli-pair/prepared.json --output /tmp/mcpcli-smoke
++```
++
++`--local` records local-only evidence, including dirty-source state, and can never become accepted staging. Omit it only for eligible committed current-main source with `REPOSITORY` and read-only GitHub authentication configured. Local Linux checks do not establish Windows/macOS acceptance; actual runner receipts remain required. ARM qualification remains deferred. The [Story 4.16 evidence](_bmad-output/implementation-artifacts/evidence/story-4-16/implementation-20261029/README.md) distinguishes executed checks from pending hosted acceptance.
++
+ ## Gateway boundary
+ 
+ The CLI and MCP server share one catalog and executor. McpCli discovers operations only from flagged, referenced `*.Contracts` packages. It submits commands and queries to the EventStore gateway; the gateway routes them to the owning module server. McpCli never connects to a module server or references its implementation packages.
+@@ -165,7 +185,7 @@ hexalith query your-module.your-query --payload @query.json --page-size 25
+ hexalith mcp --transport stdio
+ ```
+ 
+-`--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command and query payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and makes CLI `send` fail. The local profile file is `~/.eventstore/mcpcli.json`; token values are masked in `config` output. `config profile`, `config use`, and `config set` ignore `--profile` and `EVENTSTORE_PROFILE` and render their output using `--format`, then `EVENTSTORE_FORMAT`, then `json`, never the active profile's format.
++`--url`, `--token`, `--tenant`, `--actor`, `--allow-tenant-override`, `--profile`, `--format json|table`, `--output`, `--read-only`, and `--strict` are global options. Command and query payloads can be inline JSON, `@file`, or `-` for stdin. `--read-only` removes command submission from the MCP tool list and makes CLI `send` fail. The local profile file is `~/.eventstore/mcpcli.json`. An absolute `MCPCLI_HOME` relocates it to `$MCPCLI_HOME/.eventstore/mcpcli.json` on every OS; an unset override retains the default, and an empty, relative, control-character-containing or file-valued override fails safely with `configuration_invalid`. Explicit constructor file paths take precedence. Token values are masked in `config` output. `config profile`, `config use`, and `config set` ignore `--profile` and `EVENTSTORE_PROFILE` and render their output using `--format`, then `EVENTSTORE_FORMAT`, then `json`, never the active profile's format.
+ 
+ Commands use `hexalith send MODULE.OPERATION --payload '{"ItemId":"..."}'`, `--payload @command.json`, or `cat command.json | hexalith send MODULE.OPERATION --payload -`. The payload follows the declared schema and supplies the aggregate identifier; an optional `--aggregate-id` must equal it. A successful send exits 0, makes one Gateway request, and returns `operation`, the Gateway `messageId` when provided (otherwise the submitted message ID), the submitted `correlationId`, resolved `tenant` and `aggregateId`, and `status: "accepted"`. Each call generates a new ULID message ID and uses it as correlation unless `--correlation-id` supplies one. `--correlation-id` and `--idempotency-key` must be canonical uppercase ULIDs; any other value, including lowercase ULID text, fails with `validation_failed` instead of being replaced. The tool never generates an idempotency key. When a command declares a non-nullable or serializer-required idempotency member, the caller must supply `--idempotency-key`, including when a required member is nullable. `describe` reports this requirement as `envelope.idempotencyKeyRequired: true`. A supplied key replaces any raw mapped payload value; without it, a raw non-null key is rejected and a raw null key is removed. The result includes `idempotencyKey` only when supplied and `result` only when returned by the Gateway. It never includes a `duplicate` field. Validation failures exit 2 and submit nothing. Gateway failures exit 2 with a `gateway_error` document. A timeout or other uncertain Gateway outcome may have reached the Gateway; `gateway_error` reasons `gateway-timeout` and `gateway-unreachable` are uncertain even when the detail says the Gateway could not be reached. Do not assume that submitting the command again is safe.
+ 
+@@ -195,7 +215,7 @@ With `--format table`, modules use tab-separated `NAME`, `OPERATIONS`, `DESCRIPT
+ 
+ ### Output and exit codes
+ 
+-Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
++Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. JSON uses UTF-8 with LF internally and one LF terminator on every OS; table formatting keeps the platform newline. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
+ 
+ - Exit 0 means a result. Help, version, and normal MCP shutdown also exit 0.
+ - Exit 1 is reserved for `describe --lint` with findings.
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index 3e3c3b0..f5a9d23 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -187,6 +187,7 @@
+ - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+   summary: No run has executed Story 2.3's Windows evidence. The Core ACL tests (`WindowsProfileFilesHavePrivateAcls`, `WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten`) skip off Windows, and the CLI process tests `ConcurrentSetProcessesPreserveBothValuesAsync` and `VerbsNeverOpenAdminProfilesAsync` skip on Windows, so AD-14's Windows ACL, cross-process locking and admin-isolation guarantees have no executed Windows evidence.
+   evidence: `.github/workflows/ci.yml` runs only on `ubuntu-latest`; on Linux the Core tests show 2 skipped (the ACL tests), confirmed by the second-pass verification-gap review. A `windows-latest` job alone is not enough: the process tests redirect HOME/USERPROFILE, which `Environment.GetFolderPath(SpecialFolder.UserProfile)` ignores on Windows (known-folder API), so the CLI also needs a home override that Windows honors before those tests can run there. The pre-existing read-only `CurrentExecutableReadsProcessEnvironmentAsync` likewise reads the developer's real `~/.eventstore/mcpcli.json` on Windows (the mutating `ExecutableStoresAtPrefixedTokenVerbatimAsync` case is the entry below). Adding the Windows job and the home override is shared CI and hosting infrastructure outside a profile story, and Story 4.16 owns it: its Windows installation check now also runs the Core and CLI test suites with a Windows-honored home override (seventh-pass review decision, 2026-09-29), so the Story 2.3 Linux/Windows ACL criterion gets executed evidence before v1 release. This entry also traces the second-pass review's "no run has executed the Windows ACL tests" deferral.
++  status: open; Story 4.16 adds `MCPCLI_HOME` (`src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:26`), removes the home-related process skips (`tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:2027`, `:2071`), and requires actual Windows suite/XML receipts (`.github/workflows/release.yml:276`). Linux execution is recorded in `evidence/story-4-16/implementation-20261029/README.md`; Windows acceptance remains pending.
+ 
+ - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+   summary: System.CommandLine parse errors on config verbs and query numeric options print help to stdout, echo the unmatched token on stderr, and exit 1 instead of a single error document with exit 2.
+@@ -196,6 +197,7 @@
+ - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
+   summary: Pre-existing process-level CLI tests redirect HOME/USERPROFILE, which Windows ignores, so running them on Windows mutates the developer's real `~/.eventstore/mcpcli.json`.
+   evidence: `Environment.GetFolderPath(SpecialFolder.UserProfile)` uses the known-folder API on Windows, not USERPROFILE; `ExecutableStoresAtPrefixedTokenVerbatimAsync` (ConfigCommandTests) adds a `dev` profile to the real store there. Story 2.3's new process tests skip on Windows; the pre-existing one predates this story.
++  status: implementation corrected in Story 4.16: child processes now use `MCPCLI_HOME` (`tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:186`, `:235`, `:2203`). Actual Windows execution remains pending with the preceding evidence entry.
+ 
+ ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, third pass (2026-09-29)
+ 
+@@ -381,6 +383,7 @@
+ - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+   summary: CI never executes the CLI's native output file-type inspection on macOS, linux-arm64, or linux-arm32.
+   evidence: `src/Hexalith.McpCli/Cli/OutputFileType.cs:38` uses fixed-layout Linux `statx` and platform-specific macOS `stat` symbols and `st_mode` layouts, but `.github/workflows/ci.yml:18` delegates to `Hexalith.Builds/.github/workflows/domain-ci.yml@main`, which runs only on `ubuntu-latest` x64; the conformance jobs are also `ubuntu-latest`. A Linux `statx` interop failure or a wrong macOS symbol or offset could reject existing `--output` targets while CI stays green. The Windows branch is already tracked at the Story 2.3 Windows-evidence entry (Story 4.16 owns the Windows test run); this entry covers only the macOS and ARM legs, which belong in the shared Builds workflow matrix or Story 4.16's macOS installation check.
++  status: open; Story 4.16 adds the macOS installation smoke and complete CLI suite (`.github/workflows/release.yml:245`, `:276`), but no macOS runner result has executed in this implementation session. ARM qualification remains deferred; no platform acceptance is claimed.
+ 
+ - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
+   summary: Verify output to a seekable character device located outside `/dev` before relying on preflight to protect mutations.
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index a09d52b..98038f4 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -83,7 +83,7 @@ development_status:
+   4-14-make-the-live-semantic-lane-blocking-in-ci: done
+   # 4.15: rule/plan published upstream, baseline integrated, verification and Build review complete.
+   4-15-publish-the-no-new-server-rule: done
+-  4-16-stage-and-validate-the-paired-packages: backlog
++  4-16-stage-and-validate-the-paired-packages: in-progress # Implementation/local checks complete; hosted Windows/macOS acceptance pending.
+   4-17-verify-the-operator-setup-experience: backlog
+   4-18-publish-the-validated-package-pair: backlog
+   epic-4-retrospective: optional
+diff --git a/scripts/tests/test_bootstrap_release.py b/scripts/tests/test_bootstrap_release.py
+index c98cda4..392b7c2 100644
+--- a/scripts/tests/test_bootstrap_release.py
++++ b/scripts/tests/test_bootstrap_release.py
+@@ -7,6 +7,7 @@ from pathlib import Path
+ import re
+ import shutil
+ import subprocess
++import struct
+ import tempfile
+ import unittest
+ import warnings
+@@ -109,6 +110,10 @@ root = Path(os.environ["RELEASE_TEST_ROOT"])
+ args = sys.argv[1:]
+ safe = ["REDACTED" if i and args[i-1] == "--api-key" else arg for i, arg in enumerate(args)]
+ with (root / "dotnet.log").open("a") as log: log.write(json.dumps(safe) + "\\n")
++if args[0] == "msbuild":
++    project = args[1]
++    print(json.dumps({"Properties": {"TargetFramework": "net10.0", "TargetFrameworks": "", "PackAsTool": "true", "ToolCommandName": "hexalith", "UseAppHost": "false", "PublishTrimmed": "false", "PublishAot": "false", "PublishReadyToRun": "false", "SelfContained": "false", "RuntimeIdentifier": "", "RuntimeIdentifiers": "", "CreateRidSpecificToolPackages": "false", "PackageId": Path(project).stem, "Version": "1.0.0"}}))
++    sys.exit(0)
+ if args[0] in ("restore", "build") and args[1] == "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj":
+     if os.environ.get(args[0].upper() + "_FAIL"):
+         print("fixture production " + args[0] + " failed", file=sys.stderr)
+@@ -783,18 +788,37 @@ else:
+ 
+     def paired_tool(self, *, missing=(), package_type=True, command=None, manifest='("Sample.Contracts", "Sample.Contracts")', assembly=True):
+         prefix = "tools/net10.0/any/"
++        managed = bytearray(512)
++        managed[:2] = b'MZ'
++        struct.pack_into('<I', managed, 0x3c, 64)
++        managed[64:68] = b'PE\0\0'
++        struct.pack_into('<H', managed, 88, 0x10b)
++        struct.pack_into('<H', managed, 64 + 6, 1)
++        struct.pack_into('<H', managed, 64 + 20, 224)
++        struct.pack_into('<II', managed, 88 + 96 + 14 * 8, 0x2000, 72)
++        struct.pack_into('<IIII', managed, 312 + 8, 128, 0x2000, 128, 384)
++        struct.pack_into('<I', managed, 384, 72)
++        struct.pack_into('<I', managed, 384 + 16, 1)
+         files = {
+             "Hexalith.McpCli.nuspec": '<package><metadata><id>Hexalith.McpCli</id><version>1.0.0</version>'
+                 + ('<packageTypes><packageType name="DotnetTool" /></packageTypes>' if package_type else '')
+                 + '</metadata></package>',
+-            "README.md": "fixture", prefix + "Hexalith.McpCli.dll": "fixture",
+-            prefix + "Hexalith.McpCli.deps.json": "{}", prefix + "Hexalith.McpCli.runtimeconfig.json": "{}",
++            "README.md": "fixture", prefix + "Hexalith.McpCli.dll": bytes(managed),
++            prefix + "Hexalith.McpCli.deps.json": json.dumps({"runtimeTarget": {"name": ".NETCoreApp,Version=v10.0"}, "libraries": {"Sample.Contracts/1.0.0": {}}, "targets": {".NETCoreApp,Version=v10.0": {"Sample.Contracts/1.0.0": {}}}}),
++            prefix + "Hexalith.McpCli.runtimeconfig.json": json.dumps({"runtimeOptions": {"tfm": "net10.0", "framework": {"name": "Microsoft.NETCore.App", "version": "10.0.0"}}}),
+             prefix + "DotnetToolSettings.xml": '<DotNetCliTool><Commands><Command '
+                 + (command if command is not None else 'Name="hexalith" EntryPoint="Hexalith.McpCli.dll" Runner="dotnet"')
+                 + ' /></Commands></DotNetCliTool>',
+         }
++        project = self.root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
++        project.parent.mkdir(parents=True, exist_ok=True)
++        project.write_text('<Project><ItemGroup><PackageReference Include="Sample.Contracts" HexalithContracts="true" /></ItemGroup></Project>')
++        assets = project.parent / 'obj/project.assets.json'
++        assets.parent.mkdir(parents=True, exist_ok=True)
++        assets.write_text(json.dumps({'libraries': {'Sample.Contracts/1.0.0': {}}}))
++        (self.root / 'tools/dependency-policy.json').write_text(json.dumps({'modules': {'Sample.Contracts': '1.0.0'}}))
+         if assembly:
+-            files[prefix + "Sample.Contracts.dll"] = "fixture"
++            files[prefix + "Sample.Contracts.dll"] = bytes(managed)
+         with ZipFile(self.root / "nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg", "w") as archive:
+             for name, contents in files.items():
+                 if name not in missing:
+@@ -833,6 +857,81 @@ else:
+         self.assertEqual(result.returncode, 0, result.stderr)
+         self.assert_no_push()
+ 
++    def test_paired_validator_rejects_runtime_and_enrollment_drift(self):
++        self.staged()
++        prefix = 'tools/net10.0/any/'
++        cases = [
++            (prefix + 'Hexalith.McpCli.dll', b'native payload', 'managed PE'),
++            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0/linux-x64'}}), 'portable .NET 10'),
++            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0'}, 'libraries': {}}), 'Packaged Contracts versions'),
++            (prefix + 'Hexalith.McpCli.runtimeconfig.json', json.dumps({'runtimeOptions': {'tfm': 'net10.0', 'includedFrameworks': [{'name': 'Microsoft.NETCore.App'}]}}), 'framework-dependent'),
++        ]
++        path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
++        for name, payload, message in cases:
++            with self.subTest(name=name, message=message):
++                self.paired_tool()
++                with ZipFile(path) as archive:
++                    files = {item: archive.read(item) for item in archive.namelist()}
++                files[name] = payload
++                with ZipFile(path, 'w') as archive:
++                    for item, contents in files.items(): archive.writestr(item, contents)
++                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
++                self.assertNotEqual(result.returncode, 0)
++                self.assertIn(message, result.stderr)
++                self.assert_no_push()
++        self.paired_tool()
++        (self.root / 'tools/dependency-policy.json').write_text(json.dumps({'modules': {'Sample.Contracts': '2.0.0'}}))
++        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
++        self.assertNotEqual(result.returncode, 0)
++        self.assertIn('Restored Contracts versions', result.stderr)
++        self.paired_tool()
++        (self.root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj').write_text('<Project />')
++        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
++        self.assertNotEqual(result.returncode, 0)
++        self.assertIn('Generated manifest, flagged Contracts references', result.stderr)
++        self.assert_no_push()
++
++    def test_paired_validator_refuses_native_files_and_native_dependency_entries(self):
++        self.staged()
++        self.paired_tool()
++        prefix = 'tools/net10.0/any/'
++        path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
++        with ZipFile(path) as archive:
++            base = {name: archive.read(name) for name in archive.namelist()}
++        mixed = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
++        struct.pack_into('<I', mixed, 384 + 16, 0)
++        precompiled = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
++        struct.pack_into('<II', precompiled, 384 + 64, 1, 1)
++        native_dll = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
++        struct.pack_into('<II', native_dll, 88 + 96 + 14 * 8, 0, 0)
++        bit32 = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
++        struct.pack_into('<I', bit32, 384 + 16, 3)
++        cases = [(prefix + name, payload, message) for name, payload, message in [
++            ('libextra.so', b'native', 'Native payload'), ('libextra.so.1.2', b'native', 'Native payload'),
++            ('libextra.dylib', b'native', 'Native payload'), ('arbitrary-host.exe', b'native', 'Native payload'),
++            ('payload.bin', b'\x7fELF' + bytes(12), 'Native payload'),
++            ('mach.bin', b'\xcf\xfa\xed\xfe' + bytes(12), 'Native payload'),
++            ('archive.bin', b'!<arch>\n' + bytes(12), 'Native payload'),
++            ('native.dll', bytes(native_dll), 'no managed CLR header'),
++            ('mixed.dll', bytes(mixed), 'portable managed IL'),
++            ('precompiled.dll', bytes(precompiled), 'portable managed IL'),
++            ('x86.dll', bytes(bit32), 'portable managed IL'),
++        ]]
++        for kind, assets in [('native', {'extra.so': {}}),
++                             ('runtimeTargets', {'runtimes/linux-x64/native/extra.so': {'assetType': 'native', 'rid': 'linux-x64'}})]:
++            deps = json.loads(base[prefix + 'Hexalith.McpCli.deps.json'])
++            deps['targets']['.NETCoreApp,Version=v10.0']['Sample.Contracts/1.0.0'][kind] = assets
++            cases.append((prefix + 'Hexalith.McpCli.deps.json', json.dumps(deps), 'Native'))
++        for name, payload, message in cases:
++            with self.subTest(name=name, message=message):
++                with ZipFile(path, 'w') as archive:
++                    files = {**base, name: payload}
++                    for item, contents in files.items(): archive.writestr(item, contents)
++                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
++                self.assertNotEqual(result.returncode, 0)
++                self.assertIn(message, result.stderr)
++                self.assert_no_push()
++
+     def test_validator_rejects_changed_package_manifest_unknown_phase_and_invalid_version(self):
+         path = self.staged()
+         result = self.run_script("validate-release-packages.py", str(path.parent), "1.0", "bootstrap")
+@@ -1477,7 +1576,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
+     def test_workflow_checks_source_before_both_production_modes_and_separates_bootstrap_events(self):
+         release = (ROOT / ".github/workflows/release.yml").read_text()
+         verify = release.split("  verify-source:\n", 1)[1].split("  publish:\n", 1)[0]
+-        self.assertNotIn("    if:", verify)
++        self.assertIn("    if: ${{ inputs.phase != 'stage-paired' }}", verify)
+         for job in ("publish", "recover"):
+             section = release.split(f"  {job}:\n", 1)[1].split("    steps:\n", 1)[0]
+             self.assertIn("    needs: verify-source\n", section)
+diff --git a/scripts/validate-release-packages.py b/scripts/validate-release-packages.py
+index 50122bb..1a02a1f 100644
+--- a/scripts/validate-release-packages.py
++++ b/scripts/validate-release-packages.py
+@@ -5,6 +5,8 @@ import argparse
+ import json
+ import re
+ import importlib.util
++import struct
++from paired_release import digest, run, write_new
+ from pathlib import Path
+ from xml.etree import ElementTree
+ from zipfile import ZipFile
+@@ -15,6 +17,8 @@ def main() -> int:
+     parser.add_argument("staging", type=Path)
+     parser.add_argument("version")
+     parser.add_argument("phase")
++    parser.add_argument("--source-sha")
++    parser.add_argument("--output", type=Path)
+     args = parser.parse_args()
+     staging, version, phase = args.staging, args.version, args.phase
+     request_spec = importlib.util.spec_from_file_location("release_request", Path(__file__).with_name("release-request.py"))
+@@ -65,6 +69,20 @@ def main() -> int:
+                 raise ValueError("Abstractions must have no consumer-visible package dependencies")
+             if package_id == "Hexalith.McpCli":
+                 validate_tool_package(archive, names, metadata)
++            if phase == 'paired':
++                for name in names:
++                    if name.startswith('/') or '\\' in name or '..' in Path(name).parts:
++                        raise ValueError('Unsafe archive entry.')
++                if args.source_sha:
++                    repository = metadata.find('{*}repository')
++                    if repository is None or repository.get('commit') != args.source_sha:
++                        raise ValueError('Package repository commit differs from the staged source.')
++
++    if phase == 'paired':
++        validate_effective_properties(packages, version)
++    if args.output:
++        write_new(args.output, {'version': version, 'phase': phase, 'source_sha': args.source_sha,
++                               'packages': {name: digest(staging / name) for name in sorted(expected_names)}})
+ 
+     print(f"Validated {phase} packages at version {version}")
+     return 0
+@@ -96,6 +114,34 @@ def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTr
+     entries = re.findall(r'\("([^"]+)", "([^"]+)"\)', manifest.read_text(encoding="utf-8"))
+     if not entries:
+         raise ValueError("The paired tool release has no enrolled Contracts assemblies")
++    for package_id, assembly_name in entries:
++        if not package_id.endswith('.Contracts') or not assembly_name.endswith('.Contracts'):
++            raise ValueError(f'Invalid Contracts assembly manifest entry: {package_id}, {assembly_name}')
++        if prefix + assembly_name + '.dll' not in names:
++            raise ValueError(f'McpCli tool package is missing {assembly_name}.dll')
++    project = ElementTree.parse('src/Hexalith.McpCli/Hexalith.McpCli.csproj')
++    flagged = {item.get('Include') for item in project.findall('.//PackageReference')
++               if item.get('HexalithContracts') == 'true'}
++    policy = json.loads(Path('tools/dependency-policy.json').read_text())['modules']
++    if len(entries) != len(set(entries)) or {item[0] for item in entries} != flagged or flagged != set(policy):
++        raise ValueError('Generated manifest, flagged Contracts references and approved modules differ.')
++    assets = json.loads(Path('src/Hexalith.McpCli/obj/project.assets.json').read_text())
++    restored = {name.split('/')[0]: name.split('/')[1] for name in assets['libraries']}
++    if any(restored.get(name) != version for name, version in policy.items()):
++        raise ValueError('Restored Contracts versions differ from the approved enrollment.')
++    dependencies = json.loads(archive.read(prefix + 'Hexalith.McpCli.deps.json'))
++    if dependencies['runtimeTarget']['name'] != '.NETCoreApp,Version=v10.0':
++        raise ValueError('The tool must target portable .NET 10 without a runtime identifier.')
++    if any(f'{name}/{version}' not in dependencies['libraries'] for name, version in policy.items()):
++        raise ValueError('Packaged Contracts versions differ from the approved enrollment.')
++    runtime = json.loads(archive.read(prefix + 'Hexalith.McpCli.runtimeconfig.json'))['runtimeOptions']
++    frameworks = runtime.get('frameworks', [runtime.get('framework', {})])
++    if (runtime.get('tfm') != 'net10.0' or runtime.get('includedFrameworks')
++            or not any(item.get('name') == 'Microsoft.NETCore.App' and item.get('version', '').startswith('10.') for item in frameworks)):
++        raise ValueError('The tool must be framework-dependent on .NET 10.')
++    if any(name.startswith(prefix + executable) for name in names for executable in ('hexalith.exe', 'Hexalith.McpCli.exe', 'coreclr', 'hostfxr')):
++        raise ValueError('A native apphost or runtime payload is not allowed.')
++    validate_tool_payload(archive, names, dependencies, prefix)
+     for package_id, assembly_name in entries:
+         if not package_id.endswith(".Contracts") or not assembly_name.endswith(".Contracts"):
+             raise ValueError(f"Invalid Contracts assembly manifest entry: {package_id}, {assembly_name}")
+@@ -103,5 +149,86 @@ def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTr
+             raise ValueError(f"McpCli tool package is missing {assembly_name}.dll")
+ 
+ 
++def validate_tool_payload(archive, names, dependencies, prefix):
++    native_magic = (b'\x7fELF', b'\xfe\xed\xfa\xce', b'\xce\xfa\xed\xfe', b'\xfe\xed\xfa\xcf',
++                    b'\xcf\xfa\xed\xfe', b'\xca\xfe\xba\xbe', b'\xbe\xba\xfe\xca',
++                    b'\xca\xfe\xba\xbf', b'\xbf\xba\xfe\xca', b'\0asm', b'!<arch>\n')
++    for name in sorted(names):
++        if not name.startswith(prefix) or name.endswith('/'):
++            continue
++        lowered = name.lower()
++        payload = archive.read(name)
++        if (re.search(r'\.so(?:\.[0-9]+)*\Z', lowered)
++                or Path(lowered).suffix in {'.dylib', '.exe', '.a', '.lib', '.o', '.obj', '.node', '.wasm'}
++                or payload.startswith(native_magic)):
++            raise ValueError(f'Native payload is not allowed in the portable managed tool: {name}')
++        if lowered.endswith('.dll'):
++            validate_managed(payload)
++        elif payload.startswith(b'MZ'):
++            raise ValueError(f'An executable payload must be a managed DLL: {name}')
++    targets = dependencies.get('targets', {})
++    if dependencies['runtimeTarget']['name'] not in targets:
++        raise ValueError('The tool dependency document is missing its portable runtime target.')
++    for target in targets.values():
++        for library in target.values():
++            if library.get('native'):
++                raise ValueError('Native dependency assets are not allowed in the portable managed tool.')
++            for asset in library.get('runtimeTargets', {}).values():
++                if asset.get('assetType', '').lower() == 'native':
++                    raise ValueError('Native runtime-target dependency assets are not allowed in the portable managed tool.')
++
++
++def validate_managed(payload):
++    try:
++        offset = struct.unpack_from('<I', payload, 0x3c)[0]
++        optional = offset + 24
++        magic = struct.unpack_from('<H', payload, optional)[0]
++        directories = optional + (96 if magic == 0x10b else 112 if magic == 0x20b else 0)
++        if payload[:2] != b'MZ' or payload[offset:offset + 4] != b'PE\0\0' or not directories:
++            raise ValueError('The tool payload is not a managed PE assembly.')
++        cli_rva, cli_size = struct.unpack_from('<II', payload, directories + 14 * 8)
++        if not cli_rva or cli_size < 72:
++            raise ValueError('The tool payload has no managed CLR header.')
++        section_count = struct.unpack_from('<H', payload, offset + 6)[0]
++        optional_size = struct.unpack_from('<H', payload, offset + 20)[0]
++        cli_offset = None
++        for index in range(section_count):
++            section = optional + optional_size + index * 40
++            virtual_size, virtual_address, raw_size, raw_pointer = struct.unpack_from('<IIII', payload, section + 8)
++            if virtual_address <= cli_rva < virtual_address + max(virtual_size, raw_size):
++                cli_offset = raw_pointer + cli_rva - virtual_address
++                break
++        if cli_offset is None or cli_offset + 72 > len(payload):
++            raise ValueError('The tool payload has an invalid managed CLR header.')
++        flags = struct.unpack_from('<I', payload, cli_offset + 16)[0]
++        native_header = struct.unpack_from('<II', payload, cli_offset + 64)
++        if not flags & 1 or flags & 2 or any(native_header):
++            raise ValueError('The tool payload must contain portable managed IL, without mixed/native or precompiled code.')
++    except (struct.error, IndexError):
++        raise ValueError('The tool payload is not a managed PE assembly.') from None
++
++
++def validate_effective_properties(packages, version):
++    names = ['TargetFramework', 'TargetFrameworks', 'PackAsTool', 'ToolCommandName', 'UseAppHost',
++             'PublishTrimmed', 'PublishAot', 'PublishReadyToRun', 'SelfContained', 'RuntimeIdentifier', 'RuntimeIdentifiers',
++             'CreateRidSpecificToolPackages', 'PackageId', 'Version']
++    for package in packages:
++        result = run(['dotnet', 'msbuild', package['project'], '-nologo', '-p:Configuration=Release',
++                      f'-p:Version={version}', '-getProperty:' + ','.join(names)], text=True)
++        properties = json.loads(result.stdout)['Properties']
++        if properties['TargetFramework'] != 'net10.0' or properties['TargetFrameworks']:
++            raise ValueError('Release packages must target only net10.0.')
++        if properties['PackageId'] != package['id'] or properties['Version'] != version:
++            raise ValueError('Effective package identity/version differs from the release manifest.')
++        if package['id'] == 'Hexalith.McpCli':
++            if properties['PackAsTool'] != 'true' or properties['ToolCommandName'] != 'hexalith':
++                raise ValueError('Effective tool packaging properties are invalid.')
++            for name in ('UseAppHost', 'PublishTrimmed', 'PublishAot', 'PublishReadyToRun', 'SelfContained', 'CreateRidSpecificToolPackages'):
++                if properties[name].lower() not in ('', 'false'):
++                    raise ValueError(f'The portable tool cannot enable {name}.')
++            if properties['RuntimeIdentifier'] or properties['RuntimeIdentifiers']:
++                raise ValueError('The portable tool cannot specify a runtime identifier.')
++
++
+ if __name__ == "__main__":
+     raise SystemExit(main())
+diff --git a/scripts/verify-release-source.py b/scripts/verify-release-source.py
+index 8142816..a0781f7 100644
+--- a/scripts/verify-release-source.py
++++ b/scripts/verify-release-source.py
+@@ -28,16 +28,60 @@ def github_json(endpoint: str, *parameters: str):
+     return json.loads(result.stdout)
+ 
+ 
++# Job and step names are the executed blocking lanes in the pinned CI workflows.
++STAGING_JOBS = {
++    'ci / build-and-test': ['Unit tests (Tier 1, Microsoft.Testing.Platform)', 'Fail on blocking test failures'],
++    'ci / aspire-tests': ['Prepare Aspire tier', 'Run Aspire hook'],
++    'conformance-vector-contract': ['Pack and validate the shared vector contract without a Head or Gateway'],
++    'conformance-vector-loopback': ['Run packaged Contracts through CLI and MCP against reset Gateway replay'],
++    'enrolled-module-conformance': ['Restore and build exact production catalog', 'Benchmark first v1 Catalog construction in a fresh process', 'Validate approved artifacts, complete vectors and both heads'],
++    'topology-vector-discovery': ['Build and discover every live vector plus the independent smoke without starting source services'],
++}
++
++
++STAGING_COMMITLINT_JOBS = {'commitlint / commitlint': ['Validate commit messages']}
++
++def verify_jobs(repository, latest, required):
++    jobs = []
++    page = 1
++    while True:
++        response = github_json(f"repos/{repository}/actions/runs/{latest['id']}/attempts/{latest['run_attempt']}/jobs",
++                               '-f', 'per_page=100', '-f', f'page={page}')
++        jobs.extend(response['jobs'])
++        if len(jobs) >= response['total_count']:
++            break
++        if not response['jobs']:
++            raise ValueError('Incomplete workflow job results.')
++        page += 1
++    validate_jobs(jobs, required)
++    return jobs
++
++
++def validate_jobs(jobs, required):
++    for name, steps in required.items():
++        matches = [job for job in jobs if job['name'] == name]
++        if len(matches) != 1 or matches[0]['status'] != 'completed' or matches[0]['conclusion'] != 'success':
++            raise ValueError(f'Required job {name} was missing, skipped or unsuccessful.')
++        for step in steps:
++            found = [item for item in matches[0]['steps'] if item['name'] == step]
++            if len(found) != 1 or found[0]['status'] != 'completed' or found[0]['conclusion'] != 'success':
++                raise ValueError(f'Required step {name}: {step} was missing, skipped or unsuccessful.')
++
++
+ def main() -> int:
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("sha")
+     parser.add_argument("ref")
+     parser.add_argument("phase")
+     parser.add_argument("--tagged-recovery", metavar="VERSION")
++    parser.add_argument("--staging", action="store_true")
++    parser.add_argument("--output", type=str)
+     args = parser.parse_args()
+     try:
+-        if args.phase != "bootstrap":
++        if args.phase != "bootstrap" and not (args.phase == "paired" and args.staging):
+             raise ValueError("Only bootstrap releases are supported; paired release remains deferred.")
++        if args.staging and (args.phase != "paired" or args.tagged_recovery or not args.output):
++            raise ValueError("Paired staging requires fresh output and cannot recover a release.")
+         if args.ref != "refs/heads/main":
+             raise ValueError("Release must be dispatched from refs/heads/main.")
+         if re.fullmatch(r"[0-9a-f]{40}", args.sha) is None:
+@@ -89,7 +133,9 @@ def main() -> int:
+                 raise ValueError("Recovery tag is not an ancestor of current main.")
+         elif args.sha != live_main:
+             raise ValueError("Dispatch SHA is not the current main SHA; main may have moved during approval.")
+-        for workflow in ("bootstrap-package.yml", "commitlint.yml"):
++        gates = {}
++        workflows = ("ci.yml", "commitlint.yml") if args.staging else ("bootstrap-package.yml", "commitlint.yml")
++        for workflow in workflows:
+             response = github_json(
+                 f"repos/{repository}/actions/workflows/{workflow}/runs",
+                 "-f", "branch=main", "-f", "event=push", "-f", f"head_sha={args.sha}", "-f", "per_page=100",
+@@ -99,11 +145,23 @@ def main() -> int:
+             latest = max(runs, key=lambda run: (run["run_number"], run["run_attempt"])) if runs else None
+             if latest is None or latest["status"] != "completed" or latest["conclusion"] != "success":
+                 raise ValueError(f"No successful latest {workflow} push run exists for {args.sha}.")
++            if args.staging:
++                required = STAGING_JOBS if workflow == 'ci.yml' else STAGING_COMMITLINT_JOBS
++                jobs = verify_jobs(repository, latest, required)
++                gates[workflow] = {'run_id': latest['id'], 'run_attempt': latest['run_attempt'],
++                                   'url': latest['html_url'], 'source_sha': latest['head_sha'],
++                                   'status': latest['status'], 'conclusion': latest['conclusion'], 'jobs': jobs}
+             print(f"Verified {workflow}: {latest['html_url']}")
+         if args.tagged_recovery is None:
+             print(f"Verified current main source {args.sha}")
+         else:
+             print(f"Verified tagged recovery source {args.sha} on current main {live_main}")
++        if args.staging:
++            from paired_release import module, write_new
++            prerequisites = module('verify-paired-prerequisites').verify()
++            write_new(args.output, {'schema': 'mcpcli-paired-source/v1', 'source_sha': args.sha,
++                                    'source_clean': True, 'current_main': live_main, 'gates': gates,
++                                    'fr22': prerequisites})
+         return 0
+     except (ValueError, KeyError, TypeError, subprocess.CalledProcessError, OSError) as error:
+         print(f"Release source gate failed: {failure_detail(error)}", file=sys.stderr)
+diff --git a/src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs b/src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs
+index 11f3d45..983f0d9 100644
+--- a/src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs
++++ b/src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs
+@@ -106,6 +106,7 @@ public static class McpCliJson
+         {
+             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+             WriteIndented = true,
++            NewLine = "\n",
+             TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
+         };
+         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+diff --git a/src/Hexalith.McpCli.Core/Settings/ProfileStore.cs b/src/Hexalith.McpCli.Core/Settings/ProfileStore.cs
+index dc2597a..7ce3e6b 100644
+--- a/src/Hexalith.McpCli.Core/Settings/ProfileStore.cs
++++ b/src/Hexalith.McpCli.Core/Settings/ProfileStore.cs
+@@ -17,40 +17,73 @@ public sealed partial class ProfileStore
+         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+     };
+ 
+-    private readonly string _path;
++    private readonly Lazy<string> _path;
+ 
+-    /// <summary>Initializes the store at the default path or a test-supplied path.</summary>
++    /// <summary>Initializes the store at an explicit path, MCPCLI_HOME, or the user profile.</summary>
+     /// <param name="path">The optional exact profile file path.</param>
+     public ProfileStore(string? path = null)
+     {
+-        _path = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".eventstore", "mcpcli.json");
++        string? home = path is null ? Environment.GetEnvironmentVariable("MCPCLI_HOME") : null;
++        _path = new Lazy<string>(() => ResolvePath(path, home, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
+     }
+ 
+     /// <summary>Gets the path owned by this tool.</summary>
+-    public string ProfilePath => _path;
++    public string ProfilePath => _path.Value;
++
++    /// <summary>Resolves the profile location without exposing an invalid environment value.</summary>
++    internal static string ResolvePath(string? path, string? home, string userProfile)
++    {
++        if (path is not null)
++        {
++            return path;
++        }
++
++        if (home is not null)
++        {
++            if (string.IsNullOrWhiteSpace(home) || home.Any(char.IsControl) || !Path.IsPathFullyQualified(home))
++            {
++                throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
++            }
++
++            try
++            {
++                home = Path.GetFullPath(home);
++                if (File.Exists(home))
++                {
++                    throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
++                }
++            }
++            catch (ArgumentException)
++            {
++                throw new InvalidDataException("MCPCLI_HOME must be an absolute directory path.");
++            }
++        }
++
++        return Path.Combine(home ?? userProfile, ".eventstore", "mcpcli.json");
++    }
+ 
+     /// <summary>Reads and validates the version-one profile document once.</summary>
+     public ProfileSnapshot Read()
+     {
+-        string directory = Path.GetDirectoryName(_path) ?? throw new InvalidDataException("The profile path has no directory.");
++        string directory = Path.GetDirectoryName(ProfilePath) ?? throw new InvalidDataException("The profile path has no directory.");
+         if (new DirectoryInfo(directory).LinkTarget is not null)
+         {
+             throw new InvalidDataException("The mcpcli profile directory cannot be a symbolic link.");
+         }
+ 
+-        RejectNonRegularPath(_path);
+-        if (!File.Exists(_path))
++        RejectNonRegularPath(ProfilePath);
++        if (!File.Exists(ProfilePath))
+         {
+             return new ProfileSnapshot(1, null, new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal));
+         }
+ 
+-        var information = new FileInfo(_path);
++        var information = new FileInfo(ProfilePath);
+         if (information.Length > 1_048_576)
+         {
+             throw new InvalidDataException("The mcpcli profile file exceeds the size limit.");
+         }
+ 
+-        string json = File.ReadAllText(_path);
++        string json = File.ReadAllText(ProfilePath);
+         ProfileSnapshot snapshot = Parse(json)
+             ?? throw new InvalidDataException("The mcpcli profile document is empty.");
+         if (snapshot.Version != 1 || snapshot.Profiles is null)
+@@ -260,7 +293,7 @@ public sealed partial class ProfileStore
+     }
+ 
+     private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
+-        => new ProfileFileTransaction(_path).Apply(Read, update, JsonOptions);
++        => new ProfileFileTransaction(ProfilePath).Apply(Read, update, JsonOptions);
+ 
+     private static ProfileSnapshot? Parse(string json)
+     {
+diff --git a/src/Hexalith.McpCli/Cli/CliOutput.cs b/src/Hexalith.McpCli/Cli/CliOutput.cs
+index 68b2ed9..f6b2c57 100644
+--- a/src/Hexalith.McpCli/Cli/CliOutput.cs
++++ b/src/Hexalith.McpCli/Cli/CliOutput.cs
+@@ -105,6 +105,8 @@ internal static class CliOutput
+             await Console.Error.WriteLineAsync("This result is emitted as JSON; no table view is defined.").ConfigureAwait(false);
+         }
+ 
++        bool table = error is null && settings.Format == "table" && tableHeader is not null;
++        string terminator = table ? Environment.NewLine : "\n";
+         string output = error is not null
+             ? JsonSerializer.Serialize(new { error }, McpCliJson.Result)
+             : settings.Format == "table" && tableHeader is not null
+@@ -112,12 +114,12 @@ internal static class CliOutput
+                 : JsonSerializer.Serialize(document, McpCliJson.Result);
+         if (error is null && settings.Output is not null)
+         {
+-            await WriteResultFileAsync(settings.Output, output + Environment.NewLine, cancellationToken,
++            await WriteResultFileAsync(settings.Output, output + terminator, cancellationToken,
+                 afterDestinationTruncated).ConfigureAwait(false);
+         }
+         else
+         {
+-            await Console.Out.WriteLineAsync(output).ConfigureAwait(false);
++            await Console.Out.WriteAsync(output + terminator).ConfigureAwait(false);
+         }
+ 
+         return error is null ? 0 : 2;
+@@ -131,7 +133,7 @@ internal static class CliOutput
+ 
+     private static async Task<int> WriteDirectErrorAsync(OperationError error)
+     {
+-        await Console.Out.WriteLineAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result)).ConfigureAwait(false);
++        await Console.Out.WriteAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result) + "\n").ConfigureAwait(false);
+         return 2;
+     }
+ 
+diff --git a/src/Hexalith.McpCli/Cli/CliRunner.cs b/src/Hexalith.McpCli/Cli/CliRunner.cs
+index 38f293f..b695a79 100644
+--- a/src/Hexalith.McpCli/Cli/CliRunner.cs
++++ b/src/Hexalith.McpCli/Cli/CliRunner.cs
+@@ -774,7 +774,7 @@ internal sealed class CliRunner
+ 
+     private static async Task<int> WriteMcpErrorAsync(OperationError error, CancellationToken cancellationToken)
+     {
+-        await Console.Error.WriteLineAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result).AsMemory(),
++        await Console.Error.WriteAsync((JsonSerializer.Serialize(new { error }, McpCliJson.Result) + "\n").AsMemory(),
+             cancellationToken).ConfigureAwait(false);
+         return 2;
+     }
+diff --git a/tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs b/tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs
+index b057735..36d9e4d 100644
+--- a/tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs
++++ b/tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs
+@@ -724,8 +724,6 @@ public sealed class CliOutputContractTests
+     [Fact]
+     public async Task MissingExistingFileStagingDirectoryPreventsMutationAsync()
+     {
+-        Assert.SkipWhen(OperatingSystem.IsWindows(),
+-            "A child process cannot reliably redirect ProfileStore's Windows user-profile path.");
+         string directory = NewDirectory();
+         try
+         {
+@@ -744,8 +742,10 @@ public sealed class CliOutputContractTests
+                 start.Environment.Remove(name);
+             }
+ 
+-            start.Environment["HOME"] = directory;
++            start.Environment["MCPCLI_HOME"] = directory;
+             start.Environment["TMPDIR"] = Path.Combine(directory, "missing-temp");
++            start.Environment["TEMP"] = Path.Combine(directory, "missing-temp");
++            start.Environment["TMP"] = Path.Combine(directory, "missing-temp");
+             start.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
+             foreach (string argument in new[]
+                 { "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", target })
+@@ -1185,4 +1185,43 @@ public sealed class CliOutputContractTests
+         Directory.CreateDirectory(path);
+         return path;
+     }
++    /// <summary>JSON ignores a Windows-style writer terminator and writes identical LF bytes to files and stdout.</summary>
++    [Fact]
++    public async Task JsonUsesLfRegardlessOfWriterNewlineAsync()
++    {
++        string directory = NewDirectory();
++        TextWriter original = Console.Out;
++        TextWriter originalError = Console.Error;
++        try
++        {
++            var output = new StringWriter { NewLine = "\r\n" };
++            var error = new StringWriter { NewLine = "\r\n" };
++            Console.SetOut(output);
++            Console.SetError(error);
++            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
++            var runner = new CliRunner(store, () => SampleManifest);
++            (await runner.InvokeAsync(["modules"], TestContext.Current.CancellationToken)).ShouldBe(0);
++            string expected = output.ToString();
++            expected.ShouldContain("\n");
++            expected.ShouldNotContain("\r");
++            expected.EndsWith("}\n", StringComparison.Ordinal).ShouldBeTrue();
++            error.ToString().ShouldBeEmpty();
++            output.GetStringBuilder().Clear();
++            string file = Path.Combine(directory, "result.json");
++            (await runner.InvokeAsync(["modules", "--output", file], TestContext.Current.CancellationToken)).ShouldBe(0);
++            output.ToString().ShouldBeEmpty();
++            File.ReadAllBytes(file).ShouldBe(System.Text.Encoding.UTF8.GetBytes(expected));
++            (await runner.InvokeAsync(["unknown-verb"], TestContext.Current.CancellationToken)).ShouldBe(2);
++            output.ToString().ShouldNotContain("\r");
++            output.ToString().EndsWith("}\n", StringComparison.Ordinal).ShouldBeTrue();
++            error.ToString().ShouldBeEmpty();
++        }
++        finally
++        {
++            Console.SetOut(original);
++            Console.SetError(originalError);
++            Directory.Delete(directory, recursive: true);
++        }
++    }
++
+ }
+diff --git a/tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs b/tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs
+index 43a31f3..de05768 100644
+--- a/tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs
++++ b/tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs
+@@ -183,7 +183,7 @@ public sealed class ConfigCommandTests
+                 startInfo.Environment.Remove(name);
+             }
+ 
+-            startInfo.Environment["HOME"] = directory;
++            startInfo.Environment["MCPCLI_HOME"] = directory;
+             startInfo.Environment["USERPROFILE"] = directory;
+             startInfo.Environment["EVENTSTORE_TENANT"] = "process-tenant";
+             startInfo.Environment["EVENTSTORE_READ_ONLY"] = "true";
+@@ -232,7 +232,7 @@ public sealed class ConfigCommandTests
+                 startInfo.Environment.Remove(name);
+             }
+ 
+-            startInfo.Environment["HOME"] = directory;
++            startInfo.Environment["MCPCLI_HOME"] = directory;
+             startInfo.Environment["USERPROFILE"] = directory;
+             startInfo.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
+             foreach (string argument in new[]
+@@ -719,7 +719,7 @@ public sealed class ConfigCommandTests
+             error.ShouldBe(JsonSerializer.Serialize(new
+             {
+                 error = new OperationError("configuration_invalid", Message: "Invalid gateway URL from EVENTSTORE_URL."),
+-            }, McpCliJson.Result) + Environment.NewLine);
++            }, McpCliJson.Result) + "\n");
+         }
+         finally
+         {
+@@ -826,7 +826,7 @@ public sealed class ConfigCommandTests
+             error.ToString().ShouldBe(JsonSerializer.Serialize(new
+             {
+                 error = new OperationError("internal_error", Message: "MCP server failed."),
+-            }, McpCliJson.Result) + Environment.NewLine);
++            }, McpCliJson.Result) + "\n");
+         }
+         finally
+         {
+@@ -930,7 +930,7 @@ public sealed class ConfigCommandTests
+             {
+                 error = new OperationError("invalid_arguments",
+                     Message: "MCP stdio accepts only explicit json format.", Argument: "format"),
+-            }, McpCliJson.Result) + Environment.NewLine);
++            }, McpCliJson.Result) + "\n");
+ 
+             (int outputExit, string output, string outputError) = await InvokeAsync(
+                 store, invalidEnvironment, ReadManifest, "mcp", "--output", target);
+@@ -940,7 +940,7 @@ public sealed class ConfigCommandTests
+             {
+                 error = new OperationError("invalid_arguments",
+                     Message: "MCP stdio cannot write protocol output to a file.", Argument: "output"),
+-            }, McpCliJson.Result) + Environment.NewLine);
++            }, McpCliJson.Result) + "\n");
+             manifestReads.ShouldBe(0);
+             (await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken)).ShouldBe("sentinel");
+         }
+@@ -1076,14 +1076,14 @@ public sealed class ConfigCommandTests
+             output.ShouldBeEmpty();
+             hostStarts.ShouldBe(0);
+             hostRuns.ShouldBe(0);
+-            string marker = "{" + Environment.NewLine + "  \"error\"";
++            string marker = "{\n  \"error\"";
+             int start = error.IndexOf(marker, StringComparison.Ordinal);
+             start.ShouldBeGreaterThanOrEqualTo(0);
+             error.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
+             error[start..].ShouldBe(JsonSerializer.Serialize(new
+             {
+                 error = new OperationError(code, Message: message),
+-            }, McpCliJson.Result) + Environment.NewLine);
++            }, McpCliJson.Result) + "\n");
+         }
+         finally
+         {
+@@ -2026,8 +2026,6 @@ public sealed class ConfigCommandTests
+     [Fact]
+     public async Task ConcurrentSetProcessesPreserveBothValuesAsync()
+     {
+-        Assert.SkipWhen(OperatingSystem.IsWindows(),
+-            "The child process home redirect is not honored on Windows, so it would touch the real profile file.");
+         string directory = TemporaryDirectory();
+         try
+         {
+@@ -2072,8 +2070,6 @@ public sealed class ConfigCommandTests
+     [Fact]
+     public async Task VerbsNeverOpenAdminProfilesAsync()
+     {
+-        Assert.SkipWhen(OperatingSystem.IsWindows(),
+-            "The child process home redirect is not honored on Windows, so it would touch the real profile file.");
+         string directory = TemporaryDirectory();
+         try
+         {
+@@ -2204,7 +2200,7 @@ public sealed class ConfigCommandTests
+             startInfo.Environment.Remove(name);
+         }
+ 
+-        startInfo.Environment["HOME"] = home;
++        startInfo.Environment["MCPCLI_HOME"] = home;
+         startInfo.Environment["USERPROFILE"] = home;
+         foreach ((string name, string value) in environment)
+         {
+@@ -2241,4 +2237,41 @@ public sealed class ConfigCommandTests
+         current.GetProperty("tenant").GetString().ShouldBe(tenant);
+         current.GetProperty("sources").GetProperty("profile").GetString().ShouldBe(source);
+     }
++    /// <summary>Invalid home overrides produce one safe error document on the correct channel without writing a profile.</summary>
++    [Theory]
++    [InlineData("config", "current")]
++    [InlineData("modules", "")]
++    [InlineData("mcp", "")]
++    public async Task InvalidHomeIsAConfigurationErrorAsync(string verb, string subcommand)
++    {
++        string directory = TemporaryDirectory();
++        try
++        {
++            string[] arguments = string.IsNullOrEmpty(subcommand) ? [verb] : [verb, subcommand];
++            (int exit, string output, string error) = await RunExecutableAsync(directory,
++                new Dictionary<string, string> { ["MCPCLI_HOME"] = "relative-secret-home" }, arguments);
++            string expected = JsonSerializer.Serialize(new
++            {
++                error = new { code = "configuration_invalid", message = "Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path." },
++            }, McpCliJson.Result) + "\n";
++            exit.ShouldBe(2);
++            if (verb == "mcp")
++            {
++                output.ShouldBeEmpty();
++                error.ShouldBe(expected);
++            }
++            else
++            {
++                output.ShouldBe(expected);
++                error.ShouldBeEmpty();
++            }
++
++            File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
++        }
++        finally
++        {
++            Directory.Delete(directory, recursive: true);
++        }
++    }
++
+ }
+diff --git a/tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs b/tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs
+index c4c3fb9..75cf72a 100644
+--- a/tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs
++++ b/tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs
+@@ -410,7 +410,7 @@ public sealed class McpStdioProcessTests
+ 
+     private static void AssertStartupError(string diagnostic, string code, string? argument = null)
+     {
+-        string marker = "{" + Environment.NewLine + "  \"error\"";
++        string marker = "{\n  \"error\"";
+         int start = diagnostic.IndexOf(marker, StringComparison.Ordinal);
+         start.ShouldBeGreaterThanOrEqualTo(0);
+         diagnostic.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
+@@ -522,7 +522,7 @@ public sealed class McpStdioProcessTests
+         start.Environment.Remove("MCPCLI_STDIO_CATALOG");
+         start.Environment.Remove("MCPCLI_STDIO_GATEWAY");
+ 
+-        start.Environment["HOME"] = directory;
++        start.Environment["MCPCLI_HOME"] = directory;
+         start.Environment["USERPROFILE"] = directory;
+         start.Environment["MCPCLI_STDIO_PROFILE_PATH"] = Path.Combine(directory, "mcpcli.json");
+         foreach ((string name, string value) in environment)
+diff --git a/tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs b/tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs
+index 63250b3..f28ed6a 100644
+--- a/tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs
++++ b/tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs
+@@ -10,6 +10,49 @@ namespace Hexalith.McpCli.Core.Tests;
+ /// <summary>Checks profile transactions, validation, and private storage.</summary>
+ public sealed class ProfileStoreTests
+ {
++    /// <summary>The explicit file wins over home and an unset override retains the user-profile default.</summary>
++    [Fact]
++    public void HomeResolutionPreservesPathPrecedence()
++    {
++        string user = Path.Combine(Path.GetTempPath(), "default-user");
++        string home = Path.Combine(Path.GetTempPath(), "isolated-user");
++        ProfileStore.ResolvePath("explicit.json", "invalid-relative-home", user).ShouldBe("explicit.json");
++        ProfileStore.ResolvePath(null, null, user).ShouldBe(Path.Combine(user, ".eventstore", "mcpcli.json"));
++        ProfileStore.ResolvePath(null, home, user).ShouldBe(Path.Combine(home, ".eventstore", "mcpcli.json"));
++    }
++
++    /// <summary>Invalid home overrides fail safely instead of falling back to the real user's profile.</summary>
++    /// <param name="home">The invalid override.</param>
++    [Theory]
++    [InlineData("")]
++    [InlineData(" ")]
++    [InlineData("relative-secret")]
++    [InlineData("../relative-secret")]
++    [InlineData("~/secret")]
++    [InlineData("\n")]
++    [InlineData("bad\0path")]
++    public void InvalidHomeNeverFallsBack(string home)
++    {
++        Should.Throw<InvalidDataException>(() => ProfileStore.ResolvePath(null, home, Path.GetTempPath()))
++            .Message.ShouldBe("MCPCLI_HOME must be an absolute directory path.");
++    }
++
++    /// <summary>A file cannot be used as the tool's home directory.</summary>
++    [Fact]
++    public void ExistingFileCannotBeHome()
++    {
++        string file = Path.GetTempFileName();
++        try
++        {
++            Should.Throw<InvalidDataException>(() => ProfileStore.ResolvePath(null, file, Path.GetTempPath()))
++                .Message.ShouldBe("MCPCLI_HOME must be an absolute directory path.");
++        }
++        finally
++        {
++            File.Delete(file);
++        }
++    }
++
+     /// <summary>Token masking uses safe Unicode text-element prefixes and never returns the complete token.</summary>
+     [Theory]
+     [InlineData("abcd", "***")]
+diff --git a/_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md b/_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md
+new file mode 100644
+index 0000000..f0308c4
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md
+@@ -0,0 +1,97 @@
++---
++title: '4.16 Stage and validate the paired packages'
++type: 'feature'
++created: '2026-10-29'
++status: 'in-progress'
++route: 'dispatch'
++review_loop_iteration: 0
++baseline_commit: '9ba8e5bd0e213501b39d33cedf46859566fc89a4'
++context:
++  - '{project-root}/_bmad-output/implementation-artifacts/epic-4-context.md'
++---
++
++<frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
++
++## Intent
++
++**Problem:** The package pair lacks validated staging, portable installation evidence and Windows profile-safety execution.
++
++**Approach:** Extend the existing release workflow with a staging-only path: select one semantic-release version, pack the manifest's two projects, validate their bytes and install the same tool on Linux, Windows and macOS.
++
++## Boundaries & Constraints
++
++**Always:** Require clean current-main source, successful exact-SHA dependency/inventory/loopback/live gates and FR-22 integration, containing baseline and synchronization evidence. Bind results to the full source SHA, version and package hashes. Preserve bootstrap, framework-dependent untrimmed .NET 10 packaging and CLI/MCP channels. Add absolute `MCPCLI_HOME`, retaining `.eventstore/mcpcli.json`; explicit constructor paths take precedence, unset retains the default, invalid values fail safely. Emit JSON with LF internally and at its terminator; retain table formatting.
++
++**Never:** Publish packages, tags or GitHub releases; enable paired publication/recovery; run hosted v1 services during installation smoke; change approved dependencies, inventories or vectors; edit reference contents; claim unexecuted platform checks passed. Operator-client setup and publication remain stories 4.17–4.18.
++
++## I/O & Edge-Case Matrix
++
++| State | Required behavior |
++| --- | --- |
++| Eligible source and releasable commits | One selected version, exactly two fresh staged packages and hash-bound validation evidence |
++| No next release | Explicit no-release result; no staged pair |
++| Stale/dirty source, missing or skipped gates, absent FR-22 proof | Refuse accepted staging |
++| Existing staging, wrong/extra/missing packages, malformed contents or changed bytes | Fail without overwriting prior artifacts or recording success |
++| Isolated install, discovery, config and MCP smoke | Exact version and channel assertions; raw deterministic discovery bytes |
++| Missing/failed OS receipt, discovery mismatch or required Windows tests skipped | No accepted-pair receipt |
++
++</frozen-after-approval>
++
++## Code Map
++
++- `.github/workflows/release.yml`, `.releaserc.json`: existing entry point and analyzer; isolate publication hooks from staging.
++- `scripts/verify-release-source.py`: current-main/latest-run checks, presently bootstrap-only. `ci.yml` covers the blocking full-v1 gates.
++- `scripts/release-request.py`, `release-prepare.sh`, `release-receipt.py`: retain publication refusal and bootstrap semantics; reuse fresh staging and source/hash checks.
++- `scripts/validate-release-packages.py`, `tools/release-packages.json`: existing pair/tool checks; generated manifest and restored policy establish enrollment.
++- Story 4.15 `evidence/story-4-15/code-review-20261029/verification.json`: authoritative revision `70dbf73e80787299c832d30d911b16b105ab194d`; recheck current committed containment and synchronization rather than trusting historical pending fields.
++- `src/Hexalith.McpCli.Core/Settings/ProfileStore.cs`, `Serialization/McpCliJson.cs`; `src/Hexalith.McpCli/Cli/CliOutput.cs`: home resolution and platform-dependent JSON newlines. Existing tool project already declares the required pack properties.
++- `tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs`, `CliOutputContractTests.cs`, `McpStdioProcessTests.cs`; Core `ProfileStoreTests.cs`: reuse process/channel and ACL assertions; remove home-related Windows skips after isolation works.
++
++## Tasks & Acceptance
++
++**Execution:**
++
++- [x] `scripts/select-release-version.mjs` — calculate the next version with pinned semantic-release in an isolated temporary Git copy/local remote; omit publishing plugins and external writes, preserve source history/tags and return an explicit no-release result.
++- [x] `scripts/verify-release-source.py`, `scripts/verify-paired-prerequisites.py` — add a staging context requiring current clean main, latest successful exact-SHA CI/commitlint runs with required jobs executed, and fresh upstream/baseline/sync evidence.
++- [x] `scripts/prepare-paired-release.py`, `scripts/validate-release-packages.py` — restore/build the solution in Release at that version, pack only manifest projects into fresh staging, verify structure/effective packaging properties, Contracts-reference equality and framework-dependent managed payload; bind both hashes and source provenance.
++- [x] `scripts/smoke-paired-tool.py` — install exclusively from staged local source with private caches/config/home; capture version, offline discovery/config, error and MCP protocol/channel checks, output-file behavior and package hashes.
++- [x] `ProfileStore.cs`, `McpCliJson.cs`, `CliOutput.cs` at the mapped paths — implement home precedence/validation and deterministic JSON without changing envelope or table behavior.
++- [x] `tests/Hexalith.McpCli.Core.Tests/ProfileStoreTests.cs`, mapped CLI tests — cover override/invalid inputs, exact JSON channels/bytes, isolated child processes and Windows ACL/process execution; repair platform fixture defects exposed by execution.
++- [x] `.github/workflows/release.yml`, `scripts/compare-paired-evidence.py` — add staging-only jobs with read-only repository permissions, one packed pair, three OS consumers, Windows Core/CLI suites and macOS CLI suite; accept only complete matching hash-bound receipts and raw discovery captures.
++- [x] `scripts/tests/test_paired_release.py` — test matrix failures and refusal paths, including stale source, tampering, skipped gates/tests and unchanged paired-publication rejection.
++- [x] `README.md`, story evidence, this spec and `sprint-status.yaml` — document behavior/commands and distinguish local checks from executed hosted acceptance; reconcile existing Windows/macOS deferrals only with evidence.
++
++**Acceptance Criteria:**
++
++- Given eligible current-main source, when staging completes, then exactly the manifest pair shares the semantic-release version and its validated hashes identify the retained artifacts.
++- Given that same staged tool, when each OS installs and runs offline smoke, then version, CLI/MCP channels and raw discovery bytes agree without hosted infrastructure.
++- Given Windows validation, when Core/CLI suites run with isolated home overrides, then both private-ACL tests and formerly home-skipped concurrency/admin-isolation process tests execute successfully.
++- Given any failed prerequisite or platform check, when acceptance is evaluated, then no accepted pair is produced and publication remains refused.
++
++## Implementation Notes
++
++Approved by the user on 2026-10-29: "approve and continue". Implementation follows the frozen intent; no push or remote operations in this stage. Hosted Windows/macOS acceptance remains pending until actual runner evidence exists.
++
++## Spec Change Log
++
++## Review Triage Log
++
++## Design Notes
++
++No intent gaps or irreversibles. Semantic-release dry runs check push permission, requiring temporary Git state. Windows/macOS acceptance needs actual runner evidence. ARM verification remains deferred.
++
++## Verification
++
++- Run `python3 -m unittest discover -s scripts/tests -p 'test_*.py'` and real local paired preparation/install smoke; exercise negative controls with temporary fixtures.
++- Restore/build `Hexalith.McpCli.slnx` in Release with warnings as errors; run the six ordinary test projects individually. Refresh restore before Manifest.Tests.
++- Run sample validation/loopback and enrolled coverage/replay gates for Core JSON changes; restore again after sample loopback.
++- Require actual three-OS receipts, raw-byte comparison and named Windows test outcomes before platform acceptance. Preserve exact commands/results and blockers in task-owned evidence.
++
++
++## Implementation Evidence (2026-10-29)
++
++Implementation and local Linux checks are recorded in `evidence/story-4-16/implementation-20261029/README.md`. The staging path, isolated home and deterministic JSON are implemented; paired publication/recovery still refuse requests. One local-only version 1.1.1 pair was packed, validated and installed successfully. No accepted-pair receipt was produced.
++
++Actual hosted Windows/macOS checks and three-OS acceptance remain pending. The existing Windows/macOS/ARM ledger entries remain open with implementation notes; code changes and synthetic matrix tests are not platform evidence. This spec and sprint remain in progress until the required executed acceptance evidence exists.
++
++The implementation session made read-only GitHub API observations before correcting its interpretation of the no-remote-operations constraint. The evidence packet labels those fresh observations separately from local committed/gitlink and cached remote-tracking evidence. No remote writes, pushes, tags, releases or workflow dispatches occurred.
+diff --git a/scripts/compare-paired-evidence.py b/scripts/compare-paired-evidence.py
+new file mode 100644
+index 0000000..a09c7cd
+--- /dev/null
++++ b/scripts/compare-paired-evidence.py
+@@ -0,0 +1,127 @@
++#!/usr/bin/env python3
++"""Accept only one source/hash-bound pair with complete matching three-OS evidence."""
++
++import argparse
++import json
++from pathlib import Path
++import sys
++from paired_release import check_prepared, digest, module, write_new
++
++
++def compare(staging, prepared_path, consumers, output):
++    prepared_path = Path(prepared_path)
++    prepared = check_prepared(staging, prepared_path)
++    if prepared.get('eligibility') != 'current-main' or prepared.get('source_clean') is not True:
++        raise ValueError('Local-only or dirty-source preparation cannot become accepted staging.')
++    evidence = prepared_path.parent / 'evidence'
++    if not {'source-before.json', 'source-after.json', 'validation.json'} <= set(prepared.get('evidence', {})):
++        raise ValueError('Required preparation evidence is absent.')
++    for name, sha in prepared['evidence'].items():
++        if Path(name).name != name or digest(evidence / name) != sha:
++            raise ValueError('Preparation evidence changed after packing.')
++    for name in ('source-before', 'source-after'):
++        gate = json.loads((evidence / f'{name}.json').read_text())
++        if (gate.get('schema') != 'mcpcli-paired-source/v1' or gate.get('source_sha') != prepared['source_sha']
++                or gate.get('current_main') != prepared['source_sha'] or gate.get('source_clean') is not True
++                or not gate.get('fr22') or set(gate.get('gates', {})) != {'ci.yml', 'commitlint.yml'}):
++            raise ValueError('Preparation lacks eligible current-main gates and FR-22 evidence.')
++        verifier = module('verify-release-source')
++        fr22 = gate['fr22']
++        if (fr22.get('source_sha') != prepared['source_sha'] or fr22.get('source_clean') is not True
++                or fr22.get('required_revision') != module('verify-paired-prerequisites').REQUIRED
++                or len(set(fr22.get('synchronization', {}).values())) != 1
++                or set(fr22.get('synchronization', {})) != {'AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md'}):
++            raise ValueError('FR-22 evidence is incomplete or belongs to different source.')
++        for workflow, required in [('ci.yml', verifier.STAGING_JOBS), ('commitlint.yml', verifier.STAGING_COMMITLINT_JOBS)]:
++            run = gate['gates'][workflow]
++            if run.get('source_sha') != prepared['source_sha'] or run.get('status') != 'completed' or run.get('conclusion') != 'success':
++                raise ValueError('A required source workflow did not succeed at the exact SHA.')
++            verifier.validate_jobs(run.get('jobs', []), required)
++    validation = json.loads((evidence / 'validation.json').read_text())
++    if any(validation.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages')) or validation.get('phase') != 'paired':
++        raise ValueError('Package validation does not bind the prepared pair.')
++    receipts = {}
++    baseline = None
++    for directory in consumers:
++        directory = Path(directory)
++        smoke_path = directory / 'smoke/smoke.json'
++        smoke = json.loads(smoke_path.read_text())
++        system = smoke['os']
++        if system in receipts or system not in ('Linux', 'Windows', 'Darwin'):
++            raise ValueError('A required operating-system receipt is duplicate or unknown.')
++        for key in ('source_sha', 'version', 'packages'):
++            if smoke.get(key) != prepared[key]:
++                raise ValueError('Smoke receipt source, version or package hashes differ.')
++        required = {'version', 'offline-discovery', 'config', 'json-lf', 'errors', 'mcp-protocol', 'output-file', 'table'}
++        if (smoke.get('schema') != 'mcpcli-paired-smoke/v1' or smoke.get('status') != 'passed'
++                or set(smoke.get('checks', [])) != required or smoke.get('preparation_sha256') != digest(prepared_path)):
++            raise ValueError('Platform smoke was missing, failed or incomplete.')
++        captures = {}
++        for name, sha in smoke['discovery'].items():
++            path = directory / 'smoke/discovery' / name
++            if Path(name).name != name or digest(path) != sha:
++                raise ValueError('Raw discovery capture differs from its receipt.')
++            captures[name] = path.read_bytes()
++        if not captures or 'modules.json' not in captures or 'mcp-tools.json' not in captures:
++            raise ValueError('Raw discovery captures are incomplete.')
++        expected = {'modules.json', 'mcp-tools.json', 'mcp-modules.json'}
++        modules = json.loads(captures['modules.json']).get('modules', [])
++        if not modules:
++            raise ValueError('Raw discovery contains an empty catalog.')
++        for item in modules:
++            name = 'operations-' + item['name'] + '.json'
++            expected.add(name)
++            if name not in captures:
++                raise ValueError('Raw operation captures are missing.')
++            for operation in json.loads(captures[name])['operations']:
++                expected.add('describe-' + operation['name'] + '.json')
++        if set(captures) != expected or any(not raw.endswith(b'\n') or b'\r' in raw for raw in captures.values()):
++            raise ValueError('Raw discovery captures are incomplete or do not use LF.')
++        if baseline is not None and captures != baseline:
++            raise ValueError('Raw discovery bytes differ across operating systems.')
++        baseline = captures
++        tests_path = directory / 'tests/tests.json'
++        tests = json.loads(tests_path.read_text())
++        suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli'] if system == 'Darwin' else []
++        if (tests.get('schema') != 'mcpcli-paired-platform-tests/v1' or tests.get('status') != 'passed'
++                or tests.get('os') != system or tests.get('suites') != suites
++                or any(tests.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages'))):
++            raise ValueError('Required platform suites were missing or unsuccessful.')
++        expected_xml = {f'Hexalith.McpCli.{suite}.Tests.xml' for suite in suites}
++        if set(tests.get('xml', {})) != expected_xml:
++            raise ValueError('Platform XML does not contain the exact required suites.')
++        outcomes = {}
++        runner = module('run-paired-platform-tests')
++        for name, sha in tests['xml'].items():
++            path = directory / 'tests' / name
++            if digest(path) != sha:
++                raise ValueError('Platform XML bytes changed.')
++            outcomes.update(runner.inspect_xml(path))
++        if system == 'Windows' and any(outcomes.get(name) != 'Pass' for name in runner.WINDOWS_REQUIRED):
++            raise ValueError('A required Windows ACL or isolated-process test was skipped or missing.')
++        receipts[system] = {'smoke_sha256': digest(smoke_path), 'tests_sha256': digest(tests_path)}
++    if set(receipts) != {'Linux', 'Windows', 'Darwin'}:
++        raise ValueError('All three actual operating-system receipts are required.')
++    write_new(output, {'schema': 'mcpcli-accepted-staged-pair/v1', 'status': 'accepted-staging-only',
++                       'source_sha': prepared['source_sha'], 'version': prepared['version'], 'packages': prepared['packages'],
++                       'preparation_sha256': digest(prepared_path), 'platforms': receipts,
++                       'publication': 'refused; stories 4.17–4.18 remain outstanding'})
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--staging', type=Path, required=True)
++    parser.add_argument('--prepared', type=Path, required=True)
++    parser.add_argument('--consumer', action='append', type=Path, required=True)
++    parser.add_argument('--output', type=Path, required=True)
++    args = parser.parse_args()
++    try:
++        compare(args.staging, args.prepared, args.consumer, args.output)
++        return 0
++    except (ValueError, KeyError, OSError) as error:
++        print(f'Paired acceptance refused: {error}', file=sys.stderr)
++        return 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/scripts/paired_release.py b/scripts/paired_release.py
+new file mode 100644
+index 0000000..85715fa
+--- /dev/null
++++ b/scripts/paired_release.py
+@@ -0,0 +1,68 @@
++"""Shared, fail-closed primitives for staging evidence (never publication)."""
++
++import hashlib
++import importlib.util
++import json
++from pathlib import Path
++import re
++import subprocess
++
++ROOT = Path(__file__).resolve().parents[1]
++PAIR = ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]
++
++
++def module(filename):
++    spec = importlib.util.spec_from_file_location(filename.replace('-', '_'), Path(__file__).with_name(filename + '.py'))
++    result = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(result)
++    return result
++
++
++def run(arguments, **kwargs):
++    return subprocess.run([str(arg) for arg in arguments], check=True, capture_output=True, **kwargs)
++
++
++def git(*args):
++    return run(['git', *args], text=True).stdout.strip()
++
++
++def source():
++    sha = git('rev-parse', 'HEAD')
++    if re.fullmatch('[0-9a-f]{40}', sha) is None:
++        raise ValueError('An exact source SHA is required.')
++    return {'source_sha': sha, 'source_clean': not git('status', '--porcelain', '--untracked-files=normal')}
++
++
++def digest(path):
++    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
++
++
++def write_new(path, value):
++    path = Path(path)
++    with path.open('x', encoding='utf-8', newline='\n') as output:
++        json.dump(value, output, indent=2, sort_keys=True)
++        output.write('\n')
++
++
++def packages(staging, version):
++    module('release-request').validate_version(version)
++    staging = Path(staging)
++    expected = {f'{package}.{version}.nupkg' for package in PAIR}
++    if staging.is_symlink() or not staging.is_dir() or {p.name for p in staging.iterdir()} != expected:
++        raise ValueError('Staging must contain exactly the manifest pair and no other files.')
++    for path in staging.iterdir():
++        if path.is_symlink() or not path.is_file():
++            raise ValueError('Staged packages must be regular files.')
++    return {name: digest(staging / name) for name in sorted(expected)}
++
++
++def check_prepared(staging, receipt):
++    receipt = Path(receipt)
++    if not receipt.is_file() or receipt.is_symlink():
++        raise ValueError('Preparation receipt must be a regular file.')
++    receipt = json.loads(receipt.read_text(encoding='utf-8'))
++    if (receipt.get('schema') != 'mcpcli-paired-preparation/v1'
++            or re.fullmatch('[0-9a-f]{40}', receipt.get('source_sha', '')) is None
++            or receipt.get('packages') != packages(staging, receipt['version'])):
++        raise ValueError('Preparation receipt does not bind these package bytes and source.')
++    return receipt
+diff --git a/scripts/prepare-paired-release.py b/scripts/prepare-paired-release.py
+new file mode 100644
+index 0000000..3b75ac3
+--- /dev/null
++++ b/scripts/prepare-paired-release.py
+@@ -0,0 +1,87 @@
++#!/usr/bin/env python3
++"""Prepare one immutable local package pair; this script has no publication path."""
++
++import argparse
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++from paired_release import PAIR, digest, module, packages, source, write_new
++
++
++def prepare(selection_path, output, local=False):
++    selection = json.loads(Path(selection_path).read_text(encoding='utf-8'))
++    before = source()
++    if selection.get('schema') != 'mcpcli-version-selection/v1' or selection.get('source_sha') != before['source_sha']:
++        raise ValueError('Version selection does not match the exact source SHA.')
++    output = Path(output).absolute()
++    if output.exists() or output.is_symlink():
++        raise ValueError('Staging/evidence already exists; preserve it and select a fresh output directory.')
++    output.mkdir(parents=True)
++    if selection.get('release') is False and selection.get('version') is None:
++        write_new(output / 'no-release.json', {**selection, 'status': 'no-release'})
++        return
++    if selection.get('release') is not True:
++        raise ValueError('Invalid semantic-release selection.')
++    version = selection['version']
++    module('release-request').validate_version(version)
++    staging = output / 'packages'
++    evidence = output / 'evidence'
++    evidence.mkdir()
++
++    def command(name, arguments):
++        result = subprocess.run([str(item) for item in arguments], capture_output=True)
++        (evidence / f'{name}.stdout.txt').write_bytes(result.stdout)
++        (evidence / f'{name}.stderr.txt').write_bytes(result.stderr)
++        write_new(evidence / f'{name}.command.json', {'argv': [str(item) for item in arguments], 'exit_code': result.returncode})
++        result.check_returncode()
++
++    def gate(name):
++        command(name, [sys.executable, 'scripts/verify-release-source.py', '--staging', '--output', evidence / f'{name}.json',
++                       before['source_sha'], 'refs/heads/main', 'paired'])
++
++    if not local:
++        gate('source-before')
++    staging.mkdir()
++    flags = ['-p:IncludeSourceRevisionInInformationalVersion=false', f'-p:Version={version}', f'-p:InformationalVersion={version}', f'-p:RepositoryCommit={before["source_sha"]}']
++    command('restore', ['dotnet', 'restore', 'Hexalith.McpCli.slnx', *flags])
++    command('build', ['dotnet', 'build', 'Hexalith.McpCli.slnx', '--no-restore', '--configuration', 'Release', '-warnaserror', *flags])
++    manifest = json.loads(Path('tools/release-packages.json').read_text())['packages']
++    if [item['id'] for item in manifest] != PAIR:
++        raise ValueError('The release manifest must declare exactly the approved pair.')
++    for item in manifest:
++        command('pack-' + item['id'], ['dotnet', 'pack', item['project'], '--no-build', '--configuration', 'Release',
++                                     '--output', staging, *flags])
++    command('validate', [sys.executable, 'scripts/validate-release-packages.py', '--source-sha', before['source_sha'],
++                         '--output', evidence / 'validation.json', staging, version, 'paired'])
++    after = source()
++    if after != before:
++        raise ValueError('Source SHA or working-tree state changed during preparation.')
++    if not local:
++        gate('source-after')
++    if json.loads((evidence / 'validation.json').read_text())['packages'] != packages(staging, version):
++        raise ValueError('Staged package bytes changed after validation.')
++    receipt = {'schema': 'mcpcli-paired-preparation/v1', **before, 'version': version,
++               'eligibility': 'local-only' if local else 'current-main', 'packages': packages(staging, version),
++               'evidence': {path.name: digest(path) for path in sorted(evidence.iterdir())}}
++    write_new(output / 'prepared.json', receipt)
++    print(json.dumps(receipt))
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--selection', type=Path, required=True)
++    parser.add_argument('--output', type=Path, required=True)
++    parser.add_argument('--local', action='store_true', help='Collect local-only checks; never eligible for accepted staging.')
++    args = parser.parse_args()
++    try:
++        prepare(args.selection, args.output, args.local)
++        return 0
++    except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
++        print(f'Paired preparation failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
++        return 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/scripts/run-paired-platform-tests.py b/scripts/run-paired-platform-tests.py
+new file mode 100644
+index 0000000..5153709
+--- /dev/null
++++ b/scripts/run-paired-platform-tests.py
+@@ -0,0 +1,81 @@
++#!/usr/bin/env python3
++"""Run the required platform suites and retain actual xUnit XML, including skips."""
++
++import argparse
++import json
++import os
++from pathlib import Path
++import platform
++import subprocess
++import sys
++from xml.etree import ElementTree
++from paired_release import digest, git, module, write_new
++
++WINDOWS_REQUIRED = [
++    'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls',
++    'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten',
++    'Hexalith.McpCli.Cli.Tests.ConfigCommandTests.ConcurrentSetProcessesPreserveBothValuesAsync',
++    'Hexalith.McpCli.Cli.Tests.ConfigCommandTests.VerbsNeverOpenAdminProfilesAsync',
++    'Hexalith.McpCli.Cli.Tests.CliOutputContractTests.MissingExistingFileStagingDirectoryPreventsMutationAsync',
++]
++
++
++def inspect_xml(path):
++    root = ElementTree.parse(path).getroot()
++    tests = root.findall('.//test')
++    assemblies = root.findall('.//assembly')
++    if (not any(test.get('result') == 'Pass' for test in tests) or root.findall('.//error')
++            or any(int(assembly.get('failed', '0')) or int(assembly.get('errors', '0')) for assembly in assemblies)
++            or any(test.get('result') not in ('Pass', 'Skip') for test in tests)):
++        raise ValueError('Platform suite has no executed tests or contains a failure.')
++    return {test.get('name'): test.get('result') for test in tests}
++
++
++def run_tests(prepared_path, output):
++    prepared = json.loads(Path(prepared_path).read_text())
++    if git('rev-parse', 'HEAD') != prepared['source_sha']:
++        raise ValueError('Platform tests do not use the preparation source SHA.')
++    output = Path(output).resolve()
++    output.mkdir(parents=True, exist_ok=False)
++    system = platform.system()
++    suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli'] if system == 'Darwin' else []
++    env = {key: value for key, value in os.environ.items() if not key.startswith(('EVENTSTORE_', 'MCPCLI_'))}
++    env['MCPCLI_HOME'] = str(output / 'home')
++    def command(name, arguments):
++        result = subprocess.run(arguments, env=env, capture_output=True)
++        (output / f'{name}.stdout.txt').write_bytes(result.stdout)
++        (output / f'{name}.stderr.txt').write_bytes(result.stderr)
++        write_new(output / f'{name}.command.json', {'argv': arguments, 'exit_code': result.returncode})
++        result.check_returncode()
++    if suites:
++        command('restore', ['dotnet', 'restore', 'Hexalith.McpCli.slnx', '-p:Version=' + prepared['version']])
++        command('build', ['dotnet', 'build', 'Hexalith.McpCli.slnx', '--no-restore', '--configuration', 'Release', '-warnaserror', '-p:Version=' + prepared['version']])
++    outcomes = {}
++    for suite in suites:
++        name = 'Hexalith.McpCli.' + suite + '.Tests'
++        xml = output / (name + '.xml')
++        command(name, ['dotnet', f'tests/{name}/bin/Release/net10.0/{name}.dll', '-xml', str(xml)])
++        outcomes.update(inspect_xml(xml))
++    if system == 'Windows' and any(outcomes.get(name) != 'Pass' for name in WINDOWS_REQUIRED):
++        raise ValueError('A required Windows ACL or isolated-process test did not execute successfully.')
++    write_new(output / 'tests.json', {'schema': 'mcpcli-paired-platform-tests/v1', 'os': system, 'status': 'passed',
++                                     'source_sha': prepared['source_sha'], 'version': prepared['version'],
++                                     'packages': prepared['packages'], 'suites': suites,
++                                     'xml': {path.name: digest(path) for path in sorted(output.glob('*.xml'))}})
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--prepared', type=Path, required=True)
++    parser.add_argument('--output', type=Path, required=True)
++    args = parser.parse_args()
++    try:
++        run_tests(args.prepared, args.output)
++        return 0
++    except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
++        print(f'Platform validation failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
++        return 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/scripts/select-release-version.mjs b/scripts/select-release-version.mjs
+new file mode 100644
+index 0000000..e255547
+--- /dev/null
++++ b/scripts/select-release-version.mjs
+@@ -0,0 +1,47 @@
++#!/usr/bin/env node
++// All Git writes, including semantic-release's push-permission probe, target a temporary local remote.
++import { execFileSync } from 'node:child_process';
++import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import { dirname, join, resolve } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { createRequire } from 'node:module';
++import semanticRelease from 'semantic-release';
++
++const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
++const require = createRequire(import.meta.url);
++const output = process.argv[2];
++if (!output || process.argv.length !== 3) throw new Error('Usage: select-release-version.mjs OUTPUT.json');
++const temporary = mkdtempSync(join(tmpdir(), 'mcpcli-version-'));
++const env = { ...process.env };
++for (const key of Object.keys(env)) {
++    if (/^(GITHUB_|GH_|GIT_|NUGET_)/.test(key) || ['CI', 'GITLAB_CI', 'JENKINS_URL'].includes(key)) delete env[key];
++}
++const gitConfig = join(temporary, 'empty.gitconfig');
++writeFileSync(gitConfig, '');
++env.GIT_CONFIG_GLOBAL = gitConfig;
++env.GIT_CONFIG_SYSTEM = gitConfig;
++const git = (...args) => execFileSync('git', args, { cwd: root, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
++try {
++    const installed = JSON.parse(readFileSync(join(dirname(require.resolve('semantic-release')), 'package.json'), 'utf8'));
++    const pinned = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).devDependencies['semantic-release'];
++    if (installed.version !== pinned) throw new Error('Run npm ci to install the pinned semantic-release version.');
++    const sha = git('rev-parse', 'HEAD');
++    const remote = join(temporary, 'remote.git');
++    const checkout = join(temporary, 'source');
++    git('clone', '--mirror', '--no-hardlinks', root, remote);
++    git('clone', '--no-hardlinks', remote, checkout);
++    git('-C', checkout, 'checkout', '-B', 'main', sha);
++    const result = await semanticRelease({
++        branches: ['main'], tagFormat: 'v${version}', repositoryUrl: remote,
++        dryRun: true, ci: false,
++        plugins: [require.resolve('@semantic-release/commit-analyzer')],
++        extends: [],
++    }, { cwd: checkout, env, stdout: process.stderr, stderr: process.stderr });
++    const receipt = { schema: 'mcpcli-version-selection/v1', source_sha: sha,
++        release: Boolean(result), version: result ? result.nextRelease.version : null };
++    writeFileSync(output, JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
++    process.stdout.write(JSON.stringify(receipt) + '\n');
++} finally {
++    rmSync(temporary, { recursive: true, force: true });
++}
+diff --git a/scripts/smoke-paired-tool.py b/scripts/smoke-paired-tool.py
+new file mode 100644
+index 0000000..1dddd1c
+--- /dev/null
++++ b/scripts/smoke-paired-tool.py
+@@ -0,0 +1,187 @@
++#!/usr/bin/env python3
++"""Install only the staged tool into a private environment and retain raw offline checks."""
++
++import argparse
++import json
++import os
++from pathlib import Path
++import platform
++import queue
++import subprocess
++import sys
++import threading
++from paired_release import check_prepared, digest, module, packages, write_new
++
++
++def require(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def json_document(raw):
++    require(raw.endswith(b'\n') and b'\r' not in raw and not raw.startswith(b'\xef\xbb\xbf'), 'JSON output must use UTF-8 with LF internally and at its terminator.')
++    return json.loads(raw)
++
++
++def smoke(staging, prepared_path, output):
++    staging = Path(staging).absolute()
++    prepared = check_prepared(staging, prepared_path)
++    output = Path(output).absolute()
++    require(not output.exists() and not output.is_symlink(), 'Smoke output already exists; prior evidence will not be overwritten.')
++    output.mkdir(parents=True)
++    captures = output / 'discovery'
++    captures.mkdir()
++    private = output / 'private'
++    private.mkdir()
++    env = {key: value for key, value in os.environ.items() if not key.startswith(('EVENTSTORE_', 'MCPCLI_', 'NUGET_'))}
++    env.update({'MCPCLI_HOME': str(private / 'home'), 'DOTNET_CLI_HOME': str(private / 'dotnet-home'),
++                'NUGET_PACKAGES': str(private / 'packages'), 'NUGET_HTTP_CACHE_PATH': str(private / 'http-cache'),
++                'NUGET_PLUGINS_CACHE_PATH': str(private / 'plugin-cache'), 'DOTNET_SKIP_FIRST_TIME_EXPERIENCE': '1',
++                'DOTNET_CLI_TELEMETRY_OPTOUT': '1', 'DOTNET_NOLOGO': '1', 'DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE': 'true'})
++    config = private / 'NuGet.Config'
++    from xml.sax.saxutils import escape
++    config.write_text('<configuration><packageSources><clear/><add key="staged" value="' + escape(str(staging), {'"': '&quot;'})
++                      + '"/></packageSources><fallbackPackageFolders><clear/></fallbackPackageFolders></configuration>', encoding='utf-8')
++    tools = private / 'tools'
++
++    def execute(name, argv, expected=0, override=None):
++        completed = subprocess.run([str(item) for item in argv], env=override or env, cwd=private, capture_output=True, timeout=120)
++        (output / (name + '.stdout.txt')).write_bytes(completed.stdout)
++        (output / (name + '.stderr.txt')).write_bytes(completed.stderr)
++        write_new(output / (name + '.command.json'), {'argv': [str(item) for item in argv], 'exit_code': completed.returncode})
++        require(completed.returncode == expected, f'{name} returned {completed.returncode}; inspect its retained stdout/stderr.')
++        return completed
++
++    execute('install', ['dotnet', 'tool', 'install', 'Hexalith.McpCli', '--tool-path', tools, '--version', prepared['version'],
++                        '--configfile', config, '--no-cache'])
++    tool = tools / ('hexalith.exe' if os.name == 'nt' else 'hexalith')
++    result = execute('version', [tool, '--version'])
++    require(result.stdout.decode('utf-8').strip() == prepared['version'] and not result.stderr, 'Installed tool version/channel mismatch.')
++
++    def discovery(name, *arguments):
++        result = execute(name, [tool, *arguments])
++        require(not result.stderr, f'{name} wrote unexpected diagnostics.')
++        (captures / (name + '.json')).write_bytes(result.stdout)
++        return json_document(result.stdout)
++
++    modules = discovery('modules', 'modules')
++    require(modules.get('modules'), 'The installed tool catalog is empty.')
++    operation_names = []
++    for item in modules['modules']:
++        operations = discovery('operations-' + item['name'], 'operations', item['name'])
++        operation_names.extend(operation['name'] for operation in operations['operations'])
++    require(operation_names, 'The installed tool has no operations.')
++    for name in operation_names:
++        discovery('describe-' + name, 'describe', name)
++    target = private / 'result.json'
++    result = execute('output-file', [tool, 'modules', '--output', target])
++    require(not result.stdout and not result.stderr and target.read_bytes() == (captures / 'modules.json').read_bytes(), 'Output-file bytes/channels differ from discovery.')
++    result = execute('table', [tool, 'modules', '--format', 'table'])
++    require(result.stdout.startswith(b'NAME\tOPERATIONS\tDESCRIPTION') and not result.stderr, 'Table output/channel mismatch.')
++    result = execute('invalid-home', [tool, 'config', 'current'], 2, {**env, 'MCPCLI_HOME': 'relative-secret-home'})
++    expected_error = {'error': {'code': 'configuration_invalid', 'message': 'Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path.'}}
++    require(not result.stderr and json_document(result.stdout) == expected_error, 'Invalid home did not fail safely on the JSON stdout channel.')
++    result = execute('mcp-invalid-home', [tool, 'mcp', '--transport', 'stdio'], 2, {**env, 'MCPCLI_HOME': 'relative-secret-home'})
++    require(not result.stdout and json_document(result.stderr) == expected_error, 'MCP startup error polluted the protocol channel.')
++    for name, args in [
++        ('config-add', ['profile', 'add', 'staged', '--url', 'http://127.0.0.1:1', '--token', 'staged-private-token']),
++        ('config-use', ['use', 'staged']), ('config-current', ['current']), ('config-clear', ['use', '--clear']),
++        ('config-remove', ['profile', 'remove', 'staged']),
++    ]:
++        result = execute(name, [tool, 'config', *args])
++        json_document(result.stdout)
++        require(not result.stderr and b'staged-private-token' not in result.stdout, 'Config output exposed a token or wrote diagnostics.')
++    require((private / 'home/.eventstore/mcpcli.json').is_file(), 'Config did not use the isolated MCPCLI_HOME.')
++    mcp_smoke(tool, env, private, output, captures, modules, operation_names[0])
++    require(packages(staging, prepared['version']) == prepared['packages'], 'Staged bytes changed during installation smoke.')
++    receipt = {'schema': 'mcpcli-paired-smoke/v1', 'status': 'passed', 'os': platform.system(),
++               'source_sha': prepared['source_sha'], 'version': prepared['version'], 'packages': prepared['packages'],
++               'preparation_sha256': digest(prepared_path),
++               'discovery': {path.name: digest(path) for path in sorted(captures.iterdir())},
++               'checks': ['version', 'offline-discovery', 'config', 'json-lf', 'errors', 'mcp-protocol', 'output-file', 'table']}
++    write_new(output / 'smoke.json', receipt)
++
++
++def mcp_smoke(tool, env, private, output, captures, modules, operation):
++    child = subprocess.Popen([str(tool), 'mcp', '--transport', 'stdio'], cwd=private, env=env,
++                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    messages = queue.Queue()
++    transcript = bytearray()
++    errors = bytearray()
++
++    def read_stdout():
++        for line in child.stdout:
++            transcript.extend(line)
++            messages.put(line)
++        messages.put(None)
++
++    def read_stderr():
++        errors.extend(child.stderr.read())
++
++    readers = [threading.Thread(target=read_stdout), threading.Thread(target=read_stderr)]
++    for reader in readers:
++        reader.start()
++
++    def send(document):
++        child.stdin.write((json.dumps(document, separators=(',', ':')) + '\n').encode())
++        child.stdin.flush()
++
++    def request(identity, method, parameters):
++        send({'jsonrpc': '2.0', 'id': identity, 'method': method, 'params': parameters})
++        while True:
++            line = messages.get(timeout=60)
++            require(line is not None, 'MCP exited before responding.')
++            document = json.loads(line)
++            require(document.get('jsonrpc') == '2.0', 'Non-protocol data appeared on MCP stdout.')
++            if document.get('id') == identity:
++                require('result' in document and 'error' not in document, f'MCP request {method} failed.')
++                return document['result'], line
++
++    try:
++        initialized, _ = request(1, 'initialize', {'protocolVersion': '2025-06-18', 'capabilities': {},
++                                                'clientInfo': {'name': 'paired-stage-smoke', 'version': '1.0.0'}})
++        require(initialized['protocolVersion'] == '2025-06-18', 'MCP initialization version mismatch.')
++        send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
++        tools, raw = request(2, 'tools/list', {})
++        require([tool['name'] for tool in tools['tools']] == ['list_modules', 'list_operations', 'describe_operation', 'send_command', 'run_query'], 'MCP tool discovery differs from the fixed surface.')
++        (captures / 'mcp-tools.json').write_bytes(raw)
++        result, raw = request(3, 'tools/call', {'name': 'list_modules', 'arguments': {}})
++        require(result.get('isError') is False and result['structuredContent'] == modules
++                and json.loads(result['content'][0]['text']) == modules, 'MCP/CLI module discovery differs.')
++        (captures / 'mcp-modules.json').write_bytes(raw)
++        description, _ = request(4, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': operation}})
++        require(description.get('isError') is False and description['structuredContent'] == json.loads((captures / ('describe-' + operation + '.json')).read_bytes()), 'MCP/CLI operation description differs.')
++        failure, _ = request(5, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': '__missing__'}})
++        require(failure.get('isError') is True and failure['structuredContent']['error']['code'] == 'unknown_operation'
++                and json.loads(failure['content'][0]['text']) == failure['structuredContent'], 'MCP error document/channel mismatch.')
++        child.stdin.close()
++        child.wait(timeout=30)
++        require(child.returncode == 0, 'MCP did not exit cleanly after stdin closed.')
++    finally:
++        if child.poll() is None:
++            child.kill()
++            child.wait(timeout=30)
++        for reader in readers:
++            reader.join(timeout=30)
++        (output / 'mcp.stdout.jsonl').write_bytes(transcript)
++        (output / 'mcp.stderr.txt').write_bytes(errors)
++    for line in transcript.splitlines():
++        require(json.loads(line).get('jsonrpc') == '2.0', 'MCP stdout contains non-protocol output.')
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--staging', type=Path, required=True)
++    parser.add_argument('--prepared', type=Path, required=True)
++    parser.add_argument('--output', type=Path, required=True)
++    args = parser.parse_args()
++    try:
++        smoke(args.staging, args.prepared, args.output)
++        return 0
++    except (ValueError, KeyError, OSError, subprocess.SubprocessError, queue.Empty) as error:
++        print(f'Paired tool smoke failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
++        return 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/scripts/tests/test_paired_release.py b/scripts/tests/test_paired_release.py
+new file mode 100644
+index 0000000..c5d3275
+--- /dev/null
++++ b/scripts/tests/test_paired_release.py
+@@ -0,0 +1,387 @@
++"""Exercise staged-pair acceptance and negative controls without publishing or hosted claims."""
++
++import contextlib
++import copy
++import io
++import json
++from pathlib import Path
++import struct
++import subprocess
++import sys
++import tempfile
++import unittest
++from unittest.mock import patch
++from xml.etree import ElementTree
++
++SCRIPTS = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(SCRIPTS))
++from paired_release import PAIR, digest, module, packages, write_new
++
++SHA = 'a' * 40
++VERSION = '1.2.3'
++CHECKS = ['version', 'offline-discovery', 'config', 'json-lf', 'errors', 'mcp-protocol', 'output-file', 'table']
++
++
++def jobs(required):
++    return [{'name': name, 'status': 'completed', 'conclusion': 'success',
++             'steps': [{'name': step, 'status': 'completed', 'conclusion': 'success'} for step in steps]}
++            for name, steps in required.items()]
++
++
++class PairedReleaseTests(unittest.TestCase):
++    def setUp(self):
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++        self.staging = self.root / 'packages'
++        self.staging.mkdir()
++        for name in PAIR:
++            (self.staging / f'{name}.{VERSION}.nupkg').write_bytes(name.encode())
++        self.prepared_path = self.root / 'prepared.json'
++        self.gate = module('verify-release-source')
++        self.runner = module('run-paired-platform-tests')
++        self.comparator = module('compare-paired-evidence')
++        self.evidence = self.root / 'evidence'
++        self.evidence.mkdir()
++        workflow_gates = {}
++        for workflow, required in [('ci.yml', self.gate.STAGING_JOBS), ('commitlint.yml', self.gate.STAGING_COMMITLINT_JOBS)]:
++            workflow_gates[workflow] = {'source_sha': SHA, 'status': 'completed', 'conclusion': 'success', 'jobs': jobs(required)}
++        self.source_gate = {'schema': 'mcpcli-paired-source/v1', 'source_sha': SHA, 'source_clean': True,
++                            'current_main': SHA, 'gates': workflow_gates,
++                            'fr22': {'required_revision': module('verify-paired-prerequisites').REQUIRED,
++                                     'source_sha': SHA, 'source_clean': True,
++                                     'synchronization': {name: 'b' * 64 for name in ('AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md')}}}
++        self.package_hashes = packages(self.staging, VERSION)
++        self.prepared = {'schema': 'mcpcli-paired-preparation/v1', 'source_sha': SHA, 'source_clean': True,
++                         'eligibility': 'current-main', 'version': VERSION, 'packages': self.package_hashes}
++        self.save_gates()
++        self.consumers = []
++        for system in ('Linux', 'Windows', 'Darwin'):
++            directory = self.root / system
++            smoke = directory / 'smoke'
++            captures = smoke / 'discovery'
++            captures.mkdir(parents=True)
++            documents = {'modules.json': {'modules': [{'name': 'sample'}]},
++                         'operations-sample.json': {'operations': [{'name': 'sample.read'}]},
++                         'describe-sample.read.json': {'name': 'sample.read'},
++                         'mcp-tools.json': {'jsonrpc': '2.0', 'id': 2, 'result': {}},
++                         'mcp-modules.json': {'jsonrpc': '2.0', 'id': 3, 'result': {}}}
++            for name, value in documents.items():
++                write_new(captures / name, value)
++            write_new(smoke / 'smoke.json', {'schema': 'mcpcli-paired-smoke/v1', 'status': 'passed', 'os': system,
++                      'source_sha': SHA, 'version': VERSION, 'packages': self.package_hashes,
++                      'preparation_sha256': digest(self.prepared_path), 'checks': CHECKS,
++                      'discovery': {path.name: digest(path) for path in captures.iterdir()}})
++            tests = directory / 'tests'
++            tests.mkdir()
++            suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli'] if system == 'Darwin' else []
++            for suite in suites:
++                xml = ElementTree.Element('assemblies')
++                collection = ElementTree.SubElement(xml, 'assembly')
++                names = [name for name in self.runner.WINDOWS_REQUIRED if f'.{suite}.Tests.' in name]
++                for name in names or ['sample.test']:
++                    ElementTree.SubElement(collection, 'test', name=name, result='Pass')
++                ElementTree.ElementTree(xml).write(tests / f'Hexalith.McpCli.{suite}.Tests.xml')
++            write_new(tests / 'tests.json', {'schema': 'mcpcli-paired-platform-tests/v1', 'status': 'passed', 'os': system,
++                      'source_sha': SHA, 'version': VERSION, 'packages': self.package_hashes, 'suites': suites,
++                      'xml': {path.name: digest(path) for path in tests.glob('*.xml')}})
++            self.consumers.append(directory)
++
++    def save_gates(self):
++        for name in ('source-before', 'source-after'):
++            (self.evidence / (name + '.json')).write_text(json.dumps(self.source_gate))
++        (self.evidence / 'validation.json').write_text(json.dumps({'phase': 'paired', 'source_sha': SHA, 'version': VERSION, 'packages': self.package_hashes}))
++        self.prepared['evidence'] = {path.name: digest(path) for path in self.evidence.iterdir()}
++        self.prepared_path.write_text(json.dumps(self.prepared))
++
++    def compare(self, consumers=None):
++        return self.comparator.compare(self.staging, self.prepared_path, consumers or self.consumers, self.root / 'accepted.json')
++
++    def change_json(self, path, change):
++        document = json.loads(path.read_text())
++        change(document)
++        path.write_text(json.dumps(document))
++
++    def test_complete_synthetic_matrix_accepts_only_staging(self):
++        self.compare()
++        result = json.loads((self.root / 'accepted.json').read_text())
++        self.assertEqual(result['status'], 'accepted-staging-only')
++        self.assertIn('refused', result['publication'])
++        self.assertEqual(result['packages'], self.package_hashes)
++
++    def test_platform_failure_matrix_never_writes_acceptance(self):
++        mutations = [lambda d: d.update(status='failed'), lambda d: d.update(source_sha='c' * 40),
++                     lambda d: d.update(version='9.0.0'), lambda d: d.update(packages={}),
++                     lambda d: d.update(preparation_sha256='d' * 64), lambda d: d.update(checks=['version']),
++                     lambda d: d.update(os='Linux')]
++        path = self.root / 'Windows/smoke/smoke.json'
++        original = path.read_bytes()
++        for change in mutations:
++            with self.subTest(change=change):
++                path.write_bytes(original)
++                self.change_json(path, change)
++                with self.assertRaises(ValueError):
++                    self.compare()
++                self.assertFalse((self.root / 'accepted.json').exists())
++
++    def test_missing_platform_or_missing_receipt_refuses(self):
++        with self.assertRaises(ValueError):
++            self.compare(self.consumers[:2])
++        (self.root / 'Windows/smoke/smoke.json').unlink()
++        with self.assertRaises(FileNotFoundError):
++            self.compare()
++
++    def test_tampered_packages_extra_packages_and_prior_receipts_refuse(self):
++        pair = next(self.staging.iterdir())
++        pair.write_bytes(b'tampered')
++        with self.assertRaises(ValueError):
++            self.compare()
++        (self.staging / 'extra.nupkg').write_bytes(b'extra')
++        with self.assertRaises(ValueError):
++            packages(self.staging, VERSION)
++        self.assertFalse((self.root / 'accepted.json').exists())
++
++    def test_raw_capture_tampering_and_cross_os_byte_drift_refuse(self):
++        path = self.root / 'Darwin/smoke/discovery/modules.json'
++        path.write_bytes(path.read_bytes().replace(b'\n', b'\r\n'))
++        with self.assertRaises(ValueError):
++            self.compare()
++        receipt = self.root / 'Darwin/smoke/smoke.json'
++        self.change_json(receipt, lambda d: d['discovery'].update({'modules.json': digest(path)}))
++        with self.assertRaises(ValueError):
++            self.compare()
++
++    def test_all_windows_required_tests_must_execute_not_skip(self):
++        for name in self.runner.WINDOWS_REQUIRED:
++            with self.subTest(name=name):
++                suite = 'Core' if '.Core.Tests.' in name else 'Cli'
++                path = self.root / f'Windows/tests/Hexalith.McpCli.{suite}.Tests.xml'
++                tree = ElementTree.parse(path)
++                item = next(item for item in tree.findall('.//test') if item.get('name') == name)
++                item.set('result', 'Skip')
++                tree.write(path)
++                self.change_json(self.root / 'Windows/tests/tests.json', lambda d: d['xml'].update({path.name: digest(path)}))
++                with self.assertRaises(ValueError):
++                    self.compare()
++                item.set('result', 'Pass')
++                tree.write(path)
++                self.change_json(self.root / 'Windows/tests/tests.json', lambda d: d['xml'].update({path.name: digest(path)}))
++
++    def test_missing_or_wrong_platform_suite_refuses(self):
++        self.change_json(self.root / 'Windows/tests/tests.json', lambda d: d.update(suites=['Cli']))
++        with self.assertRaises(ValueError):
++            self.compare()
++
++    def test_local_only_and_dirty_source_refuse(self):
++        for key, value in [('source_clean', False), ('eligibility', 'local-only')]:
++            with self.subTest(key=key):
++                original = self.prepared_path.read_bytes()
++                self.change_json(self.prepared_path, lambda d: d.update({key: value}))
++                with self.assertRaises(ValueError):
++                    self.compare()
++                self.prepared_path.write_bytes(original)
++
++    def test_missing_fr22_and_skipped_source_steps_refuse(self):
++        for change in [lambda d: d.update(fr22={}),
++                       lambda d: d['gates']['ci.yml']['jobs'][0]['steps'][0].update(conclusion='skipped'),
++                       lambda d: d['gates']['ci.yml'].update(source_sha='d' * 40)]:
++            with self.subTest(change=change):
++                original = copy.deepcopy(self.source_gate)
++                change(self.source_gate)
++                self.save_gates()
++                with self.assertRaises(ValueError):
++                    self.compare()
++                self.source_gate = original
++
++    def test_latest_jobs_require_execution_and_complete_pagination(self):
++        all_jobs = jobs(self.gate.STAGING_JOBS)
++        with patch.object(self.gate, 'github_json', side_effect=[{'jobs': all_jobs[:2], 'total_count': len(all_jobs)},
++                                                               {'jobs': all_jobs[2:], 'total_count': len(all_jobs)}]):
++            self.gate.verify_jobs('fixture/repo', {'id': 1, 'run_attempt': 2}, self.gate.STAGING_JOBS)
++        all_jobs[0]['conclusion'] = 'skipped'
++        with self.assertRaises(ValueError):
++            self.gate.validate_jobs(all_jobs, self.gate.STAGING_JOBS)
++        with self.assertRaises(ValueError):
++            self.gate.validate_jobs([], self.gate.STAGING_JOBS)
++
++    def test_source_gate_rejects_stale_dirty_or_wrong_head(self):
++        for state in ('stale', 'dirty', 'wrong-head'):
++            def fake_git(argv, **kwargs):
++                command = argv[1:]
++                result = SHA
++                if command[0] == 'branch': result = 'main'
++                elif command[0] == 'status': result = ' M source.cs' if state == 'dirty' else ''
++                elif state == 'wrong-head': result = 'b' * 40
++                return subprocess.CompletedProcess(argv, 0, stdout=result, stderr='')
++            with self.subTest(state=state), patch.object(self.gate.subprocess, 'run', side_effect=fake_git), \
++                    patch.object(self.gate, 'github_json', return_value={'object': {'sha': 'b' * 40}}), \
++                    patch.dict('os.environ', {'REPOSITORY': 'fixture/repo'}), \
++                    patch.object(sys, 'argv', ['verify', '--staging', '--output', str(self.root / 'gate.json'), SHA, 'refs/heads/main', 'paired']), \
++                    contextlib.redirect_stderr(io.StringIO()):
++                self.assertEqual(self.gate.main(), 1)
++                self.assertFalse((self.root / 'gate.json').exists())
++
++    def test_no_release_creates_no_staged_pair_and_existing_output_refuses(self):
++        prepare = module('prepare-paired-release')
++        selection = self.root / 'selection.json'
++        write_new(selection, {'schema': 'mcpcli-version-selection/v1', 'source_sha': SHA, 'release': False, 'version': None})
++        output = self.root / 'no-release'
++        with patch.object(prepare, 'source', return_value={'source_sha': SHA, 'source_clean': True}):
++            prepare.prepare(selection, output)
++            self.assertTrue((output / 'no-release.json').is_file())
++            self.assertFalse((output / 'packages').exists())
++            with self.assertRaises(ValueError):
++                prepare.prepare(selection, output)
++
++    def test_native_or_malformed_payload_refuses(self):
++        validator = module('validate-release-packages')
++        for payload in (b'', b'MZnative', bytes(512)):
++            with self.assertRaises(ValueError):
++                validator.validate_managed(payload)
++
++    def test_paired_publication_and_recovery_remain_refused(self):
++        for version in (VERSION, '1.0.0'):
++            with self.assertRaisesRegex(ValueError, 'Paired release is deferred'):
++                module('release-request').validate_request(version, 'paired')
++
++    def test_xml_errors_or_no_executed_tests_refuse(self):
++        path = self.root / 'errors.xml'
++        for document in ['<assemblies><assembly errors="1"><test name="sample" result="Pass" /></assembly></assemblies>',
++                         '<assemblies><assembly><error /></assembly></assemblies>',
++                         '<assemblies><assembly /></assemblies>',
++                         '<assemblies><assembly><test name="sample" result="Skip" /></assembly></assemblies>']:
++            path.write_text(document)
++            with self.assertRaises(ValueError):
++                self.runner.inspect_xml(path)
++
++    def test_preparation_evidence_tampering_and_missing_discovery_refuse(self):
++        path = self.evidence / 'source-before.json'
++        path.write_text('{}')
++        with self.assertRaises(ValueError):
++            self.compare()
++        self.save_gates()
++        self.change_json(self.root / 'Windows/smoke/smoke.json', lambda d: d['discovery'].pop('operations-sample.json'))
++        with self.assertRaises(ValueError):
++            self.compare()
++
++    def test_duplicate_platform_and_missing_package_refuse(self):
++        with self.assertRaises(ValueError):
++            self.compare([self.consumers[0], self.consumers[0], self.consumers[2]])
++        next(self.staging.iterdir()).unlink()
++        with self.assertRaises(ValueError):
++            self.compare()
++
++    def test_symlink_staging_and_dangling_output_refuse(self):
++        alias = self.root / 'staging-alias'
++        alias.symlink_to(self.staging, target_is_directory=True)
++        with self.assertRaises(ValueError):
++            packages(alias, VERSION)
++        prepare = module('prepare-paired-release')
++        selection = self.root / 'no-release-selection.json'
++        write_new(selection, {'schema': 'mcpcli-version-selection/v1', 'source_sha': SHA, 'release': False, 'version': None})
++        output = self.root / 'dangling'
++        output.symlink_to(self.root / 'absent', target_is_directory=True)
++        with patch.object(prepare, 'source', return_value={'source_sha': SHA, 'source_clean': True}):
++            with self.assertRaises(ValueError):
++                prepare.prepare(selection, output)
++        self.assertTrue(output.is_symlink())
++        self.assertFalse((self.root / 'absent').exists())
++
++    def fake_preparation(self, failure=None):
++        prepare = module('prepare-paired-release')
++        selection = self.root / ('selection-' + str(failure) + '.json')
++        write_new(selection, {'schema': 'mcpcli-version-selection/v1', 'source_sha': SHA, 'release': True, 'version': VERSION})
++        output = self.root / ('prepare-' + str(failure))
++        before = {'source_sha': SHA, 'source_clean': True}
++        after = {**before, 'source_sha': 'f' * 40} if failure == 'source' else before
++        def execute(argv, **kwargs):
++            if argv[0] == 'dotnet' and argv[1] == 'pack':
++                staging = Path(argv[argv.index('--output') + 1])
++                identity = Path(argv[2]).stem
++                (staging / f'{identity}.{VERSION}.nupkg').write_bytes(identity.encode())
++            elif argv[0] == sys.executable and argv[1].endswith('validate-release-packages.py'):
++                validation = Path(argv[argv.index('--output') + 1])
++                write_new(validation, {'packages': packages(output / 'packages', VERSION)})
++                if failure == 'tamper':
++                    next((output / 'packages').iterdir()).write_bytes(b'tamper after validation')
++            elif argv[0] == sys.executable and argv[1].endswith('verify-release-source.py'):
++                write_new(Path(argv[argv.index('--output') + 1]), self.source_gate)
++            code = 1 if len(argv) > 1 and argv[1] == failure else 0
++            return subprocess.CompletedProcess(argv, code, stdout=b'fixture', stderr=b'')
++        with patch.object(prepare, 'source', side_effect=[before, after]), \
++                patch.object(prepare.subprocess, 'run', side_effect=execute), contextlib.redirect_stdout(io.StringIO()):
++            if failure:
++                with self.assertRaises((ValueError, subprocess.CalledProcessError)):
++                    prepare.prepare(selection, output)
++                self.assertFalse((output / 'prepared.json').exists())
++            else:
++                prepare.prepare(selection, output)
++                receipt = json.loads((output / 'prepared.json').read_text())
++                self.assertEqual(receipt['eligibility'], 'current-main')
++                self.assertEqual(receipt['packages'], packages(output / 'packages', VERSION))
++                self.assertTrue((output / 'evidence/source-before.json').is_file())
++                self.assertTrue((output / 'evidence/source-after.json').is_file())
++
++    def test_preparation_binds_one_fresh_pair_and_both_source_checks(self):
++        self.fake_preparation()
++
++    def test_preparation_failures_never_record_success(self):
++        for failure in ('restore', 'build', 'source', 'tamper'):
++            with self.subTest(failure=failure):
++                self.fake_preparation(failure)
++
++    def test_fr22_requires_checkout_containment_authoritative_main_and_sync(self):
++        prerequisite = module('verify-paired-prerequisites')
++        success = subprocess.CompletedProcess([], 0, stdout=b'', stderr=b'')
++        for state in ('wrong-checkout', 'missing-ancestor', 'unmerged-upstream', 'sync-drift'):
++            def git_result(*args):
++                if args[0] == 'config': return 'submodule.baseline.path references/Hexalith.AI.Tools'
++                if args[0] == 'ls-tree': return '160000 commit ' + SHA + '\treferences/Hexalith.AI.Tools'
++                return 'b' * 40 if state == 'wrong-checkout' and args[0] == '-C' else SHA
++            def api_result(endpoint):
++                return {'object': {'sha': SHA}} if '/git/ref/' in endpoint else {'status': 'behind' if state == 'unmerged-upstream' else 'identical'}
++            with self.subTest(state=state), patch.object(prerequisite, 'git', side_effect=git_result), \
++                    patch.object(prerequisite, 'run', side_effect=subprocess.CalledProcessError(1, ['git']) if state == 'missing-ancestor' else None, return_value=success), \
++                    patch.object(prerequisite, 'digest', side_effect=['a', 'b', 'c'] if state == 'sync-drift' else None, return_value='d'), \
++                    patch.object(prerequisite, 'module', return_value=type('Gate', (), {'github_json': staticmethod(api_result)})()):
++                with self.assertRaises((ValueError, subprocess.CalledProcessError)):
++                    prerequisite.verify()
++
++    def test_stale_version_selection_refuses_before_building(self):
++        prepare = module('prepare-paired-release')
++        selection = self.root / 'stale-selection.json'
++        write_new(selection, {'schema': 'mcpcli-version-selection/v1', 'source_sha': 'b' * 40, 'release': True, 'version': VERSION})
++        with patch.object(prepare, 'source', return_value={'source_sha': SHA, 'source_clean': True}), \
++                patch.object(prepare.subprocess, 'run') as command:
++            with self.assertRaises(ValueError):
++                prepare.prepare(selection, self.root / 'stale-output')
++            command.assert_not_called()
++
++    def test_baseline_requires_a_committed_root_declaration_and_gitlink(self):
++        prerequisite = module('verify-paired-prerequisites')
++        declaration = 'submodule.baseline.path references/Hexalith.AI.Tools'
++        entry = '160000 commit ' + SHA + '\treferences/Hexalith.AI.Tools'
++        invalid = [('', entry), (declaration + '\n' + declaration, entry),
++                   (declaration, '100644 blob ' + SHA + '\treferences/Hexalith.AI.Tools'),
++                   (declaration, '040000 tree ' + SHA + '\treferences/Hexalith.AI.Tools'),
++                   (declaration, '160000 commit ' + SHA + '\treferences/Other'),
++                   (declaration, '')]
++        for declared, tree in invalid:
++            with self.subTest(declaration=declared, tree=tree), patch.object(prerequisite, 'git', side_effect=[declared, tree]):
++                with self.assertRaises(ValueError):
++                    prerequisite.committed_baseline()
++        with patch.object(prerequisite, 'git', side_effect=[declaration, entry]) as git:
++            self.assertEqual(prerequisite.committed_baseline(), SHA)
++            self.assertEqual(git.call_args_list[0].args[:3], ('config', '--blob', 'HEAD:.gitmodules'))
++            self.assertEqual(git.call_args_list[1].args[:2], ('ls-tree', 'HEAD'))
++
++    def test_new_evidence_never_overwrites_a_prior_result(self):
++        path = self.root / 'already.json'
++        write_new(path, {'retained': True})
++        with self.assertRaises(FileExistsError):
++            write_new(path, {'retained': False})
++        self.assertEqual(json.loads(path.read_text()), {'retained': True})
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/scripts/verify-paired-prerequisites.py b/scripts/verify-paired-prerequisites.py
+new file mode 100644
+index 0000000..d1eceed
+--- /dev/null
++++ b/scripts/verify-paired-prerequisites.py
+@@ -0,0 +1,60 @@
++#!/usr/bin/env python3
++"""Recheck committed FR-22 integration, containing baseline and synchronized entry points."""
++
++import argparse
++import json
++import sys
++import subprocess
++from paired_release import digest, git, module, run, source, write_new
++
++REQUIRED = '70dbf73e80787299c832d30d911b16b105ab194d'
++BASELINE = 'references/Hexalith.AI.Tools'
++
++
++def committed_baseline():
++    declarations = git('config', '--blob', 'HEAD:.gitmodules', '--get-regexp', r'^submodule\..*\.path$')
++    declared_paths = [line.split(None, 1)[1] for line in declarations.splitlines() if len(line.split(None, 1)) == 2]
++    if declared_paths.count(BASELINE) != 1:
++        raise ValueError('The committed root .gitmodules must declare the baseline exactly once.')
++    entry = git('ls-tree', 'HEAD', '--', BASELINE)
++    metadata, separator, path = entry.partition('\t')
++    fields = metadata.split()
++    if not separator or path != BASELINE or len(fields) != 3 or fields[:2] != ['160000', 'commit']:
++        raise ValueError('The committed baseline must be a root submodule gitlink, not an ordinary file or directory.')
++    return fields[2]
++
++
++def verify():
++    gate = module('verify-release-source')
++    baseline = committed_baseline()
++    if git('-C', BASELINE, 'rev-parse', 'HEAD') != baseline:
++        raise ValueError('The baseline checkout differs from the committed root gitlink.')
++    run(['git', '-C', BASELINE, 'merge-base', '--is-ancestor', REQUIRED, baseline])
++    upstream = gate.github_json('repos/Hexalith/Hexalith.AI.Tools/git/ref/heads/main')['object']['sha']
++    for revision in (REQUIRED, baseline):
++        comparison = gate.github_json(f'repos/Hexalith/Hexalith.AI.Tools/compare/{revision}...{upstream}')
++        if comparison.get('status') not in ('ahead', 'identical'):
++            raise ValueError('Authoritative upstream main does not contain the required rule and committed baseline.')
++    run(['bash', 'scripts/check-agent-instructions-sync.sh'])
++    entries = ['AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md']
++    hashes = {path: digest(path) for path in entries}
++    if len(set(hashes.values())) != 1:
++        raise ValueError('Agent entry points differ.')
++    return {'required_revision': REQUIRED, 'baseline_revision': baseline, 'upstream_main': upstream,
++            'synchronization': hashes, **source()}
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--output', required=True)
++    args = parser.parse_args()
++    try:
++        write_new(args.output, verify())
++        return 0
++    except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
++        print(f'Paired prerequisite gate failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
++        return 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())

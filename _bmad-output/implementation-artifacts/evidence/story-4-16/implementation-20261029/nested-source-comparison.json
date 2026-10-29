@@ -1,0 +1,309 @@
+{
+  "scope": "temporary three-module fixture; independent exact shipped pair replay is still required",
+  "files": {
+    "src/Hexalith.McpCli.Analyzers/MissingOperationDescriptionAnalyzer.cs": {
+      "current_sha256": "6e0bd9ae756b8eaf2eb7aa1ddb0ccfa6bb00b431437e445c8a305bae88f33c35",
+      "fixture_sha256": "6e0bd9ae756b8eaf2eb7aa1ddb0ccfa6bb00b431437e445c8a305bae88f33c35"
+    },
+    "src/Hexalith.McpCli.Abstractions/WireTypeConvention.cs": {
+      "current_sha256": "c4e58658f42d640aa92fa122dda8d0ba7e9621037eeb5350518375ea78ad8c8c",
+      "fixture_sha256": "c4e58658f42d640aa92fa122dda8d0ba7e9621037eeb5350518375ea78ad8c8c"
+    },
+    "src/Hexalith.McpCli.Abstractions/HexalithModuleAttribute.cs": {
+      "current_sha256": "3d2d0f12874b2566bf471a95ccd57053e80b586667e7c2f929eada3b028bbdba",
+      "fixture_sha256": "3d2d0f12874b2566bf471a95ccd57053e80b586667e7c2f929eada3b028bbdba"
+    },
+    "src/Hexalith.McpCli.Abstractions/HexalithIdentifierAttribute.cs": {
+      "current_sha256": "44383a87d9b32e3f5e4305a249102f1808d1483c249afef76e2d7668f9ec640e",
+      "fixture_sha256": "44383a87d9b32e3f5e4305a249102f1808d1483c249afef76e2d7668f9ec640e"
+    },
+    "src/Hexalith.McpCli.Abstractions/HexalithCommandAttribute.cs": {
+      "current_sha256": "d6350490155a8d57c94e6b7d5d3e395ba0b686a331811fc70fa8b03b0d6fd102",
+      "fixture_sha256": "d6350490155a8d57c94e6b7d5d3e395ba0b686a331811fc70fa8b03b0d6fd102"
+    },
+    "src/Hexalith.McpCli.Abstractions/KebabCase.cs": {
+      "current_sha256": "ee008ad669da3d4b7fce24bddb749f22a23bb02f681711101104d7cdf404b48b",
+      "fixture_sha256": "ee008ad669da3d4b7fce24bddb749f22a23bb02f681711101104d7cdf404b48b"
+    },
+    "src/Hexalith.McpCli.Abstractions/IdentifierKind.cs": {
+      "current_sha256": "7bed92ac8444ebb0ff67c85a2a2cbd7d50514a2770c4c76d2707d4da971d1e88",
+      "fixture_sha256": "7bed92ac8444ebb0ff67c85a2a2cbd7d50514a2770c4c76d2707d4da971d1e88"
+    },
+    "src/Hexalith.McpCli.Abstractions/HexalithQueryAttribute.cs": {
+      "current_sha256": "155393c7de65b6d47ac74be2c933692abfc079ad2ec7acc595c44f5d9b527bb7",
+      "fixture_sha256": "155393c7de65b6d47ac74be2c933692abfc079ad2ec7acc595c44f5d9b527bb7"
+    },
+    "src/Hexalith.McpCli/Program.cs": {
+      "current_sha256": "9d4e419d57f122ca75208e863ee7e555f0db8e7061fe8e1169292d386d2a35e1",
+      "fixture_sha256": "9d4e419d57f122ca75208e863ee7e555f0db8e7061fe8e1169292d386d2a35e1"
+    },
+    "src/Hexalith.McpCli.Mcp/McpToolHandlers.cs": {
+      "current_sha256": "902a973729de972ba0c8a3292859c11304d95fc3b8377797c1b61ba8303741ba",
+      "fixture_sha256": "902a973729de972ba0c8a3292859c11304d95fc3b8377797c1b61ba8303741ba"
+    },
+    "src/Hexalith.McpCli.Mcp/McpOutputSchema.cs": {
+      "current_sha256": "f73b505b317fa827def46ce115c5c97710c47d0c8c7c4eb26d30b7ecde6a7e56",
+      "fixture_sha256": "f73b505b317fa827def46ce115c5c97710c47d0c8c7c4eb26d30b7ecde6a7e56"
+    },
+    "src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs": {
+      "current_sha256": "d179a2a0105abe46c0679c11580010b0b28abd99d78bbe9eb1cba3ada8a712d6",
+      "fixture_sha256": "d179a2a0105abe46c0679c11580010b0b28abd99d78bbe9eb1cba3ada8a712d6"
+    },
+    "src/Hexalith.McpCli.Core/McpCliCoreServiceCollectionExtensions.cs": {
+      "current_sha256": "5c01a6047d84a0085114cc5b70c33468b2431a31fbb55d1787a290be8769e54f",
+      "fixture_sha256": "5c01a6047d84a0085114cc5b70c33468b2431a31fbb55d1787a290be8769e54f"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogSnapshot.cs": {
+      "current_sha256": "7d775746717455fe5450deea4291bddcf54c0eec2ddd01531009b4f42b990504",
+      "fixture_sha256": "7d775746717455fe5450deea4291bddcf54c0eec2ddd01531009b4f42b990504"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogAccess.cs": {
+      "current_sha256": "6a1ea21c0ec58b2608d3498c6298f3e907712297e05ef2f998f88ab40414cc9a",
+      "fixture_sha256": "6a1ea21c0ec58b2608d3498c6298f3e907712297e05ef2f998f88ab40414cc9a"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationKind.cs": {
+      "current_sha256": "f1707438401fe5bc8f56205fc3dadeebae2c5df06782bd0202287732ac92c84d",
+      "fixture_sha256": "f1707438401fe5bc8f56205fc3dadeebae2c5df06782bd0202287732ac92c84d"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs": {
+      "current_sha256": "59adc702a0e141a7b90356be31eac6df4f8bb6a0caaebf1eeaf70de094b70c05",
+      "fixture_sha256": "59adc702a0e141a7b90356be31eac6df4f8bb6a0caaebf1eeaf70de094b70c05"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs": {
+      "current_sha256": "f8ad509b83282ccfe48fb4a59d34ae7d77681467f23485406e5703c634106e40",
+      "fixture_sha256": "f8ad509b83282ccfe48fb4a59d34ae7d77681467f23485406e5703c634106e40"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationEnvelopeDocument.cs": {
+      "current_sha256": "137f26ab3f7fec077011b5fa65066c5ee7f3b0a3a5a753e4ad0ddde4d939433d",
+      "fixture_sha256": "137f26ab3f7fec077011b5fa65066c5ee7f3b0a3a5a753e4ad0ddde4d939433d"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationDescriptor.cs": {
+      "current_sha256": "69cb24a7eb91e85c8b5b7cadc2af9e3b3fe225522b16018132c6a901a6243617",
+      "fixture_sha256": "69cb24a7eb91e85c8b5b7cadc2af9e3b3fe225522b16018132c6a901a6243617"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationSummary.cs": {
+      "current_sha256": "5fa5adddc46d77b88974916fc50ad71901996fefcd63a891b97908fe081a8398",
+      "fixture_sha256": "5fa5adddc46d77b88974916fc50ad71901996fefcd63a891b97908fe081a8398"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ICatalog.cs": {
+      "current_sha256": "3a34f2a8303a142c93bd9607f11869eef88dbeae24dc3a2d65100e53c984c35b",
+      "fixture_sha256": "3a34f2a8303a142c93bd9607f11869eef88dbeae24dc3a2d65100e53c984c35b"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationsDocument.cs": {
+      "current_sha256": "2d9732868eb35ffce2136aeeaf09a333757f074e6dfb23ddac53dd5e30e41bf6",
+      "fixture_sha256": "2d9732868eb35ffce2136aeeaf09a333757f074e6dfb23ddac53dd5e30e41bf6"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/RoutingResolution.cs": {
+      "current_sha256": "db2e336f801baee2fae95930329045be6c0584e7dc6473e3d4f2607dcad5c2a1",
+      "fixture_sha256": "db2e336f801baee2fae95930329045be6c0584e7dc6473e3d4f2607dcad5c2a1"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/LintFinding.cs": {
+      "current_sha256": "94bbe52633c819476b379d8532c100e6bf697c6872cb81ffca2e76bdacd3784e",
+      "fixture_sha256": "94bbe52633c819476b379d8532c100e6bf697c6872cb81ffca2e76bdacd3784e"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ModuleSummary.cs": {
+      "current_sha256": "1442f9c5a25b988ab7581a62ca842ef01807d778cba9c4da93a2db94b11b2b56",
+      "fixture_sha256": "1442f9c5a25b988ab7581a62ca842ef01807d778cba9c4da93a2db94b11b2b56"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogService.cs": {
+      "current_sha256": "ce5a8a59c85a76ce81461eb9e21afa5507cb63b11fa89a559fc6d85b5d329b56",
+      "fixture_sha256": "ce5a8a59c85a76ce81461eb9e21afa5507cb63b11fa89a559fc6d85b5d329b56"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ModulesDocument.cs": {
+      "current_sha256": "b3df27a5079f07c953e0bd27872d4d0cd4a15d9103fb253947aec5cfbed28a9c",
+      "fixture_sha256": "b3df27a5079f07c953e0bd27872d4d0cd4a15d9103fb253947aec5cfbed28a9c"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ExecutionAvailability.cs": {
+      "current_sha256": "ac5ebdc3da6a86887c27c426ce43837f09c81d1a5d9d03ea2a8c7962f9af0e8b",
+      "fixture_sha256": "ac5ebdc3da6a86887c27c426ce43837f09c81d1a5d9d03ea2a8c7962f9af0e8b"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationRouting.cs": {
+      "current_sha256": "8340ba07634cb1de27a2f2d67b0214b78a990af0e8ccb9a97e7bb9e8b193da82",
+      "fixture_sha256": "8340ba07634cb1de27a2f2d67b0214b78a990af0e8ccb9a97e7bb9e8b193da82"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogLookupResult.cs": {
+      "current_sha256": "1abf032863d866974ba98b81a8834e3db0e1f0fbea360ae59c4bdbed77274cf8",
+      "fixture_sha256": "1abf032863d866974ba98b81a8834e3db0e1f0fbea360ae59c4bdbed77274cf8"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ModuleDescriptor.cs": {
+      "current_sha256": "5b634822b5c48e7db432946d3f34a7c12decff9120c3046bbe3e8134bb718a84",
+      "fixture_sha256": "5b634822b5c48e7db432946d3f34a7c12decff9120c3046bbe3e8134bb718a84"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/DescriptionLinter.cs": {
+      "current_sha256": "c2055adfc41cfa062109685a2a4d1f02d70f913ed3bfe228f26c5d62783de848",
+      "fixture_sha256": "c2055adfc41cfa062109685a2a4d1f02d70f913ed3bfe228f26c5d62783de848"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/OperationDescriptionDocument.cs": {
+      "current_sha256": "4270e5757323fb0577b2cf41228041e0725d05687ede15edcd7bfd3e04dbb742",
+      "fixture_sha256": "4270e5757323fb0577b2cf41228041e0725d05687ede15edcd7bfd3e04dbb742"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogProvider.cs": {
+      "current_sha256": "389bb62df2ddb3575eb7a93aabafd65e585a8849c9cdc0fe50e1bd9e01817a60",
+      "fixture_sha256": "389bb62df2ddb3575eb7a93aabafd65e585a8849c9cdc0fe50e1bd9e01817a60"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/CatalogDiagnostic.cs": {
+      "current_sha256": "31e46ae4112a6ca23d8290d26d284e0769eb4e9330b8d6a998e514f64b892c49",
+      "fixture_sha256": "31e46ae4112a6ca23d8290d26d284e0769eb4e9330b8d6a998e514f64b892c49"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/AggregateIdAccessors.cs": {
+      "current_sha256": "25821de07aba0774be2a2b0184e829a75b0e734113e312a5deb9b75cc5274cfc",
+      "fixture_sha256": "25821de07aba0774be2a2b0184e829a75b0e734113e312a5deb9b75cc5274cfc"
+    },
+    "src/Hexalith.McpCli.Core/Catalog/ContractDeclarationException.cs": {
+      "current_sha256": "361b089e40571c8950090ee10ce9dda3698ddeaa04dc1c6d1cf8b46efa1d01b6",
+      "fixture_sha256": "361b089e40571c8950090ee10ce9dda3698ddeaa04dc1c6d1cf8b46efa1d01b6"
+    },
+    "src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs": {
+      "current_sha256": "9bdcf0c0ad40f2c2dd7605f9506f352ca5b7c93d627cacdb0465a49f73af31ee",
+      "fixture_sha256": "9bdcf0c0ad40f2c2dd7605f9506f352ca5b7c93d627cacdb0465a49f73af31ee"
+    },
+    "src/Hexalith.McpCli.Core/Settings/ProfileStore.cs": {
+      "current_sha256": "9af76430cfc29309a30508e1af08112ee24eb0ec2fd86f9edcf6cd0277105c92",
+      "fixture_sha256": "9af76430cfc29309a30508e1af08112ee24eb0ec2fd86f9edcf6cd0277105c92"
+    },
+    "src/Hexalith.McpCli.Core/Settings/ConnectionProfile.cs": {
+      "current_sha256": "fd8ee826329983a9d5049ed7418611f321f1628634d57dc9775b7638799f917f",
+      "fixture_sha256": "fd8ee826329983a9d5049ed7418611f321f1628634d57dc9775b7638799f917f"
+    },
+    "src/Hexalith.McpCli.Core/Settings/SettingsResolver.cs": {
+      "current_sha256": "72bd76862659688be14c55cb7a493ff005b7de2fd63e63f624e31c0e45b5bf08",
+      "fixture_sha256": "72bd76862659688be14c55cb7a493ff005b7de2fd63e63f624e31c0e45b5bf08"
+    },
+    "src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs": {
+      "current_sha256": "903d8926f606a79b395d4bbf36f3c8eecf3585df6a379505a743e0e31fcd120c",
+      "fixture_sha256": "903d8926f606a79b395d4bbf36f3c8eecf3585df6a379505a743e0e31fcd120c"
+    },
+    "src/Hexalith.McpCli.Core/Settings/ProfileSnapshot.cs": {
+      "current_sha256": "4e3d937c3ac7c936bdeb28e0857f2c71eba4b03140c47d147a807ee0bc16c4fb",
+      "fixture_sha256": "4e3d937c3ac7c936bdeb28e0857f2c71eba4b03140c47d147a807ee0bc16c4fb"
+    },
+    "src/Hexalith.McpCli.Core/Settings/ResolvedSettings.cs": {
+      "current_sha256": "bb386dd4cf2930c75e293bde913d6fd2bc61d2483c27c2785a682fe2d29864e9",
+      "fixture_sha256": "bb386dd4cf2930c75e293bde913d6fd2bc61d2483c27c2785a682fe2d29864e9"
+    },
+    "src/Hexalith.McpCli.Core/Settings/SettingsInput.cs": {
+      "current_sha256": "be93eea8ad04db9026f1657e0422b4bff77b4f1fdbd83271a8e9667d5e13d817",
+      "fixture_sha256": "be93eea8ad04db9026f1657e0422b4bff77b4f1fdbd83271a8e9667d5e13d817"
+    },
+    "src/Hexalith.McpCli.Core/Settings/SettingsResolution.cs": {
+      "current_sha256": "d4cfe2f340be23e08c4bbb52c27db4b803cd503579ab4317ec3a89a92e8de8ac",
+      "fixture_sha256": "d4cfe2f340be23e08c4bbb52c27db4b803cd503579ab4317ec3a89a92e8de8ac"
+    },
+    "src/Hexalith.McpCli.Core/Schema/PayloadViolation.cs": {
+      "current_sha256": "75920ba49e13bbf0549a4774f2cc3c85570bd846b2977554f8f61c42ab18ed04",
+      "fixture_sha256": "75920ba49e13bbf0549a4774f2cc3c85570bd846b2977554f8f61c42ab18ed04"
+    },
+    "src/Hexalith.McpCli.Core/Schema/PayloadValidationResult.cs": {
+      "current_sha256": "42cbce3e2a71353463dddf02c45aeab4340f2515eb1019af269c8a1c57b5a748",
+      "fixture_sha256": "42cbce3e2a71353463dddf02c45aeab4340f2515eb1019af269c8a1c57b5a748"
+    },
+    "src/Hexalith.McpCli.Core/Schema/PropertyBinding.cs": {
+      "current_sha256": "d6d6e453d0065c433b84889062f4bbb44a3f1639bb5fe49fe0591eff7baba519",
+      "fixture_sha256": "d6d6e453d0065c433b84889062f4bbb44a3f1639bb5fe49fe0591eff7baba519"
+    },
+    "src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs": {
+      "current_sha256": "8d1df8cab9fe322c6851cea25ffd814b39d97b89091a9ee97415c1462c9f1a7d",
+      "fixture_sha256": "8d1df8cab9fe322c6851cea25ffd814b39d97b89091a9ee97415c1462c9f1a7d"
+    },
+    "src/Hexalith.McpCli.Core/Schema/PropertyRole.cs": {
+      "current_sha256": "5d7ae4b99bd70b1d2b70d494b0f5e9772dbf07fa8be11bed24f99d33645dc7e1",
+      "fixture_sha256": "5d7ae4b99bd70b1d2b70d494b0f5e9772dbf07fa8be11bed24f99d33645dc7e1"
+    },
+    "src/Hexalith.McpCli.Core/Schema/PayloadValidator.cs": {
+      "current_sha256": "0a4feb278eeb3937ff29071cca27a1a0827c63c55f134bcc99e46bb23137ecca",
+      "fixture_sha256": "0a4feb278eeb3937ff29071cca27a1a0827c63c55f134bcc99e46bb23137ecca"
+    },
+    "src/Hexalith.McpCli.Core/Schema/DerivedSchema.cs": {
+      "current_sha256": "4870fd16cc510947d9225a6d3cf1654814c913eae8607ccee26e73ea3c8bfbbd",
+      "fixture_sha256": "4870fd16cc510947d9225a6d3cf1654814c913eae8607ccee26e73ea3c8bfbbd"
+    },
+    "src/Hexalith.McpCli.Core/Execution/OperationCall.cs": {
+      "current_sha256": "540d3910eb9330de4b6e1449f14c2996fbc3bea93fbc2da76da54fe41eb40342",
+      "fixture_sha256": "540d3910eb9330de4b6e1449f14c2996fbc3bea93fbc2da76da54fe41eb40342"
+    },
+    "src/Hexalith.McpCli.Core/Execution/OperationError.cs": {
+      "current_sha256": "c783b7cefc70dbd9b310bf6c8c93791024083261ea6af7316a70b713ff85a9e3",
+      "fixture_sha256": "c783b7cefc70dbd9b310bf6c8c93791024083261ea6af7316a70b713ff85a9e3"
+    },
+    "src/Hexalith.McpCli.Core/Execution/QueryResult.cs": {
+      "current_sha256": "90ce90bb942c8e006d350e3380eb0a20b772108f2f5c6b625f8db6487df97e22",
+      "fixture_sha256": "90ce90bb942c8e006d350e3380eb0a20b772108f2f5c6b625f8db6487df97e22"
+    },
+    "src/Hexalith.McpCli.Core/Execution/QueryPagingDocument.cs": {
+      "current_sha256": "30089e1d129c5fb4a0943cd1b4f41e45fffc044ae3a4c018c364fe13faee0b5c",
+      "fixture_sha256": "30089e1d129c5fb4a0943cd1b4f41e45fffc044ae3a4c018c364fe13faee0b5c"
+    },
+    "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs": {
+      "current_sha256": "0510b115f10a6a4040e103ba2b8de3c0931979e66040675c66f8f903834c4ca2",
+      "fixture_sha256": "0510b115f10a6a4040e103ba2b8de3c0931979e66040675c66f8f903834c4ca2"
+    },
+    "src/Hexalith.McpCli.Core/Execution/RunQueryArguments.cs": {
+      "current_sha256": "adb332bcaff8674d27bd506ce2acf272a088ee67335efd3401089c92c7353dbb",
+      "fixture_sha256": "adb332bcaff8674d27bd506ce2acf272a088ee67335efd3401089c92c7353dbb"
+    },
+    "src/Hexalith.McpCli.Core/Execution/SendCommandArguments.cs": {
+      "current_sha256": "4b75a0b6ffcab3e5b8ca9f2566611bd340059789f7d07771dc2bf109f0f69eb3",
+      "fixture_sha256": "4b75a0b6ffcab3e5b8ca9f2566611bd340059789f7d07771dc2bf109f0f69eb3"
+    },
+    "src/Hexalith.McpCli.Core/Execution/EnvelopeContext.cs": {
+      "current_sha256": "e8f304a5d857c7ca1181a8f6c2f997e8a4cd7cb05ed9601273bce7fbbab40c5c",
+      "fixture_sha256": "e8f304a5d857c7ca1181a8f6c2f997e8a4cd7cb05ed9601273bce7fbbab40c5c"
+    },
+    "src/Hexalith.McpCli.Core/Execution/CommandResult.cs": {
+      "current_sha256": "9910c53715c38780c006703ba5e9fa205c07cdd3b7be1f28ff98242d02f0464b",
+      "fixture_sha256": "9910c53715c38780c006703ba5e9fa205c07cdd3b7be1f28ff98242d02f0464b"
+    },
+    "src/Hexalith.McpCli.Core/Execution/IOperationExecutor.cs": {
+      "current_sha256": "22d06794bff9cf0bb19670d96f952e2e3934f6a6f86b11c5a071530a8116ab5d",
+      "fixture_sha256": "22d06794bff9cf0bb19670d96f952e2e3934f6a6f86b11c5a071530a8116ab5d"
+    },
+    "src/Hexalith.McpCli.Core/Execution/OperationOutcome.cs": {
+      "current_sha256": "d89397ecdb678e6b61734abcc9f94102b9aef5973b9af5ca3939fe76b722cfda",
+      "fixture_sha256": "d89397ecdb678e6b61734abcc9f94102b9aef5973b9af5ca3939fe76b722cfda"
+    },
+    "src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs": {
+      "current_sha256": "96c9b6ec447d381e9a4a6a4715cfbfbee639b42e60362e9f3b722519074b549e",
+      "fixture_sha256": "96c9b6ec447d381e9a4a6a4715cfbfbee639b42e60362e9f3b722519074b549e"
+    },
+    "src/Hexalith.McpCli/Hosting/SettingsBootstrap.cs": {
+      "current_sha256": "ab28b36370b7f8d8348c9204b7b9c18161e63c422c85b4b3d99edd8ef0d0942d",
+      "fixture_sha256": "ab28b36370b7f8d8348c9204b7b9c18161e63c422c85b4b3d99edd8ef0d0942d"
+    },
+    "src/Hexalith.McpCli/Hosting/ManifestLoader.cs": {
+      "current_sha256": "580ded5cd59fc4fa011985b9182507024a769542e83d6fdb66bfff2e7974ee30",
+      "fixture_sha256": "580ded5cd59fc4fa011985b9182507024a769542e83d6fdb66bfff2e7974ee30"
+    },
+    "src/Hexalith.McpCli/Hosting/HostFactory.cs": {
+      "current_sha256": "fe517c2dff9d8210449b0ad01b6dd820c04dbffee894473c28cd084237edc6b3",
+      "fixture_sha256": "fe517c2dff9d8210449b0ad01b6dd820c04dbffee894473c28cd084237edc6b3"
+    },
+    "src/Hexalith.McpCli/Hosting/StaticBearerTokenHandler.cs": {
+      "current_sha256": "d27be26255d12fe2724d2678a9be0e43e097a3063f82ca49cb20e948cb006c26",
+      "fixture_sha256": "d27be26255d12fe2724d2678a9be0e43e097a3063f82ca49cb20e948cb006c26"
+    },
+    "src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs": {
+      "current_sha256": "59be671c661c8497478d545a512c9b3fe4b6fba7464ef41f990093fae49b48ae",
+      "fixture_sha256": "59be671c661c8497478d545a512c9b3fe4b6fba7464ef41f990093fae49b48ae"
+    },
+    "src/Hexalith.McpCli/Cli/OutputFileType.cs": {
+      "current_sha256": "603ac5c28d281d07636dbe9e5aef8960056465343ffd8d8114f962d324b52d0f",
+      "fixture_sha256": "603ac5c28d281d07636dbe9e5aef8960056465343ffd8d8114f962d324b52d0f"
+    },
+    "src/Hexalith.McpCli/Cli/OutputPreflightException.cs": {
+      "current_sha256": "4e6cc3d3624528a1d29921ea1854a54d8cbb81dd0f19d4613cf458f77da8c6d2",
+      "fixture_sha256": "4e6cc3d3624528a1d29921ea1854a54d8cbb81dd0f19d4613cf458f77da8c6d2"
+    },
+    "src/Hexalith.McpCli/Cli/CliRunner.cs": {
+      "current_sha256": "70636040faf7b1ec0559bd61eea9410205e47b6240ad4d38c0bcb08c4eaf8e2d",
+      "fixture_sha256": "70636040faf7b1ec0559bd61eea9410205e47b6240ad4d38c0bcb08c4eaf8e2d"
+    },
+    "src/Hexalith.McpCli/Cli/OutputTargetKind.cs": {
+      "current_sha256": "c4d00564a76832b135de7d09cf0d906ca63c09847d4252852ddef30fe563a658",
+      "fixture_sha256": "c4d00564a76832b135de7d09cf0d906ca63c09847d4252852ddef30fe563a658"
+    },
+    "src/Hexalith.McpCli/Cli/CliOutput.cs": {
+      "current_sha256": "c3bf34a360b3f9566eb5269bf5bb663f0025f0446bf6dee26b95a40c0348ad72",
+      "fixture_sha256": "c3bf34a360b3f9566eb5269bf5bb663f0025f0446bf6dee26b95a40c0348ad72"
+    }
+  }
+}

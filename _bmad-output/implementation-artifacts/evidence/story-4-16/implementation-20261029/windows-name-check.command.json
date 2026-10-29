@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+    "-method",
+    "*ProfileStoreTests.Windows*",
+    "-xml",
+    "/tmp/mcpcli-416-windows-name-check.xml"
+  ],
+  "exit_code": 0,
+  "purpose": "Verify actual XML names only; Windows cases skip on Linux and are not platform acceptance."
+}

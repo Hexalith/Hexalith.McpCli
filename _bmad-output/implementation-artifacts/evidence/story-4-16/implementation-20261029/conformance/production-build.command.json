@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "exit_code": 0
+}

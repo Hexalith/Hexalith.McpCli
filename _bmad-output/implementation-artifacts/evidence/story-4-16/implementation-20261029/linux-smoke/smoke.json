@@ -1,0 +1,50 @@
+{
+  "checks": [
+    "version",
+    "offline-discovery",
+    "config",
+    "json-lf",
+    "errors",
+    "mcp-protocol",
+    "output-file",
+    "table"
+  ],
+  "discovery": {
+    "describe-parties.create-party.json": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c",
+    "describe-parties.deactivate-party.json": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a",
+    "describe-parties.get-party.json": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab",
+    "describe-parties.list-parties.json": "4b1879c5f3e0b9f8a9f080456d30a3effd9ffdf7edcc60935c3525101fced6ac",
+    "describe-parties.reactivate-party.json": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056",
+    "describe-parties.search-parties.json": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269",
+    "describe-parties.update-party.json": "4fa014790069345c9c918e771726edb662ccdf6dc8c189c725032056b6b44bb6",
+    "describe-tenants.add-user-to-tenant.json": "2677601e816410e799f06142d6492987981bf5d37247686324ce0d2c0d678624",
+    "describe-tenants.change-user-role.json": "0ef931a46b04eccc356d29802f423ea886a724343a9b6a70c37f6e15434bf58c",
+    "describe-tenants.create-tenant.json": "f6bbc404ef1af912361b0a1ccbc0728c886cfc56eb0f610024de4bb949f3fc69",
+    "describe-tenants.disable-tenant.json": "aed0a8002ca2c5c4a559bc4eeda33092cadfc23ef5763cc93cfe395ee1409a41",
+    "describe-tenants.enable-tenant.json": "18399cb84583224520f275e5a38fcde19ac5929e1152c9a8f3cbe224b126bf70",
+    "describe-tenants.get-tenant-audit.json": "dad30b9e38cb15f2ce933c2b9dc182446d94e8559ae715b8c1062d41ed3ce5e1",
+    "describe-tenants.get-tenant-users.json": "e8da26bc59772caa83a584abe5e2c29decd56da9634257e330a7710d6248fbec",
+    "describe-tenants.get-tenant.json": "36223181c0961b4bc15e475270b3f34435917ca26c35c097a791a94881b95b22",
+    "describe-tenants.get-user-tenants.json": "961e0af26486b19a256f7a7805899111120d271084a6e040b5d2328aed20241c",
+    "describe-tenants.list-tenants.json": "aa07a22e1231e723c30711a3e6c9cbfa64f09792ef187c203350e8eab2d4d381",
+    "describe-tenants.remove-tenant-configuration.json": "de8e8aa389c238cfaaccda0c2bd11f1b364b006bfcec26d803d753098e4ebb57",
+    "describe-tenants.remove-user-from-tenant.json": "538fe66a8abfbb722f250b4062b8161f9176719bb66f5c75f76ce53ec94a3393",
+    "describe-tenants.set-tenant-configuration.json": "242263056647184488d014f478d89c54f3655438e11fc8dc42101b98a6a0d23d",
+    "describe-tenants.update-tenant.json": "438bb698dedfdbd7edb43755ca227beee5395f9b9ae0737984479b7e8b4f3f1d",
+    "mcp-modules.json": "96d7d1d6b530656455c76a25ed42957c8ac57856f36961cf4e4969d164d951f2",
+    "mcp-tools.json": "f9b2926c343d22ad2d9db6d13777742ba9c0cf19ca324d90b17f73c5c44935c0",
+    "modules.json": "9bc10f3ac31a3340537f686d2aa35c8027dc9dc87acf60cc0f2aa3cdf83b79da",
+    "operations-parties.json": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+    "operations-tenants.json": "3dbb9c2518ccb6c717c8ad81a2dbe377270cef65981ab9a0255131cbb37f96b9"
+  },
+  "os": "Linux",
+  "packages": {
+    "Hexalith.McpCli.1.1.1.nupkg": "bc632e934b0044fb5caa135c89abf48c8f617e3336b4e89be3332e392af13357",
+    "Hexalith.McpCli.Abstractions.1.1.1.nupkg": "00fc802037f4c642793ccb1dd52734892e221b8d935c215a4d3e0510ccec10bc"
+  },
+  "preparation_sha256": "e60819ffd7f11d6c72b8446775f3cafd07202f09eda34cc41d6606fa35f58a4f",
+  "schema": "mcpcli-paired-smoke/v1",
+  "source_sha": "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+  "status": "passed",
+  "version": "1.1.1"
+}

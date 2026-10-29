@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "bash",
+    "tools/conformance-vectors/v1/run-sample-validation.sh",
+    "Release"
+  ],
+  "exit_code": 0
+}

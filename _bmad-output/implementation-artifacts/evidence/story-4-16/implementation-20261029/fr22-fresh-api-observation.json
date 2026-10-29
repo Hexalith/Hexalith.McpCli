@@ -1,0 +1,12 @@
+{
+  "baseline_revision": "70dbf73e80787299c832d30d911b16b105ab194d",
+  "required_revision": "70dbf73e80787299c832d30d911b16b105ab194d",
+  "source_clean": false,
+  "source_sha": "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+  "synchronization": {
+    ".github/copilot-instructions.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "AGENTS.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+    "CLAUDE.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6"
+  },
+  "upstream_main": "70dbf73e80787299c832d30d911b16b105ab194d"
+}

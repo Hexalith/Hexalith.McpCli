@@ -724,8 +724,6 @@ public sealed class CliOutputContractTests
     [Fact]
     public async Task MissingExistingFileStagingDirectoryPreventsMutationAsync()
     {
-        Assert.SkipWhen(OperatingSystem.IsWindows(),
-            "A child process cannot reliably redirect ProfileStore's Windows user-profile path.");
         string directory = NewDirectory();
         try
         {
@@ -744,8 +742,10 @@ public sealed class CliOutputContractTests
                 start.Environment.Remove(name);
             }
 
-            start.Environment["HOME"] = directory;
+            start.Environment["MCPCLI_HOME"] = directory;
             start.Environment["TMPDIR"] = Path.Combine(directory, "missing-temp");
+            start.Environment["TEMP"] = Path.Combine(directory, "missing-temp");
+            start.Environment["TMP"] = Path.Combine(directory, "missing-temp");
             start.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
             foreach (string argument in new[]
                 { "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", target })
@@ -1185,4 +1185,43 @@ public sealed class CliOutputContractTests
         Directory.CreateDirectory(path);
         return path;
     }
+    /// <summary>JSON ignores a Windows-style writer terminator and writes identical LF bytes to files and stdout.</summary>
+    [Fact]
+    public async Task JsonUsesLfRegardlessOfWriterNewlineAsync()
+    {
+        string directory = NewDirectory();
+        TextWriter original = Console.Out;
+        TextWriter originalError = Console.Error;
+        try
+        {
+            var output = new StringWriter { NewLine = "\r\n" };
+            var error = new StringWriter { NewLine = "\r\n" };
+            Console.SetOut(output);
+            Console.SetError(error);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var runner = new CliRunner(store, () => SampleManifest);
+            (await runner.InvokeAsync(["modules"], TestContext.Current.CancellationToken)).ShouldBe(0);
+            string expected = output.ToString();
+            expected.ShouldContain("\n");
+            expected.ShouldNotContain("\r");
+            expected.EndsWith("}\n", StringComparison.Ordinal).ShouldBeTrue();
+            error.ToString().ShouldBeEmpty();
+            output.GetStringBuilder().Clear();
+            string file = Path.Combine(directory, "result.json");
+            (await runner.InvokeAsync(["modules", "--output", file], TestContext.Current.CancellationToken)).ShouldBe(0);
+            output.ToString().ShouldBeEmpty();
+            File.ReadAllBytes(file).ShouldBe(System.Text.Encoding.UTF8.GetBytes(expected));
+            (await runner.InvokeAsync(["unknown-verb"], TestContext.Current.CancellationToken)).ShouldBe(2);
+            output.ToString().ShouldNotContain("\r");
+            output.ToString().EndsWith("}\n", StringComparison.Ordinal).ShouldBeTrue();
+            error.ToString().ShouldBeEmpty();
+        }
+        finally
+        {
+            Console.SetOut(original);
+            Console.SetError(originalError);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
 }

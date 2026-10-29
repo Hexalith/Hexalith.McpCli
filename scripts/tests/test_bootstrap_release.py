@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import struct
 import tempfile
 import unittest
 import warnings
@@ -109,6 +110,10 @@ root = Path(os.environ["RELEASE_TEST_ROOT"])
 args = sys.argv[1:]
 safe = ["REDACTED" if i and args[i-1] == "--api-key" else arg for i, arg in enumerate(args)]
 with (root / "dotnet.log").open("a") as log: log.write(json.dumps(safe) + "\\n")
+if args[0] == "msbuild":
+    project = args[1]
+    print(json.dumps({"Properties": {"TargetFramework": "net10.0", "TargetFrameworks": "", "PackAsTool": "true", "ToolCommandName": "hexalith", "UseAppHost": "false", "PublishTrimmed": "false", "PublishAot": "false", "PublishReadyToRun": "false", "SelfContained": "false", "RuntimeIdentifier": "", "RuntimeIdentifiers": "", "CreateRidSpecificToolPackages": "false", "PackageId": Path(project).stem, "Version": "1.0.0"}}))
+    sys.exit(0)
 if args[0] in ("restore", "build") and args[1] == "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj":
     if os.environ.get(args[0].upper() + "_FAIL"):
         print("fixture production " + args[0] + " failed", file=sys.stderr)
@@ -783,18 +788,37 @@ else:
 
     def paired_tool(self, *, missing=(), package_type=True, command=None, manifest='("Sample.Contracts", "Sample.Contracts")', assembly=True):
         prefix = "tools/net10.0/any/"
+        managed = bytearray(512)
+        managed[:2] = b'MZ'
+        struct.pack_into('<I', managed, 0x3c, 64)
+        managed[64:68] = b'PE\0\0'
+        struct.pack_into('<H', managed, 88, 0x10b)
+        struct.pack_into('<H', managed, 64 + 6, 1)
+        struct.pack_into('<H', managed, 64 + 20, 224)
+        struct.pack_into('<II', managed, 88 + 96 + 14 * 8, 0x2000, 72)
+        struct.pack_into('<IIII', managed, 312 + 8, 128, 0x2000, 128, 384)
+        struct.pack_into('<I', managed, 384, 72)
+        struct.pack_into('<I', managed, 384 + 16, 1)
         files = {
             "Hexalith.McpCli.nuspec": '<package><metadata><id>Hexalith.McpCli</id><version>1.0.0</version>'
                 + ('<packageTypes><packageType name="DotnetTool" /></packageTypes>' if package_type else '')
                 + '</metadata></package>',
-            "README.md": "fixture", prefix + "Hexalith.McpCli.dll": "fixture",
-            prefix + "Hexalith.McpCli.deps.json": "{}", prefix + "Hexalith.McpCli.runtimeconfig.json": "{}",
+            "README.md": "fixture", prefix + "Hexalith.McpCli.dll": bytes(managed),
+            prefix + "Hexalith.McpCli.deps.json": json.dumps({"runtimeTarget": {"name": ".NETCoreApp,Version=v10.0"}, "libraries": {"Sample.Contracts/1.0.0": {}}, "targets": {".NETCoreApp,Version=v10.0": {"Sample.Contracts/1.0.0": {}}}}),
+            prefix + "Hexalith.McpCli.runtimeconfig.json": json.dumps({"runtimeOptions": {"tfm": "net10.0", "framework": {"name": "Microsoft.NETCore.App", "version": "10.0.0"}}}),
             prefix + "DotnetToolSettings.xml": '<DotNetCliTool><Commands><Command '
                 + (command if command is not None else 'Name="hexalith" EntryPoint="Hexalith.McpCli.dll" Runner="dotnet"')
                 + ' /></Commands></DotNetCliTool>',
         }
+        project = self.root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+        project.parent.mkdir(parents=True, exist_ok=True)
+        project.write_text('<Project><ItemGroup><PackageReference Include="Sample.Contracts" HexalithContracts="true" /></ItemGroup></Project>')
+        assets = project.parent / 'obj/project.assets.json'
+        assets.parent.mkdir(parents=True, exist_ok=True)
+        assets.write_text(json.dumps({'libraries': {'Sample.Contracts/1.0.0': {}}}))
+        (self.root / 'tools/dependency-policy.json').write_text(json.dumps({'modules': {'Sample.Contracts': '1.0.0'}}))
         if assembly:
-            files[prefix + "Sample.Contracts.dll"] = "fixture"
+            files[prefix + "Sample.Contracts.dll"] = bytes(managed)
         with ZipFile(self.root / "nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg", "w") as archive:
             for name, contents in files.items():
                 if name not in missing:
@@ -832,6 +856,81 @@ else:
         result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "paired")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assert_no_push()
+
+    def test_paired_validator_rejects_runtime_and_enrollment_drift(self):
+        self.staged()
+        prefix = 'tools/net10.0/any/'
+        cases = [
+            (prefix + 'Hexalith.McpCli.dll', b'native payload', 'managed PE'),
+            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0/linux-x64'}}), 'portable .NET 10'),
+            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0'}, 'libraries': {}}), 'Packaged Contracts versions'),
+            (prefix + 'Hexalith.McpCli.runtimeconfig.json', json.dumps({'runtimeOptions': {'tfm': 'net10.0', 'includedFrameworks': [{'name': 'Microsoft.NETCore.App'}]}}), 'framework-dependent'),
+        ]
+        path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
+        for name, payload, message in cases:
+            with self.subTest(name=name, message=message):
+                self.paired_tool()
+                with ZipFile(path) as archive:
+                    files = {item: archive.read(item) for item in archive.namelist()}
+                files[name] = payload
+                with ZipFile(path, 'w') as archive:
+                    for item, contents in files.items(): archive.writestr(item, contents)
+                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assert_no_push()
+        self.paired_tool()
+        (self.root / 'tools/dependency-policy.json').write_text(json.dumps({'modules': {'Sample.Contracts': '2.0.0'}}))
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Restored Contracts versions', result.stderr)
+        self.paired_tool()
+        (self.root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj').write_text('<Project />')
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Generated manifest, flagged Contracts references', result.stderr)
+        self.assert_no_push()
+
+    def test_paired_validator_refuses_native_files_and_native_dependency_entries(self):
+        self.staged()
+        self.paired_tool()
+        prefix = 'tools/net10.0/any/'
+        path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
+        with ZipFile(path) as archive:
+            base = {name: archive.read(name) for name in archive.namelist()}
+        mixed = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
+        struct.pack_into('<I', mixed, 384 + 16, 0)
+        precompiled = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
+        struct.pack_into('<II', precompiled, 384 + 64, 1, 1)
+        native_dll = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
+        struct.pack_into('<II', native_dll, 88 + 96 + 14 * 8, 0, 0)
+        bit32 = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
+        struct.pack_into('<I', bit32, 384 + 16, 3)
+        cases = [(prefix + name, payload, message) for name, payload, message in [
+            ('libextra.so', b'native', 'Native payload'), ('libextra.so.1.2', b'native', 'Native payload'),
+            ('libextra.dylib', b'native', 'Native payload'), ('arbitrary-host.exe', b'native', 'Native payload'),
+            ('payload.bin', b'\x7fELF' + bytes(12), 'Native payload'),
+            ('mach.bin', b'\xcf\xfa\xed\xfe' + bytes(12), 'Native payload'),
+            ('archive.bin', b'!<arch>\n' + bytes(12), 'Native payload'),
+            ('native.dll', bytes(native_dll), 'no managed CLR header'),
+            ('mixed.dll', bytes(mixed), 'portable managed IL'),
+            ('precompiled.dll', bytes(precompiled), 'portable managed IL'),
+            ('x86.dll', bytes(bit32), 'portable managed IL'),
+        ]]
+        for kind, assets in [('native', {'extra.so': {}}),
+                             ('runtimeTargets', {'runtimes/linux-x64/native/extra.so': {'assetType': 'native', 'rid': 'linux-x64'}})]:
+            deps = json.loads(base[prefix + 'Hexalith.McpCli.deps.json'])
+            deps['targets']['.NETCoreApp,Version=v10.0']['Sample.Contracts/1.0.0'][kind] = assets
+            cases.append((prefix + 'Hexalith.McpCli.deps.json', json.dumps(deps), 'Native'))
+        for name, payload, message in cases:
+            with self.subTest(name=name, message=message):
+                with ZipFile(path, 'w') as archive:
+                    files = {**base, name: payload}
+                    for item, contents in files.items(): archive.writestr(item, contents)
+                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assert_no_push()
 
     def test_validator_rejects_changed_package_manifest_unknown_phase_and_invalid_version(self):
         path = self.staged()
@@ -1477,7 +1576,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
     def test_workflow_checks_source_before_both_production_modes_and_separates_bootstrap_events(self):
         release = (ROOT / ".github/workflows/release.yml").read_text()
         verify = release.split("  verify-source:\n", 1)[1].split("  publish:\n", 1)[0]
-        self.assertNotIn("    if:", verify)
+        self.assertIn("    if: ${{ inputs.phase != 'stage-paired' }}", verify)
         for job in ("publish", "recover"):
             section = release.split(f"  {job}:\n", 1)[1].split("    steps:\n", 1)[0]
             self.assertIn("    needs: verify-source\n", section)

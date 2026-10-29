@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-linux-smoke-v2/private/tools/hexalith",
+    "describe",
+    "tenants.get-user-tenants"
+  ],
+  "exit_code": 0
+}

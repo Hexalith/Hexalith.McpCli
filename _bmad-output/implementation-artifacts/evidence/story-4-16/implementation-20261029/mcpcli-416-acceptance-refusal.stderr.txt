@@ -1,0 +1,1 @@
+Paired acceptance refused: Local-only or dirty-source preparation cannot become accepted staging.

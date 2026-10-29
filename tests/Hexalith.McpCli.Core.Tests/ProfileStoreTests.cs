@@ -10,6 +10,49 @@ namespace Hexalith.McpCli.Core.Tests;
 /// <summary>Checks profile transactions, validation, and private storage.</summary>
 public sealed class ProfileStoreTests
 {
+    /// <summary>The explicit file wins over home and an unset override retains the user-profile default.</summary>
+    [Fact]
+    public void HomeResolutionPreservesPathPrecedence()
+    {
+        string user = Path.Combine(Path.GetTempPath(), "default-user");
+        string home = Path.Combine(Path.GetTempPath(), "isolated-user");
+        ProfileStore.ResolvePath("explicit.json", "invalid-relative-home", user).ShouldBe("explicit.json");
+        ProfileStore.ResolvePath(null, null, user).ShouldBe(Path.Combine(user, ".eventstore", "mcpcli.json"));
+        ProfileStore.ResolvePath(null, home, user).ShouldBe(Path.Combine(home, ".eventstore", "mcpcli.json"));
+    }
+
+    /// <summary>Invalid home overrides fail safely instead of falling back to the real user's profile.</summary>
+    /// <param name="home">The invalid override.</param>
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("relative-secret")]
+    [InlineData("../relative-secret")]
+    [InlineData("~/secret")]
+    [InlineData("\n")]
+    [InlineData("bad\0path")]
+    public void InvalidHomeNeverFallsBack(string home)
+    {
+        Should.Throw<InvalidDataException>(() => ProfileStore.ResolvePath(null, home, Path.GetTempPath()))
+            .Message.ShouldBe("MCPCLI_HOME must be an absolute directory path.");
+    }
+
+    /// <summary>A file cannot be used as the tool's home directory.</summary>
+    [Fact]
+    public void ExistingFileCannotBeHome()
+    {
+        string file = Path.GetTempFileName();
+        try
+        {
+            Should.Throw<InvalidDataException>(() => ProfileStore.ResolvePath(null, file, Path.GetTempPath()))
+                .Message.ShouldBe("MCPCLI_HOME must be an absolute directory path.");
+        }
+        finally
+        {
+            File.Delete(file);
+        }
+    }
+
     /// <summary>Token masking uses safe Unicode text-element prefixes and never returns the complete token.</summary>
     [Theory]
     [InlineData("abcd", "***")]

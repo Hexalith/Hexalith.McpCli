@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "dotnet",
+    "tool",
+    "install",
+    "Hexalith.McpCli",
+    "--tool-path",
+    "/tmp/mcpcli-416-linux-smoke-v2/private/tools",
+    "--version",
+    "1.1.1",
+    "--configfile",
+    "/tmp/mcpcli-416-linux-smoke-v2/private/NuGet.Config",
+    "--no-cache"
+  ],
+  "exit_code": 0
+}

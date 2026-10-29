@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "python3",
+    "tools/conformance-vectors/v1/check_enrolled.py",
+    "--output",
+    "/tmp/mcpcli-416-enrolled-evidence"
+  ],
+  "exit_code": 0
+}

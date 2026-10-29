@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--staging",
+    "--output",
+    "/tmp/mcpcli-416-must-not-source.json",
+    "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+    "refs/heads/main",
+    "paired"
+  ],
+  "exit_code": 1,
+  "expected_exit_code": 1
+}

@@ -1,0 +1,5 @@
+feat(release): stage and validate paired packages
+
+Add source-gated paired staging and isolated three-OS validation.
+Support MCPCLI_HOME and deterministic LF JSON for portable checks.
+Keep paired publication disabled.

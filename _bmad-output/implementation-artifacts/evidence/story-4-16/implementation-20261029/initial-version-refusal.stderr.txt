@@ -1,0 +1,1 @@
+Paired tool smoke failed: Installed tool version/channel mismatch.

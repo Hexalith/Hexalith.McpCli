@@ -183,7 +183,7 @@ public sealed class ConfigCommandTests
                 startInfo.Environment.Remove(name);
             }
 
-            startInfo.Environment["HOME"] = directory;
+            startInfo.Environment["MCPCLI_HOME"] = directory;
             startInfo.Environment["USERPROFILE"] = directory;
             startInfo.Environment["EVENTSTORE_TENANT"] = "process-tenant";
             startInfo.Environment["EVENTSTORE_READ_ONLY"] = "true";
@@ -232,7 +232,7 @@ public sealed class ConfigCommandTests
                 startInfo.Environment.Remove(name);
             }
 
-            startInfo.Environment["HOME"] = directory;
+            startInfo.Environment["MCPCLI_HOME"] = directory;
             startInfo.Environment["USERPROFILE"] = directory;
             startInfo.ArgumentList.Add(typeof(CliRunner).Assembly.Location);
             foreach (string argument in new[]
@@ -719,7 +719,7 @@ public sealed class ConfigCommandTests
             error.ShouldBe(JsonSerializer.Serialize(new
             {
                 error = new OperationError("configuration_invalid", Message: "Invalid gateway URL from EVENTSTORE_URL."),
-            }, McpCliJson.Result) + Environment.NewLine);
+            }, McpCliJson.Result) + "\n");
         }
         finally
         {
@@ -826,7 +826,7 @@ public sealed class ConfigCommandTests
             error.ToString().ShouldBe(JsonSerializer.Serialize(new
             {
                 error = new OperationError("internal_error", Message: "MCP server failed."),
-            }, McpCliJson.Result) + Environment.NewLine);
+            }, McpCliJson.Result) + "\n");
         }
         finally
         {
@@ -930,7 +930,7 @@ public sealed class ConfigCommandTests
             {
                 error = new OperationError("invalid_arguments",
                     Message: "MCP stdio accepts only explicit json format.", Argument: "format"),
-            }, McpCliJson.Result) + Environment.NewLine);
+            }, McpCliJson.Result) + "\n");
 
             (int outputExit, string output, string outputError) = await InvokeAsync(
                 store, invalidEnvironment, ReadManifest, "mcp", "--output", target);
@@ -940,7 +940,7 @@ public sealed class ConfigCommandTests
             {
                 error = new OperationError("invalid_arguments",
                     Message: "MCP stdio cannot write protocol output to a file.", Argument: "output"),
-            }, McpCliJson.Result) + Environment.NewLine);
+            }, McpCliJson.Result) + "\n");
             manifestReads.ShouldBe(0);
             (await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken)).ShouldBe("sentinel");
         }
@@ -1076,14 +1076,14 @@ public sealed class ConfigCommandTests
             output.ShouldBeEmpty();
             hostStarts.ShouldBe(0);
             hostRuns.ShouldBe(0);
-            string marker = "{" + Environment.NewLine + "  \"error\"";
+            string marker = "{\n  \"error\"";
             int start = error.IndexOf(marker, StringComparison.Ordinal);
             start.ShouldBeGreaterThanOrEqualTo(0);
             error.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
             error[start..].ShouldBe(JsonSerializer.Serialize(new
             {
                 error = new OperationError(code, Message: message),
-            }, McpCliJson.Result) + Environment.NewLine);
+            }, McpCliJson.Result) + "\n");
         }
         finally
         {
@@ -2026,8 +2026,6 @@ public sealed class ConfigCommandTests
     [Fact]
     public async Task ConcurrentSetProcessesPreserveBothValuesAsync()
     {
-        Assert.SkipWhen(OperatingSystem.IsWindows(),
-            "The child process home redirect is not honored on Windows, so it would touch the real profile file.");
         string directory = TemporaryDirectory();
         try
         {
@@ -2072,8 +2070,6 @@ public sealed class ConfigCommandTests
     [Fact]
     public async Task VerbsNeverOpenAdminProfilesAsync()
     {
-        Assert.SkipWhen(OperatingSystem.IsWindows(),
-            "The child process home redirect is not honored on Windows, so it would touch the real profile file.");
         string directory = TemporaryDirectory();
         try
         {
@@ -2204,7 +2200,7 @@ public sealed class ConfigCommandTests
             startInfo.Environment.Remove(name);
         }
 
-        startInfo.Environment["HOME"] = home;
+        startInfo.Environment["MCPCLI_HOME"] = home;
         startInfo.Environment["USERPROFILE"] = home;
         foreach ((string name, string value) in environment)
         {
@@ -2241,4 +2237,41 @@ public sealed class ConfigCommandTests
         current.GetProperty("tenant").GetString().ShouldBe(tenant);
         current.GetProperty("sources").GetProperty("profile").GetString().ShouldBe(source);
     }
+    /// <summary>Invalid home overrides produce one safe error document on the correct channel without writing a profile.</summary>
+    [Theory]
+    [InlineData("config", "current")]
+    [InlineData("modules", "")]
+    [InlineData("mcp", "")]
+    public async Task InvalidHomeIsAConfigurationErrorAsync(string verb, string subcommand)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            string[] arguments = string.IsNullOrEmpty(subcommand) ? [verb] : [verb, subcommand];
+            (int exit, string output, string error) = await RunExecutableAsync(directory,
+                new Dictionary<string, string> { ["MCPCLI_HOME"] = "relative-secret-home" }, arguments);
+            string expected = JsonSerializer.Serialize(new
+            {
+                error = new { code = "configuration_invalid", message = "Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path." },
+            }, McpCliJson.Result) + "\n";
+            exit.ShouldBe(2);
+            if (verb == "mcp")
+            {
+                output.ShouldBeEmpty();
+                error.ShouldBe(expected);
+            }
+            else
+            {
+                output.ShouldBe(expected);
+                error.ShouldBeEmpty();
+            }
+
+            File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
 }

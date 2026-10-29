@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "scripts/release-request.py",
+    "1.1.1",
+    "paired"
+  ],
+  "exit_code": 1,
+  "expected_exit_code": 1
+}

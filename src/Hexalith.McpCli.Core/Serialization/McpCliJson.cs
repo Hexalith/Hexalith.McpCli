@@ -106,6 +106,7 @@ public static class McpCliJson
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true,
+            NewLine = "\n",
             TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
         };
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));

@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "dotnet",
+    "pack",
+    "src/Hexalith.McpCli/Hexalith.McpCli.csproj",
+    "--no-build",
+    "--configuration",
+    "Release",
+    "--output",
+    "/tmp/mcpcli-416-local-pair-v2/packages",
+    "-p:IncludeSourceRevisionInInformationalVersion=false",
+    "-p:Version=1.1.1",
+    "-p:InformationalVersion=1.1.1",
+    "-p:RepositoryCommit=9ba8e5bd0e213501b39d33cedf46859566fc89a4"
+  ],
+  "exit_code": 0
+}

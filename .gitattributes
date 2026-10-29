@@ -19,3 +19,6 @@ _bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/e
 # Retain exact hash-bound live runtime output, including timestamp-only records.
 _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/live-command.stdout.txt -text whitespace=-blank-at-eol
 _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024/parent-final/live-command.stdout.txt -text whitespace=-blank-at-eol
+
+# Preserve the staged package evidence and raw cross-platform discovery bytes.
+_bmad-output/implementation-artifacts/evidence/story-4-16/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

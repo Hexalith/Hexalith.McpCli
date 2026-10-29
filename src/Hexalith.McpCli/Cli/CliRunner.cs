@@ -774,7 +774,7 @@ internal sealed class CliRunner
 
     private static async Task<int> WriteMcpErrorAsync(OperationError error, CancellationToken cancellationToken)
     {
-        await Console.Error.WriteLineAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result).AsMemory(),
+        await Console.Error.WriteAsync((JsonSerializer.Serialize(new { error }, McpCliJson.Result) + "\n").AsMemory(),
             cancellationToken).ConfigureAwait(false);
         return 2;
     }

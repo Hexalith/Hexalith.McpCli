@@ -1,0 +1,2 @@
+  Hexalith.McpCli -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/publish/
+  Successfully created package '/tmp/mcpcli-416-local-pair-v2/packages/Hexalith.McpCli.1.1.1.nupkg'.

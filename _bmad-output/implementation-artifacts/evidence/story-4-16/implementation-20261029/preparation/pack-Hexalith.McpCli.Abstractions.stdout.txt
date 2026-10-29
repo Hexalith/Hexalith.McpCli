@@ -1,0 +1,1 @@
+  Successfully created package '/tmp/mcpcli-416-local-pair-v2/packages/Hexalith.McpCli.Abstractions.1.1.1.nupkg'.

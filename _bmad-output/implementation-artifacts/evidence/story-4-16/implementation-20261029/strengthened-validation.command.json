@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "scripts/validate-release-packages.py",
+    "--source-sha",
+    "9ba8e5bd0e213501b39d33cedf46859566fc89a4",
+    "--output",
+    "/tmp/mcpcli-416-strengthened-validation.json",
+    "/tmp/mcpcli-416-local-pair-v2/packages",
+    "1.1.1",
+    "paired"
+  ],
+  "exit_code": 0
+}

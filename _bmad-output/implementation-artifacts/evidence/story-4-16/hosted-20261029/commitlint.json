@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "feat(release): stage and validate paired packages\n\nAdd source-gated paired staging and isolated three-OS validation.\nSupport MCPCLI_HOME and deterministic LF JSON for portable checks.\nKeep paired publication disabled.\n",
+  "exit_code": 0,
+  "message_file": "/tmp/mcpcli-416-message-0vv22lq3.txt",
+  "pinned_cli": "21.2.2"
+}

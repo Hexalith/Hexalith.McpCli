@@ -105,6 +105,8 @@ internal static class CliOutput
             await Console.Error.WriteLineAsync("This result is emitted as JSON; no table view is defined.").ConfigureAwait(false);
         }
 
+        bool table = error is null && settings.Format == "table" && tableHeader is not null;
+        string terminator = table ? Environment.NewLine : "\n";
         string output = error is not null
             ? JsonSerializer.Serialize(new { error }, McpCliJson.Result)
             : settings.Format == "table" && tableHeader is not null
@@ -112,12 +114,12 @@ internal static class CliOutput
                 : JsonSerializer.Serialize(document, McpCliJson.Result);
         if (error is null && settings.Output is not null)
         {
-            await WriteResultFileAsync(settings.Output, output + Environment.NewLine, cancellationToken,
+            await WriteResultFileAsync(settings.Output, output + terminator, cancellationToken,
                 afterDestinationTruncated).ConfigureAwait(false);
         }
         else
         {
-            await Console.Out.WriteLineAsync(output).ConfigureAwait(false);
+            await Console.Out.WriteAsync(output + terminator).ConfigureAwait(false);
         }
 
         return error is null ? 0 : 2;
@@ -131,7 +133,7 @@ internal static class CliOutput
 
     private static async Task<int> WriteDirectErrorAsync(OperationError error)
     {
-        await Console.Out.WriteLineAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result)).ConfigureAwait(false);
+        await Console.Out.WriteAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result) + "\n").ConfigureAwait(false);
         return 2;
     }
 
