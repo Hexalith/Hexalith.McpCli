@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/home/administrator/.nvm/versions/node/v26.4.0/bin/node",
+    "/tmp/mcpcli-version-regression-fEVWJ4/main-before-source/scripts/select-release-version.mjs",
+    "/tmp/mcpcli-version-regression-fEVWJ4/main-before-source.selection.json"
+  ],
+  "exit_code": 0,
+  "commits": {
+    "baseline": "d8af79fa147460150228c119f3867e9109d25518",
+    "selected": "5bafc49865d46cf136a31d93f0c328bab34bb326",
+    "unrelated": "d5328cbe5de031b631eecc6f5ececac7f1df5524"
+  },
+  "before": {
+    "head": "5bafc49865d46cf136a31d93f0c328bab34bb326",
+    "headFile": "5bafc49865d46cf136a31d93f0c328bab34bb326\n",
+    "refs": "refs/heads/main d8af79fa147460150228c119f3867e9109d25518 \nrefs/remotes/origin/HEAD d5328cbe5de031b631eecc6f5ececac7f1df5524 refs/remotes/origin/main\nrefs/remotes/origin/main d5328cbe5de031b631eecc6f5ececac7f1df5524 \nrefs/tags/v1.0.0 d8af79fa147460150228c119f3867e9109d25518",
+    "status": ""
+  },
+  "after": {
+    "head": "5bafc49865d46cf136a31d93f0c328bab34bb326",
+    "headFile": "5bafc49865d46cf136a31d93f0c328bab34bb326\n",
+    "refs": "refs/heads/main d8af79fa147460150228c119f3867e9109d25518 \nrefs/remotes/origin/HEAD d5328cbe5de031b631eecc6f5ececac7f1df5524 refs/remotes/origin/main\nrefs/remotes/origin/main d5328cbe5de031b631eecc6f5ececac7f1df5524 \nrefs/tags/v1.0.0 d8af79fa147460150228c119f3867e9109d25518",
+    "status": ""
+  },
+  "original_refs_unchanged": true
+}

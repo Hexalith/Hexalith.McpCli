@@ -1,0 +1,4 @@
+[11:34:27 AM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[11:34:27 AM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[11:34:27 AM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-version-v1MriL/remote.git in dry-run mode
+[11:34:27 AM] [semantic-release] › ℹ  The local branch main is behind the remote one, therefore a new version won't be published.

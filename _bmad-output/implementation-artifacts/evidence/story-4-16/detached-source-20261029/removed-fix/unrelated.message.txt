@@ -1,0 +1,1 @@
+feat: keep unrelated main history outside selection

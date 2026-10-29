@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "fix(release): select versions from detached sources\n\nReset the temporary mirror release branch at the captured source SHA.\nExercise real detached checkouts without changing original refs or tags.\n",
+  "exit_code": 0,
+  "pinned_cli": "21.2.2"
+}

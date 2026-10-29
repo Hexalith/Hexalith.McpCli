@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/home/administrator/.nvm/versions/node/v26.4.0/bin/node",
+    "/tmp/mcpcli-version-regression-IJwtcy/main-before-source/scripts/select-release-version.mjs",
+    "/tmp/mcpcli-version-regression-IJwtcy/main-before-source.selection.json"
+  ],
+  "exit_code": 0,
+  "commits": {
+    "baseline": "33b187666e5512c627c5a4a26b1f7406fd6a18c9",
+    "selected": "eaac3505844497af8c233418b098a405a0235381",
+    "unrelated": "3455afc72e6a49c7706623899c07a8257ba27772"
+  },
+  "before": {
+    "head": "eaac3505844497af8c233418b098a405a0235381",
+    "headFile": "eaac3505844497af8c233418b098a405a0235381\n",
+    "refs": "refs/heads/main 33b187666e5512c627c5a4a26b1f7406fd6a18c9 \nrefs/remotes/origin/HEAD 3455afc72e6a49c7706623899c07a8257ba27772 refs/remotes/origin/main\nrefs/remotes/origin/main 3455afc72e6a49c7706623899c07a8257ba27772 \nrefs/tags/v1.0.0 33b187666e5512c627c5a4a26b1f7406fd6a18c9",
+    "status": ""
+  },
+  "after": {
+    "head": "eaac3505844497af8c233418b098a405a0235381",
+    "headFile": "eaac3505844497af8c233418b098a405a0235381\n",
+    "refs": "refs/heads/main 33b187666e5512c627c5a4a26b1f7406fd6a18c9 \nrefs/remotes/origin/HEAD 3455afc72e6a49c7706623899c07a8257ba27772 refs/remotes/origin/main\nrefs/remotes/origin/main 3455afc72e6a49c7706623899c07a8257ba27772 \nrefs/tags/v1.0.0 33b187666e5512c627c5a4a26b1f7406fd6a18c9",
+    "status": ""
+  },
+  "original_refs_unchanged": true
+}

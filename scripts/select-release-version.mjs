@@ -30,6 +30,9 @@ try {
     const remote = join(temporary, 'remote.git');
     const checkout = join(temporary, 'source');
     git('clone', '--mirror', '--no-hardlinks', root, remote);
+    // Exact-SHA checkouts can have a detached HEAD and absent or unrelated local main.
+    git('-C', remote, 'update-ref', 'refs/heads/main', sha);
+    git('-C', remote, 'symbolic-ref', 'HEAD', 'refs/heads/main');
     git('clone', '--no-hardlinks', remote, checkout);
     git('-C', checkout, 'checkout', '-B', 'main', sha);
     const result = await semanticRelease({

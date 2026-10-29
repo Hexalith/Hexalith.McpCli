@@ -1,0 +1,29 @@
+[11:34:24 AM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[11:34:24 AM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[11:34:24 AM] [semantic-release] › ✘  ERELEASEBRANCHES The release branches are invalid in the `branches` configuration.
+A minimum of 1 and a maximum of 3 release branches are required in the branches configuration (https://semantic-release.org/usage/configuration#branches). These branches must exist on the remote repository.
+
+This may occur if your repository does not have a release branch, such as master or main.
+
+Your configuration for the problematic branches is [].
+
+file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:67
+    throw new AggregateError(errors);
+          ^
+
+AggregateError: 
+    SemanticReleaseError: The release branches are invalid in the `branches` configuration.
+        at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/get-error.js:6:10)
+        at file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:45:19
+        at Array.reduce (<anonymous>)
+        at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:35:46)
+        at async run (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:68:22)
+        at async default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:278:22)
+        at async file:///tmp/mcpcli-version-regression-IJwtcy/absent-main/scripts/select-release-version.mjs:36:20
+    at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:67:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async run (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:68:22)
+    at async default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:278:22)
+    at async file:///tmp/mcpcli-version-regression-IJwtcy/absent-main/scripts/select-release-version.mjs:36:20
+
+Node.js v26.4.0

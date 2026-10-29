@@ -1,0 +1,15 @@
+[11:33:31 AM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[11:33:31 AM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[11:33:31 AM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-version-L8RgSj/remote.git in dry-run mode
+[11:33:31 AM] [semantic-release] › ✔  Allowed to push to the Git repository
+[11:33:31 AM] [semantic-release] › ℹ  Found git tag v1.0.0 associated with version 1.0.0 on branch main
+[11:33:31 AM] [semantic-release] › ℹ  Found 1 commits since last release
+[11:33:31 AM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[11:33:31 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: select the dispatched source
+[11:33:31 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[11:33:31 AM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 1 commits complete: patch release
+[11:33:31 AM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[11:33:31 AM] [semantic-release] › ℹ  The next release version is 1.0.1
+[11:33:31 AM] [semantic-release] › ⚠  Skip v1.0.1 tag creation in dry-run mode
+[11:33:31 AM] [semantic-release] › ✔  Published release 1.0.1 on default channel
+[11:33:31 AM] [semantic-release] › ℹ  Release note for version 1.0.1:

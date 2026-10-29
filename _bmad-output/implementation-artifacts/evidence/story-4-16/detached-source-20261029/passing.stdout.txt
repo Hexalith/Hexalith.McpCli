@@ -1,0 +1,11 @@
+✔ detached source selects its exact patch release with absent-main (1446.918312ms)
+✔ detached source selects its exact patch release with main-before-source (1396.164315ms)
+✔ detached source selects its exact patch release with main-after-source (1413.109387ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4930.450142

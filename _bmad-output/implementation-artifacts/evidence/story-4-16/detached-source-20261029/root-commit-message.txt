@@ -1,0 +1,4 @@
+fix(release): select versions from detached sources
+
+Reset the temporary mirror release branch at the captured source SHA.
+Exercise real detached checkouts without changing original refs or tags.

@@ -1,0 +1,6 @@
+⧗   --- input ---
+fix(release): select versions from detached sources
+
+Reset the temporary mirror release branch at the captured source SHA.
+Exercise real detached checkouts without changing original refs or tags.
+✔   found 0 problems, 0 warnings

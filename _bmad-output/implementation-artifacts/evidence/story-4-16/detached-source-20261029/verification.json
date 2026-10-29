@@ -1,0 +1,50 @@
+{
+  "schema": "mcpcli-detached-release-version-regression/v1",
+  "source_sha": "513784a53226ae64e47a63fd76ea46222781a3ef",
+  "reported_hosted_failure": {
+    "run_id": 40857555958,
+    "source_sha": "513784a53226ae64e47a63fd76ea46222781a3ef",
+    "error": "ERELEASEBRANCHES",
+    "observation": "Parent supplied; no remote read or dispatch in this handoff."
+  },
+  "fix": "Create/reset refs/heads/main to captured source SHA and set HEAD only inside the temporary local mirror before cloning it.",
+  "local_results": {
+    "real_regression": {
+      "command": [
+        "node",
+        "--test",
+        "scripts/tests/select-release-version.test.mjs"
+      ],
+      "exit_code": 0,
+      "passed": 3,
+      "failed": 0,
+      "expected_version": "1.0.1",
+      "source_refs_tags_head_worktree_unchanged": true,
+      "owning_repository_unchanged": true
+    },
+    "removed_fix_control": {
+      "exit_code": 1,
+      "passed": 1,
+      "failed": 2,
+      "failures": [
+        "absent-main: ERELEASEBRANCHES",
+        "main-after-source: no-release instead of selected patch"
+      ]
+    },
+    "static_checks": "all passed"
+  },
+  "tooling": {
+    "node_local": "v26.4.0",
+    "workflow_node": "24",
+    "semantic_release": "25.0.9",
+    "commitlint_cli": "21.2.2"
+  },
+  "fixture_commits": {
+    "baseline": "d8af79fa147460150228c119f3867e9109d25518",
+    "selected": "5bafc49865d46cf136a31d93f0c328bab34bb326",
+    "unrelated": "d5328cbe5de031b631eecc6f5ececac7f1df5524"
+  },
+  "fixture_messages": "Exact full messages, successful pinned commitlint output and commands are retained per fixture before they are used. All fixture commits/tags are temporary and local.",
+  "root_commits_pushes_dispatches": false,
+  "dotnet_or_conformance_rerun": false
+}

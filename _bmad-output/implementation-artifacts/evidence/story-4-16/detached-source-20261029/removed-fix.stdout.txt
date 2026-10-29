@@ -1,0 +1,86 @@
+✖ detached source selects its exact patch release with absent-main (1493.538432ms)
+✔ detached source selects its exact patch release with main-before-source (1392.049181ms)
+✖ detached source selects its exact patch release with main-after-source (1446.906423ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5001.120149
+
+✖ failing tests:
+
+test at scripts/tests/select-release-version.test.mjs:94:5
+✖ detached source selects its exact patch release with absent-main (1493.538432ms)
+  AssertionError [ERR_ASSERTION]: [11:34:24 AM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+  [11:34:24 AM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+  [11:34:24 AM] [semantic-release] › ✘  ERELEASEBRANCHES The release branches are invalid in the `branches` configuration.
+  A minimum of 1 and a maximum of 3 release branches are required in the branches configuration (https://semantic-release.org/usage/configuration#branches). These branches must exist on the remote repository.
+  
+  This may occur if your repository does not have a release branch, such as master or main.
+  
+  Your configuration for the problematic branches is [].
+  
+  file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:67
+      throw new AggregateError(errors);
+            ^
+  
+  AggregateError: 
+      SemanticReleaseError: The release branches are invalid in the `branches` configuration.
+          at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/get-error.js:6:10)
+          at file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:45:19
+          at Array.reduce (<anonymous>)
+          at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:35:46)
+          at async run (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:68:22)
+          at async default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:278:22)
+          at async file:///tmp/mcpcli-version-regression-IJwtcy/absent-main/scripts/select-release-version.mjs:36:20
+      at default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/lib/branches/index.js:67:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async run (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:68:22)
+      at async default (file:///home/administrator/projects/hexalith/mcpcli/node_modules/semantic-release/index.js:278:22)
+      at async file:///tmp/mcpcli-version-regression-IJwtcy/absent-main/scripts/select-release-version.mjs:36:20
+  
+  Node.js v26.4.0
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///home/administrator/projects/hexalith/mcpcli/scripts/tests/select-release-version.test.mjs:116:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/tests/select-release-version.test.mjs:94:5
+✖ detached source selects its exact patch release with main-after-source (1446.906423ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   release: false,
+  -   release: true,
+      schema: 'mcpcli-version-selection/v1',
+      source_sha: 'eaac3505844497af8c233418b098a405a0235381',
+  +   version: null
+  -   version: '1.0.1'
+    }
+  
+      at TestContext.<anonymous> (file:///home/administrator/projects/hexalith/mcpcli/scripts/tests/select-release-version.test.mjs:119:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { schema: 'mcpcli-version-selection/v1', source_sha: 'eaac3505844497af8c233418b098a405a0235381', release: false, version: null },
+    expected: { schema: 'mcpcli-version-selection/v1', source_sha: 'eaac3505844497af8c233418b098a405a0235381', release: true, version: '1.0.1' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

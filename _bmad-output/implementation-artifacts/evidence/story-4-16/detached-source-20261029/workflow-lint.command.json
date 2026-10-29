@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "actionlint",
+    ".github/workflows/bootstrap-package.yml"
+  ],
+  "exit_code": 0
+}
