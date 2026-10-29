@@ -1076,7 +1076,7 @@ public sealed class CliOutputContractTests
             AssertPreflightError(output);
             File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
 
-            file.SetAccessControl(originalAcl);
+            RestoreFileAcl(file, originalAcl);
             originalAcl = null;
             File.ReadAllText(target).ShouldBe("old result");
         }
@@ -1084,11 +1084,19 @@ public sealed class CliOutputContractTests
         {
             if (originalAcl is not null)
             {
-                file.SetAccessControl(originalAcl);
+                RestoreFileAcl(file, originalAcl);
             }
 
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static void RestoreFileAcl(FileInfo file, FileSecurity original)
+    {
+        var restored = new FileSecurity();
+        restored.SetSecurityDescriptorBinaryForm(original.GetSecurityDescriptorBinaryForm(), AccessControlSections.Access);
+        file.SetAccessControl(restored);
     }
 
     /// <summary>The current build's executable uses the checked parser rather than invoking a raw parse.</summary>

@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "test(windows): restore saved file ACLs explicitly\n\nMark the saved access descriptor modified before restoring a denied target.\nKeep ownership, audit sections and preflight assertions unchanged.\n",
+  "exit_code": 0,
+  "pinned_cli": "21.2.2"
+}

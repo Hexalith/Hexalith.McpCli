@@ -1,0 +1,4 @@
+test(windows): restore saved file ACLs explicitly
+
+Mark the saved access descriptor modified before restoring a denied target.
+Keep ownership, audit sections and preflight assertions unchanged.
