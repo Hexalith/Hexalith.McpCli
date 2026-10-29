@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "scripts/validate-release-packages.py",
+    "--source-sha",
+    "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+    "--output",
+    "/home/runner/work/_temp/paired/evidence/validation.json",
+    "/home/runner/work/_temp/paired/packages",
+    "1.2.0",
+    "paired"
+  ],
+  "exit_code": 0
+}

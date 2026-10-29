@@ -1,0 +1,31 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/1/change-user-role.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M63W49N7CQCV3EMWMNXFA8BG",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "change-user-role",
+        "payload": {
+          "NewRole": "TenantOwner",
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com"
+        },
+        "correlationId": "01M63W49N7CQCV3EMWMNXFA8BG"
+      }
+    }
+  ]
+}

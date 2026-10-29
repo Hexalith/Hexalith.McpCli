@@ -1,0 +1,1087 @@
+{
+  "current_main": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+  "fr22": {
+    "baseline_revision": "70dbf73e80787299c832d30d911b16b105ab194d",
+    "required_revision": "70dbf73e80787299c832d30d911b16b105ab194d",
+    "source_clean": true,
+    "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+    "synchronization": {
+      ".github/copilot-instructions.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+      "AGENTS.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+      "CLAUDE.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6"
+    },
+    "upstream_main": "70dbf73e80787299c832d30d911b16b105ab194d"
+  },
+  "gates": {
+    "ci.yml": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421616762",
+          "completed_at": "2026-10-29T11:47:27Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:33:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123421616762",
+          "id": 123421616762,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "conformance-vector-loopback",
+          "node_id": "CR_kwDOUjg9is8AAAAcvIBqeg",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059811,
+          "runner_name": "GitHub Actions 1000059811",
+          "started_at": "2026-10-29T11:33:03Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:33:05Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:33:04Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:08Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:33:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:11Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared Builds submodule",
+              "number": 3,
+              "started_at": "2026-10-29T11:33:08Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:12Z",
+              "conclusion": "success",
+              "name": "Set up .NET",
+              "number": 4,
+              "started_at": "2026-10-29T11:33:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:15Z",
+              "conclusion": "success",
+              "name": "Install vector runner test tooling",
+              "number": 5,
+              "started_at": "2026-10-29T11:33:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:47:25Z",
+              "conclusion": "success",
+              "name": "Run packaged Contracts through CLI and MCP against reset Gateway replay",
+              "number": 6,
+              "started_at": "2026-10-29T11:33:15Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:47:25Z",
+              "conclusion": "success",
+              "name": "Post Set up .NET",
+              "number": 11,
+              "started_at": "2026-10-29T11:47:25Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:47:25Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 12,
+              "started_at": "2026-10-29T11:47:25Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:47:26Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "started_at": "2026-10-29T11:47:26Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421616762",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421617076",
+          "completed_at": "2026-10-29T11:43:38Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:33:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123421617076",
+          "id": 123421617076,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "enrolled-module-conformance",
+          "node_id": "CR_kwDOUjg9is8AAAAcvIBrtA",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059813,
+          "runner_name": "GitHub Actions 1000059813",
+          "started_at": "2026-10-29T11:33:04Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:33:06Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:33:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:10Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:33:06Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:15Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared Builds submodule",
+              "number": 3,
+              "started_at": "2026-10-29T11:33:10Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:16Z",
+              "conclusion": "success",
+              "name": "Set up .NET",
+              "number": 4,
+              "started_at": "2026-10-29T11:33:15Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:54Z",
+              "conclusion": "success",
+              "name": "Restore and build exact production catalog",
+              "number": 5,
+              "started_at": "2026-10-29T11:33:16Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:55Z",
+              "conclusion": "success",
+              "name": "Benchmark first v1 Catalog construction in a fresh process",
+              "number": 6,
+              "started_at": "2026-10-29T11:33:54Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:43:33Z",
+              "conclusion": "success",
+              "name": "Validate approved artifacts, complete vectors and both heads",
+              "number": 7,
+              "started_at": "2026-10-29T11:33:55Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:43:35Z",
+              "conclusion": "success",
+              "name": "Retain enrolled-module receipts, inputs and diagnostics",
+              "number": 8,
+              "started_at": "2026-10-29T11:43:33Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:43:35Z",
+              "conclusion": "success",
+              "name": "Post Set up .NET",
+              "number": 15,
+              "started_at": "2026-10-29T11:43:35Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:43:36Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 16,
+              "started_at": "2026-10-29T11:43:35Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:43:36Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "started_at": "2026-10-29T11:43:36Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421617076",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421617122",
+          "completed_at": "2026-10-29T11:36:59Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:33:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123421617122",
+          "id": 123421617122,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "topology-vector-discovery",
+          "node_id": "CR_kwDOUjg9is8AAAAcvIBr4g",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059814,
+          "runner_name": "GitHub Actions 1000059814",
+          "started_at": "2026-10-29T11:33:04Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:33:06Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:33:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:09Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:33:06Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:13Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared Builds submodule",
+              "number": 3,
+              "started_at": "2026-10-29T11:33:09Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:14Z",
+              "conclusion": "success",
+              "name": "Set up .NET",
+              "number": 4,
+              "started_at": "2026-10-29T11:33:13Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "success",
+              "name": "Install pinned non-live plan validator",
+              "number": 5,
+              "started_at": "2026-10-29T11:33:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:55Z",
+              "conclusion": "success",
+              "name": "Build and discover every live vector plus the independent smoke without starting source services",
+              "number": 6,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:56Z",
+              "conclusion": "success",
+              "name": "Retain complete live preflight receipts and diagnostics",
+              "number": 7,
+              "started_at": "2026-10-29T11:36:55Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:57Z",
+              "conclusion": "success",
+              "name": "Post Set up .NET",
+              "number": 13,
+              "started_at": "2026-10-29T11:36:57Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:57Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 14,
+              "started_at": "2026-10-29T11:36:57Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:57Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "started_at": "2026-10-29T11:36:57Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421617122",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421617205",
+          "completed_at": "2026-10-29T11:34:13Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:33:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123421617205",
+          "id": 123421617205,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "conformance-vector-contract",
+          "node_id": "CR_kwDOUjg9is8AAAAcvIBsNQ",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059815,
+          "runner_name": "GitHub Actions 1000059815",
+          "started_at": "2026-10-29T11:33:04Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:33:06Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:33:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:10Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:33:06Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:13Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared Builds submodule",
+              "number": 3,
+              "started_at": "2026-10-29T11:33:10Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:14Z",
+              "conclusion": "success",
+              "name": "Set up .NET",
+              "number": 4,
+              "started_at": "2026-10-29T11:33:13Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:34:11Z",
+              "conclusion": "success",
+              "name": "Pack and validate the shared vector contract without a Head or Gateway",
+              "number": 5,
+              "started_at": "2026-10-29T11:33:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:34:11Z",
+              "conclusion": "success",
+              "name": "Post Set up .NET",
+              "number": 9,
+              "started_at": "2026-10-29T11:34:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:34:12Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 10,
+              "started_at": "2026-10-29T11:34:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:34:12Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "started_at": "2026-10-29T11:34:12Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421617205",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421618462",
+          "completed_at": "2026-10-29T11:39:18Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:33:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123421618462",
+          "id": 123421618462,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "ci / build-and-test",
+          "node_id": "CR_kwDOUjg9is8AAAAcvIBxHg",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059812,
+          "runner_name": "GitHub Actions 1000059812",
+          "started_at": "2026-10-29T11:33:04Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:33:14Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:33:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:33:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "skipped",
+              "name": "Validate governed CI contract",
+              "number": 3,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "skipped",
+              "name": "Checkout approved Builds actions",
+              "number": 4,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "skipped",
+              "name": "Evaluate governed workflow provenance",
+              "number": 5,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:33:17Z",
+              "conclusion": "skipped",
+              "name": "Initialize root-declared submodules (governed)",
+              "number": 6,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:23Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared submodules",
+              "number": 7,
+              "started_at": "2026-10-29T11:33:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:25Z",
+              "conclusion": "success",
+              "name": "Initialize .NET",
+              "number": 8,
+              "started_at": "2026-10-29T11:35:23Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:25Z",
+              "conclusion": "skipped",
+              "name": "Checkout workflow-owned Builds preparation",
+              "number": 9,
+              "started_at": "2026-10-29T11:35:25Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:25Z",
+              "conclusion": "skipped",
+              "name": "Prepare module build",
+              "number": 10,
+              "started_at": "2026-10-29T11:35:25Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:27Z",
+              "conclusion": "success",
+              "name": "Cache NuGet packages",
+              "number": 11,
+              "started_at": "2026-10-29T11:35:25Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:27Z",
+              "conclusion": "skipped",
+              "name": "Validate test platform input",
+              "number": 12,
+              "started_at": "2026-10-29T11:35:27Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:27Z",
+              "conclusion": "skipped",
+              "name": "Prepare package dependencies",
+              "number": 13,
+              "started_at": "2026-10-29T11:35:27Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:35:36Z",
+              "conclusion": "success",
+              "name": "Restore",
+              "number": 14,
+              "started_at": "2026-10-29T11:35:27Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:04Z",
+              "conclusion": "success",
+              "name": "Build",
+              "number": 15,
+              "started_at": "2026-10-29T11:35:36Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:04Z",
+              "conclusion": "skipped",
+              "name": "Validate package consumer references",
+              "number": 16,
+              "started_at": "2026-10-29T11:36:04Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:36:04Z",
+              "conclusion": "skipped",
+              "name": "Unit tests (Tier 1, VSTest)",
+              "number": 17,
+              "started_at": "2026-10-29T11:36:04Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "success",
+              "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+              "number": 18,
+              "started_at": "2026-10-29T11:36:04Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "skipped",
+              "name": "Install and initialize Dapr (governed)",
+              "number": 19,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "skipped",
+              "name": "Install and initialize Dapr",
+              "number": 20,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "skipped",
+              "name": "Integration tests (Tier 2, VSTest)",
+              "number": 21,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "skipped",
+              "name": "Integration tests (Tier 2, Microsoft.Testing.Platform)",
+              "number": 22,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "skipped",
+              "name": "Validate coverage gates",
+              "number": 23,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:12Z",
+              "conclusion": "success",
+              "name": "Fail on blocking test failures",
+              "number": 24,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:14Z",
+              "conclusion": "success",
+              "name": "Upload test and coverage evidence",
+              "number": 25,
+              "started_at": "2026-10-29T11:39:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:14Z",
+              "conclusion": "success",
+              "name": "Post Cache NuGet packages",
+              "number": 48,
+              "started_at": "2026-10-29T11:39:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:14Z",
+              "conclusion": "success",
+              "name": "Post Initialize .NET",
+              "number": 49,
+              "started_at": "2026-10-29T11:39:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:15Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 50,
+              "started_at": "2026-10-29T11:39:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:15Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 51,
+              "started_at": "2026-10-29T11:39:15Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421618462",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123424334569",
+          "completed_at": "2026-10-29T11:56:17Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:39:18Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123424334569",
+          "id": 123424334569,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "ci / aspire-tests",
+          "node_id": "CR_kwDOUjg9is8AAAAcvKni6Q",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059816,
+          "runner_name": "GitHub Actions 1000059816",
+          "started_at": "2026-10-29T11:39:21Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:39:31Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:39:22Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:34Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 2,
+              "started_at": "2026-10-29T11:39:31Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:39:34Z",
+              "conclusion": "skipped",
+              "name": "Checkout approved Builds preparation",
+              "number": 3,
+              "started_at": "2026-10-29T11:39:34Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:19Z",
+              "conclusion": "success",
+              "name": "Initialize root-declared submodules",
+              "number": 4,
+              "started_at": "2026-10-29T11:39:34Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:20Z",
+              "conclusion": "success",
+              "name": "Validate Aspire hooks",
+              "number": 5,
+              "started_at": "2026-10-29T11:41:19Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:20Z",
+              "conclusion": "success",
+              "name": "Initialize .NET",
+              "number": 6,
+              "started_at": "2026-10-29T11:41:20Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:20Z",
+              "conclusion": "skipped",
+              "name": "Checkout workflow-owned Builds preparation",
+              "number": 7,
+              "started_at": "2026-10-29T11:41:20Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:20Z",
+              "conclusion": "skipped",
+              "name": "Prepare module build",
+              "number": 8,
+              "started_at": "2026-10-29T11:41:20Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:22Z",
+              "conclusion": "success",
+              "name": "Cache NuGet packages",
+              "number": 9,
+              "started_at": "2026-10-29T11:41:20Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:22Z",
+              "conclusion": "skipped",
+              "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+              "number": 10,
+              "started_at": "2026-10-29T11:41:22Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:29Z",
+              "conclusion": "success",
+              "name": "Trust HTTPS development certificates for live sockets",
+              "number": 11,
+              "started_at": "2026-10-29T11:41:22Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:29Z",
+              "conclusion": "skipped",
+              "name": "Install pinned browser qualification tools",
+              "number": 12,
+              "started_at": "2026-10-29T11:41:29Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:29Z",
+              "conclusion": "skipped",
+              "name": "Prepare package dependencies",
+              "number": 13,
+              "started_at": "2026-10-29T11:41:29Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:41:55Z",
+              "conclusion": "success",
+              "name": "Restore and Build",
+              "number": 14,
+              "started_at": "2026-10-29T11:41:29Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:42:12Z",
+              "conclusion": "success",
+              "name": "Install and initialize Dapr",
+              "number": 15,
+              "started_at": "2026-10-29T11:41:55Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:42:59Z",
+              "conclusion": "success",
+              "name": "Prepare Aspire tier",
+              "number": 16,
+              "started_at": "2026-10-29T11:42:12Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:11Z",
+              "conclusion": "success",
+              "name": "Run Aspire hook",
+              "number": 17,
+              "started_at": "2026-10-29T11:42:59Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:11Z",
+              "conclusion": "skipped",
+              "name": "Aspire contract tests (Tier 3, non-Performance, VSTest)",
+              "number": 18,
+              "started_at": "2026-10-29T11:56:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:11Z",
+              "conclusion": "skipped",
+              "name": "Aspire contract tests (Tier 3, non-Performance, Microsoft.Testing.Platform)",
+              "number": 19,
+              "started_at": "2026-10-29T11:56:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:11Z",
+              "conclusion": "skipped",
+              "name": "Require executed Aspire tests without skips",
+              "number": 20,
+              "started_at": "2026-10-29T11:56:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:11Z",
+              "conclusion": "success",
+              "name": "Test summary",
+              "number": 21,
+              "started_at": "2026-10-29T11:56:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:13Z",
+              "conclusion": "success",
+              "name": "Upload Aspire hook evidence",
+              "number": 22,
+              "started_at": "2026-10-29T11:56:11Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:13Z",
+              "conclusion": "success",
+              "name": "Upload test results",
+              "number": 23,
+              "started_at": "2026-10-29T11:56:13Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:14Z",
+              "conclusion": "success",
+              "name": "Post Cache NuGet packages",
+              "number": 44,
+              "started_at": "2026-10-29T11:56:13Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:14Z",
+              "conclusion": "success",
+              "name": "Post Initialize .NET",
+              "number": 45,
+              "started_at": "2026-10-29T11:56:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:14Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "number": 46,
+              "started_at": "2026-10-29T11:56:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:56:14Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 47,
+              "started_at": "2026-10-29T11:56:14Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123424334569",
+          "workflow_name": "CI"
+        },
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123424337445",
+          "completed_at": "2026-10-29T11:39:18Z",
+          "conclusion": "skipped",
+          "created_at": "2026-10-29T11:39:19Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044/job/123424337445",
+          "id": 123424337445,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "ci / performance-tests",
+          "node_id": "CR_kwDOUjg9is8AAAAcvKnuJQ",
+          "run_attempt": 1,
+          "run_id": 40866110044,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866110044",
+          "runner_group_id": null,
+          "runner_group_name": null,
+          "runner_id": null,
+          "runner_name": null,
+          "started_at": "2026-10-29T11:39:19Z",
+          "status": "completed",
+          "steps": [],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123424337445",
+          "workflow_name": "CI"
+        }
+      ],
+      "run_attempt": 1,
+      "run_id": 40866110044,
+      "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+      "status": "completed",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044"
+    },
+    "commitlint.yml": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/123421186912",
+          "completed_at": "2026-10-29T11:32:26Z",
+          "conclusion": "success",
+          "created_at": "2026-10-29T11:32:01Z",
+          "head_branch": "main",
+          "head_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+          "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866109868/job/123421186912",
+          "id": 123421186912,
+          "labels": [
+            "ubuntu-latest"
+          ],
+          "name": "commitlint / commitlint",
+          "node_id": "CR_kwDOUjg9is8AAAAcvHnbYA",
+          "run_attempt": 1,
+          "run_id": 40866109868,
+          "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40866109868",
+          "runner_group_id": 0,
+          "runner_group_name": "GitHub Actions",
+          "runner_id": 1000059810,
+          "runner_name": "GitHub Actions 1000059810",
+          "started_at": "2026-10-29T11:32:04Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completed_at": "2026-10-29T11:32:06Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-29T11:32:05Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:09Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v7.0.1",
+              "number": 2,
+              "started_at": "2026-10-29T11:32:06Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:10Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v7.1.0",
+              "number": 3,
+              "started_at": "2026-10-29T11:32:09Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:16Z",
+              "conclusion": "success",
+              "name": "Install dependencies",
+              "number": 4,
+              "started_at": "2026-10-29T11:32:10Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:23Z",
+              "conclusion": "success",
+              "name": "Verify npm dependency provenance and signatures",
+              "number": 5,
+              "started_at": "2026-10-29T11:32:16Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:23Z",
+              "conclusion": "success",
+              "name": "Validate commit messages",
+              "number": 6,
+              "started_at": "2026-10-29T11:32:23Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:24Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v7.1.0",
+              "number": 11,
+              "started_at": "2026-10-29T11:32:23Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:24Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v7.0.1",
+              "number": 12,
+              "started_at": "2026-10-29T11:32:24Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-29T11:32:24Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "started_at": "2026-10-29T11:32:24Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/123421186912",
+          "workflow_name": "Commitlint"
+        }
+      ],
+      "run_attempt": 1,
+      "run_id": 40866109868,
+      "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+      "status": "completed",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866109868"
+    }
+  },
+  "schema": "mcpcli-paired-source/v1",
+  "source_clean": true,
+  "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1"
+}

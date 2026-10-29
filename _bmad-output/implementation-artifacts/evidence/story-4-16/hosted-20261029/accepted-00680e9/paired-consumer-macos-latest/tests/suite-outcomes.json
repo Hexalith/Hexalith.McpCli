@@ -1,0 +1,19 @@
+{
+  "failures": [],
+  "os": "Darwin",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "1eac36cdd174021874ba27f9eb4014f7916dd9e1f8a1a60ad3684e46050c8f5c",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "863839a28feb3dff264584de5e0330005b68fa72626c6f49784ec11356d57a80"
+  },
+  "schema": "mcpcli-paired-suite-outcomes/v1",
+  "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+  "status": "passed",
+  "suites": [
+    {
+      "exit_code": 0,
+      "suite": "Cli",
+      "xml_status": "passed"
+    }
+  ],
+  "version": "1.2.0"
+}

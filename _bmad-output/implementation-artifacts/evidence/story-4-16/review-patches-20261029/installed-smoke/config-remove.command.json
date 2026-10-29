@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-review-fixes/installed-smoke/private/tools/hexalith",
+    "config",
+    "profile",
+    "remove",
+    "staged"
+  ],
+  "exit_code": 0
+}

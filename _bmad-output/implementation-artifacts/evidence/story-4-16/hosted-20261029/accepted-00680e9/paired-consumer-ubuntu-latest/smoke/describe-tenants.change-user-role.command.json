@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/home/runner/work/_temp/consumer/smoke/private/tools/hexalith",
+    "describe",
+    "tenants.change-user-role"
+  ],
+  "exit_code": 0
+}

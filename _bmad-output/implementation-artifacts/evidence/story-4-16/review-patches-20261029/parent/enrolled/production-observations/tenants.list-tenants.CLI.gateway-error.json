@@ -1,0 +1,29 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/9/list-tenants.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "list-tenants",
+        "projectionType": "tenant-index",
+        "payload": {},
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    }
+  ]
+}

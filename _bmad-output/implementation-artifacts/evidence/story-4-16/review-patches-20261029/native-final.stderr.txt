@@ -1,0 +1,6 @@
+test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.307s
+
+OK

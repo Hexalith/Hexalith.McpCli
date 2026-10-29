@@ -1,0 +1,9 @@
+{
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "646c909cb8ea8bd3ec9c64db6b6652b29758e68208fc22324d07907c3f38a6c8",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "0e48304a109c41f24dd36c332d752067dd0d7a94111bec84d7a5cf5153f84f7b"
+  },
+  "phase": "paired",
+  "source_sha": "251a6c32f8a61739a1650a67a1f0709eb4186973",
+  "version": "1.2.0"
+}

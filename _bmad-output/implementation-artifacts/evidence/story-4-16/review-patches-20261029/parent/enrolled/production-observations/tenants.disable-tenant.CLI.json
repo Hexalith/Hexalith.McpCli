@@ -1,0 +1,82 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/3/disable-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M63W4N21V7WSYQ9MP09N2S87",
+      "correlationId": "01M63W4N21V7WSYQ9MP09N2S87",
+      "tenant": "system",
+      "aggregateId": "vector-disable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "messageId": "01M63W4NQRN7KS9CVPFYDZDD5Q",
+      "correlationId": "01M63W4NQRN7KS9CVPFYDZDD5Q",
+      "tenant": "system",
+      "aggregateId": "vector-disable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "system",
+      "document": {
+        "tenantId": "vector-disable",
+        "name": "Vector Disable",
+        "description": null,
+        "status": "Disabled",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M63W4N21V7WSYQ9MP09N2S87",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Disable",
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M63W4N21V7WSYQ9MP09N2S87"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M63W4NQRN7KS9CVPFYDZDD5Q",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-disable"
+        },
+        "correlationId": "01M63W4NQRN7KS9CVPFYDZDD5Q"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-disable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-disable"
+        }
+      }
+    }
+  ]
+}

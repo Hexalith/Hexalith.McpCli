@@ -1,0 +1,3 @@
+Verified ci.yml: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866110044
+Verified commitlint.yml: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40866109868
+Verified current main source 00680e93423521053b7e7d4a2c39fdcaf3345cc1

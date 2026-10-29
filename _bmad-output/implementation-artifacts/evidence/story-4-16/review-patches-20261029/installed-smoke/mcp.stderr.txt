@@ -1,0 +1,174 @@
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (hexalith) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /tmp/mcpcli-416-review-fixes/installed-smoke/private
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/list' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'initialize' request handler completed in 9.8878ms.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/list' request handler completed in 7.7851ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_modules" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 15.1112ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 2.4898ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 4.1895ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.4802ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3372ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.4596ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2748ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3552ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.7112ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.793ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2979ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3221ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3158ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2563ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2674ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3171ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.7037ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3439ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.457ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2134ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.2969ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3405ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3114ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 0.3186ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = True.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (paired-stage-smoke 1.0.0) method 'tools/call' request handler completed in 8.0324ms.
+info: ModelContextProtocol.Server.StdioServerTransport[1221292038]
+      Server (stream) (hexalith) transport completed reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: ModelContextProtocol.Server.StdioServerTransport[1375634372]
+      Server (stream) (hexalith) shutting down.
+info: ModelContextProtocol.Server.StdioServerTransport[1256455528]
+      Server (stream) (hexalith) shut down.

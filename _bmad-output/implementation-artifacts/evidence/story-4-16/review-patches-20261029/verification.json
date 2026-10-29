@@ -1,0 +1,60 @@
+{
+  "source_base": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+  "scope": "Review fixes to release scripts, registered selector tests and release workflow; existing parent documentation/hosted evidence edits preserved.",
+  "focused_tests": {
+    "paired_preparation_acceptance": 31,
+    "installed_smoke_regressions": 5,
+    "real_pair_validator": 4,
+    "real_semantic_release": 4
+  },
+  "checks": {
+    "workflow_actionlint": 0,
+    "python_compile": 0,
+    "git_diff_check": 0
+  },
+  "real_retained_pair": {
+    "source_sha": "251a6c32f8a61739a1650a67a1f0709eb4186973",
+    "version": "1.2.0",
+    "validator_exit": 0,
+    "consumer_exit": 0,
+    "expected_analyzer_warning": "MCPCLI001",
+    "warning_count": 1,
+    "compiler_errors": 0,
+    "installed_smoke_exit": 0,
+    "discovery_captures": 49,
+    "mcp_captures": 25
+  },
+  "removal_controls": [
+    {
+      "control": "fr22-guard-removed",
+      "test": "test_missing_or_malformed_fr22_revision_fields_refuse",
+      "guard_removal_detected": true,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "control": "consumer-guard-removed",
+      "test": "test_acceptance_requires_successful_staged_compiler_analyzer_evidence",
+      "guard_removal_detected": true,
+      "failures": 2,
+      "errors": 0
+    }
+  ],
+  "limits": [
+    "No source commits, pushes, dispatches, remote operations or publication.",
+    "No solution build, ordinary .NET suites or conformance reruns.",
+    "Retained-pair checks cover the edited scripts against earlier real package bytes; they do not establish acceptance for current dirty source or three-OS acceptance of the expanded capture set."
+  ],
+  "selector_command": [
+    "node",
+    "--test",
+    "scripts/tests/select-release-version.test.mjs"
+  ],
+  "selector_exit_code": 0,
+  "fixtures": {
+    "baseline": "d8af79fa147460150228c119f3867e9109d25518",
+    "unreleased": "7742ce060605488b7b71cac912b1ae9d182c843e",
+    "selected": "2960920d0e99c14540ccf79d6a64eb89d5254d79",
+    "unrelated": "3456cd0440058ea0a3e44fef067a5b596b1612ab"
+  }
+}

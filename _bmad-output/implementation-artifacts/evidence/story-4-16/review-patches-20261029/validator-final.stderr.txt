@@ -1,0 +1,9 @@
+test_paired_validation_keeps_existing_tool_structure_checks (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validation_keeps_existing_tool_structure_checks) ... ok
+test_paired_validator_rejects_runtime_and_enrollment_drift (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_rejects_runtime_and_enrollment_drift) ... ok
+test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) ... ok
+test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.890s
+
+OK

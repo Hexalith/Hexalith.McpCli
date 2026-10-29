@@ -1,0 +1,16 @@
+[
+  {
+    "control": "fr22-guard-removed",
+    "test": "test_missing_or_malformed_fr22_revision_fields_refuse",
+    "guard_removal_detected": true,
+    "failures": 2,
+    "errors": 0
+  },
+  {
+    "control": "consumer-guard-removed",
+    "test": "test_acceptance_requires_successful_staged_compiler_analyzer_evidence",
+    "guard_removal_detected": true,
+    "failures": 2,
+    "errors": 0
+  }
+]

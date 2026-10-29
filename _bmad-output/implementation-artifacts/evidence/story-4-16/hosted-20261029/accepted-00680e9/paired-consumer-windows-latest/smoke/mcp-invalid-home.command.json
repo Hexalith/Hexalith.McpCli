@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "D:\\a\\_temp\\consumer\\smoke\\private\\tools\\hexalith.exe",
+    "mcp",
+    "--transport",
+    "stdio"
+  ],
+  "exit_code": 2
+}

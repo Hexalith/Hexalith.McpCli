@@ -1,0 +1,2 @@
+  Hexalith.McpCli -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/bin/Release/net10.0/publish/
+  Successfully created package '/home/runner/work/_temp/paired/packages/Hexalith.McpCli.1.2.0.nupkg'.

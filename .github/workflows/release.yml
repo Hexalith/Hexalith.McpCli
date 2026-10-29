@@ -201,6 +201,8 @@ jobs:
           fetch-depth: 0
           submodules: false
           persist-credentials: false
+      - name: Require staging dispatch from main
+        run: test "$GITHUB_REF" = refs/heads/main
       - name: Refuse staging recovery
         env:
           RECOVERY_VERSION: ${{ inputs.recovery_version }}

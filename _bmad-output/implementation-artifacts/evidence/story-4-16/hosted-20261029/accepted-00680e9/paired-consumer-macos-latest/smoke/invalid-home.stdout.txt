@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "configuration_invalid",
+    "message": "Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-m",
+    "py_compile",
+    "scripts/validate-release-packages.py",
+    "scripts/prepare-paired-release.py",
+    "scripts/compare-paired-evidence.py",
+    "scripts/smoke-paired-tool.py",
+    "scripts/verify-release-source.py",
+    "scripts/tests/test_bootstrap_release.py",
+    "scripts/tests/test_paired_release.py",
+    "scripts/tests/test_paired_smoke.py"
+  ],
+  "exit_code": 0
+}

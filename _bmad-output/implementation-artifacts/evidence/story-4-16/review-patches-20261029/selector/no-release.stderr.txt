@@ -1,0 +1,12 @@
+[1:51:27 PM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[1:51:27 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:51:28 PM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-version-nprrC8/remote.git in dry-run mode
+[1:51:28 PM] [semantic-release] › ✔  Allowed to push to the Git repository
+[1:51:28 PM] [semantic-release] › ℹ  Found git tag v1.0.0 associated with version 1.0.0 on branch main
+[1:51:28 PM] [semantic-release] › ℹ  Found 1 commits since last release
+[1:51:28 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:51:28 PM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: chore: exercise a history without a release
+[1:51:28 PM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[1:51:28 PM] [semantic-release] [/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 1 commits complete: no release
+[1:51:28 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/mcpcli/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:51:28 PM] [semantic-release] › ℹ  There are no relevant changes, so no new version is released.

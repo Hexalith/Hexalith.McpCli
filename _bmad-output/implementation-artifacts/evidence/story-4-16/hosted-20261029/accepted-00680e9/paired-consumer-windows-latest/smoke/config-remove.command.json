@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "D:\\a\\_temp\\consumer\\smoke\\private\\tools\\hexalith.exe",
+    "config",
+    "profile",
+    "remove",
+    "staged"
+  ],
+  "exit_code": 0
+}

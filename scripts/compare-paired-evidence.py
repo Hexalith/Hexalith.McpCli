@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import re
 from pathlib import Path
 import sys
 from paired_release import check_prepared, digest, module, write_new
@@ -14,7 +15,8 @@ def compare(staging, prepared_path, consumers, output):
     if prepared.get('eligibility') != 'current-main' or prepared.get('source_clean') is not True:
         raise ValueError('Local-only or dirty-source preparation cannot become accepted staging.')
     evidence = prepared_path.parent / 'evidence'
-    if not {'source-before.json', 'source-after.json', 'validation.json'} <= set(prepared.get('evidence', {})):
+    if not {'source-before.json', 'source-after.json', 'validation.json', 'consumer.json', 'consumer.command.json',
+            'consumer.stdout.txt', 'consumer.stderr.txt', 'consumer-build.log'} <= set(prepared.get('evidence', {})):
         raise ValueError('Required preparation evidence is absent.')
     for name, sha in prepared['evidence'].items():
         if Path(name).name != name or digest(evidence / name) != sha:
@@ -28,6 +30,8 @@ def compare(staging, prepared_path, consumers, output):
         verifier = module('verify-release-source')
         fr22 = gate['fr22']
         if (fr22.get('source_sha') != prepared['source_sha'] or fr22.get('source_clean') is not True
+                or any(not isinstance(fr22.get(key), str) or re.fullmatch('[0-9a-f]{40}', fr22[key]) is None
+                       for key in ('baseline_revision', 'upstream_main'))
                 or fr22.get('required_revision') != module('verify-paired-prerequisites').REQUIRED
                 or len(set(fr22.get('synchronization', {}).values())) != 1
                 or set(fr22.get('synchronization', {})) != {'AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md'}):
@@ -40,6 +44,19 @@ def compare(staging, prepared_path, consumers, output):
     validation = json.loads((evidence / 'validation.json').read_text())
     if any(validation.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages')) or validation.get('phase') != 'paired':
         raise ValueError('Package validation does not bind the prepared pair.')
+    consumer = json.loads((evidence / 'consumer.json').read_text())
+    command = json.loads((evidence / 'consumer.command.json').read_text())
+    compiler = (evidence / 'consumer-build.log').read_text()
+    if (consumer.get('schema') != 'mcpcli-paired-consumer/v1' or consumer.get('status') != 'passed'
+            or any(consumer.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages'))
+            or consumer.get('compiler_sha256') != digest(evidence / 'consumer-build.log')
+            or consumer.get('command_sha256') != digest(evidence / 'consumer.command.json')
+            or command.get('exit_code') != 0
+            or command.get('argv', [])[:3] != ['bash', 'scripts/smoke-bootstrap-consumer.sh', prepared['version']]
+            or re.search(r'MissingDescriptionQuery\.cs\([^)]*\): warning MCPCLI001:', compiler) is None
+            or re.search(r'^\s*1 Warning\(s\)$', compiler, re.MULTILINE) is None
+            or re.search(r'CS8032|CS9057', compiler)):
+        raise ValueError('The staged Abstractions compiler/analyzer consumer did not succeed.')
     receipts = {}
     baseline = None
     for directory in consumers:
@@ -74,7 +91,8 @@ def compare(staging, prepared_path, consumers, output):
             if name not in captures:
                 raise ValueError('Raw operation captures are missing.')
             for operation in json.loads(captures[name])['operations']:
-                expected.add('describe-' + operation['name'] + '.json')
+                expected.update({'describe-' + operation['name'] + '.json', 'mcp-describe-' + operation['name'] + '.json'})
+            expected.add('mcp-operations-' + item['name'] + '.json')
         if set(captures) != expected or any(not raw.endswith(b'\n') or b'\r' in raw for raw in captures.values()):
             raise ValueError('Raw discovery captures are incomplete or do not use LF.')
         if baseline is not None and captures != baseline:

@@ -1,0 +1,60 @@
+{
+  "name": "tenants.get-tenant-users",
+  "kind": "read",
+  "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+  "schema": {
+    "type": [
+      "object",
+      "null"
+    ],
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant whose members are listed. Required; a call without it is rejected."
+      },
+      "Cursor": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      },
+      "PageSize": {
+        "type": "integer",
+        "description": "Has no effect: use the pageSize and cursor call arguments instead."
+      }
+    },
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "entityId",
+      "pageSize",
+      "offset",
+      "cursor"
+    ]
+  },
+  "lintFindings": [
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member Cursor to the query envelope argument.",
+      "property": "/properties/Cursor"
+    },
+    {
+      "code": "payload_paging_member",
+      "severity": "warning",
+      "message": "Move paging member PageSize to the query envelope argument.",
+      "property": "/properties/PageSize"
+    }
+  ],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

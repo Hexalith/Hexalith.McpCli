@@ -1,0 +1,43 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/6/update-party.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M63W3JAJAMXC8DG8Y9CQDC2X",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.UpdatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "PersonDetails": {
+            "FirstName": "Augusta Ada",
+            "LastName": "Lovelace"
+          },
+          "RemoveIdentifierIds": [
+            "external-story49"
+          ],
+          "UpdateContactChannels": [
+            {
+              "ContactChannelId": "email-story49",
+              "PartyId": "party-story49",
+              "Value": "augusta@example.test"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  ]
+}

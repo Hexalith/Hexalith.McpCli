@@ -1,0 +1,33 @@
+{
+  "source_sha": "00680e93423521053b7e7d4a2c39fdcaf3345cc1",
+  "run_id": 40869271473,
+  "artifacts": [
+    {
+      "name": "accepted-staging-only",
+      "sha256": "ed6afc4f1590d2760b2753794fee237eb3333e763393c0b71ca0dff06fc8fe7f",
+      "bytes": 4325
+    },
+    {
+      "name": "paired-consumer-macos-latest",
+      "sha256": "0cc1786bf13bf9b02ed2cb792e95b6d417ed521d0cc0563bc6bb3f88f9e7f50b",
+      "bytes": 116847
+    },
+    {
+      "name": "paired-consumer-ubuntu-latest",
+      "sha256": "dad42d9905d0ea6d621dcf58a71f411dd57f67fec1c5f9e329019174b96670e0",
+      "bytes": 79904
+    },
+    {
+      "name": "paired-consumer-windows-latest",
+      "sha256": "04d16c5a694d7fadd1411834700b97a228104c985d8bd85650ee54baf6962338",
+      "bytes": 166737
+    },
+    {
+      "name": "paired-preparation",
+      "sha256": "6a29caccbae2b2cf4a53ce97a9e764222925fa454528d82a73a2659537379090",
+      "bytes": 4198994
+    }
+  ],
+  "local_archive_directory": "/tmp/mcpcli-416-hosted-svjuv79c/attempt3",
+  "package_directory": "/tmp/mcpcli-416-hosted-svjuv79c/attempt3/paired-preparation/packages"
+}

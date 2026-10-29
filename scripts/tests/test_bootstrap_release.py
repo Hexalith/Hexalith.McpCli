@@ -788,7 +788,7 @@ else:
 
     def paired_tool(self, *, missing=(), package_type=True, command=None, manifest='("Sample.Contracts", "Sample.Contracts")', assembly=True):
         prefix = "tools/net10.0/any/"
-        managed = bytearray(512)
+        managed = bytearray(640)
         managed[:2] = b'MZ'
         struct.pack_into('<I', managed, 0x3c, 64)
         managed[64:68] = b'PE\0\0'
@@ -796,9 +796,17 @@ else:
         struct.pack_into('<H', managed, 64 + 6, 1)
         struct.pack_into('<H', managed, 64 + 20, 224)
         struct.pack_into('<II', managed, 88 + 96 + 14 * 8, 0x2000, 72)
-        struct.pack_into('<IIII', managed, 312 + 8, 128, 0x2000, 128, 384)
+        struct.pack_into('<IIII', managed, 312 + 8, 256, 0x2000, 256, 384)
         struct.pack_into('<I', managed, 384, 72)
         struct.pack_into('<I', managed, 384 + 16, 1)
+        struct.pack_into('<II', managed, 384 + 8, 0x2050, 68)
+        metadata = 464
+        managed[metadata:metadata + 4] = b'BSJB'
+        struct.pack_into('<HHII', managed, metadata + 4, 1, 1, 0, 12)
+        managed[metadata + 16:metadata + 28] = b'v4.0.30319\0\0'
+        struct.pack_into('<HHII', managed, metadata + 28, 0, 1, 44, 24)
+        managed[metadata + 40:metadata + 44] = b'#~\0\0'
+        managed[metadata + 48:metadata + 52] = bytes([2, 0, 0, 1])
         files = {
             "Hexalith.McpCli.nuspec": '<package><metadata><id>Hexalith.McpCli</id><version>1.0.0</version>'
                 + ('<packageTypes><packageType name="DotnetTool" /></packageTypes>' if package_type else '')
@@ -917,6 +925,30 @@ else:
             ('precompiled.dll', bytes(precompiled), 'portable managed IL'),
             ('x86.dll', bytes(bit32), 'portable managed IL'),
         ]]
+        for label, offset, value, message in [
+            ('unknown-magic', 88, struct.pack('<H', 0x9999), 'managed PE'),
+            ('missing-metadata', 384 + 8, bytes(8), 'metadata'),
+            ('unmapped-metadata', 384 + 8, struct.pack('<II', 0x3000, 64), 'metadata'),
+            ('truncated-metadata', 384 + 8, struct.pack('<II', 0x20f0, 64), 'metadata'),
+            ('invalid-signature', 464, b'FAKE', 'metadata root'),
+            ('invalid-version', 464 + 12, struct.pack('<I', 1000), 'metadata version'),
+            ('invalid-stream', 464 + 32, struct.pack('<I', 1000), 'metadata stream'),
+        ]:
+            payload = bytearray(base[prefix + 'Hexalith.McpCli.dll'])
+            payload[offset:offset + len(value)] = value
+            if label == 'unknown-magic':
+                # The old parser used the optional header itself as the directory fallback.
+                struct.pack_into('<II', payload, 88 + 14 * 8, 0x2000, 72)
+                struct.pack_into('<II', payload, 88 + 112 + 14 * 8, 0x2000, 72)
+            cases.append((prefix + label + '.dll', bytes(payload), message))
+        cases.extend([
+            ('tools/net10.0/win-x64/payload.exe', b'MZnative', 'Alternate tools layouts'),
+            ('tools/net9.0/any/readme.txt', b'alternate', 'Alternate tools layouts'),
+            ('content/native-host.bin', b'MZnative', 'executable payload'),
+            ('content/native.exe', b'native', 'Native payload'),
+            ('content/libnative.so', b'native', 'Native payload'),
+            ('content/elf.bin', b'\x7fELF' + bytes(12), 'Native payload'),
+        ])
         for kind, assets in [('native', {'extra.so': {}}),
                              ('runtimeTargets', {'runtimes/linux-x64/native/extra.so': {'assetType': 'native', 'rid': 'linux-x64'}})]:
             deps = json.loads(base[prefix + 'Hexalith.McpCli.deps.json'])
@@ -931,6 +963,47 @@ else:
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
+
+    def test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure(self):
+        path = self.staged()
+        self.paired_tool()
+        paths = [path, path.with_name('Hexalith.McpCli.1.0.0.nupkg')]
+        def repository_commit(package_path, commit):
+            with ZipFile(package_path) as archive:
+                files = {name: archive.read(name) for name in archive.namelist()}
+            nuspec = next(name for name in files if name.endswith('.nuspec'))
+            from xml.etree import ElementTree
+            root = ElementTree.fromstring(files[nuspec])
+            metadata = root.find('{*}metadata')
+            for item in metadata.findall('{*}repository'):
+                metadata.remove(item)
+            if commit is not None:
+                ElementTree.SubElement(metadata, 'repository', type='git', commit=commit)
+            files[nuspec] = ElementTree.tostring(root)
+            with ZipFile(package_path, 'w') as archive:
+                for name, value in files.items(): archive.writestr(name, value)
+        for package_path in paths:
+            repository_commit(package_path, SHA)
+        output = self.root / 'validated.json'
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired',
+                                 '--source-sha', SHA, '--output', str(output))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        receipt = json.loads(output.read_text())
+        self.assertEqual(receipt['source_sha'], SHA)
+        self.assertEqual(receipt['phase'], 'paired')
+        self.assertEqual(receipt['packages'], {item.name: hashlib.sha256(item.read_bytes()).hexdigest() for item in paths})
+        output.unlink()
+        for package_path in paths:
+            for commit in (None, 'b' * 40):
+                with self.subTest(package=package_path.name, commit=commit):
+                    repository_commit(package_path, commit)
+                    result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired',
+                                             '--source-sha', SHA, '--output', str(output))
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn('repository commit differs', result.stderr)
+                    self.assertFalse(output.exists())
+                    repository_commit(package_path, SHA)
+        self.assert_no_push()
 
     def test_validator_rejects_changed_package_manifest_unknown_phase_and_invalid_version(self):
         path = self.staged()

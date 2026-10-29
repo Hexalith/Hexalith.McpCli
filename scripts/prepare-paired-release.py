@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 from paired_release import PAIR, digest, module, packages, source, write_new
 
 
@@ -30,8 +31,8 @@ def prepare(selection_path, output, local=False):
     evidence = output / 'evidence'
     evidence.mkdir()
 
-    def command(name, arguments):
-        result = subprocess.run([str(item) for item in arguments], capture_output=True)
+    def command(name, arguments, **kwargs):
+        result = subprocess.run([str(item) for item in arguments], capture_output=True, **kwargs)
         (evidence / f'{name}.stdout.txt').write_bytes(result.stdout)
         (evidence / f'{name}.stderr.txt').write_bytes(result.stderr)
         write_new(evidence / f'{name}.command.json', {'argv': [str(item) for item in arguments], 'exit_code': result.returncode})
@@ -55,6 +56,24 @@ def prepare(selection_path, output, local=False):
                                      '--output', staging, *flags])
     command('validate', [sys.executable, 'scripts/validate-release-packages.py', '--source-sha', before['source_sha'],
                          '--output', evidence / 'validation.json', staging, version, 'paired'])
+    with tempfile.TemporaryDirectory(prefix='mcpcli-paired-consumer-') as temporary:
+        private = Path(temporary)
+        consumer = private / 'consumer'
+        consumer_env = {key: value for key, value in os.environ.items() if not key.startswith(('NUGET_', 'DOTNET_'))}
+        consumer_env.update({'DOTNET_CLI_HOME': str(private / 'dotnet-home'), 'DOTNET_NOLOGO': '1',
+                             'DOTNET_CLI_TELEMETRY_OPTOUT': '1', 'DOTNET_SKIP_FIRST_TIME_EXPERIENCE': '1'})
+        compiler = consumer / 'build.log'
+        try:
+            command('consumer', ['bash', 'scripts/smoke-bootstrap-consumer.sh', version, staging, consumer], env=consumer_env)
+        finally:
+            if compiler.is_file():
+                (evidence / 'consumer-build.log').write_bytes(compiler.read_bytes())
+        if not compiler.is_file():
+            raise ValueError('The staged consumer did not retain its compiler/analyzer log.')
+    write_new(evidence / 'consumer.json', {'schema': 'mcpcli-paired-consumer/v1', 'status': 'passed',
+              'source_sha': before['source_sha'], 'version': version, 'packages': packages(staging, version),
+              'compiler_sha256': digest(evidence / 'consumer-build.log'),
+              'command_sha256': digest(evidence / 'consumer.command.json')})
     after = source()
     if after != before:
         raise ValueError('Source SHA or working-tree state changed during preparation.')

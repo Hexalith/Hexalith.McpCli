@@ -1,0 +1,21 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls
+  Windows ACLs are exercised only on Windows.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles
+  Windows ACL inheritance is exercised only on Windows.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten
+  Windows ACLs are exercised only on Windows.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction
+  Runs only in the fresh benchmark child process.
+  from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64) passed (1s 802ms)
+
+Test run summary: Passed!
+  total: 718
+  failed: 0
+  succeeded: 714
+  skipped: 4
+  duration: 1s 970ms

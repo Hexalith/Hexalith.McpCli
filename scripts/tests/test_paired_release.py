@@ -4,6 +4,7 @@ import contextlib
 import copy
 import io
 import json
+import os
 from pathlib import Path
 import struct
 import subprocess
@@ -49,7 +50,7 @@ class PairedReleaseTests(unittest.TestCase):
         self.source_gate = {'schema': 'mcpcli-paired-source/v1', 'source_sha': SHA, 'source_clean': True,
                             'current_main': SHA, 'gates': workflow_gates,
                             'fr22': {'required_revision': module('verify-paired-prerequisites').REQUIRED,
-                                     'source_sha': SHA, 'source_clean': True,
+                                     'source_sha': SHA, 'source_clean': True, 'baseline_revision': 'c' * 40, 'upstream_main': 'd' * 40,
                                      'synchronization': {name: 'b' * 64 for name in ('AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md')}}}
         self.package_hashes = packages(self.staging, VERSION)
         self.prepared = {'schema': 'mcpcli-paired-preparation/v1', 'source_sha': SHA, 'source_clean': True,
@@ -65,7 +66,9 @@ class PairedReleaseTests(unittest.TestCase):
                          'operations-sample.json': {'operations': [{'name': 'sample.read'}]},
                          'describe-sample.read.json': {'name': 'sample.read'},
                          'mcp-tools.json': {'jsonrpc': '2.0', 'id': 2, 'result': {}},
-                         'mcp-modules.json': {'jsonrpc': '2.0', 'id': 3, 'result': {}}}
+                         'mcp-modules.json': {'jsonrpc': '2.0', 'id': 3, 'result': {}},
+                         'mcp-operations-sample.json': {'jsonrpc': '2.0', 'id': 4, 'result': {}},
+                         'mcp-describe-sample.read.json': {'jsonrpc': '2.0', 'id': 5, 'result': {}}}
             for name, value in documents.items():
                 write_new(captures / name, value)
             write_new(smoke / 'smoke.json', {'schema': 'mcpcli-paired-smoke/v1', 'status': 'passed', 'os': system,
@@ -91,8 +94,21 @@ class PairedReleaseTests(unittest.TestCase):
         for name in ('source-before', 'source-after'):
             (self.evidence / (name + '.json')).write_text(json.dumps(self.source_gate))
         (self.evidence / 'validation.json').write_text(json.dumps({'phase': 'paired', 'source_sha': SHA, 'version': VERSION, 'packages': self.package_hashes}))
+        (self.evidence / 'consumer-build.log').write_text('MissingDescriptionQuery.cs(2,1): warning MCPCLI001: fixture\n    1 Warning(s)\n')
+        (self.evidence / 'consumer.command.json').write_text(json.dumps({'argv': ['bash', 'scripts/smoke-bootstrap-consumer.sh', VERSION, str(self.staging), '/private/consumer'], 'exit_code': 0}))
+        for channel in ('stdout', 'stderr'):
+            (self.evidence / ('consumer.' + channel + '.txt')).write_text('')
+        (self.evidence / 'consumer.json').write_text(json.dumps({'schema': 'mcpcli-paired-consumer/v1', 'status': 'passed',
+            'source_sha': SHA, 'version': VERSION, 'packages': self.package_hashes,
+            'compiler_sha256': digest(self.evidence / 'consumer-build.log'),
+            'command_sha256': digest(self.evidence / 'consumer.command.json')}))
         self.prepared['evidence'] = {path.name: digest(path) for path in self.evidence.iterdir()}
+        self.save_prepared()
+
+    def save_prepared(self):
         self.prepared_path.write_text(json.dumps(self.prepared))
+        for directory in getattr(self, 'consumers', []):
+            self.change_json(directory / 'smoke/smoke.json', lambda d: d.update(preparation_sha256=digest(self.prepared_path)))
 
     def compare(self, consumers=None):
         return self.comparator.compare(self.staging, self.prepared_path, consumers or self.consumers, self.root / 'accepted.json')
@@ -204,6 +220,95 @@ class PairedReleaseTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.gate.validate_jobs([], self.gate.STAGING_JOBS)
 
+    def test_partial_reruns_select_newest_required_jobs_with_pagination(self):
+        required = {'one': ['step'], 'two': ['step'], 'three': ['step']}
+        all_jobs = jobs(required)
+        pages = [{'jobs': [all_jobs[0]], 'total_count': 1},
+                 {'jobs': [all_jobs[1]], 'total_count': 2}, {'jobs': [all_jobs[2]], 'total_count': 2}]
+        with patch.object(self.gate, 'github_json', side_effect=pages) as api:
+            selected = self.gate.verify_jobs('fixture/repo', {'id': 123, 'run_attempt': 2}, required)
+        self.assertEqual(selected, all_jobs)
+        self.assertEqual([call.args[0] for call in api.call_args_list], [
+            'repos/fixture/repo/actions/runs/123/attempts/2/jobs',
+            'repos/fixture/repo/actions/runs/123/attempts/1/jobs',
+            'repos/fixture/repo/actions/runs/123/attempts/1/jobs'])
+        self.assertEqual(api.call_args_list[-1].args[-1], 'page=2')
+        # Older failures for a job successfully rerun do not override the newest occurrence.
+        old = copy.deepcopy(all_jobs)
+        old[0]['conclusion'] = 'failure'
+        with patch.object(self.gate, 'github_json', side_effect=[{'jobs': [all_jobs[0]], 'total_count': 1},
+                                                               {'jobs': old, 'total_count': 3}]):
+            self.assertEqual(self.gate.verify_jobs('fixture/repo', {'id': 123, 'run_attempt': 2}, required), all_jobs)
+
+    def test_newer_bad_or_duplicate_job_never_falls_back(self):
+        required = {'one': ['step'], 'two': ['step']}
+        valid = jobs(required)
+        for mode in ('failed', 'skipped', 'step-skipped', 'duplicate'):
+            newer = copy.deepcopy(valid[:1])
+            if mode == 'duplicate': newer += copy.deepcopy(newer)
+            elif mode == 'step-skipped': newer[0]['steps'][0]['conclusion'] = 'skipped'
+            else: newer[0]['conclusion'] = 'failure' if mode == 'failed' else 'skipped'
+            with self.subTest(mode=mode), patch.object(self.gate, 'github_json', side_effect=[
+                    {'jobs': newer, 'total_count': len(newer)}, {'jobs': valid, 'total_count': len(valid)}]) as api:
+                with self.assertRaises(ValueError):
+                    self.gate.verify_jobs('fixture/repo', {'id': 123, 'run_attempt': 2}, required)
+                self.assertEqual(api.call_count, 1)
+        with patch.object(self.gate, 'github_json', side_effect=[{'jobs': valid[:1], 'total_count': 2},
+                                                               {'jobs': [], 'total_count': 2}]):
+            with self.assertRaisesRegex(ValueError, 'Incomplete'):
+                self.gate.verify_jobs('fixture/repo', {'id': 123, 'run_attempt': 2}, required)
+
+    def test_missing_or_malformed_fr22_revision_fields_refuse(self):
+        for key in ('baseline_revision', 'upstream_main'):
+            for value in (None, '', 123, [], 'abc123', 'A' * 40, 'a' * 39, 'a' * 40 + '\n'):
+                original = copy.deepcopy(self.source_gate)
+                if value is None: self.source_gate['fr22'].pop(key)
+                else: self.source_gate['fr22'][key] = value
+                self.save_gates()
+                with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                    self.compare()
+                self.assertFalse((self.root / 'accepted.json').exists())
+                self.source_gate = original
+
+    def test_acceptance_requires_successful_staged_compiler_analyzer_evidence(self):
+        for mode in ('missing', 'failed', 'wrong-source', 'wrong-packages', 'no-analyzer', 'load-failure'):
+            self.save_gates()
+            if mode == 'missing': (self.evidence / 'consumer.json').unlink()
+            elif mode == 'failed': self.change_json(self.evidence / 'consumer.command.json', lambda d: d.update(exit_code=1))
+            elif mode == 'wrong-source': self.change_json(self.evidence / 'consumer.json', lambda d: d.update(source_sha='e' * 40))
+            elif mode == 'wrong-packages': self.change_json(self.evidence / 'consumer.json', lambda d: d.update(packages={}))
+            else: (self.evidence / 'consumer-build.log').write_text('0 Warning(s)' if mode == 'no-analyzer' else 'CS8032')
+            self.prepared['evidence'] = {path.name: digest(path) for path in self.evidence.iterdir()}
+            # Bind mutations to their updated individual hashes so acceptance checks the actual assertion too.
+            if mode != 'missing':
+                self.change_json(self.evidence / 'consumer.json', lambda d: d.update(
+                    compiler_sha256=digest(self.evidence / 'consumer-build.log'),
+                    command_sha256=digest(self.evidence / 'consumer.command.json')))
+                self.prepared['evidence']['consumer.json'] = digest(self.evidence / 'consumer.json')
+            self.save_prepared()
+            with self.subTest(mode=mode), self.assertRaises(ValueError):
+                self.compare()
+            self.assertFalse((self.root / 'accepted.json').exists())
+
+    def test_complete_mcp_capture_set_is_required(self):
+        path = self.root / 'Windows/smoke/smoke.json'
+        original = path.read_bytes()
+        for name in ('mcp-operations-sample.json', 'mcp-describe-sample.read.json'):
+            self.change_json(path, lambda d: d['discovery'].pop(name))
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, 'Raw discovery captures are incomplete'):
+                self.compare()
+            self.assertFalse((self.root / 'accepted.json').exists())
+            path.write_bytes(original)
+
+    def test_staging_workflow_guards_actual_dispatch_ref_before_selection(self):
+        workflow = (SCRIPTS.parent / '.github/workflows/release.yml').read_text().split('  stage-pair:', 1)[1].split('  smoke-pair:', 1)[0]
+        guard = workflow.split('      - name: Require staging dispatch from main\n', 1)[1].split('      - ', 1)[0]
+        command = guard.split('        run: ', 1)[1].strip()
+        self.assertLess(workflow.index('Require staging dispatch from main'), workflow.index('Select a version'))
+        for ref in ('refs/heads/main', 'refs/heads/topic', 'refs/tags/v1.0.0', ''):
+            result = subprocess.run(['bash', '-e', '-c', command], env={**os.environ, 'GITHUB_REF': ref}, capture_output=True)
+            self.assertEqual(result.returncode == 0, ref == 'refs/heads/main')
+
     def test_source_gate_rejects_stale_dirty_or_wrong_head(self):
         for state in ('stale', 'dirty', 'wrong-head'):
             def fake_git(argv, **kwargs):
@@ -304,6 +409,16 @@ class PairedReleaseTests(unittest.TestCase):
                 write_new(validation, {'packages': packages(output / 'packages', VERSION)})
                 if failure == 'tamper':
                     next((output / 'packages').iterdir()).write_bytes(b'tamper after validation')
+            elif argv[:2] == ['bash', 'scripts/smoke-bootstrap-consumer.sh']:
+                consumer = Path(argv[-1])
+                self.assertFalse(consumer.exists())
+                self.assertEqual(Path(argv[-2]), output / 'packages')
+                self.assertEqual(argv[2], VERSION)
+                self.assertNotEqual(kwargs['env']['DOTNET_CLI_HOME'], os.environ.get('DOTNET_CLI_HOME'))
+                consumer.mkdir()
+                (consumer / 'build.log').write_text('MissingDescriptionQuery.cs(2,1): warning MCPCLI001: fixture\n    1 Warning(s)\n')
+                if failure == 'consumer':
+                    return subprocess.CompletedProcess(argv, 1, stdout=b'compiler failure', stderr=b'')
             elif argv[0] == sys.executable and argv[1].endswith('verify-release-source.py'):
                 write_new(Path(argv[argv.index('--output') + 1]), self.source_gate)
             code = 1 if len(argv) > 1 and argv[1] == failure else 0
@@ -314,6 +429,10 @@ class PairedReleaseTests(unittest.TestCase):
                 with self.assertRaises((ValueError, subprocess.CalledProcessError)):
                     prepare.prepare(selection, output)
                 self.assertFalse((output / 'prepared.json').exists())
+                if failure == 'consumer':
+                    self.assertTrue((output / 'evidence/consumer-build.log').is_file())
+                    self.assertEqual(json.loads((output / 'evidence/consumer.command.json').read_text())['exit_code'], 1)
+                    self.assertFalse((output / 'evidence/consumer.json').exists())
             else:
                 prepare.prepare(selection, output)
                 receipt = json.loads((output / 'prepared.json').read_text())
@@ -321,12 +440,14 @@ class PairedReleaseTests(unittest.TestCase):
                 self.assertEqual(receipt['packages'], packages(output / 'packages', VERSION))
                 self.assertTrue((output / 'evidence/source-before.json').is_file())
                 self.assertTrue((output / 'evidence/source-after.json').is_file())
+                self.assertEqual(json.loads((output / 'evidence/consumer.json').read_text())['status'], 'passed')
+                self.assertIn('consumer-build.log', receipt['evidence'])
 
     def test_preparation_binds_one_fresh_pair_and_both_source_checks(self):
         self.fake_preparation()
 
     def test_preparation_failures_never_record_success(self):
-        for failure in ('restore', 'build', 'source', 'tamper'):
+        for failure in ('restore', 'build', 'source', 'tamper', 'consumer'):
             with self.subTest(failure=failure):
                 self.fake_preparation(failure)
 

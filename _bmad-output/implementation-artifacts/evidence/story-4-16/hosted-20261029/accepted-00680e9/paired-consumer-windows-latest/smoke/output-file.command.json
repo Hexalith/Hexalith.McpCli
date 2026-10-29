@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "D:\\a\\_temp\\consumer\\smoke\\private\\tools\\hexalith.exe",
+    "modules",
+    "--output",
+    "D:\\a\\_temp\\consumer\\smoke\\private\\result.json"
+  ],
+  "exit_code": 0
+}

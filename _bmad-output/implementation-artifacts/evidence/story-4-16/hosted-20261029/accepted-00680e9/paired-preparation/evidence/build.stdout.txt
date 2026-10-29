@@ -1,0 +1,32 @@
+  Hexalith.McpCli.Analyzers -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Manifest.Unmarked.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+  Topology.DaprStub -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/bin/Release/net10.0/dapr.dll
+  Hexalith.McpCli.Abstractions -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Catalog.String.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/bin/Release/net10.0/Catalog.String.Contracts.dll
+  Catalog.Routing.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/bin/Release/net10.0/Catalog.Routing.Contracts.dll
+  Catalog.Explicit.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/bin/Release/net10.0/Catalog.Explicit.Contracts.dll
+  Manifest.MarkedEmpty.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+  Catalog.InvalidProvider.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/bin/Release/net10.0/Catalog.InvalidProvider.Contracts.dll
+  Hexalith.McpCli.AppHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll
+  Hexalith.McpCli.Sample.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+  Hexalith.McpCli.Analyzers.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll
+  Catalog.Table.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/bin/Release/net10.0/Catalog.Table.Contracts.dll
+  Hexalith.McpCli.Core -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Catalog.Invalid.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/bin/Release/net10.0/Catalog.Invalid.Contracts.dll
+  Catalog.Lint.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/bin/Release/net10.0/Catalog.Lint.Contracts.dll
+  Hexalith.McpCli.Abstractions.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll
+  Hexalith.McpCli.Mcp -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.StdioHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.StdioHost.dll
+  Hexalith.McpCli.ConformanceHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+  Hexalith.McpCli.Mcp.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll
+  Hexalith.McpCli.Integration.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll
+  Hexalith.McpCli.Core.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll
+  Hexalith.McpCli.Cli.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll
+  Hexalith.McpCli.Manifest.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:21.13

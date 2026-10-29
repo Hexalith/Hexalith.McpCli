@@ -1,0 +1,1378 @@
+{
+  "result": "passed",
+  "fullV1Accepted": true,
+  "packages": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.Tenants.Contracts"
+  ],
+  "results": [
+    {
+      "result": "passed",
+      "checks": [
+        {
+          "label": "restore",
+          "command": [
+            "dotnet",
+            "restore",
+            "host/ArtifactHost.csproj",
+            "-p:RestoreAdditionalProjectSources=/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/artifacts"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "build",
+          "command": [
+            "dotnet",
+            "build",
+            "host/ArtifactHost.csproj",
+            "--no-restore",
+            "-c",
+            "Release",
+            "-m:1",
+            "-warnaserror"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "catalog",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--full-catalog"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "operations-parties",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "operations",
+            "parties",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "modules",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "modules",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.create-party",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.create-party",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.deactivate-party",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.deactivate-party",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.get-party",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.get-party",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.list-parties",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.list-parties",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.reactivate-party",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.reactivate-party",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.search-parties",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.search-parties",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "parties.update-party",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "parties.update-party",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "inventory",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--inventory",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inventory.input.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "replay",
+          "command": [
+            "/usr/bin/python3",
+            "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/run_loopback.py",
+            "--host",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--assets",
+            "/tmp/mcpcli-artifact-5nzh4ol3/host/obj/project.assets.json",
+            "--artifact",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+            "--expected-package-id",
+            "Hexalith.Parties.Contracts",
+            "--expected-package-version",
+            "1.5.1",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/0/create-party.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/1/deactivate-party.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/2/get-party.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/3/list-parties.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/4/reactivate-party.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/5/search-parties.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Parties.Contracts/inputs-zihiihkq/vectors/6/update-party.vector.json"
+          ],
+          "exitCode": 0
+        }
+      ],
+      "approvalInputs": {
+        "inventory": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/tools/inventory-coverage/v1/parties-approved.json",
+          "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+          "retainedInput": "inventory.input.json"
+        },
+        "acceptedLint": null
+      },
+      "evidenceLimit": "Scripted Gateway replay proves head routing and result parity; it does not prove live authorization or domain effects.",
+      "packageId": "Hexalith.Parties.Contracts",
+      "version": "1.5.1",
+      "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+      "vectors": {
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031"
+      },
+      "artifactSource": "/home/administrator/.nuget/packages/hexalith.parties.contracts/1.5.1/hexalith.parties.contracts.1.5.1.nupkg",
+      "retainedInputs": {
+        "artifact": "inputs-zihiihkq/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+        "vectors": {
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/create-party.vector.json": "inputs-zihiihkq/vectors/0/create-party.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/deactivate-party.vector.json": "inputs-zihiihkq/vectors/1/deactivate-party.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/get-party.vector.json": "inputs-zihiihkq/vectors/2/get-party.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/list-parties.vector.json": "inputs-zihiihkq/vectors/3/list-parties.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/reactivate-party.vector.json": "inputs-zihiihkq/vectors/4/reactivate-party.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/search-parties.vector.json": "inputs-zihiihkq/vectors/5/search-parties.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts/update-party.vector.json": "inputs-zihiihkq/vectors/6/update-party.vector.json"
+        }
+      },
+      "artifactDependencies": {
+        "Hexalith.EventStore.Contracts": "3.126.0",
+        "Hexalith.McpCli.Abstractions": "1.0.0",
+        "ByteAether.Ulid": "1.4.2",
+        "Hexalith.Commons.UniqueIds": "2.30.3"
+      },
+      "candidateDependencyOverrides": [],
+      "resolvedPackages": [
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "artifactHash": "sha512-co/oTuLRRaVSDYItAKTL6yWaYo3hE9pg5aPlzDQu3RS+PsHyJLUEDG9AJ61vodH3xkxfv8wGLGVEAiuegA61gQ==",
+          "assetsHash": "sha512-LCOjm7QFSdM2X779Db2K+i3pPei4f8PJEcY1wGehkdgYNmpQaP5uF7U8aZMMBWeYe+zV2Ues9j/nFpW4Pw10wQ==",
+          "cacheContentHash": "sha512-LCOjm7QFSdM2X779Db2K+i3pPei4f8PJEcY1wGehkdgYNmpQaP5uF7U8aZMMBWeYe+zV2Ues9j/nFpW4Pw10wQ=="
+        },
+        {
+          "id": "Dapr.Client",
+          "version": "1.19.0",
+          "artifactHash": "sha512-Yk8mjkkepD8s+HxRsND6dlpAsMtqwZcjMrMMFT2/cZT+VVYc5W9UurPMFVSbDdjE4SjgCD26WAB9Df8VGhhDqg==",
+          "assetsHash": "sha512-iB5DO8rajKnb9+yZYuVWIDxf2cK8fUJjP2/vzFzqGs2W82RV4PvTX1Fh92IonIwjFmqVSjPLMZwz+8ItGMzsMw==",
+          "cacheContentHash": "sha512-iB5DO8rajKnb9+yZYuVWIDxf2cK8fUJjP2/vzFzqGs2W82RV4PvTX1Fh92IonIwjFmqVSjPLMZwz+8ItGMzsMw=="
+        },
+        {
+          "id": "Dapr.Common",
+          "version": "1.19.0",
+          "artifactHash": "sha512-6ScWDtEammgpNiwHMi/tbRwh3PUKbDWwypWORVWBswsptnG7Hzb4imaYny7HheInIFSJ5dQGwDkxpP0SUJrnAw==",
+          "assetsHash": "sha512-sK55jyMd8mZmV/bo0TyFL/kfKgYUn9oPzZDE5k4bcE67u4nK4heIDpSbIMTANc/ptOTBjBjq+uacIBZIEDeh/w==",
+          "cacheContentHash": "sha512-sK55jyMd8mZmV/bo0TyFL/kfKgYUn9oPzZDE5k4bcE67u4nK4heIDpSbIMTANc/ptOTBjBjq+uacIBZIEDeh/w=="
+        },
+        {
+          "id": "Dapr.Protos",
+          "version": "1.19.0",
+          "artifactHash": "sha512-1s6yhNMiNws/qM2Kp4U20hOn2R5HuohYndwogQPB0a2uameIy29wH0Y3pt7hMqXkI6AbdyPPY+cDBIw+/RK3MQ==",
+          "assetsHash": "sha512-q2jtW3HMLzUtkBaGMk0oSwGOfM8C57ur0J00m6X4lsEep4I3MhNnC84B5z6QspkZlvof3p5clzXIXYuoGoym8A==",
+          "cacheContentHash": "sha512-q2jtW3HMLzUtkBaGMk0oSwGOfM8C57ur0J00m6X4lsEep4I3MhNnC84B5z6QspkZlvof3p5clzXIXYuoGoym8A=="
+        },
+        {
+          "id": "Google.Api.CommonProtos",
+          "version": "2.17.0",
+          "artifactHash": "sha512-mUwshnp8viumz1TqnQu0MN0D7n9F+v3j0gZ0IWGJvElwj0ZpbOnOetdr8Twn2aaRjoHaAI0dr+kCLNxdJtFXRw==",
+          "assetsHash": "sha512-elfQPknFr495hm7vdy6ZlgyQh6yzZq9TU7sS35L/Fj/fqjM/mUGau9gVJLhvQEtUlPjtR80hpn/m9HvBMyCXIw==",
+          "cacheContentHash": "sha512-elfQPknFr495hm7vdy6ZlgyQh6yzZq9TU7sS35L/Fj/fqjM/mUGau9gVJLhvQEtUlPjtR80hpn/m9HvBMyCXIw=="
+        },
+        {
+          "id": "Google.Protobuf",
+          "version": "3.35.0",
+          "artifactHash": "sha512-OV8v5Sap58zAKf9OJ5ZDALuBIO4iXgCxNbza1U+KKw+AOR8OLhnFPYHzd4yCH2qsKlaAOLkfNicmDZGyYe0tqA==",
+          "assetsHash": "sha512-OrUZCUzBXqdSmsQSWp/EPeINjOBcMU+PrZEJegw0aLgOGFHZ9ZI37X/SFrIxo8C9ghKynaKpPr3BVPc4EujWYg==",
+          "cacheContentHash": "sha512-OrUZCUzBXqdSmsQSWp/EPeINjOBcMU+PrZEJegw0aLgOGFHZ9ZI37X/SFrIxo8C9ghKynaKpPr3BVPc4EujWYg=="
+        },
+        {
+          "id": "Grpc.Core.Api",
+          "version": "2.80.0",
+          "artifactHash": "sha512-El6Pvolx/T/qUBsMGjLX5HHJ6V4mfcfA/3xm2wv6IwlFvX3bUcNCAl6xytolFmKaLpRBMo1bIO3ZeBRaOQppjw==",
+          "assetsHash": "sha512-i/8s+MOrYa6n7BmZ5bilcbHk+EMJDQHm2MKLhwGAT+urQqlZ6cpjvSivYvuULjebuX+UKieLYZbLRCmVQxFRkw==",
+          "cacheContentHash": "sha512-i/8s+MOrYa6n7BmZ5bilcbHk+EMJDQHm2MKLhwGAT+urQqlZ6cpjvSivYvuULjebuX+UKieLYZbLRCmVQxFRkw=="
+        },
+        {
+          "id": "Grpc.Net.Client",
+          "version": "2.80.0",
+          "artifactHash": "sha512-jkFiQhWWL5QLzcNnC6h9Tp68MJw4OQRf3PAgGr9ph8RGSImZMXa8w4VEv/Rt+Z8/qYcaf2xsn/2u3YIAyXmYDw==",
+          "assetsHash": "sha512-I1Aa24nTRMHqx0pmQfvthFsOpejquDjiJV6092KBqjw6EEr3wA9CMXlrdkoEgHartOiJrpKyZiQRl7n0NVlfBg==",
+          "cacheContentHash": "sha512-I1Aa24nTRMHqx0pmQfvthFsOpejquDjiJV6092KBqjw6EEr3wA9CMXlrdkoEgHartOiJrpKyZiQRl7n0NVlfBg=="
+        },
+        {
+          "id": "Grpc.Net.Common",
+          "version": "2.80.0",
+          "artifactHash": "sha512-MhjtEXvsvXNhZiAuaJW2DsfuXp1TKeNIjrT92TvkuXZxVO4lRIPEvA1xRPq6BN6BJ/MB+kDxpPPRPu4tJ0UXbA==",
+          "assetsHash": "sha512-E2ERsx+9IXlry4yjBl8btx0XMIKzymGNSvX5jmBS/uSwYyYDoKIDcIREyLqFLvd8vcJdcoRlycpvn9YRXutFpQ==",
+          "cacheContentHash": "sha512-E2ERsx+9IXlry4yjBl8btx0XMIKzymGNSvX5jmBS/uSwYyYDoKIDcIREyLqFLvd8vcJdcoRlycpvn9YRXutFpQ=="
+        },
+        {
+          "id": "Grpc.Reflection",
+          "version": "2.80.0",
+          "artifactHash": "sha512-myTYjiaZm2vmenTfsgwMKej0mQ1ZpO7xjqAElAOLlV1tUO/2/QksfneH8ZAwTFshTG/OGdP0zN55gr0NHSz9yw==",
+          "assetsHash": "sha512-SNGFuUR4OiJM9QUdkpP6gbFVrRKSe2xhL7lvXMP38gcgwPJBFC0wVUcYMue656YhPRIGEjeCa4iXjDQ+VQU2jQ==",
+          "cacheContentHash": "sha512-SNGFuUR4OiJM9QUdkpP6gbFVrRKSe2xhL7lvXMP38gcgwPJBFC0wVUcYMue656YhPRIGEjeCa4iXjDQ+VQU2jQ=="
+        },
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "artifactHash": "sha512-RsX7JS2zHTwaXwc9e9GhZEENOa9yIlg4FQYP+cxE6X0liE9VfO9vuCnb9NU2TEzN5roYi2O6SSXX29AMt62rTw==",
+          "assetsHash": "sha512-e0tQgVfkT4CkozW/fO1Nl0i4m9dmfk4/Er6WJXjOduSftvHW2bo3ppIQQ/ncYwpC+2hUlqezwWMeFpjZzd+1Tw==",
+          "cacheContentHash": "sha512-e0tQgVfkT4CkozW/fO1Nl0i4m9dmfk4/Er6WJXjOduSftvHW2bo3ppIQQ/ncYwpC+2hUlqezwWMeFpjZzd+1Tw=="
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "3.128.3",
+          "artifactHash": "sha512-HtyS8UCoG0ibw379OglkPlnsWlfu8YzFDcp8ppjIdDt1G4+LF62zuXamzopEB6W/RCM+c1cCvuC83HvlSU5UPg==",
+          "assetsHash": "sha512-VoVUttV2Bis0bmk5ieFAt16UTgGyHwk8tHqSEWiHrP7juAIGp0Q6Xyh9emVFR0N5lZfXnT7ByzZ1ps5c9U61Fg==",
+          "cacheContentHash": "sha512-VoVUttV2Bis0bmk5ieFAt16UTgGyHwk8tHqSEWiHrP7juAIGp0Q6Xyh9emVFR0N5lZfXnT7ByzZ1ps5c9U61Fg=="
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "3.128.3",
+          "artifactHash": "sha512-3XjkvS2x0wMRtMiNm8sYCdkkBx/OBHPyhtG7h+hs3ihjV08HFULiWoctgKrjCbROKRL1ETeFWi+gdTBLrQM68w==",
+          "assetsHash": "sha512-UKuj0yFSVDZ4nBr1iSbDGXqatbp+xzKEr5RIrglRUI9GFYTMwmWs0jWmKTA4JkNt3wYCg60Kz0evo2uYj1sEoQ==",
+          "cacheContentHash": "sha512-UKuj0yFSVDZ4nBr1iSbDGXqatbp+xzKEr5RIrglRUI9GFYTMwmWs0jWmKTA4JkNt3wYCg60Kz0evo2uYj1sEoQ=="
+        },
+        {
+          "id": "Hexalith.Parties.Contracts",
+          "version": "1.5.1",
+          "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+          "assetsHash": "sha512-0OJgZQp/ZNP0qusp9uuMNmrnXFmUU6iM3YP6XmPppOLgJZikDue+JctyT+Hxux5lQ6AW+1tpXtRAVskvsW5vaQ==",
+          "cacheContentHash": "sha512-0OJgZQp/ZNP0qusp9uuMNmrnXFmUU6iM3YP6XmPppOLgJZikDue+JctyT+Hxux5lQ6AW+1tpXtRAVskvsW5vaQ=="
+        },
+        {
+          "id": "Humanizer.Core",
+          "version": "3.0.10",
+          "artifactHash": "sha512-86jRQVvMLU7xxsdHrK87TSqu5kL0lg4EiRjvTBglkrtLw242dMON4vTrFbGKr2CRjqbThBuIpodF2MWbCFKZYA==",
+          "assetsHash": "sha512-yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw==",
+          "cacheContentHash": "sha512-yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw=="
+        },
+        {
+          "id": "Json.More.Net",
+          "version": "3.0.1",
+          "artifactHash": "sha512-WxbcZ3EOHPcMk/r6zuSnLyOlnRZqWqlC7EW/Sxgty+3WG5XnAFx79yz0fh+6PeVjbQgVC8990/wrxdd7oNcocg==",
+          "assetsHash": "sha512-fRctF2J2SILYG6wqP21drmeEODmCVkVQ/b3MndDu2fT1swfySyUgq7ePCk+aENGlDcIm05fyfjh9vcuqDEfv3w==",
+          "cacheContentHash": "sha512-fRctF2J2SILYG6wqP21drmeEODmCVkVQ/b3MndDu2fT1swfySyUgq7ePCk+aENGlDcIm05fyfjh9vcuqDEfv3w=="
+        },
+        {
+          "id": "JsonPointer.Net",
+          "version": "7.0.3",
+          "artifactHash": "sha512-kN9oYvPlegeK309OyQBAB8DJf4fHpa4hh9cXkA+v8DeQImz1hiiolT5gzED27OfWERjau35x/vH9P9nzJbcW2g==",
+          "assetsHash": "sha512-It/10weZ3oA+BGL+Gqyw9M6wsi4Tc16vWwU+u7x6LBwty57Y3aUh7bfcn2VWAzgVTAfGuCPb5KUpsH6IFjR08A==",
+          "cacheContentHash": "sha512-It/10weZ3oA+BGL+Gqyw9M6wsi4Tc16vWwU+u7x6LBwty57Y3aUh7bfcn2VWAzgVTAfGuCPb5KUpsH6IFjR08A=="
+        },
+        {
+          "id": "JsonSchema.Net",
+          "version": "9.5.0",
+          "artifactHash": "sha512-hQCdMueEOelB14QatzChiAMwzWckvMw+mdvc7ekhez+nCiMfpku33CLFh8D0dCJb8BIArDDoJk9iwNtF9jFdgg==",
+          "assetsHash": "sha512-yCohYtv0mi0oU+n3rpPBhoP/6OKkmxxwkGfprohst5DywbKoHaf9yJtFR8CYasKUUO5KfIR3gm43vsqxgT0nzA==",
+          "cacheContentHash": "sha512-yCohYtv0mi0oU+n3rpPBhoP/6OKkmxxwkGfprohst5DywbKoHaf9yJtFR8CYasKUUO5KfIR3gm43vsqxgT0nzA=="
+        },
+        {
+          "id": "Microsoft.AspNetCore.DataProtection.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-o9mhIDUltT8jpdvaf2rCSdb4XGmF7O8D6SyPnpsnvomXDkNyZlov53j/BRUqifTkM46FKoSduYQhvDoxHYmRfw==",
+          "assetsHash": "sha512-/4+1KX8VIKCCHZ8p/1dZ2WGxvIijm5lXmgHecxEwGnBYXiSjAqfF/Q7p9m6eojUDlpKMHkt1HHXeNdL9WH3YHw==",
+          "cacheContentHash": "sha512-/4+1KX8VIKCCHZ8p/1dZ2WGxvIijm5lXmgHecxEwGnBYXiSjAqfF/Q7p9m6eojUDlpKMHkt1HHXeNdL9WH3YHw=="
+        },
+        {
+          "id": "Microsoft.Extensions.AI.Abstractions",
+          "version": "10.11.0",
+          "artifactHash": "sha512-uCGFTvae/ZLMVdARRH0qVxCRKqfn8ynh4wyOEwlNTKcHTq9pqowdELTWOqL+iCdxgqgapCPumCq1E+EvLrcFlQ==",
+          "assetsHash": "sha512-h4DX/TdJU4fk1GGaf19n6Kujkj6VXbGeL4UEOsQ8+ZJC5fVApPauokCtvBP684BYbczUYZQNfo1mbmyHG4WVSg==",
+          "cacheContentHash": "sha512-h4DX/TdJU4fk1GGaf19n6Kujkj6VXbGeL4UEOsQ8+ZJC5fVApPauokCtvBP684BYbczUYZQNfo1mbmyHG4WVSg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Caching.Abstractions",
+          "version": "10.0.13",
+          "artifactHash": "sha512-96y7W2gda47hBOs0thDaC5jji4u3PLj9H6GDqImgx+fGeSOh4Gw+7QTyrJWCZQDhNSUGcfP2ULvKmVrFjqP7oQ==",
+          "assetsHash": "sha512-UOJqcdNMoFcV/5RUcOlVKq9pPmbrcmbpLx5iYz9QtrmMcWRQzlL5Q/NZRfbPPLNyIEc1HWjjs5Z7nIwqewU1sg==",
+          "cacheContentHash": "sha512-UOJqcdNMoFcV/5RUcOlVKq9pPmbrcmbpLx5iYz9QtrmMcWRQzlL5Q/NZRfbPPLNyIEc1HWjjs5Z7nIwqewU1sg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-BZhMkmPS3MrQnKFLXGmDS/geiUeLW2pN9sdRiLAsxf2gynmSQtqVrkPbCtAZtQ/G9qI50r9zTrh0ofJF+rYb2w==",
+          "assetsHash": "sha512-4YdfvaoWn3tB1xQQHGrhRTFWJ8fGOqxThxduynSZy9ZFTiSaUi3vX4EK/kj8h2HQMwTlks9MWV1fv2WRBv5/1w==",
+          "cacheContentHash": "sha512-4YdfvaoWn3tB1xQQHGrhRTFWJ8fGOqxThxduynSZy9ZFTiSaUi3vX4EK/kj8h2HQMwTlks9MWV1fv2WRBv5/1w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Binder",
+          "version": "10.0.14",
+          "artifactHash": "sha512-kKD6iek6peqP93if4iGVFauSt1Lk/iSPgKwCmjU8Ddl6HYeMmu3hON3Qo5VU2aBr8S77ecIk7T1yjfTrNlFLJg==",
+          "assetsHash": "sha512-brDb5kgle2iY2lWHgeV/KOqnBEpVnlMFigGJ/WW7KP9Nj6C/t53f/h5boYyVXB0bEhgpL+ctbewDJMI+zAMj1w==",
+          "cacheContentHash": "sha512-brDb5kgle2iY2lWHgeV/KOqnBEpVnlMFigGJ/WW7KP9Nj6C/t53f/h5boYyVXB0bEhgpL+ctbewDJMI+zAMj1w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.CommandLine",
+          "version": "10.0.14",
+          "artifactHash": "sha512-a7hK5/outIEY0F5wUFyrDT39KXCgSt/AMa3jl5rlFvKFzEzZwyt2ohRcMSh7v9VUY8wZxJz4yj+BEmjy8XTTRg==",
+          "assetsHash": "sha512-/9IqkBeB7mE1enbN4Cfeu4HFPU9uR1JSJh2qwXfwr7SYBxETkTKRht/LoPfajmmlh+BJlH3jm79CLhQPFb9ovw==",
+          "cacheContentHash": "sha512-/9IqkBeB7mE1enbN4Cfeu4HFPU9uR1JSJh2qwXfwr7SYBxETkTKRht/LoPfajmmlh+BJlH3jm79CLhQPFb9ovw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+          "version": "10.0.14",
+          "artifactHash": "sha512-sSK7aQwmLGUT9zeooT7uj3G4kYwwiorFSfFaX1fAEkq6ZXpxbC3p1nWY+4DRYxa3gMH7MZKAeqT4ZIPzPJ4ulA==",
+          "assetsHash": "sha512-jB0UiYjpnneoBH1ZeXPlHYt4zUme6SZlnstL6gsH/0O/d5rOuN5lSIlOIfxXzapl8tAi7QmYOEogP09g/wcHzA==",
+          "cacheContentHash": "sha512-jB0UiYjpnneoBH1ZeXPlHYt4zUme6SZlnstL6gsH/0O/d5rOuN5lSIlOIfxXzapl8tAi7QmYOEogP09g/wcHzA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.FileExtensions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-uhfmENaa9nhAlu8rqIbh7q0b7TPb1MewnkxcB9Rci/x4HD3SIUQvxxySfcpHtTjI9GlfGLg7vNW4ehO2gYqHzw==",
+          "assetsHash": "sha512-NBIfm8vWNi3UJ9OI9thvREJeV6KzEdPjQ4ONdH+yPWutGBpVnwLbXiEqdEFaGAFYpAluGCfyCwKFgH9pd2scfw==",
+          "cacheContentHash": "sha512-NBIfm8vWNi3UJ9OI9thvREJeV6KzEdPjQ4ONdH+yPWutGBpVnwLbXiEqdEFaGAFYpAluGCfyCwKFgH9pd2scfw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Json",
+          "version": "10.0.14",
+          "artifactHash": "sha512-e6s+msTbrfZTlqkbvwyjQwk9fgTdnRRXwwELlrygOO75Ppvk5uA8YRnbLGHvCcbWk3cdwY1cP8bPYYh5fwdSsg==",
+          "assetsHash": "sha512-4Tn8eNg85x+ICDN4OLC7Dl/xvZNREZIf7VSOAdT4Q4KYf5Ip1zAk+0BAx8BsRTomgEpCYV4kKsNNnP/ZXUbQkw==",
+          "cacheContentHash": "sha512-4Tn8eNg85x+ICDN4OLC7Dl/xvZNREZIf7VSOAdT4Q4KYf5Ip1zAk+0BAx8BsRTomgEpCYV4kKsNNnP/ZXUbQkw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.UserSecrets",
+          "version": "10.0.14",
+          "artifactHash": "sha512-2cOPepaxI7v3ExF50djtCN0BpuUBWMjpS35dOxFtqT4fovJT8SZwD0cbsm8Rp5pEkNy0lehJd7YZ45uXBG0H9w==",
+          "assetsHash": "sha512-z+dvl9uQnNzvq6Xco+UQyeujpP/BHs+ahHLPCBMxR5GW6M4JcsN1tupEgn5uWgR1fGCfmxS4QJEMt6eyizXGUA==",
+          "cacheContentHash": "sha512-z+dvl9uQnNzvq6Xco+UQyeujpP/BHs+ahHLPCBMxR5GW6M4JcsN1tupEgn5uWgR1fGCfmxS4QJEMt6eyizXGUA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration",
+          "version": "10.0.14",
+          "artifactHash": "sha512-bOc8UecSDd09S2pOsrsziUCuxfZLGN33vvUgLrSnC+6G96CpUci6oYFg4dGVD1Yq33npcIXlk6zvjvnACe1Mxg==",
+          "assetsHash": "sha512-UcnvaEaMvRckDDhyqY1OZkFwBqpZArkHFKB6dWaQWT9XTuNttNNX8Cqsb/Sic2LfJxsMLJUXnYrxY3iX5LN9pQ==",
+          "cacheContentHash": "sha512-UcnvaEaMvRckDDhyqY1OZkFwBqpZArkHFKB6dWaQWT9XTuNttNNX8Cqsb/Sic2LfJxsMLJUXnYrxY3iX5LN9pQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Di8PFxjp08vKyonp2pbr2F0SvkWJt3B9v7H/5NESNUebvQJrE4usSVdSTM6nVIQr7cF6obpSm5hXDMU3+X50Og==",
+          "assetsHash": "sha512-QtpQzuSZVyTPCuHW058yCs9Nj0394uUkNyFHS813nOmK9UgUdBdaprJ5PPsBgsQIpxADTsTkbaMMonykem6qdw==",
+          "cacheContentHash": "sha512-QtpQzuSZVyTPCuHW058yCs9Nj0394uUkNyFHS813nOmK9UgUdBdaprJ5PPsBgsQIpxADTsTkbaMMonykem6qdw=="
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection",
+          "version": "10.0.14",
+          "artifactHash": "sha512-1+/NPfu9dMgYhNlndjKMxmCycnT29xLUwb0LRqauXXStVi4U0FqSBlqqR6vXtjL0alzLDSMSCpvro3aknqv/RA==",
+          "assetsHash": "sha512-2LzcuVjemeXR+WdY9wGIr8iGb7fYsDAit+IScxXX2XJnX0b++mWcE/WO6fEGIqhdMfSQM2ZS5JGMHYZix7YXZg==",
+          "cacheContentHash": "sha512-2LzcuVjemeXR+WdY9wGIr8iGb7fYsDAit+IScxXX2XJnX0b++mWcE/WO6fEGIqhdMfSQM2ZS5JGMHYZix7YXZg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-yNfMpoudaSRuRiJMBuveoVtv4HVqvq2VsIBdnIJkfZy+bpIY0cOLt6ZWlTB/bLWknCSA+/Cfrt4SCDOPVjFFsA==",
+          "assetsHash": "sha512-vm+PPso6vOwGeX52MdOPh6z/R6KHgxQUwqq7k7Jc9jhy2JOxO2KB4xfoJQBBp2Ni8M4zKgJ4r2a1dgrYG7+MKw==",
+          "cacheContentHash": "sha512-vm+PPso6vOwGeX52MdOPh6z/R6KHgxQUwqq7k7Jc9jhy2JOxO2KB4xfoJQBBp2Ni8M4zKgJ4r2a1dgrYG7+MKw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics",
+          "version": "10.0.14",
+          "artifactHash": "sha512-1F1uOSNya1FG3RyNwrnFewNnM3jpdDxruLwuxl1F8+8tWsNI7ngo+97LN/MhWAQn/0gWYOdell4saBEQU/68mg==",
+          "assetsHash": "sha512-80VqW8eKxQaxBOLDNpLUdxOlxzWn/jqBSxNBCfD8GCjcshNDpFvUgKh8uvvZwvkfBbwmNPWPWHyy9F+RLd1dlQ==",
+          "cacheContentHash": "sha512-80VqW8eKxQaxBOLDNpLUdxOlxzWn/jqBSxNBCfD8GCjcshNDpFvUgKh8uvvZwvkfBbwmNPWPWHyy9F+RLd1dlQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileProviders.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-//+jj6ugVyJL2ESYBCI54P7PWMjnhCBIOpf5nSiP41870KQBUsIx0VS+YaEY8ZTDJO94rWqeAEkTf8Uj7qDcpQ==",
+          "assetsHash": "sha512-rAqf2Em2ZjLqNbcLJlboQnXNyJP604F960TsCKNiP00Ur6ExIc1mcwmNb8L2eTRT8RC8UKx/GjecoWcW2Sj7bw==",
+          "cacheContentHash": "sha512-rAqf2Em2ZjLqNbcLJlboQnXNyJP604F960TsCKNiP00Ur6ExIc1mcwmNb8L2eTRT8RC8UKx/GjecoWcW2Sj7bw=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileProviders.Physical",
+          "version": "10.0.14",
+          "artifactHash": "sha512-iNOnKVdGjRtVqkLMGIKgaP3EYO7bXwsS0s9fICSeeYQ70xqrrdjh9egD1LTcIQnT03XvZKEGXhHa0ofZnMr3iQ==",
+          "assetsHash": "sha512-dcp6eCIk6ZpE3CTNmIna0ifgxsPel/MtOc23/Y/AJlD9SZZr7bhlKK2DAXYlrz81yMkMi6el/LHHUFKCZ3ufuQ==",
+          "cacheContentHash": "sha512-dcp6eCIk6ZpE3CTNmIna0ifgxsPel/MtOc23/Y/AJlD9SZZr7bhlKK2DAXYlrz81yMkMi6el/LHHUFKCZ3ufuQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileSystemGlobbing",
+          "version": "10.0.14",
+          "artifactHash": "sha512-jXru4kAFOxj7Jed2UMsYb2QeVIqOPGz0Sp77crlNOpVibMzrayiwcsJ8Tpf89YiwxWiQ4bB89ilMrHr+zQECQw==",
+          "assetsHash": "sha512-xt6c/PWLL6+CiBiZA3PWRSfkwcPh+HCwiOLrgSUkhzBT7lrT/+QpIKPeuCQyDPspwOuG1q0cbJhuiGpRjr4UNQ==",
+          "cacheContentHash": "sha512-xt6c/PWLL6+CiBiZA3PWRSfkwcPh+HCwiOLrgSUkhzBT7lrT/+QpIKPeuCQyDPspwOuG1q0cbJhuiGpRjr4UNQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-nBmDCsT6B2NWjw6XlnxC7+iqQ9AskJxsqZ5AM8VGAXnRMXKYpqj5vNzvjkfVWsxScuZPVNbvZnnWKfRQiDrYYA==",
+          "assetsHash": "sha512-p6NUEkmlaB+FujQZTtyNBKFULQO+Fj8SKuYdYHASQso+RkeYdFDPNsMM4mtOHqx1GZNQnZm/inmsqGkja/Dw2w==",
+          "cacheContentHash": "sha512-p6NUEkmlaB+FujQZTtyNBKFULQO+Fj8SKuYdYHASQso+RkeYdFDPNsMM4mtOHqx1GZNQnZm/inmsqGkja/Dw2w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting",
+          "version": "10.0.14",
+          "artifactHash": "sha512-M4+Fs2oTDwgKoqGKhW10cn4nhdBSpnOSWndAA6Vag/cfeIExlJ0BExv/ony2dC6HgezY23uNOXXoZuxy6XAmpQ==",
+          "assetsHash": "sha512-q3f2GLZebtxWG/pDtckPrgIWV22pVmSLSLEkncdmbUz7Z6atwF2wn9ag5cZCc/ndcGe7ffHJom98scauFG+oNQ==",
+          "cacheContentHash": "sha512-q3f2GLZebtxWG/pDtckPrgIWV22pVmSLSLEkncdmbUz7Z6atwF2wn9ag5cZCc/ndcGe7ffHJom98scauFG+oNQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Http",
+          "version": "10.0.14",
+          "artifactHash": "sha512-VR2iiG3rS9WA6OaOiHRN6ZPNyAmrXkiqtKU7GON886nif2Rzs+8uYJfvkOYW4lzHHU8wY/U9vMJYV3p22HPOjQ==",
+          "assetsHash": "sha512-IDsXLGGz7nJMsqspWnErsP18WyAVf6V9Ixl4p47/8/95Jak3ZA1YWhQ0iesMVwubVhkVZGoO9m9ADUnK0m6HLw==",
+          "cacheContentHash": "sha512-IDsXLGGz7nJMsqspWnErsP18WyAVf6V9Ixl4p47/8/95Jak3ZA1YWhQ0iesMVwubVhkVZGoO9m9ADUnK0m6HLw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-AxQQ1pBzZur4SkRixQSkXpbM3P/kBH9BS+XvOshgkjw0bha+981X62R9zvs1GD5W3AVCQNEfm5I8/hicDSTouQ==",
+          "assetsHash": "sha512-SwcbEBtkECq3D2oywvHkm46fyrX9Dd2JPWphDnHUc2+cUWR1Mdo41atAjh/9iZjgQxuvbKfZKXqostT/LZfefA==",
+          "cacheContentHash": "sha512-SwcbEBtkECq3D2oywvHkm46fyrX9Dd2JPWphDnHUc2+cUWR1Mdo41atAjh/9iZjgQxuvbKfZKXqostT/LZfefA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Configuration",
+          "version": "10.0.14",
+          "artifactHash": "sha512-HL34Mpy5KNBb/QsMfd7WRIR4pVpB+HDX5Ek8zEuOKvqPj/q/sHGjWzfudbiE9JKMi1sJTy/s8w6HyjTdzQCKpA==",
+          "assetsHash": "sha512-CfFSNbVSXSl8UTH453c0HoY5owcpaY1PMh1xsB+3NWcEq6WUSPHRotydbnMJtmw7Kybp6cTba8e+/uaJI52ANw==",
+          "cacheContentHash": "sha512-CfFSNbVSXSl8UTH453c0HoY5owcpaY1PMh1xsB+3NWcEq6WUSPHRotydbnMJtmw7Kybp6cTba8e+/uaJI52ANw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Console",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Px3s9ipWvInXXAaZNPGtgsOFRMTfFVLgzEs3cYGjr62W94xJUWbBuMTzc+9Rr4Zhh/29QIL3xAL5wphHzUBsoQ==",
+          "assetsHash": "sha512-8Qx57p3sUAajSZHLQf8eihZqMtSIeI4fZ1JVpL4fvg4QqSbbgJkN0X0owX1cVJJRW2Xw4uqtVv9F7LgdXOBQHQ==",
+          "cacheContentHash": "sha512-8Qx57p3sUAajSZHLQf8eihZqMtSIeI4fZ1JVpL4fvg4QqSbbgJkN0X0owX1cVJJRW2Xw4uqtVv9F7LgdXOBQHQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Debug",
+          "version": "10.0.14",
+          "artifactHash": "sha512-3kXa+h6PC/qIOG1zR03DhTkMnqslw8lh5w3ORMCy6CIuVqHGtLwLY6kR7vYrNP3UQAB63eIrjmqUJwgC9/Dxig==",
+          "assetsHash": "sha512-8e79uonXzgIsZbdgc5pa2Ybk5W+vUbd+gfGS50E+BW9ApRv9s0qL1DTyqLv7VQEPxTHS/l8Y0AtS7K8do+TczQ==",
+          "cacheContentHash": "sha512-8e79uonXzgIsZbdgc5pa2Ybk5W+vUbd+gfGS50E+BW9ApRv9s0qL1DTyqLv7VQEPxTHS/l8Y0AtS7K8do+TczQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.EventLog",
+          "version": "10.0.14",
+          "artifactHash": "sha512-umj0n2R/6WHV/JQ9hoov9TKtQRm8IFkFmboRmbUL4GbJeJx5jQAXA9BQa1rACmNfgliQ4znU2/hAS3aopA6JUQ==",
+          "assetsHash": "sha512-4HbWayQiJdw0lYthC45rElah2mJJeSlHDu3rcIrinGe95JdOt6I/vWQTNUFXiujIsHv3Z8MyA79ZC5P1Ww+jNg==",
+          "cacheContentHash": "sha512-4HbWayQiJdw0lYthC45rElah2mJJeSlHDu3rcIrinGe95JdOt6I/vWQTNUFXiujIsHv3Z8MyA79ZC5P1Ww+jNg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.EventSource",
+          "version": "10.0.14",
+          "artifactHash": "sha512-QnlQzLVHPtfnJxCF5LdU8s7fUYSv10bVywN7VhAX3OUn0t0yf4xsLpeqVt7WJ6NkDZvgt/9xaroEel//ephQjg==",
+          "assetsHash": "sha512-Q06Q90D3qnrsKtf1QlaMELCED3ZdMV5SGIRIERUQTTSCoqTNKSitx3KMRgLdxBeqI5ZcbOu5InOu6xQ6o6zmUg==",
+          "cacheContentHash": "sha512-Q06Q90D3qnrsKtf1QlaMELCED3ZdMV5SGIRIERUQTTSCoqTNKSitx3KMRgLdxBeqI5ZcbOu5InOu6xQ6o6zmUg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Su71SotCYl6sHUXga8IrkGkHGr+NekqPnXd3G+bqDOFuaZs31UprqYony4tEr4WcQOqiuMXsV+VLpDawi6bQSQ==",
+          "assetsHash": "sha512-O2fXL6JmtkFwkigxS8fPTQpLXxGDjgZco5D+h88s++Cl0bDCs023PVkpNoifciJ+f30I82jnp8tpwF0wCLdFtA==",
+          "cacheContentHash": "sha512-O2fXL6JmtkFwkigxS8fPTQpLXxGDjgZco5D+h88s++Cl0bDCs023PVkpNoifciJ+f30I82jnp8tpwF0wCLdFtA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-KuCiZYUMwjbCmYegn6wgF5JkSb4SODFs90RF0Iq2Ull7b/RKZ3lv3VJ8HjscX9ZlVzz2XcWIBZrX+uMsekifFw==",
+          "assetsHash": "sha512-4wcIU0rE04ejEfCwHTftu9O8fgH6CRYCe+tseRapikUBn1Kic3QdO7ku22SwFyLrzdWGYPUZMEgv57ZYuuc5gA==",
+          "cacheContentHash": "sha512-4wcIU0rE04ejEfCwHTftu9O8fgH6CRYCe+tseRapikUBn1Kic3QdO7ku22SwFyLrzdWGYPUZMEgv57ZYuuc5gA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Options",
+          "version": "10.0.14",
+          "artifactHash": "sha512-NQJlE55aoetEJdcYHj0JMzw+P9b6ToDyWd3En1qnTg33cQpmAx0PSqcdo5KopJzfHWnU0sJTRp7RiYXSK7W9KA==",
+          "assetsHash": "sha512-EeN/33S418m9oWEaZY4N5T+BNxtOqNTIFoFbIgBKwylh4OJPKIWFAzbIhpTdNbwUs26MhkmbLCAbdY+YCJ1dIQ==",
+          "cacheContentHash": "sha512-EeN/33S418m9oWEaZY4N5T+BNxtOqNTIFoFbIgBKwylh4OJPKIWFAzbIhpTdNbwUs26MhkmbLCAbdY+YCJ1dIQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Primitives",
+          "version": "10.0.14",
+          "artifactHash": "sha512-iTALlkkPsiOteMMvtgCNYX5dLSBhD9I/5oa50ZbKI9V7ndwp9J/kCKGSdD0WEexFdm+vczMUdBdY2WOLrGl8mA==",
+          "assetsHash": "sha512-1bbZqqCJTPba3inTADExbp/9PsGVyvGOX3zr6tFr7ySCgVkX9Lpw7BV0TizktNItd3SsbUu1sQfSAYm1GZMoNw==",
+          "cacheContentHash": "sha512-1bbZqqCJTPba3inTADExbp/9PsGVyvGOX3zr6tFr7ySCgVkX9Lpw7BV0TizktNItd3SsbUu1sQfSAYm1GZMoNw=="
+        },
+        {
+          "id": "ModelContextProtocol.Core",
+          "version": "2.3.0",
+          "artifactHash": "sha512-jnCDayv+LWLfXWbi3dHsvru8rtcksCfA2Fe/Lol1AbvsManxJKlpf/8bAfWQyCcFGUqv7ORqq4Xn18m5mUZmQg==",
+          "assetsHash": "sha512-EDpbQholhVWoNumb0Ab3oGv9LmXOLgaD5ixEIUkrnzpnqD0TJCSHTJ5G71/J1KlrQ98aWDclWTPMffKTnCJoMw==",
+          "cacheContentHash": "sha512-EDpbQholhVWoNumb0Ab3oGv9LmXOLgaD5ixEIUkrnzpnqD0TJCSHTJ5G71/J1KlrQ98aWDclWTPMffKTnCJoMw=="
+        },
+        {
+          "id": "ModelContextProtocol",
+          "version": "2.3.0",
+          "artifactHash": "sha512-dLLvWbN5l4dhZHRsEn19hiNfHkEjPZw+hl1m9jFdBgEWZsfqPQYmKeirDREu97CtiX8sGM97lNSr3L4F9Sx2Nw==",
+          "assetsHash": "sha512-PHZ0q8xTAoysqUKpA5gC0RGJSfwpZhfsNz+9Sw0X0RzFFVHjIE52sx6C+ogMn+LSE+FfiYiNscPJhM6q6DMT6Q==",
+          "cacheContentHash": "sha512-PHZ0q8xTAoysqUKpA5gC0RGJSfwpZhfsNz+9Sw0X0RzFFVHjIE52sx6C+ogMn+LSE+FfiYiNscPJhM6q6DMT6Q=="
+        },
+        {
+          "id": "System.CommandLine",
+          "version": "2.0.14",
+          "artifactHash": "sha512-OI0FP6FmxDrzhJ5QpOEp+h7i/QfK5OaElKzZRHevBKJhwClZZmG624F3IlwlL9g0Zf9WYUfYx/PZF6RPyd0/9w==",
+          "assetsHash": "sha512-15fyVO4aG6poR6IKmhM74zf7PUzaU6FZAGm2d3SQSO9yIyGAeo44e6t9qeKjjaqyMEqYdqcb2G1B0gpLoDU2cA==",
+          "cacheContentHash": "sha512-15fyVO4aG6poR6IKmhM74zf7PUzaU6FZAGm2d3SQSO9yIyGAeo44e6t9qeKjjaqyMEqYdqcb2G1B0gpLoDU2cA=="
+        },
+        {
+          "id": "System.Diagnostics.EventLog",
+          "version": "10.0.14",
+          "artifactHash": "sha512-WZsvZuSO/NFiSI1rb5eNgBGhM9Ipnaxr2pVdOSkWhOIJLVIiByYY6xoQcRQ+DhM+H+uu/f13xkkDkoL9On/A3w==",
+          "assetsHash": "sha512-O/RzNwWoDzehkLlAG9hR8xooY5L41U7VUaYlcKvE3+FhHohBJqF10oLUzuv0v59VeJ62hv3uw9VoeX12zej7Sg==",
+          "cacheContentHash": "sha512-O/RzNwWoDzehkLlAG9hR8xooY5L41U7VUaYlcKvE3+FhHohBJqF10oLUzuv0v59VeJ62hv3uw9VoeX12zej7Sg=="
+        }
+      ],
+      "operations": [
+        "parties.create-party",
+        "parties.deactivate-party",
+        "parties.get-party",
+        "parties.list-parties",
+        "parties.reactivate-party",
+        "parties.search-parties",
+        "parties.update-party"
+      ],
+      "acceptedLint": null,
+      "approvedModule": "parties"
+    },
+    {
+      "result": "passed",
+      "checks": [
+        {
+          "label": "restore",
+          "command": [
+            "dotnet",
+            "restore",
+            "host/ArtifactHost.csproj",
+            "-p:RestoreAdditionalProjectSources=/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/artifacts"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "build",
+          "command": [
+            "dotnet",
+            "build",
+            "host/ArtifactHost.csproj",
+            "--no-restore",
+            "-c",
+            "Release",
+            "-m:1",
+            "-warnaserror"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "catalog",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--full-catalog"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "operations-tenants",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "operations",
+            "tenants",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "modules",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "modules",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.add-user-to-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.add-user-to-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.change-user-role",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.change-user-role",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.create-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.create-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.disable-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.disable-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.enable-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.enable-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.get-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.get-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.get-tenant-audit",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.get-tenant-audit",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 1
+        },
+        {
+          "label": "tenants.get-tenant-users",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.get-tenant-users",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 1
+        },
+        {
+          "label": "tenants.get-user-tenants",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.get-user-tenants",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 1
+        },
+        {
+          "label": "tenants.list-tenants",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.list-tenants",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 1
+        },
+        {
+          "label": "tenants.remove-tenant-configuration",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.remove-tenant-configuration",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.remove-user-from-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.remove-user-from-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.set-tenant-configuration",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.set-tenant-configuration",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "tenants.update-tenant",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "describe",
+            "tenants.update-tenant",
+            "--lint",
+            "--strict"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "inventory",
+          "command": [
+            "dotnet",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--inventory",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inventory.input.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "label": "replay",
+          "command": [
+            "/usr/bin/python3",
+            "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/run_loopback.py",
+            "--host",
+            "/tmp/mcpcli-artifact-t_8c9til/host/bin/Release/net10.0/ArtifactHost.dll",
+            "--assets",
+            "/tmp/mcpcli-artifact-t_8c9til/host/obj/project.assets.json",
+            "--artifact",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/artifacts/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+            "--expected-package-id",
+            "Hexalith.Tenants.Contracts",
+            "--expected-package-version",
+            "5.10.0",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/0/add-user-to-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/1/change-user-role.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/2/create-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/3/disable-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/4/enable-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/5/get-tenant-audit.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/6/get-tenant-users.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/7/get-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/8/get-user-tenants.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/9/list-tenants.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/10/remove-tenant-configuration.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/11/remove-user-from-tenant.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/12/set-tenant-configuration.vector.json",
+            "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/13/update-tenant.vector.json"
+          ],
+          "exitCode": 0
+        }
+      ],
+      "approvalInputs": {
+        "inventory": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/tools/inventory-coverage/v1/tenants-approved.json",
+          "sha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+          "retainedInput": "inventory.input.json"
+        },
+        "acceptedLint": {
+          "path": "/home/administrator/projects/hexalith/mcpcli/tools/inventory-coverage/v1/tenants-accepted-lint.json",
+          "sha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+          "retainedInput": "acceptedLint.input.json"
+        }
+      },
+      "evidenceLimit": "Scripted Gateway replay proves head routing and result parity; it does not prove live authorization or domain effects.",
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "5.10.0",
+      "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+      "vectors": {
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json": "46b5bfb6cbecc051b03e2c27299f52f09688d329c1d46a3792dc2e8af7ca673d",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json": "d8e799ac3340f497646ec0dd7fab8b2a2e7d969cee19558bb0a382d9b52f8d3f",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+        "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a"
+      },
+      "artifactSource": "/home/administrator/.nuget/packages/hexalith.tenants.contracts/5.10.0/hexalith.tenants.contracts.5.10.0.nupkg",
+      "retainedInputs": {
+        "artifact": "inputs-l2t_zte6/artifacts/Hexalith.Tenants.Contracts.5.10.0.nupkg",
+        "vectors": {
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json": "inputs-l2t_zte6/vectors/0/add-user-to-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json": "inputs-l2t_zte6/vectors/1/change-user-role.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json": "inputs-l2t_zte6/vectors/2/create-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json": "inputs-l2t_zte6/vectors/3/disable-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json": "inputs-l2t_zte6/vectors/4/enable-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json": "inputs-l2t_zte6/vectors/5/get-tenant-audit.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json": "inputs-l2t_zte6/vectors/6/get-tenant-users.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json": "inputs-l2t_zte6/vectors/7/get-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json": "inputs-l2t_zte6/vectors/8/get-user-tenants.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json": "inputs-l2t_zte6/vectors/9/list-tenants.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json": "inputs-l2t_zte6/vectors/10/remove-tenant-configuration.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json": "inputs-l2t_zte6/vectors/11/remove-user-from-tenant.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json": "inputs-l2t_zte6/vectors/12/set-tenant-configuration.vector.json",
+          "/home/administrator/projects/hexalith/mcpcli/tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json": "inputs-l2t_zte6/vectors/13/update-tenant.vector.json"
+        }
+      },
+      "artifactDependencies": {
+        "Hexalith.EventStore.Contracts": "3.126.1",
+        "Hexalith.McpCli.Abstractions": "1.0.0",
+        "ByteAether.Ulid": "1.4.2",
+        "Hexalith.Commons.UniqueIds": "2.30.3"
+      },
+      "candidateDependencyOverrides": [],
+      "resolvedPackages": [
+        {
+          "id": "ByteAether.Ulid",
+          "version": "1.4.2",
+          "artifactHash": "sha512-co/oTuLRRaVSDYItAKTL6yWaYo3hE9pg5aPlzDQu3RS+PsHyJLUEDG9AJ61vodH3xkxfv8wGLGVEAiuegA61gQ==",
+          "assetsHash": "sha512-LCOjm7QFSdM2X779Db2K+i3pPei4f8PJEcY1wGehkdgYNmpQaP5uF7U8aZMMBWeYe+zV2Ues9j/nFpW4Pw10wQ==",
+          "cacheContentHash": "sha512-LCOjm7QFSdM2X779Db2K+i3pPei4f8PJEcY1wGehkdgYNmpQaP5uF7U8aZMMBWeYe+zV2Ues9j/nFpW4Pw10wQ=="
+        },
+        {
+          "id": "Dapr.Client",
+          "version": "1.19.0",
+          "artifactHash": "sha512-Yk8mjkkepD8s+HxRsND6dlpAsMtqwZcjMrMMFT2/cZT+VVYc5W9UurPMFVSbDdjE4SjgCD26WAB9Df8VGhhDqg==",
+          "assetsHash": "sha512-iB5DO8rajKnb9+yZYuVWIDxf2cK8fUJjP2/vzFzqGs2W82RV4PvTX1Fh92IonIwjFmqVSjPLMZwz+8ItGMzsMw==",
+          "cacheContentHash": "sha512-iB5DO8rajKnb9+yZYuVWIDxf2cK8fUJjP2/vzFzqGs2W82RV4PvTX1Fh92IonIwjFmqVSjPLMZwz+8ItGMzsMw=="
+        },
+        {
+          "id": "Dapr.Common",
+          "version": "1.19.0",
+          "artifactHash": "sha512-6ScWDtEammgpNiwHMi/tbRwh3PUKbDWwypWORVWBswsptnG7Hzb4imaYny7HheInIFSJ5dQGwDkxpP0SUJrnAw==",
+          "assetsHash": "sha512-sK55jyMd8mZmV/bo0TyFL/kfKgYUn9oPzZDE5k4bcE67u4nK4heIDpSbIMTANc/ptOTBjBjq+uacIBZIEDeh/w==",
+          "cacheContentHash": "sha512-sK55jyMd8mZmV/bo0TyFL/kfKgYUn9oPzZDE5k4bcE67u4nK4heIDpSbIMTANc/ptOTBjBjq+uacIBZIEDeh/w=="
+        },
+        {
+          "id": "Dapr.Protos",
+          "version": "1.19.0",
+          "artifactHash": "sha512-1s6yhNMiNws/qM2Kp4U20hOn2R5HuohYndwogQPB0a2uameIy29wH0Y3pt7hMqXkI6AbdyPPY+cDBIw+/RK3MQ==",
+          "assetsHash": "sha512-q2jtW3HMLzUtkBaGMk0oSwGOfM8C57ur0J00m6X4lsEep4I3MhNnC84B5z6QspkZlvof3p5clzXIXYuoGoym8A==",
+          "cacheContentHash": "sha512-q2jtW3HMLzUtkBaGMk0oSwGOfM8C57ur0J00m6X4lsEep4I3MhNnC84B5z6QspkZlvof3p5clzXIXYuoGoym8A=="
+        },
+        {
+          "id": "Google.Api.CommonProtos",
+          "version": "2.17.0",
+          "artifactHash": "sha512-mUwshnp8viumz1TqnQu0MN0D7n9F+v3j0gZ0IWGJvElwj0ZpbOnOetdr8Twn2aaRjoHaAI0dr+kCLNxdJtFXRw==",
+          "assetsHash": "sha512-elfQPknFr495hm7vdy6ZlgyQh6yzZq9TU7sS35L/Fj/fqjM/mUGau9gVJLhvQEtUlPjtR80hpn/m9HvBMyCXIw==",
+          "cacheContentHash": "sha512-elfQPknFr495hm7vdy6ZlgyQh6yzZq9TU7sS35L/Fj/fqjM/mUGau9gVJLhvQEtUlPjtR80hpn/m9HvBMyCXIw=="
+        },
+        {
+          "id": "Google.Protobuf",
+          "version": "3.35.0",
+          "artifactHash": "sha512-OV8v5Sap58zAKf9OJ5ZDALuBIO4iXgCxNbza1U+KKw+AOR8OLhnFPYHzd4yCH2qsKlaAOLkfNicmDZGyYe0tqA==",
+          "assetsHash": "sha512-OrUZCUzBXqdSmsQSWp/EPeINjOBcMU+PrZEJegw0aLgOGFHZ9ZI37X/SFrIxo8C9ghKynaKpPr3BVPc4EujWYg==",
+          "cacheContentHash": "sha512-OrUZCUzBXqdSmsQSWp/EPeINjOBcMU+PrZEJegw0aLgOGFHZ9ZI37X/SFrIxo8C9ghKynaKpPr3BVPc4EujWYg=="
+        },
+        {
+          "id": "Grpc.Core.Api",
+          "version": "2.80.0",
+          "artifactHash": "sha512-El6Pvolx/T/qUBsMGjLX5HHJ6V4mfcfA/3xm2wv6IwlFvX3bUcNCAl6xytolFmKaLpRBMo1bIO3ZeBRaOQppjw==",
+          "assetsHash": "sha512-i/8s+MOrYa6n7BmZ5bilcbHk+EMJDQHm2MKLhwGAT+urQqlZ6cpjvSivYvuULjebuX+UKieLYZbLRCmVQxFRkw==",
+          "cacheContentHash": "sha512-i/8s+MOrYa6n7BmZ5bilcbHk+EMJDQHm2MKLhwGAT+urQqlZ6cpjvSivYvuULjebuX+UKieLYZbLRCmVQxFRkw=="
+        },
+        {
+          "id": "Grpc.Net.Client",
+          "version": "2.80.0",
+          "artifactHash": "sha512-jkFiQhWWL5QLzcNnC6h9Tp68MJw4OQRf3PAgGr9ph8RGSImZMXa8w4VEv/Rt+Z8/qYcaf2xsn/2u3YIAyXmYDw==",
+          "assetsHash": "sha512-I1Aa24nTRMHqx0pmQfvthFsOpejquDjiJV6092KBqjw6EEr3wA9CMXlrdkoEgHartOiJrpKyZiQRl7n0NVlfBg==",
+          "cacheContentHash": "sha512-I1Aa24nTRMHqx0pmQfvthFsOpejquDjiJV6092KBqjw6EEr3wA9CMXlrdkoEgHartOiJrpKyZiQRl7n0NVlfBg=="
+        },
+        {
+          "id": "Grpc.Net.Common",
+          "version": "2.80.0",
+          "artifactHash": "sha512-MhjtEXvsvXNhZiAuaJW2DsfuXp1TKeNIjrT92TvkuXZxVO4lRIPEvA1xRPq6BN6BJ/MB+kDxpPPRPu4tJ0UXbA==",
+          "assetsHash": "sha512-E2ERsx+9IXlry4yjBl8btx0XMIKzymGNSvX5jmBS/uSwYyYDoKIDcIREyLqFLvd8vcJdcoRlycpvn9YRXutFpQ==",
+          "cacheContentHash": "sha512-E2ERsx+9IXlry4yjBl8btx0XMIKzymGNSvX5jmBS/uSwYyYDoKIDcIREyLqFLvd8vcJdcoRlycpvn9YRXutFpQ=="
+        },
+        {
+          "id": "Grpc.Reflection",
+          "version": "2.80.0",
+          "artifactHash": "sha512-myTYjiaZm2vmenTfsgwMKej0mQ1ZpO7xjqAElAOLlV1tUO/2/QksfneH8ZAwTFshTG/OGdP0zN55gr0NHSz9yw==",
+          "assetsHash": "sha512-SNGFuUR4OiJM9QUdkpP6gbFVrRKSe2xhL7lvXMP38gcgwPJBFC0wVUcYMue656YhPRIGEjeCa4iXjDQ+VQU2jQ==",
+          "cacheContentHash": "sha512-SNGFuUR4OiJM9QUdkpP6gbFVrRKSe2xhL7lvXMP38gcgwPJBFC0wVUcYMue656YhPRIGEjeCa4iXjDQ+VQU2jQ=="
+        },
+        {
+          "id": "Hexalith.Commons.UniqueIds",
+          "version": "2.30.3",
+          "artifactHash": "sha512-RsX7JS2zHTwaXwc9e9GhZEENOa9yIlg4FQYP+cxE6X0liE9VfO9vuCnb9NU2TEzN5roYi2O6SSXX29AMt62rTw==",
+          "assetsHash": "sha512-e0tQgVfkT4CkozW/fO1Nl0i4m9dmfk4/Er6WJXjOduSftvHW2bo3ppIQQ/ncYwpC+2hUlqezwWMeFpjZzd+1Tw==",
+          "cacheContentHash": "sha512-e0tQgVfkT4CkozW/fO1Nl0i4m9dmfk4/Er6WJXjOduSftvHW2bo3ppIQQ/ncYwpC+2hUlqezwWMeFpjZzd+1Tw=="
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "3.128.3",
+          "artifactHash": "sha512-HtyS8UCoG0ibw379OglkPlnsWlfu8YzFDcp8ppjIdDt1G4+LF62zuXamzopEB6W/RCM+c1cCvuC83HvlSU5UPg==",
+          "assetsHash": "sha512-VoVUttV2Bis0bmk5ieFAt16UTgGyHwk8tHqSEWiHrP7juAIGp0Q6Xyh9emVFR0N5lZfXnT7ByzZ1ps5c9U61Fg==",
+          "cacheContentHash": "sha512-VoVUttV2Bis0bmk5ieFAt16UTgGyHwk8tHqSEWiHrP7juAIGp0Q6Xyh9emVFR0N5lZfXnT7ByzZ1ps5c9U61Fg=="
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "3.128.3",
+          "artifactHash": "sha512-3XjkvS2x0wMRtMiNm8sYCdkkBx/OBHPyhtG7h+hs3ihjV08HFULiWoctgKrjCbROKRL1ETeFWi+gdTBLrQM68w==",
+          "assetsHash": "sha512-UKuj0yFSVDZ4nBr1iSbDGXqatbp+xzKEr5RIrglRUI9GFYTMwmWs0jWmKTA4JkNt3wYCg60Kz0evo2uYj1sEoQ==",
+          "cacheContentHash": "sha512-UKuj0yFSVDZ4nBr1iSbDGXqatbp+xzKEr5RIrglRUI9GFYTMwmWs0jWmKTA4JkNt3wYCg60Kz0evo2uYj1sEoQ=="
+        },
+        {
+          "id": "Hexalith.Tenants.Contracts",
+          "version": "5.10.0",
+          "artifactHash": "sha512-bbVarkICPOqZU0dh6ugazUwOt9sXjTvGDdMpTlPMqGkOc8vMyEMkRTB9/itCWF2V9WhzO8WLopoxOtulLVuaGA==",
+          "assetsHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA==",
+          "cacheContentHash": "sha512-zJ80iyFndKlb9Z/XcrxX+sx6fNWAWHjG4RHV0NaJQPifBs6dB4WQiKLSiXiApmv9xKf6oDpuFKORbnqbfrXSfA=="
+        },
+        {
+          "id": "Humanizer.Core",
+          "version": "3.0.10",
+          "artifactHash": "sha512-86jRQVvMLU7xxsdHrK87TSqu5kL0lg4EiRjvTBglkrtLw242dMON4vTrFbGKr2CRjqbThBuIpodF2MWbCFKZYA==",
+          "assetsHash": "sha512-yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw==",
+          "cacheContentHash": "sha512-yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw=="
+        },
+        {
+          "id": "Json.More.Net",
+          "version": "3.0.1",
+          "artifactHash": "sha512-WxbcZ3EOHPcMk/r6zuSnLyOlnRZqWqlC7EW/Sxgty+3WG5XnAFx79yz0fh+6PeVjbQgVC8990/wrxdd7oNcocg==",
+          "assetsHash": "sha512-fRctF2J2SILYG6wqP21drmeEODmCVkVQ/b3MndDu2fT1swfySyUgq7ePCk+aENGlDcIm05fyfjh9vcuqDEfv3w==",
+          "cacheContentHash": "sha512-fRctF2J2SILYG6wqP21drmeEODmCVkVQ/b3MndDu2fT1swfySyUgq7ePCk+aENGlDcIm05fyfjh9vcuqDEfv3w=="
+        },
+        {
+          "id": "JsonPointer.Net",
+          "version": "7.0.3",
+          "artifactHash": "sha512-kN9oYvPlegeK309OyQBAB8DJf4fHpa4hh9cXkA+v8DeQImz1hiiolT5gzED27OfWERjau35x/vH9P9nzJbcW2g==",
+          "assetsHash": "sha512-It/10weZ3oA+BGL+Gqyw9M6wsi4Tc16vWwU+u7x6LBwty57Y3aUh7bfcn2VWAzgVTAfGuCPb5KUpsH6IFjR08A==",
+          "cacheContentHash": "sha512-It/10weZ3oA+BGL+Gqyw9M6wsi4Tc16vWwU+u7x6LBwty57Y3aUh7bfcn2VWAzgVTAfGuCPb5KUpsH6IFjR08A=="
+        },
+        {
+          "id": "JsonSchema.Net",
+          "version": "9.5.0",
+          "artifactHash": "sha512-hQCdMueEOelB14QatzChiAMwzWckvMw+mdvc7ekhez+nCiMfpku33CLFh8D0dCJb8BIArDDoJk9iwNtF9jFdgg==",
+          "assetsHash": "sha512-yCohYtv0mi0oU+n3rpPBhoP/6OKkmxxwkGfprohst5DywbKoHaf9yJtFR8CYasKUUO5KfIR3gm43vsqxgT0nzA==",
+          "cacheContentHash": "sha512-yCohYtv0mi0oU+n3rpPBhoP/6OKkmxxwkGfprohst5DywbKoHaf9yJtFR8CYasKUUO5KfIR3gm43vsqxgT0nzA=="
+        },
+        {
+          "id": "Microsoft.AspNetCore.DataProtection.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-o9mhIDUltT8jpdvaf2rCSdb4XGmF7O8D6SyPnpsnvomXDkNyZlov53j/BRUqifTkM46FKoSduYQhvDoxHYmRfw==",
+          "assetsHash": "sha512-/4+1KX8VIKCCHZ8p/1dZ2WGxvIijm5lXmgHecxEwGnBYXiSjAqfF/Q7p9m6eojUDlpKMHkt1HHXeNdL9WH3YHw==",
+          "cacheContentHash": "sha512-/4+1KX8VIKCCHZ8p/1dZ2WGxvIijm5lXmgHecxEwGnBYXiSjAqfF/Q7p9m6eojUDlpKMHkt1HHXeNdL9WH3YHw=="
+        },
+        {
+          "id": "Microsoft.Extensions.AI.Abstractions",
+          "version": "10.11.0",
+          "artifactHash": "sha512-uCGFTvae/ZLMVdARRH0qVxCRKqfn8ynh4wyOEwlNTKcHTq9pqowdELTWOqL+iCdxgqgapCPumCq1E+EvLrcFlQ==",
+          "assetsHash": "sha512-h4DX/TdJU4fk1GGaf19n6Kujkj6VXbGeL4UEOsQ8+ZJC5fVApPauokCtvBP684BYbczUYZQNfo1mbmyHG4WVSg==",
+          "cacheContentHash": "sha512-h4DX/TdJU4fk1GGaf19n6Kujkj6VXbGeL4UEOsQ8+ZJC5fVApPauokCtvBP684BYbczUYZQNfo1mbmyHG4WVSg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Caching.Abstractions",
+          "version": "10.0.13",
+          "artifactHash": "sha512-96y7W2gda47hBOs0thDaC5jji4u3PLj9H6GDqImgx+fGeSOh4Gw+7QTyrJWCZQDhNSUGcfP2ULvKmVrFjqP7oQ==",
+          "assetsHash": "sha512-UOJqcdNMoFcV/5RUcOlVKq9pPmbrcmbpLx5iYz9QtrmMcWRQzlL5Q/NZRfbPPLNyIEc1HWjjs5Z7nIwqewU1sg==",
+          "cacheContentHash": "sha512-UOJqcdNMoFcV/5RUcOlVKq9pPmbrcmbpLx5iYz9QtrmMcWRQzlL5Q/NZRfbPPLNyIEc1HWjjs5Z7nIwqewU1sg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-BZhMkmPS3MrQnKFLXGmDS/geiUeLW2pN9sdRiLAsxf2gynmSQtqVrkPbCtAZtQ/G9qI50r9zTrh0ofJF+rYb2w==",
+          "assetsHash": "sha512-4YdfvaoWn3tB1xQQHGrhRTFWJ8fGOqxThxduynSZy9ZFTiSaUi3vX4EK/kj8h2HQMwTlks9MWV1fv2WRBv5/1w==",
+          "cacheContentHash": "sha512-4YdfvaoWn3tB1xQQHGrhRTFWJ8fGOqxThxduynSZy9ZFTiSaUi3vX4EK/kj8h2HQMwTlks9MWV1fv2WRBv5/1w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Binder",
+          "version": "10.0.14",
+          "artifactHash": "sha512-kKD6iek6peqP93if4iGVFauSt1Lk/iSPgKwCmjU8Ddl6HYeMmu3hON3Qo5VU2aBr8S77ecIk7T1yjfTrNlFLJg==",
+          "assetsHash": "sha512-brDb5kgle2iY2lWHgeV/KOqnBEpVnlMFigGJ/WW7KP9Nj6C/t53f/h5boYyVXB0bEhgpL+ctbewDJMI+zAMj1w==",
+          "cacheContentHash": "sha512-brDb5kgle2iY2lWHgeV/KOqnBEpVnlMFigGJ/WW7KP9Nj6C/t53f/h5boYyVXB0bEhgpL+ctbewDJMI+zAMj1w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.CommandLine",
+          "version": "10.0.14",
+          "artifactHash": "sha512-a7hK5/outIEY0F5wUFyrDT39KXCgSt/AMa3jl5rlFvKFzEzZwyt2ohRcMSh7v9VUY8wZxJz4yj+BEmjy8XTTRg==",
+          "assetsHash": "sha512-/9IqkBeB7mE1enbN4Cfeu4HFPU9uR1JSJh2qwXfwr7SYBxETkTKRht/LoPfajmmlh+BJlH3jm79CLhQPFb9ovw==",
+          "cacheContentHash": "sha512-/9IqkBeB7mE1enbN4Cfeu4HFPU9uR1JSJh2qwXfwr7SYBxETkTKRht/LoPfajmmlh+BJlH3jm79CLhQPFb9ovw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+          "version": "10.0.14",
+          "artifactHash": "sha512-sSK7aQwmLGUT9zeooT7uj3G4kYwwiorFSfFaX1fAEkq6ZXpxbC3p1nWY+4DRYxa3gMH7MZKAeqT4ZIPzPJ4ulA==",
+          "assetsHash": "sha512-jB0UiYjpnneoBH1ZeXPlHYt4zUme6SZlnstL6gsH/0O/d5rOuN5lSIlOIfxXzapl8tAi7QmYOEogP09g/wcHzA==",
+          "cacheContentHash": "sha512-jB0UiYjpnneoBH1ZeXPlHYt4zUme6SZlnstL6gsH/0O/d5rOuN5lSIlOIfxXzapl8tAi7QmYOEogP09g/wcHzA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.FileExtensions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-uhfmENaa9nhAlu8rqIbh7q0b7TPb1MewnkxcB9Rci/x4HD3SIUQvxxySfcpHtTjI9GlfGLg7vNW4ehO2gYqHzw==",
+          "assetsHash": "sha512-NBIfm8vWNi3UJ9OI9thvREJeV6KzEdPjQ4ONdH+yPWutGBpVnwLbXiEqdEFaGAFYpAluGCfyCwKFgH9pd2scfw==",
+          "cacheContentHash": "sha512-NBIfm8vWNi3UJ9OI9thvREJeV6KzEdPjQ4ONdH+yPWutGBpVnwLbXiEqdEFaGAFYpAluGCfyCwKFgH9pd2scfw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.Json",
+          "version": "10.0.14",
+          "artifactHash": "sha512-e6s+msTbrfZTlqkbvwyjQwk9fgTdnRRXwwELlrygOO75Ppvk5uA8YRnbLGHvCcbWk3cdwY1cP8bPYYh5fwdSsg==",
+          "assetsHash": "sha512-4Tn8eNg85x+ICDN4OLC7Dl/xvZNREZIf7VSOAdT4Q4KYf5Ip1zAk+0BAx8BsRTomgEpCYV4kKsNNnP/ZXUbQkw==",
+          "cacheContentHash": "sha512-4Tn8eNg85x+ICDN4OLC7Dl/xvZNREZIf7VSOAdT4Q4KYf5Ip1zAk+0BAx8BsRTomgEpCYV4kKsNNnP/ZXUbQkw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration.UserSecrets",
+          "version": "10.0.14",
+          "artifactHash": "sha512-2cOPepaxI7v3ExF50djtCN0BpuUBWMjpS35dOxFtqT4fovJT8SZwD0cbsm8Rp5pEkNy0lehJd7YZ45uXBG0H9w==",
+          "assetsHash": "sha512-z+dvl9uQnNzvq6Xco+UQyeujpP/BHs+ahHLPCBMxR5GW6M4JcsN1tupEgn5uWgR1fGCfmxS4QJEMt6eyizXGUA==",
+          "cacheContentHash": "sha512-z+dvl9uQnNzvq6Xco+UQyeujpP/BHs+ahHLPCBMxR5GW6M4JcsN1tupEgn5uWgR1fGCfmxS4QJEMt6eyizXGUA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Configuration",
+          "version": "10.0.14",
+          "artifactHash": "sha512-bOc8UecSDd09S2pOsrsziUCuxfZLGN33vvUgLrSnC+6G96CpUci6oYFg4dGVD1Yq33npcIXlk6zvjvnACe1Mxg==",
+          "assetsHash": "sha512-UcnvaEaMvRckDDhyqY1OZkFwBqpZArkHFKB6dWaQWT9XTuNttNNX8Cqsb/Sic2LfJxsMLJUXnYrxY3iX5LN9pQ==",
+          "cacheContentHash": "sha512-UcnvaEaMvRckDDhyqY1OZkFwBqpZArkHFKB6dWaQWT9XTuNttNNX8Cqsb/Sic2LfJxsMLJUXnYrxY3iX5LN9pQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Di8PFxjp08vKyonp2pbr2F0SvkWJt3B9v7H/5NESNUebvQJrE4usSVdSTM6nVIQr7cF6obpSm5hXDMU3+X50Og==",
+          "assetsHash": "sha512-QtpQzuSZVyTPCuHW058yCs9Nj0394uUkNyFHS813nOmK9UgUdBdaprJ5PPsBgsQIpxADTsTkbaMMonykem6qdw==",
+          "cacheContentHash": "sha512-QtpQzuSZVyTPCuHW058yCs9Nj0394uUkNyFHS813nOmK9UgUdBdaprJ5PPsBgsQIpxADTsTkbaMMonykem6qdw=="
+        },
+        {
+          "id": "Microsoft.Extensions.DependencyInjection",
+          "version": "10.0.14",
+          "artifactHash": "sha512-1+/NPfu9dMgYhNlndjKMxmCycnT29xLUwb0LRqauXXStVi4U0FqSBlqqR6vXtjL0alzLDSMSCpvro3aknqv/RA==",
+          "assetsHash": "sha512-2LzcuVjemeXR+WdY9wGIr8iGb7fYsDAit+IScxXX2XJnX0b++mWcE/WO6fEGIqhdMfSQM2ZS5JGMHYZix7YXZg==",
+          "cacheContentHash": "sha512-2LzcuVjemeXR+WdY9wGIr8iGb7fYsDAit+IScxXX2XJnX0b++mWcE/WO6fEGIqhdMfSQM2ZS5JGMHYZix7YXZg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-yNfMpoudaSRuRiJMBuveoVtv4HVqvq2VsIBdnIJkfZy+bpIY0cOLt6ZWlTB/bLWknCSA+/Cfrt4SCDOPVjFFsA==",
+          "assetsHash": "sha512-vm+PPso6vOwGeX52MdOPh6z/R6KHgxQUwqq7k7Jc9jhy2JOxO2KB4xfoJQBBp2Ni8M4zKgJ4r2a1dgrYG7+MKw==",
+          "cacheContentHash": "sha512-vm+PPso6vOwGeX52MdOPh6z/R6KHgxQUwqq7k7Jc9jhy2JOxO2KB4xfoJQBBp2Ni8M4zKgJ4r2a1dgrYG7+MKw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Diagnostics",
+          "version": "10.0.14",
+          "artifactHash": "sha512-1F1uOSNya1FG3RyNwrnFewNnM3jpdDxruLwuxl1F8+8tWsNI7ngo+97LN/MhWAQn/0gWYOdell4saBEQU/68mg==",
+          "assetsHash": "sha512-80VqW8eKxQaxBOLDNpLUdxOlxzWn/jqBSxNBCfD8GCjcshNDpFvUgKh8uvvZwvkfBbwmNPWPWHyy9F+RLd1dlQ==",
+          "cacheContentHash": "sha512-80VqW8eKxQaxBOLDNpLUdxOlxzWn/jqBSxNBCfD8GCjcshNDpFvUgKh8uvvZwvkfBbwmNPWPWHyy9F+RLd1dlQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileProviders.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-//+jj6ugVyJL2ESYBCI54P7PWMjnhCBIOpf5nSiP41870KQBUsIx0VS+YaEY8ZTDJO94rWqeAEkTf8Uj7qDcpQ==",
+          "assetsHash": "sha512-rAqf2Em2ZjLqNbcLJlboQnXNyJP604F960TsCKNiP00Ur6ExIc1mcwmNb8L2eTRT8RC8UKx/GjecoWcW2Sj7bw==",
+          "cacheContentHash": "sha512-rAqf2Em2ZjLqNbcLJlboQnXNyJP604F960TsCKNiP00Ur6ExIc1mcwmNb8L2eTRT8RC8UKx/GjecoWcW2Sj7bw=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileProviders.Physical",
+          "version": "10.0.14",
+          "artifactHash": "sha512-iNOnKVdGjRtVqkLMGIKgaP3EYO7bXwsS0s9fICSeeYQ70xqrrdjh9egD1LTcIQnT03XvZKEGXhHa0ofZnMr3iQ==",
+          "assetsHash": "sha512-dcp6eCIk6ZpE3CTNmIna0ifgxsPel/MtOc23/Y/AJlD9SZZr7bhlKK2DAXYlrz81yMkMi6el/LHHUFKCZ3ufuQ==",
+          "cacheContentHash": "sha512-dcp6eCIk6ZpE3CTNmIna0ifgxsPel/MtOc23/Y/AJlD9SZZr7bhlKK2DAXYlrz81yMkMi6el/LHHUFKCZ3ufuQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.FileSystemGlobbing",
+          "version": "10.0.14",
+          "artifactHash": "sha512-jXru4kAFOxj7Jed2UMsYb2QeVIqOPGz0Sp77crlNOpVibMzrayiwcsJ8Tpf89YiwxWiQ4bB89ilMrHr+zQECQw==",
+          "assetsHash": "sha512-xt6c/PWLL6+CiBiZA3PWRSfkwcPh+HCwiOLrgSUkhzBT7lrT/+QpIKPeuCQyDPspwOuG1q0cbJhuiGpRjr4UNQ==",
+          "cacheContentHash": "sha512-xt6c/PWLL6+CiBiZA3PWRSfkwcPh+HCwiOLrgSUkhzBT7lrT/+QpIKPeuCQyDPspwOuG1q0cbJhuiGpRjr4UNQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-nBmDCsT6B2NWjw6XlnxC7+iqQ9AskJxsqZ5AM8VGAXnRMXKYpqj5vNzvjkfVWsxScuZPVNbvZnnWKfRQiDrYYA==",
+          "assetsHash": "sha512-p6NUEkmlaB+FujQZTtyNBKFULQO+Fj8SKuYdYHASQso+RkeYdFDPNsMM4mtOHqx1GZNQnZm/inmsqGkja/Dw2w==",
+          "cacheContentHash": "sha512-p6NUEkmlaB+FujQZTtyNBKFULQO+Fj8SKuYdYHASQso+RkeYdFDPNsMM4mtOHqx1GZNQnZm/inmsqGkja/Dw2w=="
+        },
+        {
+          "id": "Microsoft.Extensions.Hosting",
+          "version": "10.0.14",
+          "artifactHash": "sha512-M4+Fs2oTDwgKoqGKhW10cn4nhdBSpnOSWndAA6Vag/cfeIExlJ0BExv/ony2dC6HgezY23uNOXXoZuxy6XAmpQ==",
+          "assetsHash": "sha512-q3f2GLZebtxWG/pDtckPrgIWV22pVmSLSLEkncdmbUz7Z6atwF2wn9ag5cZCc/ndcGe7ffHJom98scauFG+oNQ==",
+          "cacheContentHash": "sha512-q3f2GLZebtxWG/pDtckPrgIWV22pVmSLSLEkncdmbUz7Z6atwF2wn9ag5cZCc/ndcGe7ffHJom98scauFG+oNQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Http",
+          "version": "10.0.14",
+          "artifactHash": "sha512-VR2iiG3rS9WA6OaOiHRN6ZPNyAmrXkiqtKU7GON886nif2Rzs+8uYJfvkOYW4lzHHU8wY/U9vMJYV3p22HPOjQ==",
+          "assetsHash": "sha512-IDsXLGGz7nJMsqspWnErsP18WyAVf6V9Ixl4p47/8/95Jak3ZA1YWhQ0iesMVwubVhkVZGoO9m9ADUnK0m6HLw==",
+          "cacheContentHash": "sha512-IDsXLGGz7nJMsqspWnErsP18WyAVf6V9Ixl4p47/8/95Jak3ZA1YWhQ0iesMVwubVhkVZGoO9m9ADUnK0m6HLw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Abstractions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-AxQQ1pBzZur4SkRixQSkXpbM3P/kBH9BS+XvOshgkjw0bha+981X62R9zvs1GD5W3AVCQNEfm5I8/hicDSTouQ==",
+          "assetsHash": "sha512-SwcbEBtkECq3D2oywvHkm46fyrX9Dd2JPWphDnHUc2+cUWR1Mdo41atAjh/9iZjgQxuvbKfZKXqostT/LZfefA==",
+          "cacheContentHash": "sha512-SwcbEBtkECq3D2oywvHkm46fyrX9Dd2JPWphDnHUc2+cUWR1Mdo41atAjh/9iZjgQxuvbKfZKXqostT/LZfefA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Configuration",
+          "version": "10.0.14",
+          "artifactHash": "sha512-HL34Mpy5KNBb/QsMfd7WRIR4pVpB+HDX5Ek8zEuOKvqPj/q/sHGjWzfudbiE9JKMi1sJTy/s8w6HyjTdzQCKpA==",
+          "assetsHash": "sha512-CfFSNbVSXSl8UTH453c0HoY5owcpaY1PMh1xsB+3NWcEq6WUSPHRotydbnMJtmw7Kybp6cTba8e+/uaJI52ANw==",
+          "cacheContentHash": "sha512-CfFSNbVSXSl8UTH453c0HoY5owcpaY1PMh1xsB+3NWcEq6WUSPHRotydbnMJtmw7Kybp6cTba8e+/uaJI52ANw=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Console",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Px3s9ipWvInXXAaZNPGtgsOFRMTfFVLgzEs3cYGjr62W94xJUWbBuMTzc+9Rr4Zhh/29QIL3xAL5wphHzUBsoQ==",
+          "assetsHash": "sha512-8Qx57p3sUAajSZHLQf8eihZqMtSIeI4fZ1JVpL4fvg4QqSbbgJkN0X0owX1cVJJRW2Xw4uqtVv9F7LgdXOBQHQ==",
+          "cacheContentHash": "sha512-8Qx57p3sUAajSZHLQf8eihZqMtSIeI4fZ1JVpL4fvg4QqSbbgJkN0X0owX1cVJJRW2Xw4uqtVv9F7LgdXOBQHQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.Debug",
+          "version": "10.0.14",
+          "artifactHash": "sha512-3kXa+h6PC/qIOG1zR03DhTkMnqslw8lh5w3ORMCy6CIuVqHGtLwLY6kR7vYrNP3UQAB63eIrjmqUJwgC9/Dxig==",
+          "assetsHash": "sha512-8e79uonXzgIsZbdgc5pa2Ybk5W+vUbd+gfGS50E+BW9ApRv9s0qL1DTyqLv7VQEPxTHS/l8Y0AtS7K8do+TczQ==",
+          "cacheContentHash": "sha512-8e79uonXzgIsZbdgc5pa2Ybk5W+vUbd+gfGS50E+BW9ApRv9s0qL1DTyqLv7VQEPxTHS/l8Y0AtS7K8do+TczQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.EventLog",
+          "version": "10.0.14",
+          "artifactHash": "sha512-umj0n2R/6WHV/JQ9hoov9TKtQRm8IFkFmboRmbUL4GbJeJx5jQAXA9BQa1rACmNfgliQ4znU2/hAS3aopA6JUQ==",
+          "assetsHash": "sha512-4HbWayQiJdw0lYthC45rElah2mJJeSlHDu3rcIrinGe95JdOt6I/vWQTNUFXiujIsHv3Z8MyA79ZC5P1Ww+jNg==",
+          "cacheContentHash": "sha512-4HbWayQiJdw0lYthC45rElah2mJJeSlHDu3rcIrinGe95JdOt6I/vWQTNUFXiujIsHv3Z8MyA79ZC5P1Ww+jNg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging.EventSource",
+          "version": "10.0.14",
+          "artifactHash": "sha512-QnlQzLVHPtfnJxCF5LdU8s7fUYSv10bVywN7VhAX3OUn0t0yf4xsLpeqVt7WJ6NkDZvgt/9xaroEel//ephQjg==",
+          "assetsHash": "sha512-Q06Q90D3qnrsKtf1QlaMELCED3ZdMV5SGIRIERUQTTSCoqTNKSitx3KMRgLdxBeqI5ZcbOu5InOu6xQ6o6zmUg==",
+          "cacheContentHash": "sha512-Q06Q90D3qnrsKtf1QlaMELCED3ZdMV5SGIRIERUQTTSCoqTNKSitx3KMRgLdxBeqI5ZcbOu5InOu6xQ6o6zmUg=="
+        },
+        {
+          "id": "Microsoft.Extensions.Logging",
+          "version": "10.0.14",
+          "artifactHash": "sha512-Su71SotCYl6sHUXga8IrkGkHGr+NekqPnXd3G+bqDOFuaZs31UprqYony4tEr4WcQOqiuMXsV+VLpDawi6bQSQ==",
+          "assetsHash": "sha512-O2fXL6JmtkFwkigxS8fPTQpLXxGDjgZco5D+h88s++Cl0bDCs023PVkpNoifciJ+f30I82jnp8tpwF0wCLdFtA==",
+          "cacheContentHash": "sha512-O2fXL6JmtkFwkigxS8fPTQpLXxGDjgZco5D+h88s++Cl0bDCs023PVkpNoifciJ+f30I82jnp8tpwF0wCLdFtA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Options.ConfigurationExtensions",
+          "version": "10.0.14",
+          "artifactHash": "sha512-KuCiZYUMwjbCmYegn6wgF5JkSb4SODFs90RF0Iq2Ull7b/RKZ3lv3VJ8HjscX9ZlVzz2XcWIBZrX+uMsekifFw==",
+          "assetsHash": "sha512-4wcIU0rE04ejEfCwHTftu9O8fgH6CRYCe+tseRapikUBn1Kic3QdO7ku22SwFyLrzdWGYPUZMEgv57ZYuuc5gA==",
+          "cacheContentHash": "sha512-4wcIU0rE04ejEfCwHTftu9O8fgH6CRYCe+tseRapikUBn1Kic3QdO7ku22SwFyLrzdWGYPUZMEgv57ZYuuc5gA=="
+        },
+        {
+          "id": "Microsoft.Extensions.Options",
+          "version": "10.0.14",
+          "artifactHash": "sha512-NQJlE55aoetEJdcYHj0JMzw+P9b6ToDyWd3En1qnTg33cQpmAx0PSqcdo5KopJzfHWnU0sJTRp7RiYXSK7W9KA==",
+          "assetsHash": "sha512-EeN/33S418m9oWEaZY4N5T+BNxtOqNTIFoFbIgBKwylh4OJPKIWFAzbIhpTdNbwUs26MhkmbLCAbdY+YCJ1dIQ==",
+          "cacheContentHash": "sha512-EeN/33S418m9oWEaZY4N5T+BNxtOqNTIFoFbIgBKwylh4OJPKIWFAzbIhpTdNbwUs26MhkmbLCAbdY+YCJ1dIQ=="
+        },
+        {
+          "id": "Microsoft.Extensions.Primitives",
+          "version": "10.0.14",
+          "artifactHash": "sha512-iTALlkkPsiOteMMvtgCNYX5dLSBhD9I/5oa50ZbKI9V7ndwp9J/kCKGSdD0WEexFdm+vczMUdBdY2WOLrGl8mA==",
+          "assetsHash": "sha512-1bbZqqCJTPba3inTADExbp/9PsGVyvGOX3zr6tFr7ySCgVkX9Lpw7BV0TizktNItd3SsbUu1sQfSAYm1GZMoNw==",
+          "cacheContentHash": "sha512-1bbZqqCJTPba3inTADExbp/9PsGVyvGOX3zr6tFr7ySCgVkX9Lpw7BV0TizktNItd3SsbUu1sQfSAYm1GZMoNw=="
+        },
+        {
+          "id": "ModelContextProtocol.Core",
+          "version": "2.3.0",
+          "artifactHash": "sha512-jnCDayv+LWLfXWbi3dHsvru8rtcksCfA2Fe/Lol1AbvsManxJKlpf/8bAfWQyCcFGUqv7ORqq4Xn18m5mUZmQg==",
+          "assetsHash": "sha512-EDpbQholhVWoNumb0Ab3oGv9LmXOLgaD5ixEIUkrnzpnqD0TJCSHTJ5G71/J1KlrQ98aWDclWTPMffKTnCJoMw==",
+          "cacheContentHash": "sha512-EDpbQholhVWoNumb0Ab3oGv9LmXOLgaD5ixEIUkrnzpnqD0TJCSHTJ5G71/J1KlrQ98aWDclWTPMffKTnCJoMw=="
+        },
+        {
+          "id": "ModelContextProtocol",
+          "version": "2.3.0",
+          "artifactHash": "sha512-dLLvWbN5l4dhZHRsEn19hiNfHkEjPZw+hl1m9jFdBgEWZsfqPQYmKeirDREu97CtiX8sGM97lNSr3L4F9Sx2Nw==",
+          "assetsHash": "sha512-PHZ0q8xTAoysqUKpA5gC0RGJSfwpZhfsNz+9Sw0X0RzFFVHjIE52sx6C+ogMn+LSE+FfiYiNscPJhM6q6DMT6Q==",
+          "cacheContentHash": "sha512-PHZ0q8xTAoysqUKpA5gC0RGJSfwpZhfsNz+9Sw0X0RzFFVHjIE52sx6C+ogMn+LSE+FfiYiNscPJhM6q6DMT6Q=="
+        },
+        {
+          "id": "System.CommandLine",
+          "version": "2.0.14",
+          "artifactHash": "sha512-OI0FP6FmxDrzhJ5QpOEp+h7i/QfK5OaElKzZRHevBKJhwClZZmG624F3IlwlL9g0Zf9WYUfYx/PZF6RPyd0/9w==",
+          "assetsHash": "sha512-15fyVO4aG6poR6IKmhM74zf7PUzaU6FZAGm2d3SQSO9yIyGAeo44e6t9qeKjjaqyMEqYdqcb2G1B0gpLoDU2cA==",
+          "cacheContentHash": "sha512-15fyVO4aG6poR6IKmhM74zf7PUzaU6FZAGm2d3SQSO9yIyGAeo44e6t9qeKjjaqyMEqYdqcb2G1B0gpLoDU2cA=="
+        },
+        {
+          "id": "System.Diagnostics.EventLog",
+          "version": "10.0.14",
+          "artifactHash": "sha512-WZsvZuSO/NFiSI1rb5eNgBGhM9Ipnaxr2pVdOSkWhOIJLVIiByYY6xoQcRQ+DhM+H+uu/f13xkkDkoL9On/A3w==",
+          "assetsHash": "sha512-O/RzNwWoDzehkLlAG9hR8xooY5L41U7VUaYlcKvE3+FhHohBJqF10oLUzuv0v59VeJ62hv3uw9VoeX12zej7Sg==",
+          "cacheContentHash": "sha512-O/RzNwWoDzehkLlAG9hR8xooY5L41U7VUaYlcKvE3+FhHohBJqF10oLUzuv0v59VeJ62hv3uw9VoeX12zej7Sg=="
+        }
+      ],
+      "operations": [
+        "tenants.add-user-to-tenant",
+        "tenants.change-user-role",
+        "tenants.create-tenant",
+        "tenants.disable-tenant",
+        "tenants.enable-tenant",
+        "tenants.get-tenant",
+        "tenants.get-tenant-audit",
+        "tenants.get-tenant-users",
+        "tenants.get-user-tenants",
+        "tenants.list-tenants",
+        "tenants.remove-tenant-configuration",
+        "tenants.remove-user-from-tenant",
+        "tenants.set-tenant-configuration",
+        "tenants.update-tenant"
+      ],
+      "acceptedLint": "/home/administrator/projects/hexalith/mcpcli/tools/inventory-coverage/v1/tenants-accepted-lint.json",
+      "approvedModule": "tenants"
+    }
+  ],
+  "productionReplay": {
+    "result": "passed",
+    "checks": [
+      {
+        "command": [
+          "dotnet",
+          "restore",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "dotnet",
+          "build",
+          "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "--no-restore",
+          "-c",
+          "Release",
+          "-m:1",
+          "-warnaserror",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      }
+    ],
+    "phase": "production-replay",
+    "packageCount": 2,
+    "operationCount": 21,
+    "modules": [
+      "parties",
+      "tenants"
+    ],
+    "packageModules": {
+      "Hexalith.Parties.Contracts": [
+        "parties"
+      ],
+      "Hexalith.Tenants.Contracts": [
+        "tenants"
+      ]
+    }
+  },
+  "missingRequiredModules": []
+}

@@ -154,7 +154,9 @@ def validate_tool_payload(archive, names, dependencies, prefix):
                     b'\xcf\xfa\xed\xfe', b'\xca\xfe\xba\xbe', b'\xbe\xba\xfe\xca',
                     b'\xca\xfe\xba\xbf', b'\xbf\xba\xfe\xca', b'\0asm', b'!<arch>\n')
     for name in sorted(names):
-        if not name.startswith(prefix) or name.endswith('/'):
+        if name.startswith('tools/') and not name.startswith(prefix) and name not in ('tools/', 'tools/net10.0/'):
+            raise ValueError(f'Alternate tools layouts are not allowed: {name}')
+        if name.endswith('/'):
             continue
         lowered = name.lower()
         payload = archive.read(name)
@@ -183,23 +185,53 @@ def validate_managed(payload):
         offset = struct.unpack_from('<I', payload, 0x3c)[0]
         optional = offset + 24
         magic = struct.unpack_from('<H', payload, optional)[0]
-        directories = optional + (96 if magic == 0x10b else 112 if magic == 0x20b else 0)
-        if payload[:2] != b'MZ' or payload[offset:offset + 4] != b'PE\0\0' or not directories:
+        if payload[:2] != b'MZ' or payload[offset:offset + 4] != b'PE\0\0' or magic not in (0x10b, 0x20b):
             raise ValueError('The tool payload is not a managed PE assembly.')
+        directories = optional + (96 if magic == 0x10b else 112)
         cli_rva, cli_size = struct.unpack_from('<II', payload, directories + 14 * 8)
         if not cli_rva or cli_size < 72:
             raise ValueError('The tool payload has no managed CLR header.')
         section_count = struct.unpack_from('<H', payload, offset + 6)[0]
         optional_size = struct.unpack_from('<H', payload, offset + 20)[0]
-        cli_offset = None
-        for index in range(section_count):
-            section = optional + optional_size + index * 40
-            virtual_size, virtual_address, raw_size, raw_pointer = struct.unpack_from('<IIII', payload, section + 8)
-            if virtual_address <= cli_rva < virtual_address + max(virtual_size, raw_size):
-                cli_offset = raw_pointer + cli_rva - virtual_address
-                break
-        if cli_offset is None or cli_offset + 72 > len(payload):
+        def mapped(rva, size):
+            for index in range(section_count):
+                section = optional + optional_size + index * 40
+                _, address, raw_size, pointer = struct.unpack_from('<IIII', payload, section + 8)
+                delta = rva - address
+                if 0 <= delta and size > 0 and delta + size <= raw_size and pointer + delta + size <= len(payload):
+                    return pointer + delta
+            raise ValueError('The tool payload has an invalid mapped CLR header or metadata root.')
+
+        cli_offset = mapped(cli_rva, cli_size)
+        if struct.unpack_from('<I', payload, cli_offset)[0] < 72:
             raise ValueError('The tool payload has an invalid managed CLR header.')
+        metadata_rva, metadata_size = struct.unpack_from('<II', payload, cli_offset + 8)
+        metadata = mapped(metadata_rva, metadata_size)
+        root = payload[metadata:metadata + metadata_size]
+        if len(root) < 20 or root[:4] != b'BSJB':
+            raise ValueError('The tool payload has no valid CLR metadata root.')
+        version_length = struct.unpack_from('<I', root, 12)[0]
+        cursor = 16 + version_length
+        if not version_length or version_length % 4 or cursor + 4 > len(root) or root[cursor - 1] != 0:
+            raise ValueError('The tool payload has an invalid CLR metadata version.')
+        streams = struct.unpack_from('<H', root, cursor + 2)[0]
+        cursor += 4
+        stream_ranges = []
+        stream_names = set()
+        for _ in range(streams):
+            start, size = struct.unpack_from('<II', root, cursor)
+            name_end = root.find(b'\0', cursor + 8, min(cursor + 40, len(root)))
+            if name_end < 0:
+                raise ValueError('The tool payload has an invalid CLR metadata stream name.')
+            name = root[cursor + 8:name_end]
+            if not name or name in stream_names or start + size > len(root):
+                raise ValueError('The tool payload has an invalid CLR metadata stream.')
+            stream_names.add(name)
+            stream_ranges.append((start, size))
+            cursor = (name_end + 4) & ~3
+        if (not stream_names.intersection({b'#~', b'#-'})
+                or any(start < cursor or not size for start, size in stream_ranges)):
+            raise ValueError('The tool payload has no valid CLR metadata tables stream.')
         flags = struct.unpack_from('<I', payload, cli_offset + 16)[0]
         native_header = struct.unpack_from('<II', payload, cli_offset + 64)
         if not flags & 1 or flags & 2 or any(native_header):

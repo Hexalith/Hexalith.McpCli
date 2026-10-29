@@ -1,0 +1,35 @@
+{
+  "name": "tenants.disable-tenant",
+  "kind": "write",
+  "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant to disable."
+      }
+    },
+    "required": [
+      "TenantId"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

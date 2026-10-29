@@ -1,0 +1,27 @@
+  Determining projects to restore...
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 138 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/Catalog.Lint.Contracts.csproj (in 944 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj (in 1.4 sec).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 363 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 1.3 sec).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj (in 1 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 1.48 sec).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/Catalog.Table.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/Catalog.Routing.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj (in 5 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj (in 2 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj (in 4 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj (in 1 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 7 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj (in 9 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj (in 8 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 26 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj (in 33 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj (in 13 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 815 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj (in 569 ms).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj (in 1.42 sec).
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj (in 1.53 sec).

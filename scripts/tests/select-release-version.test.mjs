@@ -23,6 +23,7 @@ for (const key of Object.keys(env)) {
 const commits = {};
 const messages = {
     baseline: 'chore: seed the release version fixture\n',
+    unreleased: 'chore: exercise a history without a release\n',
     selected: 'fix: select the dispatched source\n',
     unrelated: 'feat: keep unrelated main history outside selection\n',
 };
@@ -90,14 +91,15 @@ before(() => {
 
 after(() => rmSync(temporary, { recursive: true, force: true }));
 
-for (const scenario of ['absent-main', 'main-before-source', 'main-after-source']) {
-    test(`detached source selects its exact patch release with ${scenario}`, () => {
+for (const scenario of ['absent-main', 'main-before-source', 'main-after-source', 'no-release']) {
+    test(`detached source selects its exact release result with ${scenario}`, () => {
         const source = join(temporary, scenario);
         git(temporary, 'clone', '--no-hardlinks', seed, source);
         // The symlink is ignored by Git and must be supplied explicitly to this fixture clone.
         symlinkSync(join(root, 'node_modules'), join(source, 'node_modules'), 'junction');
-        git(source, 'checkout', '--detach', commits.selected);
-        if (scenario === 'absent-main') git(source, 'update-ref', '-d', 'refs/heads/main');
+        const selected = scenario === 'no-release' ? commits.unreleased : commits.selected;
+        git(source, 'checkout', '--detach', selected);
+        if (scenario === 'absent-main' || scenario === 'no-release') git(source, 'update-ref', '-d', 'refs/heads/main');
         else git(source, 'update-ref', 'refs/heads/main', scenario === 'main-before-source' ? commits.baseline : commits.unrelated);
         assert.equal(git(source, 'branch', '--show-current'), '');
         const before = snapshot(source);
@@ -116,7 +118,7 @@ for (const scenario of ['absent-main', 'main-before-source', 'main-after-source'
         assert.equal(result.status, 0, result.stdout + result.stderr);
         const receipt = JSON.parse(readFileSync(resultPath, 'utf8'));
         retain(`${scenario}.selection.json`, JSON.stringify(receipt, null, 2) + '\n');
-        assert.deepEqual(receipt, { schema: 'mcpcli-version-selection/v1', source_sha: commits.selected,
-            release: true, version: '1.0.1' });
+        assert.deepEqual(receipt, { schema: 'mcpcli-version-selection/v1', source_sha: selected,
+            release: scenario !== 'no-release', version: scenario === 'no-release' ? null : '1.0.1' });
     });
 }

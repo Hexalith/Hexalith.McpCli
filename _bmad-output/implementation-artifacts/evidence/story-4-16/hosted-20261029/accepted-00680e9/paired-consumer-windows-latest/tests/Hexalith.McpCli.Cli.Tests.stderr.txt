@@ -1,0 +1,24 @@
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:57131/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:57131/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 2.1409ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 2.3082ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:57273/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:57273/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 2.2196ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 2.3089ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:57276/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:57276/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 0.8409ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 0.9358ms - 202

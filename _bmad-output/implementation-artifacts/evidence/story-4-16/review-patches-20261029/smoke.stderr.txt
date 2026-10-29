@@ -1,0 +1,34 @@
+test_config_requires_exact_documents_and_every_persisted_transition (test_paired_smoke.PairedSmokeTests.test_config_requires_exact_documents_and_every_persisted_transition) ... ok
+test_mcp_checks_every_operation_list_and_description_and_retains_captures (test_paired_smoke.PairedSmokeTests.test_mcp_checks_every_operation_list_and_description_and_retains_captures) ... /home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_smoke.py:170: ResourceWarning: unclosed file <_io.BufferedReader name=7>
+  self.smoke.mcp_smoke(tool, os.environ.copy(), self.root, output, captures, modules)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_smoke.py:170: ResourceWarning: unclosed file <_io.BufferedReader name=5>
+  self.smoke.mcp_smoke(tool, os.environ.copy(), self.root, output, captures, modules)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/traceback.py:270: ResourceWarning: unclosed file <_io.BufferedReader name=7>
+  tb.tb_frame.clear()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/traceback.py:270: ResourceWarning: unclosed file <_io.BufferedWriter name=4>
+  tb.tb_frame.clear()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/traceback.py:270: ResourceWarning: unclosed file <_io.BufferedReader name=5>
+  tb.tb_frame.clear()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_smoke.py:178: ResourceWarning: unclosed file <_io.BufferedReader name=7>
+  with self.subTest(mode=mode), self.assertRaises(ValueError):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_smoke.py:178: ResourceWarning: unclosed file <_io.BufferedWriter name=4>
+  with self.subTest(mode=mode), self.assertRaises(ValueError):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_smoke.py:178: ResourceWarning: unclosed file <_io.BufferedReader name=5>
+  with self.subTest(mode=mode), self.assertRaises(ValueError):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_protocol_requires_response_or_notification_envelopes (test_paired_smoke.PairedSmokeTests.test_protocol_requires_response_or_notification_envelopes) ... ok
+test_timeout_retains_partial_channels_and_command_outcome (test_paired_smoke.PairedSmokeTests.test_timeout_retains_partial_channels_and_command_outcome) ... ok
+test_unrelated_messages_share_one_monotonic_request_deadline (test_paired_smoke.PairedSmokeTests.test_unrelated_messages_share_one_monotonic_request_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.071s
+
+OK

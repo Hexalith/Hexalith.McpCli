@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-review-fixes/installed-smoke/private/tools/hexalith",
+    "describe",
+    "tenants.remove-user-from-tenant"
+  ],
+  "exit_code": 0
+}

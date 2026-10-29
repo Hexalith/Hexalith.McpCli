@@ -1,0 +1,29 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/4/enable-tenant.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M63W58X8Y2GFG4WFWAN6Q31N",
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "enable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M63W58X8Y2GFG4WFWAN6Q31N"
+      }
+    }
+  ]
+}

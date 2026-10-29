@@ -1,0 +1,34 @@
+{
+  "source": "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled/Hexalith.Tenants.Contracts/inputs-l2t_zte6/vectors/5/get-tenant-audit.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "system",
+        "domain": "tenants",
+        "aggregateId": "vector-audit",
+        "queryType": "get-tenant-audit",
+        "projectionType": "tenants",
+        "payload": {
+          "Category": "Access",
+          "From": "2026-01-01T00:00:00Z",
+          "TenantId": "vector-audit",
+          "To": "2099-12-31T23:59:59Z"
+        },
+        "paging": {
+          "pageSize": 1
+        }
+      }
+    }
+  ]
+}

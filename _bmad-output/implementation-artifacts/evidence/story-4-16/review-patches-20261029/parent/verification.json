@@ -1,0 +1,155 @@
+[
+  {
+    "name": "restore",
+    "argv": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 1.33
+  },
+  {
+    "name": "build",
+    "argv": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 3.81
+  },
+  {
+    "name": "tests-Abstractions",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 1.08
+  },
+  {
+    "name": "tests-Analyzers",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 3.17
+  },
+  {
+    "name": "tests-Core",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 2.36
+  },
+  {
+    "name": "tests-Manifest",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 122.08
+  },
+  {
+    "name": "tests-Cli",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 14.81
+  },
+  {
+    "name": "tests-Mcp",
+    "argv": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 1.95
+  },
+  {
+    "name": "sample-validation",
+    "argv": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-validation.sh",
+      "Release"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 21.09
+  },
+  {
+    "name": "sample-loopback",
+    "argv": [
+      "bash",
+      "tools/conformance-vectors/v1/run-sample-loopback.sh"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 600.37
+  },
+  {
+    "name": "restore-after-loopback",
+    "argv": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 1.1
+  },
+  {
+    "name": "enrolled-coverage",
+    "argv": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 0.44
+  },
+  {
+    "name": "enrolled-replay",
+    "argv": [
+      "python3",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "/tmp/mcpcli-416-review-checks-l97mupb1/enrolled"
+    ],
+    "exit_code": 0,
+    "duration_seconds": 520.83
+  }
+]

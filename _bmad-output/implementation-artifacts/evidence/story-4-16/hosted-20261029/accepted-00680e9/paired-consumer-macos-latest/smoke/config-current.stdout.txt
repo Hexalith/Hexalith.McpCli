@@ -1,0 +1,26 @@
+{
+  "profile": "staged",
+  "url": "http://127.0.0.1:1/",
+  "token": "stag***",
+  "tenant": null,
+  "actor": null,
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "activeProfile",
+    "url": "profile",
+    "token": "profile",
+    "tenant": "default",
+    "actor": "default",
+    "format": "default",
+    "allowTenantOverride": "default",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}

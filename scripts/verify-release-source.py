@@ -42,19 +42,30 @@ STAGING_JOBS = {
 STAGING_COMMITLINT_JOBS = {'commitlint / commitlint': ['Validate commit messages']}
 
 def verify_jobs(repository, latest, required):
-    jobs = []
-    page = 1
-    while True:
-        response = github_json(f"repos/{repository}/actions/runs/{latest['id']}/attempts/{latest['run_attempt']}/jobs",
-                               '-f', 'per_page=100', '-f', f'page={page}')
-        jobs.extend(response['jobs'])
-        if len(jobs) >= response['total_count']:
+    selected = {}
+    for attempt in range(latest['run_attempt'], 0, -1):
+        jobs = []
+        page = 1
+        while True:
+            response = github_json(f"repos/{repository}/actions/runs/{latest['id']}/attempts/{attempt}/jobs",
+                                   '-f', 'per_page=100', '-f', f'page={page}')
+            jobs.extend(response['jobs'])
+            if len(jobs) >= response['total_count']:
+                break
+            if not response['jobs']:
+                raise ValueError('Incomplete workflow job results.')
+            page += 1
+        for name in required.keys() - selected.keys():
+            matches = [job for job in jobs if job['name'] == name]
+            if matches:
+                # A newer failed, skipped or duplicate occurrence must never fall back to an older success.
+                validate_jobs(matches, {name: required[name]})
+                selected[name] = matches[0]
+        if selected.keys() == required.keys():
             break
-        if not response['jobs']:
-            raise ValueError('Incomplete workflow job results.')
-        page += 1
-    validate_jobs(jobs, required)
-    return jobs
+    result = [selected[name] for name in required if name in selected]
+    validate_jobs(result, required)
+    return result
 
 
 def validate_jobs(jobs, required):

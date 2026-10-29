@@ -1,0 +1,26 @@
+test_missing_or_malformed_fr22_revision_fields_refuse (test_paired_release.PairedReleaseTests.test_missing_or_malformed_fr22_revision_fields_refuse) ... 
+  test_missing_or_malformed_fr22_revision_fields_refuse (test_paired_release.PairedReleaseTests.test_missing_or_malformed_fr22_revision_fields_refuse) (key='baseline_revision', value=None) ... FAIL
+test_missing_or_malformed_fr22_revision_fields_refuse (test_paired_release.PairedReleaseTests.test_missing_or_malformed_fr22_revision_fields_refuse) ... FAIL
+
+======================================================================
+FAIL: test_missing_or_malformed_fr22_revision_fields_refuse (test_paired_release.PairedReleaseTests.test_missing_or_malformed_fr22_revision_fields_refuse) (key='baseline_revision', value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_release.py", line 268, in test_missing_or_malformed_fr22_revision_fields_refuse
+    with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_or_malformed_fr22_revision_fields_refuse (test_paired_release.PairedReleaseTests.test_missing_or_malformed_fr22_revision_fields_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_release.py", line 270, in test_missing_or_malformed_fr22_revision_fields_refuse
+    self.assertFalse((self.root / 'accepted.json').exists())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (failures=2)

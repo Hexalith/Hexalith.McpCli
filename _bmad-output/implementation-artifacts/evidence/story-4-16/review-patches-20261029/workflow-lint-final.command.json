@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "actionlint",
+    ".github/workflows/release.yml"
+  ],
+  "exit_code": 0
+}

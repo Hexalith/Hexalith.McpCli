@@ -1,0 +1,239 @@
+test_paired_validation_keeps_existing_tool_structure_checks (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validation_keeps_existing_tool_structure_checks) ... FAIL
+test_paired_validator_rejects_runtime_and_enrollment_drift (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_rejects_runtime_and_enrollment_drift) ... ok
+test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) ... 
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.so', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.so.1.2', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.dylib', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/arbitrary-host.exe', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/payload.bin', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/mach.bin', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/archive.bin', message='Native payload') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/native.dll', message='no managed CLR header') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/mixed.dll', message='portable managed IL') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/precompiled.dll', message='portable managed IL') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/x86.dll', message='portable managed IL') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/unknown-magic.dll', message='managed PE') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/invalid-signature.dll', message='metadata root') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/invalid-version.dll', message='metadata version') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/win-x64/payload.exe', message='Alternate tools layouts') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net9.0/any/readme.txt', message='Alternate tools layouts') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/Hexalith.McpCli.deps.json', message='Native') ... FAIL
+  test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/Hexalith.McpCli.deps.json', message='Native') ... FAIL
+test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure) ... FAIL
+
+======================================================================
+FAIL: test_paired_validation_keeps_existing_tool_structure_checks (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validation_keeps_existing_tool_structure_checks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 865, in test_paired_validation_keeps_existing_tool_structure_checks
+    self.assertEqual(result.returncode, 0, result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmpxss_q57q/scripts/validate-release-packages.py", line 266, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmpxss_q57q/scripts/validate-release-packages.py", line 71, in main
+    validate_tool_package(archive, names, metadata)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpxss_q57q/scripts/validate-release-packages.py", line 144, in validate_tool_package
+    validate_tool_payload(archive, names, dependencies, prefix)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpxss_q57q/scripts/validate-release-packages.py", line 168, in validate_tool_payload
+    validate_managed(payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/tmp/tmpxss_q57q/scripts/validate-release-packages.py", line 228, in validate_managed
+    raise ValueError('The tool payload has an invalid CLR metadata stream.')
+ValueError: The tool payload has an invalid CLR metadata stream.
+
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.so', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.so.1.2', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/libextra.dylib', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/arbitrary-host.exe', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/payload.bin', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/mach.bin', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/archive.bin', message='Native payload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native payload' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/native.dll', message='no managed CLR header')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'no managed CLR header' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/mixed.dll', message='portable managed IL')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'portable managed IL' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/precompiled.dll', message='portable managed IL')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'portable managed IL' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/x86.dll', message='portable managed IL')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'portable managed IL' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/unknown-magic.dll', message='managed PE')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'managed PE' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/invalid-signature.dll', message='metadata root')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'metadata root' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/invalid-version.dll', message='metadata version')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'metadata version' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/win-x64/payload.exe', message='Alternate tools layouts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Alternate tools layouts' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net9.0/any/readme.txt', message='Alternate tools layouts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Alternate tools layouts' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/Hexalith.McpCli.deps.json', message='Native')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_refuses_native_files_and_native_dependency_entries (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_refuses_native_files_and_native_dependency_entries) (name='tools/net10.0/any/Hexalith.McpCli.deps.json', message='Native')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 963, in test_paired_validator_refuses_native_files_and_native_dependency_entries
+    self.assertIn(message, result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Native' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 266, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 71, in main\n    validate_tool_package(archive, names, metadata)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 144, in validate_tool_package\n    validate_tool_payload(archive, names, dependencies, prefix)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 168, in validate_tool_payload\n    validate_managed(payload)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File "/tmp/tmpf6htleqk/scripts/validate-release-packages.py", line 228, in validate_managed\n    raise ValueError(\'The tool payload has an invalid CLR metadata stream.\')\nValueError: The tool payload has an invalid CLR metadata stream.\n'
+
+======================================================================
+FAIL: test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure (scripts.tests.test_bootstrap_release.BootstrapReleaseTests.test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 989, in test_paired_validator_binds_both_nuspec_commits_and_never_receipts_failure
+    self.assertEqual(result.returncode, 0, result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmpb1npzw74/scripts/validate-release-packages.py", line 266, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmpb1npzw74/scripts/validate-release-packages.py", line 71, in main
+    validate_tool_package(archive, names, metadata)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpb1npzw74/scripts/validate-release-packages.py", line 144, in validate_tool_package
+    validate_tool_payload(archive, names, dependencies, prefix)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpb1npzw74/scripts/validate-release-packages.py", line 168, in validate_tool_payload
+    validate_managed(payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/tmp/tmpb1npzw74/scripts/validate-release-packages.py", line 228, in validate_managed
+    raise ValueError('The tool payload has an invalid CLR metadata stream.')
+ValueError: The tool payload has an invalid CLR metadata stream.
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 3.261s
+
+FAILED (failures=20)

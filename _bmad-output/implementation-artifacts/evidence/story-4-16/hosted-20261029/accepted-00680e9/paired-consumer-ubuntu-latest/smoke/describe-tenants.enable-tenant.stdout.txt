@@ -1,0 +1,35 @@
+{
+  "name": "tenants.enable-tenant",
+  "kind": "write",
+  "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant to enable."
+      }
+    },
+    "required": [
+      "TenantId"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "scripts/tests",
+    "-p",
+    "test_*.py"
+  ],
+  "exit_code": 0,
+  "duration_seconds": 78.75
+}

@@ -1,0 +1,12 @@
+  Hexalith.McpCli.Analyzers -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Hexalith.McpCli.Abstractions -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Core -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> /home/administrator/projects/hexalith/mcpcli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.ConformanceHost -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.57

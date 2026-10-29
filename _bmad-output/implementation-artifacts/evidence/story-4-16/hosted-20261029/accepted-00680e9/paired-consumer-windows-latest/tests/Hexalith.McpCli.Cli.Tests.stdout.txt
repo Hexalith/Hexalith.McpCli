@@ -1,0 +1,71 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Cli.Tests
+  Discovered:  Hexalith.McpCli.Cli.Tests
+  Starting:    Hexalith.McpCli.Cli.Tests
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ExistingDevShmResultIsTruncatedAsync [SKIP]
+      This filesystem behavior requires Linux /dev/shm.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.LiteralPipeNamedSymlinkTargetIsCreatedAsync [SKIP]
+      This filename and symbolic link require Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync [SKIP]
+      The full-device fixture requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ProcFdDeviceResultTargetWritesDirectlyAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ReadOnlyExistingResultStaysUnchangedAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.NonSeekableResultTargetWritesDirectlyAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.TrailingSlashSymlinkTargetCannotOverwriteFileAsync [SKIP]
+      This symbolic link behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ParentTraversalAfterDirectoryLinkUpdatesPhysicalTargetAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ThirtyThreeLinkOutputChainWorksAsync [SKIP]
+      This symbolic link limit requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ExistingFileWorksInUnwritableDirectoryAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.RestrictiveUmaskPreservesNewAndExistingOutputAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.DanglingResultLinkCreatesTargetAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.NestedRelativeLinksUpdatePhysicalTargetAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.DeviceResultTargetWritesDirectlyAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.WriteOnlyExistingResultIsSafelyRefusedAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ProfileActionIoUsesSafeMessageAsync [SKIP]
+      This filesystem behavior requires Unix.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ProcFdPipeReceivesResultDirectlyAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.UnlinkedProcFdRegularFileUpdatesOpenHandleAsync [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.UnexpectedAclSetupErrorIsNotIgnored [SKIP]
+      This filesystem behavior requires Linux.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-target", args: ["config", "profile", "add", "dev", "--url", ···]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-target", args: ["config", "use", "dev"]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-target", args: ["config", "use", "--clear"]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-target", args: ["config", "profile", "list"]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-lock", args: ["config", "profile", "add", "dev", "--url", ···]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-lock", args: ["config", "use", "dev"]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.ConfigCommandTests.HostileTargetFailsWithoutMutationAsync(kind: "symlink-lock", args: ["config", "use", "--clear"]) [SKIP]
+      Symbolic-link targets are exercised only on Unix-like systems.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.SpecialTargetsAreClassifiedBeforeMutationAsync [SKIP]
+      Unix file-type fixtures are required.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.DeniedRegularAndNewFileParentPreventMutationAsync [SKIP]
+      Unix file modes are required for this fixture.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.FifoPreflightChecksAccessWithoutWaitingForReaderAsync [SKIP]
+      The FIFO fixture uses the Linux mkfifo utility.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.ExistingFileWorksInUnwritableDirectoryThroughCliAsync [SKIP]
+      Unix file modes are required for this fixture.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.CliAcceptsDeviceAndProcFdPipeAsync [SKIP]
+      The device and proc-fd fixtures require Linux.
+  Finished:    Hexalith.McpCli.Cli.Tests (ID = 'a899386fa7b8b367a08f8486483248cfb267589d650d0015a1982b8f342e9db0')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Cli.Tests  Total: 485, Errors: 0, Failed: 0, Skipped: 31, Not Run: 0, Time: 26.047s

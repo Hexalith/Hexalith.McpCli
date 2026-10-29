@@ -1,0 +1,26 @@
+test_acceptance_requires_successful_staged_compiler_analyzer_evidence (test_paired_release.PairedReleaseTests.test_acceptance_requires_successful_staged_compiler_analyzer_evidence) ... 
+  test_acceptance_requires_successful_staged_compiler_analyzer_evidence (test_paired_release.PairedReleaseTests.test_acceptance_requires_successful_staged_compiler_analyzer_evidence) (mode='failed') ... FAIL
+test_acceptance_requires_successful_staged_compiler_analyzer_evidence (test_paired_release.PairedReleaseTests.test_acceptance_requires_successful_staged_compiler_analyzer_evidence) ... FAIL
+
+======================================================================
+FAIL: test_acceptance_requires_successful_staged_compiler_analyzer_evidence (test_paired_release.PairedReleaseTests.test_acceptance_requires_successful_staged_compiler_analyzer_evidence) (mode='failed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_release.py", line 289, in test_acceptance_requires_successful_staged_compiler_analyzer_evidence
+    with self.subTest(mode=mode), self.assertRaises(ValueError):
+                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_acceptance_requires_successful_staged_compiler_analyzer_evidence (test_paired_release.PairedReleaseTests.test_acceptance_requires_successful_staged_compiler_analyzer_evidence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_release.py", line 291, in test_acceptance_requires_successful_staged_compiler_analyzer_evidence
+    self.assertFalse((self.root / 'accepted.json').exists())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=2)

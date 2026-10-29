@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/mcpcli-416-review-fixes/installed-smoke/private/tools/hexalith",
+    "describe",
+    "parties.create-party"
+  ],
+  "exit_code": 0
+}

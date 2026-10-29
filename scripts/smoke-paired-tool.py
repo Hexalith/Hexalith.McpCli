@@ -10,6 +10,7 @@ import queue
 import subprocess
 import sys
 import threading
+import time
 from paired_release import check_prepared, digest, module, packages, write_new
 
 
@@ -45,12 +46,7 @@ def smoke(staging, prepared_path, output):
     tools = private / 'tools'
 
     def execute(name, argv, expected=0, override=None):
-        completed = subprocess.run([str(item) for item in argv], env=override or env, cwd=private, capture_output=True, timeout=120)
-        (output / (name + '.stdout.txt')).write_bytes(completed.stdout)
-        (output / (name + '.stderr.txt')).write_bytes(completed.stderr)
-        write_new(output / (name + '.command.json'), {'argv': [str(item) for item in argv], 'exit_code': completed.returncode})
-        require(completed.returncode == expected, f'{name} returned {completed.returncode}; inspect its retained stdout/stderr.')
-        return completed
+        return execute_command(output, private, override or env, name, argv, expected)
 
     execute('install', ['dotnet', 'tool', 'install', 'Hexalith.McpCli', '--tool-path', tools, '--version', prepared['version'],
                         '--configfile', config, '--no-cache'])
@@ -83,16 +79,8 @@ def smoke(staging, prepared_path, output):
     require(not result.stderr and json_document(result.stdout) == expected_error, 'Invalid home did not fail safely on the JSON stdout channel.')
     result = execute('mcp-invalid-home', [tool, 'mcp', '--transport', 'stdio'], 2, {**env, 'MCPCLI_HOME': 'relative-secret-home'})
     require(not result.stdout and json_document(result.stderr) == expected_error, 'MCP startup error polluted the protocol channel.')
-    for name, args in [
-        ('config-add', ['profile', 'add', 'staged', '--url', 'http://127.0.0.1:1', '--token', 'staged-private-token']),
-        ('config-use', ['use', 'staged']), ('config-current', ['current']), ('config-clear', ['use', '--clear']),
-        ('config-remove', ['profile', 'remove', 'staged']),
-    ]:
-        result = execute(name, [tool, 'config', *args])
-        json_document(result.stdout)
-        require(not result.stderr and b'staged-private-token' not in result.stdout, 'Config output exposed a token or wrote diagnostics.')
-    require((private / 'home/.eventstore/mcpcli.json').is_file(), 'Config did not use the isolated MCPCLI_HOME.')
-    mcp_smoke(tool, env, private, output, captures, modules, operation_names[0])
+    config_smoke(tool, execute, private / 'home/.eventstore/mcpcli.json')
+    mcp_smoke(tool, env, private, output, captures, modules)
     require(packages(staging, prepared['version']) == prepared['packages'], 'Staged bytes changed during installation smoke.')
     receipt = {'schema': 'mcpcli-paired-smoke/v1', 'status': 'passed', 'os': platform.system(),
                'source_sha': prepared['source_sha'], 'version': prepared['version'], 'packages': prepared['packages'],
@@ -102,7 +90,81 @@ def smoke(staging, prepared_path, output):
     write_new(output / 'smoke.json', receipt)
 
 
-def mcp_smoke(tool, env, private, output, captures, modules, operation):
+def execute_command(output, private, env, name, argv, expected=0):
+    argv = [str(item) for item in argv]
+    try:
+        completed = subprocess.run(argv, env=env, cwd=private, capture_output=True, timeout=120)
+    except subprocess.TimeoutExpired as error:
+        (output / (name + '.stdout.txt')).write_bytes(error.stdout or b'')
+        (output / (name + '.stderr.txt')).write_bytes(error.stderr or b'')
+        write_new(output / (name + '.command.json'), {'argv': argv, 'exit_code': None, 'outcome': 'timeout', 'timeout_seconds': 120})
+        raise
+    (output / (name + '.stdout.txt')).write_bytes(completed.stdout)
+    (output / (name + '.stderr.txt')).write_bytes(completed.stderr)
+    write_new(output / (name + '.command.json'), {'argv': argv, 'exit_code': completed.returncode})
+    require(completed.returncode == expected, f'{name} returned {completed.returncode}; inspect its retained stdout/stderr.')
+    return completed
+
+
+def config_smoke(tool, execute, profile_path):
+    profile = {'url': 'http://127.0.0.1:1', 'token': 'staged-private-token'}
+    empty = {'version': 1, 'profiles': {}}
+    saved = {'version': 1, 'profiles': {'staged': profile}}
+    selected = {**saved, 'activeProfile': 'staged'}
+    sources = {key: 'default' for key in ('tenant', 'actor', 'format', 'allowTenantOverride', 'readOnly', 'strict', 'output', 'allowedExtensions')}
+    current = {'profile': 'staged', 'url': 'http://127.0.0.1:1/', 'token': 'stag***', 'tenant': None,
+               'actor': None, 'allowTenantOverride': False, 'allowedExtensions': [], 'format': 'json',
+               'output': None, 'readOnly': False, 'strict': False,
+               'sources': {**sources, 'profile': 'activeProfile', 'url': 'profile', 'token': 'profile'}}
+    for name, args, document, state in [
+        ('config-add', ['profile', 'add', 'staged', '--url', profile['url'], '--token', profile['token']],
+         {'name': 'staged', 'activeProfile': None}, saved),
+        ('config-use', ['use', 'staged'], {'activeProfile': 'staged'}, selected),
+        ('config-current', ['current'], current, selected),
+        ('config-clear', ['use', '--clear'], {'activeProfile': None}, saved),
+        ('config-remove', ['profile', 'remove', 'staged'], {'name': 'staged', 'activeProfile': None}, empty),
+    ]:
+        result = execute(name, [tool, 'config', *args])
+        require(not result.stderr and profile['token'].encode() not in result.stdout,
+                'Config output exposed a token or wrote diagnostics.')
+        require(json_document(result.stdout) == document, f'{name} output document differs from the command contract.')
+        require(json.loads(profile_path.read_text()) == state, f'{name} did not persist the expected isolated profile state.')
+
+
+def protocol_document(line):
+    document = json.loads(line)
+    valid = isinstance(document, dict) and document.get('jsonrpc') == '2.0'
+    if valid and 'id' in document:
+        identity = document['id']
+        valid = (identity is None or type(identity) in (int, str)) and (('result' in document) != ('error' in document))
+        valid = valid and set(document) <= {'jsonrpc', 'id', 'result', 'error'}
+        if valid and 'error' in document:
+            error = document['error']
+            valid = (isinstance(error, dict) and type(error.get('code')) is int
+                     and isinstance(error.get('message'), str) and set(error) <= {'code', 'message', 'data'})
+    elif valid:
+        valid = (isinstance(document.get('method'), str) and bool(document['method'])
+                 and set(document) <= {'jsonrpc', 'method', 'params'}
+                 and ('params' not in document or isinstance(document['params'], (dict, list))))
+    require(valid, 'Non-protocol data appeared on MCP stdout.')
+    return document
+
+
+def request_mcp(send, messages, identity, method, parameters):
+    deadline = time.monotonic() + 60
+    send({'jsonrpc': '2.0', 'id': identity, 'method': method, 'params': parameters})
+    while True:
+        remaining = deadline - time.monotonic()
+        require(remaining > 0, f'MCP request {method} exceeded its 60 second deadline.')
+        line = messages.get(timeout=remaining)
+        require(line is not None, 'MCP exited before responding.')
+        document = protocol_document(line)
+        if document.get('id') == identity:
+            require('result' in document and 'error' not in document, f'MCP request {method} failed.')
+            return document['result'], line
+
+
+def mcp_smoke(tool, env, private, output, captures, modules):
     child = subprocess.Popen([str(tool), 'mcp', '--transport', 'stdio'], cwd=private, env=env,
                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     messages = queue.Queue()
@@ -127,15 +189,7 @@ def mcp_smoke(tool, env, private, output, captures, modules, operation):
         child.stdin.flush()
 
     def request(identity, method, parameters):
-        send({'jsonrpc': '2.0', 'id': identity, 'method': method, 'params': parameters})
-        while True:
-            line = messages.get(timeout=60)
-            require(line is not None, 'MCP exited before responding.')
-            document = json.loads(line)
-            require(document.get('jsonrpc') == '2.0', 'Non-protocol data appeared on MCP stdout.')
-            if document.get('id') == identity:
-                require('result' in document and 'error' not in document, f'MCP request {method} failed.')
-                return document['result'], line
+        return request_mcp(send, messages, identity, method, parameters)
 
     try:
         initialized, _ = request(1, 'initialize', {'protocolVersion': '2025-06-18', 'capabilities': {},
@@ -149,9 +203,24 @@ def mcp_smoke(tool, env, private, output, captures, modules, operation):
         require(result.get('isError') is False and result['structuredContent'] == modules
                 and json.loads(result['content'][0]['text']) == modules, 'MCP/CLI module discovery differs.')
         (captures / 'mcp-modules.json').write_bytes(raw)
-        description, _ = request(4, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': operation}})
-        require(description.get('isError') is False and description['structuredContent'] == json.loads((captures / ('describe-' + operation + '.json')).read_bytes()), 'MCP/CLI operation description differs.')
-        failure, _ = request(5, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': '__missing__'}})
+        identity = 4
+        for item in modules['modules']:
+            name = item['name']
+            operations = json.loads((captures / ('operations-' + name + '.json')).read_bytes())
+            result, raw = request(identity, 'tools/call', {'name': 'list_operations', 'arguments': {'module': name}})
+            require(result.get('isError') is False and result['structuredContent'] == operations
+                    and json.loads(result['content'][0]['text']) == operations, 'MCP/CLI operation discovery differs.')
+            (captures / ('mcp-operations-' + name + '.json')).write_bytes(raw)
+            identity += 1
+            for operation in operations['operations']:
+                name = operation['name']
+                expected = json.loads((captures / ('describe-' + name + '.json')).read_bytes())
+                description, raw = request(identity, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': name}})
+                require(description.get('isError') is False and description['structuredContent'] == expected
+                        and json.loads(description['content'][0]['text']) == expected, 'MCP/CLI operation description differs.')
+                (captures / ('mcp-describe-' + name + '.json')).write_bytes(raw)
+                identity += 1
+        failure, _ = request(identity, 'tools/call', {'name': 'describe_operation', 'arguments': {'operation': '__missing__'}})
         require(failure.get('isError') is True and failure['structuredContent']['error']['code'] == 'unknown_operation'
                 and json.loads(failure['content'][0]['text']) == failure['structuredContent'], 'MCP error document/channel mismatch.')
         child.stdin.close()
@@ -163,10 +232,12 @@ def mcp_smoke(tool, env, private, output, captures, modules, operation):
             child.wait(timeout=30)
         for reader in readers:
             reader.join(timeout=30)
+        for stream in (child.stdin, child.stdout, child.stderr):
+            stream.close()
         (output / 'mcp.stdout.jsonl').write_bytes(transcript)
         (output / 'mcp.stderr.txt').write_bytes(errors)
     for line in transcript.splitlines():
-        require(json.loads(line).get('jsonrpc') == '2.0', 'MCP stdout contains non-protocol output.')
+        protocol_document(line)
 
 
 def main():

@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/home/runner/work/_temp/consumer/smoke/private/tools/hexalith",
+    "modules",
+    "--format",
+    "table"
+  ],
+  "exit_code": 0
+}
