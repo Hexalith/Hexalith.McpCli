@@ -146,3 +146,37 @@ The review-fix source `630ea7f29c02f6d10b19eae1136e01538527266e` passed bootstra
 Corrected source `32fb5dbf75216adaf21551bcfa36439741c41e01` passed full CI `40880599269`, including the blocking Aspire tier, plus bootstrap, commitlint, synchronization and a fresh local source/FR-22 precheck. Staging `40885068007` succeeded at version 1.2.0 with the strengthened compiler/analyzer consumer, config state, protocol and complete MCP discovery checks. All 49 raw captures match across Linux, Windows and macOS. Windows Core passed 715 tests with three unrelated skips, Windows CLI passed 454 with 31 platform skips, and macOS CLI passed 471 with 14 platform skips. Every required Windows test and the unchanged 500 ms cold-construction test passed.
 
 The parent verified all five artifact ZIP hashes and independently reproduced the accepted receipt byte for byte. [Final accepted staging evidence](evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md) retains the exact source, package hashes, source gates, compiler proof, platform XML and raw captures. Review corrections and verification are complete, with no new deferrals; Linux ARM qualification remains in the existing ledger. This spec is done and sprint status is `review`, ready for human walkthrough. The final documentation/evidence commit records acceptance of source `32fb5db`; it does not change the validated implementation. No package, tag or GitHub release was published.
+
+### Review Findings
+
+Code review of `9ba8e5b..9199391` (code only; `_bmad-output/` and `references/` excluded), 2026-10-29. Layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor. 0 decision-needed, 5 patch, 4 defer, 17 rejected.
+
+- [x] [Review][Patch] `McpCliJson.Result.NewLine = "\n"` has no platform-independent test; deleting it keeps Linux CI green and Windows would emit CRLF inside JSON (medium) [src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs:109]
+- [x] [Review][Patch] `validate_effective_properties` has no test that fails when it is removed; stub the `dotnet msbuild -getProperty` output and add a refusal per guarded property (medium) [scripts/validate-release-packages.py]
+- [x] [Review][Patch] `validate_tool_package` runs the Contracts-entry loop twice; delete the redundant copy (low) [scripts/validate-release-packages.py:145]
+- [x] [Review][Patch] The package repository-commit check runs only `if args.source_sha:`; require `--source-sha` when `phase == 'paired'` and test the omission (low) [scripts/validate-release-packages.py:76]
+- [x] [Review][Patch] README says Windows requires "both private-ACL tests" but `WINDOWS_REQUIRED` lists three ACL tests; correct the wording (low) [README.md:107]
+- [x] [Review][Defer] Windows ACL and process tests run only in the manually dispatched `stage-paired` jobs, never in routine CI (medium) [.github/workflows/ci.yml] — deferred: a coverage-cadence issue; the fix is a Windows lane in routine CI
+- [x] [Review][Defer] `accept-staged-pair` writes `acceptance-source.json` but never compares its CI run IDs, FR-22 values or `upstream_main` with `source-before.json` and `source-after.json` (medium, unverified) [scripts/verify-release-source.py] — deferred: a read of `accept-staged-pair` and the comparator would settle whether a drift is caught elsewhere
+- [x] [Review][Defer] An invalid `MCPCLI_HOME` throws `InvalidDataException` lazily from the `ProfilePath` getter, and tests cover only `config current`, `modules` and `mcp` (medium, unverified) [src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:31] — deferred: running each verb with an invalid override would show whether any verb bypasses `configuration_invalid`
+- [x] [Review][Defer] The `.eventstore` directory ACL now carries `ContainerInherit|ObjectInherit`, so sibling files created later inherit user and SYSTEM full control (medium, unverified) [src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171] — deferred: a Windows check of a sibling file's ACL would settle it
+
+#### Rejected
+
+- No-release path skips the source gates (acceptance-auditor): `source()` already binds the selection to the exact SHA and rejects a dirty tree, and no pair is staged.
+- `source_clean: True` hard-coded (acceptance-auditor, blind-hunter): the earlier `git status` check refuses a dirty tree before this record is written.
+- Effective-property check uses different pack flags (acceptance-auditor): low; the properties compared are unaffected by those flags.
+- Bootstrap workflow modified (acceptance-auditor): justified by the detached-HEAD fix; not a violation.
+- Linux runs no test suite (acceptance-auditor): matches the spec's scope.
+- Platform tests run against the source tree, not the staged package (blind-hunter): low; the receipt wording is a documentation nuance.
+- Test outcomes keyed by display name (blind-hunter): low; the required Windows tests are facts with unique names.
+- `--version` still uses `Console.Out.WriteLine` (blind-hunter): not a JSON result, so the README's JSON claim is unaffected.
+- MCP protocol validator rejects server-initiated requests (blind-hunter): low; the scripted smoke exchange never triggers one.
+- Hard-coded CI job names and README counts (blind-hunter): low; a drift fails loudly at staging.
+- Staging jobs lack `timeout-minutes` and `concurrency` (blind-hunter): `release.yml` has a top-level `concurrency` group at line 17; the missing timeouts are low.
+- Version selector tests are thin (blind-hunter): low; the fix adds new test scaffolding.
+- Platform-specific managed DLL passes the portable gate (edge-case-hunter): low; the fix adds a guard for an unlikely payload.
+- Output directory created before selection validation (edge-case-hunter): low; the failure message already tells the operator to pick a fresh directory.
+- `select-release-version.test.mjs` reads `.git/HEAD` directly and uses `wx` evidence files (edge-case-hunter): developer-only, low.
+- Claim in commit 00680e9 that the ACL assertions stayed unchanged (edge-case-hunter): the test setup was widened, but nothing shows a gap.
+- Smoke timeouts, stderr strictness and unbounded zip reads (blind-hunter): low; hosted runs passed all three OS lanes.

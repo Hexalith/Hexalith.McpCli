@@ -344,6 +344,35 @@ class PairedReleaseTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 validator.validate_managed(payload)
 
+    def test_paired_phase_requires_the_source_sha(self):
+        validator = module('validate-release-packages')
+        with patch.object(sys, 'argv', ['validate-release-packages.py', str(self.staging), VERSION, 'paired']):
+            with self.assertRaisesRegex(ValueError, 'requires --source-sha'):
+                validator.main()
+
+    def test_effective_properties_refuse_unportable_or_mismatched_packages(self):
+        validator = module('validate-release-packages')
+        tool = {'id': 'Hexalith.McpCli', 'project': 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'}
+        valid = {'TargetFramework': 'net10.0', 'TargetFrameworks': '', 'PackAsTool': 'true', 'ToolCommandName': 'hexalith',
+                 'UseAppHost': 'false', 'PublishTrimmed': '', 'PublishAot': '', 'PublishReadyToRun': '', 'SelfContained': '',
+                 'RuntimeIdentifier': '', 'RuntimeIdentifiers': '', 'CreateRidSpecificToolPackages': '',
+                 'PackageId': 'Hexalith.McpCli', 'Version': VERSION}
+
+        def evaluate(**changes):
+            result = subprocess.CompletedProcess([], 0, stdout=json.dumps({'Properties': {**valid, **changes}}))
+            with patch.object(validator, 'run', return_value=result):
+                validator.validate_effective_properties([tool], VERSION)
+
+        evaluate()
+        for changes in ({'TargetFramework': 'net9.0'}, {'TargetFrameworks': 'net10.0;net9.0'}, {'PackageId': 'Other'},
+                        {'Version': '9.9.9'}, {'PackAsTool': 'false'}, {'ToolCommandName': 'other'},
+                        {'UseAppHost': 'true'}, {'PublishTrimmed': 'true'}, {'PublishAot': 'true'},
+                        {'PublishReadyToRun': 'true'}, {'SelfContained': 'true'},
+                        {'CreateRidSpecificToolPackages': 'true'}, {'RuntimeIdentifier': 'linux-x64'},
+                        {'RuntimeIdentifiers': 'linux-x64'}):
+            with self.subTest(changes), self.assertRaises(ValueError):
+                evaluate(**changes)
+
     def test_paired_publication_and_recovery_remain_refused(self):
         for version in (VERSION, '1.0.0'):
             with self.assertRaisesRegex(ValueError, 'Paired release is deferred'):

@@ -31,6 +31,8 @@ def main() -> int:
         raise ValueError("The release manifest must declare exactly the paired package IDs")
     if phase not in {"bootstrap", "paired"}:
         raise ValueError(f"Unknown release phase: {phase}")
+    if phase == "paired" and not args.source_sha:
+        raise ValueError("The paired phase requires --source-sha to bind the package repository commit.")
 
     active_ids = expected_ids[:1] if phase == "bootstrap" else expected_ids
     expected_names = {f"{package_id}.{version}.nupkg" for package_id in active_ids}
@@ -73,10 +75,9 @@ def main() -> int:
                 for name in names:
                     if name.startswith('/') or '\\' in name or '..' in Path(name).parts:
                         raise ValueError('Unsafe archive entry.')
-                if args.source_sha:
-                    repository = metadata.find('{*}repository')
-                    if repository is None or repository.get('commit') != args.source_sha:
-                        raise ValueError('Package repository commit differs from the staged source.')
+                repository = metadata.find('{*}repository')
+                if repository is None or repository.get('commit') != args.source_sha:
+                    raise ValueError('Package repository commit differs from the staged source.')
 
     if phase == 'paired':
         validate_effective_properties(packages, version)
@@ -142,11 +143,6 @@ def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTr
     if any(name.startswith(prefix + executable) for name in names for executable in ('hexalith.exe', 'Hexalith.McpCli.exe', 'coreclr', 'hostfxr')):
         raise ValueError('A native apphost or runtime payload is not allowed.')
     validate_tool_payload(archive, names, dependencies, prefix)
-    for package_id, assembly_name in entries:
-        if not package_id.endswith(".Contracts") or not assembly_name.endswith(".Contracts"):
-            raise ValueError(f"Invalid Contracts assembly manifest entry: {package_id}, {assembly_name}")
-        if prefix + assembly_name + ".dll" not in names:
-            raise ValueError(f"McpCli tool package is missing {assembly_name}.dll")
 
 
 def validate_tool_payload(archive, names, dependencies, prefix):

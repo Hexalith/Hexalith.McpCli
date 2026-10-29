@@ -702,3 +702,28 @@ status: open
     - The Bootstrap section already uses absolute GitHub URLs.
     - Fix before Story 4.18 publishes: make every repository link absolute (`https://github.com/Hexalith/Hexalith.McpCli/blob/main/...`), or pin them to a revision.
     - The ledger had no equivalent entry.
+
+## Deferred from: code review of spec-4-16-stage-and-validate-the-paired-packages.md (2026-10-29)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
+  summary: The Windows ACL and process tests that guard profile safety run only in the manually dispatched staging jobs, never in routine CI.
+  evidence: Medium; new in Story 4.16.
+    - `.github/workflows/ci.yml` has no Windows or macOS job; `WINDOWS_REQUIRED` in `scripts/run-paired-platform-tests.py:14` is enforced only by `stage-pair` in `release.yml`.
+    - A Windows ACL regression in `src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171` would merge with green Linux CI.
+    - Fix: add a Windows lane for those tests to routine CI.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
+  summary: Acceptance may not compare its re-verified source evidence with the preparation-time evidence.
+  evidence: Medium, unverified.
+    - `accept-staged-pair` writes `acceptance-source.json`; `scripts/compare-paired-evidence.py:15-32` reads only `source-before.json` and `source-after.json`.
+    - A CI re-run or an upstream `main` move between preparation and acceptance could go unnoticed.
+    - To settle it: read `accept-staged-pair` in `.github/workflows/release.yml:295` and the comparator for a cross-check.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
+  summary: An invalid `MCPCLI_HOME` throws lazily from the `ProfilePath` getter, so a verb may bypass the `configuration_invalid` document.
+  evidence: Medium, unverified.
+    - `src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:31` resolves the path on first access; tests cover only `config current`, `modules` and `mcp`.
+    - To settle it: run `send`, `query`, `describe`, `operations`, `config set` and `--version` with an invalid override and compare the output.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
+  summary: The `.eventstore` directory ACL now carries `ContainerInherit|ObjectInherit`, so sibling files created later inherit user and SYSTEM full control.
+  evidence: Medium, unverified.
+    - `src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171-177`; tests cover only the profile, lock and temporary files.
+    - To settle it: on Windows, create a sibling file after a profile write and inspect its ACL.
