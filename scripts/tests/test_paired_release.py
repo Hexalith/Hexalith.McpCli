@@ -375,6 +375,53 @@ class PairedReleaseTests(unittest.TestCase):
             self.assertEqual(git.call_args_list[0].args[:3], ('config', '--blob', 'HEAD:.gitmodules'))
             self.assertEqual(git.call_args_list[1].args[:2], ('ls-tree', 'HEAD'))
 
+    def test_platform_runner_collects_both_suites_before_acceptance(self):
+        for mode in ('core-exit-failure', 'core-xml-failure', 'core-launch-failure', 'required-skip', 'passed'):
+            output = self.root / ('runner-' + mode)
+            calls = []
+            def execute(argv, **kwargs):
+                if '-xml' not in argv:
+                    return subprocess.CompletedProcess(argv, 0, stdout=b'build/restore', stderr=b'')
+                suite = 'Core' if '.Core.Tests/' in argv[1] else 'Cli'
+                calls.append(suite)
+                if suite == 'Core' and mode == 'core-launch-failure':
+                    raise OSError('fixture Core process launch failure')
+                xml = Path(argv[argv.index('-xml') + 1])
+                if suite == 'Core' and mode == 'core-xml-failure':
+                    xml.write_text('<malformed')
+                else:
+                    root = ElementTree.Element('assemblies')
+                    assembly = ElementTree.SubElement(root, 'assembly')
+                    names = [name for name in self.runner.WINDOWS_REQUIRED if f'.{suite}.Tests.' in name]
+                    for index, name in enumerate(names):
+                        ElementTree.SubElement(assembly, 'test', name=name,
+                            result='Skip' if mode == 'required-skip' and suite == 'Core' and index == 0 else 'Pass')
+                    if mode == 'core-exit-failure' and suite == 'Core':
+                        ElementTree.SubElement(assembly, 'test', name='fixture.CoreFailure', result='Fail')
+                    ElementTree.ElementTree(root).write(xml)
+                code = 1 if suite == 'Core' and mode == 'core-exit-failure' else 0
+                return subprocess.CompletedProcess(argv, code, stdout=(suite + ' diagnostic').encode(), stderr=b'fixture stderr')
+            with self.subTest(mode=mode), patch.object(self.runner, 'git', return_value=SHA), \
+                    patch.object(self.runner.platform, 'system', return_value='Windows'), \
+                    patch.object(self.runner.subprocess, 'run', side_effect=execute):
+                if mode == 'passed':
+                    self.runner.run_tests(self.prepared_path, output)
+                    self.assertEqual(json.loads((output / 'tests.json').read_text())['status'], 'passed')
+                else:
+                    with self.assertRaisesRegex(ValueError, 'after collecting all required suites'):
+                        self.runner.run_tests(self.prepared_path, output)
+                    self.assertFalse((output / 'tests.json').exists())
+                self.assertEqual(calls, ['Core', 'Cli'])
+                report = json.loads((output / 'suite-outcomes.json').read_text())
+                self.assertEqual([item['suite'] for item in report['suites']], ['Core', 'Cli'])
+                self.assertEqual(report['status'], 'passed' if mode == 'passed' else 'failed')
+                for suite in ('Core', 'Cli'):
+                    name = 'Hexalith.McpCli.' + suite + '.Tests'
+                    self.assertTrue((output / (name + '.command.json')).is_file())
+                    self.assertTrue((output / (name + '.stdout.txt')).is_file())
+                    self.assertTrue((output / (name + '.stderr.txt')).is_file())
+                self.assertTrue((output / 'Hexalith.McpCli.Cli.Tests.xml').is_file())
+
     def test_new_evidence_never_overwrites_a_prior_result(self):
         path = self.root / 'already.json'
         write_new(path, {'retained': True})

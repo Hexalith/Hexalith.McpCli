@@ -1057,9 +1057,17 @@ public sealed class CliOutputContractTests
             originalAcl = file.GetAccessControl();
             FileSecurity denied = file.GetAccessControl();
             SecurityIdentifier user = WindowsIdentity.GetCurrent().User.ShouldNotBeNull();
-            denied.AddAccessRule(new FileSystemAccessRule(user, FileSystemRights.ReadAttributes, AccessControlType.Deny));
+            denied.AddAccessRule(new FileSystemAccessRule(user,
+                FileSystemRights.ReadAttributes | FileSystemRights.ReadData | FileSystemRights.WriteData, AccessControlType.Deny));
             file.SetAccessControl(denied);
-            Should.Throw<UnauthorizedAccessException>(() => File.GetAttributes(target));
+            // Attribute lookup can succeed through FindFirstFile despite ReadAttributes denial.
+            // Verify the actual read/write access used by preflight is denied instead.
+            Should.Throw<UnauthorizedAccessException>(() =>
+            {
+                using (new FileStream(target, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+                {
+                }
+            });
 
             (int exit, string output, string error) = await InvokeAsync(store,
                 ["config", "set", "dev", "actor", "operator", "--output", target]);

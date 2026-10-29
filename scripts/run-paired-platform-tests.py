@@ -13,10 +13,12 @@ from paired_release import digest, git, module, write_new
 
 WINDOWS_REQUIRED = [
     'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls',
+    'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles',
     'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten',
     'Hexalith.McpCli.Cli.Tests.ConfigCommandTests.ConcurrentSetProcessesPreserveBothValuesAsync',
     'Hexalith.McpCli.Cli.Tests.ConfigCommandTests.VerbsNeverOpenAdminProfilesAsync',
     'Hexalith.McpCli.Cli.Tests.CliOutputContractTests.MissingExistingFileStagingDirectoryPreventsMutationAsync',
+    'Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync',
 ]
 
 
@@ -41,23 +43,55 @@ def run_tests(prepared_path, output):
     suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli'] if system == 'Darwin' else []
     env = {key: value for key, value in os.environ.items() if not key.startswith(('EVENTSTORE_', 'MCPCLI_'))}
     env['MCPCLI_HOME'] = str(output / 'home')
-    def command(name, arguments):
-        result = subprocess.run(arguments, env=env, capture_output=True)
+    def command(name, arguments, required=True):
+        try:
+            result = subprocess.run(arguments, env=env, capture_output=True)
+        except OSError as error:
+            (output / f'{name}.stdout.txt').write_bytes(b'')
+            (output / f'{name}.stderr.txt').write_text(str(error) + '\n')
+            write_new(output / f'{name}.command.json', {'argv': arguments, 'exit_code': None, 'error': str(error)})
+            raise
         (output / f'{name}.stdout.txt').write_bytes(result.stdout)
         (output / f'{name}.stderr.txt').write_bytes(result.stderr)
         write_new(output / f'{name}.command.json', {'argv': arguments, 'exit_code': result.returncode})
-        result.check_returncode()
+        if required:
+            result.check_returncode()
+        return result
     if suites:
         command('restore', ['dotnet', 'restore', 'Hexalith.McpCli.slnx', '-p:Version=' + prepared['version']])
         command('build', ['dotnet', 'build', 'Hexalith.McpCli.slnx', '--no-restore', '--configuration', 'Release', '-warnaserror', '-p:Version=' + prepared['version']])
     outcomes = {}
+    failures = []
+    reports = []
     for suite in suites:
         name = 'Hexalith.McpCli.' + suite + '.Tests'
         xml = output / (name + '.xml')
-        command(name, ['dotnet', f'tests/{name}/bin/Release/net10.0/{name}.dll', '-xml', str(xml)])
-        outcomes.update(inspect_xml(xml))
-    if system == 'Windows' and any(outcomes.get(name) != 'Pass' for name in WINDOWS_REQUIRED):
-        raise ValueError('A required Windows ACL or isolated-process test did not execute successfully.')
+        report = {'suite': suite, 'exit_code': None, 'xml_status': 'missing'}
+        reports.append(report)
+        try:
+            result = command(name, ['dotnet', f'tests/{name}/bin/Release/net10.0/{name}.dll', '-xml', str(xml)], required=False)
+            report['exit_code'] = result.returncode
+            if result.returncode:
+                failures.append(f'{name} exited {result.returncode}')
+        except (OSError, subprocess.SubprocessError) as error:
+            report['launch_error'] = str(error)
+            failures.append(f'{name} could not complete: {error}')
+        try:
+            outcomes.update(inspect_xml(xml))
+            report['xml_status'] = 'passed'
+        except (OSError, ValueError, ElementTree.ParseError) as error:
+            report['xml_status'] = 'failed'
+            report['xml_error'] = str(error)
+            failures.append(f'{name} XML: {error}')
+    if system == 'Windows':
+        missing = [name for name in WINDOWS_REQUIRED if outcomes.get(name) != 'Pass']
+        if missing:
+            failures.append('Required Windows tests did not pass: ' + ', '.join(missing))
+    write_new(output / 'suite-outcomes.json', {'schema': 'mcpcli-paired-suite-outcomes/v1', 'os': system,
+              'status': 'failed' if failures else 'passed', 'source_sha': prepared['source_sha'],
+              'version': prepared['version'], 'packages': prepared['packages'], 'suites': reports, 'failures': failures})
+    if failures:
+        raise ValueError('Platform suites failed after collecting all required suites: ' + '; '.join(failures))
     write_new(output / 'tests.json', {'schema': 'mcpcli-paired-platform-tests/v1', 'os': system, 'status': 'passed',
                                      'source_sha': prepared['source_sha'], 'version': prepared['version'],
                                      'packages': prepared['packages'], 'suites': suites,

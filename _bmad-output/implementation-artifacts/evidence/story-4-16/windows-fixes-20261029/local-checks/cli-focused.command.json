@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Cli.Tests.ConfigCommandTests",
+    "-class",
+    "Hexalith.McpCli.Cli.Tests.CliOutputContractTests"
+  ],
+  "exit_code": 0,
+  "benchmark_require_v1": false
+}

@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "-m",
+    "py_compile",
+    "scripts/run-paired-platform-tests.py",
+    "scripts/tests/test_paired_release.py"
+  ],
+  "exit_code": 0
+}

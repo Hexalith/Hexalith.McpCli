@@ -166,8 +166,15 @@ internal sealed class ProfileFileTransaction(string path)
         SecurityIdentifier user = WindowsIdentity.GetCurrent().User
             ?? throw new InvalidDataException("The current Windows user has no security identifier.");
         SecurityIdentifier system = new(WellKnownSidType.LocalSystemSid, null);
-        security.AddAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
-        security.AddAccessRule(new FileSystemAccessRule(system, FileSystemRights.FullControl, AccessControlType.Allow));
+        // Existing children must retain inherited access when a permissive parent ACL is replaced.
+        // File, temporary-file and lock ACLs remain protected and explicit with no inheritance flags.
+        InheritanceFlags inheritance = security is DirectorySecurity
+            ? InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit
+            : InheritanceFlags.None;
+        security.AddAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl,
+            inheritance, PropagationFlags.None, AccessControlType.Allow));
+        security.AddAccessRule(new FileSystemAccessRule(system, FileSystemRights.FullControl,
+            inheritance, PropagationFlags.None, AccessControlType.Allow));
     }
 
     private static void RejectNonRegularFile(string path)

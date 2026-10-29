@@ -9,9 +9,22 @@ using Shouldly;
 namespace Hexalith.McpCli.Core.Tests;
 
 /// <summary>Measures the first production Catalog build plus exactly one ULID sample in a fresh process.</summary>
+[Collection(CatalogPerformanceCollection.Name)]
 public sealed class CatalogPerformanceTests
 {
     private const double ConstructionLimitMilliseconds = 500;
+
+    /// <summary>The cold measurement collection must exclude concurrent collections without changing its limit.</summary>
+    [Fact]
+    public void ColdMeasurementCollectionExcludesOtherCollections()
+    {
+        typeof(CatalogPerformanceTests).GetCustomAttribute<CollectionAttribute>().ShouldNotBeNull()
+            .Name.ShouldBe(CatalogPerformanceCollection.Name);
+        CollectionDefinitionAttribute definition = typeof(CatalogPerformanceCollection)
+            .GetCustomAttribute<CollectionDefinitionAttribute>().ShouldNotBeNull();
+        definition.Name.ShouldBe(CatalogPerformanceCollection.Name);
+        definition.DisableParallelization.ShouldBeTrue();
+    }
 
     /// <summary>Runs the measurement in its own process so other tests cannot warm Catalog caches.</summary>
     [Fact]

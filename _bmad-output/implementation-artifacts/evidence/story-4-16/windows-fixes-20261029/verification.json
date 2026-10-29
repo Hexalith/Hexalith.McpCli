@@ -1,0 +1,66 @@
+{
+  "schema": "mcpcli-windows-acl-and-runner-fixes/v1",
+  "source_sha": "251a6c32f8a61739a1650a67a1f0709eb4186973",
+  "working_tree_change": true,
+  "hosted_original": {
+    "run_id": 40862502648,
+    "source_sha": "251a6c32f8a61739a1650a67a1f0709eb4186973",
+    "windows_core_failed": 7,
+    "cold_measurement_ms": 547.1785,
+    "limit_ms": 500,
+    "windows_cli": "not executed because original runner failed immediately on Core",
+    "three_os_install_smoke": "passed",
+    "all_26_raw_discovery_captures_identical": true,
+    "macos_cli": {
+      "total": 485,
+      "passed": 471,
+      "skipped": 14,
+      "failed": 0
+    },
+    "accepted_staging": false
+  },
+  "fixes": [
+    "Directory-only current-user/LocalSystem ACE inheritance; protected explicit file/temp/lock ACLs remain unchanged.",
+    "Windows inheritance regression explicitly required by platform acceptance.",
+    "Cold benchmark collection excludes concurrent collections; fresh child and 500 ms limit unchanged.",
+    "Runner collects both suites after process/XML/launch failures, retains diagnostics, and writes no passed receipt if either fails.",
+    "Windows denied-access fixture asserts real read/write denial rather than attribute-query failure."
+  ],
+  "local_validation": {
+    "core_build": "passed; zero warnings/errors",
+    "cli_build": "passed; zero warnings/errors",
+    "core_focused": {
+      "total": 93,
+      "failed": 0,
+      "skipped": 4,
+      "passed": 89
+    },
+    "cold_child": {
+      "elapsed_ms": 156.529,
+      "limit_ms": 500,
+      "full_v1_accepted": true,
+      "retries": 0,
+      "pre_measurement_catalog_builds": 0
+    },
+    "cli_focused": {
+      "total": 204,
+      "passed": 202,
+      "failed": 0,
+      "skipped": 2
+    },
+    "python_runner_controls": {
+      "total": 25,
+      "failed": 0,
+      "modes": [
+        "Core nonzero exit",
+        "Core malformed XML",
+        "Core launch failure",
+        "required Windows skip",
+        "both suites pass"
+      ]
+    },
+    "windows_runtime_validation": "pending next actual hosted runner"
+  },
+  "root_commits_pushes_dispatches": false,
+  "no_remote_fetch_in_this_handoff": true
+}

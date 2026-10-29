@@ -1,0 +1,10 @@
+{
+  "expected_sha256": "e7d97dcd2413138fe3b86ee443b22febf8f42cc34520637d3596715233d0a3f5",
+  "matching_archives": [
+    {
+      "name": "windows-attempt2.zip",
+      "sha256": "e7d97dcd2413138fe3b86ee443b22febf8f42cc34520637d3596715233d0a3f5",
+      "matches_verified_download": true
+    }
+  ]
+}

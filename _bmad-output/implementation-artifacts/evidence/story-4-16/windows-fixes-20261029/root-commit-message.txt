@@ -1,0 +1,5 @@
+fix(profiles): preserve inherited Windows access
+
+Keep existing profile-directory files readable under private ACLs.
+Isolate cold benchmarks and retain both Windows suite failure reports.
+Preserve the 500 ms target and all platform acceptance gates.

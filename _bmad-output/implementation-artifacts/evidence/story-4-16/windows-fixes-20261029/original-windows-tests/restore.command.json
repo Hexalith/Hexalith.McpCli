@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "dotnet",
+    "restore",
+    "Hexalith.McpCli.slnx",
+    "-p:Version=1.2.0"
+  ],
+  "exit_code": 0
+}

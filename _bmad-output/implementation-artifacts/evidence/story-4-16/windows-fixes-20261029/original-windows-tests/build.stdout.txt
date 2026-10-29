@@ -1,0 +1,32 @@
+  Hexalith.McpCli.Analyzers -> D:\a\Hexalith.McpCli\Hexalith.McpCli\src\Hexalith.McpCli.Analyzers\bin\Release\netstandard2.0\Hexalith.McpCli.Analyzers.dll
+  Manifest.Unmarked.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Manifest.Unmarked.Contracts\bin\Release\net10.0\manifest.AUnmarked.Contracts.dll
+  Topology.DaprStub -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Topology.DaprStub\bin\Release\net10.0\dapr.dll
+  Hexalith.McpCli.AppHost -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.AppHost\bin\Release\net10.0\Hexalith.McpCli.AppHost.dll
+  Hexalith.McpCli.Abstractions -> D:\a\Hexalith.McpCli\Hexalith.McpCli\src\Hexalith.McpCli.Abstractions\bin\Release\net10.0\Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Sample.Contracts\bin\Release\net10.0\Hexalith.McpCli.Sample.Contracts.dll
+  Catalog.Table.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.Table.Contracts\bin\Release\net10.0\Catalog.Table.Contracts.dll
+  Manifest.MarkedEmpty.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Manifest.MarkedEmpty.Contracts\bin\Release\net10.0\Manifest.MarkedEmpty.Contracts.dll
+  Catalog.Routing.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.Routing.Contracts\bin\Release\net10.0\Catalog.Routing.Contracts.dll
+  Catalog.String.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.String.Contracts\bin\Release\net10.0\Catalog.String.Contracts.dll
+  Hexalith.McpCli.Abstractions.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Abstractions.Tests\bin\Release\net10.0\Hexalith.McpCli.Abstractions.Tests.dll
+  Catalog.InvalidProvider.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.InvalidProvider.Contracts\bin\Release\net10.0\Catalog.InvalidProvider.Contracts.dll
+  Catalog.Lint.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.Lint.Contracts\bin\Release\net10.0\Catalog.Lint.Contracts.dll
+  Catalog.Explicit.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.Explicit.Contracts\bin\Release\net10.0\Catalog.Explicit.Contracts.dll
+  Catalog.Invalid.Contracts -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\Catalog.Invalid.Contracts\bin\Release\net10.0\Catalog.Invalid.Contracts.dll
+  Hexalith.McpCli.Core -> D:\a\Hexalith.McpCli\Hexalith.McpCli\src\Hexalith.McpCli.Core\bin\Release\net10.0\Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Analyzers.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Analyzers.Tests\bin\Release\net10.0\Hexalith.McpCli.Analyzers.Tests.dll
+  Hexalith.McpCli.Mcp -> D:\a\Hexalith.McpCli\Hexalith.McpCli\src\Hexalith.McpCli.Mcp\bin\Release\net10.0\Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli -> D:\a\Hexalith.McpCli\Hexalith.McpCli\src\Hexalith.McpCli\bin\Release\net10.0\Hexalith.McpCli.dll
+  Hexalith.McpCli.ConformanceHost -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.ConformanceHost\bin\Release\net10.0\Hexalith.McpCli.ConformanceHost.dll
+  Hexalith.McpCli.Mcp.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Mcp.Tests\bin\Release\net10.0\Hexalith.McpCli.Mcp.Tests.dll
+  Hexalith.McpCli.StdioHost -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\fixtures\StdioHost\bin\Release\net10.0\Hexalith.McpCli.StdioHost.dll
+  Hexalith.McpCli.Core.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Core.Tests\bin\Release\net10.0\Hexalith.McpCli.Core.Tests.dll
+  Hexalith.McpCli.Integration.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Integration.Tests\bin\Release\net10.0\Hexalith.McpCli.Integration.Tests.dll
+  Hexalith.McpCli.Cli.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Cli.Tests\bin\Release\net10.0\Hexalith.McpCli.Cli.Tests.dll
+  Hexalith.McpCli.Manifest.Tests -> D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Manifest.Tests\bin\Release\net10.0\Hexalith.McpCli.Manifest.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:41.84

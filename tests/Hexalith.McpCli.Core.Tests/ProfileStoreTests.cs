@@ -631,7 +631,61 @@ public sealed class ProfileStoreTests
             store.Add("dev", new ConnectionProfile("https://gateway.example/", "secret-token"));
             store.Set("dev", "tenant", "acme");
 
-            AssertPrivateAcl(new DirectoryInfo(directory).GetAccessControl());
+            AssertPrivateAcl(new DirectoryInfo(directory).GetAccessControl(), InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit);
+            AssertPrivateAcl(new FileInfo(store.ProfilePath).GetAccessControl());
+            AssertPrivateAcl(new FileInfo(store.ProfilePath + ".lock").GetAccessControl());
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Restricting a parent preserves access to existing inherited profile, lock and sibling files.</summary>
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WindowsRestrictionPreservesInheritedExistingFiles()
+    {
+        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows ACL inheritance is exercised only on Windows.");
+        string directory = TemporaryDirectory();
+        try
+        {
+            var parent = Directory.CreateDirectory(directory);
+            var inherited = new DirectorySecurity();
+            inherited.SetAccessRuleProtection(isProtected: true, preserveInheritance: false);
+            SecurityIdentifier user = WindowsIdentity.GetCurrent().User.ShouldNotBeNull();
+            var system = new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null);
+            const InheritanceFlags Children = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
+            foreach (SecurityIdentifier identity in new[] { user, system }.Distinct())
+            {
+                inherited.AddAccessRule(new FileSystemAccessRule(identity, FileSystemRights.FullControl,
+                    Children, PropagationFlags.None, AccessControlType.Allow));
+            }
+
+            parent.SetAccessControl(inherited);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            File.WriteAllText(store.ProfilePath,
+                """{"version":1,"profiles":{"dev":{"url":"https://gateway.example/","token":"secret-token"}}}""");
+            File.WriteAllText(store.ProfilePath + ".lock", "lock-sentinel");
+            string sibling = Path.Combine(directory, "profiles.json");
+            File.WriteAllText(sibling, "admin-sentinel");
+            string nested = Path.Combine(Directory.CreateDirectory(Path.Combine(directory, "nested")).FullName, "sentinel.txt");
+            File.WriteAllText(nested, "nested-sentinel");
+            foreach (string path in new[] { store.ProfilePath, store.ProfilePath + ".lock", sibling, nested })
+            {
+                FileSecurity security = new FileInfo(path).GetAccessControl();
+                security.AreAccessRulesProtected.ShouldBeFalse();
+                security.GetAccessRules(true, true, typeof(SecurityIdentifier)).Cast<FileSystemAccessRule>()
+                    .Any(rule => rule.IsInherited && rule.IdentityReference.Equals(user)).ShouldBeTrue();
+            }
+
+            store.Set("dev", "tenant", "acme");
+
+            store.Read().Profiles["dev"].ShouldBe(new ConnectionProfile("https://gateway.example/", "secret-token", Tenant: "acme"));
+            File.ReadAllText(store.ProfilePath + ".lock").ShouldBe("lock-sentinel");
+            File.ReadAllText(sibling).ShouldBe("admin-sentinel");
+            File.ReadAllText(nested).ShouldBe("nested-sentinel");
+            AssertPrivateAcl(parent.GetAccessControl(), Children);
             AssertPrivateAcl(new FileInfo(store.ProfilePath).GetAccessControl());
             AssertPrivateAcl(new FileInfo(store.ProfilePath + ".lock").GetAccessControl());
         }
@@ -679,7 +733,7 @@ public sealed class ProfileStoreTests
     }
 
     [SupportedOSPlatform("windows")]
-    private static void AssertPrivateAcl(FileSystemSecurity security)
+    private static void AssertPrivateAcl(FileSystemSecurity security, InheritanceFlags inheritance = InheritanceFlags.None)
     {
         security.AreAccessRulesProtected.ShouldBeTrue();
         SecurityIdentifier user = WindowsIdentity.GetCurrent().User.ShouldNotBeNull();
@@ -692,6 +746,8 @@ public sealed class ProfileStoreTests
             rule.AccessControlType.ShouldBe(AccessControlType.Allow);
             rule.FileSystemRights.ShouldBe(FileSystemRights.FullControl);
             rule.IsInherited.ShouldBeFalse();
+            rule.InheritanceFlags.ShouldBe(inheritance);
+            rule.PropagationFlags.ShouldBe(PropagationFlags.None);
         }
 
         // A process running as LocalSystem has one identity, so its ACL legitimately holds only that SID.

@@ -1,0 +1,63 @@
+{
+  "source_sha": "251a6c32f8a61739a1650a67a1f0709eb4186973",
+  "scope": "installation smoke and raw discovery parity only; Windows suites failed",
+  "platforms": {
+    "Linux": {
+      "smoke_status": "passed",
+      "discovery_count": 26,
+      "suite_assemblies": []
+    },
+    "Windows": {
+      "smoke_status": "passed",
+      "discovery_count": 26,
+      "suite_assemblies": [
+        {
+          "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 4 threads)]",
+          "id": "443499d0-2b9b-47e7-8574-beff3b944184",
+          "name": "D:\\a\\Hexalith.McpCli\\Hexalith.McpCli\\tests\\Hexalith.McpCli.Core.Tests\\bin\\Release\\net10.0\\Hexalith.McpCli.Core.Tests.dll",
+          "run-date": "2026-10-29",
+          "run-time": "11:08:58",
+          "start-rtf": "2026-10-29T11:08:58.6437209+00:00",
+          "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+          "target-framework": ".NETCoreApp,Version=v10.0",
+          "errors": "0",
+          "failed": "7",
+          "finish-rtf": "2026-10-29T11:09:03.4598157+00:00",
+          "not-run": "0",
+          "passed": "706",
+          "skipped": "3",
+          "time": "4.817",
+          "time-rtf": "00:00:04.8170000",
+          "total": "716"
+        }
+      ]
+    },
+    "Darwin": {
+      "smoke_status": "passed",
+      "discovery_count": 26,
+      "suite_assemblies": [
+        {
+          "environment": "64-bit (ARM) .NET 10.0.14 [collection-per-class, non-parallel]",
+          "id": "f73d8df6-dfd8-44da-9291-5aff4f8f2628",
+          "name": "/Users/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+          "run-date": "2026-10-29",
+          "run-time": "11:07:21",
+          "start-rtf": "2026-10-29T11:07:21.9005640+00:00",
+          "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+          "target-framework": ".NETCoreApp,Version=v10.0",
+          "errors": "0",
+          "failed": "0",
+          "finish-rtf": "2026-10-29T11:08:06.0639950+00:00",
+          "not-run": "0",
+          "passed": "471",
+          "skipped": "14",
+          "time": "44.164",
+          "time-rtf": "00:00:44.1640000",
+          "total": "485"
+        }
+      ]
+    }
+  },
+  "accepted_staging": false,
+  "all_26_raw_discovery_files_identical": true
+}

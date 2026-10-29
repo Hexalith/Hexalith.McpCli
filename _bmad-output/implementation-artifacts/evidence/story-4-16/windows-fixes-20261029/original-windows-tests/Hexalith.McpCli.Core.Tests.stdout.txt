@@ -1,0 +1,262 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction [SKIP]
+      Runs only in the fresh benchmark child process.
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds [FAIL]
+      Shouldly.ShouldAssertException : process.ExitCode
+          should be
+      0
+          but was
+      1
+      
+      Additional Info:
+          xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+        Discovering: Hexalith.McpCli.Core.Tests
+        Discovered:  Hexalith.McpCli.Core.Tests
+        Starting:    Hexalith.McpCli.Core.Tests
+          Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction [FAIL]
+            Shouldly.ShouldAssertException : outcome.Failures
+                should be empty but had
+            1
+                item and was
+            ["First Catalog construction exceeded 500 ms."]
+            
+            Additional Info:
+                {
+              "result": "failed",
+              "fullV1Accepted": false,
+              "elapsedMilliseconds": 547.1785,
+              "limitMilliseconds": 500,
+              "processId": 8640,
+              "assemblies": [
+                "Hexalith.Parties.Contracts",
+                "Hexalith.Tenants.Contracts",
+                "Hexalith.McpCli.Sample.Contracts"
+              ],
+              "productionPackages": [
+                "Hexalith.Parties.Contracts",
+                "Hexalith.Tenants.Contracts"
+              ],
+              "modules": [
+                {
+                  "name": "parties",
+                  "identifierKind": "String",
+                  "operationCount": 7
+                },
+                {
+                  "name": "sample",
+                  "identifierKind": "Ulid",
+                  "operationCount": 3
+                },
+                {
+                  "name": "tenants",
+                  "identifierKind": "String",
+                  "operationCount": 14
+                }
+              ],
+              "missingRequiredModules": [],
+              "diagnostics": [],
+              "failures": [
+                "First Catalog construction exceeded 500 ms."
+              ]
+            }
+            Stack Trace:
+              D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Core.Tests\CatalogPerformanceTests.cs(99,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.<>c__DisplayClass2_0.<MeasureFirstConstruction>b__0()
+              D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Core.Tests\CatalogPerformanceTests.cs(254,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.RunWithFailureEvidence(String output, Action measure)
+              D:\a\Hexalith.McpCli\Hexalith.McpCli\tests\Hexalith.McpCli.Core.Tests\CatalogPerformanceTests.cs(65,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction()
+                 at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+                 at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+        Finished:    Hexalith.McpCli.Core.Tests (ID = 'a0747e915ad7c523632ff26a0d008f3dfcc7a63c995198c1f894decf24f284b0')
+      === TEST EXECUTION SUMMARY ===
+         Hexalith.McpCli.Core.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 1.057s
+      {
+        "result": "failed",
+        "fullV1Accepted": false,
+        "elapsedMilliseconds": 547.1785,
+        "limitMilliseconds": 500,
+        "processId": 8640,
+        "assemblies": [
+          "Hexalith.Parties.Contracts",
+          "Hexalith.Tenants.Contracts",
+          "Hexalith.McpCli.Sample.Contracts"
+        ],
+        "productionPackages": [
+          "Hexalith.Parties.Contracts",
+          "Hexalith.Tenants.Contracts"
+        ],
+        "modules": [
+          {
+            "name": "parties",
+            "identifierKind": "String",
+            "operationCount": 7
+          },
+          {
+            "name": "sample",
+            "identifierKind": "Ulid",
+            "operationCount": 3
+          },
+          {
+            "name": "tenants",
+            "identifierKind": "String",
+            "operationCount": 14
+          }
+        ],
+        "missingRequiredModules": [],
+        "diagnostics": [],
+        "failures": [
+          "First Catalog construction exceeded 500 ms."
+        ]
+      }
+      
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\CatalogPerformanceTests.cs(41,0): at Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds()
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+        --- End of stack trace from previous location ---
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.MutationRestrictsPermissivePreexistingModes [SKIP]
+      Unix file modes are exercised only on Unix-like systems.
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(content: "{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-s"···) [FAIL]
+      Shouldly.ShouldAssertException : `) => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")`
+          should throw
+      System.IO.InvalidDataException
+          but threw
+      System.UnauthorizedAccessException
+      ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-9bdea0a569f04eb78c5310ee10aea6ce\mcpcli.json' is denied.
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(265,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(String content)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+        ----- Inner Stack Trace -----
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(86,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Read()
+        src\Hexalith.McpCli.Core\Settings\ProfileFileTransaction.cs(26,0): at Hexalith.McpCli.Core.Settings.ProfileFileTransaction.Apply(Func`1 read, Func`2 update, JsonSerializerOptions options)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(296,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Mutate(Func`2 update)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(117,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Add(String name, ConnectionProfile profile)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(266,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.<>c__DisplayClass10_0.<HostileTargetsFailWithoutMutation>b__1()
+        /_/src/Shouldly/ShouldStaticClasses/ShouldThrow.cs(76,0): at Shouldly.Should.ThrowInternal[TException](Func`1 actual, String customMessage, String shouldlyMethod)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(content: "{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-s"···) [FAIL]
+      Shouldly.ShouldAssertException : `) => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")`
+          should throw
+      System.IO.InvalidDataException
+          but threw
+      System.UnauthorizedAccessException
+      ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-30205c82dce94e659d2ca514531984ed\mcpcli.json' is denied.
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(265,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(String content)
+           at InvokeStub_ProfileStoreTests.HostileTargetsFailWithoutMutation(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+        ----- Inner Stack Trace -----
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(86,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Read()
+        src\Hexalith.McpCli.Core\Settings\ProfileFileTransaction.cs(26,0): at Hexalith.McpCli.Core.Settings.ProfileFileTransaction.Apply(Func`1 read, Func`2 update, JsonSerializerOptions options)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(296,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Mutate(Func`2 update)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(117,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Add(String name, ConnectionProfile profile)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(266,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.<>c__DisplayClass10_0.<HostileTargetsFailWithoutMutation>b__1()
+        /_/src/Shouldly/ShouldStaticClasses/ShouldThrow.cs(76,0): at Shouldly.Should.ThrowInternal[TException](Func`1 actual, String customMessage, String shouldlyMethod)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(content: "{\"version\":1,\"profiles\":{},\"extra\":true}") [FAIL]
+      Shouldly.ShouldAssertException : `) => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")`
+          should throw
+      System.IO.InvalidDataException
+          but threw
+      System.UnauthorizedAccessException
+      ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-c2c7743f3e8f4e99a93d0f51c7a57916\mcpcli.json' is denied.
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(265,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(String content)
+           at InvokeStub_ProfileStoreTests.HostileTargetsFailWithoutMutation(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+        ----- Inner Stack Trace -----
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(86,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Read()
+        src\Hexalith.McpCli.Core\Settings\ProfileFileTransaction.cs(26,0): at Hexalith.McpCli.Core.Settings.ProfileFileTransaction.Apply(Func`1 read, Func`2 update, JsonSerializerOptions options)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(296,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Mutate(Func`2 update)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(117,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Add(String name, ConnectionProfile profile)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(266,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.<>c__DisplayClass10_0.<HostileTargetsFailWithoutMutation>b__1()
+        /_/src/Shouldly/ShouldStaticClasses/ShouldThrow.cs(76,0): at Shouldly.Should.ThrowInternal[TException](Func`1 actual, String customMessage, String shouldlyMethod)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(content: "{\"version\":1,\"profiles\":{\"dev\":{\"token\":\"hostile-s"···) [FAIL]
+      Shouldly.ShouldAssertException : `) => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")`
+          should throw
+      System.IO.InvalidDataException
+          but threw
+      System.UnauthorizedAccessException
+      ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-e4827b88e0254559a1366b9fc10d2c52\mcpcli.json' is denied.
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(265,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(String content)
+           at InvokeStub_ProfileStoreTests.HostileTargetsFailWithoutMutation(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+        ----- Inner Stack Trace -----
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(86,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Read()
+        src\Hexalith.McpCli.Core\Settings\ProfileFileTransaction.cs(26,0): at Hexalith.McpCli.Core.Settings.ProfileFileTransaction.Apply(Func`1 read, Func`2 update, JsonSerializerOptions options)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(296,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Mutate(Func`2 update)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(117,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Add(String name, ConnectionProfile profile)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(266,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.<>c__DisplayClass10_0.<HostileTargetsFailWithoutMutation>b__1()
+        /_/src/Shouldly/ShouldStaticClasses/ShouldThrow.cs(76,0): at Shouldly.Should.ThrowInternal[TException](Func`1 actual, String customMessage, String shouldlyMethod)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(content: "{\"version\":2,\"profiles\":{\"dev\":{\"token\":\"hostile-s"···) [FAIL]
+      Shouldly.ShouldAssertException : `) => store.Add("dev", new ConnectionProfile("https://gateway.example/", "new-secret")`
+          should throw
+      System.IO.InvalidDataException
+          but threw
+      System.UnauthorizedAccessException
+      ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-804142623a5f448abe8615bf9b6a745c\mcpcli.json' is denied.
+      Stack Trace:
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(265,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.HostileTargetsFailWithoutMutation(String content)
+           at InvokeStub_ProfileStoreTests.HostileTargetsFailWithoutMutation(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+        ----- Inner Stack Trace -----
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(86,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Read()
+        src\Hexalith.McpCli.Core\Settings\ProfileFileTransaction.cs(26,0): at Hexalith.McpCli.Core.Settings.ProfileFileTransaction.Apply(Func`1 read, Func`2 update, JsonSerializerOptions options)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(296,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Mutate(Func`2 update)
+        src\Hexalith.McpCli.Core\Settings\ProfileStore.cs(117,0): at Hexalith.McpCli.Core.Settings.ProfileStore.Add(String name, ConnectionProfile profile)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(266,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.<>c__DisplayClass10_0.<HostileTargetsFailWithoutMutation>b__1()
+        /_/src/Shouldly/ShouldStaticClasses/ShouldThrow.cs(76,0): at Shouldly.Should.ThrowInternal[TException](Func`1 actual, String customMessage, String shouldlyMethod)
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.TemporaryFileIsPrivateBeforeTokenBytesAreWritten [SKIP]
+      Unix file modes are exercised only on Unix-like systems.
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.MutationsRoundTripAndKeepPrivatePermissions [FAIL]
+      System.UnauthorizedAccessException : Access to the path 'C:\Users\runneradmin\AppData\Local\Temp\mcpcli-profile-b4e5fc10177d4dd3a51b3a5c45286048\profiles.json' is denied.
+      Stack Trace:
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        tests\Hexalith.McpCli.Core.Tests\ProfileStoreTests.cs(103,0): at Hexalith.McpCli.Core.Tests.ProfileStoreTests.MutationsRoundTripAndKeepPrivatePermissions()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Finished:    Hexalith.McpCli.Core.Tests (ID = 'a0747e915ad7c523632ff26a0d008f3dfcc7a63c995198c1f894decf24f284b0')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 716, Errors: 0, Failed: 7, Skipped: 3, Not Run: 0, Time: 4.817s

@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "stdin": "fix(profiles): preserve inherited Windows access\n\nKeep existing profile-directory files readable under private ACLs.\nIsolate cold benchmarks and retain both Windows suite failure reports.\nPreserve the 500 ms target and all platform acceptance gates.\n",
+  "exit_code": 0,
+  "pinned_cli": "21.2.2"
+}
