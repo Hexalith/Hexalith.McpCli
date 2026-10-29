@@ -1,0 +1,18 @@
+{
+  "README.md": "9e2bbce74a76a8a5b563a67cfc969736fc090e78433d978b3ecb3236a666b311",
+  "ci-build-first-attempt.log": "7d5f6944f1b4fe7bf056c9a847ba4ed0cab4900de6302a9124133ea1cd744405",
+  "cli-build.command.json": "be615a4b3bf3a2db877ecf86a28f305459de5253bd264a2a34f525f623671c7d",
+  "cli-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "cli-build.stdout.txt": "9633979b212a7853d942c6d4cc04c47a7ec851be071b2c12b1fbc1205c5da509",
+  "commit-message.txt": "840e26449f6fd11403b814e42a9aa029bfd65ac5d093dede1baf9632d7e5b081",
+  "commitlint.command.json": "395cffbe1438ccc06fb700ee8e310ea7c60565f5937460eb8889eeffc9c0a27a",
+  "commitlint.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "commitlint.stdout.txt": "d7887e92e6a0fb64eb4fad09e38d28b7a05ea51c3fa46456d5c265cf516781d0",
+  "output-contract-class.command.json": "e92063da8e3c269bcf015f76756b879199882d0f3bf2baa8883c2295867ed7ea",
+  "output-contract-class.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "output-contract-class.stdout.txt": "ae13bc962c6dcc4ce4284ac987a63735c858acc4fe34fb6a9e28f3b5f161d55f",
+  "parent-cli-output.command.json": "8b40d18c28659058214c3974e2204c525f03c603f92b7f80d6ef7d2cbc577ad1",
+  "parent-cli-output.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "parent-cli-output.stdout.txt": "aeeebd1d2fb389d6583f79cbef6b128fc9a6e3ca3640971607e4b0a656a03b5f",
+  "parent-cli-output.xml": "ab444556574a6db088ed73879860b5ab9194d9f44facf998b431464678c4f4b4"
+}

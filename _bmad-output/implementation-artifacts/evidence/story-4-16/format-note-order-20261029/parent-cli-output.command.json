@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Cli.Tests.CliOutputContractTests",
+    "-xml",
+    "/tmp/mcpcli-416-review-checks-l97mupb1/cli-output.xml"
+  ],
+  "exit_code": 0
+}

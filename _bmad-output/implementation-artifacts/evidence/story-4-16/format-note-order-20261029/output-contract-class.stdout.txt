@@ -1,0 +1,11 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Cli.Tests
+  Discovered:  Hexalith.McpCli.Cli.Tests
+  Starting:    Hexalith.McpCli.Cli.Tests
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync [SKIP]
+      Windows file attributes are required for this fixture.
+    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync [SKIP]
+      Windows ACLs are required for this fixture.
+  Finished:    Hexalith.McpCli.Cli.Tests (ID = '139ed9b8f7b2035f704084d9f5d4dd8c8f7c157dfb481a28a4e4122a8fc8ed5c')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Cli.Tests  Total: 24, Errors: 0, Failed: 0, Skipped: 2, Not Run: 0, Time: 0.950s

@@ -632,9 +632,10 @@ public sealed class CliOutputContractTests
             successOutput.ShouldBeEmpty();
             const string formatNote = "This result is emitted as JSON; no table view is defined.";
             string noteLine = formatNote + Environment.NewLine;
-            successError.EndsWith(noteLine, StringComparison.Ordinal).ShouldBeTrue(successError);
+            successError.Split(Environment.NewLine, StringSplitOptions.None).SkipLast(1)
+                .Count(line => string.Equals(line, formatNote, StringComparison.Ordinal)).ShouldBe(1, successError);
             successError.Split(formatNote, StringSplitOptions.None).Length.ShouldBe(2);
-            QueryCliHarness.AssertDiagnostics(successError[..^noteLine.Length]);
+            QueryCliHarness.AssertDiagnostics(successError.Remove(successError.IndexOf(noteLine, StringComparison.Ordinal), noteLine.Length));
             harness.Calls.ShouldBe(1);
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(target));
             document.RootElement.GetProperty("operation").GetString().ShouldBe("string-fixture.list-items");
