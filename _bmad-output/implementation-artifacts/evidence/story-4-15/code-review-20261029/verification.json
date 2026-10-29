@@ -1,0 +1,73 @@
+{
+  "schema": "story-4-15-code-review-patches/v1",
+  "captured_at_utc": "2026-10-29T03:01:35Z",
+  "review": {
+    "spec": "_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md",
+    "patches": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5"
+    ],
+    "decision": "D1 option 1 (exempt Hexalith.Builds build and workspace tooling), chosen by the user on 2026-10-29"
+  },
+  "upstream": {
+    "repository": "https://github.com/Hexalith/Hexalith.AI.Tools",
+    "owning_checkout": "/home/administrator/projects/hexalith/aitools",
+    "commit": "70dbf73e80787299c832d30d911b16b105ab194d",
+    "parent": "5be77fcbd96546e722b30a117516b1e03e6e4975",
+    "changed_files": [
+      "README.md",
+      "hexalith-llm-instructions.md",
+      "hexalith-mcpcli-migration-instructions.md"
+    ],
+    "committed_sha256": {
+      "README.md": "3ac8a7b01cff1f8d0c31d6f9d5d1f34b92e2daf73714e839682b9cf490119f97",
+      "hexalith-llm-instructions.md": "49e0fc0c04960b6f986343e87250462313394642ce9f9451de7ddca34e849bb4",
+      "hexalith-mcpcli-migration-instructions.md": "e84a2913bc6b876482250abf2b13c7deb823e9fcc6177be4e481ad450f2d4a60"
+    },
+    "line_endings": "hexalith-llm-instructions.md keeps CRLF; README.md and the plan keep LF",
+    "diff_check_cr_at_eol": true,
+    "remote_main_ls_remote": "70dbf73e80787299c832d30d911b16b105ab194d\trefs/heads/main",
+    "remote_main_matches_commit": true,
+    "github_commit_api": "70dbf73e80787299c832d30d911b16b105ab194d 5be77fcbd96546e722b30a117516b1e03e6e4975",
+    "commit_message_file": "upstream-commit-message.txt",
+    "patch_file": "upstream-review-patch.patch",
+    "commitlint": {
+      "cli": "@commitlint/cli@21.2.2",
+      "node": "v26.4.0",
+      "candidate_exit": 0,
+      "candidate_output": "⧗   --- input ---\ndocs: clarify the MCP and CLI migration plan scope\n\nExempt Hexalith.Builds workspace tooling that never invokes module\noperations, limit retained implementations to only safety and continuity\nfixes, and publish plan 1.1.0 with its versioning and inventory coverage\nrules.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n✔   found 0 problems, 0 warnings",
+      "malformed_control_exit": 1,
+      "malformed_control_output": "⧗   --- input ---\nUpdate stuff\n✖   subject may not be empty [subject-empty]\n✖   type may not be empty [type-empty]\n\n✖   found 2 problems, 0 warnings\nⓘ   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint"
+    }
+  },
+  "root_baseline": {
+    "gitlink_working_tree": "70dbf73e80787299c832d30d911b16b105ab194d",
+    "gitlink_committed_head": "5be77fcbd96546e722b30a117516b1e03e6e4975",
+    "root_commit": "pending: the gitlink move is in the McpCli working tree and lands in the next root commit",
+    "contains_original_rule_and_plan": {
+      "68e60375eb298854611b2fefd1dfef95bad7a8c9": true,
+      "5be77fcbd96546e722b30a117516b1e03e6e4975": true,
+      "70dbf73e80787299c832d30d911b16b105ab194d": true
+    },
+    "nested_gitmodules_present": false
+  },
+  "synchronization": {
+    "check_agent_instructions_sync_exit": 0,
+    "sha256": {
+      "AGENTS.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+      "CLAUDE.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6",
+      ".github/copilot-instructions.md": "f2a881504340ce91c1f42bfab31d68d1f7686386083e9ddc0926de846325d9f6"
+    },
+    "temporary_copy_drift_control_exit": 1
+  },
+  "links": {
+    "rule_anchor_heading_present": true,
+    "plan_links_same_folder_only": "hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership",
+    "root_readme_permalinks_revision": "70dbf73e80787299c832d30d911b16b105ab194d"
+  },
+  "platform": "Platform 8de9095 keeps hexalith-module as its run/debug tool (references/Hexalith.Platform/README.md:36, :88), accepted from 4.35.2 up to (not including) 5.0.0. No Platform, Builds or manifest change.",
+  "not_run": "No .NET, live or hosted run: documentation and reference-only change."
+}

@@ -1,0 +1,8 @@
+docs: clarify the MCP and CLI migration plan scope
+
+Exempt Hexalith.Builds workspace tooling that never invokes module
+operations, limit retained implementations to only safety and continuity
+fixes, and publish plan 1.1.0 with its versioning and inventory coverage
+rules.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,117 @@
+From 70dbf73e80787299c832d30d911b16b105ab194d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Piquot?= <jpiquot@itaneo.com>
+Date: Thu, 29 Oct 2026 04:00:36 +0100
+Subject: [PATCH] docs: clarify the MCP and CLI migration plan scope
+
+Exempt Hexalith.Builds workspace tooling that never invokes module
+operations, limit retained implementations to only safety and continuity
+fixes, and publish plan 1.1.0 with its versioning and inventory coverage
+rules.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ README.md                                 |  9 ++++----
+ hexalith-llm-instructions.md              |  3 ++-
+ hexalith-mcpcli-migration-instructions.md | 26 +++++++++++++++--------
+ 3 files changed, 24 insertions(+), 14 deletions(-)
+
+diff --git a/README.md b/README.md
+index b46eb85..6b5258b 100644
+--- a/README.md
++++ b/README.md
+@@ -45,11 +45,12 @@ repository's own instructions take precedence on conflict.
+ 
+ `Hexalith.McpCli` is the target Hexalith-owned MCP server and CLI. Follow the
+ [ownership rule](./hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership)
+-and [migration plan 1.0.0](./hexalith-mcpcli-migration-instructions.md) for
++and [migration plan 1.1.0](./hexalith-mcpcli-migration-instructions.md) for
+ decorated Contracts, frozen legacy servers, plug-ins and CLIs, and the
+-outstanding administration scope. Retained implementations receive safety and
+-continuity fixes while their approval, authorization, behavior and retirement
+-gates remain open; they are migration sources, never new-module templates.
++outstanding administration scope. Retained implementations receive only safety
++and continuity fixes while their approval, authorization, behavior and
++retirement gates remain open; they are migration sources, never new-module
++templates.
+ 
+ ## Commit validation
+ 
+diff --git a/hexalith-llm-instructions.md b/hexalith-llm-instructions.md
+index 49af7a5..efd63cc 100644
+--- a/hexalith-llm-instructions.md
++++ b/hexalith-llm-instructions.md
+@@ -76,7 +76,8 @@ sources. Limit them to safety and continuity fixes, inventory every operation
+ with its owning maintainer, and retire each only after an approved McpCli
+ replacement or explicit withdrawal passes authorization and behavior gates.
+ External developer tools such as Aspire, Dapr, and `dotnet` CLIs are outside
+-this rule.
++this rule, as is Hexalith.Builds build and workspace tooling that never invokes
++module operations, currently `hexalith-module` and `hexalith-evidence`.
+ 
+ Follow the versioned
+ [Hexalith MCP and CLI migration plan](hexalith-mcpcli-migration-instructions.md)
+diff --git a/hexalith-mcpcli-migration-instructions.md b/hexalith-mcpcli-migration-instructions.md
+index 04e6c0e..310981d 100644
+--- a/hexalith-mcpcli-migration-instructions.md
++++ b/hexalith-mcpcli-migration-instructions.md
+@@ -1,12 +1,12 @@
+ ---
+-plan_version: '1.0.0'
++plan_version: '1.1.0'
+ inventory_repository: 'https://github.com/Hexalith/Hexalith.McpCli'
+ inventory_revision: 'c694bff5a29073bee6848b88c142f7da23efcf85'
+ ---
+ 
+ # Hexalith MCP and CLI migration plan
+ 
+-Version **1.0.0** indexes the retained proprietary migration sources under the
++Version **1.1.0** indexes the retained proprietary migration sources under the
+ [Hexalith MCP and CLI ownership rule](hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership).
+ `Hexalith.McpCli` owns the target Hexalith MCP server and CLI for domain,
+ platform and operator capabilities. Do not create a new proprietary per-module
+@@ -14,7 +14,8 @@ MCP server, MCP plug-in or CLI. Declare gateway-ready operations in decorated
+ module Contracts and enroll their approved packages in McpCli. Other capability
+ classes require a separately approved generic contract and transport decision.
+ External developer CLIs such as Aspire, Dapr and `dotnet` remain outside this
+-policy.
++policy, as does Hexalith.Builds build and workspace tooling that never invokes
++module operations, currently `hexalith-module` and `hexalith-evidence`.
+ 
+ ## Frozen compatibility implementations
+ 
+@@ -38,9 +39,13 @@ The inventory links bind exact McpCli revision
+ `c694bff5a29073bee6848b88c142f7da23efcf85`. Each inventory records its own full source
+ revision, approval reference, security classes, behavior variants, unresolved
+ gaps and owning roles. These are immutable inventory snapshots rather than
+-links to a moving branch. A later source change or newly discovered surface
+-requires a versioned inventory update; absence from this index never authorizes
+-a new proprietary implementation or deletion of an existing one.
++links to a moving branch. A later source change that adds, removes or alters an
++inventoried tool, resource, CLI operation or behavior variant, or a newly
++discovered surface, requires a versioned inventory update; a safety or
++continuity fix that leaves them unchanged does not. Absence from this index
++never authorizes a new proprietary implementation or deletion of an existing
++one. Publish every change to this plan under a new `plan_version`, and move
++`inventory_revision` whenever an indexed inventory is re-pinned or added.
+ 
+ ## Approval limits
+ 
+@@ -55,9 +60,12 @@ owner-approved completeness or retirement claim.
+ A future inventory revision must identify every tool, resource, CLI operation
+ and supported variant with `replace`, `withdraw` or `defer`, a rationale,
+ security class, exact replacement contract or unresolved gap, and the owning
+-maintainer's approval reference. An included read needs its decorated Contracts
+-Query and exact Gateway route. Inventories remain migration/test documentation,
+-never runtime configuration or authority to expose a deferred operation.
++maintainer's approval reference. Gateway-ready rows name the canonical
++operation and decorated contract type; `include` requires `replace`, and
++`exclude` requires an approved `withdraw` or `defer`. An included read needs
++its decorated Contracts Query and exact Gateway route. Inventories remain
++migration/test documentation, never runtime configuration or authority to
++expose a deferred operation.
+ 
+ ## Successor administration and non-gateway scope
+ 
+-- 
+2.53.0
+

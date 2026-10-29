@@ -182,3 +182,88 @@ and UTC observations, and checks the current packet manifest. No runtime or
 inventory behavior changed. The spec is done; sprint status is review for
 maintainer acceptance. The root integration is recorded in a local commit;
 root publication is not automatic under the Build presentation step.
+
+### Review Findings (code review, 2026-10-28)
+
+Code review of the committed story range `c694bff..e6ddf3f` plus the owning AI.Tools commits `3f194e1..5be77fc` (`68e6037`, `5be77fc`; paths prefixed `Hexalith.AI.Tools/` in the diff).
+
+- **Code-only scope:** excludes `_bmad-output/` and the gitlink line, and leaves out the generated `package-lock.json`. 6 file diffs, 211 diff lines, full mode, with `epic-4-context.md` as context.
+- **Layers:** Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG) and Acceptance Auditor (AA). No layer failed. The Acceptance Auditor found no blocking AC violation. It confirmed the gitlink, the `68e6037` containment, the passing synchronization script, the inventory counts and both paired-release refusals.
+- **Result:** 27 findings (BH 13, EC 7, VG 1, AA 6). After triage: 1 decision-needed, 4 patch, 3 defer and 15 rejected.
+
+Parent checks during triage:
+- **The lockfile is consistent.** `package-lock.json` (lockfile v3, 71 packages) pins the same two devDependencies as `package.json`. Every entry resolves from `registry.npmjs.org` with sha512 integrity, and all are dev-only. The root `engines` matches the commitlint CLI's own `>=22.12.0`, and `node_modules/` is ignored.
+- **Four inventory source revisions are absent upstream.** GitHub returns HTTP 422 "No commit found" for Folders `e2252f29`, ChatBot `acc93459`, FrontComposer `81a440a8` and Projects `3d256e63`. They are also absent from the sibling clones. They exist only in this checkout's `references/` submodule clones and were McpCli gitlinks at `cad469e`, which is on `origin/main`. Parties `49373094` and Memories `f6b60d5a` are on upstream `main`.
+- **Platform uses `hexalith-module`.** Pinned Platform `8de9095` uses `dotnet tool run hexalith-module` as its workspace run/debug tool (`references/Hexalith.Platform/README.md:36`, `:88`).
+
+- [x] [Review][Decision] D1 — medium. Resolved on 2026-10-29 with option 1 (exempt Hexalith build and workspace tooling), now patch P5. Hexalith-owned Builds CLIs are neither frozen nor exempted (BH3, EC5, AA2). `references/Hexalith.Builds` packs `Hexalith.Builds.Module.Cli` (`hexalith-module`) and `Hexalith.Builds.Evidence.Cli` (`hexalith-evidence`) as dotnet tools.
+  - The exemption covers only external developer CLIs (Aspire, Dapr, `dotnet`), at `Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:16` and `hexalith-llm-instructions.md:78`.
+  - The plan's frozen table lists neither tool.
+  - The successor scope asks only for "remaining proprietary technical/domain CLI or MCP packages" to be identified.
+  - A Builds author or agent cannot tell whether these tools are frozen, exempt, or barred from gaining siblings (AC2). The PRD's "Frozen CLI" definition covers module CLIs that McpCli replaces.
+- [x] [Review][Patch] P1 — low. Both README summaries drop "only" from the safety-and-continuity limit [README.md:44] (AA1, BH13 drift part).
+  - `README.md:44` says the surfaces "receive safety and continuity fixes".
+  - `Hexalith.AI.Tools/README.md:50` says "Retained implementations receive safety and continuity fixes".
+  - The rule says "Limit them to safety and continuity fixes", and the spec's Always rule says "only". The root README also omits "never templates for new modules".
+  - Fix: say "receive only safety and continuity fixes" in both places. Add "never templates for new modules" to the root README.
+- [x] [Review][Patch] P2 — low. A literal reading of "A later source change … requires a versioned inventory update" covers the safety and continuity fixes the freeze permits [Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:41] (BH2).
+  - Read that way, every permitted fix also forces a cross-repository inventory revision.
+  - Fix: limit it to a source change that adds, removes or alters an inventoried tool, resource, CLI operation or behavior variant.
+- [x] [Review][Patch] P3 — low. The plan has `plan_version` and `inventory_revision` but no rule for revising either [Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:2] (AA5, BH8).
+  - Story 5.1's EventStore Admin successor inventory, or any re-pinned inventory, leaves the updater without guidance, and the frontmatter pin goes stale.
+  - Fix: one sentence. Revise `plan_version` and move `inventory_revision` whenever an indexed inventory is re-pinned or added, or a row of the frozen table changes.
+- [x] [Review][Patch] P4 — low. The future-inventory requirements omit PRD FR-21's coverage coupling [Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:55] (AA3).
+  - Lines 55-60 require dispositions and "exact replacement contract or unresolved gap".
+  - They omit three things FR-21 requires:
+    - Gateway-ready rows name the canonical operation and decorated contract type.
+    - `include` requires `replace`.
+    - `exclude` requires an approved `withdraw` or `defer`.
+  - Fix: add that sentence.
+- [x] [Review][Patch] P5 — medium. Exempt Hexalith build and workspace tooling in both the rule and the plan [Hexalith.AI.Tools/hexalith-llm-instructions.md:78] (from D1).
+  - In the owning AI.Tools checkout, extend `hexalith-llm-instructions.md:78-79` and `hexalith-mcpcli-migration-instructions.md:16-17` with one matching sentence. Hexalith.Builds build and workspace tooling that never invokes module operations is outside the rule. Currently that is `hexalith-module` and `hexalith-evidence`. The drafted "never reads or changes module data" test was dropped: `hexalith-module down` deletes each run's data stores (`references/Hexalith.Platform/README.md:205-210`, `:245`).
+  - Batch P5 with P1–P4 into one owning AI.Tools commit, validated with the AI.Tools pinned commitlint. Then publish it to AI.Tools `main` and move the `references/Hexalith.AI.Tools` gitlink.
+  - Update the two `README.md:44`/`:46` permalinks to the new revision, and record the new revision's evidence (integration, containment, synchronization).
+  - Platform `8de9095` keeps `hexalith-module` as its run/debug tool, accepted from 4.35.2 up to (not including) 5.0.0. No Platform, Builds or manifest change is needed.
+- [x] [Review][Defer] W1 — medium. Four of the six indexed inventories pin source revisions that do not exist upstream [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md:6] (BH1). Deferred: pre-existing from Stories 4.2–4.4. The inventories are immutable, and re-pinning or preserving the objects upstream belongs to the inventory owners. Logged in `deferred-work.md`.
+- [x] [Review][Defer] W2 — medium. AI.Tools has no CI or hook commitlint gate for its new pinned policy [Hexalith.AI.Tools/package.json:6] (VG1, pre-verified; EC4; BH5 enforcement part). Deferred: pre-existing gap in the owning repository. The fix is an upstream AI.Tools caller of the Builds reusable `commitlint.yml`. Logged in `deferred-work.md`.
+- [x] [Review][Defer] W3 — low. Relative links in the packed README break on nuget.org [README.md:46] (EC7, BH10 packaging part). Deferred: pre-existing README pattern (`README.md:130`, `:259`, `:261`, `:269`, `:276`, `:287`). Both packages pack `README.md` as `PackageReadmeFile`. Logged in `deferred-work.md`.
+
+#### Rejected (code review, 2026-10-28)
+
+- BH4 `false`:
+  - **Location claim:** McpCli-specific release content in the shared plan. AI.Tools keeps repository-specific text out of its universal entry points only, not its topical files. The spec places this gate in the plan, so moving it would edit the spec.
+  - **"Local entry points" ambiguity:** the paragraph's subject is paired McpCli publication, and evidence is recorded "in the consuming repository". `scripts/check-agent-instructions-sync.sh` exists only in McpCli, so the referent is fixed.
+- BH5 (engine part), EC1 `low` — `engines` is advisory without `engine-strict`. npm still prints EBADENGINE, the README states Node 22.12.0, and McpCli uses the same unguarded pattern. The fix adds a new `.npmrc` guard.
+- EC2 `low` — `NODE_ENV=production` or `omit=dev` installs nothing. That is contrived for a dev-only tooling package, and McpCli has the same pattern.
+- EC3 `low` — `npx --no` in a nested checkout before `npm ci` resolves an ancestor's commitlint. The README orders `npm ci` first, and nobody commits in the read-only nested `references/` checkouts. The fix adds a guard.
+- BH6 `false` — The AI.Tools commitlint policy diverges from the Builds and McpCli overrides. No repository policy requires AI.Tools to adopt either set of overrides; the spec named plain `config-conventional` 21.2.2. AI.Tools runs no semantic-release, so no caller diverges.
+- BH7 `false` — The README conflicts with `hexalith-git-instructions.md:55`. That file says to write the message to a temporary file and validate it with commitlint, and validating the exact full message on stdin satisfies that. The pinned tooling is repository-specific and belongs in the README.
+- BH9 `false` — Nothing mechanically enforces the instruction prerequisite. Story 4.16's AC gates on "recorded FR-22 merge/baseline/synchronization evidence", and the spec says Story 4.16 consumes this evidence.
+- BH10 (permalink part), EC6 `low` — The README permalinks are pinned to `5be77fc`. Pinning to the exact published revision is the spec's provenance intent, and the links go stale only after a later rule revision. The proposed fix is a new sync-script guard.
+- BH10 (wording part) `false` — The "authoritative `main`" referent is unclear. Its object, "the finished rule and plan", and the preceding paragraph both identify AI.Tools.
+- BH11 `false` — The EventStore Admin inventory has no named owner or tracking item. The plan names owning roles, as the inventories do, and McpCli story numbers are repository-specific planning. Release inventories gate enrollment coverage, not frozen-surface migration.
+- BH12 `false` — No automated check detects a new `*.Mcp`/`*.Cli` project. AC1 is met by the instruction ("when its author follows the baseline"), and automated detection is new scope.
+- BH13 (wording part) `false` — "a necessary, insufficient prerequisite" is grammatical and unambiguous.
+- AA4 `false` — The README credits Story 4.16. Story 4.16's AC implements the paired release workflow ("When the paired release workflow runs …"), and Story 4.18 publishes, so the README's "owns paired-release implementation" is accurate.
+- AA6 `false` — Scope note only. The parent verified the excluded lockfile, as recorded above.
+
+### Code review patch resolution (2026-10-29)
+
+All five patches are applied, and D1 is resolved with option 1.
+
+- **Upstream:** the owning AI.Tools commit `70dbf73e80787299c832d30d911b16b105ab194d` (parent `5be77fc`) changes `README.md`, `hexalith-llm-instructions.md` and `hexalith-mcpcli-migration-instructions.md`.
+  - It is published on authoritative `main`; `git ls-remote` and the GitHub commit API both resolve it.
+  - Its exact message passed the pinned AI.Tools commitlint 21.2.2, and a malformed control was rejected.
+  - `hexalith-llm-instructions.md` keeps its CRLF line endings, and `git diff --check` with `cr-at-eol` passes.
+- **P1:** both READMEs say retained implementations receive only safety and continuity fixes. The root README adds "never templates for new modules".
+- **P2:** only a source change that adds, removes or alters an inventoried tool, resource, CLI operation or behavior variant, or a newly discovered surface, forces an inventory update. A safety or continuity fix that leaves them unchanged does not.
+- **P3:** every change to the plan is published under a new `plan_version`, and `inventory_revision` moves whenever an indexed inventory is re-pinned or added. This change publishes plan 1.1.0. `inventory_revision` stays `c694bff`, because no inventory changed.
+- **P4:** gateway-ready rows name the canonical operation and decorated contract type; `include` requires `replace`, and `exclude` requires an approved `withdraw` or `defer`.
+- **P5 (D1):** the rule and the plan exempt Hexalith.Builds build and workspace tooling that never invokes module operations (currently `hexalith-module` and `hexalith-evidence`). The FrontComposer compiler CLI stays frozen as listed. Platform `8de9095` needs no change.
+- **Root:**
+  - `references/Hexalith.AI.Tools` is fast-forwarded to `70dbf73`, which contains `68e6037` and `5be77fc`. No nested submodule exists.
+  - `README.md:44` and `:46` link the `70dbf73` rule and plan 1.1.0, and the new evidence packet.
+  - The synchronization script passes, the three entry points are byte-identical, and a temporary-copy drift control fails.
+- **Evidence:** [code-review-20261029](evidence/story-4-15/code-review-20261029/README.md); `evidence/story-4-15/LATEST.md` points to it.
+
+Not changed: dispositions, inventories, production code, release scripts and the paired-release refusal. No .NET, live or hosted run applies. The McpCli gitlink move, README, evidence, ledger and status edits are uncommitted in the working tree. The containing root baseline reference therefore exists once they are committed.

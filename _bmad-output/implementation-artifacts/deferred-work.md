@@ -667,3 +667,35 @@ status: open
     - An agent or reviewer following the rule will flag or "fix" this required code, as pass-4 BH1 did.
     - Fix: state in `AGENTS.md` that the CI hook's root source-build list and its approved Tenants exception are test-only composition. Copy it to `CLAUDE.md` and `.github/copilot-instructions.md`, then run `scripts/check-agent-instructions-sync.sh`.
     - The ledger had no equivalent entry.
+
+## Deferred from: code review of spec-4-15-publish-the-no-new-server-rule.md (2026-10-28)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
+  summary: Four of the six approved migration inventories pin source revisions that do not exist in their upstream repositories, so nobody else can check those inventories against source.
+  evidence: Medium; pre-existing from Stories 4.2–4.4.
+    - `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md:6` (`e2252f29a2dba2b64786ee483eb59fbceaadd387`), `chatbot-migration-inventory-v1.md:6` (`acc934599cf1efff36b0643eddc6a3cc4c2978d5`), `frontcomposer-migration-inventory-v1.md:6` (`81a440a8890a17edb39924bd0cf676eb6f6b5c25`) and `projects-migration-inventory-v1.md:6` (`3d256e632a7645bc2261e668ac7c74be81155f58`) all pin unpublished revisions.
+    - GitHub returns HTTP 422 "No commit found" for each one, and the sibling clones under `/home/administrator/projects/hexalith/` lack the objects.
+    - The objects exist only in this checkout's `references/Hexalith.{Folders,ChatBot,FrontComposer,Projects}` clones. They were McpCli gitlinks at `cad469e` (on `origin/main`), so published McpCli history also points at commits that do not exist on GitHub.
+    - Parties `49373094` and Memories `f6b60d5a` are on upstream `main`.
+    - Story 4.15's published plan (`Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:24`, `:38-42`) calls these "source-pinned" immutable snapshots.
+    - Fix, for the inventory owners: either push the four objects to a preserved upstream ref, or publish versioned inventory revisions re-pinned to published source.
+    - The ledger had no equivalent entry.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
+  summary: Hexalith.AI.Tools now pins a commitlint policy, but no CI job or commit hook enforces it.
+  evidence: Medium; pre-existing gap in the owning repository.
+    - AI.Tools `5be77fc` ships `commitlint.config.mjs`, `package.json` (`@commitlint/cli` and `config-conventional` 21.2.2) and `package-lock.json`.
+    - Its tracked `.github/` has no workflows, and nothing installs a commit-msg hook.
+    - The AI.Tools baseline (`references/Hexalith.AI.Tools/AGENTS.md:56`) names a hook and a blocking CI commitlint gate as its enforcement layers.
+    - `references/Hexalith.Builds/.github/workflows/commitlint.yml:3-6` is the reusable gate for repositories that ship exactly these files. McpCli calls it from `.github/workflows/commitlint.yml`.
+    - The only evidence the policy works is the one-time `_bmad-output/implementation-artifacts/evidence/story-4-15/parent-final/commitlint.json`. A dropped `extends`, an empty-rules regression or a non-conventional message would therefore reach AI.Tools `main` unchecked.
+    - Fix upstream: add a pull-request/push caller of `Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@<pinned sha>` to AI.Tools.
+    - The ledger had no equivalent entry.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
+  summary: Relative links in the root README break on nuget.org, which renders that README for both packages.
+  evidence: Low; pre-existing pattern.
+    - `src/Hexalith.McpCli/Hexalith.McpCli.csproj:14` and `:18`, and `src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj:5` and `:8`, pack `README.md` as `PackageReadmeFile`.
+    - nuget.org cannot resolve relative links such as `_bmad-output/...` and `tools/...`.
+    - Affected links: `README.md:46` (new in Story 4.15) and the existing `:130`, `:259`, `:261`, `:269`, `:276` and `:287`.
+    - The Bootstrap section already uses absolute GitHub URLs.
+    - Fix before Story 4.18 publishes: make every repository link absolute (`https://github.com/Hexalith/Hexalith.McpCli/blob/main/...`), or pin them to a revision.
+    - The ledger had no equivalent entry.
