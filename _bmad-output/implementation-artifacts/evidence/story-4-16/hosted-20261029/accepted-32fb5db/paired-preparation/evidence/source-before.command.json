@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "scripts/verify-release-source.py",
+    "--staging",
+    "--output",
+    "/home/runner/work/_temp/paired/evidence/source-before.json",
+    "32fb5dbf75216adaf21551bcfa36439741c41e01",
+    "refs/heads/main",
+    "paired"
+  ],
+  "exit_code": 0
+}

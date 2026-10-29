@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "dotnet",
+    "pack",
+    "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+    "--no-build",
+    "--configuration",
+    "Release",
+    "--output",
+    "/home/runner/work/_temp/paired/packages",
+    "-p:IncludeSourceRevisionInInformationalVersion=false",
+    "-p:Version=1.2.0",
+    "-p:InformationalVersion=1.2.0",
+    "-p:RepositoryCommit=32fb5dbf75216adaf21551bcfa36439741c41e01"
+  ],
+  "exit_code": 0
+}

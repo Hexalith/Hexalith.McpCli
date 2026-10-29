@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "bash",
+    "scripts/smoke-bootstrap-consumer.sh",
+    "1.2.0",
+    "/home/runner/work/_temp/paired/packages",
+    "/tmp/mcpcli-paired-consumer-1z5zflte/consumer"
+  ],
+  "exit_code": 0
+}

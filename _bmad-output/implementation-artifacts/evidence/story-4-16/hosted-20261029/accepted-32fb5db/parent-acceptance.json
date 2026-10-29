@@ -1,0 +1,44 @@
+{
+  "source_sha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "stage_run": 40885068007,
+  "comparison_exit_code": 0,
+  "hosted_receipt_reproduced_byte_for_byte": true,
+  "discovery_captures_per_os": 49,
+  "required_windows_tests": {
+    "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls": "Pass",
+    "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles": "Pass",
+    "Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten": "Pass",
+    "Hexalith.McpCli.Cli.Tests.ConfigCommandTests.ConcurrentSetProcessesPreserveBothValuesAsync": "Pass",
+    "Hexalith.McpCli.Cli.Tests.ConfigCommandTests.VerbsNeverOpenAdminProfilesAsync": "Pass",
+    "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.MissingExistingFileStagingDirectoryPreventsMutationAsync": "Pass",
+    "Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync": "Pass"
+  },
+  "cold_construction": {
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.FirstConstructionStaysWithinFiveHundredMilliseconds": "Pass"
+  },
+  "suites": {
+    "Darwin": [
+      {
+        "suite": "Hexalith.McpCli.Cli.Tests",
+        "Pass": 471,
+        "Skip": 14,
+        "Fail": 0
+      }
+    ],
+    "Linux": [],
+    "Windows": [
+      {
+        "suite": "Hexalith.McpCli.Cli.Tests",
+        "Pass": 454,
+        "Skip": 31,
+        "Fail": 0
+      },
+      {
+        "suite": "Hexalith.McpCli.Core.Tests",
+        "Pass": 715,
+        "Skip": 3,
+        "Fail": 0
+      }
+    ]
+  }
+}

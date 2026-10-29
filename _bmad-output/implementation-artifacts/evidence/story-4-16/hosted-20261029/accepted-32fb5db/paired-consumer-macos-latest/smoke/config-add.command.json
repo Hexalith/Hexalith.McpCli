@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/Users/runner/work/_temp/consumer/smoke/private/tools/hexalith",
+    "config",
+    "profile",
+    "add",
+    "staged",
+    "--url",
+    "http://127.0.0.1:1",
+    "--token",
+    "staged-private-token"
+  ],
+  "exit_code": 0
+}

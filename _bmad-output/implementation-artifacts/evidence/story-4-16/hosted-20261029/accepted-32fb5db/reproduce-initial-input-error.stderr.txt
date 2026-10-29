@@ -1,0 +1,1 @@
+Paired acceptance refused: [Errno 20] Not a directory: '/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-consumer-macos-latest.zip/smoke/smoke.json'

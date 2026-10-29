@@ -1,0 +1,19 @@
+{
+  "os": "Windows",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3"
+  },
+  "schema": "mcpcli-paired-platform-tests/v1",
+  "source_sha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "status": "passed",
+  "suites": [
+    "Core",
+    "Cli"
+  ],
+  "version": "1.2.0",
+  "xml": {
+    "Hexalith.McpCli.Cli.Tests.xml": "c8e882b43d1b670ffd20d4beb25a6892938825cb62eda96c557ceaa267c83ae2",
+    "Hexalith.McpCli.Core.Tests.xml": "e87ada69991aaab5aac8113a3155bb677fa28f5b4ca2123d426175aeba50bb17"
+  }
+}

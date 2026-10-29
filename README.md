@@ -114,7 +114,7 @@ python3 scripts/prepare-paired-release.py --local --selection /tmp/mcpcli-versio
 python3 scripts/smoke-paired-tool.py --staging /tmp/mcpcli-pair/packages --prepared /tmp/mcpcli-pair/prepared.json --output /tmp/mcpcli-smoke
 ```
 
-`--local` records local-only evidence, including dirty-source state, and can never become accepted staging. Omit it only for eligible committed current-main source with `REPOSITORY` and read-only GitHub authentication configured. Local Linux checks do not establish Windows/macOS acceptance; actual runner receipts remain required. ARM qualification remains deferred. The [accepted staging evidence](_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-00680e9/README.md) records version 1.2.0, the exact validated source, package hashes and passing three-OS results. Package publication remains disabled.
+`--local` records local-only evidence, including dirty-source state, and can never become accepted staging. Omit it only for eligible committed current-main source with `REPOSITORY` and read-only GitHub authentication configured. Local Linux checks do not establish Windows/macOS acceptance; actual runner receipts remain required. ARM qualification remains deferred. The [accepted staging evidence](_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md) records version 1.2.0, the exact validated source, package hashes and passing three-OS results with all 49 discovery captures. Package publication remains disabled.
 
 ## Gateway boundary
 

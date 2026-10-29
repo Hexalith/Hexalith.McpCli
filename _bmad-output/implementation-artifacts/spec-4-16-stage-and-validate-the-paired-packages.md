@@ -2,7 +2,7 @@
 title: '4.16 Stage and validate the paired packages'
 type: 'feature'
 created: '2026-10-29'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9ba8e5bd0e213501b39d33cedf46859566fc89a4'
@@ -140,3 +140,9 @@ All 15 review findings are classified above. Thirteen private corrections were i
 The expanded acceptance checks now require fresh clean-source CI and actual three-OS staging. The accepted `00680e9` pair above remains historical evidence for its exact source and original 26-capture matrix; it is not acceptance for the review corrections. The user's existing source-push and staging authorization covers this verification rerun.
 
 The review-fix source `630ea7f29c02f6d10b19eae1136e01538527266e` passed bootstrap, commitlint and synchronization, but CI `40879087695` exposed the existing format-note ordering race recorded as CI1. Its direct test correction preserves every documented output assertion; the focused Release build and both worker/parent output-contract class runs passed (22 passes, two Windows-only skips). [Diagnostic-order evidence](evidence/story-4-16/format-note-order-20261029/README.md) retains the exact failure and correction. No staging was dispatched from this failed-CI source; the corrected source must pass fresh CI first.
+
+### Final acceptance after review
+
+Corrected source `32fb5dbf75216adaf21551bcfa36439741c41e01` passed full CI `40880599269`, including the blocking Aspire tier, plus bootstrap, commitlint, synchronization and a fresh local source/FR-22 precheck. Staging `40885068007` succeeded at version 1.2.0 with the strengthened compiler/analyzer consumer, config state, protocol and complete MCP discovery checks. All 49 raw captures match across Linux, Windows and macOS. Windows Core passed 715 tests with three unrelated skips, Windows CLI passed 454 with 31 platform skips, and macOS CLI passed 471 with 14 platform skips. Every required Windows test and the unchanged 500 ms cold-construction test passed.
+
+The parent verified all five artifact ZIP hashes and independently reproduced the accepted receipt byte for byte. [Final accepted staging evidence](evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md) retains the exact source, package hashes, source gates, compiler proof, platform XML and raw captures. Review corrections and verification are complete, with no new deferrals; Linux ARM qualification remains in the existing ledger. This spec is done and sprint status is `review`, ready for human walkthrough. The final documentation/evidence commit records acceptance of source `32fb5db`; it does not change the validated implementation. No package, tag or GitHub release was published.

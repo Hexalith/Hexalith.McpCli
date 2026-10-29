@@ -1,0 +1,26 @@
+{
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3"
+  },
+  "platforms": {
+    "Darwin": {
+      "smoke_sha256": "c1aedbe30df0aa25b2072e0c6603fd6a020cf4f2f7010253ac2c2ca50d05a4be",
+      "tests_sha256": "057645bdf32691a074efffb188530cf16d9ba4eb4600f1f593cbd8efa7f7f339"
+    },
+    "Linux": {
+      "smoke_sha256": "a2057907db1a3cf7e9c0e04ff6a317959b6b90065596b406eef4bcb65a0200bc",
+      "tests_sha256": "d1e0c4267a128daf11ac158c7fd9e412df0092da973b4a82764b12bb1d9da0b1"
+    },
+    "Windows": {
+      "smoke_sha256": "8a9a2536cfbbf2482dc3d3464ea48a64e72ce946f584f10e0d1d01ce54991685",
+      "tests_sha256": "91370c246d4170438045257817576c086f62532c8e3841d7e76dfcd3dabc3ad4"
+    }
+  },
+  "preparation_sha256": "7ff79f8df835084ac604798d605ab6e99e79e618db84c5df163fbffb182e60a9",
+  "publication": "refused; stories 4.17\u20134.18 remain outstanding",
+  "schema": "mcpcli-accepted-staged-pair/v1",
+  "source_sha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "status": "accepted-staging-only",
+  "version": "1.2.0"
+}

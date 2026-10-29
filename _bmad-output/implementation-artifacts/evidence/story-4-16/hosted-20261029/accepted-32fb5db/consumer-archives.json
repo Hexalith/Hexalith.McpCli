@@ -1,0 +1,23 @@
+[
+  {
+    "name": "paired-consumer-windows-latest",
+    "id": 12902586362,
+    "archive_sha256": "bd8d4e97ba76ce556721530e3ec3df6e9dc0b4250f3b432fbf5e5e192b1627d1",
+    "discovery_captures": 49,
+    "os": "Windows"
+  },
+  {
+    "name": "paired-consumer-macos-latest",
+    "id": 12901458253,
+    "archive_sha256": "a63f6ddf313a7715c3b6afbd04502fe5712d3fc68695cabc81481f047a893c7e",
+    "discovery_captures": 49,
+    "os": "Darwin"
+  },
+  {
+    "name": "paired-consumer-ubuntu-latest",
+    "id": 12901204892,
+    "archive_sha256": "716b590c216f66176e96a11a343e33ce7def964e2654bbb3ae0c2ec27a64a521",
+    "discovery_captures": 49,
+    "os": "Linux"
+  }
+]

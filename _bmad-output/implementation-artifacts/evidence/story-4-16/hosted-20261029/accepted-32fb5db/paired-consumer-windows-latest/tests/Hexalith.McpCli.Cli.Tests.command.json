@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll",
+    "-xml",
+    "D:\\a\\_temp\\consumer\\tests\\Hexalith.McpCli.Cli.Tests.xml"
+  ],
+  "exit_code": 0
+}

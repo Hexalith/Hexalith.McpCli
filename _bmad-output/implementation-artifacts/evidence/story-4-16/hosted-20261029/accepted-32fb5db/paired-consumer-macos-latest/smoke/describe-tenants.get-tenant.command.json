@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/Users/runner/work/_temp/consumer/smoke/private/tools/hexalith",
+    "describe",
+    "tenants.get-tenant"
+  ],
+  "exit_code": 0
+}

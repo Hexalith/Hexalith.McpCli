@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-p:IncludeSourceRevisionInInformationalVersion=false",
+    "-p:Version=1.2.0",
+    "-p:InformationalVersion=1.2.0",
+    "-p:RepositoryCommit=32fb5dbf75216adaf21551bcfa36439741c41e01"
+  ],
+  "exit_code": 0
+}

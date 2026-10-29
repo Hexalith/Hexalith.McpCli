@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "D:\\a\\_temp\\consumer\\smoke\\private\\tools\\hexalith.exe",
+    "config",
+    "profile",
+    "add",
+    "staged",
+    "--url",
+    "http://127.0.0.1:1",
+    "--token",
+    "staged-private-token"
+  ],
+  "exit_code": 0
+}

@@ -1,0 +1,38 @@
+[93mThe '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+[0m
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+[37m  Discovering: Hexalith.McpCli.Cli.Tests
+[0m[37m  Discovered:  Hexalith.McpCli.Cli.Tests
+[0m[37m  Starting:    Hexalith.McpCli.Cli.Tests
+[0m[93m    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.CliAcceptsDeviceAndProcFdPipeAsync [SKIP]
+[0m[37m      The device and proc-fd fixtures require Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.FifoPreflightChecksAccessWithoutWaitingForReaderAsync [SKIP]
+[0m[37m      The FIFO fixture uses the Linux mkfifo utility.
+[0m[93m    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync [SKIP]
+[0m[37m      Windows ACLs are required for this fixture.
+[0m[93m    Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync [SKIP]
+[0m[37m      Windows file attributes are required for this fixture.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.NonSeekableResultTargetWritesDirectlyAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ExistingDevShmResultIsTruncatedAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux /dev/shm.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ProcFdPipeReceivesResultDirectlyAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync [SKIP]
+[0m[37m      The full-device fixture requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.DeviceResultTargetWritesDirectlyAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ThirtyThreeLinkOutputChainWorksAsync [SKIP]
+[0m[37m      This symbolic link limit requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.UnlinkedProcFdRegularFileUpdatesOpenHandleAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.UnexpectedAclSetupErrorIsNotIgnored [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.ProcFdDeviceResultTargetWritesDirectlyAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[93m    Hexalith.McpCli.Cli.Tests.ExecutionFailureCommandTests.RestrictiveUmaskPreservesNewAndExistingOutputAsync [SKIP]
+[0m[37m      This filesystem behavior requires Linux.
+[0m[37m  Finished:    Hexalith.McpCli.Cli.Tests (ID = '1805ef7b3615d56a739f879743cf4152fd8c56573a7e9a36bfb1b1ae546a01d5')
+[0m[37m=== TEST EXECUTION SUMMARY ===
+[0m[37m   Hexalith.McpCli.Cli.Tests  Total: 485, Errors: 0, Failed: 0, Skipped: 14, Not Run: 0, Time: 33.753s
+[0m[0m

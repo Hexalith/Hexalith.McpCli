@@ -1,0 +1,15 @@
+{
+  "source_sha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "review_fixes_sha": "630ea7f29c02f6d10b19eae1136e01538527266e",
+  "ci_run": 40880599269,
+  "bootstrap_run": 40880598688,
+  "commitlint_run": 40880599149,
+  "sync_run": 40880598764,
+  "stage_run": 40885068007,
+  "approval": "Existing explicit source commit/push and stage-paired approval persists; publication forbidden.",
+  "ci_conclusion": "success",
+  "source_precheck": "review-source-ready.json",
+  "dispatch_phase": "stage-paired",
+  "dispatch_ref": "main",
+  "recovery_version": ""
+}

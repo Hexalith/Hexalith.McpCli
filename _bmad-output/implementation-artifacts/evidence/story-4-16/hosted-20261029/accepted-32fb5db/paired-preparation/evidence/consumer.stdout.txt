@@ -1,0 +1,12 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-paired-consumer-1z5zflte/consumer/Bootstrap.Consumer.Contracts.csproj (in 154 ms).
+/tmp/mcpcli-paired-consumer-1z5zflte/consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/mcpcli-paired-consumer-1z5zflte/consumer/Bootstrap.Consumer.Contracts.csproj]
+  Bootstrap.Consumer.Contracts -> /tmp/mcpcli-paired-consumer-1z5zflte/consumer/bin/Release/net10.0/Bootstrap.Consumer.Contracts.dll
+
+Build succeeded.
+
+/tmp/mcpcli-paired-consumer-1z5zflte/consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/mcpcli-paired-consumer-1z5zflte/consumer/Bootstrap.Consumer.Contracts.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.75

@@ -1,0 +1,15 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.MutationRestrictsPermissivePreexistingModes [SKIP]
+      Unix file modes are exercised only on Unix-like systems.
+    Hexalith.McpCli.Core.Tests.ProfileStoreTests.TemporaryFileIsPrivateBeforeTokenBytesAreWritten [SKIP]
+      Unix file modes are exercised only on Unix-like systems.
+    Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction [SKIP]
+      Runs only in the fresh benchmark child process.
+  Finished:    Hexalith.McpCli.Core.Tests (ID = 'a0747e915ad7c523632ff26a0d008f3dfcc7a63c995198c1f894decf24f284b0')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 718, Errors: 0, Failed: 0, Skipped: 3, Not Run: 0, Time: 4.607s

@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/home/runner/work/_temp/consumer/smoke/private/tools/hexalith",
+    "modules",
+    "--output",
+    "/home/runner/work/_temp/consumer/smoke/private/result.json"
+  ],
+  "exit_code": 0
+}

@@ -1,0 +1,3 @@
+NAME	OPERATIONS	DESCRIPTION
+parties	7	Manage people and organizations, their contact channels, identifiers and active status.
+tenants	14	Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.

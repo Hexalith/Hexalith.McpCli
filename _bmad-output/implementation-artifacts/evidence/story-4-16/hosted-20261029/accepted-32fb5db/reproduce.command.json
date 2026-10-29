@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "scripts/compare-paired-evidence.py",
+    "--staging",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-preparation/packages",
+    "--prepared",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-preparation/prepared.json",
+    "--consumer",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-consumer-macos-latest",
+    "--consumer",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-consumer-ubuntu-latest",
+    "--consumer",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-consumer-windows-latest",
+    "--output",
+    "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/reproduced-accepted.json"
+  ],
+  "exit_code": 0
+}
