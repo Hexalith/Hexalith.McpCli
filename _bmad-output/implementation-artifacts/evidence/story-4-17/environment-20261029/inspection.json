@@ -1,0 +1,466 @@
+{
+  "assessment": {
+    "acceptance": "incomplete; this observation is not client or business-operation evidence",
+    "application_credential_source": "unresolved",
+    "application_tenant": "unresolved",
+    "eventstore_tenants": "Found only in ext-secrets-1-isolated; not assumed to be the operator-test environment.",
+    "gateway_url": "unresolved",
+    "parties": "No identifiable Parties workload or service in the inspected Kubernetes objects."
+  },
+  "commands": [
+    {
+      "argv": [
+        "kubectl",
+        "--kubeconfig=/home/administrator/.kube/config",
+        "--context=jpiquot@local",
+        "--request-timeout=10s",
+        "get",
+        "deployments,statefulsets,daemonsets,pods,services",
+        "-A",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "resource_count": 245,
+      "selected_metadata": [
+        {
+          "images": [
+            "registry.hexalith.com/ext-secrets-1-eventstore@sha256:7cc365ff65351070e7156fef2ab858ff26a05943985b532b838b33ffc39878c1",
+            "ghcr.io/dapr/daprd:1.18.1"
+          ],
+          "kind": "Deployment",
+          "name": "eventstore",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": null,
+          "ready_replicas": 1,
+          "replicas": 1,
+          "service_type": null,
+          "uid": "9a84f25b-bed1-482c-bd1b-fadb51fce523"
+        },
+        {
+          "images": [
+            "registry.hexalith.com/ext-secrets-1-tenants@sha256:d2e67a06bacf9f88e30270cb5f47a8de8bc6b568d3bcf1b5831eb908cdf8fd0b",
+            "ghcr.io/dapr/daprd:1.18.1"
+          ],
+          "kind": "Deployment",
+          "name": "tenants",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": null,
+          "ready_replicas": 1,
+          "replicas": 1,
+          "service_type": null,
+          "uid": "9a3f527c-ee39-4cbd-aeee-96c2d47ad998"
+        },
+        {
+          "images": [
+            "registry.hexalith.com/ext-secrets-1-eventstore@sha256:7cc365ff65351070e7156fef2ab858ff26a05943985b532b838b33ffc39878c1",
+            "ghcr.io/dapr/daprd:1.18.1"
+          ],
+          "kind": "Pod",
+          "name": "eventstore-6d7977bff8-8mzh7",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": "Running",
+          "ports": null,
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": null,
+          "uid": "0f636b46-ee88-425f-b7e8-7cc24b7a2e61"
+        },
+        {
+          "images": [
+            "registry.hexalith.com/ext-secrets-1-tenants@sha256:d2e67a06bacf9f88e30270cb5f47a8de8bc6b568d3bcf1b5831eb908cdf8fd0b",
+            "ghcr.io/dapr/daprd:1.18.1"
+          ],
+          "kind": "Pod",
+          "name": "tenants-59c976998-nj46v",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": "Running",
+          "ports": null,
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": null,
+          "uid": "a0abd3d2-298d-48a8-b744-904733444118"
+        },
+        {
+          "images": [],
+          "kind": "Service",
+          "name": "eventstore",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": [
+            {
+              "port": 8080,
+              "protocol": "TCP",
+              "targetPort": 8080
+            }
+          ],
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": "ClusterIP",
+          "uid": "e0ddf31e-2681-47ab-ab16-eca29f0b3e14"
+        },
+        {
+          "images": [],
+          "kind": "Service",
+          "name": "eventstore-dapr",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": [
+            {
+              "name": "dapr-http",
+              "port": 80,
+              "protocol": "TCP",
+              "targetPort": 3500
+            },
+            {
+              "name": "dapr-grpc",
+              "port": 50001,
+              "protocol": "TCP",
+              "targetPort": 50001
+            },
+            {
+              "name": "dapr-internal",
+              "port": 50002,
+              "protocol": "TCP",
+              "targetPort": 50002
+            },
+            {
+              "name": "dapr-metrics",
+              "port": 9090,
+              "protocol": "TCP",
+              "targetPort": 9090
+            }
+          ],
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": "ClusterIP",
+          "uid": "ddafc410-35b6-47f0-bcb5-8fc098a74898"
+        },
+        {
+          "images": [],
+          "kind": "Service",
+          "name": "tenants",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": [
+            {
+              "port": 8080,
+              "protocol": "TCP",
+              "targetPort": 8080
+            }
+          ],
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": "ClusterIP",
+          "uid": "09589527-cdda-434c-917f-d28e3b8afbfc"
+        },
+        {
+          "images": [],
+          "kind": "Service",
+          "name": "tenants-dapr",
+          "namespace": "ext-secrets-1-isolated",
+          "phase": null,
+          "ports": [
+            {
+              "name": "dapr-http",
+              "port": 80,
+              "protocol": "TCP",
+              "targetPort": 3500
+            },
+            {
+              "name": "dapr-grpc",
+              "port": 50001,
+              "protocol": "TCP",
+              "targetPort": 50001
+            },
+            {
+              "name": "dapr-internal",
+              "port": 50002,
+              "protocol": "TCP",
+              "targetPort": 50002
+            },
+            {
+              "name": "dapr-metrics",
+              "port": 9090,
+              "protocol": "TCP",
+              "targetPort": 9090
+            }
+          ],
+          "ready_replicas": null,
+          "replicas": null,
+          "service_type": "ClusterIP",
+          "uid": "db28e201-faaa-4100-9c2f-de8d245461d9"
+        }
+      ],
+      "started_at": "2026-10-29T17:13:25.588349+00:00",
+      "stdout_capture": "Sanitized metadata only; full API objects are not retained."
+    },
+    {
+      "argv": [
+        "kubectl",
+        "--kubeconfig=/home/administrator/.kube/config",
+        "--context=jpiquot@local",
+        "--request-timeout=10s",
+        "get",
+        "ingresses,ingressroutes.traefik.io",
+        "-A",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "resource_count": 9,
+      "selected_metadata": [
+        {
+          "kind": "Ingress",
+          "name": "forgejo-ingress",
+          "namespace": "forgejo",
+          "routes": [],
+          "rules": [
+            {
+              "host": "repository.tache.ai",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "forgejo-http",
+                        "port": {
+                          "number": 3000
+                        }
+                      }
+                    },
+                    "path": "/",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Ingress",
+          "name": "keycloak-ingress",
+          "namespace": "keycloak",
+          "routes": [],
+          "rules": [
+            {
+              "host": "auth.tache.ai",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "keycloak",
+                        "port": {
+                          "name": "http"
+                        }
+                      }
+                    },
+                    "path": "/realms/tache",
+                    "pathType": "Prefix"
+                  },
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "keycloak",
+                        "port": {
+                          "name": "http"
+                        }
+                      }
+                    },
+                    "path": "/resources",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Ingress",
+          "name": "keycloak-reset-rate-limit",
+          "namespace": "keycloak",
+          "routes": [],
+          "rules": [
+            {
+              "host": "auth.tache.ai",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "keycloak",
+                        "port": {
+                          "name": "http"
+                        }
+                      }
+                    },
+                    "path": "/realms/tache/login-actions/reset-credentials",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Ingress",
+          "name": "llm-ingress",
+          "namespace": "llm",
+          "routes": [],
+          "rules": [
+            {
+              "host": "llm.tache.ai",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "llm-healthz",
+                        "port": {
+                          "number": 80
+                        }
+                      }
+                    },
+                    "path": "/healthz",
+                    "pathType": "Exact"
+                  },
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "envoy-gateway",
+                        "port": {
+                          "number": 4000
+                        }
+                      }
+                    },
+                    "path": "/",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Ingress",
+          "name": "distribution-registry-ingress",
+          "namespace": "registry-distribution",
+          "routes": [],
+          "rules": [
+            {
+              "host": "registry.hexalith.com",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "distribution-registry",
+                        "port": {
+                          "number": 5000
+                        }
+                      }
+                    },
+                    "path": "/",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Ingress",
+          "name": "private-registry-ingress",
+          "namespace": "registry-private",
+          "routes": [],
+          "rules": [
+            {
+              "host": "registry.tache.ai",
+              "http": {
+                "paths": [
+                  {
+                    "backend": {
+                      "service": {
+                        "name": "private-registry",
+                        "port": {
+                          "number": 5000
+                        }
+                      }
+                    },
+                    "path": "/",
+                    "pathType": "Prefix"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "IngressRoute",
+          "name": "private-registry-ui-session-guard",
+          "namespace": "registry-private",
+          "routes": [
+            {
+              "kind": "Rule",
+              "match": "Host(`registry.tache.ai`) && Path(`/v2/`) && Method(`GET`) && Header(`X-Zot-Api-Client`, `zot-ui`) && !HeaderRegexp(`Cookie`, `(^|;)[ \\t]*session=`) && !HeaderRegexp(`Authorization`, `.+`)",
+              "services": [
+                {
+                  "name": "private-registry",
+                  "port": 5000
+                }
+              ]
+            }
+          ],
+          "rules": null
+        },
+        {
+          "kind": "IngressRoute",
+          "name": "stalwart-http",
+          "namespace": "stalwart",
+          "routes": [
+            {
+              "kind": "Rule",
+              "match": "Host(`mail.tache.ai`) || Host(`mail.hexalith.com`)",
+              "services": [
+                {
+                  "name": "stalwart",
+                  "port": 8080
+                }
+              ]
+            }
+          ],
+          "rules": null
+        },
+        {
+          "kind": "IngressRoute",
+          "name": "stalwart-ingress",
+          "namespace": "stalwart",
+          "routes": [
+            {
+              "kind": "Rule",
+              "match": "Host(`mail.tache.ai`) || Host(`mail.hexalith.com`)",
+              "services": [
+                {
+                  "name": "stalwart",
+                  "port": 8080
+                }
+              ]
+            }
+          ],
+          "rules": null
+        }
+      ],
+      "started_at": "2026-10-29T17:13:26.085109+00:00",
+      "stdout_capture": "Sanitized metadata only; full API objects are not retained."
+    }
+  ],
+  "context": "jpiquot@local",
+  "kubernetes_api": "https://192.168.1.30:6443",
+  "observed_at": "2026-10-29T17:13:25.588313+00:00",
+  "schema": "mcpcli-operator-environment-observation/v1",
+  "scope": "Read-only Kubernetes metadata; no application calls, secret reads, deployments or test-data writes. This does not inspect applications outside Kubernetes.",
+  "selected_host": "192.168.1.30"
+}

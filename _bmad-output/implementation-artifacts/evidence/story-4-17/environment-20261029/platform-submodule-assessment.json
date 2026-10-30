@@ -1,0 +1,67 @@
+{
+  "conclusion": "No usable operator Gateway/tenant/credential binding found in inspected Platform records. Preparing a temporary environment would expand the current documentation/evidence footprint; readiness remains incomplete.",
+  "findings": [
+    {
+      "finding": "No installed Parties staging/production binding or authenticated operator Gateway URL established; isolated secret-test services excluded; no scoped Parties credential established.",
+      "lines": [
+        13,
+        20,
+        24,
+        30
+      ],
+      "source": "references/Hexalith.Platform/docs/implementation/ext-parties-1-platform-prerequisites-2026-10-18/README.md"
+    },
+    {
+      "finding": "Later observation of the same host retains isolated services and still requires actual service installations and Parties bindings.",
+      "lines": [
+        9,
+        11,
+        20,
+        32
+      ],
+      "source": "references/Hexalith.Platform/docs/implementation/story-5-4-owner-continuation-2026-10-26/README.md"
+    },
+    {
+      "finding": "Installation bindings remain unapplied; no deployment performed by this source-delivery work.",
+      "lines": [
+        11,
+        17
+      ],
+      "source": "references/Hexalith.Platform/docs/implementation/custody-registration-publication-2026-10-27/README.md"
+    },
+    {
+      "finding": "Historical local seven-server qualification ran and was cleaned up; it establishes no surviving remote operator endpoint.",
+      "lines": [
+        46,
+        55,
+        58,
+        119,
+        120
+      ],
+      "source": "references/Hexalith.Platform/_bmad-output/implementation-artifacts/evidence/1-12/README.md"
+    },
+    {
+      "finding": "Run-scoped development composition and Debug McpCli build; no static deployed Gateway or application credentials supplied.",
+      "lines": [
+        205,
+        223,
+        236,
+        250
+      ],
+      "source": "references/Hexalith.Platform/README.md"
+    }
+  ],
+  "limits": "Read-only source inspection plus earlier cluster metadata; no Secret retrieval, deployment, domain calls or application-data writes. Unrelated custody/history qualification is not imposed on this simple McpCli task.",
+  "observed_at": "2026-10-29T17:32:43.292764+00:00",
+  "operator": "user",
+  "platform_revision": "8de90958bc41b7fd01b7ed22b8ab364447a800e4",
+  "schema": "mcpcli-operator-platform-assessment/v1",
+  "selected_host": "192.168.1.30",
+  "sources": {
+    "references/Hexalith.Platform/README.md": "a5218c3932ca0716c0bbbd7d946858cebeb490d69180221f2f60c9015b561314",
+    "references/Hexalith.Platform/_bmad-output/implementation-artifacts/evidence/1-12/README.md": "d10c8aa3aee46e9d2bf6969885222627807dec68a16a058c9bde7e67d76b42bb",
+    "references/Hexalith.Platform/docs/implementation/custody-registration-publication-2026-10-27/README.md": "7631f0136f9eb64258419c3b2d1ced13b2e9e8a37b4783bd86f831ee6b7cae87",
+    "references/Hexalith.Platform/docs/implementation/ext-parties-1-platform-prerequisites-2026-10-18/README.md": "d9130b9171fec5f6ea71f49a6e65b9a8f9507bd01e498d910d9a82d297edd5e1",
+    "references/Hexalith.Platform/docs/implementation/story-5-4-owner-continuation-2026-10-26/README.md": "bbec0a5205664e14e0b675389251757836ae5d75f13bebb3b8e00fffa529e396"
+  }
+}
