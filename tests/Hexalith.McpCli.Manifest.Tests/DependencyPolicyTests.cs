@@ -47,7 +47,7 @@ public sealed class DependencyPolicyTests
         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
-        Assert.Equal(new[] { "Hexalith.EventStore.Aspire/3.128.3", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/5.10.0" },
+        Assert.Equal(new[] { "Hexalith.EventStore.Aspire/3.128.4", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/5.10.0" },
             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
@@ -1055,14 +1055,14 @@ public sealed class DependencyPolicyTests
         Assert.Equal(new[]
         {
             "Hexalith.Commons.UniqueIds/2.30.3",
-            "Hexalith.EventStore.Aspire/3.128.3",
-            "Hexalith.EventStore.Client/3.128.3",
-            "Hexalith.EventStore.Contracts/3.128.3",
-            "Hexalith.EventStore.DomainService/3.128.3",
-            "Hexalith.EventStore.Server/3.128.3",
-            "Hexalith.EventStore.ServiceDefaults/3.128.3",
-            "Hexalith.EventStore.Testing/3.128.3",
-            "Hexalith.EventStore.Testing.Integration/3.128.3",
+            "Hexalith.EventStore.Aspire/3.128.4",
+            "Hexalith.EventStore.Client/3.128.4",
+            "Hexalith.EventStore.Contracts/3.128.4",
+            "Hexalith.EventStore.DomainService/3.128.4",
+            "Hexalith.EventStore.Server/3.128.4",
+            "Hexalith.EventStore.ServiceDefaults/3.128.4",
+            "Hexalith.EventStore.Testing/3.128.4",
+            "Hexalith.EventStore.Testing.Integration/3.128.4",
             "Hexalith.McpCli.Abstractions/1.1.0",
             "Hexalith.Parties.Aspire/2.0.0",
             "Hexalith.Tenants.Aspire/5.10.0",

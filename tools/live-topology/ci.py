@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
-# Published EventStore 3.128.3 includes the routing contracts. Tenants deliberately
+# Published EventStore 3.128.4 includes the routing contracts. Tenants deliberately
 # compiles against the same sibling EventStore source as the root server under test.
 SOURCE_EVENTSTORE = {'Hexalith.Tenants'}
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
