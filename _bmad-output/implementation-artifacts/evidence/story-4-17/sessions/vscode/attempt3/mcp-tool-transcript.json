@@ -1,0 +1,532 @@
+{
+  "source": "Copilot CLI agent-host session events (tool.execution_start/complete) for mcpServerName hexalith",
+  "session": {
+    "sessionId": "eef84b6a-656c-42c5-911b-f8bbedcba43b",
+    "copilotVersion": "1.0.103-unstable.r40031404408.gba6c003",
+    "producer": "copilot-agent",
+    "startTime": "2026-10-31T10:36:44.705Z",
+    "selectedModel": "gpt-6.1-sol"
+  },
+  "userPrompt": "Use only the hexalith MCP server.\r\n\r\nList modules and operations for tenants and parties.\r\nDescribe tenants.get-tenant, parties.create-party and parties.get-party.\r\n\r\nRead tenant mcpcli-417-20261031-155f9b6d.\r\n\r\nCreate one Person:\r\nPartyId: party-417-vscode-20261031-1\r\nFirstName: Operator\r\nLastName: Setup\r\nPreferred email: operator@example.test\r\nContactChannelId: email-417-vscode-20261031-1\r\nIdentifier type: Other\r\nIdentifier value: operator-setup\r\nIdentifierId: external-417-vscode-20261031-1\r\n\r\nOmit idempotencyKey.\r\n\r\nRead the person back using the same PartyId as entityId.\r\nShow tool names, module operation counts and the three JSON results.\r\nIf creation fails or is uncertain, stop without retrying.",
+  "finalAnswer": "Created once and verified using `entityId: party-417-vscode-20261031-1`. `idempotencyKey` was omitted. No retries.\n\n### Hexalith tools\n`hexalith-list_modules`, `hexalith-list_operations`, `hexalith-describe_operation`, `hexalith-run_query`, `hexalith-send_command`.\n\n### Modules and operations\n\n| Module | Total | Read | Write |\n|---|---:|---:|---:|\n| tenants | 14 | 5 | 9 |\n| parties | 7 | 3 | 4 |\n\n**tenants**\n- Read: `get-tenant`, `get-tenant-audit`, `get-tenant-users`, `get-user-tenants`, `list-tenants`.\n- Write: `add-user-to-tenant`, `change-user-role`, `create-tenant`, `disable-tenant`, `enable-tenant`, `remove-tenant-configuration`, `remove-user-from-tenant`, `set-tenant-configuration`, `update-tenant`.\n\n**parties**\n- Read: `get-party`, `list-parties`, `search-parties`.\n- Write: `create-party`, `deactivate-party`, `reactivate-party`, `update-party`.\n\n### Operation descriptions\n\n- **`tenants.get-tenant`**: Reads full tenant details using payload `TenantId`, under fixed tenant `system`. Requires membership or global administrator access; not paged.\n- **`parties.create-party`**: Atomically creates a Person or Organization with explicit IDs, typed details, contact channels and identifiers. Child `PartyId` values must match the root. Tenant comes from the envelope; idempotency key is optional.\n- **`parties.get-party`**: Reads details using payload `PartyId` in the envelope tenant; supports `entityId`. Missing and erased parties return safe not-found; inactive parties remain visible.\n\nAll three were submittable with no lint findings.\n\n### 1. Tenant read\n```json\n{\n  \"operation\": \"tenants.get-tenant\",\n  \"tenant\": \"system\",\n  \"document\": {\n    \"tenantId\": \"mcpcli-417-20261031-155f9b6d\",\n    \"name\": \"McpCli operator setup\",\n    \"description\": \"Task-owned synthetic operator tenant\",\n    \"status\": \"Active\",\n    \"members\": [\n      {\n        \"userId\": \"mcpcli-417-operator-20261031-155f9b6d\",\n        \"role\": \"TenantContributor\"\n      }\n    ],\n    \"configuration\": {},\n    \"createdAt\": \"2026-10-31T07:54:10.0320071+00:00\"\n  }\n}\n```\n\n### 2. Person creation\n```json\n{\n  \"operation\": \"parties.create-party\",\n  \"messageId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"correlationId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"aggregateId\": \"party-417-vscode-20261031-1\",\n  \"status\": \"accepted\",\n  \"result\": {\n    \"id\": \"party-417-vscode-20261031-1\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-vscode-20261031-1\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-vscode-20261031-1\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [],\n    \"createdAt\": \"2026-10-31T10:39:12.8684184+00:00\",\n    \"lastModifiedAt\": \"2026-10-31T10:39:12.8684244+00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false\n  }\n}\n```\n\n### 3. Person read-back\n```json\n{\n  \"operation\": \"parties.get-party\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"document\": {\n    \"id\": \"party-417-vscode-20261031-1\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-vscode-20261031-1\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-vscode-20261031-1\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [\n      {\n        \"displayName\": \"Operator Setup\",\n        \"sortName\": \"Setup, Operator\",\n        \"changedAt\": \"2026-10-31T10:39:12.8753269+00:00\",\n        \"triggeredBy\": \"PartyCreated\"\n      }\n    ],\n    \"createdAt\": \"2026-10-31T10:39:12.8753269+00:00\",\n    \"lastModifiedAt\": \"2026-10-31T10:39:12.8753269+00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false,\n    \"freshness\": {\n      \"status\": \"Current\",\n      \"warningCodes\": []\n    }\n  }\n}\n```",
+  "calls": [
+    {
+      "toolCallId": "call_x4wSzKHiTNZ1o0bHFcYQaSEg",
+      "clientToolName": "hexalith-list_modules",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "list_modules",
+      "arguments": {},
+      "startedAt": "2026-10-31T10:38:32.205Z",
+      "completedAt": "2026-10-31T10:38:32.321Z",
+      "success": true,
+      "resultText": "{\n  \"modules\": [\n    {\n      \"name\": \"parties\",\n      \"description\": \"Manage people and organizations, their contact channels, identifiers and active status.\",\n      \"operationCount\": 7\n    },\n    {\n      \"name\": \"tenants\",\n      \"description\": \"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant \\u0027system\\u0027; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\n      \"operationCount\": 14\n    }\n  ]\n}\n\n{\"modules\":[{\"name\":\"parties\",\"description\":\"Manage people and organizations, their contact channels, identifiers and active status.\",\"operationCount\":7},{\"name\":\"tenants\",\"description\":\"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\"operationCount\":14}]}",
+      "structuredResult": {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      }
+    },
+    {
+      "toolCallId": "call_7EKhEQ9oAGzdCnZCOUFmA93b",
+      "clientToolName": "hexalith-list_operations",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "list_operations",
+      "arguments": {
+        "module": "tenants"
+      },
+      "startedAt": "2026-10-31T10:38:34.400Z",
+      "completedAt": "2026-10-31T10:38:34.441Z",
+      "success": true,
+      "resultText": "Output too large to read at once (13.3 KB). Saved to: C:\\Users\\JEROME~1\\AppData\\Local\\Temp\\1793443114429-copilot-tool-output-c04a71145ec141cfa93c9d7e56b2e8a4.txt\nConsider using tools like rg (for searching), head/tail (for viewing start/end), view with view_range (for specific sections), or jq (for JSON) to examine portions of the output.\n\nPreview (first 500 chars):\n{\n  \"module\": \"tenants\",\n  \"operations\": [\n    {\n      \"name\": \"tenants.add-user-to-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member\\u0027s role.\"\n    },\n    {\n      \"name\": \"tenants.change-use",
+      "structuredResult": null
+    },
+    {
+      "toolCallId": "call_PyKYvSNrslDuNBUP4YledsvE",
+      "clientToolName": "hexalith-list_operations",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "list_operations",
+      "arguments": {
+        "module": "parties"
+      },
+      "startedAt": "2026-10-31T10:38:39.374Z",
+      "completedAt": "2026-10-31T10:38:39.412Z",
+      "success": true,
+      "resultText": "{\n  \"module\": \"parties\",\n  \"operations\": [\n    {\n      \"name\": \"parties.create-party\",\n      \"kind\": \"write\",\n      \"description\": \"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\"\n    },\n    {\n      \"name\": \"parties.deactivate-party\",\n      \"kind\": \"write\",\n      \"description\": \"Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks.\"\n    },\n    {\n      \"name\": \"parties.get-party\",\n      \"kind\": \"read\",\n      \"description\": \"Read an existing party\\u0027s detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\"\n    },\n    {\n      \"name\": \"parties.list-parties\",\n      \"kind\": \"read\",\n      \"description\": \"List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"\n    },\n    {\n      \"name\": \"parties.reactivate-party\",\n      \"kind\": \"write\",\n      \"description\": \"Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks.\"\n    },\n    {\n      \"name\": \"parties.search-parties\",\n      \"kind\": \"read\",\n      \"description\": \"Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"\n    },\n    {\n      \"name\": \"parties.update-party\",\n      \"kind\": \"write\",\n      \"description\": \"Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100.\"\n    }\n  ]\n}\n\n{\"module\":\"parties\",\"operations\":[{\"name\":\"parties.create-party\",\"kind\":\"write\",\"description\":\"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\"},{\"name\":\"parties.deactivate-party\",\"kind\":\"write\",\"description\":\"Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks.\"},{\"name\":\"parties.get-party\",\"kind\":\"read\",\"description\":\"Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\"},{\"name\":\"parties.list-parties\",\"kind\":\"read\",\"description\":\"List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"},{\"name\":\"parties.reactivate-party\",\"kind\":\"write\",\"description\":\"Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks.\"},{\"name\":\"parties.search-parties\",\"kind\":\"read\",\"description\":\"Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"},{\"name\":\"parties.update-party\",\"kind\":\"write\",\"description\":\"Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100.\"}]}",
+      "structuredResult": {
+        "module": "parties",
+        "operations": [
+          {
+            "name": "parties.create-party",
+            "kind": "write",
+            "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+          },
+          {
+            "name": "parties.deactivate-party",
+            "kind": "write",
+            "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.get-party",
+            "kind": "read",
+            "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible."
+          },
+          {
+            "name": "parties.list-parties",
+            "kind": "read",
+            "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.reactivate-party",
+            "kind": "write",
+            "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.search-parties",
+            "kind": "read",
+            "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.update-party",
+            "kind": "write",
+            "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+          }
+        ]
+      }
+    },
+    {
+      "toolCallId": "call_rC0b5ZYUxNC3ZqnHrGRshjA0",
+      "clientToolName": "hexalith-list_operations",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "list_operations",
+      "arguments": {
+        "module": "tenants",
+        "kind": "read"
+      },
+      "startedAt": "2026-10-31T10:38:41.861Z",
+      "completedAt": "2026-10-31T10:38:41.893Z",
+      "success": true,
+      "resultText": "{\n  \"module\": \"tenants\",\n  \"operations\": [\n    {\n      \"name\": \"tenants.get-tenant\",\n      \"kind\": \"read\",\n      \"description\": \"Read one tenant\\u0027s full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\"\n    },\n    {\n      \"name\": \"tenants.get-tenant-audit\",\n      \"kind\": \"read\",\n      \"description\": \"Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"\n    },\n    {\n      \"name\": \"tenants.get-tenant-users\",\n      \"kind\": \"read\",\n      \"description\": \"List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"\n    },\n    {\n      \"name\": \"tenants.get-user-tenants\",\n      \"kind\": \"read\",\n      \"description\": \"List the tenants one user is a member of, ordered by tenant identifier, with each tenant\\u0027s name, status and the user\\u0027s role. Callers always see their own memberships, a global administrator sees any user\\u0027s, and a TenantOwner sees another user\\u0027s memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"\n    },\n    {\n      \"name\": \"tenants.list-tenants\",\n      \"kind\": \"read\",\n      \"description\": \"List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document\\u0027s cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"\n    }\n  ]\n}\n\n{\"module\":\"tenants\",\"operations\":[{\"name\":\"tenants.get-tenant\",\"kind\":\"read\",\"description\":\"Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\"},{\"name\":\"tenants.get-tenant-audit\",\"kind\":\"read\",\"description\":\"Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.get-tenant-users\",\"kind\":\"read\",\"description\":\"List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.get-user-tenants\",\"kind\":\"read\",\"description\":\"List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.list-tenants\",\"kind\":\"read\",\"description\":\"List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"}]}",
+      "structuredResult": {
+        "module": "tenants",
+        "operations": [
+          {
+            "name": "tenants.get-tenant",
+            "kind": "read",
+            "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+          },
+          {
+            "name": "tenants.get-tenant-audit",
+            "kind": "read",
+            "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-tenant-users",
+            "kind": "read",
+            "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-user-tenants",
+            "kind": "read",
+            "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.list-tenants",
+            "kind": "read",
+            "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          }
+        ]
+      }
+    },
+    {
+      "toolCallId": "call_FRa5p2NmogPCeXHroBb5m7wG",
+      "clientToolName": "hexalith-list_operations",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "list_operations",
+      "arguments": {
+        "module": "tenants",
+        "kind": "write"
+      },
+      "startedAt": "2026-10-31T10:38:44.109Z",
+      "completedAt": "2026-10-31T10:38:44.141Z",
+      "success": true,
+      "resultText": "{\n  \"module\": \"tenants\",\n  \"operations\": [\n    {\n      \"name\": \"tenants.add-user-to-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member\\u0027s role.\"\n    },\n    {\n      \"name\": \"tenants.change-user-role\",\n      \"kind\": \"write\",\n      \"description\": \"Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant\\u0027s members, roles and configuration.\"\n    },\n    {\n      \"name\": \"tenants.create-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.\"\n    },\n    {\n      \"name\": \"tenants.disable-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.\"\n    },\n    {\n      \"name\": \"tenants.enable-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.\"\n    },\n    {\n      \"name\": \"tenants.remove-tenant-configuration\",\n      \"kind\": \"write\",\n      \"description\": \"Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.\"\n    },\n    {\n      \"name\": \"tenants.remove-user-from-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Remove a user\\u0027s membership from an active tenant, revoking the user\\u0027s role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant\\u0027s members, roles and configuration.\"\n    },\n    {\n      \"name\": \"tenants.set-tenant-configuration\",\n      \"kind\": \"write\",\n      \"description\": \"Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets.\"\n    },\n    {\n      \"name\": \"tenants.update-tenant\",\n      \"kind\": \"write\",\n      \"description\": \"Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.\"\n    }\n  ]\n}\n\n{\"module\":\"tenants\",\"operations\":[{\"name\":\"tenants.add-user-to-tenant\",\"kind\":\"write\",\"description\":\"Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role.\"},{\"name\":\"tenants.change-user-role\",\"kind\":\"write\",\"description\":\"Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.\"},{\"name\":\"tenants.create-tenant\",\"kind\":\"write\",\"description\":\"Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.\"},{\"name\":\"tenants.disable-tenant\",\"kind\":\"write\",\"description\":\"Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.\"},{\"name\":\"tenants.enable-tenant\",\"kind\":\"write\",\"description\":\"Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.\"},{\"name\":\"tenants.remove-tenant-configuration\",\"kind\":\"write\",\"description\":\"Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.\"},{\"name\":\"tenants.remove-user-from-tenant\",\"kind\":\"write\",\"description\":\"Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.\"},{\"name\":\"tenants.set-tenant-configuration\",\"kind\":\"write\",\"description\":\"Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets.\"},{\"name\":\"tenants.update-tenant\",\"kind\":\"write\",\"description\":\"Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.\"}]}",
+      "structuredResult": {
+        "module": "tenants",
+        "operations": [
+          {
+            "name": "tenants.add-user-to-tenant",
+            "kind": "write",
+            "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role."
+          },
+          {
+            "name": "tenants.change-user-role",
+            "kind": "write",
+            "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.create-tenant",
+            "kind": "write",
+            "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+          },
+          {
+            "name": "tenants.disable-tenant",
+            "kind": "write",
+            "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+          },
+          {
+            "name": "tenants.enable-tenant",
+            "kind": "write",
+            "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+          },
+          {
+            "name": "tenants.remove-tenant-configuration",
+            "kind": "write",
+            "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+          },
+          {
+            "name": "tenants.remove-user-from-tenant",
+            "kind": "write",
+            "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.set-tenant-configuration",
+            "kind": "write",
+            "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+          },
+          {
+            "name": "tenants.update-tenant",
+            "kind": "write",
+            "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+          }
+        ]
+      }
+    },
+    {
+      "toolCallId": "call_e2Zz40YQ9WzOpCosy6y6pzK4",
+      "clientToolName": "hexalith-describe_operation",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant"
+      },
+      "startedAt": "2026-10-31T10:38:46.368Z",
+      "completedAt": "2026-10-31T10:38:46.404Z",
+      "success": true,
+      "resultText": "{\n  \"name\": \"tenants.get-tenant\",\n  \"kind\": \"read\",\n  \"description\": \"Read one tenant\\u0027s full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"TenantId\": {\n        \"type\": \"string\",\n        \"description\": \"Identifier of the tenant to read. Required; a call without it is rejected.\"\n      }\n    },\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"TenantId\": \"acme\"\n  },\n  \"envelope\": {\n    \"fixedTenant\": \"system\",\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}\n\n{\"name\":\"tenants.get-tenant\",\"kind\":\"read\",\"description\":\"Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"TenantId\":{\"type\":\"string\",\"description\":\"Identifier of the tenant to read. Required; a call without it is rejected.\"}},\"additionalProperties\":false},\"example\":{\"TenantId\":\"acme\"},\"envelope\":{\"fixedTenant\":\"system\",\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}",
+      "structuredResult": {
+        "name": "tenants.get-tenant",
+        "kind": "read",
+        "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "fixedTenant": "system",
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      }
+    },
+    {
+      "toolCallId": "call_8cvbet4tt5VqM8oiaaYcLUs4",
+      "clientToolName": "hexalith-describe_operation",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "parties.create-party"
+      },
+      "startedAt": "2026-10-31T10:38:48.828Z",
+      "completedAt": "2026-10-31T10:38:48.872Z",
+      "success": true,
+      "resultText": "Output too large to read at once (15.4 KB). Saved to: C:\\Users\\JEROME~1\\AppData\\Local\\Temp\\1793443128859-copilot-tool-output-18f93e12d22449dd99192db5c8d2d589.txt\nConsider using tools like rg (for searching), head/tail (for viewing start/end), view with view_range (for specific sections), or jq (for JSON) to examine portions of the output.\n\nPreview (first 500 chars):\n{\n  \"name\": \"parties.create-party\",\n  \"kind\": \"write\",\n  \"description\": \"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitte",
+      "structuredResult": null
+    },
+    {
+      "toolCallId": "call_DrnR7ad26QDTi6zU9qQePGkA",
+      "clientToolName": "hexalith-describe_operation",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "parties.get-party"
+      },
+      "startedAt": "2026-10-31T10:39:02.210Z",
+      "completedAt": "2026-10-31T10:39:02.240Z",
+      "success": true,
+      "resultText": "{\n  \"name\": \"parties.get-party\",\n  \"kind\": \"read\",\n  \"description\": \"Read an existing party\\u0027s detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"PartyId\": {\n        \"type\": \"string\",\n        \"description\": \"The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them.\"\n      }\n    },\n    \"required\": [\n      \"PartyId\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"PartyId\": \"party-49\"\n  },\n  \"envelope\": {\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"tenant\",\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}\n\n{\"name\":\"parties.get-party\",\"kind\":\"read\",\"description\":\"Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them.\"}},\"required\":[\"PartyId\"],\"additionalProperties\":false},\"example\":{\"PartyId\":\"party-49\"},\"envelope\":{\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"tenant\",\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}",
+      "structuredResult": {
+        "name": "parties.get-party",
+        "kind": "read",
+        "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      }
+    },
+    {
+      "toolCallId": "call_qqnccvHm8cVTc8SYQYogdFPa",
+      "clientToolName": "hexalith-run_query",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"mcpcli-417-20261031-155f9b6d\"}"
+      },
+      "startedAt": "2026-10-31T10:39:04.576Z",
+      "completedAt": "2026-10-31T10:39:04.716Z",
+      "success": true,
+      "resultText": "{\n  \"operation\": \"tenants.get-tenant\",\n  \"tenant\": \"system\",\n  \"document\": {\n    \"tenantId\": \"mcpcli-417-20261031-155f9b6d\",\n    \"name\": \"McpCli operator setup\",\n    \"description\": \"Task-owned synthetic operator tenant\",\n    \"status\": \"Active\",\n    \"members\": [\n      {\n        \"userId\": \"mcpcli-417-operator-20261031-155f9b6d\",\n        \"role\": \"TenantContributor\"\n      }\n    ],\n    \"configuration\": {},\n    \"createdAt\": \"2026-10-31T07:54:10.0320071\\u002B00:00\"\n  }\n}\n\n{\"operation\":\"tenants.get-tenant\",\"tenant\":\"system\",\"document\":{\"tenantId\":\"mcpcli-417-20261031-155f9b6d\",\"name\":\"McpCli operator setup\",\"description\":\"Task-owned synthetic operator tenant\",\"status\":\"Active\",\"members\":[{\"userId\":\"mcpcli-417-operator-20261031-155f9b6d\",\"role\":\"TenantContributor\"}],\"configuration\":{},\"createdAt\":\"2026-10-31T07:54:10.0320071+00:00\"}}",
+      "structuredResult": {
+        "operation": "tenants.get-tenant",
+        "tenant": "system",
+        "document": {
+          "tenantId": "mcpcli-417-20261031-155f9b6d",
+          "name": "McpCli operator setup",
+          "description": "Task-owned synthetic operator tenant",
+          "status": "Active",
+          "members": [
+            {
+              "userId": "mcpcli-417-operator-20261031-155f9b6d",
+              "role": "TenantContributor"
+            }
+          ],
+          "configuration": {},
+          "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+        }
+      }
+    },
+    {
+      "toolCallId": "call_FvBJIkkj9S77MLxpCxmapSqt",
+      "clientToolName": "hexalith-send_command",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "send_command",
+      "arguments": {
+        "operation": "parties.create-party",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "payload": "{\"PartyId\":\"party-417-vscode-20261031-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-vscode-20261031-1\",\"ContactChannelId\":\"email-417-vscode-20261031-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-vscode-20261031-1\",\"IdentifierId\":\"external-417-vscode-20261031-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      },
+      "startedAt": "2026-10-31T10:39:12.763Z",
+      "completedAt": "2026-10-31T10:39:12.977Z",
+      "success": true,
+      "resultText": "{\n  \"operation\": \"parties.create-party\",\n  \"messageId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"correlationId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"aggregateId\": \"party-417-vscode-20261031-1\",\n  \"status\": \"accepted\",\n  \"result\": {\n    \"id\": \"party-417-vscode-20261031-1\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-vscode-20261031-1\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-vscode-20261031-1\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [],\n    \"createdAt\": \"2026-10-31T10:39:12.8684184\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T10:39:12.8684244\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false\n  }\n}\n\n{\"operation\":\"parties.create-party\",\"messageId\":\"01M68RNGWZQQWCMH86E3RFT0KQ\",\"correlationId\":\"01M68RNGWZQQWCMH86E3RFT0KQ\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"aggregateId\":\"party-417-vscode-20261031-1\",\"status\":\"accepted\",\"result\":{\"id\":\"party-417-vscode-20261031-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-417-vscode-20261031-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-417-vscode-20261031-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-10-31T10:39:12.8684184+00:00\",\"lastModifiedAt\":\"2026-10-31T10:39:12.8684244+00:00\",\"isRestricted\":false,\"isErased\":false}}",
+      "structuredResult": {
+        "operation": "parties.create-party",
+        "messageId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+        "correlationId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "aggregateId": "party-417-vscode-20261031-1",
+        "status": "accepted",
+        "result": {
+          "id": "party-417-vscode-20261031-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-417-vscode-20261031-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-417-vscode-20261031-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [],
+          "createdAt": "2026-10-31T10:39:12.8684184+00:00",
+          "lastModifiedAt": "2026-10-31T10:39:12.8684244+00:00",
+          "isRestricted": false,
+          "isErased": false
+        }
+      }
+    },
+    {
+      "toolCallId": "call_PjO59bhGCjNbJJqjgUw4SW6A",
+      "clientToolName": "hexalith-run_query",
+      "mcpServerName": "hexalith",
+      "mcpConfigServerName": "hexalith",
+      "mcpConfigSource": "user",
+      "mcpTransport": "stdio",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "parties.get-party",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "entityId": "party-417-vscode-20261031-1",
+        "payload": "{\"PartyId\":\"party-417-vscode-20261031-1\"}"
+      },
+      "startedAt": "2026-10-31T10:39:15.617Z",
+      "completedAt": "2026-10-31T10:39:15.659Z",
+      "success": true,
+      "resultText": "{\n  \"operation\": \"parties.get-party\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"document\": {\n    \"id\": \"party-417-vscode-20261031-1\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-vscode-20261031-1\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-vscode-20261031-1\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [\n      {\n        \"displayName\": \"Operator Setup\",\n        \"sortName\": \"Setup, Operator\",\n        \"changedAt\": \"2026-10-31T10:39:12.8753269\\u002B00:00\",\n        \"triggeredBy\": \"PartyCreated\"\n      }\n    ],\n    \"createdAt\": \"2026-10-31T10:39:12.8753269\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T10:39:12.8753269\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false,\n    \"freshness\": {\n      \"status\": \"Current\",\n      \"warningCodes\": []\n    }\n  }\n}\n\n{\"operation\":\"parties.get-party\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"document\":{\"id\":\"party-417-vscode-20261031-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-417-vscode-20261031-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-417-vscode-20261031-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[{\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"changedAt\":\"2026-10-31T10:39:12.8753269+00:00\",\"triggeredBy\":\"PartyCreated\"}],\"createdAt\":\"2026-10-31T10:39:12.8753269+00:00\",\"lastModifiedAt\":\"2026-10-31T10:39:12.8753269+00:00\",\"isRestricted\":false,\"isErased\":false,\"freshness\":{\"status\":\"Current\",\"warningCodes\":[]}}}",
+      "structuredResult": {
+        "operation": "parties.get-party",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "document": {
+          "id": "party-417-vscode-20261031-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-417-vscode-20261031-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-417-vscode-20261031-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [
+            {
+              "displayName": "Operator Setup",
+              "sortName": "Setup, Operator",
+              "changedAt": "2026-10-31T10:39:12.8753269+00:00",
+              "triggeredBy": "PartyCreated"
+            }
+          ],
+          "createdAt": "2026-10-31T10:39:12.8753269+00:00",
+          "lastModifiedAt": "2026-10-31T10:39:12.8753269+00:00",
+          "isRestricted": false,
+          "isErased": false,
+          "freshness": {
+            "status": "Current",
+            "warningCodes": []
+          }
+        }
+      }
+    }
+  ],
+  "nonHexalithToolRequests": [
+    {
+      "toolCallId": "call_zSV6SEdP2ExoDMvJOwXw8dHY",
+      "name": "tool_search_tool",
+      "requestedAt": "2026-10-31T10:38:12.571Z"
+    },
+    {
+      "toolCallId": "call_X3iIsYzunAeGxv1lwMlEyq3N",
+      "name": "view",
+      "requestedAt": "2026-10-31T10:38:57.202Z"
+    },
+    {
+      "toolCallId": "call_g5zIhDSmFzfZAYIUIUVSBGWV",
+      "name": "view",
+      "requestedAt": "2026-10-31T10:38:59.886Z"
+    },
+    {
+      "toolCallId": "call_x13PxdfP3k8DgUcwqqmQXJJe",
+      "name": "tool_search_tool",
+      "requestedAt": "2026-10-31T10:39:07.051Z"
+    }
+  ]
+}

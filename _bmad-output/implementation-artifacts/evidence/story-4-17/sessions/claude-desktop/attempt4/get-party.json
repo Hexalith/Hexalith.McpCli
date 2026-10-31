@@ -1,0 +1,61 @@
+{
+  "toolUseId": "toolu_013kfNkycrwd9wefekNzB26P",
+  "clientToolName": "mcp__remote-devices__hexalith__run_query",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "entityId": "party-417-desktop-20261031-4",
+    "operation": "parties.get-party",
+    "payload": "{\"PartyId\":\"party-417-desktop-20261031-4\"}"
+  },
+  "requestedAt": "2026-10-31T11:01:09.140Z",
+  "returnedAt": "2026-10-31T11:01:09.476Z",
+  "isError": null,
+  "resultText": "{\"operation\":\"parties.get-party\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"document\":{\"id\":\"party-417-desktop-20261031-4\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-417-desktop-20261031-4\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-417-desktop-20261031-4\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[{\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"changedAt\":\"2026-10-31T11:01:05.3626496+00:00\",\"triggeredBy\":\"PartyCreated\"}],\"createdAt\":\"2026-10-31T11:01:05.3626496+00:00\",\"lastModifiedAt\":\"2026-10-31T11:01:05.3626496+00:00\",\"isRestricted\":false,\"isErased\":false,\"freshness\":{\"status\":\"Current\",\"warningCodes\":[]}}}",
+  "structuredResult": {
+    "operation": "parties.get-party",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "document": {
+      "id": "party-417-desktop-20261031-4",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-desktop-20261031-4",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-desktop-20261031-4",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [
+        {
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "changedAt": "2026-10-31T11:01:05.3626496+00:00",
+          "triggeredBy": "PartyCreated"
+        }
+      ],
+      "createdAt": "2026-10-31T11:01:05.3626496+00:00",
+      "lastModifiedAt": "2026-10-31T11:01:05.3626496+00:00",
+      "isRestricted": false,
+      "isErased": false,
+      "freshness": {
+        "status": "Current",
+        "warningCodes": []
+      }
+    }
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "VS Code",
+  "attempt": 3,
+  "status": "passed",
+  "assisted": true,
+  "operator": "Human user in this conversation",
+  "observer": "Claude Code",
+  "priorExperience": "Same human who ran the Claude Code and Claude Desktop sessions; not an independent first-time operator",
+  "clientVersion": "1.144.0",
+  "harness": "Copilot CLI agent host in a local (non-WSL) VS Code window: sessionType agent-host-copilotcli, connectionKind local",
+  "copilotRuntime": {
+    "sessionId": "eef84b6a-656c-42c5-911b-f8bbedcba43b",
+    "copilotVersion": "1.0.103-unstable.r40031404408.gba6c003",
+    "producer": "copilot-agent",
+    "startTime": "2026-10-31T10:36:44.705Z",
+    "selectedModel": "gpt-6.1-sol"
+  },
+  "vscodeSession": {
+    "agentSessionId": "5e4333e9-b542-4dbc-9f37-90065a8b7d6a",
+    "sdkSessionId": "eef84b6a-656c-42c5-911b-f8bbedcba43b",
+    "sessionDbSha256AtCapture": "4915a22b307f67072afc48a03873f7ec8e44e02cfb015ff9e6bb4b9a7f3a7780"
+  },
+  "launchEnvironment": {
+    "clientOs": "Windows (native VS Code window)",
+    "serverBridge": "C:\\Windows\\System32\\wsl.exe --distribution Ubuntu-26.04 --user administrator --cd <private operator home> --exec /usr/bin/env MCPCLI_HOME=<private> DOTNET_ROOT=/home/administrator/.dotnet <staged hexalith> mcp --transport stdio --profile operator",
+    "distribution": "Ubuntu-26.04",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2"
+  },
+  "readmeSha256AtObservation": "b807fde752eb0607a9e6013a6a0dbc376742aa86ba9bbea757cd9ad013d6d0c3",
+  "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "toolVersion": "1.2.0",
+  "deploymentReviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "selectedTenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-vscode-20261031-1",
+  "initializationEvidence": {
+    "kind": "Copilot runtime MCP client log: hexalith server initialized as client peer",
+    "observations": [
+      {
+        "at": "2026-10-31T10:34:15.131Z",
+        "protocolVersion": "2026-07-28",
+        "serverVersion": "1.2.0"
+      },
+      {
+        "at": "2026-10-31T10:34:21.958Z",
+        "protocolVersion": "2026-07-28",
+        "serverVersion": "1.2.0"
+      },
+      {
+        "at": "2026-10-31T10:34:24.383Z",
+        "protocolVersion": "2026-07-28",
+        "serverVersion": "1.2.0"
+      },
+      {
+        "at": "2026-10-31T10:34:53.024Z",
+        "protocolVersion": "2026-07-28",
+        "serverVersion": "1.2.0"
+      },
+      {
+        "at": "2026-10-31T10:36:46.645Z",
+        "protocolVersion": "2026-07-28",
+        "serverVersion": "1.2.0"
+      }
+    ],
+    "vscodeLocalServerLog": {
+      "file": "vscode-usrlocal-hexalith-window2.log",
+      "sha256": "ce789428616a4a13cc99cf6b2ea459fc33afb975ad00ea368639028688af3604",
+      "note": "Separate VS Code LocalProcess start of the same user-profile entry at 10:34:06Z: content root is the private operator home, initialize completed in 12.6 ms, tools/list discovered 5 tools."
+    }
+  },
+  "discoveryEvidence": {
+    "file": "mcp-tool-transcript.json",
+    "fiveGenericToolsObserved": [
+      "describe_operation",
+      "list_modules",
+      "list_operations",
+      "run_query",
+      "send_command"
+    ],
+    "listModules": [
+      {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      }
+    ],
+    "listOperationsCalls": [
+      {
+        "module": "tenants"
+      },
+      {
+        "module": "parties"
+      },
+      {
+        "module": "tenants",
+        "kind": "read"
+      },
+      {
+        "module": "tenants",
+        "kind": "write"
+      }
+    ],
+    "describeOperationCalls": [
+      {
+        "operation": "tenants.get-tenant"
+      },
+      {
+        "operation": "parties.create-party"
+      },
+      {
+        "operation": "parties.get-party"
+      }
+    ],
+    "oneServer": [
+      [
+        "hexalith",
+        "hexalith",
+        "user"
+      ]
+    ]
+  },
+  "tenantReadEvidence": "tenant-query.json",
+  "commandEvidence": "create-party.json",
+  "persistedPartyEvidence": "get-party.json",
+  "checks": {
+    "tenantResultTenantIsSystem": true,
+    "tenantDocumentSelected": true,
+    "tenantActive": true,
+    "contributorMember": true,
+    "commandAccepted": true,
+    "commandTenantSelected": true,
+    "commandAggregateMatches": true,
+    "readTenantSelected": true,
+    "persistedIdMatches": true,
+    "persistedActiveNotErased": true,
+    "persistedPerson": true,
+    "persistedContact": true,
+    "persistedIdentifier": true,
+    "persistedFreshnessCurrent": true
+  },
+  "commandSubmissions": 1,
+  "messageId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+  "correlationId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+  "callerTenantArgumentOmitted": false,
+  "callerTenantArgument": {
+    "sendCommand": "mcpcli-417-20261031-155f9b6d",
+    "partiesRunQuery": "mcpcli-417-20261031-155f9b6d",
+    "rule": "Equal to the configured session tenant with allowTenantOverride false; accepted source OperationExecutor.cs:316-322 refuses a different value and otherwise resolves the session tenant. Routing by omission is not shown by this session."
+  },
+  "callerIdempotencyKeyOmitted": true,
+  "assistance": [
+    "Agent diagnosed and repaired the client registrations (--cd) and advised the harness/window.",
+    "The human supplied the task prompt; the client model chose the tool calls."
+  ],
+  "failures": [
+    "Attempts 1 and 2 failed before tool calls; retained separately."
+  ],
+  "observedDifferences": [
+    "Command result timestamps (10:39:12.8684Z) precede the persisted read's createdAt/name-history timestamp (10:39:12.8753Z); the persisted document adds one PartyCreated name-history entry and Current freshness. Exact JSON retained.",
+    "The model also called list_operations with kind read/write for tenants and viewed a spilled tool-output file for parties.create-party; these are client-side reads."
+  ],
+  "independentTiming": false,
+  "elapsedSeconds": null,
+  "cleanupEvidence": null,
+  "capturedAt": "2026-10-31T10:44:02.640354+00:00"
+}

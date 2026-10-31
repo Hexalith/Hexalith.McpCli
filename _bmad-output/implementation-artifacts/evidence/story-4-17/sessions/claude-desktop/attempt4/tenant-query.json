@@ -1,0 +1,31 @@
+{
+  "toolUseId": "toolu_01NsUejXpvr1kK2Hxdwdfedf",
+  "clientToolName": "mcp__remote-devices__hexalith__run_query",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "operation": "tenants.get-tenant",
+    "payload": "{\"TenantId\":\"mcpcli-417-20261031-155f9b6d\"}"
+  },
+  "requestedAt": "2026-10-31T11:00:58.893Z",
+  "returnedAt": "2026-10-31T11:00:59.335Z",
+  "isError": null,
+  "resultText": "{\"operation\":\"tenants.get-tenant\",\"tenant\":\"system\",\"document\":{\"tenantId\":\"mcpcli-417-20261031-155f9b6d\",\"name\":\"McpCli operator setup\",\"description\":\"Task-owned synthetic operator tenant\",\"status\":\"Active\",\"members\":[{\"userId\":\"mcpcli-417-operator-20261031-155f9b6d\",\"role\":\"TenantContributor\"}],\"configuration\":{},\"createdAt\":\"2026-10-31T07:54:10.0320071+00:00\"}}",
+  "structuredResult": {
+    "operation": "tenants.get-tenant",
+    "tenant": "system",
+    "document": {
+      "tenantId": "mcpcli-417-20261031-155f9b6d",
+      "name": "McpCli operator setup",
+      "description": "Task-owned synthetic operator tenant",
+      "status": "Active",
+      "members": [
+        {
+          "userId": "mcpcli-417-operator-20261031-155f9b6d",
+          "role": "TenantContributor"
+        }
+      ],
+      "configuration": {},
+      "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+    }
+  }
+}

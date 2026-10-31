@@ -128,10 +128,39 @@
         ],
         "outcome": "initialized"
       }
+    },
+    {
+      "registration": "Claude Desktop claude_desktop_config.json mcpServers.hexalith (wsl.exe bridge), prepared before Desktop attempt4",
+      "path": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Claude/claude_desktop_config.json",
+      "backup": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/claude-desktop-before-cd-20261031-105612Z.json",
+      "beforeSha256": "ed93912a51cf215f0ce904ffc597ba4bc8e786cfe0b15da7c135c4b57ec6b4ae",
+      "afterSha256": "20881f032404f862113cb8ad02726b8ff2eef1978762b848a3ce70e3b9419a5a",
+      "change": "Same two-line --cd insertion; other servers and settings unchanged.",
+      "probe": {
+        "label": "exact-repaired-claude-desktop",
+        "cwd": "/mnt/c/WINDOWS/system32",
+        "command": "/mnt/c/Windows/System32/wsl.exe",
+        "deadlineSeconds": 60.0,
+        "domainCalls": 0,
+        "applicationWrites": 0,
+        "initializeSeconds": 0.497,
+        "serverInfo": {
+          "name": "hexalith",
+          "version": "1.2.0"
+        },
+        "tools": [
+          "list_modules",
+          "list_operations",
+          "describe_operation",
+          "send_command",
+          "run_query"
+        ],
+        "outcome": "initialized"
+      }
     }
   ],
   "unchangedRegistrations": {
     "wslCopilotGlobal": "/home/administrator/.copilot/mcp-config.json runs the Linux executable directly; its working directory depends on the launching harness and was not changed.",
-    "claudeDesktop": "Not changed; its completed attempt3 servers run from /mnt/c/WINDOWS/system32 and served requests."
+    "claudeDesktop": "Changed at 2026-10-31T10:56Z (see additionalRepairs); attempt3 ran with the earlier System32 working directory."
   }
 }

@@ -1,0 +1,53 @@
+{
+  "toolUseId": "toolu_01CwKKvXZ9Ee4v7LKSo9GZ7u",
+  "clientToolName": "mcp__remote-devices__hexalith__send_command",
+  "mcpToolName": "send_command",
+  "arguments": {
+    "operation": "parties.create-party",
+    "payload": "{\"PartyId\":\"party-417-desktop-20261031-4\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-desktop-20261031-4\",\"ContactChannelId\":\"email-417-desktop-20261031-4\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-desktop-20261031-4\",\"IdentifierId\":\"external-417-desktop-20261031-4\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+  },
+  "requestedAt": "2026-10-31T11:01:03.210Z",
+  "returnedAt": "2026-10-31T11:01:05.522Z",
+  "isError": null,
+  "resultText": "{\"operation\":\"parties.create-party\",\"messageId\":\"01M68SXJN755MY38306BXCS07D\",\"correlationId\":\"01M68SXJN755MY38306BXCS07D\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"aggregateId\":\"party-417-desktop-20261031-4\",\"status\":\"accepted\",\"result\":{\"id\":\"party-417-desktop-20261031-4\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-417-desktop-20261031-4\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-417-desktop-20261031-4\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-10-31T11:01:05.3583635+00:00\",\"lastModifiedAt\":\"2026-10-31T11:01:05.3583688+00:00\",\"isRestricted\":false,\"isErased\":false}}",
+  "structuredResult": {
+    "operation": "parties.create-party",
+    "messageId": "01M68SXJN755MY38306BXCS07D",
+    "correlationId": "01M68SXJN755MY38306BXCS07D",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "aggregateId": "party-417-desktop-20261031-4",
+    "status": "accepted",
+    "result": {
+      "id": "party-417-desktop-20261031-4",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-desktop-20261031-4",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-desktop-20261031-4",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [],
+      "createdAt": "2026-10-31T11:01:05.3583635+00:00",
+      "lastModifiedAt": "2026-10-31T11:01:05.3583688+00:00",
+      "isRestricted": false,
+      "isErased": false
+    }
+  }
+}

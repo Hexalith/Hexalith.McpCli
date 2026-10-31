@@ -1,0 +1,112 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "Claude Desktop",
+  "attempt": 4,
+  "status": "passed",
+  "assisted": true,
+  "operator": "Human user in this conversation",
+  "observer": "Claude Code",
+  "priorExperience": "Same human who ran the earlier client sessions; not an independent first-time operator",
+  "clientVersion": "4.29",
+  "clientVersionNote": "User-reported from Settings -> About on 2026-10-31 after attempt4; attempt3 recorded 4.4212.0.0 (MSIX).",
+  "harness": "Claude Desktop Cowork tab (conversation product 'cowork', MCP client local-agent-mode-hexalith 1.0.0; tools exposed to the agent as mcp__remote-devices__hexalith__*). Not the Code tab.",
+  "model": "claude-opus-5-5",
+  "conversation": {
+    "uuid": "cowork:cse_01SK9CmUdrrNKuXxkJMePTQA",
+    "sessionId": "cse_01SK9CmUdrrNKuXxkJMePTQA",
+    "cacheBlobSha256": "0d11e8d95a35b94c61c9c2b414e6f50adfebf79f262a17d2dd1ae7a6e9912daf",
+    "decodedConversationSha256": "d289153963fb32230348daf95be615592020223f5e26e5e2c12ce22ab08e7ec2"
+  },
+  "launchEnvironment": {
+    "clientOs": "Windows",
+    "serverBridge": "C:\\Windows\\System32\\wsl.exe --distribution Ubuntu-26.04 --user administrator --cd <private operator home> --exec /usr/bin/env MCPCLI_HOME=<private> DOTNET_ROOT=/home/administrator/.dotnet <staged hexalith> mcp --transport stdio --profile operator",
+    "distribution": "Ubuntu-26.04",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2"
+  },
+  "readmeSha256AtObservation": "836736f29b540a8a709aa316b676fa618e341c471a92de5ae2109091b9b0e110",
+  "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "toolVersion": "1.2.0",
+  "deploymentReviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "selectedTenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-desktop-20261031-4",
+  "initializationEvidence": {
+    "file": "mcp-server-hexalith.sanitized.log",
+    "sha256": "3207ef41e05ee69e28760d88abde33f3ae9a0fb532094f0e5170d887548a5b36",
+    "summary": "Fresh server at 10:58:18Z, content root = private operator home (--cd), initialize/tools-list for Desktop clients, then exactly nine tools/call completions with IsError = False; Gateway POST queries 200, command 202, queries 200. The client logger omits bodies; bodies come from the conversation cache."
+  },
+  "discoveryEvidence": {
+    "file": "mcp-tool-transcript.json",
+    "fiveGenericToolsObserved": [
+      "describe_operation",
+      "list_modules",
+      "list_operations",
+      "run_query",
+      "send_command"
+    ],
+    "listModules": {
+      "modules": [
+        {
+          "name": "parties",
+          "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+          "operationCount": 7
+        },
+        {
+          "name": "tenants",
+          "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+          "operationCount": 14
+        }
+      ]
+    },
+    "describedOperations": [
+      "parties.create-party",
+      "parties.get-party",
+      "tenants.get-tenant"
+    ]
+  },
+  "tenantReadEvidence": "tenant-query.json",
+  "commandEvidence": "create-party.json",
+  "persistedPartyEvidence": "get-party.json",
+  "checks": {
+    "listModulesBoth": true,
+    "listOperationsBoth": true,
+    "threeDescriptionsSubmittableNoLint": true,
+    "tenantResultTenantIsSystem": true,
+    "tenantDocumentSelectedActive": true,
+    "commandAccepted": true,
+    "commandTenantSelected": true,
+    "commandAggregateMatches": true,
+    "readTenantSelected": true,
+    "persistedIdActiveNotErased": true,
+    "persistedPerson": true,
+    "persistedContact": true,
+    "persistedIdentifier": true,
+    "persistedFreshnessCurrent": true,
+    "noToolErrors": true,
+    "callerTenantOmitted": true,
+    "callerIdempotencyKeyOmitted": true,
+    "oneSendCommand": true
+  },
+  "commandSubmissions": 1,
+  "messageId": "01M68SXJN755MY38306BXCS07D",
+  "correlationId": "01M68SXJN755MY38306BXCS07D",
+  "assistance": [
+    "Agent repaired the Desktop registration (--cd), told the user to restart Desktop and supplied the exact prompt and fresh IDs."
+  ],
+  "failures": [
+    "Earlier Desktop attempts 1-3 are retained separately."
+  ],
+  "observedDifferences": [
+    "The prompt asked for one call at a time; the client issued describe_operation for tenants.get-tenant and parties.create-party concurrently. Each requested call still ran exactly once.",
+    "The client also used its ToolSearch to load the hexalith tool definitions before the first call."
+  ],
+  "independentTiming": false,
+  "elapsedSeconds": null,
+  "cleanupEvidence": null,
+  "capturedAt": "2026-10-31T11:06:38.869065+00:00",
+  "harnessAcceptance": {
+    "decision": "accepted",
+    "by": "Human user (environment owner)",
+    "recordedAt": "2026-10-31T11:10:46.823513+00:00",
+    "statement": "The Cowork tab session is accepted as the Claude Desktop conversation session; README excludes only the Code tab."
+  }
+}

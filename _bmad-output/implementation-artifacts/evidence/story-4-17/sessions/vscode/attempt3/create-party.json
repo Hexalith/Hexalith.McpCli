@@ -1,0 +1,58 @@
+{
+  "toolCallId": "call_FvBJIkkj9S77MLxpCxmapSqt",
+  "clientToolName": "hexalith-send_command",
+  "mcpServerName": "hexalith",
+  "mcpConfigServerName": "hexalith",
+  "mcpConfigSource": "user",
+  "mcpTransport": "stdio",
+  "mcpToolName": "send_command",
+  "arguments": {
+    "operation": "parties.create-party",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "payload": "{\"PartyId\":\"party-417-vscode-20261031-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-vscode-20261031-1\",\"ContactChannelId\":\"email-417-vscode-20261031-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-vscode-20261031-1\",\"IdentifierId\":\"external-417-vscode-20261031-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+  },
+  "startedAt": "2026-10-31T10:39:12.763Z",
+  "completedAt": "2026-10-31T10:39:12.977Z",
+  "success": true,
+  "resultText": "{\n  \"operation\": \"parties.create-party\",\n  \"messageId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"correlationId\": \"01M68RNGWZQQWCMH86E3RFT0KQ\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"aggregateId\": \"party-417-vscode-20261031-1\",\n  \"status\": \"accepted\",\n  \"result\": {\n    \"id\": \"party-417-vscode-20261031-1\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-vscode-20261031-1\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-vscode-20261031-1\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [],\n    \"createdAt\": \"2026-10-31T10:39:12.8684184\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T10:39:12.8684244\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false\n  }\n}\n\n{\"operation\":\"parties.create-party\",\"messageId\":\"01M68RNGWZQQWCMH86E3RFT0KQ\",\"correlationId\":\"01M68RNGWZQQWCMH86E3RFT0KQ\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"aggregateId\":\"party-417-vscode-20261031-1\",\"status\":\"accepted\",\"result\":{\"id\":\"party-417-vscode-20261031-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-417-vscode-20261031-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-417-vscode-20261031-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-10-31T10:39:12.8684184+00:00\",\"lastModifiedAt\":\"2026-10-31T10:39:12.8684244+00:00\",\"isRestricted\":false,\"isErased\":false}}",
+  "structuredResult": {
+    "operation": "parties.create-party",
+    "messageId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+    "correlationId": "01M68RNGWZQQWCMH86E3RFT0KQ",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "aggregateId": "party-417-vscode-20261031-1",
+    "status": "accepted",
+    "result": {
+      "id": "party-417-vscode-20261031-1",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-vscode-20261031-1",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-vscode-20261031-1",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [],
+      "createdAt": "2026-10-31T10:39:12.8684184+00:00",
+      "lastModifiedAt": "2026-10-31T10:39:12.8684244+00:00",
+      "isRestricted": false,
+      "isErased": false
+    }
+  }
+}

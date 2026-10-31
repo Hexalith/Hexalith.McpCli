@@ -1,0 +1,35 @@
+{
+  "toolCallId": "call_qqnccvHm8cVTc8SYQYogdFPa",
+  "clientToolName": "hexalith-run_query",
+  "mcpServerName": "hexalith",
+  "mcpConfigServerName": "hexalith",
+  "mcpConfigSource": "user",
+  "mcpTransport": "stdio",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "operation": "tenants.get-tenant",
+    "payload": "{\"TenantId\":\"mcpcli-417-20261031-155f9b6d\"}"
+  },
+  "startedAt": "2026-10-31T10:39:04.576Z",
+  "completedAt": "2026-10-31T10:39:04.716Z",
+  "success": true,
+  "resultText": "{\n  \"operation\": \"tenants.get-tenant\",\n  \"tenant\": \"system\",\n  \"document\": {\n    \"tenantId\": \"mcpcli-417-20261031-155f9b6d\",\n    \"name\": \"McpCli operator setup\",\n    \"description\": \"Task-owned synthetic operator tenant\",\n    \"status\": \"Active\",\n    \"members\": [\n      {\n        \"userId\": \"mcpcli-417-operator-20261031-155f9b6d\",\n        \"role\": \"TenantContributor\"\n      }\n    ],\n    \"configuration\": {},\n    \"createdAt\": \"2026-10-31T07:54:10.0320071\\u002B00:00\"\n  }\n}\n\n{\"operation\":\"tenants.get-tenant\",\"tenant\":\"system\",\"document\":{\"tenantId\":\"mcpcli-417-20261031-155f9b6d\",\"name\":\"McpCli operator setup\",\"description\":\"Task-owned synthetic operator tenant\",\"status\":\"Active\",\"members\":[{\"userId\":\"mcpcli-417-operator-20261031-155f9b6d\",\"role\":\"TenantContributor\"}],\"configuration\":{},\"createdAt\":\"2026-10-31T07:54:10.0320071+00:00\"}}",
+  "structuredResult": {
+    "operation": "tenants.get-tenant",
+    "tenant": "system",
+    "document": {
+      "tenantId": "mcpcli-417-20261031-155f9b6d",
+      "name": "McpCli operator setup",
+      "description": "Task-owned synthetic operator tenant",
+      "status": "Active",
+      "members": [
+        {
+          "userId": "mcpcli-417-operator-20261031-155f9b6d",
+          "role": "TenantContributor"
+        }
+      ],
+      "configuration": {},
+      "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+    }
+  }
+}

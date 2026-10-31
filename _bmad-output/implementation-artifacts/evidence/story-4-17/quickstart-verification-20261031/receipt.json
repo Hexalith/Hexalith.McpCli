@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-31T11:21:54.110900+00:00",
+  "humanDecision": "2026-10-31: a first-time operator must be able to install the MCP server with one simple prompt; quick start uses Claude Code on Linux/WSL with masked --token entry (both choices made by the user).",
+  "readmeSha256Verified": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429",
+  "method": "verify-readme-quickstart.py extracts the README quick-start/owner blocks, substitutes placeholders and runs each command in a fresh bash without DOTNET_ROOT/MCPCLI_HOME/EVENTSTORE_*/NUGET_* under a scratch HOME; the token is piped into the README's masked read and never printed. Scratch roots (holding a profile token) were deleted afterwards.",
+  "result": "All eight steps exit 0: owner handoff, start folder, install 1.2.0, masked token profile add, tenant/actor/current, claude mcp add + get (Connected), read-only tenant query (system / selected tenant Active), registration removal.",
+  "defectFound": {
+    "what": "README's Claude Code registration `claude mcp add --transport stdio --scope local --env MCPCLI_HOME=... hexalith -- ...` fails on Claude Code 2.1.316 with `Invalid environment variable format: hexalith` because --env is variadic and consumes the server name.",
+    "evidence": "first-run-claude-mcp-add-order.log",
+    "fix": "Server name immediately after `add`; README reference command corrected and troubleshooting row added.",
+    "whyUnnoticed": "The earlier Claude Code registration (sessions/claude-code/registration-20261031) was written to the config directly, not via the README command."
+  },
+  "domainCalls": "Two read-only tenants.get-tenant queries across the two runs; no command submitted.",
+  "notVerified": "Running `claude mcp add` from inside the operator's own interactive Claude Code session, and the interactive /exit, /mcp and task prompt; these are exercised by the timed session."
+}
