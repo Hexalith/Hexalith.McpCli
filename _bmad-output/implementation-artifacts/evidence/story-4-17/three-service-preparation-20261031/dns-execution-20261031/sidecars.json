@@ -1,0 +1,19 @@
+{
+  "phase": "sidecars",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review",
+    "--review-sha256",
+    "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "--execute-reviewed",
+    "--phase",
+    "sidecars"
+  ],
+  "startedAt": "2026-10-31T07:10:34.006684+00:00",
+  "endedAt": "2026-10-31T07:10:37.107936+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"sidecars\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

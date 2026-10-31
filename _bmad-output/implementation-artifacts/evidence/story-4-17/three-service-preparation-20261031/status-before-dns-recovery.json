@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-10-31T06:14:23.688699+00:00",
+  "storyStatus": "in-progress",
+  "preparationStatus": "fresh recovery packet prepared and locally verified; new concrete deployment review pending",
+  "activeTopology": "Gateway, Tenants domain, Parties domain plus one task-owned Redis provider",
+  "owner": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "guide": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/README.md",
+  "reviewPacket": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/review.json",
+  "reviewSha256": "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-e01a41d1",
+    "release": "mcpcli-417-20261031-e01a41d1"
+  },
+  "tenant": "mcpcli-417-20261031-e01a41d1",
+  "operatorSubject": "mcpcli-417-operator-20261031-e01a41d1",
+  "expiresAt": "2026-11-01T06:12:53.602504+00:00",
+  "privateInputManifest": "/tmp/mcpcli-417-v1-private-20261031-attempt6/private-inputs.json",
+  "privateInputManifestSha256": "be12aee79c5786c503262d3a39380143b63665a1a3bf8fa9ea5e86a9fbb175fb",
+  "authorization": "Recovery preparation and bounded read-only metadata authorized; original packet approval/cleanup do not authorize applying this changed packet.",
+  "verified": [
+    "Exact accepted 1.2.0 staged pair/source and both receipts freshly rechecked; no substitution.",
+    "Unchanged immutable images and required compiled wire/channel/projection surfaces remain bound.",
+    "Kubernetes 1.34.9 exposes Job replacement/failure controls; existing controller-manager uses controller credentials, job-controller SA exists and Dapr 1.18.1 pinned default allowlist includes it. No impersonation/shared injector changes.",
+    "25 focused synthetic methods pass: non-retrying Job policy, bound Job/Pod ownership and injection, changed/duplicate/terminal Pod refusals, all-app create before startup observation, all-app UID gate before writer, bounded GET failures and diagnostics, and POST no-replay.",
+    "Local review verification passes, binding runner/helper/fixture/evidence/manifests/private inputs; six client-only manifest dry-runs pass and selected fresh namespace is absent.",
+    "Current/historical private-input-value exclusion scan across public recovery snapshot passes."
+  ],
+  "reviewRisks": [
+    "Actual controller admission/Dapr injection/runtime startup/readiness and persistence remain unexecuted for this fresh packet.",
+    "Job controls disable normal retries/replacements; Jobs are not a transactional exactly-once guarantee. Bound identity/terminal checks stop further writes; no app restart/recreation is authorized.",
+    "Existing injector uses ordinary sidecars and baseline namespace admission; restricted warning/audit and app drop-ALL settings remain explicit adaptations.",
+    "kubectl client 1.36 emits version-skew warning against server 1.34; target schema metadata confirms Job fields, but client-only dry-run proves no server admission.",
+    "Configured registry identity delegation and private /tmp credential lifetime remain review items.",
+    "Review expiry 2026-11-01T06:12:53.602504+00:00; handoff token TTL at most two hours capped to review expiry; independent timing requires fresh installation/profile/configuration."
+  ],
+  "missingPreparationInputs": [],
+  "stillRequired": [
+    "human approval of exact fresh recovery packet",
+    "fresh actual empty-provider backup and UID bindings before applications",
+    "actual controller-owned injection, administrator/writer/tenant/member bootstrap and readiness",
+    "three actual MCP client sessions with persisted synthetic Party evidence",
+    "independent fresh-install README-only timed attempt retaining all outcomes/assistance",
+    "UID-bound cleanup and sanitized execution evidence"
+  ],
+  "evidence": "recovery-prepared-snapshot.json and recovery-prepared-packet/; recovery-provenance-recheck.json; original execution-20261031/ retained",
+  "historicalEvidence": [
+    "status-before-filled-packet.json",
+    "../remote-inspection-20261030/current-readiness.json",
+    "prepared-packet/evidence/preparation-attempts.json",
+    "status-before-recovery-packet.json",
+    "prepared-packet/",
+    "execution-20261031/"
+  ],
+  "currentWork": "Review boundary: no recovery deployment executed",
+  "lastExecution": {
+    "reviewSha256": "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+    "approved": true,
+    "infrastructure": "complete",
+    "realEmptyBackup": "complete",
+    "gateway": "failed: RemoteDisconnected; injector refused direct human-created Pod",
+    "laterPhases": "not executed",
+    "cleanup": "complete; namespace and backing-volume absence retained in execution-20261031/cleanup-verification.json"
+  }
+}

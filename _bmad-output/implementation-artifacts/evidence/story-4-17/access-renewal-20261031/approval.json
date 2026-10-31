@@ -1,0 +1,6 @@
+{
+  "approvedAt": "2026-10-31T09:53:55.067441+00:00",
+  "answer": "Approve the two-hour renewal",
+  "requestSha256": "ef26437ee16f55078ecf8af171745d7a82b50a95d964d2c5b32daf1ab3a98765",
+  "scope": "Same tenant, actor and permissions; protected client profiles/registrations and local connections only. No deployment changes or application writes."
+}

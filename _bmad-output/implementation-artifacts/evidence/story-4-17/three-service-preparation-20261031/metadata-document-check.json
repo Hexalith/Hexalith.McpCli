@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-31T07:42:48.953919+00:00",
+  "status": "passed",
+  "snapshotMatchesOwnerSource": true,
+  "packetRuntimeBindingsMatch": true,
+  "secretCount": 8,
+  "command": {
+    "argv": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "README.md",
+      "docs/release/operator-setup-checklist.md",
+      "_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md",
+      "_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "documentHashes": {
+    "README.md": "0dd463e39ce28e2a39716d0a80e595f5b8a98f133aaf73b4e50dd5a85cc5b12e",
+    "docs/release/operator-setup-checklist.md": "96737f18810e6aa9cb7eaa8ca5ab1e9971660be0a349ec73f41005713e222877",
+    "_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md": "b31a1586cf0736e2c215f8a08e22e75dceb0380acb86133f39c01ca05859ead6"
+  },
+  "limits": [
+    "No new deployment/activation/seed occurred; prior accepted marker/uncertain journal and all cleanup remain preserved.",
+    "Actual clients, persisted Party and independent fresh README timing remain incomplete."
+  ]
+}

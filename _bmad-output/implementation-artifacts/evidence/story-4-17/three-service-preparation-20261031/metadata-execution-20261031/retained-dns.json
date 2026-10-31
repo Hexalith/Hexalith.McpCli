@@ -1,0 +1,19 @@
+{
+  "phase": "dns",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "startedAt": "2026-10-31T07:51:37.242790+00:00",
+  "resolvers": [
+    "169.254.25.10"
+  ],
+  "namesResolved": [
+    "redis.mcpcli-417-20261031-155f9b6d.svc.cluster.local",
+    "dapr-sentry.dapr-system.svc.cluster.local",
+    "dapr-api.dapr-system.svc.cluster.local",
+    "dapr-placement-server.dapr-system.svc.cluster.local",
+    "dapr-scheduler-server-a.dapr-system.svc.cluster.local"
+  ],
+  "policyUid": "9386d6f5-5cce-4734-bcfb-04205a2a27e0",
+  "policySpecSha256": "1d795050a042636faa2dfd17aece8999075440a6247ba7bf9462a73fd5f4eb4d",
+  "endedAt": "2026-10-31T07:51:42.479265+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "messageId": "01M68F7ACDQET6CZCXWPTAKRS9",
+  "correlationId": "01M68F7ACDQET6CZCXWPTAKRS9",
+  "tenant": "system",
+  "domain": "tenants",
+  "aggregateId": "mcpcli-417-20261031-155f9b6d",
+  "commandType": "add-user-to-tenant",
+  "payload": {
+    "TenantId": "mcpcli-417-20261031-155f9b6d",
+    "UserId": "mcpcli-417-operator-20261031-155f9b6d",
+    "Role": "TenantContributor"
+  }
+}

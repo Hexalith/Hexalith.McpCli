@@ -1,0 +1,15 @@
+{
+  "phase": "metadata",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "startedAt": "2026-10-31T07:52:58.593007+00:00",
+  "metadataObserved": true,
+  "unauthenticatedGet": true,
+  "hostReady": true,
+  "metadataId": "eventstore",
+  "loopbackPort": 18171,
+  "forwardStopped": true,
+  "placement": "placement: connected",
+  "runtimeStatus": "RUNNING",
+  "endedAt": "2026-10-31T07:53:05.767220+00:00"
+}

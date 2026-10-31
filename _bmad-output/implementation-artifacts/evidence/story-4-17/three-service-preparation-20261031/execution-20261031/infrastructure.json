@@ -1,0 +1,19 @@
+{
+  "phase": "infrastructure",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-review",
+    "--review-sha256",
+    "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+    "--execute-reviewed",
+    "--phase",
+    "infrastructure"
+  ],
+  "startedAt": "2026-10-31T05:57:59.735000+00:00",
+  "endedAt": "2026-10-31T05:58:15.447023+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"infrastructure\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

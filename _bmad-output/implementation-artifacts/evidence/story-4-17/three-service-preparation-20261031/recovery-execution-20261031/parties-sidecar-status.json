@@ -1,0 +1,30 @@
+{
+  "name": "parties-zgnqw",
+  "uid": "acad7927-c77b-485a-af7b-a84cea992f84",
+  "dnsPolicy": "ClusterFirst",
+  "dnsConfig": null,
+  "containerStatuses": [
+    {
+      "name": "daprd",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:30:06Z"
+        }
+      },
+      "lastState": {}
+    },
+    {
+      "name": "parties",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:30:05Z"
+        }
+      },
+      "lastState": {}
+    }
+  ]
+}

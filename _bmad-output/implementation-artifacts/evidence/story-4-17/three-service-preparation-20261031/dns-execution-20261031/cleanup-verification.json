@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-31T07:23:57.344406+00:00",
+  "namespace": "mcpcli-417-20261031-ef5184e1",
+  "namespaceAbsent": true,
+  "volumeName": "pvc-0d15aae5-b57a-4898-8e4d-fc20107dd2cd",
+  "backingVolumeAbsent": true,
+  "writerActivation": "persisted protocol v2 marker verified without resubmission",
+  "tenantSeedAndHandoffExecuted": false
+}

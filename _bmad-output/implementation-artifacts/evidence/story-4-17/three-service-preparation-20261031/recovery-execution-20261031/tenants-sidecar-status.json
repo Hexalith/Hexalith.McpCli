@@ -1,0 +1,30 @@
+{
+  "name": "tenants-v2qz6",
+  "uid": "e25c4a58-e92e-4ec9-b4e9-5b86f2ac017c",
+  "dnsPolicy": "ClusterFirst",
+  "dnsConfig": null,
+  "containerStatuses": [
+    {
+      "name": "daprd",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:29:58Z"
+        }
+      },
+      "lastState": {}
+    },
+    {
+      "name": "tenants",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:29:58Z"
+        }
+      },
+      "lastState": {}
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "mcpcli-operator-remote-inspection-request/v1",
+  "createdAt": "2026-10-30T17:48:00.578949+00:00",
+  "status": "approved-read-only-inspection",
+  "purpose": "Resolve usable immutable runtime images and existing deployment prerequisites for the concrete temporary environment packet.",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "registry": "registry.hexalith.com"
+  },
+  "bounds": {
+    "requestTimeoutSeconds": 10,
+    "registryManifestCandidatesMaximum": 15,
+    "clusterReadKinds": [
+      "Namespace",
+      "Deployment",
+      "StatefulSet",
+      "Pod",
+      "Service",
+      "StorageClass",
+      "Component",
+      "Configuration"
+    ],
+    "retainedFields": [
+      "name",
+      "namespace",
+      "uid",
+      "image references",
+      "architecture",
+      "readiness counts",
+      "service types and ports",
+      "storage class identifiers",
+      "public provider endpoints and credential-reference names only"
+    ]
+  },
+  "allowedActions": [
+    "Read configured context API URL without credentials",
+    "Read selected cluster metadata and render only the retained fields",
+    "Read image manifests for specific existing candidate identities/versions/digests, using configured authentication without displaying credentials"
+  ],
+  "excludedActions": [
+    "Secret resource retrieval",
+    "credential-value printing or copying",
+    "remote process execution",
+    "registry push/tag/publication",
+    "deployment or resource mutation",
+    "new domain/application calls",
+    "test-data writes",
+    "cleanup or deletion"
+  ],
+  "limits": "Permission for inspection supplies no usable image compatibility, installed readiness, deployment approval or human-session evidence.",
+  "approvedAt": "2026-10-30T17:53:40.640110+00:00",
+  "authorization": "Human: Allow read-only inspection"
+}

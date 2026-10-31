@@ -1,0 +1,2233 @@
+[
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "codex-operator-story-4-17",
+          "version": "1.0"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "logging": {},
+          "tools": {
+            "listChanged": true
+          }
+        },
+        "serverInfo": {
+          "name": "hexalith",
+          "version": "1.2.0"
+        }
+      },
+      "id": 1,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "method": "notifications/initialized"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {}
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "tools": [
+          {
+            "name": "list_modules",
+            "description": "Purpose: List modules, descriptions, and operation counts. Use when: Starting catalog discovery. Next: Call list_operations with a module name.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "outputSchema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "modules": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "operationCount": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "description",
+                          "operationCount"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "modules"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "validation_failed"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "violations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "path": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "path",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "violations"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "gateway_error"
+                              ]
+                            },
+                            "status": {
+                              "type": "integer",
+                              "default": null
+                            },
+                            "detail": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "reason": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryable": {
+                              "type": "boolean",
+                              "default": null
+                            },
+                            "clientAction": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryAfter": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "correlationId": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "status",
+                            "detail"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_operation"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_module"
+                              ]
+                            },
+                            "module": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "module",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_arguments"
+                              ]
+                            },
+                            "argument": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "argument",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "read_only",
+                                "catalog_empty",
+                                "catalog_invalid",
+                                "unsupported_transport",
+                                "configuration_invalid",
+                                "internal_error"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "readOnlyHint": true
+            }
+          },
+          {
+            "name": "list_operations",
+            "description": "Purpose: List a module's operations, optionally filtered by read or write kind. Use when: Choosing an operation in a known module. Next: Call describe_operation with an operation name.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "module": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "module"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "module": {
+                      "type": "string"
+                    },
+                    "operations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "type": "string",
+                            "enum": [
+                              "read",
+                              "write"
+                            ]
+                          },
+                          "description": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "kind",
+                          "description"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "operations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "validation_failed"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "violations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "path": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "path",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "violations"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "gateway_error"
+                              ]
+                            },
+                            "status": {
+                              "type": "integer",
+                              "default": null
+                            },
+                            "detail": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "reason": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryable": {
+                              "type": "boolean",
+                              "default": null
+                            },
+                            "clientAction": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryAfter": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "correlationId": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "status",
+                            "detail"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_operation"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_module"
+                              ]
+                            },
+                            "module": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "module",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_arguments"
+                              ]
+                            },
+                            "argument": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "argument",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "read_only",
+                                "catalog_empty",
+                                "catalog_invalid",
+                                "unsupported_transport",
+                                "configuration_invalid",
+                                "internal_error"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "readOnlyHint": true
+            }
+          },
+          {
+            "name": "describe_operation",
+            "description": "Purpose: Show payload schema, optional example, envelope arguments, lint findings, and availability. Use when: Preparing a selected operation. Next: If submittable, call run_query for a read or send_command for a write.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "read",
+                        "write"
+                      ]
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "schema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "example": true,
+                    "envelope": {
+                      "type": "object",
+                      "properties": {
+                        "fixedTenant": {
+                          "type": "string"
+                        },
+                        "aggregateIdRequired": {
+                          "type": "boolean"
+                        },
+                        "idempotencyKeyRequired": {
+                          "type": "boolean"
+                        },
+                        "arguments": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "aggregateIdRequired",
+                        "idempotencyKeyRequired",
+                        "arguments"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "lintFindings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "severity": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "property": {
+                            "type": "string",
+                            "default": null
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "severity",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "submittable": {
+                      "type": "boolean"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "kind",
+                    "description",
+                    "schema",
+                    "envelope",
+                    "lintFindings",
+                    "submittable"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "validation_failed"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "violations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "path": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "path",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "violations"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "gateway_error"
+                              ]
+                            },
+                            "status": {
+                              "type": "integer",
+                              "default": null
+                            },
+                            "detail": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "reason": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryable": {
+                              "type": "boolean",
+                              "default": null
+                            },
+                            "clientAction": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryAfter": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "correlationId": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "status",
+                            "detail"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_operation"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_module"
+                              ]
+                            },
+                            "module": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "module",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_arguments"
+                              ]
+                            },
+                            "argument": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "argument",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "read_only",
+                                "catalog_empty",
+                                "catalog_invalid",
+                                "unsupported_transport",
+                                "configuration_invalid",
+                                "internal_error"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "readOnlyHint": true
+            }
+          },
+          {
+            "name": "send_command",
+            "description": "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action; a gateway-timeout or gateway-unreachable error does not prove rejection, so do not resubmit automatically.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "string"
+                },
+                "tenant": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "aggregateId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "correlationId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "idempotencyKey": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "extensions": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "additionalProperties": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "default": null
+                }
+              },
+              "required": [
+                "operation",
+                "payload"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "operation": {
+                      "type": "string"
+                    },
+                    "messageId": {
+                      "type": "string"
+                    },
+                    "correlationId": {
+                      "type": "string"
+                    },
+                    "tenant": {
+                      "type": "string"
+                    },
+                    "aggregateId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "const": "accepted"
+                    },
+                    "idempotencyKey": {
+                      "type": "string",
+                      "default": null
+                    },
+                    "result": {
+                      "default": null
+                    }
+                  },
+                  "required": [
+                    "operation",
+                    "messageId",
+                    "correlationId",
+                    "tenant",
+                    "aggregateId",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "validation_failed"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "violations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "path": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "path",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "violations"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "gateway_error"
+                              ]
+                            },
+                            "status": {
+                              "type": "integer",
+                              "default": null
+                            },
+                            "detail": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "reason": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryable": {
+                              "type": "boolean",
+                              "default": null
+                            },
+                            "clientAction": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryAfter": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "correlationId": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "status",
+                            "detail"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_operation"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_module"
+                              ]
+                            },
+                            "module": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "module",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_arguments"
+                              ]
+                            },
+                            "argument": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "argument",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "read_only",
+                                "catalog_empty",
+                                "catalog_invalid",
+                                "unsupported_transport",
+                                "configuration_invalid",
+                                "internal_error"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "annotations": {
+              "destructiveHint": true,
+              "idempotentHint": false,
+              "readOnlyHint": false
+            }
+          },
+          {
+            "name": "run_query",
+            "description": "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "string"
+                },
+                "tenant": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "aggregateId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "entityId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "pageSize": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "offset": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "cursor": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "operation",
+                "payload"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "operation": {
+                      "type": "string"
+                    },
+                    "tenant": {
+                      "type": "string"
+                    },
+                    "document": true,
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "pageSize": {
+                          "type": "integer"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "default": null
+                        },
+                        "nextCursor": {
+                          "type": "string",
+                          "default": null
+                        },
+                        "totalCount": {
+                          "type": "integer",
+                          "default": null
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "default": null
+                        }
+                      },
+                      "required": [
+                        "pageSize"
+                      ],
+                      "default": null,
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "operation",
+                    "tenant",
+                    "document"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "validation_failed"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "violations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "path": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "path",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "violations"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "gateway_error"
+                              ]
+                            },
+                            "status": {
+                              "type": "integer",
+                              "default": null
+                            },
+                            "detail": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "reason": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryable": {
+                              "type": "boolean",
+                              "default": null
+                            },
+                            "clientAction": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "retryAfter": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "correlationId": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "status",
+                            "detail"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_operation"
+                              ]
+                            },
+                            "operation": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "operation",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unknown_module"
+                              ]
+                            },
+                            "module": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "suggestions": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "module",
+                            "suggestions"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_arguments"
+                              ]
+                            },
+                            "argument": {
+                              "type": "string",
+                              "default": null
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "argument",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "read_only",
+                                "catalog_empty",
+                                "catalog_invalid",
+                                "unsupported_transport",
+                                "configuration_invalid",
+                                "internal_error"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "default": null
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "readOnlyHint": true
+            }
+          }
+        ]
+      },
+      "id": 2,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/call",
+      "params": {
+        "name": "list_modules",
+        "arguments": {}
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"modules\": [\n    {\n      \"name\": \"parties\",\n      \"description\": \"Manage people and organizations, their contact channels, identifiers and active status.\",\n      \"operationCount\": 7\n    },\n    {\n      \"name\": \"tenants\",\n      \"description\": \"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant \\u0027system\\u0027; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\n      \"operationCount\": 14\n    }\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "modules": [
+            {
+              "name": "parties",
+              "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+              "operationCount": 7
+            },
+            {
+              "name": "tenants",
+              "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+              "operationCount": 14
+            }
+          ]
+        },
+        "isError": false
+      },
+      "id": 3,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "method": "tools/call",
+      "params": {
+        "name": "describe_operation",
+        "arguments": {
+          "operation": "parties.create-party"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"name\": \"parties.create-party\",\n  \"kind\": \"write\",\n  \"description\": \"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\",\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"PartyId\": {\n        \"type\": \"string\",\n        \"description\": \"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"\n      },\n      \"Type\": {\n        \"enum\": [\n          \"Unknown\",\n          \"Person\",\n          \"Organization\"\n        ],\n        \"description\": \"The explicit party kind: Person or Organization; Unknown is rejected.\"\n      },\n      \"PersonDetails\": {\n        \"type\": [\n          \"object\",\n          \"null\"\n        ],\n        \"properties\": {\n          \"FirstName\": {\n            \"type\": \"string\",\n            \"description\": \"The person\\u0027s supplied first name.\"\n          },\n          \"LastName\": {\n            \"type\": \"string\",\n            \"description\": \"The person\\u0027s supplied last name.\"\n          },\n          \"DateOfBirth\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"format\": \"date-time\",\n            \"description\": \"The optional date of birth with an explicit UTC offset.\"\n          },\n          \"Prefix\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"description\": \"The optional name prefix, such as a title.\"\n          },\n          \"Suffix\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"description\": \"The optional name suffix.\"\n          }\n        },\n        \"required\": [\n          \"FirstName\",\n          \"LastName\"\n        ],\n        \"additionalProperties\": false,\n        \"description\": \"Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type.\"\n      },\n      \"OrganizationDetails\": {\n        \"type\": [\n          \"object\",\n          \"null\"\n        ],\n        \"properties\": {\n          \"LegalName\": {\n            \"type\": \"string\",\n            \"description\": \"The organization\\u0027s complete legal name.\"\n          },\n          \"TradingName\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"description\": \"The optional name the organization trades under.\"\n          },\n          \"LegalForm\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"description\": \"The optional legal form of the organization.\"\n          },\n          \"RegistrationNumber\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ],\n            \"description\": \"The optional organization registration number.\"\n          },\n          \"IsNaturalPerson\": {\n            \"type\": \"boolean\",\n            \"description\": \"Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification.\"\n          }\n        },\n        \"required\": [\n          \"LegalName\"\n        ],\n        \"additionalProperties\": false,\n        \"description\": \"Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type.\"\n      },\n      \"ContactChannels\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": [\n            \"object\",\n            \"null\"\n          ],\n          \"properties\": {\n            \"PartyId\": {\n              \"type\": \"string\",\n              \"description\": \"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"\n            },\n            \"ContactChannelId\": {\n              \"type\": \"string\",\n              \"description\": \"The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"\n            },\n            \"Type\": {\n              \"enum\": [\n                \"Email\",\n                \"Phone\",\n                \"PostalAddress\",\n                \"SocialMedia\"\n              ],\n              \"description\": \"The contact-channel kind: Email, Phone, PostalAddress or SocialMedia.\"\n            },\n            \"Value\": {\n              \"type\": \"string\",\n              \"description\": \"A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming.\"\n            },\n            \"IsPreferred\": {\n              \"type\": \"boolean\",\n              \"description\": \"Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins.\"\n            }\n          },\n          \"required\": [\n            \"PartyId\",\n            \"ContactChannelId\",\n            \"Type\",\n            \"Value\"\n          ],\n          \"additionalProperties\": false\n        },\n        \"description\": \"Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root.\"\n      },\n      \"Identifiers\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": [\n            \"object\",\n            \"null\"\n          ],\n          \"properties\": {\n            \"PartyId\": {\n              \"type\": \"string\",\n              \"description\": \"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"\n            },\n            \"IdentifierId\": {\n              \"type\": \"string\",\n              \"description\": \"The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"\n            },\n            \"Type\": {\n              \"enum\": [\n                \"VAT\",\n                \"SIRET\",\n                \"NationalId\",\n                \"CompanyRegistration\",\n                \"TaxId\",\n                \"Other\"\n              ],\n              \"description\": \"The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other.\"\n            },\n            \"Value\": {\n              \"type\": \"string\",\n              \"description\": \"The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value.\"\n            }\n          },\n          \"required\": [\n            \"PartyId\",\n            \"IdentifierId\",\n            \"Type\",\n            \"Value\"\n          ],\n          \"additionalProperties\": false\n        },\n        \"description\": \"Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root.\"\n      }\n    },\n    \"required\": [\n      \"PartyId\",\n      \"Type\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"PartyId\": \"party-49\",\n    \"Type\": \"Person\",\n    \"PersonDetails\": {\n      \"FirstName\": \"Ada\",\n      \"LastName\": \"Lovelace\"\n    }\n  },\n  \"envelope\": {\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"tenant\",\n      \"aggregateId\",\n      \"correlationId\",\n      \"idempotencyKey\",\n      \"extensions\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}"
+          }
+        ],
+        "structuredContent": {
+          "name": "parties.create-party",
+          "kind": "write",
+          "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "PartyId": {
+                "type": "string",
+                "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+              },
+              "Type": {
+                "enum": [
+                  "Unknown",
+                  "Person",
+                  "Organization"
+                ],
+                "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+              },
+              "PersonDetails": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "FirstName": {
+                    "type": "string",
+                    "description": "The person's supplied first name."
+                  },
+                  "LastName": {
+                    "type": "string",
+                    "description": "The person's supplied last name."
+                  },
+                  "DateOfBirth": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time",
+                    "description": "The optional date of birth with an explicit UTC offset."
+                  },
+                  "Prefix": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name prefix, such as a title."
+                  },
+                  "Suffix": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name suffix."
+                  }
+                },
+                "required": [
+                  "FirstName",
+                  "LastName"
+                ],
+                "additionalProperties": false,
+                "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+              },
+              "OrganizationDetails": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "LegalName": {
+                    "type": "string",
+                    "description": "The organization's complete legal name."
+                  },
+                  "TradingName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name the organization trades under."
+                  },
+                  "LegalForm": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional legal form of the organization."
+                  },
+                  "RegistrationNumber": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional organization registration number."
+                  },
+                  "IsNaturalPerson": {
+                    "type": "boolean",
+                    "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                  }
+                },
+                "required": [
+                  "LegalName"
+                ],
+                "additionalProperties": false,
+                "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+              },
+              "ContactChannels": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "PartyId": {
+                      "type": "string",
+                      "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                    },
+                    "ContactChannelId": {
+                      "type": "string",
+                      "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                    },
+                    "Type": {
+                      "enum": [
+                        "Email",
+                        "Phone",
+                        "PostalAddress",
+                        "SocialMedia"
+                      ],
+                      "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                    },
+                    "Value": {
+                      "type": "string",
+                      "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                    },
+                    "IsPreferred": {
+                      "type": "boolean",
+                      "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                    }
+                  },
+                  "required": [
+                    "PartyId",
+                    "ContactChannelId",
+                    "Type",
+                    "Value"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+              },
+              "Identifiers": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "PartyId": {
+                      "type": "string",
+                      "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                    },
+                    "IdentifierId": {
+                      "type": "string",
+                      "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                    },
+                    "Type": {
+                      "enum": [
+                        "VAT",
+                        "SIRET",
+                        "NationalId",
+                        "CompanyRegistration",
+                        "TaxId",
+                        "Other"
+                      ],
+                      "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                    },
+                    "Value": {
+                      "type": "string",
+                      "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                    }
+                  },
+                  "required": [
+                    "PartyId",
+                    "IdentifierId",
+                    "Type",
+                    "Value"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+              }
+            },
+            "required": [
+              "PartyId",
+              "Type"
+            ],
+            "additionalProperties": false
+          },
+          "example": {
+            "PartyId": "party-49",
+            "Type": "Person",
+            "PersonDetails": {
+              "FirstName": "Ada",
+              "LastName": "Lovelace"
+            }
+          },
+          "envelope": {
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "tenant",
+              "aggregateId",
+              "correlationId",
+              "idempotencyKey",
+              "extensions"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        },
+        "isError": false
+      },
+      "id": 4,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "method": "tools/call",
+      "params": {
+        "name": "describe_operation",
+        "arguments": {
+          "operation": "parties.get-party"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"name\": \"parties.get-party\",\n  \"kind\": \"read\",\n  \"description\": \"Read an existing party\\u0027s detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"PartyId\": {\n        \"type\": \"string\",\n        \"description\": \"The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus \\u0027.\\u0027, \\u0027_\\u0027 or \\u0027-\\u0027; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them.\"\n      }\n    },\n    \"required\": [\n      \"PartyId\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"PartyId\": \"party-49\"\n  },\n  \"envelope\": {\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"tenant\",\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}"
+          }
+        ],
+        "structuredContent": {
+          "name": "parties.get-party",
+          "kind": "read",
+          "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+          "schema": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "PartyId": {
+                "type": "string",
+                "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+              }
+            },
+            "required": [
+              "PartyId"
+            ],
+            "additionalProperties": false
+          },
+          "example": {
+            "PartyId": "party-49"
+          },
+          "envelope": {
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "tenant",
+              "aggregateId",
+              "entityId",
+              "pageSize",
+              "offset",
+              "cursor"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        },
+        "isError": false
+      },
+      "id": 5,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "method": "tools/call",
+      "params": {
+        "name": "describe_operation",
+        "arguments": {
+          "operation": "tenants.get-tenant"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"name\": \"tenants.get-tenant\",\n  \"kind\": \"read\",\n  \"description\": \"Read one tenant\\u0027s full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"TenantId\": {\n        \"type\": \"string\",\n        \"description\": \"Identifier of the tenant to read. Required; a call without it is rejected.\"\n      }\n    },\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"TenantId\": \"acme\"\n  },\n  \"envelope\": {\n    \"fixedTenant\": \"system\",\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}"
+          }
+        ],
+        "structuredContent": {
+          "name": "tenants.get-tenant",
+          "kind": "read",
+          "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+          "schema": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "TenantId": {
+                "type": "string",
+                "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+              }
+            },
+            "additionalProperties": false
+          },
+          "example": {
+            "TenantId": "acme"
+          },
+          "envelope": {
+            "fixedTenant": "system",
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "aggregateId",
+              "entityId",
+              "pageSize",
+              "offset",
+              "cursor"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        },
+        "isError": false
+      },
+      "id": 6,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 7,
+      "method": "tools/call",
+      "params": {
+        "name": "run_query",
+        "arguments": {
+          "operation": "tenants.get-tenant",
+          "payload": "{\"TenantId\": \"mcpcli-417-20261031-155f9b6d\"}"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"operation\": \"tenants.get-tenant\",\n  \"tenant\": \"system\",\n  \"document\": {\n    \"tenantId\": \"mcpcli-417-20261031-155f9b6d\",\n    \"name\": \"McpCli operator setup\",\n    \"description\": \"Task-owned synthetic operator tenant\",\n    \"status\": \"Active\",\n    \"members\": [\n      {\n        \"userId\": \"mcpcli-417-operator-20261031-155f9b6d\",\n        \"role\": \"TenantContributor\"\n      }\n    ],\n    \"configuration\": {},\n    \"createdAt\": \"2026-10-31T07:54:10.0320071\\u002B00:00\"\n  }\n}"
+          }
+        ],
+        "structuredContent": {
+          "operation": "tenants.get-tenant",
+          "tenant": "system",
+          "document": {
+            "tenantId": "mcpcli-417-20261031-155f9b6d",
+            "name": "McpCli operator setup",
+            "description": "Task-owned synthetic operator tenant",
+            "status": "Active",
+            "members": [
+              {
+                "userId": "mcpcli-417-operator-20261031-155f9b6d",
+                "role": "TenantContributor"
+              }
+            ],
+            "configuration": {},
+            "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+          }
+        },
+        "isError": false
+      },
+      "id": 7,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 8,
+      "method": "tools/call",
+      "params": {
+        "name": "run_query",
+        "arguments": {
+          "operation": "parties.get-party",
+          "payload": "{\"PartyId\": \"party-417-desktop-20261031-2\"}",
+          "entityId": "party-417-desktop-20261031-2",
+          "tenant": "mcpcli-417-20261031-155f9b6d"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"error\": {\n    \"code\": \"gateway_error\",\n    \"status\": 500,\n    \"detail\": \"actor-not-found-infrastructure\",\n    \"reason\": \"query_internal_error\",\n    \"retryAfter\": \"30\",\n    \"correlationId\": \"01M68M8NT5QE9CQBVYTT69NW0S\"\n  }\n}"
+          }
+        ],
+        "structuredContent": {
+          "error": {
+            "code": "gateway_error",
+            "status": 500,
+            "detail": "actor-not-found-infrastructure",
+            "reason": "query_internal_error",
+            "retryAfter": "30",
+            "correlationId": "01M68M8NT5QE9CQBVYTT69NW0S"
+          }
+        },
+        "isError": true
+      },
+      "id": 8,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 9,
+      "method": "tools/call",
+      "params": {
+        "name": "send_command",
+        "arguments": {
+          "operation": "parties.create-party",
+          "payload": "{\"PartyId\":\"party-417-desktop-20261031-2\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-desktop-20261031-2\",\"ContactChannelId\":\"email-417-desktop-20261031-2\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-desktop-20261031-2\",\"IdentifierId\":\"external-417-desktop-20261031-2\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}",
+          "tenant": "mcpcli-417-20261031-155f9b6d"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"operation\": \"parties.create-party\",\n  \"messageId\": \"01M68M8NSHXYNYZ9XD9K9HHW2H\",\n  \"correlationId\": \"01M68M8NSHXYNYZ9XD9K9HHW2H\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"aggregateId\": \"party-417-desktop-20261031-2\",\n  \"status\": \"accepted\",\n  \"result\": {\n    \"id\": \"party-417-desktop-20261031-2\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-desktop-20261031-2\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-desktop-20261031-2\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [],\n    \"createdAt\": \"2026-10-31T09:22:17.7374742\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T09:22:17.7385315\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false\n  }\n}"
+          }
+        ],
+        "structuredContent": {
+          "operation": "parties.create-party",
+          "messageId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+          "correlationId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+          "tenant": "mcpcli-417-20261031-155f9b6d",
+          "aggregateId": "party-417-desktop-20261031-2",
+          "status": "accepted",
+          "result": {
+            "id": "party-417-desktop-20261031-2",
+            "type": "Person",
+            "isActive": true,
+            "displayName": "Operator Setup",
+            "sortName": "Setup, Operator",
+            "personDetails": {
+              "firstName": "Operator",
+              "lastName": "Setup"
+            },
+            "contactChannels": [
+              {
+                "id": "email-417-desktop-20261031-2",
+                "type": "Email",
+                "value": "operator@example.test",
+                "isPreferred": true
+              }
+            ],
+            "identifiers": [
+              {
+                "id": "external-417-desktop-20261031-2",
+                "type": "Other",
+                "value": "operator-setup"
+              }
+            ],
+            "consentRecords": [],
+            "nameHistory": [],
+            "createdAt": "2026-10-31T09:22:17.7374742+00:00",
+            "lastModifiedAt": "2026-10-31T09:22:17.7385315+00:00",
+            "isRestricted": false,
+            "isErased": false
+          }
+        },
+        "isError": false
+      },
+      "id": 9,
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "direction": "client-to-server",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 10,
+      "method": "tools/call",
+      "params": {
+        "name": "run_query",
+        "arguments": {
+          "operation": "parties.get-party",
+          "payload": "{\"PartyId\": \"party-417-desktop-20261031-2\"}",
+          "entityId": "party-417-desktop-20261031-2",
+          "tenant": "mcpcli-417-20261031-155f9b6d"
+        }
+      }
+    }
+  },
+  {
+    "direction": "server-to-client",
+    "message": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"operation\": \"parties.get-party\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"document\": {\n    \"id\": \"party-417-desktop-20261031-2\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-desktop-20261031-2\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-desktop-20261031-2\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [\n      {\n        \"displayName\": \"Operator Setup\",\n        \"sortName\": \"Setup, Operator\",\n        \"changedAt\": \"2026-10-31T09:22:17.7769658\\u002B00:00\",\n        \"triggeredBy\": \"PartyCreated\"\n      }\n    ],\n    \"createdAt\": \"2026-10-31T09:22:17.7769658\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T09:22:17.7769658\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false,\n    \"freshness\": {\n      \"status\": \"Current\",\n      \"warningCodes\": []\n    }\n  }\n}"
+          }
+        ],
+        "structuredContent": {
+          "operation": "parties.get-party",
+          "tenant": "mcpcli-417-20261031-155f9b6d",
+          "document": {
+            "id": "party-417-desktop-20261031-2",
+            "type": "Person",
+            "isActive": true,
+            "displayName": "Operator Setup",
+            "sortName": "Setup, Operator",
+            "personDetails": {
+              "firstName": "Operator",
+              "lastName": "Setup"
+            },
+            "contactChannels": [
+              {
+                "id": "email-417-desktop-20261031-2",
+                "type": "Email",
+                "value": "operator@example.test",
+                "isPreferred": true
+              }
+            ],
+            "identifiers": [
+              {
+                "id": "external-417-desktop-20261031-2",
+                "type": "Other",
+                "value": "operator-setup"
+              }
+            ],
+            "consentRecords": [],
+            "nameHistory": [
+              {
+                "displayName": "Operator Setup",
+                "sortName": "Setup, Operator",
+                "changedAt": "2026-10-31T09:22:17.7769658+00:00",
+                "triggeredBy": "PartyCreated"
+              }
+            ],
+            "createdAt": "2026-10-31T09:22:17.7769658+00:00",
+            "lastModifiedAt": "2026-10-31T09:22:17.7769658+00:00",
+            "isRestricted": false,
+            "isErased": false,
+            "freshness": {
+              "status": "Current",
+              "warningCodes": []
+            }
+          }
+        },
+        "isError": false
+      },
+      "id": 10,
+      "jsonrpc": "2.0"
+    }
+  }
+]

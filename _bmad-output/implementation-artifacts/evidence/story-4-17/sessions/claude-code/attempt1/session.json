@@ -1,0 +1,61 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "Claude Code",
+  "attempt": 1,
+  "status": "passed",
+  "assisted": true,
+  "operator": "Human user in this conversation",
+  "observer": "Codex",
+  "priorExperience": "Already assisted through Desktop and supplied the prepared profile and prompt",
+  "clientVersion": "2.1.316",
+  "harness": "Interactive Claude Code terminal session",
+  "launchEnvironment": {
+    "distribution": "Ubuntu-26.04",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "architecture": "x86_64"
+  },
+  "readmeSha256AtObservation": "49553e8f0882b136e10513e19c498a9c07851f7da7292ed27450dec4702e8752",
+  "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "toolVersion": "1.2.0",
+  "deploymentReviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "selectedTenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-code-20261031-1",
+  "initializationEvidence": {
+    "kind": "Actual Claude Code MCP result metadata includes initialized server identity hexalith1.2.0 on all nine completed calls",
+    "file": "mcp-tool-transcript.json",
+    "rawInitializePayloadExposed": false,
+    "negotiatedProtocolVersion": null
+  },
+  "discoveryEvidence": {
+    "file": "mcp-tool-transcript.json",
+    "fiveGenericToolsObserved": [
+      "list_modules",
+      "list_operations",
+      "describe_operation",
+      "run_query",
+      "send_command"
+    ],
+    "bothModuleListsAndThreeDescriptionsRetained": true
+  },
+  "tenantReadEvidence": "tenant-query.json",
+  "commandEvidence": "create-party.json",
+  "persistedPartyEvidence": "get-party.json",
+  "commandSubmissions": 1,
+  "callerTenantArgumentOmitted": true,
+  "callerIdempotencyKeyOmitted": true,
+  "assistance": [
+    "Agent configured client registration/private profile and supplied the task prompt."
+  ],
+  "failures": [],
+  "observedDifferences": [
+    "Persisted read has later timestamps, one PartyCreated name-history entry and Current freshness; exact original JSON retained."
+  ],
+  "independentTiming": false,
+  "elapsedSeconds": null,
+  "cleanupEvidence": null,
+  "sourceTranscriptSha256": "25229936ab3dd3ba7dcebdbe30e70ee79aae3b77d38bf56271caff09e7719c12",
+  "sourceTranscriptPath": "/home/administrator/.claude/projects/-home-administrator-projects-hexalith-mcpcli/cfa23329-af4a-4fe9-9121-5b191842011a.jsonl",
+  "serializedFrameDeduplication": "Deduplicated stable tool-use IDs; repeated serialized assistant frames are not additional requests.",
+  "capturedAt": "2026-10-31T09:56:37.538515+00:00",
+  "credentialExposureScan": "passed"
+}

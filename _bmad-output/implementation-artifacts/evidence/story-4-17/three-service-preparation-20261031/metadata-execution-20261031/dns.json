@@ -1,0 +1,19 @@
+{
+  "phase": "dns",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review",
+    "--review-sha256",
+    "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+    "--execute-reviewed",
+    "--phase",
+    "dns"
+  ],
+  "startedAt": "2026-10-31T07:51:36.750630+00:00",
+  "endedAt": "2026-10-31T07:51:42.489894+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"dns\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

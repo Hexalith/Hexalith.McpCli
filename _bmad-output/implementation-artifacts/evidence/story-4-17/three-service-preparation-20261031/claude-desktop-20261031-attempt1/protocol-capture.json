@@ -1,0 +1,118 @@
+{
+  "schema": "mcpcli-desktop-protocol-capture/v1",
+  "sourcePath": "/mnt/c/Users/JeromePiquot/AppData/Local/Claude/logs/mcp-server-hexalith.log",
+  "sourceSha256": "192eebe559a9b76045e9f376df5086c2d25134fe50f3e01d86642ca5ed1c4676",
+  "sanitizedPath": "mcp-server-hexalith.sanitized.log",
+  "sanitizedSha256": "88f8c99e672b59bbedc8c6044a529f8a9582e22d38a73239ed0284003e5a6a13",
+  "redactions": 0,
+  "capturedAt": "2026-10-31T09:03:35.939957+00:00",
+  "format": "Desktop MCP event log; message bodies omitted by the client logger, not a raw JSON-RPC capture.",
+  "clientInfoFromLog": [
+    "claude-ai 0.1.0",
+    "local-agent-mode-hexalith 1.0.0"
+  ],
+  "events": [
+    {
+      "line": 2,
+      "event": "2026-10-31T08:48:58.261Z [hexalith] [info] Message from client: method=\"initialize\" id=0 params { metadata: undefined }"
+    },
+    {
+      "line": 13,
+      "event": "2026-10-31T08:49:06.418Z [hexalith] [info] Message from server: id=0 result { metadata: undefined }"
+    },
+    {
+      "line": 14,
+      "event": "2026-10-31T08:49:06.419Z [hexalith] [info] Message from client: method=\"notifications/initialized\" { metadata: undefined }"
+    },
+    {
+      "line": 16,
+      "event": "      Server (hexalith 1.2.0), Client (claude-ai 0.1.0) method 'initialize' request handler completed in 10.6769ms."
+    },
+    {
+      "line": 17,
+      "event": "2026-10-31T08:49:06.428Z [hexalith] [info] Message from client: method=\"tools/list\" id=1 params { metadata: undefined }"
+    },
+    {
+      "line": 21,
+      "event": "      Server (hexalith 1.2.0), Client (claude-ai 0.1.0) method 'tools/list' request handler completed in 7.1437ms."
+    },
+    {
+      "line": 22,
+      "event": "2026-10-31T08:49:06.437Z [hexalith] [info] Message from server: id=1 result { metadata: undefined }"
+    },
+    {
+      "line": 36,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'initialize' request handler completed in 11.5372ms."
+    },
+    {
+      "line": 38,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/list' request handler completed in 7.6413ms."
+    },
+    {
+      "line": 42,
+      "event": "      \"list_modules\" completed. IsError = False."
+    },
+    {
+      "line": 44,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 18.677ms."
+    },
+    {
+      "line": 48,
+      "event": "      \"describe_operation\" completed. IsError = False."
+    },
+    {
+      "line": 50,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 5.9459ms."
+    },
+    {
+      "line": 54,
+      "event": "      \"describe_operation\" completed. IsError = False."
+    },
+    {
+      "line": 56,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 1.7277ms."
+    },
+    {
+      "line": 60,
+      "event": "      \"describe_operation\" completed. IsError = False."
+    },
+    {
+      "line": 62,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 0.713ms."
+    },
+    {
+      "line": 74,
+      "event": "      \"run_query\" completed. IsError = False."
+    },
+    {
+      "line": 76,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 78.0067ms."
+    },
+    {
+      "line": 80,
+      "event": "      \"send_command\" completed. IsError = True."
+    },
+    {
+      "line": 82,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 10.2237ms."
+    },
+    {
+      "line": 94,
+      "event": "      \"send_command\" completed. IsError = True."
+    },
+    {
+      "line": 96,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 53.6781ms."
+    },
+    {
+      "line": 108,
+      "event": "      \"run_query\" completed. IsError = True."
+    },
+    {
+      "line": 110,
+      "event": "      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 100.7546ms."
+    }
+  ],
+  "initializeSucceeded": true,
+  "toolsListSucceeded": true
+}

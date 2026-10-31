@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-31T06:37:27.262818+00:00",
+  "namespace": "mcpcli-417-20261031-e01a41d1",
+  "namespaceAbsent": true,
+  "volumeName": "pvc-9ad4cd80-dfd1-4faa-998d-5dd50e474796",
+  "backingVolumeAbsent": true,
+  "writerAndTenantSeedExecuted": false,
+  "redisDatabaseSizeAtFailure": 0
+}

@@ -1,0 +1,86 @@
+{
+  "schema": "mcpcli-operator-offline-verification/v1",
+  "observedAt": "2026-10-30T17:37:19.629838+00:00",
+  "status": "passed-offline-only",
+  "readmeSha256": "efc7fec3ab457bb9e98093dcbca6d0761732dbdbd4816a4ddabb5137f8a1e5f3",
+  "checklistSha256": "b0b55dd2b78391f1989ec780dafa1a8edb9809b931f45e7dbcdc2de7ef714c6b",
+  "provenance": {
+    "acceptedReceipt": "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/accepted-staging-only/accepted-pair.json",
+    "acceptedReceiptSha256": "b90d5295de08a48451f29b4d830692af83770c717d1205f078ab24243d5ff026",
+    "preparedReceipt": "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/paired-preparation/prepared.json",
+    "preparedReceiptSha256": "7ff79f8df835084ac604798d605ab6e99e79e618db84c5df163fbffb182e60a9",
+    "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+    "sourceClean": true,
+    "version": "1.2.0",
+    "packages": {
+      "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+      "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3"
+    }
+  },
+  "installedExecutable": {
+    "path": "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+    "sha256": "bda630e0ee7309c976b4566dec7db9cfa1f7ebc0ea19e76db38f5255983d3d98",
+    "version": "1.2.0"
+  },
+  "checks": [
+    "exact accepted/prepared/package hash bindings",
+    "isolated local-only install/version",
+    "all 49 production CLI/MCP discovery captures",
+    "offline protocol smoke",
+    "README JSON/XML parsed",
+    "README private profile/token entry tested with synthetic token",
+    "README Tenants/Parties MCP calls against synthetic loopback; exactly one command"
+  ],
+  "readmeExamples": "readme-examples-attempt3/verification.json",
+  "commands": [
+    [
+      "python3",
+      "scripts/smoke-paired-tool.py",
+      "--staging",
+      "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-preparation/packages",
+      "--prepared",
+      "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/paired-preparation/prepared.json",
+      "--output",
+      "/tmp/mcpcli-417-offline-20261030"
+    ],
+    [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-4-17/offline-verification-20261030/verify-readme.py",
+      "--tool",
+      "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+      "--output",
+      "_bmad-output/implementation-artifacts/evidence/story-4-17/offline-verification-20261030/readme-examples-attempt3"
+    ]
+  ],
+  "failures": [
+    {
+      "attempt": "readme-examples",
+      "exitCode": 1,
+      "cause": "Verification harness initially assumed Content-Length; actual client uses chunked HTTP. Harness corrected; no production change."
+    },
+    {
+      "attempt": "readme-examples-attempt2",
+      "exitCode": 1,
+      "cause": "Harness wrongly required empty MCP stderr during execution; normal diagnostics correctly use stderr. Protocol stdout and semantic calls passed. Harness corrected to retain diagnostics and check secret absence."
+    }
+  ],
+  "acceptance": {
+    "actualClientSessions": "not-executed",
+    "persistedLiveParty": "not-executed",
+    "independentReadmeOnlyTiming": "not-executed",
+    "elapsedSeconds": null,
+    "within900Seconds": null,
+    "environmentDeployment": "not-authorized-or-executed",
+    "story": "incomplete"
+  },
+  "unexecutedMatrixCases": [
+    "missing-runtime",
+    "wrong-native-or-WSL-launch",
+    "invalid-profile actual client",
+    "insufficient-live-permission",
+    "unavailable-selected-service",
+    "uncertain-live-command",
+    "assisted/interrupted/over-target human timing"
+  ],
+  "limits": "All loopback results are synthetic; an experienced implementing agent is not a new operator. No credentials, domain writes or external environment calls occurred."
+}

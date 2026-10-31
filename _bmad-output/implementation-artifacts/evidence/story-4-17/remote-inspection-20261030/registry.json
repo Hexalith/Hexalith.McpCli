@@ -1,0 +1,192 @@
+{
+  "observedAt": "2026-10-30T17:57:52.142319+00:00",
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/eventstore:3.128.3"
+      ],
+      "startedAt": "2026-10-30T17:57:46.824978+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:0ab1771c85e22784dd0f2becdd1824b46879a035a226a61b7551c951297800a5"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/eventstore:3.128.3"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/eventstore:3.128.4"
+      ],
+      "startedAt": "2026-10-30T17:57:47.345016+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/eventstore:3.128.4"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/parties:1.5.1"
+      ],
+      "startedAt": "2026-10-30T17:57:47.827026+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:85afc9e954146883da56edce78e2ddaf401a47b35241bdceed87dfc20217aceb"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/parties:1.5.1"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/parties:2.0.0"
+      ],
+      "startedAt": "2026-10-30T17:57:48.366386+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:de6fbf4a2b1f2df942ea0dff3f356c6aa7dff51df34de95a3d63e5187a6829f2"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/parties:2.0.0"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/tenants:5.10.0"
+      ],
+      "startedAt": "2026-10-30T17:57:48.886347+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:2bc415a61466693bfa7e6c0df1c9aab319b0ef2e82c620897aa9faa1b58f75a5"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/tenants:5.10.0"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/tenants:5.11.1"
+      ],
+      "startedAt": "2026-10-30T17:57:49.360151+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:d0a662280224594c637e87c474d0d4b6e493f4394b13e132b8b975f60cc714c7"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "reference": "registry.hexalith.com/tenants:5.11.1"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/tenants-api:5.11.1"
+      ],
+      "startedAt": "2026-10-30T17:57:49.920363+00:00",
+      "exitCode": 1,
+      "reference": "registry.hexalith.com/tenants-api:5.11.1"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/memories:3.0.10"
+      ],
+      "startedAt": "2026-10-30T17:57:50.313856+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:7b57a25b844b326c1711a43e92d4247b7b771daeaccb3298f6ee1ab4b61eadf9"
+      ],
+      "platforms": [],
+      "reference": "registry.hexalith.com/memories:3.0.10"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/memories-domain-service:3.0.10"
+      ],
+      "startedAt": "2026-10-30T17:57:50.730290+00:00",
+      "exitCode": 1,
+      "reference": "registry.hexalith.com/memories-domain-service:3.0.10"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/memories-access-telemetry-clock:3.0.10"
+      ],
+      "startedAt": "2026-10-30T17:57:51.250708+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:fbaee0b60cdacd6ef0ded71363a339868dae059a2606c897d4b268c6c57556b0"
+      ],
+      "platforms": [],
+      "reference": "registry.hexalith.com/memories-access-telemetry-clock:3.0.10"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/memories-access-telemetry:3.0.10"
+      ],
+      "startedAt": "2026-10-30T17:57:51.623180+00:00",
+      "exitCode": 0,
+      "digests": [
+        "sha256:706150865d5c173f6777bff6fc9ca89f5ce27f0a28070249ef84af43d38b0065"
+      ],
+      "platforms": [],
+      "reference": "registry.hexalith.com/memories-access-telemetry:3.0.10"
+    }
+  ],
+  "limits": "Manifest inspection only. Digest availability does not establish owner/source compatibility, node pullability or runtime readiness."
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "mcpcli-v1-recovery-snapshot/v1",
+  "observedAt": "2026-10-31T06:14:23.687932+00:00",
+  "owningSource": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "reviewSha256": "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+  "files": {
+    "phases.py": "9573387fa429f135ea6659e2c2c14486d3d229f8351d32898fc35b1179088795",
+    "test_v1.py": "ad38feff003cd168b4b0a42dc70d2b0b46ab6a7705ae82a7f0c577c9da0b5f4c",
+    "README.md": "59ef1312e05f0578d874408070f12831621890cfdd8028984c9f4e73b23ee133",
+    "prepare.py": "23cefe7b6838a6b160f2f2a2e34a650609c021014f0062affabd8213287f1126",
+    "packet-20261031-recovery-final/tenants.yaml": "c36e52648d3adfa547b8ddc1db863b892f3656d584eb5f7294647cf7ced82b5a",
+    "packet-20261031-recovery-final/parties.yaml": "305db1b12d5c3a2e344c4aea031e9ef93e0f58c7208c398d79ba368839fa2483",
+    "packet-20261031-recovery-final/eventstore.yaml": "0d803a6708c72ee207a089c75f8c003474eb8ed0269ffbdd0070280ae45f5d93",
+    "packet-20261031-recovery-final/review.json": "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+    "packet-20261031-recovery-final/namespace.yaml": "09260419a04d4866e9ac374aa643121911e6a5d8d7b247f1b096067906213ffc",
+    "packet-20261031-recovery-final/infrastructure.yaml": "9e3f5fdf4bba3e0e86d6457ded035f9e0d84dfd7eede2c528f9a855046f658c8",
+    "packet-20261031-recovery-final/redis.yaml": "71d57d5e741333a0eb359e519d79b7ed4f75bee6f0bbe75a3cf0cef40ab6efab",
+    "evidence/tenants-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/target-observation.json": "2634ec304f46920a3156d5cc2e771467af52f2312d3e49c61d9bbfbb0bc4854b",
+    "evidence/images.json": "17d363c99e939afc93ac0a8a4b4107b998ac3a46e3044a234e6214f356ef0bac",
+    "evidence/parties-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/startup-order.json": "7f3600fd043f0444b92e1579cfcdb9abaada23aad3e1b67f300f7d60fe6c9326",
+    "evidence/wire-bindings.json": "a3d32e78c6a43c428805e5ecabe86d5fc9dcb42460619fec13313dc713e8fda3",
+    "evidence/api-commands.json": "ded11a7313dae44029afed724493bb76de408cd099bf5165c79b820642f19de3",
+    "evidence/controller-support.json": "231ebf4ca7be3d1a162f80e72c304e86fd104a76e04b1766ab787e979841eab9",
+    "evidence/preparation-attempts.json": "11441f13a31805f575e0e8eb6504014b5fb83d431b5d155bc06f98b29c7663bd",
+    "evidence/recovery-20261031/gateway-metadata-members.json": "46fc7a650a70969a12eb7c4fb9e472aab129b4459665f8ce3a3a5f396dcb99ad",
+    "evidence/recovery-20261031/validation.json": "6be1bae222b3194ee6ea27afc1aa1218813db4411e17a470273d2158da693e78",
+    "evidence/recovery-20261031/gateway-startup-member.json": "997bf6fd56cf88e1415858fc1ae8bc5f329bb910c5212768ce4d4ea620f77d1d",
+    "evidence/recovery-20261031/validation-final.json": "073f70963f52bae3ce80f0e8a7e49e0e3520136c3d9c46f1f1ba9dd284ead528",
+    "evidence/recovery-20261031/gateway-startup-state-machine.json": "98e4848a97af166daefd95cae588f37acf9baaef2fec0d79841ef65099e7dc25",
+    "evidence/recovery-20261031/prior-source/phases.py": "6a46eb5d810de108558049d73f013f2aec1c13175c0c255c9f4981035f8e4531",
+    "evidence/recovery-20261031/prior-source/test_v1.py": "6896ccdd3f27555162ed9590c7c832789a7327d813febf4e86a7ae0c7aea2cca",
+    "evidence/recovery-20261031/prior-source/README.md": "4d136be20ca777c93fbae1fae4c88ae39ae3b921b9d7bc8ce6c3b3053715dea4",
+    "evidence/recovery-20261031/prior-source/prepare.py": "aac057e8824bf4483cd567d259fd143dff1e75b36a35a451432ef5ef62549299"
+  },
+  "sensitiveBoundaryScan": {
+    "status": "passed",
+    "historicalAndCurrentInputManifests": 5,
+    "matchedValues": 0
+  },
+  "limits": [
+    "Execute only from owning Platform path; copied source is evidence.",
+    "No private credentials/backup/journal/handoff copied. Original execution-20261031/ and prior prepared-packet/ remain untouched.",
+    "Exact sanitized command stdout/stderr are embedded in JSON receipts."
+  ]
+}

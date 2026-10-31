@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-10-30T18:25:19.139334+00:00",
+  "baselineCommit": "c99aebe4a93ca611a443c83f031ef1c02bd499b7",
+  "fullDiff": "/tmp/mcpcli-417-final-audit-etfs062u.diff",
+  "fullDiffSha256": "44738868b42d4d72830ff234e6483af0ffd49b8d0afd349044e4c376d51995cd",
+  "untrackedFilesIncluded": 163,
+  "reviewedMaterial": [
+    "README and checklist",
+    "owning Platform preparer/seed/exporter and regression tests",
+    "provenance and protocol receipts",
+    "schema-checked README argument objects",
+    "all 49 raw discovery files by byte comparison",
+    "local Gateway archive entrypoint and compiled payload",
+    "sanitized metadata and manifest-read records"
+  ],
+  "limits": "Baseline also contains earlier committed skill/gitlink changes, which are preserved. Workflow Tasks/Acceptance audit is incomplete because preparation scope and actual human/live evidence are still pending. Formal workflow review has not started."
+}

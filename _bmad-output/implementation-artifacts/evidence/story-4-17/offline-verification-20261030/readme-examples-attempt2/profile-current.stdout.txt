@@ -1,0 +1,26 @@
+{
+  "profile": "operator",
+  "url": "http://127.0.0.1:33929/",
+  "token": "synt***",
+  "tenant": "mcpcli-417-offline",
+  "actor": "operator-offline",
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "flag",
+    "url": "profile",
+    "token": "profile",
+    "tenant": "profile",
+    "actor": "profile",
+    "format": "default",
+    "allowTenantOverride": "default",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}

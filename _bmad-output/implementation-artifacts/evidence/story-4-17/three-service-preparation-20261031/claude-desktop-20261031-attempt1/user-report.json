@@ -1,0 +1,110 @@
+{
+  "schema": "mcpcli-operator-client-attempt/v1",
+  "recordedAt": "2026-10-31T09:00:13.847531+00:00",
+  "source": "User-supplied Claude Desktop transcript; server requests separately corroborated by bounded logs.",
+  "client": "Claude Desktop",
+  "clientVersionObserved": "4.4212.0.0",
+  "os": "Windows, launching WSL Ubuntu-26.04 as administrator",
+  "setupAssisted": true,
+  "independentReadmeOnlyTiming": false,
+  "elapsedSeconds": null,
+  "actualRawInitializeCaptureRetained": false,
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "discoveryReported": {
+    "server": "hexalith",
+    "modules": [
+      {
+        "name": "parties",
+        "operations": 7
+      },
+      {
+        "name": "tenants",
+        "operations": 14
+      }
+    ]
+  },
+  "schemasReportedConsulted": [
+    "tenants.get-tenant",
+    "parties.create-party",
+    "parties.get-party"
+  ],
+  "tenantQueryResponse": {
+    "operation": "tenants.get-tenant",
+    "tenant": "system",
+    "document": {
+      "tenantId": "mcpcli-417-20261031-155f9b6d",
+      "name": "McpCli operator setup",
+      "description": "Task-owned synthetic operator tenant",
+      "status": "Active",
+      "members": [
+        {
+          "userId": "mcpcli-417-operator-20261031-155f9b6d",
+          "role": "TenantContributor"
+        }
+      ],
+      "configuration": {},
+      "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+    }
+  },
+  "partyId": "party-417-desktop-20261031-1",
+  "attempts": [
+    {
+      "stage": "local-validation",
+      "submittedToGateway": false,
+      "response": {
+        "error": {
+          "code": "validation_failed",
+          "operation": "parties.create-party",
+          "violations": [
+            {
+              "path": "/idempotencyKey",
+              "message": "The idempotency key must be a canonical uppercase ULID."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "stage": "command-submission",
+      "submittedToGateway": true,
+      "idempotencyKey": "01M68JJB7QJS46XXDT4AQCDRT3",
+      "outcome": "unknown; preserved without command replay",
+      "response": {
+        "error": {
+          "code": "gateway_error",
+          "status": 503,
+          "detail": "Idempotency admission is temporarily unavailable. Retry later.",
+          "reason": "idempotency_admission_unavailable",
+          "retryable": true,
+          "clientAction": "retry_later",
+          "retryAfter": "1",
+          "correlationId": "01M68JJNZN338R4KCQNC8T9EFX"
+        }
+      }
+    },
+    {
+      "stage": "read-only-party-observation",
+      "response": {
+        "error": {
+          "code": "gateway_error",
+          "status": 500,
+          "detail": "actor-not-found-infrastructure",
+          "reason": "query_internal_error",
+          "retryAfter": "30",
+          "correlationId": "01M68JJW11DZ07BHQTBB2KQP21"
+        }
+      }
+    }
+  ],
+  "completeCrossModuleTask": false,
+  "persistedPartyVerified": false,
+  "automaticCommandReplayPerformed": false,
+  "limits": [
+    "The user transcript is not a raw MCP protocol capture.",
+    "No independent elapsed time was measured.",
+    "A 500 legacy read-model error does not establish actor placement failure.",
+    "The failed command remains preserved; no domain write was issued by this diagnostic work."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-31T05:09:09.534665+00:00",
+  "decision": "User chose 1: three-service v1 topology",
+  "supersedes": "full Platform reference-closure constraint only",
+  "authorizes": "continued preparation and local validation under existing spec approval",
+  "preserved": [
+    "exact staged tool/source/package hashes",
+    "approved enrollment",
+    "tenant rules",
+    "three actual client sessions",
+    "independent README-only timing"
+  ],
+  "pending": [
+    "concrete deployment approval",
+    "installation/seed writes",
+    "actual client/timing acceptance"
+  ]
+}

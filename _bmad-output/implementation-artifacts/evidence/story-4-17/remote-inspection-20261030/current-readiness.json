@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-30T18:23:20.485216+00:00",
+  "storyStatus": "in-progress",
+  "completedOffline": [
+    "README and observer checklist",
+    "exact accepted 1.2.0 package provenance and isolated installation",
+    "49 discovery captures byte-identical to accepted evidence",
+    "README syntax/schema and synthetic-loopback examples",
+    "24 Platform test methods with refusal matrices",
+    "eight-workload canonical graph and isolated chart snapshot",
+    "mapped-source Gateway local archive built and independently hash/entrypoint/payload checked"
+  ],
+  "gatewayArchive": {
+    "path": "/tmp/mcpcli-417-mapped-archive-20261030/eventstore.tar.gz",
+    "sha256": "9f4d265003aec0f0d8e7615966c464c48d98ea3bd118a497f5a4ea98e05c453b",
+    "installedOrPublished": false
+  },
+  "remoteInspection": "approved bounded read-only inspection completed; see cluster.json, registry.json and registry-followup.json",
+  "imageAvailability": {
+    "publishedRequiredEightWorkloadImagesMissing": [
+      "registry.hexalith.com/tenants-api:5.11.1",
+      "registry.hexalith.com/memories-domain-service:3.0.10"
+    ],
+    "registryCredentialRequirement": "An isolated anonymous manifest read was denied; working configured authentication was needed for successful reads.",
+    "nodePullability": "not established"
+  },
+  "remainingFullClosureInputs": [
+    "task-specific provider/data manifests and private binding files",
+    "hosted catalog/writer/bound-bootstrap setup and review packet",
+    "deployment authorization and actual readiness"
+  ],
+  "pendingDecision": "Approve three-service v1 operator-test topology or keep full eight-workload Platform closure; proposal is topology-scope-proposal.md. Frozen constraint remains unchanged pending the answer.",
+  "unexecuted": [
+    "deployment",
+    "bootstrap/domain writes",
+    "actual Claude Code/Desktop/VS Code sessions",
+    "persisted live Party read-back",
+    "independent README-only timing",
+    "cleanup"
+  ],
+  "limits": "Offline/Synthetic evidence is not human/client/live acceptance. Prior failed build/verification attempts are retained.",
+  "updatedAt": "2026-10-30T18:25:18.797719+00:00",
+  "checklistSha256": "51844a5c7e52853368b5c53e742c374b0813ebc39c515bcf1058c671c6da22d7",
+  "scopeQuestion": "pending human reply; full-closure constraint not modified",
+  "audit": {
+    "discoveryIdenticalFiles": 49,
+    "validOfflineEvidenceJsonFiles": 65,
+    "validProtocolMessages": 27,
+    "readmePayloadSchemas": "all three match accepted package schemas",
+    "platformTests": "24 passing methods, including refusal tables",
+    "approvedIntent": "preserved",
+    "archive": "independent SHA-256, entrypoint, Linux/amd64 and host-payload match",
+    "matrix": "actual client/business-state/new-operator rows unexecuted, no acceptance inferred",
+    "registryReads": "16 bounded manifest invocations including repeated diagnostics; see anonymous-manifest-attempt2.json accounting"
+  }
+}

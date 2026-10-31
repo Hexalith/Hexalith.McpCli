@@ -1,0 +1,19 @@
+{
+  "phase": "cleanup",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review",
+    "--review-sha256",
+    "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "--execute-reviewed",
+    "--phase",
+    "cleanup"
+  ],
+  "startedAt": "2026-10-31T07:21:45.491682+00:00",
+  "endedAt": "2026-10-31T07:22:04.159540+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"cleanup\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

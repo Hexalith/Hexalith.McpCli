@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+    "query",
+    "tenants.get-tenant",
+    "--payload",
+    "{\"TenantId\": \"mcpcli-417-20261031-155f9b6d\"}",
+    "--profile",
+    "operator"
+  ],
+  "exitCode": 0,
+  "response": {
+    "operation": "tenants.get-tenant",
+    "tenant": "system",
+    "document": {
+      "tenantId": "mcpcli-417-20261031-155f9b6d",
+      "name": "McpCli operator setup",
+      "description": "Task-owned synthetic operator tenant",
+      "status": "Active",
+      "members": [
+        {
+          "userId": "mcpcli-417-operator-20261031-155f9b6d",
+          "role": "TenantContributor"
+        }
+      ],
+      "configuration": {},
+      "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+    }
+  },
+  "applicationWritesSubmitted": 0,
+  "newPrivateHome": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home"
+}

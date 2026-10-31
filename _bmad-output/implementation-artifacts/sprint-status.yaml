@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '2026-10-29'
+last_updated: '2026-10-31'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -84,7 +84,7 @@ development_status:
   # 4.15: rule/plan published upstream, baseline integrated, verification and Build review complete.
   4-15-publish-the-no-new-server-rule: done
   4-16-stage-and-validate-the-paired-packages: done # Build/review complete; staging 40885068007 passed all three OS lanes and required Windows checks.
-  4-17-verify-the-operator-setup-experience: backlog
+  4-17-verify-the-operator-setup-experience: in-progress
   4-18-publish-the-validated-package-pair: backlog
   epic-4-retrospective: optional
 

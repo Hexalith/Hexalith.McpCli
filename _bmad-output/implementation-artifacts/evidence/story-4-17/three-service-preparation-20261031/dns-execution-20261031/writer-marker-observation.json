@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-10-31T07:17:47.025074+00:00",
+  "operation": "read exact maintenance marker only",
+  "redisKey": "statestore||projection-delivery-writer-protocol",
+  "marker": {
+    "schemaVersion": 1,
+    "writerProtocolVersion": 2,
+    "cutoverCommit": "717a06e16c3afd81b904eaf4de646b74b13262d2",
+    "activatedAt": "2026-10-31T07:10:59.8416995+00:00"
+  },
+  "activationNotResubmitted": true
+}

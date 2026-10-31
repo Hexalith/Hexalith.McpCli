@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-31T06:29:07.360884+00:00",
+  "userReply": "approve",
+  "reviewSha256": "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+  "context": "jpiquot@local",
+  "api": "https://192.168.1.30:6443",
+  "namespace": "mcpcli-417-20261031-e01a41d1",
+  "approved": [
+    "apply exact corrected packet with three controller Jobs",
+    "private task Secrets including registry pull identity",
+    "provider-native empty backup",
+    "administrator and writer bootstrap",
+    "test tenant/member seeding",
+    "private localhost handoff",
+    "UID-bound cleanup after sessions"
+  ],
+  "excluded": [
+    "publication",
+    "shared control-plane changes",
+    "impersonation",
+    "Secret resource retrieval",
+    "unrelated application writes"
+  ],
+  "actualClientAndIndependentTiming": "human-executed, still required"
+}

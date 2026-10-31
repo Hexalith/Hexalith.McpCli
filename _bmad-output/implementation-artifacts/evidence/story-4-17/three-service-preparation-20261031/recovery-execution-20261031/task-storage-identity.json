@@ -1,0 +1,5 @@
+{
+  "pvcUid": "9ad4cd80-dfd1-4faa-998d-5dd50e474796",
+  "volumeName": "pvc-9ad4cd80-dfd1-4faa-998d-5dd50e474796",
+  "reclaimPolicy": "Delete"
+}

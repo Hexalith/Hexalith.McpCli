@@ -1,0 +1,19 @@
+{
+  "phase": "backup",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final",
+    "--review-sha256",
+    "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+    "--execute-reviewed",
+    "--phase",
+    "backup"
+  ],
+  "startedAt": "2026-10-31T06:29:35.227502+00:00",
+  "endedAt": "2026-10-31T06:29:37.333967+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"backup\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

@@ -1,0 +1,19 @@
+{
+  "phase": "cleanup",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-review",
+    "--review-sha256",
+    "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+    "--execute-reviewed",
+    "--phase",
+    "cleanup"
+  ],
+  "startedAt": "2026-10-31T06:01:31.377488+00:00",
+  "endedAt": "2026-10-31T06:01:49.713703+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"cleanup\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

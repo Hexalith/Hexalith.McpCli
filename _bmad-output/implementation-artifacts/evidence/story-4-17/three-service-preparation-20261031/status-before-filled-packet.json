@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-31T05:10:29.348986+00:00",
+  "storyStatus": "in-progress",
+  "activeTopology": "three-service v1 operator-test fixture: Gateway, Tenants domain, Parties domain",
+  "scopeDecision": "Human selected option 1 on 2026-10-31; full Platform closure constraint superseded for this temporary environment.",
+  "currentWork": "Prepare filled fixture-equivalent deployment packet and validate actual immutable image/configuration capabilities.",
+  "authorization": "Preparation and read-only inspection/artifact inputs; no deployment, publication, Kubernetes Secret retrieval or application writes.",
+  "completedPriorEvidence": [
+    "accepted staged 1.2.0 provenance/install",
+    "49 byte-identical discovery captures",
+    "README syntax/schema/loopback checks",
+    "24 legacy Platform preparation tests",
+    "local mapped-source Gateway archive"
+  ],
+  "stillRequired": [
+    "three-service packet and focused verification",
+    "concrete deployment review",
+    "actual installation/seed/readiness",
+    "three actual MCP client sessions",
+    "persisted Party result",
+    "independent README-only timing",
+    "cleanup"
+  ],
+  "historicalEvidence": "../remote-inspection-20261030/current-readiness.json; prior full-closure plans and attempts retained."
+}

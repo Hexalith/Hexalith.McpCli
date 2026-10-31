@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-10-31T05:57:30.768904+00:00",
+  "localVerification": "passed",
+  "reviewSha256": "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+  "api": "https://192.168.1.30:6443",
+  "namespaceAbsent": true,
+  "kubernetesServiceClusterIp": "10.233.0.1",
+  "dapr": {
+    "dapr-sentry": [
+      {
+        "image": "ghcr.io/dapr/sentry:1.18.1",
+        "args": [
+          "--mode",
+          "kubernetes",
+          "--log-level",
+          "info",
+          "--enable-metrics",
+          "--metrics-port",
+          "9090",
+          "--trust-domain",
+          "cluster.local"
+        ],
+        "securityEnvironment": {}
+      }
+    ],
+    "dapr-sidecar-injector": [
+      {
+        "image": "ghcr.io/dapr/injector:1.18.1",
+        "args": [
+          "--log-level",
+          "info",
+          "--enable-metrics",
+          "--metrics-port",
+          "9090",
+          "--healthz-port",
+          "8080",
+          "--scheduler-enabled=true"
+        ],
+        "securityEnvironment": {
+          "SIDECAR_RUN_AS_NON_ROOT": "true",
+          "SIDECAR_DROP_ALL_CAPABILITIES": "false",
+          "SIDECAR_READ_ONLY_ROOT_FILESYSTEM": "true"
+        }
+      }
+    ]
+  },
+  "storageClass": {
+    "provisioner": "openebs.io/local",
+    "volumeBindingMode": "WaitForFirstConsumer",
+    "reclaimPolicy": "Delete"
+  },
+  "materialDrift": false,
+  "applicationWrites": 0,
+  "secretResourceReads": 0
+}

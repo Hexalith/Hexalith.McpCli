@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-31T06:29:09.409648+00:00",
+  "reviewSha256": "1f632480a23e000ade4abbb9a89ec6632fd29c6f75268eac2b977cc181fd69fc",
+  "localVerification": "passed",
+  "namespaceAbsent": true,
+  "materialDrift": false,
+  "dapr": {
+    "dapr-sentry": [
+      {
+        "image": "ghcr.io/dapr/sentry:1.18.1",
+        "args": [
+          "--mode",
+          "kubernetes",
+          "--log-level",
+          "info",
+          "--enable-metrics",
+          "--metrics-port",
+          "9090",
+          "--trust-domain",
+          "cluster.local"
+        ],
+        "securityEnvironment": {}
+      }
+    ],
+    "dapr-sidecar-injector": [
+      {
+        "image": "ghcr.io/dapr/injector:1.18.1",
+        "args": [
+          "--log-level",
+          "info",
+          "--enable-metrics",
+          "--metrics-port",
+          "9090",
+          "--healthz-port",
+          "8080",
+          "--scheduler-enabled=true"
+        ],
+        "securityEnvironment": {
+          "SIDECAR_RUN_AS_NON_ROOT": "true",
+          "SIDECAR_DROP_ALL_CAPABILITIES": "false",
+          "SIDECAR_READ_ONLY_ROOT_FILESYSTEM": "true"
+        }
+      }
+    ]
+  },
+  "storage": {
+    "provisioner": "openebs.io/local",
+    "volumeBindingMode": "WaitForFirstConsumer",
+    "reclaimPolicy": "Delete"
+  },
+  "serverVersion": "v1.34.9",
+  "jobControllerServiceAccountUid": "e700a8f7-2bb1-4763-922a-81b7b65eff7f",
+  "perControllerCredentials": true,
+  "applicationWrites": 0,
+  "secretResourceReads": 0
+}

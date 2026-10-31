@@ -1,0 +1,23 @@
+{
+  "schema": "mcpcli-same-scope-access-renewal/v1",
+  "status": "pending-human-approval",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "actor": "mcpcli-417-operator-20261031-155f9b6d",
+  "currentExpiresAt": "2026-10-31T09:54:53+00:00",
+  "requestedTtlSeconds": 7200,
+  "maximumExpiresAt": "2026-11-01T07:37:50.685975+00:00",
+  "claimsPolicy": "Preserve every original claim except iat/nbf/exp; retain original HS256 issuer/audience/subject/tenant/domain/permission/global-admin policy.",
+  "originalPayloadSha256": "5cda2537d27ddf2107468050727a64468e6be4e5221e319db8b1aee95b8edc63",
+  "profileSha256": "421b05ea236577b96ae9d726053b994a32fac7ed39b55fbc16daedb78762866b",
+  "privateProfile": "/tmp/mcpcli-417-v1-private-20261031-attempt8/operator-home/.eventstore/mcpcli.json",
+  "changes": [
+    "Issue a replacement operator credential within the same approved environment and scope.",
+    "Create a protected renewed profile and update task Hexalith client registrations, preserving all other servers.",
+    "Restart only local MCP server processes as needed; retain old profile/evidence."
+  ],
+  "remoteDeploymentChanges": false,
+  "domainCommandsIncluded": false,
+  "originalUncertainCommandReplayIncluded": false,
+  "tokenGenerated": false,
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4"
+}

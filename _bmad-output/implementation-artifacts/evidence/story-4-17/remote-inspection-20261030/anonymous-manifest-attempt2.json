@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-10-30T18:20:06.747506+00:00",
+  "argv": [
+    "docker",
+    "--config",
+    "/tmp/mcpcli-417-public-registry-w_os9qxi",
+    "buildx",
+    "imagetools",
+    "inspect",
+    "registry.hexalith.com/parties:1.5.1"
+  ],
+  "exitCode": 1,
+  "isolatedEmptyDockerConfig": true,
+  "configuredCredentialsUsed": false,
+  "digests": [],
+  "errorCategory": "authentication-required",
+  "registryRequests": 16,
+  "previousAttempt": "The first anonymous invocation failed without retaining stderr; do not infer a plugin failure or absence of a network request. Count both anonymous invocations conservatively.",
+  "limits": "Anonymous manifest availability only; no node pull, image execution or deployment evidence.",
+  "requestBudgetObservation": "16 bounded manifest invocations were made against the selected registry, including diagnostic repeats; the planned maximum of 15 was exceeded by one repeat of the same allowed image reference. No further registry reads are scheduled."
+}

@@ -432,3 +432,7 @@ FodyWeavers.xsd
 .bmad-loop/cache/
 .bmad-loop/policy.toml
 _bmad/render/
+
+# Operator acceptance procedure is source documentation, not build output.
+!docs/release/
+!docs/release/operator-setup-checklist.md

@@ -1,0 +1,51 @@
+{
+  "verifiedAt": "2026-10-31T09:23:24.342806+00:00",
+  "success": true,
+  "tenantReadThroughSystem": true,
+  "exactContributorMembership": true,
+  "commandSubmissions": 1,
+  "idempotencyKeyOmitted": true,
+  "originalKeyedAttemptReplayed": false,
+  "persistedParty": {
+    "id": "party-417-desktop-20261031-2",
+    "personDetails": {
+      "firstName": "Operator",
+      "lastName": "Setup"
+    },
+    "contactChannels": [
+      {
+        "id": "email-417-desktop-20261031-2",
+        "type": "Email",
+        "value": "operator@example.test",
+        "isPreferred": true
+      }
+    ],
+    "identifiers": [
+      {
+        "id": "external-417-desktop-20261031-2",
+        "type": "Other",
+        "value": "operator-setup"
+      }
+    ],
+    "isActive": true,
+    "isErased": false
+  },
+  "actualClaudeDesktopAcceptance": false,
+  "independentTiming": false,
+  "credentialExposureScan": "passed",
+  "files": {
+    "party-pre-read-response.json": "9de683c5a7b8c34128012e0a93f126be455482e819ec7ffecea68f38fdbfbc1f",
+    "describe-tenant-query-response.json": "14609ab16d3901d27f4f664ae286811b094b80711ba4b6acc139131403c4940c",
+    "describe-create-response.json": "aab1e8e01b86032985e1fedcbb9d4aac8429c5816b2c8ddffb07fb0df0b113b6",
+    "tenant-query-response.json": "1cf58046317bef99ae75228bd7d69a82dbcbf072b70a4ad5f08d90e89eb4f237",
+    "describe-party-query-response.json": "42df606f8e82747ee540ca09aeabf50159c47507f8ca786ce465d5fc21dd105b",
+    "party-read-00-response.json": "78ba8406e5a13f29ac457a101ee24adac5f664550d8d69603ec4714c0aacd7b8",
+    "mcp-transcript.json": "0565c019067d5e1cd7fd7754b337932f7817c611af6cece061351055303b0ead",
+    "command-intent.json": "c7eb1348cf623f9338689e4b93f3eaf8fc25ff5cdf050099ad5b3354c63a96dc",
+    "tools-list-response.json": "59c2734bdc725eb7bac963ad784097f574b9d3aeb2b689fb7d468f337fd1b53a",
+    "initialize-response.json": "25b751537dd9760b907f2adb745d0404f020e34db1a65f6e995a166e5a3089d4",
+    "execution-summary.json": "d81497ad8ead2461d88475f39b47fb32f82ae0c0cf84a2a4788ec2c5c9a11b69",
+    "modules-response.json": "55e9c43a90436e8f5d091af9af33c9dd1180bd3d09e3d2d11ab95aa7efd82e89",
+    "create-party-response.json": "eadbd10e262ca6d409feefee1aac65c19a63e47780d4414005303e43a55fc340"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "mcpcli-v1-metadata-snapshot/v1",
+  "observedAt": "2026-10-31T07:41:59.627572+00:00",
+  "owningSource": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "files": {
+    "phases.py": "20b07d174a6f5751b3fbad33e44d5f90da82b2f77b94f71dec4eda1d2470dccb",
+    "test_v1.py": "d91ec4c90f09b3a07ef06e2f3a5fa8a765412612943dc2615e7e31453d45c593",
+    "README.md": "420d81a8915ac633a427500eae1a55ee485bf63ffcf2e816ecdc831d0443049f",
+    "prepare.py": "a92fa353e079dab490b29342886b4ddb11f58682b1aad4d34f72d4546d19e937",
+    "packet-20261031-gateway-api-review/tenants.yaml": "b29a98f7ff2aba6fe397812eb1f657fc96f8abe0ec313986c3a0c62a9bd10beb",
+    "packet-20261031-gateway-api-review/parties.yaml": "8efd7def9e0760be8b418c32063080b377f3e6f09a7533d7519bccf57e02b0c7",
+    "packet-20261031-gateway-api-review/eventstore.yaml": "5ffd6fa55d8df6ce1933bba35aea14ea0a7237fa232833630e5b9305d32acbeb",
+    "packet-20261031-gateway-api-review/review.json": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+    "packet-20261031-gateway-api-review/namespace.yaml": "9d97b4d5a035c2af23f2026a6c98fbdf6925fcf4b99f98d92538d09eb4459015",
+    "packet-20261031-gateway-api-review/infrastructure.yaml": "1b4e643e55d0e404a661431a571a3bbebb936bbf6fb4eae7bc595241b028586d",
+    "packet-20261031-gateway-api-review/redis.yaml": "f36a0fa200f8c43a200770659489f5797660f3976a5f80cee77cfbdfb066344c",
+    "evidence/dns-target.json": "e7610085afe758268f06a1bf14c8811e707badbb6ff6b523b04fc826094ab7f0",
+    "evidence/tenants-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/gateway-api-mode.json": "bde52a5eab5bd993775f900e67ec5a6acdf6f3918d6d83adbbb74f6b4b47f5d6",
+    "evidence/target-observation.json": "2634ec304f46920a3156d5cc2e771467af52f2312d3e49c61d9bbfbb0bc4854b",
+    "evidence/images.json": "17d363c99e939afc93ac0a8a4b4107b998ac3a46e3044a234e6214f356ef0bac",
+    "evidence/parties-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/startup-order.json": "7f3600fd043f0444b92e1579cfcdb9abaada23aad3e1b67f300f7d60fe6c9326",
+    "evidence/wire-bindings.json": "a3d32e78c6a43c428805e5ecabe86d5fc9dcb42460619fec13313dc713e8fda3",
+    "evidence/api-commands.json": "ded11a7313dae44029afed724493bb76de408cd099bf5165c79b820642f19de3",
+    "evidence/controller-support.json": "231ebf4ca7be3d1a162f80e72c304e86fd104a76e04b1766ab787e979841eab9",
+    "evidence/preparation-attempts.json": "430926823cee92fd50f95eb33edef974ef76d9093c6b0c268011007ca6d9cdd5",
+    "evidence/metadata-recovery-20261031/validation-final.json": "7b598c4559657154aa6fb2cee47addf7fce4daa0dcfbf1d91860e836463cadb8",
+    "evidence/metadata-recovery-20261031/prior-source/phases.py": "48b0566733151e83dbca40ea9b00b9cec5ea8825fc1c5cfd4683e93496cee4ca",
+    "evidence/metadata-recovery-20261031/prior-source/test_v1.py": "2ed8efb02bee856e1be100ee96cda420a089d193fcb62260f2263e89639c3d5f",
+    "evidence/metadata-recovery-20261031/prior-source/README.md": "12ae49afa61569d65583a9ce652bcdd010cda04ca42782a8a64dc08fb9b49138",
+    "evidence/metadata-recovery-20261031/prior-source/prepare.py": "ac5b3912dc298a93089af9152a23cbd54708665d710c94b5fc7acfc5d3634627"
+  },
+  "sensitiveBoundaryScan": {
+    "status": "passed",
+    "inputManifestsScanned": 7,
+    "matches": 0
+  },
+  "limits": [
+    "Execute from owning Platform path; copied source is evidence.",
+    "No private credentials/backup/execution journal/profile/image archive copied. Original protocol-v2 marker and all approved execution/cleanup evidence remain untouched.",
+    "Static inspections and synthetic tests do not establish new metadata/API-mode/readiness or seed success."
+  ]
+}

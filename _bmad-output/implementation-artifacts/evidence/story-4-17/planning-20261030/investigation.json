@@ -1,0 +1,91 @@
+{
+  "schema": "mcpcli-operator-planning-investigation/v1",
+  "observed_at": "2026-10-30T15:40:09.411202+00:00",
+  "repository_revision": "e74d215739766a663cb9e910f4534f383e7973ff",
+  "status": "draft; environment scope decision outstanding",
+  "provenance": {
+    "status": "passed",
+    "checks": [
+      "accepted status is staging only",
+      "prepared source is clean",
+      "version and exact full source agree",
+      "preparation SHA-256 equals acceptance binding",
+      "both local package SHA-256 values equal prepared and accepted bindings"
+    ],
+    "version": "1.2.0",
+    "source_sha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+    "accepted_receipt": "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/accepted-staging-only/accepted-pair.json",
+    "accepted_receipt_sha256": "b90d5295de08a48451f29b4d830692af83770c717d1205f078ab24243d5ff026",
+    "prepared_receipt": "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/paired-preparation/prepared.json",
+    "preparation_sha256": "7ff79f8df835084ac604798d605ab6e99e79e618db84c5df163fbffb182e60a9",
+    "local_package_directory": "/tmp/mcpcli-416-hosted-svjuv79c/attempt4/paired-preparation/packages",
+    "local_packages": {
+      "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+      "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3"
+    },
+    "limitation": "Temporary local package availability is not a durable distribution or publication link."
+  },
+  "readme": {
+    "path": "README.md",
+    "sha256_before_implementation": "108a28116c32c25df07b9866a286b98fe29ed8b3d973b4c4d238d608fc1bafde"
+  },
+  "platform": {
+    "revision": "18db09be1fa5e19b4bbf669cc8dda8b5d40df588",
+    "selected_host": "192.168.1.30",
+    "sources": {
+      "references/Hexalith.Platform/README.md": "e00a8af28dfe04c692a748b3464f75a715ad75be4bb690ed0be6d4448d1a6850",
+      "references/Hexalith.Platform/docs/implementation/ext-parties-1-platform-prerequisites-2026-10-18/README.md": "d9130b9171fec5f6ea71f49a6e65b9a8f9507bd01e498d910d9a82d297edd5e1",
+      "references/Hexalith.Platform/docs/implementation/story-5-4-operational-security-2026-10-28/README.md": "7ea7dbe25f935fe028debb72a0ca4edc268fa3dbcccf00d84014c4f4f3e9a167",
+      "references/Hexalith.Platform/docs/implementation/ext-protection-1-parent-merged-2026-10-30/loop6/README.md": "776d5291fb8c926657532496d85198a4969711e63b73b4b6f1203569f8ef03e6"
+    },
+    "finding": "Current inspected source records establish no installed operator Gateway, approved application tenant or credential binding. Existing isolated secret-test services are not the selected task environment.",
+    "limits": "Repository-local source investigation only; no new remote observation, credential retrieval, deployment or domain call. No unrelated Platform qualification requirements imposed on this task."
+  },
+  "client_documentation": [
+    {
+      "client": "Claude Code",
+      "sources": [
+        "https://code.claude.com/docs/en/mcp"
+      ],
+      "findings": [
+        "Use claude mcp add --transport stdio --scope local hexalith -- /absolute/path/hexalith mcp --transport stdio --profile operator.",
+        "Local scope is private to the project; use the existing private McpCli profile for credentials."
+      ]
+    },
+    {
+      "client": "Claude Desktop",
+      "sources": [
+        "https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers",
+        "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging"
+      ],
+      "findings": [
+        "Merge one command/args/env entry into mcpServers through Developer settings and fully restart.",
+        "GUI environment and working directory can differ from a terminal; use absolute executable paths and explicit MCPCLI_HOME. Do not assume Claude Code variable expansion is supported."
+      ]
+    },
+    {
+      "client": "VS Code",
+      "sources": [
+        "https://code.visualstudio.com/docs/agent-customization/mcp-servers",
+        "https://code.visualstudio.com/docs/agents/reference/mcp-configuration"
+      ],
+      "findings": [
+        "Record exact version and selected harness. Current guided Copilot Global flow uses ~/.copilot/mcp-config.json and mcpServers.",
+        "Local harness configurations use servers and type stdio; portable configurations do not support inputs or envFile. Match examples to the operator client version and harness."
+      ]
+    },
+    {
+      "client": "Windows/WSL",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop"
+      ],
+      "inference": "The executable, .NET runtime and isolated profile must be available in the launching environment. Native Windows and WSL launches require distinct paths or an explicit wsl.exe bridge; verify the actual operator combination."
+    }
+  ],
+  "acceptance": {
+    "three_client_sessions": "not executed",
+    "new_operator_timing": "not executed",
+    "live_environment": "unresolved",
+    "story": "incomplete"
+  }
+}

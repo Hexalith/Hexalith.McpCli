@@ -1,0 +1,61 @@
+{
+  "schema": "mcpcli-approved-access-renewal/v1",
+  "completedAt": "2026-10-31T09:53:55.903210+00:00",
+  "sameAuthorizationClaims": true,
+  "scopeSha256": "9210c137e1ffddd71474048229879f0dd3dc121b24d9297cc04c479f3bd43111",
+  "oldExpiresAt": "2026-10-31T09:54:53+00:00",
+  "newExpiresAt": "2026-10-31T11:53:55+00:00",
+  "ttlSeconds": 7200,
+  "newPrivateHome": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home",
+  "oldProfilePreserved": true,
+  "updatedRegistrations": [
+    {
+      "client": "desktop",
+      "path": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Claude/claude_desktop_config.json",
+      "sha256": "ed93912a51cf215f0ce904ffc597ba4bc8e786cfe0b15da7c135c4b57ec6b4ae"
+    },
+    {
+      "client": "claude-code",
+      "path": "/home/administrator/.claude.json",
+      "sha256": "bf58e5932017a980b7b1f0931084dbdcbd1a984df862cbbbd6f957173fcb58d5"
+    },
+    {
+      "client": "copilot-windows",
+      "path": "/mnt/c/Users/JeromePiquot/.copilot/mcp-config.json",
+      "sha256": "b6e5a174174cec5c0cce44a72dc8ddc87ee0b939dda410b01e257c4de3e27235"
+    },
+    {
+      "client": "copilot-wsl",
+      "path": "/home/administrator/.copilot/mcp-config.json",
+      "sha256": "6720375074e3f90cf444ff2044e83c82b6e1699eb0e1ac0c312a014d8e2909c2"
+    }
+  ],
+  "forward": {
+    "pid": 1055177,
+    "processGroupId": 1055177,
+    "argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=1s",
+      "7198s",
+      "kubectl",
+      "--context=jpiquot@local",
+      "-n",
+      "mcpcli-417-20261031-155f9b6d",
+      "port-forward",
+      "--address=127.0.0.1",
+      "pod/eventstore-l6rpl",
+      "18170:8080"
+    ],
+    "expiresAt": "2026-10-31T11:53:55+00:00",
+    "gatewayPodUid": "1daa2ee7-b949-41f2-b41c-4ce33e902e25",
+    "replacedOwnedForwardPids": [
+      2776481
+    ]
+  },
+  "gatewayReadyHttpStatus": 200,
+  "applicationWritesSubmitted": 0,
+  "deploymentChanges": false,
+  "oldClientProcessesStopped": false,
+  "restartRequirement": "Start/restart the Hexalith MCP server in each client to load its renewed registration; do not close unrelated client work."
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "mcpcli-417-parent-audit/v1",
+  "observedAt": "2026-10-31T05:45:53.261997+00:00",
+  "baselineCommit": "c99aebe4a93ca611a443c83f031ef1c02bd499b7",
+  "reviewSha256": "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-aebefecb",
+    "release": "mcpcli-417-20261031-aebefecb"
+  },
+  "expiresAt": "2026-11-01T05:40:31.477727+00:00",
+  "storyStatus": "in-progress",
+  "checks": {
+    "localPacketAndManifestVerification": "passed with external transport disabled",
+    "retainedSnapshotMatchesOwningFiles": true,
+    "focusedTestsPassed": 18,
+    "privateInputSetsScanned": 3,
+    "publicFilesScanned": 115,
+    "privateValueMatches": 0,
+    "acceptedPackageProvenance": "exact hashes rechecked",
+    "runnerHelperAndFixtureEvidenceBindings": "passed",
+    "concretePhaseGuideAndIndependentFreshTimingProcedure": "audited"
+  },
+  "readmeSha256": "0dd463e39ce28e2a39716d0a80e595f5b8a98f133aaf73b4e50dd5a85cc5b12e",
+  "tasks": {
+    "filledPacket": "complete",
+    "readme": "complete",
+    "observerChecklist": "complete",
+    "actualClientAndTimingEvidence": "pending",
+    "finalAcceptanceAndCompletion": "pending"
+  },
+  "matrix": {
+    "acceptedLocalPackage": "passed offline",
+    "actualClientInitializationAndDiscovery": "not executed",
+    "crossModulePersistedTask": "not executed",
+    "missingRuntimePathProfilePermissionsService": "procedures and offline refusal coverage only; actual cases not executed",
+    "independentREADMEOnlyTiming": "not executed",
+    "targetExceededAssistedInterrupted": "recording procedure only; actual cases not executed"
+  },
+  "execution": {
+    "deploymentAuthorized": false,
+    "deploymentApplied": false,
+    "realBackupOrBootstrap": false,
+    "actualClientSessions": false,
+    "independentTiming": false,
+    "formalStep04ReviewStarted": false
+  },
+  "diffFiles": {
+    "mcpcli": "/tmp/mcpcli-417-parent-final-bn96w9g3.diff",
+    "platformTaskOnly": "/tmp/platform-417-parent-final-pecshpkb.diff"
+  },
+  "scope": "No commits, pushes, dependency changes or shared Platform edits performed by this task; concurrent unrelated changes preserved."
+}

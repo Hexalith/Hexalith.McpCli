@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-31T07:07:56.609281+00:00",
+  "userReply": "I approve",
+  "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+  "context": "jpiquot@local",
+  "api": "https://192.168.1.30:6443",
+  "namespace": "mcpcli-417-20261031-ef5184e1",
+  "approved": [
+    "exact DNS-aware packet with three controller Jobs",
+    "169.254.25.10/32 TCP/UDP 53 egress",
+    "private task Secrets including registry pull identity",
+    "DNS and sidecar checks",
+    "real empty-store backup",
+    "administrator/writer bootstrap",
+    "test tenant/member seeding",
+    "private localhost handoff",
+    "UID-bound cleanup"
+  ],
+  "excluded": [
+    "publication",
+    "shared control-plane changes",
+    "impersonation",
+    "Secret resource retrieval",
+    "unrelated application writes"
+  ],
+  "actualClientsAndTiming": "human-executed, still required"
+}

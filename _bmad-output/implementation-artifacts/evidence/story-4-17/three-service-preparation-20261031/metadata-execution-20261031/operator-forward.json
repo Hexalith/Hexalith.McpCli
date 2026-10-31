@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-10-31T07:56:47.409028+00:00",
+  "pid": 2774903,
+  "processGroupId": 2774903,
+  "localUrl": "http://127.0.0.1:18170",
+  "expiresAt": "2026-10-31T09:54:53+00:00",
+  "boundedSeconds": 7091,
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=INT",
+    "--kill-after=10s",
+    "7091s",
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review",
+    "--review-sha256",
+    "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+    "--forward"
+  ],
+  "logPath": "/tmp/mcpcli-417-v1-private-20261031-attempt8/execution/operator-forward.log",
+  "verifiedOwnedForward": true
+}

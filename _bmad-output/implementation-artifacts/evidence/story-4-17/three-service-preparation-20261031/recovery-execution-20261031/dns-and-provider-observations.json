@@ -1,0 +1,65 @@
+[
+  {
+    "argv": [
+      "kubectl",
+      "--context=jpiquot@local",
+      "--request-timeout=10s",
+      "-n",
+      "mcpcli-417-20261031-e01a41d1",
+      "exec",
+      "eventstore-v6fmm",
+      "-c",
+      "eventstore",
+      "--",
+      "timeout",
+      "5",
+      "getent",
+      "ahostsv4",
+      "dapr-sentry.dapr-system.svc.cluster.local"
+    ],
+    "exitCode": 143,
+    "stdout": "",
+    "stderr": "command terminated with exit code 143\n"
+  },
+  {
+    "argv": [
+      "kubectl",
+      "--context=jpiquot@local",
+      "--request-timeout=10s",
+      "-n",
+      "mcpcli-417-20261031-e01a41d1",
+      "exec",
+      "eventstore-v6fmm",
+      "-c",
+      "eventstore",
+      "--",
+      "timeout",
+      "5",
+      "getent",
+      "ahostsv4",
+      "redis"
+    ],
+    "exitCode": 143,
+    "stdout": "",
+    "stderr": "command terminated with exit code 143\n"
+  },
+  {
+    "argv": [
+      "kubectl",
+      "--context=jpiquot@local",
+      "--request-timeout=10s",
+      "-n",
+      "mcpcli-417-20261031-e01a41d1",
+      "exec",
+      "redis",
+      "-c",
+      "redis",
+      "--",
+      "redis-cli",
+      "DBSIZE"
+    ],
+    "exitCode": 0,
+    "stdout": "0\n",
+    "stderr": ""
+  }
+]

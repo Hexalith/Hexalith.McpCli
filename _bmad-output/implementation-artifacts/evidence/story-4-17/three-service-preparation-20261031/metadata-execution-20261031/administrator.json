@@ -1,0 +1,19 @@
+{
+  "phase": "administrator",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review",
+    "--review-sha256",
+    "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+    "--execute-reviewed",
+    "--phase",
+    "administrator"
+  ],
+  "startedAt": "2026-10-31T07:53:24.596431+00:00",
+  "endedAt": "2026-10-31T07:53:30.358215+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"administrator\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-31T05:43:47.359172+00:00",
+  "storyStatus": "in-progress",
+  "preparationStatus": "filled-packet-prepared-and-locally-verified; deployment review pending",
+  "activeTopology": "Gateway, Tenants domain, Parties domain plus one task-owned Redis provider",
+  "owner": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "guide": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/README.md",
+  "reviewPacket": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/packet-20261031-review/review.json",
+  "reviewSha256": "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-aebefecb",
+    "release": "mcpcli-417-20261031-aebefecb"
+  },
+  "tenant": "mcpcli-417-20261031-aebefecb",
+  "operatorSubject": "mcpcli-417-operator-20261031-aebefecb",
+  "expiresAt": "2026-11-01T05:40:31.477727+00:00",
+  "privateInputManifest": "/tmp/mcpcli-417-v1-private-20261031-attempt4/private-inputs.json",
+  "privateInputManifestSha256": "a26638cb4441830500615f6f21ceafb2fe5f787e6fee9ce16eebd8830dfb1317",
+  "authorization": "Preparation and selected read-only metadata/artifact inspection only; no deployment, publication, Secret resource retrieval or application writes.",
+  "verified": [
+    "Exact accepted staged 1.2.0 pair and preparation/accepted receipt hashes rechecked; source unchanged.",
+    "Three actual immutable released images inspected without starting applications; manifest/daemon/config identities retained separately.",
+    "Required seed command/query/domain constants, payload/enum/projection members inspected from actual image; eight Tenants required surfaces and projection dispatch DTO comparisons show no API changes; distinct binary identities retained.",
+    "18 focused synthetic runner/parity/refusal tests pass, including uncertain writer, terminal seed and missing persisted admin/member outcomes; no mutation replay.",
+    "Local review verification binds document, runner, imported helper, fixtures/evidence, manifests and private inputs before execution.",
+    "Six public manifest files pass client-only Kubernetes dry-run; selected namespace freshly observed absent.",
+    "Private input modes/hash bindings and no-value public evidence scan pass."
+  ],
+  "reviewRisks": [
+    "Actual Dapr 1.18.1 interoperability, admission, pull/volume behavior and /ready remain unexecuted.",
+    "Namespace baseline enforcement with restricted warnings/auditing accommodates existing sidecar injector; app containers drop ALL; shared settings remain untouched.",
+    "Configured registry identity is delegated to task pull Secret only after review; upstream account may have broader scope.",
+    "Private task inputs are ephemeral /tmp files; preserve them privately until reviewed execution/cleanup or prepare a fresh packet.",
+    "Review expires 2026-11-01T05:40:31 UTC. Client token minted only on handoff, lasts at most two hours and never exceeds approval expiry."
+  ],
+  "missingPreparationInputs": [],
+  "stillRequired": [
+    "human concrete deployment approval",
+    "actual provider-native pre-application empty-store backup and UID binding",
+    "actual administrator/writer/tenant/member bootstrap and /ready observations",
+    "three actual MCP client sessions and persisted synthetic Party evidence",
+    "independent fresh-install README-only timing, with all failures/assistance retained",
+    "task cleanup and retained sanitized execution evidence"
+  ],
+  "evidence": "prepared-snapshot.json and prepared-packet/; provenance-recheck.json",
+  "historicalEvidence": [
+    "status-before-filled-packet.json",
+    "../remote-inspection-20261030/current-readiness.json",
+    "prepared-packet/evidence/preparation-attempts.json"
+  ]
+}

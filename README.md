@@ -116,6 +116,194 @@ python3 scripts/smoke-paired-tool.py --staging /tmp/mcpcli-pair/packages --prepa
 
 `--local` records local-only evidence, including dirty-source state, and can never become accepted staging. Omit it only for eligible committed current-main source with `REPOSITORY` and read-only GitHub authentication configured. Local Linux checks do not establish Windows/macOS acceptance; actual runner receipts remain required. ARM qualification remains deferred. The [accepted staging evidence](_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md) records version 1.2.0, the exact validated source, package hashes and passing three-OS results with all 49 discovery captures. Package publication remains disabled.
 
+## Operator setup with the staged 1.2.0 tool
+
+Story 4.17 uses the accepted **staging-only** pair from source `32fb5dbf75216adaf21551bcfa36439741c41e01`. It is not a published release. Obtain both package files, `prepared.json` and `accepted-pair.json` from the maintainer's [accepted staging packet](_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md). Keep the packages in a local directory; do not substitute a public-feed package, a source build or another 1.2.0 archive.
+
+| File | SHA-256 |
+| --- | --- |
+| `Hexalith.McpCli.1.2.0.nupkg` | `eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e` |
+| `Hexalith.McpCli.Abstractions.1.2.0.nupkg` | `ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3` |
+| `prepared.json` | `7ff79f8df835084ac604798d605ab6e99e79e618db84c5df163fbffb182e60a9` |
+| `accepted-pair.json` | `b90d5295de08a48451f29b4d830692af83770c717d1205f078ab24243d5ff026` |
+
+Before starting, have .NET **10 SDK** installed (`dotnet --info` and `dotnet --list-runtimes` must show .NET 10), Python 3 for the private token prompt below, and an installed, signed-in MCP client. The framework-dependent executable also needs the .NET 10 runtime in the environment that launches it. Record exact client, extension/harness, OS and runtime versions; the registration formats below were checked against official documentation on 2026-10-30. Client execution still requires the [operator checklist](docs/release/operator-setup-checklist.md).
+
+The environment owner must supply an approved, ready task environment on Platform `192.168.1.30`, a private local Gateway port-forward, the selected test tenant, a short-lived operator token, actor, expiry and permission to create one synthetic Party per session. The identity must read Tenants in `system` and read/write Parties in that selected tenant. A discovery result alone cannot establish those permissions. Temporary Platform preparation and its concrete deployment review are separate prerequisites; an isolated secrets-test endpoint is not this environment. Keep bootstrap administrator credentials and signing keys with the environment owner. For the independent README-only attempt, an observer starts timing **immediately before tool installation** and stops at the first successful MCP `send_command`; include installation, configuration, registration, all failures and assistance. The target is 900 seconds.
+
+The [three-service preparation status](_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the approved live owner environment and its expiry. Real backup/bootstrap/readiness and a non-administrator staged-CLI tenant read have passed; actual client and independent timing acceptance remain pending. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
+
+### Install into an isolated directory
+
+Use a new absolute task directory outside the repository. On Linux/macOS, replace `/absolute/path/accepted-packages` with the supplied local package directory:
+
+```sh
+operator_root="$HOME/mcpcli-417-operator"
+staged_packages="/absolute/path/accepted-packages"
+mkdir -m 700 "$operator_root"
+export MCPCLI_HOME="$operator_root/home"
+export DOTNET_CLI_HOME="$operator_root/dotnet-home"
+export NUGET_PACKAGES="$operator_root/packages"
+export NUGET_HTTP_CACHE_PATH="$operator_root/http-cache"
+export NUGET_PLUGINS_CACHE_PATH="$operator_root/plugin-cache"
+```
+
+On Windows PowerShell, use native Windows paths and `python` instead of `python3` if that is your Python command:
+
+```powershell
+$operator_root = Join-Path $env:USERPROFILE 'mcpcli-417-operator'
+$staged_packages = 'C:\absolute\path\accepted-packages'
+New-Item -ItemType Directory -Path $operator_root -ErrorAction Stop | Out-Null
+$env:MCPCLI_HOME = Join-Path $operator_root 'home'
+$env:DOTNET_CLI_HOME = Join-Path $operator_root 'dotnet-home'
+$env:NUGET_PACKAGES = Join-Path $operator_root 'packages'
+$env:NUGET_HTTP_CACHE_PATH = Join-Path $operator_root 'http-cache'
+$env:NUGET_PLUGINS_CACHE_PATH = Join-Path $operator_root 'plugin-cache'
+```
+
+Verify the four hashes above with `sha256sum` (Linux), `shasum -a 256` (macOS), or `Get-FileHash -Algorithm SHA256` (PowerShell). Confirm both receipts name 1.2.0 and the full source above, `prepared.json` says `source_clean: true`, and `accepted-pair.json` says `accepted-staging-only` and binds the prepared hash and both package hashes. Stop on any mismatch.
+
+Create `NuGet.Config` in the task directory with the **absolute local package path**, escaping XML characters such as `&` as `&amp;`. This clears inherited sources and fallback folders:
+
+```xml
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="accepted-local" value="/absolute/path/accepted-packages" />
+  </packageSources>
+  <fallbackPackageFolders><clear /></fallbackPackageFolders>
+</configuration>
+```
+
+Install and check the absolute executable (PowerShell: prefix an executable path with `&`; the file is `tools\hexalith.exe`):
+
+```sh
+dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path "$operator_root/tools" --configfile "$operator_root/NuGet.Config" --no-cache
+"$operator_root/tools/hexalith" --version
+"$operator_root/tools/hexalith" modules --strict
+```
+
+Require version `1.2.0` and modules `parties` (7 operations) and `tenants` (14). Do not put the tool on a shared PATH. These package and protocol checks do not establish a live client session.
+
+### Configure the private operator profile
+
+Remove inherited `EVENTSTORE_*` settings from the launching terminal/client environment: they override profile fields. Use the owner's actual Gateway URL, tenant and actor below. The URL is the operator-local port-forward, for example `http://127.0.0.1:18170`, and works only while that private forward is running in the same network environment. On PowerShell, replace `$operator_root` paths with their Windows equivalents and use `&` to invoke them.
+
+```sh
+"$operator_root/tools/hexalith" config profile add operator --url http://127.0.0.1:18170
+"$operator_root/tools/hexalith" config set operator tenant mcpcli-417-SELECTED
+"$operator_root/tools/hexalith" config set operator actor APPROVED-OPERATOR-SUBJECT
+```
+
+The CLI creates the private directory and file ACLs. Save the following as `set-private-token.py` in your task directory and run `python3 /absolute/path/set-private-token.py` (Windows: `python C:\absolute\path\set-private-token.py`). Enter the owner's token at the hidden prompt; never paste it into chat, a client registration, command arguments, screenshots or evidence. Close clients before changing the profile. This modifies the existing file in place, retaining its permissions:
+
+```python
+import getpass
+import json
+import os
+from pathlib import Path
+
+path = Path(os.environ["MCPCLI_HOME"]) / ".eventstore" / "mcpcli.json"
+with path.open("r+", encoding="utf-8") as profile:
+    document = json.load(profile)
+    token = getpass.getpass("Short-lived operator token: ")
+    if not token.strip():
+        raise SystemExit("A nonblank operator token is required.")
+    document["profiles"]["operator"]["token"] = token
+    profile.seek(0)
+    json.dump(document, profile, indent=2)
+    profile.write("\n")
+    profile.truncate()
+```
+
+Check `"$operator_root/tools/hexalith" config current --profile operator`. The token is masked; URL, tenant and actor must match the owner's approval, with profile sources for those settings. Leave `allowTenantOverride` false. Tenants always routes its envelope to fixed `system`; its payload `TenantId` selects the tenant to read. Parties uses the configured session tenant. No tenant belongs in the Party payload. Do not read or edit the admin CLI's `profiles.json`.
+
+### Register one stdio server per client
+
+All clients launch the same absolute executable with arguments `mcp --transport stdio --profile operator` and the same private `MCPCLI_HOME`. A client owns its own server process; one registration exposes both modules and the five generic tools. Do not add separate Tenants/Parties servers or point a client at the Gateway as an MCP HTTP URL.
+
+For [Claude Code](https://code.claude.com/docs/en/mcp), run from the project in which you will test, replacing both absolute paths:
+
+```sh
+claude --version
+claude mcp add --transport stdio --scope local --env MCPCLI_HOME=/absolute/path/mcpcli-417-operator/home hexalith -- /absolute/path/mcpcli-417-operator/tools/hexalith mcp --transport stdio --profile operator
+claude mcp get hexalith
+```
+
+Open Claude Code in that project, inspect `/mcp`, and approve the intended server/tools. Local scope is private to that project. Record the actual initialization/connection result and expand the returned tool calls in the conversation.
+
+For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers), open **Settings → Developer → Edit Config** and merge this entry into `mcpServers` in `claude_desktop_config.json`, preserving other servers. Fully quit and reopen Desktop, then inspect its connector/tool list and server logs. Desktop's Code tab is a separate harness and does not count as the Desktop conversation session.
+
+```json
+{
+  "mcpServers": {
+    "hexalith": {
+      "command": "/absolute/path/mcpcli-417-operator/tools/hexalith",
+      "args": ["mcp", "--transport", "stdio", "--profile", "operator"],
+      "env": {"MCPCLI_HOME": "/absolute/path/mcpcli-417-operator/home"}
+    }
+  }
+}
+```
+
+For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers), record **Help → About**, the Copilot extension version and the selected agent harness. Run **MCP: Add Server → Command (stdio)** with the absolute launch command. The current **Global → Copilot Global** destination uses `~/.copilot/mcp-config.json` (or `$COPILOT_HOME/mcp-config.json`) and the same `mcpServers` entry above. Its portable format does not support `inputs` or `envFile`. For the **Local** harness, open the user-profile `mcp.json` or a private test workspace's `.vscode/mcp.json` and merge the following `servers` entry. Select that harness in Chat, trust/start `hexalith`, enable its tools and inspect the actual tool output. Do not commit a personal workspace configuration.
+
+```json
+{
+  "servers": {
+    "hexalith": {
+      "type": "stdio",
+      "command": "/absolute/path/mcpcli-417-operator/tools/hexalith",
+      "args": ["mcp", "--transport", "stdio", "--profile", "operator"],
+      "env": {"MCPCLI_HOME": "/absolute/path/mcpcli-417-operator/home"}
+    }
+  }
+}
+```
+
+On Windows, change the JSON command to `C:\\Users\\YOUR-USER\\mcpcli-417-operator\\tools\\hexalith.exe` and `MCPCLI_HOME` to its Windows home path, using JSON-escaped backslashes. A GUI launch may inherit neither the shell PATH nor shell variables. Use literal absolute paths, restart after environment changes, and set `DOTNET_ROOT` in the entry's `env` to the actual .NET installation directory if the apphost cannot find the runtime. Never assume `~`, `$HOME` or shell expansion in JSON.
+
+For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/mcpcli-417-operator/home", "/home/YOUR-USER/mcpcli-417-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
+
+### Complete the approved cross-module task
+
+In each actual client, request the tools from server **hexalith** explicitly. First call `list_modules` with `{}`, then `list_operations` with `{"module":"tenants"}` and `{"module":"parties"}`, and `describe_operation` for `tenants.get-tenant`, `parties.create-party` and `parties.get-party`. Confirm the five tools `list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query`, both modules and `submittable: true` for the selected operations.
+
+Replace `mcpcli-417-SELECTED` with the approved tenant and use a fresh Party ID, contact ID and identifier ID for **every** client and attempt. The following are MCP **argument objects**, not CLI commands. `payload` is a string containing JSON; keep its property casing. Use synthetic names and contact details only.
+
+```json
+{"operation":"tenants.get-tenant","payload":"{\"TenantId\":\"mcpcli-417-SELECTED\"}"}
+```
+
+Call `run_query` with those arguments. Require result `tenant: "system"`, `document.tenantId` equal to the selected tenant and an active tenant document. Then obtain the operator's write approval and call `send_command` once:
+
+```json
+{"operation":"parties.create-party","payload":"{\"PartyId\":\"party-417-CLIENT-ATTEMPT\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-CLIENT-ATTEMPT\",\"ContactChannelId\":\"email-417-CLIENT-ATTEMPT\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-CLIENT-ATTEMPT\",\"IdentifierId\":\"external-417-CLIENT-ATTEMPT\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"}
+```
+
+A successful command has `isError: false`, matching JSON text/`structuredContent`, `status: "accepted"`, the selected Parties tenant and your fresh Party ID. This is the timer's stop point. Keep the message/correlation IDs. Acceptance still requires a persisted query; call `run_query` with:
+
+```json
+{"operation":"parties.get-party","payload":"{\"PartyId\":\"party-417-CLIENT-ATTEMPT\"}","entityId":"party-417-CLIENT-ATTEMPT"}
+```
+
+Require the selected result tenant, `document.id` equal to your Party ID, `isActive: true`, `isErased: false`, the synthetic person, contact and identifier values. If projection state is pending, bounded **read** checks for up to 45 seconds are permitted; record each query. Never repeat `send_command` after a timeout or ambiguous error. Stop and let the owner inspect the message ID and persisted state. Retain sanitized actual client connection, discovery, call and persisted-result evidence; a model's narrative answer or SDK smoke is insufficient. Stop the client-owned server and private port-forward after the session; the environment owner removes only task-owned state according to the reviewed cleanup plan.
+
+### Resolve setup failures
+
+| Failing step | Correction and required record |
+| --- | --- |
+| Install/hash mismatch | Stop; reacquire the accepted archives/receipts. Retain the exact failing command and hash. |
+| Executable/runtime not found | Check the absolute native/WSL command, permissions, .NET 10 runtime and GUI `DOTNET_ROOT`; restart the client. |
+| `configuration_invalid` or missing profile | Check absolute `MCPCLI_HOME`, private file access, `--profile operator` and inherited `EVENTSTORE_*`; inspect masked `config current`. |
+| Four tools / `read_only` | Remove an unintended inherited read-only setting only after confirming write approval; keep the failed attempt. |
+| `submittable: false` / connection refused | Check the approved URL and private forward in the launching environment. Discovery can succeed offline. |
+| Authentication/authorization failure | Ask the environment owner to check expiry, `system` and selected-tenant membership, Parties write scope and actor. Never substitute bootstrap credentials. |
+| Tool absent / wrong config shape | Check client version, selected harness, scope, trust prompts and `mcpServers` versus `servers`; expand client server logs. |
+| Command outcome uncertain / persisted result missing | Preserve message IDs and errors, stop writes, request owner investigation; acceptance remains incomplete. |
+
+Record every attempt, failure, assistance and elapsed time in the [session checklist](docs/release/operator-setup-checklist.md). An assisted, interrupted, unexecuted or over-900-second attempt remains visible and cannot be reported as unassisted success. Current Story 4.17 readiness remains incomplete until all three clients and the independent timed attempt have their actual evidence.
+
 ## Gateway boundary
 
 The CLI and MCP server share one catalog and executor. McpCli discovers operations only from flagged, referenced `*.Contracts` packages. It submits commands and queries to the EventStore gateway; the gateway routes them to the owning module server. McpCli never connects to a module server or references its implementation packages.

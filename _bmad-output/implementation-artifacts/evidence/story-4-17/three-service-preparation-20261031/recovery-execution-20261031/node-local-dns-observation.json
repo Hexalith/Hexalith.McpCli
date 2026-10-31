@@ -1,0 +1,21 @@
+{
+  "name": "nodelocaldns",
+  "uid": "874acc3b-b776-4995-8447-10f8d63f16ef",
+  "hostNetwork": true,
+  "containers": [
+    {
+      "name": "node-cache",
+      "image": "registry.k8s.io/dns/k8s-dns-node-cache:1.26.4",
+      "args": [
+        "-localip",
+        "169.254.25.10",
+        "-conf",
+        "/etc/coredns/Corefile",
+        "-upstreamsvc",
+        "coredns",
+        "-metrics-listen-address",
+        "127.0.0.1:9353"
+      ]
+    }
+  ]
+}

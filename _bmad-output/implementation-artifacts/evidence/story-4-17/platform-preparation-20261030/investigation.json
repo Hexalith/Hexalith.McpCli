@@ -1,0 +1,41 @@
+{
+  "observed_at": "2026-10-30T16:47:39.111846+00:00",
+  "owning_repository": "/home/administrator/projects/hexalith/platform",
+  "revision": "92f8f05187afc873806f48af75a736ee5ae997c0",
+  "working_tree": "Contains unrelated user/concurrent modifications; existing files remain unchanged by this investigation. Use an isolated source snapshot for preparation.",
+  "source_hashes": {
+    "apphost.cs": "cc99f598bc4fee54ba4d6f70fa14a0980645ecc697a03d8f651a805a72fd5444",
+    "src/Hexalith.Platform.Composition/PlatformHostedPublishing.cs": "ff0d90e0a10c6a1dd92b16129a9ca368c690838b43abd833b374f7694cd5a9d6",
+    "src/Hexalith.Platform.Composition/PlatformDaprBindings.cs": "adaabe21b30e90d8ef14c05ac73ccc506deb6cb224370db30580f7e858a69e27",
+    "src/Hexalith.Platform.Composition/PlatformApplicationGraph.cs": "42378f4ac70f4145bf414c4007ba7a0f3a69b4dfa7edb02de8206e7134427374",
+    "src/Hexalith.Platform.Composition/PlatformLocalProfile.cs": "62fd734ed2e9316e4662e6029c88f84476674e696664b6e45cc96c74c70f462a",
+    "src/Hexalith.Platform.Composition/PlatformNativeTestPreparation.cs": "31f99e3533ff050f5ee68395961a537219ec6012cff877d584b349c287523dd1",
+    "src/Hexalith.Platform.Composition/PlatformRoutingCatalogBootstrap.cs": "dd4eae61ab97bd67b51c1e48235826f6467ae0fbc75cf455ab16af1d72837d1a",
+    "tests/Hexalith.Platform.Composition.Tests/PartiesAdoptionTests.cs": "1e69823ae0c20e96616bfcfea38a884a2dbd0eb82200df380dca84958b4b09ae",
+    "tests/Hexalith.Platform.Composition.Tests/PlatformHostedPublishingTests.cs": "81950bf01da4d093d56305ea8ddaaec66711c25ed52cb71a3a86200f9080f8f0",
+    "eng/helm-qualification/chart/reference-graph.json": "6d6e28d4b190540fbd82559dc39b484c758853897709c6ea4473345fd2de4d87",
+    "eng/helm-qualification/chart/values.yaml": "1d7873e046862d488f886e53a04a35a9c44291c1ac77514e3d18c9773b2c1e8f"
+  },
+  "selected_target": {
+    "host": "192.168.1.30",
+    "transport": "existing Kubernetes context jpiquot@local, API https://192.168.1.30:6443",
+    "observation_limit": "Context/API from retained earlier metadata, not a fresh remote observation."
+  },
+  "findings": {
+    "chart_workloads": 7,
+    "actual_declared_workloads": 8,
+    "missing_chart_identity": "memories/domain",
+    "native_probe": "qualification.invalid image placeholders; never deploy",
+    "auth": "Run-scoped existing symmetric JWT support; no new identity server. Bootstrap principal is separate from scoped client identity.",
+    "preparation_sequence": [
+      "Resolve current complete graph and reconcile chart/parity assertions in isolated source",
+      "Resolve immutable images and private environment bindings",
+      "Render and validate environment/app resources with task-only ownership",
+      "Prepare real owner bootstrap/tenant/member sequence with persisted confirmation",
+      "Produce exact review packet before cluster, registry or domain writes"
+    ]
+  },
+  "status": "investigation complete; specification approval pending",
+  "scope_decision": "User selected option 1: include temporary environment preparation, review concrete deployment before applying.",
+  "limits": "No remote connections, secret retrieval, deployment, image publication or domain calls occurred."
+}

@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-30T18:19:28.869063+00:00",
+  "argv": [
+    "docker",
+    "--config",
+    "/tmp/mcpcli-417-public-registry-2h76vr89",
+    "buildx",
+    "imagetools",
+    "inspect",
+    "registry.hexalith.com/parties:1.5.1"
+  ],
+  "exitCode": 1,
+  "isolatedEmptyDockerConfig": true,
+  "configuredCredentialsUsed": false,
+  "digests": [],
+  "requestCountAcrossRegistryInspection": 15,
+  "limits": "One public manifest read. No node pull, image execution or deployment evidence."
+}

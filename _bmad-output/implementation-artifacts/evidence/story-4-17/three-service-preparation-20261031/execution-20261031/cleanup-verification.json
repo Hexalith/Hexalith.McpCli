@@ -1,0 +1,15 @@
+{
+  "namespaceAbsent": true,
+  "backingVolumeAbsent": true,
+  "volumeName": "pvc-48a43836-97de-439b-a4a0-555e2b15b7df",
+  "gatewayPhaseOutcome": "RemoteDisconnected; no sidecar injected",
+  "applicationPhasesNotExecuted": [
+    "tenants",
+    "administrator",
+    "writer",
+    "parties",
+    "seed",
+    "handoff"
+  ],
+  "cleanup": "approved UID-bound namespace cleanup complete; original private journal retained"
+}

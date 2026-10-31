@@ -1,0 +1,13 @@
+{
+  "protocolVersion": "2025-11-25",
+  "capabilities": {
+    "logging": {},
+    "tools": {
+      "listChanged": true
+    }
+  },
+  "serverInfo": {
+    "name": "hexalith",
+    "version": "1.2.0"
+  }
+}

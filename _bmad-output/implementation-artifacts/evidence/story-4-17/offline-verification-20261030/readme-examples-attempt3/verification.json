@@ -1,0 +1,15 @@
+{
+  "status": "passed-offline-only",
+  "readmeSha256": "efc7fec3ab457bb9e98093dcbca6d0761732dbdbd4816a4ddabb5137f8a1e5f3",
+  "tool": "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+  "checks": [
+    "JSON client configurations",
+    "local-only XML configuration",
+    "private token prompt in isolated profile",
+    "CLI profile verbs and masked sources",
+    "README MCP argument objects against synthetic loopback",
+    "system/selected-tenant routing",
+    "single command submission"
+  ],
+  "limits": "Synthetic loopback only; no actual Claude/VS Code session, live persisted Party or independent operator timing."
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "mcpcli-417-metadata-parent-audit/v1",
+  "observedAt": "2026-10-31T07:44:44.732282+00:00",
+  "baselineCommit": "c99aebe4a93ca611a443c83f031ef1c02bd499b7",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-155f9b6d",
+    "release": "mcpcli-417-20261031-155f9b6d"
+  },
+  "expiresAt": "2026-11-01T07:37:50.685975+00:00",
+  "checks": {
+    "localPacketManifestVerification": "passed with external transport disabled",
+    "sourceSnapshotAndValidationHashes": "all match",
+    "focusedTestsPassed": 39,
+    "privateInputSetsScanned": 7,
+    "publicFilesScanned": 373,
+    "privateValueMatches": 0,
+    "secretInventory": 8,
+    "gatewayLocalApi": "no optional API token; strictly 127.0.0.1; no local API Service ports",
+    "remoteProtections": "app-channel token, JWT, mTLS and both domain API tokens required",
+    "metadataGate": "real header-free HTTP metadata and hostReady before administrator/writer",
+    "postNonRetryAndFullReadiness": "preserved"
+  },
+  "retiredExecutions": {
+    "allThreeNamespacesAndVolumes": "verified removed",
+    "thirdDnsSidecarsAdministrator": "real success retained",
+    "thirdWriterProtocol": "persisted v2 marker verified; no replay",
+    "thirdReadiness": "failed due raw metadata probe401; authenticated actorRuntime.hostReady true",
+    "tenantSeedAndHandoff": "never executed",
+    "originalJournalsAndBackups": "retained"
+  },
+  "currentExecution": {
+    "deploymentApproved": false,
+    "deployed": false,
+    "metadataOrReadinessObserved": false,
+    "seedExecuted": false,
+    "clientAndTimingEvidence": "pending",
+    "storyStatus": "in-progress",
+    "formalStep04ReviewStarted": false
+  },
+  "readmeSha256": "0dd463e39ce28e2a39716d0a80e595f5b8a98f133aaf73b4e50dd5a85cc5b12e",
+  "diffFiles": {
+    "mcpcli": "/tmp/mcpcli-417-metadata-parent-wpuqfooc.diff",
+    "platformTaskOnly": "/tmp/platform-417-metadata-parent-8iw9sf2q.diff"
+  },
+  "scope": "Gateway local API mode is explicit for fresh review. No upstream/references edits, health bypass, shared change, publication, commit or push."
+}

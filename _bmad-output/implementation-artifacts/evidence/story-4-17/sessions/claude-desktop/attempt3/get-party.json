@@ -1,0 +1,47 @@
+{
+  "operation": "parties.get-party",
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "document": {
+    "id": "party-417-desktop-20261031-3",
+    "type": "Person",
+    "isActive": true,
+    "displayName": "Operator Setup",
+    "sortName": "Setup, Operator",
+    "personDetails": {
+      "firstName": "Operator",
+      "lastName": "Setup"
+    },
+    "contactChannels": [
+      {
+        "id": "email-417-desktop-20261031-3",
+        "type": "Email",
+        "value": "operator@example.test",
+        "isPreferred": true
+      }
+    ],
+    "identifiers": [
+      {
+        "id": "external-417-desktop-20261031-3",
+        "type": "Other",
+        "value": "operator-setup"
+      }
+    ],
+    "consentRecords": [],
+    "nameHistory": [
+      {
+        "displayName": "Operator Setup",
+        "sortName": "Setup, Operator",
+        "changedAt": "2026-10-31T09:38:44.7675881+00:00",
+        "triggeredBy": "PartyCreated"
+      }
+    ],
+    "createdAt": "2026-10-31T09:38:44.7675881+00:00",
+    "lastModifiedAt": "2026-10-31T09:38:44.7675881+00:00",
+    "isRestricted": false,
+    "isErased": false,
+    "freshness": {
+      "status": "Current",
+      "warningCodes": []
+    }
+  }
+}

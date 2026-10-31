@@ -1,0 +1,102 @@
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (hexalith) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /home/administrator/projects/hexalith/mcpcli
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/list' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'initialize' request handler completed in 13.8215ms.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/list' request handler completed in 12.0405ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_modules" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 30.8357ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 6.373ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 0.9524ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 1.192ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 0.2593ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 13.4972ms.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:36479/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:36479/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 27.5639ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 33.6307ms - 200
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "run_query" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 97.2581ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:36479/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:36479/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 6.9742ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 7.1379ms - 202
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "send_command" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 23.4179ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler called.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:36479/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:36479/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 1.9572ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 2.0568ms - 200
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "run_query" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (README-offline-verifier 1) method 'tools/call' request handler completed in 3.0768ms.
+info: ModelContextProtocol.Server.StdioServerTransport[1221292038]
+      Server (stream) (hexalith) transport completed reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: ModelContextProtocol.Server.StdioServerTransport[1375634372]
+      Server (stream) (hexalith) shutting down.
+info: ModelContextProtocol.Server.StdioServerTransport[1256455528]
+      Server (stream) (hexalith) shut down.

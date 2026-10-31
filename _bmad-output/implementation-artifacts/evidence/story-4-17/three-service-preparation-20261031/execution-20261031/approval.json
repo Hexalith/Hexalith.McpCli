@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-31T05:57:28.807726+00:00",
+  "userReply": "approve",
+  "reviewSha256": "79b9b6febc3c6ba8ca9753c1d8a4776f4eef07470fe25dcec3a01b3c84e5cedd",
+  "context": "jpiquot@local",
+  "api": "https://192.168.1.30:6443",
+  "namespace": "mcpcli-417-20261031-aebefecb",
+  "approved": [
+    "apply exact prepared packet",
+    "create private task Secrets including registry pull identity",
+    "provider-native empty-store backup",
+    "administrator and writer bootstrap",
+    "create test tenant and contributor membership",
+    "private localhost handoff",
+    "UID-bound cleanup after sessions"
+  ],
+  "excluded": [
+    "package/image publication",
+    "shared control-plane changes",
+    "Kubernetes Secret retrieval",
+    "unrelated application writes"
+  ],
+  "actualClientAndIndependentTiming": "human-executed, still required"
+}

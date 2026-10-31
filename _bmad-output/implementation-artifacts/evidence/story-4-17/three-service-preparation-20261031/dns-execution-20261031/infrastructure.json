@@ -1,0 +1,19 @@
+{
+  "phase": "infrastructure",
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review",
+    "--review-sha256",
+    "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "--execute-reviewed",
+    "--phase",
+    "infrastructure"
+  ],
+  "startedAt": "2026-10-31T07:08:05.616844+00:00",
+  "endedAt": "2026-10-31T07:08:20.887889+00:00",
+  "exitCode": 0,
+  "stdout": "{\"phase\": \"infrastructure\", \"status\": \"complete\"}\n",
+  "stderr": ""
+}

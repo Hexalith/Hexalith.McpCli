@@ -1,0 +1,43 @@
+{
+  "observedAt": "2026-10-31T07:57:24.629080+00:00",
+  "checks": [
+    {
+      "name": "version",
+      "argv": [
+        "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+        "--version"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "profile",
+      "argv": [
+        "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+        "config",
+        "current",
+        "--profile",
+        "operator"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "tenant-query",
+      "argv": [
+        "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+        "query",
+        "tenants.get-tenant",
+        "--payload",
+        "{\"TenantId\": \"mcpcli-417-20261031-155f9b6d\"}",
+        "--profile",
+        "operator"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "gatewayReadyHttpStatus": 200,
+  "nonAdministratorTenantRead": "passed; fixed system envelope and selected tenant/member document",
+  "actualClientSession": false,
+  "independentOperatorTiming": false,
+  "partyCommandSubmitted": false,
+  "source": "exact accepted staged 1.2.0"
+}

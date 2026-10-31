@@ -1,0 +1,15 @@
+{
+  "owningDirectory": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/evidence/mapped-source-archive-20261030",
+  "files": {
+    "archive-verification.json": "a93e120b6ae334a62795f1e70196982cfd8f46e82534a58e58712adf1ec06d97",
+    "base-binding.json": "7cb531e95b422125cf3771f39cb5f362fab70584ad3850736c70ea77048ced59",
+    "base-index.json": "de0ee358cdd672f7017a003bed21e9ac9ed48a27c922a59b18175b6e82fa7fee",
+    "base-manifest.json": "43cbcf11fd6f88c0375c9c0f7fe59af619abeb323befe5f57dc1502b5a05d8c3",
+    "build-archive.py": "c5c93c13dee7f5a4013886cf88dc9326c5cd2999f4caed02e98147bc8fd397cf",
+    "build-result.json": "ab94bff0da93e19ae2145606555a29b194f364791733318f57f41849cee56c57",
+    "build.command.json": "0845eb54969ee1d9793b137ef9dd00bf6153b6c5221136d01d7a063157cc1fdb",
+    "build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build.stdout.txt": "2de6ef0b26d9a736588e5a01aeb6cfc3dc970ce46e67f9fd275d9f5939519642",
+    "network-access.json": "667212d2161665d1a20d76b275a63678c300f09d72410bcd2ae04f9d75688f6d"
+  }
+}

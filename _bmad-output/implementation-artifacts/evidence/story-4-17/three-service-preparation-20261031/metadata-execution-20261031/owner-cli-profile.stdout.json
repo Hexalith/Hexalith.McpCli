@@ -1,0 +1,26 @@
+{
+  "profile": "operator",
+  "url": "http://127.0.0.1:18170/",
+  "token": "eyJh***",
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "actor": "mcpcli-417-operator-20261031-155f9b6d",
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "flag",
+    "url": "profile",
+    "token": "profile",
+    "tenant": "profile",
+    "actor": "profile",
+    "format": "default",
+    "allowTenantOverride": "profile",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}

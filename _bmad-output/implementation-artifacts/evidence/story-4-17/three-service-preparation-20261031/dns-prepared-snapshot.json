@@ -1,0 +1,45 @@
+{
+  "schema": "mcpcli-v1-dns-snapshot/v1",
+  "observedAt": "2026-10-31T06:53:08.379479+00:00",
+  "owningSource": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+  "files": {
+    "phases.py": "48b0566733151e83dbca40ea9b00b9cec5ea8825fc1c5cfd4683e93496cee4ca",
+    "test_v1.py": "2ed8efb02bee856e1be100ee96cda420a089d193fcb62260f2263e89639c3d5f",
+    "README.md": "12ae49afa61569d65583a9ce652bcdd010cda04ca42782a8a64dc08fb9b49138",
+    "prepare.py": "ac5b3912dc298a93089af9152a23cbd54708665d710c94b5fc7acfc5d3634627",
+    "packet-20261031-dns-review/tenants.yaml": "f40c836629ef83a6cfce53cc96546f9f5d9319670be5e5963fb58164df5ea7cc",
+    "packet-20261031-dns-review/parties.yaml": "49481c3734f2338ae6572717f0bebe2fcceb653fa9676c05eaffde9da66ae191",
+    "packet-20261031-dns-review/eventstore.yaml": "69aded6a3866ed74c9d3b2cf52a2cdca9919619bde1da660b62c4a61f2b412dc",
+    "packet-20261031-dns-review/review.json": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "packet-20261031-dns-review/namespace.yaml": "3a4966bbf3a438403a6987b6285657151225fa58ef442c253191e7b075f963bb",
+    "packet-20261031-dns-review/infrastructure.yaml": "40cd6e7b4ae039be75104bf155fb30f4194a30fd94ab3b8b0ad0a80fd3c40d4a",
+    "packet-20261031-dns-review/redis.yaml": "a0716462c3cbd34517593e701c17fe513e6adda309ef14b5227d88361d9151dc",
+    "evidence/dns-target.json": "e7610085afe758268f06a1bf14c8811e707badbb6ff6b523b04fc826094ab7f0",
+    "evidence/tenants-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/target-observation.json": "2634ec304f46920a3156d5cc2e771467af52f2312d3e49c61d9bbfbb0bc4854b",
+    "evidence/images.json": "17d363c99e939afc93ac0a8a4b4107b998ac3a46e3044a234e6214f356ef0bac",
+    "evidence/parties-projection-contract-diff.json": "d6b7b6c04ef0e7c6559c6de194554ed65bdd96ed9481924ecc74243e86049676",
+    "evidence/startup-order.json": "7f3600fd043f0444b92e1579cfcdb9abaada23aad3e1b67f300f7d60fe6c9326",
+    "evidence/wire-bindings.json": "a3d32e78c6a43c428805e5ecabe86d5fc9dcb42460619fec13313dc713e8fda3",
+    "evidence/api-commands.json": "ded11a7313dae44029afed724493bb76de408cd099bf5165c79b820642f19de3",
+    "evidence/controller-support.json": "231ebf4ca7be3d1a162f80e72c304e86fd104a76e04b1766ab787e979841eab9",
+    "evidence/preparation-attempts.json": "4fd327f19af7c17d6c95ee0c48a1d560c8749ebd98b90e91cce4ecaae12ae243",
+    "evidence/dns-recovery-20261031/provider-image-tools.json": "89a672979b3452221a93404c8f8fc231cfe7d337c6877f671db3b4c654ba4971",
+    "evidence/dns-recovery-20261031/validation-final.json": "76149c4e48e763aef6f2aeefbed443f79103aeea9285a6a00ccbf137f6e10b3f",
+    "evidence/dns-recovery-20261031/prior-source/phases.py": "9573387fa429f135ea6659e2c2c14486d3d229f8351d32898fc35b1179088795",
+    "evidence/dns-recovery-20261031/prior-source/test_v1.py": "ad38feff003cd168b4b0a42dc70d2b0b46ab6a7705ae82a7f0c577c9da0b5f4c",
+    "evidence/dns-recovery-20261031/prior-source/README.md": "59ef1312e05f0578d874408070f12831621890cfdd8028984c9f4e73b23ee133",
+    "evidence/dns-recovery-20261031/prior-source/prepare.py": "23cefe7b6838a6b160f2f2a2e34a650609c021014f0062affabd8213287f1126"
+  },
+  "sensitiveBoundaryScan": {
+    "status": "passed",
+    "inputManifestsScanned": 6,
+    "matches": 0
+  },
+  "limits": [
+    "Copied source is evidence; execute only from the owning Platform checkout.",
+    "No private credential, backup, execution journal, handoff or image archive copied. Both approved failures/cleanup remain in original evidence directories.",
+    "Static image tools/local CLI checks are not DNS proof; actual new DNS and sidecar readiness evidence is produced only during approved execution."
+  ]
+}

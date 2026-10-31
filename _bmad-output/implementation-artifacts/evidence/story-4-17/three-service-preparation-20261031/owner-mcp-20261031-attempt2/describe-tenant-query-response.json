@@ -1,0 +1,44 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"name\": \"tenants.get-tenant\",\n  \"kind\": \"read\",\n  \"description\": \"Read one tenant\\u0027s full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"TenantId\": {\n        \"type\": \"string\",\n        \"description\": \"Identifier of the tenant to read. Required; a call without it is rejected.\"\n      }\n    },\n    \"additionalProperties\": false\n  },\n  \"example\": {\n    \"TenantId\": \"acme\"\n  },\n  \"envelope\": {\n    \"fixedTenant\": \"system\",\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ]\n  },\n  \"lintFindings\": [],\n  \"submittable\": true\n}"
+    }
+  ],
+  "structuredContent": {
+    "name": "tenants.get-tenant",
+    "kind": "read",
+    "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+    "schema": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "TenantId": {
+          "type": "string",
+          "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+        }
+      },
+      "additionalProperties": false
+    },
+    "example": {
+      "TenantId": "acme"
+    },
+    "envelope": {
+      "fixedTenant": "system",
+      "aggregateIdRequired": false,
+      "idempotencyKeyRequired": false,
+      "arguments": [
+        "aggregateId",
+        "entityId",
+        "pageSize",
+        "offset",
+        "cursor"
+      ]
+    },
+    "lintFindings": [],
+    "submittable": true
+  },
+  "isError": false
+}

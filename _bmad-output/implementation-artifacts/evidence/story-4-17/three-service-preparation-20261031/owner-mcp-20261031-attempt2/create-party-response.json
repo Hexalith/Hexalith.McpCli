@@ -1,0 +1,49 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"operation\": \"parties.create-party\",\n  \"messageId\": \"01M68M8NSHXYNYZ9XD9K9HHW2H\",\n  \"correlationId\": \"01M68M8NSHXYNYZ9XD9K9HHW2H\",\n  \"tenant\": \"mcpcli-417-20261031-155f9b6d\",\n  \"aggregateId\": \"party-417-desktop-20261031-2\",\n  \"status\": \"accepted\",\n  \"result\": {\n    \"id\": \"party-417-desktop-20261031-2\",\n    \"type\": \"Person\",\n    \"isActive\": true,\n    \"displayName\": \"Operator Setup\",\n    \"sortName\": \"Setup, Operator\",\n    \"personDetails\": {\n      \"firstName\": \"Operator\",\n      \"lastName\": \"Setup\"\n    },\n    \"contactChannels\": [\n      {\n        \"id\": \"email-417-desktop-20261031-2\",\n        \"type\": \"Email\",\n        \"value\": \"operator@example.test\",\n        \"isPreferred\": true\n      }\n    ],\n    \"identifiers\": [\n      {\n        \"id\": \"external-417-desktop-20261031-2\",\n        \"type\": \"Other\",\n        \"value\": \"operator-setup\"\n      }\n    ],\n    \"consentRecords\": [],\n    \"nameHistory\": [],\n    \"createdAt\": \"2026-10-31T09:22:17.7374742\\u002B00:00\",\n    \"lastModifiedAt\": \"2026-10-31T09:22:17.7385315\\u002B00:00\",\n    \"isRestricted\": false,\n    \"isErased\": false\n  }\n}"
+    }
+  ],
+  "structuredContent": {
+    "operation": "parties.create-party",
+    "messageId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+    "correlationId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "aggregateId": "party-417-desktop-20261031-2",
+    "status": "accepted",
+    "result": {
+      "id": "party-417-desktop-20261031-2",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-desktop-20261031-2",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-desktop-20261031-2",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [],
+      "createdAt": "2026-10-31T09:22:17.7374742+00:00",
+      "lastModifiedAt": "2026-10-31T09:22:17.7385315+00:00",
+      "isRestricted": false,
+      "isErased": false
+    }
+  },
+  "isError": false
+}

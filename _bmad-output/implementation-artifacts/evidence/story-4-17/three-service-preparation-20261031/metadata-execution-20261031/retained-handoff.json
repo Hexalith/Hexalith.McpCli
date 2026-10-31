@@ -1,0 +1,12 @@
+{
+  "phase": "handoff",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "startedAt": "2026-10-31T07:54:47.940769+00:00",
+  "profilePath": "/tmp/mcpcli-417-v1-private-20261031-attempt8/operator-home/.eventstore/mcpcli.json",
+  "tokenExpiresUnix": 1793440493,
+  "tokenExpiresAt": "2026-10-31T09:54:53+00:00",
+  "globalAdministrator": false,
+  "role": "TenantContributor",
+  "endedAt": "2026-10-31T07:54:53.545693+00:00"
+}

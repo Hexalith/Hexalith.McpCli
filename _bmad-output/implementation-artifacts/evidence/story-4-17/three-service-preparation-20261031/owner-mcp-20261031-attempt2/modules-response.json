@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"modules\": [\n    {\n      \"name\": \"parties\",\n      \"description\": \"Manage people and organizations, their contact channels, identifiers and active status.\",\n      \"operationCount\": 7\n    },\n    {\n      \"name\": \"tenants\",\n      \"description\": \"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant \\u0027system\\u0027; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\n      \"operationCount\": 14\n    }\n  ]\n}"
+    }
+  ],
+  "structuredContent": {
+    "modules": [
+      {
+        "name": "parties",
+        "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+        "operationCount": 7
+      },
+      {
+        "name": "tenants",
+        "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+        "operationCount": 14
+      }
+    ]
+  },
+  "isError": false
+}

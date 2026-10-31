@@ -1,0 +1,18 @@
+{
+  "schema": "mcpcli-admission-assessment-index/v1",
+  "observedAt": "2026-10-31T09:11:03.727547+00:00",
+  "files": {
+    "Inspect.csproj": "70bb69716b1fef8d15851e8177f0682ab2f5d8582a8ebf7903c9711d1f46120b",
+    "image-revision-Program.cs": "062b3467a2877dbb23cc9324b50b63608da879c2652e11274cc24446a0d4570e",
+    "assessment.json": "397a5c3ba9b3387b8bd7aeebeffad9dd477ac1b01a88cb1c2605a85b5983a8d7",
+    "IdempotencyAdmissionOptions.cs": "d628e76dcbfee462f47534facdf739961bb9045c9f6ccc8eb4f60ff021f912f8",
+    "ConfigurationIdempotencyDigestKeyProvider.cs": "e274160c6c7816814d83ec889f8e47009fa6edd560935291ec00301cecccd1dd",
+    "NuGet.Config": "9508cae5f76364f56e80eb97cb16493977243cf38e5cca6284e3d74f83b20a2c",
+    "Program.cs": "22b360d6a0af158b44a09242a7fb1c1067186f16b47cd38328711806c6524397"
+  },
+  "approvedRuntimeFilesUnchanged": true,
+  "attemptEvidenceHashes": {
+    "user-report.json": "a68241923f98185990240057fd41386752a4586e0b5a5be142403a515c8a127f",
+    "server-observations.json": "0428c10d6c87fee99428ed7d022f9bf2c5a8b12723f5640849e5caa9d8129f14"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "phase": "backup",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261031-e01a41d1",
+  "startedAt": "2026-10-31T06:29:35.763740+00:00",
+  "backupSha256": "dd236d58e3cf9f49192b7e558965ccb40fdec95fdfed8eff4d67c7a256aa1d4c",
+  "redisPodUid": "b4215698-171f-4350-a3da-65bf01ca19fb",
+  "pvcUid": "9ad4cd80-dfd1-4faa-998d-5dd50e474796",
+  "endedAt": "2026-10-31T06:29:37.323517+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"error\": {\n    \"code\": \"gateway_error\",\n    \"status\": 500,\n    \"detail\": \"actor-not-found-infrastructure\",\n    \"reason\": \"query_internal_error\",\n    \"retryAfter\": \"30\",\n    \"correlationId\": \"01M68M8NT5QE9CQBVYTT69NW0S\"\n  }\n}"
+    }
+  ],
+  "structuredContent": {
+    "error": {
+      "code": "gateway_error",
+      "status": 500,
+      "detail": "actor-not-found-infrastructure",
+      "reason": "query_internal_error",
+      "retryAfter": "30",
+      "correlationId": "01M68M8NT5QE9CQBVYTT69NW0S"
+    }
+  },
+  "isError": true
+}

@@ -1,0 +1,72 @@
+{
+  "recordedAt": "2026-10-31T07:41:59.628546+00:00",
+  "storyStatus": "in-progress",
+  "preparationStatus": "Gateway-only loopback API compatibility packet prepared; fresh concrete review pending",
+  "activeTopology": "Gateway, Tenants domain, Parties domain plus one task-owned Redis provider",
+  "owner": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "guide": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/README.md",
+  "reviewPacket": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/review.json",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-155f9b6d",
+    "release": "mcpcli-417-20261031-155f9b6d"
+  },
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "operatorSubject": "mcpcli-417-operator-20261031-155f9b6d",
+  "expiresAt": "2026-11-01T07:37:50.685975+00:00",
+  "privateInputManifest": "/tmp/mcpcli-417-v1-private-20261031-attempt8/private-inputs.json",
+  "privateInputManifestSha256": "0f4c99156b87833f147e80548b12617309b37817fc7fb5c57b8847f109fd7dc5",
+  "authorization": "Prepare Gateway-only local API compatibility mode and real pre-writer metadata gate; no new deployment or activation retry. Prior exact packet approvals do not authorize this candidate.",
+  "verified": [
+    "Accepted staged 1.2.0 bytes/source and both receipts rechecked; tool/contracts/images/pins unchanged.",
+    "Effective compiled Gateway raw HttpClient metadata probe/health registration, independent fixture app-channel token and prior actual401/200 hostReady observations retained.",
+    "Eight-Secret packet removes only unused Gateway API-token Secret/env/annotation; HTTP/gRPC APIs bind127.0.0.1 and are absent from cross-Pod Gateway Service ports. App-channel/JWT/mTLS and both domain API tokens remain guarded.",
+    "Real unauthenticated metadata phase on temporary loopback18171 is ordered after sidecars and before administrator/writer, requiring eventstore id and boolean hostReady=true; forward closes on success/failure.",
+    "Actual Tenants image verifier/read-model/domain-verifier calls assessed; no concrete seed configuration mismatch established from initial bootstrap warning. Exact two seed payloads and real verified authority preserved.",
+    "39 synthetic tests pass; six manifests pass client-only dry-run; local hashes/inputs, eight-Secret inventory, fresh namespace absence and source/snapshot checks pass.",
+    "No public credential values match seven retained private-input manifests."
+  ],
+  "reviewRisks": [
+    "Gateway-only API token removal changes its in-Pod trust boundary; trusted local processes can access Dapr APIs. Loopback binding and no Service API exposure are mandatory.",
+    "Actual new unauthenticated metadata/hostReady, genuine full /ready and seed behavior remain execution gates; no synthetic replacement or forced readiness.",
+    "Successful prior DNS/sidecar/administrator and persisted protocol-v2 activation evidence does not qualify a new store. Never resubmit in the retired namespace/store or rewrite its uncertain journal.",
+    "Baseline admission, registry delegation, ephemeral private inputs, Jobs not being transactional exactly-once, and kubectl skew remain explicit review items.",
+    "Review expires 2026-11-01T07:37:50.685975+00:00; handoff token at most two hours capped to review expiry; independent timing uses fresh install/profile/registration."
+  ],
+  "missingPreparationInputs": [],
+  "stillRequired": [
+    "human approval of exact Gateway API-mode candidate",
+    "fresh real DNS/backup/owned runtime/metadata/admin observations",
+    "one fresh-store writer activation followed by genuine Gateway/all-app readiness and persisted tenant/member seed",
+    "three actual MCP client sessions with persisted Party evidence",
+    "independent fresh-install README-only timed attempt, retaining all failures/assistance",
+    "UID-bound cleanup and sanitized execution evidence"
+  ],
+  "evidence": "metadata-prepared-snapshot.json and metadata-prepared-packet/; metadata-provenance-recheck.json; all three prior approved execution/cleanup directories retained",
+  "historicalEvidence": [
+    "status-before-filled-packet.json",
+    "../remote-inspection-20261030/current-readiness.json",
+    "prepared-packet/evidence/preparation-attempts.json",
+    "status-before-recovery-packet.json",
+    "prepared-packet/",
+    "execution-20261031/",
+    "status-before-dns-packet.json",
+    "recovery-execution-20261031/",
+    "recovery-prepared-packet/",
+    "status-before-metadata-packet.json",
+    "dns-execution-20261031/",
+    "dns-prepared-packet/"
+  ],
+  "currentWork": "Concrete review boundary; no new packet application",
+  "lastExecution": {
+    "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "approved": true,
+    "dnsBackupJobsSidecarsAdministrator": "complete with real proof",
+    "writerActivation": "persisted v2 marker verified; not resubmitted",
+    "writerReadiness": "failed: Gateway raw metadata health probe HTTP401 causes /ready503",
+    "tenantSeedHandoff": "not executed",
+    "cleanup": "namespace and backing volume verified absent"
+  }
+}

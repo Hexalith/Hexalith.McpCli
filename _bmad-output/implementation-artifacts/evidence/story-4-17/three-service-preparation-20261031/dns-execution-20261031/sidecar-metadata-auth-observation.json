@@ -1,0 +1,78 @@
+{
+  "observedAt": "2026-10-31T07:19:32.520523+00:00",
+  "requests": "two read-only local Dapr metadata GETs; no activation retry",
+  "results": [
+    {
+      "authenticated": false,
+      "status": 401
+    },
+    {
+      "authenticated": true,
+      "status": 200,
+      "id": "eventstore",
+      "actorRuntime": {
+        "runtimeStatus": "RUNNING",
+        "activeActors": [
+          {
+            "type": "GlobalPositionActor",
+            "count": 1
+          },
+          {
+            "type": "ProjectionLifecycleActor",
+            "count": 1
+          },
+          {
+            "type": "AggregateActor",
+            "count": 1
+          },
+          {
+            "type": "CoordinatedCommandActor"
+          },
+          {
+            "type": "ProjectionActor",
+            "count": 1
+          },
+          {
+            "type": "ETagActor",
+            "count": 1
+          },
+          {
+            "type": "IdentityActorRegistryActor"
+          },
+          {
+            "type": "IdempotencyAdmissionDirectoryActor"
+          },
+          {
+            "type": "IdempotencyTenantLifecycleActor"
+          },
+          {
+            "type": "IdempotencyAdmissionActor"
+          },
+          {
+            "type": "SharedProjectionSourceRosterActor"
+          },
+          {
+            "type": "IdempotencyLegacyInventoryActor"
+          }
+        ],
+        "hostReady": true,
+        "placement": "placement: connected"
+      },
+      "components": [
+        {
+          "name": "kubernetes",
+          "type": "secretstores.kubernetes"
+        },
+        {
+          "name": "statestore",
+          "type": "state.redis"
+        },
+        {
+          "name": "pubsub",
+          "type": "pubsub.redis"
+        }
+      ]
+    }
+  ],
+  "forwardStopped": true
+}

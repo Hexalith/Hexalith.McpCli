@@ -1,0 +1,66 @@
+[
+  {
+    "path": "/api/v1/queries",
+    "body": {
+      "tenant": "system",
+      "domain": "tenants",
+      "aggregateId": "mcpcli-417-offline",
+      "queryType": "get-tenant",
+      "projectionType": "tenants",
+      "payload": {
+        "TenantId": "mcpcli-417-offline"
+      }
+    }
+  },
+  {
+    "path": "/api/v1/commands",
+    "body": {
+      "messageId": "01M66Y1BMW01VMF831CM71X8GW",
+      "tenant": "mcpcli-417-offline",
+      "domain": "party",
+      "aggregateId": "party-417-offline-01",
+      "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+      "payload": {
+        "PartyId": "party-417-offline-01",
+        "Type": "Person",
+        "PersonDetails": {
+          "FirstName": "Operator",
+          "LastName": "Setup"
+        },
+        "ContactChannels": [
+          {
+            "PartyId": "party-417-offline-01",
+            "ContactChannelId": "email-417-offline-01",
+            "Type": "Email",
+            "Value": "operator@example.test",
+            "IsPreferred": true
+          }
+        ],
+        "Identifiers": [
+          {
+            "PartyId": "party-417-offline-01",
+            "IdentifierId": "external-417-offline-01",
+            "Type": "Other",
+            "Value": "operator-setup"
+          }
+        ]
+      },
+      "correlationId": "01M66Y1BMW01VMF831CM71X8GW"
+    }
+  },
+  {
+    "path": "/api/v1/queries",
+    "body": {
+      "tenant": "mcpcli-417-offline",
+      "domain": "party",
+      "aggregateId": "party-417-offline-01",
+      "queryType": "PartyDetail",
+      "projectionType": "party-detail",
+      "payload": {
+        "PartyId": "party-417-offline-01"
+      },
+      "entityId": "party-417-offline-01",
+      "projectionActorType": "PartyDetailProjectionQueryActor"
+    }
+  }
+]

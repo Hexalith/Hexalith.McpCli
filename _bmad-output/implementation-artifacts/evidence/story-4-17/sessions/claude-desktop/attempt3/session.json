@@ -1,0 +1,63 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "Claude Desktop",
+  "attempt": 3,
+  "status": "assisted",
+  "crossModuleTaskPassed": true,
+  "completeClientEvidence": false,
+  "operator": "Human user in this conversation; operator actor recorded separately",
+  "observer": "Codex",
+  "priorExperience": "Assisted setup and earlier failed attempt; not an independent first-time operator",
+  "clientVersion": "4.4212.0.0 (Windows MSIX version previously observed)",
+  "harness": "Desktop conversation per requested/user-reported workflow; logger client local-agent-mode-hexalith 1.0.0",
+  "launchEnvironment": "Native Windows launches WSL Ubuntu-26.04 as administrator",
+  "readmeSha256AtObservation": "3f271fcb46865c4bd4623d88a4c042e08de817d5696db90c50a28ce4510dbe9a",
+  "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "toolVersion": "1.2.0",
+  "deploymentReviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "selectedTenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-desktop-20261031-3",
+  "initializationEvidence": "mcp-server-hexalith.sanitized.log: successful initialization and tools/list event log; protocol payload bodies omitted by client logger",
+  "discoveryEvidence": {
+    "priorUserModuleReport": {
+      "parties": 7,
+      "tenants": 14
+    },
+    "logSuccessfulToolCompletionCounts": {
+      "list_modules": 1,
+      "list_operations": 1,
+      "describe_operation": 6,
+      "send_command": 1,
+      "run_query": 3
+    },
+    "individualListOperationsArgumentBodiesRetained": false
+  },
+  "tenantReadEvidence": "tenant-query.json",
+  "commandEvidence": "create-party.json",
+  "persistedPartyEvidence": "get-party.json",
+  "argumentProvenance": "User reports schema consultation, explicit selected tenant, preferred email and omission of idempotencyKey; actual request JSON body not exposed in client log",
+  "assistance": [
+    "Agent registered Desktop configuration and supplied successive test prompts.",
+    "Earlier keyed attempt failed; preserved separately."
+  ],
+  "failures": [
+    "Earlier attempt1 is retained and not overwritten."
+  ],
+  "observedDifferences": [
+    "Creation response timestamp differs from persisted projection timestamp; exact original values retained.",
+    "Creation response has empty nameHistory; persisted read has one PartyCreated entry."
+  ],
+  "remainingEvidence": [
+    "Explicit discovery outputs for both list_operations module arguments and five tool names have not been retained from Desktop."
+  ],
+  "independentTiming": false,
+  "cleanupEvidence": null,
+  "capturedAt": "2026-10-31T09:44:30.029756+00:00",
+  "desktopLogSourceSha256": "f6901a25b513ff30d417aba2ebb445b81895f97aeb7b0fe4a52365e1ca7f887e",
+  "files": {
+    "create-party.json": "4e954cb5b16ec2f29078ab6c5492f2751b31bb1a18d7a54bcbb5a81375202a17",
+    "tenant-query.json": "fa934d6ff48fdbd8b6a0a8d13b126a0c7d3c88b726ccd65961750b531e0d625b",
+    "mcp-server-hexalith.sanitized.log": "7f9cd6e343f4a217efb20b2f5a8d232a7636f93f915f5484fcc3e90549ef8bc9",
+    "get-party.json": "9bb3809a6211c483cfbb7ab966f87e63b2bfb5d8549bd74a547664ad2ddb9799"
+  }
+}

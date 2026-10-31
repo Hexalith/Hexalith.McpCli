@@ -1,0 +1,26 @@
+{
+  "name": "eventstore-79nrf",
+  "uid": "692a76ad-f2ef-4bde-8fed-77b47ce3c77a",
+  "containerStatuses": [
+    {
+      "name": "daprd",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T07:09:21Z"
+        }
+      }
+    },
+    {
+      "name": "eventstore",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T07:09:20Z"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "authorizedAt": "2026-10-31T09:22:17.517192+00:00",
+  "arguments": {
+    "operation": "parties.create-party",
+    "payload": "{\"PartyId\":\"party-417-desktop-20261031-2\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-desktop-20261031-2\",\"ContactChannelId\":\"email-417-desktop-20261031-2\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-desktop-20261031-2\",\"IdentifierId\":\"external-417-desktop-20261031-2\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}",
+    "tenant": "mcpcli-417-20261031-155f9b6d"
+  },
+  "retryPermitted": false,
+  "client": "Codex-owned MCP stdio client through the installed Windows-to-WSL launch configuration"
+}

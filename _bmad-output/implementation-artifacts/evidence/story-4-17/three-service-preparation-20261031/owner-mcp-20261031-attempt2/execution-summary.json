@@ -1,0 +1,102 @@
+{
+  "schema": "mcpcli-authorized-owner-task/v1",
+  "startedAt": "2026-10-31T09:22:16.293758+00:00",
+  "authorization": "User: fait ces operations; fresh -2 Party, optional idempotency key omitted, one submission only.",
+  "client": "Codex-owned MCP stdio client through the installed Windows-to-WSL launch configuration",
+  "actualClaudeDesktopSession": false,
+  "independentTiming": false,
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-desktop-20261031-2",
+  "originalKeyedAttemptReplayed": false,
+  "commandSubmissions": 1,
+  "commandResponse": {
+    "operation": "parties.create-party",
+    "messageId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+    "correlationId": "01M68M8NSHXYNYZ9XD9K9HHW2H",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "aggregateId": "party-417-desktop-20261031-2",
+    "status": "accepted",
+    "result": {
+      "id": "party-417-desktop-20261031-2",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-desktop-20261031-2",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-desktop-20261031-2",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [],
+      "createdAt": "2026-10-31T09:22:17.7374742+00:00",
+      "lastModifiedAt": "2026-10-31T09:22:17.7385315+00:00",
+      "isRestricted": false,
+      "isErased": false
+    }
+  },
+  "creation": "accepted once",
+  "persistedRead": {
+    "operation": "parties.get-party",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "document": {
+      "id": "party-417-desktop-20261031-2",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-417-desktop-20261031-2",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-417-desktop-20261031-2",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [
+        {
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "changedAt": "2026-10-31T09:22:17.7769658+00:00",
+          "triggeredBy": "PartyCreated"
+        }
+      ],
+      "createdAt": "2026-10-31T09:22:17.7769658+00:00",
+      "lastModifiedAt": "2026-10-31T09:22:17.7769658+00:00",
+      "isRestricted": false,
+      "isErased": false,
+      "freshness": {
+        "status": "Current",
+        "warningCodes": []
+      }
+    }
+  },
+  "success": true,
+  "completedAt": "2026-10-31T09:22:18.223731+00:00"
+}

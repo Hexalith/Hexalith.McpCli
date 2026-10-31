@@ -1,0 +1,72 @@
+[
+  {
+    "name": "eventstore-l6rpl",
+    "uid": "1daa2ee7-b949-41f2-b41c-4ce33e902e25",
+    "phase": "Running",
+    "containers": [
+      {
+        "name": "daprd",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8"
+      },
+      {
+        "name": "eventstore",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed"
+      }
+    ]
+  },
+  {
+    "name": "parties-fznzs",
+    "uid": "c692779c-185d-46ee-96f5-f2447c368a0c",
+    "phase": "Running",
+    "containers": [
+      {
+        "name": "daprd",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8"
+      },
+      {
+        "name": "parties",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "registry.hexalith.com/parties@sha256:85afc9e954146883da56edce78e2ddaf401a47b35241bdceed87dfc20217aceb"
+      }
+    ]
+  },
+  {
+    "name": "redis",
+    "uid": "9f690b78-2073-4118-8b12-3fc1fac77956",
+    "phase": "Running",
+    "containers": [
+      {
+        "name": "redis",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "docker.io/library/redis@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf"
+      }
+    ]
+  },
+  {
+    "name": "tenants-9sc7v",
+    "uid": "fb287ddf-734b-4a94-9dbb-02d79927039b",
+    "phase": "Running",
+    "containers": [
+      {
+        "name": "daprd",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8"
+      },
+      {
+        "name": "tenants",
+        "ready": true,
+        "restartCount": 0,
+        "imageID": "registry.hexalith.com/tenants@sha256:2bc415a61466693bfa7e6c0df1c9aab319b0ef2e82c620897aa9faa1b58f75a5"
+      }
+    ]
+  }
+]

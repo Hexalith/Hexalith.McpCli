@@ -1,0 +1,1503 @@
+{
+  "tools": [
+    {
+      "name": "list_modules",
+      "description": "Purpose: List modules, descriptions, and operation counts. Use when: Starting catalog discovery. Next: Call list_operations with a module name.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "modules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "operationCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "operationCount"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "modules"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "reason": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_operations",
+      "description": "Purpose: List a module's operations, optionally filtered by read or write kind. Use when: Choosing an operation in a known module. Next: Call describe_operation with an operation name.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "kind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "module"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string"
+              },
+              "operations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "read",
+                        "write"
+                      ]
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "kind",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "module",
+              "operations"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "reason": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "describe_operation",
+      "description": "Purpose: Show payload schema, optional example, envelope arguments, lint findings, and availability. Use when: Preparing a selected operation. Next: If submittable, call run_query for a read or send_command for a write.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "schema": {
+                "type": [
+                  "object",
+                  "boolean"
+                ]
+              },
+              "example": true,
+              "envelope": {
+                "type": "object",
+                "properties": {
+                  "fixedTenant": {
+                    "type": "string"
+                  },
+                  "aggregateIdRequired": {
+                    "type": "boolean"
+                  },
+                  "idempotencyKeyRequired": {
+                    "type": "boolean"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "aggregateIdRequired",
+                  "idempotencyKeyRequired",
+                  "arguments"
+                ],
+                "additionalProperties": false
+              },
+              "lintFindings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "property": {
+                      "type": "string",
+                      "default": null
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "severity",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "submittable": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "kind",
+              "description",
+              "schema",
+              "envelope",
+              "lintFindings",
+              "submittable"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "reason": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "send_command",
+      "description": "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action; a gateway-timeout or gateway-unreachable error does not prove rejection, so do not resubmit automatically.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "aggregateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "correlationId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "idempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "extensions": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "default": null
+          }
+        },
+        "required": [
+          "operation",
+          "payload"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string"
+              },
+              "messageId": {
+                "type": "string"
+              },
+              "correlationId": {
+                "type": "string"
+              },
+              "tenant": {
+                "type": "string"
+              },
+              "aggregateId": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "const": "accepted"
+              },
+              "idempotencyKey": {
+                "type": "string",
+                "default": null
+              },
+              "result": {
+                "default": null
+              }
+            },
+            "required": [
+              "operation",
+              "messageId",
+              "correlationId",
+              "tenant",
+              "aggregateId",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "reason": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      }
+    },
+    {
+      "name": "run_query",
+      "description": "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "aggregateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "entityId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "pageSize": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": null
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": null
+          },
+          "cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "operation",
+          "payload"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string"
+              },
+              "tenant": {
+                "type": "string"
+              },
+              "document": true,
+              "paging": {
+                "type": "object",
+                "properties": {
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "default": null
+                  },
+                  "nextCursor": {
+                    "type": "string",
+                    "default": null
+                  },
+                  "totalCount": {
+                    "type": "integer",
+                    "default": null
+                  },
+                  "hasMore": {
+                    "type": "boolean",
+                    "default": null
+                  }
+                },
+                "required": [
+                  "pageSize"
+                ],
+                "default": null,
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "operation",
+              "tenant",
+              "document"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "reason": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "default": null
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "default": null
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    }
+  ]
+}

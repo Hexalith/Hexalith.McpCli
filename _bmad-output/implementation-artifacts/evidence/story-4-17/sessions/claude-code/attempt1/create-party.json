@@ -1,0 +1,40 @@
+{
+  "operation": "parties.create-party",
+  "messageId": "01M68NP4B9ZB4ZQ44DYPN67605",
+  "correlationId": "01M68NP4B9ZB4ZQ44DYPN67605",
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "aggregateId": "party-417-code-20261031-1",
+  "status": "accepted",
+  "result": {
+    "id": "party-417-code-20261031-1",
+    "type": "Person",
+    "isActive": true,
+    "displayName": "Operator Setup",
+    "sortName": "Setup, Operator",
+    "personDetails": {
+      "firstName": "Operator",
+      "lastName": "Setup"
+    },
+    "contactChannels": [
+      {
+        "id": "email-417-code-20261031-1",
+        "type": "Email",
+        "value": "operator@example.test",
+        "isPreferred": true
+      }
+    ],
+    "identifiers": [
+      {
+        "id": "external-417-code-20261031-1",
+        "type": "Other",
+        "value": "operator-setup"
+      }
+    ],
+    "consentRecords": [],
+    "nameHistory": [],
+    "createdAt": "2026-10-31T09:47:07.0538931+00:00",
+    "lastModifiedAt": "2026-10-31T09:47:07.0538994+00:00",
+    "isRestricted": false,
+    "isErased": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "mcpcli-417-dns-parent-audit/v1",
+  "observedAt": "2026-10-31T06:55:05.204522+00:00",
+  "baselineCommit": "c99aebe4a93ca611a443c83f031ef1c02bd499b7",
+  "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-ef5184e1",
+    "release": "mcpcli-417-20261031-ef5184e1"
+  },
+  "expiresAt": "2026-11-01T06:50:37.675109+00:00",
+  "checks": {
+    "localPacketAndManifestVerification": "passed with external transport disabled",
+    "snapshotAndValidationSourceHashes": "all match",
+    "focusedTestsPassed": 33,
+    "privateInputSetsScanned": 6,
+    "publicFilesScanned": 283,
+    "privateValueMatches": 0,
+    "exactDnsRule": "169.254.25.10/32 UDP/TCP 53",
+    "phaseOrder": "DNS before apps; sidecar runtime readiness before administrator queries",
+    "postNonRetryAndWriterReadiness": "preserved"
+  },
+  "priorAttempts": {
+    "first": "infrastructure/empty backup complete; direct-Pod injection failed; namespace and volume cleanup verified",
+    "second": "all three injected Jobs and Gateway liveness complete; administrator observation failed with sidecar DNS unavailable; Redis remained empty; namespace and volume cleanup verified",
+    "writerAndTenantSeedExecuted": false,
+    "originalJournalsAndBackups": "retained privately; sanitized structural receipts retained publicly"
+  },
+  "currentExecution": {
+    "deploymentApproved": false,
+    "deployed": false,
+    "actualDnsOrSidecarSuccess": false,
+    "bootstrapAndSeedExecuted": false,
+    "actualClientAndIndependentTiming": "pending",
+    "storyStatus": "in-progress",
+    "formalStep04ReviewStarted": false
+  },
+  "readmeSha256": "0dd463e39ce28e2a39716d0a80e595f5b8a98f133aaf73b4e50dd5a85cc5b12e",
+  "diffFiles": {
+    "mcpcli": "/tmp/mcpcli-417-dns-parent-feacvakv.diff",
+    "platformTaskOnly": "/tmp/platform-417-dns-parent-rur_i0sh.diff"
+  },
+  "scope": "Only approved failed attempts and cleanup executed. No shared changes, Secret retrieval, publication, commit or push."
+}

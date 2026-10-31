@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-10-31T07:23:57.904697+00:00",
+  "storyStatus": "in-progress",
+  "preparationStatus": "reopened after accepted writer activation and raw metadata probe API-token mismatch",
+  "activeTopology": "Gateway, Tenants domain, Parties domain plus one task-owned Redis provider",
+  "owner": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1",
+  "guide": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/README.md",
+  "reviewPacket": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/review.json",
+  "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261031-ef5184e1",
+    "release": "mcpcli-417-20261031-ef5184e1"
+  },
+  "tenant": "mcpcli-417-20261031-ef5184e1",
+  "operatorSubject": "mcpcli-417-operator-20261031-ef5184e1",
+  "expiresAt": "2026-11-01T06:50:37.675109+00:00",
+  "privateInputManifest": "/tmp/mcpcli-417-v1-private-20261031-attempt7/private-inputs.json",
+  "privateInputManifestSha256": "88436f7ad3b4aaa604f8bc8e7189f6d0f83f9f217051cf86cdc4e2cd3a12c739",
+  "authorization": "Third exact packet application and cleanup approved/completed. Compatible configuration preparation and bounded reads authorized; changed packet requires concrete review.",
+  "verified": [
+    "Exact accepted staged 1.2.0 packages/source and both receipt hashes rechecked, without substitution.",
+    "Same three immutable application images, provider, Job/no-retry/UID rules, resources, tenant routing and private Secret boundaries retained.",
+    "Actual target nodelocaldns hostNetwork address 169.254.25.10 and prior real Pod resolver observed; exact /32 UDP/TCP 53 policy matches existing Platform reference.",
+    "Pinned Redis image getent/cat/BusyBox timeout contents and argument support inspected; no extra workload or installed package required, and no prepared DNS-success proof invented.",
+    "33 synthetic tests pass including target/policy/provider/resolver refusals, delayed DNS/sidecar success, timeout diagnostics, missing/terminated/unready/changed runtimes, exact CLI channels and no later mutation submission.",
+    "Local review hashes, six client-only manifest dry-runs, fresh namespace absence, current-source/snapshot hashes and private-value exclusion checks pass."
+  ],
+  "reviewRisks": [
+    "Actual new provider resolver/DNS and sidecar runtime readiness must succeed during approved execution. Prior Gateway liveness did not establish sidecar readiness or persisted authority.",
+    "Early DNS uses the established Redis Pod only; 45-second polling plus bounded in-flight tool calls, with five-second timeout/one-second kill grace and outer command bound. No DNS bypass or broad egress.",
+    "Sidecars have a separate 120-second readiness poll before queries, bind container IDs and preserve writer-gated application /ready; lost/changed runtimes stop subsequent operations.",
+    "Original baseline admission, registry delegation, ephemeral private /tmp inputs, Job exactly-once limitations and kubectl client/server skew remain explicit owner review items.",
+    "Review expires 2026-11-01T06:50:37.675109+00:00; client TTL at most two hours capped to review expiry. Independent timing still requires fresh installation/configuration/profile/registration."
+  ],
+  "missingPreparationInputs": [],
+  "stillRequired": [
+    "human approval of exact node-local DNS packet",
+    "fresh actual DNS/policy/empty-backup and identity evidence before application Jobs",
+    "actual sidecar runtime readiness, persisted administrator, writer, tenant/member and application readiness",
+    "three actual MCP client sessions and persisted synthetic Party result",
+    "independent fresh-install README-only timing with all attempts/assistance",
+    "UID-bound cleanup and sanitized execution evidence"
+  ],
+  "evidence": "dns-prepared-snapshot.json and dns-prepared-packet/; dns-recovery-provenance-recheck.json; both prior approved execution/cleanup directories retained",
+  "historicalEvidence": [
+    "status-before-filled-packet.json",
+    "../remote-inspection-20261030/current-readiness.json",
+    "prepared-packet/evidence/preparation-attempts.json",
+    "status-before-recovery-packet.json",
+    "prepared-packet/",
+    "execution-20261031/",
+    "status-before-dns-packet.json",
+    "recovery-execution-20261031/",
+    "recovery-prepared-packet/"
+  ],
+  "currentWork": "Concrete review boundary; new packet not applied",
+  "lastExecution": {
+    "reviewSha256": "23f8ac08ed0051024c4e1c0264fafd7037f96040ec911b58cca72124dac9094f",
+    "approved": true,
+    "dnsBackupJobsSidecarsAdministrator": "complete with real proof",
+    "writerActivation": "persisted v2 marker verified; not resubmitted",
+    "writerReadiness": "failed: Gateway raw metadata health probe HTTP401 causes /ready503",
+    "tenantSeedHandoff": "not executed",
+    "cleanup": "namespace and backing volume verified absent"
+  }
+}

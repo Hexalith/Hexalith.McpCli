@@ -1,0 +1,9 @@
+{"at": "2026-10-31T07:10:35.403874+00:00", "app": "eventstore", "podUid": "692a76ad-f2ef-4bde-8fed-77b47ce3c77a", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:36.319644+00:00", "app": "tenants", "podUid": "7ed75ebd-e185-4846-8189-87d2bb98cdfd", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:37.096552+00:00", "app": "parties", "podUid": "3005b5c3-b333-4cc0-be29-cd40f835e963", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:44.436973+00:00", "app": "eventstore", "podUid": "692a76ad-f2ef-4bde-8fed-77b47ce3c77a", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:45.222565+00:00", "app": "tenants", "podUid": "7ed75ebd-e185-4846-8189-87d2bb98cdfd", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:46.093802+00:00", "app": "parties", "podUid": "3005b5c3-b333-4cc0-be29-cd40f835e963", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:56.814778+00:00", "app": "eventstore", "podUid": "692a76ad-f2ef-4bde-8fed-77b47ce3c77a", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:57.661566+00:00", "app": "tenants", "podUid": "7ed75ebd-e185-4846-8189-87d2bb98cdfd", "ready": true, "state": ["running"]}
+{"at": "2026-10-31T07:10:58.500335+00:00", "app": "parties", "podUid": "3005b5c3-b333-4cc0-be29-cd40f835e963", "ready": true, "state": ["running"]}

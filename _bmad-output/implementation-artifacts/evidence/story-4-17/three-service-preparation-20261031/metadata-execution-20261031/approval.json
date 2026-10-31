@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-31T07:50:52.397352+00:00",
+  "userReply": "I approve",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "context": "jpiquot@local",
+  "api": "https://192.168.1.30:6443",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "approved": [
+    "exact Gateway API-compatible packet with three controller Jobs and Redis/1Gi",
+    "Gateway-only strictly loopback API without optional API token and no local API Service ports",
+    "eight private Secrets including registry pull identity",
+    "retained app-channel/JWT/mTLS/domain API protections",
+    "DNS, sidecar and genuine metadata checks",
+    "real empty backup and administrator/writer bootstrap",
+    "test tenant/member seed",
+    "private handoff and UID-bound cleanup"
+  ],
+  "excluded": [
+    "publication",
+    "shared changes",
+    "impersonation",
+    "Secret retrieval",
+    "health bypass",
+    "unrelated application writes"
+  ],
+  "actualClientsAndTiming": "human-executed, still required"
+}

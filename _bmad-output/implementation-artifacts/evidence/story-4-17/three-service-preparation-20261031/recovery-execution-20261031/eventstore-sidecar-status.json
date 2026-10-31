@@ -1,0 +1,30 @@
+{
+  "name": "eventstore-v6fmm",
+  "uid": "699bd09d-f19c-4cc4-8083-3f62c7e9d88c",
+  "dnsPolicy": "ClusterFirst",
+  "dnsConfig": null,
+  "containerStatuses": [
+    {
+      "name": "daprd",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:29:45Z"
+        }
+      },
+      "lastState": {}
+    },
+    {
+      "name": "eventstore",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T06:29:45Z"
+        }
+      },
+      "lastState": {}
+    }
+  ]
+}

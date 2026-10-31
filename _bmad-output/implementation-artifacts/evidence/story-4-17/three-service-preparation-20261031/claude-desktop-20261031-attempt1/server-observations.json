@@ -1,0 +1,117 @@
+{
+  "schema": "mcpcli-client-correlation-observations/v1",
+  "records": [
+    {
+      "timestamp": "2026-10-31T09:52:48.249233720+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Information",
+      "category": "Hexalith.EventStore.Pipeline.LoggingBehavior",
+      "message": "MediatR pipeline entry: CorrelationId=01M68JJNZN338R4KCQNC8T9EFX, CausationId=01M68JJNZN338R4KCQNC8T9EFX, CommandType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, Tenant=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, SourceIp=127.0.0.1, Endpoint=/api/v1/commands, UserId=mcpcli-417-operator-20261031-155f9b6d, ReceivedAtUtc=10/31/2026 08:52:48 +00:00, Stage=PipelineEntry"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:48.249280278+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Information",
+      "category": "Hexalith.EventStore.Server.Pipeline.SubmitCommandHandler",
+      "message": "Command received: CorrelationId=01M68JJNY07PHRJTYXP7T7372S, CausationId=protected, CommandType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, TenantId=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, Stage=CommandReceived"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:48.256199220+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Error",
+      "category": "Hexalith.EventStore.Server.Pipeline.SubmitCommandHandler",
+      "message": "Trusted idempotency admission is unavailable. ExceptionType=InvalidOperationException, CorrelationId=01M68JJNY07PHRJTYXP7T7372S, Stage=IdempotencyAdmissionUnavailable"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:48.259401905+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Error",
+      "category": "Hexalith.EventStore.Pipeline.LoggingBehavior",
+      "message": "MediatR pipeline error: CorrelationId=01M68JJNZN338R4KCQNC8T9EFX, CausationId=01M68JJNZN338R4KCQNC8T9EFX, CommandType=Hexalith.Parties.Contracts.Commands.CreatePartyComposite, Tenant=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, ExceptionType=IdempotencyAdmissionFailureException, SafeDiagnostic=Protected data diagnostic details were redacted. ReasonCode=protected-data-diagnostic-redacted; Stage=pipeline., DurationMs=7.2445, Stage=PipelineError"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:48.269555413+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Warning",
+      "category": "Hexalith.EventStore.ErrorHandling.IdempotencyAdmissionFailureExceptionHandler",
+      "message": "Idempotency admission failed closed. Code=idempotency_admission_unavailable, CorrelationId=01M68JJNZN338R4KCQNC8T9EFX, Stage=IdempotencyAdmissionFailedClosed"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.435621331+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Information",
+      "category": "Hexalith.EventStore.Pipeline.LoggingBehavior",
+      "message": "MediatR pipeline entry: CorrelationId=01M68JJW11DZ07BHQTBB2KQP21, CausationId=01M68JJW11DZ07BHQTBB2KQP21, CommandType=SubmitQuery, Tenant=(null), Domain=(null), AggregateId=(null), SourceIp=127.0.0.1, Endpoint=/api/v1/queries, UserId=mcpcli-417-operator-20261031-155f9b6d, ReceivedAtUtc=10/31/2026 08:52:54 +00:00, Stage=PipelineEntry"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.435644174+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Information",
+      "category": "Hexalith.EventStore.Server.Pipeline.SubmitQueryHandler",
+      "message": "Query received: CorrelationId=01M68JJW11DZ07BHQTBB2KQP21, QueryType=PartyDetail, TenantId=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, Stage=QueryReceived"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.519912804+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Warning",
+      "category": "Hexalith.EventStore.Server.Pipeline.SubmitQueryHandler",
+      "message": "Query routing returned failure: CorrelationId=01M68JJW11DZ07BHQTBB2KQP21, QueryType=PartyDetail, TenantId=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, ErrorMessage=actor-not-found-infrastructure, Stage=QueryFailed"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.520939738+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Error",
+      "category": "Hexalith.EventStore.Pipeline.LoggingBehavior",
+      "message": "MediatR pipeline error: CorrelationId=01M68JJW11DZ07BHQTBB2KQP21, CausationId=01M68JJW11DZ07BHQTBB2KQP21, CommandType=SubmitQuery, Tenant=(null), Domain=(null), AggregateId=(null), ExceptionType=QueryExecutionFailedException, SafeDiagnostic=Protected data diagnostic details were redacted. ReasonCode=protected-data-diagnostic-redacted; Stage=pipeline., DurationMs=85.1526, Stage=PipelineError"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.529180975+01:00",
+      "sourceFile": "eventstore-eventstore-l6rpl-full-window.log",
+      "sourceSha256": "55f280d060e54a6718592a099c42b240aaed10f346815f6640db24e5372e9881",
+      "level": "Warning",
+      "category": "Hexalith.EventStore.ErrorHandling.QueryExecutionFailedExceptionHandler",
+      "message": "Query failed with mapped HTTP status: CorrelationId=01M68JJW11DZ07BHQTBB2KQP21, Tenant=mcpcli-417-20261031-155f9b6d, Domain=party, AggregateId=party-417-desktop-20261031-1, QueryType=PartyDetail, StatusCode=500"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.441996052+01:00",
+      "sourceFile": "parties-parties-fznzs-full-window.log",
+      "sourceSha256": "d06240c31f2a86278be82374ee6c7f301368a3071874d4018219f115b49aae97",
+      "level": "Information",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request starting HTTP/1.1 POST http://127.0.0.1:8080/query - application/json;+charset=utf-8 -"
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.494606531+01:00",
+      "sourceFile": "parties-parties-fznzs-full-window.log",
+      "sourceSha256": "d06240c31f2a86278be82374ee6c7f301368a3071874d4018219f115b49aae97",
+      "level": "Information",
+      "category": "Microsoft.AspNetCore.Http.Result.OkObjectResult",
+      "message": "Setting HTTP status code 200."
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.516666777+01:00",
+      "sourceFile": "parties-parties-fznzs-full-window.log",
+      "sourceSha256": "d06240c31f2a86278be82374ee6c7f301368a3071874d4018219f115b49aae97",
+      "level": "Information",
+      "category": "Microsoft.AspNetCore.Http.Result.OkObjectResult",
+      "message": "Writing value of type 'QueryResult' as Json."
+    },
+    {
+      "timestamp": "2026-10-31T09:52:54.518052831+01:00",
+      "sourceFile": "parties-parties-fznzs-full-window.log",
+      "sourceSha256": "d06240c31f2a86278be82374ee6c7f301368a3071874d4018219f115b49aae97",
+      "level": "Information",
+      "category": "Microsoft.AspNetCore.Hosting.Diagnostics",
+      "message": "Request finished HTTP/1.1 POST http://127.0.0.1:8080/query - 200 - application/json;+charset=utf-8 76.0730ms"
+    }
+  ]
+}

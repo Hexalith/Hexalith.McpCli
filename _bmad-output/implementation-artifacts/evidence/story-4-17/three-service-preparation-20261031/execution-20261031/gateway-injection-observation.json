@@ -1,0 +1,27 @@
+{
+  "labels": {
+    "app": "eventstore",
+    "dapr.io/app-id": "eventstore",
+    "hexalith.com/operator-task": "mcpcli-417-20261031-aebefecb"
+  },
+  "annotations": {
+    "cni.projectcalico.org/containerID": "933c4e4b28ea42b32038b03a0242e5ebd35b5ada546c60863c87d02aec2f95c0",
+    "cni.projectcalico.org/podIP": "10.233.102.237/32",
+    "cni.projectcalico.org/podIPs": "10.233.102.237/32",
+    "dapr.io/api-token-secret": "mcpcli-eventstore-api",
+    "dapr.io/app-id": "eventstore",
+    "dapr.io/app-port": "8080",
+    "dapr.io/app-token-secret": "mcpcli-eventstore-app",
+    "dapr.io/config": "mcpcli-v1-access",
+    "dapr.io/enabled": "true",
+    "dapr.io/sidecar-cpu-limit": "500m",
+    "dapr.io/sidecar-cpu-request": "50m",
+    "dapr.io/sidecar-listen-addresses": "127.0.0.1",
+    "dapr.io/sidecar-memory-limit": "256Mi",
+    "dapr.io/sidecar-memory-request": "64Mi"
+  },
+  "containers": [
+    "eventstore"
+  ],
+  "initContainers": []
+}

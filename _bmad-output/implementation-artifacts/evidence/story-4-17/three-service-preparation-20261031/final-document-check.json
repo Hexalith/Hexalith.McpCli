@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-10-31T05:44:38.868936+00:00",
+  "result": "passed",
+  "checks": [
+    "Scoped McpCli git diff --check passed.",
+    "Snapshot source/manifest/evidence hashes match owning Platform files.",
+    "All command stdout/stderr retained inside JSON receipts as well as workspace logs.",
+    "No source/helper/fixture/selected evidence changed after review generation."
+  ],
+  "owningPaths": {
+    "README.md": "0dd463e39ce28e2a39716d0a80e595f5b8a98f133aaf73b4e50dd5a85cc5b12e",
+    "docs/release/operator-setup-checklist.md": "3ad98be04f3fead4f1fb72eab8d88f0a4093796cf3b110ef5249a3b451d3112b",
+    "_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md": "526687b9913395ce3da661a1b9218c2d0d72a568ef9d75cc28c779c1a12176af"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "owningDirectory": "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/evidence/builds-mapped-source-20261030",
+  "files": {
+    "assessment.json": "819640f44c890af9ffb10db86554b27be9eb2986277f60ff0731a79fe5d0a990",
+    "inputs.json": "b5c036b809590473eb805fa60e7f15ebc206579b7004877c85bf12466b42491e",
+    "local-base-inventory.json": "4c9c38187ae6a1d55062a7b444c34617446a19297ea3f75f692a041f5cb62653",
+    "mapping.command.json": "7251e6bf18d0b313e3dfed31d3b5748a167e8dd2c8555afa4c956949f9b98e03",
+    "mapping.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mapping.stdout.txt": "83863d40112f7783f3bde435abf0bbceccac4efe2f706f3b49b9634fcca868b0",
+    "publish.command.json": "24145aa0be73909b9dfdef964af4f6164b278288003160480f91a55e6cd87ff9",
+    "publish.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publish.stdout.txt": "94ddb27a4a612009cc9bf9da0a19d321cf7d90083c8707bf2e67cca492a1adaf",
+    "published-payload.json": "56033123cd48ea04d9f8a34f64a895bd3c0ba4c4e565c7775c38677b419c204f",
+    "restore.command.json": "9eff9d45d8abb4687b7bfab39fff08702e04303354147989888c19512e4af0c3",
+    "restore.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restore.stdout.txt": "91070178a977f705160c677bc449e60544dff014b9fb227347d7c98cac0e8427",
+    "result.json": "43e6a0868a78f0512a628f2eee2b7c21214f0a0da507fcebfd24f60998349c28",
+    "source-inputs.json": "1c88e0f2cabe75dbd1de42c52f1144ec12afb7c2d6654035814ad55b0069c867"
+  }
+}

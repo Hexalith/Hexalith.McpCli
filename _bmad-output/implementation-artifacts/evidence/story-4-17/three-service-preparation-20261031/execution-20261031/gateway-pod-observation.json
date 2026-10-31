@@ -1,0 +1,61 @@
+{
+  "name": "eventstore",
+  "uid": "8b7c24d9-48c8-4ba3-8234-2a933dba3496",
+  "phase": "Running",
+  "conditions": [
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-31T05:58:43Z",
+      "observedGeneration": 1,
+      "status": "True",
+      "type": "PodReadyToStartContainers"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-31T05:58:41Z",
+      "observedGeneration": 1,
+      "status": "True",
+      "type": "Initialized"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-31T05:58:41Z",
+      "message": "containers with unready status: [eventstore]",
+      "observedGeneration": 1,
+      "reason": "ContainersNotReady",
+      "status": "False",
+      "type": "Ready"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-31T05:58:41Z",
+      "message": "containers with unready status: [eventstore]",
+      "observedGeneration": 1,
+      "reason": "ContainersNotReady",
+      "status": "False",
+      "type": "ContainersReady"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-31T05:58:41Z",
+      "observedGeneration": 1,
+      "status": "True",
+      "type": "PodScheduled"
+    }
+  ],
+  "containerStatuses": [
+    {
+      "name": "eventstore",
+      "ready": false,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T05:58:42Z"
+        }
+      },
+      "lastState": {},
+      "image": "sha256:7f723a970215e9afa46b59c1127bee19d38bf0e7903aacca65be91a2e78a639a",
+      "imageID": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed"
+    }
+  ]
+}

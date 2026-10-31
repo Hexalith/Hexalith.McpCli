@@ -1,0 +1,24 @@
+{
+  "client": "Claude Code",
+  "version": "2.1.316",
+  "scope": "local",
+  "project": "/home/administrator/projects/hexalith/mcpcli",
+  "configuration": {
+    "command": "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+    "args": [
+      "mcp",
+      "--transport",
+      "stdio",
+      "--profile",
+      "operator"
+    ],
+    "env": {
+      "MCPCLI_HOME": "/tmp/mcpcli-417-v1-private-20261031-attempt8/operator-home",
+      "DOTNET_ROOT": "/home/administrator/.dotnet"
+    }
+  },
+  "registered": true,
+  "actualSessionExecuted": false,
+  "writesSubmitted": 0,
+  "recordedAt": "2026-10-31T09:44:30.032138+00:00"
+}

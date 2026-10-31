@@ -1,0 +1,19 @@
+{
+  "purpose": "Ordinary client session fragments only; not used for independent README-only timing",
+  "files": {
+    "mcp-linux.json": {
+      "path": "/tmp/mcpcli-417-v1-private-20261031-attempt8/mcp-linux.json",
+      "sha256": "b713d1ed77c65b3b06e709219fcbf05898a51c2cd9dc1709f587933fd7fd4be2"
+    },
+    "mcp-windows-wsl.json": {
+      "path": "/tmp/mcpcli-417-v1-private-20261031-attempt8/mcp-windows-wsl.json",
+      "sha256": "10d2bb939a64e7b7f567b3ffbde1ee9f2ee408de7baa7e5dba5057ba5629fabf"
+    },
+    "mcp-vscode-local-windows-wsl.json": {
+      "path": "/tmp/mcpcli-417-v1-private-20261031-attempt8/mcp-vscode-local-windows-wsl.json",
+      "sha256": "69f8002f833a2471395f39b915dc5705f06c2de53367894b0fda20913d334678"
+    }
+  },
+  "containsCredentials": false,
+  "actualClientsRegistered": false
+}

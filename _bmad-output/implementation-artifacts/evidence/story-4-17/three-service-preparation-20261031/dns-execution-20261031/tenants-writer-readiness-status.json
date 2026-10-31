@@ -1,0 +1,26 @@
+{
+  "name": "tenants-t8k49",
+  "uid": "7ed75ebd-e185-4846-8189-87d2bb98cdfd",
+  "containerStatuses": [
+    {
+      "name": "daprd",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T07:09:32Z"
+        }
+      }
+    },
+    {
+      "name": "tenants",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-31T07:09:32Z"
+        }
+      }
+    }
+  ]
+}

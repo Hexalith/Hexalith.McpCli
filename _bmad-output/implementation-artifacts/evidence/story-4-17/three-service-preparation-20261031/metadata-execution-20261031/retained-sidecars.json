@@ -1,0 +1,8 @@
+{
+  "phase": "sidecars",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "startedAt": "2026-10-31T07:52:50.567377+00:00",
+  "sidecarRuntimeReadinessObserved": true,
+  "endedAt": "2026-10-31T07:52:52.993408+00:00"
+}

@@ -1,0 +1,45 @@
+{
+  "observedAt": "2026-10-30T18:04:21.265284+00:00",
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/tenants-api:5.11.1"
+      ],
+      "startedAt": "2026-10-30T18:04:20.306306+00:00",
+      "exitCode": 1,
+      "errorCategory": "manifest-not-found",
+      "reference": "registry.hexalith.com/tenants-api:5.11.1"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/memories-domain-service:3.0.10"
+      ],
+      "startedAt": "2026-10-30T18:04:20.607960+00:00",
+      "exitCode": 1,
+      "errorCategory": "manifest-not-found",
+      "reference": "registry.hexalith.com/memories-domain-service:3.0.10"
+    },
+    {
+      "argv": [
+        "docker",
+        "buildx",
+        "imagetools",
+        "inspect",
+        "registry.hexalith.com/tenants-api:5.10.0"
+      ],
+      "startedAt": "2026-10-30T18:04:20.931998+00:00",
+      "exitCode": 1,
+      "errorCategory": "manifest-not-found",
+      "reference": "registry.hexalith.com/tenants-api:5.10.0"
+    }
+  ],
+  "purpose": "Distinguish missing manifests from access failures and check the accepted Tenants version; 14 total candidate requests."
+}

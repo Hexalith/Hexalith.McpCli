@@ -1,0 +1,29 @@
+{
+  "name": "dapr-sidecar-injector",
+  "uid": "b5474717-e70e-4fbb-9c54-19b18714b795",
+  "webhooks": [
+    {
+      "name": "sidecar-injector.dapr.io",
+      "namespaceSelector": {},
+      "objectSelector": {},
+      "failurePolicy": "Ignore",
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "apiVersions": [
+            "v1"
+          ],
+          "operations": [
+            "CREATE"
+          ],
+          "resources": [
+            "pods"
+          ],
+          "scope": "*"
+        }
+      ]
+    }
+  ]
+}

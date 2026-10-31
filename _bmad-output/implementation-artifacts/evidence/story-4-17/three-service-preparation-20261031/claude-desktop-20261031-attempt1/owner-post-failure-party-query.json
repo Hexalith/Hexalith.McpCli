@@ -1,0 +1,28 @@
+{
+  "observedAt": "2026-10-31T09:05:30.669972+00:00",
+  "scope": "Owner read-only supplemental observation; not an actual GUI tool result",
+  "argv": [
+    "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+    "query",
+    "parties.get-party",
+    "--payload",
+    "{\"PartyId\": \"party-417-desktop-20261031-1\"}",
+    "--entity-id",
+    "party-417-desktop-20261031-1",
+    "--profile",
+    "operator"
+  ],
+  "exitCode": 2,
+  "stdout": {
+    "error": {
+      "code": "gateway_error",
+      "status": 500,
+      "detail": "actor-not-found-infrastructure",
+      "reason": "query_internal_error",
+      "retryAfter": "30",
+      "correlationId": "01M68K9YGCMMDTMEKZ492W39WE"
+    }
+  },
+  "stderr": "info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]\n      Start processing HTTP request POST http://127.0.0.1:18170/api/v1/queries\ninfo: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]\n      Sending HTTP request POST http://127.0.0.1:18170/api/v1/queries\ninfo: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]\n      Received HTTP response headers after 40.6196ms - 500\ninfo: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]\n      End processing HTTP request after 50.6566ms - 500\n",
+  "commandsSubmitted": 0
+}
