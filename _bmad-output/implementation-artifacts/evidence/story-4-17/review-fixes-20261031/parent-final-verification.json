@@ -1,0 +1,68 @@
+{
+  "schema": "mcpcli-story-4-17-parent-final-verification/v1",
+  "capturedAt": "2026-10-31T16:25:46.137098+00:00",
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "eng/mcpcli-operator-setup/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/platform",
+      "exitCode": 0,
+      "stdout": "parent-platform-tests.stdout.txt",
+      "stderr": "parent-platform-tests.stderr.txt"
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-17/review-fixes-20261031/verify-readme.py",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "/tmp/mcpcli-417-timing-handoff",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-17/review-fixes-20261031/parent-readme-verification.json"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": "parent-readme.stdout.txt",
+      "stderr": "parent-readme.stderr.txt"
+    }
+  ],
+  "files": {
+    "mcpcli": {
+      "README.md": "83d5a0e4948698822573f5f4c102cd95150a0adeacf5c57f49ddeb2b3d2bf80a",
+      "docs/release/operator-setup-checklist.md": "f84db7ebebd57eb796f6b60448db6eeb03776914b73947ad0e265f286a1e09e1",
+      ".gitignore": "8e3fb9ac211d3d2c5f821b997ddb491a63df1010e084bcc8dd915af96abfeb14",
+      "_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md": "bd8358f0954845f0bd49f8ae16b04c45b1c2b263669b93abb90bef842812ea74",
+      "_bmad-output/implementation-artifacts/sprint-status.yaml": "cc4b5b19ecb0f2deb4181069c65f674a20838aaabfcbfb3852365d2dba065d92",
+      "_bmad-output/implementation-artifacts/deferred-work.md": "3198db2b3875096556525e1eb0097b112ce2fcf3b573d27a5d5e08925741c9eb"
+    },
+    "platform": {
+      "eng/mcpcli-operator-setup/v1/phases.py": "967e9c27f653fc45db9e2a30443bdc7cc5ff55ab569dffb7928a37cfe266aa36",
+      "eng/mcpcli-operator-setup/v1/prepare.py": "64c832bb0e305eca1c4df24bd0aa72a5a3d3eccd8e8e5197e6d7b95bfb762cc3",
+      "eng/mcpcli-operator-setup/v1/test_v1.py": "34dd08228aa8b1897f5d1aa89ec609d988b3306b2fada0ae12ffb0af01dcaa0c",
+      "eng/mcpcli-operator-setup/v1/README.md": "c15c7154f44df17a2c1861e077361af4e8867c1ecd26026b41f58e3b49802ec3"
+    }
+  },
+  "testCount": 56,
+  "readmeAssertions": 17,
+  "noNewLiveAcceptance": true,
+  "review": {
+    "layersCompleted": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "findingsTriaged": 13,
+    "patchedRootCauses": 5,
+    "preExistingDeferred": 4,
+    "rejected": 2,
+    "openInScopeFindings": 0
+  }
+}

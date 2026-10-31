@@ -1,0 +1,85 @@
+{
+  "schema": "mcpcli-story-4-17-review-fixes/v1",
+  "capturedAt": "2026-10-31T16:15:03.931625+00:00",
+  "repositories": {
+    "mcpcli": {
+      "root": "/home/administrator/projects/hexalith/mcpcli",
+      "baseline": "d7e21771079a2302e7a2e958dccdd12d94f56070",
+      "files": {
+        "README.md": "7c77f89285d41bb412b7899657d2b41945facbe96e67b66a184b5d1361c68b2e",
+        "docs/release/operator-setup-checklist.md": "fffe8694ca13790addfced5a8814fe99c03d32e6618b154819aca67eddac33da",
+        ".gitignore": "8e3fb9ac211d3d2c5f821b997ddb491a63df1010e084bcc8dd915af96abfeb14"
+      }
+    },
+    "platform": {
+      "root": "/home/administrator/projects/hexalith/platform",
+      "baseline": "82c9a31a0565c6dfd47750f5c67c087b487e6300",
+      "files": {
+        "eng/mcpcli-operator-setup/v1/phases.py": "967e9c27f653fc45db9e2a30443bdc7cc5ff55ab569dffb7928a37cfe266aa36",
+        "eng/mcpcli-operator-setup/v1/prepare.py": "9f1b001d7c46da848dea3ca9781fd5d794be5435e1f6a00728ef39deeacd824c",
+        "eng/mcpcli-operator-setup/v1/test_v1.py": "39a88c4ce1ca6003cd194f8dd29f929e510644202150d498367b0a3f11e93cfc",
+        "eng/mcpcli-operator-setup/v1/README.md": "91d4b1964da0b44a5733e0da4657fe7f37209271a1c3f070c137e5fcf6a0b5c7"
+      }
+    }
+  },
+  "acceptedReceiptHashes": {
+    "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/paired-preparation/prepared.json": "7ff79f8df835084ac604798d605ab6e99e79e618db84c5df163fbffb182e60a9",
+    "_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/accepted-staging-only/accepted-pair.json": "b90d5295de08a48451f29b4d830692af83770c717d1205f078ab24243d5ff026"
+  },
+  "platformTests": {
+    "cwd": "/home/administrator/projects/hexalith/platform",
+    "command": "python3 -m unittest discover -v -s eng/mcpcli-operator-setup/v1 -p 'test_*.py'",
+    "exitCode": 0,
+    "tests": 54,
+    "durationSeconds": 7.829,
+    "stdout": "platform-tests.stdout.txt",
+    "stderr": "platform-tests.stderr.txt"
+  },
+  "readmeVerification": {
+    "command": "python3 -I /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-17/review-fixes-20261031/verify-readme.py /home/administrator/projects/hexalith/mcpcli /tmp/mcpcli-417-timing-handoff /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-17/review-fixes-20261031/readme-verification.json",
+    "exitCode": 0,
+    "assertions": 12,
+    "report": "readme-verification.json",
+    "readmeSha256": "7c77f89285d41bb412b7899657d2b41945facbe96e67b66a184b5d1361c68b2e",
+    "gatewayCalls": 0
+  },
+  "diffChecks": [
+    {
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "README.md",
+        "docs/release/operator-setup-checklist.md",
+        ".gitignore"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "/home/administrator/projects/hexalith/platform",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "eng/mcpcli-operator-setup/v1/phases.py",
+        "eng/mcpcli-operator-setup/v1/prepare.py",
+        "eng/mcpcli-operator-setup/v1/test_v1.py",
+        "eng/mcpcli-operator-setup/v1/README.md"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "limitations": [
+    "No deployment, Kubernetes mutation, publication or application write occurred.",
+    "Historical packets and evidence were preserved; modified runner/helper hashes require a fresh packet and review for another execution.",
+    "Current README has local installation/configuration/protocol/teardown evidence only; final live README run and genuine first-time operator timing remain deferred as recorded in the story.",
+    "Unrelated pre-existing Platform planning/spec changes were preserved."
+  ]
+}

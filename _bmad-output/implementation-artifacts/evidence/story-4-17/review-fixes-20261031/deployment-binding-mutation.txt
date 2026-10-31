@@ -1,0 +1,630 @@
+test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) ...
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='infrastructure', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='infrastructure', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='dns', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='dns', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='backup', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='backup', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='gateway', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='gateway', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='tenants', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='tenants', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='parties', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='parties', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='startup', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='startup', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='sidecars', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='sidecars', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='metadata', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='metadata', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='administrator', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='administrator', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='writer', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='writer', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='seed', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='seed', case='evidence') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='handoff', case='fixture') ... FAIL
+  test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='handoff', case='evidence') ... FAIL
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='infrastructure', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='infrastructure', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='dns', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='dns', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='backup', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='backup', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='gateway', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='gateway', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='tenants', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='tenants', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='parties', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='parties', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='startup', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='startup', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='sidecars', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='sidecars', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='metadata', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='metadata', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='administrator', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='administrator', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='writer', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='writer', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='seed', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='seed', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='handoff', case='fixture')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: fixture-changed-after-review. Preserve th[40 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: fixture-changed-after-review. Preserve th[39 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: fixture-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+======================================================================
+FAIL: test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner (test_v1.ReviewPatchTests.test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner) (phase='handoff', case='evidence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 728, in test_every_deployment_phase_refuses_fixture_and_evidence_drift_before_runner
+    c.save();self.refusal(c,code,'--execute-reviewed','--phase',phase);runner.assert_not_called();external.assert_not_called()
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/platform/eng/mcpcli-operator-setup/v1/test_v1.py", line 687, in refusal
+    self.assertEqual((1,'','Phase stopped: '+code+'. Preserve the journal; do not retry uncertain writes.\n'),self.cli(c,*args))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (1, '[14 chars]ped: evidence-changed-after-review. Preserve t[41 chars].\n') != (1, '[14 chars]ped: TypeError. Preserve the journal; do not r[21 chars].\n')
+
+First differing element 2:
+'Phase stopped: evidence-changed-after-review. Preserve t[40 chars]s.\n'
+'Phase stopped: TypeError. Preserve the journal; do not r[20 chars]s.\n'
+
+  (1,
+   '',
+-  'Phase stopped: evidence-changed-after-review. Preserve the journal; do not '
+-  'retry uncertain writes.\n')
++  'Phase stopped: TypeError. Preserve the journal; do not retry uncertain '
++  'writes.\n')
+
+----------------------------------------------------------------------
+Ran 1 test in 0.479s
+
+FAILED (failures=26)

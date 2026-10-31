@@ -1,0 +1,24 @@
+{
+  "schema": "mcpcli-story-4-17-parent-acceptance-audit/v1",
+  "capturedAt": "2026-10-31T16:17:19.037478+00:00",
+  "checks": {
+    "changedFileHashes": true,
+    "acceptedReceiptHashes": true,
+    "platformTests": true,
+    "readmeChecks": true,
+    "noNewLiveClaim": true,
+    "claudeCode": true,
+    "claudeDesktop": true,
+    "vsCode": true,
+    "timingRecalculation": true,
+    "reviewItemsComplete": true,
+    "matrixRowsEvidenced": true
+  },
+  "allChecksPass": true,
+  "timingRecalculatedSeconds": 685.294,
+  "limitations": [
+    "Previously accepted human exceptions are preserved.",
+    "Not-executed negative matrix cases remain explicitly recorded in matrix-coverage.json.",
+    "No new live deployment, application write, GUI-client session or timing attempt."
+  ]
+}

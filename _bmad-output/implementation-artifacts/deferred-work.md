@@ -747,3 +747,15 @@ status: open
   evidence: Low; introduced by commit `a3989b4` (published-profile work), not by Story 4.17.
     - `README.md:567` says preparation builds both domain hosts against the package cohort; `tools/live-topology/ci.py:383-388` still requires each `references/<module>` checkout and raises `Missing declared direct root source prerequisite` otherwise.
     - Fix: add the source-checkout prerequisite back to that paragraph.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: CI package provenance may omit an executable actually launched by Aspire.
+  evidence: Medium, unverified; pre-existing published-profile work. `tools/live-topology/ci.py:231-233` binds only DLL/JSON outputs, while native apphost files also exist. Inspect the effective Aspire/DCP launch command to determine whether any excluded native executable runs; bind the used launch assets and add mutation coverage if so.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: Frozen Memories/Tenants peers are selected by build properties without independent restored-graph assertions.
+  evidence: Medium; pre-existing peer-cohort work. `tools/live-topology/ci.py:185-193` checks only EventStore identities, while `tools/live-topology/ci.py:405` passes Memories 3.0.11 and Tenants 5.11.2 properties. Verify the actual required peer identities in project.assets.json and add mutation coverage for ignored/overridden properties.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: Package Gateway socket tests do not independently reject missing or invalid app-channel/workload credentials.
+  evidence: Medium verification gap, not a demonstrated authentication bypass; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:183-184` sets a valid dapr-api-token and workload assertion for every proof-defect case. Add missing/wrong app-channel and missing/invalid workload-assertion probes against the actual package host.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: A clean focused Manifest.Tests build does not build the package Gateway host required by its socket tests.
+  evidence: Low; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:41` asserts that the host DLL already exists, but `tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj:12` and the referenced Integration.Tests/AppHost graph have no package-host build dependency. The documented full solution build supplies it; add a build-only project dependency for clean focused runs.

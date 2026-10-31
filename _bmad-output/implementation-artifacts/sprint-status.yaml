@@ -84,7 +84,7 @@ development_status:
   # 4.15: rule/plan published upstream, baseline integrated, verification and Build review complete.
   4-15-publish-the-no-new-server-rule: done
   4-16-stage-and-validate-the-paired-packages: done # Build/review complete; staging 40885068007 passed all three OS lanes and required Windows checks.
-  4-17-verify-the-operator-setup-experience: in-progress # Code review 2026-10-31 (code + Platform v1 runner): 22 patches left as action items in the spec; timing exception accepted, first-time measurement deferred.
+  4-17-verify-the-operator-setup-experience: review # Build complete 2026-10-31: 22 review fixes plus follow-up patches; 56 Platform tests and 17 README assertions pass; accepted timing exception and deferred work retained.
   4-18-publish-the-validated-package-pair: backlog
   epic-4-retrospective: optional
 

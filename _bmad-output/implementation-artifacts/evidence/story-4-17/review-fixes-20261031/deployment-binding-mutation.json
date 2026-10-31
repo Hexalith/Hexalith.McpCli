@@ -1,0 +1,11 @@
+{
+  "mutation": "if phase == verify and not forward",
+  "sourceEdited": false,
+  "testMethods": 1,
+  "failures": 26,
+  "errors": 0,
+  "mutationDetected": true,
+  "detail": "deployment-binding-mutation.txt",
+  "logNormalization": "Trailing whitespace removed from captured text lines; diagnostic content otherwise preserved.",
+  "rawOutputSha256": "3a5da040a9467feac256f4caa1fb2051949fbd578bb3ca782108ce336f47cb3d"
+}

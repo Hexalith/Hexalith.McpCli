@@ -126,23 +126,25 @@ Claude Code installs and registers the tool from one prompt. You only type your 
 
 Before you start, your environment owner gives you:
 
-- the path of a **handoff folder** with the tool packages and a `NuGet.Config` (the owner has already checked them);
-- the **Gateway URL**, your **tenant** and your **actor**;
+- the absolute path of a **handoff folder** with the tool packages and a `NuGet.Config` (the owner has already checked them); use a path beginning with `/`, without `~`;
+- the **Gateway URL**, your **tenant** and your **actor**; the URL is local to this machine and works only while the owner's private port-forward is running here;
 - a short-lived **token** and its expiry, handed to you privately (for example copied to your clipboard). You paste it only at the hidden `Token:` prompt in step 3;
 - a new **Party ID** for your test, for example `party-417-ana-1`.
 
-You need a Linux or WSL bash terminal where `dotnet --list-runtimes` shows `Microsoft.NETCore.App 10.x` (the 1.2.0 tool does not run on a machine with only .NET 11), and Claude Code installed and signed in (`claude --version`).
+You need a Linux or WSL bash terminal where `dotnet --list-sdks` shows a .NET SDK 10 or later and `dotnet --list-runtimes` shows `Microsoft.NETCore.App 10.x` (the 1.2.0 tool does not run on a machine with only .NET 11), and Claude Code installed and signed in (`claude --version`). Check that `env | grep '^EVENTSTORE_'` prints nothing: inherited `EVENTSTORE_*` variables override the profile, so remove them from the setup and client launch environment before continuing.
 
 **1.** Open a terminal and start Claude Code in a new folder:
 
 ```sh
-mkdir -p ~/hexalith-operator/project && cd ~/hexalith-operator/project && claude
+mkdir -m 700 ~/hexalith-operator && mkdir ~/hexalith-operator/project && cd ~/hexalith-operator/project && claude
 ```
+
+If the root folder already exists, stop and inspect it. Use step 5 only after confirming that it contains solely an earlier Hexalith setup; never delete an unrelated existing folder.
 
 **2.** Copy this prompt and paste it into Claude Code as it is. Claude Code first asks for your handoff folder, tenant and actor. Answer, then approve the commands it runs:
 
 ```text
-Set up the Hexalith MCP server for me. Before running anything, ask me for my handoff folder, tenant and actor, and put my answers in place of HANDOFF, TENANT and ACTOR below. Never run a command that still contains one of those three words. Otherwise run each command below with Bash, exactly as written, one at a time. Stop at the first error and show it to me. Never ask for, read or print my token.
+Set up the Hexalith MCP server for me. Before running anything, ask me for my handoff folder, tenant and actor. Replace each whole HANDOFF, TENANT or ACTOR argument below with a shell-quoted literal value, never insert an answer inside existing quotes. For --configfile, replace the entire "HANDOFF/NuGet.Config" argument with the shell-quoted absolute path to NuGet.Config in my handoff folder. Preserve spaces, dollar signs and command-substitution text as literal characters; use Bash single-quoted literals and escape any embedded single quote. Never run a command that still contains one of those three placeholder words. Otherwise run each command below with Bash, exactly as written, one at a time. Stop at the first error and show it to me. Never ask for, read or print my token.
 1. export DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" NUGET_PACKAGES="$HOME/hexalith-operator/packages" && dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path "$HOME/hexalith-operator/tools" --configfile "HANDOFF/NuGet.Config" --no-cache && "$HOME/hexalith-operator/tools/hexalith" --version
    The last line must be 1.2.0.
 2. Ask me to run the token command from step 3 of the README in another terminal, with the token my environment owner gave me, and wait until I say it is done.
@@ -152,11 +154,18 @@ Set up the Hexalith MCP server for me. Before running anything, ask me for my ha
    The status must be Connected. Then tell me to restart Claude Code.
 ```
 
-**3.** When Claude Code asks for the token command, open a **second** terminal running bash (type `bash` first if it uses zsh or fish), run these two lines with your Gateway URL instead of `GATEWAY-URL`, paste your token at `Token:` (nothing is shown) and press Enter. Then tell Claude Code it is done. The token is not displayed or kept in your shell history, but it is passed to `hexalith` as a command argument, so other processes on this machine could read it while that command runs. If that is not acceptable, use [Configure the private operator profile](#configure-the-private-operator-profile) instead. To replace an expired token later, run these two lines again, then ask Claude Code to repeat setup step 3: adding the profile again clears its tenant and actor.
+**3.** When Claude Code asks for the token command, open a **second** terminal running bash (type `bash` first if it uses zsh or fish), run these two lines with your Gateway URL instead of `GATEWAY-URL`, paste your token at `Token:` (nothing is shown) and press Enter. Then tell Claude Code it is done. The token is not displayed or kept in your shell history, but it is passed to `hexalith` as a command argument, so other processes on this machine could read it while that command runs. If that is not acceptable, use [Configure the private operator profile](#configure-the-private-operator-profile) instead.
 
 ```sh
 export DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" MCPCLI_HOME="$HOME/hexalith-operator/home"
-read -rsp 'Token: ' token && echo && "$HOME/hexalith-operator/tools/hexalith" config profile add operator --url GATEWAY-URL --token "$token"; unset token
+(read -rsp 'Token: ' token && echo && "$HOME/hexalith-operator/tools/hexalith" config profile add operator --url GATEWAY-URL --token "$token"; mcpcli_token_status=$?; unset token; exit "$mcpcli_token_status")
+```
+
+To replace an expired token later, close Claude Code, run the two lines above again, then run the following two lines in that same terminal with your real tenant and actor. Adding the profile again clears those fields. Restart Claude Code in `~/hexalith-operator/project` afterward so its stdio server loads the new token.
+
+```sh
+"$HOME/hexalith-operator/tools/hexalith" config set operator tenant TENANT
+"$HOME/hexalith-operator/tools/hexalith" config set operator actor ACTOR
 ```
 
 **4.** When Claude Code says setup is done, type `/exit`, run `claude` again in the same folder and type `/mcp`: `hexalith` must be connected. Then paste this request as it is. Claude Code first asks for your tenant and Party ID. Answer, then approve each hexalith tool call:
@@ -167,10 +176,11 @@ Use only the hexalith MCP tools. Before calling any tool, ask me for my tenant a
 
 You are done when the creation result shows `status: accepted` with your tenant and Party ID, and the read-back shows the person with `isActive: true`. If a step fails, see [Resolve setup failures](#resolve-setup-failures). Never repeat the creation.
 
-**5.** When you have finished, remove the registration and the private folder, which holds your token:
+**5.** When you have finished, remove the registration and the private folder, which holds your token. Run the second line even if the first reports that no server named `hexalith` is registered:
 
 ```sh
-cd ~/hexalith-operator/project && claude mcp remove hexalith -s local && cd ~ && rm -rf ~/hexalith-operator
+cd ~/hexalith-operator/project && claude mcp remove hexalith -s local
+cd ~ && rm -rf ~/hexalith-operator
 ```
 
 ### Environment owner: environment and handoff
@@ -194,8 +204,8 @@ For the quick start, first verify the four hashes and receipts as described in t
 
 ```sh
 handoff=/absolute/path/handoff
-mkdir "$handoff"
-cp /absolute/path/accepted-packages/*.nupkg "$handoff"/
+mkdir "$handoff" &&
+cp /absolute/path/accepted-packages/*.nupkg "$handoff"/ &&
 cat > "$handoff/NuGet.Config" <<EOF
 <configuration>
   <packageSources>
@@ -337,7 +347,7 @@ For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers
 
 On Windows, change the JSON command to `C:\\Users\\YOUR-USER\\mcpcli-417-operator\\tools\\hexalith.exe` and `MCPCLI_HOME` to its Windows home path, using JSON-escaped backslashes. A GUI launch may inherit neither the shell PATH nor shell variables. Use literal absolute paths, restart after environment changes, and set `DOTNET_ROOT` in the entry's `env` to the actual .NET installation directory if the apphost cannot find the runtime. Never assume `~`, `$HOME` or shell expansion in JSON.
 
-For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--cd", "/home/YOUR-USER/mcpcli-417-operator/home", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/mcpcli-417-operator/home", "/home/YOUR-USER/mcpcli-417-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Keep `--cd` with a small Linux directory: a Windows GUI starts `wsl.exe` in its own Windows directory (for example `C:\Users\YOU` or `System32`), and without `--cd` the server starts under `/mnt/c/...` and can stall before answering `initialize` while it scans that tree. `--exec` does not load your shell profile: if .NET is installed in your Linux home (for example `~/.dotnet`), add `"DOTNET_ROOT=/home/YOUR-USER/.dotnet"` after the `MCPCLI_HOME=…` argument, and add `"--user", "YOUR-USER"` when the tool belongs to a user other than the distribution's default user. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
+For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--cd", "/home/YOUR-USER/mcpcli-417-operator/home", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/mcpcli-417-operator/home", "/home/YOUR-USER/mcpcli-417-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Keep `--cd` with a small Linux directory: a Windows GUI starts `wsl.exe` in its own Windows directory (for example `C:\Users\YOU` or `System32`), and without `--cd` the server starts under `/mnt/c/...` and can stall before answering `initialize` while it scans that tree. `--exec` does not load your shell profile: if .NET is installed in your Linux home (for example `~/.dotnet`), add `"DOTNET_ROOT=/home/YOUR-USER/.dotnet"` after the `MCPCLI_HOME=…` argument, and add the `wsl.exe` options `"--user", "YOUR-USER"` before `"--exec"` when the tool belongs to a user other than the distribution's default user. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
 
 ### Complete the approved cross-module task
 

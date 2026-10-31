@@ -1,0 +1,136 @@
+{
+  "schema": "mcpcli-operator-review-fixes-verification/v1",
+  "capturedAt": "2026-10-31T16:25:46.129669+00:00",
+  "readmeSha256": "83d5a0e4948698822573f5f4c102cd95150a0adeacf5c57f49ddeb2b3d2bf80a",
+  "packageHashes": {
+    "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3"
+  },
+  "gatewayCalls": 0,
+  "credentials": "synthetic only; no real token read",
+  "assertions": {
+    "ownerHandoffCreated": true,
+    "ownerExistingFolderUnchanged": true,
+    "existingQuickStartRootAndMarkerPreserved": true,
+    "freshProjectCreated": true,
+    "freshQuickStartRootMode700": true,
+    "acceptedToolVersion120": true,
+    "tokenReadFailurePreservedAndVariableCleared": true,
+    "profileAddFailurePreservedAndVariableCleared": true,
+    "initialTokenNotEchoed": true,
+    "profileValuesAndMaskedToken": true,
+    "literalAnswersPreservedWithoutShellExpansion": true,
+    "registeredStdioServerConnected": true,
+    "renewalReplacesTokenAndClearsTenantActor": true,
+    "renewalRestoresTenantAndActor": true,
+    "renewalRequiresClientRestart": true,
+    "registeredTeardownRemovesPrivateFolder": true,
+    "absentRegistrationStillRemovesPrivateFolder": true
+  },
+  "allAssertionsPass": true,
+  "results": [
+    {
+      "label": "owner handoff",
+      "command": "handoff='<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)'\nmkdir \"$handoff\" &&\ncp /tmp/mcpcli-417-timing-handoff/*.nupkg \"$handoff\"/ &&\ncat > \"$handoff/NuGet.Config\" <<EOF\n<configuration>\n  <packageSources>\n    <clear />\n    <add key=\"accepted-local\" value=\"$handoff\" />\n  </packageSources>\n  <fallbackPackageFolders><clear /></fallbackPackageFolders>\n</configuration>\nEOF\n",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "owner handoff refuses existing folder",
+      "command": "handoff='<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)'\nmkdir \"$handoff\" &&\ncp /tmp/mcpcli-417-timing-handoff/*.nupkg \"$handoff\"/ &&\ncat > \"$handoff/NuGet.Config\" <<EOF\n<configuration>\n  <packageSources>\n    <clear />\n    <add key=\"accepted-local\" value=\"$handoff\" />\n  </packageSources>\n  <fallbackPackageFolders><clear /></fallbackPackageFolders>\n</configuration>\nEOF\n",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "mkdir: '<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)': File exists\n"
+    },
+    {
+      "label": "start refuses existing root",
+      "command": "mkdir -m 700 ~/hexalith-operator && mkdir ~/hexalith-operator/project && cd ~/hexalith-operator/project\n",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "mkdir: <scratch>/home/hexalith-operator: File exists\n"
+    },
+    {
+      "label": "start folder without launching interactive client",
+      "command": "mkdir -m 700 ~/hexalith-operator && mkdir ~/hexalith-operator/project && cd ~/hexalith-operator/project\n",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "install and version",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" NUGET_PACKAGES=\"$HOME/hexalith-operator/packages\" && dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path \"$HOME/hexalith-operator/tools\" --configfile '<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)/NuGet.Config' --no-cache && \"$HOME/hexalith-operator/tools/hexalith\" --version",
+      "exitCode": 0,
+      "stdout": "You can invoke the tool using the following command: hexalith\nTool 'hexalith.mcpcli' (version '1.2.0') was successfully installed.\n1.2.0\n",
+      "stderr": "\nWelcome to .NET 10.0!\n---------------------\nSDK Version: 10.0.403\n\nTelemetry\n---------\nThe .NET tools collect usage data in order to help us improve your experience. It is collected by Microsoft and shared with the community. You can opt-out of telemetry by setting the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to '1' or 'true' using your favorite shell.\n\nRead more about .NET CLI Tools telemetry: https://aka.ms/dotnet-cli-telemetry\n\n----------------\nInstalled an ASP.NET Core HTTPS development certificate.\nTo trust the certificate, run 'dotnet dev-certs https --trust'\nLearn about HTTPS: https://aka.ms/dotnet-https\n\n----------------\nWrite your first app: https://aka.ms/dotnet-hello-world\nFind out what's new: https://aka.ms/dotnet-whats-new\nExplore documentation: https://aka.ms/dotnet-docs\nReport issues and find source on GitHub: https://github.com/dotnet/core\nUse 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli\n--------------------------------------------------------------------------------------\n"
+    },
+    {
+      "label": "token read failure preserves status and clears variable",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\"\n(read -rsp 'Token: ' token && echo && \"$HOME/hexalith-operator/tools/hexalith\" config profile add operator --url http://127.0.0.1:18170 --token \"$token\"; mcpcli_token_status=$?; unset token; exit \"$mcpcli_token_status\")\n\nmcpcli_failure_status=$?\n[ \"${token+x}\" != x ] || exit 99\nexit \"$mcpcli_failure_status\"\n",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "profile add failure preserves CLI status and clears variable",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\"\n(read -rsp 'Token: ' token && echo && \"$HOME/hexalith-operator/tools/hexalith\" config profile add operator --url invalid-url --token \"$token\"; mcpcli_token_status=$?; unset token; exit \"$mcpcli_token_status\")\n\nmcpcli_failure_status=$?\n[ \"${token+x}\" != x ] || exit 99\nexit \"$mcpcli_failure_status\"\n",
+      "exitCode": 2,
+      "stdout": "\n{\n  \"error\": {\n    \"code\": \"configuration_invalid\",\n    \"message\": \"Invalid gateway URL from flag.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "masked token command",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\"\n(read -rsp 'Token: ' token && echo && \"$HOME/hexalith-operator/tools/hexalith\" config profile add operator --url http://127.0.0.1:18170 --token \"$token\"; mcpcli_token_status=$?; unset token; exit \"$mcpcli_token_status\")\n",
+      "exitCode": 0,
+      "stdout": "\n{\n  \"name\": \"operator\",\n  \"activeProfile\": null\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "tenant actor and masked current",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\" && \"$HOME/hexalith-operator/tools/hexalith\" config set operator tenant 'tenant space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config set operator actor 'actor'\"'\"'s space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config current --profile operator",
+      "exitCode": 0,
+      "stdout": "{\n  \"profile\": \"operator\",\n  \"field\": \"tenant\"\n}\n{\n  \"profile\": \"operator\",\n  \"field\": \"actor\"\n}\n{\n  \"profile\": \"operator\",\n  \"url\": \"http://127.0.0.1:18170/\",\n  \"token\": \"SYNT***\",\n  \"tenant\": \"tenant space $MCPCLI_417_LITERAL $(touch shell-marker)\",\n  \"actor\": \"actor\\u0027s space $MCPCLI_417_LITERAL $(touch shell-marker)\",\n  \"allowTenantOverride\": false,\n  \"allowedExtensions\": [],\n  \"format\": \"json\",\n  \"output\": null,\n  \"readOnly\": false,\n  \"strict\": false,\n  \"sources\": {\n    \"profile\": \"flag\",\n    \"url\": \"profile\",\n    \"token\": \"profile\",\n    \"tenant\": \"profile\",\n    \"actor\": \"profile\",\n    \"format\": \"default\",\n    \"allowTenantOverride\": \"default\",\n    \"readOnly\": \"default\",\n    \"strict\": \"default\",\n    \"output\": \"default\",\n    \"allowedExtensions\": \"default\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "register and connect",
+      "command": "claude mcp add hexalith --transport stdio --scope local --env MCPCLI_HOME=\"$HOME/hexalith-operator/home\" --env DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" -- \"$HOME/hexalith-operator/tools/hexalith\" mcp --transport stdio --profile operator && claude mcp get hexalith",
+      "exitCode": 0,
+      "stdout": "Added stdio MCP server hexalith with command: <scratch>/home/hexalith-operator/tools/hexalith mcp --transport stdio --profile operator to local config\nFile modified: <scratch>/home/.claude.json [project: <scratch>/home/hexalith-operator/project]\nhexalith:\n  Scope: Local config (private to you in this project)\n  Status: \u2714 Connected\n  Type: stdio\n  Command: <scratch>/home/hexalith-operator/tools/hexalith\n  Args: mcp --transport stdio --profile operator\n  Environment:\n    MCPCLI_HOME=<scratch>/home/hexalith-operator/home\n    DOTNET_ROOT=/home/administrator/.dotnet\n\nTo remove this server, run: claude mcp remove hexalith -s local\n",
+      "stderr": ""
+    },
+    {
+      "label": "renew token with documented command",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\"\n(read -rsp 'Token: ' token && echo && \"$HOME/hexalith-operator/tools/hexalith\" config profile add operator --url http://127.0.0.1:18170 --token \"$token\"; mcpcli_token_status=$?; unset token; exit \"$mcpcli_token_status\")\n",
+      "exitCode": 0,
+      "stdout": "\n{\n  \"name\": \"operator\",\n  \"activeProfile\": null\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "restore tenant and actor after renewal",
+      "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\"\n\"$HOME/hexalith-operator/tools/hexalith\" config set operator tenant 'tenant space $MCPCLI_417_LITERAL $(touch shell-marker)'\n\"$HOME/hexalith-operator/tools/hexalith\" config set operator actor 'actor'\"'\"'s space $MCPCLI_417_LITERAL $(touch shell-marker)'\n",
+      "exitCode": 0,
+      "stdout": "{\n  \"profile\": \"operator\",\n  \"field\": \"tenant\"\n}\n{\n  \"profile\": \"operator\",\n  \"field\": \"actor\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "teardown registered server",
+      "command": "cd ~/hexalith-operator/project && claude mcp remove hexalith -s local\ncd ~ && rm -rf ~/hexalith-operator\n",
+      "exitCode": 0,
+      "stdout": "Removed MCP server hexalith from local config\nFile modified: <scratch>/home/.claude.json [project: <scratch>/home/hexalith-operator/project]\n",
+      "stderr": ""
+    },
+    {
+      "label": "teardown without registration",
+      "command": "cd ~/hexalith-operator/project && claude mcp remove hexalith -s local\ncd ~ && rm -rf ~/hexalith-operator\n",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "No MCP server named \"hexalith\" in local scope\n"
+    }
+  ],
+  "limitations": [
+    "No live Gateway, domain write or new operator timing.",
+    "No fresh Claude Desktop/VS Code GUI session.",
+    "Connection check covers stdio initialization only."
+  ]
+}

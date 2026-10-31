@@ -1,0 +1,12 @@
+{
+  "repository": "/home/administrator/projects/hexalith/platform",
+  "commit": "c1550f447b1b5aaa89b8197a7f1cb48e87623f1f",
+  "files": [
+    "eng/mcpcli-operator-setup/v1/README.md",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "eng/mcpcli-operator-setup/v1/prepare.py",
+    "eng/mcpcli-operator-setup/v1/test_v1.py"
+  ],
+  "commitlintEvidence": "commitlint-validation.json",
+  "pushed": false
+}

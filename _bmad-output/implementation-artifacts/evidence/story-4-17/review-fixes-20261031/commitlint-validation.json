@@ -1,0 +1,42 @@
+[
+  {
+    "repository": "/home/administrator/projects/hexalith/mcpcli",
+    "messageFile": "/tmp/mcpcli-417-mcpcli-c_ytlyji.commit-message.txt",
+    "message": "fix: harden the story 4.17 operator setup",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "mcpcli-commitlint.stdout.txt",
+    "stderr": "mcpcli-commitlint.stderr.txt",
+    "toolingInstallation": {
+      "command": "npm ci --no-audit --no-fund",
+      "exitCode": 0,
+      "observedOutput": "added 356 packages in 6s"
+    }
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/platform",
+    "messageFile": "/tmp/mcpcli-417-platform-wxbsxkgd.commit-message.txt",
+    "message": "fix: verify the MCP CLI operator setup experience",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "platform-commitlint.stdout.txt",
+    "stderr": "platform-commitlint.stderr.txt",
+    "toolingInstallation": {
+      "command": "npm ci --no-audit --no-fund",
+      "exitCode": 0,
+      "observedOutput": "added 71 packages in 3s"
+    }
+  }
+]
