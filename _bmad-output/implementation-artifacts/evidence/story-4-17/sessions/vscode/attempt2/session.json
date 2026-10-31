@@ -1,0 +1,42 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "VS Code",
+  "attempt": 2,
+  "status": "failed",
+  "assisted": true,
+  "clientVersion": "1.144.0",
+  "harness": "Copilot CLI agent host (sessionType agent-host-copilotcli, connectionKind remote_extension_host, WSL Ubuntu-26.04 window); runtime copilot-agent 1.0.103-unstable.r40031404408.gba6c003",
+  "operator": "Human user in this conversation",
+  "observer": "Claude Code",
+  "copilotSessions": [
+    {
+      "id": "e1808edb-ccdb-428e-a3b2-500a759de92f",
+      "startedAt": "2026-10-31T10:21:53.997Z",
+      "toolRequests": "4 tool_search_tool only"
+    },
+    {
+      "id": "57e504e1-9ea1-4b4a-a5d8-6adce7cbc558",
+      "startedAt": "2026-10-31T10:23:16.192Z",
+      "toolRequests": "none",
+      "clientAnswer": "I can't complete this request because the Hexalith MCP server's tools aren't available in this session. I haven't read or created anything, and I haven't retried creation."
+    }
+  ],
+  "earlierSessionsSameFailure": "Attempt1 Copilot sessions 4dea9d8b (10:03Z) and beb90734 (10:05Z) show the same runtime spawn failure; attempt1 evidence is preserved unchanged.",
+  "failureStage": "MCP server spawn inside the WSL Copilot CLI runtime, before initialize and before any domain call",
+  "runtimeEvidence": {
+    "file": "copilot-runtime-mcp-failures.log",
+    "sha256": "782ab82c67b235d9eaa6ed6f27fa98253ef8c85225c45ff1672ea8041c54bd7e",
+    "finding": "Each runtime load reports hexalith 'failed to spawn MCP server process: No such file or directory (os error 2)', together with Windows-only servers from other applications' configurations (MCP_DOCKER, playwright, codacy)."
+  },
+  "diagnosis": "The Copilot CLI harness of a WSL remote window runs in Linux and receives VS Code-discovered server definitions. The hexalith definition it spawned uses the Windows command C:\\Windows\\System32\\wsl.exe (user-profile mcp.json, Windows Copilot Global and Claude Desktop entries all use it), which does not exist inside Linux. The WSL-native ~/.copilot entry was not the one spawned. This harness-specific failure is separate from the Local-harness initialize stall repaired in ../initialize-stall-repair-20261031/receipt.json.",
+  "toolCallsReported": 0,
+  "hexalithToolCalls": 0,
+  "commandSubmissionsReported": 0,
+  "partyId": "party-417-vscode-20261031-1",
+  "creationAttempted": false,
+  "persistedReadAttempted": false,
+  "independentTiming": false,
+  "actualVsCodeToolsVerified": false,
+  "recordedAt": "2026-10-31T10:34:21.840786+00:00",
+  "nextCheck": "Select VS Code's Local agent harness (not Copilot CLI), start the user-profile hexalith server (repaired with --cd), enable only its five tools and call list_modules first; use fresh Party ID party-417-vscode-20261031-3."
+}

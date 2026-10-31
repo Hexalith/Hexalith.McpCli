@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-10-31T10:07:55.619960+00:00",
+  "client": "VS Code1.144.0",
+  "configurationFormat": "VS Code user-profile MCP servers with type stdio",
+  "path": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Code/User/mcp.json",
+  "backup": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/vscode-user-mcp-before-20261031-100755Z.json",
+  "beforeSha256": "0489b298f95e7e8f8d4c3969878798a6cdae194311efd98bc47b77b3ea0b404a",
+  "afterSha256": "df009905544ec5cef5bfba506c14dfc5e16d7eb0173dfe75c3f51a82118a07f9",
+  "serverNames": [
+    "ado",
+    "io.github.github/github-mcp-server",
+    "aspire",
+    "microsoft-learn",
+    "fluent-ui-blazor",
+    "hexalith"
+  ],
+  "existingServersAndInputsPreserved": true,
+  "hexalith": {
+    "type": "stdio",
+    "command": "C:\\Windows\\System32\\wsl.exe",
+    "args": [
+      "--distribution",
+      "Ubuntu-26.04",
+      "--user",
+      "administrator",
+      "--exec",
+      "/usr/bin/env",
+      "MCPCLI_HOME=/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home",
+      "DOTNET_ROOT=/home/administrator/.dotnet",
+      "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+      "mcp",
+      "--transport",
+      "stdio",
+      "--profile",
+      "operator"
+    ]
+  },
+  "applicationWritesSubmitted": 0,
+  "sessionNotYetVerified": true
+}

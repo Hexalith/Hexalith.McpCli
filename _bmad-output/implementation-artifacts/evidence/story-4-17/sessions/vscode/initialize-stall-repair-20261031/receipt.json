@@ -1,0 +1,137 @@
+{
+  "schema": "mcpcli-operator-setup-repair/v1",
+  "recordedAt": "2026-10-31T10:29:09.515608+00:00",
+  "client": "VS Code 1.144.0",
+  "registration": "user-profile mcp.json servers.hexalith (wsl.exe bridge)",
+  "observedFailure": {
+    "summary": "After the first configuration repair, two VS Code restarts started the user-profile hexalith server, but VS Code logged 'Waiting for server to respond to `initialize` request...' every 5 seconds without a response until the extension host shut down or the observation ended.",
+    "vscodeLogs": [
+      {
+        "file": "vscode-usrlocal-hexalith-20261031T112007.log",
+        "sha256": "e929d9660aab97b82ee74752e1c666e28946b48aeeab5bd8a8d69719ecdc6a8e",
+        "waitingLines": 21
+      },
+      {
+        "file": "vscode-usrlocal-hexalith-20261031T112245.log",
+        "sha256": "73ba855e113772febfda305b5b77dcd2c187db2b6f3fcc68a221874fa91bbeb8",
+        "waitingLines": 69
+      }
+    ],
+    "liveProcess": {
+      "observedAt": "2026-10-31T10:26Z",
+      "pid": 1684480,
+      "startedUtc": "2026-10-31T10:23:08Z",
+      "cwd": "/mnt/c/Users/JeromePiquot",
+      "mainThreadState": "R/D with wchan p9_client_rpc (WSL 9P access to the Windows drive)",
+      "openDescriptors": "one inotify descriptor plus directory descriptors walking /mnt/c/Users/JeromePiquot/anaconda3/Lib/site-packages/...",
+      "stdinStdout": "pipes; no JSON-RPC response emitted"
+    },
+    "comparison": "Claude Code's server (cwd in the Linux project) initialized normally; Claude Desktop's wsl.exe servers run with cwd /mnt/c/WINDOWS/system32."
+  },
+  "diagnosis": "A Windows GUI client launches wsl.exe from its own Windows working directory (VS Code: C:\\Users\\JeromePiquot). WSL maps it to /mnt/c/..., the accepted 1.2.0 host uses Host.CreateApplicationBuilder() with the default content root (current directory), and its default configuration file watcher recursively enumerates that directory tree over 9P before the stdio server answers initialize. Accepted source: src/Hexalith.McpCli/Hosting/HostFactory.cs at 32fb5dbf75216adaf21551bcfa36439741c41e01.",
+  "productionChange": false,
+  "repair": {
+    "kind": "client configuration only",
+    "change": "Insert wsl.exe arguments --cd <private operator home> before --exec; all other servers, inputs and arguments unchanged (two-line diff).",
+    "path": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Code/User/mcp.json",
+    "backup": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/vscode-user-mcp-before-cd-20261031-102833Z.json",
+    "beforeSha256": "df009905544ec5cef5bfba506c14dfc5e16d7eb0173dfe75c3f51a82118a07f9",
+    "afterSha256": "7533c62a7ad51942435786cf57dddba2968824db5f5d15ccc29e20e16b89d2bb"
+  },
+  "probes": {
+    "method": "Task-owned stdio probe from cwd /mnt/c/Users/JeromePiquot through /mnt/c/Windows/System32/wsl.exe: initialize, notifications/initialized and tools/list only; process killed afterwards.",
+    "results": [
+      {
+        "label": "vscode-args-no-cd",
+        "cwd": "/mnt/c/Users/JeromePiquot",
+        "command": "/mnt/c/Windows/System32/wsl.exe",
+        "deadlineSeconds": 25.0,
+        "domainCalls": 0,
+        "applicationWrites": 0,
+        "initializeSeconds": null,
+        "outcome": "no-initialize-response-before-deadline"
+      },
+      {
+        "label": "vscode-args-with-cd",
+        "cwd": "/mnt/c/Users/JeromePiquot",
+        "command": "/mnt/c/Windows/System32/wsl.exe",
+        "deadlineSeconds": 60.0,
+        "domainCalls": 0,
+        "applicationWrites": 0,
+        "initializeSeconds": 0.692,
+        "serverInfo": {
+          "name": "hexalith",
+          "version": "1.2.0"
+        },
+        "tools": [
+          "list_modules",
+          "list_operations",
+          "describe_operation",
+          "send_command",
+          "run_query"
+        ],
+        "outcome": "initialized"
+      },
+      {
+        "label": "exact-repaired-vscode-entry",
+        "cwd": "/mnt/c/Users/JeromePiquot",
+        "command": "/mnt/c/Windows/System32/wsl.exe",
+        "deadlineSeconds": 60.0,
+        "domainCalls": 0,
+        "applicationWrites": 0,
+        "initializeSeconds": 0.516,
+        "serverInfo": {
+          "name": "hexalith",
+          "version": "1.2.0"
+        },
+        "tools": [
+          "list_modules",
+          "list_operations",
+          "describe_operation",
+          "send_command",
+          "run_query"
+        ],
+        "outcome": "initialized"
+      }
+    ]
+  },
+  "domainCalls": 0,
+  "applicationWrites": 0,
+  "actualVsCodeSession": false,
+  "nextCheck": "Restart VS Code or run 'MCP: Restart Server' for user-profile hexalith, open a fresh Agent chat, enable only that hexalith server's five tools and call list_modules before any creation.",
+  "additionalRepairs": [
+    {
+      "registration": "native Windows Copilot Global mcp-config.json mcpServers.hexalith (wsl.exe bridge); used by Copilot CLI agent harness",
+      "path": "/mnt/c/Users/JeromePiquot/.copilot/mcp-config.json",
+      "backup": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/copilot-global-windows-before-cd-20261031-103017Z.json",
+      "beforeSha256": "b6e5a174174cec5c0cce44a72dc8ddc87ee0b939dda410b01e257c4de3e27235",
+      "afterSha256": "05dbe59e91015178301a44f47145643ec029500a0858518523ae0d635cb04673",
+      "change": "Same two-line --cd insertion; aspire entry unchanged.",
+      "probe": {
+        "label": "exact-repaired-copilot-global-windows",
+        "cwd": "/mnt/c/Users/JeromePiquot",
+        "command": "/mnt/c/Windows/System32/wsl.exe",
+        "deadlineSeconds": 60.0,
+        "domainCalls": 0,
+        "applicationWrites": 0,
+        "initializeSeconds": 0.569,
+        "serverInfo": {
+          "name": "hexalith",
+          "version": "1.2.0"
+        },
+        "tools": [
+          "list_modules",
+          "list_operations",
+          "describe_operation",
+          "send_command",
+          "run_query"
+        ],
+        "outcome": "initialized"
+      }
+    }
+  ],
+  "unchangedRegistrations": {
+    "wslCopilotGlobal": "/home/administrator/.copilot/mcp-config.json runs the Linux executable directly; its working directory depends on the launching harness and was not changed.",
+    "claudeDesktop": "Not changed; its completed attempt3 servers run from /mnt/c/WINDOWS/system32 and served requests."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-31T10:10:17.121513+00:00",
+  "configuration": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Code/User/mcp.json",
+  "configurationSha256": "df009905544ec5cef5bfba506c14dfc5e16d7eb0173dfe75c3f51a82118a07f9",
+  "initializeResponse": {
+    "protocolVersion": "2025-11-25",
+    "capabilities": {
+      "logging": {},
+      "tools": {
+        "listChanged": true
+      }
+    },
+    "serverInfo": {
+      "name": "hexalith",
+      "version": "1.2.0"
+    }
+  },
+  "tools": [
+    "list_modules",
+    "list_operations",
+    "describe_operation",
+    "send_command",
+    "run_query"
+  ],
+  "toolCount": 5,
+  "domainCalls": 0,
+  "applicationWrites": 0,
+  "actualVsCodeSession": false,
+  "scope": "Supplemental launcher check using the exact newly registered VS Code user configuration; GUI tool availability remains to verify."
+}
