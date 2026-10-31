@@ -1,0 +1,108 @@
+
+== owner: prepare handoff folder
+eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e  <root>/handoff/Hexalith.McpCli.1.2.0.nupkg
+ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3  <root>/handoff/Hexalith.McpCli.Abstractions.1.2.0.nupkg
+
+== 1. start folder
+<root>/home/hexalith-operator/project
+
+== prompt step 1: install
+
+Welcome to .NET 10.0!
+---------------------
+SDK Version: 10.0.403
+
+Telemetry
+---------
+The .NET tools collect usage data in order to help us improve your experience. It is collected by Microsoft and shared with the community. You can opt-out of telemetry by setting the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to '1' or 'true' using your favorite shell.
+
+Read more about .NET CLI Tools telemetry: https://aka.ms/dotnet-cli-telemetry
+
+----------------
+Installed an ASP.NET Core HTTPS development certificate.
+To trust the certificate, run 'dotnet dev-certs https --trust'
+Learn about HTTPS: https://aka.ms/dotnet-https
+
+----------------
+Write your first app: https://aka.ms/dotnet-hello-world
+Find out what's new: https://aka.ms/dotnet-whats-new
+Explore documentation: https://aka.ms/dotnet-docs
+Report issues and find source on GitHub: https://github.com/dotnet/core
+Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli
+--------------------------------------------------------------------------------------
+You can invoke the tool using the following command: hexalith
+Tool 'hexalith.mcpcli' (version '1.2.0') was successfully installed.
+1.2.0
+exit=0
+
+== token command (token piped from the protected profile; never printed)
+
+{
+  "name": "operator",
+  "activeProfile": null
+}
+exit=0
+
+== prompt step 3: tenant, actor, current
+{
+  "profile": "operator",
+  "field": "tenant"
+}
+exit=0
+{
+  "profile": "operator",
+  "field": "actor"
+}
+exit=0
+{
+  "profile": "operator",
+  "url": "http://127.0.0.1:18170/",
+  "token": "eyJh***",
+  "tenant": "mcpcli-417-20261031-155f9b6d",
+  "actor": "mcpcli-417-operator-20261031-155f9b6d",
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "flag",
+    "url": "profile",
+    "token": "profile",
+    "tenant": "profile",
+    "actor": "profile",
+    "format": "default",
+    "allowTenantOverride": "default",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}
+exit=0
+
+== prompt step 4: register and show
+Invalid environment variable format: hexalith, environment variables should be added as: -e KEY1=value1 -e KEY2=value2
+exit=1
+No MCP server named "hexalith". Run `claude mcp add` to add one.
+exit=1
+
+== supplemental read-only check of the stored token (one tenants.get-tenant query)
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 31.324ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 40.1602ms - 200
+{'tenant': 'system', 'tenantId': 'mcpcli-417-20261031-155f9b6d', 'status': 'Active'}
+exit=0
+
+== registered command for the init probe
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,os,sys; c=json.load(open(os.path.expanduser("~/.claude.json"))); p=c["projects"][os.getcwd()]["mcpServers"]["hexalith"]; print(json.dumps({"command": p["command"], "args": p["args"], "env": sorted(p.get("env",{}))}))
+                                                                                   ~^^^^^^^^^^^^
+KeyError: 'projects'

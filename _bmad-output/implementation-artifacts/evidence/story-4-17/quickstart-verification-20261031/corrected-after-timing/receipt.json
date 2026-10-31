@@ -1,0 +1,27 @@
+{
+  "schema": "mcpcli-readme-quickstart-verification/v1",
+  "capturedAt": "2026-10-31T14:34:01.234807+00:00",
+  "readmeSha256": "0d5028ea6721457104b9e2d6d7065ab9a5f3f469c32378c55fde3ef3d5d7084b",
+  "previousReadmeSha256": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429",
+  "reason": "Timing attempt 1 findings: the operator twice pasted prompts without replacing placeholders (one unintended Party write followed a failed tenant read), and asked where the token comes from.",
+  "changes": [
+    "Setup and task prompts now make Claude Code ask for handoff folder/tenant/actor and tenant/Party ID first, and never send a placeholder word as a value.",
+    "Task prompt stops at any failed or uncertain call, not only the creation.",
+    "README and setup prompt say the owner hands over the token privately and it is pasted only at the hidden Token: prompt."
+  ],
+  "commandVerification": {
+    "file": "readme-quickstart-verification.json",
+    "allStepsExitZero": true,
+    "steps": 8,
+    "registrationConnected": true,
+    "readOnlyQuery": "system mcpcli-417-20261031-155f9b6d Active",
+    "domainCalls": "one read-only tenants.get-tenant query; no command",
+    "scratchRootsDeleted": true
+  },
+  "promptBehaviorChecks": {
+    "file": "prompt-behavior-checks.json",
+    "setupAsksForValuesFirst": true,
+    "taskAsksForValuesFirst": true
+  },
+  "timingAttemptBoundTo": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429"
+}

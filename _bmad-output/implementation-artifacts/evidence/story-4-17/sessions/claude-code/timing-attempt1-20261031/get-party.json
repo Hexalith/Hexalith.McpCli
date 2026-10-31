@@ -1,0 +1,60 @@
+{
+  "toolUseId": "toolu_01WqQeP3x3pFC9ccZdxvjbpJ",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "operation": "parties.get-party",
+    "payload": "{\"PartyId\":\"party-417-timing-20261031-1\"}",
+    "entityId": "party-417-timing-20261031-1"
+  },
+  "requestedAt": "2026-10-31T14:27:09.324Z",
+  "returnedAt": "2026-10-31T14:27:09.356Z",
+  "isError": false,
+  "structuredResult": {
+    "operation": "parties.get-party",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "document": {
+      "id": "party-417-timing-20261031-1",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-party-417-timing-20261031-1",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-party-417-timing-20261031-1",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [
+        {
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "changedAt": "2026-10-31T14:27:07.2788279+00:00",
+          "triggeredBy": "PartyCreated"
+        }
+      ],
+      "createdAt": "2026-10-31T14:27:07.2788279+00:00",
+      "lastModifiedAt": "2026-10-31T14:27:07.2788279+00:00",
+      "isRestricted": false,
+      "isErased": false,
+      "freshness": {
+        "status": "Current",
+        "warningCodes": []
+      }
+    }
+  },
+  "resultText": null
+}

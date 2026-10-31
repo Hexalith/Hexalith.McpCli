@@ -1,0 +1,26 @@
+2026-10-31 11:34:06.269 [info] Starting server hexalith
+2026-10-31 11:34:06.270 [info] Connection state: Starting
+2026-10-31 11:34:06.270 [info] Starting server from LocalProcess extension host
+2026-10-31 11:34:07.151 [info] Connection state: Starting
+2026-10-31 11:34:07.151 [info] Connection state: Running
+2026-10-31 11:34:11.031 [warning] [server stderr] info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+2026-10-31 11:34:11.031 [warning] [server stderr]       Server (stream) (hexalith) transport reading messages.
+2026-10-31 11:34:11.032 [warning] [server stderr] info: Microsoft.Hosting.Lifetime[0]
+2026-10-31 11:34:11.034 [warning] [server stderr]       Application started. Press Ctrl+C to shut down.
+2026-10-31 11:34:11.035 [warning] [server stderr] info: Microsoft.Hosting.Lifetime[0]
+2026-10-31 11:34:11.051 [warning] [server stderr]       Hosting environment: Production
+2026-10-31 11:34:11.052 [warning] [server stderr] info: Microsoft.Hosting.Lifetime[0]
+2026-10-31 11:34:11.052 [warning] [server stderr]       Content root path: /tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home
+2026-10-31 11:34:11.053 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[570385771]
+2026-10-31 11:34:11.053 [warning] [server stderr]       Server (hexalith 1.2.0) method 'initialize' request handler called.
+2026-10-31 11:34:11.053 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[1867955179]
+2026-10-31 11:34:11.053 [warning] [server stderr]       Server (hexalith 1.2.0), Client (Visual Studio Code 1.144.0) method 'initialize' request handler completed in 12.5691ms.
+2026-10-31 11:34:12.448 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[570385771]
+2026-10-31 11:34:12.450 [warning] [server stderr]       Server (hexalith 1.2.0), Client (Visual Studio Code 1.144.0) method 'logging/setLevel' request handler called.
+2026-10-31 11:34:12.451 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[1867955179]
+2026-10-31 11:34:12.452 [warning] [server stderr]       Server (hexalith 1.2.0), Client (Visual Studio Code 1.144.0) method 'logging/setLevel' request handler completed in 2.3414ms.
+2026-10-31 11:34:12.545 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[570385771]
+2026-10-31 11:34:12.547 [warning] [server stderr]       Server (hexalith 1.2.0), Client (Visual Studio Code 1.144.0) method 'tools/list' request handler called.
+2026-10-31 11:34:12.560 [warning] [server stderr] info: ModelContextProtocol.Server.McpServer[1867955179]
+2026-10-31 11:34:12.562 [warning] [server stderr]       Server (hexalith 1.2.0), Client (Visual Studio Code 1.144.0) method 'tools/list' request handler completed in 14.6532ms.
+2026-10-31 11:34:12.566 [info] Discovered 5 tools

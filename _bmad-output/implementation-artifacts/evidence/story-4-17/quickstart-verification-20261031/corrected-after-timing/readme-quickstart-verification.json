@@ -1,0 +1,99 @@
+{
+  "readmeSha256": "0d5028ea6721457104b9e2d6d7065ab9a5f3f469c32378c55fde3ef3d5d7084b",
+  "taskPromptPlaceholders": [
+    "PARTY-ID",
+    "TENANT"
+  ],
+  "domainCalls": "one read-only tenants.get-tenant query; no command",
+  "results": [
+    {
+      "label": "owner handoff block",
+      "exit": 0,
+      "tail": []
+    },
+    {
+      "label": "start folder (without launching claude)",
+      "exit": 0,
+      "tail": []
+    },
+    {
+      "label": "prompt step 1",
+      "exit": 0,
+      "tail": [
+        "----------------",
+        "Installed an ASP.NET Core HTTPS development certificate.",
+        "To trust the certificate, run 'dotnet dev-certs https --trust'",
+        "Learn about HTTPS: https://aka.ms/dotnet-https",
+        "",
+        "----------------",
+        "Write your first app: https://aka.ms/dotnet-hello-world",
+        "Find out what's new: https://aka.ms/dotnet-whats-new",
+        "Explore documentation: https://aka.ms/dotnet-docs",
+        "Report issues and find source on GitHub: https://github.com/dotnet/core",
+        "Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli",
+        "--------------------------------------------------------------------------------------"
+      ]
+    },
+    {
+      "label": "README token block",
+      "exit": 0,
+      "tail": [
+        "{",
+        "  \"name\": \"operator\",",
+        "  \"activeProfile\": null",
+        "}"
+      ]
+    },
+    {
+      "label": "prompt step 3",
+      "exit": 0,
+      "tail": [
+        "    \"url\": \"profile\",",
+        "    \"token\": \"profile\",",
+        "    \"tenant\": \"profile\",",
+        "    \"actor\": \"profile\",",
+        "    \"format\": \"default\",",
+        "    \"allowTenantOverride\": \"default\",",
+        "    \"readOnly\": \"default\",",
+        "    \"strict\": \"default\",",
+        "    \"output\": \"default\",",
+        "    \"allowedExtensions\": \"default\"",
+        "  }",
+        "}"
+      ]
+    },
+    {
+      "label": "prompt step 4",
+      "exit": 0,
+      "tail": [
+        "File modified: <root>/home/.claude.json [project: <root>/home/hexalith-operator/project]",
+        "hexalith:",
+        "  Scope: Local config (private to you in this project)",
+        "  Status: \u2714 Connected",
+        "  Type: stdio",
+        "  Command: <root>/home/hexalith-operator/tools/hexalith",
+        "  Args: mcp --transport stdio --profile operator",
+        "  Environment:",
+        "    MCPCLI_HOME=<root>/home/hexalith-operator/home",
+        "    DOTNET_ROOT=/home/administrator/.dotnet",
+        "",
+        "To remove this server, run: claude mcp remove hexalith -s local"
+      ]
+    },
+    {
+      "label": "supplemental read-only tenant query",
+      "exit": 0,
+      "tail": [
+        "system mcpcli-417-20261031-155f9b6d Active"
+      ]
+    },
+    {
+      "label": "cleanup registration",
+      "exit": 0,
+      "tail": [
+        "Removed MCP server hexalith from local config",
+        "File modified: <root>/home/.claude.json [project: <root>/home/hexalith-operator/project]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "schema": "mcpcli-approved-manual-uid-cleanup/v1",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "reviewExpiresAt": "2026-11-01T07:37:50.685975+00:00",
+  "runnerRefusal": {
+    "command": "python3 eng/mcpcli-operator-setup/v1/phases.py --packet eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review --review-sha256 063bac57… (verify)",
+    "output": "Phase stopped: fixture-changed-after-review. Preserve the journal; do not retry uncertain writes.",
+    "changedFixtureFiles": {
+      "tests/Hexalith.McpCli.AppHost/Program.cs": {
+        "reviewed": "f1d1cfb02e1719e5502b919f8a271c2263fe65b7d483947315fb024094da1cfd",
+        "current": "de48e7568949dfab7a26993385a6405f3d7e81ac064a8f133151b8631031d1c7"
+      },
+      "tests/Hexalith.McpCli.AppHost/TopologyConfiguration.cs": {
+        "reviewed": "c0da409e86004d2fff0542785be52ed09ff7001e418485febedf79f8ff4a2a81",
+        "current": "291258b68e8f8e63714334c9ffef549d9522aab1ee13330493e771ce90b8e2c3"
+      },
+      "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs": {
+        "reviewed": "3cc576b8741941ea303fded808cfc4c9b6200677e79e4f34108d7b2fbeab56c2",
+        "current": "419215dd846aa262b1e88f29f3730ff2a6e989df169807476bf9d38e94ef105c"
+      }
+    },
+    "changedBy": "McpCli commit 989fe5a 'ci: qualify the published gateway topology' (2026-10-31T09:11:13Z)"
+  },
+  "approval": {
+    "at": "2026-10-31T14:35:57.253348+00:00",
+    "answer": "Suppression manuelle liée à l'UID (Recommandé)",
+    "optionText": "Je revérifie l'UID et l'étiquette de propriétaire juste avant d'agir. Je supprime ensuite uniquement ce namespace (kubectl delete namespace --wait, 180 s), comme le fait la phase cleanup du script, et je confirme que le namespace et le volume ont disparu. Un reçu consigne le refus du script et cet écart. Les journaux privés sont conservés.",
+    "answerEnglish": "Manual UID-bound deletion (Recommended)",
+    "optionTextEnglish": "I recheck the UID and owner label immediately before acting, then delete only this namespace (kubectl delete namespace --wait, 180 s) as the runner's cleanup phase does, and confirm the namespace and volume are gone. A receipt records the runner refusal and this deviation. Private journals are preserved."
+  },
+  "recordedIdentity": {
+    "namespaceUid": "6b0597b4-cf3b-4fce-a3ab-0f1ee5d720b2",
+    "pvcUid": "a97e3827-3b05-4907-aca0-78229cd22754",
+    "redisPodUid": "9f690b78-2073-4118-8b12-3fc1fac77956"
+  },
+  "preDeleteCheck": {
+    "checkedAt": "2026-10-31T14:35:58.223705+00:00",
+    "namespaceUid": "6b0597b4-cf3b-4fce-a3ab-0f1ee5d720b2",
+    "ownerLabel": "mcpcli-417-20261031-155f9b6d",
+    "phase": "Active",
+    "pods": [
+      [
+        "eventstore-l6rpl",
+        "1daa2ee7-b949-41f2-b41c-4ce33e902e25"
+      ],
+      [
+        "parties-fznzs",
+        "c692779c-185d-46ee-96f5-f2447c368a0c"
+      ],
+      [
+        "redis",
+        "9f690b78-2073-4118-8b12-3fc1fac77956"
+      ],
+      [
+        "tenants-9sc7v",
+        "fb287ddf-734b-4a94-9dbb-02d79927039b"
+      ]
+    ],
+    "pvcs": [
+      [
+        "task-data",
+        "a97e3827-3b05-4907-aca0-78229cd22754",
+        "pvc-a97e3827-3b05-4907-aca0-78229cd22754"
+      ]
+    ],
+    "pvReclaimPolicies": {
+      "pvc-a97e3827-3b05-4907-aca0-78229cd22754": "Delete"
+    }
+  },
+  "forwardStopped": true,
+  "deleteRequest": {
+    "at": "2026-10-31T14:35:58.471067+00:00",
+    "method": "DELETE /api/v1/namespaces/<ns> with DeleteOptions.preconditions.uid (server-enforced)",
+    "responseKind": "Namespace",
+    "responseUid": "6b0597b4-cf3b-4fce-a3ab-0f1ee5d720b2",
+    "responsePhase": "Terminating"
+  },
+  "result": {
+    "observedAt": "2026-10-31T14:36:19.039194+00:00",
+    "namespaceAbsent": true,
+    "persistentVolumesAbsent": {
+      "pvc-a97e3827-3b05-4907-aca0-78229cd22754": true
+    },
+    "privateJournalsPreserved": {
+      "location": "/tmp/mcpcli-417-v1-private-20261031-attempt8/execution",
+      "files": [
+        "add-user-to-tenant-intent.json",
+        "administrator.json",
+        "backup.json",
+        "create-tenant-intent.json",
+        "dns-observations.jsonl",
+        "dns.json",
+        "eventstore-identity.json",
+        "eventstore-job.json",
+        "eventstore-sidecar-identity.json",
+        "gateway.json",
+        "handoff.json",
+        "infrastructure.json",
+        "initial-empty.rdb",
+        "initial-redis-backup.json",
+        "metadata-port-forward.log",
+        "metadata.json",
+        "observations.jsonl",
+        "operator-forward-process.json",
+        "operator-forward.log",
+        "parties-identity.json",
+        "parties-job.json",
+        "parties-sidecar-identity.json",
+        "parties.json",
+        "port-forward.log",
+        "seed.json",
+        "sidecar-observations.jsonl",
+        "sidecars.json",
+        "startup.json",
+        "tenants-identity.json",
+        "tenants-job.json",
+        "tenants-sidecar-identity.json",
+        "tenants.json",
+        "writer.json"
+      ],
+      "owner": "The user (environment owner)",
+      "retention": "Kept as private evidence per the Platform guide; removed only on the owner's request."
+    },
+    "applicationWritesSubmitted": 0
+  },
+  "status": "complete",
+  "retainedLocalResources": {
+    "recordedAt": "2026-10-31T14:54:51.789002+00:00",
+    "owner": "The user (environment owner); removal only on request",
+    "credentialState": "Every operator token for this environment has expired or expires at 2026-10-31T16:11:49Z, and the Gateway and namespace no longer exist, so the stored tokens cannot reach a service.",
+    "items": [
+      {
+        "path": "~/hexalith-operator",
+        "what": "Timed run's tool install, profile (token) and Claude Code project folder"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt8",
+        "what": "Private inputs (signing key, app tokens), backups, journals and renewed operator profiles"
+      },
+      {
+        "path": "/tmp/mcpcli-417-timing-handoff",
+        "what": "Handoff copies of the two accepted packages and NuGet.Config"
+      },
+      {
+        "path": "/tmp/mcpcli-417-offline-20261030",
+        "what": "Staged 1.2.0 tool used by the owner and client sessions"
+      },
+      {
+        "path": "Claude Desktop claude_desktop_config.json, VS Code user mcp.json, Copilot mcp-config.json (Windows and WSL), ~/.claude.json (mcpcli project and ~/hexalith-operator/project)",
+        "what": "hexalith registrations pointing at the removed environment; pre-change backups are in the private folder"
+      }
+    ]
+  }
+}

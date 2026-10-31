@@ -1,0 +1,1 @@
+[pod/dapr-sidecar-injector-c46dfc499-vxjsg/dapr-sidecar-injector] time="2026-10-31T05:58:41.088088106Z" level=error msg="service account 'jpiquot' not on the list of allowed controller accounts" instance=dapr-sidecar-injector-c46dfc499-vxjsg scope=dapr.injector.service type=log ver=1.18.1

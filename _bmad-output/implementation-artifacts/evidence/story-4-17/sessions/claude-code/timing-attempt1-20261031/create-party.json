@@ -1,0 +1,52 @@
+{
+  "toolUseId": "toolu_01W7Vj3Ku3BXwq1EDa2toPH2",
+  "mcpToolName": "send_command",
+  "arguments": {
+    "operation": "parties.create-party",
+    "payload": "{\"PartyId\":\"party-417-timing-20261031-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"ContactChannelId\":\"email-party-417-timing-20261031-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"IdentifierId\":\"external-party-417-timing-20261031-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+  },
+  "requestedAt": "2026-10-31T14:27:07.238Z",
+  "returnedAt": "2026-10-31T14:27:07.521Z",
+  "isError": false,
+  "structuredResult": {
+    "operation": "parties.create-party",
+    "messageId": "01M695PTVDN76PQH5F0WTE7HS6",
+    "correlationId": "01M695PTVDN76PQH5F0WTE7HS6",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "aggregateId": "party-417-timing-20261031-1",
+    "status": "accepted",
+    "result": {
+      "id": "party-417-timing-20261031-1",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-party-417-timing-20261031-1",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-party-417-timing-20261031-1",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [],
+      "createdAt": "2026-10-31T14:27:07.232324+00:00",
+      "lastModifiedAt": "2026-10-31T14:27:07.2323437+00:00",
+      "isRestricted": false,
+      "isErased": false
+    }
+  },
+  "resultText": null
+}

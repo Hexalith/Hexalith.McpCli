@@ -1,0 +1,100 @@
+2026-10-31T10:58:17.938Z [hexalith] [info] Server started and connected successfully { metadata: undefined }
+2026-10-31T10:58:18.028Z [hexalith] [info] Message from client: method="initialize" id=0 params { metadata: undefined }
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (hexalith) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (claude-ai 0.1.0) method 'initialize' request handler completed in 16.4341ms.
+2026-10-31T10:58:18.830Z [hexalith] [info] Message from server: id=0 result { metadata: undefined }
+2026-10-31T10:58:18.834Z [hexalith] [info] Message from client: method="notifications/initialized" { metadata: undefined }
+2026-10-31T10:58:18.841Z [hexalith] [info] Message from client: method="tools/list" id=1 params { metadata: undefined }
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (claude-ai 0.1.0) method 'tools/list' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (claude-ai 0.1.0) method 'tools/list' request handler completed in 11.6642ms.
+2026-10-31T10:58:18.867Z [hexalith] [info] Message from server: id=1 result { metadata: undefined }
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_modules" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 19.9613ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 6.8414ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "list_operations" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 1.1943ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 5.7891ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 2.0481ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "describe_operation" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 0.7198ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 30.1843ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 34.6392ms - 200
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "run_query" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 79.3186ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:18170/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:18170/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 83.6642ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 83.9026ms - 202
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "send_command" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 110.3151ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler called.
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:18170/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 12.6175ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 12.821ms - 200
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "run_query" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 1.2.0), Client (local-agent-mode-hexalith 1.0.0) method 'tools/call' request handler completed in 14.4384ms.

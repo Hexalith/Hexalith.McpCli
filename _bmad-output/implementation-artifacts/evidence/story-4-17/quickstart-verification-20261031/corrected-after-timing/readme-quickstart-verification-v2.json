@@ -1,0 +1,100 @@
+{
+  "readmeSha256": "24c60ee2fe4665c2b701f43f4b37f972e78bb4fda8bab39f9c09b102106fc4d3",
+  "gatewayCalls": 0,
+  "note": "Commands extracted from the README and run in fresh bash shells under a scratch HOME; token piped into the masked read, never printed. The task environment had been removed, so no Gateway query ran.",
+  "assertions": {
+    "step1LastStdoutLineIs120": true,
+    "tokenBlockExitZeroAndTokenNotEchoed": true,
+    "step3ShowsUrlTenantActorTokenMasked": true,
+    "step4Connected": true,
+    "step5RemovesRegistrationAndFolder": true
+  },
+  "allAssertionsPass": true,
+  "results": [
+    {
+      "label": "owner handoff block",
+      "exit": 0,
+      "stdout": [],
+      "stderrTail": []
+    },
+    {
+      "label": "step 1 start folder (without launching claude)",
+      "exit": 0,
+      "stdout": [],
+      "stderrTail": []
+    },
+    {
+      "label": "prompt step 1",
+      "exit": 0,
+      "stdout": [
+        "You can invoke the tool using the following command: hexalith",
+        "Tool 'hexalith.mcpcli' (version '1.2.0') was successfully installed.",
+        "1.2.0"
+      ],
+      "stderrTail": [
+        "Explore documentation: https://aka.ms/dotnet-docs",
+        "Report issues and find source on GitHub: https://github.com/dotnet/core",
+        "Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli",
+        "--------------------------------------------------------------------------------------"
+      ]
+    },
+    {
+      "label": "step 3 token block",
+      "exit": 0,
+      "stdout": [
+        "{",
+        "  \"name\": \"operator\",",
+        "  \"activeProfile\": null",
+        "}"
+      ],
+      "stderrTail": []
+    },
+    {
+      "label": "prompt step 3",
+      "exit": 0,
+      "stdout": [
+        "    \"url\": \"profile\",",
+        "    \"token\": \"profile\",",
+        "    \"tenant\": \"profile\",",
+        "    \"actor\": \"profile\",",
+        "    \"format\": \"default\",",
+        "    \"allowTenantOverride\": \"default\",",
+        "    \"readOnly\": \"default\",",
+        "    \"strict\": \"default\",",
+        "    \"output\": \"default\",",
+        "    \"allowedExtensions\": \"default\"",
+        "  }",
+        "}"
+      ],
+      "stderrTail": []
+    },
+    {
+      "label": "prompt step 4",
+      "exit": 0,
+      "stdout": [
+        "File modified: <root>/home/.claude.json [project: <root>/home/hexalith-operator/project]",
+        "hexalith:",
+        "  Scope: Local config (private to you in this project)",
+        "  Status: \u2714 Connected",
+        "  Type: stdio",
+        "  Command: <root>/home/hexalith-operator/tools/hexalith",
+        "  Args: mcp --transport stdio --profile operator",
+        "  Environment:",
+        "    MCPCLI_HOME=<root>/home/hexalith-operator/home",
+        "    DOTNET_ROOT=/home/administrator/.dotnet",
+        "",
+        "To remove this server, run: claude mcp remove hexalith -s local"
+      ],
+      "stderrTail": []
+    },
+    {
+      "label": "step 5 teardown block",
+      "exit": 0,
+      "stdout": [
+        "Removed MCP server hexalith from local config",
+        "File modified: <root>/home/.claude.json [project: <root>/home/hexalith-operator/project]"
+      ],
+      "stderrTail": []
+    }
+  ]
+}

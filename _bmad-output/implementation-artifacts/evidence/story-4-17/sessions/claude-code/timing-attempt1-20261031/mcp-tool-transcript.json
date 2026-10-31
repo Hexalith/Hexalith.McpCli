@@ -1,0 +1,654 @@
+{
+  "sessionId": "843cde73-1348-43fb-be39-6a6a71183ee0",
+  "clientVersion": "2.1.316",
+  "model": "claude-opus-5-5",
+  "calls": [
+    {
+      "toolUseId": "toolu_01BjSc4zbqaDgDFNh9X9aEEC",
+      "mcpToolName": "list_modules",
+      "arguments": {},
+      "requestedAt": "2026-10-31T14:25:58.677Z",
+      "returnedAt": "2026-10-31T14:25:58.743Z",
+      "isError": false,
+      "structuredResult": {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01L5Zx3qnxBCUQMQv9YJAJoW",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant"
+      },
+      "requestedAt": "2026-10-31T14:26:00.406Z",
+      "returnedAt": "2026-10-31T14:26:00.452Z",
+      "isError": false,
+      "structuredResult": {
+        "name": "tenants.get-tenant",
+        "kind": "read",
+        "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "fixedTenant": "system",
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01VP66M1FwLyRaxHZ7r4mjZD",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "parties.create-party"
+      },
+      "requestedAt": "2026-10-31T14:26:00.679Z",
+      "returnedAt": "2026-10-31T14:26:00.709Z",
+      "isError": false,
+      "structuredResult": {
+        "name": "parties.create-party",
+        "kind": "write",
+        "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "Type": {
+              "enum": [
+                "Unknown",
+                "Person",
+                "Organization"
+              ],
+              "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+            },
+            "PersonDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "FirstName": {
+                  "type": "string",
+                  "description": "The person's supplied first name."
+                },
+                "LastName": {
+                  "type": "string",
+                  "description": "The person's supplied last name."
+                },
+                "DateOfBirth": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "The optional date of birth with an explicit UTC offset."
+                },
+                "Prefix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name prefix, such as a title."
+                },
+                "Suffix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name suffix."
+                }
+              },
+              "required": [
+                "FirstName",
+                "LastName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "OrganizationDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "LegalName": {
+                  "type": "string",
+                  "description": "The organization's complete legal name."
+                },
+                "TradingName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name the organization trades under."
+                },
+                "LegalForm": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional legal form of the organization."
+                },
+                "RegistrationNumber": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional organization registration number."
+                },
+                "IsNaturalPerson": {
+                  "type": "boolean",
+                  "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                }
+              },
+              "required": [
+                "LegalName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "ContactChannels": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "ContactChannelId": {
+                    "type": "string",
+                    "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "Email",
+                      "Phone",
+                      "PostalAddress",
+                      "SocialMedia"
+                    ],
+                    "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "ContactChannelId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+            },
+            "Identifiers": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "IdentifierId": {
+                    "type": "string",
+                    "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "VAT",
+                      "SIRET",
+                      "NationalId",
+                      "CompanyRegistration",
+                      "TaxId",
+                      "Other"
+                    ],
+                    "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "IdentifierId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+            }
+          },
+          "required": [
+            "PartyId",
+            "Type"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          }
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01YUp4qMhxRfN8ecxo9xQ2SJ",
+      "mcpToolName": "describe_operation",
+      "arguments": {
+        "operation": "parties.get-party"
+      },
+      "requestedAt": "2026-10-31T14:26:00.958Z",
+      "returnedAt": "2026-10-31T14:26:00.985Z",
+      "isError": false,
+      "structuredResult": {
+        "name": "parties.get-party",
+        "kind": "read",
+        "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01XhiJkZ6CzZHQR56TtW4D2i",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"TENANT\"}"
+      },
+      "requestedAt": "2026-10-31T14:26:02.672Z",
+      "returnedAt": "2026-10-31T14:26:02.777Z",
+      "isError": true,
+      "structuredResult": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Forbidden",
+          "reason": "insufficient_permission",
+          "correlationId": "01M695MVTMM1N1GT6JK523M4VZ"
+        }
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01R6FcL8BKvm2fBphxG8gxiA",
+      "mcpToolName": "send_command",
+      "arguments": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"PARTY-ID\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"PARTY-ID\",\"ContactChannelId\":\"email-PARTY-ID\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"PARTY-ID\",\"IdentifierId\":\"external-PARTY-ID\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      },
+      "requestedAt": "2026-10-31T14:26:08.638Z",
+      "returnedAt": "2026-10-31T14:26:08.915Z",
+      "isError": false,
+      "structuredResult": {
+        "operation": "parties.create-party",
+        "messageId": "01M695N1MEPYW6H9BSNQTC0JBE",
+        "correlationId": "01M695N1MEPYW6H9BSNQTC0JBE",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "aggregateId": "PARTY-ID",
+        "status": "accepted",
+        "result": {
+          "id": "PARTY-ID",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-PARTY-ID",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-PARTY-ID",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [],
+          "createdAt": "2026-10-31T14:26:08.6521176+00:00",
+          "lastModifiedAt": "2026-10-31T14:26:08.6521256+00:00",
+          "isRestricted": false,
+          "isErased": false
+        }
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01R4xMvZ62GmfThnRcCE17f8",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"PARTY-ID\"}",
+        "entityId": "PARTY-ID"
+      },
+      "requestedAt": "2026-10-31T14:26:10.727Z",
+      "returnedAt": "2026-10-31T14:26:10.775Z",
+      "isError": false,
+      "structuredResult": {
+        "operation": "parties.get-party",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "document": {
+          "id": "PARTY-ID",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-PARTY-ID",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-PARTY-ID",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [
+            {
+              "displayName": "Operator Setup",
+              "sortName": "Setup, Operator",
+              "changedAt": "2026-10-31T14:26:08.6610978+00:00",
+              "triggeredBy": "PartyCreated"
+            }
+          ],
+          "createdAt": "2026-10-31T14:26:08.6610978+00:00",
+          "lastModifiedAt": "2026-10-31T14:26:08.6610978+00:00",
+          "isRestricted": false,
+          "isErased": false,
+          "freshness": {
+            "status": "Current",
+            "warningCodes": []
+          }
+        }
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01TCE3V5ZrimcQqU1eBZQ8pj",
+      "mcpToolName": "list_modules",
+      "arguments": {},
+      "requestedAt": "2026-10-31T14:27:02.451Z",
+      "returnedAt": "2026-10-31T14:27:02.479Z",
+      "isError": false,
+      "structuredResult": {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01Df3bwNSfmEYg9BrMidUBmr",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"mcpcli-417-20261031-155f9b6d\"}"
+      },
+      "requestedAt": "2026-10-31T14:27:04.287Z",
+      "returnedAt": "2026-10-31T14:27:04.325Z",
+      "isError": false,
+      "structuredResult": {
+        "operation": "tenants.get-tenant",
+        "tenant": "system",
+        "document": {
+          "tenantId": "mcpcli-417-20261031-155f9b6d",
+          "name": "McpCli operator setup",
+          "description": "Task-owned synthetic operator tenant",
+          "status": "Active",
+          "members": [
+            {
+              "userId": "mcpcli-417-operator-20261031-155f9b6d",
+              "role": "TenantContributor"
+            }
+          ],
+          "configuration": {},
+          "createdAt": "2026-10-31T07:54:10.0320071+00:00"
+        }
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01W7Vj3Ku3BXwq1EDa2toPH2",
+      "mcpToolName": "send_command",
+      "arguments": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"party-417-timing-20261031-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"ContactChannelId\":\"email-party-417-timing-20261031-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"IdentifierId\":\"external-party-417-timing-20261031-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      },
+      "requestedAt": "2026-10-31T14:27:07.238Z",
+      "returnedAt": "2026-10-31T14:27:07.521Z",
+      "isError": false,
+      "structuredResult": {
+        "operation": "parties.create-party",
+        "messageId": "01M695PTVDN76PQH5F0WTE7HS6",
+        "correlationId": "01M695PTVDN76PQH5F0WTE7HS6",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "aggregateId": "party-417-timing-20261031-1",
+        "status": "accepted",
+        "result": {
+          "id": "party-417-timing-20261031-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-party-417-timing-20261031-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-party-417-timing-20261031-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [],
+          "createdAt": "2026-10-31T14:27:07.232324+00:00",
+          "lastModifiedAt": "2026-10-31T14:27:07.2323437+00:00",
+          "isRestricted": false,
+          "isErased": false
+        }
+      },
+      "resultText": null
+    },
+    {
+      "toolUseId": "toolu_01WqQeP3x3pFC9ccZdxvjbpJ",
+      "mcpToolName": "run_query",
+      "arguments": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"party-417-timing-20261031-1\"}",
+        "entityId": "party-417-timing-20261031-1"
+      },
+      "requestedAt": "2026-10-31T14:27:09.324Z",
+      "returnedAt": "2026-10-31T14:27:09.356Z",
+      "isError": false,
+      "structuredResult": {
+        "operation": "parties.get-party",
+        "tenant": "mcpcli-417-20261031-155f9b6d",
+        "document": {
+          "id": "party-417-timing-20261031-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-party-417-timing-20261031-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-party-417-timing-20261031-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [
+            {
+              "displayName": "Operator Setup",
+              "sortName": "Setup, Operator",
+              "changedAt": "2026-10-31T14:27:07.2788279+00:00",
+              "triggeredBy": "PartyCreated"
+            }
+          ],
+          "createdAt": "2026-10-31T14:27:07.2788279+00:00",
+          "lastModifiedAt": "2026-10-31T14:27:07.2788279+00:00",
+          "isRestricted": false,
+          "isErased": false,
+          "freshness": {
+            "status": "Current",
+            "warningCodes": []
+          }
+        }
+      },
+      "resultText": null
+    }
+  ]
+}

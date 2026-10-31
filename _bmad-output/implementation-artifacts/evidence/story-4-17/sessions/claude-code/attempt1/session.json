@@ -24,7 +24,14 @@
     "kind": "Actual Claude Code MCP result metadata includes initialized server identity hexalith1.2.0 on all nine completed calls",
     "file": "mcp-tool-transcript.json",
     "rawInitializePayloadExposed": false,
-    "negotiatedProtocolVersion": null
+    "negotiatedProtocolVersion": "2026-07-28",
+    "clientMcpLog": {
+      "file": "mcp-logs-hexalith-20261031T094646.jsonl",
+      "sha256": "d128d8de58c153256bbf02ecd69d91b9e07e4b93759f4e378eec715bbaca489d",
+      "summary": "Claude Code's own MCP connection log for session cfa23329: connected over stdio at 09:46:48Z with serverVersion hexalith 1.2.0 and negotiated protocol 2026-07-28; then 9 tool calls, 9 completed successfully.",
+      "addedAt": "2026-10-31T14:54:26.620332+00:00",
+      "addedBy": "Step-04 review patch (initialization evidence had been inferred from tool-result metadata)"
+    }
   },
   "discoveryEvidence": {
     "file": "mcp-tool-transcript.json",
@@ -52,7 +59,7 @@
   ],
   "independentTiming": false,
   "elapsedSeconds": null,
-  "cleanupEvidence": null,
+  "cleanupEvidence": "../../../cleanup-20261031/receipt.json (namespace and volume removed 2026-10-31T14:36:19Z; retained local resources and owner listed there)",
   "sourceTranscriptSha256": "25229936ab3dd3ba7dcebdbe30e70ee79aae3b77d38bf56271caff09e7719c12",
   "sourceTranscriptPath": "/home/administrator/.claude/projects/-home-administrator-projects-hexalith-mcpcli/cfa23329-af4a-4fe9-9121-5b191842011a.jsonl",
   "serializedFrameDeduplication": "Deduplicated stable tool-use IDs; repeated serialized assistant frames are not additional requests.",

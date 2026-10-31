@@ -1,0 +1,10 @@
+{
+  "approvedAt": "2026-10-31T14:11:49.596017+00:00",
+  "question": "Comment clore le chronométrage ?",
+  "answer": "Vous chronométrez (Recommandé)",
+  "optionText": "Je relance la redirection et j'émets un nouveau jeton de 2 h, ce que ce choix autorise. Vous suivez seul le démarrage rapide du README avec party-417-timing-20261031-1, environ 15 min. Je l'enregistre honnêtement : firstTimeOperator=false, expérience déclarée. Vous acceptez cette mesure comme preuve de chronométrage de la story. La mesure par une vraie nouvelle personne part au registre deferred-work. Ensuite, nettoyage de l'environnement lié à l'UID.",
+  "requestSha256": "032dd1e28dd97c46a35b78ce916666437280ca5a0d5044879da8343d60424672",
+  "questionEnglish": "How should the timing be closed?",
+  "answerEnglish": "You time it yourself (Recommended)",
+  "optionTextEnglish": "I restart the forward and issue a new two-hour token, which this choice authorizes. You follow the README quick start alone with party-417-timing-20261031-1, about 15 minutes. I record it honestly: firstTimeOperator=false, experience disclosed. You accept this measurement as the story's timing evidence. A measurement by a genuinely new person goes to the deferred-work ledger. Then the UID-bound environment cleanup."
+}

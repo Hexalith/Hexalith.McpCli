@@ -727,3 +727,23 @@ status: open
   evidence: Medium, unverified.
     - `src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171-177`; tests cover only the profile, lock and temporary files.
     - To settle it: on Windows, create a sibling file after a profile write and inspect its ACL.
+
+## Deferred from: implementation of spec-4-17-verify-the-operator-setup-experience.md (2026-10-31)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: No genuine first-time operator has timed the README quick start; the recorded 685 s run was by the experienced user, with one observer answer.
+  evidence: High; human decision 2026-10-31, no first-time operator was available.
+    - `_bmad-output/implementation-artifacts/evidence/story-4-17/timing-attempts.json:11` records `firstTimeOperator: false` and `:66` `unassistedSuccess: false`, against README `b5d5fa56…`; the exception is at `docs/release/operator-setup-checklist.md:66`.
+    - The README prompts were corrected afterwards (final README `24c60ee2…`, quick start at `README.md:123-174`); that version has asserting command checks and prompt-behavior checks but no timed operator run.
+    - Fix: when a person new to McpCli is available, run the corrected quick start in a freshly reviewed environment with the procedure in `docs/release/operator-setup-checklist.md:66-72`, and add the attempt to `timing-attempts.json`.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: The README packed into both NuGet packages now carries Story 4.17 operator material and more repository-relative links.
+  evidence: Medium; from the Story 4.17 review.
+    - `README.md:119-386` holds the staged-1.2.0 operator section, including the private Platform address `192.168.1.30` (`README.md:189`) and story environment history.
+    - New relative links at `README.md:178`, `:187`, `:191` and `:384` will not resolve on nuget.org. The existing relative-link entry (`deferred-work.md:697`) lists anchors that this section moved by about 260 lines.
+    - Fix before Story 4.18 publishes: move the story-specific operator material out of the packed README (or trim it to generic setup) and make the remaining links absolute.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
+  summary: The README's live-CI paragraph no longer says preparation needs the domain modules' source checkouts.
+  evidence: Low; introduced by commit `a3989b4` (published-profile work), not by Story 4.17.
+    - `README.md:567` says preparation builds both domain hosts against the package cohort; `tools/live-topology/ci.py:383-388` still requires each `references/<module>` checkout and raises `Missing declared direct root source prerequisite` otherwise.
+    - Fix: add the source-checkout prerequisite back to that paragraph.

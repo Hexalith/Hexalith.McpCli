@@ -1,0 +1,17 @@
+{
+  "schema": "mcpcli-same-scope-access-renewal/v1",
+  "purpose": "User-timed README quick-start run (party-417-timing-20261031-1); no first-time operator is available.",
+  "namespace": "mcpcli-417-20261031-155f9b6d",
+  "actor": "mcpcli-417-operator-20261031-155f9b6d",
+  "requestedTtlSeconds": 7200,
+  "claimsPolicy": "Preserve every original claim except iat/nbf/exp; retain original HS256 issuer/audience/subject/tenant/domain/permission/global-admin policy.",
+  "sourceProfileSha256": "1e99bbdd29caf2af15b3109ffbb76b7bd89ba393cdcb94f379109b5e90755d64",
+  "reviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "changes": [
+    "Issue a replacement operator credential within the same approved environment and scope into a new protected profile used only as the token source for the operator's masked entry.",
+    "Restart the owner's private local Gateway forward until the new expiry."
+  ],
+  "clientRegistrationsChanged": false,
+  "remoteDeploymentChanges": false,
+  "domainCommandsIncluded": false
+}

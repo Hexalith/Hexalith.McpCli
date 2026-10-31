@@ -1,0 +1,21 @@
+{
+  "toolUseId": "toolu_01XhiJkZ6CzZHQR56TtW4D2i",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "operation": "tenants.get-tenant",
+    "payload": "{\"TenantId\":\"TENANT\"}"
+  },
+  "requestedAt": "2026-10-31T14:26:02.672Z",
+  "returnedAt": "2026-10-31T14:26:02.777Z",
+  "isError": true,
+  "structuredResult": {
+    "error": {
+      "code": "gateway_error",
+      "status": 403,
+      "detail": "Forbidden",
+      "reason": "insufficient_permission",
+      "correlationId": "01M695MVTMM1N1GT6JK523M4VZ"
+    }
+  },
+  "resultText": null
+}

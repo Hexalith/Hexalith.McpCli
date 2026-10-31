@@ -436,3 +436,6 @@ _bmad/render/
 # Operator acceptance procedure is source documentation, not build output.
 !docs/release/
 !docs/release/operator-setup-checklist.md
+
+# Story 4.17 cites these sanitized logs as evidence.
+!_bmad-output/implementation-artifacts/evidence/story-4-17/**/*.log

@@ -1,0 +1,136 @@
+{
+  "schema": "mcpcli-operator-matrix-coverage/v1",
+  "capturedAt": "2026-10-31T14:38:56.826703+00:00",
+  "source": "spec-4-17 I/O & Edge-Case Matrix and docs/release/operator-setup-checklist.md (unexecuted matrix cases)",
+  "rows": [
+    {
+      "matrixRow": "Accepted local staged package",
+      "status": "executed",
+      "evidence": [
+        "offline-verification-20261030/verification.json",
+        "quickstart-verification-20261031/corrected-after-timing/receipt.json",
+        "sessions/claude-code/timing-attempt1-20261031/setup-session.json"
+      ],
+      "summary": "Exact 1.2.0 installed from a local-only NuGet.Config with --no-cache; package/receipt hashes rechecked; installed executable reports 1.2.0."
+    },
+    {
+      "matrixRow": "Client initializes and discovers",
+      "status": "executed",
+      "evidence": [
+        "sessions/claude-code/attempt1/session.json",
+        "sessions/claude-desktop/attempt4/session.json",
+        "sessions/vscode/attempt3/session.json"
+      ],
+      "summary": "One registered hexalith server per client initialized as 1.2.0 and exposed five tools and both modules."
+    },
+    {
+      "matrixRow": "Approved cross-module task",
+      "status": "executed",
+      "evidence": [
+        "sessions/claude-code/attempt1/session.json",
+        "sessions/claude-desktop/attempt4/session.json",
+        "sessions/vscode/attempt3/session.json",
+        "sessions/claude-code/timing-attempt1-20261031/session.json"
+      ],
+      "summary": "Fixed-system tenant read, one accepted fresh Party per session and a matching persisted read in the selected tenant."
+    },
+    {
+      "matrixRow": "Missing runtime, PATH, profile, permissions or service",
+      "cases": [
+        {
+          "case": "Wrong executable or launch environment",
+          "status": "executed",
+          "evidence": [
+            "sessions/vscode/attempt2/session.json"
+          ],
+          "correction": "VS Code Copilot CLI harness in a WSL remote window could not spawn the Windows wsl.exe definition (No such file or directory); README tells operators to use a local window."
+        },
+        {
+          "case": "Launch directory stalls initialize",
+          "status": "executed",
+          "evidence": [
+            "sessions/vscode/initialize-stall-repair-20261031/receipt.json"
+          ],
+          "correction": "Windows clients start wsl.exe in a Windows directory; README bridge args now include --cd."
+        },
+        {
+          "case": "Client registration rejected",
+          "status": "executed",
+          "evidence": [
+            "quickstart-verification-20261031/first-run-claude-mcp-add-order.log"
+          ],
+          "correction": "claude mcp add --env swallowed the server name; README puts the name right after add."
+        },
+        {
+          "case": "Read outside the identity's tenant scope",
+          "status": "executed",
+          "evidence": [
+            "sessions/claude-code/timing-attempt1-20261031/placeholder-tenant-query-403.json"
+          ],
+          "correction": "tenants.get-tenant for a tenant the token does not cover (the placeholder value TENANT) returned 403 insufficient_permission. An identity that lacks read scope altogether was not tested. README prompts now refuse placeholder values and stop at any failed call; the authorization row first asks the operator to check the tenant value."
+        },
+        {
+          "case": "Unavailable service / unknown command outcome",
+          "status": "executed",
+          "evidence": [
+            "three-service-preparation-20261031/claude-desktop-20261031-attempt1/user-report.json",
+            "three-service-preparation-20261031/admission-assessment-index.json"
+          ],
+          "correction": "Keyed CreateParty got HTTP 503 idempotency_admission_unavailable; outcome preserved, never replayed; README example omits the optional key."
+        },
+        {
+          "case": "Missing .NET runtime",
+          "status": "not-executed",
+          "reason": "Not induced: removing the runtime from an operator environment was not approved, and every launch environment had .NET 10. README row 'Executable/runtime not found' documents the correction (DOTNET_ROOT)."
+        },
+        {
+          "case": "Invalid or missing private profile",
+          "status": "not-executed",
+          "reason": "No session hit it and inducing it was not needed for the approved task. README row 'configuration_invalid or missing profile' documents the correction."
+        },
+        {
+          "case": "Insufficient write permission",
+          "status": "not-executed",
+          "reason": "Would require a second identity without Parties write scope; not part of the approved environment. README row 'Authentication/authorization failure' documents the correction."
+        },
+        {
+          "case": "Stopped private forward",
+          "status": "not-executed",
+          "reason": "No client call was made while the forward was down. README row 'submittable: false / connection refused' documents the correction."
+        }
+      ]
+    },
+    {
+      "matrixRow": "New operator uses only README",
+      "status": "executed-with-exception",
+      "evidence": [
+        "timing-attempts.json",
+        "sessions/claude-code/timing-attempt1-20261031/session.json"
+      ],
+      "summary": "685 s, within 900 s; operator was the experienced user (no first-time operator available; human decision 2026-10-31), one observer answer, so unassistedSuccess is false. First-time measurement deferred in the ledger."
+    },
+    {
+      "matrixRow": "Target exceeded, assisted or interrupted",
+      "cases": [
+        {
+          "case": "Assisted",
+          "status": "executed",
+          "evidence": [
+            "timing-attempts.json"
+          ],
+          "correction": "Assistance and misses kept on the attempt; distinguished from unassisted success."
+        },
+        {
+          "case": "Target exceeded",
+          "status": "not-executed",
+          "reason": "The only timed attempt finished in 685 s; no attempt was deliberately prolonged."
+        },
+        {
+          "case": "Interrupted",
+          "status": "not-executed",
+          "reason": "The only timed attempt was not interrupted."
+        }
+      ]
+    }
+  ]
+}

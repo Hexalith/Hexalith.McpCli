@@ -1,0 +1,179 @@
+{
+  "schema": "mcpcli-operator-session/v1",
+  "client": "Claude Code",
+  "attempt": "timing-1",
+  "status": "assisted",
+  "statusNote": "Timed README quick-start run. Initialization, discovery of both modules, approved command and persisted result are evidenced; the README task prompt does not call list_operations, so this is a timing record, not a replacement for Claude Code attempt1.",
+  "operator": "The user (environment owner), timing their own run",
+  "observer": "Claude Code (McpCli repository session); not in the operator's terminals",
+  "priorExperience": "Ran the assisted Claude Code, Claude Desktop and VS Code sessions for this story and approved the README quick start; not a first-time operator.",
+  "firstTimeOperator": false,
+  "osVersion": "Windows 11 / WSL2 Ubuntu-26.04, kernel 6.6.87.2-microsoft-standard-WSL2",
+  "clientVersion": "2.1.316",
+  "extensionVersion": null,
+  "harness": "Claude Code CLI in a WSL terminal (Ubuntu-26.04)",
+  "model": "claude-opus-5-5",
+  "launchEnvironment": "WSL terminal; client cwd ~/hexalith-operator/project; local-scope stdio registration with MCPCLI_HOME and DOTNET_ROOT (registration.json)",
+  "readmeSha256": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429",
+  "sourceSha": "32fb5dbf75216adaf21551bcfa36439741c41e01",
+  "toolVersion": "1.2.0",
+  "packageAndReceiptHashes": {
+    "Hexalith.McpCli.1.2.0.nupkg": "eea29a8f6fde17b1cc780aa3a484753231eba6914b6b8401309269e393ddb37e",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "ab2d64f27c592286cb3721ffb6774ece2b745b86301eb36f48b22b821a443db3",
+    "handoff": "/tmp/mcpcli-417-timing-handoff (local-only NuGet.Config)"
+  },
+  "environmentApproval": "access-renewal-timing-20261031/approval.json",
+  "deploymentReviewSha256": "063bac572c44e85441169aa4410b4001886f5ae7ed6e212f3c5138c607e86be4",
+  "selectedTenant": "mcpcli-417-20261031-155f9b6d",
+  "partyId": "party-417-timing-20261031-1",
+  "initializationEvidence": {
+    "files": [
+      "mcp-logs-hexalith-2026-10-31T14-25-14-652Z.jsonl",
+      "mcp-logs-hexalith-2026-10-31T14-25-41-236Z.jsonl"
+    ],
+    "summary": "Setup health check connected at 14:25:15Z and the restarted session at 14:25:41Z; both report serverVersion hexalith 1.2.0, negotiated protocol 2026-07-28, tools only."
+  },
+  "discoveryEvidence": {
+    "file": "mcp-tool-transcript.json",
+    "listModules": {
+      "modules": [
+        {
+          "name": "parties",
+          "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+          "operationCount": 7
+        },
+        {
+          "name": "tenants",
+          "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+          "operationCount": 14
+        }
+      ]
+    },
+    "describedOperations": [
+      "parties.create-party",
+      "parties.get-party",
+      "tenants.get-tenant"
+    ]
+  },
+  "tenantReadEvidence": "tenant-query.json",
+  "commandEvidence": "create-party.json",
+  "persistedPartyEvidence": "get-party.json",
+  "unintendedWriteEvidence": [
+    "placeholder-tenant-query-403.json",
+    "placeholder-create-party.json",
+    "placeholder-get-party.json"
+  ],
+  "checks": {
+    "serverInitialized120Protocol20260728": true,
+    "listModulesBoth": true,
+    "threeDescriptions": true,
+    "tenantResultTenantIsSystem": true,
+    "tenantDocumentSelectedActive": true,
+    "commandAccepted": true,
+    "commandTenantSelected": true,
+    "commandAggregateMatches": true,
+    "readTenantSelected": true,
+    "persistedIdActiveNotErased": true,
+    "persistedPerson": true,
+    "persistedContact": true,
+    "persistedIdentifier": true,
+    "persistedFreshnessCurrent": true,
+    "callerTenantOmitted": true,
+    "callerIdempotencyKeyOmitted": true,
+    "approvedPartySubmittedOnce": true
+  },
+  "timing": {
+    "attempt": 1,
+    "sessionEvidence": "sessions/claude-code/timing-attempt1-20261031/session.json",
+    "operator": "The user (environment owner), timing their own run",
+    "priorExperience": "Ran the assisted Claude Code, Claude Desktop and VS Code sessions for this story and approved the README quick start; not a first-time operator.",
+    "firstTimeOperator": false,
+    "client": "Claude Code 2.1.316",
+    "harness": "Claude Code CLI in a WSL terminal (Ubuntu-26.04)",
+    "path": "README quick start (operator section only)",
+    "readmeSha256": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429",
+    "startedAtUtc": "2026-10-31T14:15:42.227Z",
+    "startSource": "Client transcript timestamp of the pasted setup prompt. The stopwatch started immediately before the paste; the operator reported no stopwatch reading, so the elapsed time is a lower bound by a few seconds.",
+    "endedAtUtc": "2026-10-31T14:27:07.521Z",
+    "endSource": "Client transcript timestamp of the first send_command success with the correct tenant and Party ID; client MCP log shows completion at 14:27:07.500Z.",
+    "stopwatchReading": null,
+    "elapsedSeconds": 685,
+    "elapsedSecondsToFirstAcceptedCommandWithWrongPartyId": 627,
+    "firstCommandEvidence": {
+      "file": "create-party.json",
+      "toolUseId": "toolu_01W7Vj3Ku3BXwq1EDa2toPH2",
+      "requestedAt": "2026-10-31T14:27:07.238Z",
+      "returnedAt": "2026-10-31T14:27:07.521Z",
+      "status": "accepted",
+      "tenant": "mcpcli-417-20261031-155f9b6d",
+      "aggregateId": "party-417-timing-20261031-1",
+      "messageId": "01M695PTVDN76PQH5F0WTE7HS6",
+      "correlationId": "01M695PTVDN76PQH5F0WTE7HS6",
+      "clientLogCompletion": "2026-10-31T14:27:07.500Z (Tool 'send_command' completed successfully in 258ms)"
+    },
+    "assistance": [
+      {
+        "at": "2026-10-31T14:22:17Z",
+        "by": "Observer agent (Claude Code session in the McpCli repository)",
+        "what": "The operator asked the observer 'where do I get the token?' after their own client could not say. The observer re-explained the owner's pre-run token delivery: run the owner helper copy-token.sh in a third tab, paste at the masked 'Token:' prompt. No value or step outside the README and the pre-run handoff was given, but it was an agent answer during the run."
+      }
+    ],
+    "failures": [
+      {
+        "step": "README step 2 (setup prompt)",
+        "at": "2026-10-31T14:15:42.227Z",
+        "what": "The operator pasted the setup prompt without replacing HANDOFF, TENANT and ACTOR. The client stopped before step 1 as instructed and reported the missing HANDOFF folder.",
+        "correction": "At 14:17:00Z the operator pasted the owner's value table into the client, which substituted the values and continued. About 78 s lost."
+      },
+      {
+        "step": "README step 3 (token)",
+        "at": "2026-10-31T14:20:47.754Z",
+        "what": "The operator asked their client where the token comes from; by design it has neither the README nor the token and could not answer.",
+        "correction": "Observer assistance (see assistance); the operator stored the token through the masked command and said 'done' at 14:24:58Z."
+      },
+      {
+        "step": "README step 4 (task prompt)",
+        "at": "2026-10-31T14:25:55.397Z",
+        "what": "The operator pasted the task prompt without replacing TENANT and PARTY-ID. tenants.get-tenant for 'TENANT' returned 403 insufficient_permission (correlation 01M695MVTMM1N1GT6JK523M4VZ). Because the prompt's stop condition covered only the creation, the client continued and created an unintended Party 'PARTY-ID' (accepted, message/correlation 01M695N1MEPYW6H9BSNQTC0JBE, selected tenant), then read it back.",
+        "correction": "At 14:26:50Z the operator pasted the value table again; the client re-ran the task and created the approved Party once. The unintended synthetic Party stays in the task tenant until the UID-bound environment cleanup. It does not stop the timer (wrong Party ID)."
+      }
+    ],
+    "interrupted": false,
+    "successfulSendCommand": true,
+    "targetSeconds": 900,
+    "withinTarget": true,
+    "unassistedSuccess": false,
+    "unassistedSuccessReason": "Observer assistance during the run, and the operator is not first-time.",
+    "outcome": "assisted-within-target",
+    "humanDecision": "2026-10-31: no first-time operator was available; the user chose to time their own run, recorded with firstTimeOperator=false, and accepts it as the story's timing evidence. A measurement by a genuine first-time operator is deferred to the ledger."
+  },
+  "assistance": [
+    {
+      "at": "2026-10-31T14:22:17Z",
+      "by": "Observer agent (Claude Code session in the McpCli repository)",
+      "what": "The operator asked the observer 'where do I get the token?' after their own client could not say. The observer re-explained the owner's pre-run token delivery: run the owner helper copy-token.sh in a third tab, paste at the masked 'Token:' prompt. No value or step outside the README and the pre-run handoff was given, but it was an agent answer during the run."
+    }
+  ],
+  "failures": [
+    {
+      "step": "README step 2 (setup prompt)",
+      "at": "2026-10-31T14:15:42.227Z",
+      "what": "The operator pasted the setup prompt without replacing HANDOFF, TENANT and ACTOR. The client stopped before step 1 as instructed and reported the missing HANDOFF folder.",
+      "correction": "At 14:17:00Z the operator pasted the owner's value table into the client, which substituted the values and continued. About 78 s lost."
+    },
+    {
+      "step": "README step 3 (token)",
+      "at": "2026-10-31T14:20:47.754Z",
+      "what": "The operator asked their client where the token comes from; by design it has neither the README nor the token and could not answer.",
+      "correction": "Observer assistance (see assistance); the operator stored the token through the masked command and said 'done' at 14:24:58Z."
+    },
+    {
+      "step": "README step 4 (task prompt)",
+      "at": "2026-10-31T14:25:55.397Z",
+      "what": "The operator pasted the task prompt without replacing TENANT and PARTY-ID. tenants.get-tenant for 'TENANT' returned 403 insufficient_permission (correlation 01M695MVTMM1N1GT6JK523M4VZ). Because the prompt's stop condition covered only the creation, the client continued and created an unintended Party 'PARTY-ID' (accepted, message/correlation 01M695N1MEPYW6H9BSNQTC0JBE, selected tenant), then read it back.",
+      "correction": "At 14:26:50Z the operator pasted the value table again; the client re-ran the task and created the approved Party once. The unintended synthetic Party stays in the task tenant until the UID-bound environment cleanup. It does not stop the timer (wrong Party ID)."
+    }
+  ],
+  "cleanupEvidence": "../../../cleanup-20261031/receipt.json (namespace and volume removed 2026-10-31T14:36:19Z; operator forward stopped first)",
+  "capturedAt": "2026-10-31T14:51:35.451300+00:00"
+}

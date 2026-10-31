@@ -1,0 +1,4 @@
+time="2026-10-31T06:29:58.805649521Z" level=info msg="Starting Dapr Runtime -- version 1.18.1 -- commit 4cef924a0b1360c69d810deec8cd59bf853f6721" app_id=tenants instance=tenants-v2qz6 scope=dapr.runtime type=log ver=1.18.1
+time="2026-10-31T06:29:58.805674669Z" level=info msg="Log level set to: info" app_id=tenants instance=tenants-v2qz6 scope=dapr.runtime type=log ver=1.18.1
+time="2026-10-31T06:29:58.805870881Z" level=info msg="Running in Kubernetes environment as user 1654" app_id=tenants instance=tenants-v2qz6 scope=dapr.runtime.security type=log ver=1.18.1
+time="2026-10-31T06:29:58.806041103Z" level=info msg="Fetching initial identity" app_id=tenants instance=tenants-v2qz6 scope=dapr.runtime.security type=log ver=1.18.1

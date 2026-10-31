@@ -170,6 +170,6 @@
   ],
   "independentTiming": false,
   "elapsedSeconds": null,
-  "cleanupEvidence": null,
+  "cleanupEvidence": "../../../cleanup-20261031/receipt.json (namespace and volume removed 2026-10-31T14:36:19Z; retained local resources and owner listed there)",
   "capturedAt": "2026-10-31T10:44:02.640354+00:00"
 }

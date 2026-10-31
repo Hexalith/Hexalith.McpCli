@@ -1,0 +1,21 @@
+test_backup_and_provider_refusals (test_v1.V1Tests.test_backup_and_provider_refusals) ... ok
+test_cli_requires_review_and_preserves_channels_without_external_calls (test_v1.V1Tests.test_cli_requires_review_and_preserves_channels_without_external_calls) ... ok
+test_filled_control_fixture_parity_and_sensitive_boundaries (test_v1.V1Tests.test_filled_control_fixture_parity_and_sensitive_boundaries) ... ok
+test_fixture_route_and_bootstrap_refusals (test_v1.V1Tests.test_fixture_route_and_bootstrap_refusals) ... ok
+test_fresh_private_and_packet_output_refusals (test_v1.V1Tests.test_fresh_private_and_packet_output_refusals) ... ok
+test_image_and_capability_refusals (test_v1.V1Tests.test_image_and_capability_refusals) ... ok
+test_manifest_refusal_matrix (test_v1.V1Tests.test_manifest_refusal_matrix) ... ok
+test_ordered_phases_real_backup_shape_writer_once_and_scoped_handoff (test_v1.V1Tests.test_ordered_phases_real_backup_shape_writer_once_and_scoped_handoff) ... ok
+test_phase_order_target_and_retry_refusals (test_v1.V1Tests.test_phase_order_target_and_retry_refusals) ... ok
+test_poll_and_redirect_refusals (test_v1.V1Tests.test_poll_and_redirect_refusals) ... ok
+test_registry_helper_constraints_and_extension (test_v1.V1Tests.test_registry_helper_constraints_and_extension) ... ok
+test_review_binding_refusals (test_v1.V1Tests.test_review_binding_refusals) ... ok
+test_token_expiry_is_capped_by_review_window (test_v1.V1Tests.test_token_expiry_is_capped_by_review_window) ... ok
+test_missing_administrator_or_membership_stops_before_handoff (test_v1.WriteFailureTests.test_missing_administrator_or_membership_stops_before_handoff) ... ok
+test_terminal_seed_failure_never_submits_membership_or_replays_command (test_v1.WriteFailureTests.test_terminal_seed_failure_never_submits_membership_or_replays_command) ... ok
+test_uncertain_writer_is_submitted_once_and_blocks_further_phases (test_v1.WriteFailureTests.test_uncertain_writer_is_submitted_once_and_blocks_further_phases) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.592s
+
+OK

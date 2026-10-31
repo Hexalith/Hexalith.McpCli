@@ -127,10 +127,11 @@ Claude Code installs and registers the tool from one prompt. You only type your 
 Before you start, your environment owner gives you:
 
 - the path of a **handoff folder** with the tool packages and a `NuGet.Config` (the owner has already checked them);
-- the **Gateway URL**, your **tenant**, your **actor**, a short-lived **token** and its expiry;
+- the **Gateway URL**, your **tenant** and your **actor**;
+- a short-lived **token** and its expiry, handed to you privately (for example copied to your clipboard). You paste it only at the hidden `Token:` prompt in step 3;
 - a new **Party ID** for your test, for example `party-417-ana-1`.
 
-You need a Linux or WSL terminal where `dotnet --version` shows 10 or later, and Claude Code installed and signed in (`claude --version`).
+You need a Linux or WSL bash terminal where `dotnet --list-runtimes` shows `Microsoft.NETCore.App 10.x` (the 1.2.0 tool does not run on a machine with only .NET 11), and Claude Code installed and signed in (`claude --version`).
 
 **1.** Open a terminal and start Claude Code in a new folder:
 
@@ -138,33 +139,39 @@ You need a Linux or WSL terminal where `dotnet --version` shows 10 or later, and
 mkdir -p ~/hexalith-operator/project && cd ~/hexalith-operator/project && claude
 ```
 
-**2.** Copy this prompt, replace `HANDOFF`, `TENANT` and `ACTOR` with your values, paste it into Claude Code and approve the commands it runs:
+**2.** Copy this prompt and paste it into Claude Code as it is. Claude Code first asks for your handoff folder, tenant and actor. Answer, then approve the commands it runs:
 
 ```text
-Set up the Hexalith MCP server for me. Run each command below with Bash, exactly as written, one at a time. Stop at the first error and show it to me. Never ask for, read or print my token.
+Set up the Hexalith MCP server for me. Before running anything, ask me for my handoff folder, tenant and actor, and put my answers in place of HANDOFF, TENANT and ACTOR below. Never run a command that still contains one of those three words. Otherwise run each command below with Bash, exactly as written, one at a time. Stop at the first error and show it to me. Never ask for, read or print my token.
 1. export DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" NUGET_PACKAGES="$HOME/hexalith-operator/packages" && dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path "$HOME/hexalith-operator/tools" --configfile "HANDOFF/NuGet.Config" --no-cache && "$HOME/hexalith-operator/tools/hexalith" --version
    The last line must be 1.2.0.
-2. Ask me to run the token command from the README in another terminal, and wait until I say it is done.
+2. Ask me to run the token command from step 3 of the README in another terminal, with the token my environment owner gave me, and wait until I say it is done.
 3. export DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" MCPCLI_HOME="$HOME/hexalith-operator/home" && "$HOME/hexalith-operator/tools/hexalith" config set operator tenant TENANT && "$HOME/hexalith-operator/tools/hexalith" config set operator actor ACTOR && "$HOME/hexalith-operator/tools/hexalith" config current --profile operator
    Show me url, tenant and actor. The token must stay masked.
 4. claude mcp add hexalith --transport stdio --scope local --env MCPCLI_HOME="$HOME/hexalith-operator/home" --env DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" -- "$HOME/hexalith-operator/tools/hexalith" mcp --transport stdio --profile operator && claude mcp get hexalith
    The status must be Connected. Then tell me to restart Claude Code.
 ```
 
-**3.** When Claude Code asks for the token command, open a **second** terminal, run these two lines with your Gateway URL instead of `GATEWAY-URL`, paste your token at `Token:` (nothing is shown) and press Enter. Then tell Claude Code it is done.
+**3.** When Claude Code asks for the token command, open a **second** terminal running bash (type `bash` first if it uses zsh or fish), run these two lines with your Gateway URL instead of `GATEWAY-URL`, paste your token at `Token:` (nothing is shown) and press Enter. Then tell Claude Code it is done. The token is not displayed or kept in your shell history, but it is passed to `hexalith` as a command argument, so other processes on this machine could read it while that command runs. If that is not acceptable, use [Configure the private operator profile](#configure-the-private-operator-profile) instead. To replace an expired token later, run these two lines again, then ask Claude Code to repeat setup step 3: adding the profile again clears its tenant and actor.
 
 ```sh
 export DOTNET_ROOT="$(dirname "$(readlink -f "$(command -v dotnet)")")" MCPCLI_HOME="$HOME/hexalith-operator/home"
 read -rsp 'Token: ' token && echo && "$HOME/hexalith-operator/tools/hexalith" config profile add operator --url GATEWAY-URL --token "$token"; unset token
 ```
 
-**4.** When Claude Code says setup is done, type `/exit`, run `claude` again in the same folder and type `/mcp`: `hexalith` must be connected. Then paste this request after replacing `TENANT` and `PARTY-ID`, and approve each hexalith tool call:
+**4.** When Claude Code says setup is done, type `/exit`, run `claude` again in the same folder and type `/mcp`: `hexalith` must be connected. Then paste this request as it is. Claude Code first asks for your tenant and Party ID. Answer, then approve each hexalith tool call:
 
 ```text
-Use only the hexalith MCP tools. First list the modules. Then read tenant TENANT with tenants.get-tenant. Then create one person exactly once with parties.create-party: PartyId PARTY-ID, first name Operator, last name Setup, preferred email operator@example.test with ContactChannelId email-PARTY-ID, and an Other identifier with value operator-setup and IdentifierId external-PARTY-ID. Do not pass a tenant or an idempotency key. Then read the person back with parties.get-party using entityId PARTY-ID. If the creation fails or is uncertain, stop and do not retry.
+Use only the hexalith MCP tools. Before calling any tool, ask me for my tenant and my Party ID, and put my answers in place of TENANT and PARTY-ID below. Never send TENANT or PARTY-ID themselves as values. First list the modules. Then read tenant TENANT with tenants.get-tenant. Then create one person exactly once with parties.create-party: PartyId PARTY-ID, first name Operator, last name Setup, preferred email operator@example.test with ContactChannelId email-PARTY-ID, and an Other identifier with value operator-setup and IdentifierId external-PARTY-ID. Do not pass a tenant or an idempotency key. Then read the person back with parties.get-party using entityId PARTY-ID. If the read-back does not find the person yet, repeat only the read every few seconds for up to 45 seconds. Otherwise, if any call fails or its result is uncertain, stop, show me the error and do not retry.
 ```
 
 You are done when the creation result shows `status: accepted` with your tenant and Party ID, and the read-back shows the person with `isActive: true`. If a step fails, see [Resolve setup failures](#resolve-setup-failures). Never repeat the creation.
+
+**5.** When you have finished, remove the registration and the private folder, which holds your token:
+
+```sh
+cd ~/hexalith-operator/project && claude mcp remove hexalith -s local && cd ~ && rm -rf ~/hexalith-operator
+```
 
 ### Environment owner: environment and handoff
 
@@ -179,11 +186,11 @@ Story 4.17 uses the accepted **staging-only** pair from source `32fb5dbf75216ada
 
 Before starting, have .NET **10 SDK** installed (`dotnet --info` and `dotnet --list-runtimes` must show .NET 10), Python 3 for the private token prompt below, and an installed, signed-in MCP client. The framework-dependent executable also needs the .NET 10 runtime in the environment that launches it. Record exact client, extension/harness, OS and runtime versions; the registration formats below were checked against official documentation on 2026-10-30. Client execution still requires the [operator checklist](docs/release/operator-setup-checklist.md).
 
-The environment owner must supply an approved, ready task environment on Platform `192.168.1.30`, a private local Gateway port-forward, the selected test tenant, a short-lived operator token, actor, expiry and permission to create one synthetic Party per session. The identity must read Tenants in `system` and read/write Parties in that selected tenant. A discovery result alone cannot establish those permissions. Temporary Platform preparation and its concrete deployment review are separate prerequisites; an isolated secrets-test endpoint is not this environment. Keep bootstrap administrator credentials and signing keys with the environment owner. For the independent README-only attempt, an observer starts timing **immediately before tool installation** and stops at the first successful MCP `send_command`; include installation, configuration, registration, all failures and assistance. The target is 900 seconds.
+The environment owner must supply an approved, ready task environment on Platform `192.168.1.30`, a private local Gateway port-forward, the selected test tenant, a short-lived operator token, actor, expiry and permission to create one synthetic Party per session. The identity must read Tenants in `system` and read/write Parties in that selected tenant. A discovery result alone cannot establish those permissions. Temporary Platform preparation and its concrete deployment review are separate prerequisites; an isolated secrets-test endpoint is not this environment. Keep bootstrap administrator credentials and signing keys with the environment owner. For the independent README-only attempt, an observer starts timing immediately before the operator pastes the quick-start setup prompt (manual path: immediately before `dotnet tool install`) and stops at the first successful MCP `send_command` with the correct tenant and Party ID; include installation, configuration, registration, all failures and assistance. The target is 900 seconds.
 
-The [three-service preparation status](_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the approved live owner environment and its expiry. Real backup/bootstrap/readiness and a non-administrator staged-CLI tenant read have passed; actual client and independent timing acceptance remain pending. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
+The [three-service preparation status](_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the owner environment used for Story 4.17. It was removed on 2026-10-31 after the client sessions and the timed run ([cleanup receipt](_bmad-output/implementation-artifacts/evidence/story-4-17/cleanup-20261031/receipt.json)); their results are in the [session checklist](docs/release/operator-setup-checklist.md). A new environment needs its own reviewed preparation. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
 
-For the quick start, first verify the four hashes and receipts as described in the manual installation below. Then copy both packages into a handoff folder the operator can read and write its `NuGet.Config`:
+For the quick start, first verify the four hashes and receipts as described in the manual installation below. Then copy both packages into a handoff folder that the operator can read, and write its `NuGet.Config`. Choose a folder path without `&`, `<`, `>` or quotes, because the block writes it into XML unescaped:
 
 ```sh
 handoff=/absolute/path/handoff
@@ -262,7 +269,7 @@ Remove inherited `EVENTSTORE_*` settings from the launching terminal/client envi
 "$operator_root/tools/hexalith" config set operator actor APPROVED-OPERATOR-SUBJECT
 ```
 
-The CLI creates the private directory and file ACLs. Save the following as `set-private-token.py` in your task directory and run `python3 /absolute/path/set-private-token.py` (Windows: `python C:\absolute\path\set-private-token.py`). Enter the owner's token at the hidden prompt; never paste it into chat, a client registration, command arguments, screenshots or evidence. Close clients before changing the profile. This modifies the existing file in place, retaining its permissions:
+The CLI creates the private directory and file ACLs. Save the following as `set-private-token.py` in your task directory and run `python3 /absolute/path/set-private-token.py` (Windows: `python C:\absolute\path\set-private-token.py`). Enter the owner's token at the hidden prompt; never paste it into chat, a client registration, screenshots or evidence. Unlike the quick start's `--token` command, this script also keeps it out of command arguments. Close clients before changing the profile. This modifies the existing file in place, retaining its permissions:
 
 ```python
 import getpass
@@ -297,9 +304,9 @@ claude mcp add hexalith --transport stdio --scope local --env MCPCLI_HOME=/absol
 claude mcp get hexalith
 ```
 
-Open Claude Code in that project, inspect `/mcp`, and approve the intended server/tools. Local scope is private to that project. Record the actual initialization/connection result and expand the returned tool calls in the conversation.
+If .NET is installed in your home directory (for example `~/.dotnet`), add `--env DOTNET_ROOT=/absolute/path/.dotnet` before `--`. Open Claude Code in that project, inspect `/mcp`, and approve the intended server/tools. Local scope is private to that project. Record the actual initialization/connection result and expand the returned tool calls in the conversation.
 
-For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers), open **Settings → Developer → Edit Config** and merge this entry into `mcpServers` in `claude_desktop_config.json`, preserving other servers. Fully quit and reopen Desktop, then inspect its connector/tool list and server logs. Desktop's Code tab is a separate harness and does not count as the Desktop conversation session.
+For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers), open **Settings → Developer → Edit Config** and merge this entry into `mcpServers` in `claude_desktop_config.json`, preserving other servers. Fully quit and reopen Desktop, then inspect its connector/tool list and server logs. Desktop's Code tab is a separate harness and does not count as the Desktop conversation session. Story 4.17's accepted Desktop session ran in the Cowork tab, where the tools appear as `mcp__remote-devices__hexalith__*`.
 
 ```json
 {
@@ -313,7 +320,7 @@ For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/con
 }
 ```
 
-For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers), record **Help → About**, the Copilot extension version and the selected agent harness. Run **MCP: Add Server → Command (stdio)** with the absolute launch command. The current **Global → Copilot Global** destination uses `~/.copilot/mcp-config.json` (or `$COPILOT_HOME/mcp-config.json`) and the same `mcpServers` entry above. Its portable format does not support `inputs` or `envFile`. For the **Local** harness, open the user-profile `mcp.json` or a private test workspace's `.vscode/mcp.json` and merge the following `servers` entry. Select that harness in Chat, trust/start `hexalith`, enable its tools and inspect the actual tool output. Do not commit a personal workspace configuration. With a Windows `wsl.exe` registration (see Windows/WSL below), run the Copilot CLI harness from a local VS Code window, not a WSL remote window. In a WSL remote window that harness runs inside Linux, receives the Windows definition and cannot start `wsl.exe` (`No such file or directory` in its runtime log).
+For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers), record **Help → About**, the Copilot extension version and the selected agent harness. Run **MCP: Add Server → Command (stdio)** with the absolute launch command. The current **Global → Copilot Global** destination uses `~/.copilot/mcp-config.json` (or `$COPILOT_HOME/mcp-config.json`) and the same `mcpServers` entry above. Its portable format does not support `inputs` or `envFile`. For the **Local** harness, open the user-profile `mcp.json` or a private test workspace's `.vscode/mcp.json` and merge the following `servers` entry. Select that harness in Chat, trust/start `hexalith`, enable its tools and inspect the actual tool output. Do not commit a personal workspace configuration. With a Windows `wsl.exe` registration (see Windows/WSL below), run the Copilot CLI harness from a local VS Code window, not a WSL remote window. In a WSL remote window that harness runs inside Linux, receives the Windows definition and cannot start `wsl.exe` (`No such file or directory` in its runtime log). Story 4.17's passing VS Code session used the Copilot CLI harness in a local window, reading the user-profile `mcp.json` entry.
 
 ```json
 {
@@ -330,7 +337,7 @@ For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers
 
 On Windows, change the JSON command to `C:\\Users\\YOUR-USER\\mcpcli-417-operator\\tools\\hexalith.exe` and `MCPCLI_HOME` to its Windows home path, using JSON-escaped backslashes. A GUI launch may inherit neither the shell PATH nor shell variables. Use literal absolute paths, restart after environment changes, and set `DOTNET_ROOT` in the entry's `env` to the actual .NET installation directory if the apphost cannot find the runtime. Never assume `~`, `$HOME` or shell expansion in JSON.
 
-For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--cd", "/home/YOUR-USER/mcpcli-417-operator/home", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/mcpcli-417-operator/home", "/home/YOUR-USER/mcpcli-417-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Keep `--cd` with a small Linux directory: a Windows GUI starts `wsl.exe` in its own Windows directory (for example `C:\Users\YOU` or `System32`), and without `--cd` the server starts under `/mnt/c/...` and can stall before answering `initialize` while it scans that tree. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
+For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--cd", "/home/YOUR-USER/mcpcli-417-operator/home", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/mcpcli-417-operator/home", "/home/YOUR-USER/mcpcli-417-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Keep `--cd` with a small Linux directory: a Windows GUI starts `wsl.exe` in its own Windows directory (for example `C:\Users\YOU` or `System32`), and without `--cd` the server starts under `/mnt/c/...` and can stall before answering `initialize` while it scans that tree. `--exec` does not load your shell profile: if .NET is installed in your Linux home (for example `~/.dotnet`), add `"DOTNET_ROOT=/home/YOUR-USER/.dotnet"` after the `MCPCLI_HOME=…` argument, and add `"--user", "YOUR-USER"` when the tool belongs to a user other than the distribution's default user. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
 
 ### Complete the approved cross-module task
 
@@ -361,18 +368,20 @@ Require the selected result tenant, `document.id` equal to your Party ID, `isAct
 | Failing step | Correction and required record |
 | --- | --- |
 | Install/hash mismatch | Stop; reacquire the accepted archives/receipts. Retain the exact failing command and hash. |
-| Executable/runtime not found | Check the absolute native/WSL command, permissions, .NET 10 runtime and GUI `DOTNET_ROOT`; restart the client. |
+| Executable/runtime not found | Check the absolute native/WSL command, permissions, .NET 10 runtime and GUI `DOTNET_ROOT`; restart the client. If `dotnet` is a snap or version-manager shim, the quick start derives the wrong `DOTNET_ROOT`: use the folder that contains `shared/Microsoft.NETCore.App` (the path `dotnet --list-runtimes` prints, without that suffix). |
 | `configuration_invalid` or missing profile | Check absolute `MCPCLI_HOME`, private file access, `--profile operator` and inherited `EVENTSTORE_*`; inspect masked `config current`. |
 | Four tools / `read_only` | Remove an unintended inherited read-only setting only after confirming write approval; keep the failed attempt. |
-| `submittable: false` / connection refused | Check the approved URL and private forward in the launching environment. Discovery can succeed offline. |
-| Authentication/authorization failure | Ask the environment owner to check expiry, `system` and selected-tenant membership, Parties write scope and actor. Never substitute bootstrap credentials. |
+| `submittable: false` with `configuration_invalid` | The profile has no Gateway URL; check `config current`. Discovery can succeed offline. |
+| Connection refused on a call | Check the approved URL and that the private forward runs in the launching environment. |
+| Authentication/authorization failure | First check that the call used your real tenant, not a placeholder such as `TENANT`. Then ask the environment owner to check expiry, `system` and selected-tenant membership, Parties write scope and actor. Never substitute bootstrap credentials. |
 | Tool absent / wrong config shape | Check client version, selected harness, scope, trust prompts and `mcpServers` versus `servers`; expand client server logs. |
 | VS Code Copilot CLI harness reports no `hexalith` tools | In a WSL remote window its runtime cannot start a Windows `wsl.exe` registration; open a local VS Code window and start a fresh chat. Keep the failed session. |
+| Setup run again reports `already installed` or `already exists` | Run quick-start step 5 to remove the earlier attempt, then start again from step 1. |
 | `claude mcp add` reports `Invalid environment variable format` | Put the server name right after `add`; `--env` takes several values and otherwise reads the name as one. |
 | Client keeps waiting for `initialize` (WSL bridge) | Add `--cd` with a small Linux directory before `--exec`, then restart the server. Without it the server starts in the client's Windows directory under `/mnt/c/...`. Keep the stalled server log. |
 | Command outcome uncertain / persisted result missing | Preserve message IDs and errors, stop writes, request owner investigation; acceptance remains incomplete. |
 
-Record every attempt, failure, assistance and elapsed time in the [session checklist](docs/release/operator-setup-checklist.md). An assisted, interrupted, unexecuted or over-900-second attempt remains visible and cannot be reported as unassisted success. Current Story 4.17 readiness remains incomplete until all three clients and the independent timed attempt have their actual evidence.
+Record every attempt, failure, assistance and elapsed time in the [session checklist](docs/release/operator-setup-checklist.md). An assisted, interrupted, unexecuted or over-900-second attempt remains visible and cannot be reported as unassisted success. For Story 4.17, the checklist records the three client sessions, the timed attempt (assisted, by an experienced operator) and the environment cleanup.
 
 ## Gateway boundary
 

@@ -1,0 +1,46 @@
+{
+  "schema": "mcpcli-approved-access-renewal/v1",
+  "completedAt": "2026-10-31T14:11:51.256266+00:00",
+  "sameAuthorizationClaims": true,
+  "scopeSha256": "9210c137e1ffddd71474048229879f0dd3dc121b24d9297cc04c479f3bd43111",
+  "newExpiresAt": "2026-10-31T16:11:49+00:00",
+  "ttlSeconds": 7200,
+  "newPrivateHome": "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-timing-20261031/operator-home",
+  "sourceProfilePreserved": true,
+  "clientRegistrationsChanged": false,
+  "forward": {
+    "pid": 2004179,
+    "processGroupId": 2004179,
+    "argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=1s",
+      "7198s",
+      "kubectl",
+      "--context=jpiquot@local",
+      "-n",
+      "mcpcli-417-20261031-155f9b6d",
+      "port-forward",
+      "--address=127.0.0.1",
+      "pod/eventstore-l6rpl",
+      "18170:8080"
+    ],
+    "expiresAt": "2026-10-31T16:11:49+00:00",
+    "gatewayPodUid": "1daa2ee7-b949-41f2-b41c-4ce33e902e25"
+  },
+  "gatewayReadyHttpStatus": 200,
+  "readOnlyVerification": {
+    "exitCode": 0,
+    "tenant": "system",
+    "tenantId": "mcpcli-417-20261031-155f9b6d",
+    "status": "Active",
+    "members": [
+      {
+        "userId": "mcpcli-417-operator-20261031-155f9b6d",
+        "role": "TenantContributor"
+      }
+    ]
+  },
+  "applicationWritesSubmitted": 0,
+  "deploymentChanges": false
+}

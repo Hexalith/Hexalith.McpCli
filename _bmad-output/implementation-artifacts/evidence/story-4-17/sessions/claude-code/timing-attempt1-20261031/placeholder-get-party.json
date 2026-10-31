@@ -1,0 +1,60 @@
+{
+  "toolUseId": "toolu_01R4xMvZ62GmfThnRcCE17f8",
+  "mcpToolName": "run_query",
+  "arguments": {
+    "operation": "parties.get-party",
+    "payload": "{\"PartyId\":\"PARTY-ID\"}",
+    "entityId": "PARTY-ID"
+  },
+  "requestedAt": "2026-10-31T14:26:10.727Z",
+  "returnedAt": "2026-10-31T14:26:10.775Z",
+  "isError": false,
+  "structuredResult": {
+    "operation": "parties.get-party",
+    "tenant": "mcpcli-417-20261031-155f9b6d",
+    "document": {
+      "id": "PARTY-ID",
+      "type": "Person",
+      "isActive": true,
+      "displayName": "Operator Setup",
+      "sortName": "Setup, Operator",
+      "personDetails": {
+        "firstName": "Operator",
+        "lastName": "Setup"
+      },
+      "contactChannels": [
+        {
+          "id": "email-PARTY-ID",
+          "type": "Email",
+          "value": "operator@example.test",
+          "isPreferred": true
+        }
+      ],
+      "identifiers": [
+        {
+          "id": "external-PARTY-ID",
+          "type": "Other",
+          "value": "operator-setup"
+        }
+      ],
+      "consentRecords": [],
+      "nameHistory": [
+        {
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "changedAt": "2026-10-31T14:26:08.6610978+00:00",
+          "triggeredBy": "PartyCreated"
+        }
+      ],
+      "createdAt": "2026-10-31T14:26:08.6610978+00:00",
+      "lastModifiedAt": "2026-10-31T14:26:08.6610978+00:00",
+      "isRestricted": false,
+      "isErased": false,
+      "freshness": {
+        "status": "Current",
+        "warningCodes": []
+      }
+    }
+  },
+  "resultText": null
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "local",
+  "project": "/home/administrator/hexalith-operator/project",
+  "servers": {
+    "hexalith": {
+      "type": "stdio",
+      "command": "/home/administrator/hexalith-operator/tools/hexalith",
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio",
+        "--profile",
+        "operator"
+      ],
+      "env": {
+        "MCPCLI_HOME": "/home/administrator/hexalith-operator/home",
+        "DOTNET_ROOT": "/home/administrator/.dotnet"
+      }
+    }
+  }
+}

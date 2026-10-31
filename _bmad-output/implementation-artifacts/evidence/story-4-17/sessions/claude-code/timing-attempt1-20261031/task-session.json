@@ -1,0 +1,236 @@
+{
+  "source": "Claude Code transcript 843cde73-1348-43fb-be39-6a6a71183ee0.jsonl (sanitized: user/assistant text, tool calls and results only)",
+  "transcriptSha256": "00098394523f60a5fa6afd07495def52803e795171367060e0dbf69c50f15a41",
+  "sessionId": "843cde73-1348-43fb-be39-6a6a71183ee0",
+  "version": "2.1.316",
+  "model": "claude-opus-5-5",
+  "items": [
+    {
+      "kind": "user",
+      "at": "2026-10-31T14:25:55.397Z",
+      "text": "Use only the hexalith MCP tools. First list the modules. Then read tenant TENANT with tenants.get-tenant. Then create one person exactly once with parties.create-party: PartyId PARTY-ID, first name Operator, last name Setup, preferred email operator@example.test with ContactChannelId email-PARTY-ID, and an Other identifier with value operator-setup and IdentifierId external-PARTY-ID. Do not pass a tenant or an idempotency key. Then read the person back with parties.get-party using entityId PARTY-ID. If the creation fails or is uncertain, stop and do not retry."
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:25:57.430Z",
+      "id": "toolu_01Jjn1sPaERxSGY2JppoT6vC",
+      "name": "ToolSearch",
+      "input": {
+        "query": "select:mcp__hexalith__list_modules,mcp__hexalith__list_operations,mcp__hexalith__describe_operation,mcp__hexalith__run_query,mcp__hexalith__send_command",
+        "max_results": 5
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:25:57.459Z",
+      "toolUseId": "toolu_01Jjn1sPaERxSGY2JppoT6vC",
+      "isError": false,
+      "text": ""
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:25:58.677Z",
+      "id": "toolu_01BjSc4zbqaDgDFNh9X9aEEC",
+      "name": "mcp__hexalith__list_modules",
+      "input": {}
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:25:58.743Z",
+      "toolUseId": "toolu_01BjSc4zbqaDgDFNh9X9aEEC",
+      "isError": false,
+      "text": "{\"modules\":[{\"name\":\"parties\",\"description\":\"Manage people and organizations, their contact channels, identifiers and active status.\",\"operationCount\":7},{\"name\":\"tenants\",\"description\":\"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\"operationCount\":14}]}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:00.406Z",
+      "id": "toolu_01L5Zx3qnxBCUQMQv9YJAJoW",
+      "name": "mcp__hexalith__describe_operation",
+      "input": {
+        "operation": "tenants.get-tenant"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:00.452Z",
+      "toolUseId": "toolu_01L5Zx3qnxBCUQMQv9YJAJoW",
+      "isError": false,
+      "text": "{\"name\":\"tenants.get-tenant\",\"kind\":\"read\",\"description\":\"Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"TenantId\":{\"type\":\"string\",\"description\":\"Identifier of the tenant to read. Required; a call without it is rejected.\"}},\"additionalProperties\":false},\"example\":{\"TenantId\":\"acme\"},\"envelope\":{\"fixedTenant\":\"system\",\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:00.679Z",
+      "id": "toolu_01VP66M1FwLyRaxHZ7r4mjZD",
+      "name": "mcp__hexalith__describe_operation",
+      "input": {
+        "operation": "parties.create-party"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:00.709Z",
+      "toolUseId": "toolu_01VP66M1FwLyRaxHZ7r4mjZD",
+      "isError": false,
+      "text": "{\"name\":\"parties.create-party\",\"kind\":\"write\",\"description\":\"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\",\"schema\":{\"type\":\"object\",\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"Type\":{\"enum\":[\"Unknown\",\"Person\",\"Organization\"],\"description\":\"The explicit party kind: Person or Organization; Unknown is rejected.\"},\"PersonDetails\":{\"type\":[\"object\",\"null\"],\"properties\":{\"FirstName\":{\"type\":\"string\",\"description\":\"The person's supplied first name.\"},\"LastName\":{\"type\":\"string\",\"description\":\"The person's supplied last name.\"},\"DateOfBirth\":{\"type\":[\"string\",\"null\"],\"format\":\"date-time\",\"description\":\"The optional date of birth with an explicit UTC offset.\"},\"Prefix\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name prefix, such as a title.\"},\"Suffix\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name suffix.\"}},\"required\":[\"FirstName\",\"LastName\"],\"additionalProperties\":false,\"description\":\"Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type.\"},\"OrganizationDetails\":{\"type\":[\"object\",\"null\"],\"properties\":{\"LegalName\":{\"type\":\"string\",\"description\":\"The organization's complete legal name.\"},\"TradingName\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name the organization trades under.\"},\"LegalForm\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional legal form of the organization.\"},\"RegistrationNumber\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional organization registration number.\"},\"IsNaturalPerson\":{\"type\":\"boolean\",\"description\":\"Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification.\"}},\"required\":[\"LegalName\"],\"additionalProperties\":false,\"description\":\"Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type.\"},\"ContactChannels\":{\"type\":\"array\",\"items\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"ContactChannelId\":{\"type\":\"string\",\"description\":\"The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"},\"Type\":{\"enum\":[\"Email\",\"Phone\",\"PostalAddress\",\"SocialMedia\"],\"description\":\"The contact-channel kind: Email, Phone, PostalAddress or SocialMedia.\"},\"Value\":{\"type\":\"string\",\"description\":\"A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming.\"},\"IsPreferred\":{\"type\":\"boolean\",\"description\":\"Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins.\"}},\"required\":[\"PartyId\",\"ContactChannelId\",\"Type\",\"Value\"],\"additionalProperties\":false},\"description\":\"Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root.\"},\"Identifiers\":{\"type\":\"array\",\"items\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"IdentifierId\":{\"type\":\"string\",\"description\":\"The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"},\"Type\":{\"enum\":[\"VAT\",\"SIRET\",\"NationalId\",\"CompanyRegistration\",\"TaxId\",\"Other\"],\"description\":\"The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other.\"},\"Value\":{\"type\":\"string\",\"description\":\"The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value.\"}},\"required\":[\"PartyId\",\"IdentifierId\",\"Type\",\"Value\"],\"additionalProperties\":false},\"description\":\"Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root.\"}},\"required\":[\"PartyId\",\"Type\"],\"additionalProperties\":false},\"example\":{\"PartyId\":\"party-49\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Ada\",\"LastName\":\"Lovelace\"}},\"envelope\":{\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"tenant\",\"aggregateId\",\"correlationId\",\"idempotencyKey\",\"extensions\"]},\"lintFindings\":[],\"submittable\":true}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:00.958Z",
+      "id": "toolu_01YUp4qMhxRfN8ecxo9xQ2SJ",
+      "name": "mcp__hexalith__describe_operation",
+      "input": {
+        "operation": "parties.get-party"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:00.985Z",
+      "toolUseId": "toolu_01YUp4qMhxRfN8ecxo9xQ2SJ",
+      "isError": false,
+      "text": "{\"name\":\"parties.get-party\",\"kind\":\"read\",\"description\":\"Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them.\"}},\"required\":[\"PartyId\"],\"additionalProperties\":false},\"example\":{\"PartyId\":\"party-49\"},\"envelope\":{\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"tenant\",\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:02.672Z",
+      "id": "toolu_01XhiJkZ6CzZHQR56TtW4D2i",
+      "name": "mcp__hexalith__run_query",
+      "input": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"TENANT\"}"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:02.777Z",
+      "toolUseId": "toolu_01XhiJkZ6CzZHQR56TtW4D2i",
+      "isError": true,
+      "text": "{\n  \"error\": {\n    \"code\": \"gateway_error\",\n    \"status\": 403,\n    \"detail\": \"Forbidden\",\n    \"reason\": \"insufficient_permission\",\n    \"correlationId\": \"01M695MVTMM1N1GT6JK523M4VZ\"\n  }\n}"
+    },
+    {
+      "kind": "assistant",
+      "at": "2026-10-31T14:26:07.073Z",
+      "text": "The tenant read returned 403 Forbidden. Your stop condition only covers the creation step, so I'll go ahead with the create as instructed."
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:08.638Z",
+      "id": "toolu_01R6FcL8BKvm2fBphxG8gxiA",
+      "name": "mcp__hexalith__send_command",
+      "input": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"PARTY-ID\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"PARTY-ID\",\"ContactChannelId\":\"email-PARTY-ID\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"PARTY-ID\",\"IdentifierId\":\"external-PARTY-ID\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:08.915Z",
+      "toolUseId": "toolu_01R6FcL8BKvm2fBphxG8gxiA",
+      "isError": false,
+      "text": "{\"operation\":\"parties.create-party\",\"messageId\":\"01M695N1MEPYW6H9BSNQTC0JBE\",\"correlationId\":\"01M695N1MEPYW6H9BSNQTC0JBE\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"aggregateId\":\"PARTY-ID\",\"status\":\"accepted\",\"result\":{\"id\":\"PARTY-ID\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-PARTY-ID\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-PARTY-ID\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-10-31T14:26:08.6521176+00:00\",\"lastModifiedAt\":\"2026-10-31T14:26:08.6521256+00:00\",\"isRestricted\":false,\"isErased\":false}}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:26:10.727Z",
+      "id": "toolu_01R4xMvZ62GmfThnRcCE17f8",
+      "name": "mcp__hexalith__run_query",
+      "input": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"PARTY-ID\"}",
+        "entityId": "PARTY-ID"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:26:10.775Z",
+      "toolUseId": "toolu_01R4xMvZ62GmfThnRcCE17f8",
+      "isError": false,
+      "text": "{\"operation\":\"parties.get-party\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"document\":{\"id\":\"PARTY-ID\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-PARTY-ID\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-PARTY-ID\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[{\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"changedAt\":\"2026-10-31T14:26:08.6610978+00:00\",\"triggeredBy\":\"PartyCreated\"}],\"createdAt\":\"2026-10-31T14:26:08.6610978+00:00\",\"lastModifiedAt\":\"2026-10-31T14:26:08.6610978+00:00\",\"isRestricted\":false,\"isErased\":false,\"freshness\":{\"status\":\"Current\",\"warningCodes\":[]}}}"
+    },
+    {
+      "kind": "assistant",
+      "at": "2026-10-31T14:26:17.171Z",
+      "text": "I created the person once and read it back. The tenant read failed, though, and the party went into the session's default tenant, `mcpcli-417-20261031-155f9b6d`. I couldn't confirm whether that's the same as `TENANT`.\n\n1. **List modules:** two modules are available: `parties` (7 operations) and `tenants` (14 operations).\n2. **`tenants.get-tenant` for `TENANT`:** failed with **403 Forbidden** (`insufficient_permission`, correlationId `01M695MVTMM1N1GT6JK523M4VZ`). Your stop rule only covered the create step, so I carried on. This tool returns \"forbidden\" to anyone who isn't a tenant member or global administrator, whether or not the tenant exists. So either this account can't access `TENANT`, or `TENANT` doesn't exist.\n3. **`parties.create-party`:** sent once, with no tenant and no idempotency key. The status came back **accepted** (messageId `01M695N1MEPYW6H9BSNQTC0JBE`), so the result was certain and I didn't retry.\n4. **`parties.get-party` with entityId `PARTY-ID`:** the record matches what was requested, and its freshness status is `Current`:\n   - **PartyId:** `PARTY-ID`, a Person, active, display name \"Operator Setup\"\n   - **Name:** first name Operator, last name Setup\n   - **Contact channel:** `email-PARTY-ID`, Email `operator@example.test`, preferred\n   - **Identifier:** `external-PARTY-ID`, type Other, value `operator-setup`\n   - **Created:** 2026-10-31T14:26:08Z\n\nIf the party was meant to be in `TENANT`, you'll need an account with access to that tenant. Because of your no-retry rule, I haven't created it anywhere else."
+    },
+    {
+      "kind": "user",
+      "at": "2026-10-31T14:26:50.730Z",
+      "text": "<pasted_content id=\"21cb\">\n┌─────────────┬───────────────────────────────────────┐\n│    Champ    │                Valeur                 │\n├─────────────┼───────────────────────────────────────┤\n│ HANDOFF     │ /tmp/mcpcli-417-timing-handoff        │\n├─────────────┼───────────────────────────────────────┤\n│ TENANT      │ mcpcli-417-20261031-155f9b6d          │\n├─────────────┼───────────────────────────────────────┤\n│ ACTOR       │ mcpcli-417-operator-20261031-155f9b6d │\n├─────────────┼───────────────────────────────────────┤\n│ GATEWAY-URL │ http://127.0.0.1:18170                │\n├─────────────┼───────────────────────────────────────┤\n│ PARTY-ID    │ party-417-timing-20261031-1           │\n└─────────────┴───────────────────────────────────────┘\n</pasted_content id=\"21cb\">"
+    },
+    {
+      "kind": "assistant",
+      "at": "2026-10-31T14:27:02.417Z",
+      "text": "These are the real values for the placeholders. I'd taken `TENANT` and `PARTY-ID` literally, so I'll run the sequence again with them filled in."
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:27:02.451Z",
+      "id": "toolu_01TCE3V5ZrimcQqU1eBZQ8pj",
+      "name": "mcp__hexalith__list_modules",
+      "input": {}
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:27:02.479Z",
+      "toolUseId": "toolu_01TCE3V5ZrimcQqU1eBZQ8pj",
+      "isError": false,
+      "text": "{\"modules\":[{\"name\":\"parties\",\"description\":\"Manage people and organizations, their contact channels, identifiers and active status.\",\"operationCount\":7},{\"name\":\"tenants\",\"description\":\"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\"operationCount\":14}]}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:27:04.287Z",
+      "id": "toolu_01Df3bwNSfmEYg9BrMidUBmr",
+      "name": "mcp__hexalith__run_query",
+      "input": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"mcpcli-417-20261031-155f9b6d\"}"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:27:04.325Z",
+      "toolUseId": "toolu_01Df3bwNSfmEYg9BrMidUBmr",
+      "isError": false,
+      "text": "{\"operation\":\"tenants.get-tenant\",\"tenant\":\"system\",\"document\":{\"tenantId\":\"mcpcli-417-20261031-155f9b6d\",\"name\":\"McpCli operator setup\",\"description\":\"Task-owned synthetic operator tenant\",\"status\":\"Active\",\"members\":[{\"userId\":\"mcpcli-417-operator-20261031-155f9b6d\",\"role\":\"TenantContributor\"}],\"configuration\":{},\"createdAt\":\"2026-10-31T07:54:10.0320071+00:00\"}}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:27:07.238Z",
+      "id": "toolu_01W7Vj3Ku3BXwq1EDa2toPH2",
+      "name": "mcp__hexalith__send_command",
+      "input": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"party-417-timing-20261031-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"ContactChannelId\":\"email-party-417-timing-20261031-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-417-timing-20261031-1\",\"IdentifierId\":\"external-party-417-timing-20261031-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:27:07.521Z",
+      "toolUseId": "toolu_01W7Vj3Ku3BXwq1EDa2toPH2",
+      "isError": false,
+      "text": "{\"operation\":\"parties.create-party\",\"messageId\":\"01M695PTVDN76PQH5F0WTE7HS6\",\"correlationId\":\"01M695PTVDN76PQH5F0WTE7HS6\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"aggregateId\":\"party-417-timing-20261031-1\",\"status\":\"accepted\",\"result\":{\"id\":\"party-417-timing-20261031-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-party-417-timing-20261031-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-party-417-timing-20261031-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-10-31T14:27:07.232324+00:00\",\"lastModifiedAt\":\"2026-10-31T14:27:07.2323437+00:00\",\"isRestricted\":false,\"isErased\":false}}"
+    },
+    {
+      "kind": "tool_use",
+      "at": "2026-10-31T14:27:09.324Z",
+      "id": "toolu_01WqQeP3x3pFC9ccZdxvjbpJ",
+      "name": "mcp__hexalith__run_query",
+      "input": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"party-417-timing-20261031-1\"}",
+        "entityId": "party-417-timing-20261031-1"
+      }
+    },
+    {
+      "kind": "tool_result",
+      "at": "2026-10-31T14:27:09.356Z",
+      "toolUseId": "toolu_01WqQeP3x3pFC9ccZdxvjbpJ",
+      "isError": false,
+      "text": "{\"operation\":\"parties.get-party\",\"tenant\":\"mcpcli-417-20261031-155f9b6d\",\"document\":{\"id\":\"party-417-timing-20261031-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-party-417-timing-20261031-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-party-417-timing-20261031-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[{\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"changedAt\":\"2026-10-31T14:27:07.2788279+00:00\",\"triggeredBy\":\"PartyCreated\"}],\"createdAt\":\"2026-10-31T14:27:07.2788279+00:00\",\"lastModifiedAt\":\"2026-10-31T14:27:07.2788279+00:00\",\"isRestricted\":false,\"isErased\":false,\"freshness\":{\"status\":\"Current\",\"warningCodes\":[]}}}"
+    },
+    {
+      "kind": "assistant",
+      "at": "2026-10-31T14:27:16.246Z",
+      "text": "I created the person `party-417-timing-20261031-1` once in `mcpcli-417-20261031-155f9b6d` and read it back successfully.\n\n1. **List modules:** `parties` (7 operations) and `tenants` (14 operations).\n2. **`tenants.get-tenant` for `mcpcli-417-20261031-155f9b6d`:** this time it worked. The tenant \"McpCli operator setup\" is Active, and its one member is `mcpcli-417-operator-20261031-155f9b6d` with the role TenantContributor.\n3. **`parties.create-party`:** sent once, with no tenant and no idempotency key, and the status came back **accepted** (messageId `01M695PTVDN76PQH5F0WTE7HS6`). The default tenant was `mcpcli-417-20261031-155f9b6d`, so the party is in the right tenant.\n4. **`parties.get-party` with entityId `party-417-timing-20261031-1`:** the record matches the request, and its freshness status is `Current`:\n   - **Name:** Operator Setup, a Person, active\n   - **Contact channel:** `email-party-417-timing-20261031-1`, Email `operator@example.test`, preferred\n   - **Identifier:** `external-party-417-timing-20261031-1`, type Other, value `operator-setup`\n   - **Created:** 2026-10-31T14:27:07Z\n\nMy first attempt left an extra record in this tenant. I read your placeholders literally and created a person with PartyId `PARTY-ID` (same name, email and identifier, contact channel `email-PARTY-ID`, identifier `external-PARTY-ID`). It's still active, so a check that counts the people in the tenant will find two. I haven't changed it. If you want, I can look for a parties operation that deactivates or removes it."
+    }
+  ]
+}
