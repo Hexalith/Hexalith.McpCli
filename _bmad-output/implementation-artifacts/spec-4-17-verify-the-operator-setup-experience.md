@@ -2,7 +2,7 @@
 title: '4.17 Verify the operator setup experience'
 type: 'feature'
 created: '2026-10-29'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'c99aebe4a93ca611a443c83f031ef1c02bd499b7'
@@ -219,3 +219,66 @@ Step-04 pass 1 (2026-10-31): Blind Hunter (BH), Edge Case Hunter (EC) and Verifi
 - Offline image preparation also followed the baseline fallback: source-mode EventStoreHost archive failed CS1704 (UniqueIds source 1.0.0 versus cached 2.30.3); task-owned package-only Release restore succeeded from local caches, then publish failed CS1061/CS0117 on three required Custody APIs absent from pinned packages. Both attempts were network-isolated and produced no archive. Exact commands/results and the unresolved-input list are retained in `evidence/story-4-17/offline-verification-20261030/platform-checks/` and `platform-preparation-status.json`.
 - Follow-up local audit: added table-driven refusal coverage from a valid disposable control for profile/source/graph/target/expiry/scope/private-file constraints, image/Secret/environment boundaries (including literal ConfigMap credentials), reviewed hash/scope/expiry changes and malformed owner requests. Exact representative CLI channels and absence of external calls/output are checked. All 24 narrow test methods pass; preparer/seed runtime hashes are unchanged. Fresh commands, hashes and logs are in `offline-verification-20261030/guard-coverage-20261030/`; previous evidence is preserved.
 - Sanctioned Gateway assessment correction: the Builds-owned seed bypasses Platform.Custody and restores/compiles/publishes Release against pinned Gateway 3.128.4 from local caches. Its network-isolated container step then fails fetching the ASP.NET base manifest from `mcr.microsoft.com:443`, so no archive exists. Source/package hashes, compiled bytes, catalog limitations and exact commands are retained in `offline-verification-20261030/builds-seed-20261030/assessment.json`. These findings do not establish installed readiness or close any human acceptance task.
+
+### Review Findings
+
+Code review of story 4.17, 2026-10-31. Code-only scope: McpCli `c99aebe..cbc7254` for `README.md`, `docs/release/operator-setup-checklist.md` and `.gitignore`, plus the owning Platform v1 runner (`Hexalith.Platform/` = `/home/administrator/projects/hexalith/platform`): `eng/mcpcli-operator-setup/v1/{phases.py,prepare.py,test_v1.py,README.md}` at `3dc3f6b6`. 1,836 diff lines. Layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor (none failed). 1 decision-needed (resolved to patch), 22 patch, 1 defer, 32 rejected.
+
+- [ ] [Review][Patch] Runner refuses cleanup and `--forward` after unrelated McpCli edits. `verify()` checks every bound McpCli fixture hash before every phase, `--forward` included, although no phase reads those files at run time; commit `989fe5a` forced the manual cleanup. Resolved 2026-10-31 (human decision, option a): skip only the fixture and evidence hash checks for `cleanup` and `--forward`; keep the review, runner and helper hashes, scope, expiry, private inputs and namespace UID/owner checks, and add a test for each path. (medium; blind-hunter+edge-case-hunter+acceptance-auditor+verification-gap) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/phases.py:40]
+- [ ] [Review][Patch] Quick-start step 5 chains `claude mcp remove … && … rm -rf`. `claude mcp remove` exits 1 when no server is registered (checked locally: "No MCP server named "hexalith" in local scope", exit 1), so the folder is never removed. The troubleshooting remedy for `already installed` points to step 5 and fails the same way. (medium) [README.md:173]
+- [ ] [Review][Patch] The token renewal instruction leaves the running stdio server on the expired token. The host captures `settings.Token` once, at startup (`src/Hexalith.McpCli/Hosting/HostFactory.cs:53`). Also, "ask Claude Code to repeat setup step 3" does not work in the restarted session, which no longer has the setup prompt. Give the two `config set` lines directly and require a Claude Code restart. (medium) [README.md:155]
+- [ ] [Review][Patch] The quick-start prerequisites check only the `Microsoft.NETCore.App 10.x` runtime, but step 1 runs `dotnet tool install`, which needs a .NET SDK (10 or later). The manual path already asks for the SDK (`README.md:187`). (medium) [README.md:134]
+- [ ] [Review][Patch] The Platform v1 guide still says the environment is live, gives the 09:54:53Z token expiry, says client checks are "still unexecuted", says cleanup is pending through `--phase cleanup`, and still calls the applied packet a review candidate. It also forbids tokens in arguments without mentioning the quick start's disclosed `--token` exception. Record the 2026-10-31 manual UID-precondition cleanup, the runner refusal and the results location. (medium) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/README.md:3]
+- [ ] [Review][Patch] These runner guards have no test that fails when the guard is removed:
+  - cleanup with a mismatched UID or label must issue no `delete`;
+  - `cleanup-incomplete`;
+  - `--forward` before handoff (`required-phase-incomplete`, no `Popen`);
+  - the Gateway forward mapping `18170:8080`;
+  - `operator-profile-already-exists`;
+  - `bootstrap-dapr-routing-required`;
+  - `private-forward-port-in-use`;
+  - `seed-command-uncertain-stop`.
+
+  Verification-gap mutations of `:276`, `:366`, `:378` and `:239` all left the 39 tests passing. (medium) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/test_v1.py]
+- [ ] [Review][Patch] The handoff test checks only the profile token's claims. Assert the exact `mcpcli.json` document (version 1; operator URL, token, tenant, actor and `allowTenantOverride: false`; no other keys). `ProfileStore` rejects unknown members, and a wrong `tenant` passes today. (medium) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/test_v1.py:220]
+- [ ] [Review][Patch] The quick start never says that inherited `EVENTSTORE_*` variables override the profile. The manual path (`README.md:264`) and the troubleshooting row (`:372`) do. Add a prerequisite that `env | grep '^EVENTSTORE_'` prints nothing. (low) [README.md:134]
+- [ ] [Review][Patch] "Before you start" does not say that the Gateway URL is a local address that works only while the owner's private port-forward runs on this machine. (low) [README.md:130]
+- [ ] [Review][Patch] The WSL bridge text says to add `"--user", "YOUR-USER"` without saying where. It is a `wsl.exe` option and must come before `"--exec"`. (low) [README.md:340]
+- [ ] [Review][Patch] The handoff folder must be given as an absolute path. `~` and relative answers make `--configfile "HANDOFF/NuGet.Config"` fail. (low) [README.md:129]
+- [ ] [Review][Patch] The owner's handoff block continues after `mkdir "$handoff"` fails, copying into and rewriting an existing folder. Chain the commands with `&&`. (low) [README.md:197]
+- [ ] [Review][Patch] `!…/story-4-17/**/*.log` re-includes any future raw log in that tree, and `/pushall` sessions commit working-tree files broadly. The 49 scanned logs are now tracked, so the negation can be deleted. The redundant `!docs/release/operator-setup-checklist.md` line is harmless and left alone. (low) [.gitignore:441]
+- [ ] [Review][Patch] `withinTarget = elapsedSeconds <= 900` evaluates true for a failed attempt whose `elapsedSeconds` is null. Require `successfulSendCommand &&`. (low) [docs/release/operator-setup-checklist.md:70]
+- [ ] [Review][Patch] The seed terminal-status tuple omits `PublishFailed`, and lists `Failed` and `DeadLettered`, which are not `CommandStatus` values. Use `Rejected`, `PublishFailed` and `TimedOut`. (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/phases.py:351]
+- [ ] [Review][Patch] `--forward` returns 0 with no message when `kubectl port-forward` exits on its own. Report `private-forward-exited` and exit 1. (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/phases.py:380]
+- [ ] [Review][Patch] Every Gateway forward reopens `port-forward.log` in `w` mode, so after a full run only the last phase's diagnostics remain. Use a unique file per forward. (`a` mode would break the `Forwarding from` readiness match.) (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/phases.py:243]
+- [ ] [Review][Patch] `images[0]` is assumed to be the Gateway when its writer marker is checked. Select the entry by name, as the Tenants check does. (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/prepare.py:136]
+- [ ] [Review][Patch] The private-path containment checks are lexical. A `..` segment or a symlinked parent can place credentials inside a repository. Call `.resolve()` before the `is_relative_to` checks (`phases.py:47-48`). (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/prepare.py:126]
+- [ ] [Review][Patch] The packet's adaptation text says "handoff requires /ready success", but handoff checks only Pod and sidecar state. `/ready` and all three Pods Ready are observed in the writer phase. Correct the text. (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/prepare.py:253]
+- [ ] [Review][Patch] `registry_auth()` runs after the private credentials are written. If it fails, orphaned credentials are left behind and that root cannot be reused. Resolve it before `mkdir`. (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/prepare.py:152]
+- [ ] [Review][Patch] Several numbers are run together with their units in the Platform README: "HTTP503", "received401", "within60 seconds;401/403", "sidecar3500", "invocation50002", "HTTP3500/gRPC50001". (low) [Hexalith.Platform/eng/mcpcli-operator-setup/v1/README.md:9]
+- [x] [Review][Defer] The shipped quick start (`24c60ee2…`) has never been run end to end by an operator against a live Gateway. The timed run used `b5d5fa56…`, and the final checks made no Gateway call. (medium) [README.md:123] — deferred: already tracked (`deferred-work.md:736`)
+
+#### Rejected
+
+- Runner tests are not in CI, and the runner hard-codes the McpCli path and workstation links (verification-gap, blind-hunter, edge-case-hunter): low. The runner is deliberately bound to this workstation and to context `jpiquot@local`. A fix needs a new path parameter and Platform CI wiring.
+- Cleanup deletes by name after checking the UID (blind-hunter, edge-case-hunter, acceptance-auditor): low. The task namespace name has a random suffix. A delete with a UID precondition needs a raw-API body and absence polling.
+- Cleanup cannot be rerun after the 180 s wait times out (blind-hunter, edge-case-hunter): low and unlikely. A fix adds a retry branch, and the manual UID cleanup remains available.
+- A missing evidence file is silently left unbound (blind-hunter, edge-case-hunter): low. All nine named files are bound in the reviewed packet, and a fix adds a guard.
+- The token file is briefly mode 0644 before `chmod` (blind-hunter): false. It sits under the private root, which is mode 0700 on disk, so no other user can reach it.
+- The quick start skips the hash and `modules --strict` checks (blind-hunter): low. The owner verifies the hashes before handoff (`README.md:193`), step 1 checks version 1.2.0, and the one-prompt quick start is a human decision.
+- Session statuses are inconsistent (blind-hunter, acceptance-auditor): false. The files follow `checklist:72`. `passed` sessions have all four items evidenced, with assistance in the separate `assisted` flag. The timing run and Desktop attempt3 lack full discovery evidence. The missing stopwatch reading is disclosed at `checklist:14`.
+- The token script bypasses the CLI's lock (blind-hunter): low. Pass 1 already rejected this (EC-11). The `KeyError` happens only if the documented `profile add` is skipped, and a CLI option to read the token from stdin would change production behaviour, which the spec forbids.
+- The story is closed without the AC2 first-time-operator timing (acceptance-auditor): rejected because the fix would edit the spec under review. The exception is a recorded human decision and is deferred (`deferred-work.md:733`).
+- The named-client setups were assisted (acceptance-auditor): low. The checklist discloses them as "Passed with assistance" and the user accepted them. Re-running them needs a new environment.
+- The sessions omit template keys and the Windows build (acceptance-auditor): low. Pass 1 already triaged this (BH-9/EC-19): retained sessions are not rewritten. The README hash is in `readmeSha256AtObservation`, and the WSL distribution and kernel are recorded.
+- The operator token is broader than the plan's scoping (acceptance-auditor): false. EventStore maps `tenants`, `domains` and `permissions` as independent claims (`EventStoreClaimsTransformation.cs:37`), so this is the narrowest token it can express. Tenants writes still need domain roles that a TenantContributor lacks, and the human approved the packet.
+- The timed run counted the wrong command (acceptance-auditor): false. Stopping at the correct Party ID comes later than the first accepted command, so 685 s overstates rather than understates the time. The unintended write is recorded as a miss and was removed with the namespace.
+- The diff includes another story's README line (acceptance-auditor): this is commit `a3989b4`, already deferred as EC-26 (`deferred-work.md:745`).
+- A handoff near the review's expiry gets a short-lived token (edge-case-hunter): low and unlikely. A fix adds a guard.
+- `http.client.HTTPException` is not caught (edge-case-hunter): maybe-false, low. No one has shown it can be reached, and the phase stops loudly.
+- Transport errors on read-only query POSTs end the phase (edge-case-hunter): low and unlikely once the forward is up. A fix adds a parameter.
+- The refusal code is missing from `observations.jsonl` (edge-case-hunter): low. It is printed on stderr, and a fix adds a branch.
+- A null `payload` or null committed-sequence field could crash the runner (edge-case-hunter): maybe-false, low. No one has shown it can be reached.
+- A port-forward that exits at once waits 30 s before the phase stops (edge-case-hunter): low. The forward log keeps the kubectl error, and a fix adds a guard.
+- Route keys are not checked against their values (edge-case-hunter): low. The fixture is under this repository's control, and a fix adds a guard.
+- Weak checks in `validate_manifests`: namespace precedence, named `targetPort`, `initContainers` and credential env names (edge-case-hunter ×4): false. The validator checks only the documents `prepare` generates itself, and those never contain these shapes.
