@@ -249,3 +249,11 @@ existing package profile and immutable configuration qualification scope.
   tests; lane README; CI provenance implementation; and its focused test file.
   `git diff --check` passes and all ten original review triage rows remain.
   No workflow initialization was expanded, and no commit or push was performed.
+
+
+### Concurrent selector regression recovery — 2026-10-31
+
+- Exact CI41191431042 at19de453867b0599c673596870d1b77a4fdcc9047 fails only `ci / aspire-tests`, job124510090166, during Prepare Aspire tier. Retained `Hexalith.Tenants-build.stdout.txt` identifies two CS0246 errors in TenantCatalogDeclarations.cs at14/20: RouteOperationContract is absent from the qualified3.128.4 package API. This is a source-selection failure before live execution, not a transient test failure.
+- Concurrent evidence commit19de453 changed only the Tenants selector relevant to this lane, from qualified5c7b64a0aaef330bb37ea6da8dea593ea70e4628 to older7ec6ed72df046393c3cee39cf6dc529c15c8f7dc. The previous full CI41188956410 at40a8969862e035cc40bf122774c7b53d0ab0b071 succeeds.
+- Restore the root-selected qualified descendant3aa86b374ba9004d401978141aa7fff0237485a0. `git merge-base --is-ancestor 5c7b64a0aaef330bb37ea6da8dea593ea70e4628 3aa86b374ba9004d401978141aa7fff0237485a0` passes. `git diff --exit-code` between those revisions for src, Directory.Build.props/targets, Directory.Packages.props and global.json is empty. The descendant changes only test callback coordination and already passed Tenants CI41187756427 and source-ref41187756262.
+- Only the owning McpCli gitlink and this account change; all concurrent operational evidence bytes, approved vectors, package cohort, pipeline gates, production sources and authentication/admission checks are preserved. The nested Tenants checkout remains uninitialized. New exact-source hosted CI remains to be observed after push.
