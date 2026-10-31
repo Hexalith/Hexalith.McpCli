@@ -80,6 +80,15 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     {
         string receipt = Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT")
             ?? throw new InvalidOperationException("The isolated wrapper omitted its pre-application Redis backup receipt.");
+        if (bool.TryParse(Environment.GetEnvironmentVariable("Topology__UsePackagedGateway"), out bool packaged) && packaged)
+        {
+            string commit = Environment.GetEnvironmentVariable("MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT")
+                ?? throw new InvalidOperationException("The published gateway profile omitted its restored package source commit.");
+            using var packagedHttp = new HttpClient { BaseAddress = GatewayEndpoint, Timeout = TimeSpan.FromSeconds(30) };
+            packagedHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateLiveIdentity());
+            await ProjectionWriterBootstrap.ActivateAsync(packagedHttp, receipt, commit, cancellationToken).ConfigureAwait(false);
+            return;
+        }
         var start = new ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
         foreach (string argument in new[] { "-C", Path.Combine(RepositoryProjectPaths.GetRepositoryRoot(), "references", "Hexalith.EventStore"), "rev-parse", "HEAD" })
             start.ArgumentList.Add(argument);

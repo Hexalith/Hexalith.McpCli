@@ -137,6 +137,7 @@ public sealed class TopologyLaunchTests : IDisposable
     [Theory]
     [InlineData("PreflightOnly")]
     [InlineData("InspectComposition")]
+    [InlineData("UsePackagedGateway")]
     public async Task NonBooleanTopologyFlagStopsLaunch(string flag)
     {
         string assembly = PrepareHost();
@@ -274,18 +275,27 @@ public sealed class TopologyLaunchTests : IDisposable
     }
 
     /// <summary>Checks actual composed app/sidecar environments and shared configuration before startup.</summary>
-    [Fact]
-    public async Task ComposedResourcesKeepTokensAclAndGatewayContentRoot()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ComposedResourcesKeepTokensAclAndGatewayContentRoot(bool usePackagedGateway)
     {
         string assembly = PrepareHost();
         PrepareSources();
+        string packageHost = Path.Combine(_root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "Hexalith.McpCli.EventStoreGateway.TestHost.csproj");
+        Directory.CreateDirectory(Path.GetDirectoryName(packageHost)!);
+        File.WriteAllText(packageHost, "<Project />");
+        Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(packageHost)!, "Properties"));
+        File.Copy(Path.Combine(_root, "references", "Hexalith.EventStore", "src", "Hexalith.EventStore", "Properties", "launchSettings.json"),
+            Path.Combine(Path.GetDirectoryName(packageHost)!, "Properties", "launchSettings.json"));
         const string signingKey = "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
         using var available = new TcpListener(IPAddress.Loopback, 0);
         available.Start();
         string gatewayPort = ((IPEndPoint)available.LocalEndpoint).Port.ToString(System.Globalization.CultureInfo.InvariantCulture);
         available.Stop();
         var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true,
-            extraArguments: ["--Dapr:PlacementHostAddress=127.0.0.1:6050", "--Dapr:SchedulerHostAddress=127.0.0.1:6060"]);
+            extraArguments: ["--Dapr:PlacementHostAddress=127.0.0.1:6050", "--Dapr:SchedulerHostAddress=127.0.0.1:6060",
+                $"--Topology:UsePackagedGateway={usePackagedGateway}"]);
         Assert.True(result.ExitCode == 0, result.Stderr + result.Stdout);
         Assert.Equal(string.Empty, result.Stderr);
         Assert.DoesNotContain(signingKey, result.Stdout);
@@ -295,17 +305,30 @@ public sealed class TopologyLaunchTests : IDisposable
             document.RootElement.GetProperty("appChannelTokenParameters").EnumerateArray().Select(parameter => parameter.GetString()));
         JsonElement[] resources = document.RootElement.GetProperty("resources").EnumerateArray().ToArray();
         Assert.Equal(new[] { "eventstore", "tenants", "parties" }, resources.Select(resource => resource.GetProperty("name").GetString()));
+        string? proofKey = resources.Single(resource => resource.GetProperty("name").GetString() == "tenants")
+            .GetProperty("streamReadPublicKeyHash").GetString();
+        if (usePackagedGateway) Assert.NotNull(proofKey);
+        else Assert.Null(proofKey);
+        Assert.Equal(proofKey, resources.Single(resource => resource.GetProperty("name").GetString() == "eventstore")
+            .GetProperty("streamReadPublicKeyHash").GetString());
         Assert.Equal(3, resources.Select(resource => resource.GetProperty("tokenHash").GetString()).Distinct(StringComparer.Ordinal).Count());
         foreach (JsonElement resource in resources)
         {
             Assert.Equal(64, resource.GetProperty("appTokenLength").GetInt32());
             Assert.Equal(64, resource.GetProperty("sidecarTokenLength").GetInt32());
             Assert.True(resource.GetProperty("tokensMatch").GetBoolean());
-            Assert.Equal(Path.Combine(host, "DaprComponents", "accesscontrol.yaml"), resource.GetProperty("configuration").GetString());
+            Assert.Equal(Path.Combine(host, "DaprComponents", usePackagedGateway ? "accesscontrol.published.yaml" : "accesscontrol.yaml"), resource.GetProperty("configuration").GetString());
             Assert.Equal("127.0.0.1:6050", resource.GetProperty("placementHostAddress").GetString());
             Assert.Equal("127.0.0.1:6060", resource.GetProperty("schedulerHostAddress").GetString());
             Assert.Equal("Development", resource.GetProperty("aspnetcoreEnvironment").GetString());
             Assert.Equal("Development", resource.GetProperty("dotnetEnvironment").GetString());
+            if (usePackagedGateway)
+            {
+                Assert.Equal(resource.GetProperty("name").GetString(), resource.GetProperty("workload").GetString());
+                Assert.Equal(resource.GetProperty("name").GetString(), resource.GetProperty("workloadAudience").GetString());
+            }
+            Assert.Equal(usePackagedGateway && resource.GetProperty("name").GetString() == "eventstore" ? "tenants,global-administrators" : null,
+                resource.GetProperty("streamReadAllowedDomains").GetString());
             JsonElement components = resource.GetProperty("components");
             Assert.Equal(2, components.EnumerateObject().Count());
             Assert.Equal(Path.Combine(host, "DaprComponents", "statestore.yaml"), components.GetProperty("statestore").GetString());
@@ -324,7 +347,8 @@ public sealed class TopologyLaunchTests : IDisposable
                 "parties" => "Hexalith.Parties",
                 _ => throw new InvalidOperationException("Unexpected resource."),
             };
-            Assert.Equal(Path.Combine(_root, "references", module, "src", module, module + ".csproj"), resource.GetProperty("projectPath").GetString());
+            Assert.Equal(usePackagedGateway && module == "Hexalith.EventStore" ? packageHost
+                : Path.Combine(_root, "references", module, "src", module, module + ".csproj"), resource.GetProperty("projectPath").GetString());
             JsonElement authentication = resource.GetProperty("authentication");
             Assert.Equal(string.Empty, authentication.GetProperty("authority").GetString());
             Assert.Equal("mcpcli-live-tests", authentication.GetProperty("issuer").GetString());
@@ -357,6 +381,19 @@ public sealed class TopologyLaunchTests : IDisposable
             }
             else Assert.Empty(settings.EnumerateObject());
         }
+    }
+
+    /// <summary>An explicit package profile never silently substitutes the native gateway when its owned host is absent.</summary>
+    [Fact]
+    public async Task MissingPackagedGatewayStopsBeforeResourceCreation()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        string project = Path.Combine(_root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "Hexalith.McpCli.EventStoreGateway.TestHost.csproj");
+        var result = await InvokeAsync(assembly, new string('k', 32), "Dapr must not run", extraArgument: "--Topology:UsePackagedGateway=true");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal($"Required selected Gateway project '{project}' is missing; no alternate host was selected.{Environment.NewLine}", result.Stderr);
     }
 
     private string PrepareHost()

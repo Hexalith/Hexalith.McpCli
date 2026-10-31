@@ -19,14 +19,16 @@ import tempfile
 import time
 import uuid
 import xml.etree.ElementTree as ET
+from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
-# Published EventStore 3.128.4 includes the routing contracts. Tenants deliberately
-# compiles against the same sibling EventStore source as the root server under test.
-SOURCE_EVENTSTORE = {'Hexalith.Tenants'}
+# This CI lane explicitly qualifies the published SDK cohort. Native source catalog
+# activation remains a separate composition; never mix its gateway with package hosts.
+EVENTSTORE_COHORT = '3.128.4'
+PACKAGE_GATEWAY = 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj'
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
@@ -38,7 +40,7 @@ def sanitized(text: str) -> str:
     """Retain diagnostics without copying credentials or PEM material into artifacts."""
     text = re.sub(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', '[REDACTED PEM]', text, flags=re.S)
     text = re.sub(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', '[REDACTED JWT]', text)
-    text = re.sub(r'(?i)((?P<quote>\\+)"[^"\r\n]*SigningKey(?P=quote)"\s*:\s*)(?P=quote)"[^"\r\n]*(?P=quote)"',
+    text = re.sub(r'(?i)((?P<quote>\\+)"[^"\r\n]*(?:SigningKey|PrivateKey)(?P=quote)"\s*:\s*)(?P=quote)"[^"\r\n]*(?P=quote)"',
                   lambda match: match[1] + match['quote'] + '"[REDACTED]' + match['quote'] + '"', text)
     # A JSON string token can also contain an escaped JSON diagnostic or command.
     def redact_string(match):
@@ -52,11 +54,11 @@ def sanitized(text: str) -> str:
             return match.group()
     text = re.sub(r'"(?:[^"\\]|\\.)*"', redact_string, text)
     # Preserve all quote/escape delimiters when the surrounding text is not a JSON document.
-    text = re.sub(r'(?i)("(?:[^"\\]|\\.)*SigningKey"\s*:\s*)"(?:[^"\\]|\\.)*"',
+    text = re.sub(r'(?i)("(?:[^"\\]|\\.)*(?:SigningKey|PrivateKey)"\s*:\s*)"(?:[^"\\]|\\.)*"',
                   r'\1"[REDACTED]"', text)
-    text = re.sub(r'(?i)(SigningKey(?:=|:|\s)+)[^\s,\]"}]+', r'\1[REDACTED]', text)
+    text = re.sub(r'(?i)((?:SigningKey|PrivateKey)(?:=|:|\s)+)[^\s,\]"}]+', r'\1[REDACTED]', text)
     for key, value in os.environ.items():
-        if value and len(value) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY', key, re.I):
+        if value and len(value) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY', key, re.I):
             text = text.replace(value, '[REDACTED]')
     return text
 
@@ -73,6 +75,12 @@ def sanitized_xml(text: str) -> str:
         return sanitized(text)
     changed = False
     for element in root.iter():
+        private_element = re.search(r'(?i)(SigningKey|PrivateKey)$', element.tag) is not None
+        private_setting = any(re.search(r'(?i)(SigningKey|PrivateKey)$', value)
+                              for key, value in element.attrib.items() if key.lower() in ('name', 'key'))
+        if (private_element or private_setting) and element.text:
+            element.text = '[REDACTED]'
+            changed = True
         for field in ('text', 'tail'):
             value = getattr(element, field)
             if value is not None:
@@ -81,7 +89,8 @@ def sanitized_xml(text: str) -> str:
                     setattr(element, field, redacted)
                     changed = True
         for key, value in element.attrib.items():
-            redacted = sanitized(value)
+            redacted = '[REDACTED]' if re.search(r'(?i)(SigningKey|PrivateKey)$', key) \
+                or private_setting and key.lower() == 'value' else sanitized(value)
             if redacted != value:
                 element.set(key, redacted)
                 changed = True
@@ -171,6 +180,95 @@ def require_contract() -> None:
         raise ValueError(f'ASPIRE_TEST_PROJECT must be {PROJECT}.')
     if os.environ.get('TEST_PLATFORM', 'microsoft-testing-platform') != 'microsoft-testing-platform':
         raise ValueError('TEST_PLATFORM must be microsoft-testing-platform.')
+
+
+def restored_cohort(project: Path, required: str) -> dict:
+    """Verify the restored graph and deployed EventStore assemblies against their archives."""
+    assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
+    libraries = {name: item for name, item in assets['libraries'].items()
+                 if name.lower().startswith('hexalith.eventstore.')}
+    if required + '/' + EVENTSTORE_COHORT not in libraries or any(
+            not name.endswith('/' + EVENTSTORE_COHORT) or item.get('type') != 'package'
+            for name, item in libraries.items()):
+        raise ValueError(f'{project}: restored assets must contain only the exact published EventStore package cohort.')
+    target = assets['targets']['net10.0']
+    output = project.parent / 'bin/Release/net10.0'
+    packages = {}
+    for identity in sorted(libraries):
+        name, version = identity.split('/')
+        archive_name = name.lower() + '.' + version + '.nupkg'
+        folder = next((Path(root) / identity.lower() for root in assets['packageFolders']
+                       if (Path(root) / identity.lower() / archive_name).is_file()), None)
+        if folder is None:
+            raise ValueError(f'The restored package archive is unavailable: {identity}.')
+        archive_path = folder / archive_name
+        with ZipFile(archive_path) as archive:
+            nuspecs = [entry for entry in archive.namelist() if entry.endswith('.nuspec')]
+            if len(nuspecs) != 1:
+                raise ValueError(f'Package archive must contain one nuspec: {identity}.')
+            nuspec = archive.read(nuspecs[0])
+            if (folder / (name.lower() + '.nuspec')).read_bytes() != nuspec:
+                raise ValueError(f'Extracted package metadata differs from its archive: {identity}.')
+            metadata = ET.fromstring(nuspec).find('{*}metadata')
+            repository = metadata.find('{*}repository') if metadata is not None else None
+            commit = repository.get('commit', '') if repository is not None else ''
+            if metadata is None or metadata.findtext('{*}id') != name or metadata.findtext('{*}version') != version \
+                    or not re.fullmatch('[0-9a-f]{40}', commit):
+                raise ValueError(f'Package archive must identify its exact published identity and source: {identity}.')
+            binaries = {}
+            for asset in sorted(target[identity].get('runtime', {})):
+                if not asset.lower().endswith('.dll'):
+                    continue
+                expected = archive.read(asset)
+                if (folder / asset).read_bytes() != expected:
+                    raise ValueError(f'Extracted package binary differs from its archive: {identity}/{asset}.')
+                deployed = output / Path(asset).name
+                if deployed.read_bytes() != expected:
+                    raise ValueError(f'Deployed EventStore binary differs from its archive: {deployed}.')
+                binaries[Path(asset).name] = hashlib.sha256(expected).hexdigest()
+            packages[identity] = {'sourceCommit': commit, 'sha256': hashlib.sha256(archive_path.read_bytes()).hexdigest(),
+                                  'binaries': binaries}
+    owned = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+             for path in sorted(output.iterdir()) if path.is_file() and path.suffix in ('.dll', '.json')}
+    return {'packages': packages, 'output': owned}
+
+
+def gateway_package_provenance() -> dict:
+    """Bind every launched host, the restored archives and actual configuration to one receipt."""
+    gateway = restored_cohort(ROOT / PACKAGE_GATEWAY, 'Hexalith.EventStore.Gateway')
+    identity = 'Hexalith.EventStore.Gateway/' + EVENTSTORE_COHORT
+    package = gateway['packages'][identity]
+    domains = {module: restored_cohort(ROOT / 'references' / module / 'src' / module / (module + '.csproj'),
+                                      'Hexalith.EventStore.DomainService')
+               for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
+    source = ROOT / 'references/Hexalith.EventStore'
+    commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True, timeout=10).strip()
+    if not re.fullmatch('[0-9a-f]{40}', commit):
+        raise ValueError('The selected native configuration source identity is unavailable.')
+    native = source / 'src/Hexalith.EventStore'
+    host = (ROOT / PACKAGE_GATEWAY).parent
+    deployed = host / 'bin/Release/net10.0/appsettings.gateway.json'
+    if (native / 'appsettings.json').read_bytes() != deployed.read_bytes() \
+            or (native / 'Properties/launchSettings.json').read_bytes() != (host / 'Properties/launchSettings.json').read_bytes():
+        raise ValueError('The published gateway configuration differs from its selected native defaults or launch profiles.')
+    paths = [native / 'appsettings.json', native / 'Properties/launchSettings.json', deployed,
+             host / 'Properties/launchSettings.json', ROOT / 'tests/Hexalith.McpCli.AppHost/appsettings.json']
+    paths.extend(sorted((ROOT / 'tests/Hexalith.McpCli.AppHost/DaprComponents').glob('*.yaml')))
+    for module in ('Hexalith.Tenants', 'Hexalith.Parties'):
+        directory = ROOT / 'references' / module / 'src' / module
+        paths.extend(sorted(directory.glob('appsettings*.json')))
+        paths.extend(sorted((directory / 'bin/Release/net10.0').glob('appsettings*.json')))
+    configuration = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
+    return {'profile': 'published', 'version': EVENTSTORE_COHORT, 'sourceCommit': package['sourceCommit'],
+            'sha256': package['sha256'], 'gatewayHost': gateway, 'domainHosts': domains,
+            'configurationSourceCommit': commit, 'configuration': configuration}
+
+
+def require_prepared_provenance(prepared: dict) -> dict:
+    actual = gateway_package_provenance()
+    if prepared.get('gateway') != actual:
+        raise ValueError('The prepared gateway package identity or bytes changed before isolated execution.')
+    return actual
 
 
 def prepare(evidence: Path) -> None:
@@ -279,16 +377,19 @@ def prepare(evidence: Path) -> None:
             receipt['sources'].append(source)
         for source in receipt['sources']:
             module = source['module']
-            project = f'src/{module}/{module}.csproj'
-            properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true']
-            if module in SOURCE_EVENTSTORE:
-                properties.append('-p:HexalithEventStoreFromSource=true')
+            project = PACKAGE_GATEWAY if module == 'Hexalith.EventStore' else f'src/{module}/{module}.csproj'
+            working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
+            properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
+                          '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
-                30, evidence / (module + '-eventstore-version'), cwd=ROOT / 'references' / module)
-            command = ['dotnet', 'build', f'src/{module}/{module}.csproj', '--configuration', 'Release', '-warnaserror', '-m:1',
+                30, evidence / (module + '-eventstore-version'), cwd=working)
+            if source['HexalithEventStoreVersion'] != EVENTSTORE_COHORT:
+                raise ValueError(f'{module} did not select the exact published EventStore cohort.')
+            command = ['dotnet', 'build', project, '--configuration', 'Release', '-warnaserror', '-m:1',
                        *properties]
-            bounded(command, 300, evidence / (module + '-build'), cwd=ROOT / 'references' / module)
+            bounded(command, 300, evidence / (module + '-build'), cwd=working)
+        receipt['gateway'] = gateway_package_provenance()
         python = private / 'venv/bin/python'
         bounded([sys.executable, '-m', 'venv', str(private / 'venv')], 60, evidence / 'python-venv')
         bounded([str(python), '-m', 'pip', 'install', '--disable-pip-version-check', '-r', str(ROOT / 'tools/conformance-vectors/v1/requirements.txt')],
@@ -365,6 +466,7 @@ def run(evidence: Path) -> None:
         prepared = json.loads(source.read_text())
         if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
             raise ValueError('Current successful preparation receipt is required.')
+        gateway = require_prepared_provenance(prepared)
         prepared_runtime = Path(prepared['runtime']).resolve()
         python = Path(prepared['python'])
         if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
@@ -381,6 +483,8 @@ def run(evidence: Path) -> None:
             if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
                 del environment[key]
         environment.update(MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
+                           Topology__UsePackagedGateway='true',
+                           MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT=gateway['sourceCommit'],
                            PATH=str(python.parent) + os.pathsep + prepared['path'])
         generation = evidence / report['runId']
         generation.mkdir()
@@ -430,7 +534,8 @@ def run(evidence: Path) -> None:
             if not isinstance(error, Exception):
                 print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
                 raise
-        # Smoke stays independent and runs even after a vector assertion failure.
+        # Smoke stays independent; even a long or failed vector lane cannot reuse stale inputs.
+        require_prepared_provenance(prepared)
         smoke = generation / 'smoke'
         smoke.mkdir()
         bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),

@@ -35,6 +35,21 @@ public sealed class TopologyConfigurationTests : IDisposable
     [Fact]
     public void DeclaredDirectRootSourcesPass() => TopologyConfiguration.ValidateWorkspace(_root);
 
+    /// <summary>The package host is explicit and run-only; default and publish keep the native project.</summary>
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void GatewayProjectSelectionPrecedesRegistration(bool packaged, bool publish)
+    {
+        string package = Path.Combine(_root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "Hexalith.McpCli.EventStoreGateway.TestHost.csproj");
+        Directory.CreateDirectory(Path.GetDirectoryName(package)!);
+        File.WriteAllText(package, "<Project />");
+        string native = Path.Combine(_root, "references", "Hexalith.EventStore", "src", "Hexalith.EventStore", "Hexalith.EventStore.csproj");
+        Assert.Equal(packaged && !publish ? package : native, TopologyConfiguration.ResolveGatewayProject(_root, packaged, publish));
+    }
+
     /// <summary>Disabled or mismatched bootstrap cannot silently create a different authority.</summary>
     [Theory]
     [InlineData(false, "mcpcli-live-admin")]

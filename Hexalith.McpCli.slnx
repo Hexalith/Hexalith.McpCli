@@ -7,6 +7,7 @@
     <Project Path="src/Hexalith.McpCli/Hexalith.McpCli.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj" />
     <Project Path="tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" />
     <Project Path="tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj" />
     <Project Path="tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj" />

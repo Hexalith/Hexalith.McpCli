@@ -75,6 +75,7 @@
     "Hexalith.Tenants.Contracts": "5.10.0"
   },
   "testPackages": [
+    "Hexalith.EventStore.Gateway",
     "Microsoft.NET.Test.Sdk",
     "xunit.v3",
     "Shouldly",

@@ -21,6 +21,8 @@ string? signingKey = builder.Configuration["Authentication:JwtBearer:SigningKey"
 int gatewayPort;
 bool preflightOnly;
 bool inspectComposition;
+bool usePackagedGateway;
+string gatewayProject;
 var routes = new Dictionary<string, string>();
 var topicOverrides = new Dictionary<string, string>();
 try
@@ -28,6 +30,7 @@ try
     gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", 3501);
     preflightOnly = builder.Configuration.GetValue<bool>("Topology:PreflightOnly");
     inspectComposition = builder.Configuration.GetValue<bool>("Topology:InspectComposition");
+    usePackagedGateway = builder.Configuration.GetValue<bool>("Topology:UsePackagedGateway") && !builder.ExecutionContext.IsPublishMode;
     if (!preflightOnly && !inspectComposition && Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_TOPOLOGY") != "1")
         throw new InvalidOperationException("Live topology tests require tools/live-topology/run-isolated.py; refusing to use host Dapr or Redis.");
     foreach (IConfigurationSection route in builder.Configuration.GetSection("Gateway:Routes").GetChildren())
@@ -48,6 +51,8 @@ try
     }
     TopologyConfiguration.ValidateGatewayPort(gatewayPort);
     TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
+    gatewayProject = TopologyConfiguration.ResolveGatewayProject(RepositoryProjectPaths.GetRepositoryRoot(),
+        usePackagedGateway, builder.ExecutionContext.IsPublishMode);
     TopologyConfiguration.ValidateSigningKey(signingKey);
     TopologyConfiguration.ValidateBootstrap(builder.Configuration.GetValue<bool>("Tenants:BootstrapGlobalAdminEnabled"),
         builder.Configuration["Tenants:BootstrapGlobalAdminUserId"]);
@@ -64,13 +69,13 @@ catch (Exception exception) when (exception is InvalidOperationException or Time
 if (preflightOnly) return 0;
 
 string components = Path.Combine(builder.AppHostDirectory, "DaprComponents");
-string access = Path.Combine(components, "accesscontrol.yaml");
+string access = Path.Combine(components, usePackagedGateway ? "accesscontrol.published.yaml" : "accesscontrol.yaml");
 string? placement = builder.Configuration["Dapr:PlacementHostAddress"];
 string? scheduler = builder.Configuration["Dapr:SchedulerHostAddress"];
 IResourceBuilder<ParameterResource> key = builder.AddParameter("live-test-signing-key", () => signingKey!, secret: true);
 
 // Load the test-owned settings instead of the source host's sample Development registrations.
-IResourceBuilder<ProjectResource> gateway = builder.AddHexalithEventStoreGatewayProject()
+IResourceBuilder<ProjectResource> gateway = builder.AddProject("eventstore", gatewayProject)
     .WithEnvironment("ASPNETCORE_CONTENTROOT", builder.AppHostDirectory);
 foreach ((string name, string value) in routes.Concat(topicOverrides))
     gateway.WithEnvironment(name, value);
@@ -93,6 +98,20 @@ IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(top
     daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
     .WithGeneratedEventStoreAppChannelToken();
 
+// Tenants proves its current administrator and owner state through the real,
+// authenticated stream boundary. Private proof material exists only for this run.
+if (usePackagedGateway)
+{
+    using RSA tenantSourceKey = RSA.Create(2048);
+    string tenantPrivateKey = Convert.ToBase64String(tenantSourceKey.ExportPkcs8PrivateKey());
+    IResourceBuilder<ParameterResource> tenantProof = builder.AddParameter("live-tenants-source-key", () => tenantPrivateKey, secret: true);
+    tenants.WithEnvironment("Authentication__BoundStreamRead__PrivateKey", tenantProof);
+    gateway.WithEnvironment("Authentication__BoundStreamRead__PublicKeys__tenants", Convert.ToBase64String(tenantSourceKey.ExportSubjectPublicKeyInfo()))
+        .WithEnvironment("Authentication__BoundStreamRead__AllowedDomains__tenants", "tenants,global-administrators")
+        .WithEnvironment("Authentication__DaprInternal__Audience", "eventstore")
+        .WithEnvironment("Authentication__DaprInternal__AllowedCallers__0", "tenants");
+}
+
 foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
 {
     resource.WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
@@ -104,6 +123,10 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
         .WithEnvironment("Authentication__JwtBearer__AllowedAlgorithms__0", "HS256")
         .WithEnvironment("Authentication__JwtBearer__SigningKey", key)
         .WithEnvironment("Authentication__JwtBearer__RequireHttpsMetadata", "false");
+    if (usePackagedGateway)
+        resource.WithEnvironment("Authentication__WorkloadIssuer__Workload", resource.Resource.Name)
+            .WithEnvironment("Authentication__Workload__Audience", resource.Resource.Name)
+            .WithEnvironment("Authentication__Workload__AllowedCallers__0", "eventstore");
     foreach (EndpointAnnotation endpoint in resource.Resource.Annotations.OfType<EndpointAnnotation>())
     {
         endpoint.Port = null;
@@ -157,6 +180,10 @@ if (inspectComposition)
             contentRoot = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_CONTENTROOT")),
             bootstrapEnabled = await ValueAsync(appEnvironment.GetValueOrDefault("Tenants__BootstrapGlobalAdminEnabled")),
             bootstrapUserId = await ValueAsync(appEnvironment.GetValueOrDefault("Tenants__BootstrapGlobalAdminUserId")),
+            streamReadPublicKeyHash = await StreamReadKeyHashAsync(appEnvironment),
+            streamReadAllowedDomains = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__BoundStreamRead__AllowedDomains__tenants")),
+            workload = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__WorkloadIssuer__Workload")),
+            workloadAudience = await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__Workload__Audience")),
         });
     }
     Console.WriteLine(JsonSerializer.Serialize(new
@@ -185,4 +212,15 @@ static string? Hash(string? value) => value is null ? null : Convert.ToHexString
 
 static async Task<string?> ValueAsync(object? value) => value is IValueProvider provider
     ? await provider.GetValueAsync(CancellationToken.None).ConfigureAwait(false) : value?.ToString();
+
+static async Task<string?> StreamReadKeyHashAsync(Dictionary<string, object> environment)
+{
+    string? publicKey = await ValueAsync(environment.GetValueOrDefault("Authentication__BoundStreamRead__PublicKeys__tenants"));
+    if (publicKey is not null) return Hash(publicKey);
+    string? privateKey = await ValueAsync(environment.GetValueOrDefault("Authentication__BoundStreamRead__PrivateKey"));
+    if (privateKey is null) return null;
+    using RSA key = RSA.Create();
+    key.ImportPkcs8PrivateKey(Convert.FromBase64String(privateKey), out _);
+    return Hash(Convert.ToBase64String(key.ExportSubjectPublicKeyInfo()));
+}
 return 0;

@@ -25,6 +25,16 @@ internal static class TopologyConfiguration
     /// <summary>The root source checkouts required by the published helpers.</summary>
     internal static readonly string[] Modules = ["Hexalith.EventStore", "Hexalith.Tenants", "Hexalith.Parties"];
 
+    /// <summary>Resolves the explicit package compatibility host before registration; publish keeps the native host.</summary>
+    internal static string ResolveGatewayProject(string root, bool usePackagedGateway, bool isPublishMode)
+    {
+        string project = usePackagedGateway && !isPublishMode
+            ? Path.Combine(root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "Hexalith.McpCli.EventStoreGateway.TestHost.csproj")
+            : Path.Combine(root, "references", "Hexalith.EventStore", "src", "Hexalith.EventStore", "Hexalith.EventStore.csproj");
+        return File.Exists(project) ? project
+            : throw new InvalidOperationException($"Required selected Gateway project '{project}' is missing; no alternate host was selected.");
+    }
+
     /// <summary>Requires each server to come from its declared direct root checkout.</summary>
     internal static void ValidateWorkspace(string root)
     {

@@ -172,14 +172,39 @@ Local and self-hosted environments retain operator-managed namespace permissions
 Every live child still proves all four private namespaces; setup or probe failure
 fails preparation.
 
-`prepare-ci.sh` first validates all three declared direct Git source checkouts,
-then builds EventStore, Tenants and Parties from their own working directories.
-Each server build has its own 300-second deadline and uses the documented
-`UseHexalithProjectReferences=false` / `UseNuGetDeps=true` Release switches.
-Tenants also sets `HexalithEventStoreFromSource=true` so it deliberately compiles
-against the same sibling EventStore source as the root server under test.
-The published `Hexalith.EventStore.Contracts` 3.128.3 package now includes the
-routing contracts; the approved source exception keeps those builds aligned.
+`prepare-ci.sh` validates all three declared direct Git source checkouts, then
+explicitly selects the published EventStore **3.128.4** compatibility profile.
+It builds the owned `Hexalith.McpCli.EventStoreGateway.TestHost` and both domain
+hosts with `UseHexalithProjectReferences=false`, `UseNuGetDeps=true`,
+`HexalithEventStoreFromSource=false` and the exact EventStore cohort version.
+Each server build has its own 300-second deadline. Native gateway appsettings
+provide the lowest-priority defaults, while the test AppHost's routes, normal
+configuration overrides, real JWT validation and sidecar tokens remain effective.
+Matching launch profiles preserve Aspire's HTTP/HTTPS endpoint discovery.
+The explicit package profile gives Tenants a fresh run-owned RSA proof key and
+the gateway its matching public trust, restricted to `tenants` and
+`global-administrators`. Exact workload audiences and caller allowlists retain
+the actual assertion validator. Only Tenants receives the additional sidecar
+permission to POST `/api/v1/streams/read/workload` through the published-only
+`accesscontrol.published.yaml`. Native/default and publish ACL files retain their
+existing permissions. Persisted administrator and owner authority still come from
+that authenticated source boundary.
+
+Preparation validates the actual restored EventStore package version/type closure
+in both domain hosts and the gateway. It reads identity/source from each archive's
+embedded nuspec and compares extracted and deployed EventStore DLLs to the same
+archive contents. The receipt seals those archive hashes, all launched host DLL
+and JSON hashes, the linked native configuration source commit and hashes of the
+used settings, launch profiles and sidecar configurations. Execution rechecks this
+receipt before the vector lane and again immediately before independent smoke,
+then passes explicit
+`Topology__UsePackagedGateway=true` plus the package source commit privately to
+both the 21-vector lane and independent smoke. Writer activation binds that
+deployed package commit to the genuine pre-application Redis backup. None of the
+authority, writer, readiness, persisted-state or owned-cleanup assertions change.
+The test host is neither packable nor publishable and is absent from release
+inventory. Direct native/default and publish models retain the native gateway;
+this compatibility lane does not qualify newer native catalog compositions.
 Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
@@ -188,12 +213,10 @@ installed in a task-owned virtual environment. The existing bootstrap extracts
 the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 `RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
-status, each source build's `HexalithEventStoreVersion`, tool versions and
-executable hashes are retained. Only McpCli's own restore pins EventStore
-3.128.3. Source servers follow their own configuration and the pinned Builds
-catalog. For package-based builds, `preparation.json` records the resolved
-EventStore package version. Tenants' recorded value stamps the sibling EventStore
-source, whose commit is recorded in the EventStore source entry.
+status, each host's selected `HexalithEventStoreVersion`, gateway provenance,
+tool versions and executable hashes are retained. Source-checkout commits record
+the linked defaults and domain code; the separate gateway package source commit
+identifies the deployed gateway implementation.
 
 From the repository root, after the focused Release checks and the workflow's
 full `dapr init --runtime-version 1.18.7`, run the same preparation and execution

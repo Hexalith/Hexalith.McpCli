@@ -17,6 +17,7 @@ import tempfile
 import time
 import unittest
 from unittest.mock import patch
+from zipfile import ZipFile
 
 HERE = Path(__file__).resolve().parent
 
@@ -58,7 +59,7 @@ if name == 'dotnet':
         if mode in ('build-failure', 'build-stdout-failure') and 'Tenants' in args[1]:
             print('named source build failure', file=sys.stdout if mode == 'build-stdout-failure' else sys.stderr); sys.exit(23)
     elif args[0] == 'msbuild':
-        print('3.127.0' if pathlib.Path.cwd().name == 'Hexalith.Parties' else '3.128.0')
+        print('3.128.3' if mode == 'wrong-package-cohort' else '3.128.4')
     sys.exit(0)
 if name == 'dapr':
     print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.18.2') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
@@ -121,6 +122,9 @@ mode = os.environ.get('FIXTURE_MODE', '')
 with (root / 'runner-environment.jsonl').open('a') as log:
     log.write(json.dumps([pathlib.Path(__file__).name,
                           sorted(key for key in os.environ if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')))]) + '\n')
+with (root / 'runner-gateway-environment.jsonl').open('a') as log:
+    log.write(json.dumps({'profile': os.environ.get('Topology__UsePackagedGateway'),
+                         'sourceCommit': os.environ.get('MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT')}) + '\n')
 def owned(name, base=runtime):
     path = base / 'runs' / name; path.mkdir(parents=True)
     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
@@ -194,6 +198,8 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (child / 'tests.xml').write_text('<test>' + (escape(content) if mode == 'generation-xml-secrets' else content) + '</test>')
     if mode != 'missing-vectors':
         (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
+    if mode == 'tamper-after-vectors':
+        (root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll').write_bytes(b'changed-after-vector-lane')
     # Like run-vectors.py, every failed lane result exits 1.
     sys.exit(124 if mode == 'lane-timeout' else 19 if mode == 'vector-exit' else 1 if mode in (
         'failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
@@ -253,6 +259,50 @@ class CiHooksTests(unittest.TestCase):
         tests = self.root / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
         tests.parent.mkdir(parents=True)
         tests.touch()
+        gateway = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost'
+        (gateway / 'obj').mkdir(parents=True)
+        (gateway / 'Hexalith.McpCli.EventStoreGateway.TestHost.csproj').touch()
+        cache = self.root / 'package-cache'
+        assemblies = ('Gateway', 'Server', 'DomainService', 'Contracts')
+        for suffix in assemblies:
+            name = 'Hexalith.EventStore.' + suffix
+            package = cache / name.lower() / '3.128.4'
+            package.mkdir(parents=True)
+            nuspec = ('<package><metadata><id>' + name + '</id><version>3.128.4</version><repository commit="'
+                      + 'a' * 40 + '" /></metadata></package>').encode()
+            payload = (name + '-qualified-fixture').encode()
+            (package / (name.lower() + '.nuspec')).write_bytes(nuspec)
+            extracted = package / ('lib/net10.0/' + name + '.dll')
+            extracted.parent.mkdir(parents=True)
+            extracted.write_bytes(payload)
+            with ZipFile(package / (name.lower() + '.3.128.4.nupkg'), 'w') as archive:
+                archive.writestr(name + '.nuspec', nuspec)
+                archive.writestr('lib/net10.0/' + name + '.dll', payload)
+        projects = [gateway, *(self.root / 'references' / ('Hexalith.' + module) / 'src' / ('Hexalith.' + module)
+                              for module in ('Tenants', 'Parties'))]
+        for project in projects:
+            (project / 'obj').mkdir(exist_ok=True)
+            output = project / 'bin/Release/net10.0'
+            output.mkdir(parents=True)
+            libraries = {'Hexalith.EventStore.' + suffix + '/3.128.4': {'type': 'package'} for suffix in assemblies}
+            target = {name: {'type': 'package', 'runtime': {'lib/net10.0/' + name.split('/')[0] + '.dll': {}}}
+                      for name in libraries}
+            (project / 'obj/project.assets.json').write_text(json.dumps({
+                'libraries': libraries, 'targets': {'net10.0': target}, 'packageFolders': {str(cache): {}}}))
+            for suffix in assemblies:
+                name = 'Hexalith.EventStore.' + suffix
+                (output / (name + '.dll')).write_bytes((name + '-qualified-fixture').encode())
+        native = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore'
+        (native / 'Properties').mkdir()
+        (native / 'appsettings.json').write_text('{"nativeDefaults":true}')
+        (native / 'Properties/launchSettings.json').write_text('{"profiles":{}}')
+        (gateway / 'Properties').mkdir()
+        (gateway / 'Properties/launchSettings.json').write_text('{"profiles":{}}')
+        (gateway / 'bin/Release/net10.0/appsettings.gateway.json').write_text('{"nativeDefaults":true}')
+        apphost = self.root / 'tests/Hexalith.McpCli.AppHost'
+        (apphost / 'DaprComponents').mkdir(parents=True)
+        (apphost / 'appsettings.json').write_text('{"testOwned":true}')
+        (apphost / 'DaprComponents/accesscontrol.published.yaml').write_text('{"defaultAction":"deny"}')
         self.bin = self.root / 'stub-bin'
         self.bin.mkdir()
         for tool in ('timeout', 'git', 'dotnet', 'docker', 'dapr', 'aspire', 'unshare', 'ip', 'daprd', 'sudo', 'curl'):
@@ -316,15 +366,17 @@ class CiHooksTests(unittest.TestCase):
         prepared = self.prepare()
         calls = self.calls()
         source_builds = [call for call in calls if call[0] == 'dotnet' and call[2] == 'build']
-        self.assertEqual(['Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties'], [Path(call[1]).name for call in source_builds])
+        self.assertEqual(['tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj',
+                          'src/Hexalith.Tenants/Hexalith.Tenants.csproj', 'src/Hexalith.Parties/Hexalith.Parties.csproj'],
+                         [call[3] for call in source_builds])
+        self.assertEqual(str(self.root), source_builds[0][1])
         for call in source_builds:
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('Release', call)
-            if Path(call[1]).name == 'Hexalith.Tenants':
-                self.assertIn('-p:HexalithEventStoreFromSource=true', call)
-            else:
-                self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
+            self.assertIn('-p:HexalithEventStoreFromSource=false', call)
+            self.assertIn('-p:HexalithEventStoreVersion=3.128.4', call)
+            self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
         deadlines = [call[4] for call in calls if call[0] == 'timeout' and call[5:7] == ['dotnet', 'build']]
         self.assertEqual(['300'] * 3, deadlines)
         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
@@ -338,7 +390,7 @@ class CiHooksTests(unittest.TestCase):
             self.assertEqual('M  ' + checkout.name + '-fixture.txt', source['status'])
         for arguments in (['rev-parse', 'HEAD'], ['status', '--porcelain', '--untracked-files=normal']):
             self.assertEqual([str(checkout) for checkout in checkouts],
-                             [call[1] for call in calls if call[0] == 'git' and call[2:] == arguments])
+                             [call[1] for call in calls if call[0] == 'git' and call[2:] == arguments][:3])
         tools = prepared['tools']
         self.assertEqual({'aspire', 'dapr', 'dotnet'}, set(tools['executables']))
         for name, executable in tools['executables'].items():
@@ -355,22 +407,161 @@ class CiHooksTests(unittest.TestCase):
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             self.assertEqual(str(Path(self.env['HOME']) / '.aspire/bundle' / relative), tools[relative]['path'])
             self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
-        self.assertEqual(['3.128.0', '3.128.0', '3.127.0'],
+        self.assertEqual(['3.128.4'] * 3,
                          [source['HexalithEventStoreVersion'] for source in prepared['sources']])
+        self.assertEqual({'profile': 'published', 'version': '3.128.4', 'sourceCommit': 'a' * 40},
+                         {key: prepared['gateway'][key] for key in ('profile', 'version', 'sourceCommit')})
+        self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
         self.assertEqual(3, len(property_calls))
         for call in property_calls:
             self.assertIn('-getProperty:HexalithEventStoreVersion', call)
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
-            if Path(call[1]).name == 'Hexalith.Tenants':
-                self.assertIn('-p:HexalithEventStoreFromSource=true', call)
-            else:
-                self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
+            self.assertIn('-p:HexalithEventStoreFromSource=false', call)
+            self.assertIn('-p:HexalithEventStoreVersion=3.128.4', call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
         self.assertNotIn('fixture-secret-token', json.dumps(prepared))
+
+    def test_published_gateway_profile_binds_both_vector_and_independent_smoke(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        actual = [json.loads(line) for line in (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()]
+        self.assertEqual([{'profile': 'true', 'sourceCommit': 'a' * 40}] * 2, actual)
+
+    def test_changed_gateway_package_bytes_refuse_before_any_live_runner(self):
+        self.prepare()
+        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/3.128.4/hexalith.eventstore.gateway.3.128.4.nupkg', 'a') as archive:
+            archive.writestr('changed.txt', b'changed')
+        result = self.invoke('run-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('gateway package identity or bytes changed', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+
+    def test_different_gateway_cohort_refuses_before_build_or_runtime(self):
+        result = self.invoke('prepare-ci.sh', 'wrong-package-cohort')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('did not select the exact published EventStore cohort', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+
+    def test_actual_domain_asset_version_and_project_mutations_refuse_prepare_and_execute(self):
+        for module in ('Tenants', 'Parties'):
+            asset = self.root / f'references/Hexalith.{module}/src/Hexalith.{module}/obj/project.assets.json'
+            original = asset.read_text()
+            for phase in ('prepare', 'run'):
+                for defect in ('transitive-version', 'project-type'):
+                    with self.subTest(module=module, phase=phase, defect=defect):
+                        self.fresh_evidence()
+                        if phase == 'run': self.prepare()
+                        (self.root / 'runner-gateway-environment.jsonl').unlink(missing_ok=True)
+                        changed = json.loads(original)
+                        identity = 'Hexalith.EventStore.Contracts/3.128.4'
+                        if defect == 'transitive-version':
+                            changed['libraries']['Hexalith.EventStore.Contracts/3.128.3'] = changed['libraries'].pop(identity)
+                        else:
+                            changed['libraries'][identity]['type'] = 'project'
+                        asset.write_text(json.dumps(changed))
+                        try:
+                            result = self.invoke('prepare-ci.sh' if phase == 'prepare' else 'run-ci.sh')
+                            self.assertNotEqual(0, result.returncode)
+                            self.assertIn('restored assets must contain only the exact published EventStore package cohort', result.stderr)
+                            self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                        finally:
+                            asset.write_text(original)
+
+    def test_archive_extracted_deployed_and_configuration_mutations_refuse_before_runners(self):
+        package = self.root / 'package-cache/hexalith.eventstore.gateway/3.128.4'
+        deployed = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0'
+        source = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json'
+        cases = [package / 'hexalith.eventstore.gateway.nuspec',
+                 package / 'lib/net10.0/Hexalith.EventStore.Gateway.dll',
+                 deployed / 'Hexalith.EventStore.Gateway.dll',
+                 deployed / 'appsettings.gateway.json', source]
+        for phase in ('prepare', 'run'):
+            for path in cases:
+                with self.subTest(phase=phase, path=str(path.relative_to(self.root))):
+                    self.fresh_evidence()
+                    if phase == 'run': self.prepare()
+                    original = path.read_bytes()
+                    path.write_bytes(original + b'changed')
+                    try:
+                        result = self.invoke('prepare-ci.sh' if phase == 'prepare' else 'run-ci.sh')
+                        self.assertNotEqual(0, result.returncode)
+                        self.assertIn('differs from', result.stderr)
+                        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                    finally:
+                        path.write_bytes(original)
+
+    def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
+        folder = self.root / 'package-cache/hexalith.eventstore.gateway/3.128.4'
+        archive = folder / 'hexalith.eventstore.gateway.3.128.4.nupkg'
+        nuspec = folder / 'hexalith.eventstore.gateway.nuspec'
+        original_archive, original_nuspec = archive.read_bytes(), nuspec.read_bytes()
+        for before, after in ((b'<id>Hexalith.EventStore.Gateway</id>', b'<id>Wrong.Package</id>'),
+                              (b'<version>3.128.4</version>', b'<version>3.128.3</version>'),
+                              (b'a' * 40, b'not-a-source-commit')):
+            with self.subTest(replacement=after):
+                self.fresh_evidence()
+                with ZipFile(archive) as opened:
+                    files = {name: opened.read(name) for name in opened.namelist()}
+                name = next(name for name in files if name.endswith('.nuspec'))
+                files[name] = files[name].replace(before, after)
+                with ZipFile(archive, 'w') as changed:
+                    for name, value in files.items(): changed.writestr(name, value)
+                nuspec.write_bytes(original_nuspec.replace(before, after))
+                try:
+                    result = self.invoke('prepare-ci.sh')
+                    self.assertNotEqual(0, result.returncode)
+                    self.assertIn('Package archive must identify its exact published identity and source', result.stderr)
+                    self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                finally:
+                    archive.write_bytes(original_archive)
+                    nuspec.write_bytes(original_nuspec)
+
+    def test_configuration_change_with_preserved_native_parity_still_refuses(self):
+        self.prepare()
+        for path in (self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json',
+                     self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/appsettings.gateway.json'):
+            path.write_text('{"changedButMatching":true}')
+        result = self.invoke('run-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('gateway package identity or bytes changed', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+
+    def test_second_provenance_check_refuses_drift_after_vectors_before_smoke(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'tamper-after-vectors')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
+        actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
+        self.assertEqual(1, len(actual), 'The independent smoke must not start after vector-time drift.')
+
+    def test_fresh_pkcs8_private_keys_are_redacted_in_direct_escaped_and_xml_diagnostics(self):
+        import base64
+        from html import escape
+        pem = subprocess.check_output(
+            ['openssl', 'genpkey', '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:2048'],
+            stderr=subprocess.DEVNULL)
+        key = base64.b64encode(subprocess.check_output(
+            ['openssl', 'pkcs8', '-topk8', '-nocrypt', '-outform', 'DER'], input=pem,
+            stderr=subprocess.DEVNULL)).decode()
+        module = self.ci_module()
+        field = 'Authentication__BoundStreamRead__PrivateKey'
+        direct = json.dumps({field: key, 'meaningful': 'retained', 'publicKey': 'nonsecret-public-trust'})
+        for text in (direct, json.dumps({'diagnostic': direct}), field + '=' + key,
+                     json.dumps({'diagnostic': json.dumps({'nested': direct})})):
+            sanitized = module.sanitized(text)
+            self.assertNotIn(key, sanitized)
+            if text != field + '=' + key: self.assertIn('retained', sanitized)
+        for text in ('<error message="' + escape(direct, quote=True) + '" />',
+                     '<PrivateKey>' + key + '</PrivateKey>',
+                     '<setting name="' + field + '" value="' + key + '" other="retained" />'):
+            sanitized = module.sanitized_xml(text)
+            self.assertNotIn(key, sanitized)
+            self.assertIn('[REDACTED]', sanitized)
 
     def test_repository_sdk_rollforward_accepts_selected_newer_patch(self):
         result = self.invoke('prepare-ci.sh', 'sdk-patch-rollforward')
@@ -569,7 +760,7 @@ class CiHooksTests(unittest.TestCase):
                 result = self.invoke('prepare-ci.sh', mode)
                 self.assertNotEqual(0, result.returncode)
                 self.assertIn(f'exited {code}', result.stderr)
-                self.assertIn('dotnet build src/Hexalith.', result.stderr)
+                self.assertIn('dotnet build ', result.stderr)
                 self.assertFalse(any('run-vectors.py' in str(call) or 'bootstrap-runtime.py' in str(call) for call in self.calls()))
 
     def test_stdout_only_source_failure_names_both_retained_output_paths(self):
@@ -577,7 +768,7 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(1, result.returncode)
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
-                   '-p:HexalithEventStoreFromSource=true')
+                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=3.128.4')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
         error = f'{command} exited 23; stdout: {stdout}; stderr: {stderr}'

@@ -1,0 +1,99 @@
+{
+  "apiVersion": "dapr.io/v1alpha1",
+  "kind": "Configuration",
+  "metadata": {
+    "name": "mcpcli-live-access"
+  },
+  "spec": {
+    "accessControl": {
+      "defaultAction": "deny",
+      "trustDomain": "public",
+      "policies": [
+        {
+          "appId": "eventstore",
+          "defaultAction": "deny",
+          "trustDomain": "public",
+          "namespace": "default",
+          "operations": [
+            {
+              "name": "/process",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            },
+            {
+              "name": "/query",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            },
+            {
+              "name": "/project",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
+              "name": "/project/v2",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
+              "name": "/admin/operational-index-metadata",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            }
+          ]
+        },
+        {
+          "appId": "tenants",
+          "defaultAction": "deny",
+          "trustDomain": "public",
+          "namespace": "default",
+          "operations": [
+            {
+              "name": "/api/v1/streams/read/workload",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
+              "name": "/api/v1/commands",
+              "httpVerb": ["POST"],
+              "action": "allow"
+            },
+            {
+              "name": "/api/v1/queries",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            }
+          ]
+        },
+        {
+          "appId": "parties",
+          "defaultAction": "deny",
+          "trustDomain": "public",
+          "namespace": "default",
+          "operations": [
+            {
+              "name": "/api/v1/queries",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            }
+          ]
+        }
+      ]
+    },
+    "mtls": {
+      "enabled": true,
+      "sentryAddress": "127.0.0.1:50001",
+      "controlPlaneTrustDomain": "public"
+    }
+  }
+}
