@@ -399,6 +399,9 @@ def prepare(evidence: Path) -> None:
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
             properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
+            if module == 'Hexalith.Parties':
+                # Keep the complete frozen peer cohort compatible with its approved Gateway.
+                properties += ['-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2']
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=working)

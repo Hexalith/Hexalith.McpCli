@@ -390,6 +390,9 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
             self.assertIn('-p:HexalithEventStoreVersion=3.128.4', call)
             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
+        for call in source_builds:
+            for package_pin in ('-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2'):
+                self.assertEqual('src/Hexalith.Parties/Hexalith.Parties.csproj' == call[3], package_pin in call)
         deadlines = [call[4] for call in calls if call[0] == 'timeout' and call[5:7] == ['dotnet', 'build']]
         self.assertEqual(['300'] * 3, deadlines)
         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
