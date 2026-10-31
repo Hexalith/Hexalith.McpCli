@@ -21,3 +21,11 @@ Allowed files for this story:
 ## Verification
 
 Owning root Tenants checkout and origin/main both resolve33337d18b6e560e79e0ac4567d803681a86232aa. Validate the exact candidate with pinned commitlint and run real owning hooks, then require new exact-main hostedCI/all21live vectors. No application source, package selection or approval artifact changes here.
+
+## Upstream reconciliation
+
+Upstream a267e4709f4cbea34511c470bb1823c79a732327 preserves new operator documentation and evidence but restores the incompatible Tenants 39765310 gitlink. Retain all upstream work and restore only the already qualified 33337d18 source peer. This is a metadata update; no nested dependency is initialized or updated.
+
+The earlier exact source head 55dbf1d1e6388a0f3ce84bc0a242a4c8c7242097 passed complete CI 41202977894, including all 21 unique live operations with zero failed or skipped cases (`/tmp/mcp55-final-live-summary.json`). The restored gitlink and package profile are identical to that proof. Run the existing CI hook suite and require the new exact-head hosted CI before final root release; retain every approved artifact and live assertion.
+
+The existing controlled CI hook suite passed all 72 tests in 242.167 seconds after reconciliation (`/tmp/mcp-upstream-frozen-peer-tests.log`). The pinned owner commitlint accepted the exact candidate before staging; final root acceptance still requires the new pushed head CI and all 21 live operations.
