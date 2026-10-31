@@ -1054,7 +1054,7 @@ public sealed class DependencyPolicyTests
         Assert.Empty(graph.LoadFailures);
         Assert.Equal(new[]
         {
-            "Hexalith.Commons.UniqueIds/2.30.3",
+            "Hexalith.Commons.UniqueIds/2.30.7",
             "Hexalith.EventStore.Aspire/3.128.4",
             "Hexalith.EventStore.Client/3.128.4",
             "Hexalith.EventStore.Contracts/3.128.4",
