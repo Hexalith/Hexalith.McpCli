@@ -1,0 +1,74 @@
+{
+  "schema": "mcpcli-story-4-17-guard-mutations/v1",
+  "capturedAt": "2026-10-31",
+  "platformFiles": {
+    "phases.py": "ce3f8c3a507b0353978a0a9ce5381da3fed1879f9a8850369ada1b209b9ce0a9",
+    "prepare.py": "0e46f852a11f816dd1e0054d581c02a472fe66c30987d0220de7b781124660cf",
+    "test_v1.py": "0d28384debbfda8d6491fe627f4adfb90e594d4662b0d30db699b946b11f5c55"
+  },
+  "method": "guard-mutations.py copies the three files into a scratch tree, applies one textual mutation per case and runs python3 -B -m unittest test_v1; the repository files are never modified.",
+  "beforePatches": "Against Platform c1550f44, mutations M1-M7 each left all 56 tests passing.",
+  "results": {
+    "M0-none": {
+      "exitCode": 0,
+      "summary": "61 tests OK",
+      "failingTests": []
+    },
+    "M1-forward-sidecar": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_real_forward_checks_sidecars_and_gateway_boundary_before_any_process"
+      ]
+    },
+    "M2-forward-boundary": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_real_forward_checks_sidecars_and_gateway_boundary_before_any_process"
+      ]
+    },
+    "M3-handoff-podmissing": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_handoff_refuses_missing_pod_or_unready_sidecar_without_profile"
+      ]
+    },
+    "M4-handoff-sidecar": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_handoff_refuses_missing_pod_or_unready_sidecar_without_profile"
+      ]
+    },
+    "M5-handoff-chmod": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_handoff_profile_is_private_and_seed_submits_exactly_the_reviewed_operations"
+      ]
+    },
+    "M6-tenants-marker": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_tenants_bootstrap_image_marker_is_required"
+      ]
+    },
+    "M7-seed-diverges": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 failure",
+      "failingTests": [
+        "test_handoff_profile_is_private_and_seed_submits_exactly_the_reviewed_operations"
+      ]
+    },
+    "M9-json-fixtures": {
+      "exitCode": 1,
+      "summary": "61 tests, 1 error",
+      "failingTests": [
+        "test_block_style_yaml_fixtures_prepare_the_same_dapr_documents"
+      ]
+    }
+  }
+}

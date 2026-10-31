@@ -200,12 +200,12 @@ The environment owner must supply an approved, ready task environment on Platfor
 
 The [three-service preparation status](_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the owner environment used for Story 4.17. It was removed on 2026-10-31 after the client sessions and the timed run ([cleanup receipt](_bmad-output/implementation-artifacts/evidence/story-4-17/cleanup-20261031/receipt.json)); their results are in the [session checklist](docs/release/operator-setup-checklist.md). A new environment needs its own reviewed preparation. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
 
-For the quick start, first verify the four hashes and receipts as described in the manual installation below. Then copy both packages into a handoff folder that the operator can read, and write its `NuGet.Config`. Choose a folder path without `&`, `<`, `>` or quotes, because the block writes it into XML unescaped:
+For the quick start, first verify the four hashes and receipts as described in the manual installation below. Then copy the two verified packages, by name, into a handoff folder that the operator can read, and write its `NuGet.Config`. Choose a folder path without `&`, `<`, `>` or quotes, because the block writes it into XML unescaped:
 
 ```sh
 handoff=/absolute/path/handoff
 mkdir "$handoff" &&
-cp /absolute/path/accepted-packages/*.nupkg "$handoff"/ &&
+cp /absolute/path/accepted-packages/Hexalith.McpCli.1.2.0.nupkg /absolute/path/accepted-packages/Hexalith.McpCli.Abstractions.1.2.0.nupkg "$handoff"/ &&
 cat > "$handoff/NuGet.Config" <<EOF
 <configuration>
   <packageSources>
@@ -386,7 +386,7 @@ Require the selected result tenant, `document.id` equal to your Party ID, `isAct
 | Authentication/authorization failure | First check that the call used your real tenant, not a placeholder such as `TENANT`. Then ask the environment owner to check expiry, `system` and selected-tenant membership, Parties write scope and actor. Never substitute bootstrap credentials. |
 | Tool absent / wrong config shape | Check client version, selected harness, scope, trust prompts and `mcpServers` versus `servers`; expand client server logs. |
 | VS Code Copilot CLI harness reports no `hexalith` tools | In a WSL remote window its runtime cannot start a Windows `wsl.exe` registration; open a local VS Code window and start a fresh chat. Keep the failed session. |
-| Setup run again reports `already installed` or `already exists` | Run quick-start step 5 to remove the earlier attempt, then start again from step 1. |
+| Setup run again reports `already installed` or `already exists` | Inspect `~/hexalith-operator` first, as in quick-start step 1. Only if it contains solely an earlier Hexalith setup, run step 5 to remove it, then start again from step 1. |
 | `claude mcp add` reports `Invalid environment variable format` | Put the server name right after `add`; `--env` takes several values and otherwise reads the name as one. |
 | Client keeps waiting for `initialize` (WSL bridge) | Add `--cd` with a small Linux directory before `--exec`, then restart the server. Without it the server starts in the client's Windows directory under `/mnt/c/...`. Keep the stalled server log. |
 | Command outcome uncertain / persisted result missing | Preserve message IDs and errors, stop writes, request owner investigation; acceptance remains incomplete. |

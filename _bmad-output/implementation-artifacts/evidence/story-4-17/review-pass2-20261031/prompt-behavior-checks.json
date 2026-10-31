@@ -1,0 +1,128 @@
+{
+  "schema": "mcpcli-operator-prompt-behavior-checks/v2",
+  "capturedAt": "2026-10-31T22:51:39.603756+00:00",
+  "readmeSha256": "ac0789f199c1b94372e9d46e742bfe462a36ecb23fa04c56d2a6a9054ca76ed2",
+  "claudeCode": "2.1.316 (Claude Code)",
+  "method": "claude -p with --permission-mode default, a settings file forcing Bash to ask, --strict-mcp-config with no servers, in an empty scratch project; every Bash attempt is refused and recorded, then replayed with dotnet and the tool stubbed. Turn 3 tells Claude that step 1 is done because this harness cannot approve it; that is harness assistance, not operator procedure.",
+  "values": {
+    "HANDOFF": "<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)",
+    "TENANT": "tenant space $MCPCLI_417_LITERAL $(touch shell-marker)",
+    "ACTOR": "actor's space $MCPCLI_417_LITERAL $(touch shell-marker)"
+  },
+  "assertions": {
+    "setupAsksBeforeRunning": true,
+    "step1AttemptedOnlyAfterAnswers": true,
+    "step1HandoffPathLiteral": true,
+    "step3AttemptedWithoutPlaceholders": true,
+    "step3TenantAndActorLiteral": true,
+    "noShellExpansionMarker": true,
+    "taskAsksBeforeAnyTool": true
+  },
+  "allAssertionsPass": true,
+  "checks": {
+    "setupTurn1": {
+      "exitCode": 0,
+      "numTurns": 1,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "permissionDenials": [],
+      "reply": "Before I run anything, I need three values from you:\n\n1. **Handoff folder**: the absolute path to the folder that contains `NuGet.Config`.\n2. **Tenant**: the tenant name for the `operator` profile.\n3. **Actor**: the actor name for the `operator` profile.\n\nI'll put each value into the commands as its own Bash single-quoted argument, with any `'` escaped, so spaces, `$` and `$(...)` stay as plain text. For `--configfile` I'll use `'<your handoff folder>/NuGet.Config'`. I won't ask for, read or print your token.\n\nI'll wait for your answers before starting step 1."
+    },
+    "setupTurn2Answers": {
+      "exitCode": 0,
+      "numTurns": 2,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "permissionDenials": [
+        {
+          "tool": "Bash",
+          "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" NUGET_PACKAGES=\"$HOME/hexalith-operator/packages\" && dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path \"$HOME/hexalith-operator/tools\" --configfile '<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)/NuGet.Config' --no-cache && \"$HOME/hexalith-operator/tools/hexalith\" --version"
+        }
+      ],
+      "reply": "I stopped at step 1 because the command didn't run. Here's the error:\n\n```\nQuoted text in this command can't be checked before it runs\n```\n\nThis error came from Claude Code's safety check, not from `dotnet`. The check blocked the command before it started. It most likely objected to the `$(touch shell-marker)` text inside the single-quoted `--configfile` path. In single quotes that text is plain characters, but the check can't confirm that. Nothing was installed, and no `shell-marker` file was created.\n\nThis is the exact command I tried to run:\n\n```bash\nexport DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" NUGET_PACKAGES=\"$HOME/hexalith-operator/packages\" && dotnet tool install Hexalith.McpCli --version 1.2.0 --tool-path \"$HOME/hexalith-operator/tools\" --configfile '<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)/NuGet.Config' --no-cache && \"$HOME/hexalith-operator/tools/hexalith\" --version\n```\n\nThere are two ways to continue:\n- **Run step 1 yourself** in a terminal, then tell me whether the last line is `1.2.0`. I'll go on to step 2 from there.\n- **Allow this command in Claude Code's permission settings**, then tell me to try again.\n\nSteps 3 and 4 will probably hit the same block, since your tenant and actor values also contain `$(...)`."
+    },
+    "step1Replay": {
+      "exitCode": 1,
+      "calls": [
+        [
+          "dotnet",
+          "tool",
+          "install",
+          "Hexalith.McpCli",
+          "--version",
+          "1.2.0",
+          "--tool-path",
+          "<scratch>/home/hexalith-operator/tools",
+          "--configfile",
+          "<scratch>/handoff space $MCPCLI_417_LITERAL $(touch shell-marker)/NuGet.Config",
+          "--no-cache"
+        ]
+      ]
+    },
+    "setupTurn3": {
+      "exitCode": 0,
+      "numTurns": 1,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "permissionDenials": [],
+      "reply": "I've marked step 1 as done, based on what you told me: the installed version is 1.2.0.\n\n**Step 2:** In another terminal, run the token command from step 3 of the README, using the token your environment owner gave you. Don't paste the token here. I won't ask for it, read it or print it.\n\nTell me when it's done, and I'll run step 3 with your tenant and actor."
+    },
+    "setupTurn4": {
+      "exitCode": 0,
+      "numTurns": 2,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "permissionDenials": [
+        {
+          "tool": "Bash",
+          "command": "export DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\" && \"$HOME/hexalith-operator/tools/hexalith\" config set operator tenant 'tenant space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config set operator actor 'actor'\\''s space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config current --profile operator"
+        }
+      ],
+      "reply": "I stopped at step 3 because the command didn't run. Here's the error:\n\n```\nQuoted text in this command can't be checked before it runs\n```\n\nClaude Code's safety check blocked it again, like step 1, because of the `$(...)` text in your tenant and actor values. Nothing ran: the tenant and actor aren't set, and no `shell-marker` file was created.\n\nThis is the exact command. Your values are single-quoted literals, and the apostrophe in `actor's` is escaped as `'\\''`:\n\n```bash\nexport DOTNET_ROOT=\"$(dirname \"$(readlink -f \"$(command -v dotnet)\")\")\" MCPCLI_HOME=\"$HOME/hexalith-operator/home\" && \"$HOME/hexalith-operator/tools/hexalith\" config set operator tenant 'tenant space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config set operator actor 'actor'\\''s space $MCPCLI_417_LITERAL $(touch shell-marker)' && \"$HOME/hexalith-operator/tools/hexalith\" config current --profile operator\n```\n\nIf you run it yourself, please send me only the url, tenant and actor lines from the output. Leave out the token line, even if it shows as masked.\n\nStep 4 has no tenant or actor values in it, so it may not be blocked. Once step 3 is done, I'll try running step 4 here."
+    },
+    "step3Replay": {
+      "exitCode": 0,
+      "calls": [
+        [
+          "config",
+          "set",
+          "operator",
+          "tenant",
+          "tenant space $MCPCLI_417_LITERAL $(touch shell-marker)"
+        ],
+        [
+          "config",
+          "set",
+          "operator",
+          "actor",
+          "actor's space $MCPCLI_417_LITERAL $(touch shell-marker)"
+        ],
+        [
+          "config",
+          "current",
+          "--profile",
+          "operator"
+        ]
+      ]
+    },
+    "taskTurn1": {
+      "exitCode": 0,
+      "numTurns": 1,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "permissionDenials": [],
+      "reply": "Before I call any tools, I need two values from you:\n\n1. **Tenant**: the tenant ID to read with `tenants.get-tenant`.\n2. **Party ID**: the PartyId for the new person. I'll also use it to build `email-<PartyId>` and `external-<PartyId>`, and as the `entityId` for the read-back.\n\nOnce I have both, I'll go through the steps in order using only the hexalith MCP tools: list modules, get the tenant, create the party once, then read it back. If the person isn't found yet, I'll repeat only the read every few seconds for up to 45 seconds. If any call fails or its result is unclear, I'll stop, show you the error and not retry."
+    }
+  },
+  "limitations": [
+    "No command actually ran; no install, profile, registration, Gateway call or timing.",
+    "Model output varies between runs; this is one sample."
+  ],
+  "allAssertionsPassCorrection": "The harness first compared against 8 expected assertions while defining 7, so the recorded run printed allAssertionsPass false (see prompt-behavior-checks.stdout.txt). The count was corrected to 7 and this value recomputed from the 7 recorded assertions; the model run was not repeated.",
+  "observation": "Both refused commands were flagged by Claude Code's own Bash safety check (\"Quoted text in this command can't be checked before it runs\") because the synthetic answers contain $(...); an interactive operator would get an approval prompt. Realistic tenant/actor/handoff values do not contain such text."
+}

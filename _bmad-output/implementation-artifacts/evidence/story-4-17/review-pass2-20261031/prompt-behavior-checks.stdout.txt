@@ -1,0 +1,14 @@
+{
+  "readmeSha256": "ac0789f199c1b94372e9d46e742bfe462a36ecb23fa04c56d2a6a9054ca76ed2",
+  "claudeCode": "2.1.316 (Claude Code)",
+  "assertions": {
+    "setupAsksBeforeRunning": true,
+    "step1AttemptedOnlyAfterAnswers": true,
+    "step1HandoffPathLiteral": true,
+    "step3AttemptedWithoutPlaceholders": true,
+    "step3TenantAndActorLiteral": true,
+    "noShellExpansionMarker": true,
+    "taskAsksBeforeAnyTool": true
+  },
+  "allAssertionsPass": false
+}

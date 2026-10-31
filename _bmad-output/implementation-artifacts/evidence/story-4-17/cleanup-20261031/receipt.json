@@ -136,7 +136,35 @@
       },
       {
         "path": "/tmp/mcpcli-417-v1-private-20261031-attempt8",
-        "what": "Private inputs (signing key, app tokens), backups, journals and renewed operator profiles"
+        "what": "Private inputs (signing key, app tokens), backups, journals and renewed operator profiles; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031",
+        "what": "Earlier attempt private inputs (task signing key, app/API tokens, Redis password); no registry credential copy"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt2",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt3",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt4",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password and execution journal; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt5",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt6",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password and execution journal; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
+      },
+      {
+        "path": "/tmp/mcpcli-417-v1-private-20261031-attempt7",
+        "what": "Earlier failed or cleaned attempt: task signing key, app/API tokens, Redis password and execution journal; its registry pull-credential copy was deleted on 2026-10-31 (see credentialDisposal)"
       },
       {
         "path": "/tmp/mcpcli-417-timing-handoff",
@@ -150,6 +178,22 @@
         "path": "Claude Desktop claude_desktop_config.json, VS Code user mcp.json, Copilot mcp-config.json (Windows and WSL), ~/.claude.json (mcpcli project and ~/hexalith-operator/project)",
         "what": "hexalith registrations pointing at the removed environment; pre-change backups are in the private folder"
       }
-    ]
+    ],
+    "credentialDisposal": {
+      "recordedAt": "2026-10-31T22:48:39Z",
+      "source": "Story 4.17 code review pass 2, decision (a) approved by the user",
+      "finding": "Each retained v1 private root attempt2..attempt8 held mcpcli-pull-.dockerconfigjson, a copy of the configured live registry.hexalith.com credential that stays valid after the namespace is gone; this receipt previously listed only attempt8 and did not name it.",
+      "deleted": [
+        "/tmp/mcpcli-417-v1-private-20261031-attempt2/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt3/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt4/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt5/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt6/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt7/mcpcli-pull-.dockerconfigjson",
+        "/tmp/mcpcli-417-v1-private-20261031-attempt8/mcpcli-pull-.dockerconfigjson"
+      ],
+      "retained": "Task-only credentials (expired environment), backups and journals stay in the listed /tmp roots, which a reboot or tmp cleanup can remove; no other registry credential copy was found under /tmp.",
+      "effect": "The retired packets can no longer pass private-input verification; any new execution needs a fresh packet and review."
+    }
   }
 }
