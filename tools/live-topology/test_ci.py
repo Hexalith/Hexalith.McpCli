@@ -92,6 +92,8 @@ elif name == 'git':
         print(root if mode == 'copied-source' else pathlib.Path.cwd())
     elif args == ['rev-parse', 'HEAD']:
         print(hashlib.sha1(str(pathlib.Path.cwd()).encode()).hexdigest())
+    elif args[0] == 'show':
+        sys.stdout.buffer.write((pathlib.Path.cwd() / args[1].split(':', 1)[1]).read_bytes())
     elif args == ['status', '--porcelain', '--untracked-files=normal']:
         print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
 elif name == 'sudo':
@@ -299,6 +301,17 @@ class CiHooksTests(unittest.TestCase):
         (gateway / 'Properties').mkdir()
         (gateway / 'Properties/launchSettings.json').write_text('{"profiles":{}}')
         (gateway / 'bin/Release/net10.0/appsettings.gateway.json').write_text('{"nativeDefaults":true}')
+        (gateway / 'Configuration').mkdir()
+        (gateway / 'Configuration/appsettings.gateway.json').write_text('{"nativeDefaults":true}')
+        files = {
+            'Configuration/appsettings.gateway.json': 'src/Hexalith.EventStore/appsettings.json',
+            'Properties/launchSettings.json': 'src/Hexalith.EventStore/Properties/launchSettings.json',
+        }
+        (gateway / 'Configuration/provenance.json').write_text(json.dumps({
+            'profile': 'published', 'eventStoreVersion': '3.128.4',
+            'sourceRepository': 'https://github.com/Hexalith/Hexalith.EventStore.git', 'sourceCommit': 'a' * 40,
+            'files': {relative: {'sourcePath': original, 'sha256': hashlib.sha256((gateway / relative).read_bytes()).hexdigest()}
+                      for relative, original in files.items()}}))
         apphost = self.root / 'tests/Hexalith.McpCli.AppHost'
         (apphost / 'DaprComponents').mkdir(parents=True)
         (apphost / 'appsettings.json').write_text('{"testOwned":true}')
@@ -479,7 +492,9 @@ class CiHooksTests(unittest.TestCase):
         cases = [package / 'hexalith.eventstore.gateway.nuspec',
                  package / 'lib/net10.0/Hexalith.EventStore.Gateway.dll',
                  deployed / 'Hexalith.EventStore.Gateway.dll',
-                 deployed / 'appsettings.gateway.json', source]
+                 deployed / 'appsettings.gateway.json', source,
+                 deployed.parents[2] / 'Configuration/appsettings.gateway.json',
+                 deployed.parents[2] / 'Properties/launchSettings.json']
         for phase in ('prepare', 'run'):
             for path in cases:
                 with self.subTest(phase=phase, path=str(path.relative_to(self.root))):
@@ -523,12 +538,52 @@ class CiHooksTests(unittest.TestCase):
 
     def test_configuration_change_with_preserved_native_parity_still_refuses(self):
         self.prepare()
+        host = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost'
         for path in (self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json',
-                     self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/appsettings.gateway.json'):
+                     host / 'Configuration/appsettings.gateway.json',
+                     host / 'bin/Release/net10.0/appsettings.gateway.json'):
             path.write_text('{"changedButMatching":true}')
+        manifest = host / 'Configuration/provenance.json'
+        changed = json.loads(manifest.read_text())
+        changed['files']['Configuration/appsettings.gateway.json']['sha256'] = hashlib.sha256(
+            (host / 'Configuration/appsettings.gateway.json').read_bytes()).hexdigest()
+        manifest.write_text(json.dumps(changed))
         result = self.invoke('run-ci.sh')
         self.assertNotEqual(0, result.returncode)
         self.assertIn('gateway package identity or bytes changed', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+
+    def test_snapshot_manifest_cohort_source_identity_and_blob_binding_refuse_before_runners(self):
+        host = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost'
+        manifest = host / 'Configuration/provenance.json'
+        original = manifest.read_text()
+        cases = [('eventStoreVersion', '3.128.3'), ('sourceCommit', 'not-a-commit'),
+                 ('sourceRepository', 'https://example.invalid/forged'), ('profile', 'native')]
+        for phase in ('prepare', 'run'):
+            for key, value in cases:
+                with self.subTest(phase=phase, field=key):
+                    self.fresh_evidence()
+                    if phase == 'run': self.prepare()
+                    changed = json.loads(original)
+                    changed[key] = value
+                    manifest.write_text(json.dumps(changed))
+                    try:
+                        result = self.invoke('prepare-ci.sh' if phase == 'prepare' else 'run-ci.sh')
+                        self.assertNotEqual(0, result.returncode)
+                        self.assertIn('snapshot must declare its exact published cohort and native source identity', result.stderr)
+                        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                    finally:
+                        manifest.write_text(original)
+        # A freshly rehashed snapshot still must match the exact declared source blob.
+        self.fresh_evidence()
+        snapshot = host / 'Configuration/appsettings.gateway.json'
+        snapshot.write_text('{"changed":true}')
+        changed = json.loads(original)
+        changed['files']['Configuration/appsettings.gateway.json']['sha256'] = hashlib.sha256(snapshot.read_bytes()).hexdigest()
+        manifest.write_text(json.dumps(changed))
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('snapshot differs from its exact native source blob', result.stderr)
         self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
 
     def test_second_provenance_check_refuses_drift_after_vectors_before_smoke(self):

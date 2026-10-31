@@ -194,3 +194,58 @@ Scoped verification (no complete live lane repeated during these review repairs)
 - `git diff --check` passes. Temporary package processes are stopped. No commit or
   push was performed by the implementing agent. The parent retains full validation
   and all-21-vector acceptance responsibility.
+
+## Builds-only conformance amendment
+
+The exact a3989b4 hosted enrolled-module job 124498335404 fails with MSB3030:
+the package TestHost tries to copy EventStore appsettings while this lightweight
+job intentionally initializes only Builds. The completed job log is retained at
+`/tmp/mcpcli-a398-conformance-completed.log` (lines 176 and 203). The parent
+explicitly directs keeping this lightweight boundary and owning a reviewed,
+nonsecret source-bound package configuration snapshot. This remains within the
+existing package profile and immutable configuration qualification scope.
+
+- The owned required `Configuration/appsettings.gateway.json` is byte-identical
+  to EventStore commit `ab39879c06eea69668916941ce46a2b6d7e8efd9`, the owner's
+  selected configuration source. `Configuration/provenance.json` records the
+  exact 3.128.4 profile, source repository, commit, original paths and SHA-256 for
+  defaults and matching launch profiles. Git attributes preserve those bytes.
+- The project copies this required file to the same runtime filename and retains
+  the existing lowest configuration priority. Native/default/publish project
+  selection and ACLs, actual RSA proof validation, archive/runtime cohort checks
+  and all 21 semantic vectors remain unchanged.
+- Live qualification validates the manifest, hashes and deployed defaults, then
+  compares owned snapshots to the exact recorded Git blobs. The immutable receipt
+  includes the manifest and used configuration hashes, rechecked before vectors
+  and independent smoke. Compilation and socket tests need only the Builds catalog.
+- A fresh standalone a398 clone at
+  `/tmp/mcpcli-minimal-conformance-w67ujmoz/McpCli` with only ordinary copies of
+  the exact owner-selected Builds4d93 catalog reproduces the original missing
+  source-file error, then builds the full solution Release with zero warnings or
+  errors after the fix. EventStore/Tenants/Parties source directories are absent;
+  no nested initialization/update or original producer mutation was performed.
+- Removing the required owned snapshot fails compilation with MSB3030, then a
+  restored full solution build passes. The eight real socket/config cases pass
+  with no skips in 7.956 seconds. The enrolled catalog coverage subset passes 5/5.
+  Logs are `/tmp/mcpcli-minimal-required-snapshot.log`,
+  `/tmp/mcpcli-minimal-after-build-final.log`,
+  `/tmp/mcpcli-minimal-socket-tests-final.log` and
+  `/tmp/mcpcli-minimal-conformance-tests.log`.
+- Real restored package provenance also passes against the independent complete
+  qualification workspace: exact Gateway 3.128.4/source 717, configuration source
+  ab398, seven archives and 17 used configuration files. Retained summary:
+  `/tmp/mcpcli-snapshot-real-provenance.log`.
+- New manifest cohort/source/path/hash and exact source-blob controls reject drift
+  before runners; prior deployed-binary, both-domain restored graph, long-lane
+  smoke recheck and fresh PKCS#8 redaction controls remain active. The full focused
+  CI-hook test-file result is recorded below when complete.
+
+- Final focused hook suite: `python3 -m unittest discover -s tools/live-topology
+  -p test_ci.py -v` passes 72/72 in 189.191 seconds, including the new manifest
+  controls and all prior archive/domain/private-key/smoke drift cases. Log:
+  `/tmp/mcpcli-snapshot-ci-tests.log`.
+- Final amendment scope is nine files: Git attributes; this spec; package host
+  project; the two owned Configuration JSON files; existing package boundary
+  tests; lane README; CI provenance implementation; and its focused test file.
+  `git diff --check` passes and all ten original review triage rows remain.
+  No workflow initialization was expanded, and no commit or push was performed.

@@ -242,17 +242,35 @@ def gateway_package_provenance() -> dict:
                                       'Hexalith.EventStore.DomainService')
                for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
     source = ROOT / 'references/Hexalith.EventStore'
-    commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True, timeout=10).strip()
-    if not re.fullmatch('[0-9a-f]{40}', commit):
-        raise ValueError('The selected native configuration source identity is unavailable.')
-    native = source / 'src/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
+    manifest = host / 'Configuration/provenance.json'
+    configuration_source = json.loads(manifest.read_text())
+    commit = configuration_source.get('sourceCommit', '')
+    expected_files = {
+        'Configuration/appsettings.gateway.json': 'src/Hexalith.EventStore/appsettings.json',
+        'Properties/launchSettings.json': 'src/Hexalith.EventStore/Properties/launchSettings.json',
+    }
+    if configuration_source.get('profile') != 'published' \
+            or configuration_source.get('eventStoreVersion') != EVENTSTORE_COHORT \
+            or configuration_source.get('sourceRepository') != 'https://github.com/Hexalith/Hexalith.EventStore.git' \
+            or not re.fullmatch('[0-9a-f]{40}', commit) \
+            or set(configuration_source.get('files', {})) != set(expected_files):
+        raise ValueError('The package configuration snapshot must declare its exact published cohort and native source identity.')
+    for relative, original in expected_files.items():
+        entry = configuration_source['files'][relative]
+        snapshot = (host / relative).read_bytes()
+        if entry.get('sourcePath') != original or entry.get('sha256') != hashlib.sha256(snapshot).hexdigest():
+            raise ValueError('The package configuration snapshot differs from its declared native source provenance.')
+        # Source is needed only by actual live qualification. Builds-only conformance
+        # compiles and exercises the same required, owned snapshot without a runtime checkout.
+        native = subprocess.check_output(['git', 'show', commit + ':' + original], cwd=source, timeout=10)
+        if native != snapshot:
+            raise ValueError('The package configuration snapshot differs from its exact native source blob.')
     deployed = host / 'bin/Release/net10.0/appsettings.gateway.json'
-    if (native / 'appsettings.json').read_bytes() != deployed.read_bytes() \
-            or (native / 'Properties/launchSettings.json').read_bytes() != (host / 'Properties/launchSettings.json').read_bytes():
-        raise ValueError('The published gateway configuration differs from its selected native defaults or launch profiles.')
-    paths = [native / 'appsettings.json', native / 'Properties/launchSettings.json', deployed,
-             host / 'Properties/launchSettings.json', ROOT / 'tests/Hexalith.McpCli.AppHost/appsettings.json']
+    if (host / 'Configuration/appsettings.gateway.json').read_bytes() != deployed.read_bytes():
+        raise ValueError('The published gateway configuration differs from its source-bound snapshot.')
+    paths = [manifest, *(host / relative for relative in expected_files), deployed,
+             ROOT / 'tests/Hexalith.McpCli.AppHost/appsettings.json']
     paths.extend(sorted((ROOT / 'tests/Hexalith.McpCli.AppHost/DaprComponents').glob('*.yaml')))
     for module in ('Hexalith.Tenants', 'Hexalith.Parties'):
         directory = ROOT / 'references' / module / 'src' / module

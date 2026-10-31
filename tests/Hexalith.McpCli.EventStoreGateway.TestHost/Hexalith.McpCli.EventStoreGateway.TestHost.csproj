@@ -2,11 +2,13 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
-    <McpCliEventStoreRoot Condition="'$(McpCliEventStoreRoot)' == ''">$(MSBuildThisFileDirectory)../../references/Hexalith.EventStore</McpCliEventStoreRoot>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Hexalith.EventStore.Gateway" />
-    <Content Include="$(McpCliEventStoreRoot)/src/Hexalith.EventStore/appsettings.json"
-             Link="appsettings.gateway.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <!-- Reviewed nonsecret native defaults remain available in Builds-only jobs. -->
+    <Content Remove="Configuration/appsettings.gateway.json" />
+    <Content Include="Configuration/appsettings.gateway.json" TargetPath="appsettings.gateway.json"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <Content Update="Configuration/provenance.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
   </ItemGroup>
 </Project>

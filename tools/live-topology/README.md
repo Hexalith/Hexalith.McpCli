@@ -177,10 +177,16 @@ explicitly selects the published EventStore **3.128.4** compatibility profile.
 It builds the owned `Hexalith.McpCli.EventStoreGateway.TestHost` and both domain
 hosts with `UseHexalithProjectReferences=false`, `UseNuGetDeps=true`,
 `HexalithEventStoreFromSource=false` and the exact EventStore cohort version.
-Each server build has its own 300-second deadline. Native gateway appsettings
-provide the lowest-priority defaults, while the test AppHost's routes, normal
-configuration overrides, real JWT validation and sidecar tokens remain effective.
+Each server build has its own 300-second deadline. A required owned snapshot of
+native gateway defaults provides the lowest configuration priority, while the
+test AppHost's routes, normal configuration overrides, real JWT validation and
+sidecar tokens remain effective.
 Matching launch profiles preserve Aspire's HTTP/HTTPS endpoint discovery.
+The snapshot manifest fixes configuration source commit
+`ab39879c06eea69668916941ce46a2b6d7e8efd9`, original paths and hashes. Lightweight
+solution builds and real socket checks require only the declared Builds catalog;
+actual live preparation also compares these files with those exact source Git
+blobs. Missing, modified or incorrectly deployed snapshots fail qualification.
 The explicit package profile gives Tenants a fresh run-owned RSA proof key and
 the gateway its matching public trust, restricted to `tenants` and
 `global-administrators`. Exact workload audiences and caller allowlists retain
@@ -194,7 +200,7 @@ Preparation validates the actual restored EventStore package version/type closur
 in both domain hosts and the gateway. It reads identity/source from each archive's
 embedded nuspec and compares extracted and deployed EventStore DLLs to the same
 archive contents. The receipt seals those archive hashes, all launched host DLL
-and JSON hashes, the linked native configuration source commit and hashes of the
+and JSON hashes, the reviewed native configuration source commit and hashes of the
 used settings, launch profiles and sidecar configurations. Execution rechecks this
 receipt before the vector lane and again immediately before independent smoke,
 then passes explicit
@@ -215,8 +221,9 @@ the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
 status, each host's selected `HexalithEventStoreVersion`, gateway provenance,
 tool versions and executable hashes are retained. Source-checkout commits record
-the linked defaults and domain code; the separate gateway package source commit
-identifies the deployed gateway implementation.
+the domain code; the snapshot manifest records its exact configuration source.
+The separate gateway package source commit identifies the deployed gateway
+implementation.
 
 From the repository root, after the focused Release checks and the workflow's
 full `dapr init --runtime-version 1.18.7`, run the same preparation and execution

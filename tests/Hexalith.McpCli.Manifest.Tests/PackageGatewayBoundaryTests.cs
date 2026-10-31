@@ -105,6 +105,28 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         throw new TimeoutException("The package gateway did not start within the bounded deadline.");
     }
 
+    /// <summary>The required package defaults retain their reviewed native source and match the launched bytes.</summary>
+    [Fact]
+    public void PackageConfigurationRetainsReviewedSourceAndDeployedHashes()
+    {
+        string host = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.EventStoreGateway.TestHost");
+        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance.json")));
+        JsonElement profile = document.RootElement;
+        Assert.Equal("published", profile.GetProperty("profile").GetString());
+        Assert.Equal("3.128.4", profile.GetProperty("eventStoreVersion").GetString());
+        Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
+        Assert.Equal("ab39879c06eea69668916941ce46a2b6d7e8efd9", profile.GetProperty("sourceCommit").GetString());
+        foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
+        {
+            string path = Path.Combine(host, file.Name);
+            string hash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
+            Assert.Equal(file.Value.GetProperty("sha256").GetString(), hash);
+        }
+        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
+        Assert.Equal(File.ReadAllBytes(Path.Combine(host, "Configuration", "appsettings.gateway.json")),
+            File.ReadAllBytes(Path.Combine(host, "bin", configuration, "net10.0", "appsettings.gateway.json")));
+    }
+
     /// <summary>Requests at the configured limit succeed; Kestrel rejects a larger body without an endpoint size attribute.</summary>
     [Theory]
     [InlineData(1_048_576, HttpStatusCode.OK)]

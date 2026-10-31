@@ -22,3 +22,7 @@ _bmad-output/implementation-artifacts/evidence/story-4-12/review-pass-3-20261024
 
 # Preserve the staged package evidence and raw cross-platform discovery bytes.
 _bmad-output/implementation-artifacts/evidence/story-4-16/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
+# Package profile provenance binds exact native configuration snapshot bytes.
+tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/*.json -text
+tests/Hexalith.McpCli.EventStoreGateway.TestHost/Properties/launchSettings.json -text

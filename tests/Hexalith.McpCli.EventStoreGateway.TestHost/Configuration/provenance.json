@@ -1,0 +1,16 @@
+{
+  "profile": "published",
+  "eventStoreVersion": "3.128.4",
+  "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+  "sourceCommit": "ab39879c06eea69668916941ce46a2b6d7e8efd9",
+  "files": {
+    "Configuration/appsettings.gateway.json": {
+      "sourcePath": "src/Hexalith.EventStore/appsettings.json",
+      "sha256": "103e849f6c08a236f5516c37dc424a5e702dfa219f4a20c83c68caa78ee0abb8"
+    },
+    "Properties/launchSettings.json": {
+      "sourcePath": "src/Hexalith.EventStore/Properties/launchSettings.json",
+      "sha256": "0fe6ce67df194dbf75e4a5df14c4b45aadbff631c73885d54d9705d26f7b2175"
+    }
+  }
+}
