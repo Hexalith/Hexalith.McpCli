@@ -6,11 +6,13 @@ namespace Hexalith.McpCli.Manifest.Tests;
 public sealed class TopologyAccessControlTests
 {
     /// <summary>Allows discovery only from the Gateway while all callers and methods remain explicitly bounded.</summary>
-    [Fact]
-    public void MetadataDiscoveryRequiresGatewayPostAndDefaultDeny()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void MetadataDiscoveryRequiresGatewayPostAndDefaultDeny(bool published)
     {
         string path = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.AppHost",
-            "DaprComponents", "accesscontrol.yaml");
+            "DaprComponents", published ? "accesscontrol.published.yaml" : "accesscontrol.yaml");
         // JSON is a YAML subset accepted by Dapr, so this boundary needs no additional parser dependency.
         using JsonDocument document = JsonDocument.Parse(File.ReadAllText(path));
         JsonElement mtls = document.RootElement.GetProperty("spec").GetProperty("mtls");
@@ -35,7 +37,8 @@ public sealed class TopologyAccessControlTests
             JsonElement[] operations = policy.GetProperty("operations").EnumerateArray().ToArray();
             string[] allowedPaths = caller == "eventstore"
                 ? ["/admin/operational-index-metadata", "/process", "/project", "/project/v2", "/query"]
-                : caller == "tenants" ? ["/api/v1/commands", "/api/v1/queries"] : ["/api/v1/queries"];
+                : caller == "tenants" ? published ? ["/api/v1/commands", "/api/v1/queries", "/api/v1/streams/read/workload"]
+                    : ["/api/v1/commands", "/api/v1/queries"] : ["/api/v1/queries"];
             Assert.Equal(allowedPaths, operations.Select(operation => operation.GetProperty("name").GetString()).Order(StringComparer.Ordinal));
             Assert.All(operations, operation =>
             {
