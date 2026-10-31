@@ -24,7 +24,7 @@ def package(path, *, identity="Hexalith.McpCli.Abstractions", version="1.0.0", m
     files = {
         "Hexalith.McpCli.Abstractions.nuspec": (
             f'<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"><metadata>'
-            f'<id>{identity}</id><version>{version}</version>'
+            f'<id>{identity}</id><version>{version}</version><repository type="git" commit="{SHA}" />'
             + ('<dependencies><group><dependency id="Leak" version="1.0.0" /></group></dependencies>' if dependency else '')
             + '</metadata></package>'
         ),
@@ -808,7 +808,7 @@ else:
         managed[metadata + 40:metadata + 44] = b'#~\0\0'
         managed[metadata + 48:metadata + 52] = bytes([2, 0, 0, 1])
         files = {
-            "Hexalith.McpCli.nuspec": '<package><metadata><id>Hexalith.McpCli</id><version>1.0.0</version>'
+            "Hexalith.McpCli.nuspec": f'<package><metadata><id>Hexalith.McpCli</id><version>1.0.0</version><repository type="git" commit="{SHA}" />'
                 + ('<packageTypes><packageType name="DotnetTool" /></packageTypes>' if package_type else '')
                 + '</metadata></package>',
             "README.md": "fixture", prefix + "Hexalith.McpCli.dll": bytes(managed),
@@ -856,12 +856,12 @@ else:
         for options, message in cases:
             with self.subTest(options=options):
                 self.paired_tool(**options)
-                result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "paired")
+                result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "paired", "--source-sha", SHA)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
         self.paired_tool()
-        result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "paired")
+        result = self.run_script("validate-release-packages.py", str(path.parent), "1.0.0", "paired", "--source-sha", SHA)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assert_no_push()
 
@@ -883,18 +883,18 @@ else:
                 files[name] = payload
                 with ZipFile(path, 'w') as archive:
                     for item, contents in files.items(): archive.writestr(item, contents)
-                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired', '--source-sha', SHA)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
         self.paired_tool()
         (self.root / 'tools/dependency-policy.json').write_text(json.dumps({'modules': {'Sample.Contracts': '2.0.0'}}))
-        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired', '--source-sha', SHA)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Restored Contracts versions', result.stderr)
         self.paired_tool()
         (self.root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj').write_text('<Project />')
-        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired', '--source-sha', SHA)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Generated manifest, flagged Contracts references', result.stderr)
         self.assert_no_push()
@@ -959,7 +959,7 @@ else:
                 with ZipFile(path, 'w') as archive:
                     files = {**base, name: payload}
                     for item, contents in files.items(): archive.writestr(item, contents)
-                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired')
+                result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired', '--source-sha', SHA)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
@@ -985,6 +985,11 @@ else:
         for package_path in paths:
             repository_commit(package_path, SHA)
         output = self.root / 'validated.json'
+        result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired',
+                                 '--output', str(output))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('requires --source-sha', result.stderr)
+        self.assertFalse(output.exists())
         result = self.run_script('validate-release-packages.py', str(path.parent), '1.0.0', 'paired',
                                  '--source-sha', SHA, '--output', str(output))
         self.assertEqual(result.returncode, 0, result.stderr)
