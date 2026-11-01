@@ -1,0 +1,21 @@
+{
+  "schema": "mcpcli-4-18-environment-approval/v1",
+  "decision": "approved",
+  "owner": "user (explicit conversation approval)",
+  "user_response": "approve",
+  "recorded_at_utc": "2026-11-01T14:04:49.528472+00:00",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261101-00c6a713",
+    "release": "mcpcli-417-20261101-00c6a713"
+  },
+  "tenant": "mcpcli-417-20261101-00c6a713",
+  "operator_subject": "mcpcli-417-operator-20261101-00c6a713",
+  "expires_at_utc": "2026-11-02T12:46:22.115384+00:00",
+  "staging_run_id": 41307182275,
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0",
+  "scope": "Deploy exact packet, complete ordered bootstrap/seed/handoff and scoped forward; eventual owned cleanup after client sessions. No mutation replay, production release or NuGet publication approval."
+}

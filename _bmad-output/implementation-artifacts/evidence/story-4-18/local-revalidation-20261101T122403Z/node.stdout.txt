@@ -1,0 +1,12 @@
+✔ detached source selects its exact release result with absent-main (3611.221898ms)
+✔ detached source selects its exact release result with main-before-source (3459.021473ms)
+✔ detached source selects its exact release result with main-after-source (3486.474506ms)
+✔ detached source selects its exact release result with no-release (3518.838569ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15939.361737

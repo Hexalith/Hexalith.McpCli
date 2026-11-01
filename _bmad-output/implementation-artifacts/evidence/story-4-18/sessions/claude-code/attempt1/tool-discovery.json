@@ -1,0 +1,13 @@
+[
+  {
+    "matches": [
+      "mcp__hexalith__list_modules",
+      "mcp__hexalith__list_operations",
+      "mcp__hexalith__describe_operation",
+      "mcp__hexalith__run_query",
+      "mcp__hexalith__send_command"
+    ],
+    "query": "select:mcp__hexalith__list_modules,mcp__hexalith__list_operations,mcp__hexalith__describe_operation,mcp__hexalith__run_query,mcp__hexalith__send_command",
+    "total_deferred_tools": 25
+  }
+]

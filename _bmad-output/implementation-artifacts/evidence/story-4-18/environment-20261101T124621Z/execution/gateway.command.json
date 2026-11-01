@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/environment-20261101T124621Z/packet",
+    "--review-sha256",
+    "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+    "--execute-reviewed",
+    "--phase",
+    "gateway"
+  ],
+  "started_at_utc": "2026-11-01T14:05:51.287687+00:00",
+  "ended_at_utc": "2026-11-01T14:05:54.673492+00:00",
+  "exit_code": 0,
+  "timed_out": false,
+  "kubectl": "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+  "kubectl_sha256": "73bb6f5063caadae1e73a39de018d8ad21755984bea35358484db817859e7634"
+}

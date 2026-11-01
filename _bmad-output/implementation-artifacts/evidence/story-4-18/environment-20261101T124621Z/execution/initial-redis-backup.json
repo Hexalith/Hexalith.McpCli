@@ -1,0 +1,10 @@
+{
+  "databaseSize": 0,
+  "createdBeforeApplications": true,
+  "backupFile": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/execution/initial-empty.rdb",
+  "sha256": "89c984b40e26f61b515abbec6b4965faab19bea9d502532636e27699e232d81a",
+  "namespaceUid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+  "redisPodUid": "400a001a-27f8-49d2-9718-c5299c968b19",
+  "pvcUid": "bda2e9b2-4c98-40a6-9c12-a8a96501ed9b",
+  "capturedAt": "2026-11-01T14:05:48.100593+00:00"
+}

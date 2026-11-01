@@ -1,0 +1,153 @@
+{
+  "schema": "mcpcli-paired-local-revalidation/v1",
+  "status": "passed",
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "branch": "main",
+  "initial_working_tree_clean": true,
+  "started_at_utc": "2026-11-01T12:24:03.850714+00:00",
+  "frozen_approved_block_sha256": "8a82b7db6c9237695f63a0b6d470c16389173d6ea3caea0c8e847328b9bd4a98",
+  "checks": [
+    {
+      "name": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "started_at_utc": "2026-11-01T12:24:03.850714+00:00",
+      "elapsed_seconds": 104.809,
+      "exit_code": 0,
+      "stdout": "python.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "python.stderr.txt",
+      "stderr_sha256": "cf3bd498b2cdb53e0feeb7ce3d896756580719a440605d32bbe313f334a7a136"
+    },
+    {
+      "name": "node",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/select-release-version.test.mjs"
+      ],
+      "started_at_utc": "2026-11-01T12:25:48.655498+00:00",
+      "elapsed_seconds": 15.982,
+      "exit_code": 0,
+      "stdout": "node.stdout.txt",
+      "stdout_sha256": "5bdf540c5e6a7aab5ef3a977cc3711e49735644c2cf1a99db2bfe8ab14bfa076",
+      "stderr": "node.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actionlint",
+      "argv": [
+        "actionlint",
+        ".github/workflows/release.yml",
+        ".github/workflows/ci.yml"
+      ],
+      "started_at_utc": "2026-11-01T12:26:04.637116+00:00",
+      "elapsed_seconds": 0.702,
+      "exit_code": 0,
+      "stdout": "actionlint.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "actionlint.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "instruction-sync",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "started_at_utc": "2026-11-01T12:26:05.343908+00:00",
+      "elapsed_seconds": 0.02,
+      "exit_code": 0,
+      "stdout": "instruction-sync.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "instruction-sync.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at_utc": "2026-11-01T12:26:05.365113+00:00",
+      "elapsed_seconds": 0.299,
+      "exit_code": 0,
+      "stdout": "whitespace.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "whitespace.stderr.txt",
+      "stderr_sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+    },
+    {
+      "name": "syntax-release-preflight",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-preflight.sh"
+      ],
+      "started_at_utc": "2026-11-01T12:26:37.339725+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0,
+      "stdout": "syntax-release-preflight.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "syntax-release-preflight.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "syntax-release-prepare",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-prepare.sh"
+      ],
+      "started_at_utc": "2026-11-01T12:26:37.341501+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "stdout": "syntax-release-prepare.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "syntax-release-prepare.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "syntax-release-publish",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-publish.sh"
+      ],
+      "started_at_utc": "2026-11-01T12:26:37.342904+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "stdout": "syntax-release-publish.stdout.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "syntax-release-publish.stderr.txt",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "remote_operations": 0,
+  "actual_client_sessions": 0,
+  "nuget_pushes": 0,
+  "scope": "Local release-automation tests use synthetic evidence and temporary local Git fixture repositories. They do not establish hosted exact-source or operator acceptance.",
+  "pending": [
+    "Hosted exact-source CI and commitlint; not queried during this no-remote implementation step",
+    "Fresh successful stage-paired run and three-platform acceptance",
+    "New owner-approved ready environment and user participation in actual Claude Code, Claude Desktop and VS Code sessions",
+    "Candidate-bound operator approval preserving the historical assisted 685-second exception",
+    "Production approval, publication and signature-aware public-content verification for both packages"
+  ],
+  "summary": {
+    "python_tests": 138,
+    "node_tests": 4,
+    "failed": 0,
+    "static_checks": "passed"
+  }
+}

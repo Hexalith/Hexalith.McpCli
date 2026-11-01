@@ -1,0 +1,62 @@
+{
+  "schema": "mcpcli-fresh-staging-handoff/v1",
+  "status": "accepted-staging-only",
+  "recorded_at_utc": "2026-11-01T12:40:42.457549+00:00",
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "8570ee0e836132ee0bdc06b310547c2ccbd2fdea18ee53b87118588680fab931",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "511aa34294ed8858d285701528dd028207f031fe873a3a37b0d141ecb2d12dee"
+  },
+  "staging_run_id": 41307182275,
+  "preparation_sha256": "b00cc283fdc2943f2d8433dfe789b6f7bad0bbf79073909d3c8046160b8cc46a",
+  "acceptance_sha256": "c80f4ac18532465c699db9b79825c466dfb7be38d36b00a969fb5f140098f9ed",
+  "readme_sha256": "432a77c23e881f3fb182fc4b6ced8794375fd9c504b067d11e9ac5342f8bc910",
+  "run_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+  "original_artifacts": [
+    {
+      "digest": "sha256:a76fb7230cc79d361c26dc1b018efb06c5db1fe2ee5b6c78196bf624c6e8ea42",
+      "id": 13084100345,
+      "name": "paired-preparation"
+    },
+    {
+      "digest": "sha256:06b091d1d10ed3c47bc158d0ee5045ca8dc17fd06fd14eedb8c2c700e39071b2",
+      "id": 13082764696,
+      "name": "paired-consumer-ubuntu-latest"
+    },
+    {
+      "digest": "sha256:15d1d1db95398bfc9c2c2f8131ec6f41afbe3ecb5c77eac7a7f8162c54ef3ebc",
+      "id": 13084275190,
+      "name": "paired-consumer-windows-latest"
+    },
+    {
+      "digest": "sha256:c1d6ff59088f2224f06023a46a16786c6beafd016d01b350dad132296f97b196",
+      "id": 13084250211,
+      "name": "paired-consumer-macos-latest"
+    },
+    {
+      "digest": "sha256:0be987ecc54b6e972fc4d51d0be317a11ebb8241c2f6e978503dfceda30817ec",
+      "id": 13083956884,
+      "name": "accepted-staging-only"
+    }
+  ],
+  "platforms": [
+    "Darwin",
+    "Linux",
+    "Windows"
+  ],
+  "artifact_zip_digests_verified": true,
+  "acceptance_recomputed_equal": true,
+  "acceptance_source_verified": true,
+  "package_identity_source_readme_verified": true,
+  "remote_main_still_matches": true,
+  "candidate_directory": "/home/administrator/projects/hexalith/mcpcli/.artifacts/story-4-18/staging-41307182275",
+  "extracted_directory": "/home/administrator/projects/hexalith/mcpcli/.artifacts/story-4-18/extracted-41307182275",
+  "handoff_directory": "/tmp/mcpcli-4-18-41307182275/handoff",
+  "handoff_config_sha256": "a28ed5e43a16d452c43b670809472077870635aaf361ff9b61813617cfddc890",
+  "actual_client_sessions": 0,
+  "publication_dispatched": false,
+  "nuget_pushes": 0,
+  "operator_acceptance": "pending new approved environment and three actual candidate-bound client sessions",
+  "production_approval": "pending"
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "mcpcli-4-18-client-progress/v1",
+  "recorded_at_utc": "2026-11-01T14:27:15.001252+00:00",
+  "staging_run_id": 41307182275,
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "clients": {
+    "Claude Code": {
+      "actual_calls": "passed",
+      "session_id": "7ceb60f0-3ebf-490b-ba96-7ccb271ff745",
+      "single_command_message_id": "01M6BQKC4BC8AKQ5GEKE53VASX",
+      "shutdown": "pending user /exit",
+      "evidence": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/sessions/claude-code/attempt1/session.json"
+    },
+    "Claude Desktop": {
+      "actual_calls": "pending",
+      "configuration": "hexalith updated; full client restart required",
+      "other_servers_preserved": true
+    },
+    "VS Code": {
+      "actual_calls": "pending",
+      "configuration": "prepared fragment only; user configuration unchanged"
+    }
+  },
+  "operator_acceptance": "pending all three clients and explicit candidate decision",
+  "production_publication": "pending",
+  "access_expires_at_utc": "2026-11-01T16:07:34+00:00"
+}

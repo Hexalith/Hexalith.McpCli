@@ -1,0 +1,21 @@
+{
+  "session_id": "7ceb60f0-3ebf-490b-ba96-7ccb271ff745",
+  "source_log_record": {
+    "debug": "Connection established with capabilities: {\"hasTools\":true,\"hasPrompts\":false,\"hasResources\":false,\"hasResourceSubscribe\":false,\"serverVersion\":{\"name\":\"hexalith\",\"version\":\"1.2.0\"},\"protocolEra\":\"modern\",\"negotiatedProtocolVersion\":\"2026-07-28\"}",
+    "timestamp": "2026-11-01T14:17:00.883Z",
+    "sessionId": "7ceb60f0-3ebf-490b-ba96-7ccb271ff745",
+    "cwd": "/tmp/mcpcli-4-18-41307182275/client-workspace"
+  },
+  "capabilities": {
+    "hasTools": true,
+    "hasPrompts": false,
+    "hasResources": false,
+    "hasResourceSubscribe": false,
+    "serverVersion": {
+      "name": "hexalith",
+      "version": "1.2.0"
+    },
+    "protocolEra": "modern",
+    "negotiatedProtocolVersion": "2026-07-28"
+  }
+}

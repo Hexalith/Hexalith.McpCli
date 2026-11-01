@@ -1,0 +1,12 @@
+{
+  "actual-tool-calls.json": "8a08e9fcfe0f57b4022ab36395f499f2904415ae73eac1ab31bf51d77353c0bc",
+  "client-report.md": "f695258844eed45de1654d0c4555f437e01ca54ebdbba5fd5b0b9c6cf4c2eded",
+  "command-result.json": "ea394affe5db6f5ae0ae896057a535484ebdd8a838a963cbbba0476c02bc2ccf",
+  "connection.jsonl": "91d849ef6675faa4749e7f09aa088ee70a036da89e7e7c718bec9fdd4034abe6",
+  "initialization.json": "5decd34e8f7b8facf0a2d7329dc2d57207b2c02297499ef49a3529d6b9fabd4b",
+  "persisted-party.json": "dfb3cf1680e021551ec7c2c24b771cc3f0067d3d2b9496655a56bf474116b1f5",
+  "session.json": "9bfbf79f4821335419bf40c0e98c7545689013428d731433d4e3ca15e823e160",
+  "supporting-client-calls.json": "cd46b068ebbf71874f2b369c5d3a3e64f09132963cc0a8e5696c4a4fea9c4058",
+  "tenant-read.json": "a347cd8d230ea1792900715b12f65c61ef363809f45dcf70217e5c9e6c031595",
+  "tool-discovery.json": "db79dd07ab7dbdb396f436cc4b8b0796c281e8e1ffbeda818802d62764437758"
+}

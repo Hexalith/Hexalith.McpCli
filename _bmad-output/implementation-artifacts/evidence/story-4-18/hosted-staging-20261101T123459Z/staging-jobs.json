@@ -1,0 +1,698 @@
+{
+  "total_count": 8,
+  "jobs": [
+    {
+      "id": 124849872080,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEaHc0A",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124849872080",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124849872080",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-01T12:35:05Z",
+      "started_at": "2026-11-01T12:35:08Z",
+      "completed_at": "2026-11-01T12:36:28Z",
+      "name": "stage-pair",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-01T12:35:09Z",
+          "completed_at": "2026-11-01T12:35:10Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T12:35:10Z",
+          "completed_at": "2026-11-01T12:35:13Z"
+        },
+        {
+          "name": "Require staging dispatch from main",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T12:35:13Z",
+          "completed_at": "2026-11-01T12:35:13Z"
+        },
+        {
+          "name": "Refuse staging recovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-01T12:35:13Z",
+          "completed_at": "2026-11-01T12:35:13Z"
+        },
+        {
+          "name": "Initialize only the root-declared build and baseline dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-01T12:35:13Z",
+          "completed_at": "2026-11-01T12:35:19Z"
+        },
+        {
+          "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-01T12:35:19Z",
+          "completed_at": "2026-11-01T12:35:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-01T12:35:19Z",
+          "completed_at": "2026-11-01T12:35:20Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-01T12:35:20Z",
+          "completed_at": "2026-11-01T12:35:25Z"
+        },
+        {
+          "name": "Select a version using only a temporary local Git remote",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-01T12:35:25Z",
+          "completed_at": "2026-11-01T12:35:27Z"
+        },
+        {
+          "name": "Recheck full-v1 source gates and prepare exactly one pair",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-01T12:35:27Z",
+          "completed_at": "2026-11-01T12:36:23Z"
+        },
+        {
+          "name": "Retain the sole staged pair or explicit no-release result",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-01T12:36:23Z",
+          "completed_at": "2026-11-01T12:36:25Z"
+        },
+        {
+          "name": "Retain failed preparation diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-11-01T12:36:25Z",
+          "completed_at": "2026-11-01T12:36:25Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-11-01T12:36:25Z",
+          "completed_at": "2026-11-01T12:36:25Z"
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-01T12:36:25Z",
+          "completed_at": "2026-11-01T12:36:26Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-01T12:36:26Z",
+          "completed_at": "2026-11-01T12:36:26Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-01T12:36:26Z",
+          "completed_at": "2026-11-01T12:36:26Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124849872080",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000064685,
+      "runner_name": "GitHub Actions 1000064685",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124849873086,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEaHgvg",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124849873086",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124849873086",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-01T12:35:05Z",
+      "started_at": "2026-11-01T12:35:05Z",
+      "completed_at": "2026-11-01T12:35:05Z",
+      "name": "verify-source",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124849873086",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124849873093,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEaHgxQ",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124849873093",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124849873093",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-01T12:35:05Z",
+      "started_at": "2026-11-01T12:35:05Z",
+      "completed_at": "2026-11-01T12:35:05Z",
+      "name": "recover",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124849873093",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124849873181,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEaHhHQ",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124849873181",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124849873181",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-01T12:35:05Z",
+      "started_at": "2026-11-01T12:35:05Z",
+      "completed_at": "2026-11-01T12:35:05Z",
+      "name": "publish",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124849873181",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124850198196,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEabWtA",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124850198196",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124850198196",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-01T12:36:28Z",
+      "started_at": "2026-11-01T12:36:32Z",
+      "completed_at": "2026-11-01T12:38:48Z",
+      "name": "smoke-pair (macos-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-01T12:36:33Z",
+          "completed_at": "2026-11-01T12:36:35Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T12:36:35Z",
+          "completed_at": "2026-11-01T12:36:42Z"
+        },
+        {
+          "name": "Initialize root-declared Builds for required platform tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T12:36:42Z",
+          "completed_at": "2026-11-01T12:36:48Z"
+        },
+        {
+          "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-01T12:36:48Z",
+          "completed_at": "2026-11-01T12:37:05Z"
+        },
+        {
+          "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-01T12:37:05Z",
+          "completed_at": "2026-11-01T12:37:08Z"
+        },
+        {
+          "name": "Install the same local tool bytes and run offline smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-01T12:37:08Z",
+          "completed_at": "2026-11-01T12:37:24Z"
+        },
+        {
+          "name": "Execute required Windows Core and CLI suites or macOS CLI suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-01T12:37:24Z",
+          "completed_at": "2026-11-01T12:38:40Z"
+        },
+        {
+          "name": "Retain actual platform receipts and raw captures",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-01T12:38:40Z",
+          "completed_at": "2026-11-01T12:38:43Z"
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-01T12:38:43Z",
+          "completed_at": "2026-11-01T12:38:43Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-01T12:38:43Z",
+          "completed_at": "2026-11-01T12:38:44Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-01T12:38:44Z",
+          "completed_at": "2026-11-01T12:38:45Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124850198196",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000064690,
+      "runner_name": "GitHub Actions 1000064690",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124850198272,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEabXAA",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124850198272",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124850198272",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-01T12:36:28Z",
+      "started_at": "2026-11-01T12:36:31Z",
+      "completed_at": "2026-11-01T12:39:33Z",
+      "name": "smoke-pair (windows-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-01T12:36:32Z",
+          "completed_at": "2026-11-01T12:36:33Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T12:36:33Z",
+          "completed_at": "2026-11-01T12:36:45Z"
+        },
+        {
+          "name": "Initialize root-declared Builds for required platform tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T12:36:45Z",
+          "completed_at": "2026-11-01T12:36:51Z"
+        },
+        {
+          "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-01T12:36:51Z",
+          "completed_at": "2026-11-01T12:36:54Z"
+        },
+        {
+          "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-01T12:36:54Z",
+          "completed_at": "2026-11-01T12:36:55Z"
+        },
+        {
+          "name": "Install the same local tool bytes and run offline smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-01T12:36:55Z",
+          "completed_at": "2026-11-01T12:37:20Z"
+        },
+        {
+          "name": "Execute required Windows Core and CLI suites or macOS CLI suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-01T12:37:20Z",
+          "completed_at": "2026-11-01T12:39:28Z"
+        },
+        {
+          "name": "Retain actual platform receipts and raw captures",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-01T12:39:28Z",
+          "completed_at": "2026-11-01T12:39:29Z"
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-01T12:39:29Z",
+          "completed_at": "2026-11-01T12:39:29Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-01T12:39:29Z",
+          "completed_at": "2026-11-01T12:39:32Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-01T12:39:32Z",
+          "completed_at": "2026-11-01T12:39:32Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124850198272",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000064691,
+      "runner_name": "GitHub Actions 1000064691",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124850198286,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEabXDg",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124850198286",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124850198286",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-01T12:36:28Z",
+      "started_at": "2026-11-01T12:36:31Z",
+      "completed_at": "2026-11-01T12:36:59Z",
+      "name": "smoke-pair (ubuntu-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-01T12:36:32Z",
+          "completed_at": "2026-11-01T12:36:33Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T12:36:33Z",
+          "completed_at": "2026-11-01T12:36:35Z"
+        },
+        {
+          "name": "Initialize root-declared Builds for required platform tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T12:36:35Z",
+          "completed_at": "2026-11-01T12:36:39Z"
+        },
+        {
+          "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-01T12:36:39Z",
+          "completed_at": "2026-11-01T12:36:40Z"
+        },
+        {
+          "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-01T12:36:40Z",
+          "completed_at": "2026-11-01T12:36:40Z"
+        },
+        {
+          "name": "Install the same local tool bytes and run offline smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-01T12:36:40Z",
+          "completed_at": "2026-11-01T12:36:56Z"
+        },
+        {
+          "name": "Execute required Windows Core and CLI suites or macOS CLI suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-01T12:36:56Z",
+          "completed_at": "2026-11-01T12:36:56Z"
+        },
+        {
+          "name": "Retain actual platform receipts and raw captures",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-01T12:36:56Z",
+          "completed_at": "2026-11-01T12:36:57Z"
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-01T12:36:57Z",
+          "completed_at": "2026-11-01T12:36:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-01T12:36:57Z",
+          "completed_at": "2026-11-01T12:36:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-01T12:36:58Z",
+          "completed_at": "2026-11-01T12:36:58Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124850198286",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000064692,
+      "runner_name": "GitHub Actions 1000064692",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124850906380,
+      "run_id": 41307182275,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41307182275",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdEbGlDA",
+      "head_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/124850906380",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41307182275/job/124850906380",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-01T12:39:33Z",
+      "started_at": "2026-11-01T12:39:37Z",
+      "completed_at": "2026-11-01T12:39:54Z",
+      "name": "accept-staged-pair",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-01T12:39:38Z",
+          "completed_at": "2026-11-01T12:39:40Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T12:39:40Z",
+          "completed_at": "2026-11-01T12:39:43Z"
+        },
+        {
+          "name": "Initialize root-declared baseline for fresh acceptance checks",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T12:39:43Z",
+          "completed_at": "2026-11-01T12:39:43Z"
+        },
+        {
+          "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-01T12:39:43Z",
+          "completed_at": "2026-11-01T12:39:45Z"
+        },
+        {
+          "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-01T12:39:45Z",
+          "completed_at": "2026-11-01T12:39:46Z"
+        },
+        {
+          "name": "Require source still eligible after platform execution",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-01T12:39:46Z",
+          "completed_at": "2026-11-01T12:39:50Z"
+        },
+        {
+          "name": "Require every receipt, named Windows test and identical raw discovery bytes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-01T12:39:50Z",
+          "completed_at": "2026-11-01T12:39:51Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-01T12:39:51Z",
+          "completed_at": "2026-11-01T12:39:52Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-01T12:39:52Z",
+          "completed_at": "2026-11-01T12:39:52Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-01T12:39:52Z",
+          "completed_at": "2026-11-01T12:39:52Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/124850906380",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000064703,
+      "runner_name": "GitHub Actions 1000064703",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

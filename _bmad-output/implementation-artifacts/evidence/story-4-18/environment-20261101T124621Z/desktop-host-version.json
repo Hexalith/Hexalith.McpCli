@@ -1,0 +1,8 @@
+{
+  "observed_at_utc": "2026-11-01T14:27:15.001252+00:00",
+  "process_name": "claude",
+  "path": "C:\\Program Files\\WindowsApps\\Claude_4.4212.0.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe",
+  "product_version": "4.4212.0",
+  "source": "Read-only Get-Process Claude MainModule.FileVersionInfo.ProductVersion",
+  "actual_desktop_session_verified": false
+}

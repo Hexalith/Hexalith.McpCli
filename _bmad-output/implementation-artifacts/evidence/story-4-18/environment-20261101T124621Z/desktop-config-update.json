@@ -1,0 +1,56 @@
+{
+  "schema": "mcpcli-actual-client-configuration-update/v1",
+  "client": "Claude Desktop",
+  "updated_at_utc": "2026-11-01T14:26:09.733730+00:00",
+  "config_path": "/mnt/c/Users/JeromePiquot/AppData/Roaming/Claude/claude_desktop_config.json",
+  "modified_entry": "mcpServers.hexalith",
+  "other_entries_preserved": true,
+  "before_sha256": "d9f9f0bd316f8d04f832f001005a1d2b9ece6e4d354cd44e4c2cd9df0215363e",
+  "after_sha256": "531ef45b102a170d7e051ae8a185ac6a673fe4a3f2985e7d08a63bd460b5fffe",
+  "private_backup": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/clients/desktop-config-backup/claude_desktop_config.before.json",
+  "old_hexalith": {
+    "command": "C:\\Windows\\System32\\wsl.exe",
+    "args": [
+      "--distribution",
+      "Ubuntu-26.04",
+      "--user",
+      "administrator",
+      "--cd",
+      "/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home",
+      "--exec",
+      "/usr/bin/env",
+      "MCPCLI_HOME=/tmp/mcpcli-417-v1-private-20261031-attempt8/access-renewal-20261031/operator-home",
+      "DOTNET_ROOT=/home/administrator/.dotnet",
+      "/tmp/mcpcli-417-offline-20261030/private/tools/hexalith",
+      "mcp",
+      "--transport",
+      "stdio",
+      "--profile",
+      "operator"
+    ]
+  },
+  "new_hexalith": {
+    "command": "C:\\Windows\\System32\\wsl.exe",
+    "args": [
+      "--distribution",
+      "Ubuntu-26.04",
+      "--user",
+      "administrator",
+      "--cd",
+      "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+      "--exec",
+      "/usr/bin/env",
+      "MCPCLI_HOME=/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+      "DOTNET_ROOT=/home/administrator/.dotnet",
+      "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+      "mcp",
+      "--transport",
+      "stdio",
+      "--profile",
+      "operator"
+    ]
+  },
+  "credentials_embedded": false,
+  "restart_required": true,
+  "actual_client_session": "pending user GUI participation"
+}

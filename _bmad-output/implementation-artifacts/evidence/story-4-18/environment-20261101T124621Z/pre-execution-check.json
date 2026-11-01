@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "recorded_at_utc": "2026-11-01T14:04:49.528472+00:00",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "namespace_absent": true,
+  "source_still_current_main": true,
+  "runner_inputs_verified": true,
+  "tool_hash_verified": true,
+  "target_api_and_dapr_storage_checked": true,
+  "ports_available": [
+    18170,
+    18171
+  ],
+  "resources_applied": false
+}

@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "dotnet",
+    "tool",
+    "install",
+    "Hexalith.McpCli",
+    "--version",
+    "1.2.0",
+    "--tool-path",
+    "/tmp/mcpcli-4-18-41307182275/operator/tools",
+    "--configfile",
+    "/tmp/mcpcli-4-18-41307182275/operator/NuGet.Config",
+    "--no-cache"
+  ],
+  "started_at_utc": "2026-11-01T14:08:35.301031+00:00",
+  "exit_code": 0,
+  "source": "accepted staging 41307182275 local-only handoff",
+  "tool_path": "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+  "mcpcli_home": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home"
+}

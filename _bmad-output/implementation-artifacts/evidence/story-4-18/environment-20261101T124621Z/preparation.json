@@ -1,0 +1,54 @@
+{
+  "schema": "mcpcli-4-18-environment-preparation/v1",
+  "state": "prepared-pending-exact-packet-approval",
+  "prepared_at_utc": "2026-11-01T12:46:21.975715+00:00",
+  "user_direction": "yes to preparing a fresh environment on 192.168.1.30",
+  "deployment_approved": false,
+  "resources_applied": false,
+  "platform_source": "947b4077997975f1898c7ed2c6297d0178e36a86",
+  "platform_recipe": "eng/mcpcli-operator-setup/v1",
+  "mcpcli_source": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "staging_run_id": 41307182275,
+  "version": "1.2.0",
+  "packet_directory": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/environment-20261101T124621Z/packet",
+  "private_root": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261101-00c6a713",
+    "release": "mcpcli-417-20261101-00c6a713"
+  },
+  "tenant": "mcpcli-417-20261101-00c6a713",
+  "operator_subject": "mcpcli-417-operator-20261101-00c6a713",
+  "expires_at_utc": "2026-11-02T12:46:22.115384+00:00",
+  "kubectl": "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+  "kubectl_sha256": "73bb6f5063caadae1e73a39de018d8ad21755984bea35358484db817859e7634",
+  "runner_sha256": "ce3f8c3a507b0353978a0a9ce5381da3fed1879f9a8850369ada1b209b9ce0a9",
+  "prepare_sha256": "0e46f852a11f816dd1e0054d581c02a472fe66c30987d0220de7b781124660cf",
+  "namespace_prefix_note": "The unchanged Platform recipe uses mcpcli-417- for a new unique namespace; this attempt belongs to Story 4.18.",
+  "scope": {
+    "apps": [
+      "eventstore",
+      "tenants",
+      "parties"
+    ],
+    "provider": "task-owned Redis",
+    "storage": "1Gi",
+    "network": "private ClusterIP services and loopback Gateway forward",
+    "seed_operations": [
+      "create-tenant",
+      "add-user-to-tenant"
+    ],
+    "client_operations": "one fresh synthetic Party per approved client/attempt"
+  },
+  "pending": [
+    "Exact concrete packet approval before infrastructure or bootstrap",
+    "Actual runtime/readiness/seed and operator handoff",
+    "Three actual candidate-bound client sessions and final operator decision",
+    "Production approval and public pair verification"
+  ],
+  "local_verification": "passed: 61 tests, exact packet verification and six client manifest dry runs",
+  "target_preflight": "passed: exact target, absent namespace, matching Dapr/storage/DNS/controller metadata, ports and candidate current main",
+  "registry_credential_disposal": "Private copy must be deleted after owned environment cleanup; keep all other backup/journal evidence."
+}

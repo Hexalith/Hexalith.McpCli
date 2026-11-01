@@ -1,0 +1,136 @@
+{
+  "schema": "mcpcli-paired-actual-client-session/v1",
+  "client": "Claude Code",
+  "status": "passed",
+  "actual_client": true,
+  "staging_run_id": 41307182275,
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "8570ee0e836132ee0bdc06b310547c2ccbd2fdea18ee53b87118588680fab931",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "511aa34294ed8858d285701528dd028207f031fe873a3a37b0d141ecb2d12dee"
+  },
+  "preparation_sha256": "b00cc283fdc2943f2d8433dfe789b6f7bad0bbf79073909d3c8046160b8cc46a",
+  "acceptance_sha256": "c80f4ac18532465c699db9b79825c466dfb7be38d36b00a969fb5f140098f9ed",
+  "readme_sha256": "432a77c23e881f3fb182fc4b6ced8794375fd9c504b067d11e9ac5342f8bc910",
+  "operator": "User in this conversation",
+  "observer": "Codex",
+  "os_version": "Ubuntu 26.04 LTS, WSL2 kernel 6.6.87.2-microsoft-standard-WSL2, x86_64",
+  "client_version": "2.1.316",
+  "harness": "Interactive Claude Code terminal session",
+  "launch_environment": "Ubuntu-26.04 WSL; isolated client-workspace; explicit --strict-mcp-config",
+  "executable_path": "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+  "selected_tenant": "mcpcli-417-20261101-00c6a713",
+  "party_id": "party-418-code-20261101-1",
+  "session_id": "7ceb60f0-3ebf-490b-ba96-7ccb271ff745",
+  "started_at_utc": "2026-11-01T14:17:00.883Z",
+  "ended_at_utc": "2026-11-01T14:18:24.845Z",
+  "environment_approval": {
+    "decision": "approved",
+    "ready": true,
+    "owner": "user (explicit conversation approval)",
+    "target": "https://192.168.1.30:6443",
+    "namespace_uid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+    "namespace": "mcpcli-417-20261101-00c6a713",
+    "tenant": "mcpcli-417-20261101-00c6a713",
+    "approved_at_utc": "2026-11-01T14:04:49.528472+00:00",
+    "expires_at_utc": "2026-11-01T16:07:34+00:00",
+    "ready_observed_at_utc": "2026-11-01T14:10:45.110746+00:00",
+    "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+    "operator_subject": "mcpcli-417-operator-20261101-00c6a713",
+    "role": "TenantContributor",
+    "domains": [
+      "tenants",
+      "party"
+    ],
+    "permissions": [
+      "command:submit",
+      "query:read"
+    ],
+    "global_administrator": false
+  },
+  "server_identity": {
+    "name": "hexalith",
+    "version": "1.2.0"
+  },
+  "tools": [
+    "describe_operation",
+    "list_modules",
+    "list_operations",
+    "run_query",
+    "send_command"
+  ],
+  "modules": [
+    "parties",
+    "tenants"
+  ],
+  "operation_lists": [
+    "parties",
+    "tenants"
+  ],
+  "described_operations": [
+    "tenants.get-tenant",
+    "parties.create-party",
+    "parties.get-party"
+  ],
+  "tenant_read": {
+    "tenant": "system",
+    "document_id": "mcpcli-417-20261101-00c6a713",
+    "is_active": true,
+    "membership_verified": true
+  },
+  "command_result": {
+    "status": "accepted",
+    "tenant": "mcpcli-417-20261101-00c6a713",
+    "aggregate_id": "party-418-code-20261101-1",
+    "message_id": "01M6BQKC4BC8AKQ5GEKE53VASX",
+    "correlation_id": "01M6BQKC4BC8AKQ5GEKE53VASX"
+  },
+  "persisted_party": {
+    "tenant": "mcpcli-417-20261101-00c6a713",
+    "id": "party-418-code-20261101-1",
+    "isActive": true,
+    "isErased": false,
+    "synthetic_fields_verified": true
+  },
+  "assistance": [
+    "Agent prepared environment, package installation, private operator profile, configuration, launcher and filled task prompt.",
+    "Claude Code Auto mode accepted all nine MCP calls through its classifier."
+  ],
+  "failures": [],
+  "permission_prompts": {
+    "mode": "auto",
+    "all_nine_decisions": "accept",
+    "source": "config/classifier",
+    "user_screen_prompts": "Not independently observed; no denial recorded."
+  },
+  "verification": {
+    "actual_tool_calls": 9,
+    "send_command_submissions": 1,
+    "persisted_reads": 1,
+    "exact_planned_arguments": true,
+    "no_overrides": true,
+    "all_client_calls_logged_successful": true,
+    "all_text_structured_content_equal": true,
+    "raw_explicit_isError_false_observed": false,
+    "error_flag_note": "No client is_error or raw MCP isError member is retained on these successful results; no error flag is true. Explicit false was not reconstructed.",
+    "serialized_frames_deduplicated_by_tool_use_id": true,
+    "actual_connection_version_verified": true,
+    "synthetic_person_contact_identifier_fields_verified": true,
+    "recorded_information_log_note": "The connection log has one error-key record carrying server stderr info logs, not a failed tool or connection."
+  },
+  "cleanup": {
+    "client_server_shutdown": "pending",
+    "active_client_server_pids": [
+      113402
+    ],
+    "owned_forward": "retained for remaining clients until token expiry",
+    "environment_cleanup": "pending after all sessions"
+  },
+  "source_transcript_sha256": "cca201dbea35a9575b0accec153934fa72e34ac268b1c3ebd2c7332ba6ec3e4c",
+  "source_connection_sha256": "91d849ef6675faa4749e7f09aa088ee70a036da89e7e7c718bec9fdd4034abe6",
+  "private_original_snapshot": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/clients/claude-code-actual-attempt1",
+  "captured_at_utc": "2026-11-01T14:25:29.665092+00:00",
+  "operator_decision": "pending all three actual sessions; not inferred from this completion report",
+  "timing_exception": "Existing assisted 685-second exception retained; no new first-time/unassisted claim."
+}

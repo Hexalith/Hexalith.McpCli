@@ -1,0 +1,42 @@
+{
+  "eligibility": "current-main",
+  "evidence": {
+    "build.command.json": "18bd0fdb064eccdb9168860aad4ddb8a379b0b7c7d04fadcc1248c8604bf54d3",
+    "build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build.stdout.txt": "7aef4dd0eb949c1c8634a93b9ba477f30c8b074164086fdd2b1fbcb738408bfa",
+    "consumer-build.log": "931534fe109bcee54ebbaf00060f095639011cbce6952dadb6c2bdd5ac28c93b",
+    "consumer.command.json": "4f6f984f5a9bd00950c4ed02b7e02530c2383158e1641816b0b77ded356f9c01",
+    "consumer.json": "377b37ed67a9aa15a2d10566788f39fe003802b1f8de4418952d5354989bfc78",
+    "consumer.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "consumer.stdout.txt": "c625a692d2aa634f961854b2a4ef37ebfac3c157b64d99bde5f30b037717e748",
+    "pack-Hexalith.McpCli.Abstractions.command.json": "3b7ac604e997b3856b694744df3256acf55859da1a31947b6f54922f851ea7d3",
+    "pack-Hexalith.McpCli.Abstractions.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pack-Hexalith.McpCli.Abstractions.stdout.txt": "4e1e18e523f5292ab86502d559e7ed4e284537b17e121db192820bf95119923d",
+    "pack-Hexalith.McpCli.command.json": "3d6a34aa4a7301298a1d1d1258270a1c2d82f0315a4285cba0c57550660159e7",
+    "pack-Hexalith.McpCli.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pack-Hexalith.McpCli.stdout.txt": "aa68dab89aeb5686fe1eb37ab38b32a5f352bd2e9a5f90768afa586c052e7057",
+    "restore.command.json": "b451a5ae0a600f53341765fdc8b22adc5c8da5f8340e927456e04a630fbd29c3",
+    "restore.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restore.stdout.txt": "5ca7e1da944b7629ee580b5a6a601ffc101e80859dfdd5fe6ea31999a83171d5",
+    "source-after.command.json": "0b6727951e58d661294824703cfe24071e1d2d638a2f48402fed1f03e9bf8e75",
+    "source-after.json": "1623e4f17dfdc652b2f88c2eebbfb3f14855be5c5f7cc2acf5c85460a98ecca6",
+    "source-after.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-after.stdout.txt": "a4306446feec0c24e6afa9f8fd6ed7bcd702236d0b3dd1ad94a6ea68fa19005a",
+    "source-before.command.json": "e19a04d885ab50d897e51372325572713d30a7afc647c75dd351645ca87f4979",
+    "source-before.json": "1623e4f17dfdc652b2f88c2eebbfb3f14855be5c5f7cc2acf5c85460a98ecca6",
+    "source-before.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-before.stdout.txt": "a4306446feec0c24e6afa9f8fd6ed7bcd702236d0b3dd1ad94a6ea68fa19005a",
+    "validate.command.json": "a2300e9a48f7f95566f30dfe635d08e55815f7de4a9f47dcddffcd8e276ba1ff",
+    "validate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validate.stdout.txt": "66c91216b671eca4afef7e3992a400f1a268632ec2b31489adfd91d34fc33db3",
+    "validation.json": "983f11e4b9d58057a6066a015423bbef23743d4fe470bd60128a9f525c103dfc"
+  },
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "8570ee0e836132ee0bdc06b310547c2ccbd2fdea18ee53b87118588680fab931",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "511aa34294ed8858d285701528dd028207f031fe873a3a37b0d141ecb2d12dee"
+  },
+  "schema": "mcpcli-paired-preparation/v1",
+  "source_clean": true,
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0"
+}

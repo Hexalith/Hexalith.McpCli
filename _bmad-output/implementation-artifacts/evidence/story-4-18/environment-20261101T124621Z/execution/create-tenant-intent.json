@@ -1,0 +1,13 @@
+{
+  "messageId": "01M6BPZFNHJ99J5BZN6F5PYW4X",
+  "correlationId": "01M6BPZFNHJ99J5BZN6F5PYW4X",
+  "tenant": "system",
+  "domain": "tenants",
+  "aggregateId": "mcpcli-417-20261101-00c6a713",
+  "commandType": "create-tenant",
+  "payload": {
+    "TenantId": "mcpcli-417-20261101-00c6a713",
+    "Name": "McpCli operator setup",
+    "Description": "Task-owned synthetic operator tenant"
+  }
+}

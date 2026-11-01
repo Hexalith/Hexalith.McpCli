@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+    "query",
+    "tenants.get-tenant",
+    "--payload",
+    "{\"TenantId\": \"mcpcli-417-20261101-00c6a713\"}",
+    "--profile",
+    "operator"
+  ],
+  "exit_code": 0,
+  "observed_at_utc": "2026-11-01T14:09:53.869465+00:00",
+  "purpose": "Supplemental non-administrator read from the exact staged CLI; not an actual client session"
+}

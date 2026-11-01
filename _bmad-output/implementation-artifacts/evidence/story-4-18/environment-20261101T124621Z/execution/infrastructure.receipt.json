@@ -1,0 +1,10 @@
+{
+  "phase": "infrastructure",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261101-00c6a713",
+  "startedAt": "2026-11-01T14:05:19.339720+00:00",
+  "namespaceUid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+  "redisPodUid": "400a001a-27f8-49d2-9718-c5299c968b19",
+  "pvcUid": "bda2e9b2-4c98-40a6-9c12-a8a96501ed9b",
+  "endedAt": "2026-11-01T14:05:30.416220+00:00"
+}

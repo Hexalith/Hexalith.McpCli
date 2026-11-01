@@ -1,0 +1,311 @@
+{
+  "schema": "mcpcli-4-18-target-preflight/v1",
+  "status": "passed",
+  "observed_at_utc": "2026-11-01T12:47:28.543168+00:00",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "checks": {
+    "api": "https://192.168.1.30:6443",
+    "kubernetes_versions": {
+      "clientVersion": "v1.34.9",
+      "serverVersion": "v1.34.9"
+    },
+    "namespace_absent": true,
+    "kubernetes_service_cluster_ip": "10.233.0.1",
+    "sentry": {
+      "uid": "7611713d-8be3-49a0-a300-b575c2d96ebb",
+      "containers": [
+        {
+          "image": "ghcr.io/dapr/sentry:1.18.1",
+          "args": [
+            "--mode",
+            "kubernetes",
+            "--log-level",
+            "info",
+            "--enable-metrics",
+            "--metrics-port",
+            "9090",
+            "--trust-domain",
+            "cluster.local"
+          ]
+        }
+      ],
+      "ready_replicas": 3
+    },
+    "injector": {
+      "uid": "5f654759-30a9-4a30-88b3-a3a591324bdb",
+      "containers": [
+        {
+          "image": "ghcr.io/dapr/injector:1.18.1",
+          "args": [
+            "--log-level",
+            "info",
+            "--enable-metrics",
+            "--metrics-port",
+            "9090",
+            "--healthz-port",
+            "8080",
+            "--scheduler-enabled=true"
+          ],
+          "securityEnvironment": {
+            "SIDECAR_RUN_AS_NON_ROOT": "true",
+            "SIDECAR_DROP_ALL_CAPABILITIES": "false",
+            "SIDECAR_READ_ONLY_ROOT_FILESYSTEM": "true"
+          }
+        }
+      ],
+      "ready_replicas": 3
+    },
+    "storage_class": {
+      "name": "openebs-hostpath",
+      "uid": "d1f619db-ee58-467e-8bf3-bd26dc86486e",
+      "provisioner": "openebs.io/local",
+      "volumeBindingMode": "WaitForFirstConsumer",
+      "reclaimPolicy": "Delete"
+    },
+    "node_local_dns": {
+      "uid": "874acc3b-b776-4995-8447-10f8d63f16ef",
+      "hostNetwork": true,
+      "resolver": "169.254.25.10",
+      "ready": 1
+    },
+    "job_controller": {
+      "controller_pods": [
+        "kube-controller-manager-node1"
+      ],
+      "uses_service_account_credentials": true,
+      "service_account_uid": "e700a8f7-2bb1-4763-922a-81b7b65eff7f"
+    },
+    "dapr_services": [
+      {
+        "name": "dapr-sentry",
+        "uid": "e0338ce4-f97d-46b8-a25d-d8d23f32b24f",
+        "clusterIP": "10.233.34.7"
+      },
+      {
+        "name": "dapr-api",
+        "uid": "4e56c3ef-9c3e-40fb-93d1-8ded4da1408b",
+        "clusterIP": "10.233.28.175"
+      },
+      {
+        "name": "dapr-placement-server",
+        "uid": "0d53f693-52e2-4a40-ae5a-646c21e5d65d",
+        "clusterIP": "None"
+      },
+      {
+        "name": "dapr-scheduler-server-a",
+        "uid": "73f04198-9ab6-46bc-ac3a-2530508cf609",
+        "clusterIP": "10.233.13.50"
+      }
+    ],
+    "amd64_nodes": [
+      {
+        "name": "node1",
+        "ready": true,
+        "allocatable": {
+          "cpu": "31600m",
+          "memory": "127653983951",
+          "pods": "110"
+        }
+      }
+    ],
+    "local_ports_available": [
+      18170,
+      18171
+    ],
+    "candidate_source_still_current_main": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "config",
+        "view",
+        "--minify",
+        "-o",
+        "jsonpath={.clusters[0].cluster.server}"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "version",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "namespace",
+        "mcpcli-417-20261101-00c6a713",
+        "--ignore-not-found",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "service",
+        "kubernetes",
+        "-n",
+        "default",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "deployment",
+        "dapr-sentry",
+        "-n",
+        "dapr-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "deployment",
+        "dapr-sidecar-injector",
+        "-n",
+        "dapr-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "storageclass",
+        "openebs-hostpath",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "daemonset",
+        "nodelocaldns",
+        "-n",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "pods",
+        "-n",
+        "kube-system",
+        "-l",
+        "component=kube-controller-manager",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "serviceaccount",
+        "job-controller",
+        "-n",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "service",
+        "dapr-sentry",
+        "dapr-api",
+        "dapr-placement-server",
+        "dapr-scheduler-server-a",
+        "-n",
+        "dapr-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/mcpcli-4-18-41307182275/tools/kubectl",
+        "--context=jpiquot@local",
+        "--request-timeout=15s",
+        "get",
+        "nodes",
+        "-l",
+        "kubernetes.io/arch=amd64",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "resources_applied": false,
+  "readiness_proven": false,
+  "limits": [
+    "Selected non-Secret target metadata only; no application calls, workload creation or shared configuration changes.",
+    "Client manifest parsing does not prove server admission or actual sidecar/application readiness."
+  ]
+}

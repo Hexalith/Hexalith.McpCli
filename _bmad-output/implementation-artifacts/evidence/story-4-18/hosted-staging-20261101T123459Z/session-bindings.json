@@ -1,0 +1,12 @@
+{
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "8570ee0e836132ee0bdc06b310547c2ccbd2fdea18ee53b87118588680fab931",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "511aa34294ed8858d285701528dd028207f031fe873a3a37b0d141ecb2d12dee"
+  },
+  "staging_run_id": 41307182275,
+  "preparation_sha256": "b00cc283fdc2943f2d8433dfe789b6f7bad0bbf79073909d3c8046160b8cc46a",
+  "acceptance_sha256": "c80f4ac18532465c699db9b79825c466dfb7be38d36b00a969fb5f140098f9ed",
+  "readme_sha256": "432a77c23e881f3fb182fc4b6ced8794375fd9c504b067d11e9ac5342f8bc910"
+}

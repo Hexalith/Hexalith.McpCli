@@ -1,0 +1,25 @@
+{
+  "schema": "mcpcli-4-18-owned-forward/v1",
+  "pid": 4106391,
+  "argv": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=10s",
+    "7126s",
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/environment-20261101T124621Z/packet",
+    "--review-sha256",
+    "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+    "--forward"
+  ],
+  "log_path": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/execution/client-forward.log",
+  "created_at_utc": "2026-11-01T14:08:47.165455+00:00",
+  "automatic_stop_at_utc": "2026-11-01T16:07:34+00:00",
+  "target_namespace": "mcpcli-417-20261101-00c6a713",
+  "url": "http://127.0.0.1:18170",
+  "private_profile_path": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home/.eventstore/mcpcli.json",
+  "process_start_ticks": "28318890",
+  "status": "active"
+}

@@ -1,0 +1,131 @@
+{
+  "schema": "mcpcli-4-18-environment-deployment/v1",
+  "status": "ready-for-actual-client-sessions",
+  "observed_at_utc": "2026-11-01T14:10:45.110746+00:00",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "staging_run_id": 41307182275,
+  "version": "1.2.0",
+  "target": {
+    "context": "jpiquot@local",
+    "api": "https://192.168.1.30:6443",
+    "namespace": "mcpcli-417-20261101-00c6a713",
+    "release": "mcpcli-417-20261101-00c6a713"
+  },
+  "namespace_uid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+  "phases_completed": [
+    "infrastructure",
+    "dns",
+    "backup",
+    "gateway",
+    "tenants",
+    "parties",
+    "startup",
+    "sidecars",
+    "metadata",
+    "administrator",
+    "writer",
+    "seed",
+    "handoff"
+  ],
+  "workloads": [
+    {
+      "name": "eventstore-nkkwj",
+      "uid": "d888a907-5fb9-4684-9b52-a6f827582884",
+      "phase": "Running",
+      "ready": true,
+      "containers": [
+        {
+          "name": "daprd",
+          "image_id": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8",
+          "restarts": 0
+        },
+        {
+          "name": "eventstore",
+          "image_id": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+          "restarts": 0
+        }
+      ]
+    },
+    {
+      "name": "parties-8788l",
+      "uid": "7e05a2e4-4f69-4d55-bb25-572903461360",
+      "phase": "Running",
+      "ready": true,
+      "containers": [
+        {
+          "name": "daprd",
+          "image_id": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8",
+          "restarts": 0
+        },
+        {
+          "name": "parties",
+          "image_id": "registry.hexalith.com/parties@sha256:85afc9e954146883da56edce78e2ddaf401a47b35241bdceed87dfc20217aceb",
+          "restarts": 0
+        }
+      ]
+    },
+    {
+      "name": "redis",
+      "uid": "400a001a-27f8-49d2-9718-c5299c968b19",
+      "phase": "Running",
+      "ready": true,
+      "containers": [
+        {
+          "name": "redis",
+          "image_id": "docker.io/library/redis@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+          "restarts": 0
+        }
+      ]
+    },
+    {
+      "name": "tenants-v4zlq",
+      "uid": "c91d24d6-c21b-445c-9711-694a04036d70",
+      "phase": "Running",
+      "ready": true,
+      "containers": [
+        {
+          "name": "daprd",
+          "image_id": "ghcr.io/dapr/daprd@sha256:b7f7d296f01f0b4b82bf3c5f087ecf26165ce08caf3e87f94b8c72b9e11873f8",
+          "restarts": 0
+        },
+        {
+          "name": "tenants",
+          "image_id": "registry.hexalith.com/tenants@sha256:2bc415a61466693bfa7e6c0df1c9aab319b0ef2e82c620897aa9faa1b58f75a5",
+          "restarts": 0
+        }
+      ]
+    }
+  ],
+  "gateway_ready_http_status": 200,
+  "persisted_tenant_and_contributor_verified": true,
+  "accepted_cli_operator_read_verified": true,
+  "operator_token_expires_at_utc": "2026-11-01T16:07:34+00:00",
+  "forward": {
+    "schema": "mcpcli-4-18-owned-forward/v1",
+    "pid": 4106391,
+    "argv": [
+      "timeout",
+      "--signal=INT",
+      "--kill-after=10s",
+      "7126s",
+      "python3",
+      "eng/mcpcli-operator-setup/v1/phases.py",
+      "--packet",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/environment-20261101T124621Z/packet",
+      "--review-sha256",
+      "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+      "--forward"
+    ],
+    "log_path": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/execution/client-forward.log",
+    "created_at_utc": "2026-11-01T14:08:47.165455+00:00",
+    "automatic_stop_at_utc": "2026-11-01T16:07:34+00:00",
+    "target_namespace": "mcpcli-417-20261101-00c6a713",
+    "url": "http://127.0.0.1:18170",
+    "private_profile_path": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home/.eventstore/mcpcli.json",
+    "process_start_ticks": "28318890",
+    "status": "active"
+  },
+  "actual_client_sessions": 0,
+  "production_publication": "pending candidate-specific actual client/operator acceptance"
+}

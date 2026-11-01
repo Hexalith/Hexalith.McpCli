@@ -1,0 +1,1287 @@
+{
+  "schema": "mcpcli-actual-client-tool-transcript/v1",
+  "session_id": "7ceb60f0-3ebf-490b-ba96-7ccb271ff745",
+  "calls": [
+    {
+      "tool_use_id": "toolu_01Qo5qCrXWENdzMWgGwdw8rM",
+      "tool": "list_modules",
+      "request_timestamp": "2026-11-01T14:17:21.153Z",
+      "result_timestamp": "2026-11-01T14:17:21.526Z",
+      "arguments": {},
+      "text": "{\"modules\":[{\"name\":\"parties\",\"description\":\"Manage people and organizations, their contact channels, identifiers and active status.\",\"operationCount\":7},{\"name\":\"tenants\",\"description\":\"Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.\",\"operationCount\":14}]}",
+      "structuredContent": {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "modules": [
+            {
+              "name": "parties",
+              "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+              "operationCount": 7
+            },
+            {
+              "name": "tenants",
+              "description": "Manage tenants: their lifecycle, user memberships and roles, configuration settings, and audit trail. Calls are always submitted under the fixed platform tenant 'system'; operations that take a TenantId act on that tenant, while tenants.list-tenants and tenants.get-user-tenants read across tenants. A global administrator is a platform operator allowed to manage every tenant.",
+              "operationCount": 14
+            }
+          ]
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_011G89EVfHVgqLYFHTFwzB5W",
+      "tool": "list_operations",
+      "request_timestamp": "2026-11-01T14:17:27.233Z",
+      "result_timestamp": "2026-11-01T14:17:27.995Z",
+      "arguments": {
+        "module": "tenants"
+      },
+      "text": "{\"module\":\"tenants\",\"operations\":[{\"name\":\"tenants.add-user-to-tenant\",\"kind\":\"write\",\"description\":\"Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role.\"},{\"name\":\"tenants.change-user-role\",\"kind\":\"write\",\"description\":\"Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.\"},{\"name\":\"tenants.create-tenant\",\"kind\":\"write\",\"description\":\"Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.\"},{\"name\":\"tenants.disable-tenant\",\"kind\":\"write\",\"description\":\"Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.\"},{\"name\":\"tenants.enable-tenant\",\"kind\":\"write\",\"description\":\"Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.\"},{\"name\":\"tenants.get-tenant\",\"kind\":\"read\",\"description\":\"Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\"},{\"name\":\"tenants.get-tenant-audit\",\"kind\":\"read\",\"description\":\"Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.get-tenant-users\",\"kind\":\"read\",\"description\":\"List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.get-user-tenants\",\"kind\":\"read\",\"description\":\"List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.list-tenants\",\"kind\":\"read\",\"description\":\"List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\"},{\"name\":\"tenants.remove-tenant-configuration\",\"kind\":\"write\",\"description\":\"Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.\"},{\"name\":\"tenants.remove-user-from-tenant\",\"kind\":\"write\",\"description\":\"Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.\"},{\"name\":\"tenants.set-tenant-configuration\",\"kind\":\"write\",\"description\":\"Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets.\"},{\"name\":\"tenants.update-tenant\",\"kind\":\"write\",\"description\":\"Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.\"}]}",
+      "structuredContent": {
+        "module": "tenants",
+        "operations": [
+          {
+            "name": "tenants.add-user-to-tenant",
+            "kind": "write",
+            "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role."
+          },
+          {
+            "name": "tenants.change-user-role",
+            "kind": "write",
+            "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.create-tenant",
+            "kind": "write",
+            "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+          },
+          {
+            "name": "tenants.disable-tenant",
+            "kind": "write",
+            "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+          },
+          {
+            "name": "tenants.enable-tenant",
+            "kind": "write",
+            "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+          },
+          {
+            "name": "tenants.get-tenant",
+            "kind": "read",
+            "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+          },
+          {
+            "name": "tenants.get-tenant-audit",
+            "kind": "read",
+            "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-tenant-users",
+            "kind": "read",
+            "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-user-tenants",
+            "kind": "read",
+            "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.list-tenants",
+            "kind": "read",
+            "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.remove-tenant-configuration",
+            "kind": "write",
+            "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+          },
+          {
+            "name": "tenants.remove-user-from-tenant",
+            "kind": "write",
+            "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.set-tenant-configuration",
+            "kind": "write",
+            "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+          },
+          {
+            "name": "tenants.update-tenant",
+            "kind": "write",
+            "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+          }
+        ]
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "module": "tenants",
+          "operations": [
+            {
+              "name": "tenants.add-user-to-tenant",
+              "kind": "write",
+              "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role."
+            },
+            {
+              "name": "tenants.change-user-role",
+              "kind": "write",
+              "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+            },
+            {
+              "name": "tenants.create-tenant",
+              "kind": "write",
+              "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+            },
+            {
+              "name": "tenants.disable-tenant",
+              "kind": "write",
+              "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+            },
+            {
+              "name": "tenants.enable-tenant",
+              "kind": "write",
+              "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+            },
+            {
+              "name": "tenants.get-tenant",
+              "kind": "read",
+              "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+            },
+            {
+              "name": "tenants.get-tenant-audit",
+              "kind": "read",
+              "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. For TenantId system, the trail also includes the grants and revocations of global administrators. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+            },
+            {
+              "name": "tenants.get-tenant-users",
+              "kind": "read",
+              "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+            },
+            {
+              "name": "tenants.get-user-tenants",
+              "kind": "read",
+              "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+            },
+            {
+              "name": "tenants.list-tenants",
+              "kind": "read",
+              "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+            },
+            {
+              "name": "tenants.remove-tenant-configuration",
+              "kind": "write",
+              "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+            },
+            {
+              "name": "tenants.remove-user-from-tenant",
+              "kind": "write",
+              "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+            },
+            {
+              "name": "tenants.set-tenant-configuration",
+              "kind": "write",
+              "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+            },
+            {
+              "name": "tenants.update-tenant",
+              "kind": "write",
+              "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+            }
+          ]
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_01HGrmmbGCYSDe9ztyJDEXDB",
+      "tool": "list_operations",
+      "request_timestamp": "2026-11-01T14:17:27.457Z",
+      "result_timestamp": "2026-11-01T14:17:27.985Z",
+      "arguments": {
+        "module": "parties"
+      },
+      "text": "{\"module\":\"parties\",\"operations\":[{\"name\":\"parties.create-party\",\"kind\":\"write\",\"description\":\"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\"},{\"name\":\"parties.deactivate-party\",\"kind\":\"write\",\"description\":\"Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks.\"},{\"name\":\"parties.get-party\",\"kind\":\"read\",\"description\":\"Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\"},{\"name\":\"parties.list-parties\",\"kind\":\"read\",\"description\":\"List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"},{\"name\":\"parties.reactivate-party\",\"kind\":\"write\",\"description\":\"Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks.\"},{\"name\":\"parties.search-parties\",\"kind\":\"read\",\"description\":\"Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.\"},{\"name\":\"parties.update-party\",\"kind\":\"write\",\"description\":\"Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100.\"}]}",
+      "structuredContent": {
+        "module": "parties",
+        "operations": [
+          {
+            "name": "parties.create-party",
+            "kind": "write",
+            "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+          },
+          {
+            "name": "parties.deactivate-party",
+            "kind": "write",
+            "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.get-party",
+            "kind": "read",
+            "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible."
+          },
+          {
+            "name": "parties.list-parties",
+            "kind": "read",
+            "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.reactivate-party",
+            "kind": "write",
+            "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.search-parties",
+            "kind": "read",
+            "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.update-party",
+            "kind": "write",
+            "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+          }
+        ]
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "module": "parties",
+          "operations": [
+            {
+              "name": "parties.create-party",
+              "kind": "write",
+              "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+            },
+            {
+              "name": "parties.deactivate-party",
+              "kind": "write",
+              "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+            },
+            {
+              "name": "parties.get-party",
+              "kind": "read",
+              "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible."
+            },
+            {
+              "name": "parties.list-parties",
+              "kind": "read",
+              "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+            },
+            {
+              "name": "parties.reactivate-party",
+              "kind": "write",
+              "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+            },
+            {
+              "name": "parties.search-parties",
+              "kind": "read",
+              "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+            },
+            {
+              "name": "parties.update-party",
+              "kind": "write",
+              "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+            }
+          ]
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_01Wf4rEXPVynsrjXeXYVMx46",
+      "tool": "describe_operation",
+      "request_timestamp": "2026-11-01T14:17:36.788Z",
+      "result_timestamp": "2026-11-01T14:17:38.231Z",
+      "arguments": {
+        "operation": "tenants.get-tenant"
+      },
+      "text": "{\"name\":\"tenants.get-tenant\",\"kind\":\"read\",\"description\":\"Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"TenantId\":{\"type\":\"string\",\"description\":\"Identifier of the tenant to read. Required; a call without it is rejected.\"}},\"additionalProperties\":false},\"example\":{\"TenantId\":\"acme\"},\"envelope\":{\"fixedTenant\":\"system\",\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}",
+      "structuredContent": {
+        "name": "tenants.get-tenant",
+        "kind": "read",
+        "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "fixedTenant": "system",
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "name": "tenants.get-tenant",
+          "kind": "read",
+          "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+          "schema": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "TenantId": {
+                "type": "string",
+                "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+              }
+            },
+            "additionalProperties": false
+          },
+          "example": {
+            "TenantId": "acme"
+          },
+          "envelope": {
+            "fixedTenant": "system",
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "aggregateId",
+              "entityId",
+              "pageSize",
+              "offset",
+              "cursor"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_019TWD5WssNvsYCqHieSvfXP",
+      "tool": "describe_operation",
+      "request_timestamp": "2026-11-01T14:17:36.990Z",
+      "result_timestamp": "2026-11-01T14:17:38.234Z",
+      "arguments": {
+        "operation": "parties.create-party"
+      },
+      "text": "{\"name\":\"parties.create-party\",\"kind\":\"write\",\"description\":\"Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.\",\"schema\":{\"type\":\"object\",\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"Type\":{\"enum\":[\"Unknown\",\"Person\",\"Organization\"],\"description\":\"The explicit party kind: Person or Organization; Unknown is rejected.\"},\"PersonDetails\":{\"type\":[\"object\",\"null\"],\"properties\":{\"FirstName\":{\"type\":\"string\",\"description\":\"The person's supplied first name.\"},\"LastName\":{\"type\":\"string\",\"description\":\"The person's supplied last name.\"},\"DateOfBirth\":{\"type\":[\"string\",\"null\"],\"format\":\"date-time\",\"description\":\"The optional date of birth with an explicit UTC offset.\"},\"Prefix\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name prefix, such as a title.\"},\"Suffix\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name suffix.\"}},\"required\":[\"FirstName\",\"LastName\"],\"additionalProperties\":false,\"description\":\"Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type.\"},\"OrganizationDetails\":{\"type\":[\"object\",\"null\"],\"properties\":{\"LegalName\":{\"type\":\"string\",\"description\":\"The organization's complete legal name.\"},\"TradingName\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional name the organization trades under.\"},\"LegalForm\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional legal form of the organization.\"},\"RegistrationNumber\":{\"type\":[\"string\",\"null\"],\"description\":\"The optional organization registration number.\"},\"IsNaturalPerson\":{\"type\":\"boolean\",\"description\":\"Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification.\"}},\"required\":[\"LegalName\"],\"additionalProperties\":false,\"description\":\"Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type.\"},\"ContactChannels\":{\"type\":\"array\",\"items\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"ContactChannelId\":{\"type\":\"string\",\"description\":\"The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"},\"Type\":{\"enum\":[\"Email\",\"Phone\",\"PostalAddress\",\"SocialMedia\"],\"description\":\"The contact-channel kind: Email, Phone, PostalAddress or SocialMedia.\"},\"Value\":{\"type\":\"string\",\"description\":\"A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming.\"},\"IsPreferred\":{\"type\":\"boolean\",\"description\":\"Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins.\"}},\"required\":[\"PartyId\",\"ContactChannelId\",\"Type\",\"Value\"],\"additionalProperties\":false},\"description\":\"Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root.\"},\"Identifiers\":{\"type\":\"array\",\"items\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them.\"},\"IdentifierId\":{\"type\":\"string\",\"description\":\"The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven.\"},\"Type\":{\"enum\":[\"VAT\",\"SIRET\",\"NationalId\",\"CompanyRegistration\",\"TaxId\",\"Other\"],\"description\":\"The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other.\"},\"Value\":{\"type\":\"string\",\"description\":\"The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value.\"}},\"required\":[\"PartyId\",\"IdentifierId\",\"Type\",\"Value\"],\"additionalProperties\":false},\"description\":\"Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root.\"}},\"required\":[\"PartyId\",\"Type\"],\"additionalProperties\":false},\"example\":{\"PartyId\":\"party-49\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Ada\",\"LastName\":\"Lovelace\"}},\"envelope\":{\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"tenant\",\"aggregateId\",\"correlationId\",\"idempotencyKey\",\"extensions\"]},\"lintFindings\":[],\"submittable\":true}",
+      "structuredContent": {
+        "name": "parties.create-party",
+        "kind": "write",
+        "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "Type": {
+              "enum": [
+                "Unknown",
+                "Person",
+                "Organization"
+              ],
+              "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+            },
+            "PersonDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "FirstName": {
+                  "type": "string",
+                  "description": "The person's supplied first name."
+                },
+                "LastName": {
+                  "type": "string",
+                  "description": "The person's supplied last name."
+                },
+                "DateOfBirth": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "The optional date of birth with an explicit UTC offset."
+                },
+                "Prefix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name prefix, such as a title."
+                },
+                "Suffix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name suffix."
+                }
+              },
+              "required": [
+                "FirstName",
+                "LastName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "OrganizationDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "LegalName": {
+                  "type": "string",
+                  "description": "The organization's complete legal name."
+                },
+                "TradingName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name the organization trades under."
+                },
+                "LegalForm": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional legal form of the organization."
+                },
+                "RegistrationNumber": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional organization registration number."
+                },
+                "IsNaturalPerson": {
+                  "type": "boolean",
+                  "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                }
+              },
+              "required": [
+                "LegalName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "ContactChannels": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "ContactChannelId": {
+                    "type": "string",
+                    "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "Email",
+                      "Phone",
+                      "PostalAddress",
+                      "SocialMedia"
+                    ],
+                    "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "ContactChannelId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+            },
+            "Identifiers": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "IdentifierId": {
+                    "type": "string",
+                    "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "VAT",
+                      "SIRET",
+                      "NationalId",
+                      "CompanyRegistration",
+                      "TaxId",
+                      "Other"
+                    ],
+                    "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "IdentifierId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+            }
+          },
+          "required": [
+            "PartyId",
+            "Type"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          }
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "name": "parties.create-party",
+          "kind": "write",
+          "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "PartyId": {
+                "type": "string",
+                "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+              },
+              "Type": {
+                "enum": [
+                  "Unknown",
+                  "Person",
+                  "Organization"
+                ],
+                "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+              },
+              "PersonDetails": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "FirstName": {
+                    "type": "string",
+                    "description": "The person's supplied first name."
+                  },
+                  "LastName": {
+                    "type": "string",
+                    "description": "The person's supplied last name."
+                  },
+                  "DateOfBirth": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time",
+                    "description": "The optional date of birth with an explicit UTC offset."
+                  },
+                  "Prefix": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name prefix, such as a title."
+                  },
+                  "Suffix": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name suffix."
+                  }
+                },
+                "required": [
+                  "FirstName",
+                  "LastName"
+                ],
+                "additionalProperties": false,
+                "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+              },
+              "OrganizationDetails": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "LegalName": {
+                    "type": "string",
+                    "description": "The organization's complete legal name."
+                  },
+                  "TradingName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional name the organization trades under."
+                  },
+                  "LegalForm": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional legal form of the organization."
+                  },
+                  "RegistrationNumber": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The optional organization registration number."
+                  },
+                  "IsNaturalPerson": {
+                    "type": "boolean",
+                    "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                  }
+                },
+                "required": [
+                  "LegalName"
+                ],
+                "additionalProperties": false,
+                "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+              },
+              "ContactChannels": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "PartyId": {
+                      "type": "string",
+                      "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                    },
+                    "ContactChannelId": {
+                      "type": "string",
+                      "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                    },
+                    "Type": {
+                      "enum": [
+                        "Email",
+                        "Phone",
+                        "PostalAddress",
+                        "SocialMedia"
+                      ],
+                      "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                    },
+                    "Value": {
+                      "type": "string",
+                      "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                    },
+                    "IsPreferred": {
+                      "type": "boolean",
+                      "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                    }
+                  },
+                  "required": [
+                    "PartyId",
+                    "ContactChannelId",
+                    "Type",
+                    "Value"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+              },
+              "Identifiers": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "PartyId": {
+                      "type": "string",
+                      "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                    },
+                    "IdentifierId": {
+                      "type": "string",
+                      "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                    },
+                    "Type": {
+                      "enum": [
+                        "VAT",
+                        "SIRET",
+                        "NationalId",
+                        "CompanyRegistration",
+                        "TaxId",
+                        "Other"
+                      ],
+                      "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                    },
+                    "Value": {
+                      "type": "string",
+                      "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                    }
+                  },
+                  "required": [
+                    "PartyId",
+                    "IdentifierId",
+                    "Type",
+                    "Value"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+              }
+            },
+            "required": [
+              "PartyId",
+              "Type"
+            ],
+            "additionalProperties": false
+          },
+          "example": {
+            "PartyId": "party-49",
+            "Type": "Person",
+            "PersonDetails": {
+              "FirstName": "Ada",
+              "LastName": "Lovelace"
+            }
+          },
+          "envelope": {
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "tenant",
+              "aggregateId",
+              "correlationId",
+              "idempotencyKey",
+              "extensions"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_01NXuGwKM9Ux5Q3T68vyYM1r",
+      "tool": "describe_operation",
+      "request_timestamp": "2026-11-01T14:17:37.282Z",
+      "result_timestamp": "2026-11-01T14:17:38.214Z",
+      "arguments": {
+        "operation": "parties.get-party"
+      },
+      "text": "{\"name\":\"parties.get-party\",\"kind\":\"read\",\"description\":\"Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.\",\"schema\":{\"type\":[\"object\",\"null\"],\"properties\":{\"PartyId\":{\"type\":\"string\",\"description\":\"The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them.\"}},\"required\":[\"PartyId\"],\"additionalProperties\":false},\"example\":{\"PartyId\":\"party-49\"},\"envelope\":{\"aggregateIdRequired\":false,\"idempotencyKeyRequired\":false,\"arguments\":[\"tenant\",\"aggregateId\",\"entityId\",\"pageSize\",\"offset\",\"cursor\"]},\"lintFindings\":[],\"submittable\":true}",
+      "structuredContent": {
+        "name": "parties.get-party",
+        "kind": "read",
+        "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": true
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "name": "parties.get-party",
+          "kind": "read",
+          "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+          "schema": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "PartyId": {
+                "type": "string",
+                "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+              }
+            },
+            "required": [
+              "PartyId"
+            ],
+            "additionalProperties": false
+          },
+          "example": {
+            "PartyId": "party-49"
+          },
+          "envelope": {
+            "aggregateIdRequired": false,
+            "idempotencyKeyRequired": false,
+            "arguments": [
+              "tenant",
+              "aggregateId",
+              "entityId",
+              "pageSize",
+              "offset",
+              "cursor"
+            ]
+          },
+          "lintFindings": [],
+          "submittable": true
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_016Shvui8Vs7eGnd1ykyaJ7g",
+      "tool": "run_query",
+      "request_timestamp": "2026-11-01T14:17:41.954Z",
+      "result_timestamp": "2026-11-01T14:17:42.339Z",
+      "arguments": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"mcpcli-417-20261101-00c6a713\"}"
+      },
+      "text": "{\"operation\":\"tenants.get-tenant\",\"tenant\":\"system\",\"document\":{\"tenantId\":\"mcpcli-417-20261101-00c6a713\",\"name\":\"McpCli operator setup\",\"description\":\"Task-owned synthetic operator tenant\",\"status\":\"Active\",\"members\":[{\"userId\":\"mcpcli-417-operator-20261101-00c6a713\",\"role\":\"TenantContributor\"}],\"configuration\":{},\"createdAt\":\"2026-11-01T14:07:25.0116372+00:00\"}}",
+      "structuredContent": {
+        "operation": "tenants.get-tenant",
+        "tenant": "system",
+        "document": {
+          "tenantId": "mcpcli-417-20261101-00c6a713",
+          "name": "McpCli operator setup",
+          "description": "Task-owned synthetic operator tenant",
+          "status": "Active",
+          "members": [
+            {
+              "userId": "mcpcli-417-operator-20261101-00c6a713",
+              "role": "TenantContributor"
+            }
+          ],
+          "configuration": {},
+          "createdAt": "2026-11-01T14:07:25.0116372+00:00"
+        }
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "operation": "tenants.get-tenant",
+          "tenant": "system",
+          "document": {
+            "tenantId": "mcpcli-417-20261101-00c6a713",
+            "name": "McpCli operator setup",
+            "description": "Task-owned synthetic operator tenant",
+            "status": "Active",
+            "members": [
+              {
+                "userId": "mcpcli-417-operator-20261101-00c6a713",
+                "role": "TenantContributor"
+              }
+            ],
+            "configuration": {},
+            "createdAt": "2026-11-01T14:07:25.0116372+00:00"
+          }
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_01V1DZAW7gNr9Tqak2B7KGnm",
+      "tool": "send_command",
+      "request_timestamp": "2026-11-01T14:18:12.098Z",
+      "result_timestamp": "2026-11-01T14:18:17.873Z",
+      "arguments": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"party-418-code-20261101-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-418-code-20261101-1\",\"ContactChannelId\":\"email-party-418-code-20261101-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-418-code-20261101-1\",\"IdentifierId\":\"external-party-418-code-20261101-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      },
+      "text": "{\"operation\":\"parties.create-party\",\"messageId\":\"01M6BQKC4BC8AKQ5GEKE53VASX\",\"correlationId\":\"01M6BQKC4BC8AKQ5GEKE53VASX\",\"tenant\":\"mcpcli-417-20261101-00c6a713\",\"aggregateId\":\"party-418-code-20261101-1\",\"status\":\"accepted\",\"result\":{\"id\":\"party-418-code-20261101-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-party-418-code-20261101-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-party-418-code-20261101-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[],\"createdAt\":\"2026-11-01T14:18:16.879685+00:00\",\"lastModifiedAt\":\"2026-11-01T14:18:16.8807483+00:00\",\"isRestricted\":false,\"isErased\":false}}",
+      "structuredContent": {
+        "operation": "parties.create-party",
+        "messageId": "01M6BQKC4BC8AKQ5GEKE53VASX",
+        "correlationId": "01M6BQKC4BC8AKQ5GEKE53VASX",
+        "tenant": "mcpcli-417-20261101-00c6a713",
+        "aggregateId": "party-418-code-20261101-1",
+        "status": "accepted",
+        "result": {
+          "id": "party-418-code-20261101-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-party-418-code-20261101-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-party-418-code-20261101-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [],
+          "createdAt": "2026-11-01T14:18:16.879685+00:00",
+          "lastModifiedAt": "2026-11-01T14:18:16.8807483+00:00",
+          "isRestricted": false,
+          "isErased": false
+        }
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "operation": "parties.create-party",
+          "messageId": "01M6BQKC4BC8AKQ5GEKE53VASX",
+          "correlationId": "01M6BQKC4BC8AKQ5GEKE53VASX",
+          "tenant": "mcpcli-417-20261101-00c6a713",
+          "aggregateId": "party-418-code-20261101-1",
+          "status": "accepted",
+          "result": {
+            "id": "party-418-code-20261101-1",
+            "type": "Person",
+            "isActive": true,
+            "displayName": "Operator Setup",
+            "sortName": "Setup, Operator",
+            "personDetails": {
+              "firstName": "Operator",
+              "lastName": "Setup"
+            },
+            "contactChannels": [
+              {
+                "id": "email-party-418-code-20261101-1",
+                "type": "Email",
+                "value": "operator@example.test",
+                "isPreferred": true
+              }
+            ],
+            "identifiers": [
+              {
+                "id": "external-party-418-code-20261101-1",
+                "type": "Other",
+                "value": "operator-setup"
+              }
+            ],
+            "consentRecords": [],
+            "nameHistory": [],
+            "createdAt": "2026-11-01T14:18:16.879685+00:00",
+            "lastModifiedAt": "2026-11-01T14:18:16.8807483+00:00",
+            "isRestricted": false,
+            "isErased": false
+          }
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    },
+    {
+      "tool_use_id": "toolu_01XTVvK4HBuv44E7gLMH7Nny",
+      "tool": "run_query",
+      "request_timestamp": "2026-11-01T14:18:23.946Z",
+      "result_timestamp": "2026-11-01T14:18:24.845Z",
+      "arguments": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"party-418-code-20261101-1\"}",
+        "entityId": "party-418-code-20261101-1"
+      },
+      "text": "{\"operation\":\"parties.get-party\",\"tenant\":\"mcpcli-417-20261101-00c6a713\",\"document\":{\"id\":\"party-418-code-20261101-1\",\"type\":\"Person\",\"isActive\":true,\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"personDetails\":{\"firstName\":\"Operator\",\"lastName\":\"Setup\"},\"contactChannels\":[{\"id\":\"email-party-418-code-20261101-1\",\"type\":\"Email\",\"value\":\"operator@example.test\",\"isPreferred\":true}],\"identifiers\":[{\"id\":\"external-party-418-code-20261101-1\",\"type\":\"Other\",\"value\":\"operator-setup\"}],\"consentRecords\":[],\"nameHistory\":[{\"displayName\":\"Operator Setup\",\"sortName\":\"Setup, Operator\",\"changedAt\":\"2026-11-01T14:18:16.9235985+00:00\",\"triggeredBy\":\"PartyCreated\"}],\"createdAt\":\"2026-11-01T14:18:16.9235985+00:00\",\"lastModifiedAt\":\"2026-11-01T14:18:16.9235985+00:00\",\"isRestricted\":false,\"isErased\":false,\"freshness\":{\"status\":\"Current\",\"warningCodes\":[]}}}",
+      "structuredContent": {
+        "operation": "parties.get-party",
+        "tenant": "mcpcli-417-20261101-00c6a713",
+        "document": {
+          "id": "party-418-code-20261101-1",
+          "type": "Person",
+          "isActive": true,
+          "displayName": "Operator Setup",
+          "sortName": "Setup, Operator",
+          "personDetails": {
+            "firstName": "Operator",
+            "lastName": "Setup"
+          },
+          "contactChannels": [
+            {
+              "id": "email-party-418-code-20261101-1",
+              "type": "Email",
+              "value": "operator@example.test",
+              "isPreferred": true
+            }
+          ],
+          "identifiers": [
+            {
+              "id": "external-party-418-code-20261101-1",
+              "type": "Other",
+              "value": "operator-setup"
+            }
+          ],
+          "consentRecords": [],
+          "nameHistory": [
+            {
+              "displayName": "Operator Setup",
+              "sortName": "Setup, Operator",
+              "changedAt": "2026-11-01T14:18:16.9235985+00:00",
+              "triggeredBy": "PartyCreated"
+            }
+          ],
+          "createdAt": "2026-11-01T14:18:16.9235985+00:00",
+          "lastModifiedAt": "2026-11-01T14:18:16.9235985+00:00",
+          "isRestricted": false,
+          "isErased": false,
+          "freshness": {
+            "status": "Current",
+            "warningCodes": []
+          }
+        }
+      },
+      "mcp_metadata": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "hexalith",
+            "version": "1.2.0"
+          }
+        },
+        "structuredContent": {
+          "operation": "parties.get-party",
+          "tenant": "mcpcli-417-20261101-00c6a713",
+          "document": {
+            "id": "party-418-code-20261101-1",
+            "type": "Person",
+            "isActive": true,
+            "displayName": "Operator Setup",
+            "sortName": "Setup, Operator",
+            "personDetails": {
+              "firstName": "Operator",
+              "lastName": "Setup"
+            },
+            "contactChannels": [
+              {
+                "id": "email-party-418-code-20261101-1",
+                "type": "Email",
+                "value": "operator@example.test",
+                "isPreferred": true
+              }
+            ],
+            "identifiers": [
+              {
+                "id": "external-party-418-code-20261101-1",
+                "type": "Other",
+                "value": "operator-setup"
+              }
+            ],
+            "consentRecords": [],
+            "nameHistory": [
+              {
+                "displayName": "Operator Setup",
+                "sortName": "Setup, Operator",
+                "changedAt": "2026-11-01T14:18:16.9235985+00:00",
+                "triggeredBy": "PartyCreated"
+              }
+            ],
+            "createdAt": "2026-11-01T14:18:16.9235985+00:00",
+            "lastModifiedAt": "2026-11-01T14:18:16.9235985+00:00",
+            "isRestricted": false,
+            "isErased": false,
+            "freshness": {
+              "status": "Current",
+              "warningCodes": []
+            }
+          }
+        }
+      },
+      "client_error_flag_present": false,
+      "client_error_flag": null,
+      "permission_decision": {
+        "decision": "accept",
+        "source": "config",
+        "reasonType": "classifier"
+      }
+    }
+  ]
+}

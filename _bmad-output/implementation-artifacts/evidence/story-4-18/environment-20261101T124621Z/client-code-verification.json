@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "files_scanned": 131,
+  "actual_tool_calls_verified": 9,
+  "single_command_verified": true,
+  "all_text_structured_content_equal": true,
+  "explicit_false_flag_observed": false,
+  "raw_originals_private": true,
+  "other_desktop_config_entries_preserved": true,
+  "sensitive_output_absent": true,
+  "frozen_intent_unchanged": true
+}

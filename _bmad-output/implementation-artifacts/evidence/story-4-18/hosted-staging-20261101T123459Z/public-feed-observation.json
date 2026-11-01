@@ -1,0 +1,21 @@
+{
+  "schema": "mcpcli-public-feed-observation/v1",
+  "observed_at_utc": "2026-11-01T12:41:38.185455+00:00",
+  "version": "1.2.0",
+  "purpose": "Read-only availability observation; not publication preflight or credential validation",
+  "packages": {
+    "Hexalith.McpCli.Abstractions": {
+      "status": "available-at-observation",
+      "public_versions": [
+        "1.0.0",
+        "1.1.0"
+      ],
+      "confirmed_first_ever_absence": false
+    },
+    "Hexalith.McpCli": {
+      "status": "available-at-observation",
+      "public_versions": [],
+      "confirmed_first_ever_absence": true
+    }
+  }
+}

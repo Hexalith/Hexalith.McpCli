@@ -1,0 +1,99 @@
+{
+  "status": "prepared-not-executed",
+  "client": "VS Code",
+  "attempt": 1,
+  "source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "version": "1.2.0",
+  "packages": {
+    "Hexalith.McpCli.1.2.0.nupkg": "8570ee0e836132ee0bdc06b310547c2ccbd2fdea18ee53b87118588680fab931",
+    "Hexalith.McpCli.Abstractions.1.2.0.nupkg": "511aa34294ed8858d285701528dd028207f031fe873a3a37b0d141ecb2d12dee"
+  },
+  "staging_run_id": 41307182275,
+  "preparation_sha256": "b00cc283fdc2943f2d8433dfe789b6f7bad0bbf79073909d3c8046160b8cc46a",
+  "acceptance_sha256": "c80f4ac18532465c699db9b79825c466dfb7be38d36b00a969fb5f140098f9ed",
+  "readme_sha256": "432a77c23e881f3fb182fc4b6ced8794375fd9c504b067d11e9ac5342f8bc910",
+  "party_id": "party-418-vscode-20261101-1",
+  "environment_approval": {
+    "decision": "approved",
+    "ready": true,
+    "owner": "user (explicit conversation approval)",
+    "target": "https://192.168.1.30:6443",
+    "namespace_uid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+    "namespace": "mcpcli-417-20261101-00c6a713",
+    "tenant": "mcpcli-417-20261101-00c6a713",
+    "approved_at_utc": "2026-11-01T14:04:49.528472+00:00",
+    "expires_at_utc": "2026-11-01T16:07:34+00:00",
+    "ready_observed_at_utc": "2026-11-01T14:10:45.110746+00:00",
+    "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+    "operator_subject": "mcpcli-417-operator-20261101-00c6a713",
+    "role": "TenantContributor",
+    "domains": [
+      "tenants",
+      "party"
+    ],
+    "permissions": [
+      "command:submit",
+      "query:read"
+    ],
+    "global_administrator": false
+  },
+  "calls": [
+    {
+      "tool": "list_modules",
+      "arguments": {}
+    },
+    {
+      "tool": "list_operations",
+      "arguments": {
+        "module": "tenants"
+      }
+    },
+    {
+      "tool": "list_operations",
+      "arguments": {
+        "module": "parties"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.create-party"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.get-party"
+      }
+    },
+    {
+      "tool": "run_query",
+      "arguments": {
+        "operation": "tenants.get-tenant",
+        "payload": "{\"TenantId\":\"mcpcli-417-20261101-00c6a713\"}"
+      }
+    },
+    {
+      "tool": "send_command",
+      "arguments": {
+        "operation": "parties.create-party",
+        "payload": "{\"PartyId\":\"party-418-vscode-20261101-1\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-418-vscode-20261101-1\",\"ContactChannelId\":\"email-party-418-vscode-20261101-1\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-418-vscode-20261101-1\",\"IdentifierId\":\"external-party-418-vscode-20261101-1\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"
+      }
+    },
+    {
+      "tool": "run_query",
+      "arguments": {
+        "operation": "parties.get-party",
+        "payload": "{\"PartyId\":\"party-418-vscode-20261101-1\"}",
+        "entityId": "party-418-vscode-20261101-1"
+      }
+    }
+  ],
+  "actual_results": null
+}

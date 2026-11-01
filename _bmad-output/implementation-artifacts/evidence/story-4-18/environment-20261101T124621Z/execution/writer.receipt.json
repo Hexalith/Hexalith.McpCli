@@ -1,0 +1,11 @@
+{
+  "phase": "writer",
+  "status": "complete",
+  "namespace": "mcpcli-417-20261101-00c6a713",
+  "startedAt": "2026-11-01T14:07:02.844657+00:00",
+  "activationCount": 1,
+  "sourceCommit": "717a06e16c3afd81b904eaf4de646b74b13262d2",
+  "backupSha256": "89c984b40e26f61b515abbec6b4965faab19bea9d502532636e27699e232d81a",
+  "readinessObserved": true,
+  "endedAt": "2026-11-01T14:07:16.138802+00:00"
+}
