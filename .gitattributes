@@ -26,3 +26,6 @@ _bmad-output/implementation-artifacts/evidence/story-4-16/** -text whitespace=-b
 # Package profile provenance binds exact native configuration snapshot bytes.
 tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/*.json -text
 tests/Hexalith.McpCli.EventStoreGateway.TestHost/Properties/launchSettings.json -text
+
+# Preserve Story 4.18 hash-bound local verification and raw command evidence.
+_bmad-output/implementation-artifacts/evidence/story-4-18/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

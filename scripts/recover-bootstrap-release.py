@@ -67,6 +67,8 @@ def download_public_package(url, downloaded, pushed):
 def recover(version, phase):
     request = load_script('release-request')
     request.validate_request(version, phase)
+    if phase != 'bootstrap':
+        raise ValueError('Bootstrap recovery refuses paired publication; evidence-based paired recovery is manual.')
     verify_source(phase, version)
     staging = Path('nupkgs/bootstrap')
     subprocess.run(['python3', str(SCRIPT_DIRECTORY / 'validate-release-packages.py'), '--', str(staging), version, phase], check=True)

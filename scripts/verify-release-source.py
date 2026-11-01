@@ -30,6 +30,7 @@ def github_json(endpoint: str, *parameters: str):
 
 # Job and step names are the executed blocking lanes in the pinned CI workflows.
 STAGING_JOBS = {
+    'release-automation': ['Verify pinned release automation and refusal guards', 'Verify detached-source semantic-release version selection'],
     'ci / build-and-test': ['Unit tests (Tier 1, Microsoft.Testing.Platform)', 'Fail on blocking test failures'],
     'ci / aspire-tests': ['Prepare Aspire tier', 'Run Aspire hook'],
     'conformance-vector-contract': ['Pack and validate the shared vector contract without a Head or Gateway'],
@@ -89,8 +90,10 @@ def main() -> int:
     parser.add_argument("--output", type=str)
     args = parser.parse_args()
     try:
-        if args.phase != "bootstrap" and not (args.phase == "paired" and args.staging):
-            raise ValueError("Only bootstrap releases are supported; paired release remains deferred.")
+        if args.phase not in ('bootstrap', 'paired'):
+            raise ValueError('Unknown release phase.')
+        if args.phase == 'paired' and (args.tagged_recovery or not args.output):
+            raise ValueError('Paired source verification requires evidence output and refuses tagged recovery.')
         if args.staging and (args.phase != "paired" or args.tagged_recovery or not args.output):
             raise ValueError("Paired staging requires fresh output and cannot recover a release.")
         if args.ref != "refs/heads/main":
@@ -144,8 +147,15 @@ def main() -> int:
                 raise ValueError("Recovery tag is not an ancestor of current main.")
         elif args.sha != live_main:
             raise ValueError("Dispatch SHA is not the current main SHA; main may have moved during approval.")
+        if args.phase == 'bootstrap':
+            from paired_release import module
+            if args.tagged_recovery is not None:
+                module('release-request').check_bootstrap_recovery_line(args.tagged_recovery, args.sha)
+            elif not os.environ.get('MCPCLI_RECOVERY_VERSION'):
+                module('release-request').check_bootstrap_line()
         gates = {}
-        workflows = ("ci.yml", "commitlint.yml") if args.staging else ("bootstrap-package.yml", "commitlint.yml")
+        paired = args.phase == 'paired'
+        workflows = ("ci.yml", "commitlint.yml") if paired else ("bootstrap-package.yml", "commitlint.yml")
         for workflow in workflows:
             response = github_json(
                 f"repos/{repository}/actions/workflows/{workflow}/runs",
@@ -156,7 +166,7 @@ def main() -> int:
             latest = max(runs, key=lambda run: (run["run_number"], run["run_attempt"])) if runs else None
             if latest is None or latest["status"] != "completed" or latest["conclusion"] != "success":
                 raise ValueError(f"No successful latest {workflow} push run exists for {args.sha}.")
-            if args.staging:
+            if paired:
                 required = STAGING_JOBS if workflow == 'ci.yml' else STAGING_COMMITLINT_JOBS
                 jobs = verify_jobs(repository, latest, required)
                 gates[workflow] = {'run_id': latest['id'], 'run_attempt': latest['run_attempt'],
@@ -167,7 +177,7 @@ def main() -> int:
             print(f"Verified current main source {args.sha}")
         else:
             print(f"Verified tagged recovery source {args.sha} on current main {live_main}")
-        if args.staging:
+        if paired:
             from paired_release import module, write_new
             prerequisites = module('verify-paired-prerequisites').verify()
             write_new(args.output, {'schema': 'mcpcli-paired-source/v1', 'source_sha': args.sha,

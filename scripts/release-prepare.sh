@@ -10,6 +10,11 @@ if [ "$#" -gt 2 ] || { [ "$#" -eq 2 ] && [ "$2" != --verify-source ]; }; then
   exit 1
 fi
 
+if [ "$release_phase" = paired ]; then
+  python3 "$script_directory/publish-paired-release.py" prepare --version "$release_version"
+  exit
+fi
+
 staging_directory="nupkgs/bootstrap"
 receipt="nupkgs/bootstrap.sha256"
 if [ -e "$staging_directory" ] || [ -L "$staging_directory" ] || [ -e "$receipt" ] || [ -L "$receipt" ]; then

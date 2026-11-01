@@ -1,0 +1,41 @@
+{
+  "name": "tenants.remove-tenant-configuration",
+  "kind": "write",
+  "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant whose setting is deleted."
+      },
+      "Key": {
+        "type": "string",
+        "description": "Exact, case-sensitive configuration key to delete."
+      }
+    },
+    "required": [
+      "TenantId",
+      "Key"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme",
+    "Key": "billing.plan"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

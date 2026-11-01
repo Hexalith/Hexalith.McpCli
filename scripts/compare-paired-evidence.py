@@ -6,7 +6,7 @@ import json
 import re
 from pathlib import Path
 import sys
-from paired_release import check_prepared, digest, module, write_new
+from paired_release import check_prepared, digest, module, validate_source_evidence, write_new
 
 
 def compare(staging, prepared_path, consumers, output):
@@ -23,24 +23,7 @@ def compare(staging, prepared_path, consumers, output):
             raise ValueError('Preparation evidence changed after packing.')
     for name in ('source-before', 'source-after'):
         gate = json.loads((evidence / f'{name}.json').read_text())
-        if (gate.get('schema') != 'mcpcli-paired-source/v1' or gate.get('source_sha') != prepared['source_sha']
-                or gate.get('current_main') != prepared['source_sha'] or gate.get('source_clean') is not True
-                or not gate.get('fr22') or set(gate.get('gates', {})) != {'ci.yml', 'commitlint.yml'}):
-            raise ValueError('Preparation lacks eligible current-main gates and FR-22 evidence.')
-        verifier = module('verify-release-source')
-        fr22 = gate['fr22']
-        if (fr22.get('source_sha') != prepared['source_sha'] or fr22.get('source_clean') is not True
-                or any(not isinstance(fr22.get(key), str) or re.fullmatch('[0-9a-f]{40}', fr22[key]) is None
-                       for key in ('baseline_revision', 'upstream_main'))
-                or fr22.get('required_revision') != module('verify-paired-prerequisites').REQUIRED
-                or len(set(fr22.get('synchronization', {}).values())) != 1
-                or set(fr22.get('synchronization', {})) != {'AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md'}):
-            raise ValueError('FR-22 evidence is incomplete or belongs to different source.')
-        for workflow, required in [('ci.yml', verifier.STAGING_JOBS), ('commitlint.yml', verifier.STAGING_COMMITLINT_JOBS)]:
-            run = gate['gates'][workflow]
-            if run.get('source_sha') != prepared['source_sha'] or run.get('status') != 'completed' or run.get('conclusion') != 'success':
-                raise ValueError('A required source workflow did not succeed at the exact SHA.')
-            verifier.validate_jobs(run.get('jobs', []), required)
+        validate_source_evidence(gate, prepared['source_sha'])
     validation = json.loads((evidence / 'validation.json').read_text())
     if any(validation.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages')) or validation.get('phase') != 'paired':
         raise ValueError('Package validation does not bind the prepared pair.')

@@ -1,4 +1,4 @@
-"""Shared, fail-closed primitives for staging evidence (never publication)."""
+"""Shared, fail-closed primitives for immutable paired release evidence."""
 
 import hashlib
 import importlib.util
@@ -35,6 +35,41 @@ def source():
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def read_json(path):
+    path = Path(path)
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('Evidence must be a regular file.')
+    document = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(document, dict):
+        raise ValueError('Evidence must contain a JSON object.')
+    return document
+
+
+def validate_source_evidence(gate, sha):
+    if (not isinstance(gate, dict) or gate.get('schema') != 'mcpcli-paired-source/v1' or gate.get('source_sha') != sha
+            or gate.get('current_main') != sha or gate.get('source_clean') is not True
+            or set(gate.get('gates', {})) != {'ci.yml', 'commitlint.yml'}):
+        raise ValueError('Source evidence lacks exact current-main blocking gates.')
+    fr22 = gate.get('fr22', {})
+    if not isinstance(fr22, dict) or not isinstance(fr22.get('synchronization'), dict):
+        raise ValueError('FR-22 evidence must contain synchronized instruction hashes.')
+    sync = fr22['synchronization']
+    if (fr22.get('source_sha') != sha or fr22.get('source_clean') is not True
+            or any(not isinstance(fr22.get(key), str) or re.fullmatch('[0-9a-f]{40}', fr22[key]) is None
+                   for key in ('baseline_revision', 'upstream_main'))
+            or fr22.get('required_revision') != module('verify-paired-prerequisites').REQUIRED
+            or set(sync) != {'AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md'}
+            or len(set(sync.values())) != 1
+            or any(not isinstance(value, str) or re.fullmatch('[0-9a-f]{64}', value) is None for value in sync.values())):
+        raise ValueError('FR-22 evidence is incomplete or belongs to different source.')
+    verifier = module('verify-release-source')
+    for workflow, required in [('ci.yml', verifier.STAGING_JOBS), ('commitlint.yml', verifier.STAGING_COMMITLINT_JOBS)]:
+        run = gate['gates'][workflow]
+        if run.get('source_sha') != sha or run.get('status') != 'completed' or run.get('conclusion') != 'success':
+            raise ValueError('A required source workflow did not succeed at the exact SHA.')
+        verifier.validate_jobs(run.get('jobs', []), required)
 
 
 def write_new(path, value):

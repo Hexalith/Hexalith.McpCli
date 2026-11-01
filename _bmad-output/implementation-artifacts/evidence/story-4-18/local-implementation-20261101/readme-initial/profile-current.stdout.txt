@@ -1,0 +1,26 @@
+{
+  "profile": "operator",
+  "url": "http://127.0.0.1:18170/",
+  "token": null,
+  "tenant": "fixture tenant $(never-run) \u0027quoted\u0027",
+  "actor": "fixture actor $USER $(never-run)",
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "flag",
+    "url": "profile",
+    "token": "default",
+    "tenant": "profile",
+    "actor": "profile",
+    "format": "default",
+    "allowTenantOverride": "default",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}

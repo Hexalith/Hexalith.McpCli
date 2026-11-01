@@ -1,5 +1,7 @@
 {
-  "branches": ["main"],
+  "branches": [
+    "main"
+  ],
   "tagFormat": "v${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
@@ -15,7 +17,12 @@
     [
       "@semantic-release/github",
       {
-        "assets": ["nupkgs/bootstrap/*.nupkg"],
+        "assets": [
+          "nupkgs/bootstrap/*.nupkg",
+          "nupkgs/paired/packages/*.nupkg",
+          "nupkgs/paired/preflight.json",
+          "nupkgs/paired-publication/*.json"
+        ],
         "labels": [],
         "successCommentCondition": false,
         "releasedLabels": false

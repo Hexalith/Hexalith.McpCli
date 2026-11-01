@@ -1,0 +1,142 @@
+.......................................................................FFFFFFFFF................................................................
+======================================================================
+FAIL: test_workflow_completes_missing_published_and_draft_releases_with_exact_assets (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completes_missing_published_and_draft_releases_with_exact_assets) (state='missing', existing_asset=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 393, in test_workflow_completes_missing_published_and_draft_releases_with_exact_assets
+    ("published", True, ["view", "upload"]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completes_missing_published_and_draft_releases_with_exact_assets (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completes_missing_published_and_draft_releases_with_exact_assets) (state='published', existing_asset=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 393, in test_workflow_completes_missing_published_and_draft_releases_with_exact_assets
+    ("published", True, ["view", "upload"]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completes_missing_published_and_draft_releases_with_exact_assets (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completes_missing_published_and_draft_releases_with_exact_assets) (state='draft', existing_asset=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 393, in test_workflow_completes_missing_published_and_draft_releases_with_exact_assets
+    ("published", True, ["view", "upload"]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completes_missing_published_and_draft_releases_with_exact_assets (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completes_missing_published_and_draft_releases_with_exact_assets) (state='published', existing_asset=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 393, in test_workflow_completes_missing_published_and_draft_releases_with_exact_assets
+    ("published", True, ["view", "upload"]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completes_missing_published_and_draft_releases_with_exact_assets (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completes_missing_published_and_draft_releases_with_exact_assets) (state='draft', existing_asset=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 393, in test_workflow_completes_missing_published_and_draft_releases_with_exact_assets
+    ("published", True, ["view", "upload"]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmphim1w1jn/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completion_propagates_creation_upload_publication_and_source_failures (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completion_propagates_creation_upload_publication_and_source_failures) (failure='create')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 412, in test_workflow_completion_propagates_creation_upload_publication_and_source_failures
+    ("edit", "draft", ["view", "upload", "edit"])):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 42 : Traceback (most recent call last):
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completion_propagates_creation_upload_publication_and_source_failures (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completion_propagates_creation_upload_publication_and_source_failures) (failure='upload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 412, in test_workflow_completion_propagates_creation_upload_publication_and_source_failures
+    ("edit", "draft", ["view", "upload", "edit"])):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 42 : Traceback (most recent call last):
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completion_propagates_creation_upload_publication_and_source_failures (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completion_propagates_creation_upload_publication_and_source_failures) (failure='edit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 412, in test_workflow_completion_propagates_creation_upload_publication_and_source_failures
+    ("edit", "draft", ["view", "upload", "edit"])):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 42 : Traceback (most recent call last):
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 151, in main
+    from paired_release import module
+ModuleNotFoundError: No module named 'paired_release'
+
+
+======================================================================
+FAIL: test_workflow_completion_propagates_creation_upload_publication_and_source_failures (test_bootstrap_release.BootstrapReleaseTests.test_workflow_completion_propagates_creation_upload_publication_and_source_failures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_bootstrap_release.py", line 429, in test_workflow_completion_propagates_creation_upload_publication_and_source_failures
+    self.env.pop("GITHUB_RELEASE_FAIL")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'No successful latest bootstrap-package.yml push run' not found in 'Traceback (most recent call last):\n  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 193, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File "/tmp/tmpsviwkfn9/runner-temp/release-scripts/verify-release-source.py", line 151, in main\n    from paired_release import module\nModuleNotFoundError: No module named \'paired_release\'\n'
+
+----------------------------------------------------------------------
+Ran 137 tests in 94.380s
+
+FAILED (failures=9)

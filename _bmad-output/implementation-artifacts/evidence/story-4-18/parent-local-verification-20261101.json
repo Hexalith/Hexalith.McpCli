@@ -1,0 +1,45 @@
+{
+  "schema": "mcpcli-parent-local-verification/v1",
+  "status": "local-checks-passed-release-pending",
+  "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+  "diff_file": "/tmp/mcpcli-418-final-4ogl8m21.diff",
+  "approved_intent_unchanged": true,
+  "evidence_index_hashes_verified": true,
+  "local_document_links_resolve": true,
+  "production_src_changed": false,
+  "python_suite": {
+    "tests": 138,
+    "result": "passed"
+  },
+  "publication_suite": {
+    "tests": 22,
+    "result": "passed"
+  },
+  "guard_removals": {
+    "detected": 24,
+    "result": "passed"
+  },
+  "node_selector": {
+    "tests": 4,
+    "result": "passed"
+  },
+  "manifest": {
+    "tests": 267,
+    "skipped": 0,
+    "result": "passed"
+  },
+  "matrix_coverage": {
+    "accepted_pair": "PublicationTests.test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents",
+    "evidence_failure": "PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions",
+    "credentials_and_registry": "PublicationBoundaryTests.test_missing_credentials_retains_exact_preflight_refusal_without_external_calls; PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails",
+    "partial_publication": "PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+    "bootstrap_line": "PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible; BootstrapReleaseTests.test_source_and_bootstrap_recovery_refuse_the_paired_publication_line"
+  },
+  "pending": [
+    "commit/push and hosted exact-source CI",
+    "fresh three-platform accepted staging",
+    "new reviewed environment and actual client sessions",
+    "candidate acceptance and production approval",
+    "both public package verifications"
+  ]
+}

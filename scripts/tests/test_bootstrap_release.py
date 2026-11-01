@@ -243,7 +243,14 @@ if state == "permission-denied":
     print(os.environ["SUBPROCESS_STDERR"] + chr(0), file=sys.stderr)
     sys.exit(1)
 endpoint = sys.argv[4]
-if endpoint.endswith("git/ref/heads/main"):
+if "/git/matching-refs/tags/mcpcli-paired-publication-started" in endpoint:
+    marker_state = os.environ.get("PAIR_PUBLICATION_STATE", "absent")
+    if marker_state == "absent": print("[]")
+    elif endpoint.endswith("-v1.0.0"):
+        print(json.dumps([{"ref":"refs/tags/mcpcli-paired-publication-started-v1.0.0", "object":{"type":"commit", "sha":"a" * 40}}]))
+    else:
+        print(json.dumps([{"ref":"refs/tags/mcpcli-paired-publication-started", "object":{"type":"commit", "sha":"b" * 40}}]))
+elif endpoint.endswith("git/ref/heads/main"):
     print(json.dumps({"object":{"sha":"b" * 40 if state == "stale" else sha}}))
 elif endpoint.endswith("git/ref/tags/v1.0.0"):
     if os.environ.get("REMOTE_TAG_ANNOTATED") == "1":
@@ -307,7 +314,8 @@ else:
     def complete_github_release(self):
         preserved = self.root / "runner-temp/release-scripts"
         preserved.mkdir(parents=True, exist_ok=True)
-        shutil.copy(self.root / "scripts/verify-release-source.py", preserved / "verify-release-source.py")
+        for filename in ("verify-release-source.py", "paired_release.py", "release-request.py"):
+            shutil.copy(self.root / "scripts" / filename, preserved / filename)
         self.env.update(RUNNER_TEMP=str(preserved.parent), RECOVERY_VERSION="1.0.0")
         self.workflow_exports["DISPATCH_SHA"] = SHA
         return self.run_workflow_step("recover", "Complete the GitHub release")
@@ -331,7 +339,11 @@ else:
                       "${{ secrets.GITHUB_TOKEN }}": "fixture-github-token",
                       "${{ github.sha }}": self.env.get("WORKFLOW_SHA", SHA),
                       "${{ github.ref }}": self.env.get("WORKFLOW_REF", "refs/heads/main"),
-                      "${{ steps.nuget-login.outputs.NUGET_API_KEY }}": "fixture-secret-never-print"}
+                      "${{ steps.nuget-login.outputs.NUGET_API_KEY }}": "fixture-secret-never-print",
+                      "${{ inputs.staging_run_id }}": "",
+                      "${{ runner.temp }}/paired-candidate": str(self.root / "runner-temp/paired-candidate"),
+                      "${{ runner.temp }}/operator-acceptance.json": str(self.root / "runner-temp/operator-acceptance.json"),
+                      "${{ runner.temp }}/paired-preflight.json": str(self.root / "runner-temp/paired-preflight.json")}
             for line in declarations.splitlines():
                 key, value = line.strip().split(": ", 1)
                 if "${{" in value:
@@ -623,7 +635,7 @@ else:
     def test_invalid_requests_are_rejected_by_every_entry_point_before_effects(self):
         for script in ("release-prepare.sh", "release-preflight.sh", "release-publish.sh", "recover-bootstrap-release.py",
                        "smoke-bootstrap-consumer.sh"):
-            for phase, version, message in (("paired", "1.0.0", "deferred"), ("unknown", "1.0.0", "Unknown"),
+            for phase, version, message in (("unknown", "1.0.0", "Unknown"),
                     ("-h", "1.0.0", "Unknown"),
                     *(("bootstrap", version, "Invalid") for version in (
                         "-h", "1.0", "01.0.0", "1.0.0-", "1.0.0-01", "1.0.0-a..b", "1.0.0+meta", "1.0.0\n",
@@ -1590,13 +1602,26 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
             self.assertEqual(Path(call[2]).name, PACKAGE)
             self.assertNotIn("--skip-duplicate", call)
 
+    def test_source_and_bootstrap_recovery_refuse_the_paired_publication_line(self):
+        self.env['PAIR_PUBLICATION_STATE'] = 'started'
+        cases = [('verify-release-source.py', (SHA, 'refs/heads/main', 'bootstrap'), 'Independent bootstrap publication is closed'),
+                 ('verify-release-source.py', ('--tagged-recovery', '1.0.0', '--', SHA, 'refs/heads/main', 'bootstrap'), 'Paired release versions cannot use bootstrap recovery'),
+                 ('recover-bootstrap-release.py', ('1.0.0', 'bootstrap'), 'Paired release versions cannot use bootstrap recovery')]
+        for script, arguments, message in cases:
+            with self.subTest(script=script, arguments=arguments):
+                result = self.run_script(script, *arguments)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertFalse((self.root / 'registry.log').exists())
+                self.assert_no_push()
+
     def test_source_rejections_require_current_main_and_both_latest_results(self):
         result = self.run_script("verify-release-source.py", SHA, "refs/heads/feature", "bootstrap")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("refs/heads/main", result.stderr)
         self.assertFalse((self.root / "gh.log").exists())
         for sha, phase, message in (("invalid", "bootstrap", "exact source SHA"),
-                                     (SHA, "paired", "paired release remains deferred")):
+                                     (SHA, "paired", "requires evidence output")):
             with self.subTest(sha=sha, phase=phase):
                 result = self.run_script("verify-release-source.py", sha, "refs/heads/main", phase)
                 self.assertNotEqual(result.returncode, 0)
@@ -1659,7 +1684,8 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
             section = release.split(f"  {job}:\n", 1)[1].split("    steps:\n", 1)[0]
             self.assertIn("    needs: verify-source\n", section)
             operator = "==" if job == "publish" else "!="
-            self.assertIn(f"    if: ${{{{ inputs.recovery_version {operator} '' }}}}\n", section)
+            expected = f"    if: ${{{{ inputs.recovery_version {operator} '' }}}}\n" if job == "publish" else "    if: ${{ inputs.recovery_version != '' && inputs.phase == 'bootstrap' }}\n"
+            self.assertIn(expected, section)
         self.assertIn('run: bash "$RUNNER_TEMP/release-scripts/release-prepare.sh" "$RECOVERY_VERSION"', release)
         bootstrap = (ROOT / ".github/workflows/bootstrap-package.yml").read_text()
         self.assertIn("group: bootstrap-package-${{ github.event_name }}-${{ github.ref }}", bootstrap)

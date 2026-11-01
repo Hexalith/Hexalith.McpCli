@@ -1,0 +1,367 @@
+{
+  "schema": "mcpcli-guard-removal-evidence/v1",
+  "mutations": [
+    {
+      "guard": "operator-decision",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "        operator_acceptance(operator_path, prepared, accepted_path, origin, actor)\n",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions",
+      "tests_run": 1,
+      "failures": 30,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": " self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (index=28)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 263, in test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions\n    with self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (index=29)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 263, in test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions\n    with self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.639s\n\nFAILED (failures=30)\n"
+    },
+    {
+      "guard": "acceptance-source",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "        validate_source_evidence(read_json(acceptance_source), sha)\n",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest (test_paired_publication.PublicationTests.test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 286, in test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest\n    with self.controls(), self.assertRaisesRegex(ValueError, 'Required step'):\n                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.051s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "original-archive-digest",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": " or 'sha256:' + digest(archive) != artifact['digest']",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_original_staging_archive_source_version_and_acceptance_source_must_match",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_original_staging_archive_source_version_and_acceptance_source_must_match (test_paired_publication.PublicationTests.test_original_staging_archive_source_version_and_acceptance_source_must_match)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 274, in test_original_staging_archive_source_version_and_acceptance_source_must_match\n    with self.assertRaisesRegex(ValueError, 'changed after authentication'):\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.065s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "uncertain-push-stop",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "if pushed.returncode != 0:",
+        "replace": "if False:"
+      },
+      "test": "PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+      "tests_run": 1,
+      "failures": 2,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry (test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry) (mode='first-push')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 194, in test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry\n    with self.assertRaises((ValueError, subprocess.CalledProcessError)):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (<class 'ValueError'>, <class 'subprocess.CalledProcessError'>) not raised\n\n======================================================================\nFAIL: test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry (test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry) (mode='second-push')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 194, in test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry\n    with self.assertRaises((ValueError, subprocess.CalledProcessError)):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (<class 'ValueError'>, <class 'subprocess.CalledProcessError'>) not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.539s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "public-content-match",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "if staged_contents != public_contents:",
+        "replace": "if False:"
+      },
+      "test": "PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry (test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry) (mode='public-mismatch')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 194, in test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry\n    with self.assertRaises((ValueError, subprocess.CalledProcessError)):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (<class 'ValueError'>, <class 'subprocess.CalledProcessError'>) not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.537s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "source-before-each-push",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "                preflight(snapshot / 'candidate', snapshot / 'operator.json', version,\n                          OUTCOMES / f'before-push-{index + 1}.json')\n",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry (test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry) (mode='source-before-second')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 194, in test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry\n    with self.assertRaises((ValueError, subprocess.CalledProcessError)):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (<class 'ValueError'>, <class 'subprocess.CalledProcessError'>) not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.394s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "both-feed-identities",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "for identity in ('Hexalith.McpCli.Abstractions', 'Hexalith.McpCli'):",
+        "replace": "for identity in ('Hexalith.McpCli.Abstractions',):"
+      },
+      "test": "PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_both_registry_identities_are_checked_and_occupied_version_fails (test_paired_publication.PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails) (responses=[[], ['1.2.3']])\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 391, in test_both_registry_identities_are_checked_and_occupied_version_fails\n    with self.assertRaisesRegex(ValueError, expected): request.check_registry(VERSION, 'paired')\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "bootstrap-line-marker",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "if marker != []:",
+        "replace": "if False:"
+      },
+      "test": "PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible (test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 410, in test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible\n    with patch.object(gate, 'github_json', return_value=response), self.assertRaisesRegex(ValueError, 'closed'):\n                                                                   ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.005s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "uncertain-repeat-marker",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "if gate.github_json(endpoint + version_marker) != []:",
+        "replace": "if False:"
+      },
+      "test": "PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible (test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 415, in test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible\n    with self.assertRaisesRegex(ValueError, 'already started'): publisher.reserve_version(VERSION, SHA)\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.017s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "private-snapshot",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "            shutil.copytree(IMPORTED, snapshot, symlinks=True)",
+        "replace": "            snapshot = IMPORTED"
+      },
+      "test": "PublicationTests.test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes",
+      "tests_run": 1,
+      "failures": 0,
+      "errors": 1,
+      "detected": true,
+      "diagnostic": "======================================================================\nERROR: test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes (test_paired_publication.PublicationTests.test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 176, in test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes\n    self.publisher.publish(VERSION)\n    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/publish-paired-release.py\", line 152, in publish\n    staged_contents, public_contents = recovery.content(package), recovery.content(downloaded)\n                                       ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/recover-bootstrap-release.py\", line 32, in content\n    with ZipFile(path) as archive:\n         ~~~~~~~^^^^^^\n  File \"/usr/lib/python3.14/zipfile/__init__.py\", line 1471, in __init__\n    self._RealGetContents()\n    ~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/usr/lib/python3.14/zipfile/__init__.py\", line 1538, in _RealGetContents\n    raise BadZipFile(\"File is not a zip file\")\nzipfile.BadZipFile: File is not a zip file\n\n----------------------------------------------------------------------\nRan 1 test in 0.119s\n\nFAILED (errors=1)\n"
+    },
+    {
+      "guard": "staging-job-execution",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "    module('verify-release-source').verify_jobs(repository, run, STAGING_JOBS)\n",
+        "replace": ""
+      },
+      "test": "PublicationBoundaryTests.test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed (test_paired_publication.PublicationBoundaryTests.test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed) (target='jobs')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 465, in test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed\n    with self.assertRaises(ValueError): verifier.authenticate_run('fixture/repo', 123, SHA)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.009s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "operator-excerpt-hash",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "or hashlib.sha256(content.encode('utf-8')).hexdigest() != record.get('sha256')",
+        "replace": "or False"
+      },
+      "test": "PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (index=21)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 263, in test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions\n    with self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.541s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "blocking-source-step",
+      "source": "scripts/paired_release.py",
+      "original_sha256": "2f69376a2230a9d649906d10b37a902fc5fe49291f980023def50cade159589d",
+      "mutation": {
+        "remove": "        verifier.validate_jobs(run.get('jobs', []), required)\n",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest (test_paired_publication.PublicationTests.test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 286, in test_acceptance_source_is_cross_checked_even_with_authentic_archive_digest\n    with self.controls(), self.assertRaisesRegex(ValueError, 'Required step'):\n                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.054s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "release-automation-gate",
+      "source": "scripts/verify-release-source.py",
+      "original_sha256": "2f0084dfb7320cb06c8c41fe013a0e686a1462c3c42e1fbeb5f96b131f466e50",
+      "mutation": {
+        "remove": "    'release-automation': ['Verify pinned release automation and refusal guards', 'Verify detached-source semantic-release version selection'],\n",
+        "replace": ""
+      },
+      "test": "PublicationBoundaryTests.test_full_ci_requires_the_release_automation_job_and_both_executed_steps",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_full_ci_requires_the_release_automation_job_and_both_executed_steps (test_paired_publication.PublicationBoundaryTests.test_full_ci_requires_the_release_automation_job_and_both_executed_steps)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 469, in test_full_ci_requires_the_release_automation_job_and_both_executed_steps\n    self.assertIn('release-automation', gate.STAGING_JOBS)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'release-automation' not found in {'ci / build-and-test': ['Unit tests (Tier 1, Microsoft.Testing.Platform)', 'Fail on blocking test failures'], 'ci / aspire-tests': ['Prepare Aspire tier', 'Run Aspire hook'], 'conformance-vector-contract': ['Pack and validate the shared vector contract without a Head or Gateway'], 'conformance-vector-loopback': ['Run packaged Contracts through CLI and MCP against reset Gateway replay'], 'enrolled-module-conformance': ['Restore and build exact production catalog', 'Benchmark first v1 Catalog construction in a fresh process', 'Validate approved artifacts, complete vectors and both heads'], 'topology-vector-discovery': ['Build and discover every live vector plus the independent smoke without starting source services']}\n\n----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "confirmed-first-absence",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "if registration_error.code == 404:",
+        "replace": "if True:"
+      },
+      "test": "PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s",
+      "tests_run": 1,
+      "failures": 2,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_first_ever_absence_requires_both_explicit_404s (test_paired_publication.PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s) (statuses=[404, 403])\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 381, in test_first_ever_absence_requires_both_explicit_404s\n    with self.assertRaises(ValueError): request.registry_versions('Hexalith.McpCli', True)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_first_ever_absence_requires_both_explicit_404s (test_paired_publication.PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s) (statuses=[404, 500])\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 381, in test_first_ever_absence_requires_both_explicit_404s\n    with self.assertRaises(ValueError): request.registry_versions('Hexalith.McpCli', True)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "packed-readme-match",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "if archive.read('README.md') != (ROOT / 'README.md').read_bytes():",
+        "replace": "if False:"
+      },
+      "test": "PublicationTests.test_packed_readme_and_nuspec_are_rechecked_without_building",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_packed_readme_and_nuspec_are_rechecked_without_building (test_paired_publication.PublicationTests.test_packed_readme_and_nuspec_are_rechecked_without_building) (mode='readme')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 305, in test_packed_readme_and_nuspec_are_rechecked_without_building\n    with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'README|source'):\n                                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.036s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "downloaded-artifact-digest",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "if 'sha256:' + hashlib.sha256(response.stdout).hexdigest() != artifact['digest']:",
+        "replace": "if False:"
+      },
+      "test": "PublicationBoundaryTests.test_authenticated_fetch_checks_downloaded_bytes_and_preserves_prior_attempts",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_authenticated_fetch_checks_downloaded_bytes_and_preserves_prior_attempts (test_paired_publication.PublicationBoundaryTests.test_authenticated_fetch_checks_downloaded_bytes_and_preserves_prior_attempts)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 355, in test_authenticated_fetch_checks_downloaded_bytes_and_preserves_prior_attempts\n    with self.assertRaisesRegex(ValueError, 'GitHub artifact digest'):\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.007s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "credential-before-record",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "    require_sanitized_operator(decision)\n    write_new(output, decision)",
+        "replace": "    write_new(output, decision)"
+      },
+      "test": "PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets",
+      "tests_run": 1,
+      "failures": 2,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets (test_paired_publication.PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets) (key='GH_TOKEN')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 318, in test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets\n    with self.subTest(key=key), self.assertRaisesRegex(ValueError, 'credential'):\n                                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets (test_paired_publication.PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 320, in test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets\n    self.assertFalse(output.exists())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.006s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "credential-before-import",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "    module('verify-paired-publication').require_sanitized_operator(operator)\n",
+        "replace": ""
+      },
+      "test": "PublicationTests.test_credentials_are_refused_before_operator_packet_is_copied_into_import",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_credentials_are_refused_before_operator_packet_is_copied_into_import (test_paired_publication.PublicationTests.test_credentials_are_refused_before_operator_packet_is_copied_into_import)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 295, in test_credentials_are_refused_before_operator_packet_is_copied_into_import\n    self.assertFalse(self.publisher.IMPORTED.exists())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.072s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "credential-retention-redaction",
+      "source": "scripts/verify-paired-publication.py",
+      "original_sha256": "daf97e329bb447e701f95525770f41ae93398d11980872bfa67dfc167aedcee5",
+      "mutation": {
+        "remove": "            retained = retained.replace(value, '[REDACTED]')",
+        "replace": "            retained = retained"
+      },
+      "test": "PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets (test_paired_publication.PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 332, in test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets\n    self.assertNotIn(os.environ['GH_TOKEN'], path.read_text())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'fixture-github-secret' unexpectedly found in '{\\n  \"evidence\": \"fixture-publication-secret\",\\n  \"escaped\": \"fixture-github-secret\"\\n}\\n'\n\n----------------------------------------------------------------------\nRan 1 test in 0.010s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "bootstrap-historical-ancestry",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "if sha == first_pair or ancestor.returncode != 0:",
+        "replace": "if False:"
+      },
+      "test": "PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags",
+      "tests_run": 1,
+      "failures": 2,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_bootstrap_recovery_cannot_target_paired_or_later_release_tags (test_paired_publication.PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags) (mode='same-source')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 434, in test_bootstrap_recovery_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_bootstrap_recovery_cannot_target_paired_or_later_release_tags (test_paired_publication.PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags) (mode='later-source')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 434, in test_bootstrap_recovery_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.009s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "bootstrap-paired-version-refusal",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "if not isinstance(version_markers, list) or any(item.get('ref') == version_ref for item in version_markers):",
+        "replace": "if False:"
+      },
+      "test": "PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_bootstrap_recovery_cannot_target_paired_or_later_release_tags (test_paired_publication.PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags) (mode='paired-version')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 434, in test_bootstrap_recovery_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.006s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "bootstrap-first-marker-state",
+      "source": "scripts/release-request.py",
+      "original_sha256": "121007f8e48381cdb00c5e82b6170fa00cc2b237be355b7ad61313719a6eb5b6",
+      "mutation": {
+        "remove": "if references == []:",
+        "replace": "if True:"
+      },
+      "test": "PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags",
+      "tests_run": 1,
+      "failures": 5,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "ry_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_bootstrap_recovery_cannot_target_paired_or_later_release_tags (test_paired_publication.PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags) (mode='missing-global')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 434, in test_bootstrap_recovery_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_bootstrap_recovery_cannot_target_paired_or_later_release_tags (test_paired_publication.PublicationBoundaryTests.test_bootstrap_recovery_cannot_target_paired_or_later_release_tags) (mode='uncertain')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 434, in test_bootstrap_recovery_cannot_target_paired_or_later_release_tags\n    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.008s\n\nFAILED (failures=5)\n"
+    },
+    {
+      "guard": "remaining-version-availability",
+      "source": "scripts/publish-paired-release.py",
+      "original_sha256": "83c4ccd78bff9466655555e4592e5504ee9f7ea6aab23239daeae03b9b9463b7",
+      "mutation": {
+        "remove": "if version.lower() in {item.lower() for item in available}:",
+        "replace": "if False:"
+      },
+      "test": "PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+      "tests_run": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true,
+      "diagnostic": "======================================================================\nFAIL: test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry (test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry) (mode='second-occupied')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py\", line 194, in test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry\n    with self.assertRaises((ValueError, subprocess.CalledProcessError)):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (<class 'ValueError'>, <class 'subprocess.CalledProcessError'>) not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.596s\n\nFAILED (failures=1)\n"
+    }
+  ],
+  "status": "passed",
+  "repository_files_changed": false
+}

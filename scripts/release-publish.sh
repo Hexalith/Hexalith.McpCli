@@ -8,6 +8,10 @@ if [ "$#" -ne 1 ]; then
 fi
 release_version="${1:?Release version is required}"
 release_phase="${MCPCLI_RELEASE_PHASE:?Release phase is required}"
+if [ "$release_phase" = paired ]; then
+  python3 "$script_directory/publish-paired-release.py" publish --version "$release_version"
+  exit
+fi
 # Direct invocation must enforce the same request, credential and registry checks.
 bash "$script_directory/release-preflight.sh" "$release_version"
 

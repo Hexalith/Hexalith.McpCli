@@ -373,10 +373,10 @@ class PairedReleaseTests(unittest.TestCase):
             with self.subTest(changes), self.assertRaises(ValueError):
                 evaluate(**changes)
 
-    def test_paired_publication_and_recovery_remain_refused(self):
-        for version in (VERSION, '1.0.0'):
-            with self.assertRaisesRegex(ValueError, 'Paired release is deferred'):
-                module('release-request').validate_request(version, 'paired')
+    def test_paired_requests_validate_version_but_never_enable_bootstrap_recovery(self):
+        module('release-request').validate_request(VERSION, 'paired')
+        with self.assertRaisesRegex(ValueError, 'Bootstrap recovery refuses paired'):
+            module('recover-bootstrap-release').recover(VERSION, 'paired')
 
     def test_xml_errors_or_no_executed_tests_refuse(self):
         path = self.root / 'errors.xml'

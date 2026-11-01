@@ -1,0 +1,47 @@
+{
+  "schema": "mcpcli-local-static-checks/v1",
+  "status": "passed",
+  "commands": [
+    {
+      "argv": [
+        "actionlint",
+        ".github/workflows/release.yml",
+        ".github/workflows/ci.yml"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-preflight.sh",
+        "scripts/release-prepare.sh",
+        "scripts/release-publish.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\n"
+    }
+  ]
+}

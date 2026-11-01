@@ -695,6 +695,7 @@ status: open
     - The ledger had no equivalent entry.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
   summary: Relative links in the root README break on nuget.org, which renders that README for both packages.
+  status: Resolved in Story 4.18 local implementation (2026-11-01); every repository link is absolute, verified by the README local-check receipt under evidence/story-4-18/local-implementation-20261101/readme/receipt.json. Fresh packing/publication remains pending.
   evidence: Low; pre-existing pattern.
     - `src/Hexalith.McpCli/Hexalith.McpCli.csproj:14` and `:18`, and `src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj:5` and `:8`, pack `README.md` as `PackageReadmeFile`.
     - nuget.org cannot resolve relative links such as `_bmad-output/...` and `tools/...`.
@@ -738,6 +739,7 @@ status: open
     - Fix: when a person new to McpCli is available, run the corrected quick start in a freshly reviewed environment with the procedure in `docs/release/operator-setup-checklist.md:72-78`, and add the attempt to `timing-attempts.json`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: The README packed into both NuGet packages now carries Story 4.17 operator material and more repository-relative links.
+  status: Resolved in Story 4.18 local implementation (2026-11-01); original package/environment/session records remain in docs/release/operator-setup-history.md, the packed README retains generic setup and absolute links, and fresh candidate acceptance remains pending.
   evidence: Medium; from the Story 4.17 review.
     - `README.md:119-395` holds the staged-1.2.0 operator section, including the private Platform address `192.168.1.30` (`README.md:199`) and story environment history.
     - New relative links at `README.md:188`, `:197`, `:201` and `:394` will not resolve on nuget.org. The existing relative-link entry (`deferred-work.md:697`) lists anchors that this section moved by about 270 lines.

@@ -4,12 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: Bootstrap publication, staging-only paired validation, or refused paired publication
+        description: Bootstrap publication, staging-only paired validation, or accepted paired publication
         required: true
         type: choice
         options: [bootstrap, stage-paired, paired]
       recovery_version:
         description: Existing partial-release version to recover, for example 1.0.0; leave blank for a new release
+        required: false
+        type: string
+        default: ''
+      staging_run_id:
+        description: Exact successful stage-paired Release run to publish (paired phase only)
+        required: false
+        type: string
+        default: ''
+      operator_acceptance:
+        description: Sanitized candidate-bound operator approval JSON (paired phase only; see release checklist)
         required: false
         type: string
         default: ''
@@ -33,6 +43,14 @@ jobs:
         with:
           ref: ${{ github.sha }}
           submodules: false
+      - name: Refuse unsupported paired recovery before production approval
+        env:
+          PHASE: ${{ inputs.phase }}
+          RECOVERY_VERSION: ${{ inputs.recovery_version }}
+        run: test "$PHASE" != paired || test -z "$RECOVERY_VERSION"
+      - name: Initialize root-declared baseline for paired source verification
+        if: ${{ inputs.phase == 'paired' }}
+        run: git submodule update --init -- references/Hexalith.AI.Tools
       - name: Require current main with exact-source bootstrap and commitlint success
         env:
           GH_TOKEN: ${{ github.token }}
@@ -40,7 +58,8 @@ jobs:
           DISPATCH_REF: ${{ github.ref }}
           DISPATCH_SHA: ${{ github.sha }}
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
-        run: python3 scripts/verify-release-source.py -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
+          MCPCLI_RECOVERY_VERSION: ${{ inputs.recovery_version }}
+        run: python3 scripts/verify-release-source.py --output "$RUNNER_TEMP/release-source.json" -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
 
   publish:
     needs: verify-source
@@ -60,7 +79,7 @@ jobs:
           fetch-depth: 0
           submodules: false
       - name: Initialize root-declared Builds submodule
-        run: git submodule update --init -- references/Hexalith.Builds
+        run: git submodule update --init -- references/Hexalith.Builds references/Hexalith.AI.Tools
       - name: Set up .NET
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
@@ -78,7 +97,20 @@ jobs:
           DISPATCH_REF: ${{ github.ref }}
           DISPATCH_SHA: ${{ github.sha }}
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
-        run: python3 scripts/verify-release-source.py -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
+          MCPCLI_RECOVERY_VERSION: ${{ inputs.recovery_version }}
+        run: python3 scripts/verify-release-source.py --output "$RUNNER_TEMP/release-source.json" -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
+      - name: Authenticate the selected staging run and retain the explicit operator decision
+        if: ${{ inputs.phase == 'paired' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DISPATCH_SHA: ${{ github.sha }}
+          MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
+          OPERATOR_ACCEPTANCE: ${{ inputs.operator_acceptance }}
+        run: |
+          python3 scripts/verify-paired-publication.py fetch --repository "$REPOSITORY" \
+            --staging-run "$MCPCLI_STAGING_RUN_ID" --source-sha "$DISPATCH_SHA" --candidate "$RUNNER_TEMP/paired-candidate"
+          python3 scripts/verify-paired-publication.py record-operator --output "$RUNNER_TEMP/operator-acceptance.json"
       - name: Get short-lived NuGet publication key
         id: nuget-login
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
@@ -93,11 +125,63 @@ jobs:
           DISPATCH_SHA: ${{ github.sha }}
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
+          MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
+          MCPCLI_PAIRED_CANDIDATE: ${{ runner.temp }}/paired-candidate
+          MCPCLI_OPERATOR_ACCEPTANCE: ${{ runner.temp }}/operator-acceptance.json
+          MCPCLI_PAIRED_PREFLIGHT: ${{ runner.temp }}/paired-preflight.json
         run: npx --no-install semantic-release
+      - name: Require both paired packages publicly verified
+        if: ${{ inputs.phase == 'paired' }}
+        env:
+          DISPATCH_SHA: ${{ github.sha }}
+          MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
+        run: |
+          python3 - <<'PYTHON'
+          import json, os
+          from pathlib import Path
+          path = Path('nupkgs/paired-publication/outcome.json')
+          outcome = json.loads(path.read_text()) if path.is_file() else {}
+          valid = (outcome.get('status') == 'paired-public-verified'
+                   and outcome.get('source_sha') == os.environ['DISPATCH_SHA']
+                   and str(outcome.get('staging_run_id')) == os.environ['MCPCLI_STAGING_RUN_ID']
+                   and set(outcome.get('packages', {})) == {'Hexalith.McpCli.Abstractions', 'Hexalith.McpCli'}
+                   and all(item.get('status') == 'public-verified' for item in outcome['packages'].values()))
+          receipt = {'status': 'passed' if valid else 'refused',
+                     'reason': 'Both public packages verified' if valid else 'Paired publication produced no complete public-pair verification; no-release is not publication'}
+          Path(os.environ['RUNNER_TEMP'], 'paired-publication-completion.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          if not valid:
+              raise SystemExit(receipt['reason'])
+          PYTHON
+      - name: Retain sanitized operator evidence on success or refusal
+        if: ${{ always() && inputs.phase == 'paired' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: >-
+          python3 scripts/verify-paired-publication.py retain-operator
+          --input "$RUNNER_TEMP/operator-acceptance.json"
+          --input nupkgs/paired/operator.json
+          --output "$RUNNER_TEMP/retained-operator"
+      - name: Retain paired publication success, refusal or partial outcomes
+        if: ${{ always() && inputs.phase == 'paired' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paired-publication-outcomes
+          path: |
+            ${{ runner.temp }}/paired-preflight.json*
+            ${{ runner.temp }}/paired-publication-completion.json
+            ${{ runner.temp }}/release-source.json
+            ${{ runner.temp }}/operator-acceptance.json.failure.json
+            ${{ runner.temp }}/retained-operator/
+            ${{ runner.temp }}/paired-candidate/
+            nupkgs/paired/
+            !nupkgs/paired/operator.json
+            nupkgs/paired-publication/
+          if-no-files-found: warn
 
   recover:
     needs: verify-source
-    if: ${{ inputs.recovery_version != '' }}
+    if: ${{ inputs.recovery_version != '' && inputs.phase == 'bootstrap' }}
     runs-on: ubuntu-latest
     environment: production
     permissions:
@@ -118,7 +202,8 @@ jobs:
           DISPATCH_REF: ${{ github.ref }}
           DISPATCH_SHA: ${{ github.sha }}
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
-        run: python3 scripts/verify-release-source.py -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
+          MCPCLI_RECOVERY_VERSION: ${{ inputs.recovery_version }}
+        run: python3 scripts/verify-release-source.py --output "$RUNNER_TEMP/release-source.json" -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
       - name: Preserve reviewed recovery scripts before checking out the release tag
         run: cp -a scripts "$RUNNER_TEMP/release-scripts"
       - name: Require an existing release tag on main
@@ -149,6 +234,7 @@ jobs:
         env:
           MCPCLI_RELEASE_PHASE: ${{ inputs.phase }}
           RECOVERY_VERSION: ${{ inputs.recovery_version }}
+          MCPCLI_RECOVERY_VERSION: ${{ inputs.recovery_version }}
         run: bash "$RUNNER_TEMP/release-scripts/release-prepare.sh" "$RECOVERY_VERSION"
       - name: Get short-lived NuGet publication key
         id: nuget-login

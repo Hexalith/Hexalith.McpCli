@@ -1,0 +1,75 @@
+{
+  "schema": "mcpcli-paired-local-implementation/v1",
+  "status": "local-verification-passed",
+  "date": "2026-11-01",
+  "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+  "working_tree": "uncommitted implementation; ineligible for staging/publication",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "result": "138 passed",
+      "evidence": "python.stdout.txt",
+      "evidence_sha256": "2c8d3f4d773afbc057853ea3d11c67ac73a74f30cc116a26701a73f5d784f5b9"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_paired_publication.py'",
+      "result": "22 passed; includes latest second-identity occupancy-race case",
+      "evidence": "publication.stdout.txt",
+      "evidence_sha256": "ecf2ed889c2f4152b8022a82a4fb39005e4968ec68e78e310f83731ff31834e9"
+    },
+    {
+      "command": "node --test scripts/tests/select-release-version.test.mjs",
+      "result": "4 passed",
+      "evidence": "node.stdout.txt",
+      "evidence_sha256": "b227191af7672c19f362e3fe1482dcdb31f5bcec07c8fc648772343d512748a4"
+    },
+    {
+      "command": "dotnet restore Hexalith.McpCli.slnx",
+      "result": "passed",
+      "evidence": "restore.stdout.txt",
+      "evidence_sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "result": "passed; 0 warnings, 0 errors",
+      "evidence": "build.stdout.txt",
+      "evidence_sha256": "68f80a9f2f8c9834d7a524a5d6560c50f9722b0f4f1d2c6743cca7ac4e37f4f8"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release",
+      "result": "267 passed; 0 failed, 0 skipped",
+      "evidence": "manifest.stdout.txt",
+      "evidence_sha256": "6b9d279c53f99cd438573e129ef49cac4fb6df6d477be339e429e00f15889acd"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 readme-check.py",
+      "result": "36 passed; current README hash, built CLI/profile/discovery/stdio; synthetic credentials, 0 Gateway calls, 0 actual GUI sessions",
+      "evidence": "readme/receipt.json",
+      "evidence_sha256": "0490cbc668008fa42103c16cba9a740ce8fa6b4af08b93192213a4a990a310b7"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 guard-mutations.py",
+      "result": "24/24 in-memory guard removals detected; repository files untouched",
+      "evidence": "guard-mutations.json",
+      "evidence_sha256": "fcbef462c099744b302311d9134491b1efdc0a3c00b5b585aa9656052002b185"
+    },
+    {
+      "command": "actionlint; shell syntax; instruction synchronization; git diff --check",
+      "result": "all passed",
+      "evidence": "static-checks.json",
+      "evidence_sha256": "2240fc3384cf045ac8209f1f42e1a15ef8ebdb1ac57d651facc1103ea7f845b0"
+    }
+  ],
+  "historical_evidence_modified": false,
+  "git_commits_or_pushes": 0,
+  "nuget_pushes": 0,
+  "environments_deployed": 0,
+  "pending": [
+    "Integrate reviewed source and pass exact-SHA full hosted CI/commitlint",
+    "Stage fresh three-OS accepted pair at pinned semantic-release version",
+    "Owner approval and readiness for a new task environment",
+    "User participation in actual Claude Code, Claude Desktop and VS Code sessions against the fresh pair",
+    "Explicit candidate-bound operator acceptance retaining the assisted timing exception",
+    "Production approval, paired preflight/publication and signature-aware verification of both public versions"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "mcpcli-commit-message-validation/v1",
+  "validated_at_utc": "2026-11-01T06:40:50.848353+00:00",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "message": "feat(release): add guarded paired package publication\n",
+  "message_sha256": "cc808f2847f139d3124bd9207c03a5bfc91ceed412698d4f7f6fe600a779ac47",
+  "cli_version": "21.2.4",
+  "pinned_version": "21.2.4",
+  "package_lock_sha256": "430cd31be6291955cbd5768b3640bffb38e7ebbcc1ae17880289533a998aa77f",
+  "exit_code": 0,
+  "stdout": "\u29d7   --- input ---\nfeat(release): add guarded paired package publication\n\u2714   found 0 problems, 0 warnings\n",
+  "stderr": "",
+  "temporary_message_file": "/tmp/mcpcli-418-commit-9lkkt79u.txt"
+}

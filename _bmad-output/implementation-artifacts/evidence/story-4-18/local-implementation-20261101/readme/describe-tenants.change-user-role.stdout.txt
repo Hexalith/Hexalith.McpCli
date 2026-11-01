@@ -1,0 +1,52 @@
+{
+  "name": "tenants.change-user-role",
+  "kind": "write",
+  "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant\u0027s members, roles and configuration.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "TenantId": {
+        "type": "string",
+        "description": "Identifier of the tenant whose member changes role."
+      },
+      "UserId": {
+        "type": "string",
+        "description": "Identifier of the member whose role changes: the subject (sub) claim the identity provider issues for that user."
+      },
+      "NewRole": {
+        "enum": [
+          "Unknown",
+          "TenantOwner",
+          "TenantContributor",
+          "TenantReader"
+        ],
+        "description": "Role that replaces the member\u0027s current role. Every role can read the tenant and its members; TenantContributor can also update its name and description; TenantOwner can also manage its members, roles and configuration. Unknown is rejected."
+      }
+    },
+    "required": [
+      "TenantId",
+      "UserId",
+      "NewRole"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "TenantId": "acme",
+    "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90",
+    "NewRole": "TenantOwner"
+  },
+  "envelope": {
+    "fixedTenant": "system",
+    "aggregateIdRequired": false,
+    "idempotencyKeyRequired": false,
+    "arguments": [
+      "aggregateId",
+      "correlationId",
+      "idempotencyKey",
+      "extensions"
+    ]
+  },
+  "lintFindings": [],
+  "submittable": false,
+  "reason": "configuration_invalid"
+}

@@ -1,0 +1,26 @@
+{
+  "profile": "operator",
+  "url": "http://127.0.0.1:18170/",
+  "token": "synt***",
+  "tenant": null,
+  "actor": null,
+  "allowTenantOverride": false,
+  "allowedExtensions": [],
+  "format": "json",
+  "output": null,
+  "readOnly": false,
+  "strict": false,
+  "sources": {
+    "profile": "flag",
+    "url": "profile",
+    "token": "profile",
+    "tenant": "default",
+    "actor": "default",
+    "format": "default",
+    "allowTenantOverride": "default",
+    "readOnly": "default",
+    "strict": "default",
+    "output": "default",
+    "allowedExtensions": "default"
+  }
+}

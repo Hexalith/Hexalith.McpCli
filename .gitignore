@@ -436,3 +436,4 @@ _bmad/render/
 # Operator acceptance procedure is source documentation, not build output.
 !docs/release/
 !docs/release/operator-setup-checklist.md
+!docs/release/operator-setup-history.md
