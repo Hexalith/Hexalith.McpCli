@@ -1,0 +1,26 @@
+{
+  "decision": "approved",
+  "ready": true,
+  "owner": "user (explicit conversation approval)",
+  "target": "https://192.168.1.30:6443",
+  "namespace_uid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+  "namespace": "mcpcli-417-20261101-00c6a713",
+  "tenant": "mcpcli-417-20261101-00c6a713",
+  "approved_at_utc": "2026-11-01T16:37:04.321092+00:00",
+  "expires_at_utc": "2026-11-01T18:37:04+00:00",
+  "ready_observed_at_utc": "2026-11-01T16:38:30.778703+00:00",
+  "review_sha256": "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+  "operator_subject": "mcpcli-417-operator-20261101-00c6a713",
+  "role": "TenantContributor",
+  "domains": [
+    "tenants",
+    "party"
+  ],
+  "permissions": [
+    "command:submit",
+    "query:read"
+  ],
+  "global_administrator": false,
+  "renewal_request": "add 2 hours",
+  "original_review_expiry_unchanged": "2026-11-02T12:46:22.115384+00:00"
+}

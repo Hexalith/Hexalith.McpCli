@@ -1,0 +1,25 @@
+{
+  "schema": "mcpcli-owned-renewed-forward/v1",
+  "status": "starting",
+  "pid": 3518534,
+  "argv": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=10s",
+    "7176s",
+    "python3",
+    "eng/mcpcli-operator-setup/v1/phases.py",
+    "--packet",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/environment-20261101T124621Z/packet",
+    "--review-sha256",
+    "f2e88eb4dc9536709a0b1daf9193423cbb9011ddf5a8b59c7775fce1a97d598e",
+    "--forward"
+  ],
+  "created_at_utc": "2026-11-01T16:37:27.593127+00:00",
+  "automatic_stop_at_utc": "2026-11-01T18:37:04+00:00",
+  "namespace": "mcpcli-417-20261101-00c6a713",
+  "namespace_uid": "2f5b7d0a-4988-4380-a026-7b1e1c39855e",
+  "url": "http://127.0.0.1:18170",
+  "private_log": "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/access-renewal-20261101T163704Z/forward.log",
+  "process_start_ticks": "29210969"
+}

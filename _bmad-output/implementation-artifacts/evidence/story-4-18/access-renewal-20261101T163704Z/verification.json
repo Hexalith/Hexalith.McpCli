@@ -1,0 +1,32 @@
+{
+  "schema": "mcpcli-renewed-access-verification/v1",
+  "status": "passed",
+  "recorded_at_utc": "2026-11-01T16:38:30.780919+00:00",
+  "same_authorization_claims": true,
+  "private_profile_updated": true,
+  "other_profile_fields_unchanged": true,
+  "owned_forward_active": true,
+  "automatic_stop_at_utc": "2026-11-01T18:37:04+00:00",
+  "gateway_ready_http_status": 200,
+  "active_tenant_and_contributor_verified": true,
+  "query_command": [
+    "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+    "query",
+    "tenants.get-tenant",
+    "--payload",
+    "{\"TenantId\": \"mcpcli-417-20261101-00c6a713\"}",
+    "--profile",
+    "operator"
+  ],
+  "query_exit_code": 0,
+  "application_writes": 0,
+  "deployment_changes": false,
+  "original_receipts_and_old_profile_preserved": true,
+  "client_action": "Reconnect the Hexalith MCP server to load the renewed private profile; do not repeat any previously submitted command.",
+  "release_source": {
+    "staged_source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+    "current_local_head": "b224ac69c64fbe8af81f427bf406d54b2ba2d811",
+    "current_source_matches_staging": false,
+    "publication_requirement": "Exact current-main staging and actual candidate-bound sessions remain required; historical session evidence cannot qualify new archives."
+  }
+}
