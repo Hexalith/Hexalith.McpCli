@@ -350,6 +350,7 @@ public sealed class CatalogTests
     [InlineData("bad-kind", "Unknown identifier kind.", 99, 2, null, "invalid_module_declaration", "IdentifierKind '99'")]
     [InlineData("bad-convention", "Unknown convention.", 0, 99, null, "invalid_module_declaration", "WireTypeConvention '99'")]
     [InlineData("bad-tenant", "Invalid fixed tenant.", 0, 2, "Bad Tenant", "invalid_routing_value", "FixedTenant 'Bad Tenant'")]
+    [InlineData("reserved-tenant", "Reserved fixed tenant.", 0, 2, "system", "invalid_routing_value", "FixedTenant 'system'")]
     public void InvalidModuleMarkerExcludesTheModule(string name, string description, int identifierKind, int convention,
         string? fixedTenant, string category, string detail)
     {

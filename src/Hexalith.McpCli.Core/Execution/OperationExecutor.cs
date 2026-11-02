@@ -111,13 +111,23 @@ public sealed class OperationExecutor(
             return Fail(call, prefillValidation.Violations);
         }
 
-        string? tenant = ResolveTenant(module, call.Tenant, context, out PayloadViolation? tenantViolation);
+        // Public tenant input follows AD-27 normalization; declared fixed values remain exact.
+        string? perCallTenant = module.FixedTenant is null && operation.PlatformScope is null
+            ? call.Tenant?.ToLowerInvariant() : call.Tenant;
+        EnvelopeContext tenantContext = module.FixedTenant is null && operation.PlatformScope is null
+            ? context with { Tenant = context.Tenant?.ToLowerInvariant() } : context;
+        string? tenant = ResolveTenant(module, operation, perCallTenant, tenantContext, out PayloadViolation? tenantViolation);
         if (tenantViolation is not null)
         {
             return Fail(call, tenantViolation);
         }
 
-        if (!RoutingResolver.IsTenantDomain(tenant))
+        if (tenant == "system")
+        {
+            return Fail(call, "/tenant", "The public tenant 'system' is reserved.");
+        }
+
+        if (operation.PlatformScope is null && !RoutingResolver.IsTenantDomain(tenant))
         {
             return Fail(call, "/tenant", tenant is null
                 ? "A tenant is required for this operation."
@@ -298,10 +308,20 @@ public sealed class OperationExecutor(
             && raw.TryGetProperty(binding.SerializedName, out JsonElement supplied)
             && supplied.ValueKind != JsonValueKind.Null;
 
-    private static string? ResolveTenant(ModuleDescriptor module, string? perCall, EnvelopeContext context,
-        out PayloadViolation? violation)
+    private static string? ResolveTenant(ModuleDescriptor module, OperationDescriptor operation, string? perCall,
+        EnvelopeContext context, out PayloadViolation? violation)
     {
         violation = null;
+        if (operation.PlatformScope is not null)
+        {
+            if (perCall is not null && !string.Equals(perCall, operation.PlatformScope, StringComparison.Ordinal))
+            {
+                violation = new PayloadViolation("/tenant", "The per-call tenant disagrees with the operation's platform scope.");
+            }
+
+            return operation.PlatformScope;
+        }
+
         if (module.FixedTenant is not null)
         {
             if (perCall is not null && !string.Equals(perCall, module.FixedTenant, StringComparison.Ordinal))

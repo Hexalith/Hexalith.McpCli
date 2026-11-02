@@ -41,10 +41,11 @@ public static class CatalogBuilder
                 continue;
             }
 
-            if (marker.FixedTenant is not null && !RoutingResolver.IsTenantDomain(marker.FixedTenant))
+            if (marker.FixedTenant is not null
+                && (!RoutingResolver.IsTenantDomain(marker.FixedTenant) || marker.FixedTenant == "system"))
             {
                 diagnostics.Add(Diagnostic(assemblyName, "invalid_routing_value",
-                    $"Module FixedTenant '{marker.FixedTenant}' must be 1 to 64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit."));
+                    $"Module FixedTenant '{marker.FixedTenant}' must be a public canonical tenant: 1 to 64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit, excluding reserved 'system'."));
                 continue;
             }
 
@@ -196,6 +197,14 @@ public static class CatalogBuilder
                 $"HexalithQuery.AggregateId '{aggregateConstant}' must be 1 to 256 ASCII letters, digits, '.', '_', or '-', starting and ending with a letter or digit.");
         }
 
+        string? platformScope = command?.PlatformScope ?? query?.PlatformScope;
+        if (platformScope is not null && (!RoutingResolver.IsPlatformScope(platformScope) || module.FixedTenant is not null))
+        {
+            throw new ContractDeclarationException("invalid_routing_value", module.FixedTenant is not null
+                ? $"{attribute}.PlatformScope cannot be combined with HexalithModule.FixedTenant."
+                : $"{attribute}.PlatformScope '{platformScope}' must be platform: followed by a canonical lowercase scope name.");
+        }
+
         RoutingResolution routing = RoutingResolver.Resolve(type, kind, module, part, command, query);
         var roleNames = new Dictionary<PropertyRole, string?>
         {
@@ -235,7 +244,7 @@ public static class CatalogBuilder
         string description = command?.Description ?? query!.Description;
         IReadOnlyList<LintFinding> lintFindings = DescriptionLinter.Inspect(type, description, kind, options, schema);
         var operation = new OperationDescriptor(module.Name + "." + part, kind, description,
-            example, schema, routing.Routing, accessor, aggregateConstant,
+            example, platformScope, schema, routing.Routing, accessor, aggregateConstant,
             kind == OperationKind.Query && accessor is null && aggregateConstant is null, idempotencyRequired, type, lintFindings);
         return (operation, routing.Warnings);
     }

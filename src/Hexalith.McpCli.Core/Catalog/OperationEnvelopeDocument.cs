@@ -7,8 +7,10 @@ namespace Hexalith.McpCli.Core.Catalog;
 /// <param name="AggregateIdRequired">Whether the caller must supply an aggregate identifier.</param>
 /// <param name="IdempotencyKeyRequired">Whether the caller must supply an idempotency key.</param>
 /// <param name="Arguments">The applicable envelope argument names.</param>
+/// <param name="PlatformScope">The operation's exact declared platform request scope, when any.</param>
 public sealed record OperationEnvelopeDocument(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? FixedTenant,
     bool AggregateIdRequired,
     bool IdempotencyKeyRequired,
-    IReadOnlyList<string> Arguments);
+    IReadOnlyList<string> Arguments,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? PlatformScope = null);
