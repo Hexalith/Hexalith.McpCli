@@ -41,11 +41,10 @@ public static class CatalogBuilder
                 continue;
             }
 
-            if (marker.FixedTenant is not null
-                && (!RoutingResolver.IsTenantDomain(marker.FixedTenant) || marker.FixedTenant == "system"))
+            if (marker.FixedTenant is not null && !RoutingResolver.IsTenantDomain(marker.FixedTenant))
             {
                 diagnostics.Add(Diagnostic(assemblyName, "invalid_routing_value",
-                    $"Module FixedTenant '{marker.FixedTenant}' must be a public canonical tenant: 1 to 64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit, excluding reserved 'system'."));
+                    $"Module FixedTenant '{marker.FixedTenant}' must be a canonical tenant: 1 to 64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit."));
                 continue;
             }
 

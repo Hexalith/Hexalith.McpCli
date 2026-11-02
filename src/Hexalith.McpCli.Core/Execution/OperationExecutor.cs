@@ -122,7 +122,7 @@ public sealed class OperationExecutor(
             return Fail(call, tenantViolation);
         }
 
-        if (tenant == "system")
+        if (tenant == "system" && module.FixedTenant is null)
         {
             return Fail(call, "/tenant", "The public tenant 'system' is reserved.");
         }
