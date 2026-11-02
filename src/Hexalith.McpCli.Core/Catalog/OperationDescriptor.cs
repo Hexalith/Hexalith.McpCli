@@ -8,7 +8,7 @@ namespace Hexalith.McpCli.Core.Catalog;
 /// <summary>One resolved operation ready for discovery and execution.</summary>
 public sealed class OperationDescriptor
 {
-    internal OperationDescriptor(string name, OperationKind kind, string description, string? example, DerivedSchema schema,
+    internal OperationDescriptor(string name, OperationKind kind, string description, string? example, string? platformScope, DerivedSchema schema,
         OperationRouting routing, Func<JsonElement, string?>? aggregateIdAccessor, string? aggregateIdConstant,
         bool aggregateIdRequired, bool idempotencyKeyRequired, Type contractType, IReadOnlyList<LintFinding> lintFindings)
     {
@@ -16,6 +16,7 @@ public sealed class OperationDescriptor
         Kind = kind;
         Description = description;
         Example = example;
+        PlatformScope = platformScope;
         Schema = schema;
         Routing = routing;
         AggregateIdAccessor = aggregateIdAccessor;
@@ -41,6 +42,9 @@ public sealed class OperationDescriptor
 
     /// <summary>Gets the validated sample payload, when declared.</summary>
     public string? Example { get; }
+
+    /// <summary>Gets the operation's exact declared platform request scope, when any.</summary>
+    public string? PlatformScope { get; }
 
     /// <summary>Gets the reusable derived payload schema and validator.</summary>
     [JsonIgnore]

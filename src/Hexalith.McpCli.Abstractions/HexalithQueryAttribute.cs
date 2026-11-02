@@ -16,6 +16,9 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     /// <summary>Gets or sets the ASCII lowercase kebab-case operation name part, overriding the name derived from the type name.</summary>
     public string? Name { get; set; }
 
+    /// <summary>Gets or sets the exact cataloged platform request scope for this operation.</summary>
+    public string? PlatformScope { get; set; }
+
     /// <summary>Gets or sets the gateway domain when no contract interface supplies it.</summary>
     public string? Domain { get; set; }
 
