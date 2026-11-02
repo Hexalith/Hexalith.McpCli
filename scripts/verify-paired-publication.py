@@ -169,10 +169,12 @@ def operator_acceptance(path, prepared, accepted_path, origin, actor):
     bindings.update(staging_run_id=origin['staging_run_id'], preparation_sha256=accepted['preparation_sha256'],
                     acceptance_sha256=digest(accepted_path), readme_sha256=digest(ROOT / 'README.md'))
     if decision.get('schema') == 'mcpcli-paired-automated-acceptance/v1':
+        decided_at = timestamp(decision.get('decided_at_utc'))
         if (decision.get('decision') != 'approved' or decision.get('authorization') != 'user-requested-human-validation-bypass'
                 or not actor or actor.endswith('[bot]') or decision.get('approved_by') != actor
                 or any(decision.get(key) != value for key, value in bindings.items())
-                or 'sessions' in decision or timestamp(decision['decided_at_utc']) > datetime.now(timezone.utc)):
+                or 'sessions' in decision
+                or not timestamp(origin['completed_at']) <= decided_at <= datetime.now(timezone.utc)):
             raise ValueError('Automated authorization must bind the exact staged pair, source, actor and user request.')
         return decision
     if (decision.get('schema') != 'mcpcli-paired-operator-acceptance/v1' or decision.get('decision') != 'approved'

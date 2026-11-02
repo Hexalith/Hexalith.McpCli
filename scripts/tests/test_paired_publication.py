@@ -238,7 +238,9 @@ class PublicationTests(unittest.TestCase):
                     'authorization': 'user-requested-human-validation-bypass',
                     'approved_by': 'fixture-owner', 'decided_at_utc': '2026-11-01T00:03:00Z', **self.bindings}
         for change in (None, {'source_sha': 'b' * 40}, {'staging_run_id': 999},
-                       {'authorization': 'unknown'}, {'sessions': []}, {'approved_by': 'other-user'}):
+                       {'authorization': 'unknown'}, {'sessions': []}, {'approved_by': 'other-user'},
+                       {'decided_at_utc': '2026-10-31T23:59:59Z'}, {'decided_at_utc': '9999-01-01T00:00:00Z'},
+                       {'decided_at_utc': None}):
             candidate = {**decision, **(change or {})}
             path = self.root / ('automated-' + str(len(list(self.root.glob('automated-*.json')))) + '.json')
             write_new(path, candidate)
@@ -249,6 +251,22 @@ class PublicationTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     self.verifier.operator_acceptance(path, self.prepared, self.accepted_path,
                                                       self.origin, 'fixture-owner')
+
+    def test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions(self):
+        decision = {'schema': 'mcpcli-paired-automated-acceptance/v1', 'decision': 'approved',
+                    'authorization': 'user-requested-human-validation-bypass',
+                    'approved_by': 'fixture-owner', 'decided_at_utc': '2026-11-01T00:03:00Z', **self.bindings}
+        self.operator = self.root / 'automated-operator.json'
+        write_new(self.operator, decision)
+        self.env['MCPCLI_OPERATOR_ACCEPTANCE'] = str(self.operator)
+        with self.controls():
+            self.import_pair()
+            self.publisher.publish(VERSION)
+        result = json.loads((self.publisher.OUTCOMES / 'outcome.json').read_text())
+        self.assertEqual(result['status'], 'paired-public-verified')
+        self.assertEqual(result['operator_sha256'], digest(self.operator))
+        self.assertNotIn('sessions', result)
+        self.assertEqual([name for name, _ in self.pushes], [f'{identity}.{VERSION}.nupkg' for identity in PAIR])
 
     def test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions(self):
         mutations = [lambda d: d.update(decision='pending'), lambda d: d.update(approved_by='other-user'),

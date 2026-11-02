@@ -1,6 +1,6 @@
 # Operator setup history
 
-These records qualify only their original source, archives, README revisions and environments. They do not qualify a fresh pair. Story 4.18 requires three new actual client sessions; the existing assisted 685-second timing exception remains explicit.
+These records qualify only their original source, archives, README revisions and environments. They do not qualify a fresh pair. Story 4.18 now permits either three new actual client sessions or the user's explicit candidate-bound automated authorization; the latter makes no new client-session claim. The existing assisted 685-second timing exception remains explicit in this history.
 
 Story 4.17 uses the accepted **staging-only** pair from source `32fb5dbf75216adaf21551bcfa36439741c41e01`. It is not a published release. Obtain both package files, `prepared.json` and `accepted-pair.json` from the maintainer's [accepted staging packet](../../_bmad-output/implementation-artifacts/evidence/story-4-16/hosted-20261029/accepted-32fb5db/README.md). Keep the packages in a local directory; do not substitute a public-feed package, a source build or another 1.2.0 archive.
 
