@@ -1,0 +1,17 @@
+{
+  "observed_at_utc": "2026-11-01T16:52:09.696651+00:00",
+  "staged_source": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+  "superseded_current_main": "b224ac69c64fbe8af81f427bf406d54b2ba2d811",
+  "superseded_ci": {
+    "run_id": 41326637790,
+    "status": "completed",
+    "conclusion": "cancelled"
+  },
+  "current_remote_main": "3bc89642ad43305531c4018b75b5e1b9e0681e10",
+  "latest_ci": {
+    "run_id": 41328095878,
+    "observed_status": "queued",
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41328095878"
+  },
+  "requirement": "Wait for exact current-main successful blocking gates, then stage and accept the fresh pair before further publication-acceptance sessions. Do not rerun superseded-source CI or transfer old session evidence."
+}
