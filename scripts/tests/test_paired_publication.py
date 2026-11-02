@@ -233,6 +233,23 @@ class PublicationTests(unittest.TestCase):
         self.assertFalse(self.publisher.IMPORTED.exists())
         self.assertFalse(self.publisher.OUTCOMES.exists())
 
+    def test_explicit_automated_authorization_binds_staging_without_claiming_client_sessions(self):
+        decision = {'schema': 'mcpcli-paired-automated-acceptance/v1', 'decision': 'approved',
+                    'authorization': 'user-requested-human-validation-bypass',
+                    'approved_by': 'fixture-owner', 'decided_at_utc': '2026-11-01T00:03:00Z', **self.bindings}
+        for change in (None, {'source_sha': 'b' * 40}, {'staging_run_id': 999},
+                       {'authorization': 'unknown'}, {'sessions': []}, {'approved_by': 'other-user'}):
+            candidate = {**decision, **(change or {})}
+            path = self.root / ('automated-' + str(len(list(self.root.glob('automated-*.json')))) + '.json')
+            write_new(path, candidate)
+            if change is None:
+                self.assertEqual(self.verifier.operator_acceptance(path, self.prepared, self.accepted_path,
+                                                                    self.origin, 'fixture-owner'), candidate)
+            else:
+                with self.assertRaises(ValueError):
+                    self.verifier.operator_acceptance(path, self.prepared, self.accepted_path,
+                                                      self.origin, 'fixture-owner')
+
     def test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions(self):
         mutations = [lambda d: d.update(decision='pending'), lambda d: d.update(approved_by='other-user'),
             lambda d: d.update(source_sha='b' * 40), lambda d: d.update(staging_run_id=999), lambda d: d.update(version='1.2.0'),
