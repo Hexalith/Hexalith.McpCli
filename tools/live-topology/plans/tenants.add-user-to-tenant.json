@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.add-user-to-tenant",
-  "vectorSha256": "4f226fe5a057cc77d9ee0a10833bbd15be0a1d0581076a3717f630bae0a5cb90",
+  "vectorSha256": "235a853cdd85f6df72d5eeaa8d89a03b35b361b9347b1a10e3ee3b6b74081a80",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-members"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-members"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-members"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-members"
         },
         "assertions": [
           {

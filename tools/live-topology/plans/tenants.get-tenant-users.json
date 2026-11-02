@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.get-tenant-users",
-  "vectorSha256": "335e467a76ac7811a48ee238d7fc7e173908734e3d4f22a8476a863e90c0033f",
+  "vectorSha256": "1e02d4c9f4b3eab6e2c7b532df46acd6639ea29863f3541cffc6a2cf62369cff",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-users"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-users"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-users"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-users"
         },
         "assertions": [
           {
@@ -81,7 +81,7 @@
           "TenantId": "vector-users"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-users"
         },
         "assertions": [
           {
@@ -107,7 +107,7 @@
           "TenantId": "vector-users"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-users"
         },
         "assertions": [
           {

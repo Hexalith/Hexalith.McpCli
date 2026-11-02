@@ -19,6 +19,8 @@ from run_loopback import run_catalog
 def artifact_for(assets: dict, package_id: str, receipt: dict) -> Path:
     if not isinstance(receipt, dict):
         raise RuntimeError(f'{package_id}: approval receipt must be a JSON object.')
+    if receipt.get('status') not in (None, 'approved-published-artifact'):
+        raise RuntimeError(f'{package_id}: candidate vectors require published-artifact owner approval.')
     matches = [(key, library) for key, library in assets['libraries'].items()
                if key.rsplit('/', 1)[0].casefold() == package_id.casefold() and library['type'] == 'package']
     if len(matches) != 1:

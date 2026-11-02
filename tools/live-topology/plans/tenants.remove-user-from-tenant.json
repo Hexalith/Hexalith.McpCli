@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.remove-user-from-tenant",
-  "vectorSha256": "837868cc764d7566698bccf29e161f22fcaa936403577e5466667471abc90d6c",
+  "vectorSha256": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-removal"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-removal"
         },
         "assertions": [
           {
@@ -81,7 +81,7 @@
           "TenantId": "vector-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-removal"
         },
         "assertions": [
           {

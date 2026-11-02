@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.get-tenant-audit",
-  "vectorSha256": "65b9f3f36af12c54a86e946c8489335ab8130f5efa95003b2e94e2fa6259d83f",
+  "vectorSha256": "a97d4c82fe5f73f380d337d16777215e2d27b479f3e65440a783c1906f3532b6",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-audit"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-audit"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-audit"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-audit"
         },
         "assertions": [
           {
@@ -81,7 +81,7 @@
           "TenantId": "vector-audit"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-audit"
         },
         "assertions": [
           {
@@ -109,7 +109,7 @@
           "TenantId": "vector-audit"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-audit"
         },
         "assertions": [
           {
@@ -172,7 +172,7 @@
           "Category": "Administrative"
         },
         "envelope": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "pageSize": 100
         },
         "assertions": [
@@ -207,7 +207,7 @@
           "Category": "Access"
         },
         "envelope": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "pageSize": 100
         },
         "assertions": [
@@ -242,7 +242,7 @@
           "Category": "Access"
         },
         "envelope": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "pageSize": 100
         },
         "assertions": [
@@ -277,7 +277,7 @@
           "Category": "Access"
         },
         "envelope": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "pageSize": 100
         },
         "assertions": [
@@ -308,7 +308,7 @@
           "Category": "Access"
         },
         "envelope": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "pageSize": 100
         },
         "assertions": [

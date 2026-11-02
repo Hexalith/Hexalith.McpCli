@@ -369,7 +369,8 @@ class VectorContractTests(unittest.TestCase):
                         self.assertEqual([], self._validate(document))
 
     def test_tenant_runtime_slug_grammar_and_agreement_apply_at_every_call_position(self) -> None:
-        invalid = ("", "UPPER", "-leading", "trailing-", "contains space", "a" * 65)
+        invalid = ("", "UPPER", "-leading", "trailing-", "contains space", "a" * 65,
+                   "system", "platform:", "platform:UPPER", "platform:bad--scope")
         for template in (self.command, self.query):
             for position in POSITIONS:
                 for area in ("envelope", "expectedGateway"):
@@ -386,7 +387,7 @@ class VectorContractTests(unittest.TestCase):
                 document, step, pointer = self._step_at(template, position)
                 step["expectedGateway"]["body"]["tenant"] = "other-tenant"
                 self._assert_rejected(document, f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
-        for value in ("a", "a-b1", "a" + "-" * 62 + "z"):
+        for value in ("a", "a-b1", "a" + "-" * 62 + "z", "platform:tenants"):
             for template in (self.command, self.query):
                 with self.subTest(kind=template["kind"], value=value):
                     document = copy.deepcopy(template)

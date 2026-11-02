@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.list-tenants",
-  "vectorSha256": "03270b8453567dd5348fedd65c16d31bc5e927238f448a885b4eef40b9e4c7c3",
+  "vectorSha256": "7cc17790f181f77cf0061108bcfab78e20059da588fd69d5533f0485a25b388e",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-list-a"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-list-a"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-list-b"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-list-b"
         },
         "assertions": [
           {
@@ -93,7 +93,7 @@
           "TenantId": "vector-list-c"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-list-c"
         },
         "assertions": [
           {

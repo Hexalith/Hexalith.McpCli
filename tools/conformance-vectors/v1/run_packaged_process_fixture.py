@@ -15,6 +15,8 @@ import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
+from verify_artifact import resolve_builds_props
+
 
 def run(command, cwd, env, expected=0):
     result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, capture_output=True, text=True)
@@ -166,8 +168,9 @@ def fixture(repo: Path, artifact: Path):
     with tempfile.TemporaryDirectory(prefix='mcpcli-packaged-process-') as temporary:
         root = Path(temporary).resolve()
         # The synthetic receipt, inventory and flagged project exist only in this temporary repository.
-        for name in ['src', 'references/Hexalith.Builds/Props', 'tools/conformance-vectors/v1', 'tools/inventory-coverage/v1']:
+        for name in ['src', 'tools/conformance-vectors/v1', 'tools/inventory-coverage/v1']:
             shutil.copytree(repo / name, root / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
+        shutil.copytree(resolve_builds_props(repo), root / 'references/Hexalith.Builds/Props')
         for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
             if (repo / name).exists():
                 shutil.copy2(repo / name, root / name)

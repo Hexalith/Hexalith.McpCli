@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.create-tenant",
   "kind": "command",
@@ -16,7 +16,7 @@
       "Description": "Created by the McpCli v1 vector"
     },
     "envelope": {
-      "tenant": "system",
+      "tenant": "platform:tenants",
       "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
     },
     "expectedGateway": {
@@ -24,7 +24,7 @@
       "path": "/api/v1/commands",
       "body": {
         "messageId": "<generated>",
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "domain": "tenants",
         "aggregateId": "vector-create",
         "commandType": "create-tenant",
@@ -61,7 +61,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "platform:tenants"
       },
       {
         "path": "/aggregateId",
@@ -83,13 +83,13 @@
         "TenantId": "vector-create"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "vector-create"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-create",
           "domain": "tenants",
           "aggregateId": "vector-create",
           "queryType": "get-tenant",
@@ -126,7 +126,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-create"
         },
         {
           "path": "/document/tenantId",

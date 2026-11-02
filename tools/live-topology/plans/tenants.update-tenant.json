@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.update-tenant",
-  "vectorSha256": "a66c2c7bdb28a02a48346705b26fcccbf6e06697633d138844b8ed2bba49c86a",
+  "vectorSha256": "b8483be038efd2b6c4d995e131b94aa38b9cc872e15673af3f9f76652d9532cf",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-update"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-update"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-update"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-update"
         },
         "assertions": [
           {
