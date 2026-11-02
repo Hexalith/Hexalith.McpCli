@@ -3,8 +3,8 @@
   "version": "7.0.0",
   "module": "tenants",
   "status": "pending-published-artifact-and-owner-approval",
-  "candidateArtifactHash": "sha512-G0XICP9NVFYgAFk4hZd+KTqM45TbdHnH6Y1pMmTTH2PcxeoqZzzTH/OehH3eScRXXneTlVjkOOaToI7QaaYqLQ==",
-  "candidateProvenance": "local-uncommitted-source",
+  "candidateArtifactHash": "sha512-vovnGv3V6O1JEDXX1Z3oqS3g9iGo8A42hXSxdXNAIQrEvsfI7WkhNTEe7oiLQrM1CbfXhST04oIAp9+ARxjCQA==",
+  "candidateProvenance": "local-committed-source-not-published",
   "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
   "supersedesPublishedVersion": "5.10.0",
   "vectorFilesSha256": {
@@ -22,5 +22,6 @@
     "remove-user-from-tenant.vector.json": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
     "set-tenant-configuration.vector.json": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
     "update-tenant.vector.json": "b8483be038efd2b6c4d995e131b94aa38b9cc872e15673af3f9f76652d9532cf"
-  }
+  },
+  "candidateSourceCommit": "ed35296686451f41ee919ca132052ced3315113c"
 }
