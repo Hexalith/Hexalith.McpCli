@@ -13,6 +13,11 @@
   <Import Project="$(HexalithBuildPackageVersions1)" Condition="Exists('$(HexalithBuildPackageVersions1)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <Import Project="$(HexalithBuildPackageVersions2)" Condition="Exists('$(HexalithBuildPackageVersions2)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <Import Project="$(HexalithBuildPackageVersions3)" Condition="Exists('$(HexalithBuildPackageVersions3)') And '$(HexalithVersionsLoaded)' != 'true'" />
+  <ItemGroup>
+    <!-- The isolated AppHost test fixture still uses the topology-owning 3.128.4 harness.
+         Production EventStore dependencies remain on the coordinated 4.0.0 cohort. -->
+    <PackageVersion Update="Hexalith.EventStore.Testing.Integration" Version="3.128.4" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>14.0</LangVersion>
