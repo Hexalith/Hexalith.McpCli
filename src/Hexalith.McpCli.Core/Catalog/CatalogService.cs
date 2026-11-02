@@ -70,7 +70,7 @@ public sealed class CatalogService(CatalogProvider provider, ExecutionAvailabili
         (ModuleDescriptor module, OperationDescriptor descriptor) = selected;
         string? reason = availability.ReasonFor(descriptor.Kind);
         var arguments = new List<string>();
-        if (module.FixedTenant is null)
+        if (module.FixedTenant is null && descriptor.PlatformScope is null)
         {
             arguments.Add("tenant");
         }
@@ -86,7 +86,7 @@ public sealed class CatalogService(CatalogProvider provider, ExecutionAvailabili
         }
 
         var envelope = new OperationEnvelopeDocument(module.FixedTenant, descriptor.AggregateIdRequired,
-            descriptor.IdempotencyKeyRequired, Array.AsReadOnly(arguments.ToArray()));
+            descriptor.IdempotencyKeyRequired, Array.AsReadOnly(arguments.ToArray()), descriptor.PlatformScope);
         var document = new OperationDescriptionDocument(descriptor.Name, PublicKind(descriptor.Kind), descriptor.Description,
             descriptor.SchemaDocument, descriptor.Example is null ? null : JsonNode.Parse(descriptor.Example), envelope,
             descriptor.LintFindings, reason is null, reason);

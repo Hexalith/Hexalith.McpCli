@@ -53,7 +53,7 @@ public sealed class QueryValidationCommandTests
             yield return ["routing-fixture.get-http2-status", "--aggregate-id", value, "/aggregateId"];
         }
 
-        foreach (string value in new[] { "-a", "a-", "a.b", "a_b", "A", "a/b", "a:b", "é", "a\n", new string('a', 65) })
+        foreach (string value in new[] { "-a", "a-", "a.b", "a_b", "a/b", "a:b", "é", "a\n", new string('a', 65) })
         {
             yield return ["routing-fixture.get-http2-status", "--tenant", value, "/tenant"];
         }

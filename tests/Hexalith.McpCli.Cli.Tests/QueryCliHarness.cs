@@ -116,6 +116,15 @@ internal sealed class QueryCliHarness : IAsyncDisposable
         AssertJson(document.GetRawText(), expected);
     }
 
+    /// <summary>Returns the sole captured command after checking its HTTP route.</summary>
+    internal JsonElement AssertCommandRequest()
+    {
+        (string method, string path, JsonElement document) = _requests.ShouldHaveSingleItem();
+        method.ShouldBe("POST");
+        path.ShouldBe("/api/v1/commands");
+        return document;
+    }
+
     /// <summary>Checks complete documents with type-preserving JSON equality.</summary>
     internal static void AssertJson(string actual, string expected)
     {

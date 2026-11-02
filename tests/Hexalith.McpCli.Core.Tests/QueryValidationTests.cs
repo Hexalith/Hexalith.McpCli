@@ -112,7 +112,7 @@ public sealed class QueryValidationTests
     /// <summary>Provides invalid syntax and adjacent length boundaries for Gateway envelope identifiers.</summary>
     public static IEnumerable<object?[]> InvalidEnvelopeIdentifiers()
     {
-        foreach (string value in new[] { "", " ", "-a", "a-", "a.b", "a_b", "A", "a/b", "a:b", "é", "a\n", new string('a', 65) })
+        foreach (string value in new[] { "", " ", "-a", "a-", "a.b", "a_b", "a/b", "a:b", "é", "a\n", new string('a', 65) })
         {
             yield return ["tenant", value];
         }

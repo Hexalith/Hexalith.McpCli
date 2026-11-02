@@ -629,7 +629,8 @@ public sealed class DiscoveryCommandTests
                 {"name":"routing-fixture.items-list","kind":"read","description":"List all synthetic items.",
                  "schema":{"type":["object","null"],"additionalProperties":false},
                  "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
-                    "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
+                    "arguments":["aggregateId","entityId","pageSize","offset","cursor"],
+                    "platformScope":"platform:routing"},
                  "lintFindings":[],"submittable":false,"reason":"configuration_invalid"}
                 """,
             (false, "describe") => """
