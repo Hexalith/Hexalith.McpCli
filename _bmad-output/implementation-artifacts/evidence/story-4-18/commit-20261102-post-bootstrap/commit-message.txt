@@ -1,0 +1,1 @@
+fix(release): select a fresh pair after the bootstrap
