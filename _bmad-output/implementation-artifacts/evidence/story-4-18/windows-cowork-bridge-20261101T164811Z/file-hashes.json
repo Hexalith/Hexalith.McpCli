@@ -1,0 +1,13 @@
+{
+  "bridge-verification.json": "6711dd6088c604930ff86b0c74d71fa1bebe965dcb5b698cbd4dc259bbf5099d",
+  "config-repair.json": "a71e13374f843d8aa7a736666d89e5578df3b452a7cfbf3fdb7b8903a2fcc08b",
+  "config.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "config.stdout.txt": "037bbd3bcd74c05dbd4beaf5e593c12c42f6e175b633aebe74fee892d5aa1c79",
+  "desktop-closed-check.json": "873952ee1ab439735e2cb653c27200989110cbfd1dd8e1232733dfc4c64f93a7",
+  "release-source-checkpoint.json": "d257a1e4ae62d384b3ef205a0d777545b5c4b81d0ca92e4b85c7202741fbb13f",
+  "tenant-read.stderr.txt": "7b57f468ae142bcef46d4597a1b6c2c506746b660c7b8b743b09d3410cd8b521",
+  "tenant-read.stdout.txt": "e4e9dc27e391e57c0891857548ccb41fbd76125c1cc2a48af60212f22a4feecf",
+  "version.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "version.stdout.txt": "1e5b51cde515396a9fa762909cf8ca6584ccc564b325d2eebeea76175fe95c4d",
+  "windows-handoff.json": "b5b6a8776a25509a9b90662248eeba775def68edfa2d4232c4fbf120b3316a51"
+}

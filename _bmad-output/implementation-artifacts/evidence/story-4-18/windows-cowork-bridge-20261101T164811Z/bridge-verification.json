@@ -1,0 +1,82 @@
+{
+  "schema": "mcpcli-windows-wsl-launch-verification/v1",
+  "status": "passed",
+  "verified_at_utc": "2026-11-01T16:48:57.234359+00:00",
+  "windows_launcher": "C:\\Windows\\System32\\wsl.exe",
+  "distribution": "Ubuntu-26.04",
+  "linux_user": "administrator",
+  "fresh_tool": "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+  "private_profile_loaded": true,
+  "version": "1.2.0",
+  "persisted_tenant_and_membership_read": "passed",
+  "checks": [
+    {
+      "name": "version",
+      "argv": [
+        "/mnt/c/Windows/System32/wsl.exe",
+        "--distribution",
+        "Ubuntu-26.04",
+        "--user",
+        "administrator",
+        "--cd",
+        "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "--exec",
+        "/usr/bin/env",
+        "MCPCLI_HOME=/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "DOTNET_ROOT=/home/administrator/.dotnet",
+        "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "config",
+      "argv": [
+        "/mnt/c/Windows/System32/wsl.exe",
+        "--distribution",
+        "Ubuntu-26.04",
+        "--user",
+        "administrator",
+        "--cd",
+        "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "--exec",
+        "/usr/bin/env",
+        "MCPCLI_HOME=/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "DOTNET_ROOT=/home/administrator/.dotnet",
+        "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+        "config",
+        "current",
+        "--profile",
+        "operator"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "tenant-read",
+      "argv": [
+        "/mnt/c/Windows/System32/wsl.exe",
+        "--distribution",
+        "Ubuntu-26.04",
+        "--user",
+        "administrator",
+        "--cd",
+        "/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "--exec",
+        "/usr/bin/env",
+        "MCPCLI_HOME=/tmp/mcpcli-4-18-41307182275/environment-private-20261101T124621Z/operator-home",
+        "DOTNET_ROOT=/home/administrator/.dotnet",
+        "/tmp/mcpcli-4-18-41307182275/operator/tools/hexalith",
+        "query",
+        "tenants.get-tenant",
+        "--payload",
+        "-",
+        "--profile",
+        "operator"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "actual_cowork_session": false,
+  "domain_writes": 0,
+  "purpose": "Verify the exact Windows-to-WSL launch route, not actual client acceptance or publication eligibility."
+}
