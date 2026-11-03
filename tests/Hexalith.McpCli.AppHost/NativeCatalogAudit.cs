@@ -83,8 +83,18 @@ internal static class NativeCatalogAudit
                 foreach (string group in groups)
                     if (package.TryGetProperty(group, out JsonElement files))
                         foreach (JsonProperty file in files.EnumerateObject())
+                        {
+                            // NuGet records _._ for an empty asset group without extracting a file.
+                            if (file.Name.StartsWith(group + "/", StringComparison.Ordinal)
+                                && file.Name.EndsWith("/_._", StringComparison.Ordinal)
+                                && !file.Name.Contains("../", StringComparison.Ordinal)
+                                && !file.Name.Contains('\\')
+                                && archive.GetEntry(file.Name) is null
+                                && !File.Exists(Path.Combine(folder, file.Name))) continue;
                             RequireEntryBytes(folder, file.Name, archive.GetEntry(file.Name)
-                                ?? throw new InvalidDataException("A consumed reader asset is absent from its audited archive."));
+                                ?? throw new InvalidDataException("A consumed reader asset is absent from its audited archive: "
+                                    + identity + "/" + file.Name + "."));
+                        }
     }
 
     private static void RequireEntryBytes(string folder, string relative, ZipArchiveEntry entry)

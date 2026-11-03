@@ -51,6 +51,8 @@ public sealed class NativeCatalogAuditTests : IDisposable
     [InlineData("archive-tampered")]
     [InlineData("asset-tampered")]
     [InlineData("unarchived-asset")]
+    [InlineData("empty-group-placeholder")]
+    [InlineData("placeholder-traversal")]
     public void ReaderGraphRequiresExactAuditedPackageBytes(string kind)
     {
         string proof = Path.Combine(_root, "audit.json");
@@ -64,11 +66,12 @@ public sealed class NativeCatalogAuditTests : IDisposable
         var target = new Dictionary<string, object> { ["SDK/4.0.4"] = new
         {
             compile = new Dictionary<string, object> { [kind == "unarchived-asset" ? "lib/Unknown.dll" : "lib/Fixture.dll"] = new { } },
+            build = new Dictionary<string, object> { [kind == "placeholder-traversal" ? "build/../_._" : "build/_._"] = new { } },
         } };
         using JsonDocument assets = JsonDocument.Parse(JsonSerializer.Serialize(new { libraries,
             packageFolders = new Dictionary<string, object> { [Path.Combine(_root, "packages")] = new { } },
             targets = new Dictionary<string, object> { ["net10.0"] = target } }));
-        if (kind == "matching") Assert.Equal(_packageHash, NativeCatalogAudit.RequireCoverage(assets.RootElement, audit.RootElement)["SDK/4.0.4"]);
+        if (kind is "matching" or "empty-group-placeholder") Assert.Equal(_packageHash, NativeCatalogAudit.RequireCoverage(assets.RootElement, audit.RootElement)["SDK/4.0.4"]);
         else Assert.Throws<InvalidDataException>(() => NativeCatalogAudit.RequireCoverage(assets.RootElement, audit.RootElement));
     }
 

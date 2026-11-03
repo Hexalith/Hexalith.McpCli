@@ -397,7 +397,16 @@ def require_prepared_provenance(prepared: dict) -> dict:
             raise ValueError('The prepared qualified source identity or clean owned files changed before execution.')
     actual = gateway_package_provenance()
     if prepared.get('gateway') != actual:
-        raise ValueError('The prepared gateway package identity or bytes changed before isolated execution.')
+        def first_difference(expected: object, observed: object, path: str = 'gateway') -> str:
+            if isinstance(expected, dict) and isinstance(observed, dict):
+                for key in sorted(expected.keys() | observed.keys()):
+                    if key not in expected or key not in observed:
+                        return path + '.' + key
+                    if expected[key] != observed[key]:
+                        return first_difference(expected[key], observed[key], path + '.' + key)
+            return path
+        changed = first_difference(prepared.get('gateway'), actual)
+        raise ValueError('The prepared gateway package identity or bytes changed before isolated execution: ' + changed + '.')
     require_reader_audit(prepared)
     return actual
 
