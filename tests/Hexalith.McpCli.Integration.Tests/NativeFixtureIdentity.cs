@@ -23,6 +23,9 @@ internal static class NativeFixtureIdentity
                 : new[] { "query:read", "tenants:read" },
             ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + (live ? 600 : 300),
         };
+        // The Gateway derives the administrator hint from this signed role; Tenants independently
+        // verifies current persisted membership before accepting management commands.
+        if (live && !authorityRead) claims["role"] = "GlobalAdministrator";
         // The real writer maintenance endpoint requires its existing operator role.
         // Business calls use the separate native grants and persisted administrator barrier.
         if (maintenance)

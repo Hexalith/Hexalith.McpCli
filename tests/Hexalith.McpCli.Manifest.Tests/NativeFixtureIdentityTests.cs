@@ -24,6 +24,7 @@ public sealed class NativeFixtureIdentityTests
         IReadOnlyDictionary<string, object> claims = NativeFixtureIdentity.CreateClaims(1000, live: true);
         Assert.Equal(expected.Order(StringComparer.Ordinal), ((string[])claims["eventstore:tenant"]).Order(StringComparer.Ordinal));
         Assert.Equal("agent", claims["eventstore:surface"]);
+        Assert.Equal("GlobalAdministrator", claims["role"]);
         Assert.False(claims.ContainsKey("global_admin"));
         Assert.False(claims.ContainsKey("tenants"));
         Assert.DoesNotContain(((string[])claims["eventstore:permission"]), permission => permission.Contains('*'));
