@@ -141,6 +141,10 @@ with (root / 'runner-gateway-environment.jsonl').open('a') as log:
                          'sourceCommit': os.environ.get('MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT')}) + '\n')
 with (root / 'runner-source-overrides.jsonl').open('a') as log:
     log.write(json.dumps(os.environ.get('CustomAfterMicrosoftCommonTargets')) + '\n')
+if mode == 'nested-before-smoke' and pathlib.Path(__file__).name == 'run-vectors.py':
+    nested = root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
+    nested.parent.mkdir(parents=True)
+    nested.write_bytes(b'untouched nested checkout')
 def owned(name, base=runtime):
     path = base / 'runs' / name; path.mkdir(parents=True)
     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
@@ -538,6 +542,41 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual({str(cache)}, {call['cache'] for call in builds})
         self.assertEqual(0, self.invoke('run-ci.sh').returncode)
 
+    def test_separate_adapter_materializes_its_ordinary_package_runtime_closure(self):
+        self.prepare()
+        builds = [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build']
+        selected = [call for call in builds if '-p:CopyLocalLockFileAssemblies=true' in call]
+        self.assertEqual(1, len(selected))
+        self.assertEqual('src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj', selected[0][3])
+        self.assertEqual(str(self.root / 'references/Hexalith.Parties'), selected[0][1])
+        self.assertIn('-p:HexalithEventStoreFromSource=false', selected[0])
+        self.assertIn('-p:HexalithEventStoreVersion=4.0.4', selected[0])
+
+    def test_competing_nested_catalog_is_rechecked_before_either_live_runner(self):
+        prepared = self.prepare()
+        module = self.ci_module()
+        nested = self.root / 'references/Hexalith.Parties/references/Hexalith.Builds/.git'
+        nested.parent.mkdir(parents=True)
+        nested.write_bytes(b'untouched nested checkout')
+        with patch.dict(os.environ, self.env, clear=True):
+            with self.assertRaisesRegex(ValueError, 'Competing nested Builds catalog'):
+                module.require_prepared_provenance(prepared)
+        self.assertEqual(b'untouched nested checkout', nested.read_bytes())
+        result = self.invoke('run-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Competing nested Builds catalog', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+
+    def test_competing_nested_catalog_created_after_vectors_blocks_independent_smoke(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'nested-before-smoke')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Competing nested Builds catalog', result.stderr)
+        actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
+        self.assertEqual(1, len(actual))
+        nested = self.root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
+        self.assertEqual(b'untouched nested checkout', nested.read_bytes())
+
     def test_source_catalog_override_reaches_all_builds_and_both_isolated_runners(self):
         self.env['CustomAfterMicrosoftCommonTargets'] = str(self.root / 'untrusted.targets')
         prepared = self.prepare()
@@ -667,6 +706,30 @@ class CiHooksTests(unittest.TestCase):
                         self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
                     finally:
                         path.write_bytes(original)
+
+    def test_compiled_adapter_may_omit_copy_local_transitives_but_launched_host_may_not(self):
+        adapter_output = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/bin/Release/net10.0'
+        transitive = adapter_output / 'Hexalith.EventStore.Server.dll'
+        transitive.unlink()
+        prepared = self.prepare()
+        self.assertIs(False, prepared['gateway']['partiesAdapter']['deploymentRequired'])
+        self.assertNotIn(transitive.name, prepared['gateway']['partiesAdapter']['output'])
+        self.assertIn('Hexalith.EventStore.Server/4.0.4', prepared['gateway']['partiesAdapter']['packages'])
+        copied = adapter_output / 'Hexalith.EventStore.DomainService.dll'
+        original = copied.read_bytes()
+        copied.write_bytes(b'changed adapter copy')
+        self.fresh_evidence()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
+        copied.write_bytes(original)
+        launched = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll'
+        launched.unlink()
+        self.fresh_evidence()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Launched host is missing its restored EventStore binary', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
 
     def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
         folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'

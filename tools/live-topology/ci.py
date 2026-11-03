@@ -185,8 +185,8 @@ def require_contract() -> None:
         raise ValueError('TEST_PLATFORM must be microsoft-testing-platform.')
 
 
-def restored_cohort(project: Path, required: str) -> dict:
-    """Verify the restored graph and deployed EventStore assemblies against their archives."""
+def restored_cohort(project: Path, required: str, *, deployed_required: bool = True) -> dict:
+    """Verify restored EventStore archives and any assemblies copied to the project output."""
     assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
     libraries = {name: item for name, item in assets['libraries'].items()
                  if name.lower().startswith('hexalith.eventstore.')}
@@ -227,14 +227,16 @@ def restored_cohort(project: Path, required: str) -> dict:
                 if (folder / asset).read_bytes() != expected:
                     raise ValueError(f'Extracted package binary differs from its archive: {identity}/{asset}.')
                 deployed = output / Path(asset).name
-                if deployed.read_bytes() != expected:
+                if deployed.is_file() and deployed.read_bytes() != expected:
                     raise ValueError(f'Deployed EventStore binary differs from its archive: {deployed}.')
+                if deployed_required and not deployed.is_file():
+                    raise ValueError(f'Launched host is missing its restored EventStore binary: {deployed}.')
                 binaries[Path(asset).name] = hashlib.sha256(expected).hexdigest()
             packages[identity] = {'sourceCommit': commit, 'sha256': hashlib.sha256(archive_path.read_bytes()).hexdigest(),
                                   'binaries': binaries}
     owned = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
              for path in sorted(output.iterdir()) if path.is_file() and path.suffix in ('.dll', '.json')}
-    return {'packages': packages, 'output': owned}
+    return {'packages': packages, 'output': owned, 'deploymentRequired': deployed_required}
 
 
 def gateway_package_provenance() -> dict:
@@ -247,7 +249,7 @@ def gateway_package_provenance() -> dict:
                                       'Hexalith.EventStore.DomainService')
                for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
     adapter = restored_cohort(ROOT / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                              'Hexalith.EventStore.DomainService')
+                              'Hexalith.EventStore.DomainService', deployed_required=False)
     composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
                                                       selection, 'Hexalith.Tenants.Aspire/7.0.0')
     client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
@@ -296,6 +298,7 @@ def gateway_package_provenance() -> dict:
 
 def require_source_catalog(prepared: dict) -> Path:
     """Recheck the pinned source catalog and exact private override before any child rebuild."""
+    native_cohort.reject_nested_catalogs(ROOT)
     private = Path(prepared['privateDirectory'])
     catalog = ROOT / 'references/Hexalith.Builds/Props/Directory.Packages.props'
     expected = prepared.get('sourcePackageCatalog', {})
@@ -497,7 +500,7 @@ def prepare(evidence: Path) -> None:
             bounded(command, 300, evidence / (module + '-build'), cwd=working)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                         '--configuration', 'Release', '-warnaserror', '-m:1', *properties],
+                         '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-build', cwd=working)
         # Rebuild the actual AppHost and tests in the same fresh public cache.
         bounded(['dotnet', 'build', PROJECT + '/Hexalith.McpCli.Integration.Tests.csproj',
