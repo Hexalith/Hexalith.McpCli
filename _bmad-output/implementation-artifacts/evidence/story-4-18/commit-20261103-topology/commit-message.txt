@@ -1,0 +1,1 @@
+fix(topology): align Tenants and Builds with EventStore 4.0.4
