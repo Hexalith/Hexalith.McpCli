@@ -43,7 +43,8 @@ internal static class NativeCatalogEvidence
             if (!actual.Serving || actual.RootDigest != root || actual.Generation != 1 || actual.Profile != "Development"
                 || string.IsNullOrWhiteSpace(actual.AttemptId) || string.IsNullOrWhiteSpace(actual.ActivationBindingDigest)
                 || !actual.RequiredHosts.OrderBy(peer => peer.HostId, StringComparer.Ordinal).Select(peer => peer.HostId).SequenceEqual(hosts, StringComparer.Ordinal)
-                || actual.RequiredHosts.Any(peer => peer.AppId != peer.HostId || string.IsNullOrWhiteSpace(peer.ExecutableDigest)
+                || actual.RequiredHosts.Any(peer => peer.AppId != peer.HostId
+                    || peer.HostId != "eventstore" && string.IsNullOrWhiteSpace(peer.ExecutableDigest)
                     || string.IsNullOrWhiteSpace(peer.AuthenticationFingerprint) || string.IsNullOrWhiteSpace(peer.TopologyDigest)))
                 throw new InvalidDataException("An SDK participant did not read back the complete actual native cohort.");
             if (readbacks.Count > 0 && JsonSerializer.Serialize(actual) != JsonSerializer.Serialize(readbacks[0]))

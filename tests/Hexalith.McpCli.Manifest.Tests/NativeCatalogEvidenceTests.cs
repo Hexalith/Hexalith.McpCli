@@ -36,6 +36,7 @@ public sealed class NativeCatalogEvidenceTests : IDisposable
     [InlineData("wrong-root")]
     [InlineData("not-serving")]
     [InlineData("incomplete-hosts")]
+    [InlineData("missing-owner-executable")]
     [InlineData("disagreeing-readbacks")]
     public async Task InvalidReadbackRefusesWithoutNativeEvidence(string defect)
     {
@@ -44,6 +45,8 @@ public sealed class NativeCatalogEvidenceTests : IDisposable
             "wrong-root" => Readback() with { RootDigest = "wrong-root" },
             "not-serving" => Readback() with { Serving = false },
             "incomplete-hosts" => Readback() with { RequiredHosts = Readback().RequiredHosts.Take(2).ToArray() },
+            "missing-owner-executable" => Readback() with { RequiredHosts = Readback().RequiredHosts.Select(peer =>
+                peer.HostId == "parties" ? peer with { ExecutableDigest = null } : peer).ToArray() },
             _ => Readback() with { Epoch = 2 },
         };
         Write("tenants", actual);
@@ -63,7 +66,8 @@ public sealed class NativeCatalogEvidenceTests : IDisposable
     }
 
     private RouteCatalogGenerationReadback Readback() => new(1, 1, "actual-root", "routes", "admission", "Development",
-        _hosts.Select(host => new RouteCatalogHostIdentity(host, host, "inventory", "topology", "authentication") { ExecutableDigest = "executable" }).ToArray(), true)
+        _hosts.Select(host => new RouteCatalogHostIdentity(host, host, "inventory", "topology", "authentication")
+            { ExecutableDigest = host == "eventstore" ? null : "executable" }).ToArray(), true)
         { AttemptId = "attempt", ActivationBindingDigest = "binding" };
 
     private void Write(string host, RouteCatalogGenerationReadback readback)
