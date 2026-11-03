@@ -941,9 +941,12 @@ class CiHooksTests(unittest.TestCase):
     def test_stdout_only_source_failure_names_both_retained_output_paths(self):
         result = self.invoke('prepare-ci.sh', 'build-stdout-failure')
         self.assertEqual(1, result.returncode)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        overlay = Path(receipt['privateDirectory']) / 'source-runtime-packages.props'
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
-                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4')
+                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4 '
+                   f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
         error = f'{command} exited 23; stdout: {stdout}; stderr: {stderr}'
@@ -951,7 +954,6 @@ class CiHooksTests(unittest.TestCase):
         self.assertIn('Running (300s): ' + command, result.stdout)
         self.assertEqual('named source build failure\n', stdout.read_text())
         self.assertEqual('', stderr.read_text())
-        receipt = json.loads((self.evidence / 'preparation.json').read_text())
         self.assertEqual('failed', receipt['result'])
         self.assertEqual('RuntimeError: ' + error, receipt['error'])
         self.assertEqual({'result': 'not-run', 'fullLiveAccepted': False},
