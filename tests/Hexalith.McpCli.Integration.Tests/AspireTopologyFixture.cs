@@ -29,6 +29,8 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <inheritdoc/>
     protected override IReadOnlyList<string> ExtraAppArgs =>
     [
+        // The published SDK prepares child metadata only for an explicit Development AppHost.
+        "--environment=Development",
         $"--Authentication:JwtBearer:SigningKey={_signingKey}",
     ];
 
