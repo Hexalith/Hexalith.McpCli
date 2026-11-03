@@ -26,6 +26,7 @@ jobs:
         tests/Hexalith.McpCli.Manifest.Tests
         tests/Hexalith.McpCli.Cli.Tests
         tests/Hexalith.McpCli.Mcp.Tests
+      build-timeout-minutes: 60
       aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
       aspire-continue-on-error: false
       aspire-prepare-script: tools/live-topology/prepare-ci.sh
