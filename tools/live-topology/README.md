@@ -318,5 +318,6 @@ credential values are redacted from diagnostic text. Raw private runtime state
 stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
 
-Paired package publication remains disabled; the bootstrap-only release gate
-continues to refuse it.
+Paired package publication requires exact-source CI, a successful staged pair,
+candidate-bound acceptance and production approval; see
+`docs/release/operator-setup-checklist.md`.
