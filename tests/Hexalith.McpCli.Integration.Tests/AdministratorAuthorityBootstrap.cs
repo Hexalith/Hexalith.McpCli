@@ -18,7 +18,7 @@ internal static class AdministratorAuthorityBootstrap
     internal static async Task RequireAsync(HttpClient http, string administratorId, CancellationToken cancellationToken)
     {
         IEventStoreGatewayClient gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
-        var request = new SubmitQueryRequest("system", GetGlobalAdministratorsQuery.Domain, "global-administrators",
+        var request = new SubmitQueryRequest("platform:global-administrators", GetGlobalAdministratorsQuery.Domain, "global-administrators",
             GetGlobalAdministratorsQuery.QueryType, GetGlobalAdministratorsQuery.ProjectionType);
         using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         deadline.CancelAfter(RequestTimeout);

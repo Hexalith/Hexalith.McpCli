@@ -1,0 +1,223 @@
+{
+  "status": "approved-published-artifact",
+  "purpose": "Bind the unchanged Tenants v7 Contracts inventory and fourteen vectors to the signed public archive and verified source.",
+  "recordedAtUtc": "2026-11-03T08:31:52.050479+00:00",
+  "approvalBasis": "The requesting user authorized an unattended release and bypass of separate human validation in this conversation. This records automated artifact and vector acceptance; it does not claim a separate reviewer or actual client sessions.",
+  "approver": "Codex automation delegated by the requesting user through authenticated account jpiquot",
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "7.0.0",
+  "artifactHash": "sha512-q1jGvSBg2LSPViJalRVX5ueCtyjyX19yom7MvTtuhSHaelovLJebTl032tPCtKDG2CVZK0pQhh+SbH6qz0Muhw==",
+  "artifactSha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
+  "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+  "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v7.0.0",
+  "publicArchiveUrl": "https://www.nuget.org/api/v2/package/Hexalith.Tenants.Contracts/7.0.0",
+  "repositorySignature": "NuGet.org repository signature verified locally with dotnet nuget verify --all",
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "235a853cdd85f6df72d5eeaa8d89a03b35b361b9347b1a10e3ee3b6b74081a80",
+    "change-user-role.vector.json": "a780125888131a2c7c173e3e871d381260f551710e818679974c6e237768d59b",
+    "create-tenant.vector.json": "45c46e681d6254746a90cd714390a69a0c393569ab01ed58508a9de736517e42",
+    "disable-tenant.vector.json": "dde30f0f33fd4a2511161ec5071bf34df57a5559c2b95b1d9ab7a35102f4fcd2",
+    "enable-tenant.vector.json": "df5c68579c6434746d8c571afaeb3af03a840db6ae70e03838fa19cba104d5c2",
+    "get-tenant-audit.vector.json": "a97d4c82fe5f73f380d337d16777215e2d27b479f3e65440a783c1906f3532b6",
+    "get-tenant-users.vector.json": "1e02d4c9f4b3eab6e2c7b532df46acd6639ea29863f3541cffc6a2cf62369cff",
+    "get-tenant.vector.json": "872375af6aa01b916f2192854839e0ddc0d90518391f3b0d4a13bba7cd09542d",
+    "get-user-tenants.vector.json": "a2655d4a2c9286599a529746b3c51be068ffce58a35785e1daaf649b5bdcc597",
+    "list-tenants.vector.json": "7cc17790f181f77cf0061108bcfab78e20059da588fd69d5533f0485a25b388e",
+    "remove-tenant-configuration.vector.json": "d8457285ead1b387c13c31dc342c2e932c3b686f0b21c194016372ca9f05a630",
+    "remove-user-from-tenant.vector.json": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
+    "set-tenant-configuration.vector.json": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
+    "update-tenant.vector.json": "b8483be038efd2b6c4d995e131b94aa38b9cc872e15673af3f9f76652d9532cf"
+  },
+  "verification": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/verification.json",
+    "sha256": "55cbe344966cc056ca4261d83c0069bb2f38d0c3ca2ecd83830b443da8b26e7d",
+    "result": "passed",
+    "operations": 14
+  },
+  "limits": "This binds public Contracts bytes and complete offline vectors. McpCli live topology and release acceptance require their separate CI and staging gates.",
+  "formatVersion": 1,
+  "qualifiedAtUtc": "2026-11-03T08:38:18.361985+00:00",
+  "publicMetadata": {
+    "Id": "Hexalith.Tenants.Contracts",
+    "Version": "7.0.0",
+    "NormalizedVersion": "7.0.0",
+    "PackageHash": "q1jGvSBg2LSPViJalRVX5ueCtyjyX19yom7MvTtuhSHaelovLJebTl032tPCtKDG2CVZK0pQhh+SbH6qz0Muhw==",
+    "PackageHashAlgorithm": "SHA512",
+    "Published": "2026-11-03T08:02:14.69+00:00",
+    "ProjectUrl": "https://github.com/Hexalith/Hexalith.Tenants",
+    "url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Contracts',Version='7.0.0')",
+    "finalUrl": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Contracts',Version='7.0.0')",
+    "metadata": "/tmp/tenants-release-20261103-07JciR/mcpcli-public-tenants7-metadata.xml"
+  },
+  "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+  "historicalCandidate": {
+    "status": "historical-local-candidate-not-public-evidence",
+    "artifactHash": "sha512-vovnGv3V6O1JEDXX1Z3oqS3g9iGo8A42hXSxdXNAIQrEvsfI7WkhNTEe7oiLQrM1CbfXhST04oIAp9+ARxjCQA==",
+    "sourceCommit": "ed35296686451f41ee919ca132052ced3315113c",
+    "provenance": "local-committed-source-not-published"
+  },
+  "vectorRepository": {
+    "url": "https://github.com/Hexalith/Hexalith.McpCli",
+    "revision": "edaecb04b1a8edf78f6ad28e5bf253db594003f4",
+    "files": {
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json": {
+        "sha256": "235a853cdd85f6df72d5eeaa8d89a03b35b361b9347b1a10e3ee3b6b74081a80",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json": {
+        "sha256": "a780125888131a2c7c173e3e871d381260f551710e818679974c6e237768d59b",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json": {
+        "sha256": "45c46e681d6254746a90cd714390a69a0c393569ab01ed58508a9de736517e42",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json": {
+        "sha256": "dde30f0f33fd4a2511161ec5071bf34df57a5559c2b95b1d9ab7a35102f4fcd2",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json": {
+        "sha256": "df5c68579c6434746d8c571afaeb3af03a840db6ae70e03838fa19cba104d5c2",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json": {
+        "sha256": "a97d4c82fe5f73f380d337d16777215e2d27b479f3e65440a783c1906f3532b6",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json": {
+        "sha256": "1e02d4c9f4b3eab6e2c7b532df46acd6639ea29863f3541cffc6a2cf62369cff",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json": {
+        "sha256": "872375af6aa01b916f2192854839e0ddc0d90518391f3b0d4a13bba7cd09542d",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json": {
+        "sha256": "a2655d4a2c9286599a529746b3c51be068ffce58a35785e1daaf649b5bdcc597",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json": {
+        "sha256": "7cc17790f181f77cf0061108bcfab78e20059da588fd69d5533f0485a25b388e",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json": {
+        "sha256": "d8457285ead1b387c13c31dc342c2e932c3b686f0b21c194016372ca9f05a630",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json": {
+        "sha256": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json": {
+        "sha256": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      },
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json": {
+        "sha256": "b8483be038efd2b6c4d995e131b94aa38b9cc872e15673af3f9f76652d9532cf",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      }
+    },
+    "unchangedFromRevision": true
+  },
+  "validator": {
+    "repository": "https://github.com/Hexalith/Hexalith.McpCli",
+    "revision": "edaecb04b1a8edf78f6ad28e5bf253db594003f4",
+    "files": {
+      "tools/conformance-vectors/v1/validate.py": {
+        "sha256": "015f4b45c190fb18eff3884e3b44edf6d9910adc63fbf82cbc2bae2ee122c459",
+        "gitRevision": "7f4a08cb4b7ff9402d1dcf0826ad45ab0256ba65"
+      },
+      "tools/conformance-vectors/v1/schema.json": {
+        "sha256": "ae35f5dac518efc3469efc1d56a2b8e13527b8b9074adec15a065556502dd3f0",
+        "gitRevision": "f35c3754f43a6c187005b18ac8142e2ac0d2354f"
+      }
+    },
+    "operationsFile": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/tenants-operations.json",
+      "sha256": "13eb41cb975b4b4fd6eaaa16e5453081eab1faedc85ccbea8a1c88e6384ff051"
+    }
+  },
+  "strictValidation": {
+    "command": [
+      "python3",
+      "tools/conformance-vectors/v1/validate.py",
+      "--artifact",
+      "/tmp/tenants-release-20261103-07JciR/tenants-7.0.0-root-agent-v2/hexalith.tenants.contracts.7.0.0.nupkg",
+      "--expected-package-id",
+      "Hexalith.Tenants.Contracts",
+      "--expected-package-version",
+      "7.0.0",
+      "--operations-file",
+      "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/tenants-operations.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json"
+    ],
+    "shellCommand": "python3 tools/conformance-vectors/v1/validate.py --artifact /tmp/tenants-release-20261103-07JciR/tenants-7.0.0-root-agent-v2/hexalith.tenants.contracts.7.0.0.nupkg --expected-package-id Hexalith.Tenants.Contracts --expected-package-version 7.0.0 --operations-file _bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/tenants-operations.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+    "exitCode": 0,
+    "stdout": "Validated 14 vector(s) against /tmp/tenants-release-20261103-07JciR/tenants-7.0.0-root-agent-v2/hexalith.tenants.contracts.7.0.0.nupkg\n",
+    "stderr": "",
+    "completedAtUtc": "2026-11-03T08:38:18.361985+00:00"
+  },
+  "signatureVerification": {
+    "command": [
+      "dotnet",
+      "nuget",
+      "verify",
+      "--all",
+      "/tmp/tenants-release-20261103-07JciR/tenants-7.0.0-root-agent-v2/hexalith.tenants.contracts.7.0.0.nupkg",
+      "--verbosity",
+      "normal"
+    ],
+    "exitCode": 0,
+    "stdout": "X.509 certificate chain validation will use the fallback certificate bundle at '/home/administrator/.dotnet/sdk/10.0.403/trustedroots/codesignctl.pem'.\nX.509 certificate chain validation will use the fallback certificate bundle at '/home/administrator/.dotnet/sdk/10.0.403/trustedroots/timestampctl.pem'.\n\nVerifying Hexalith.Tenants.Contracts.7.0.0\nContent hash: TsYZitTvzdxx/fRjwRaaytAzO5//84YuS9AtRBLNUVWy+NHW09zGfTmd3pNMLp87g50rIxLxSmWXiSXjvcFZyQ==\n/tmp/tenants-release-20261103-07JciR/tenants-7.0.0-root-agent-v2/hexalith.tenants.contracts.7.0.0.nupkg\nSignature Hash Algorithm: SHA256\n\nSignature type: Repository\nService index: https://api.nuget.org/v3/index.json\nOwners: Hexalith\nVerifying the repository primary signature with certificate: \n  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US\n  SHA1 hash: C72FE7739A9EECB8EC1E4F596DB3BB74039B1DE2\n  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D\n  Issued by: CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O=\"DigiCert, Inc.\", C=US\n  Valid from: 02/23/2024 01:00:00 to 05/19/2027 01:59:59\n  CRL URL: http://crl3.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl\n  CRL URL: http://crl4.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl\n  OCSP URL: http://ocsp.digicert.com\nTimestamp: 11/03/2026 09:11:44\nVerifying repository primary signature's timestamp with timestamping service certificate: \n  Subject Name: CN=DigiCert SHA256 RSA4096 Timestamp Responder 2026 1, O=\"DigiCert, Inc.\", C=US\n  SHA1 hash: 51D9ABDA034973D84F4266ACA48248E6B369C439\n  SHA256 hash: 2DA09DA7F4131F9FE72DB6C5E6E9C9656755AF043F1EA742CC0D2120E141EBFC\n  Issued by: CN=DigiCert Trusted G4 TimeStamping RSA4096 SHA256 2025 CA1, O=\"DigiCert, Inc.\", C=US\n  Valid from: 08/05/2026 02:00:00 to 11/05/2037 00:59:59\n  CRL URL: http://crl3.digicert.com/DigiCertTrustedG4TimeStampingRSA4096SHA2562025CA1.crl\n  OCSP URL: http://ocsp.digicert.com\n\nSuccessfully verified package 'Hexalith.Tenants.Contracts.7.0.0'.\n",
+    "stdoutSha256": "afc4c20e68fbe9963d932aa49ce6228a990ede600bb5a2772b91251c6806ca93"
+  },
+  "delegatedApproval": {
+    "kind": "automated-approval-under-explicit-user-authorization",
+    "authenticatedAccount": "jpiquot",
+    "delegatedAgent": "Codex",
+    "delegatedAgentTask": "/root/implement_mcp_published_enrollment",
+    "userInstruction": "push all changes and sync all submodules and repository. update to latest .NET SDK. update to latest packages versions. fix any CI/CD failures, then create a Release (bypass any human validation) and check nuget packages have been published.",
+    "separateHumanValidation": false,
+    "actualOperatorClientSession": false,
+    "productionApprovalHistory": [
+      {
+        "comment": "User-authorized unattended release; automated CI and package verification remain required. No separate human validation is claimed.",
+        "environments": [
+          {
+            "id": 18745236815,
+            "name": "production"
+          }
+        ],
+        "state": "approved",
+        "user": "jpiquot"
+      }
+    ]
+  },
+  "freshRestore": {
+    "nugetPackages": "/tmp/tenants-release-20261103-07JciR/mcpcli-published7-packages-lznp07r_",
+    "source": "https://www.nuget.org/api/v2",
+    "restoredArchiveSha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
+    "independentPublicArchiveMatch": true
+  },
+  "enrollment": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/enrolled.json",
+    "sha256": "b5e626deac9919f28403dece883d03cec3a53e6cace5e68fadaca987d9efd564",
+    "result": "passed",
+    "fullV1Accepted": true,
+    "packageCount": 2
+  }
+}

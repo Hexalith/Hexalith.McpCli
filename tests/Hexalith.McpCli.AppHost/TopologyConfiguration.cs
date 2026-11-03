@@ -3,12 +3,29 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Security.Cryptography;
 
 namespace Hexalith.McpCli.AppHost;
 
 /// <summary>Validates the source and local runtime boundary before starting the test topology.</summary>
 internal static class TopologyConfiguration
 {
+    /// <summary>Requires the immutable wrapper-owned empty backup before catalog or writer mutation.</summary>
+    internal static string VerifyFreshBackup(string receiptPath)
+    {
+        using JsonDocument proof = JsonDocument.Parse(File.ReadAllText(receiptPath), new JsonDocumentOptions { AllowDuplicateProperties = false });
+        JsonElement root = proof.RootElement;
+        if (root.GetProperty("databaseSize").GetInt32() != 0 || !root.GetProperty("createdBeforeApplications").GetBoolean())
+            throw new InvalidOperationException("Writer bootstrap requires the wrapper's empty pre-application Redis backup.");
+        string backup = root.GetProperty("backupFile").GetString()!;
+        byte[] bytes = File.ReadAllBytes(backup);
+        string hash = Convert.ToHexStringLower(SHA256.HashData(bytes));
+        if (!bytes.AsSpan().StartsWith("REDIS"u8) || root.GetProperty("sha256").GetString() != hash
+            || Path.GetDirectoryName(Path.GetFullPath(backup)) != Path.GetDirectoryName(Path.GetFullPath(receiptPath)))
+            throw new InvalidOperationException("Writer bootstrap backup bytes or location do not match the private receipt.");
+        return $"sha256:{hash};file:{Path.GetFullPath(backup)}";
+    }
+
     /// <summary>The private test administrator configured for the server-owned bootstrap.</summary>
     internal const string BootstrapAdministratorId = "mcpcli-live-admin";
 

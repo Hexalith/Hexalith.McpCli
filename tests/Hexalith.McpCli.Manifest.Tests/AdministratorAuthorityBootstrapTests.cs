@@ -21,7 +21,7 @@ public sealed class AdministratorAuthorityBootstrapTests
             Assert.Equal(HttpMethod.Post, request.Method);
             Assert.Equal("/api/v1/queries", request.RequestUri!.AbsolutePath);
             using JsonDocument body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync().ConfigureAwait(false));
-            Assert.Equal("system", body.RootElement.GetProperty("tenant").GetString());
+            Assert.Equal("platform:global-administrators", body.RootElement.GetProperty("tenant").GetString());
             Assert.Equal("global-administrators", body.RootElement.GetProperty("aggregateId").GetString());
             return Response(++calls == 1 ? "another-administrator" : AdministratorId);
         });

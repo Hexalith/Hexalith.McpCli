@@ -113,9 +113,9 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance.json")));
         JsonElement profile = document.RootElement;
         Assert.Equal("published", profile.GetProperty("profile").GetString());
-        Assert.Equal("3.128.4", profile.GetProperty("eventStoreVersion").GetString());
+        Assert.Equal("4.0.4", profile.GetProperty("eventStoreVersion").GetString());
         Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
-        Assert.Equal("ab39879c06eea69668916941ce46a2b6d7e8efd9", profile.GetProperty("sourceCommit").GetString());
+        Assert.Equal("326bfef884543cdbcaf96de7f4c4ad378dbad6d7", profile.GetProperty("sourceCommit").GetString());
         foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
         {
             string path = Path.Combine(host, file.Name);
@@ -134,7 +134,17 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
     public async Task ActualKestrelEnforcesOneMiB(int bytes, HttpStatusCode expected)
     {
         using var content = new ByteArrayContent(new byte[bytes]);
-        using HttpResponseMessage response = await _http!.PostAsync("testing/body-limit", content, TestContext.Current.CancellationToken);
+        using var request = new HttpRequestMessage(HttpMethod.Post, "testing/body-limit") { Content = content };
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        string unsigned = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" })) + "."
+            + Encode(JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
+            {
+                ["iss"] = "mcpcli-boundary-tests", ["aud"] = "hexalith-eventstore", ["sub"] = "body-limit-probe",
+                ["eventstore:surface"] = "agent", ["iat"] = now, ["nbf"] = now - 5, ["exp"] = now + 60,
+            }));
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", unsigned + "."
+            + Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(_signingKey), Encoding.ASCII.GetBytes(unsigned))));
+        using HttpResponseMessage response = await _http!.SendAsync(request, TestContext.Current.CancellationToken);
         Assert.Equal(expected, response.StatusCode);
     }
 
@@ -166,6 +176,7 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         string domain = defect == "outside-domain" ? "party" : "tenants";
+        string scope = defect == "outside-domain" ? "tenant-a" : "platform:tenants";
         string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
         string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
         {
@@ -177,16 +188,17 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         string assertion = unsigned + "." + Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(_signingKey), Encoding.ASCII.GetBytes(unsigned)));
         var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/streams/read/workload")
         {
-            Content = JsonContent.Create(new { tenant = "system", domain, aggregateId = "tenant-a" }),
+            Content = JsonContent.Create(new { tenant = scope, domain, aggregateId = "tenant-a" }),
         };
         request.Headers.Add("dapr-api-token", _channelToken);
+        request.Headers.Add("X-Hexalith-Scope", scope);
         request.Headers.Add("X-Hexalith-Workload-Assertion", assertion);
         if (defect != "absent-proof")
         {
             string proofPayload = Encode(JsonSerializer.SerializeToUtf8Bytes(new
             {
                 version = 1, caller = defect == "mismatched-caller" ? "other-owner" : "tenants",
-                tenant = "system", domain, aggregateId = "tenant-a", issuedAt = now, expiresAt = now + 30,
+                tenant = scope, domain, aggregateId = "tenant-a", issuedAt = now, expiresAt = now + 30,
                 nonce = Convert.ToHexString(RandomNumberGenerator.GetBytes(16)),
             }));
             using RSA wrongKey = RSA.Create(2048);

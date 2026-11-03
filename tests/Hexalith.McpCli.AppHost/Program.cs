@@ -114,7 +114,11 @@ if (usePackagedGateway)
 
 foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
 {
-    resource.WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+    resource.WithEnvironment("UseHexalithProjectReferences", "false")
+        .WithEnvironment("UseNuGetDeps", "true")
+        .WithEnvironment("HexalithEventStoreFromSource", "false")
+        .WithEnvironment("HexalithEventStoreVersion", "4.0.4")
+        .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)
         .WithEnvironment("Authentication__JwtBearer__Issuer", "mcpcli-live-tests")
@@ -133,6 +137,8 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
         endpoint.TargetPort = null;
     }
 }
+
+parties.WithEnvironment("HexalithTenantsVersion", "5.11.2").WithEnvironment("HexalithMemoriesVersion", "3.0.11");
 
 // Evaluate the actual composed model without starting it; never emit secret values.
 if (inspectComposition)
@@ -197,7 +203,11 @@ if (inspectComposition)
     return 0;
 }
 
-await builder.Build().RunAsync().ConfigureAwait(false);
+await using NativeCatalogRuntime? catalog = usePackagedGateway
+    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, Path.Combine(components, "statestore.yaml")).ConfigureAwait(false)
+    : null;
+await using DistributedApplication application = builder.Build();
+await application.RunAsync().ConfigureAwait(false);
 
 async Task<Dictionary<string, object>> EnvironmentAsync(IResource resource)
 {

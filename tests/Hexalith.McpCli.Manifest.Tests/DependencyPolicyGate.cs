@@ -274,7 +274,9 @@ internal static class DependencyPolicyGate
                     failures.Add($"Helper {root.Identity} has an unresolved dependency {id}: {path}");
                 }
                 else if (dependency.Type != "package" || id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase)
-                    && (!id.EndsWith(".Aspire", StringComparison.OrdinalIgnoreCase) || !policy.TestPackages.Contains(id)))
+                    && (!id.EndsWith(".Aspire", StringComparison.OrdinalIgnoreCase) || !policy.TestPackages.Contains(id))
+                    && (!policy.AspireHelperSupportPackages.TryGetValue(id, out string? reviewedVersion)
+                        || !string.Equals(dependency.Version, reviewedVersion, StringComparison.Ordinal)))
                 {
                     failures.Add($"Helper {root.Identity} has a forbidden dependency {dependency.Identity}: {path}");
                 }

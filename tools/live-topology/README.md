@@ -15,8 +15,8 @@ bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.4),
 Dapr CLI 1.18.2 and runtime 1.18.7 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. For direct wrapper runs, install Dapr independently without
-initializing or changing a user environment. Build the three root source servers
-and integration tests using the repository README first.
+initializing or changing a user environment. The canonical lane uses the exact public packages and qualified source selection
+through the CI hooks below; ordinary source builds do not establish that profile.
 
 From the repository root, create a new task-owned directory and extract the four
 native binaries from digest-pinned official images. The bootstrap verifies each
@@ -35,13 +35,10 @@ and never overwrites their contents.
 private_runtime="$(mktemp -d)/runtime"
 timeout --signal=TERM --kill-after=20s 900 \
   python3 tools/live-topology/bootstrap-runtime.py "$private_runtime"
-MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" \
-timeout --signal=TERM --kill-after=20s 960 \
-  python3 tools/live-topology/run-isolated.py -- \
-  dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll \
-  -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips
 ```
 
+Low-level wrapper invocations also require the source/package-qualified native
+profile and environment provided by `ci.py`; the bootstrap alone is insufficient.
 `MCPCLI_ISOLATED_RUNTIME_DIR` must explicitly name the prepared directory; an
 unset or empty value is refused before creating files. `-failSkips` makes a
 skipped smoke fail with `FAIL_SKIP`, preserving the prerequisite diagnostic.
@@ -71,23 +68,17 @@ python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
 
 ## Complete semantic lane
 
-Build the source servers and solution using the root README, then prepare the
-private runtime above. `run-vectors.py` preflights the entire production-enrolled
-set and launches one fresh isolated test process per approved vector:
+After successful qualified preparation, `run-ci.sh` invokes `run-vectors.py`
+with the inherited native profile and fresh package cache. It preflights the entire
+production-enrolled set and launches one new isolated process per approved vector,
+then invokes the independent smoke. Use the bounded preparation/execution hooks
+below; direct default/native launches do not establish the canonical profile.
 
-```sh
-MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" \
-timeout --signal=TERM --kill-after=30s 21600 \
-  python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-vector-evidence
-```
-
-The outer six-hour bound covers 21 independently bounded children (960 seconds
-each). The wrapper retains its existing 900-second child bound. The selected
+Each of the 21 children retains its independent 960-second bound. The wrapper retains its existing 900-second child bound. The selected
 Python runner has an eight-minute process budget, each CLI process a maximum of
 30 seconds, and each read observation a 45-second deadline. Only Queries poll;
 declared Command steps are submitted once, including intentional repeated
-business actions declared as distinct vector steps. The independent smoke can
-still be run with the earlier command and is not substituted for a vector.
+business actions declared as distinct vector steps. The independent smoke is not substituted for a vector.
 
 The fixtures bootstrap `mcpcli-live-admin` through the existing authenticated
 Development bootstrap, using the same fresh signing key as the Gateway. Before
@@ -95,9 +86,10 @@ executing any vector, a bounded privileged `get-global-administrators` Query mus
 return that persisted administrator. The independent smoke uses this same read barrier
 before its single final usability Query, because resource liveness can precede
 handler capability readiness. This infrastructure proof does not enroll
-the excluded Query in the Catalog. The ACL admits only POST `/project` and `/project/v2` from
-EventStore and POST `/api/v1/commands` from Tenants in addition to the smoke's
-existing permissions. Authentication, mTLS and default deny remain required.
+the excluded Query in the Catalog. The shared composition binds the finite actual
+SDK domain-service route inventory to EventStore's real sidecar identity and the
+required bound-bootstrap, stream-read and query routes to their actual peer
+identities. Authentication, mTLS and default deny remain required.
 
 Before starting any application, the wrapper verifies `DBSIZE=0` and saves an
 actual provider-native Redis RDB backup. It retains immutable backup bytes and a
@@ -129,8 +121,6 @@ For diagnostics, these commands still preflight the complete approved set:
 
 ```sh
 python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-preflight --preflight-only
-MCPCLI_ISOLATED_RUNTIME_DIR="$private_runtime" timeout --signal=TERM --kill-after=30s 1000 \
-  python3 tools/live-topology/run-vectors.py --output /tmp/mcpcli-live-selected --operation tenants.get-tenant-audit
 ```
 
 A preflight-only receipt and a successful selected subset always retain
@@ -172,45 +162,60 @@ Local and self-hosted environments retain operator-managed namespace permissions
 Every live child still proves all four private namespaces; setup or probe failure
 fails preparation.
 
-`prepare-ci.sh` validates all three declared direct Git source checkouts, then
-explicitly selects the published EventStore **3.128.4** compatibility profile.
-It builds the owned `Hexalith.McpCli.EventStoreGateway.TestHost` and both domain
-hosts with `UseHexalithProjectReferences=false`, `UseNuGetDeps=true`,
-`HexalithEventStoreFromSource=false` and the exact EventStore cohort version.
-Each server build has its own 300-second deadline. A required owned snapshot of
-native gateway defaults provides the lowest configuration priority, while the
-test AppHost's routes, normal configuration overrides, real JWT validation and
-sidecar tokens remain effective.
-Matching launch profiles preserve Aspire's HTTP/HTTPS endpoint discovery.
-The snapshot manifest fixes configuration source commit
-`ab39879c06eea69668916941ce46a2b6d7e8efd9`, original paths and hashes. Lightweight
-solution builds and real socket checks require only the declared Builds catalog;
-actual live preparation also compares these files with those exact source Git
-blobs. Missing, modified or incorrectly deployed snapshots fail qualification.
-The explicit package profile gives Tenants a fresh run-owned RSA proof key and
-the gateway its matching public trust, restricted to `tenants` and
-`global-administrators`. Exact workload audiences and caller allowlists retain
-the actual assertion validator. Only Tenants receives the additional sidecar
-permission to POST `/api/v1/streams/read/workload` through the published-only
-`accesscontrol.published.yaml`. Native/default and publish ACL files retain their
-existing permissions. Persisted administrator and owner authority still come from
-that authenticated source boundary.
+`prepare-ci.sh` authenticates the complete native runtime selection in
+`native-runtime.json`: exact public EventStore **4.0.4** archives, public Tenants
+**7.0.0** archives and their embedded repository commits, plus the separately
+qualified Parties and Platform source revisions. The independent
+Testing.Integration **3.128.4** package continues to own the test lifecycle.
+Missing public packages, hash or source mismatches, wrong repository identities,
+linked or dirty owned checkouts refuse before source selection. Only disposable
+GitHub-hosted CI may fetch and detach a declared root checkout at its exact
+qualified commit; local revisions and nested dependencies are never updated.
 
-Preparation validates the actual restored EventStore package version/type closure
-in both domain hosts and the gateway. It reads identity/source from each archive's
-embedded nuspec and compares extracted and deployed EventStore DLLs to the same
-archive contents. The receipt seals those archive hashes, all launched host DLL
-and JSON hashes, the reviewed native configuration source commit and hashes of the
-used settings, launch profiles and sidecar configurations. Execution rechecks this
-receipt before the vector lane and again immediately before independent smoke,
-then passes explicit
-`Topology__UsePackagedGateway=true` plus the package source commit privately to
-both the 21-vector lane and independent smoke. Writer activation binds that
-deployed package commit to the genuine pre-application Redis backup. None of the
-authority, writer, readiness, persisted-state or owned-cleanup assertions change.
-The test host is neither packable nor publishable and is absent from release
-inventory. Direct native/default and publish models retain the native gateway;
-this compatibility lane does not qualify newer native catalog compositions.
+All builds and nested preparation processes inherit a fresh task-owned
+`NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
+Integration.Tests/AppHost are built with the public SDK cohort. Parties retains
+its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. Server build
+commands retain their separate 300-second bounds. The owned gateway's mandatory
+configuration snapshot is verified against native source commit
+`326bfef884543cdbcaf96de7f4c4ad378dbad6d7`, matching the public 4.0.4 archive
+metadata; normal overrides, real JWT validation and sidecar tokens remain active.
+
+Before creating any digest material or catalog authority, the AppHost verifies
+the genuine empty pre-application Redis backup. The selected Tenants host uses
+SDK preparation of its real Contracts/Server artifacts and dependency closure.
+Parties preserves its separate EventStoreExtensions artifact: the existing
+qualified Platform CatalogBuilder prepares and checks its actual adapter factory,
+compiled declarations and policies without adding a server dependency edge.
+The shared `AddEventStoreDevelopmentRouteCatalog` composes the real three-host
+model, actual sidecar identities, finite native receiver traffic and run-private
+custody. Its SDK model observer and actual hosts perform prepare/ready/commit;
+all three persisted readbacks must agree before the administrator barrier.
+Composition and metadata ownership remain alive until the application stops;
+private digest custody is then removed through its ownership marker.
+
+Tenants receives a fresh run-owned bound-stream proof key, with matching gateway
+trust limited to `tenants` and `global-administrators`, plus its existing
+owner-bound bootstrap settings. The bootstrap query uses
+`platform:global-administrators`; smoke lists `platform:tenants`. Fixture JWTs
+carry the signed `eventstore:surface`, exact platform permissions and normal
+tenant grants, with no reserved `system` tenant grant or human authority shortcut.
+The excluded administrator barrier uses its actual UI-only eligibility through
+a separate exact read identity; it is not exposed to the agent Catalog.
+Anonymous/forged credentials still require 401. Internal storage namespaces and
+publisher topics remain unchanged. The persisted administrator, authenticated
+writer-v2 activation, readiness, persisted effects and owned cleanup remain
+independent gates.
+
+Preparation seals actual archive hashes, all deployed host DLL/JSON hashes,
+selected sources and used settings/sidecar configurations. Execution rechecks
+those identities before vectors and again before independent smoke. The
+sanitized `native-catalog.json` records the source-selection/preparation digests,
+actual SDK artifacts and matching credential-free peer readback. Private custody,
+keys, RDB bytes and raw operational state remain outside uploaded evidence.
+This is infrastructure for native acceptance; public artifact approval and a
+complete successful remote 21-plus-smoke lane remain separate requirements.
+
 Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An

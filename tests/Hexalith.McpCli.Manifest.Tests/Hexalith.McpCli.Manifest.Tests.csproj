@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/NativeFixtureIdentity.cs" Link="NativeFixtureIdentity.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs" Link="AdministratorAuthorityBootstrap.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveVectorProcess.cs" Link="LiveVectorProcess.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveVectorSelection.cs" Link="LiveVectorSelection.cs" />

@@ -23,7 +23,7 @@ public sealed class GatewaySmokeTests(AspireTopologyFixture fixture)
         fixture.SkipIfUnavailable();
         using HttpClient http = fixture.CreateAuthenticatedGatewayClient();
         IEventStoreGatewayClient gateway = new EventStoreGatewayClient(http, Options.Create(new EventStoreGatewayClientOptions()));
-        var request = new SubmitQueryRequest("system", ListTenantsQuery.Domain, "index",
+        var request = new SubmitQueryRequest("platform:tenants", ListTenantsQuery.Domain, "index",
             ListTenantsQuery.QueryType, ListTenantsQuery.ProjectionType);
         AuthenticationHeaderValue validIdentity = http.DefaultRequestHeaders.Authorization!;
         await RequireUnauthorizedAsync(null);
