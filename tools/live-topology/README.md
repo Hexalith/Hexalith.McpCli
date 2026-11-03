@@ -171,6 +171,15 @@ fails preparation.
 **7.0.0** archives and their embedded repository commits, plus the separately
 qualified Parties and Platform source revisions. The independent
 Testing.Integration **3.128.4** package continues to own the test lifecycle.
+
+Generic CLI and MCP query requests preserve every descriptor-declared
+`projectionActorType`, including the frozen published Parties selectors. SDK
+4.0.4 rejects those historical selectors for native HTTP query routes. Native
+acceptance therefore remains pending genuine shared SDK compatibility support,
+owner-declared digest-bound selectors and verification of the resulting public
+cohort. The committed catalog must still choose the actual receiver; offline
+scripted parity and preflight do not establish native acceptance.
+
 Missing public packages, hash or source mismatches, wrong repository identities,
 linked or dirty owned checkouts refuse before source selection. Only disposable
 GitHub-hosted CI may fetch and detach a declared root checkout at its exact

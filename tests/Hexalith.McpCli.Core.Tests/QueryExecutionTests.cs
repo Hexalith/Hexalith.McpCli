@@ -18,7 +18,7 @@ public sealed class QueryExecutionTests
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
     private const string OtherId = "01ARZ3NDEKTSV4RRFFQ69G5FAW";
 
-    /// <summary>Declared semantic routing is preserved while the native gateway selects its executable receiver.</summary>
+    /// <summary>All descriptor routing values, including an optional actor selector, reach the Gateway unchanged.</summary>
     [Theory]
     [InlineData("routing-fixture.interface-item", "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", null, ItemId)]
     [InlineData("routing-fixture.interface-item", "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", ItemId, ItemId)]
@@ -40,7 +40,8 @@ public sealed class QueryExecutionTests
             : operation == "routing-fixture.interface-item" ? "interface-item-wire" : "get-http2-status";
         using JsonDocument expectedPayload = JsonDocument.Parse(payload);
         var expected = new SubmitQueryRequest(tenant, isString ? "string-fixture" : "routing", expectedId,
-            wire, isString ? "string-items" : "routing-items", expectedPayload.RootElement);
+            wire, isString ? "string-items" : "routing-items", expectedPayload.RootElement, ProjectionActorType:
+                operation == "routing-fixture.interface-item" ? "RoutingProjectionActor" : null);
         AssertRequest(gateway, expected);
         AssertResult(outcome, operation, tenant, "{\"items\":[]}");
     }

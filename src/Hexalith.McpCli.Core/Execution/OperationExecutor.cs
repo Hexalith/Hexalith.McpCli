@@ -266,10 +266,10 @@ public sealed class OperationExecutor(
             }
         }
 
-        // The native committed catalog selects the executable query receiver; historical actor hints remain descriptive metadata.
+        // Preserve the descriptor's wire selector; receiver admission remains the Gateway's responsibility.
         var queryRequest = new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,
             operation.Routing.ProjectionType, rebuilt.ValueKind == JsonValueKind.Null ? null : rebuilt,
-            run.EntityId)
+            run.EntityId, operation.Routing.ProjectionActorType)
         {
             Paging = run.PageSize is not null || run.Offset is not null || run.Cursor is not null
                 ? new QueryPagingOptions(run.PageSize, run.Offset, run.Cursor) : null,
