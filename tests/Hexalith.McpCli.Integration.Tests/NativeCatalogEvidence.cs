@@ -13,8 +13,15 @@ internal static class NativeCatalogEvidence
     {
         string backup = Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT")
             ?? throw new InvalidOperationException("Native catalog evidence requires the isolated genesis backup.");
+        await RequireAsync(backup, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Validates the actual SDK readbacks associated with one verified wrapper-owned backup.</summary>
+    internal static async Task RequireAsync(string backup, CancellationToken cancellationToken)
+    {
         string backupReference = TopologyConfiguration.VerifyFreshBackup(backup);
         string run = Path.GetDirectoryName(backup)!;
+        File.Delete(Path.Combine(run, "native-catalog.json"));
         using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         deadline.CancelAfter(TimeSpan.FromSeconds(60));
         string coordinatesPath = Path.Combine(run, "native-catalog-coordinates.json");

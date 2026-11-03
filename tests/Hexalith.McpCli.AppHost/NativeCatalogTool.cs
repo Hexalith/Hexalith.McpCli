@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Xml.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
 
 namespace Hexalith.McpCli.AppHost;
 
@@ -29,7 +31,7 @@ internal static class NativeCatalogTool
         }
         string template = Path.Combine(repositoryRoot.FullName, "references", "Hexalith.Platform", "src", "Hexalith.Platform.CatalogBuilder", "Hexalith.Platform.CatalogBuilder.csproj");
         string build = Path.Combine(directory, "reader");
-        CreatePrivateDirectory(build);
+        PrepareBuildDirectory(repositoryRoot.FullName, build);
         string project = Path.Combine(build, "Hexalith.Platform.CatalogBuilder.csproj");
         XDocument xml = XDocument.Load(template);
         xml.Root!.AddFirst(new XElement("Import", new XAttribute("Project", Path.Combine(repositoryRoot.FullName, "Directory.Packages.props"))));
@@ -114,16 +116,27 @@ internal static class NativeCatalogTool
         {
             instanceId, gatewayAppId, sdkVersion,
             templateSource = template,
+            templateProjectSha256 = Digest(File.ReadAllBytes(template)),
+            readerProjectSha256 = Digest(File.ReadAllBytes(project)),
+            globalJsonSha256 = Digest(File.ReadAllBytes(Path.Combine(build, "global.json"))),
+            bindingsSha256 = Digest(File.ReadAllBytes(bindings)),
             templateHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(build, "Program.cs")))),
             inputHashes,
         }), token).ConfigureAwait(false);
         return JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(directory, "receipt.json"), token).ConfigureAwait(false));
     }
 
+    /// <summary>Places the exact root SDK policy in the private reader ancestry before invoking dotnet.</summary>
+    internal static void PrepareBuildDirectory(string repositoryRoot, string build)
+    {
+        CreatePrivateDirectory(build);
+        File.Copy(Path.Combine(repositoryRoot, "global.json"), Path.Combine(build, "global.json"));
+    }
+
     /// <summary>Creates a private run-owned directory without broadening existing permissions.</summary>
     internal static void CreatePrivateDirectory(string path)
     {
-        if (Directory.Exists(path))
+        if (Path.Exists(path) || new DirectoryInfo(path).LinkTarget is not null)
         {
             throw new InvalidDataException("A catalog preparation directory is already occupied.");
         }
@@ -139,11 +152,29 @@ internal static class NativeCatalogTool
     {
         CreatePrivateDirectory(path);
         try { File.WriteAllText(Path.Combine(path, ".owner"), owner); }
-        catch { Directory.Delete(path, recursive: false); throw; }
+        catch (Exception failure)
+        {
+            await NativeCatalogCleanup.RunAsync(failure, () => { Directory.Delete(path, recursive: false); return ValueTask.CompletedTask; }).ConfigureAwait(false);
+            throw;
+        }
         try { await prepare().ConfigureAwait(false); }
         catch (Exception failure)
         {
-            if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) { DeleteOwnedDirectory(path, owner); }
+            string diagnostics = NativeCatalogDiagnostics.Read(path);
+            if (diagnostics.Length > 0)
+            {
+                failure.Data["NativeCatalogDiagnostics"] = diagnostics;
+                try { Console.Error.WriteLine(diagnostics); }
+                catch (Exception diagnosticFailure) when (diagnosticFailure is IOException or ObjectDisposedException)
+                {
+                    failure.Data["CatalogDiagnosticOutputFailure"] = diagnosticFailure.GetType().Name;
+                }
+            }
+            await NativeCatalogCleanup.RunAsync(failure, () =>
+            {
+                if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) DeleteOwnedDirectory(path, owner);
+                return ValueTask.CompletedTask;
+            }).ConfigureAwait(false);
             throw;
         }
     }
@@ -153,11 +184,41 @@ internal static class NativeCatalogTool
     {
         if (!Directory.Exists(path)) { return; }
         string marker = Path.Combine(path, ".owner");
-        if (!File.Exists(marker) || File.ReadAllText(marker) != owner)
+        if (new DirectoryInfo(path).LinkTarget is not null || new FileInfo(marker).LinkTarget is not null
+            || !File.Exists(marker) || File.ReadAllText(marker) != owner)
         {
             throw new InvalidDataException("A foreign preparation directory must not be deleted.");
         }
         Directory.Delete(path, recursive: true);
+    }
+
+    /// <summary>Marks ownership before termination attempts and clears it only after confirmed exit.</summary>
+    internal static async Task ConfirmTerminationAsync(Action kill, Func<CancellationToken, Task> wait, Exception failure)
+    {
+        failure.Data["CatalogOwnedProcessStillRunning"] = true;
+        try { kill(); }
+        catch (Exception cleanupFailure) { failure.Data["CatalogKillFailure"] = cleanupFailure.GetType().Name; }
+        using var cleanup = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        try
+        {
+            await wait(cleanup.Token).ConfigureAwait(false);
+            failure.Data.Remove("CatalogOwnedProcessStillRunning");
+        }
+        catch (Exception cleanupFailure) { failure.Data["CatalogExitConfirmationFailure"] = cleanupFailure.GetType().Name; }
+    }
+
+    private static async Task<string> ReadDiagnosticsAsync(StreamReader reader, CancellationToken token)
+    {
+        var retained = new StringBuilder();
+        char[] buffer = new char[2048];
+        try
+        {
+            int count;
+            while ((count = await reader.ReadAsync(buffer, token).ConfigureAwait(false)) > 0)
+                if (retained.Length < 8192) retained.Append(buffer, 0, Math.Min(count, 8192 - retained.Length));
+        }
+        catch (Exception failure) when (failure is OperationCanceledException or IOException or ObjectDisposedException) { }
+        return NativeCatalogDiagnostics.Sanitize(retained.ToString());
     }
 
     private static async Task RunAsync(string directory, string log, IReadOnlyList<string> arguments, CancellationToken token)
@@ -166,33 +227,35 @@ internal static class NativeCatalogTool
         {
             WorkingDirectory = directory, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false,
         };
-        foreach (string argument in arguments)
-        {
-            start.ArgumentList.Add(argument);
-        }
+        foreach (string argument in arguments) start.ArgumentList.Add(argument);
+        token.ThrowIfCancellationRequested();
         using Process process = Process.Start(start) ?? throw new InvalidOperationException("The actual catalog executable did not start.");
-        Task<string> output = process.StandardOutput.ReadToEndAsync(token);
-        Task<string> error = process.StandardError.ReadToEndAsync(token);
-        try
+        using var capture = CancellationTokenSource.CreateLinkedTokenSource(token);
+        Task<string> output = ReadDiagnosticsAsync(process.StandardOutput, capture.Token);
+        Task<string> error = ReadDiagnosticsAsync(process.StandardError, capture.Token);
+        Exception? failure = null;
+        try { await process.WaitForExitAsync(token).ConfigureAwait(false); }
+        catch (Exception original)
         {
-            await process.WaitForExitAsync(token).ConfigureAwait(false);
+            failure = original;
+            await ConfirmTerminationAsync(() => process.Kill(entireProcessTree: true),
+                cancellation => process.WaitForExitAsync(cancellation), original).ConfigureAwait(false);
+            await capture.CancelAsync().ConfigureAwait(false);
         }
-        catch (OperationCanceledException)
+        string diagnostics = string.Empty;
+        try { diagnostics = string.Join(Environment.NewLine, await Task.WhenAll(output, error).WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false)); }
+        catch (Exception diagnosticFailure) { failure ??= diagnosticFailure; }
+        diagnostics = NativeCatalogDiagnostics.Sanitize(diagnostics);
+        try { File.WriteAllText(Path.Combine(directory, log), diagnostics); }
+        catch (Exception logFailure)
         {
-            process.Kill(entireProcessTree: true);
-            using CancellationTokenSource cleanup = new(TimeSpan.FromSeconds(30));
-            try { await process.WaitForExitAsync(cleanup.Token).ConfigureAwait(false); }
-            catch (OperationCanceledException failure)
-            {
-                failure.Data["CatalogOwnedProcessStillRunning"] = true;
-                throw;
-            }
-            throw;
+            if (failure is null) failure = logFailure;
+            else failure.Data["CatalogDiagnosticWriteFailure"] = logFailure.GetType().Name;
         }
-        await File.WriteAllTextAsync(Path.Combine(directory, log), await output.ConfigureAwait(false) + await error.ConfigureAwait(false), token).ConfigureAwait(false);
+        if (failure is not null) ExceptionDispatchInfo.Capture(failure).Throw();
         if (process.ExitCode != 0)
-        {
-            throw new InvalidDataException("The actual Platform catalog tool refused preparation; see " + Path.Combine(directory, log) + ".");
-        }
+            throw new InvalidDataException("The actual Platform catalog tool refused preparation. " + diagnostics);
     }
+
+    private static string Digest(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
 }

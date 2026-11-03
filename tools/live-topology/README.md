@@ -176,9 +176,10 @@ All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties retains
 its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. The Parties
-adapter is a compiled library, not a launched host: its restored package archives
-and copied DLLs must match public bytes, while absent copy-local transitive DLLs
-are permitted. Launched hosts must contain every restored runtime DLL. The source
+adapter remains a separate compiled library. Its ordinary build uses
+`CopyLocalLockFileAssemblies=true` to materialize the genuine package runtime
+closure; every deployed SDK DLL must match its public archive before preparation
+is accepted. No server dependency edge or loader exception is added. The source
 catalog retains the pinned root-declared Builds revision with the root's exact
 Redis 3.4.31 override. A task-owned MSBuild post-import override also reaches SDK
 owner preparation and later Aspire child rebuilds. Preparation hashes both private

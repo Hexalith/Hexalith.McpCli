@@ -1,5 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogTool.cs" Link="NativeCatalogTool.cs" />
+    <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogCleanup.cs" Link="NativeCatalogCleanup.cs" />
+    <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogDiagnostics.cs" Link="NativeCatalogDiagnostics.cs" />
+    <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogPreparationEvidence.cs" Link="NativeCatalogPreparationEvidence.cs" />
+    <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogRuntime.cs" Link="NativeCatalogRuntime.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs" Link="NativeCatalogEvidence.cs" />
+    <PackageReference Include="Hexalith.EventStore.Aspire" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/NativeFixtureIdentity.cs" Link="NativeFixtureIdentity.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/AdministratorAuthorityBootstrap.cs" Link="AdministratorAuthorityBootstrap.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveVectorProcess.cs" Link="LiveVectorProcess.cs" />

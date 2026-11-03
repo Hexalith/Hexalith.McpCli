@@ -14,13 +14,14 @@ namespace Hexalith.McpCli.AppHost;
 /// <summary>Owns the genuine SDK catalog composition for one proven new isolated backend.</summary>
 internal sealed class NativeCatalogRuntime : IAsyncDisposable
 {
-    private readonly DevelopmentRouteCatalogPreparedOwner _tenants;
-    private readonly DevelopmentRouteCatalogComposition _catalog;
+    private readonly IAsyncDisposable _tenants;
+    private readonly IAsyncDisposable _catalog;
     private readonly string _reader;
     private readonly string _owner;
     private readonly string _custody;
 
-    private NativeCatalogRuntime(DevelopmentRouteCatalogPreparedOwner tenants, DevelopmentRouteCatalogComposition catalog,
+    /// <summary>Retains SDK metadata/composition ownership until every independent cleanup has been attempted.</summary>
+    internal NativeCatalogRuntime(IAsyncDisposable tenants, IAsyncDisposable catalog,
         string reader, string owner, string custody)
     {
         _tenants = tenants;
@@ -106,18 +107,27 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
                     inputs = new
                     {
                         sourceSelectionSha256 = Digest(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime.json"))),
-                        tenantPreparationSha256 = Digest(File.ReadAllBytes(Path.Combine(tenantOwner.Directory, "preparation.json"))),
-                        partyPreparationSha256 = Digest(File.ReadAllBytes(Path.Combine(directory, "reader", "preparation.json"))),
+                        preparations = NativeCatalogPreparationEvidence.Capture(Path.Combine(tenantOwner.Directory, "preparation.json"),
+                            Path.Combine(directory, "reader", "preparation.json")),
                         partyArtifacts,
                     } }), deadline.Token).ConfigureAwait(false);
             return new(tenantOwner, catalog, directory, owner, custodyDirectory);
         }
         catch (Exception failure)
         {
-            if (catalog is not null) await catalog.DisposeAsync().ConfigureAwait(false);
-            if (tenantOwner is not null) await tenantOwner.DisposeAsync().ConfigureAwait(false);
-            if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) NativeCatalogTool.DeleteOwnedDirectory(directory, owner);
-            NativeCatalogTool.DeleteOwnedDirectory(custodyDirectory, owner);
+            await NativeCatalogCleanup.RunAsync(failure,
+                () => catalog?.DisposeAsync() ?? ValueTask.CompletedTask,
+                () => tenantOwner?.DisposeAsync() ?? ValueTask.CompletedTask,
+                () =>
+                {
+                    if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) NativeCatalogTool.DeleteOwnedDirectory(directory, owner);
+                    return ValueTask.CompletedTask;
+                },
+                () =>
+                {
+                    if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) NativeCatalogTool.DeleteOwnedDirectory(custodyDirectory, owner);
+                    return ValueTask.CompletedTask;
+                }).ConfigureAwait(false);
             throw;
         }
     }
@@ -125,13 +135,21 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
-        try { await _catalog.DisposeAsync().ConfigureAwait(false); }
-        finally
+        bool unconfirmed = false;
+        async ValueTask DisposeSdkAsync(IAsyncDisposable resource)
         {
-            await _tenants.DisposeAsync().ConfigureAwait(false);
-            NativeCatalogTool.DeleteOwnedDirectory(_reader, _owner);
-            NativeCatalogTool.DeleteOwnedDirectory(_custody, _owner);
+            try { await resource.DisposeAsync().ConfigureAwait(false); }
+            catch (Exception failure)
+            {
+                unconfirmed |= failure.Data.Contains("CatalogOwnedProcessStillRunning");
+                throw;
+            }
         }
+        await NativeCatalogCleanup.RunAsync(null,
+            () => DisposeSdkAsync(_catalog),
+            () => DisposeSdkAsync(_tenants),
+            () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_reader, _owner); return ValueTask.CompletedTask; },
+            () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_custody, _owner); return ValueTask.CompletedTask; }).ConfigureAwait(false);
     }
 
     private static string Digest(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));

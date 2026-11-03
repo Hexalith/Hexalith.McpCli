@@ -354,6 +354,16 @@ On Windows, change the JSON command to `C:\\Users\\YOUR-USER\\hexalith-operator\
 
 For [Windows/WSL](https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop), either install the tool, .NET and profile natively on Windows, or launch the WSL installation explicitly. A native Windows client cannot execute `/home/.../hexalith` directly. An explicit bridge uses `command: "C:\\Windows\\System32\\wsl.exe"` and `args: ["--distribution", "YOUR-DISTRO", "--cd", "/home/YOUR-USER/hexalith-operator/home", "--exec", "/usr/bin/env", "MCPCLI_HOME=/home/YOUR-USER/hexalith-operator/home", "/home/YOUR-USER/hexalith-operator/tools/hexalith", "mcp", "--transport", "stdio", "--profile", "operator"]`. Keep `--cd` with a small Linux directory: a Windows GUI starts `wsl.exe` in its own Windows directory (for example `C:\Users\YOU` or `System32`), and without `--cd` the server starts under `/mnt/c/...` and can stall before answering `initialize` while it scans that tree. `--exec` does not load your shell profile: if .NET is installed in your Linux home (for example `~/.dotnet`), add `"DOTNET_ROOT=/home/YOUR-USER/.dotnet"` after the `MCPCLI_HOME=…` argument, and add the `wsl.exe` options `"--user", "YOUR-USER"` before `"--exec"` when the tool belongs to a user other than the distribution's default user. Confirm .NET and the private Gateway port-forward are reachable inside that distribution. Record this combination as its own tested environment.
 
+### Read an approved tenant (Tenants 7.0.0)
+
+Call `run_query` with the following MCP argument object. Replace every `APPROVED-TENANT` with the same approved canonical lowercase tenant configured in your operator profile; `tenant`, `aggregateId` and payload `TenantId` must match.
+
+```json
+{"operation":"tenants.get-tenant","tenant":"APPROVED-TENANT","aggregateId":"APPROVED-TENANT","payload":"{\"TenantId\":\"APPROVED-TENANT\"}"}
+```
+
+Require `isError: false`, matching JSON text and `structuredContent`, result `tenant` equal to the selected tenant, and `document.tenantId` equal to that tenant with `document.status: "Active"`. This is current invocation guidance; the automated artifact approval and scripted replay do not establish a new actual operator-client session. The earlier session guidance remains below.
+
 <a id="complete-the-approved-cross-module-task"></a>
 
 ### Historical cross-module operator task (Tenants 5.10.0)

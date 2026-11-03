@@ -707,29 +707,26 @@ class CiHooksTests(unittest.TestCase):
                     finally:
                         path.write_bytes(original)
 
-    def test_compiled_adapter_may_omit_copy_local_transitives_but_launched_host_may_not(self):
-        adapter_output = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/bin/Release/net10.0'
-        transitive = adapter_output / 'Hexalith.EventStore.Server.dll'
+    def test_archive_only_utility_does_not_relax_actual_adapter_deployment_gate(self):
+        project = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj'
+        output = project.parent / 'bin/Release/net10.0'
+        transitive = output / 'Hexalith.EventStore.Server.dll'
+        original = transitive.read_bytes()
         transitive.unlink()
-        prepared = self.prepare()
-        self.assertIs(False, prepared['gateway']['partiesAdapter']['deploymentRequired'])
-        self.assertNotIn(transitive.name, prepared['gateway']['partiesAdapter']['output'])
-        self.assertIn('Hexalith.EventStore.Server/4.0.4', prepared['gateway']['partiesAdapter']['packages'])
-        copied = adapter_output / 'Hexalith.EventStore.DomainService.dll'
-        original = copied.read_bytes()
-        copied.write_bytes(b'changed adapter copy')
-        self.fresh_evidence()
-        result = self.invoke('prepare-ci.sh')
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
-        copied.write_bytes(original)
-        launched = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll'
-        launched.unlink()
-        self.fresh_evidence()
+        module = self.ci_module()
+        utility = module.restored_cohort(project, 'Hexalith.EventStore.DomainService', deployed_required=False)
+        self.assertIs(False, utility['deploymentRequired'])
+        self.assertNotIn(transitive.name, utility['output'])
         result = self.invoke('prepare-ci.sh')
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Launched host is missing its restored EventStore binary', result.stderr)
         self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+        transitive.write_bytes(original)
+        copied = output / 'Hexalith.EventStore.DomainService.dll'
+        copied.write_bytes(b'changed adapter copy')
+        with self.assertRaisesRegex(ValueError, 'Deployed EventStore binary differs from its archive'):
+            module.restored_cohort(project, 'Hexalith.EventStore.DomainService', deployed_required=False)
+
 
     def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
         folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'
