@@ -1,0 +1,14 @@
+{
+  "actor.json": "80b0e3b9c9e9920187d38484018c33ff033c84a4db4e569b021aa72a28b292e9",
+  "ci-jobs.json": "85fe6aec1011db5737e91ed0f21ab73ff0f53ad309d83992054b4485afbbf9d1",
+  "ci-runs.json": "e759bde5cea634eff7de4eff311718fd23733d71b21eda4bd94bfe9dd9f11b77",
+  "commitlint-runs.json": "420fcafdc6a51100cc71062579deea65343d1c04af5e82c84c5bdde6e2656de3",
+  "hexalith.eventstore.client-versions.json": "2cb429a37fb93e762ebf498a5f05218a43fca68a3ef35ff31d70196fba6fef52",
+  "hexalith.eventstore.contracts-versions.json": "2cb429a37fb93e762ebf498a5f05218a43fca68a3ef35ff31d70196fba6fef52",
+  "hexalith.eventstore.server-versions.json": "2cb429a37fb93e762ebf498a5f05218a43fca68a3ef35ff31d70196fba6fef52",
+  "hexalith.mcpcli.abstractions-versions.json": "9f71a9bde821e595b341f0b66c1257fd72d344f62c0b46b24b18acc1b3e44e39",
+  "hexalith.parties.contracts-versions.json": "6c920b1a443a02eea03a4094303442596e0654259faaa8c183bacbeaf0a9f825",
+  "hexalith.tenants.contracts-versions.json": "aefa0a6266d219f3d056ba068f6b3fa0499174df48c4f79861a70898fb2681ce",
+  "main.json": "e3ab157bb66c834ac31e57cad77765efe82563033e7a2581ceb8c508e6d73a3b",
+  "qualification.json": "95053f8f92122a5cc81cdbb3ad684931601b182dfd7f9d7eb3166dd1932fd48b"
+}

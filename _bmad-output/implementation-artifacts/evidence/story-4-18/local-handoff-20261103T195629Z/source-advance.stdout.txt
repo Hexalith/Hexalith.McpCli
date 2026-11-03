@@ -1,0 +1,6 @@
+M	src/Hexalith.McpCli.Abstractions/HexalithCommandAttribute.cs
+M	src/Hexalith.McpCli.Abstractions/HexalithQueryAttribute.cs
+M	tests/Hexalith.McpCli.Cli.Tests/PlatformScopeCommandTests.cs
+M	tests/Hexalith.McpCli.Cli.Tests/QueryCliHarness.cs
+M	tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs
+A	tests/Hexalith.McpCli.Mcp.Tests/PlatformScopeProtocolTests.cs

@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "exit_code": 0,
+  "message_sha256": "46cddc3772bff0be478b5a6dd431122bffb8fafcb5e909d94b1946d10dd72490"
+}

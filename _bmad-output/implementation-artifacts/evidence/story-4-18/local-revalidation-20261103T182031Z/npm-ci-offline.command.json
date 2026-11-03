@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "npm",
+    "ci",
+    "--offline",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "started_at_utc": "2026-11-03T18:24:35.779967+00:00",
+  "ended_at_utc": "2026-11-03T18:24:41.310271+00:00",
+  "exit_code": 0
+}

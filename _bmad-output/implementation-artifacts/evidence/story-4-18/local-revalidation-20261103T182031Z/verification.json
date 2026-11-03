@@ -1,0 +1,126 @@
+{
+  "blockers": "blockers.json",
+  "commands": {
+    "actionlint": {
+      "command": "actionlint.command.json",
+      "exit_code": 0,
+      "stderr": "actionlint.stderr.txt",
+      "stdout": "actionlint.stdout.txt"
+    },
+    "current-version-selection": {
+      "command": "current-version-selection.command.json",
+      "exit_code": 0,
+      "stderr": "current-version-selection.stderr.txt",
+      "stdout": "current-version-selection.stdout.txt"
+    },
+    "diff-whitespace": {
+      "command": "diff-whitespace.command.json",
+      "exit_code": 0,
+      "stderr": "diff-whitespace.stderr.txt",
+      "stdout": "diff-whitespace.stdout.txt"
+    },
+    "final-diff-whitespace": {
+      "command": "final-diff-whitespace.command.json",
+      "exit_code": 0,
+      "stderr": "final-diff-whitespace.stderr.txt",
+      "stdout": "final-diff-whitespace.stdout.txt"
+    },
+    "final-staged-diff-whitespace": {
+      "command": "final-staged-diff-whitespace.command.json",
+      "exit_code": 0,
+      "stderr": "final-staged-diff-whitespace.stderr.txt",
+      "stdout": "final-staged-diff-whitespace.stdout.txt"
+    },
+    "instruction-sync": {
+      "command": "instruction-sync.command.json",
+      "exit_code": 0,
+      "stderr": "instruction-sync.stderr.txt",
+      "stdout": "instruction-sync.stdout.txt"
+    },
+    "local-source-gate": {
+      "command": "local-source-gate.command.json",
+      "exit_code": 1,
+      "stderr": "local-source-gate.stderr.txt",
+      "stdout": "local-source-gate.stdout.txt"
+    },
+    "node-tests": {
+      "command": "node-tests.command.json",
+      "exit_code": 0,
+      "stderr": "node-tests.stderr.txt",
+      "stdout": "node-tests.stdout.txt"
+    },
+    "node-tests-attempt1": {
+      "command": "node-tests-attempt1.command.json",
+      "exit_code": 1,
+      "stderr": "node-tests-attempt1.stderr.txt",
+      "stdout": "node-tests-attempt1.stdout.txt"
+    },
+    "npm-ci-offline": {
+      "command": "npm-ci-offline.command.json",
+      "exit_code": 0,
+      "stderr": "npm-ci-offline.stderr.txt",
+      "stdout": "npm-ci-offline.stdout.txt"
+    },
+    "python-tests": {
+      "command": "python-tests.command.json",
+      "exit_code": 0,
+      "stderr": "python-tests.stderr.txt",
+      "stdout": "python-tests.stdout.txt"
+    },
+    "shell-syntax": {
+      "command": "shell-syntax.command.json",
+      "exit_code": 0,
+      "stderr": "shell-syntax.stderr.txt",
+      "stdout": "shell-syntax.stdout.txt"
+    },
+    "source-advance": {
+      "command": "source-advance.command.json",
+      "exit_code": 0,
+      "stderr": "source-advance.stderr.txt",
+      "stdout": "source-advance.stdout.txt"
+    },
+    "staged-diff-whitespace": {
+      "command": "staged-diff-whitespace.command.json",
+      "exit_code": 0,
+      "stderr": "staged-diff-whitespace.stderr.txt",
+      "stdout": "staged-diff-whitespace.stdout.txt"
+    }
+  },
+  "completion": "Final execution task remains unchecked; spec and sprint remain in-progress.",
+  "current_version_selection": "current-version.json",
+  "external_actions": {
+    "actual_client_sessions": 0,
+    "candidate_acceptance_attestations": 0,
+    "commits": 0,
+    "hosted_gate_checks": 0,
+    "nuget_pushes": 0,
+    "public_feed_checks": 0,
+    "remote_git_operations": 0,
+    "staging_dispatches": 0
+  },
+  "frozen_intent_unchanged": true,
+  "immutable_exact_source_release_qualification": false,
+  "matrix_coverage": "matrix-coverage.json",
+  "production_code_changes": false,
+  "python_tests": {
+    "duration_seconds": 207.299,
+    "exit_code": 0,
+    "paired_publication_tests": 24,
+    "passed": 140,
+    "skipped": 0
+  },
+  "recorded_at_utc": "2026-11-03T18:26:52.843287+00:00",
+  "schema": "mcpcli-local-release-verification/v1",
+  "selector_tests": {
+    "evidence": "selector-fixtures",
+    "exit_code": 0,
+    "first_attempt": "Retained as node-tests-attempt1.* and selector-fixtures-attempt1/. Evidence was incorrectly written into the worktree whose unchanged status the test asserts; rerun used an external temporary directory and copied evidence after exit.",
+    "passed": 4,
+    "skipped": 0
+  },
+  "source_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "source_sha_meaning": "Observed child HEAD at start/during/end; individual command-boundary SHA snapshots were not captured.",
+  "source_timing": "source-timing.json",
+  "status": "local-checks-passed-release-acceptance-incomplete",
+  "tooling": "Pinned Node dependencies installed from cache with npm ci --offline --ignore-scripts --no-audit --no-fund."
+}

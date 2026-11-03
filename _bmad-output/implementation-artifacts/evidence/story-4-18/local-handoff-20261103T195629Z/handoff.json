@@ -1,0 +1,71 @@
+{
+  "external_actions": {
+    "acceptance_attestations": 0,
+    "commits": 0,
+    "hosted_gate_checks": 0,
+    "nuget_pushes": 0,
+    "public_feed_checks": 0,
+    "remote_operations": 0,
+    "staging_dispatches": 0
+  },
+  "final_execution_task_checked": false,
+  "final_validation": {
+    "diff_whitespace_exit_code": 0,
+    "prior_evidence_hashes_verified": true,
+    "production_or_release_behavior_changed": false,
+    "release_path_hashes_verified": true,
+    "source_sha": "50e94096d0a0f74fc15e164d6013819655829d0c",
+    "staged_diff_whitespace_exit_code": 0,
+    "story_and_sprint_remain_in_progress": true
+  },
+  "historical_evidence_preserved": true,
+  "historical_test_source_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "immutable_exact_source_release_qualification": false,
+  "local_source_gate": {
+    "command": "local-source-gate.command.json",
+    "credentials_removed": true,
+    "exit_code": 1,
+    "expected_refusal": "Release source gate failed: Release source has uncommitted changes.",
+    "github_cli_blocked_by_local_stub": true,
+    "github_cli_invocations": 0,
+    "precondition": "Existing user modifications and prior verification evidence make the worktree dirty."
+  },
+  "matrix_coverage": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/local-revalidation-20261103T182031Z/matrix-coverage.json",
+    "rows": 5,
+    "scope": "Previously executed synthetic tests only; not current-source hosted or public qualification.",
+    "sha256": "ed08914d5a383b0705d99073a7ce302538b86d23c9eb149c094ee2d2355115ca"
+  },
+  "pending": [
+    "Clean final committed current-main source and pinned semantic-release selection",
+    "Qualified public upstream query-selector compatibility cohort, owner package qualification and native live acceptance",
+    "Fresh exact-source CI/commitlint with all blocking executed jobs and steps, FR-22 and synchronized instructions",
+    "Fresh immutable same-version package pair and Linux/Windows/macOS staging acceptance",
+    "Authenticated candidate-bound automated authorization or three fresh actual sessions plus operator decision",
+    "Production environment approval and source/evidence/credential/feed-availability preflight",
+    "Both public package versions and signature-aware consumer-content verification"
+  ],
+  "prior_verification": {
+    "node_tests_passed": 4,
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/local-revalidation-20261103T182031Z/verification.json",
+    "python_tests_passed": 140,
+    "reason": "Release scripts, workflows, pinned tooling and README bytes match the previous locally tested source; no new release automation behavior was introduced.",
+    "sha256": "72b765bb83a330ca29e032daa69f78e79b9cc5ba86139fbac6135920578a0917",
+    "tests_reexecuted": false
+  },
+  "recorded_at_utc": "2026-11-03T19:56:30.372533+00:00",
+  "release_implementation_paths_unchanged_since_prior_tests": true,
+  "schema": "mcpcli-local-release-handoff/v1",
+  "source_sha": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "source_sha_after_local_checks": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "status": "local-implementation-present-external-acceptance-incomplete",
+  "story_status": "in-progress",
+  "upstream_state": "Prior compatibility blocker retained; no current upstream or public-state observation performed.",
+  "version_selection": {
+    "current_shared_version": "Requires fresh pinned selection from the final clean committed source.",
+    "current_source_reselected": false,
+    "historical_source_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+    "historical_version": "2.0.1"
+  },
+  "workflow_limit": "Active bmad-build step-03: No push. No remote ops. Sequential execution only."
+}

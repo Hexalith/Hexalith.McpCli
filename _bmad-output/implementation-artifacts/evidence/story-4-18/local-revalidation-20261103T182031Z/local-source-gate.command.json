@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--output",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/local-revalidation-20261103T182031Z/source-gate.json",
+    "--",
+    "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+    "refs/heads/main",
+    "paired"
+  ],
+  "environment": {
+    "REPOSITORY": "Hexalith/Hexalith.McpCli"
+  },
+  "credentials_removed": true,
+  "precondition": "Worktree confirmed dirty before invocation, so the guard refuses before any GitHub API access.",
+  "started_at_utc": "2026-11-03T18:25:58.549814+00:00",
+  "ended_at_utc": "2026-11-03T18:25:59.167948+00:00",
+  "exit_code": 1,
+  "expected_exit_code": 1
+}

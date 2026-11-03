@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "node",
+    "--test",
+    "scripts/tests/select-release-version.test.mjs"
+  ],
+  "environment": {
+    "MCPCLI_VERSION_TEST_EVIDENCE": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/local-revalidation-20261103T182031Z/selector-fixtures"
+  },
+  "started_at_utc": "2026-11-03T18:24:45.105133+00:00",
+  "ended_at_utc": "2026-11-03T18:24:54.368376+00:00",
+  "exit_code": 1
+}

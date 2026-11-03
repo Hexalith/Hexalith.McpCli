@@ -1,0 +1,21 @@
+{
+  "containing_workflow_initial_sha": "491d0f975baff6449225f70a322aa9b73c592cbc",
+  "final_observed_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "immutable_exact_source_release_qualification": false,
+  "implementation_handoff_first_observation": "git log -5 --oneline before local verification; 7a4e4dc was already HEAD.",
+  "implementation_handoff_first_observed_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "initial_sha_origin": "Reported by the parent workflow, then its three-file diff was checked locally.",
+  "observed_during_python_suite_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "per_command_boundary_source_snapshots_captured": false,
+  "reason": "Local start/during/end observations and the exact selector receipt do not replace immutable, clean exact-source hosted qualification.",
+  "schema": "mcpcli-local-source-timing/v1",
+  "selector_receipt_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "source_advance_changes_production_or_release_automation_code": false,
+  "source_advance_files": [
+    "A\t_bmad-output/implementation-artifacts/evidence/story-4-18/query-selector-compatibility/README.md",
+    "A\t_bmad-output/implementation-artifacts/evidence/story-4-18/query-selector-compatibility/parties-owner-bindings.patch",
+    "M\t_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md"
+  ],
+  "source_advance_timing": "Before the implementation handoff first inspected the repository.",
+  "source_change_observed_across_child_checks": false
+}

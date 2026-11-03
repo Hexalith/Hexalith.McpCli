@@ -1,0 +1,111 @@
+{
+  "authenticated_actor": "jpiquot",
+  "ci": {
+    "conclusion": null,
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "enrolled-module-conformance",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "conformance-vector-loopback",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "topology-vector-discovery",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "release-automation",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "conformance-vector-contract",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "ci / build-and-test",
+        "status": "completed"
+      },
+      {
+        "conclusion": null,
+        "name": "ci / aspire-tests",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "skipped",
+        "name": "ci / performance-tests",
+        "status": "completed"
+      }
+    ],
+    "run_id": 41692865495,
+    "status": "in_progress",
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41692865495"
+  },
+  "commitlint": {
+    "conclusion": "success",
+    "run_id": 41692865587,
+    "status": "completed",
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41692865587"
+  },
+  "completion": "Story remains in-progress; this checkpoint does not satisfy release acceptance.",
+  "nuget_pushes": 0,
+  "public_packages": [
+    {
+      "http_status": 200,
+      "latest_version": "4.0.4",
+      "package": "hexalith.eventstore.contracts",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.contracts/index.json"
+    },
+    {
+      "http_status": 200,
+      "latest_version": "4.0.4",
+      "package": "hexalith.eventstore.client",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.client/index.json"
+    },
+    {
+      "http_status": 200,
+      "latest_version": "4.0.4",
+      "package": "hexalith.eventstore.server",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.server/index.json"
+    },
+    {
+      "http_status": 200,
+      "latest_version": "3.0.0",
+      "package": "hexalith.parties.contracts",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json"
+    },
+    {
+      "http_status": 200,
+      "latest_version": "7.0.0",
+      "package": "hexalith.tenants.contracts",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/index.json"
+    },
+    {
+      "http_status": 404,
+      "package": "hexalith.mcpcli",
+      "scope": "version-index observation only; not publication availability preflight",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/index.json"
+    },
+    {
+      "http_status": 200,
+      "latest_version": "2.0.0",
+      "package": "hexalith.mcpcli.abstractions",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/index.json"
+    }
+  ],
+  "publication_dispatched": false,
+  "recorded_at_utc": "2026-11-03T20:04:38.474013+00:00",
+  "remote_main": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "schema": "mcpcli-hosted-release-qualification/v1",
+  "source_sha": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "staging_dispatched": false,
+  "upstream_blocker": "Latest public EventStore cohort remains 4.0.4. The committed native-runtime selection and README record that this cohort rejects enrolled legacy query selectors. A qualified compatible public cohort and owner bindings are not established.",
+  "user_authorization": "User replied yes to necessary commit/push and hosted release qualification; active no-remote/no-push skill restriction overridden for this continuation."
+}

@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "scripts/tests",
+    "-p",
+    "test_*.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "started_at_utc": "2026-11-03T18:20:31.454611+00:00",
+  "ended_at_utc": "2026-11-03T18:23:58.877005+00:00",
+  "exit_code": 0
+}

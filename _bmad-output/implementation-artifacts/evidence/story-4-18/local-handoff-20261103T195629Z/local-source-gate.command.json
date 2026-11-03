@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--output",
+    "/tmp/mcpcli-418-local-handoff-rws5rceb/evidence/source-gate.json",
+    "--",
+    "50e94096d0a0f74fc15e164d6013819655829d0c",
+    "refs/heads/main",
+    "paired"
+  ],
+  "ended_at_utc": "2026-11-03T19:56:30.366080+00:00",
+  "exit_code": 1,
+  "expected_exit_code": 1,
+  "source_sha_after": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "source_sha_before": "50e94096d0a0f74fc15e164d6013819655829d0c",
+  "started_at_utc": "2026-11-03T19:56:29.894296+00:00"
+}

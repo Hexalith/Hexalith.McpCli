@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/home/administrator/.nvm/versions/node/v26.4.0/bin/node",
+    "/home/administrator/projects/hexalith/mcpcli/node_modules/@commitlint/cli/cli.js",
+    "--verbose"
+  ],
+  "exit_code": 0
+}

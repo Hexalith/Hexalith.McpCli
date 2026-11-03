@@ -1,0 +1,105 @@
+{
+  "matrix_rows": 5,
+  "rows": [
+    {
+      "behavior": "accepted-candidate-publishes-only-exact-pair",
+      "status": "covered-by-executed-passing-synthetic-tests",
+      "tests": [
+        {
+          "output": "python-tests.stderr.txt:92",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:158",
+          "test": "test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents"
+        },
+        {
+          "output": "python-tests.stderr.txt:91",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:255",
+          "test": "test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions"
+        }
+      ]
+    },
+    {
+      "behavior": "invalid-evidence-source-or-extra-package-refuses-before-push",
+      "status": "covered-by-executed-passing-synthetic-tests",
+      "tests": [
+        {
+          "output": "python-tests.stderr.txt:96",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:214",
+          "test": "test_mutated_import_receipt_package_or_extra_package_never_pushes"
+        },
+        {
+          "output": "python-tests.stderr.txt:98",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:302",
+          "test": "test_original_staging_archive_source_version_and_acceptance_source_must_match"
+        },
+        {
+          "output": "python-tests.stderr.txt:97",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:271",
+          "test": "test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions"
+        },
+        {
+          "output": "python-tests.stderr.txt:113",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_release.py:200",
+          "test": "test_missing_fr22_and_skipped_source_steps_refuse"
+        }
+      ]
+    },
+    {
+      "behavior": "missing-key-occupied-version-or-uncertain-feed-refuses",
+      "status": "covered-by-executed-passing-synthetic-tests",
+      "tests": [
+        {
+          "output": "python-tests.stderr.txt:95",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:204",
+          "test": "test_missing_key_or_uncertain_registry_never_pushes_and_retains_refusal"
+        },
+        {
+          "output": "python-tests.stderr.txt:81",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:420",
+          "test": "test_both_registry_identities_are_checked_and_occupied_version_fails"
+        },
+        {
+          "output": "python-tests.stderr.txt:82",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:409",
+          "test": "test_first_ever_absence_requires_both_explicit_404s"
+        }
+      ]
+    },
+    {
+      "behavior": "partial-or-uncertain-push-retains-outcomes-without-retry",
+      "status": "covered-by-executed-passing-synthetic-tests",
+      "tests": [
+        {
+          "output": "python-tests.stderr.txt:100",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:179",
+          "test": "test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry"
+        }
+      ]
+    },
+    {
+      "behavior": "bootstrap-line-closes-after-paired-publication-starts",
+      "status": "covered-by-executed-passing-synthetic-tests",
+      "tests": [
+        {
+          "output": "python-tests.stderr.txt:84",
+          "result": "passed",
+          "source": "scripts/tests/test_paired_publication.py:433",
+          "test": "test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible"
+        }
+      ]
+    }
+  ],
+  "schema": "mcpcli-local-matrix-coverage/v1",
+  "scope": "Synthetic local verification only; no hosted, client or public package acceptance.",
+  "status": "passed",
+  "test_output_sha256": "df19df2f61af475a7fb2992a4f2d4b97a04a77a28d7ceffe7a2351dfacd76edb"
+}

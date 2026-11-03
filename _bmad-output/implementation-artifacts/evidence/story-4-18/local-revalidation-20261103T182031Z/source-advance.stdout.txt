@@ -1,0 +1,3 @@
+A	_bmad-output/implementation-artifacts/evidence/story-4-18/query-selector-compatibility/README.md
+A	_bmad-output/implementation-artifacts/evidence/story-4-18/query-selector-compatibility/parties-owner-bindings.patch
+M	_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md

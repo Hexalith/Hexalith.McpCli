@@ -1,0 +1,1 @@
+{"schema":"mcpcli-version-selection/v1","source_sha":"7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397","release":true,"version":"2.0.1"}

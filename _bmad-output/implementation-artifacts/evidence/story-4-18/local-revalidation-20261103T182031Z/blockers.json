@@ -1,0 +1,40 @@
+{
+  "historical_candidate_mismatch": {
+    "current_selected_version": "2.0.1",
+    "current_source_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+    "historical_source_sha": "17eb4fbbc151ca4b99dfa452e9f65655db2b402f",
+    "historical_staging_run_id": 41307182275,
+    "historical_version": "1.2.0",
+    "qualifies_current_source": false,
+    "reference": "_bmad-output/implementation-artifacts/evidence/story-4-18/hosted-staging-20261101T123459Z/candidate.json",
+    "reference_sha256": "95217ac4c638faf4e44bc660fccc7a7f361d7b611e6e6585701e8ab4b2c8d76d"
+  },
+  "hosted_or_public_state_inferred": false,
+  "local_source_guard": {
+    "cause": "This task adds uncommitted verification evidence; publication requires a fresh clean committed source.",
+    "command": "local-source-gate.command.json",
+    "exit_code": 1,
+    "reason": "Release source gate failed: Release source has uncommitted changes.",
+    "remote_access": false,
+    "stderr": "local-source-gate.stderr.txt"
+  },
+  "pending": [
+    "Qualified upstream query-selector compatibility packages and native live acceptance",
+    "Fresh exact-current-main CI and commitlint with executed blocking jobs/steps and FR-22",
+    "Fresh immutable pair and three-OS staging acceptance at the selected shared version",
+    "Authenticated candidate-bound automated authorization or three fresh actual sessions and operator decision",
+    "Production approval and rechecked source/evidence/feed availability",
+    "Both public package versions and signature-aware consumer contents verified"
+  ],
+  "retained_upstream_checkpoint": {
+    "current_public_state_checked": false,
+    "observation": "Previously recorded Parties package build CS0117: EventStore.Contracts 4.0.4 lacks CompatibilityProjectionActorTypes. A qualified public EventStore cohort and owner package qualification precede fresh live acceptance.",
+    "reexecuted": false,
+    "reference": "_bmad-output/implementation-artifacts/evidence/story-4-18/query-selector-compatibility/README.md",
+    "sha256": "18839bd90bda606d11fb162947eec37699e7310d9b8d3efb90c7febc754938e1"
+  },
+  "schema": "mcpcli-local-release-blockers/v1",
+  "source_sha": "7a4e4dcbd3ebb3cfc90b11fa3dcea1233283b397",
+  "status": "external-release-acceptance-incomplete",
+  "workflow_limit": "Active bmad-build step-03: No push. No remote ops. Sequential execution only."
+}
