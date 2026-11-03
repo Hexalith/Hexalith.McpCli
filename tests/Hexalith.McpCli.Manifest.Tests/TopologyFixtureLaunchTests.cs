@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -69,6 +71,52 @@ public sealed class TopologyFixtureLaunchTests
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", priorAspnet);
             context.Unload();
         }
+    }
+
+    /// <summary>The actual live fixture signs its bounded administrator hint and a forged signature never authenticates.</summary>
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void LiveAdministratorHintRequiresTheActualFixtureSignature(bool forged, bool nonmember)
+    {
+        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
+        string path = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.Integration.Tests",
+            "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
+        var context = new AssemblyLoadContext("signed-fixture-" + Guid.NewGuid().ToString("N"), isCollectible: true);
+        var resolver = new AssemblyDependencyResolver(path);
+        context.Resolving += (_, name) => resolver.ResolveAssemblyToPath(name) is { } resolved ? context.LoadFromAssemblyPath(resolved) : null;
+        try
+        {
+            Type type = context.LoadFromAssemblyPath(path).GetType("Hexalith.McpCli.Integration.Tests.AspireTopologyFixture", throwOnError: true)!;
+            object fixture = Activator.CreateInstance(type)!;
+            string token = (string)type.GetMethod(nonmember ? "CreateNonmemberIdentity" : "CreateLiveIdentity", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(fixture, null)!;
+            string key = (string)type.GetField("_signingKey", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(fixture)!;
+            if (forged)
+            {
+                int start = token.LastIndexOf('.') + 1;
+                token = token[..start] + (token[start] == 'A' ? 'B' : 'A') + token[(start + 1)..];
+            }
+            var handler = new JwtSecurityTokenHandler { MapInboundClaims = false };
+            var validation = new TokenValidationParameters
+            {
+                ValidIssuer = "mcpcli-live-tests", ValidAudience = "hexalith-eventstore", ValidateLifetime = true,
+                RequireSignedTokens = true, ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(key)),
+                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+            };
+            if (forged) Assert.Throws<SecurityTokenSignatureKeyNotFoundException>(() => handler.ValidateToken(token, validation, out _));
+            else
+            {
+                var principal = handler.ValidateToken(token, validation, out _);
+                Assert.Equal(nonmember ? "mcpcli-live-nonmember" : "mcpcli-live-admin", principal.FindFirst("sub")!.Value);
+                Assert.Equal("GlobalAdministrator", principal.FindFirst("role")!.Value);
+                Assert.Equal("agent", principal.FindFirst("eventstore:surface")!.Value);
+                Assert.False(principal.HasClaim(claim => claim.Type is "global_admin" or "is_global_admin"));
+            }
+        }
+        finally { context.Unload(); }
     }
 
     private static void PreserveBuilderOptions(object applicationOptions, object hostOptions) { }

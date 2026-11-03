@@ -28,7 +28,7 @@ internal static class NativeCatalogPreparationEvidence
             ["partyPreparationSha256"] = Digest(partyReceipt),
             ["tenantPreparation"] = safeTenant,
             ["partyPreparation"] = Select(party, "instanceId", "gatewayAppId", "sdkVersion", "templateSource", "templateHash",
-                "templateProjectSha256", "readerProjectSha256", "globalJsonSha256", "bindingsSha256", "inputHashes"),
+                "templateProjectSha256", "readerProjectSha256", "globalJsonSha256", "bindingsSha256", "inputHashes", "auditReceiptSha256", "auditedPackageGraph"),
         };
     }
 

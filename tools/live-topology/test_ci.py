@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import base64
 import importlib.util
 import hashlib
 import io
@@ -141,6 +142,11 @@ with (root / 'runner-gateway-environment.jsonl').open('a') as log:
                          'sourceCommit': os.environ.get('MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT')}) + '\n')
 with (root / 'runner-source-overrides.jsonl').open('a') as log:
     log.write(json.dumps(os.environ.get('CustomAfterMicrosoftCommonTargets')) + '\n')
+with (root / 'runner-reader-audit.jsonl').open('a') as log:
+    log.write(json.dumps({'path': os.environ.get('MCPCLI_NATIVE_READER_AUDIT_PATH'),
+                         'sha256': os.environ.get('MCPCLI_NATIVE_READER_AUDIT_SHA256')}) + '\n')
+if mode == 'audit-before-smoke' and pathlib.Path(__file__).name == 'run-vectors.py':
+    pathlib.Path(os.environ['MCPCLI_NATIVE_READER_AUDIT_PATH']).write_text('{}')
 if mode == 'nested-before-smoke' and pathlib.Path(__file__).name == 'run-vectors.py':
     nested = root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
     nested.parent.mkdir(parents=True)
@@ -324,6 +330,8 @@ class CiHooksTests(unittest.TestCase):
         platform = self.root / 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder'
         platform.mkdir(parents=True)
         (platform / 'Hexalith.Platform.CatalogBuilder.csproj').touch()
+        (platform / 'Program.cs').touch()
+        (self.root / 'Directory.Packages.props').write_text('<Project />')
         tenants_package = cache / 'hexalith.tenants.contracts/7.0.0'
         tenants_package.mkdir(parents=True)
         with ZipFile(tenants_package / 'hexalith.tenants.contracts.7.0.0.nupkg', 'w') as archive:
@@ -373,6 +381,14 @@ class CiHooksTests(unittest.TestCase):
             (project / 'obj/project.assets.json').write_text(json.dumps({'libraries': {identity: {'type': 'package'}},
                 'targets': {'net10.0': {identity: {'runtime': {asset: {}}}}}, 'packageFolders': {str(cache): {}}}))
         (self.tools / 'native-runtime.json').write_text(json.dumps(selection))
+        for assets_path in self.root.rglob('obj/project.assets.json'):
+            assets = json.loads(assets_path.read_text())
+            assets['project'] = {'restore': {'restoreAuditProperties':
+                {'enableAudit': 'true', 'auditLevel': 'low', 'auditMode': 'all'},
+                'warningProperties': {'allWarningsAsErrors': True}}}
+            for identity, package in assets['libraries'].items():
+                package['sha512'] = base64.b64encode(hashlib.sha512(identity.encode()).digest()).decode()
+            assets_path.write_text(json.dumps(assets))
         native = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore'
         (native / 'Properties').mkdir()
         (native / 'appsettings.json').write_text('{"nativeDefaults":true}')
@@ -589,6 +605,55 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-source-overrides.jsonl').read_text().splitlines()]
         self.assertEqual([str(override)] * 2, inherited)
+
+    def test_online_audit_receipt_reaches_both_runners_and_refuses_drift(self):
+        prepared = self.prepare()
+        audit = prepared['readerAudit']
+        document = json.loads(Path(audit['path']).read_text())
+        self.assertEqual('audited', document['result'])
+        self.assertTrue(document['packages'])
+        builds = [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build']
+        self.assertTrue(all(all(value in call for value in ('-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
+                                                           '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true')) for call in builds))
+        self.assertEqual(set(document['packages']), set(document['archives']))
+        self.assertTrue(all(source['policy']['warnings']['allWarningsAsErrors'] for source in document['sources'].values()))
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        inherited = [json.loads(line) for line in (self.root / 'runner-reader-audit.jsonl').read_text().splitlines()]
+        self.assertEqual([audit] * 2, inherited)
+        Path(audit['path']).write_text('{}')
+        with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
+            self.ci_module().require_reader_audit(prepared)
+
+    def test_reader_requires_complete_successful_online_graph_audits(self):
+        module = self.ci_module()
+        path = self.root / 'tests/Hexalith.McpCli.AppHost/obj/project.assets.json'
+        original = path.read_text()
+        for defect in ('disabled', 'direct-only', 'level', 'feed-failure', 'missing-package-hash',
+                       'advisory-suppression', 'global-nowarn', 'package-nowarn', 'warn-not-error', 'not-all-errors'):
+            with self.subTest(defect=defect):
+                document = json.loads(original)
+                if defect == 'disabled': document['project']['restore']['restoreAuditProperties']['enableAudit'] = 'false'
+                if defect == 'direct-only': document['project']['restore']['restoreAuditProperties']['auditMode'] = 'direct'
+                if defect == 'level': document['project']['restore']['restoreAuditProperties']['auditLevel'] = 'high'
+                if defect == 'feed-failure': document['logs'] = [{'level': 'Warning', 'code': 'NU1900'}]
+                if defect == 'missing-package-hash': next(iter(document['libraries'].values())).pop('sha512')
+                if defect == 'advisory-suppression': document['project']['restore']['restoreAuditProperties']['suppressedAdvisories'] = {'https://github.com/advisories/GHSA-example': None}
+                if defect == 'global-nowarn': document['project']['restore']['warningProperties']['noWarn'] = ['NU1903']
+                if defect == 'warn-not-error': document['project']['restore']['warningProperties']['warnNotAsError'] = ['NU1901']
+                if defect == 'not-all-errors': document['project']['restore']['warningProperties']['allWarningsAsErrors'] = False
+                if defect == 'package-nowarn': document['project']['frameworks'] = {'net10.0': {'dependencies': {'Package': {'noWarn': ['NU1902']}}}}
+                path.write_text(json.dumps(document))
+                with self.assertRaisesRegex(ValueError, 'audit|content hashes'):
+                    module.reader_audit_provenance()
+        path.write_text(original)
+
+    def test_audit_proof_drift_after_vectors_refuses_smoke(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'audit-before-smoke')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('online audit proof changed', result.stderr)
+        self.assertEqual(1, len((self.root / 'runner-reader-audit.jsonl').read_text().splitlines()))
 
     def test_source_catalog_and_private_override_drift_refuse_before_live(self):
         prepared = self.prepare()
@@ -1048,7 +1113,8 @@ class CiHooksTests(unittest.TestCase):
         receipt = json.loads((self.evidence / 'preparation.json').read_text())
         overlay = Path(receipt['privateDirectory']) / 'source-runtime-packages.props'
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
-                   '-warnaserror -m:1 -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
+                   '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
+                   '-p:TreatWarningsAsErrors=true -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4 '
                    f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'

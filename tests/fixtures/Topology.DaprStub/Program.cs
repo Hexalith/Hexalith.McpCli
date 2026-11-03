@@ -1,3 +1,17 @@
+if (Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_ASSETS") is { Length: > 0 } readerAssets)
+{
+    File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_CALLS")!, System.Text.Json.JsonSerializer.Serialize(args) + Environment.NewLine);
+    if (args is ["restore", string project, ..])
+    {
+        string directory = Path.Combine(Path.GetDirectoryName(project)!, "obj");
+        Directory.CreateDirectory(directory);
+        File.Copy(readerAssets, Path.Combine(directory, "project.assets.json"));
+        return 0;
+    }
+    Console.Error.WriteLine("controlled-reader-build-stop");
+    return 9;
+}
+
 if (args.Contains("rev-parse") && int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_GIT_DELAY_MS"), out int gitDelay))
 {
     Thread.Sleep(gitDelay);

@@ -19,9 +19,10 @@ internal static class NativeCatalogTool
     /// <param name="sdkVersion">The exact published SDK cohort prepared for every host.</param>
     /// <param name="owners">The prepared declaration and adapter assemblies with actual receiver identities.</param>
     /// <param name="token">The bounded startup lifetime.</param>
+    /// <param name="dotnetExecutable">Optional controlled-process executable for offline preparation tests.</param>
     internal static async Task<JsonDocument> GenerateAsync(DirectoryInfo repositoryRoot, string directory,
         string instanceId, string gatewayAppId, string sdkVersion,
-        IReadOnlyList<(string OwnerPath, string AdapterPath, string AppId)> owners, CancellationToken token)
+        IReadOnlyList<(string OwnerPath, string AdapterPath, string AppId)> owners, CancellationToken token, string dotnetExecutable = "dotnet")
     {
         ArgumentNullException.ThrowIfNull(repositoryRoot);
         if (owners.Count == 0 || owners.Any(owner => !Path.IsPathFullyQualified(owner.OwnerPath)
@@ -66,14 +67,20 @@ internal static class NativeCatalogTool
         xml.Save(project);
         File.Copy(Path.Combine(Path.GetDirectoryName(template)!, "Program.cs"), Path.Combine(build, "Program.cs"));
         string output = Path.Combine(build, "output");
-        // The qualified package archives and source identities were already verified by preparation.
-        // Keep this per-run reader build independent of transient advisory-feed availability.
-        await RunAsync(build, "build.log", ["build", project, "-c", "Release", "-m:1", "--output", output,
-            "-p:GeneratePackageOnBuild=false", "-p:NuGetAudit=false", "-p:CentralPackageVersionsFileImported=true",
+        string auditPath = Environment.GetEnvironmentVariable("MCPCLI_NATIVE_READER_AUDIT_PATH")
+            ?? throw new InvalidOperationException("The isolated reader requires its retained online graph audit.");
+        string auditHash = Environment.GetEnvironmentVariable("MCPCLI_NATIVE_READER_AUDIT_SHA256")
+            ?? throw new InvalidOperationException("The isolated reader requires its prepared online audit hash.");
+        using JsonDocument audit = NativeCatalogAudit.Load(repositoryRoot.FullName, auditPath, auditHash, sdkVersion);
+        // Restore only metadata before checking the retained audit and the actual package bytes compilation will consume.
+        string[] properties = ["-p:GeneratePackageOnBuild=false", "-p:NuGetAudit=false", "-p:CentralPackageVersionsFileImported=true",
             "-p:UseHexalithProjectReferences=false", "-p:HexalithEventStoreVersion=" + sdkVersion,
-            "-p:PlatformCatalogBindings=" + bindings, "--nologo", "-warnaserror"], token).ConfigureAwait(false);
+            "-p:PlatformCatalogBindings=" + bindings, "--nologo", "-warnaserror"];
+        await RunAsync(build, "restore.log", ["restore", project, "-p:Configuration=Release", .. properties], token, dotnetExecutable).ConfigureAwait(false);
+        Dictionary<string, string> auditedPackageGraph;
         using (JsonDocument assets = JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(build, "obj", "project.assets.json"), token).ConfigureAwait(false)))
         {
+            auditedPackageGraph = NativeCatalogAudit.RequireCoverage(assets.RootElement, audit.RootElement);
             JsonProperty[] sdk = assets.RootElement.GetProperty("libraries").EnumerateObject()
                 .Where(library => library.Name.StartsWith("Hexalith.EventStore.", StringComparison.Ordinal)).ToArray();
             if (sdk.Length == 0 || sdk.Any(library => library.Name[(library.Name.LastIndexOf('/') + 1)..] != sdkVersion
@@ -82,6 +89,8 @@ internal static class NativeCatalogTool
                 throw new InvalidDataException("The actual private catalog reader did not restore the exact published SDK cohort.");
             }
         }
+        await RunAsync(build, "build.log", ["build", project, "--no-restore", "-c", "Release", "-m:1", "--output", output,
+            .. properties], token, dotnetExecutable).ConfigureAwait(false);
         foreach ((string filename, string source) in copied)
         {
             string target = Path.Combine(output, filename);
@@ -108,7 +117,7 @@ internal static class NativeCatalogTool
                 appId = owner.AppId,
             }),
         }), token).ConfigureAwait(false);
-        await RunAsync(build, "generation.log", [Path.Combine(output, "Hexalith.Platform.CatalogBuilder.dll"), request], token).ConfigureAwait(false);
+        await RunAsync(build, "generation.log", [Path.Combine(output, "Hexalith.Platform.CatalogBuilder.dll"), request], token, dotnetExecutable).ConfigureAwait(false);
         foreach ((string path, string digest) in inputHashes)
         {
             if (Convert.ToHexStringLower(SHA256.HashData(await File.ReadAllBytesAsync(path, token).ConfigureAwait(false))) != digest)
@@ -117,6 +126,7 @@ internal static class NativeCatalogTool
         await File.WriteAllBytesAsync(Path.Combine(build, "preparation.json"), JsonSerializer.SerializeToUtf8Bytes(new
         {
             instanceId, gatewayAppId, sdkVersion,
+            auditReceiptSha256 = auditHash, auditedPackageGraph,
             templateSource = template,
             templateProjectSha256 = Digest(File.ReadAllBytes(template)),
             readerProjectSha256 = Digest(File.ReadAllBytes(project)),
@@ -223,9 +233,9 @@ internal static class NativeCatalogTool
         return NativeCatalogDiagnostics.Sanitize(retained.ToString());
     }
 
-    private static async Task RunAsync(string directory, string log, IReadOnlyList<string> arguments, CancellationToken token)
+    private static async Task RunAsync(string directory, string log, IReadOnlyList<string> arguments, CancellationToken token, string dotnetExecutable)
     {
-        ProcessStartInfo start = new("dotnet")
+        ProcessStartInfo start = new(dotnetExecutable)
         {
             WorkingDirectory = directory, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false,
         };

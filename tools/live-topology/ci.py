@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ctypes
 import ctypes.util
+import base64
 import hashlib
 import json
 import os
@@ -321,6 +322,67 @@ def require_source_catalog(prepared: dict) -> Path:
     return private / 'source-runtime-overrides.targets'
 
 
+def reader_audit_provenance() -> dict:
+    """Retain exact package-byte coverage from successful online all-dependency audits."""
+    projects = [PACKAGE_GATEWAY, 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
+                'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
+                *(f'references/Hexalith.{name}/src/Hexalith.{name}/Hexalith.{name}.csproj' for name in ('Tenants', 'Parties')),
+                'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj']
+    packages, archives, sources = {}, {}, {}
+    for relative in projects:
+        assets = json.loads((ROOT / relative).parent.joinpath('obj/project.assets.json').read_text())
+        audit = assets.get('project', {}).get('restore', {}).get('restoreAuditProperties', {})
+        warning_policy = assets.get('project', {}).get('restore', {}).get('warningProperties', {})
+        dependency_warnings = {framework + '/' + name: item.get('noWarn', [])
+                               for framework, data in assets.get('project', {}).get('frameworks', {}).items()
+                               for name, item in data.get('dependencies', {}).items() if item.get('noWarn')}
+        suppressed = [*warning_policy.get('noWarn', []), *warning_policy.get('warnNotAsError', []),
+                      *(code for codes in dependency_warnings.values() for code in codes)]
+        if any(audit.get(name) != value for name, value in
+               {'enableAudit': 'true', 'auditLevel': 'low', 'auditMode': 'all'}.items()) \
+                or audit.get('suppressedAdvisories') or warning_policy.get('allWarningsAsErrors') is not True \
+                or any(re.fullmatch(r'NU19\d{2}', code, re.IGNORECASE) for code in suppressed) \
+                or any(item.get('level', '').lower() in ('warning', 'error') for item in assets.get('logs', [])):
+            raise ValueError('The native reader requires unsuppressed low-level online all-dependency vulnerability audits with all warnings as errors.')
+        graph = {}
+        for identity, item in assets['libraries'].items():
+            if item.get('type') != 'package':
+                continue
+            digest = item.get('sha512', '')
+            if not re.fullmatch(r'[A-Za-z0-9+/]{86}==', digest) or identity in packages and packages[identity] != digest:
+                raise ValueError('The audited package graph has missing or disagreeing package content hashes.')
+            filename = identity.lower().replace('/', '.') + '.nupkg'
+            archive = next((Path(folder) / identity.lower() / filename for folder in assets['packageFolders']
+                            if (Path(folder) / identity.lower() / filename).is_file()), None)
+            if archive is None:
+                raise ValueError('An online audited package archive is missing: ' + identity)
+            archive_hash = base64.b64encode(hashlib.sha512(archive.read_bytes()).digest()).decode()
+            if identity in archives and archives[identity] != archive_hash:
+                raise ValueError('Online audited archive bytes disagree: ' + identity)
+            archives[identity] = archive_hash
+            graph[identity] = packages[identity] = digest
+        if not graph:
+            raise ValueError('The online audited package graph is empty.')
+        sources[relative] = {'packages': graph, 'policy': {'audit': audit, 'warnings': warning_policy,
+                                                         'dependencyNoWarn': dependency_warnings}}
+    inputs = ['global.json', 'Directory.Build.props', 'Directory.Packages.props',
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj',
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs']
+    return {'schemaVersion': 1, 'result': 'audited', 'sdkVersion': EVENTSTORE_COHORT,
+            'sources': sources, 'packages': packages, 'archives': archives,
+            'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in inputs}}
+
+
+def require_reader_audit(prepared: dict) -> Path:
+    """Refuse drift in the retained audit proof or its current online audited graphs."""
+    expected = prepared.get('readerAudit', {})
+    path = Path(expected.get('path', ''))
+    if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get('sha256') \
+            or json.loads(path.read_text()) != reader_audit_provenance():
+        raise ValueError('The native reader online audit proof changed or is missing.')
+    return path
+
+
 def require_prepared_provenance(prepared: dict) -> dict:
     selection = native_cohort.manifest(NATIVE_SELECTION)
     if prepared.get('selection') != selection:
@@ -336,6 +398,7 @@ def require_prepared_provenance(prepared: dict) -> dict:
     actual = gateway_package_provenance()
     if prepared.get('gateway') != actual:
         raise ValueError('The prepared gateway package identity or bytes changed before isolated execution.')
+    require_reader_audit(prepared)
     return actual
 
 
@@ -483,7 +546,8 @@ def prepare(evidence: Path) -> None:
                 continue
             project = PACKAGE_GATEWAY if module == 'Hexalith.EventStore' else f'src/{module}/{module}.csproj'
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
-            properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
+            properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
+                          '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
@@ -504,8 +568,12 @@ def prepare(evidence: Path) -> None:
                         300, evidence / 'parties-adapter-build', cwd=working)
         # Rebuild the actual AppHost and tests in the same fresh public cache.
         bounded(['dotnet', 'build', PROJECT + '/Hexalith.McpCli.Integration.Tests.csproj',
-                 '--configuration', 'Release', '-warnaserror', '-m:1'], 300, evidence / 'native-tests-build')
+                 '--configuration', 'Release', '-warnaserror', '-m:1', '-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
+                 '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true'], 300, evidence / 'native-tests-build')
         receipt['gateway'] = gateway_package_provenance()
+        audit_path = evidence / 'native-reader-audit.json'
+        save(audit_path, reader_audit_provenance())
+        receipt['readerAudit'] = {'path': str(audit_path.resolve()), 'sha256': hashlib.sha256(audit_path.read_bytes()).hexdigest()}
         python = private / 'venv/bin/python'
         bounded([sys.executable, '-m', 'venv', str(private / 'venv')], 60, evidence / 'python-venv')
         bounded([str(python), '-m', 'pip', 'install', '--disable-pip-version-check', '-r', str(ROOT / 'tools/conformance-vectors/v1/requirements.txt')],
@@ -584,6 +652,7 @@ def run(evidence: Path) -> None:
             raise ValueError('Current successful preparation receipt is required.')
         gateway = require_prepared_provenance(prepared)
         source_overrides = require_source_catalog(prepared)
+        reader_audit = require_reader_audit(prepared)
         prepared_runtime = Path(prepared['runtime']).resolve()
         python = Path(prepared['python'])
         if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
@@ -606,6 +675,8 @@ def run(evidence: Path) -> None:
                            HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                            Topology__UsePackagedGateway='true',
                            MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT=gateway['sourceCommit'],
+                           MCPCLI_NATIVE_READER_AUDIT_PATH=str(reader_audit),
+                           MCPCLI_NATIVE_READER_AUDIT_SHA256=prepared['readerAudit']['sha256'],
                            PATH=str(python.parent) + os.pathsep + prepared['path'])
         generation = evidence / report['runId']
         generation.mkdir()

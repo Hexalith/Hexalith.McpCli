@@ -24,6 +24,7 @@ public sealed class NativeFixtureIdentityTests
         IReadOnlyDictionary<string, object> claims = NativeFixtureIdentity.CreateClaims(1000, live: true);
         Assert.Equal(expected.Order(StringComparer.Ordinal), ((string[])claims["eventstore:tenant"]).Order(StringComparer.Ordinal));
         Assert.Equal("agent", claims["eventstore:surface"]);
+        Assert.Equal("GlobalAdministrator", claims["role"]);
         Assert.False(claims.ContainsKey("global_admin"));
         Assert.False(claims.ContainsKey("tenants"));
         Assert.DoesNotContain(((string[])claims["eventstore:permission"]), permission => permission.Contains('*'));
@@ -56,6 +57,19 @@ public sealed class NativeFixtureIdentityTests
         Assert.Empty((string[])claims["eventstore:tenant"]);
         Assert.False(claims.ContainsKey("global_admin"));
         Assert.False(claims.ContainsKey("role"));
+    }
+
+    /// <summary>The signed nonmember has the same bounded hint and grants with only its real authenticated subject changed.</summary>
+    [Fact]
+    public void NonmemberChangesOnlyTheSignedSubject()
+    {
+        var member = NativeFixtureIdentity.CreateClaims(1000, live: true);
+        var nonmember = NativeFixtureIdentity.CreateClaims(1000, live: true, nonmember: true);
+        Assert.Equal(NativeFixtureIdentity.NonmemberId, nonmember["sub"]);
+        foreach (string key in member.Keys.Where(key => key != "sub"))
+            Assert.Equal(JsonSerializer.Serialize(member[key]), JsonSerializer.Serialize(nonmember[key]));
+        Assert.Contains(NativeAdministratorBoundary.TargetTenant, (string[])nonmember["eventstore:tenant"]);
+        Assert.False(nonmember.ContainsKey("global_admin"));
     }
 
     private static string FindRepositoryRoot()

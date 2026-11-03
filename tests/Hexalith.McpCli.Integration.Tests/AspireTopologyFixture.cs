@@ -77,6 +77,9 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <summary>Creates the short-lived delegated identity shared privately with one runner.</summary>
     internal string CreateLiveIdentity() => CreateIdentity(invalidSignature: false, live: true);
 
+    /// <summary>Signs the bounded live role hint for the independent nonmember control.</summary>
+    internal string CreateNonmemberIdentity() => CreateIdentity(invalidSignature: false, live: true, nonmember: true);
+
     /// <summary>Activates the standard platform prerequisite before allowing vector writes into fresh state.</summary>
     internal async Task RequireProjectionWriterAsync(CancellationToken cancellationToken)
     {
@@ -118,11 +121,11 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
         await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, cancellationToken).ConfigureAwait(false);
     }
 
-    private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false)
+    private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false, bool nonmember = false)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
-        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead)));
+        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead, nonmember)));
         string unsigned = header + "." + payload;
         string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(invalidSignature ? Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)) : _signingKey), Encoding.ASCII.GetBytes(unsigned)));
         return unsigned + "." + signature;

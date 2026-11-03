@@ -31,6 +31,18 @@ public sealed class GatewaySmokeTests(AspireTopologyFixture fixture)
         await RequireUnauthorizedAsync(wrongKey.DefaultRequestHeaders.Authorization);
         http.DefaultRequestHeaders.Authorization = validIdentity;
         await fixture.RequireAdministratorAuthorityAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await fixture.RequireProjectionWriterAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        using (var nonmemberHttp = new HttpClient { BaseAddress = fixture.GatewayEndpoint, Timeout = GatewaySmokeProbe.RequestTimeout })
+        using (var administratorHttp = new HttpClient { BaseAddress = fixture.GatewayEndpoint, Timeout = GatewaySmokeProbe.RequestTimeout })
+        {
+            nonmemberHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", fixture.CreateNonmemberIdentity());
+            administratorHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", fixture.CreateLiveIdentity());
+            await NativeAdministratorBoundary.RequireNonmemberRejectionAsync(
+                new EventStoreGatewayClient(nonmemberHttp, Options.Create(new EventStoreGatewayClientOptions())),
+                new EventStoreGatewayClient(administratorHttp, Options.Create(new EventStoreGatewayClientOptions())),
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Console.WriteLine("Native nonmember: signed hint rejected; persisted target vector-create absent before and after.");
+        }
         EventStoreQueryResult result = await GatewaySmokeProbe.ExecuteAsync(gateway, request, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.IsNotModified);

@@ -85,7 +85,11 @@ Development bootstrap, using the same fresh signing key as the Gateway. Before
 executing any vector, a bounded privileged `get-global-administrators` Query must
 return that persisted administrator. The independent smoke uses this same read barrier
 before its single final usability Query, because resource liveness can precede
-handler capability readiness. This infrastructure proof does not enroll
+handler capability readiness. The same smoke case also sends one valid signed nonmember
+administrator hint through the real owner command boundary. It requires the exact
+permission rejection and independently reads the target tenant as the persisted
+administrator before and after to prove it remains absent. Anonymous and forged
+requests still require 401; the selection remains 21 vectors plus one smoke case. This infrastructure proof does not enroll
 the excluded Query in the Catalog. The shared composition binds the finite actual
 SDK domain-service route inventory to EventStore's real sidecar identity and the
 required bound-bootstrap, stream-read and query routes to their actual peer
@@ -179,7 +183,12 @@ its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. The Parties
 adapter remains a separate compiled library. Its ordinary build uses
 `CopyLocalLockFileAssemblies=true` to materialize the genuine package runtime
 closure; every deployed SDK DLL must match its public archive before preparation
-is accepted. No server dependency edge or loader exception is added. The source
+is accepted. Online source, AppHost and client builds explicitly audit all dependencies with warnings as errors.
+Preparation requires low-level auditing without advisory exclusions or NU19xx warning suppression and retains the effective restore policy.
+`native-reader-audit.json` binds both NuGet content hashes and actual archive SHA512 values, plus reader input hashes, before both runners. Each private reader restores first,
+checks every package archive and extracted asset against that proof, then builds with
+`--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
+retains the exact audited graph. No server dependency edge or loader exception is added. The source
 catalog retains the pinned root-declared Builds revision with the root's exact
 Redis 3.4.31 override. A task-owned MSBuild post-import override also reaches SDK
 owner preparation and later Aspire child rebuilds. Preparation hashes both private

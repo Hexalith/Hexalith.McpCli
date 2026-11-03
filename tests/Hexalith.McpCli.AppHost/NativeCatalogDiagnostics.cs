@@ -40,7 +40,7 @@ internal static class NativeCatalogDiagnostics
     internal static string Read(string directory)
     {
         var parts = new List<string>();
-        foreach (string name in new[] { "build.log", "generation.log" })
+        foreach (string name in new[] { "restore.log", "build.log", "generation.log" })
         {
             string path = Path.Combine(directory, "reader", name);
             if (!File.Exists(path)) continue;
