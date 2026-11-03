@@ -96,10 +96,12 @@ elif name == 'git':
                 print('submodule.' + module + '.path references/Hexalith.' + module)
     elif args == ['rev-parse', '--show-toplevel']:
         print(root if mode == 'copied-source' else pathlib.Path.cwd())
+    elif args == ['rev-parse', 'HEAD:references/Hexalith.Builds']:
+        print('b' * 40)
     elif args[0] == 'rev-parse' and args[-1].endswith('^{commit}'):
         print('a' * 40)
     elif args == ['rev-parse', 'HEAD']:
-        print('a' * 40)
+        print(('b' if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'a') * 40)
     elif args == ['remote', 'get-url', 'origin']:
         print('https://github.com/Hexalith/' + pathlib.Path.cwd().name + '.git')
     elif args[0] == 'show':
@@ -262,6 +264,11 @@ class CiHooksTests(unittest.TestCase):
             (modules / f'{index}.vector.json').write_text(json.dumps({'operation': f'sample.operation-{index:02}'}))
         (self.root / 'global.json').write_text('{"sdk":{"version":"10.0.402","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
+        (self.root / 'Directory.Build.props').write_text(
+            '<Project><ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>')
+        builds = self.root / 'references/Hexalith.Builds'
+        (builds / 'Props').mkdir(parents=True)
+        (builds / 'Props/Directory.Packages.props').write_text('<Project><ItemGroup /></Project>')
         for module in ('EventStore', 'Tenants', 'Parties', 'Platform'):
             checkout = self.root / 'references' / ('Hexalith.' + module)
             project = checkout / 'src' / checkout.name / (checkout.name + '.csproj')
@@ -456,6 +463,16 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
             self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call)
             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
+        overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
+        self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
+        self.assertEqual(hashlib.sha256(overlay.read_bytes()).hexdigest(),
+                         prepared['sourcePackageCatalog']['overlaySha256'])
+        self.assertIn(str(self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'),
+                      overlay.read_text())
+        self.assertIn('Update="StackExchange.Redis" Version="3.4.31"', overlay.read_text())
+        for call in source_builds:
+            self.assertEqual(call[3] != source_builds[0][3],
+                             '-p:HexalithBuildPackageVersions1=' + str(overlay) in call)
         for call in source_builds:
             for package_pin in ('-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2'):
                 self.assertEqual('src/Hexalith.Parties/Hexalith.Parties.csproj' == call[3], package_pin in call)

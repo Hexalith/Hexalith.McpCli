@@ -415,6 +415,30 @@ def prepare(evidence: Path) -> None:
                      url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
             native_cohort.verify_archive(archive, package)
         receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
+        # Source checkouts do not initialize their own nested Builds gitlinks. The root-declared
+        # Builds catalog predates EventStore 4.0.4's Redis floor, so apply the same exact override
+        # as this root's Directory.Build.props only to the qualified source host builds.
+        builds_root = ROOT / 'references/Hexalith.Builds'
+        declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
+                                  10, evidence / 'builds-declared', cwd=ROOT)
+        actual_builds = bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / 'builds-actual', cwd=builds_root)
+        if actual_builds != declared_builds:
+            raise ValueError('The root-declared Builds catalog differs from its pinned gitlink.')
+        catalog = builds_root / 'Props/Directory.Packages.props'
+        own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
+        redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
+                 if item.get('Update') == 'StackExchange.Redis']
+        if not catalog.is_file() or redis != ['3.4.31']:
+            raise ValueError('The qualified source catalog requires the exact root Redis 3.4.31 override.')
+        overlay = private / 'source-runtime-packages.props'
+        project_xml = ET.Element('Project')
+        ET.SubElement(project_xml, 'Import', {'Project': str(catalog)})
+        ET.SubElement(ET.SubElement(project_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        ET.ElementTree(project_xml).write(overlay, encoding='utf-8', xml_declaration=True)
+        receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
+                                           'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
+                                           'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest()}
         for source in receipt['sources']:
             module = source['module']
             if module == 'Hexalith.Platform':
@@ -423,6 +447,8 @@ def prepare(evidence: Path) -> None:
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
             properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
+            if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
+                properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
             if module == 'Hexalith.Parties':
                 # Preserve the separately qualified Parties source dependency selections.
                 properties += ['-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2']
