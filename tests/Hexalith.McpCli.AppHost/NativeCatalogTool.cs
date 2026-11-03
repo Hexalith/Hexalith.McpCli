@@ -66,8 +66,10 @@ internal static class NativeCatalogTool
         xml.Save(project);
         File.Copy(Path.Combine(Path.GetDirectoryName(template)!, "Program.cs"), Path.Combine(build, "Program.cs"));
         string output = Path.Combine(build, "output");
+        // The qualified package archives and source identities were already verified by preparation.
+        // Keep this per-run reader build independent of transient advisory-feed availability.
         await RunAsync(build, "build.log", ["build", project, "-c", "Release", "-m:1", "--output", output,
-            "-p:GeneratePackageOnBuild=false", "-p:CentralPackageVersionsFileImported=true",
+            "-p:GeneratePackageOnBuild=false", "-p:NuGetAudit=false", "-p:CentralPackageVersionsFileImported=true",
             "-p:UseHexalithProjectReferences=false", "-p:HexalithEventStoreVersion=" + sdkVersion,
             "-p:PlatformCatalogBindings=" + bindings, "--nologo", "-warnaserror"], token).ConfigureAwait(false);
         using (JsonDocument assets = JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(build, "obj", "project.assets.json"), token).ConfigureAwait(false)))
