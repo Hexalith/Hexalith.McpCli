@@ -92,7 +92,21 @@ class NativeCohortTests(unittest.TestCase):
             self.select()
         mutations = [command for command, _ in self.calls if command[1] in ('checkout', 'fetch')]
         self.assertEqual([['git', 'fetch', '--no-recurse-submodules', '--depth=1', 'origin', 'a' * 40],
-                          ['git', 'checkout', '--detach', 'a' * 40]], mutations)
+                          ['git', 'checkout', '--no-recurse-submodules', '--detach', 'a' * 40]], mutations)
+
+    def test_competing_nested_catalog_refuses_before_selection_without_touching_it(self):
+        for marker in ('.git', 'Props/Directory.Packages.props'):
+            with self.subTest(marker=marker):
+                path = self.root / 'references/Hexalith.Tenants/references/Hexalith.Builds' / marker
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b'private nested input')
+                try:
+                    with self.assertRaisesRegex(ValueError, 'Competing nested Builds catalog'):
+                        self.select()
+                    self.assertEqual(b'private nested input', path.read_bytes())
+                    self.assertEqual([], self.calls)
+                finally:
+                    path.unlink()
 
     def test_missing_qualified_commit_refuses_before_any_checkout(self):
         self.heads['Hexalith.EventStore'] = 'b' * 40

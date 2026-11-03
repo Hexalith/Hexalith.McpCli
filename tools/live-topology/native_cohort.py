@@ -59,8 +59,17 @@ def verify_archive(path: Path, package: dict) -> dict:
     return dict(package, sha256=digest)
 
 
+def reject_nested_catalogs(root: Path) -> None:
+    """Refuse competing child catalogs without initializing, updating or deleting them."""
+    for module in MODULES:
+        nested = root / 'references' / module / 'references/Hexalith.Builds'
+        if nested.is_symlink() or (nested / '.git').exists() or (nested / 'Props/Directory.Packages.props').exists():
+            raise ValueError(f'Competing nested Builds catalog is present: {nested}; nested checkout was left unchanged.')
+
+
 def select_sources(root: Path, selection: dict, evidence: Path, bounded) -> list[dict]:
     """Validate every owned checkout first; only disposable hosted CI may change revisions."""
+    reject_nested_catalogs(root)
     declared = bounded(['git', 'config', '--file', str(root / '.gitmodules'), '--get-regexp', r'^submodule\..*\.path$'],
                        10, evidence / 'root-submodules')
     paths = {line.split(maxsplit=1)[1] for line in declared.splitlines()}
@@ -101,7 +110,7 @@ def select_sources(root: Path, selection: dict, evidence: Path, bounded) -> list
     for source in sources:
         checkout = root / source['path']
         if source['commit'] != source['selectedCommit']:
-            bounded(['git', 'checkout', '--detach', source['selectedCommit']], 30,
+            bounded(['git', 'checkout', '--no-recurse-submodules', '--detach', source['selectedCommit']], 30,
                     evidence / (source['module'] + '-select'), cwd=checkout)
         actual = bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / (source['module'] + '-selected'), cwd=checkout)
         status = bounded(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'],
