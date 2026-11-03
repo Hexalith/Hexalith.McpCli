@@ -546,7 +546,9 @@ def prepare(evidence: Path) -> None:
                 continue
             project = PACKAGE_GATEWAY if module == 'Hexalith.EventStore' else f'src/{module}/{module}.csproj'
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
+            # Source owners may downgrade audit warnings; this native qualification requires every warning to fail.
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
+                          '-p:WarningsNotAsErrors=',
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
@@ -569,7 +571,8 @@ def prepare(evidence: Path) -> None:
         # Rebuild the actual AppHost and tests in the same fresh public cache.
         bounded(['dotnet', 'build', PROJECT + '/Hexalith.McpCli.Integration.Tests.csproj',
                  '--configuration', 'Release', '-warnaserror', '-m:1', '-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
-                 '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true'], 300, evidence / 'native-tests-build')
+                 '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true', '-p:WarningsNotAsErrors='],
+                300, evidence / 'native-tests-build')
         receipt['gateway'] = gateway_package_provenance()
         audit_path = evidence / 'native-reader-audit.json'
         save(audit_path, reader_audit_provenance())

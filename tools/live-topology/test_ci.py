@@ -61,6 +61,13 @@ if name == 'dotnet':
     elif args[0] == 'build':
         if mode in ('build-failure', 'build-stdout-failure') and 'Tenants' in args[1]:
             print('named source build failure', file=sys.stdout if mode == 'build-stdout-failure' else sys.stderr); sys.exit(23)
+        if args[1] == 'src/Hexalith.Tenants/Hexalith.Tenants.csproj':
+            # The pinned Tenants props append these even when TreatWarningsAsErrors is true.
+            assets = pathlib.Path.cwd() / pathlib.Path(args[1]).parent / 'obj/project.assets.json'
+            document = json.loads(assets.read_text())
+            warnings = document['project']['restore']['warningProperties']
+            warnings['warnNotAsError'] = [] if '-p:WarningsNotAsErrors=' in args else ['NU1901', 'NU1902', 'NU1903', 'NU1904']
+            assets.write_text(json.dumps(document))
     elif args[0] == 'msbuild':
         print('4.0.3' if mode == 'wrong-package-cohort' else '4.0.4')
     sys.exit(0)
@@ -614,9 +621,12 @@ class CiHooksTests(unittest.TestCase):
         self.assertTrue(document['packages'])
         builds = [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build']
         self.assertTrue(all(all(value in call for value in ('-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
-                                                           '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true')) for call in builds))
+                                                           '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
+                                                           '-p:WarningsNotAsErrors=')) for call in builds))
         self.assertEqual(set(document['packages']), set(document['archives']))
         self.assertTrue(all(source['policy']['warnings']['allWarningsAsErrors'] for source in document['sources'].values()))
+        tenants = 'references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj'
+        self.assertEqual([], document['sources'][tenants]['policy']['warnings']['warnNotAsError'])
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-reader-audit.jsonl').read_text().splitlines()]
@@ -1114,7 +1124,7 @@ class CiHooksTests(unittest.TestCase):
         overlay = Path(receipt['privateDirectory']) / 'source-runtime-packages.props'
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
-                   '-p:TreatWarningsAsErrors=true -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
+                   '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4 '
                    f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
