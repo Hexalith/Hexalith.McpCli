@@ -8,6 +8,7 @@ using Hexalith.EventStore.ServiceDefaults;
 using Hexalith.EventStore.SignalRHub;
 using Hexalith.EventStore.ServiceDefaults.Authentication;
 using Hexalith.EventStore.Controllers;
+using Hexalith.McpCli.EventStoreGateway.TestHost;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 1_048_576);
@@ -21,6 +22,8 @@ builder.Configuration.Sources.Insert(0, new Microsoft.Extensions.Configuration.J
 });
 
 builder.AddServiceDefaults();
+// Retain the SDK refusal reason in this test-only host; the normal handler still emits the public 503.
+builder.Services.AddExceptionHandler<CatalogRefusalDiagnosticHandler>();
 builder.Services.AddDaprClient();
 builder.Services.AddHealthChecks()
     .AddEventStoreDaprHealthChecks();

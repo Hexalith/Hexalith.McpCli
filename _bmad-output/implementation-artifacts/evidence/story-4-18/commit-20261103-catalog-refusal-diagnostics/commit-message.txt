@@ -1,0 +1,1 @@
+test(topology): retain catalog refusal reasons in package gateway
