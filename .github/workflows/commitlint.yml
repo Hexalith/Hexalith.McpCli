@@ -16,6 +16,6 @@ permissions:
 
 jobs:
   commitlint:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@fc743715f7d0993392dee34b2ef9c4eb85cdd399
+    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@725754075e1d6369430a3adf94d46fb71e6eaf9e
     with:
       pull-request-title: ${{ github.event.pull_request.title }}
