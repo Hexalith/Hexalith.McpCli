@@ -1,10 +1,78 @@
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.Loader;
 
 namespace Hexalith.McpCli.Manifest.Tests;
 
-/// <summary>Exercises the actual integration fixture's refusals before infrastructure checks or launch.</summary>
+/// <summary>Protects actual fixture environment selection and refusals without starting infrastructure.</summary>
+[Collection("TopologyFixtureEnvironment")]
 public sealed class TopologyFixtureLaunchTests
 {
+    /// <summary>Both real fixture consumers select Development before preparation despite inherited production settings.</summary>
+    [Theory]
+    [InlineData("LiveVectorTests", "Production", "Staging")]
+    [InlineData("LiveVectorTests", "Staging", "Production")]
+    [InlineData("GatewaySmokeTests", "Production", "Staging")]
+    [InlineData("GatewaySmokeTests", "Staging", "Production")]
+    public async Task SharedFixtureArgumentsSelectExplicitDevelopment(string consumerName, string dotnetEnvironment, string aspnetEnvironment)
+    {
+        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
+        string assemblyPath = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.Integration.Tests",
+            "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
+        var context = new AssemblyLoadContext("fixture-environment-" + Guid.NewGuid().ToString("N"), isCollectible: true);
+        var resolver = new AssemblyDependencyResolver(assemblyPath);
+        context.Resolving += (_, name) => resolver.ResolveAssemblyToPath(name) is { } path ? context.LoadFromAssemblyPath(path) : null;
+        string? priorDotnet = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+        string? priorAspnet = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        try
+        {
+            Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", dotnetEnvironment);
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", aspnetEnvironment);
+            Assembly integration = context.LoadFromAssemblyPath(assemblyPath);
+            Type fixtureType = integration.GetType("Hexalith.McpCli.Integration.Tests.AspireTopologyFixture", throwOnError: true)!;
+            Type consumer = integration.GetType("Hexalith.McpCli.Integration.Tests." + consumerName, throwOnError: true)!;
+            Assert.Equal(fixtureType, Assert.Single(Assert.Single(consumer.GetConstructors()).GetParameters()).ParameterType);
+            Assert.Equal("AspireTopology", Assert.Single(consumer.CustomAttributes,
+                attribute => attribute.AttributeType.FullName == "Xunit.CollectionAttribute").ConstructorArguments[0].Value);
+            Type collection = integration.GetType("Hexalith.McpCli.Integration.Tests.AspireTopologyCollection", throwOnError: true)!;
+            Assert.Contains(collection.GetInterfaces(), item => item.IsGenericType
+                && item.GetGenericTypeDefinition().FullName == "Xunit.ICollectionFixture`1" && item.GenericTypeArguments[0] == fixtureType);
+            object fixture = Activator.CreateInstance(fixtureType)!;
+            string[] arguments = ((IEnumerable<string>)fixtureType.GetProperty("ExtraAppArgs", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .GetValue(fixture)!).ToArray();
+            Type testingBuilder = context.LoadFromAssemblyName(new AssemblyName("Aspire.Hosting.Testing"))
+                .GetType("Aspire.Hosting.Testing.DistributedApplicationTestingBuilder", throwOnError: true)!;
+            // Use the pinned factory's builder-only seam with actual AppHost metadata, without invoking its entry point.
+            MethodInfo create = Assert.Single(testingBuilder.GetMethods(BindingFlags.NonPublic | BindingFlags.Static),
+                method => method.Name == "Create" && method.GetParameters().Length == 3
+                    && method.GetParameters()[2].ParameterType == typeof(Assembly));
+            Delegate configure = Delegate.CreateDelegate(create.GetParameters()[1].ParameterType,
+                typeof(TopologyFixtureLaunchTests).GetMethod(nameof(PreserveBuilderOptions), BindingFlags.NonPublic | BindingFlags.Static)!);
+            Assembly appHost = context.LoadFromAssemblyPath(Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests",
+                "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0", "Hexalith.McpCli.AppHost.dll"));
+            using var reflection = context.EnterContextualReflection();
+            foreach (bool explicitDevelopment in new[] { false, true })
+            {
+                string[] selected = explicitDevelopment ? arguments : arguments.Where(argument => !argument.StartsWith("--environment=", StringComparison.Ordinal)).ToArray();
+                await using IAsyncDisposable builder = (IAsyncDisposable)create.Invoke(null, [selected, configure, appHost])!;
+                Type builderType = builder.GetType();
+                object environment = builderType.GetProperty("Environment")!.GetValue(builder)!;
+                Assert.Equal(explicitDevelopment ? "Development" : dotnetEnvironment,
+                    environment.GetType().GetProperty("EnvironmentName")!.GetValue(environment));
+                object execution = builderType.GetProperty("ExecutionContext")!.GetValue(builder)!;
+                Assert.Equal(true, execution.GetType().GetProperty("IsRunMode")!.GetValue(execution));
+            }
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", priorDotnet);
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", priorAspnet);
+            context.Unload();
+        }
+    }
+
+    private static void PreserveBuilderOptions(object applicationOptions, object hostOptions) { }
+
     /// <summary>Direct execution fails closed, and a missing root source retains its required path.</summary>
     [Theory]
     [InlineData(false)]
