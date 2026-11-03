@@ -17,6 +17,8 @@
     <!-- The isolated AppHost test fixture still uses the topology-owning 3.128.4 harness.
          Production EventStore dependencies remain on the coordinated 4.0.4 cohort. -->
     <PackageVersion Update="Hexalith.EventStore.Testing.Integration" Version="3.128.4" />
+    <!-- The pinned Builds catalog has 3.4.29; EventStore 4.0.4 requires 3.4.31. -->
+    <PackageVersion Update="StackExchange.Redis" Version="3.4.31" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
