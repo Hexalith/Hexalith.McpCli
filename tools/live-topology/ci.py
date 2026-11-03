@@ -294,10 +294,35 @@ def gateway_package_provenance() -> dict:
             'configurationSourceCommit': commit, 'configuration': configuration}
 
 
+def require_source_catalog(prepared: dict) -> Path:
+    """Recheck the pinned source catalog and exact private override before any child rebuild."""
+    private = Path(prepared['privateDirectory'])
+    catalog = ROOT / 'references/Hexalith.Builds/Props/Directory.Packages.props'
+    expected = prepared.get('sourcePackageCatalog', {})
+    declared = subprocess.check_output(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'], cwd=ROOT, timeout=10, text=True).strip()
+    checkout = catalog.parent.parent
+    actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=checkout, timeout=10, text=True).strip()
+    status = subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'], cwd=checkout, timeout=10, text=True).strip()
+    if actual != declared or actual != expected.get('buildsCommit') or status or checkout.is_symlink() \
+            or hashlib.sha256(catalog.read_bytes()).hexdigest() != expected.get('catalogSha256'):
+        raise ValueError('The prepared root-declared source package catalog identity or bytes changed.')
+    files = {'source-runtime-packages.props': 'overlaySha256', 'source-runtime-overrides.targets': 'overridesSha256'}
+    for name, key in files.items():
+        path = private / name
+        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
+            raise ValueError('The prepared private source package override changed or is missing.')
+    redis = [item.get('Version') for item in ET.parse(ROOT / 'Directory.Build.props').getroot().iter('PackageVersion')
+             if item.get('Update') == 'StackExchange.Redis']
+    if redis != ['3.4.31']:
+        raise ValueError('The prepared source package override differs from the exact root Redis pin.')
+    return private / 'source-runtime-overrides.targets'
+
+
 def require_prepared_provenance(prepared: dict) -> dict:
     selection = native_cohort.manifest(NATIVE_SELECTION)
     if prepared.get('selection') != selection:
         raise ValueError('The authenticated native source/package selection changed after preparation.')
+    require_source_catalog(prepared)
     for source in prepared['sources']:
         checkout = ROOT / source['path']
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=checkout, timeout=10, text=True).strip()
@@ -414,16 +439,16 @@ def prepare(evidence: Path) -> None:
             bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--connect-timeout', '15', '--max-time', '120',
                      url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
             native_cohort.verify_archive(archive, package)
-        receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
-        # Source checkouts do not initialize their own nested Builds gitlinks. The root-declared
-        # Builds catalog predates EventStore 4.0.4's Redis floor, so apply the same exact override
-        # as this root's Directory.Build.props only to the qualified source host builds.
+        # Source checkouts do not initialize their nested Builds gitlinks. Use the pinned root
+        # catalog and its explicit Redis floor for the qualified source host builds.
         builds_root = ROOT / 'references/Hexalith.Builds'
         declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
                                   10, evidence / 'builds-declared', cwd=ROOT)
         actual_builds = bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / 'builds-actual', cwd=builds_root)
-        if actual_builds != declared_builds:
-            raise ValueError('The root-declared Builds catalog differs from its pinned gitlink.')
+        builds_status = bounded(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'],
+                                10, evidence / 'builds-status', cwd=builds_root)
+        if actual_builds != declared_builds or builds_status or builds_root.is_symlink():
+            raise ValueError('The root-declared Builds catalog must match its pinned clean direct checkout.')
         catalog = builds_root / 'Props/Directory.Packages.props'
         own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
         redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
@@ -436,9 +461,19 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(ET.SubElement(project_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
         ET.ElementTree(project_xml).write(overlay, encoding='utf-8', xml_declaration=True)
+        # Standard MSBuild post-import configuration reaches SDK preparation and Aspire's
+        # later dotnet rebuilds without changing an owner's source or nested catalog.
+        overrides = private / 'source-runtime-overrides.targets'
+        overrides_xml = ET.Element('Project')
+        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
+        os.environ['CustomAfterMicrosoftCommonTargets'] = str(overrides)
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
                                            'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
-                                           'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest()}
+                                           'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest(),
+                                           'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest()}
+        receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
         for source in receipt['sources']:
             module = source['module']
             if module == 'Hexalith.Platform':
@@ -545,6 +580,7 @@ def run(evidence: Path) -> None:
         if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
             raise ValueError('Current successful preparation receipt is required.')
         gateway = require_prepared_provenance(prepared)
+        source_overrides = require_source_catalog(prepared)
         prepared_runtime = Path(prepared['runtime']).resolve()
         python = Path(prepared['python'])
         if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
@@ -562,6 +598,7 @@ def run(evidence: Path) -> None:
                 del environment[key]
         environment.update(MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
                            NUGET_PACKAGES=prepared['nugetPackages'],
+                           CustomAfterMicrosoftCommonTargets=str(source_overrides),
                            UseHexalithProjectReferences='false', UseNuGetDeps='true',
                            HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                            Topology__UsePackagedGateway='true',

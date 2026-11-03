@@ -175,8 +175,13 @@ qualified commit; local revisions and nested dependencies are never updated.
 All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties retains
-its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. Server build
-commands retain their separate 300-second bounds. The owned gateway's mandatory
+its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. The source
+catalog retains the pinned root-declared Builds revision with the root's exact
+Redis 3.4.31 override. A task-owned MSBuild post-import override also reaches SDK
+owner preparation and later Aspire child rebuilds. Preparation hashes both private
+catalog files and the pinned catalog; execution rejects source or file drift
+before vectors and again before smoke. Server build commands retain their
+separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
 `326bfef884543cdbcaf96de7f4c4ad378dbad6d7`, matching the public 4.0.4 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.

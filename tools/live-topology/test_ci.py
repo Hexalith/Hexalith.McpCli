@@ -52,7 +52,7 @@ if name == 'timeout':
     os.execvp(command[0], command)
 if name == 'dotnet':
     with (root / 'dotnet-package-caches.jsonl').open('a') as caches:
-        caches.write(json.dumps({'args': args, 'cache': os.environ.get('NUGET_PACKAGES')}) + '\n')
+        caches.write(json.dumps({'args': args, 'cache': os.environ.get('NUGET_PACKAGES'), 'overrides': os.environ.get('CustomAfterMicrosoftCommonTargets')}) + '\n')
     if args == ['--version']:
         if mode == 'missing-sdk':
             print('A compatible .NET SDK was not found.', file=sys.stderr); sys.exit(145)
@@ -101,13 +101,13 @@ elif name == 'git':
     elif args[0] == 'rev-parse' and args[-1].endswith('^{commit}'):
         print('a' * 40)
     elif args == ['rev-parse', 'HEAD']:
-        print(('b' if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'a') * 40)
+        print((('c' if mode == 'wrong-builds-source' else 'b') if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'd' if mode in ('wrong-builds-source', 'dirty-builds-source') else 'a') * 40)
     elif args == ['remote', 'get-url', 'origin']:
         print('https://github.com/Hexalith/' + pathlib.Path.cwd().name + '.git')
     elif args[0] == 'show':
         sys.stdout.buffer.write((pathlib.Path.cwd() / args[1].split(':', 1)[1]).read_bytes())
     elif args == ['status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all']:
-        if mode == 'dirty-source': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
+        if mode == 'dirty-source' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
 elif name == 'sudo':
     if args != ['-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0']:
         sys.exit(89)
@@ -139,6 +139,8 @@ with (root / 'runner-environment.jsonl').open('a') as log:
 with (root / 'runner-gateway-environment.jsonl').open('a') as log:
     log.write(json.dumps({'profile': os.environ.get('Topology__UsePackagedGateway'),
                          'sourceCommit': os.environ.get('MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT')}) + '\n')
+with (root / 'runner-source-overrides.jsonl').open('a') as log:
+    log.write(json.dumps(os.environ.get('CustomAfterMicrosoftCommonTargets')) + '\n')
 def owned(name, base=runtime):
     path = base / 'runs' / name; path.mkdir(parents=True)
     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
@@ -489,7 +491,7 @@ class CiHooksTests(unittest.TestCase):
             self.assertEqual('', source['status'])
         for arguments in (['rev-parse', 'HEAD'], ['status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all']):
             self.assertEqual([str(checkout) for checkout in checkouts],
-                             [call[1] for call in calls if call[0] == 'git' and call[2:] == arguments][:4])
+                             [call[1] for call in calls if call[0] == 'git' and call[2:] == arguments and call[1] in {str(checkout) for checkout in checkouts}][:4])
         tools = prepared['tools']
         self.assertEqual({'aspire', 'dapr', 'dotnet'}, set(tools['executables']))
         for name, executable in tools['executables'].items():
@@ -535,6 +537,48 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(8, len(builds))
         self.assertEqual({str(cache)}, {call['cache'] for call in builds})
         self.assertEqual(0, self.invoke('run-ci.sh').returncode)
+
+    def test_source_catalog_override_reaches_all_builds_and_both_isolated_runners(self):
+        self.env['CustomAfterMicrosoftCommonTargets'] = str(self.root / 'untrusted.targets')
+        prepared = self.prepare()
+        override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
+        self.assertEqual(hashlib.sha256(override.read_bytes()).hexdigest(), prepared['sourcePackageCatalog']['overridesSha256'])
+        calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
+        builds = [call for call in calls if call['args'][0] in ('build', 'msbuild')]
+        self.assertEqual({str(override)}, {call['overrides'] for call in builds})
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        inherited = [json.loads(line) for line in (self.root / 'runner-source-overrides.jsonl').read_text().splitlines()]
+        self.assertEqual([str(override)] * 2, inherited)
+
+    def test_source_catalog_and_private_override_drift_refuse_before_live(self):
+        prepared = self.prepare()
+        private = Path(prepared['privateDirectory'])
+        paths = [self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props',
+                 private / 'source-runtime-packages.props', private / 'source-runtime-overrides.targets']
+        for path in paths:
+            with self.subTest(path=path.name):
+                original = path.read_bytes()
+                try:
+                    path.write_bytes(b'changed source build configuration')
+                    result = self.invoke('run-ci.sh')
+                    self.assertNotEqual(0, result.returncode)
+                    self.assertIn('source package', result.stderr)
+                    self.assertIn('changed', result.stderr)
+                    self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                finally:
+                    path.write_bytes(original)
+
+    def test_source_catalog_checkout_mismatch_or_owned_dirt_refuses_before_selection(self):
+        self.env.update(GITHUB_ACTIONS='true', RUNNER_ENVIRONMENT='github-hosted')
+        for mode in ('wrong-builds-source', 'dirty-builds-source'):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                result = self.invoke('prepare-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn('pinned clean direct checkout', result.stderr)
+                self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+                self.assertFalse(any(call[0] == 'git' and call[2] in ('fetch', 'checkout') for call in self.calls()))
 
     def test_published_gateway_profile_binds_both_vector_and_independent_smoke(self):
         self.prepare()
