@@ -157,10 +157,25 @@ if (inspectComposition)
         Dictionary<string, object> sidecarEnvironment = await EnvironmentAsync(sidecar.Sidecar);
         string? appToken = await ValueAsync(appEnvironment.GetValueOrDefault("APP_API_TOKEN"));
         string? sidecarToken = await ValueAsync(sidecarEnvironment.GetValueOrDefault("APP_API_TOKEN"));
+        IProjectMetadata metadata = resource.Resource.GetProjectMetadata();
+#pragma warning disable ASPIREEXTENSION001
+        ProjectLaunchConfiguration launch = await resource.Resource.CreateLaunchConfigurationAsync(ExecutableLaunchMode.NoDebug)
+            .ConfigureAwait(false) as ProjectLaunchConfiguration
+            ?? throw new InvalidOperationException("The inspected resource has no actual .NET project launch configuration.");
+#pragma warning restore ASPIREEXTENSION001
         snapshots.Add(new
         {
             name = resource.Resource.Name,
-            projectPath = resource.Resource.Annotations.OfType<IProjectMetadata>().Single().ProjectPath,
+            projectPath = metadata.ProjectPath,
+            launch = new
+            {
+                projectPath = launch.ProjectPath,
+                buildConfiguration = launch.BuildConfiguration,
+                metadataSuppressBuild = metadata.SuppressBuild,
+                suppressBuild = launch.SuppressBuild,
+                hasUnsupportedLaunchArgumentOverride = resource.Resource.Annotations.Any(annotation =>
+                    annotation.GetType().Name is "LaunchToolArgsCallbackAnnotation" or "ProjectLaunchArgsOverrideAnnotation"),
+            },
             aspnetcoreEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_ENVIRONMENT")),
             dotnetEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("DOTNET_ENVIRONMENT")),
             endpoints = resource.Resource.Annotations.OfType<EndpointAnnotation>()
@@ -200,6 +215,8 @@ if (inspectComposition)
     Console.WriteLine(JsonSerializer.Serialize(new
     {
         appHostDirectory = builder.AppHostDirectory,
+        environment = builder.Environment.EnvironmentName,
+        isRunMode = builder.ExecutionContext.IsRunMode,
         resources = snapshots,
         appChannelTokenParameters = builder.Resources.OfType<ParameterResource>()
             .Where(parameter => parameter.Name.EndsWith("-app-api-token", StringComparison.Ordinal))

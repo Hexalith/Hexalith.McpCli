@@ -295,12 +295,14 @@ public sealed class TopologyLaunchTests : IDisposable
         available.Stop();
         var result = await InvokeAsync(assembly, signingKey, "[]", requestedPort: gatewayPort, inspect: true,
             extraArguments: ["--Dapr:PlacementHostAddress=127.0.0.1:6050", "--Dapr:SchedulerHostAddress=127.0.0.1:6060",
-                $"--Topology:UsePackagedGateway={usePackagedGateway}"]);
+                $"--Topology:UsePackagedGateway={usePackagedGateway}", "--environment=Development"]);
         Assert.True(result.ExitCode == 0, result.Stderr + result.Stdout);
         Assert.Equal(string.Empty, result.Stderr);
         Assert.DoesNotContain(signingKey, result.Stdout);
         using JsonDocument document = JsonDocument.Parse(result.Stdout);
         string host = document.RootElement.GetProperty("appHostDirectory").GetString()!;
+        Assert.Equal("Development", document.RootElement.GetProperty("environment").GetString());
+        Assert.True(document.RootElement.GetProperty("isRunMode").GetBoolean());
         Assert.Equal(new[] { "eventstore-app-api-token", "parties-app-api-token", "tenants-app-api-token" },
             document.RootElement.GetProperty("appChannelTokenParameters").EnumerateArray().Select(parameter => parameter.GetString()));
         JsonElement[] resources = document.RootElement.GetProperty("resources").EnumerateArray().ToArray();
@@ -349,6 +351,16 @@ public sealed class TopologyLaunchTests : IDisposable
             };
             Assert.Equal(usePackagedGateway && module == "Hexalith.EventStore" ? packageHost
                 : Path.Combine(_root, "references", module, "src", module, module + ".csproj"), resource.GetProperty("projectPath").GetString());
+            if (module == "Hexalith.Tenants")
+            {
+                JsonElement launch = resource.GetProperty("launch");
+                Assert.Equal(resource.GetProperty("projectPath").GetString(), launch.GetProperty("projectPath").GetString());
+                Assert.Equal(".csproj", Path.GetExtension(launch.GetProperty("projectPath").GetString()));
+                Assert.True(File.Exists(launch.GetProperty("projectPath").GetString()));
+                Assert.False(launch.GetProperty("metadataSuppressBuild").GetBoolean());
+                Assert.False(launch.GetProperty("suppressBuild").GetBoolean());
+                Assert.False(launch.GetProperty("hasUnsupportedLaunchArgumentOverride").GetBoolean());
+            }
             JsonElement authentication = resource.GetProperty("authentication");
             Assert.Equal(string.Empty, authentication.GetProperty("authority").GetString());
             Assert.Equal("mcpcli-live-tests", authentication.GetProperty("issuer").GetString());
