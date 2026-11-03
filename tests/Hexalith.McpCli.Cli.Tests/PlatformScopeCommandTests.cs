@@ -60,6 +60,7 @@ public sealed class PlatformScopeCommandTests
         using JsonDocument document = JsonDocument.Parse(output);
         document.RootElement.GetProperty("tenant").GetString().ShouldBe("platform:routing");
         document.RootElement.GetProperty("status").GetString().ShouldBe("accepted");
+        harness.Calls.ShouldBe(1);
         JsonElement request = harness.AssertCommandRequest();
         request.GetProperty("tenant").GetString().ShouldBe("platform:routing");
         request.GetProperty("domain").GetString().ShouldBe("routing");

@@ -1,0 +1,1 @@
+test(topology): bind source failure diagnostics to catalog overlay

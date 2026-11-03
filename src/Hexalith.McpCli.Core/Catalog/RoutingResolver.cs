@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Hexalith.EventStore.Contracts.Commands;
-using Hexalith.EventStore.Contracts.Identity;
 using Hexalith.EventStore.Contracts.Queries;
 using Hexalith.McpCli.Abstractions;
 
@@ -120,7 +119,18 @@ internal static partial class RoutingResolver
         CatalogDiagnostic Warning(string category, string message) => new(typeName, category, "warning", message);
     }
 
-    internal static bool IsPlatformScope(string? value) => TenantCanonicalizer.IsPlatformScope(value);
+    internal static bool IsPlatformScope(string? value)
+    {
+        if (value is null || !value.StartsWith("platform:", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        ReadOnlySpan<char> suffix = value.AsSpan("platform:".Length);
+        return suffix.Length > 0 && IsAsciiLowerOrDigit(suffix[0]) && IsAsciiLowerOrDigit(suffix[^1])
+            && !suffix.Contains("--", StringComparison.Ordinal)
+            && suffix.ToArray().All(character => IsAsciiLowerOrDigit(character) || character == '-');
+    }
 
     internal static bool IsTenantDomain(string? value) => value is { Length: >= 1 and <= 64 }
         && IsAsciiLowerOrDigit(value[0])

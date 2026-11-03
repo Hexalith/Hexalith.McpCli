@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ctypes
 import ctypes.util
+import base64
 import hashlib
 import json
 import os
@@ -21,13 +22,16 @@ import uuid
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import native_cohort
+
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
-MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties')
-# This CI lane explicitly qualifies the published SDK cohort. Native source catalog
-# activation remains a separate composition; never mix its gateway with package hosts.
-EVENTSTORE_COHORT = '3.128.4'
+MODULES = native_cohort.MODULES
+# The legacy Testing.Integration harness remains independent of these launched SDK hosts.
+EVENTSTORE_COHORT = native_cohort.COHORT
+NATIVE_SELECTION = ROOT / 'tools/live-topology/native-runtime.json'
 PACKAGE_GATEWAY = 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj'
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
@@ -182,8 +186,8 @@ def require_contract() -> None:
         raise ValueError('TEST_PLATFORM must be microsoft-testing-platform.')
 
 
-def restored_cohort(project: Path, required: str) -> dict:
-    """Verify the restored graph and deployed EventStore assemblies against their archives."""
+def restored_cohort(project: Path, required: str, *, deployed_required: bool = True) -> dict:
+    """Verify restored EventStore archives and any assemblies copied to the project output."""
     assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
     libraries = {name: item for name, item in assets['libraries'].items()
                  if name.lower().startswith('hexalith.eventstore.')}
@@ -215,6 +219,7 @@ def restored_cohort(project: Path, required: str) -> dict:
             if metadata is None or metadata.findtext('{*}id') != name or metadata.findtext('{*}version') != version \
                     or not re.fullmatch('[0-9a-f]{40}', commit):
                 raise ValueError(f'Package archive must identify its exact published identity and source: {identity}.')
+            native_cohort.require_restored_archive(archive_path, native_cohort.manifest(NATIVE_SELECTION), identity)
             binaries = {}
             for asset in sorted(target[identity].get('runtime', {})):
                 if not asset.lower().endswith('.dll'):
@@ -223,24 +228,33 @@ def restored_cohort(project: Path, required: str) -> dict:
                 if (folder / asset).read_bytes() != expected:
                     raise ValueError(f'Extracted package binary differs from its archive: {identity}/{asset}.')
                 deployed = output / Path(asset).name
-                if deployed.read_bytes() != expected:
+                if deployed.is_file() and deployed.read_bytes() != expected:
                     raise ValueError(f'Deployed EventStore binary differs from its archive: {deployed}.')
+                if deployed_required and not deployed.is_file():
+                    raise ValueError(f'Launched host is missing its restored EventStore binary: {deployed}.')
                 binaries[Path(asset).name] = hashlib.sha256(expected).hexdigest()
             packages[identity] = {'sourceCommit': commit, 'sha256': hashlib.sha256(archive_path.read_bytes()).hexdigest(),
                                   'binaries': binaries}
     owned = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
              for path in sorted(output.iterdir()) if path.is_file() and path.suffix in ('.dll', '.json')}
-    return {'packages': packages, 'output': owned}
+    return {'packages': packages, 'output': owned, 'deploymentRequired': deployed_required}
 
 
 def gateway_package_provenance() -> dict:
     """Bind every launched host, the restored archives and actual configuration to one receipt."""
+    selection = native_cohort.manifest(NATIVE_SELECTION)
     gateway = restored_cohort(ROOT / PACKAGE_GATEWAY, 'Hexalith.EventStore.Gateway')
     identity = 'Hexalith.EventStore.Gateway/' + EVENTSTORE_COHORT
     package = gateway['packages'][identity]
     domains = {module: restored_cohort(ROOT / 'references' / module / 'src' / module / (module + '.csproj'),
                                       'Hexalith.EventStore.DomainService')
                for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
+    adapter = restored_cohort(ROOT / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+                              'Hexalith.EventStore.DomainService', deployed_required=True)
+    composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
+                                                      selection, 'Hexalith.Tenants.Aspire/7.0.0')
+    client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
+                                                 selection, 'Hexalith.Tenants.Contracts/7.0.0')
     source = ROOT / 'references/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
     manifest = host / 'Configuration/provenance.json'
@@ -253,7 +267,7 @@ def gateway_package_provenance() -> dict:
     if configuration_source.get('profile') != 'published' \
             or configuration_source.get('eventStoreVersion') != EVENTSTORE_COHORT \
             or configuration_source.get('sourceRepository') != 'https://github.com/Hexalith/Hexalith.EventStore.git' \
-            or not re.fullmatch('[0-9a-f]{40}', commit) \
+            or commit != selection['sources']['Hexalith.EventStore']['commit'] \
             or set(configuration_source.get('files', {})) != set(expected_files):
         raise ValueError('The package configuration snapshot must declare its exact published cohort and native source identity.')
     for relative, original in expected_files.items():
@@ -278,14 +292,122 @@ def gateway_package_provenance() -> dict:
         paths.extend(sorted((directory / 'bin/Release/net10.0').glob('appsettings*.json')))
     configuration = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
     return {'profile': 'published', 'version': EVENTSTORE_COHORT, 'sourceCommit': package['sourceCommit'],
-            'sha256': package['sha256'], 'gatewayHost': gateway, 'domainHosts': domains,
+            'sha256': package['sha256'], 'gatewayHost': gateway, 'domainHosts': domains, 'partiesAdapter': adapter,
+            'compositionHost': composition, 'clientHost': client,
             'configurationSourceCommit': commit, 'configuration': configuration}
 
 
+def require_source_catalog(prepared: dict) -> Path:
+    """Recheck the pinned source catalog and exact private override before any child rebuild."""
+    native_cohort.reject_nested_catalogs(ROOT)
+    private = Path(prepared['privateDirectory'])
+    catalog = ROOT / 'references/Hexalith.Builds/Props/Directory.Packages.props'
+    expected = prepared.get('sourcePackageCatalog', {})
+    declared = subprocess.check_output(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'], cwd=ROOT, timeout=10, text=True).strip()
+    checkout = catalog.parent.parent
+    actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=checkout, timeout=10, text=True).strip()
+    status = subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'], cwd=checkout, timeout=10, text=True).strip()
+    if actual != declared or actual != expected.get('buildsCommit') or status or checkout.is_symlink() \
+            or hashlib.sha256(catalog.read_bytes()).hexdigest() != expected.get('catalogSha256'):
+        raise ValueError('The prepared root-declared source package catalog identity or bytes changed.')
+    files = {'source-runtime-packages.props': 'overlaySha256', 'source-runtime-overrides.targets': 'overridesSha256'}
+    for name, key in files.items():
+        path = private / name
+        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
+            raise ValueError('The prepared private source package override changed or is missing.')
+    redis = [item.get('Version') for item in ET.parse(ROOT / 'Directory.Build.props').getroot().iter('PackageVersion')
+             if item.get('Update') == 'StackExchange.Redis']
+    if redis != ['3.4.31']:
+        raise ValueError('The prepared source package override differs from the exact root Redis pin.')
+    return private / 'source-runtime-overrides.targets'
+
+
+def reader_audit_provenance() -> dict:
+    """Retain exact package-byte coverage from successful online all-dependency audits."""
+    projects = [PACKAGE_GATEWAY, 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
+                'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
+                *(f'references/Hexalith.{name}/src/Hexalith.{name}/Hexalith.{name}.csproj' for name in ('Tenants', 'Parties')),
+                'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj']
+    packages, archives, sources = {}, {}, {}
+    for relative in projects:
+        assets = json.loads((ROOT / relative).parent.joinpath('obj/project.assets.json').read_text())
+        audit = assets.get('project', {}).get('restore', {}).get('restoreAuditProperties', {})
+        warning_policy = assets.get('project', {}).get('restore', {}).get('warningProperties', {})
+        dependency_warnings = {framework + '/' + name: item.get('noWarn', [])
+                               for framework, data in assets.get('project', {}).get('frameworks', {}).items()
+                               for name, item in data.get('dependencies', {}).items() if item.get('noWarn')}
+        suppressed = [*warning_policy.get('noWarn', []), *warning_policy.get('warnNotAsError', []),
+                      *(code for codes in dependency_warnings.values() for code in codes)]
+        if any(audit.get(name) != value for name, value in
+               {'enableAudit': 'true', 'auditLevel': 'low', 'auditMode': 'all'}.items()) \
+                or audit.get('suppressedAdvisories') or warning_policy.get('allWarningsAsErrors') is not True \
+                or any(re.fullmatch(r'NU19\d{2}', code, re.IGNORECASE) for code in suppressed) \
+                or any(item.get('level', '').lower() in ('warning', 'error') for item in assets.get('logs', [])):
+            raise ValueError('The native reader requires unsuppressed low-level online all-dependency vulnerability audits with all warnings as errors.')
+        graph = {}
+        for identity, item in assets['libraries'].items():
+            if item.get('type') != 'package':
+                continue
+            digest = item.get('sha512', '')
+            if not re.fullmatch(r'[A-Za-z0-9+/]{86}==', digest) or identity in packages and packages[identity] != digest:
+                raise ValueError('The audited package graph has missing or disagreeing package content hashes.')
+            filename = identity.lower().replace('/', '.') + '.nupkg'
+            archive = next((Path(folder) / identity.lower() / filename for folder in assets['packageFolders']
+                            if (Path(folder) / identity.lower() / filename).is_file()), None)
+            if archive is None:
+                raise ValueError('An online audited package archive is missing: ' + identity)
+            archive_hash = base64.b64encode(hashlib.sha512(archive.read_bytes()).digest()).decode()
+            if identity in archives and archives[identity] != archive_hash:
+                raise ValueError('Online audited archive bytes disagree: ' + identity)
+            archives[identity] = archive_hash
+            graph[identity] = packages[identity] = digest
+        if not graph:
+            raise ValueError('The online audited package graph is empty.')
+        sources[relative] = {'packages': graph, 'policy': {'audit': audit, 'warnings': warning_policy,
+                                                         'dependencyNoWarn': dependency_warnings}}
+    inputs = ['global.json', 'Directory.Build.props', 'Directory.Packages.props',
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj',
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs']
+    return {'schemaVersion': 1, 'result': 'audited', 'sdkVersion': EVENTSTORE_COHORT,
+            'sources': sources, 'packages': packages, 'archives': archives,
+            'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in inputs}}
+
+
+def require_reader_audit(prepared: dict) -> Path:
+    """Refuse drift in the retained audit proof or its current online audited graphs."""
+    expected = prepared.get('readerAudit', {})
+    path = Path(expected.get('path', ''))
+    if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get('sha256') \
+            or json.loads(path.read_text()) != reader_audit_provenance():
+        raise ValueError('The native reader online audit proof changed or is missing.')
+    return path
+
+
 def require_prepared_provenance(prepared: dict) -> dict:
+    selection = native_cohort.manifest(NATIVE_SELECTION)
+    if prepared.get('selection') != selection:
+        raise ValueError('The authenticated native source/package selection changed after preparation.')
+    require_source_catalog(prepared)
+    for source in prepared['sources']:
+        checkout = ROOT / source['path']
+        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=checkout, timeout=10, text=True).strip()
+        status = subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'], cwd=checkout, timeout=10, text=True).strip()
+        remote = subprocess.check_output(['git', 'remote', 'get-url', 'origin'], cwd=checkout, timeout=10, text=True).strip()
+        if commit != source['selectedCommit'] or status or remote != source['repository']:
+            raise ValueError('The prepared qualified source identity or clean owned files changed before execution.')
     actual = gateway_package_provenance()
     if prepared.get('gateway') != actual:
-        raise ValueError('The prepared gateway package identity or bytes changed before isolated execution.')
+        def first_difference(expected: object, observed: object, path: str = 'gateway') -> str:
+            if isinstance(expected, dict) and isinstance(observed, dict):
+                for key in sorted(expected.keys() | observed.keys()):
+                    if key not in expected or key not in observed:
+                        return path + '.' + key
+                    if expected[key] != observed[key]:
+                        return first_difference(expected[key], observed[key], path + '.' + key)
+            return path
+        changed = first_difference(prepared.get('gateway'), actual)
+        raise ValueError('The prepared gateway package identity or bytes changed before isolated execution: ' + changed + '.')
+    require_reader_audit(prepared)
     return actual
 
 
@@ -376,31 +498,72 @@ def prepare(evidence: Path) -> None:
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             binary = Path.home() / '.aspire/bundle' / relative
             tools[relative] = {'path': str(binary), 'sha256': hashlib.sha256(binary.read_bytes()).hexdigest()}
-        # Check every checkout before building any source. Never initialize nested dependencies.
-        declared = bounded(['git', 'config', '--file', str(ROOT / '.gitmodules'), '--get-regexp', r'^submodule\..*\.path$'],
-                           10, evidence / 'root-submodules')
-        paths = {line.split(maxsplit=1)[1] for line in declared.splitlines()}
-        for module in MODULES:
-            relative = 'references/' + module
-            checkout = ROOT / relative
-            project = checkout / 'src' / module / (module + '.csproj')
-            if relative not in paths or checkout.is_symlink() or not (checkout / '.git').exists() or not project.is_file():
-                raise RuntimeError(f'Missing declared direct root source prerequisite: {project}')
-            actual = bounded(['git', 'rev-parse', '--show-toplevel'], 10, evidence / (module + '-root'), cwd=checkout)
-            if Path(actual).resolve() != checkout.resolve():
-                raise RuntimeError(f'{checkout} is not its own Git working tree.')
-            source = {'module': module, 'path': relative,
-                      'commit': bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / (module + '-commit'), cwd=checkout),
-                      'status': bounded(['git', 'status', '--porcelain', '--untracked-files=normal'], 10, evidence / (module + '-status'), cwd=checkout)}
-            receipt['sources'].append(source)
+        selection = native_cohort.manifest(NATIVE_SELECTION)
+        receipt['selection'] = selection
+        # Never restore an unpublished local candidate: all subprocesses share one new cache.
+        package_cache = private / 'packages'
+        package_cache.mkdir()
+        os.environ['NUGET_PACKAGES'] = str(package_cache)
+        receipt['nugetPackages'] = str(package_cache)
+        archives = private / 'public-archives'
+        archives.mkdir()
+        for package in selection['packages']:
+            name = package['id'].lower() + '.' + package['version'] + '.nupkg'
+            archive = archives / name
+            url = f'https://api.nuget.org/v3-flatcontainer/{package["id"].lower()}/{package["version"]}/{name}'
+            bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--connect-timeout', '15', '--max-time', '120',
+                     url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
+            native_cohort.verify_archive(archive, package)
+        # Source checkouts do not initialize their nested Builds gitlinks. Use the pinned root
+        # catalog and its explicit Redis floor for the qualified source host builds.
+        builds_root = ROOT / 'references/Hexalith.Builds'
+        declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
+                                  10, evidence / 'builds-declared', cwd=ROOT)
+        actual_builds = bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / 'builds-actual', cwd=builds_root)
+        builds_status = bounded(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'],
+                                10, evidence / 'builds-status', cwd=builds_root)
+        if actual_builds != declared_builds or builds_status or builds_root.is_symlink():
+            raise ValueError('The root-declared Builds catalog must match its pinned clean direct checkout.')
+        catalog = builds_root / 'Props/Directory.Packages.props'
+        own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
+        redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
+                 if item.get('Update') == 'StackExchange.Redis']
+        if not catalog.is_file() or redis != ['3.4.31']:
+            raise ValueError('The qualified source catalog requires the exact root Redis 3.4.31 override.')
+        overlay = private / 'source-runtime-packages.props'
+        project_xml = ET.Element('Project')
+        ET.SubElement(project_xml, 'Import', {'Project': str(catalog)})
+        ET.SubElement(ET.SubElement(project_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        ET.ElementTree(project_xml).write(overlay, encoding='utf-8', xml_declaration=True)
+        # Standard MSBuild post-import configuration reaches SDK preparation and Aspire's
+        # later dotnet rebuilds without changing an owner's source or nested catalog.
+        overrides = private / 'source-runtime-overrides.targets'
+        overrides_xml = ET.Element('Project')
+        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
+        os.environ['CustomAfterMicrosoftCommonTargets'] = str(overrides)
+        receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
+                                           'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
+                                           'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest(),
+                                           'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest()}
+        receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
         for source in receipt['sources']:
             module = source['module']
+            if module == 'Hexalith.Platform':
+                continue
             project = PACKAGE_GATEWAY if module == 'Hexalith.EventStore' else f'src/{module}/{module}.csproj'
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
-            properties = ['-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
+            # Source owners may downgrade audit warnings; this native qualification requires every warning to fail.
+            properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
+                          '-p:WarningsNotAsErrors=',
+                          '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
+            if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
+                properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
             if module == 'Hexalith.Parties':
-                # Keep the complete frozen peer cohort compatible with its approved Gateway.
+                # Preserve the separately qualified Parties source dependency selections.
                 properties += ['-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2']
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
@@ -410,7 +573,19 @@ def prepare(evidence: Path) -> None:
             command = ['dotnet', 'build', project, '--configuration', 'Release', '-warnaserror', '-m:1',
                        *properties]
             bounded(command, 300, evidence / (module + '-build'), cwd=working)
+            if module == 'Hexalith.Parties':
+                bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+                         '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
+                        300, evidence / 'parties-adapter-build', cwd=working)
+        # Rebuild the actual AppHost and tests in the same fresh public cache.
+        bounded(['dotnet', 'build', PROJECT + '/Hexalith.McpCli.Integration.Tests.csproj',
+                 '--configuration', 'Release', '-warnaserror', '-m:1', '-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
+                 '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true', '-p:WarningsNotAsErrors='],
+                300, evidence / 'native-tests-build')
         receipt['gateway'] = gateway_package_provenance()
+        audit_path = evidence / 'native-reader-audit.json'
+        save(audit_path, reader_audit_provenance())
+        receipt['readerAudit'] = {'path': str(audit_path.resolve()), 'sha256': hashlib.sha256(audit_path.read_bytes()).hexdigest()}
         python = private / 'venv/bin/python'
         bounded([sys.executable, '-m', 'venv', str(private / 'venv')], 60, evidence / 'python-venv')
         bounded([str(python), '-m', 'pip', 'install', '--disable-pip-version-check', '-r', str(ROOT / 'tools/conformance-vectors/v1/requirements.txt')],
@@ -464,7 +639,7 @@ def require_owned(path: Path, runtime: Path) -> dict:
 def copy_diagnostics(runtime: Path, output: Path) -> None:
     """Copy an explicit allowlist, excluding state stores, issuer credentials and keys."""
     names = {'result.json', 'outside.json', 'command.stdout.txt', 'command.stderr.txt',
-             'sentry.log', 'redis.log', 'placement.log', 'scheduler.log', 'initial-redis-backup.json'}
+             'sentry.log', 'redis.log', 'placement.log', 'scheduler.log', 'initial-redis-backup.json', 'native-catalog.json'}
     for run in sorted((runtime / 'runs').glob('*')):
         if run.is_dir() and not run.is_symlink():
             for name in names:
@@ -488,6 +663,8 @@ def run(evidence: Path) -> None:
         if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
             raise ValueError('Current successful preparation receipt is required.')
         gateway = require_prepared_provenance(prepared)
+        source_overrides = require_source_catalog(prepared)
+        reader_audit = require_reader_audit(prepared)
         prepared_runtime = Path(prepared['runtime']).resolve()
         python = Path(prepared['python'])
         if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
@@ -504,8 +681,14 @@ def run(evidence: Path) -> None:
             if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
                 del environment[key]
         environment.update(MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
+                           NUGET_PACKAGES=prepared['nugetPackages'],
+                           CustomAfterMicrosoftCommonTargets=str(source_overrides),
+                           UseHexalithProjectReferences='false', UseNuGetDeps='true',
+                           HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                            Topology__UsePackagedGateway='true',
                            MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT=gateway['sourceCommit'],
+                           MCPCLI_NATIVE_READER_AUDIT_PATH=str(reader_audit),
+                           MCPCLI_NATIVE_READER_AUDIT_SHA256=prepared['readerAudit']['sha256'],
                            PATH=str(python.parent) + os.pathsep + prepared['path'])
         generation = evidence / report['runId']
         generation.mkdir()

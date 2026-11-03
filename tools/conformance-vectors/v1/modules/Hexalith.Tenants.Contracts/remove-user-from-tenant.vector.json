@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.remove-user-from-tenant",
   "kind": "command",
@@ -16,14 +16,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-removal",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Role": "TenantReader"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-removal",
           "commandType": "add-user-to-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -142,14 +142,14 @@
       "UserId": "vector-user-3@example.com"
     },
     "envelope": {
-      "tenant": "system"
+      "tenant": "platform:tenants"
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/commands",
       "body": {
         "messageId": "<generated>",
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "domain": "tenants",
         "aggregateId": "vector-removal",
         "commandType": "remove-user-from-tenant",
@@ -186,7 +186,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "platform:tenants"
       },
       {
         "path": "/aggregateId",
@@ -203,13 +203,13 @@
         "TenantId": "vector-removal"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "vector-removal"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-removal",
           "domain": "tenants",
           "aggregateId": "vector-removal",
           "queryType": "get-tenant-users",
@@ -242,7 +242,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-removal"
         },
         {
           "path": "/document/items",

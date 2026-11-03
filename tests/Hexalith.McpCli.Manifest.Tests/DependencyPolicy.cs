@@ -20,6 +20,9 @@ internal sealed record DependencyPolicy
     /// <summary>Gets the enrolled module pins.</summary>
     public Dictionary<string, string> Modules { get; init; } = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>Gets the exact server-free Hexalith support closure permitted under Aspire helpers.</summary>
+    public Dictionary<string, string> AspireHelperSupportPackages { get; init; } = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>Gets packages allowed only as test roots.</summary>
     public HashSet<string> TestPackages { get; init; } = new(StringComparer.OrdinalIgnoreCase);
 
@@ -39,6 +42,8 @@ internal sealed record DependencyPolicy
             BaselinePackages = ReadVersions(policy.GetProperty("baselinePackages")),
             DecorationPackage = new(decoration.GetProperty("id").GetString()!, decoration.GetProperty("version").GetString()!),
             Modules = ReadVersions(policy.GetProperty("modules")),
+            AspireHelperSupportPackages = policy.TryGetProperty("aspireHelperSupportPackages", out JsonElement support)
+                ? ReadVersions(support) : new(StringComparer.OrdinalIgnoreCase),
             TestPackages = ReadNames(policy.GetProperty("testPackages")),
             SampleContracts = policy.GetProperty("sampleContracts").GetString()!,
         };

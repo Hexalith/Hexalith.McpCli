@@ -81,6 +81,23 @@ public sealed class AspireHelperDependencyTests
             DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
     }
 
+    /// <summary>Reviewed server-free helper support is admitted only at its exact pinned version.</summary>
+    [Fact]
+    public void ReviewedSupportRequiresExactVersion()
+    {
+        var (policy, graph) = Candidate();
+        const string support = "Hexalith.EventStore.Contracts";
+        policy.AspireHelperSupportPackages[support] = "4.0.4";
+        var nodes = new Dictionary<string, RestoredDependencyNode>(graph.Nodes, StringComparer.OrdinalIgnoreCase);
+        nodes[Helper] = nodes[Helper] with { Dependencies = new Dictionary<string, string> { [support] = "4.0.4" } };
+        nodes[support] = new(support, "4.0.4", "package", new Dictionary<string, string>(), []);
+        Assert.Empty(DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
+
+        nodes[support] = nodes[support] with { Version = "4.0.5" };
+        Assert.Equal([$"Helper {Helper}/1.0.0 has a forbidden dependency {support}/4.0.5: Topology > {Helper}/1.0.0 > {support}/4.0.5"],
+            DependencyPolicyGate.CheckAspireHelperClosure(policy, graph with { Nodes = nodes }, [Helper]));
+    }
+
     /// <summary>Restore parsing failures remain admission failures even when helpers resolve.</summary>
     [Fact]
     public void RestoreLoadFailuresArePreserved()

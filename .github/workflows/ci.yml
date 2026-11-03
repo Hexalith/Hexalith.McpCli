@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@d3fb9d3d62c32953a1769a6b4cdb63ad3c983a3f
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@725754075e1d6369430a3adf94d46fb71e6eaf9e
     with:
       solution: Hexalith.McpCli.slnx
       test-platform: microsoft-testing-platform
@@ -26,6 +26,7 @@ jobs:
         tests/Hexalith.McpCli.Manifest.Tests
         tests/Hexalith.McpCli.Cli.Tests
         tests/Hexalith.McpCli.Mcp.Tests
+      build-timeout-minutes: 60
       aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
       aspire-continue-on-error: false
       aspire-prepare-script: tools/live-topology/prepare-ci.sh

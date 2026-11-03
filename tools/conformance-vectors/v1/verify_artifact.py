@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import configparser
 import hashlib
 import json
 import os
@@ -17,6 +18,27 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 from validate import _load_json, package_identity, validate_vectors
+
+
+def resolve_builds_props(repo: Path) -> Path:
+    """Use only a declared Builds checkout, including the enclosing umbrella workspace."""
+    local = repo / 'references/Hexalith.Builds/Props'
+    if local.is_dir():
+        return local
+    result = subprocess.run(['git', '-C', str(repo), 'rev-parse', '--show-superproject-working-tree'],
+                            capture_output=True, text=True, check=False)
+    if result.returncode != 0 or not result.stdout.strip():
+        raise FileNotFoundError(f'Root-declared Builds props are unavailable for {repo}.')
+    workspace = Path(result.stdout.strip())
+    modules = configparser.ConfigParser()
+    if not modules.read(workspace / '.gitmodules') or not any(
+            section.startswith('submodule ') and modules[section].get('path') == 'references/Hexalith.Builds'
+            for section in modules.sections()):
+        raise FileNotFoundError(f'{workspace}/.gitmodules does not declare references/Hexalith.Builds.')
+    source = workspace / 'references/Hexalith.Builds/Props'
+    if not source.is_dir():
+        raise FileNotFoundError(f'Root-declared Builds props are unavailable at {source}.')
+    return source
 
 
 def check_lint(findings: list[dict], accepted: list[dict]) -> None:
@@ -152,8 +174,8 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             env = {k: v for k, v in os.environ.items() if not k.startswith(('MCPCLI_', 'EVENTSTORE_'))}
             env['MCPCLI_CONFORMANCE_PROFILE_PATH'] = str(scratch / 'profile.json')
             env['NUGET_PACKAGES'] = str(scratch / 'packages')
-            for name in ['src', 'references/Hexalith.Builds/Props']:
-                shutil.copytree(repo / name, scratch / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git'))
+            shutil.copytree(repo / 'src', scratch / 'src', ignore=shutil.ignore_patterns('bin', 'obj', '.git'))
+            shutil.copytree(resolve_builds_props(repo), scratch / 'references/Hexalith.Builds/Props')
             for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
                 if (repo / name).exists():
                     shutil.copy2(repo / name, scratch / name)

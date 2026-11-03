@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.list-tenants",
   "kind": "query",
@@ -16,14 +16,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-list-a",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-list-b",
           "commandType": "create-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -142,14 +142,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-list-c",
           "commandType": "create-tenant",
@@ -187,7 +187,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -202,14 +202,14 @@
     "kind": "query",
     "payload": {},
     "envelope": {
-      "tenant": "system",
+      "tenant": "platform:tenants",
       "pageSize": 2
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/queries",
       "body": {
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "domain": "tenants",
         "aggregateId": "index",
         "queryType": "list-tenants",
@@ -261,7 +261,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "platform:tenants"
       },
       {
         "path": "/document/items",
@@ -301,7 +301,7 @@
       "kind": "query",
       "payload": {},
       "envelope": {
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "pageSize": 2,
         "cursor": "scripted-list-tenants-cursor-1"
       },
@@ -309,7 +309,7 @@
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "index",
           "queryType": "list-tenants",
@@ -356,7 +356,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/document/items",

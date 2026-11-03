@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.enable-tenant",
-  "vectorSha256": "468b2d3f21d8236678e627d52fd3be4984dae8bcffb338ff708f12687a334224",
+  "vectorSha256": "df5c68579c6434746d8c571afaeb3af03a840db6ae70e03838fa19cba104d5c2",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-enable"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-enable"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-enable"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-enable"
         },
         "assertions": [
           {
@@ -83,7 +83,7 @@
           "TenantId": "vector-enable"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-enable"
         },
         "assertions": [
           {

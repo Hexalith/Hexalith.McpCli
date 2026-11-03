@@ -29,6 +29,8 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <inheritdoc/>
     protected override IReadOnlyList<string> ExtraAppArgs =>
     [
+        // The published SDK prepares child metadata only for an explicit Development AppHost.
+        "--environment=Development",
         $"--Authentication:JwtBearer:SigningKey={_signingKey}",
     ];
 
@@ -75,6 +77,9 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <summary>Creates the short-lived delegated identity shared privately with one runner.</summary>
     internal string CreateLiveIdentity() => CreateIdentity(invalidSignature: false, live: true);
 
+    /// <summary>Signs the bounded live role hint for the independent nonmember control.</summary>
+    internal string CreateNonmemberIdentity() => CreateIdentity(invalidSignature: false, live: true, nonmember: true);
+
     /// <summary>Activates the standard platform prerequisite before allowing vector writes into fresh state.</summary>
     internal async Task RequireProjectionWriterAsync(CancellationToken cancellationToken)
     {
@@ -85,7 +90,7 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
             string commit = Environment.GetEnvironmentVariable("MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT")
                 ?? throw new InvalidOperationException("The published gateway profile omitted its restored package source commit.");
             using var packagedHttp = new HttpClient { BaseAddress = GatewayEndpoint, Timeout = TimeSpan.FromSeconds(30) };
-            packagedHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateLiveIdentity());
+            packagedHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateIdentity(invalidSignature: false, live: true, maintenance: true));
             await ProjectionWriterBootstrap.ActivateAsync(packagedHttp, receipt, commit, cancellationToken).ConfigureAwait(false);
             return;
         }
@@ -102,31 +107,25 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
         if (git.ExitCode != 0) throw new InvalidOperationException("Cannot identify the deployed EventStore source commit for private writer activation.");
         _ = await error.ConfigureAwait(false);
         using var http = new HttpClient { BaseAddress = GatewayEndpoint, Timeout = TimeSpan.FromSeconds(30) };
-        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateLiveIdentity());
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateIdentity(invalidSignature: false, live: true, maintenance: true));
         await ProjectionWriterBootstrap.ActivateAsync(http, receipt, (await output.ConfigureAwait(false)).Trim(), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Waits for a privileged persisted-membership query, independently of resource liveness.</summary>
     internal async Task RequireAdministratorAuthorityAsync(CancellationToken cancellationToken)
     {
+        if (bool.TryParse(Environment.GetEnvironmentVariable("Topology__UsePackagedGateway"), out bool native) && native)
+            await NativeCatalogEvidence.RequireAsync(cancellationToken).ConfigureAwait(false);
         using var http = new HttpClient { BaseAddress = GatewayEndpoint, Timeout = TimeSpan.FromSeconds(15) };
-        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateLiveIdentity());
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateIdentity(invalidSignature: false, live: false, authorityRead: true));
         await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, cancellationToken).ConfigureAwait(false);
     }
 
-    private string CreateIdentity(bool invalidSignature, bool live)
+    private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false, bool nonmember = false)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
-        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
-        {
-            ["iss"] = "mcpcli-live-tests", ["aud"] = "hexalith-eventstore", ["sub"] = live ? AdministratorId : "mcpcli-live-smoke",
-            ["tenants"] = live ? "[\"system\",\"tenant-a\"]" : "[\"system\"]",
-            ["domains"] = live ? "[\"tenants\",\"party\",\"global-administrators\"]" : "[\"tenants\"]",
-            ["permissions"] = live ? "[\"command:submit\",\"query:read\"]" : "[\"query:read\"]",
-            ["global_admin"] = live ? "true" : "false",
-            ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + (live ? 600 : 300),
-        }));
+        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead, nonmember)));
         string unsigned = header + "." + payload;
         string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(invalidSignature ? Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)) : _signingKey), Encoding.ASCII.GetBytes(unsigned)));
         return unsigned + "." + signature;

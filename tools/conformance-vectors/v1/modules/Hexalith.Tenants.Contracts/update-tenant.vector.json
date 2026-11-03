@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.update-tenant",
   "kind": "command",
@@ -16,14 +16,14 @@
         "Description": "Description cleared by the update"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-update",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -80,14 +80,14 @@
       "Description": null
     },
     "envelope": {
-      "tenant": "system"
+      "tenant": "platform:tenants"
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/commands",
       "body": {
         "messageId": "<generated>",
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "domain": "tenants",
         "aggregateId": "vector-update",
         "commandType": "update-tenant",
@@ -125,7 +125,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "platform:tenants"
       },
       {
         "path": "/aggregateId",
@@ -142,13 +142,13 @@
         "TenantId": "vector-update"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "vector-update"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-update",
           "domain": "tenants",
           "aggregateId": "vector-update",
           "queryType": "get-tenant",
@@ -185,7 +185,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-update"
         },
         {
           "path": "/document/name",

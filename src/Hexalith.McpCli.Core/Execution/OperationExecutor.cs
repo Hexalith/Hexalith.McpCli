@@ -266,6 +266,7 @@ public sealed class OperationExecutor(
             }
         }
 
+        // Preserve the descriptor's wire selector; receiver admission remains the Gateway's responsibility.
         var queryRequest = new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,
             operation.Routing.ProjectionType, rebuilt.ValueKind == JsonValueKind.Null ? null : rebuilt,
             run.EntityId, operation.Routing.ProjectionActorType)

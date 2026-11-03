@@ -10,7 +10,6 @@ using System.Text.Json;
 using Hexalith.EventStore.Aspire;
 using Hexalith.McpCli.AppHost;
 using Hexalith.Parties.Aspire;
-using Hexalith.Tenants.Aspire;
 
 using Microsoft.Extensions.Configuration;
 
@@ -23,6 +22,7 @@ bool preflightOnly;
 bool inspectComposition;
 bool usePackagedGateway;
 string gatewayProject;
+string sourceRoot;
 var routes = new Dictionary<string, string>();
 var topicOverrides = new Dictionary<string, string>();
 try
@@ -50,8 +50,9 @@ try
         topicOverrides.Add($"EventStore__Publisher__TopicOverrides__{topic.Key}", topic.Value);
     }
     TopologyConfiguration.ValidateGatewayPort(gatewayPort);
-    TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
-    gatewayProject = TopologyConfiguration.ResolveGatewayProject(RepositoryProjectPaths.GetRepositoryRoot(),
+    sourceRoot = RepositoryProjectPaths.GetRepositoryRoot();
+    TopologyConfiguration.ValidateWorkspace(sourceRoot);
+    gatewayProject = TopologyConfiguration.ResolveGatewayProject(sourceRoot,
         usePackagedGateway, builder.ExecutionContext.IsPublishMode);
     TopologyConfiguration.ValidateSigningKey(signingKey);
     TopologyConfiguration.ValidateBootstrap(builder.Configuration.GetValue<bool>("Tenants:BootstrapGlobalAdminEnabled"),
@@ -89,8 +90,12 @@ HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, ad
 // Apply explicit token wiring only when the helper has not provisioned it.
 if (!builder.Resources.OfType<ParameterResource>().Any(parameter => parameter.Name == gateway.Resource.Name + "-app-api-token"))
     gateway.WithGeneratedEventStoreAppChannelToken();
-IResourceBuilder<ProjectResource> tenants = builder.AddHexalithTenantsServer(topology, access,
-    daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
+// Native SDK preparation builds this exact, validated source project using its ordinary launch metadata.
+// The cross-repository convenience helper suppresses builds, so retain its Dapr wiring on this unsuppressed resource.
+IResourceBuilder<ProjectResource> tenants = builder.AddProject("tenants", Path.Combine(sourceRoot, "references",
+    "Hexalith.Tenants", "src", "Hexalith.Tenants", "Hexalith.Tenants.csproj"))
+    .AddEventStoreDomainModule(topology, "tenants", access,
+        daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
     .WithGeneratedEventStoreAppChannelToken()
     .WithEnvironment("Tenants__BootstrapGlobalAdminEnabled", builder.Configuration["Tenants:BootstrapGlobalAdminEnabled"])
     .WithEnvironment("Tenants__BootstrapGlobalAdminUserId", builder.Configuration["Tenants:BootstrapGlobalAdminUserId"]);
@@ -114,7 +119,11 @@ if (usePackagedGateway)
 
 foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
 {
-    resource.WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+    resource.WithEnvironment("UseHexalithProjectReferences", "false")
+        .WithEnvironment("UseNuGetDeps", "true")
+        .WithEnvironment("HexalithEventStoreFromSource", "false")
+        .WithEnvironment("HexalithEventStoreVersion", "4.0.4")
+        .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)
         .WithEnvironment("Authentication__JwtBearer__Issuer", "mcpcli-live-tests")
@@ -134,6 +143,8 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
     }
 }
 
+parties.WithEnvironment("HexalithTenantsVersion", "5.11.2").WithEnvironment("HexalithMemoriesVersion", "3.0.11");
+
 // Evaluate the actual composed model without starting it; never emit secret values.
 if (inspectComposition)
 {
@@ -146,10 +157,25 @@ if (inspectComposition)
         Dictionary<string, object> sidecarEnvironment = await EnvironmentAsync(sidecar.Sidecar);
         string? appToken = await ValueAsync(appEnvironment.GetValueOrDefault("APP_API_TOKEN"));
         string? sidecarToken = await ValueAsync(sidecarEnvironment.GetValueOrDefault("APP_API_TOKEN"));
+        IProjectMetadata metadata = resource.Resource.GetProjectMetadata();
+#pragma warning disable ASPIREEXTENSION001
+        ProjectLaunchConfiguration launch = await resource.Resource.CreateLaunchConfigurationAsync(ExecutableLaunchMode.NoDebug)
+            .ConfigureAwait(false) as ProjectLaunchConfiguration
+            ?? throw new InvalidOperationException("The inspected resource has no actual .NET project launch configuration.");
+#pragma warning restore ASPIREEXTENSION001
         snapshots.Add(new
         {
             name = resource.Resource.Name,
-            projectPath = resource.Resource.Annotations.OfType<IProjectMetadata>().Single().ProjectPath,
+            projectPath = metadata.ProjectPath,
+            launch = new
+            {
+                projectPath = launch.ProjectPath,
+                buildConfiguration = launch.BuildConfiguration,
+                metadataSuppressBuild = metadata.SuppressBuild,
+                suppressBuild = launch.SuppressBuild,
+                hasUnsupportedLaunchArgumentOverride = resource.Resource.Annotations.Any(annotation =>
+                    annotation.GetType().Name is "LaunchToolArgsCallbackAnnotation" or "ProjectLaunchArgsOverrideAnnotation"),
+            },
             aspnetcoreEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("ASPNETCORE_ENVIRONMENT")),
             dotnetEnvironment = await ValueAsync(appEnvironment.GetValueOrDefault("DOTNET_ENVIRONMENT")),
             endpoints = resource.Resource.Annotations.OfType<EndpointAnnotation>()
@@ -189,6 +215,8 @@ if (inspectComposition)
     Console.WriteLine(JsonSerializer.Serialize(new
     {
         appHostDirectory = builder.AppHostDirectory,
+        environment = builder.Environment.EnvironmentName,
+        isRunMode = builder.ExecutionContext.IsRunMode,
         resources = snapshots,
         appChannelTokenParameters = builder.Resources.OfType<ParameterResource>()
             .Where(parameter => parameter.Name.EndsWith("-app-api-token", StringComparison.Ordinal))
@@ -197,7 +225,11 @@ if (inspectComposition)
     return 0;
 }
 
-await builder.Build().RunAsync().ConfigureAwait(false);
+await using NativeCatalogRuntime? catalog = usePackagedGateway
+    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, Path.Combine(components, "statestore.yaml")).ConfigureAwait(false)
+    : null;
+await using DistributedApplication application = builder.Build();
+await application.RunAsync().ConfigureAwait(false);
 
 async Task<Dictionary<string, object>> EnvironmentAsync(IResource resource)
 {

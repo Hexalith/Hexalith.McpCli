@@ -33,6 +33,12 @@
       "maxLength": 64,
       "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$(?![\\s\\S])"
     },
+    "requestScope": {
+      "oneOf": [
+        { "$ref": "#/$defs/tenant", "not": { "const": "system" } },
+        { "type": "string", "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])" }
+      ]
+    },
     "aggregateId": {
       "type": "string",
       "minLength": 1,
@@ -81,7 +87,7 @@
       "additionalProperties": false,
       "required": ["tenant"],
       "properties": {
-        "tenant": { "$ref": "#/$defs/tenant" },
+        "tenant": { "$ref": "#/$defs/requestScope" },
         "actor": { "$ref": "#/$defs/nonblank" },
         "aggregateId": { "$ref": "#/$defs/aggregateId" },
         "entityId": { "$ref": "#/$defs/aggregateId" },
@@ -115,7 +121,7 @@
       "required": ["messageId", "tenant", "domain", "aggregateId", "commandType", "payload", "correlationId"],
       "properties": {
         "messageId": { "const": "<generated>" },
-        "tenant": { "$ref": "#/$defs/tenant" },
+        "tenant": { "$ref": "#/$defs/requestScope" },
         "domain": { "$ref": "#/$defs/tenant" },
         "aggregateId": { "$ref": "#/$defs/aggregateId" },
         "commandType": { "$ref": "#/$defs/commandWireType" },
@@ -135,7 +141,7 @@
       "additionalProperties": false,
       "required": ["tenant", "domain", "aggregateId", "queryType", "projectionType"],
       "properties": {
-        "tenant": { "$ref": "#/$defs/tenant" },
+        "tenant": { "$ref": "#/$defs/requestScope" },
         "domain": { "$ref": "#/$defs/tenant" },
         "aggregateId": { "$ref": "#/$defs/aggregateId" },
         "queryType": { "$ref": "#/$defs/queryWireType" },

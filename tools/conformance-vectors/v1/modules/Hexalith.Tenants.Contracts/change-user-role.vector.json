@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.change-user-role",
   "kind": "command",
@@ -16,14 +16,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-roles",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Role": "TenantReader"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-roles",
           "commandType": "add-user-to-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -143,14 +143,14 @@
       "NewRole": "TenantOwner"
     },
     "envelope": {
-      "tenant": "system"
+      "tenant": "platform:tenants"
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/commands",
       "body": {
         "messageId": "<generated>",
-        "tenant": "system",
+        "tenant": "platform:tenants",
         "domain": "tenants",
         "aggregateId": "vector-roles",
         "commandType": "change-user-role",
@@ -188,7 +188,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "platform:tenants"
       },
       {
         "path": "/aggregateId",
@@ -205,13 +205,13 @@
         "TenantId": "vector-roles"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "vector-roles"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-roles",
           "domain": "tenants",
           "aggregateId": "vector-roles",
           "queryType": "get-tenant-users",
@@ -249,7 +249,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-roles"
         },
         {
           "path": "/document/items",

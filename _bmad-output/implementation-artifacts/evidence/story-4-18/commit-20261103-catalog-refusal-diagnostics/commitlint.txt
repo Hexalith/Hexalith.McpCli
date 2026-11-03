@@ -1,0 +1,3 @@
+⧗   --- input ---
+test(topology): retain catalog refusal reasons in package gateway
+✔   found 0 problems, 0 warnings

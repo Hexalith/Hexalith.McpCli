@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.get-tenant-audit",
   "kind": "query",
@@ -16,14 +16,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-audit",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Role": "TenantReader"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-audit",
           "commandType": "add-user-to-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -142,14 +142,14 @@
         "Value": "administrative"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-audit",
           "commandType": "set-tenant-configuration",
@@ -187,7 +187,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -205,14 +205,14 @@
         "NewRole": "TenantContributor"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-audit",
           "commandType": "change-user-role",
@@ -250,7 +250,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -270,14 +270,14 @@
       "Category": "Access"
     },
     "envelope": {
-      "tenant": "system",
+      "tenant": "vector-audit",
       "pageSize": 1
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/queries",
       "body": {
-        "tenant": "system",
+        "tenant": "vector-audit",
         "domain": "tenants",
         "aggregateId": "vector-audit",
         "queryType": "get-tenant-audit",
@@ -341,7 +341,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "vector-audit"
       },
       {
         "path": "/document/items",
@@ -391,7 +391,7 @@
         "Category": "Access"
       },
       "envelope": {
-        "tenant": "system",
+        "tenant": "vector-audit",
         "pageSize": 1,
         "cursor": "scripted-tenant-audit-cursor-1"
       },
@@ -399,7 +399,7 @@
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-audit",
           "domain": "tenants",
           "aggregateId": "vector-audit",
           "queryType": "get-tenant-audit",
@@ -464,7 +464,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-audit"
         },
         {
           "path": "/document/items",

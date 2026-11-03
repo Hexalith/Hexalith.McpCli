@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.change-user-role",
-  "vectorSha256": "b7796c3add35d85492dfd57af8340ca068a0c00ab2c46e714caa9d62587d72f3",
+  "vectorSha256": "a780125888131a2c7c173e3e871d381260f551710e818679974c6e237768d59b",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-roles"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-roles"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-roles"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-roles"
         },
         "assertions": [
           {
@@ -81,7 +81,7 @@
           "TenantId": "vector-roles"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-roles"
         },
         "assertions": [
           {

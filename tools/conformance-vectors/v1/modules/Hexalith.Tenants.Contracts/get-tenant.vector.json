@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.get-tenant",
   "kind": "query",
@@ -16,14 +16,14 @@
         "Description": "Read by the McpCli v1 vector"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-read",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Role": "TenantReader"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-read",
           "commandType": "add-user-to-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -142,14 +142,14 @@
         "Value": "fr-FR"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-read",
           "commandType": "set-tenant-configuration",
@@ -187,7 +187,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -204,13 +204,13 @@
       "TenantId": "vector-read"
     },
     "envelope": {
-      "tenant": "system"
+      "tenant": "vector-read"
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/queries",
       "body": {
-        "tenant": "system",
+        "tenant": "vector-read",
         "domain": "tenants",
         "aggregateId": "vector-read",
         "queryType": "get-tenant",
@@ -254,7 +254,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "vector-read"
       },
       {
         "path": "/document/tenantId",

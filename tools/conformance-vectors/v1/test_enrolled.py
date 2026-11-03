@@ -16,7 +16,32 @@ import unittest
 import xml.etree.ElementTree as ET
 import check_enrolled
 from check_enrolled import artifact_for, approved_vectors
-from verify_artifact import check_lint, resolved_packages, verify
+from verify_artifact import check_lint, resolved_packages, resolve_builds_props, verify
+
+
+class BuildsPropsResolutionTests(unittest.TestCase):
+    def test_uses_declared_workspace_checkout_without_nested_initialization(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            repo = workspace / 'references/Hexalith.McpCli'
+            repo.mkdir(parents=True)
+            props = workspace / 'references/Hexalith.Builds/Props'
+            props.mkdir(parents=True)
+            (workspace / '.gitmodules').write_text('[submodule "Hexalith.Builds"]\n\tpath = references/Hexalith.Builds\n')
+            with patch('verify_artifact.subprocess.run', return_value=subprocess.CompletedProcess([], 0, str(workspace) + '\n', '')):
+                self.assertEqual(props, resolve_builds_props(repo))
+            self.assertFalse((repo / 'references/Hexalith.Builds').exists())
+
+    def test_refuses_undeclared_workspace_checkout(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            repo = workspace / 'references/Hexalith.McpCli'
+            repo.mkdir(parents=True)
+            (workspace / 'references/Hexalith.Builds/Props').mkdir(parents=True)
+            (workspace / '.gitmodules').write_text('[submodule "Other"]\n\tpath = references/Other\n')
+            with patch('verify_artifact.subprocess.run', return_value=subprocess.CompletedProcess([], 0, str(workspace) + '\n', '')):
+                with self.assertRaisesRegex(FileNotFoundError, 'does not declare references/Hexalith.Builds'):
+                    resolve_builds_props(repo)
 
 
 class EnrolledArtifactTests(unittest.TestCase):
@@ -58,6 +83,11 @@ class EnrolledArtifactTests(unittest.TestCase):
                 receipt[field] = value
                 with self.assertRaises(RuntimeError):
                     artifact_for(self.assets, 'Module.Contracts', receipt)
+
+    def test_pending_candidate_cannot_enroll_even_with_matching_artifact(self):
+        self.receipt['status'] = 'pending-published-artifact-and-owner-approval'
+        with self.assertRaisesRegex(RuntimeError, 'require published-artifact owner approval'):
+            artifact_for(self.assets, 'Module.Contracts', self.receipt)
 
     def test_missing_restored_package_fails(self):
         self.artifact.unlink()

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.get-user-tenants",
-  "vectorSha256": "93527ddf37aa76ac81726df076ce93590697194e9ae216c6b290d8bfff2e9b1f",
+  "vectorSha256": "a2655d4a2c9286599a529746b3c51be068ffce58a35785e1daaf649b5bdcc597",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-membership-a"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-a"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-membership-a"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-a"
         },
         "assertions": [
           {
@@ -81,7 +81,7 @@
           "TenantId": "vector-membership-b"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-b"
         },
         "assertions": [
           {
@@ -119,7 +119,7 @@
           "TenantId": "vector-membership-b"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-b"
         },
         "assertions": [
           {
@@ -145,7 +145,7 @@
           "TenantId": "vector-membership-c"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-c"
         },
         "assertions": [
           {
@@ -183,7 +183,7 @@
           "TenantId": "vector-membership-c"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-membership-c"
         },
         "assertions": [
           {

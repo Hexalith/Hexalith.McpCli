@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.create-tenant",
-  "vectorSha256": "db383667c0a346d30628f0a8c0996154ee2090e6611ee041a59dfe0f7d7c5491",
+  "vectorSha256": "45c46e681d6254746a90cd714390a69a0c393569ab01ed58508a9de736517e42",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-create"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-create"
         },
         "assertions": [
           {

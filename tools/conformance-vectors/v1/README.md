@@ -108,13 +108,25 @@ Inventory bytes must match the approved digest before verification, and the
 verifier checks that digest again when freezing its input. Package IDs and their
 approval directory names compare case-insensitively; versions remain exact.
 `Hexalith.Parties.Contracts` 1.5.1 has all seven vectors and its exact signed-archive
-receipt under `modules/Hexalith.Parties.Contracts/`. Tenants 5.10.0 has fourteen byte-identical approved vectors and its actual signed-archive
-receipt under `modules/Hexalith.Tenants.Contracts/`. Receipts link the owner approval
-and published-artifact bindings. Parties vectors changed only `/package/version`
-from their approved candidate; the selected Tenants version preserves every
-original approved vector byte. The mandatory repaired normal Tenants 5.10.1
-five-package/container release has qualified separately from these exact enrolled
-NuGet identities.
+receipt under `modules/Hexalith.Parties.Contracts/`. `Hexalith.Tenants.Contracts`
+7.0.0 has fourteen unchanged vectors and its authentic signed public-archive
+receipt under `modules/Hexalith.Tenants.Contracts/`. That receipt links the
+[automated approval evidence](../../../_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/approval.json),
+including the exact source, archive, inventory and vector hashes, strict validator
+result, authenticated account and delegated Codex identity. The user explicitly
+authorized bypass of human validation; no separate human review or actual
+operator-client session is claimed. Historical local-candidate hashes and sources
+remain identified as historical evidence.
+
+Tenants commands and cross-tenant reads (`tenants.list-tenants` and
+`tenants.get-user-tenants`) declare `platform:tenants`. Single-tenant reads
+(`tenants.get-tenant`, `tenants.get-tenant-users` and `tenants.get-tenant-audit`)
+use an explicit canonical tenant matching the payload's `TenantId` aggregate;
+an explicitly supplied aggregate must match that payload value. The current
+module has no fixed `system` scope. These scopes come from the built catalog;
+Gateway authorization and persistent effects retain their separate live gates.
+The former 5.10.0 enrollment and separate normal 5.10.1 provenance-repair release
+remain historical evidence.
 
 Passing replay establishes transport envelopes and result/error parity against
 a scripted Gateway. It supplies no live authorization, domain-effect or retirement
@@ -208,15 +220,19 @@ warm-up builds or retries. Evidence records the assembly/module/operation popula
 identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
 The existing isolated String-kind Catalog test remains part of Core.Tests.
 
-The authentic signed Tenants 5.10.0 Contracts artifact passes all fourteen original
-vectors and the approved twenty inventory decisions. The selected enrollment keeps
-that exact version and the qualified Builds pin. The separate normal 5.10.1 five-package
-and container release qualifies the approved provenance repair; its version
-is not claimed as the enrolled Contracts version. The original 5.10.0 container's
-malformed labels remain historical failures. The actual Ubuntu strict gate passed all 21 operations and measured first Catalog
+Current enrollment binds the authentic signed Tenants 7.0.0 Contracts artifact to
+all fourteen unchanged vectors and the approved twenty inventory decisions.
+The exact current approval is linked above; scripted replay establishes transport
+parity. Full remote isolated live acceptance, actual operator-client acceptance,
+privacy sanitization, persisted effects and legacy retirement retain their
+separate gates.
+
+Historical qualification of Tenants 5.10.0 and the separate normal 5.10.1
+five-package/container provenance repair remains bound to those versions. The
+original 5.10.0 container's malformed labels remain historical failures. The
+historical Ubuntu strict gate passed all 21 operations and measured first Catalog
 construction plus exactly one Ulid sample at 194.5002 ms against the 500 ms limit.
 The [artifact and matrix audit](../../../_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/parent-root-review-fixed-ubuntu-acceptance-audit.json)
-binds the exact source, artifacts and named passing regressions. The earlier Story 4.8 scratch package and 5.9.0
-pin are historical and do not authorize the published bytes. Scripted replay
-establishes transport parity; live authorization, privacy sanitization, persisted
-effects and legacy retirement retain their Story 4.13 and retirement gates.
+binds that source, those artifacts and the named passing regressions. The earlier
+Story 4.8 scratch package and 5.9.0 pin are historical and do not authorize current
+published bytes.

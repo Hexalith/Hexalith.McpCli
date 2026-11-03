@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.set-tenant-configuration",
-  "vectorSha256": "0fd3896ed5640e5a2f88f46de79d15d3dac67acf97577e01e8f21e3b0c78db55",
+  "vectorSha256": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-config"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-config"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-config"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-config"
         },
         "assertions": [
           {

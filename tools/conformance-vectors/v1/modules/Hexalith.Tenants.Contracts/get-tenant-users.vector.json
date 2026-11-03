@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "5.10.0"
+    "version": "7.0.0"
   },
   "operation": "tenants.get-tenant-users",
   "kind": "query",
@@ -16,14 +16,14 @@
         "Description": null
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-users",
           "commandType": "create-tenant",
@@ -61,7 +61,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -79,14 +79,14 @@
         "Role": "TenantOwner"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-users",
           "commandType": "add-user-to-tenant",
@@ -124,7 +124,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -142,14 +142,14 @@
         "Role": "TenantContributor"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-users",
           "commandType": "add-user-to-tenant",
@@ -187,7 +187,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -205,14 +205,14 @@
         "Role": "TenantReader"
       },
       "envelope": {
-        "tenant": "system"
+        "tenant": "platform:tenants"
       },
       "expectedGateway": {
         "method": "POST",
         "path": "/api/v1/commands",
         "body": {
           "messageId": "<generated>",
-          "tenant": "system",
+          "tenant": "platform:tenants",
           "domain": "tenants",
           "aggregateId": "vector-users",
           "commandType": "add-user-to-tenant",
@@ -250,7 +250,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "platform:tenants"
         },
         {
           "path": "/aggregateId",
@@ -267,14 +267,14 @@
       "TenantId": "vector-users"
     },
     "envelope": {
-      "tenant": "system",
+      "tenant": "vector-users",
       "pageSize": 2
     },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/queries",
       "body": {
-        "tenant": "system",
+        "tenant": "vector-users",
         "domain": "tenants",
         "aggregateId": "vector-users",
         "queryType": "get-tenant-users",
@@ -326,7 +326,7 @@
       {
         "path": "/tenant",
         "operator": "equals",
-        "value": "system"
+        "value": "vector-users"
       },
       {
         "path": "/document/items",
@@ -368,7 +368,7 @@
         "TenantId": "vector-users"
       },
       "envelope": {
-        "tenant": "system",
+        "tenant": "vector-users",
         "pageSize": 2,
         "cursor": "scripted-tenant-users-cursor-1"
       },
@@ -376,7 +376,7 @@
         "method": "POST",
         "path": "/api/v1/queries",
         "body": {
-          "tenant": "system",
+          "tenant": "vector-users",
           "domain": "tenants",
           "aggregateId": "vector-users",
           "queryType": "get-tenant-users",
@@ -424,7 +424,7 @@
         {
           "path": "/tenant",
           "operator": "equals",
-          "value": "system"
+          "value": "vector-users"
         },
         {
           "path": "/document/items",

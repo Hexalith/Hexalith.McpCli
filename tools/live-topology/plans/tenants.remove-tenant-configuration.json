@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.remove-tenant-configuration",
-  "vectorSha256": "89767e83a1888806d5d8d8397ecf23f43e41249faa66850bb3eb8f01657080a2",
+  "vectorSha256": "d8457285ead1b387c13c31dc342c2e932c3b686f0b21c194016372ca9f05a630",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [
@@ -17,7 +17,7 @@
           "TenantId": "vector-config-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-config-removal"
         },
         "assertions": [
           {
@@ -55,7 +55,7 @@
           "TenantId": "vector-config-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-config-removal"
         },
         "assertions": [
           {
@@ -83,7 +83,7 @@
           "TenantId": "vector-config-removal"
         },
         "envelope": {
-          "tenant": "system"
+          "tenant": "vector-config-removal"
         },
         "assertions": [
           {

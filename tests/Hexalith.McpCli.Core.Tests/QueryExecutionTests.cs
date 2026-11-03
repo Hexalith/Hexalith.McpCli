@@ -18,7 +18,7 @@ public sealed class QueryExecutionTests
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
     private const string OtherId = "01ARZ3NDEKTSV4RRFFQ69G5FAW";
 
-    /// <summary>Accessor, explicit, and constant sources select exactly one declared route.</summary>
+    /// <summary>All descriptor routing values, including an optional actor selector, reach the Gateway unchanged.</summary>
     [Theory]
     [InlineData("routing-fixture.interface-item", "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", null, ItemId)]
     [InlineData("routing-fixture.interface-item", "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", ItemId, ItemId)]
