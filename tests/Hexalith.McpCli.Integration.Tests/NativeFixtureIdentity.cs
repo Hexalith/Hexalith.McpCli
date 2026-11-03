@@ -26,10 +26,10 @@ internal static class NativeFixtureIdentity
                 : new[] { "query:read", "tenants:read" },
             ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + (live ? 600 : 300),
         };
-        // This signed role is a hint for the real bootstrapped actor. The owner must independently
-        // verify its current native-source membership before restoring administrator command context.
+        // The Gateway derives its administrator hint from this signed role. The owner independently
+        // verifies current native-source membership; the signed nonmember control must still be refused.
         if (live || maintenance) claims["role"] = "GlobalAdministrator";
-        // The real writer maintenance endpoint also requires its existing UI surface.
+        // Writer maintenance also requires its UI surface; business calls use exact native grants.
         if (maintenance)
         {
             claims["eventstore:surface"] = "ui";
