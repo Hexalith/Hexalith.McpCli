@@ -1,0 +1,1 @@
+fix(ci): provide smoke writer bootstrap evidence path

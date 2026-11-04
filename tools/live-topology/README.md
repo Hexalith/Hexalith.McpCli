@@ -303,6 +303,9 @@ requires exactly 21 passing vector outcomes, complete coverage, fresh matching
 semantic receipts, successful cleanup and a separate one-case, unskipped passing
 authenticated smoke XML. Vector assertion failures still allow the independent
 smoke attempt; neither smoke nor preflight/subset evidence can replace vectors.
+The smoke child receives its current generation's `smoke/` directory as
+`MCPCLI_LIVE_OUTPUT` for the writer-bootstrap receipt, after inherited live and
+Gateway settings have been removed.
 Pending Operations marked `running` at a deadline or cancellation are retained
 as interrupted Operations and named in stderr. On cancellation, including when
 smoke is interrupted after a vector failure, `ci.py` exits 143 and `ci-live.json`

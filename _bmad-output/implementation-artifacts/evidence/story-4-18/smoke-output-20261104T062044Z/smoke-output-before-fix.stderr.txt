@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_inherited_live_and_gateway_variables_never_reach_vectors_or_smoke (test_ci.CiHooksTests.test_inherited_live_and_gateway_variables_never_reach_vectors_or_smoke)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1451, in test_inherited_live_and_gateway_variables_never_reach_vectors_or_smoke
+    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : Running (16200s): /tmp/tmp9okivwl5/mcpcli-live-ci-t35p077j/venv/bin/python /tmp/tmp9okivwl5/tools/live-topology/run-vectors.py --output /tmp/tmp9okivwl5/evidence/8e820b17a2a847a09f3b5307667dca8d/vectors
+Running (960s): /tmp/tmp9okivwl5/mcpcli-live-ci-t35p077j/venv/bin/python /tmp/tmp9okivwl5/tools/live-topology/run-isolated.py -- dotnet /tmp/tmp9okivwl5/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/tmp9okivwl5/evidence/8e820b17a2a847a09f3b5307667dca8d/smoke/tests.xml
+Live CI failed: RuntimeError: /tmp/tmp9okivwl5/mcpcli-live-ci-t35p077j/venv/bin/python /tmp/tmp9okivwl5/tools/live-topology/run-isolated.py -- dotnet /tmp/tmp9okivwl5/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /tmp/tmp9okivwl5/evidence/8e820b17a2a847a09f3b5307667dca8d/smoke/tests.xml exited 1; stdout: /tmp/tmp9okivwl5/evidence/8e820b17a2a847a09f3b5307667dca8d/smoke/process.stdout.txt; stderr: /tmp/tmp9okivwl5/evidence/8e820b17a2a847a09f3b5307667dca8d/smoke/process.stderr.txt
+
+
+----------------------------------------------------------------------
+Ran 1 test in 6.271s
+
+FAILED (failures=1)

@@ -1,0 +1,8 @@
+test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics (test_ci.CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics) ... ok
+test_vector_and_smoke_failures_are_both_named (test_ci.CiHooksTests.test_vector_and_smoke_failures_are_both_named) ... ok
+test_sigterm_during_smoke_preserves_cancellation_after_vector_failure (test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 14.827s
+
+OK

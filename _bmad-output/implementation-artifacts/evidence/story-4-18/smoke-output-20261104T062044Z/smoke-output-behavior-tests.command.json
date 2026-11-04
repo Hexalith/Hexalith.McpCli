@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci.CiHooksTests.test_complete_lane_and_smoke_acceptance_retains_only_sanitized_diagnostics",
+    "test_ci.CiHooksTests.test_vector_and_smoke_failures_are_both_named",
+    "test_ci.CiHooksTests.test_sigterm_during_smoke_preserves_cancellation_after_vector_failure"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli/tools/live-topology",
+  "started_at_utc": "2026-11-04T06:26:46.533328+00:00",
+  "finished_at_utc": "2026-11-04T06:27:01.423357+00:00",
+  "exit_code": 0
+}

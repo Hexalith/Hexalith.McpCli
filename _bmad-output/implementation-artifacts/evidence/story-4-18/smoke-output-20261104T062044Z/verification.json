@@ -1,0 +1,30 @@
+{
+  "base_source_sha": "01394f3e48901268f236cf1d8054272416a0cc93",
+  "defect": "Independent smoke writer bootstrap requires MCPCLI_LIVE_OUTPUT, but the clean runner environment omitted it.",
+  "fix": "Supply only the current generation smoke output directory to the independent child after inherited live and Gateway settings are scrubbed.",
+  "regression_before_fix": {
+    "exit_code": 1,
+    "failed": 1
+  },
+  "regression_after_fix": {
+    "exit_code": 0,
+    "passed": 1
+  },
+  "related_success_failure_cancellation_tests": {
+    "passed": 3,
+    "failed": 0
+  },
+  "committed_alignment_workflow_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "changed_code_sha256": {
+    "tools/live-topology/ci.py": "72a7fe14189189159d9c712f72b35c8b981329cbe2f9d80ddd40901861475ab0",
+    "tools/live-topology/test_ci.py": "d0b218dab8b2a024283a9ceb2a93014ab75dfe07035709274e5f4f65f85d1e5a",
+    "tools/live-topology/README.md": "530440fb566f5414d2ad32a99d7481b5f860aaf50ea61872fe7b7b130bdc2804"
+  },
+  "scope": "Generic test runner only; no production behavior, enrollment or further reference changes.",
+  "full_live_acceptance_established": false,
+  "staging_dispatched": false,
+  "publication_dispatched": false
+}

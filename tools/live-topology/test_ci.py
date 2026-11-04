@@ -239,6 +239,11 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         'failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
         'lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime') else 0)
 else:
+    output = pathlib.Path(os.environ['MCPCLI_LIVE_OUTPUT'])
+    expected = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1]).parent
+    if output != expected or not output.is_dir():
+        raise RuntimeError('Smoke writer bootstrap requires its selected evidence directory.')
+    (root / 'runner-smoke-output.json').write_text(json.dumps(str(output)))
     path = owned('smoke')
     if mode == 'cancel-smoke-after-vector-failure':
         def terminate(*_):
@@ -1439,11 +1444,17 @@ class CiHooksTests(unittest.TestCase):
 
     def test_inherited_live_and_gateway_variables_never_reach_vectors_or_smoke(self):
         self.prepare()
-        self.env.update(MCPCLI_LIVE_TOKEN='inherited-live-token', EVENTSTORE_TENANT='inherited-tenant')
+        inherited_output = self.root / 'untrusted-output'
+        self.env.update(MCPCLI_LIVE_TOKEN='inherited-live-token', EVENTSTORE_TENANT='inherited-tenant',
+                        MCPCLI_LIVE_OUTPUT=str(inherited_output), MCPCLI_LIVE_OPERATION='inherited-operation')
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         recorded = [json.loads(line) for line in (self.root / 'runner-environment.jsonl').read_text().splitlines()]
-        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', []]], recorded)
+        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual(str(Path(receipt['output']) / 'smoke'),
+                         json.loads((self.root / 'runner-smoke-output.json').read_text()))
+        self.assertFalse(inherited_output.exists())
 
     def test_missing_built_integration_tests_refuses_live(self):
         self.prepare()

@@ -748,7 +748,7 @@ def run(evidence: Path) -> None:
         smoke.mkdir()
         bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
                  '-class', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', '-failSkips', '-result-xml', str(smoke / 'tests.xml')],
-                960, smoke / 'process', environment=environment)
+                960, smoke / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(smoke)})
         xml = ET.parse(smoke / 'tests.xml').getroot()
         assemblies, cases = xml.findall('assembly'), xml.findall('.//test')
         if len(assemblies) != 1 or len(cases) != 1 or any(assemblies[0].get(key) != value for key, value in
