@@ -1,0 +1,20 @@
+{
+  "base_source_sha": "5d5dd5fdf0007d273fa9044c6e1725d6490a42dd",
+  "previous_builds_gitlink": "725754075e1d6369430a3adf94d46fb71e6eaf9e",
+  "approved_builds_gitlink": "4ae27c89226737e2d26925a23298ee619eb4efb9",
+  "user_authorization": "Explicit yes to the prepared two-file Builds alignment, recorded as a narrow exception to the frozen no-reference-change constraint.",
+  "catalog_changed": false,
+  "dependency_policy_changed": false,
+  "manifest_tests": {
+    "passed": 326,
+    "failed": 0,
+    "skipped": 0
+  },
+  "release_build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "hosted_acceptance": "Pending for the eventual committed source. Prior-source live outcomes are retained separately.",
+  "staging_dispatched": false,
+  "publication_dispatched": false
+}

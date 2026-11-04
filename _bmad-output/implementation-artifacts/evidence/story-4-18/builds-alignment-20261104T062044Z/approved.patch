@@ -1,0 +1,18 @@
+diff --git a/.github/workflows/commitlint.yml b/.github/workflows/commitlint.yml
+--- a/.github/workflows/commitlint.yml
++++ b/.github/workflows/commitlint.yml
+@@ -16,6 +16,6 @@
+ 
+ jobs:
+   commitlint:
+-    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@725754075e1d6369430a3adf94d46fb71e6eaf9e
++    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@4ae27c89226737e2d26925a23298ee619eb4efb9
+     with:
+       pull-request-title: ${{ github.event.pull_request.title }}
+diff --git a/references/Hexalith.Builds b/references/Hexalith.Builds
+index 7257540..4ae27c8 160000
+--- a/references/Hexalith.Builds
++++ b/references/Hexalith.Builds
+@@ -1 +1 @@
+-Subproject commit 725754075e1d6369430a3adf94d46fb71e6eaf9e
++Subproject commit 4ae27c89226737e2d26925a23298ee619eb4efb9

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "references/Hexalith.Builds",
+    "diff",
+    "--exit-code",
+    "725754075e1d6369430a3adf94d46fb71e6eaf9e",
+    "4ae27c89226737e2d26925a23298ee619eb4efb9",
+    "--",
+    "Props"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_at_utc": "2026-11-04T06:24:37.062222+00:00",
+  "finished_at_utc": "2026-11-04T06:24:37.064077+00:00",
+  "exit_code": 0
+}

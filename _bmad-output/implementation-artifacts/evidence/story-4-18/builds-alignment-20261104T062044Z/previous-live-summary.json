@@ -1,0 +1,82 @@
+{
+  "run_id": 41774719596,
+  "source_sha": "5d5dd5fdf0007d273fa9044c6e1725d6490a42dd",
+  "artifact_id": 13298868767,
+  "artifact_sha256": "0b0b28924212264f639cb4444de55f89e0badfd80d6cd33a1620c48b3aaac764",
+  "counts": {
+    "failed": 13,
+    "passed": 8
+  },
+  "cases": [
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/smoke/tests.xml",
+      "result": "Fail",
+      "message": "System.InvalidOperationException : MCPCLI_LIVE_OUTPUT must name the selected case evidence directory."
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.create-party/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.create-party failed: FAILED parties.create-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.create-party/live-result.json\nVectorError: persisted-invocation parties.get-party: read deadline: persisted-invocation parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\", \\\"/document/type\\\", \\\"/document/isErased\\\", \\\"/document/personDetails/lastName\\\", \\\"/document/contactChannels\\\", \\\"/document/contactChannels/0/id\\\", \\\"/document/contactChannels/0/type\\\", \\\"/document/contactChannels/0/value\\\", \\\"/document/contactChannels/0/isPreferred\\\", \\\"/document/identifiers\\\", \\\"/document/identifiers/0/id\\\", \\\"/document/identifiers/0/type\\\", \\\"/document/identifiers/0/value\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.deactivate-party/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.deactivate-party failed: FAILED parties.deactivate-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.deactivate-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.get-party/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.get-party failed: FAILED parties.get-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.get-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.list-parties/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.list-parties failed: FAILED parties.list-parties; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.list-parties/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.reactivate-party/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.reactivate-party failed: FAILED parties.reactivate-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.reactivate-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.search-parties/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.search-parties failed: FAILED parties.search-parties; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.search-parties/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.update-party/tests.xml",
+      "result": "Fail",
+      "message": "Live vector parties.update-party failed: FAILED parties.update-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/parties.update-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.change-user-role/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.change-user-role failed: FAILED tenants.change-user-role; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.change-user-role/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JG9NBR95RG1SDW192AQY6K'}}\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-tenant/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.get-tenant failed: FAILED tenants.get-tenant; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-tenant/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JH3C4ECEP9GE1QVKGZP4G1'}}\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-tenant-users/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.get-tenant-users failed: FAILED tenants.get-tenant-users; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-tenant-users/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JH0VAT2PACFN1DRDBGQG7M'}}\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-user-tenants/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.get-user-tenants failed: FAILED tenants.get-user-tenants; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.get-user-tenants/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JH61AF3A1946DBX6KFDHN7'}}\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.set-tenant-configuration/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.set-tenant-configuration failed: FAILED tenants.set-tenant-configuration; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.set-tenant-configuration/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JHRNCEYB080SVQR863CGKH'}}\n"
+    },
+    {
+      "path": "2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.update-tenant/tests.xml",
+      "result": "Fail",
+      "message": "Live vector tenants.update-tenant failed: FAILED tenants.update-tenant; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/2b2ea959f6ba45b6bcb9a7751eeeccb8/vectors/0414fb706cf94b97aead2701f5ee3c53/tenants.update-tenant/live-result.json\nVectorError: /prerequisites/0 tenants.create-tenant: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 500, 'detail': 'An unexpected error occurred while processing your request.', 'correlationId': '01M6JHV5TMZYP03HZKE1BXCBFD'}}\n"
+    }
+  ]
+}

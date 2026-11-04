@@ -1,0 +1,15 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_at_utc": "2026-11-04T06:20:57.863663+00:00",
+  "finished_at_utc": "2026-11-04T06:21:01.722013+00:00",
+  "exit_code": 0
+}

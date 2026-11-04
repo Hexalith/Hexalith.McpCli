@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Hexalith.McpCli.Manifest.Tests",
+    "--no-build",
+    "--configuration",
+    "Release"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_at_utc": "2026-11-04T06:21:09.317710+00:00",
+  "finished_at_utc": "2026-11-04T06:23:12.808536+00:00",
+  "exit_code": 0
+}
