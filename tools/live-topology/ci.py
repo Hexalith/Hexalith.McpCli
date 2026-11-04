@@ -540,6 +540,10 @@ def prepare(evidence: Path) -> None:
         # later dotnet rebuilds without changing an owner's source or nested catalog.
         overrides = private / 'source-runtime-overrides.targets'
         overrides_xml = ET.Element('Project')
+        # Keep later SDK/Aspire builds on the same compiler warning policy as
+        # preparation. Owner props can append exemptions even when the inherited
+        # TreatWarningsAsErrors is true, changing deterministic assembly bytes.
+        ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup'), 'WarningsNotAsErrors')
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)

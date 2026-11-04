@@ -1,0 +1,7 @@
+{
+  "content": "        env:\n          SOLUTION: ${{ inputs.solution }}\n        run: |\n          dotnet restore \"$SOLUTION\"\n          dotnet build \"$SOLUTION\" --no-restore --configuration Release -warnaserror\n      - name: Install and initialize Dapr\n        uses: Hexalith/Hexalith.Builds/Github/dapr-init@c171c7265e70806f09f6ac54130aa6e28ef74395 # BUILD-REL-1\n        with:\n          version: ${{ inputs.dapr-version }}\n          runtime-version: ${{ inputs.dapr-runtime-version }}\n      - name: Prepare Aspire tier\n        if: ${{ inputs.aspire-prepare-script != '' }}\n        timeout-minutes: ${{ inputs.aspire-prepare-timeout-minutes }}\n        shell: bash\n        env:\n          ASPIRE_PREPARE_SCRIPT: ${{ inputs.aspire-prepare-script }}",
+  "encoding": "utf-8",
+  "sha": "60a16409491c88b711f74b72b0871d8a40b4941b",
+  "display_url": "https://github.com/Hexalith/Hexalith.Builds/blob/4ae27c89226737e2d26925a23298ee619eb4efb9/.github/workflows/domain-ci.yml",
+  "display_title": "domain-ci.yml"
+}

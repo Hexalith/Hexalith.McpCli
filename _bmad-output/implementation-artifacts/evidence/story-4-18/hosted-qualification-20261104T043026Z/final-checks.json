@@ -1,0 +1,22 @@
+[
+  {
+    "command": [
+      "python3",
+      "-c",
+      "import ast,pathlib; [ast.parse(pathlib.Path(p).read_text(), filename=p) for p in (\"tools/live-topology/ci.py\", \"tools/live-topology/test_ci.py\")]"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+  }
+]

@@ -1,0 +1,15 @@
+test_source_catalog_override_reaches_all_builds_and_both_isolated_runners (test_ci.CiHooksTests.test_source_catalog_override_reaches_all_builds_and_both_isolated_runners) ... FAIL
+
+======================================================================
+FAIL: test_source_catalog_override_reaches_all_builds_and_both_isolated_runners (test_ci.CiHooksTests.test_source_catalog_override_reaches_all_builds_and_both_isolated_runners)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 610, in test_source_catalog_override_reaches_all_builds_and_both_isolated_runners
+    self.assertEqual(1, len(warning_policy))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 3.730s
+
+FAILED (failures=1)

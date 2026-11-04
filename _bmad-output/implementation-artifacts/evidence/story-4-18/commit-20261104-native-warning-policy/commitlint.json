@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "exit_code": 0,
+  "message_file": "commit-message.txt"
+}

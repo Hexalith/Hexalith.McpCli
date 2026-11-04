@@ -1,0 +1,9 @@
+test_source_catalog_override_reaches_all_builds_and_both_isolated_runners (test_ci.CiHooksTests.test_source_catalog_override_reaches_all_builds_and_both_isolated_runners) ... ok
+test_second_provenance_check_refuses_drift_after_vectors_before_smoke (test_ci.CiHooksTests.test_second_provenance_check_refuses_drift_after_vectors_before_smoke) ... ok
+test_source_catalog_and_private_override_drift_refuse_before_live (test_ci.CiHooksTests.test_source_catalog_and_private_override_drift_refuse_before_live) ... ok
+test_reader_requires_complete_successful_online_graph_audits (test_ci.CiHooksTests.test_reader_requires_complete_successful_online_graph_audits) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 13.747s
+
+OK

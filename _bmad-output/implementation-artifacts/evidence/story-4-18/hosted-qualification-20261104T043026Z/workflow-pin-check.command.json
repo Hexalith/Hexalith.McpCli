@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli/tools/live-topology",
+  "exit_code": 1
+}

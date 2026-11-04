@@ -1,0 +1,18 @@
+2026-11-03T21:48:23.0416621Z FAIL: test_workflow_pin_matches_builds_gitlink (test_ci.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='4ae27c89226737e2d26925a23298ee619eb4efb9')
+2026-11-03T21:48:23.0417767Z ----------------------------------------------------------------------
+2026-11-03T21:48:23.0418267Z Traceback (most recent call last):
+2026-11-03T21:48:23.0419311Z   File "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/test_ci.py", line 1930, in test_workflow_pin_matches_builds_gitlink
+2026-11-03T21:48:23.0420157Z     self.assertEqual(recorded[2], pin)
+2026-11-03T21:48:23.0420513Z     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+2026-11-03T21:48:23.0421180Z AssertionError: '725754075e1d6369430a3adf94d46fb71e6eaf9e' != '4ae27c89226737e2d26925a23298ee619eb4efb9'
+2026-11-03T21:48:23.0421841Z - 725754075e1d6369430a3adf94d46fb71e6eaf9e
+2026-11-03T21:48:23.0422224Z + 4ae27c89226737e2d26925a23298ee619eb4efb9
+2026-11-03T21:48:23.0422690Z 
+2026-11-03T21:48:23.0422694Z 
+2026-11-03T21:48:23.0422849Z ----------------------------------------------------------------------
+2026-11-03T21:48:23.0423136Z Ran 191 tests in 466.410s
+2026-11-03T21:48:23.0423257Z 
+2026-11-03T21:48:23.0423336Z FAILED (failures=1)
+2026-11-03T21:48:23.0423647Z FAILED: full live acceptance=False; receipt: /tmp/tmp5rcyk8lr/live-lane.json
+2026-11-03T21:48:23.0424063Z FAILED: full live acceptance=False; receipt: /tmp/tmpa6ofzoee/live-lane.json
+2026-11-03T21:48:23.0424473Z FAILED: full live acceptance=False; receipt: /tmp/tmpplbs1_k4/live-lane.json

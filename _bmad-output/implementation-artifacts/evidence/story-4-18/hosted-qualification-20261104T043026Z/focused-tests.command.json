@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci.CiHooksTests.test_source_catalog_override_reaches_all_builds_and_both_isolated_runners",
+    "test_ci.CiHooksTests.test_second_provenance_check_refuses_drift_after_vectors_before_smoke",
+    "test_ci.CiHooksTests.test_source_catalog_and_private_override_drift_refuse_before_live",
+    "test_ci.CiHooksTests.test_reader_requires_complete_successful_online_graph_audits"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli/tools/live-topology",
+  "started_at_utc": "2026-11-04T04:35:59.635353+00:00",
+  "finished_at_utc": "2026-11-04T04:36:13.453256+00:00",
+  "exit_code": 0
+}

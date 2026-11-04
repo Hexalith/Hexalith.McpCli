@@ -1,0 +1,61 @@
+{
+  "artifact": {
+    "id": 13280067632,
+    "run_id": 41720082821,
+    "source_sha": "2322e2736024ef5f3aeb807d820e84b2a8f7acab",
+    "sha256": "fb93949652ef2e6e95d8f0080c8e5c48bf477ba743664784ca08dc6ce6224ec1",
+    "bytes": 5367354,
+    "verified_against": "GitHub Actions artifact API digest"
+  },
+  "lane": {
+    "result": "failed",
+    "fullLiveAccepted": false,
+    "passed": 14,
+    "failed": 7
+  },
+  "failed_vector_results": [
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.create-party/live-result.json",
+      "operation": "parties.create-party",
+      "result": "failed",
+      "error": "VectorError: persisted-invocation parties.get-party: read deadline: persisted-invocation parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\", \"/document/type\", \"/document/isErased\", \"/document/personDetails/lastName\", \"/document/contactChannels\", \"/document/contactChannels/0/id\", \"/document/contactChannels/0/type\", \"/document/contactChannels/0/value\", \"/document/contactChannels/0/isPreferred\", \"/document/identifiers\", \"/document/identifiers/0/id\", \"/document/identifiers/0/type\", \"/document/identifiers/0/value\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.deactivate-party/live-result.json",
+      "operation": "parties.deactivate-party",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.get-party/live-result.json",
+      "operation": "parties.get-party",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.list-parties/live-result.json",
+      "operation": "parties.list-parties",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.reactivate-party/live-result.json",
+      "operation": "parties.reactivate-party",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.search-parties/live-result.json",
+      "operation": "parties.search-parties",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    },
+    {
+      "artifact_path": "0b5f65a18f5744d3b295870ee9197494/vectors/363e86e6481b400ea5fb51f7f224d4b8/parties.update-party/live-result.json",
+      "operation": "parties.update-party",
+      "result": "failed",
+      "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]"
+    }
+  ],
+  "independent_smoke_error": "The prepared gateway package identity or bytes changed before isolated execution: gateway.domainHosts.Hexalith.Tenants.output.Hexalith.Tenants.dll."
+}

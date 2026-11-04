@@ -200,7 +200,9 @@ checks every package archive and extracted asset against that proof, then builds
 retains the exact audited graph. No server dependency edge or loader exception is added. The source
 catalog retains the pinned root-declared Builds revision with the root's exact
 Redis 3.4.31 override. A task-owned MSBuild post-import override also reaches SDK
-owner preparation and later Aspire child rebuilds. Preparation hashes both private
+owner preparation and later Aspire child rebuilds, clearing owner-appended
+`WarningsNotAsErrors` exemptions so their compiler policy and deterministic bytes
+match preparation. Preparation hashes both private
 catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory

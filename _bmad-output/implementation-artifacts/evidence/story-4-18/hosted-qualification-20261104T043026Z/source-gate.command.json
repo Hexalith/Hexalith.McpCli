@@ -1,0 +1,24 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--staging",
+    "--output",
+    "/tmp/mcpcli-4-18-qualification-20261104T043026Z/source.json",
+    "--",
+    "2322e2736024ef5f3aeb807d820e84b2a8f7acab",
+    "refs/heads/main",
+    "paired"
+  ],
+  "started_at_utc": "2026-11-04T04:30:26.912502+00:00",
+  "finished_at_utc": "2026-11-04T04:30:28.233676+00:00",
+  "before": {
+    "sha": "2322e2736024ef5f3aeb807d820e84b2a8f7acab",
+    "status": ""
+  },
+  "after": {
+    "sha": "2322e2736024ef5f3aeb807d820e84b2a8f7acab",
+    "status": ""
+  },
+  "exit_code": 1
+}

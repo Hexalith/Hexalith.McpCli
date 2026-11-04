@@ -17,6 +17,7 @@ import tarfile
 import tempfile
 import time
 import unittest
+import xml.etree.ElementTree as ET
 from unittest.mock import patch
 from zipfile import ZipFile
 
@@ -605,6 +606,9 @@ class CiHooksTests(unittest.TestCase):
         prepared = self.prepare()
         override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
         self.assertEqual(hashlib.sha256(override.read_bytes()).hexdigest(), prepared['sourcePackageCatalog']['overridesSha256'])
+        warning_policy = ET.parse(override).getroot().findall('./PropertyGroup/WarningsNotAsErrors')
+        self.assertEqual(1, len(warning_policy))
+        self.assertEqual('', warning_policy[0].text or '')
         calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
         builds = [call for call in calls if call['args'][0] in ('build', 'msbuild')]
         self.assertEqual({str(override)}, {call['overrides'] for call in builds})
